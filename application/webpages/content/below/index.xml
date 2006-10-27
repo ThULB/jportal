@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage title="MyCoRe Sample">
+    <section title="Start" xml:lang="de">
+  <p>Dieser Server ist eine Beispiel-Anwendung zur Gestaltung
+  allgemeiner Dokumenten- und
+  Dissertations/Habilitations-Server.</p>
+  <p>Alle Dokumente werden mit einem erweiterten Dublin Core
+  Metadatensatz in das System eingestellt und sind über diese
+  Metadaten recherchierbar. Je nach eingesetzter Hard- und Software
+  kommt hierzu noch eine Volltext-Recherchemöglichkeit.</p>
+  <p>Innerhalb dieser Anwendung sind die Daten in zwei Grundtypen
+  aufgeteilt. Da sich die Arbeitsabläufe für das Einstellen und
+  Verwalten einfacher Dokumente von denen einer
+  Dissertation/Habilitation wesentlich unterscheiden, werden diese
+  im Projekt auch getrennt behandelt. Dissertationen/Habilitation
+  unterliegen strengen Vorschriften, da sie einen Teil des
+  Promotionsprozesses darstellen und nach festgelegten Regeln durch
+  die Universitätsbibliotheken vorzuhalten sind.</p>
+  <p>Jeder dieser beiden Typen kennt die Metadaten des eigentlichen
+  Objektes, das Objekt an sich sowie Institutions- und
+  Personen-Metadaten, auf welche in den Dokument-Metadaten
+  referenziert wird. Hinzu kommen noch Informationen über
+  Klassifikation denen das Objekt via Metadaten zugeordnet ist.</p>
+  <p>
+    <a href="../main/search.xml">
+      <strong>Die Suche in den Daten</strong>
+    </a>
+  </p>
+  <p>Für die Suche in den Daten werden Ihnen interaktive Suchmasken
+  angeboten. Alle Auswahlfelder der Suchmaske sind implizit mit UND
+  verknüpft. Um den Google-Effekt riesiger Trefferlisten zu
+  vermeiden, sollten Sie Ihre Suche durch die Auswahl mehrerer
+  Parameter einschränken.</p>
+  <p>Der Erfolg der Volltext-Suche ist ein wenig vom verwendeten
+  Server-System abhängig, hier kann es bedingt durch die
+  unterschiedlichen Volltext-Suchmaschinen zu Differenzen in der
+  Trefferliste kommen. Auch die Qualität der Textindizierbarkeit
+  der eingestellten Objekte ist hier von Bedeutung. PDF Dateien
+  beispielsweise, die den Text als Bilder (z. B. Scan) vorhalten
+  sind nicht textindizierbar und damit auch nicht
+  Volltext-recherchierbar!</p>
+  <p>
+    <strong>
+      <a href="../main/authorsArea.xml">Die
+      Dokumentenverwaltung</a>
+    </strong>
+  </p>
+  <p>Auch im Autorenbereich wird zwischen allgemeinen Dokumenten
+  und Dissertationen / Habilitationen unterschieden. Während
+  letztere rechtlich für die Autoren relevant sind und durch die
+  Bibliothek betreut werden, haben Dokumente keine Bedeutung bei
+  der Graduierung. Dieser Teil ist für Preprints, Lehrmaterial usw.
+  gedacht. Auch Videos und multimediales Material kann als Dokument
+  abgelegt werden.</p>
+  <p>Im Autorenbereich wird unter DocPortal immer zwischen einem
+  Autor und einem Bearbeiter unterschieden. Beide haben
+  unterschiedliche Rechte. Autoren dürfen ihre Arbeiten nur in
+  einen Workflow einbringen, Bearbeiter können dann diese Daten
+  freigeben und in das System hochladen. Die Arbeitsabläufe
+  unterscheiden sich dabei zwischen den beiden Typen, Dokumente
+  werden direkt nach dem Bearbeiten geladen, für Dissertationen /
+  Habilitationen ist dafür noch ein extra Arbeitsschritt
+  erforderlich.</p>
+  <p>Wenn Sie eine ausführliche Information zum Autor oder zu
+  beteiligten Personen oder Institutionen in die Metadaten Ihres
+  Objektes integrieren möchten (für Dissertationen / Habilitationen
+  ist das PFLICHT), so legen Sie zuerst einen Personen- bzw.
+  Institutionen-Datensatz an und merken sich die ID dieses
+  Datensatzes. Nun können Sie diese ID beim Ausfüllen der
+  Dokumentdaten als Referenz bei den Feldern Autor, Publizist und
+  Beteiligter entsprechend angeben.</p>
+  <p>Daten die neu eingegeben wurden werden erstmal im Workflow
+  zwischengespeichert. Hier befinden sich alle Daten, die noch
+  nicht in das System eingestellt wurden. Da bei der Bearbeitung
+  von Dissertationen / Habilitationen oft mehrere
+  Iterationsschritte erforderlich sind, müssen diese Daten dann
+  expizit in den Server gestellt werden.</p>
+<p style="text-align:right">
+ <a style="color:white" href="../../index/robotd/index.html">Zugang für Robots (Dokumente)</a>
+</p>
+<p style="text-align:right">
+ <a style="color:white" href="../../index/robotp/index.html">Zugang für Robots (Autoren)</a>
+</p>
+<p style="text-align:right">
+ <a style="color:white" href="../../index/roboti/index.html">Zugang für Robots (Institutionen)</a>
+</p>
+</section>
+    <section xml:lang="en" title="Home">
+        MyCoRe is an Open Source project for the development of Digital Library and archive solutions (or, put more generally, "Content Repositories" &gt;&gt; CoRe). In the MyCoRe project a group of universities is working on the development of a shared software core for such applications. This core is adjustable to local requirements and easy to modify. This is expressed by the "My" in MyCoRe, which represents the local adaptability. On the basis of this core which is available under the open source GNU General Public License, specific local applications will emerge at the participating institutes. The technical base of the system is formed of Java class libraries, XML technology and implementations for various database backends, both commercial like IBM Content Manager and IBM DB2 or Open Source solutions like MySQL and XML:DB databases. 
+<p style="text-align:right">
+ <a style="color:white" href="../../index/robotd/index.html">Access for robots (documents)</a>
+</p>
+<p style="text-align:right">
+ <a style="color:white" href="../../index/robotp/index.html">Access for robots (authors)</a>
+</p>
+<p style="text-align:right">
+ <a style="color:white" href="../../index/roboti/index.html">Access for robots (institutions)</a>
+</p>
+    </section>
+    <meta>
+        <log date="2005-05-10" time="08:51" labelPath="Menü unten &gt; Start" lastEditor="Administrator" />
+    </meta>
+</MyCoReWebPage>

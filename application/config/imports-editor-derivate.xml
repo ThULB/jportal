@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<imports>
+
+  <headline anchor="CENTER">
+   <text>
+    <label xml:lang="de">Bearbeite eines Derivate-Labels.<p/></label>
+    <label xml:lang="en">Edit a derivate label.<p/></label>
+   </text>
+  </headline>
+
+  <panel id="import-derivate">
+    <cell col="1" row="1" anchor="NORTHWEST" ref="LLabel" />
+    <cell col="2" row="1" anchor="NORTHWEST" ref="DLabel" />
+    <cell col="3" row="1" anchor="NORTHWEST" >
+      <space width="20" height="0" />
+    </cell>
+    <cell col="4" row="1" anchor="NORTHWEST" ref="HLabel" />
+
+    <cell col="1" row="3" />
+    <cell col="2" row="3" anchor="EAST" ref="TwoButtons"  />
+  </panel>
+
+<!-- *** LABEL *** -->
+
+  <text id="LLabel">
+    <label xml:lang="de">
+      <span class="editorlabel">&#160;&#160;&#160;Label&#160;&#160;&#160;</span>
+    </label>
+    <label xml:lang="en">
+      <span class="editorlabel">&#160;&#160;&#160;Label&#160;&#160;&#160;</span>
+    </label>
+  </text>
+
+  <helpPopup id="HLabel" width="400px" height="250px">
+   <label xml:lang="de">
+Hier kann der Label des Derivates geändert werden.
+   </label>
+   <label xml:lang="en">
+You can change the label of the derivate here.
+   </label>
+  </helpPopup>
+
+<!-- *** End *** -->
+
+</imports>
+

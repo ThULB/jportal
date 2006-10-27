@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<mycoregroup 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xsi:noNamespaceSchemaLocation="MCRGroup.xsd">
+
+<!-- ******************************************************************* -->
+
+  <group ID="editorgroup2">
+    <group.description>Die Gruppe von Bearbeitern der Gruppe 2</group.description>
+  </group>
+
+<!-- ******************************************************************* -->
+
+</mycoregroup>
+

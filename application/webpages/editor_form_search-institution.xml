@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Suchmaske für Institutionen" xml:lang="de">
+  <editor id="search-institution-de">
+    <include uri="webapp:editor/editor-search-institution.xml"/>
+  </editor>
+</section>
+
+<section title="Search mask for institutions" xml:lang="en">
+  <editor id="search-institution-en">
+    <include uri="webapp:editor/editor-search-institution.xml"/>
+  </editor>
+</section>
+
+</MyCoReWebPage>
+
+

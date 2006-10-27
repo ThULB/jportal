@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Suchmaske für Personen" xml:lang="de">
+  <editor id="search-person-de">
+    <include uri="webapp:editor/editor-search-person.xml"/>
+  </editor>
+</section>
+
+<section title="Search mask for person" xml:lang="en">
+  <editor id="search-person-en">
+    <include uri="webapp:editor/editor-search-person.xml"/>
+  </editor>
+</section>
+
+</MyCoReWebPage>
+
+

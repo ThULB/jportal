@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="derivate">
+ <derivate>
+  <!-- XLink's to Metadata-->
+  <element name="linkmetas" minOccurs='1' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="linkmeta" class="MCRMetaLinkID" 
+    minOccurs='1' maxOccurs='1'/>
+  </element>
+  <!-- External XLink's -->
+  <element name="externals" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetalink name="external" class="MCRMetaLink" minOccurs='1'
+    maxOccurs='unbounded'/>
+  </element>
+  <!-- IFS Connector -->
+  <element name="internals" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetaifs name="internal" class="MCRMetaIFS" minOccurs='1'
+    maxOccurs='1'/>
+  </element>
+ </derivate>
+ <service>
+  <!-- Service Dates -->
+  <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaiso8601date name="servdate" class="MCRMetaISO8601Date" minOccurs='1'
+    maxOccurs='unbounded'/>
+  </element>
+  <!-- Service Flags -->
+  <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="256" />
+  </element>
+  <!-- Service ACLs -->
+  <element name="servacls" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaaccessrule name="servacl" class="MCRMetaAccessRule" minOccurs='1'
+    maxOccurs='unbounded' length="512" />
+  </element>
+ </service>
+</configuration>

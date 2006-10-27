@@ -1,0 +1,159 @@
+##############################################################################
+# This file shows all properties of deperecated code parts in MyCoRe 1.3
+##############################################################################
+
+##############################################################################
+# Classes for the commandline interface
+##############################################################################
+
+# MCR.external_command_classes=org.mycore.frontend.cli.MCRSQLTableCreate
+
+##############################################################################
+# Native SQL classes definition
+##############################################################################
+
+# This is the alternate. It work with native SQL class for XML
+# MCR.xml_store_class=org.mycore.backend.sql.MCRSQLXMLStore
+
+# This is the alternate. It work with native SQL class for classifications
+# MCR.classifications_store_class=org.mycore.backend.sql.MCRSQLClassificationStore
+
+# This is the alternate. It work with native SQL class for link table store
+# MCR.linktable_store_class=org.mycore.backend.sql.MCRSQLLinkTableStore
+
+# This is the alternate. It work with native SQL class for user store
+# MCR.userstore_class_name=org.mycore.backend.sql.MCRSQLUserStore2
+
+# This is the alternate. It work with native SQL class for IFS
+# MCR.IFS.FileMetadataStore.Class=org.mycore.backend.sql.MCRSQLFileMetadataStore
+
+# This is the alternate. It work with native SQL class for NBN
+# MCR.NBN.ManagerImplementation=org.mycore.backend.sql.MCRSQLNBNManager
+  
+# This is the default. It work with native SQL class for AccessControll
+# MCR.accessstore_class_name=org.mycore.backend.sql.MCRSQLAccessStore
+# MCR.rulestore_class_name=org.mycore.backend.sql.MCRSQLRuleStore
+
+##############################################################################
+# SQL Table names   
+##############################################################################
+
+# MCR.xml_store_sql_table_class=MCRXMLCLASS
+# MCR.xml_store_sql_size_class=MEDIUMBLOB
+# MCR.xml_store_sql_table_author=MCRXMLAUTH
+# MCR.xml_store_sql_table_derivate=MCRXMLDER
+# MCR.xml_store_sql_table_document=MCRXMLDOC
+# MCR.xml_store_sql_table_institution=MCRXMLINST
+
+# LinkTable store for classifications
+# MCR.linktable_store_sql_table_class=MCRLINKCLASS
+
+##############################################################################
+# Search masks
+##############################################################################
+
+# Search masks
+# MCR.searchmask_config_alldocs=SearchMask_Alldocs.xml
+# MCR.searchmask_config_simpledocument=SearchMask_SimpleDocument.xml
+# MCR.searchmask_config_allpers=SearchMask_Allpers.xml
+# MCR.searchmask_config_institution=SearchMask_Institution.xml
+# MCR.searchmask_config_freetext=SearchMask_Freetext.xml
+
+##############################################################################
+# The persistence configuration for XML:DB (eXist)
+##############################################################################
+
+# MCR.persistence_xmldb_driver=org.exist.xmldb.DatabaseImpl
+# MCR.persistence_xmldb_database_url=xmldb:exist://localhost:8081/db/mycore
+# MCR.persistence_xmldb_database=exist
+# MCR.persistence_xmldb_user=mycore
+# MCR.persistence_xmldb_passwd=<password>
+
+# Encoding for XML:DB 
+# MCR.persistence_xmldb_encoding=ISO-8859-1
+# MCR.persistence_xmldb_encoding=UTF-8
+
+# The name of the Java class of the persistence search layer
+# MCR.persistence_xmldb_merger_name=org.mycore.services.query.MCRSearchMerger
+# MCR.persistence_xmldb_query_name=org.mycore.backend.xmldb.MCRXMLDBTransformXPathToeXist
+
+# The name of the XMLDB EventHandler
+# MCR.EventHandler.MCRObject.4.class=org.mycore.backend.xmldb.MCRXMLDBEventHandlerIndexMeta
+
+##############################################################################
+# The old persistence configuration for JDOM
+##############################################################################
+
+# The name of the Java class of the persistence search layer
+  MCR.persistence_jdom_merger_name=org.mycore.services.query.MCRSearchMerger
+  MCR.persistence_jdom_query_name=org.mycore.backend.jdom.MCRJDOMTransformXPathToJDOM
+
+# The name of the JDOM EventHandler
+  MCR.EventHandler.MCRObject.4.class=org.mycore.backend.jdom.MCRJDOMEventHandlerIndexMeta
+
+# The reload time in seconds
+  MCR.persistence_jdom_reload=3600
+
+##############################################################################
+# XML sort keys
+##############################################################################
+
+MCR.XMLSorter.types= alldocs,allpers,institution
+
+MCR.XMLSorter.alldocs.InterfaceImpl= org.mycore.common.xml.MCRXMLSorter
+MCR.XMLSorter.alldocs.keys.count= 1
+MCR.XMLSorter.alldocs.keys.1= "translate(./mycoreobject/metadata/titles/title[lang('"+lang+"')],'ABCDEFGHIJKLMNOPQRSTUVWXYZ���','abcdefghijklmnopqrstuvwxyz����')"
+MCR.XMLSorter.alldocs.keys.1.inorder= true
+
+MCR.XMLSorter.allpers.InterfaceImpl= org.mycore.common.xml.MCRXMLSorter
+MCR.XMLSorter.allpers.keys.count= 2
+MCR.XMLSorter.allpers.keys.1= "translate(./mycoreobject/metadata/names/name[lang('"+lang+"')]/surname,'ABCDEFGHIJKLMNOPQRSTUVWXYZ���','abcdefghijklmnopqrstuvwxyz����')"
+MCR.XMLSorter.allpers.keys.1.inorder= false
+MCR.XMLSorter.allpers.keys.2= "translate(./mycoreobject/metadata/names/name[lang('"+lang+"')]/firstname,'ABCDEFGHIJKLMNOPQRSTUVWXYZ���','abcdefghijklmnopqrstuvwxyz����')"
+MCR.XMLSorter.allpers.keys.2.inorder= false
+
+
+MCR.XMLSorter.institution.InterfaceImpl= org.mycore.common.xml.MCRXMLSorter
+MCR.XMLSorter.institution.keys.count= 1
+MCR.XMLSorter.institution.keys.1= "translate(./mycoreobject/metadata/names/name[lang('"+lang+"')],'ABCDEFGHIJKLMNOPQRSTUVWXYZ���','abcdefghijklmnopqrstuvwxyz����')"
+MCR.XMLSorter.institution.keys.1.inorder= true
+##############################################################################
+# Remote Connections
+##############################################################################
+
+# List of the remote server aliases
+MCR.remoteaccess_hostaliases=selfremote
+
+# Configuration for the own host with remote access
+MCR.remoteaccess_selfremote_query_class=org.mycore.backend.remote.MCRServletCommunication
+MCR.remoteaccess_selfremote_host=%MCR.baseurl%
+MCR.remoteaccess_selfremote_protocol=http
+MCR.remoteaccess_selfremote_port=80
+MCR.remoteaccess_selfremote_query_servlet=/servlets/MCRQueryServlet
+MCR.remoteaccess_selfremote_ifs_servlet=/servlets/MCRFileNodeServlet
+
+# Configuration of the MyCoReSample system in Leipzig
+MCR.remoteaccess_mcrLpzMS_query_class=org.mycore.backend.remote.MCRServletCommunication
+MCR.remoteaccess_mcrLpzMS_host=pcclu06.rz.uni-leipzig.de
+MCR.remoteaccess_mcrLpzMS_protocol=http
+MCR.remoteaccess_mcrLpzMS_port=8291
+MCR.remoteaccess_mcrLpzMS_query_servlet=/servlets/MCRQueryServlet
+MCR.remoteaccess_mcrLpzMS_ifs_servlet=/servlets/MCRFileNodeServlet
+
+# Configuration of the DOL system in Leipzig
+MCR.remoteaccess_mcrLpzDOL_query_class=org.mycore.backend.remote.MCRServletCommunication
+MCR.remoteaccess_mcrLpzDOL_host=pcclu06.rz.uni-leipzig.de
+MCR.remoteaccess_mcrLpzDOL_protocol=http
+MCR.remoteaccess_mcrLpzDOL_port=8391
+MCR.remoteaccess_mcrLpzDOL_query_servlet=/servlets/MCRQueryServlet
+MCR.remoteaccess_mcrLpzDOL_ifs_servlet=/servlets/MCRFileNodeServlet
+
+# Configuration of the Toxi system in Leipzig
+MCR.remoteaccess_mcrLpzTOX_query_class=org.mycore.backend.remote.MCRServletCommunication
+MCR.remoteaccess_mcrLpzTOX_host=pcclu06.rz.uni-leipzig.de
+MCR.remoteaccess_mcrLpzTOX_protocol=http
+MCR.remoteaccess_mcrLpzTOX_port=8591
+MCR.remoteaccess_mcrLpzTOX_query_servlet=/servlets/MCRQueryServlet
+MCR.remoteaccess_mcrLpzTOX_ifs_servlet=/servlets/MCRFileNodeServlet
+
+##############################################################################

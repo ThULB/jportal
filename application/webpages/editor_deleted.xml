@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<head>
+ <maintitle xml:lang="de">DocPortal</maintitle>
+ <maintitle xml:lang="en">DocPortal</maintitle>
+ <pagetitle xml:lang="de">Löschen der Daten</pagetitle>
+ <pagetitle xml:lang="en">Remove data</pagetitle>
+</head>
+
+<section title="Löschen der Daten" xml:lang="de">
+<p></p>
+<br />
+<p></p>
+<center>
+<table width="80%">
+ <tr align="center">
+  <td align="center">
+   Das Löschen des Datensatzes war erfolgreich.
+  </td>
+ </tr>
+</table>
+</center>
+<p></p>
+<br />
+<p></p>
+</section>
+
+<section title="Remove the data" xml:lang="en">
+<p></p>
+<br />
+<p></p>
+<center>
+<table width="80%">
+ <tr align="center">
+  <td align="center">
+   The dataset was removed sccessfuly.
+  </td>
+ </tr>
+</table>
+</center>
+<p></p>
+<br />
+<p></p>
+</section>
+
+</MyCoReWebPage>
+
+

@@ -1,0 +1,553 @@
+#
+# The MyCoRe properties PRIVATE sample file for the Dublin Core Demo
+#
+##############################################################################
+# Displayed Title in the webbrowser
+##############################################################################
+
+# Name of the project
+  MCR.nameOfProject=DocPortal - The MyCoRe-Sample
+
+# The base directory of the DocPortal installation, e.g. for windows c:/program files/docportal
+  MCR.basedir=/mcradmin/docportal
+# MCR.basedir=$INSTALL_PATH
+# The base URL of the web application, e.g. for tomcat http://localhost:8080/docportal/
+  MCR.baseurl=http://localhost:8291/
+# any textfilter plugins in this path
+  MCR.PluginDirectory=%MCR.basedir%/lib
+
+##############################################################################
+# Plugins for text index                                                     #
+##############################################################################
+
+# Classes for TextFilterPluginManager to convert files to text for indexing with lucene 
+  MCR.TextFilterPlugin.1.class=org.mycore.services.plugins.MSWordPlugin
+  MCR.TextFilterPlugin.2.class=org.mycore.services.plugins.OpenDocumentTextPlugin
+  MCR.TextFilterPlugin.3.class=org.mycore.services.plugins.OoTextPlugin
+  MCR.TextFilterPlugin.4.class=org.mycore.services.plugins.PdfPlugin
+  MCR.TextFilterPlugin.5.class=org.mycore.services.plugins.PlainTextPlugin
+  MCR.TextFilterPlugin.6.class=org.mycore.services.plugins.PostScriptPlugin
+  MCR.TextFilterPlugin.7.class=org.mycore.services.plugins.XmlHtmlPlugin
+
+##############################################################################
+# Event handlers used for ALL persistence configurations
+##############################################################################
+
+  MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRAccessEventHandler
+  MCR.EventHandler.MCRObject.2.class=org.mycore.datamodel.metadata.MCRXMLTableEventHandler
+  MCR.EventHandler.MCRObject.3.class=org.mycore.datamodel.metadata.MCRLinkTableEventHandler
+# MCR.EventHandler.MCRObject.4.class is defined below (new query indexing with JDOM/Lucene/Hibernate)
+
+  MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRAccessEventHandler
+  MCR.EventHandler.MCRDerivate.2.class=org.mycore.datamodel.metadata.MCRXMLTableEventHandler
+# MCR.EventHandler.MCRDerivate.3.class is defined in the searcher definition and hold only a repair
+
+##############################################################################
+# New query implementation using JDOM - use only for metadata search         #
+##############################################################################
+
+# MCR.EventHandler.MCRObject.4.Indexer=jdom-metadata
+
+# MCR.Searcher.jdom-metadata.Index=metadata
+# MCR.Searcher.jdom-metadata.Class=org.mycore.backend.jdom.MCRJDOMSearcher
+
+##############################################################################
+# New query implementation using Lucene - use for metadata and/or content    #
+##############################################################################
+
+  MCR.Lucene.LockDir=%MCR.basedir%/lucene-locks
+
+  MCR.EventHandler.MCRDerivate.3.class=org.mycore.datamodel.ifs.MCRContentIndexEventHandler
+  MCR.EventHandler.MCRObject.4.Indexer=lucene-metadata
+  MCR.EventHandler.MCRFile.1.Indexer=lucene-content
+
+  MCR.Searcher.lucene-metadata.Index=metadata
+  MCR.Searcher.lucene-metadata.Class=org.mycore.backend.lucene.MCRLuceneSearcher
+  MCR.Searcher.lucene-metadata.IndexDir=%MCR.basedir%/lucene-index4metadata
+
+  MCR.Searcher.lucene-content.Index=content
+  MCR.Searcher.lucene-content.Class=org.mycore.backend.lucene.MCRLuceneSearcher
+  MCR.Searcher.lucene-content.IndexDir=%MCR.basedir%/lucene-index4content
+
+##############################################################################
+# New query implementation using Hibernate - use only for metadata search    #
+##############################################################################
+
+# MCR.EventHandler.MCRObject.4.Indexer=hibernate-metadata
+# MCR.EventHandler.MCRFile.1.Indexer=hibernate-content
+
+# MCR.Searcher.hibernate-metadata.Index=metadata
+# MCR.Searcher.hibernate-metadata.Class=org.mycore.backend.hibernate.MCRHIBSearcher
+# MCR.Searcher.hibernate-metadata.TableName=MCRQueryI
+
+# MCR.Searcher.hibernate-content.Index=content
+# MCR.Searcher.hibernate-content.Class=org.mycore.backend.hibernate.MCRHIBSearcher
+# MCR.Searcher.hibernate-content.TableName=MCRQueryII
+
+##############################################################################
+# JDBC Parameter
+##############################################################################
+
+# JDBC parameters for connecting to DB2
+# MCR.persistence_sql_type=db2
+# MCR.persistence_sql_database_url=jdbc:db2:ICMNLSDB
+# MCR.persistence_sql_driver=COM.ibm.db2.jdbc.app.DB2Driver
+
+# JDBC parameters for connecting to MySQL
+# MCR.persistence_sql_type=mysql
+# MCR.persistence_sql_database_url=jdbc:mysql://127.0.0.1/mycore?user=mcradmin&autoReconnect=true
+# MCR.persistence_sql_driver=org.gjt.mm.mysql.Driver
+# MCR.persistence_sql_database_userid=mcradmin
+# MCR.persistence_sql_database_passwd=
+
+# JDBC parameters for connecting to HSQLDB
+  MCR.persistence_sql_type=hsqldb
+  MCR.persistence_sql_data_directory=%MCR.basedir%/hsqldb-data
+  MCR.persistence_sql_database_name=docportal
+# HSQLDB in server mode  
+  MCR.persistence_sql_database_port=8298
+  MCR.persistence_sql_database_url=jdbc:hsqldb:hsql://localhost:8298
+# HSQLDB in connection mode
+# MCR.persistence_sql_database_url=jdbc:hsqldb:file://%MCR.basedir%/hsqldb-data/docportal
+  MCR.persistence_sql_driver=org.hsqldb.jdbcDriver
+  MCR.persistence_sql_database_userid=sa
+  MCR.persistence_sql_database_passwd=
+
+MCR.persistence_sql_init_connections=1
+MCR.persistence_sql_max_connections=5
+
+##############################################################################
+# Hibernate SQL classes definition
+##############################################################################
+
+# This is the default. It use the Hibernate class for XML
+  MCR.xml_store_class=org.mycore.backend.hibernate.MCRHIBXMLStore
+
+# This is the default. It use the Hibernate class for classifications
+  MCR.classifications_store_class=org.mycore.backend.hibernate.MCRHIBClassificationStore
+
+# This is the default. It use the Hibernate class for link table store
+  MCR.linktable_store_class=org.mycore.backend.hibernate.MCRHIBLinkTableStore
+
+# This is the default. It use the Hibernate class for user store
+  MCR.userstore_class_name=org.mycore.backend.hibernate.MCRHIBUserStore2
+
+# This is the default. It use the Hibernate class for IFS
+  MCR.IFS.FileMetadataStore.Class=org.mycore.backend.hibernate.MCRHIBFileMetadataStore
+  MCR.IFS.ContentStore.SQLDB.Class=org.mycore.backend.hibernate.MCRHIBCStore
+
+# This is the default. It use the Hibernate class for NBN
+  MCR.NBN.ManagerImplementation=org.mycore.backend.hibernate.MCRHIBNBNManager
+  
+# This is the default. It use the Hibernate class for AccessControll
+  MCR.accessstore_class_name=org.mycore.backend.hibernate.MCRHIBAccessStore
+  MCR.rulestore_class_name=org.mycore.backend.hibernate.MCRHIBRuleStore
+
+##############################################################################
+# Definitions to use Hibernate                                               #
+##############################################################################
+
+# if you don't set this, hibernate-mapping.dtd is stored in your system-temp-directory
+  MCR.dtd.directory=%MCR.basedir%/schema
+  
+# additional hibernate-mapping-files
+  MCR.hibernate.hbm.xml.MCRRESUMPTIONTOKEN=MCRRESUMPTIONTOKEN.hbm.xml
+
+##############################################################################
+# Internal Filesystem generic                                                #
+##############################################################################
+
+# File content type detection implementation and config file name:
+  MCR.IFS.FileContentTypes.DetectorClass=org.mycore.datamodel.ifs.MCRSimpleFCTDetector
+  MCR.IFS.FileContentTypes.DefinitionFile=FileContentTypes.xml
+
+# File content store selection implementation and config file name:
+  MCR.IFS.ContentStoreSelector.Class=org.mycore.datamodel.ifs.MCRSimpleContentStoreSelector
+  MCR.IFS.ContentStoreSelector.ConfigFile=ContentStoreSelectionRules.xml
+
+# File metadata cache size, default is 500 files and directories
+  MCR.IFS.FileMetadataStore.CacheSize=500
+
+# Sample file content store with ID = FS, uses local filesystem
+  MCR.IFS.ContentStore.FS.Class=org.mycore.backend.filesystem.MCRCStoreVFS
+  MCR.IFS.ContentStore.FS.URI=%MCR.basedir%/filestore
+
+##############################################################################
+# Internal Filesystem SQL with Hibernate                                     #
+##############################################################################
+
+# Sample file content store with ID = SQLDB, uses sql database
+# MCR.IFS.ContentStore.SQLDB.Class=org.mycore.backend.hibernate.MCRHIBCStore
+
+##############################################################################
+# Helix Universal Server 9.0 (Real) File Content Store                       #
+##############################################################################
+
+# The class that implements the Real Server 8.0 / 9.0 content store:
+# MCR.IFS.ContentStore.HELIX.Class=org.mycore.backend.filesystem.MCRCStoreRemoteFTP
+
+# Hostname, port, user ID and password for FTP connections to
+# Real Server host:
+# MCR.IFS.ContentStore.HELIX.Hostname=realhelix.uni-essen.de
+# MCR.IFS.ContentStore.HELIX.FTPPort=21
+# MCR.IFS.ContentStore.HELIX.UserID=XXXX
+# MCR.IFS.ContentStore.HELIX.Password=XXXX
+
+# If true, debug messages for FTP session will be written to STDOUT:
+# MCR.IFS.ContentStore.HELIX.DebugFTP=false
+
+# The directory on the Real Server host where the files are stored:
+# MCR.IFS.ContentStore.HELIX.BaseDirectory=/real/content/
+
+# The class that implements the AudioVideoExtender for this store:
+# MCR.IFS.AVExtender.HELIX.Class=org.mycore.backend.realhelix.MCRAVExtRealHelix
+
+# URL where clients can download the Real Player:
+# MCR.IFS.AVExtender.HELIX.RealPlayerURL=http://www.real.com/player/index.html
+
+# URL where clients can download Windows Media Player:
+# MCR.IFS.AVExtender.HELIX.MediaPlayerURL=http://www.microsoft.com/windows/windowsmedia/download/
+
+# Base URL of Real Server RAM generator mount point,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.RamGenBaseURL=http://realhelix.uni-essen.de:4887/ramgen/content/
+
+# Base URL of Helix Server ASX generator mount point,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.AsxGenBaseURL=http://realhelix.uni-essen.de:4887/asxgen/content/
+
+# Base URL of Real Server View Source script,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.ViewSourceBaseURL=http://realhelix.uni-essen.de:4887/viewsource/template.html?src=/content/
+
+##############################################################################
+# IBM VideoCharger Server 8.1 File Content Store                             #
+##############################################################################
+
+# The class that implements the VideoCharger 7.1 / 8.1 content store:
+# MCR.IFS.ContentStore.VC.Class=org.mycore.backend.videocharger.MCRCStoreVideoCharger
+
+# Hostname, port, user ID and password for FTP connections to 
+# IBM VideoCharger server:
+
+# MCR.IFS.ContentStore.VC.Hostname=videocharger.uni-essen.de
+# MCR.IFS.ContentStore.VC.FTPPort=4324
+# MCR.IFS.ContentStore.VC.UserID=XXXX
+# MCR.IFS.ContentStore.VC.Password=XXXX
+
+# If true, debug messages for FTP session will be written to STDOUT:
+# MCR.IFS.ContentStore.VC.DebugFTP=false
+
+# The class that implements the AudioVideoExtender for this store:
+# MCR.IFS.AVExtender.VC.Class=org.mycore.backend.videocharger.MCRAVExtVideoCharger
+
+# URL where clients can download the IBM VideoCharger Player:
+# MCR.IFS.AVExtender.VC.PlayerURL=http://videocharger.uni-essen.de/vs_public/download/en_US/player.html
+
+# URLs of VideoCharger vslist and iscpfsel CGI scripts:
+# This is used to start VideoCharger player and to get metadata:
+
+# MCR.IFS.AVExtender.VC.VSListURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/vslist
+# MCR.IFS.AVExtender.VC.ISCPFSelURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/iscpfsel
+
+##############################################################################
+# SQL Table names   
+##############################################################################
+
+# XML stores
+MCR.xml_store_sql_table=MCRXMLTABLE
+
+# Configuration for SQL store
+MCR.classifications_store_sql_table_class=MCRCLASS
+MCR.classifications_store_sql_table_classlabel=MCRCLASSLAB
+MCR.classifications_store_sql_table_categ=MCRCATEG
+MCR.classifications_store_sql_table_categlabel=MCRCATEGLAB
+
+# LinkTable store for links
+MCR.linktable_store_sql_table_href=MCRLINKHREF
+
+# Internal FileSystem table
+MCR.IFS.FileMetadataStore.SQL.TableName=MCRFSNODES
+
+# SQL tables for the user management
+MCR.users_store_sql_table_users=MCRUSERS
+MCR.users_store_sql_table_groups=MCRGROUPS
+MCR.users_store_sql_table_group_members=MCRGROUPMEMBERS
+MCR.users_store_sql_table_group_admins=MCRGROUPADMINS
+
+# Access control tables
+MCR.access_store_sql_table_rule=MCRACCESSRULE
+MCR.access_store_sql_table_map=MCRACCESS
+
+# NBN table
+MCR.nbn_store_sql_table=MCRNBN
+
+# Content Store table
+MCR.content_store_sql_table=MCRCSTORE
+
+##############################################################################
+# User Management                                                            #
+##############################################################################
+
+# The switch to determine whether we use password encryption or not
+# (turn on='true' or off='false'). Please refer to the UserGuide before
+# switching encryption on!
+MCR.users_use_password_encryption=true
+
+# The configuration for the superuser
+MCR.users_superuser_username=root
+MCR.users_superuser_userpasswd=alleswirdgut
+MCR.users_superuser_groupname=rootgroup
+
+# The configuration for the guestuser
+MCR.users_guestuser_username=gast
+MCR.users_guestuser_userpasswd=gast
+MCR.users_guestuser_groupname=gastgroup
+
+##############################################################################
+# Save Directory                                                             #
+##############################################################################
+
+  MCR.Save.FileSystem=%MCR.basedir%/save
+
+##############################################################################
+# Editor                                                                     #
+##############################################################################
+
+# Files smaller than this number of bytes will be kept in memory
+  MCR.Editor.FileUpload.MemoryThreshold=1000000
+
+# Maximum size of any file that is uploaded with editor form
+  MCR.Editor.FileUpload.MaxSize=5000000
+
+# Directory where files may be temporary stored during upload
+  MCR.Editor.FileUpload.TempStoragePath=%MCR.basedir%/fileupload
+
+# FileUpload connection
+# MCR.FileUpload.IP=
+  MCR.FileUpload.Port=8299
+
+##############################################################################
+# Workflow                                                                   #
+##############################################################################
+
+# The project ID
+MCR.default_project_id=DocPortal
+MCR.default_project_type=document
+MCR.author_project_id=DocPortal
+MCR.document_project_id=DocPortal
+MCR.institution_project_id=DocPortal
+
+# Editor path
+MCR.editor_base_directory=%MCR.basedir%/workflow
+MCR.editor_author_directory=%MCR.basedir%/workflow/author
+MCR.editor_document_directory=%MCR.basedir%/workflow/document
+MCR.editor_derivate_directory=%MCR.basedir%/workflow/document
+MCR.editor_institution_directory=%MCR.basedir%/workflow/institution
+
+# Editor Mail adresses for Messages add1@serv1,add2,@serv2,...
+MCR.editor_mail=user@domain.xyz
+
+# Editor flags for todo and type
+MCR.editor_author_wnewobj_mail=%MCR.editor_mail%
+MCR.editor_author_weditobj_mail=
+MCR.editor_author_weditacl_mail=
+MCR.editor_author_wcommit_mail=%MCR.editor_mail%
+MCR.editor_author_wdelobj_mail=%MCR.editor_mail%
+MCR.editor_author_seditobj_mail=%MCR.editor_mail%
+MCR.editor_author_seditacl_mail=%MCR.editor_mail%
+MCR.editor_author_sdelobj_mail=%MCR.editor_mail%
+
+MCR.editor_document_wnewobj_mail=%MCR.editor_mail%
+MCR.editor_document_wnewder_mail=
+MCR.editor_document_waddfile_mail=
+MCR.editor_document_weditobj_mail=
+MCR.editor_document_weditder_mail=
+MCR.editor_document_weditacl_mail=
+MCR.editor_document_wcommit_mail=%MCR.editor_mail%
+MCR.editor_document_wdelobj_mail=%MCR.editor_mail%
+MCR.editor_document_wdelder_mail=
+MCR.editor_document_seditobj_mail=%MCR.editor_mail%
+MCR.editor_document_seditacl_mail=%MCR.editor_mail%
+MCR.editor_document_sdelobj_mail=%MCR.editor_mail%
+MCR.editor_document_sdelder_mail=%MCR.editor_mail%
+
+MCR.editor_institution_wnewobj_mail=%MCR.editor_mail%
+MCR.editor_institution_weditobj_mail=
+MCR.editor_institution_weditacl_mail=
+MCR.editor_institution_wcommit_mail=%MCR.editor_mail%
+MCR.editor_institution_wdelobj_mail=%MCR.editor_mail%
+MCR.editor_institution_seditobj_mail=%MCR.editor_mail%
+MCR.editor_institution_seditacl_mail=%MCR.editor_mail%
+MCR.editor_institution_sdelobj_mail=%MCR.editor_mail%
+
+MCR.editor_mail_sender=%MCR.editor_mail%
+MCR.editor_mail_application_id=MyCoReSample
+
+# Generic mail configuration for MCRMailer
+MCR.mail.server=my-mail-host.de
+MCR.mail.protocol=smtp
+MCR.mail.debug=false
+MCR.mail.encoding=UTF-8
+
+# Editor HostAlias for Classification
+MCR.editor_baseurl=local
+
+##############################################################################
+# Applet JAR signing Parameters                                              #
+##############################################################################
+
+# Alias for key pair, e.g. mycore
+SIGN.Alias=docportal
+
+# File where the keys are stored in
+SIGN.KeyStore=%MCR.basedir%/keystore
+
+# Password for keystore and key pair
+# SET IN PRIVATE.PROPERTIES: SIGN.Password
+SIGN.Password=alleswirdgut
+
+# Number of days the key should be valid
+SIGN.Validity=1000
+
+# Name, organization and country of signer
+SIGN.Name=Dokumenten-Server DocPortal
+SIGN.OrgUnit=DocPortal
+SIGN.Organization=MyCoRe
+SIGN.Country=Germany
+
+##############################################################################
+# OAI Clients                                                                #
+##############################################################################
+
+## instance independent settings
+# the email address of the oai admin
+  MCR.oai.adminemail=%MCR.editor_mail%
+
+# A temporary directory to store the resumption tokens
+  MCR.oai.resumptiontoken.dir=%MCR.basedir%/tmp
+
+# timeout, after which the resumption tokens will be deleted (in hours)
+  MCR.oai.resumptiontoken.timeout=48
+
+# Number of results in the list
+  MCR.oai.maxreturns=50
+
+# implementation of the OAI query interface
+  MCR.oai.queryservice=org.mycore.services.oai.MCROAIQueryImpl
+
+# just the url of friends-providers
+# MCR.oai.friends=miami.uni-muenster.de/servlets/OAIDataProvider mycoresamplelinux.dl.uni-leipzig.de/servlets/MCROAIDataProvider20
+
+# metadata transformer stylesheets: oai_dc is required, others are optional and use as input metadata format oai_dc
+  MCR.oai.metadata.transformer.oai_dc=MyCoReOAI-mycore2dc.xsl
+
+# the store, where resumption tokens are saved
+  MCR.oai.resumptiontoken.store=org.mycore.backend.hibernate.MCRHIBResumptionTokenStore
+
+# qualified Dublin Core
+# MCR.oai.metadata.transformer.oai_qdc=MyCoReOAI-mycore2dcqualified.xsl
+# MCR.oai.metadata.namespace.oai_qdc=http://www.mycore.de/xmlns/qdc
+# MCR.oai.metadata.schema.oai_qdc=http://www.mycore.de/schema/qdc.xsd
+
+# xMetaDiss
+# MCR.oai.metadata.transformer.xmetadiss=MyCoReOAI-mycore2xMetaDiss.xsl
+# MCR.oai.metadata.namespace.xmetadiss=http://www.ddb.de/standards/xMetaDiss/
+# MCR.oai.metadata.schema.xmetadiss=http://www.ddb.de/standards/xmetadiss/xmetadiss.xsd
+
+# xEpicur
+# MCR.oai.metadata.transformer.epicur=MyCoReOAI-mycore2xepicur.xsl
+# MCR.oai.metadata.namespace.epicur=urn:nbn:dC:1111-2004033116
+# MCR.oai.metadata.schema.epicur=urn:nbn:dC:1111-2004033116 http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:dC:1111-2004033116
+
+## instance dependent settings for instance OAIProvider
+  MCR.oai.repositoryidentifier.MCROAIProvider=oai.mycore.de
+  MCR.oai.repositoryname.MCROAIProvider=MyCoRe Repository DocPortal
+
+# a mycore-query condition that is joined with "AND" with the other query (from,until,set)
+# you can restrict an instance here to a special document-type or something else
+  MCR.oai.queryRestriction.OAIProvider=<condition field="objecttype" value="document" operator="=" />
+
+ # DINIspec - searchField mapping: ddc = subject, pub-type = type, doc-type=format;
+  MCR.oai.setscheme.searchfields.MCROAIProvider=format,type, subject
+  MCR.oai.setscheme.classids.MCROAIProvider.format=DocPortal_class_00000006
+  MCR.oai.setscheme.classids.MCROAIProvider.type=DocPortal_class_00000005
+  MCR.oai.setscheme.classids.MCROAIProvider.subject=DocPortal_class_00000009
+
+##############################################################################
+# The MyCoRe properties NBN file for the Dublin Core Demo                    #
+##############################################################################
+
+# The URL of the national NBN resolver for "urn:nbn:de:..."  URNs
+  MCR.NBN.TopLevelResolver=http://nbn-resolving.de/urn/resolver.pl?urn=
+
+# The prefix of all local NBN URLs, e. g. "urn:nbn:de:hbz:465-"
+  MCR.NBN.NamespacePrefix=urn:nbn:de:hbz:6-
+
+# Name of the DB table
+  MCR.NBN.PersistenceStore.TableName=MCRNBN
+
+# Name of the Stylesheet
+  MCR.NBN.Stylesheet=MyCoReNBN-ddb.xsl
+
+# Document types which are relevant for DDB registration
+  MCR.NBN.contenttypes=ps pdf
+
+# Local eMail address 
+  MCR.NBN.localcontact=%MCR.editor_mail%
+
+# eMail of DDB
+# MCR.NBN.ddbcontact=ep@ddb.de
+  MCR.NBN.ddbcontact=%MCR.editor_mail%
+
+# temporary directory for zip file creation
+  MCR.NBN.tmpDirectory=/tmp
+
+# contact id delivered by the DDB
+  MCR.NBN.DDBContactID=L6000-0708
+
+# The university name
+  MCR.NBN.ToplevelContributor=MyCoRe Community
+
+# The corporate name
+MCR.NBN.CorporateName=MyCoRe Developer Group
+
+# The corporate address
+MCR.NBN.CorporateName.Address=MyCoRe Developer Group, Essen, Hamburg, Jena, Leipzig, Muenchen, Rostock, Germany
+
+# the classification of Die Deutsche Bibliothek
+MCR.NBN.Subject=DNBSG
+
+##############################################################################
+# MCRUploadApplet                                                            #
+##############################################################################
+
+MCR.UploadApplet.BackgroundColor=#CAD9E0
+
+##############################################################################
+# Logging System                                                             #
+##############################################################################
+
+# Set the log level and appender for the general logger
+# appender flog: use for fast logging
+# appender stdout: use if performance is not important but details
+
+  MCR.log4j.rootLogger=INFO, stdout
+# MCR.log4j.logger.org.mycore=DEBUG
+# MCR.log4j.rootLogger=DEBUG, flog
+
+# exclude MyCoRe classes from debug
+  MCR.log4j.logger.org.mycore.common.MCRUtils=INFO
+  MCR.log4j.logger.org.mycore.common.xml.MCRURIResolver=DEBUG
+  MCR.log4j.logger.org.mycore.common.xml.MCRLayoutServlet=INFO
+  MCR.log4j.logger.org.mycore.backend.hibernate=ERROR
+  MCR.log4j.logger.org.mycore.services.plugins.TextFilterPluginManager=INFO
+  MCR.log4j.logger.org.mycore.user=INFO
+
+#exclude external classes from debug
+  MCR.log4j.logger.org.hibernate=ERROR
+  MCR.log4j.logger.org.hsqldb=ERROR
+  MCR.log4j.logger.com.mchange=ERROR
+  MCR.log4j.logger.org.pdfbox=ERROR
+
+##############################################################################

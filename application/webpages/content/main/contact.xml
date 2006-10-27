@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Kontakt">
+<p>
+  <strong>Für technische Fragen</strong>
+</p>
+<p>Projektkoordination und Geschäftsstelle MyCoRe</p>
+<p>Kathleen Krebs</p>
+<p>Mail: <a href="mailto:kathleen.krebs@rrz.uni-hamburg.de">kathleen.krebs@rrz.uni-hamburg.de</a></p>
+<p>Tel: +49 (0)40-42838-7212</p>
+<p>
+  <br />
+  <strong>Mail an die Benutzerliste</strong>
+</p>
+<p>Für Fragen, Tipps und Hinweise auf Fehler haben wir folgende
+Kontaktadresse eingerichtet:  
+<a href="mailto:mycore-user@lists.sourceforge.net">mycore-user@lists.sourceforge.net</a>.
+<br /> 
+<br /></p>
+	</section>
+	<section xml:lang="en" title="Kontakt">
+<p>
+  <strong>For technical support</strong>
+</p>
+<p>Project coordination und MyCoRe head quater</p>
+<p>Kathleen Krebs</p>
+<p>Mail: <a href="mailto:kathleen.krebs@rrz.uni-hamburg.de">kathleen.krebs@rrz.uni-hamburg.de</a></p>
+<p>Tel: +49 (0)40-42838-7212</p>
+<p>
+  <br />
+  <strong>Mail to the user list</strong>
+</p>
+<p>Send us your questions, tips and hints of errors to the address
+<a href="mailto:mycore-user@lists.sourceforge.net">mycore-user@lists.sourceforge.net</a>.
+<br /> 
+<br /></p>
+	</section>
+<meta><log date="2006-05-10" time="09:09" labelPath="/Kontakt" lastEditor="Administrator" /></meta></MyCoReWebPage>

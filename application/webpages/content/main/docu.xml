@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Anleitungen und mehr">
+  <P>Zur Arbeit mit der vorliegenden Anwendung finden Sie an dieser
+  Stelle noch Verweise auf eine Reihe von Anleitungen und
+  Dokumentationen, welche die Arbeit mit dem Gesamtsystem
+  beschreiben und erleichtern sollen.</P>
+  <P>
+    <toc />
+  </P>
+  <P>Weiterhin haben Sie über die URL des MyCoRe-Projektes Zugang
+  zu allen Informationen der Kern-Anwendung, auf welcher dieser
+  Dokumenten-Server basiert.</P>
+  <P />
+</section>
+<meta><log date="2005-05-10" time="09:21" labelPath="Hauptmenü links &gt; Anleitungen und mehr" lastEditor="Administrator" /></meta><section xml:lang="en" title="Documentation"><toc /></section></MyCoReWebPage>

@@ -1,0 +1,7 @@
+hsqldbadmin.sh
+hsqldbstart.sh
+hsqldbstop.sh
+jettystart.sh
+jettystop.sh
+listPlugins.sh
+mycore.sh

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================== -->
+<!-- $Revision: 1.1 $ $Date: 2006/03/21 12:37:43 $ -->
+<!-- ============================================== -->
+
+<editor>
+
+ <target type="servlet" name="MCRCheckEditACLServlet" method="post" format="xml" />
+
+<!--
+ <target type="debug"/>
+-->
+
+ <validationMessage>
+  <label xml:lang="de">Bitte korrigieren Sie die markierten Felder!</label>
+  <label xml:lang="en">Please correct the marked field!</label>
+ </validationMessage>
+
+ <components root="editor-acls" var="/service">
+
+  <include uri="webapp:editor/imports-editor-acl.xml"/>
+
+ </components>
+</editor>

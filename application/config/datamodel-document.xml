@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="document">
+ <structure>
+  <!-- Object Children -->
+  <element name="children" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetalinkid name="child" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- Object Parent -->
+  <element name="parents" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetalinkid name="parent" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='1' />
+  </element>
+  <!-- Derivate Objects -->
+  <element name="derobjects" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+ </structure>
+ <metadata>
+  <!-- 01 - DC Titel -->
+  <element name="titles" minOccurs='1' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="title" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024" />
+  </element>
+  <!-- 02 - DC Creator -->
+  <element name="creators" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="creator" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="128" />
+  </element>
+  <!-- 03 - CreatorLink -->
+  <element name="creatorlinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="creatorlink" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 04 - DC Subject -->
+  <element name="subjects" minOccurs='0' maxOccurs='1'  parasearch="true"
+   textsearch="false">
+   <mcrmetaclassification name="subject" class="MCRMetaClassification" 
+    minOccurs='1' maxOccurs='unbounded' />
+  </element>
+  <!-- 05 - Origin -->
+  <element name="origins" minOccurs='1' maxOccurs='1'  parasearch="true"
+   textsearch="false">
+   <mcrmetaclassification name="origin" class="MCRMetaClassification" 
+    minOccurs='1' maxOccurs='unbounded' />
+  </element>
+  <!-- 06 - DC Description -->
+  <element name="descriptions" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="description" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="4096"/>
+  </element>
+  <!-- 07 - DescriptURL -->
+  <element name="descripturls" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalink name="descripturl" class="MCRMetaLink" minOccurs='1'
+    maxOccurs='unbounded'/>
+  </element>
+  <!-- 08 - DC Publisher -->
+  <element name="publishers" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="publisher" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="128" />
+  </element>
+  <!-- 09 - PublisherLink -->
+  <element name="publishlinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="publishlink" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 10 - DC Contributor -->
+  <element name="contributors" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="contributor" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="128" />
+  </element>
+  <!-- 11 - ContributorLink -->
+  <element name="contriblinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="contriblink" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 12 - DC Date -->
+  <element name="dates" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 13 - DC Type -->
+  <element name="types" minOccurs='1' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaclassification name="type" class="MCRMetaClassification" 
+    minOccurs='1' maxOccurs='unbounded' />
+  </element>
+  <!-- 14 - DC Format -->
+  <element name="formats" minOccurs='1' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaclassification name="format" class="MCRMetaClassification" 
+    minOccurs='1' maxOccurs='unbounded' />
+  </element>
+  <!-- 15 - DC Identifier -->
+  <element name="identifiers" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="identifier" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="128"/>
+  </element>
+  <!-- 16 - DC Source -->
+  <element name="sources" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="source" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024"/>
+  </element>
+  <!-- 17 - SourceLink -->
+  <element name="sourcelinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalinkid name="sourcelink" class="MCRMetaLinkID" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 18 - DC Language -->
+  <element name="languages" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaclassification name="language" class="MCRMetaClassification" 
+    minOccurs='1' maxOccurs='unbounded' />
+  </element>
+  <!-- 19 - DC Keyword -->
+  <element name="keywords" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="128"/>
+  </element>
+  <!-- 20 - DC Coverage -->
+  <element name="coverages" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="coverage" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024"/>
+  </element>
+  <!-- 21 - CoverageLink -->
+  <element name="coveragelinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalink name="coveragelink" class="MCRMetaLink" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 22 - CoverageDate -->
+  <element name="coveragedates" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaiso8601date name="coveragedate" class="MCRMetaISO8601Date" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 23 - DC Relation -->
+  <element name="relations" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="relation" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024"/>
+  </element>
+  <!-- 24 - RelationLink -->
+  <element name="relationlinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalink name="relationlink" class="MCRMetaLink" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 25 - RelationISBN -->
+  <element name="relationisbns" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaisbn name="relationisbn" class="MCRMetaISBN" minOccurs='1'
+    maxOccurs='unbounded' length="32"/>
+  </element>
+  <!-- 26 - DC Rights -->
+  <element name="rights" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024" />
+  </element>
+  <!-- 27 - RightsLink -->
+  <element name="rightslinks" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalink name="rightslink" class="MCRMetaLink" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 28 - Size -->
+  <element name="sizes" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="size" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024" />
+  </element>
+  <!-- 29 - Place -->
+  <element name="places" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="place" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024" />
+  </element>
+  <!-- 30 - ISBN -->
+  <element name="isbns" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaisbn name="isbn" class="MCRMetaISBN" minOccurs='1'
+    maxOccurs='unbounded' length="32" />
+  </element>
+  <!-- 31 - NBN -->
+  <element name="nbns" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetanbn name="nbn" class="MCRMetaNBN" minOccurs='1'
+    maxOccurs='1' length="256" />
+  </element>
+  <!-- 32 - URN -->
+  <element name="urns" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="urn" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' />
+  </element>
+  <!-- 33 - DDB Contact -->
+  <element name="contacts" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetalangtext name="contact" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="1024" />
+  </element>
+  <!-- 34 - Notes -->
+  <element name="notes" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="true">
+   <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="4096" />
+  </element>
+  <!-- 35 - Citations -->
+  <element name="citations" minOccurs='0' maxOccurs='1' parasearch="false"
+   textsearch="false">
+   <mcrmetalangtext name="citation" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="4096" />
+  </element>
+ </metadata>
+ <service>
+  <!-- Service Dates -->
+  <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaiso8601date name="servdate" class="MCRMetaISO8601Date" minOccurs='1'
+    maxOccurs='unbounded'/>
+  </element>
+  <!-- Service Flags -->
+  <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1'
+    maxOccurs='unbounded' length="256" />
+  </element>
+  <!-- Service ACLs -->
+  <element name="servacls" minOccurs='0' maxOccurs='1' parasearch="true"
+   textsearch="false">
+   <mcrmetaaccessrule name="servacl" class="MCRMetaAccessRule" minOccurs='1'
+    maxOccurs='unbounded' length="512" />
+  </element>
+ </service>
+</configuration>

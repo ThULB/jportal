@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Suchmaske für Dokumente" xml:lang="de">
+  <editor id="search-complexdocument-de">
+    <include uri="webapp:editor/editor-search-complexdocument.xml"/>
+  </editor>
+</section>
+
+<section title="Search mask for documents" xml:lang="en">
+  <editor id="search-complexdocument-en">
+    <include uri="webapp:editor/editor-search-complexdocument.xml"/>
+  </editor>
+</section>
+
+</MyCoReWebPage>
+
+

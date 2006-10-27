@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- UserAdmin module build file for use with Apache Ant                 -->
+<!-- $Revision: 1.3 $ $Date: 2006/06/21 11:07:26 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - accessadmin" default="webapps" basedir="../..">
+
+  <import file="${basedir}/common-modules.xml" />
+	
+  <!-- =================================================================== -->
+  <!-- Help on usage                                                       -->
+  <!-- =================================================================== -->
+
+  <target name="usage">
+    <echo>
+      Usage:
+        ant [target]
+
+      Available targets are:
+        webapps              --> Build the complete sample web application directory
+
+      Please do not use any of the other targets, they are internal.
+    </echo>
+  </target>
+	
+  <!-- =================================================================== -->
+  <!-- Build the web application directory and copy webpages               -->
+  <!-- =================================================================== -->
+	
+  <target name="webapps">
+	<echo>
+			building ${ant.project.name} webapp
+	</echo>
+	<!-- Copy files  -->
+	<copy todir="${docportal.webapps}/admin">
+	  <fileset file="${env.MYCORE_HOME}/modules/module-accessadmin/webapps/content/*.*"/>
+	</copy>
+	<copy todir="${docportal.webapps}/admin/css">
+	  <fileset file="${env.MYCORE_HOME}/modules/module-accessadmin/webapps/stylesheets/*.*"/>
+	</copy>
+	<copy todir="${docportal.webapps}/admin/images">
+	  <fileset file="${env.MYCORE_HOME}/modules/module-accessadmin/webapps/images/*.*"/>
+	</copy>
+  </target>
+	
+  <!-- =================================================================== -->
+	
+</project>

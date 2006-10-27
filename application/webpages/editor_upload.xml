@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Datenübertragung fertig" xml:lang="de">
+<p></p>
+<br />
+<p></p>
+<center>
+Die Datenübertragung war erfolgreich.
+</center>
+<p></p>
+<br />
+<p></p>
+</section>
+
+<section title="The data upload finished" xml:lang="en">
+<p></p>
+<br />
+<p></p>
+<center>
+The data upload was successful finished.
+</center>
+<p></p>
+<br />
+<p></p>
+</section>
+
+</MyCoReWebPage>
+
+

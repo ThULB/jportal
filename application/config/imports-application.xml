@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<imports>
+
+  <list id="SAccess" width="120" type="dropdown">
+   <item value="Access:public">
+    <label xml:lang="de">Zugriff: öffentlich</label>
+    <label xml:lang="en">Access: public</label>
+   </item>
+   <item value="Access:hidden-group1">
+    <label xml:lang="de">Zugriff: nur für alle berechtigten Leser (Gruppe 1)</label>
+    <label xml:lang="en">Access: only for special reader (group 1)</label>
+   </item>
+   <item value="Access:hidden-group2">
+    <label xml:lang="de">Zugriff: nur für alle berechtigten Leser (Gruppe 2)</label>
+    <label xml:lang="en">Access: only for special reader (group 2)</label>
+   </item>
+  </list>
+
+  <list id="SState" width="120" type="dropdown">
+   <item value="State:commited">
+    <label xml:lang="de">Status: fertig</label>
+    <label xml:lang="en">State: ready</label>
+   </item>
+   <item value="State:workflow">
+    <label xml:lang="de">Status: in Arbeit</label>
+    <label xml:lang="en">State: in work</label>
+   </item>
+  </list>
+
+</imports>
+

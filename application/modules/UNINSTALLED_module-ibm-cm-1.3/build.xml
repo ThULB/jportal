@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- UserAdmin module build file for use with Apache Ant                 -->
+<!-- $Revision: 1.4 $ $Date: 2006/07/05 13:13:39 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - IBM CM" default="webapps" basedir="../..">
+
+    <import file="${basedir}/common-modules.xml" />
+
+    <!-- =================================================================== -->
+    <!-- Help on usage                                                       -->
+    <!-- =================================================================== -->
+
+    <target name="usage">
+        <echo>
+      Usage:
+        ant [target]
+
+      Available targets are:
+        webapps              --> Build the complete sample web application directory
+
+      Please do not use any of the other targets, they are internal.
+    </echo>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Build the web application directory and copy webpages               -->
+    <!-- =================================================================== -->
+
+    <target name="webapps">
+        <echo>
+            building IBM CM module webapp
+        </echo>
+
+        <!-- copy config -->
+        <copy todir="webapps/WEB-INF/classes">
+            <fileset dir="${env.DOCPORTAL_HOME}/modules/module-ibm-cm-1.3/config">
+                <include name="mycore.properties.ibm-cm" />
+            </fileset>
+        </copy>
+        <mcr-config action="addInclude"
+                    propertyfile="${docportal.webapps}/WEB-INF/classes/mycore.properties"
+                    value="mycore.properties.ibm-cm" />
+    </target>
+</project>

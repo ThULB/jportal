@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================== -->
+<!-- $Revision: 1.5 $ $Date: 2005/09/27 12:22:56 $ -->
+<!-- ============================================== -->
+
+<editor>
+
+ <target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml"/>
+
+ <validationMessage>
+  <label xml:lang="de">Bitte korrigieren Sie die markierten Felder!</label>
+  <label xml:lang="en">Please correct the marked field!</label>
+ </validationMessage>
+
+ <components root="editor-document" var="/mycoreobject">
+
+  <include uri="webapp:editor/imports-common.xml"/>
+  <include uri="webapp:editor/imports-editor-document.xml"/>
+
+ </components>
+</editor>

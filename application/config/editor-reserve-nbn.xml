@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- editor definition for nbn reservation -->
+<!-- $Revision: 1.2 $ $Date: 2004/05/07 09:06:34 $ -->
+<!-- author: Werner Gresshoff -->
+
+<!DOCTYPE editor>
+
+<editor>
+
+<title
+  prefix  = "NBN reservieren"
+  xpath   = "nbnreservation/title"
+  default = ""
+/>
+
+<workflow>
+  <source class = "org.mycore.services.nbn.MCRNBNReservation" />
+  <target class = "org.mycore.services.nbn.MCRNBNReservation" />
+</workflow>
+
+<components root="PRoot" var="nbnreservation"> 
+
+  <label id="LAuthor"    required="true">Autor EMail:</label>
+  <label id="LComment">Kommentar:</label>
+
+  <textfield id="TFAuthor"    width="40" maxlength="60" />
+  <textarea  id="TAComment"   width="40" height="3" linewrap="off" default="" />
+
+  <submitbutton id="BSubmit" label="NBN reservieren" />
+
+  <panel id="PRoot"> 
+    <cell col="1" row="1" anchor="EAST"      ref="LAuthor"     />
+    <cell col="2" row="1" anchor="WEST"      ref="TFAuthor" var="author" />
+    <cell col="1" row="2" anchor="NORTHEAST" ref="LComment" />
+    <cell col="2" row="2" anchor="NORTHWEST" ref="TAComment" var="comment" />
+    <cell col="2" row="3" anchor="WEST"      ref="BSubmit" var="save" />
+  </panel>
+
+</components>
+
+</editor>
+

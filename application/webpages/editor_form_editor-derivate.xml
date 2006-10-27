@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Bearbeiten eines Derivates" xml:lang="de">
+<table id="contentArea" width="100%" cellspacing="20" cellpadding="0">
+<tr>
+<td>
+<center>
+<editor id="editor-derivate"><include uri="webapp:editor/editor-editor-derivate.xml" /></editor>
+</center>
+</td>
+</tr>
+</table>
+</section>
+
+<section title="Edit an object (derivate)" xml:lang="en">
+<table id="contentArea" width="100%" cellspacing="20" cellpadding="0">
+<tr>
+<td>
+<center>
+<editor id="editor-derivate"><include uri="webapp:editor/editor-editor-derivate.xml" /></editor>
+</center>
+</td>
+</tr>
+</table>
+</section>
+
+</MyCoReWebPage>
+
+

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ContentStoreSelectionRules SYSTEM "ContentStoreSelectionRules.dtd">
+
+<!-- Default file content store, if no other rule applies: -->
+<ContentStoreSelectionRules 
+  default="FS" 
+>
+
+<!-- Uncomment this if you want to use Helix Universal Server or Real Server -->
+<!--
+  <store ID="HELIX">
+    <type> wmv </type>
+    <type> wma </type>
+    <type> mp3 </type>
+    <type> wav </type>
+    <type> realaud </type>
+    <type> realvid </type>
+  </store>
+-->
+
+<!-- Uncomment this if you want to use IBM VideoCharger Server -->                                                          
+<!--
+  <store ID="VC">
+    <type> avi </type>
+    <type> mpegvid </type>
+    <type> mpegvid2 </type>
+    <type> mpegaud </type>
+  </store>
+-->
+
+<!-- Uncomment this if you want to control where files are being stored -->
+<!-- depending on file content type, e. g. to store video files in a    -->
+<!-- IBM VideoCharger server, add a rule with store ID and type IDs     -->
+
+<!--
+  <store ID="CM8">
+    <type> html </type>
+    <type> msppt </type>
+    <type> msword95 </type>
+    <type> msword97 </type>
+    <type> pdf </type>
+    <type> ps </type>
+    <type> rtf </type>
+    <type> txt </type>
+    <type> xml </type>
+  </store>
+-->
+
+</ContentStoreSelectionRules>
+

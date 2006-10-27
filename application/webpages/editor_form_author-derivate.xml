@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Neueingabe eines Dokumentes" xml:lang="de">
+<p></p>
+<br />
+<p></p>
+<editor id="author-derivate-de"><include uri="webapp:editor/editor-author-derivate.xml" /></editor>
+<p></p>
+<br />
+<p></p>
+</section>
+
+<section title="Add a derivate" xml:lang="en">
+<p></p>
+<br />
+<p></p>
+<editor id="author-derivate-en"><include uri="webapp:editor/editor-author-derivate.xml" /></editor>
+<p></p>
+<br />
+<p></p>
+</section>
+
+</MyCoReWebPage>
+
+

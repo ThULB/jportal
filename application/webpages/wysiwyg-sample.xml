@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<head>
+ <maintitle xml:lang="de">DocPortal</maintitle>
+ <maintitle xml:lang="en">DocPortal</maintitle>
+ <pagetitle xml:lang="de">WYSIWYG HTML Editor Beispielseite</pagetitle>
+ <pagetitle xml:lang="en">WYSIWYG HTML editor sample page</pagetitle>
+</head>
+
+<section title="WYSIWYG HTML Editor Beispielseite" xml:lang="de">
+
+    <p>
+    Der hier bereitgestellte <b>FCKEditor</b> ist ein <b>WYSIWYG 
+    (What you see is what you get) HTML-Editor</b>,
+    in dem Sie vergleichbar mit einem Textverarbeitungsprogramm
+    formatierten Text, Tabellen, Aufzählungen usw. eingeben können.
+    </p><p>
+    <b><a href="http://www.fckeditor.net/" target="_blank">FCKEditor 2.2</a></b> 
+    funktioniert in den Browsern <b>FireFox 1.0+, 
+    Internet Explorer 5.5+, Mozilla 1.3+ oder Netscape 7.0+</b>. 
+    Der Safari-Browser (Macintosh) wird bisher nicht unterstützt. 
+    Sie müssen in Ihrem Browser <b>JavaScript aktiviert</b> haben. 
+    Ansonsten erscheint hier ein einfaches Texteingabefeld, 
+    in dem Sie aber dennoch direkt HTML-Quellcode eingeben können.
+    </p>
+
+<editor id="wysiwyg">
+  <target type="debug" method="post" format="xml" />
+
+  <components root="root" var="/html">
+    <headline anchor="LEFT">
+      <text label="HTML-Abschnitt bearbeiten:"/>
+    </headline>
+
+    <panel id="root" lines="on">
+      <cell row="1" col="1" anchor="WEST">
+        <textarea id="text" width="80" height="20"
+          wysiwygEditor="true" editorWidth="640" editorHeight="320" />
+      </cell>
+      <cell row="2" col="1" anchor="EAST" height="20">
+        <cancelButton label="Abbrechen" width="100px" />
+        <text label=" "/>
+        <submitButton label="Speichern" width="100px" />
+      </cell>
+    </panel>
+
+  </components>
+</editor>
+
+    <p>
+    Wenn Sie mit der Maus auf eines der Symbole zeigen, erscheint ein
+    kurzer Hilfetext (<b>Tooltip</b>). Viele Funktionen, insbesondere bei der 
+    Bearbeitung von Tabellen, erreichen Sie auch über die 
+    <b>rechte Maustaste (Kontextmenü)</b>.
+    </p>
+
+</section>
+
+</MyCoReWebPage>
+
+

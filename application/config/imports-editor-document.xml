@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================== -->
+<!-- $Revision: 1.5 $ $Date: 2006/05/16 11:54:32 $ -->
+<!-- ============================================== -->
+
+<imports>
+
+<!-- *** Headline *** -->
+
+  <headline anchor="CENTER">
+   <text>
+    <label xml:lang="de">Die mit * gekennzeichneten Daten sind Pflichtfelder.<p/></label>
+    <label xml:lang="en">The fields with * are required.<p/></label>
+   </text>
+  </headline>
+
+  <panel id="editor-document">
+    <hidden var="ID"/>
+    <hidden var="label"/>
+    <hidden var="version"/>
+
+    <hidden var="service/servdates" descendants="true"/>
+
+    <hidden var="service/servacls" descendants="true"/>
+
+    <hidden var="service/servflags" descendants="true"/>
+	  
+    <hidden var="metadata/@lang" default="de"/>
+
+    <cell col="1" row="1" anchor="NORTHWEST" ref="LTitleP"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="DTitle"/>
+    <cell col="3" row="1" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="1" anchor="NORTHWEST" ref="HTitle"/>
+
+    <cell col="1" row="2" anchor="NORTHWEST" ref="LCreatorP"/>
+    <cell col="2" row="2" anchor="NORTHWEST" ref="DCreator"/>
+    <cell col="3" row="2" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="2" anchor="WEST" ref="HCreator"/>
+
+    <cell col="2" row="3" anchor="NORTHWEST" ref="DCreatorLink"/>
+
+    <cell col="1" row="4" anchor="NORTHWEST" ref="LOriginP"/>
+    <cell col="2" row="4" anchor="NORTHWEST" ref="DOrigin"/>
+    <cell col="3" row="4" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="4" anchor="NORTHWEST" ref="HOrigin"/>
+
+    <cell col="1" row="5" anchor="NORTHWEST" ref="LDescription"/>
+    <cell col="2" row="5" anchor="NORTHWEST" ref="DDescription"/>
+    <cell col="3" row="5" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="5" anchor="NORTHWEST" ref="HDescription"/>
+
+    <cell col="1" row="6" anchor="NORTHWEST" ref="LPublisher"/>
+    <cell col="2" row="6" anchor="NORTHWEST" ref="DPublisher"/>
+    <cell col="3" row="6" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="6" anchor="NORTHWEST" ref="HPublisher"/>
+
+    <cell col="2" row="7" anchor="NORTHWEST" ref="DPublisherLink"/>
+
+    <cell col="1" row="8" anchor="NORTHWEST" ref="LContributor"/>
+    <cell col="2" row="8" anchor="NORTHWEST" ref="DContributor"/>
+    <cell col="3" row="8" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="8" anchor="NORTHWEST" ref="HContributor"/>
+
+    <cell col="2" row="9" anchor="NORTHWEST" ref="DContributorLink"/>
+
+    <cell col="1" row="10" anchor="NORTHWEST" ref="LDate"/>
+    <cell col="2" row="10" anchor="NORTHWEST" ref="DDate"/>
+    <cell col="3" row="10" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="10" anchor="NORTHWEST" ref="HDate"/>
+
+    <cell col="1" row="11" anchor="NORTHWEST" ref="LTypeP"/>
+    <cell col="2" row="11" anchor="NORTHWEST" ref="DType"/>
+    <cell col="3" row="11" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="11" anchor="NORTHWEST" ref="HType"/>
+
+    <cell col="1" row="12" anchor="NORTHWEST" ref="LFormatP"/>
+    <cell col="2" row="12" anchor="NORTHWEST" ref="DFormat"/>
+    <cell col="3" row="12" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="12" anchor="NORTHWEST" ref="HFormat"/>
+
+    <cell col="1" row="13" anchor="NORTHWEST" ref="LIdentifier"/>
+    <cell col="2" row="13" anchor="NORTHWEST" ref="DIdentifier"/>
+    <cell col="3" row="13" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="13" anchor="NORTHWEST" ref="HIdentifier"/>
+
+    <cell col="1" row="14" anchor="NORTHWEST" ref="LSource"/>
+    <cell col="2" row="14" anchor="NORTHWEST" ref="DSource"/>
+    <cell col="3" row="14" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="14" anchor="NORTHWEST" ref="HSource"/>
+
+    <cell col="1" row="15" anchor="NORTHWEST" ref="LLanguageP"/>
+    <cell col="2" row="15" anchor="NORTHWEST" ref="DLanguage"/>
+    <cell col="3" row="15" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="15" anchor="NORTHWEST" ref="HLanguage"/>
+
+    <cell col="1" row="16" anchor="NORTHWEST" ref="LKeywords"/>
+    <cell col="2" row="16" anchor="NORTHWEST" ref="DKeywords"/>
+    <cell col="3" row="16" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="16" anchor="NORTHWEST" ref="HKeywords"/>
+
+    <cell col="1" row="17" anchor="NORTHWEST" ref="LCoverage"/>
+    <cell col="2" row="17" anchor="NORTHWEST" ref="DCoverage"/>
+    <cell col="3" row="17" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="17" anchor="NORTHWEST" ref="HCoverage"/>
+
+    <cell col="1" row="18" anchor="NORTHWEST" ref="LRelation"/>
+    <cell col="2" row="18" anchor="NORTHWEST" ref="DRelation"/>
+    <cell col="3" row="18" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="18" anchor="NORTHWEST" ref="HRelation"/>
+
+    <cell col="1" row="19" anchor="NORTHWEST" ref="LRightsP"/>
+    <cell col="2" row="19" anchor="NORTHWEST" ref="DRights"/>
+    <cell col="3" row="19" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="19" anchor="NORTHWEST" ref="HRights"/>
+
+    <cell col="1" row="20" anchor="NORTHWEST" ref="LSize"/>
+    <cell col="2" row="20" anchor="NORTHWEST" ref="DSize"/>
+    <cell col="3" row="20" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="20" anchor="NORTHWEST" ref="HSize"/>
+
+    <cell col="1" row="21" anchor="NORTHWEST" ref="LContact"/>
+    <cell col="2" row="21" anchor="NORTHWEST" ref="DContact"/>
+    <cell col="3" row="21" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="21" anchor="NORTHWEST" ref="HContact"/>
+
+    <cell col="1" row="22" anchor="NORTHWEST" ref="LNote"/>
+    <cell col="2" row="22" anchor="NORTHWEST" ref="DNote"/>
+    <cell col="3" row="22" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="22" anchor="NORTHWEST" ref="HNote"/>
+
+    <cell col="1" row="23" anchor="NORTHWEST" ref="LCitation"/>
+    <cell col="2" row="23" anchor="NORTHWEST" ref="DCitation"/>
+    <cell col="3" row="23" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="23" anchor="NORTHWEST" ref="HCitation"/>
+
+    <cell col="1" row="24" anchor="NORTHWEST">
+      <space width="0px" height="20px"/>
+    </cell>
+
+    <cell col="1" row="25"/>
+    <cell col="2" row="25" anchor="WEST" ref="TwoButtons"/>
+
+    <cell col="1" row="26" anchor="NORTHWEST">
+      <space width="0px" height="20px"/>
+    </cell>
+
+  </panel>
+
+<!-- *** Data for the TITLE ** -->
+
+  <panel id="DTitle">
+    <hidden var="metadata/titles/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/titles/@parasearch" default="true"/>
+    <hidden var="metadata/titles/@textsearch" default="true"/>
+    <hidden var="metadata/titles/@notinherit" default="false"/>
+    <hidden var="metadata/titles/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="WEST" var="metadata/titles/title" >
+      <repeater min="1" max="5" ref="DTitleRep" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DTitleRep">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="1" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" sortnr="2">
+      <textarea id="TFCoTitle" width="62" height="3" maxlength="1024">
+        <condition id="CoTitle" required="true">
+          <label xml:lang="de">Bitte tragen Sie den Titel ein!</label>
+          <label xml:lang="en">Please enter the title!</label>
+        </condition>
+      </textarea>
+    </cell>
+    <cell col="3" row="1" anchor="NORTHWEST" ref="STitleType" var="@type" sortnr="3"/>
+  </panel>
+
+<!-- *** Data for the CREATOR ** -->
+
+  <panel id="DCreator">
+    <hidden var="metadata/creators/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/creators/@parasearch" default="true"/>
+    <hidden var="metadata/creators/@textsearch" default="true"/>
+    <hidden var="metadata/creators/@notinherit" default="false"/>
+    <hidden var="metadata/creators/@heritable" default="true"/>
+    <hidden var="metadata/creators/creator/@inherited" default="0"/>
+    <hidden var="metadata/creators/creator/@lang" default="de"/>
+    <cell col="1" row="1" anchor="WEST" ref="DCreatorCond"/>
+    <cell col="2" row="1" anchor="WEST" ref="ACreator"/>
+  </panel>
+
+  <panel id="DCreatorCond">
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/creators/creator" sortnr="4" >
+      <textfield id="ZCreatorCond" width="48" maxlength="128">
+        <condition id="CoCreatorCond" required="true">
+          <label xml:lang="de">Bitte tragen Sie den/die Autor(en) ein!</label>
+          <label xml:lang="en">Please enter the author(s)!</label>
+        </condition>
+      </textfield>
+    </cell>
+  </panel>
+
+<!-- *** Data for the CREATORLINK ** -->
+
+  <panel id="DCreatorLink">
+    <hidden var="metadata/creatorlinks/@class" default="MCRMetaLinkID"/>
+    <hidden var="metadata/creatorlinks/@parasearch" default="true"/>
+    <hidden var="metadata/creatorlinks/@textsearch" default="false"/>
+    <hidden var="metadata/creatorlinks/@notinherit" default="false"/>
+    <hidden var="metadata/creatorlinks/@heritable" default="true"/>
+    <cell row="1" col="1" anchor="NORTHWEST" sortnr="5" var="metadata/creatorlinks/creatorlink">
+      <repeater min="1" max="5" pos="right">  
+        <panel lines="off">
+          <hidden var="@inherited" default="0"/>
+          <hidden var="@type" default="locator"/>
+          <hidden var="@title" default="Person"/>
+          <hidden var="@href" default="" />
+          <cell row="1" col="1" width="100%">
+	    <output var="@title" default="Person"/>
+	    <text label="&#160;&#160;&#160;" />
+	  </cell>
+          <cell row="1" col="2">
+            <subselect id="sub.select1" type="webpage" href="indexpage?searchclass=creators_sub" sortnr="6" >
+              <label xml:lang="de">Auswählen</label>
+              <label xml:lang="en">Select</label>
+            </subselect>
+          </cell>
+        </panel>
+      </repeater>
+    </cell>
+  </panel>
+
+<!-- ** Data for the ORIGIN *** -->
+
+  <panel id="DOrigin">
+    <hidden var="metadata/origins/@class" default="MCRMetaClassification"/>
+    <hidden var="metadata/origins/@parasearch" default="true"/>
+    <hidden var="metadata/origins/@textsearch" default="false"/>
+    <hidden var="metadata/origins/@notinherit" default="false"/>
+    <hidden var="metadata/origins/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="WEST" var="metadata/origins/origin">
+      <repeater min="1" max="5" ref="DOriginRep" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DOriginRep">
+    <hidden var="@inherited" default="0"/>
+    <hidden var="@classid" default="DocPortal_class_00000003"/>
+    <cell col="1" row="1" anchor="WEST" ref="COriginDoc" var="@categid" sortnr="7"/>
+  </panel>
+
+<!-- *** Data for the DESCRIPTION ** -->
+
+  <panel id="DDescription">
+    <hidden var="metadata/descriptions/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/descriptions/@parasearch" default="true"/>
+    <hidden var="metadata/descriptions/@textsearch" default="true"/>
+    <hidden var="metadata/descriptions/@notinherit" default="false"/>
+    <hidden var="metadata/descriptions/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/descriptions/description">
+      <repeater min="1" max="5" ref="DDescriptionRep" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DDescriptionRep">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="8" default="de"/>
+    <cell col="2" row="1" anchor="WEST" ref="TFarea4096" sortnr="9"/>
+    <cell col="3" row="1" anchor="NORTHWEST" ref="SDescriptType" var="@type" sortnr="10"/>
+  </panel>
+
+<!-- *** Data for the Publisher ** -->
+
+  <panel id="DPublisher">
+    <hidden var="metadata/publishers/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/publishers/@parasearch" default="true"/>
+    <hidden var="metadata/publishers/@textsearch" default="true"/>
+    <hidden var="metadata/publishers/@notinherit" default="false"/>
+    <hidden var="metadata/publishers/@heritable" default="true"/>
+    <hidden var="metadata/publishers/publisher/@inherited" default="0"/>
+    <hidden var="metadata/publishers/publisher/@lang" default="de"/>
+    <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="metadata/publishers/publisher" sortnr="11"/>
+    <cell col="2" row="1" anchor="WEST" ref="SPublisherType" var="metadata/publishers/publisher/@type" sortnr="12"/>
+    <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
+  </panel>
+
+<!-- *** Data for the PublisherLink ** -->
+
+  <panel id="DPublisherLink">
+    <hidden var="metadata/publishlinks/@class" default="MCRMetaLinkID"/>
+    <hidden var="metadata/publishlinks/@parasearch" default="true"/>
+    <hidden var="metadata/publishlinks/@textsearch" default="false"/>
+    <hidden var="metadata/publishlinks/@notinherit" default="false"/>
+    <hidden var="metadata/publishlinks/@heritable" default="true"/>
+    <cell row="1" col="1" anchor="NORTHWEST" sortnr="13" var="metadata/publishlinks/publishlink">
+      <repeater min="1" max="5" pos="right">  
+        <panel lines="off">
+          <hidden var="@inherited" default="0"/>
+          <hidden var="@type" default="locator"/>
+          <hidden var="@title" default="Person"/>
+          <hidden var="@href" default="" />
+          <cell row="1" col="1" width="100%">
+	    <output var="@title" default="Person"/>
+	    <text label="&#160;&#160;&#160;" />
+	  </cell>
+          <cell row="1" col="2">
+            <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=creators_sub" ordernr="14" >
+              <label xml:lang="de">Auswählen</label>
+              <label xml:lang="en">Select</label>
+            </subselect>
+          </cell>
+        </panel>
+      </repeater>
+    </cell>
+<!--
+    <cell row="2" col="1" anchor="NORTHWEST" sortnr="15" var="metadata/publishlinks/publishlink[2]">
+      <repeater min="1" max="5" pos="right">  
+        <panel lines="off">
+          <hidden var="@inherited" default="0"/>
+          <hidden var="@type" default="locator"/>
+          <hidden var="@title" default="Institution"/>
+          <hidden var="@href" default="" />
+          <cell row="1" col="1" width="100%">
+	    <output var="@title" default="Institution"/>
+	    <text label="&#160;&#160;&#160;" />
+	  </cell>
+          <cell row="1" col="2">
+            <subselect id="sub.select3" type="webpage" href="index/robotie/index.html" ordernr="16" >
+              <label xml:lang="de">Auswählen</label>
+              <label xml:lang="en">Select</label>
+            </subselect>
+          </cell>
+        </panel>
+      </repeater>
+    </cell>
+-->
+  </panel>
+
+<!-- *** Data for the Contributor ** -->
+
+  <panel id="DContributor">
+    <hidden var="metadata/contributors/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/contributors/@parasearch" default="true"/>
+    <hidden var="metadata/contributors/@textsearch" default="true"/>
+    <hidden var="metadata/contributors/@notinherit" default="false"/>
+    <hidden var="metadata/contributors/@heritable" default="true"/>
+    <hidden var="metadata/contributors/contributor/@inherited" default="0"/>
+    <hidden var="metadata/contributors/contributor/@lang" default="de"/>
+    <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="metadata/contributors/contributor" sortnr="17"/>
+    <cell col="2" row="1" anchor="WEST" ref="SContributorType" var="metadata/contributors/contributor/@type" sortnr="18"/>
+    <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
+  </panel>
+
+<!-- *** Data for the ContributorLink ** -->
+
+  <panel id="DContributorLink">
+    <hidden var="metadata/contriblinks/@class" default="MCRMetaLinkID"/>
+    <hidden var="metadata/contriblinks/@parasearch" default="true"/>
+    <hidden var="metadata/contriblinks/@textsearch" default="false"/>
+    <hidden var="metadata/contriblinks/@notinherit" default="false"/>
+    <hidden var="metadata/contriblinks/@heritable" default="true"/>
+    <cell row="1" col="1" anchor="NORTHWEST" sortnr="19" var="metadata/contriblinks/contriblink">
+      <repeater min="1" max="5" pos="right">  
+        <panel lines="off">
+          <hidden var="@inherited" default="0"/>
+          <hidden var="@type" default="locator"/>
+          <hidden var="@title" default="Person"/>
+          <hidden var="@href" default="" />
+          <cell row="1" col="1" width="100%">
+	    <output var="@title" default="Person"/>
+	    <text label="&#160;&#160;&#160;" />
+	  </cell>
+          <cell row="1" col="2">
+            <subselect id="sub.select4" type="webpage" href="indexpage?searchclass=creators_sub" ordernr="20" >
+              <label xml:lang="de">Auswählen</label>
+              <label xml:lang="en">Select</label>
+            </subselect>
+          </cell>
+        </panel>
+      </repeater>
+    </cell>
+<!--
+    <cell row="2" col="1" anchor="NORTHWEST" sortnr="21" var="metadata/contriblinks/contriblink[2]">
+      <repeater min="1" max="5" pos="right">  
+        <panel lines="off">
+          <hidden var="@inherited" default="0"/>
+          <hidden var="@type" default="locator"/>
+          <hidden var="@title" default="Institution"/>
+          <hidden var="@href" default="" />
+          <cell row="1" col="1" width="100%">
+	    <output var="@title" default="Institution"/>
+	    <text label="&#160;&#160;&#160;" />
+	  </cell>
+          <cell row="1" col="2">
+            <subselect id="sub.select5" type="webpage" href="index/robotie/index.html" ordernr="22" >
+              <label xml:lang="de">Auswählen</label>
+              <label xml:lang="en">Select</label>
+            </subselect>
+          </cell>
+        </panel>
+      </repeater>
+    </cell>
+-->
+  </panel>
+
+<!-- *** Data for the Date ** -->
+
+  <panel id="DDate">
+    <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date"/>
+    <hidden var="metadata/dates/@parasearch" default="true"/>
+    <hidden var="metadata/dates/@textsearch" default="false"/>
+    <hidden var="metadata/dates/@notinherit" default="false"/>
+    <hidden var="metadata/dates/@heritable" default="true"/>
+    <hidden var="metadata/dates/date/@inherited" default="0"/>
+    <cell col="1" row="1" anchor="WEST" ref="TFzeile10" var="metadata/dates/date" sortnr="23"/>
+    <cell col="2" row="1" anchor="WEST" ref="SDateType" var="metadata/dates/date/@type" sortnr="24"/>
+  </panel>
+
+<!-- ** Data for the TYPE *** -->
+
+  <panel id="DType">
+    <hidden var="metadata/types/@class" default="MCRMetaClassification"/>
+    <hidden var="metadata/types/@parasearch" default="true"/>
+    <hidden var="metadata/types/@textsearch" default="false"/>
+    <hidden var="metadata/types/@notinherit" default="false"/>
+    <hidden var="metadata/types/@heritable" default="true"/>
+    <hidden var="metadata/types/type/@inherited" default="0"/>
+    <hidden var="metadata/types/type/@classid" default="DocPortal_class_00000005"/>
+    <cell col="1" row="1" anchor="WEST" ref="CType" var="metadata/types/type/@categid" sortnr="25"/>
+  </panel>
+
+<!-- ** Data for the FORMAT *** -->
+
+  <panel id="DFormat">
+    <hidden var="metadata/formats/@class" default="MCRMetaClassification"/>
+    <hidden var="metadata/formats/@parasearch" default="true"/>
+    <hidden var="metadata/formats/@textsearch" default="false"/>
+    <hidden var="metadata/formats/@notinherit" default="false"/>
+    <hidden var="metadata/formats/@heritable" default="true"/>
+    <hidden var="metadata/formats/format/@inherited" default="0"/>
+    <hidden var="metadata/formats/format/@classid" default="DocPortal_class_00000006"/>
+    <cell col="1" row="1" anchor="WEST" ref="CFormat" var="metadata/formats/format/@categid" sortnr="26"/>
+  </panel>
+
+<!-- *** Data for the Identifier ** -->
+
+  <panel id="DIdentifier">
+    <hidden var="metadata/identifiers/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/identifiers/@parasearch" default="true"/>
+    <hidden var="metadata/identifiers/@textsearch" default="true"/>
+    <hidden var="metadata/identifiers/@notinherit" default="false"/>
+    <hidden var="metadata/identifiers/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identifiers/identifier">
+      <repeater min="1" max="5" ref="DIdentifierRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DIdentifierRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="27" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" sortnr="28" default=""/>
+  </panel>
+
+<!-- *** Data for the Sources ** -->
+
+  <panel id="DSource">
+    <hidden var="metadata/sources/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/sources/@parasearch" default="true"/>
+    <hidden var="metadata/sources/@textsearch" default="true"/>
+    <hidden var="metadata/sources/@notinherit" default="false"/>
+    <hidden var="metadata/sources/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/sources/source">
+      <repeater min="1" max="5" ref="DSourceRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DSourceRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="29" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile1024" sortnr="30" default=""/>
+  </panel>
+
+<!-- ** Data for the LANGUAGE *** -->
+
+  <panel id="DLanguage">
+    <hidden var="metadata/languages/@class" default="MCRMetaClassification"/>
+    <hidden var="metadata/languages/@parasearch" default="true"/>
+    <hidden var="metadata/languages/@textsearch" default="false"/>
+    <hidden var="metadata/languages/@notinherit" default="false"/>
+    <hidden var="metadata/languages/@heritable" default="true"/>
+    <hidden var="metadata/languages/language/@inherited" default="0"/>
+    <hidden var="metadata/languages/language/@classid" default="DocPortal_class_00000004"/>
+    <cell col="1" row="1" anchor="WEST" ref="CLanguage" var="metadata/languages/language/@categid" sortnr="31"/>
+  </panel>
+
+<!-- *** Data for the KEYWORDS ** -->
+
+  <panel id="DKeywords">
+    <hidden var="metadata/keywords/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/keywords/@parasearch" default="true"/>
+    <hidden var="metadata/keywords/@textsearch" default="true"/>
+    <hidden var="metadata/keywords/@notinherit" default="false"/>
+    <hidden var="metadata/keywords/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/keywords/keyword">
+      <repeater min="1" max="5" ref="DKeywordsRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DKeywordsRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="32" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" sortnr="33" default=""/>
+  </panel>
+
+<!-- *** Data for the COVERAGE ** -->
+
+  <panel id="DCoverage">
+    <hidden var="metadata/coverages/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/coverages/@parasearch" default="true"/>
+    <hidden var="metadata/coverages/@textsearch" default="true"/>
+    <hidden var="metadata/coverages/@notinherit" default="false"/>
+    <hidden var="metadata/coverages/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/coverages/coverage">
+      <repeater min="1" max="5" ref="DCoverageRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DCoverageRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="34" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile1024" sortnr="35" default=""/>
+  </panel>
+
+<!-- *** Data for the Relation ** -->
+
+  <panel id="DRelation">
+    <hidden var="metadata/relations/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/relations/@parasearch" default="true"/>
+    <hidden var="metadata/relations/@textsearch" default="true"/>
+    <hidden var="metadata/relations/@notinherit" default="false"/>
+    <hidden var="metadata/relations/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/relations/relation">
+      <repeater min="1" max="5" ref="DRelationRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DRelationRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="36" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile1024" sortnr="37" default=""/>
+  </panel>
+
+<!-- *** Data for the Rights ** -->
+
+  <panel id="DRights">
+    <hidden var="metadata/rights/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/rights/@parasearch" default="true"/>
+    <hidden var="metadata/rights/@textsearch" default="true"/>
+    <hidden var="metadata/rights/@notinherit" default="false"/>
+    <hidden var="metadata/rights/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/rights/right">
+      <repeater min="1" max="5" ref="DRightsRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DRightsRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="38" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" sortnr="39" default="">
+      <textfield id="TFCoRights" width="48" maxlength="1024">
+        <condition id="CoRights" required="true">
+          <label xml:lang="de">Bitte tragen Sie die Rechte ein!</label>
+          <label xml:lang="en">Please enter the rights!</label>
+        </condition>
+      </textfield>
+    </cell>
+  </panel>
+
+<!-- *** Data for the Size ** -->
+
+  <panel id="DSize">
+    <hidden var="metadata/sizes/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/sizes/@parasearch" default="true"/>
+    <hidden var="metadata/sizes/@textsearch" default="false"/>
+    <hidden var="metadata/sizes/@notinherit" default="false"/>
+    <hidden var="metadata/sizes/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/sizes/size">
+      <repeater min="1" max="5" ref="DSizeRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DSizeRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="40" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile1024" sortnr="41" default=""/>
+  </panel>
+
+<!-- *** Data for the Contact ** -->
+
+  <panel id="DContact">
+    <hidden var="metadata/contacts/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/contacts/@parasearch" default="false"/>
+    <hidden var="metadata/contacts/@textsearch" default="false"/>
+    <hidden var="metadata/contacts/@notinherit" default="false"/>
+    <hidden var="metadata/contacts/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/contacts/contact">
+      <repeater min="1" max="5" ref="DContactRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DContactRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="42" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile1024" sortnr="43" default=""/>
+  </panel>
+
+<!-- *** Data for the Note ** -->
+
+  <panel id="DNote">
+    <hidden var="metadata/notes/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/notes/@parasearch" default="true"/>
+    <hidden var="metadata/notes/@textsearch" default="true"/>
+    <hidden var="metadata/notes/@notinherit" default="false"/>
+    <hidden var="metadata/notes/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/notes/note">
+      <repeater min="1" max="5" ref="DNoteRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DNoteRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="44" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFarea4096" sortnr="45" default=""/>
+  </panel>
+
+<!-- *** Data for the Citation ** -->
+
+  <panel id="DCitation">
+    <hidden var="metadata/citations/@class" default="MCRMetaLangText"/>
+    <hidden var="metadata/citations/@parasearch" default="false"/>
+    <hidden var="metadata/citations/@textsearch" default="false"/>
+    <hidden var="metadata/citations/@notinherit" default="false"/>
+    <hidden var="metadata/citations/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/citations/citation">
+      <repeater min="1" max="5" ref="DCitationRef" pos="right"/>
+    </cell>
+  </panel>
+
+  <panel id="DCitationRef">
+    <hidden var="@inherited" default="0"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="46" default="de"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="TFarea4096" sortnr="47" default=""/>
+  </panel>
+
+<!-- *** End *** -->
+
+</imports>

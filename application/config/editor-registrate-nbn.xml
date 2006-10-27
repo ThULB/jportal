@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- editor definition for nbn reservation -->
+<!-- $Revision: 1.2 $ $Date: 2004/05/07 09:06:34 $ -->
+<!-- author: Werner Gresshoff -->
+
+<!DOCTYPE editor>
+
+<editor>
+
+<title
+  prefix  = "NBN registrieren"
+  xpath   = "nbnregistration/title"
+  default = ""
+/>
+
+<workflow>
+  <source class = "org.mycore.services.nbn.MCRNBNRegistration" />
+  <target class = "org.mycore.services.nbn.MCRNBNRegistration" />
+</workflow>
+
+<components root="PRoot" var="nbnregistration"> 
+
+  <label id="LNBN">NBN (nbn:de:hbz:6-):</label>
+  <label id="LNewNBN">Neue NBN erzeugen:</label>
+  <label id="LRegisterNBN">NBN bei DDB registrieren:</label>
+
+  <textfield id="TFNBN"    width="20" maxlength="11" />
+  <checkbox id="CNewNBN" value="true" label="Bitte eine neue NBN erzeugen" />
+  <checkbox id="CRegisterNBN" value="true" label="Bitte die NBN bei der Deutschen Bibliothek registrieren" />
+
+  <submitbutton id="BSubmit" label="NBN registrieren" />
+
+  <panel id="PRoot"> 
+    <cell col="1" row="1" anchor="EAST"      ref="LNBN"     />
+    <cell col="2" row="1" anchor="WEST"      ref="TFNBN" var="nbn" />
+    <cell col="1" row="2" anchor="EAST"      ref="LNewNBN" />
+    <cell col="2" row="2" anchor="WEST"      ref="CNewNBN" var="nbn/@new" />
+    <cell col="1" row="3" anchor="EAST"      ref="LRegisterNBN" />
+    <cell col="2" row="3" anchor="WEST"      ref="CRegisterNBN" var="nbn/@register" />
+    <cell col="2" row="4" anchor="WEST"      ref="BSubmit" var="save" />
+  </panel>
+
+</components>
+
+</editor>
+

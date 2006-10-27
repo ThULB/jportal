@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE editor>
+
+<editor>
+ <target type="servlet" name="MCRStartEditorServlet" method="get" format="name=value" />
+<!--
+ <target type="debug" />
+-->
+
+ <components root="commit-derivate">
+
+  <panel id="commit-derivate">
+   <hidden var="todo" default="ssetlabel" />
+   <cell col="1" row="1" anchor="NORTHWEST" ref="import-derivate" />
+  </panel>
+
+  <include uri="webapp:editor/imports-common.xml" />
+  <include uri="webapp:editor/imports-editor-derivate.xml" />
+
+  <panel id="DLabel">
+    <cell col="1" row="1" anchor="NORTHWEST" var="extparm" sortnr="1">
+      <textfield id="TFweditder" width="64" maxlength="128">
+      <include uri="session:seditder" cacheable="false" />
+      </textfield>
+    </cell>
+  </panel>
+
+ </components>
+</editor>
+

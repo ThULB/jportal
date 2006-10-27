@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure 1.2//EN" "configure_1_2.dtd">
+
+<!-- =================================================================== -->
+<!-- MyCoRe Papyri application configuration file for jetty              -->
+<!-- $Revision: 1.2 $ $Date: 2005/11/03 14:29:01 $                      -->
+<!-- =================================================================== -->
+
+<Configure class="org.mortbay.jetty.Server">
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Add and configure a HTTP listener to port 8291                  -->
+  <!-- The default port can be changed using: java -Djetty.port=....   -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Call name="addListener">
+    <Arg>
+      <New class="org.mortbay.http.SocketListener">
+        <Set name="Port">
+          <SystemProperty name="jetty.port" default="8291"/>
+        </Set>
+        <Set name="MinThreads">5</Set>
+        <Set name="MaxThreads">100</Set>
+        <Set name="MaxIdleTimeMs">30000</Set>
+        <Set name="LowResourcePersistTimeMs">5000</Set>
+        <Set name="PoolName">Listener</Set>
+      </New>
+    </Arg>
+  </Call>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Set the default web application configuration mechanisms:       -->
+  <!--   XMLConfiguration       - handles WEB-INF/web.xml              -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Set name="WebApplicationConfigurationClassNames">
+    <Array type="java.lang.String">
+      <Item>org.mortbay.jetty.servlet.XMLConfiguration</Item>
+    </Array>
+  </Set>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Add root context web applications.                              -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Call name="addWebApplication">
+    <Arg>/</Arg>
+    <Arg>
+      <SystemProperty name="jetty.home" default="."/>/../../webapps
+    </Arg>
+    <Set name="defaultsDescriptor">
+      <SystemProperty name="jetty.home" default="."/>/webdefault.xml
+    </Set>
+  </Call>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Configure the Request Log                                       -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Set name="RequestLog">
+    <New class="org.mortbay.http.NCSARequestLog">
+      <Arg><SystemProperty name="jetty.home" default="."/>/logs/yyyy_mm_dd.request.log</Arg>
+      <Set name="retainDays">90</Set>
+      <Set name="append">true</Set>
+      <Set name="extended">false</Set>
+      <Set name="LogTimeZone">GMT</Set>
+    </New>
+  </Set>
+
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <!-- Build a demo context manually.                                  -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+  <Call name="addContext">
+    <Arg>/</Arg>
+    <Set name="ResourceBase">
+      <SystemProperty name="jetty.home" default="."/>/../../webapps
+    </Set>
+    <Call name="addHandler">
+      <Arg>
+        <New class="org.mortbay.http.handler.ResourceHandler">
+            <Set name="minGzipLength">8192</Set>
+        </New>
+      </Arg>
+    </Call>
+  </Call>
+
+</Configure>
+

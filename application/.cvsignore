@@ -1,0 +1,16 @@
+.classpath
+.project
+.settings
+filestore
+hsqldb-data
+keystore
+lucenestore
+mycorelib
+save
+schema
+webapps
+workflow
+lucene-index4content
+lucene-index4metadata
+lucene-locks
+hsqlport.tmp

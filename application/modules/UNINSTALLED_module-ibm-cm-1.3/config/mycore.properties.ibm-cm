@@ -1,0 +1,61 @@
+
+##############################################################################
+# The persistence configuration for CM8
+##############################################################################
+
+#MCR.persistence_cm8_cmbicmsrvs=%MCR.basedir%/modules/module-ibm-cm-1.3/config/cmbicmsrvs.ini
+#MCR.persistence_cm8_cmbicmenv=%MCR.basedir%/modules/module-ibm-cm-1.3/config/cmbicmenv.ini
+
+## Special values for the persistence layer
+MCR.persistence_cm8_max_connections=25
+MCR.persistence_cm8_library_server=ICMNLSDB
+MCR.persistence_cm8_user_id=icmadmin
+MCR.persistence_cm8_password=???
+
+## Special values for the objects for CM8
+MCR.persistence_cm8_document=MCR13_Doc
+MCR.persistence_cm8_document_prefix=td
+MCR.persistence_cm8_author=MCR13_Auth
+MCR.persistence_cm8_author_prefix=ta
+MCR.persistence_cm8_institution=MCR13_Inst
+MCR.persistence_cm8_institution_prefix=ti
+MCR.persistence_cm8_derivate=MCR13_Der
+MCR.persistence_cm8_derivate_prefix=tz
+
+## Resource manager store for the Internal FileSystem
+MCR.IFS.ContentStore.CM8.ItemType=MCR13_IFS
+MCR.IFS.ContentStore.CM8.StoreTemp.Type=none
+MCR.IFS.ContentStore.CM8.StoreTemp.Type=memory
+MCR.IFS.ContentStore.CM8.StoreTemp.MemSize=4
+MCR.IFS.ContentStore.CM8.StoreTemp.Dir=/tmp
+
+## Special values for the text search engine
+MCR.persistence_cm8_textsearch_ccsid=1208
+MCR.persistence_cm8_textsearch_lang=DE_DE
+MCR.persistence_cm8_textsearch_indexdir=/home/db2inst1/sqllib/db2ext/indexes
+MCR.persistence_cm8_textsearch_workingdir=/home/db2inst1/sqllib/db2ext/indexes
+MCR.persistence_cm8_textsearch_commitcount=0
+MCR.persistence_cm8_textsearch_minchanges=1
+MCR.persistence_cm8_textsearch_updatefreq=d(*) h(01) m(00)
+
+# The name of the Java class of the persistence search layer
+# MCR.persistence_cm8_merger_name=org.mycore.services.query.MCRSearchMerger
+# MCR.persistence_cm8_query_name=org.mycore.backend.cm8.MCRCM8TransformXPathToCM8
+
+# The name of the CM8 EventHandler
+MCR.EventHandler.MCRObject.4.class=org.mycore.backend.cm8.MCRCM8EventHandlerIndexMeta
+
+##############################################################################
+# Internal Filesystem IBM CM                                                 #
+##############################################################################
+
+# Sample file content store with ID = CM8, use the IBM Content Manager 8
+MCR.IFS.ContentStore.CM8.Class=org.mycore.backend.cm8.MCRCStoreContentManager8
+MCR.IFS.ContentStore.CM8.Attribute.File=ifsfile
+MCR.IFS.ContentStore.CM8.Attribute.Time=ifstime
+MCR.IFS.ContentStore.CM8.Attribute.Owner=ifsowner
+
+##############################################################################
+
+#TODO: OutOfMemoryException when uncommented
+#MCR.internal_command_classes=%MCR.internal_command_classes%,org.mycore.backend.cm8.MCRCM8ItemTypeCommands

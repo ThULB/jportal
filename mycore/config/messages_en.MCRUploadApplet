@@ -1,0 +1,6 @@
+
+MCRUploadApplet.select = select ...
+MCRUploadApplet.submit = submit ...
+MCRUploadApplet.dirsel = Select files or directories:
+MCRUploadApplet.altsel = or enter an absolute path:
+MCRUploadApplet.choose = Select files or directories

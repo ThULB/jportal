@@ -1,0 +1,255 @@
+<project name="docportal" basedir=".">
+  <!-- =================================================================== -->
+  <!-- Global properties                                                   -->
+  <!-- =================================================================== -->
+
+  <!-- Javac properties -->
+  <property name="debug" value="on" />
+  <property name="optimize" value="on" />
+  <property name="deprecation" value="off" />
+  <property name="javatarget" value="1.4" />
+  <property name="sourcerelease" value="1.4" />
+  <property name="sourceencoding" value="ISO-8859-15" />
+
+  <!-- Maximum amount of memory to allocate to java VM when loading -->
+  <property name="java.maxmemory" value="256m" />
+
+  <!-- Read in environment variables -->
+  <property environment="env" />
+
+  <!-- Provide a default value for MYCORE_HOME if not set in env -->
+  <property name="env.MYCORE_HOME" value="../mycore" />
+  <dirname file="${env.MYCORE_HOME}/build.xml" property="mycore" />
+
+  <!-- Read in properties from config/build.properties -->
+  <property file="${env.MYCORE_HOME}/config/build.properties" />
+
+  <!-- Provide a default value for DOCPORTAL_HOME if not set in env -->
+  <property name="env.DOCPORTAL_HOME" value="${basedir}" />
+
+  <!-- Read in properties from config/mycore.properties.private -->
+  <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <filterchain>
+      <linecontains>
+        <contains value="MCR.basedir=" />
+      </linecontains>
+    </filterchain>
+  </loadproperties>
+  <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <filterchain>
+      <tokenfilter>
+        <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
+      </tokenfilter>
+    </filterchain>
+  </loadproperties>
+
+  <property file="${basedir}/config/mycore.properties" />
+
+  <!-- Read in properties from ${env.MYCORE_HOME}/config/build.properties -->
+  <property file="${env.MYCORE_HOME}/config/build.properties" />
+  <condition property="MCR.XMLStore.Type" value="OpenSource">
+    <not>
+      <isset property="MCR.XMLStore.Type" />
+    </not>
+  </condition>
+
+  <!-- MyCoRe CVS repository root -->
+  <property name="CVSRoot" value="/cvs" />
+
+  <property name="mycore" value="${env.MYCORE_HOME}" />
+  <property name="mycore.config" value="${mycore}/config" />
+  <property name="mycore.doc" value="${mycore}/documentation" />
+  <property name="mycore.lib" value="${mycore}/lib" />
+  <property name="mycore.modules" value="${mycore}/modules" />
+  <property name="mycore.schema" value="${mycore}/schema" />
+  <property name="mycore.stylesheets" value="${mycore}/stylesheets" />
+
+  <property name="docportal" value="${env.DOCPORTAL_HOME}" />
+  <property name="docportal.bin" value="${docportal}/bin" />
+  <property name="docportal.classes" value="${docportal}/classes" />
+  <property name="docportal.javadocs" value="${docportal}/javadocs" />
+  <property name="docportal.changelogs" value="${docportal}/changelogs" />
+  <property name="docportal.config" value="${docportal}/config" />
+  <property name="docportal.content" value="${docportal}/content" />
+  <property name="docportal.doc" value="${docportal}/documentation" />
+  <property name="docportal.lib" value="${docportal}/lib" />
+  <property name="docportal.mcrlib" value="${docportal}/lib/mycore" />
+  <property name="docportal.modules" value="${docportal}/modules" />
+  <property name="docportal.oai" value="${MCR.oai.resumptiontoken.dir}" />
+  <property name="docportal.save" value="${MCR.Save.FileSystem}" />
+  <property name="docportal.schema" value="${docportal}/schema" />
+  <property name="docportal.sources" value="${docportal}/sources" />
+  <property name="docportal.stylesheets" value="${docportal}/stylesheets" />
+  <property name="docportal.unixtools" value="${docportal}/unixtools" />
+  <property name="docportal.webpages" value="${docportal}/webpages" />
+  <property name="docportal.webapps" value="${docportal}/webapps" />
+  <property name="docportal.workflow" value="${MCR.editor_base_directory}" />
+	
+  <!-- =================================================================== -->
+  <!-- Initalization of directories and CLASSPATH, LIBPATH                 -->
+  <!-- =================================================================== -->
+
+  <target name="init" depends="jdbcstore.path.1, jdbcstore.path.2, xmlstore.path.1, xmlstore.path.2, share.path.1, share.path.2">
+
+    <!-- Fail if environment variables are not set -->
+    <fail message="Environment variable JAVA_HOME is not set!" unless="env.JAVA_HOME" />
+
+    <path id="docportal.classpath">
+      <pathelement location="${docportal.classes}" />
+      <pathelement location="${docportal.config}" />
+      <pathelement location="${docportal.schema}" />
+      <pathelement location="${docportal.stylesheets}" />
+      <fileset dir="${docportal.lib}" includes="*.jar" />
+      <fileset dir="${docportal.lib}/jetty" includes="*.jar" />
+      <pathelement location="${mycore.stylesheets}" />
+      <pathelement location="${mycore.schema}" />
+      <pathelement location="${mycore.config}" />
+      <fileset dir="${mycore.lib}" includes="*.jar" />
+      <!-- fileset dir="../mycore" includes="modules/module-*/config"/ -->
+
+      <!-- add lib path of module -->
+      <fileset dir="${env.MYCORE_HOME}" includes="modules/module-*/lib/*.jar" />
+      <path refid="jdbc.classpath" />
+      <path refid="xml.classpath" />
+      <path refid="share.classpath" />
+      <dirset dir="${basedir}">
+	   	<include name="modules/module-*/config" />    	
+      </dirset>
+    </path>
+
+    <path id="docportal.libpath">
+      <dirset dir="${env.JAVA_HOME}" includes="bin bin/classic" />
+      <path refid="jdbc.libpath" />
+      <path refid="xml.libpath" />
+    </path>
+
+    <condition property="detected.os" value="unix">
+      <os family="unix" />
+    </condition>
+    <condition property="detected.os" value="windows">
+      <os family="dos" />
+    </condition>
+    <condition property="os.is.unix">
+      <os family="unix" />
+    </condition>
+    <condition property="os.is.windows">
+      <os family="dos" />
+    </condition>
+    <condition property="os.is.mac">
+      <os name="Mac OS X" />
+    </condition>
+
+    <condition property="db.is.hibernate">
+      <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
+    </condition>
+    <condition property="db.is.sql">
+      <not>
+        <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
+      </not>
+    </condition>
+
+    <condition property="store.is.cm8">
+      <equals arg1="${MCR.XMLStore.Type}" arg2="cm8" />
+    </condition>
+
+    <pathconvert targetos="${detected.os}" property="docportal.classpath.translated" refid="docportal.classpath" />
+    <pathconvert targetos="${detected.os}" property="docportal.libpath.translated" refid="docportal.libpath" />
+
+    <property name="env.LIBPATH" value="${docportal.libpath.translated}" />
+    <property name="env.LD_LIBRARY_PATH" value="${docportal.libpath.translated}" />
+    <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="docportal.classpath" />
+  </target>
+
+  <target name="jdbcstore.path.1" if="MCR.JDBCStore.BaseDir">
+    <path id="jdbc.classpath">
+      <fileset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.Jars}" />
+      <dirset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.ClassesDirs}" />
+    </path>
+    <path id="jdbc.libpath">
+      <dirset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.LibPath}" />
+    </path>
+  </target>
+
+  <target name="jdbcstore.path.2" unless="MCR.JDBCStore.BaseDir">
+    <path id="jdbc.classpath" />
+    <path id="jdbc.libpath" />
+  </target>
+
+  <target name="xmlstore.path.1" if="MCR.XMLStore.BaseDir">
+    <path id="xml.classpath">
+      <fileset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.Jars}" />
+      <dirset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.ClassesDirs}" />
+    </path>
+    <path id="xml.libpath">
+      <dirset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.LibPath}" />
+    </path>
+  </target>
+
+  <target name="xmlstore.path.2" unless="MCR.XMLStore.BaseDir">
+    <path id="xml.classpath" />
+    <path id="xml.libpath" />
+  </target>
+
+  <target name="share.path.1" if="MCR.System.SharedJarsDir">
+    <path id="share.classpath">
+      <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
+    </path>
+  </target>
+
+  <target name="share.path.2" unless="MCR.System.SharedJarsDir">
+    <path id="share.classpath" />
+  </target>
+
+  <!-- System CLASSPATH is completely ignored! -->
+  <property name="build.sysclasspath" value="ignore" />
+
+  <!-- =================================================================== -->
+  <!-- merge the web.xml from core with web.xml of the module              -->
+  <!-- =================================================================== -->
+
+  <target name="do.merge" if="web.xml.present">
+
+    <copy file="${docportal.webapps}/WEB-INF/web.xml" tofile="${docportal.webapps}/WEB-INF/web1.xml" />
+    <copy file="${web.xml.file}" tofile="${docportal.webapps}/WEB-INF/web2.xml" />
+    <copy file="${mycore}/stylesheets/merge-web-xml.xsl" todir="${docportal.webapps}/WEB-INF" />
+    <xslt basedir="${docportal.webapps}/WEB-INF" classpathref="docportal.classpath"
+      in="${docportal.webapps}/WEB-INF/web2.xml" style="${docportal.webapps}/WEB-INF/merge-web-xml.xsl"
+      out="${docportal.webapps}/WEB-INF/web.xml" />
+    <delete file="${docportal.webapps}/WEB-INF/web1.xml" />
+    <delete file="${docportal.webapps}/WEB-INF/web2.xml" />
+    <delete file="${docportal.webapps}/WEB-INF/merge-web-xml.xsl" />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- merge module_messages.properties with the message.properties file   -->
+  <!-- 						in docportal/config							   -->
+  <!-- =================================================================== -->
+	
+  <target name="properties.merge">
+  	<echo>parameter: ${locale_param} </echo>
+  	<condition property="locale_suffix" value="">
+  		<or>
+  	    	<equals arg1="${locale_param}" arg2=""/>
+  			<equals arg1="${locale_param}" arg2="${MCR.metadata_default_lang}"/>
+  		</or>
+  	</condition>
+  	<condition property="locale_suffix" value="_${locale_param}">
+  		<not>
+  		<or>
+  	    	<equals arg1="${locale_param}" arg2=""/>
+  			<equals arg1="${locale_param}" arg2="${MCR.metadata_default_lang}"/>
+  		</or>
+  		</not>
+  	</condition>
+  	
+  	
+  	<echo>locale (Test 2) ist: ${locale_suffix} </echo>
+  	<echo>Source path: ${module}</echo>
+  	<echo>Dest path: ${docportal.webapps}/WEB-INF/classes/messages${locale_suffix}.properties</echo>
+  	<concat destfile="${docportal.webapps}/WEB-INF/classes/messages${locale_suffix}.properties" append="true">
+  		<fileset file="${module}"/>  		
+    </concat>
+  </target>
+	
+  <!-- =================================================================== -->
+</project>
