@@ -4,14 +4,14 @@
 	<import file="${basedir}/build.xml" />
 
 	  <!-- Read in properties from config/mycore.properties.jp -->
-	  <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	  <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
 	    <filterchain>
 	      <linecontains>
 	        <contains value="MCR.basedir=" />
 	      </linecontains>
 	    </filterchain>
 	  </loadproperties>
-	  <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	  <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
 	    <filterchain>
 	      <tokenfilter>
 	        <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
@@ -24,7 +24,7 @@
   <!-- =================================================================== -->	
 	<target name="jp.create.schema" depends="create.schema">
 	    <!-- Load the properties that define the XML metadata configuration files -->
-	    <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	    <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
 	      <filterchain>
 	        <linecontains>
 	          <contains value="MCR.persistence_config_"/>
