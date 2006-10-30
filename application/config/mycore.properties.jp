@@ -40,8 +40,8 @@ MCR.persistence_config_jpinst=datamodel-jpinst.xml
 ###  overwrite later with jportal values !!!
 ###
 # The project ID
-### MCR.default_project_id=DocPortal
-### MCR.default_project_type=document
+MCR.default_project_id=JPortal
+MCR.default_project_type=jparticle
 
 MCR.jpjournal_project_id=JPortal
 MCR.jpvolume_project_id=JPortal
