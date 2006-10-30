@@ -1,0 +1,127 @@
+html, body {
+    /*background-color: gray;*/
+    background: #FFFAE5 url(../IMAGES/bg_pix.gif);
+    margin: 0px;
+    font-family: Myriad Pro, Myriad, Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+
+table.main {
+    height: 100%;
+    /*width: 100%;*/
+    width: 996px;
+    /*margin-left: auto;
+    margin-right: auto;*/
+    color: #5C727E;
+    background: #FFFAE5 url(../IMAGES/bg_pix.gif);
+    background-repeat: repeat-x repeat-y;
+}
+
+* html table.main {  /* nur fuer Internet Explorer */
+    width:1076px;     /* Version 5.x */
+    w\idth:996px;    /* Version 6 */
+}
+
+/* ==================================================== */
+/* Style for the top margin, also defines the width	*/
+/* of the column					*/
+/* ==================================================== */
+td.left_margin {
+    height: 7px;
+    width: 21px;
+}
+
+td.menu_column {
+    height: 7px;
+    width: 222px;
+}
+
+td.content_column {
+    height: 7px;
+    /*width: 557px;*/
+}
+
+td.right_margin {
+    height: 7px;
+    width: 0%;
+}
+
+/* Decoration Stuff */
+td.decor_line {
+    font-size: 2px;
+    height: 1px;
+    line-height: 1px;
+    background: black url(../IMAGES/black_dot.gif);
+    background-repeat: repeat-x;
+}
+
+td.decor_spc {
+    font-size: 2px;
+    height: 2px;
+    line-height: 2px;
+}
+
+td.decor_big_spc {
+    height: 27px;
+}
+
+/* Main graphics */
+td.balk1 {
+    background: #5C727E /*url(../IMAGES/balk1.gif)*/;
+}
+
+img.balk1 {
+    height: 111px;
+    width: 243px;
+    border-style: none;
+    border-width: 0px;
+    display: block;
+}
+* html img.balk1 {  /* nur fuer Internet Explorer */
+    width:323px;     /* Version 5.x */
+    w\idth:243px;    /* Version 6 */
+}
+
+td.balk2 {
+    background: #5C727E /*url(../IMAGES/balk1.gif)*/;
+}
+
+img.balk2 {
+    height: 111px;
+    width: 753px;
+    border-style: none;
+    border-width: 0px;
+    display: block;
+}
+
+td.balk_u {
+    background: #D6CCA2 url(../IMAGES/menu_pix.gif);
+}
+			
+
+img.balk_u {
+    height: 54px;
+    width: 222px;
+    border-style: none;
+    border-width: 0px;
+    display: block;
+}
+
+img.jahr {
+    height: 115px;
+    width: 222px;
+    border-style: none;
+    border-width: 0px;
+    display: block;
+}
+
+img.logo {
+    height: 36px;
+    width: 99px;
+    border-style: none;
+    border-width: 0px;
+    display: block;
+}
+
