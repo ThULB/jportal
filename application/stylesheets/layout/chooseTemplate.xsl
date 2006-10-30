@@ -9,9 +9,10 @@
 	<xsl:include href="template_mycoresample-2.xsl" />
 	<!-- ===================================================================================== -->
 	<xsl:template name="chooseTemplate">
-		<xsl:comment>
-		chooseTemplate: "<xsl:value-of select="$template"/>"
-		</xsl:comment>
+		
+		<!-- JPortal specific templates -->
+		<xsl:call-template name="jp.chooseTemplate" />
+		
 		<xsl:choose>
 			<xsl:when test=" $template = 'template_wcms' " >
 				<xsl:call-template name="template_wcms"/>

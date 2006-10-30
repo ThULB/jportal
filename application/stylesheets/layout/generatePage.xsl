@@ -48,7 +48,8 @@
 	<xsl:include href="navi_main.xsl" />
 	<xsl:include href="footer.xsl" />
 	<xsl:include href="navigation.xsl" /> 
-	<xsl:include href="wcms_common.xsl" />           
+	<xsl:include href="wcms_common.xsl" />     
+	<xsl:include href="jp_extensions.xsl" />     	      
       <!-- =================================================================================================== -->
       <xsl:template name="generatePage">
             <!-- call the appropriate template -->
