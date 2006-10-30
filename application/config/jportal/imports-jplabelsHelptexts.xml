@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--?xml version="1.0" encoding="ISO-8859-1"? -->
+<imports>
+      <!-- JST-Container ========================================================================== -->
+      <!-- *** Data for the MainTITLE *** -->
+      <text id="maintitle_label">
+            <label xml:lang="de">
+                  <span class="editorlabel"><b>Bibliographische Beschreibung: </b></span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel"><b>Заголовок:</b></span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel"><b>tytuł główny:</b></span>
+            </label>
+      </text>
+      <text id="maintitle_label_contchild">
+            <label xml:lang="de">
+                  <span class="editorlabel">Bibliographische Beschreibung:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Заголовок:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel"><b>tytuł główny:</b></span>
+            </label>
+      </text>	
+      <helpPopup id="maintitle_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Titel des Objektes einzugeben.</label>
+      </helpPopup>      
+      <!-- *** Data for the subTITLE *** -->
+      <text id="subtitle_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Weitere Titel:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Подзаголовок:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">tytuł dodatkowy:</span>
+            </label>
+      </text>
+      <helpPopup id="subtitle_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Titel des Objektes einzugeben.</label>
+      </helpPopup>            
+      <!-- *** Data for the mainedi *** -->      
+      <text id="mainedi_label">
+            <label xml:lang="de">
+                  <span class="editorlabel"><b>Herausgeber:</b></span>
+            </label>
+		   <label xml:lang="ru">
+                  <span class="editorlabel"><b>Редактор:</b></span>
+            </label>
+		    <label xml:lang="pl">
+                  <span class="editorlabel"><b>wydawca:</b></span>
+            </label>
+      </text>
+      <text id="person_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Person:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Автор:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">osoba:</span>
+            </label>
+      </text>      
+      <text id="institution_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Institution:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Институт:</span>
+            </label>
+		    <label xml:lang="pl">
+                  <span class="editorlabel">instytucja:</span>
+            </label>
+      </text>            
+      <text id="personInst_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Person/Institution:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Автор/Институт:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">osoba/instytucja:</span>
+            </label>
+      </text>            
+      <helpPopup id="mainedi_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>            
+      <!-- *** Data for the subedi *** -->      
+      <text id="subedi_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Mitherausgeber:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Соиздатель:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">współwydawca:</span>
+            </label>
+      </text>
+      <helpPopup id="subedi_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the mainauthor *** -->      
+      <text id="author_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Autor:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Автор:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">autor:</span>
+            </label>
+      </text>
+      <helpPopup id="author_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the contribu *** -->      
+      <text id="contribu_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Beitragender</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Соавтор</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">współautor</span>
+            </label>
+      </text>
+      <helpPopup id="contribu_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the keyword *** -->      
+      <text id="keyword_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Schlagwort:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Ключевое-, Ключевые слово(а):</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">hasła rzeczowe, przedmiotowe:</span>
+            </label>
+      </text>
+      <helpPopup id="keyword_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the classi *** -->      
+      <text id="classi_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">DDC:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">DDC:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">DDC:</span>
+            </label>
+      </text>
+      <helpPopup id="classi_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the abstract *** -->      
+      <text id="abstract_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Zusammenfsg.:</span>
+            </label>
+		   <label xml:lang="ru">
+                  <span class="editorlabel">Итог:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">streszczenie:</span>
+            </label>
+      </text>
+      <helpPopup id="abstract_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the coverage *** -->      
+      <text id="coverage_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Erscheinungsjahr der rez. Werkes:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Промежуток времени:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">okres:</span>
+            </label>
+      </text>
+      <helpPopup id="coverage_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the identi *** -->      
+      <text id="identi_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Bezeichner:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Идентификатор:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">identyfikowanie:</span>
+            </label>
+      </text>
+      <helpPopup id="identi_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the right *** -->      
+      <text id="right_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Besitznachweis:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Правообладание:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">copyright:</span>
+            </label>
+      </text>
+      <helpPopup id="right_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the note *** -->      
+      <text id="note_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Bemerkung:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Примечание:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">uwaga:</span>
+            </label>
+      </text>
+      <helpPopup id="note_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the predece *** -->      
+      <text id="predece_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Vorgänger:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Предыдущий:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">predecessor:</span>
+            </label>
+      </text>
+      <helpPopup id="predecep" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the successor *** -->      
+      <text id="successor_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Nachfolger:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Последующий:</span> 
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">successor:</span>
+            </label>
+      </text>
+      <helpPopup id="successor_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the type *** -->
+      <text id="type_label">
+            <label xml:lang="de">
+                  <span class="editorlabel"><b>Publikationstyp:</b></span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel"><b>Тип публикации:</b></span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel"><b>rodzaj publikacji:</b></span>
+            </label>
+      </text>
+      <helpPopup id="type_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Typ des Objektes einzugeben.</label>
+      </helpPopup>      
+      <!-- *** Data for the parent *** -->
+      <text id="parent_label">
+            <label xml:lang="de">
+                  <span class="editorlabel"><b>Zugehörige Zeitschrift:</b></span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel"><b>Сопутствующий журнал:</b></span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel"><b>czasopismo związane:</b></span>
+            </label>
+      </text>
+      <helpPopup id="parent_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+      </helpPopup>                      
+      <!-- *** Data for the lang *** -->
+      <text id="cont_lang_label">
+            <label xml:lang="de"><b>Sprache:</b></label>
+		    <label xml:lang="ru"><b>Язык:</b></label>
+		    <label xml:lang="pl"><b>język:</b></label>
+      </text>
+      <helpPopup id="cont_lang_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+      </helpPopup>         
+      <!-- *** Data for the parent_jpvolume *** -->
+      <text id="jpvolume_parent_label">
+            <label xml:lang="de"><b>Zugehörige Zeitschrift:</b></label>
+		    <label xml:lang="ru"><b>Журнал:</b></label>
+		     <label xml:lang="pl"><b>czasopismo związane:</b></label>
+      </text>
+      <helpPopup id="jpvolume_parent_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die zugehörige Zeitschrift einzugeben.</label>
+      </helpPopup>         
+	<!-- jpvolume_mainedi -->
+      <text id="jpvolume_mainedi_label">
+            <label xml:lang="de">Herausgeber:</label>
+		  <label xml:lang="ru">Редактор:</label>
+		  <label xml:lang="pl">wydawca:</label>
+      </text>
+      <text id="jpvolume_person_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">bla:</span>
+            </label>
+      </text>               
+      <!-- JST-Content Collection ========================================================================== -->            
+      <!-- *** Data for the parent_jpvolume *** -->
+      <text id="jstcontentcoll_parent_label">
+            <label xml:lang="de"><b>Zugehöriger Container:</b></label>
+		  <label xml:lang="ru"><b>Принадлежащий контейнер:</b></label>
+      </text>
+      <helpPopup id="jstcontentcoll_parent_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+		 <!-- <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
+      </helpPopup>        
+      <text id="jstcontentcoll_maintitle_label">
+            <label xml:lang="de">Hauptsachtitel</label>
+		  <label xml:lang="ru">Основной заголовок</label>
+		  <label xml:lang="pl">tytuł główny</label>
+      </text>
+      <helpPopup id="jstcontentcoll_maintitle_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+		  <!--<label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
+      </helpPopup>        
+      <text id="jstcontentcoll_timebeha_label">
+            <label xml:lang="de"><b>Zeitliche Zuordnung</b></label>
+		  <label xml:lang="ru"><b>Временная идентификация</b></label>
+      </text>
+      <helpPopup id="jstcontentcoll_timebeha_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+		<!--  <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
+      </helpPopup>              
+      <!-- jparticle ========================================================================== -->      
+      <!-- *** timebeha *** -->
+      <text id="timebeha_label">
+            <label xml:lang="de">
+                  <span class="editorlabel"><b>Erschienen:</b></span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel"><b>Выход из печати:</b></span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel"><b>rok wydania:</b></span>
+            </label>
+      </text>
+      <helpPopup id="timebeha_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+		 <!-- <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
+      </helpPopup>  
+      <!-- *** rubric *** -->
+      <text id="rubric_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Rubrik:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Рубрика:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">rubryka:</span>
+            </label>
+      </text>
+      <helpPopup id="rubric_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+      </helpPopup>              
+      <!-- *** size *** -->
+      <text id="size_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Umfang:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Размер:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">objętość:</span>
+            </label>
+      </text>
+      <helpPopup id="size_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+      </helpPopup>              
+      <!-- *** reference *** -->
+      <text id="pub_reference_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Referenz:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Референция:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">referencje:</span>
+            </label>
+      </text>
+      <helpPopup id="pub_reference_help" width="400px" height="250px">
+            <label xml:lang="de">...</label>
+      </helpPopup>              
+      <!-- *** Data for the lang *** -->
+      <text id="pub_lang_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Sprache:</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorlabel">Язык:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">język:</span>
+            </label>
+      </text>
+      <helpPopup id="pub_lang_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
+      </helpPopup>        
+	<!--common used-->
+      <!-- *** Data for the flags *** -->
+      <text id="rightsManag_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Rechteverwaltung:</span>
+            </label>
+            <label xml:lang="en">
+                  <span class="editorlabel">Rights management:</span>
+            </label>
+		   <label xml:lang="ru">
+                  <span class="editorlabel">Правовое администрирование:</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorlabel">Rights management:</span>
+            </label>
+      </text>
+      <helpPopup id="rightsManag_help" width="400px" height="250px">
+            <label xml:lang="de"> Hier können nun Leserechte vergeben werden. Weiterhin können Host- oder Domainnamen angegeben 
+                  werden, welche Zugriffsberechtigung haben.<p/>Beispiel: myhost.mynet.com oder .mynet.com . </label>
+            <label xml:lang="en"> Here you can add the read access of the object. Also you can add a host or domain name for the 
+                  access host.<p/>Example: myhost.mynet.com or .mynet.com . </label>
+      </helpPopup>
+      <text id="righstManag_access_label">
+            <label xml:lang="de">
+                  <span class="editorhints">Zugriff</span>
+            </label>
+            <label xml:lang="en">
+                  <span class="editorhints">Access</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorhints">Доступ</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorhints">Access</span>
+            </label>
+      </text>
+      <text id="righstManag_state_label">
+            <label xml:lang="de">
+                  <span class="editorhints">Status</span>
+            </label>
+            <label xml:lang="en">
+                  <span class="editorhints">State</span>
+            </label>
+		  <label xml:lang="ru">
+                  <span class="editorhints">Статус</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorhints">status</span>
+            </label>
+      </text>
+      <text id="righstManag_ip_label">
+            <label xml:lang="de">
+                  <span class="editorhints">IP</span>
+            </label>
+            <label xml:lang="en">
+                  <span class="editorhints">IP</span>
+            </label>
+		  <label xml:lang="de">
+                  <span class="editorhints">Status</span>
+            </label>
+		  <label xml:lang="pl">
+                  <span class="editorhints">Status</span>
+            </label>
+      </text>      
+      <!-- *** Data for the subTITLE *** -->
+      <text id="publisher_label">
+            <label xml:lang="de">
+                  <span class="editorlabel">Verlag des rezensierten Werkes:</span>
+            </label>
+      </text>
+      <helpPopup id="publisher_help" width="400px" height="250px">
+            <label xml:lang="de"> Es ist der Titel des Verlages einzugeben.</label>
+      </helpPopup>      	
+</imports>

@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<imports>
+      <include uri="webapp:editor/imports-jpcommon.xml" />
+      <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
+      <panel id="globalImport.jpvolume" lines="on">
+            <hidden var="ID" />
+            <hidden var="label" />
+            <hidden var="metadata/@lang" default="de" />
+            <!-- required fields ......................................... -->
+            <!-- parent: jstcontainertoplevel -->
+            <cell row="1" col="1" anchor="NORTHWEST" ref="jpvolume_parent_label" />
+            <cell row="1" col="2" anchor="NORTHWEST" ref="jpvolume_parent_input" />
+            <cell row="1" col="3" anchor="WEST" ref="jpvolume_parent_help" />
+            <!-- maintitle -->
+            <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label_contchild" />
+            <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
+            <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
+            <!-- subtitle -->
+            <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
+            <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
+            <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
+            <!-- maineditor -->
+            <cell row="30" col="1" anchor="NORTHWEST" ref="jpvolume_mainedi_label" />
+            <cell row="30" col="2" anchor="NORTHWEST" ref="mainedi_input" />
+            <cell row="30" col="3" anchor="WEST" ref="jpvolume_mainedi_help" />
+            <!-- subedi -->
+            <cell row="40" col="1" anchor="NORTHWEST" ref="subedi_label" />
+            <cell row="40" col="2" anchor="NORTHWEST" ref="subedi_input" />
+            <cell row="40" col="3" anchor="WEST" ref="subedi_help" />
+            <!-- mainauthor -->
+            <cell row="50" col="1" anchor="NORTHWEST" ref="author_label" />
+            <cell row="50" col="2" anchor="NORTHWEST" ref="author_input" />
+            <cell row="50" col="3" anchor="WEST" ref="author_help" />
+            <!-- contribu -->
+            <cell row="70" col="1" anchor="NORTHWEST" ref="contribu_label" />
+            <cell row="70" col="2" anchor="NORTHWEST" ref="contribu_input" />
+            <cell row="70" col="3" anchor="WEST" ref="contribu_help" />
+            <!-- keyword -->
+            <cell row="80" col="1" anchor="NORTHWEST" ref="keyword_label" />
+            <cell row="80" col="2" anchor="NORTHWEST" ref="keyword_input" />
+            <cell row="80" col="3" anchor="WEST" ref="keyword_help" />
+            <!-- classi -->
+            <!--            <cell row="9" col="1" anchor="NORTHWEST" ref="classi_label" />-->
+            <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
+            <!--            <cell row="9" col="3" anchor="WEST" ref="classi_help" />-->
+            <!-- abstract -->
+            <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
+            <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
+            <cell row="100" col="3" anchor="WEST" ref="abstract_help" />
+            <!-- coverage -->
+            <cell row="120" col="1" anchor="NORTHWEST" ref="coverage_label" />
+            <cell row="120" col="2" anchor="NORTHWEST" ref="coverage_input" />
+            <cell row="120" col="3" anchor="WEST" ref="coverage_help" />
+            <!-- identi -->
+            <cell row="130" col="1" anchor="NORTHWEST" ref="identi_label" />
+            <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input" />
+            <cell row="130" col="3" anchor="WEST" ref="identi_help" />
+            <!-- lang -->
+            <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label" />
+            <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
+            <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
+            <!-- right -->
+            <cell row="150" col="1" anchor="NORTHWEST" ref="right_label" />
+            <cell row="150" col="2" anchor="NORTHWEST" ref="right_input" />
+            <cell row="150" col="3" anchor="WEST" ref="right_help" />
+            <!-- note -->
+            <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
+            <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
+            <cell row="160" col="3" anchor="WEST" ref="note_help" />
+            <!-- type -->
+            <cell row="170" col="1" anchor="NORTHWEST" ref="type_label" />
+            <cell row="170" col="2" anchor="NORTHWEST" ref="type_input" />
+            <cell row="170" col="3" anchor="NORTHWEST" ref="type_help" />
+            <!-- timebeha -->
+            <cell row="180" col="1" anchor="NORTHWEST" ref="timebeha_label" />
+            <cell row="180" col="2" anchor="NORTHWEST" ref="timebeha_input" />
+            <cell row="180" col="3" anchor="NORTHWEST" ref="timebeha_help" />            
+            <!-- service data -->
+            <!--            <cell row="200" col="1" anchor="NORTHWEST" ref="rightsManag_label" />-->
+            <cell row="200" col="2" anchor="NORTHWEST" ref="righstManag_input" />
+            <!--            <cell row="200" col="3" anchor="WEST" ref="rightsManag_help" /> -->
+            <!-- place holder -->
+            <cell row="210" col="1" anchor="NORTHWEST" >
+                  <space height="14" />
+            </cell>
+            <!-- save / cancel button -->
+            <cell row="220" col="1" anchor="EAST"/>
+            <cell row="220" col="2" anchor="EAST" ref="save" />
+      </panel>
+      <!-- panel definitions -->
+      <!-- MainTitle ================================================================== -->
+      <panel id="maintitle_input">
+            <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/maintitles/@parasearch" default="true" />
+            <hidden var="metadata/maintitles/@textsearch" default="true" />
+            <hidden var="metadata/maintitles/@notinherit" default="false" />
+            <hidden var="metadata/maintitles/@heritable" default="false" />
+            <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" ordernr="1" 
+                  default="de" />
+            <cell col="2" row="1" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" ordernr="1" />
+      </panel>
+      <!-- end: MainTitle -->
+      <!-- SubTitle ================================================================== -->
+      <panel id="subtitle_input">
+            <hidden var="metadata/subtitles/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/subtitles/@parasearch" default="true" />
+            <hidden var="metadata/subtitles/@textsearch" default="true" />
+            <hidden var="metadata/subtitles/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle" ordernr="1" >
+                  <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
+            </cell>
+      </panel>
+      <panel id="subtitle_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
+            <cell col="2" row="2" anchor="NORTHWEST" ref="TFarea4096" />
+      </panel>
+      <!-- end: SubTitle -->
+      <!-- maineditor ================================================================== -->
+      <panel id="mainedi_input">
+            <hidden var="metadata/mainedis/@class" default="MCRMetaLinkID" />
+            <hidden var="metadata/mainedis/@parasearch" default="true" />
+            <hidden var="metadata/mainedis/@textsearch" default="true" />
+            <hidden var="metadata/mainedis/@notinherit" default="false" />
+            <hidden var="metadata/mainedis/@heritable" default="false" />
+            <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />
+		  
+	    <cell col="2" row="1" anchor="EAST" var="metadata/mainedis/mainedi">
+         <repeater min="1" max="10">
+           <panel lines="off">
+			 <hidden var="@inherited" default="0" />
+			 <hidden var="@type" default="locator" />
+            <hidden var="@title" default="Herausgeber" />			   
+			 <hidden var="@label" />
+			 <hidden var="@href" />			
+             <cell row="1" col="2" width="100%">
+		       <output var="@label" />
+               <text   label=" (" />
+			   <output var="@href" />
+               <text   label=")" />				 
+             </cell>
+			 <cell row="1" col="3" >
+               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
+             </cell>			   
+			 <cell row="1" col="4" >
+               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
+             </cell>			   			   
+           </panel>
+         </repeater>
+       </cell>	  		  
+      </panel>
+      <!-- end: mainedi -->
+      <!-- subedi ================================================================== -->
+      <panel id="subedi_input">
+            <hidden var="metadata/subedis/@class" default="MCRMetaLinkID" />
+            <hidden var="metadata/subedis/@parasearch" default="true" />
+            <hidden var="metadata/subedis/@textsearch" default="true" />
+            <hidden var="metadata/subedis/@notinherit" default="false" />
+            <hidden var="metadata/subedis/@heritable" default="false" />
+            <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />
+		  
+	    <cell col="2" row="1" anchor="EAST" var="metadata/subedis/subedi">
+         <repeater min="1" max="10">
+           <panel lines="off">
+			 <hidden var="@inherited" default="0" />
+			 <hidden var="@type" default="locator" />
+            <hidden var="@title" default="Mitherausgeber" />			   
+			 <hidden var="@label" />
+			 <hidden var="@href" />			
+             <cell row="1" col="2" width="100%">
+		       <output var="@label" />
+               <text   label=" (" />
+			   <output var="@href" />
+               <text   label=")" />				 
+             </cell>
+			 <cell row="1" col="3" >
+               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
+             </cell>			   
+			 <cell row="1" col="4" >
+               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
+             </cell>			   			   
+           </panel>
+         </repeater>
+       </cell>	  			  
+      </panel>
+      <!-- end: subedi -->
+      <!-- author ================================================================== -->
+      <panel id="author_input">
+        <hidden var="metadata/authors/@class" default="MCRMetaLinkID" sortnr="3" />
+        <hidden var="metadata/authors/@parasearch" default="true" sortnr="3" />
+        <hidden var="metadata/authors/@textsearch" default="true" sortnr="3" />
+	    <cell col="1" row="1" anchor="EAST" var="metadata/authors/author" sortnr="3" >
+         <repeater min="1" max="10">
+           <panel lines="off">
+			 <hidden var="@inherited" default="0" />
+			 <hidden var="@type" default="locator" />
+			 <hidden var="@label" />
+			 <hidden var="@href" />			
+             <cell col="1" row="1" anchor="NORTHWEST" ref="author_input_repeater_type" var="@title" />			   
+             <cell row="2" col="1" width="100%">
+		       <output var="@label" />
+               <text   label=" (" />
+			   <output var="@href" />
+               <text   label=")" />				 
+             </cell>
+			 <cell row="2" col="2" >
+               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
+             </cell>			   
+			 <cell row="2" col="3" >
+               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
+             </cell>			   			   
+           </panel>
+         </repeater>
+       </cell>	  
+	  </panel>
+      <!-- end: author -->
+      <!-- contribu ================================================================== -->
+      <panel id="contribu_input">
+            <hidden var="metadata/contribus/@class" default="MCRMetaLinkID" />
+            <hidden var="metadata/contribus/@parasearch" default="true" />
+            <hidden var="metadata/contribus/@textsearch" default="true" />
+            <hidden var="metadata/contribus/@notinherit" default="false" />
+            <hidden var="metadata/contribus/@heritable" default="false" />
+		    <cell col="1" row="1" anchor="EAST" var="metadata/contribus/contribu" >
+	         <repeater min="1" max="10">
+	           <panel lines="off">
+				 <hidden var="@inherited" default="0" />
+				 <hidden var="@type" default="locator" />
+				 <hidden var="@label" />
+				 <hidden var="@href" />			
+	             <cell col="1" row="1" anchor="NORTHWEST" ref="contribu_input_repeater_type" var="@title" />			   
+	             <cell row="2" col="1" width="100%">
+			       <output var="@label" />
+	               <text   label=" (" />
+				   <output var="@href" />
+	               <text   label=")" />				 
+	             </cell>
+				 <cell row="2" col="2" >
+	               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
+	             </cell>			   
+				 <cell row="2" col="3" >
+	               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
+	             </cell>			   			   
+	           </panel>
+	         </repeater>
+	       </cell>	  
+	  </panel>
+      <!-- end: contribu -->
+      <!-- keyword ================================================================== -->
+      <panel id="keyword_input">
+            <hidden var="metadata/keywords/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/keywords/@parasearch" default="true" />
+            <hidden var="metadata/keywords/@textsearch" default="true" />
+            <hidden var="metadata/keywords/@heritable" default="true" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/keywords/keyword/@lang" ordernr="1" default="de" />
+            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/keywords/keyword" ordernr="1" />
+      </panel>
+      <!-- end: keyword -->
+      <!-- classi ================================================================== -->
+      <panel id="classi_input">
+            <hidden var="metadata/classis/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/classis/@parasearch" default="true" />
+            <hidden var="metadata/classis/@textsearch" default="false" />
+            <hidden var="metadata/classis/@notinherit" default="false" />
+            <hidden var="metadata/classis/@heritable" default="true" />
+            <!--            <cell col="1" row="1" anchor=" NORTHWEST" var="metadata/classis/classi" ordernr="18">
+                  <repeater min="0" max="10" anchor="NORTHWEST" ref="classi_input_repeater" />
+            </cell>
+      </panel>
+      <panel id="classi_input_repeater">
+            <hidden var="@inherited" default="0" />
+            <hidden var="@classid" default="DocPortal_class_00000009" />
+            <cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassi" var="@categid" ordernr="18" />-->
+      </panel>
+      <!--      <list id="Cclassi" width="300" type="dropdown">
+            <item value="">
+                  <label xml:lang="de">
+                  </label>
+            </item>
+            <include 
+                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_00000009'%5d" 
+                  />
+      </list>-->
+      <!-- end: classi -->
+      <!-- abstract ================================================================== -->
+      <panel id="abstract_input">
+            <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/abstracts/@parasearch" default="true" />
+            <hidden var="metadata/abstracts/@textsearch" default="true" />
+            <hidden var="metadata/abstracts/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/abstracts/abstract" ordernr="1" >
+                  <repeater min="0" max="3" anchor="NORTHWEST" ref="abstract_input_repeater" />
+            </cell>
+      </panel>
+      <panel id="abstract_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
+            <cell col="2" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
+      </panel>
+      <!-- end: abstract -->
+      <!-- coverage ================================================================== -->
+      <panel id="coverage_input">
+            <hidden var="metadata/coverages/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/coverages/@parasearch" default="true" />
+            <hidden var="metadata/coverages/@textsearch" default="true" />
+            <hidden var="metadata/coverages/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/coverages/coverage" ordernr="1" >
+                  <repeater min="0" max="10" anchor="NORTHWEST" ref="coverage_input_repeater" />
+            </cell>
+      </panel>
+      <panel id="coverage_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
+            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
+      </panel>
+      <!-- end: coverage -->
+      <!-- identi ================================================================== -->
+      <panel id="identi_input">
+            <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/identis/@parasearch" default="true" />
+            <hidden var="metadata/identis/@textsearch" default="true" />
+            <hidden var="metadata/identis/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identis/identi" ordernr="1" >
+                  <repeater min="0" max="10" anchor="NORTHWEST" ref="identi_input_repeater" />
+            </cell>
+      </panel>
+      <panel id="identi_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
+            <cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+      </panel>
+      <!-- end: identi -->
+      <!-- Lang ================================================================== -->
+      <panel id="cont_lang_input">
+            <hidden var="metadata/languages/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/languages/@parasearch" default="true" />
+            <hidden var="metadata/languages/@textsearch" default="false" />
+            <hidden var="metadata/languages/@notinherit" default="false" />
+            <hidden var="metadata/languages/@heritable" default="false" />
+            <hidden var="metadata/languages/language/@inherited" default="0" />
+            <hidden var="metadata/languages/language/@classid" default="DocPortal_class_00000004" />
+            <cell col="1" row="1" anchor=" NORTHWEST" ref="CLanguage" var="metadata/languages/language/@categid" ordernr="18" />
+      </panel>
+      <list id="CLanguage" width="300" type="dropdown">
+            <item value="">
+                  <label xml:lang="de">
+                  </label>
+            </item>
+<!--            <include 
+                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_00000004'%5d" 
+                  />-->
+		    <include uri="classification:editor:-1:children:DocPortal_class_00000004" />		  
+      </list>
+      <!-- end: Lang -->
+      <!-- right ================================================================== -->
+      <panel id="right_input">
+            <hidden var="metadata/rights/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/rights/@parasearch" default="true" />
+            <hidden var="metadata/rights/@textsearch" default="true" />
+            <hidden var="metadata/rights/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/rights/right/@lang" ordernr="1" default="de" />
+            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/rights/right" ordernr="1" />
+      </panel>
+      <!-- end: right -->
+      <!-- note ================================================================== -->
+      <panel id="note_input">
+            <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/notes/@parasearch" default="true" />
+            <hidden var="metadata/notes/@textsearch" default="true" />
+            <hidden var="metadata/notes/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="1" default="de" />
+            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/notes/note" ordernr="1" />
+      </panel>
+      <!-- end: note -->
+      <!-- type ================================================================== -->
+      <panel id="type_input">
+            <hidden var="metadata/types/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/types/@parasearch" default="true" />
+            <hidden var="metadata/types/@textsearch" default="false" />
+            <hidden var="metadata/types/@notinherit" default="false" />
+            <hidden var="metadata/types/@heritable" default="false" />
+            <hidden var="metadata/types/type/@inherited" default="0" />
+            <hidden var="metadata/types/type/@classid" default="DocPortal_class_10000010" />
+            <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" ordernr="18" />
+      </panel>
+      <list id="Ctype" width="300" type="dropdown">
+<!--            <include 
+                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_10000010'%5d" 
+                  />-->
+		    <include uri="classification:editor:-1:children:DocPortal_class_10000010" />		  
+      </list>
+      <!-- end: type -->
+      <!-- timebeha ================================================================== -->
+      <panel id="timebeha_input">
+            <hidden var="metadata/timebehas/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/timebehas/@parasearch" default="true" />
+            <hidden var="metadata/timebehas/@textsearch" default="false" />
+            <hidden var="metadata/timebehas/@notinherit" default="false" />
+            <hidden var="metadata/timebehas/@heritable" default="false" />
+            <hidden var="metadata/timebehas/timebeha/@inherited" default="0" />
+            <hidden var="metadata/timebehas/timebeha/@classid" default="DocPortal_class_20000004" />
+            <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctimebeha" var="metadata/timebehas/timebeha/@categid" 
+                  ordernr="18" />
+      </panel>
+      <list id="Ctimebeha" width="300" type="dropdown">
+<!--            <include 
+                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_20000004'%5d" 
+                  />-->
+		    <include uri="classification:editor:-1:children:DocPortal_class_20000004" />		  
+      </list>
+      <!-- end: timebeha -->
+      <!--rights management =======================================================================-->
+      <panel id="righstManag_input">
+            <hidden var="service/servflags/@class" default="MCRMetaLangText" />
+            <hidden var="service/servflags/@parasearch" default="true" />
+            <hidden var="service/servflags/@textsearch" default="false" />
+            <hidden var="service/servflags/@notinherit" default="true" />
+            <hidden var="service/servflags/@heritable" default="false" />
+            <!--            <cell row="1" col="1" anchor="NORTHWEST" ref="righstManag_access_label" />-->
+            <cell row="1" col="2" anchor="NORTHWEST" ref="righstManag_access_input" />
+            <!--            <cell row="20" col="1" anchor="NORTHWEST" ref="righstManag_state_label" />-->
+            <cell row="20" col="2" anchor="NORTHWEST" ref="righstManag_state_input" />
+            <!--            <cell row="30" col="1" anchor="NORTHWEST" ref="righstManag_ip_label" />-->
+            <cell row="30" col="2" anchor="NORTHWEST" ref="righstManag_ip_input" />
+            <hidden var="service/servflags/servflag[4]/@inherited" default="0" />
+            <hidden var="service/servflags/servflag[4]/@lang" default="de" />
+            <hidden var="service/servflags/servflag[4]" />
+            <hidden var="service/servflags/servflag[5]/@inherited" default="0" />
+            <hidden var="service/servflags/servflag[5]/@lang" default="de" />
+            <hidden var="service/servflags/servflag[5]" />
+            <hidden var="service/servflags/servflag[6]/@inherited" default="0" />
+            <hidden var="service/servflags/servflag[6]/@lang" default="de" />
+            <hidden var="service/servflags/servflag[6]" />
+      </panel>
+      <!--end: rights management-->
+      <!-- end: panel definitions -->
+</imports>

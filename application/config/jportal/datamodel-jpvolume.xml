@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<configuration type="jstconttop">
+<configuration type="jpjournal">
       <structure>
             <!-- Object Children -->
             <element name="children" minOccurs='0' maxOccurs='1' parasearch="false" textsearch="false">

@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<imports>
+      <!--      <include uri="webapp:editor/imports-application.xml" /> -->
+      <!-- *** Text fields *** -->
+      <textfield id="TFzeile10" width="10" maxlength="10" />
+      <textfield id="TFzeile32" width="32" maxlength="32" />
+      <textfield id="TFzeile64" width="48" maxlength="64" />
+      <textfield id="TFzeile128" width="64" maxlength="128" />
+      <textfield id="TFzeile1024" width="64" maxlength="1024" />
+      <!-- *** Text area *** -->
+      <textarea id="TFarea4096" width="62" height="6" maxlength="4096" />
+      <!-- *** Language List *** -->
+      <list id="Slang" width="60" type="dropdown">
+<!--            <include 
+                  uri="request:servlets/MCRQueryServlet?XSL.sortOrder=alphabetic&amp;XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;query=/mycoreclass%5b@ID='DocPortal_class_10000030'%5d" 
+                  />-->
+		    <include uri="classification:editor:-1:children:DocPortal_class_10000030" />		  
+      </list>
+      <!-- *** contribu/@type List *** -->
+      <list id="contribu_input_repeater_type" type="dropdown">
+            <item value="authorOfReviewer">
+                  <label xml:lang="de">Autor des rezensierten Werkes</label>
+				<label xml:lang="ru">Автор рецензируемого произведения</label>
+            </item>
+            <item value="mentionedInst">
+                  <label xml:lang="de">Erwähnte Institution</label>
+            </item>	
+            <item value="mentionedPerson">
+                  <label xml:lang="de">Erwähnte Person</label>
+            </item>			  
+            <item value="fotographer">
+                  <label xml:lang="de">Fotograf</label>
+				<label xml:lang="ru">Фотограф</label>
+            </item>		  
+            <item value="contibutorOfReviewer">
+                  <label xml:lang="de">Herausgeber des rezensierten Werkes</label>
+				<label xml:lang="ru">Редактор рецензируемого произведения</label>
+            </item>            
+
+            <item value="illustrator">
+                  <label xml:lang="de">Illustrator, Kupferstecher</label>
+				<label xml:lang="ru">Иллюстратор</label>
+            </item>
+            <item value="commentator">
+                  <label xml:lang="de">Kommentator, Bearbeiter</label>
+				<label xml:lang="ru">Комментатор</label>
+            </item>		  
+             <item value="composer">
+                  <label xml:lang="de">Komponist</label>
+				 <label xml:lang="ru">Композито</label>
+            </item>
+            <item value="painter">
+                  <label xml:lang="de">Maler</label>
+				<label xml:lang="ru">Художник</label>
+            </item>
+            <item value="moderator">
+                  <label xml:lang="de">Moderator</label>
+				<label xml:lang="ru">Модератор</label>
+            </item>		  
+            <item value="editor">
+                  <label xml:lang="de">Redakteur</label>
+				<label xml:lang="ru">Редактор</label>
+            </item>
+            <item value="misc">
+                  <label xml:lang="de">Sonst. Mitarbeiter</label>
+				<label xml:lang="ru">Другой сотрудник</label>
+            </item>			  
+            <item value="sponsor">
+                  <label xml:lang="de">Sponsor</label>
+				<label xml:lang="ru">Спонсор</label>
+            </item>		 
+	 
+            <item value="translator">
+                  <label xml:lang="de">Übersetzer</label>
+				<label xml:lang="ru">Переводчик</label>
+            </item>		  
+            <item value="organiser">
+                  <label xml:lang="de">Veranstalter</label>
+				<label xml:lang="ru">Организатор</label>
+            </item>
+	  
+		  	  		  
+      </list>
+      <!-- *** author_input_repeater_type List *** -->
+      <list id="author_input_repeater_type" type="dropdown">
+            <item value="mainauthor">
+                  <label xml:lang="de">Hauptautor</label>
+				<label xml:lang="ru">Автор</label>
+				<label xml:lang="pl">autor</label>
+            </item>
+            <item value="subauthor">
+                  <label xml:lang="de">Mitautor</label>
+				<label xml:lang="ru">Соавтор</label>
+            </item>
+            <item value="reviewer">
+                  <label xml:lang="de">Rezensent</label>
+				<label xml:lang="ru">Рецензент</label>
+            </item>	    
+      </list>
+      <list id="subtitle_type" width="120" type="dropdown">
+		    <item value="title_spokenAbout">
+				<label xml:lang="de">Erwähntes Werk (bei Rezensionen)</label>
+			</item>		  
+		    <item value="title_main">
+				<label xml:lang="de">Hauptsachtitel</label>
+			</item>
+            <item value="short">
+                  <label xml:lang="de">Kurztitel</label>
+				<label xml:lang="ru">Сокращенный заголовок</label>
+   			</item>
+		    <item value="title_beside">
+				<label xml:lang="de">Nebentitel</label>
+			</item>
+            <item value="misc">
+                  <label xml:lang="de">Sonst. Titel</label>
+				<label xml:lang="ru">др. заголовок?</label>
+            </item>
+		    <item value="title_rezensation">
+				<label xml:lang="de">Titel des rezensierten Werkes</label>
+			</item>
+		    <item value="title_original">
+				<label xml:lang="de">Titel laut Vorlage</label>
+			</item>
+            <item value="additional">
+                <label xml:lang="de">Zusatztitel</label>
+				<label xml:lang="ru">Вспомогательный заголовок</label>
+				<label xml:lang="pl">tytuł dodatkowy</label>
+            </item>		  
+      </list>
+      <list id="abstract_type" width="120" type="dropdown">
+            <item value="extend">
+                  <label xml:lang="de">ausführlich</label>
+				<label xml:lang="ru">подробно</label>
+            </item>		  
+            <item value="toc">
+                  <label xml:lang="de">Inhaltsverzeichnis</label>
+				<label xml:lang="ru">Содержание</label>
+            </item>		  
+            <item value="short">
+                  <label xml:lang="de">kurz</label>
+				<label xml:lang="ru">коротко</label>
+            </item>
+      </list>
+      <list id="identi_type" width="120" type="dropdown">
+            <item value="issn">
+                  <label xml:lang="de">ISSN</label>
+				 <label xml:lang="ru">ISSN</label>
+            </item>
+            <item value="isbn">
+                  <label xml:lang="de">ISBN</label>
+				<label xml:lang="ru">ISBN</label>
+            </item>
+            <item value="nbn">
+                  <label xml:lang="de">NBN</label>
+				<label xml:lang="ru">NBN</label>
+            </item>
+            <item value="doi">
+                  <label xml:lang="de">DOI</label>
+				<label xml:lang="ru">DOI</label>
+            </item>
+            <item value="misc">
+                  <label xml:lang="de">sonst.</label>
+				<label xml:lang="ru">другое</label>
+            </item>
+      </list>
+      <panel id="righstManag_access_input">
+            <hidden var="service/servflags/servflag/@inherited" default="0" />
+            <hidden var="service/servflags/servflag/@lang" default="de" />
+            <hidden var="service/servflags/servflag" default="Access:public" />
+            <!--            <cell col="1" row="1" anchor="WEST" ref="SAccess" var="service/servflags/servflag" ordernr="2" />
+            <cell col="2" row="1" anchor="NORTHWEST" ref="AFlagsAccess" />-->
+      </panel>
+      <panel id="righstManag_state_input">
+            <hidden var="service/servflags/servflag[2]/@inherited" default="0" />
+            <hidden var="service/servflags/servflag[2]/@lang" default="de" />
+            <hidden var="service/servflags/servflag[2]" default="State:commited" />
+            <!--            <cell col="1" row="1" anchor="WEST" ref="SState" var="service/servflags/servflag[2]" default="State:commited" />-->
+      </panel>
+      <panel id="righstManag_ip_input">
+            <hidden var="service/servflags/servflag[3]/@inherited" default="0" />
+            <hidden var="service/servflags/servflag[3]/@lang" default="de" />
+            <hidden var="service/servflags/servflag[3]" default="IP:" />
+            <!--            <cell col="1" row="3" anchor="WEST" var="service/servflags/servflag[3]" ordernr="2" >
+                  <textfield id="TFzeile1024" width="64" maxlength="1024" default="IP:" />
+            </cell>-->
+      </panel>
+      <!-- parent ================================================================== -->
+      <panel id="jpvolume_parent_input">
+            <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
+            <hidden var="structure/parents/@parasearch" default="true" />
+            <hidden var="structure/parents/@textsearch" default="true" />
+            <hidden var="structure/parents/@notinherit" default="false" />
+            <hidden var="structure/parents/@heritable" default="true" />
+            <hidden var="structure/parents/parent/@inherited" default="0" />
+            <hidden var="structure/parents/parent/@type" default="locator" />
+            <hidden var="structure/parents/parent/@title" default="ArticleCollection" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="list_jpjournal" var="structure/parents/parent/@href" />
+      </panel>
+      <!-- end: parent -->            
+      <!-- save ================================================================== -->
+      <panel id="save">
+            <cell row="1" col="1" anchor="WEST" >
+                  <cancelButton id="BCancel" width="100px" >
+                        <label xml:lang="de">[Abbrechen]</label>
+                        <label xml:lang="en">[Cancel]</label>
+					    <label xml:lang="ru">[Отменить]</label>
+					    <label xml:lang="pl">[przerwać]</label>
+                  </cancelButton>
+            </cell>
+            <cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save" >
+                  <submitButton id="BSubmit" width="100px" >
+                        <label xml:lang="de">[Speichern]</label>
+                        <label xml:lang="en">[Save]</label>
+					    <label xml:lang="ru">[Сохранить]</label>
+                  </submitButton>
+            </cell>
+      </panel>
+      <!-- end: safe -->      
+      <!--jstcontoplist ======================================================-->
+      <list id="list_jpjournal" width="300" type="dropdown">
+<!--            <include cacheable="false" 
+                  uri="request:servlets/MCRQueryServlet?XSL.Style=jpjournal-to-items&amp;type=alljpjournal&amp;hosts=local&amp;lang=de&amp;query=/mycoreobject%5b@ID%20like%20'*'%5d" 
+                  />-->
+      </list>      
+</imports>

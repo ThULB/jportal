@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<configuration type="jstpub">
+<configuration type="jparticle">
       <structure>
             <!-- Object Parent -->
             <element name="parents" minOccurs='1' maxOccurs='1' parasearch="false" textsearch="false">
