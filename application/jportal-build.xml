@@ -3,6 +3,25 @@
 <project name="jportal" default="usage" basedir=".">
 	<import file="${basedir}/build.xml" />
 
+	  <!-- Read in properties from config/mycore.properties.jp -->
+	  <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	    <filterchain>
+	      <linecontains>
+	        <contains value="MCR.basedir=" />
+	      </linecontains>
+	    </filterchain>
+	  </loadproperties>
+	  <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	    <filterchain>
+	      <tokenfilter>
+	        <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
+	      </tokenfilter>
+	    </filterchain>
+	  </loadproperties>
+	
+  <!-- =================================================================== -->
+  <!-- Create schemas					                                   -->
+  <!-- =================================================================== -->	
 	<target name="jp.create.schema" depends="create.schema">
 	    <!-- Load the properties that define the XML metadata configuration files -->
 	    <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
@@ -34,5 +53,16 @@
 	          style="stylesheets/MCRMetadataSchema.xsl"
 	          out="schema/${metadata.schema}" />
 	  </target>		
+
+  <!-- =================================================================== -->
+  <!-- Create local working directories                                    -->
+  <!-- =================================================================== -->	
+	<target name="jp.create.directories" depends="create.directories">
+	    <mkdir dir="${MCR.editor_jpjournal_directory}" />
+	    <mkdir dir="${MCR.editor_jpvolume_directory}" />
+	    <mkdir dir="${MCR.editor_jparticle_directory}" />
+	    <mkdir dir="${MCR.editor_jpperson_directory}" />
+	    <mkdir dir="${MCR.editor_jpinst_directory}" />		
+	</target>
 	
 </project>
