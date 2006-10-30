@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<project name="jportal" default="usage" basedir=".">
+	<import file="${basedir}/build.xml" />
+
+	<target name="jp.create.schema" depends="create.schema">
+	    <!-- Load the properties that define the XML metadata configuration files -->
+	    <loadproperties srcFile="${basedir}/config/jportal/mycore.properties.jp">
+	      <filterchain>
+	        <linecontains>
+	          <contains value="MCR.persistence_config_"/>
+	        </linecontains>
+	      </filterchain>
+	    </loadproperties>
+	    <!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpjournal}"    /></antcall>
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpvolume}"    /></antcall>
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jparticle}" /></antcall>
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpperson}" /></antcall>
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpinst}" /></antcall>		
+	    <move todir="${docportal.schema}">
+	      <fileset dir="${docportal.schema}" 
+	        includes="${MCR.persistence_config_jpjournal} ${MCR.persistence_config_jpvolume} ${MCR.persistence_config_jparticle} ${MCR.persistence_config_jpperson} ${MCR.persistence_config_jpinst}"
+	      />
+	      <mapper type="glob" from="*.xml" to="*.xsd"/>
+	    </move>
+	</target>
+	
+	  <target name="jp.do.transform" depends="init">
+	    <echo>Transforming ${metadata.schema}...</echo>
+	    <xslt basedir="${docportal.config}"
+	          classpathref="docportal.classpath"
+	          in="${docportal.config}/jportal/${metadata.schema}"
+	          style="stylesheets/MCRMetadataSchema.xsl"
+	          out="schema/${metadata.schema}" />
+	  </target>		
+	
+</project>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="jstpub">
+      <structure>
+            <!-- Object Parent -->
+            <element name="parents" minOccurs='1' maxOccurs='1' parasearch="false" textsearch="false">
+                  <mcrmetalinkid name="parent" class="MCRMetaLinkID" minOccurs='1' maxOccurs='1' />
+            </element>
+            <!-- Derivate Objects -->
+            <element name="derobjects" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>
+      </structure>
+      <metadata>
+            <!-- 01 - Maintitle -->
+            <element name="maintitles" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="maintitle" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="1024" />
+            </element>            
+            <!-- 02 - SubTitles -->
+            <!-- types = addtitle | shorttitle | misc. -->
+            <element name="subtitles" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="subtitle" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>
+            <!-- 03 - publisher -->
+            <element name="publishers" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="publisher" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>		  		  
+            <!-- 03 - author -->
+            <!-- type = mainauthor | subauthor-->            
+            <element name="authors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="author" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>
+            <!-- 04 - contribus -->
+            <!-- xlinktitle = Fotograf, Komponist, Maler, Redakteur, Veranstalter, Illustrator, Sponsor, Übersetzer, Moderator, Kommentator -->
+            <element name="contribus" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="contribu" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>                        
+            <!-- 05 - keywords -->
+            <element name="keywords" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>            
+            <!-- 06 - classis -->
+            <!-- heritated -->            
+            <element name="classis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="classi" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+		   <!--classiPub-->
+            <element name="classispub" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="classipub" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+		   <!--classiPub2-->
+            <element name="classispub2" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="classipub2" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    		  		  
+		   <!--classiPub3-->
+            <element name="classispub3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="classipub3" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    		  		  		  
+            <!-- 07 - abstract -->
+            <!-- type = short | long -->
+            <element name="abstracts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
+            </element>            
+            <!-- 08 - coverages -->
+            <element name="coverages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="coverage" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>            
+            <!-- 09 - identis -->
+            <!-- type = issn | isbn | nbn | doi | misc. -->
+            <element name="identis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>                        
+            <!-- 10 - language -->
+            <element name="languages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                        
+            <!-- 11 - rights -->
+            <element name="rights" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
+            </element>                        
+            <!-- 12 - notes -->
+            <element name="notes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>                        
+            <!-- 13 - type -->
+            <element name="types" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="type" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+            </element>                                    
+            <!-- 14 - timebehas -->
+            <element name="timebehas" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="timebeha" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+            </element> 
+            <!-- 15 - rubric -->
+            <element name="rubrics" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="rubric" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+            <!-- 16 - sizes -->
+            <element name="sizes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="size" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
+            </element>                        
+            <!-- 17 - references -->
+            <element name="refs" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="ref" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="4096" />				
+            </element>                        
+      </metadata>
+      <service>
+            <!-- Service Dates -->
+            <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetadate name="servdate" class="MCRMetaDate" minOccurs='1' maxOccurs='unbounded'/>
+            </element>
+            <!-- Service Flags -->
+            <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="256" />
+            </element>
+      </service>
+</configuration>

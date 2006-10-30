@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="jstconttop">
+      <structure>
+            <!-- Object Children -->
+            <element name="children" minOccurs='0' maxOccurs='1' parasearch="false" textsearch="false">
+                  <mcrmetalinkid name="child" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>
+            <!-- Derivate Objects -->
+            <element name="derobjects" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>            
+      </structure>
+      <metadata>
+            <!-- 01 - Maintitle -->
+            <element name="maintitles" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="maintitle" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024" />
+            </element>            
+            <!-- 02 - SubTitles -->
+            <!-- types = addtitle | shorttitle | misc. -->
+            <element name="subtitles" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="subtitle" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>
+            <!-- 03 - Maineditor -->
+            <element name="mainedis" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="mainedi" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
+            </element>
+            <!-- 04 - subedi -->
+            <!-- type = subedi -->
+            <element name="subedis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="subedi" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>
+            <!-- 05 - author -->
+            <!-- type = mainauthor | subauthor-->            
+            <element name="authors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="author" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>
+            <!-- 06 - contribus -->
+            <!-- xlinktitle = Fotograf, Komponist, Maler, Redakteur, Veranstalter, Illustrator, Sponsor, ?bersetzer, Moderator, Kommentator -->
+            <element name="contribus" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="contribu" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+            </element>                        
+            <!-- 07 - keywords -->
+            <element name="keywords" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>            
+            <!-- 08 - classis -->
+            <!--ddc or something thulb specifically-->
+            <element name="classis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="classi" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+            <!-- 09 - abstract -->
+            <!-- type = short | long | toc -->
+            <element name="abstracts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
+            </element>            
+            <!-- 10 - coverages -->
+            <element name="coverages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="coverage" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>            
+            <!-- 11 - identis -->
+            <!-- type = issn | isbn | nbn | doi | misc. -->
+            <element name="identis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+            </element>                        
+            <!-- 12 - language -->
+            <element name="languages" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='1' maxOccurs='unbounded' />
+            </element>                        
+            <!-- 13 - rights -->
+            <element name="rights" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
+            </element>                        
+            <!-- 14 - notes -->
+            <element name="notes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
+            </element>                        
+            <!-- 15 - type -->
+            <element name="types" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetaclassification name="type" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+            </element>                                    
+            <!-- 16 - predeces -->
+            <element name="predeces" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalink name="predece" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+            <!-- 17 - successor -->
+            <element name="successors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalink name="successor" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
+            </element>                                    
+      </metadata>
+      <service>
+            <!-- Service Dates -->
+            <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetadate name="servdate" class="MCRMetaDate" minOccurs='1' maxOccurs='unbounded'/>
+            </element>
+            <!-- Service Flags -->
+            <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+                  <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="256" />
+            </element>
+      </service>
+</configuration>

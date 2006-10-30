@@ -1,0 +1,33 @@
+##############################################################################
+# The data model configuration
+##############################################################################
+
+### Journal 
+MCR.type_jpjournal=true
+MCR.type_jpjournal_in=alljpjournals
+MCR.type_alljpjournal=jpjournal
+MCR.persistence_config_jpjournal=datamodel-jpjournal.xml
+
+### Volume
+MCR.type_jpvolume=true
+MCR.type_jpvolume_in=alljpvolumes
+MCR.type_alljpvolume=jpvolume
+MCR.persistence_config_jpvolume=datamodel-jpvolume.xml
+
+### article
+MCR.type_jparticle=true
+MCR.type_jparticle_in=alljparticles
+MCR.type_alljparticle=jparticle
+MCR.persistence_config_jparticle=datamodel-jparticle.xml
+
+### jpperson
+MCR.type_jpperson=true
+MCR.type_jpperson_in=alljppersons
+MCR.type_alljpperson=jpperson
+MCR.persistence_config_jpperson=datamodel-jpperson.xml
+
+### jpinst
+MCR.type_jpinst=true
+MCR.type_jpinst_in=alljpinsts
+MCR.type_alljpinst=jpinst
+MCR.persistence_config_jpinst=datamodel-jpinst.xml
