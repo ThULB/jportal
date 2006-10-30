@@ -65,4 +65,57 @@
 	    <mkdir dir="${MCR.editor_jpinst_directory}" />		
 	</target>
 	
+  <!-- =================================================================== -->
+  <!-- Load all classifications                                            -->
+  <!-- =================================================================== -->
+
+  <target name="jp.create.class" depends="init" description="Load all JPortal classifications">
+    <property name="commands.file" value="${basedir}/commands.txt"/>
+    <delete file="${commands.file}" />
+    <echo file="${commands.file}" append="false">
+
+    update all classifications from directory ${docportal.content}/classification/jportal
+
+    </echo>
+    <antcall target="invoke.cli">
+      <param name="cli.directory" value="${basedir}" />
+      <param name="cli.command"   value="process ${commands.file}" />
+    </antcall>
+    <delete file="${commands.file}" />
+  </target>	
+
+  <!-- =================================================================== -->
+  <!-- Build web application                                               -->
+  <!-- =================================================================== -->
+  <target name="jp.webapps" depends="webapps">
+  
+    <copy todir="${docportal.webapps}/editor">
+      <fileset dir="${docportal.config}/jportal" includes="editor-*.xml" />
+      <fileset dir="${docportal.config}/jportal" includes="imports-*.xml" />
+    </copy>  	
+    <copy todir="${docportal.webapps}">
+      <fileset dir="${docportal.webpages}/jportal-editor" />
+    </copy>  	
+	<delete>
+		<fileset dir="${docportal.webapps}/jportal-editor"></fileset>
+	</delete>  	
+  </target>
+	
 </project>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

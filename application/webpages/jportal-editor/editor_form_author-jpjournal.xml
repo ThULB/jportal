@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+      <section title="Neueingabe eines jstcontainerstoplevel" xml:lang="de">
+            <p></p>
+            <editor id="author-jpjournal-de">
+                  <include uri="webapp:editor/editor-author-jpjournal.xml"/>
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+      <section title="Create a new jpjournal" xml:lang="en">
+            <p></p>
+            <br />
+            <p></p>
+            <editor id="author-jpjournal-en">
+                  <include uri="webapp:editor/editor-author-jpjournal.xml"/>
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+</MyCoReWebPage>
