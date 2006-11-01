@@ -23,9 +23,6 @@
 			<xsl:when test=" $template = 'template_mycoresample-2' " >
 				<xsl:call-template name="template_mycoresample-2"/>
 			</xsl:when>
-			<xsl:otherwise>
-				<xsl:call-template name="template_mycoresample-1"/>
-			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<!-- ================================================================================= -->
