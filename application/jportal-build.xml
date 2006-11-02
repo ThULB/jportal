@@ -68,10 +68,11 @@
   <!-- Load all classifications                                            -->
   <!-- =================================================================== -->
 
-  <target name="jp.create.class" depends="init" description="Load all MYJPortal classifications">
+  <target name="jp.create.class" depends="init" description="Load all JPortal/MYJPORTAL classifications">
     <property name="commands.file" value="${basedir}/commands.txt"/>
     <delete file="${commands.file}" />
     <echo file="${commands.file}" append="false">
+    	update all classifications from directory ${env.JPORTAL_HOME}/content/classification
 	    update all classifications from directory ${env.MYJPORTAL_HOME}/content/classification
     </echo>
     <antcall target="invoke.cli">
