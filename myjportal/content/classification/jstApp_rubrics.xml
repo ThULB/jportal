@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
+      ID="DocPortal_class_20000010" >
+      <label xml:lang="de" text="Rubriken JALZ" description="Rubriken JALZ" />
+      <categories>
+            <category ID="00002000">
+                  <label xml:lang="de" text="Normalblatt" />
+                  <category ID="00002000.00001000">
+                        <label xml:lang="de" text="Alte Literatur" />
+                  </category>
+                  <category ID="00002000.00002000">
+                        <label xml:lang="de" text="Altenthmer" />
+                  </category>
+                  <category ID="00002000.00003000">
+                        <label xml:lang="de" text="Architektonik" />
+                  </category>
+                  <category ID="00002000.00005000">
+                        <label xml:lang="de" text="Auslndische Sprachkunde" />
+                  </category>
+                  <category ID="00002000.00006000">
+                        <label xml:lang="de" text="Biblische Literatur" />
+                  </category>
+                  <category ID="00002000.00007000">
+                        <label xml:lang="de" text="Botanik" />
+                  </category>
+                  <category ID="00002000.00008000">
+                        <label xml:lang="de" text="Chemie" />
+                  </category>
+                  <category ID="00002000.00009000">
+                        <label xml:lang="de" text="Deutsche Sprachkunde" />
+                  </category>
+                  <category ID="00002000.00010000">
+                        <label xml:lang="de" text="Deutsche Sprachkunst" />
+                  </category>
+                  <category ID="00002000.00011000">
+                        <label xml:lang="de" text="Diplomatik" />
+                  </category>
+                  <category ID="00002000.00012000">
+                        <label xml:lang="de" text="Erbaungsschriften" />
+                  </category>
+                  <category ID="00002000.00013000">
+                        <label xml:lang="de" text="Erdbeschreibung" />
+                  </category>
+                  <category ID="00002000.00014000">
+                        <label xml:lang="de" text="Erziehungskunde" />
+                  </category>
+                  <category ID="00002000.00015000">
+                        <label xml:lang="de" text="Freimaurerschriften" />
+                  </category>
+                  <category ID="00002000.00016000">
+                        <label xml:lang="de" text="Geschichte" />
+                  </category>
+                  <category ID="00002000.00017000">
+                        <label xml:lang="de" text="Griechische Literatur" />
+                  </category>
+                  <category ID="00002000.00018000">
+                        <label xml:lang="de" text="Handlungswissenschaften" />
+                  </category>
+                  <category ID="00002000.00019000">
+                        <label xml:lang="de" text="Jugendschriften" />
+                  </category>
+                  <category ID="00002000.00020000">
+                        <label xml:lang="de" text="Jurisprudenz" />
+                  </category>
+                  <category ID="00002000.00021000">
+                        <label xml:lang="de" text="Kinderschriften" />
+                  </category>
+                  <category ID="00002000.00022000">
+                        <label xml:lang="de" text="Kirchengeschichte" />
+                  </category>
+                  <category ID="00002000.00024000">
+                        <label xml:lang="de" text="Kirchengeschichten" />
+                  </category>
+                  <category ID="00002000.00025000">
+                        <label xml:lang="de" text="Kriegswissenschaften" />
+                  </category>
+                  <category ID="00002000.00026000">
+                        <label xml:lang="de" text="Lateinische Sprachkunde" />
+                  </category>
+                  <category ID="00002000.00027000">
+                        <label xml:lang="de" text="Literaturgeschichte" />
+                  </category>
+                  <category ID="00002000.00028000">
+                        <label xml:lang="de" text="Mathematik" />
+                  </category>
+                  <category ID="00002000.00029000">
+                        <label xml:lang="de" text="Medicin" />
+                  </category>
+                  <category ID="00002000.00030000">
+                        <label xml:lang="de" text="Naturgeschichte" />
+                  </category>
+                  <category ID="00002000.00031000">
+                        <label xml:lang="de" text="Naturlehre" />
+                  </category>
+                  <category ID="00002000.00032000">
+                        <label xml:lang="de" text="Neuere Sprachkunde" />
+                  </category>
+                  <category ID="00002000.00033000">
+                        <label xml:lang="de" text="Numismatik" />
+                  </category>
+                  <category ID="00002000.00034000">
+                        <label xml:lang="de" text="Oekonomie" />
+                  </category>
+                  <category ID="00002000.00036000">
+                        <label xml:lang="de" text="Orientalische Literatur" />
+                  </category>
+                  <category ID="00002000.00037000">
+                        <label xml:lang="de" text="Pdagogik" />
+                  </category>
+                  <category ID="00002000.00038000">
+                        <label xml:lang="de" text="Philologik" />
+                  </category>
+                  <category ID="00002000.00039000">
+                        <label xml:lang="de" text="Philosophie" />
+                  </category>
+                  <category ID="00002000.00040000">
+                        <label xml:lang="de" text="Physik" />
+                  </category>
+                  <category ID="00002000.00041000">
+                        <label xml:lang="de" text="Rmische Literatur" />
+                  </category>
+                  <category ID="00002000.00042000">
+                        <label xml:lang="de" text="Schne Anzeigen" />
+                  </category>
+                  <category ID="00002000.00043000">
+                        <label xml:lang="de" text="Schne Knste" />
+                  </category>
+                  <category ID="00002000.00044000">
+                        <label xml:lang="de" text="Sprachkunde" />
+                  </category>
+                  <category ID="00002000.00045000">
+                        <label xml:lang="de" text="Staatswissenschaften" />
+                  </category>
+                  <category ID="00002000.00046000">
+                        <label xml:lang="de" text="Statistik" />
+                  </category>
+                  <category ID="00002000.00047000">
+                        <label xml:lang="de" text="Technologie" />
+                  </category>
+                  <category ID="00002000.00048000">
+                        <label xml:lang="de" text="Theologie" />
+                  </category>
+                  <category ID="00002000.00049000">
+                        <label xml:lang="de" text="Vermischte Schriften" />
+                  </category>
+            </category>
+            <category ID="00003000">
+                  <label xml:lang="de" text="Intelligenzblatt" />
+                  <category ID="00003000.00001000">
+                        <label xml:lang="de" text="wird noch erstellt" />
+                  </category>
+            </category>
+      </categories>
+</mycoreclass>

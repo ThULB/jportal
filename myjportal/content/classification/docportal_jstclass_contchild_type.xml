@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
+      ID="DocPortal_class_10000010" >
+      <label xml:lang="de" text="JST Art des Child Containers" description="erklrung zur atr des child-containers" />
+      <categories>
+            <category ID="TYPE0001">
+                  <label xml:lang="de" text="Band" />
+            </category>
+            <category ID="TYPE0002">
+                  <label xml:lang="de" text="Ausgabe" />
+            </category>
+            <category ID="TYPE0003">
+                  <label xml:lang="de" text="Heft" />
+            </category>
+            <category ID="TYPE0004">
+                  <label xml:lang="de" text="Nummer" />
+            </category>            
+      </categories>
+</mycoreclass>

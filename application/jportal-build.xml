@@ -3,6 +3,9 @@
 <project name="jportal" default="usage" basedir=".">
 	<import file="${basedir}/build.xml" />
 
+	  <property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal" />	
+	  <property name="env.JPORTAL_HOME" value="${basedir}/jportal-add-ons" />		
+	
 	  <!-- Read in properties from config/mycore.properties.jp -->
 	  <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
 	    <filterchain>
@@ -23,14 +26,6 @@
   <!-- Create schemas					                                   -->
   <!-- =================================================================== -->	
 	<target name="jp.create.schema" depends="create.schema">
-	    <!-- Load the properties that define the XML metadata configuration files -->
-	    <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
-	      <filterchain>
-	        <linecontains>
-	          <contains value="MCR.persistence_config_"/>
-	        </linecontains>
-	      </filterchain>
-	    </loadproperties>
 	    <!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpjournal}"    /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpvolume}"    /></antcall>
@@ -39,7 +34,11 @@
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpinst}" /></antcall>		
 	    <move todir="${docportal.schema}">
 	      <fileset dir="${docportal.schema}" 
-	        includes="${MCR.persistence_config_jpjournal} ${MCR.persistence_config_jpvolume} ${MCR.persistence_config_jparticle} ${MCR.persistence_config_jpperson} ${MCR.persistence_config_jpinst}"
+	        includes="${MCR.persistence_config_jpjournal} 
+	      	${MCR.persistence_config_jpvolume} 
+	      	${MCR.persistence_config_jparticle} 
+	      	${MCR.persistence_config_jpperson} 
+	      	${MCR.persistence_config_jpinst}" 
 	      />
 	      <mapper type="glob" from="*.xml" to="*.xsd"/>
 	    </move>
@@ -47,9 +46,9 @@
 	
 	  <target name="jp.do.transform" depends="init">
 	    <echo>Transforming ${metadata.schema}...</echo>
-	    <xslt basedir="${docportal.config}"
+	    <xslt basedir="${env.JPORTAL_HOME}/config/${metadata.schema}"
 	          classpathref="docportal.classpath"
-	          in="${docportal.config}/jportal/${metadata.schema}"
+	          in="${env.JPORTAL_HOME}/config/${metadata.schema}"
 	          style="stylesheets/MCRMetadataSchema.xsl"
 	          out="schema/${metadata.schema}" />
 	  </target>		
@@ -69,13 +68,11 @@
   <!-- Load all classifications                                            -->
   <!-- =================================================================== -->
 
-  <target name="jp.create.class" depends="init" description="Load all JPortal classifications">
+  <target name="jp.create.class" depends="init" description="Load all MYJPortal classifications">
     <property name="commands.file" value="${basedir}/commands.txt"/>
     <delete file="${commands.file}" />
     <echo file="${commands.file}" append="false">
-
-    update all classifications from directory ${docportal.content}/classification/jportal
-
+	    update all classifications from directory ${env.MYJPORTAL_HOME}/content/classification
     </echo>
     <antcall target="invoke.cli">
       <param name="cli.directory" value="${basedir}" />
@@ -87,22 +84,61 @@
   <!-- =================================================================== -->
   <!-- Build web application                                               -->
   <!-- =================================================================== -->
-  <target name="jp.webapps" depends="webapps">
-  
+  <target name="jp.webapps" >
+  	
+  	<!-- get JPORTAL sources -->
+  	<!-- ############################# -->
+	  	<!-- get editors -->
     <copy todir="${docportal.webapps}/editor">
-      <fileset dir="${docportal.config}/jportal" includes="editor-*.xml" />
-      <fileset dir="${docportal.config}/jportal" includes="imports-*.xml" />
+      <fileset dir="${env.JPORTAL_HOME}/config" includes="editor-*.xml" />
+      <fileset dir="${env.JPORTAL_HOME}/config" includes="imports-*.xml" />
     </copy>  	
-    <copy todir="${docportal.webapps}">
-      <fileset dir="${docportal.webpages}/jportal-editor" />
-    </copy>  	
-	<delete>
-		<fileset dir="${docportal.webapps}/jportal-editor"></fileset>
-	</delete>  	
+	<antcall target="jp.webapps.copyWebPages">
+		<param name="sourcedir.webpages" value="${env.JPORTAL_HOME}/webpages" />
+	</antcall>
+	<antcall target="jp.webapps.copyXSL">
+		<param name="sourcedir.XSL" value="${env.JPORTAL_HOME}/stylesheets" />
+	</antcall>  	
+  	
+  	<!-- get MYJPORTAL sources -->
+  	<!-- ############################# -->  	
+	  	<!-- webpages stuff to "webapps" -->
+	<antcall target="jp.webapps.copyWebPages">
+		<param name="sourcedir.webpages" value="${env.MYJPORTAL_HOME}/webpages" />
+	</antcall>
+	<antcall target="jp.webapps.copyXSL">
+		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/stylesheets" />
+	</antcall>  	  	
+  	<!-- get templates  -->
+	<antcall target="jp.webapps.copyXSL">
+		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/webpages/templates/master" />
+	</antcall>  	  	  	
+
+  	<!-- docportal sources -->
+  	<!-- ############################# -->  	  	
+  	<antcall target="webapps"/>
   </target>
 	
-</project>
+  <!-- =================================================================== -->
+	
+	<target name="jp.webapps.copyWebPages">
+	  	<!-- webpages stuff to "webapps" -->
+	    <copy todir="${docportal.webapps}" failonerror="false">
+	      <fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
+	    </copy>  		
+	</target>
 
+  <!-- =================================================================== -->	
+
+	<target name="jp.webapps.copyXSL">
+	    <copy todir="${docportal.webapps}/WEB-INF/stylesheets" flatten="true" failonerror="false">
+	      <fileset dir="${sourcedir.XSL}"   includes="**/*.xsl" />
+	    </copy>
+	</target>
+
+  <!-- =================================================================== -->	
+	
+</project>
 
 
 
