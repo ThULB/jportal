@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
-      ID="docportal_class_011" >
+      ID="jportal_class_00000001" >
       <label xml:lang="de" text="Länder" description="Klassifikation Länder" />
       <categories>
             <category ID="AF">
