@@ -1,4 +1,13 @@
 ##############################################################################
+# Overwrite ACL behaviour of DocPortal                                       #
+##############################################################################
+
+MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRRemoveAclEventHandler
+MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRRemoveAclEventHandler
+MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRObjectTypeStrategy
+
+
+##############################################################################
 # The data model configuration
 ##############################################################################
 
@@ -32,22 +41,20 @@ MCR.type_jpinst_in=alljpinsts
 MCR.type_alljpinst=jpinst
 MCR.persistence_config_jpinst=datamodel-jpinst.xml
 
+
 ##############################################################################
 # Workflow                                                                   #
 ##############################################################################
 
-###
-###  overwrite later with jportal values !!!
-###
 # The project ID
-MCR.default_project_id=JPortal
+MCR.default_project_id=jportal
 MCR.default_project_type=jparticle
 
-MCR.jpjournal_project_id=JPortal
-MCR.jpvolume_project_id=JPortal
-MCR.jparticle_project_id=JPortal
-MCR.jpperson_project_id=JPortal
-MCR.jpinst_project_id=JPortal
+MCR.jpjournal_project_id=jportal
+MCR.jpvolume_project_id=jportal
+MCR.jparticle_project_id=jportal
+MCR.jpperson_project_id=jportal
+MCR.jpinst_project_id=jportal
 
 # Editor path
 MCR.editor_base_directory=%MCR.basedir%/workflow

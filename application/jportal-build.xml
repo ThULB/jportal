@@ -81,7 +81,33 @@
     </antcall>
     <delete file="${commands.file}" />
   </target>	
-
+	
+  <!-- =================================================================== -->
+  <!-- Build web application                                               -->
+  <!-- =================================================================== -->
+	
+	<target name="create.default-rules" depends="init" description="Load default ACL rules">
+		<property name="commands.file" value="${basedir}/commands.txt" />
+		<echo file="${commands.file}" append="false">
+	    	update permission read for id default with rulefile grant-all.xml
+	    	update permission writedb for id default with rulefile grant-editors.xml
+	    	update permission deletedb for id default with rulefile grant-admins.xml
+	    </echo>
+		<!-- this demonstrates how to specify default rules on a basis of an object type -->
+		<!--
+		<echo file="${commands.file}" append="true">
+	    	update permission read for id default_akte with rulefile grant-all.xml
+	    	update permission writedb for id default_akte with rulefile grant-editors.xml
+	    	update permission deletedb for id default_akte with rulefile grant-admins.xml
+	    </echo>
+	    -->
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${basedir}/config/acl" />
+			<param name="cli.command" value="process ${commands.file}" />
+		</antcall>
+		<delete file="${commands.file}" />
+	</target>	
+	
   <!-- =================================================================== -->
   <!-- Build web application                                               -->
   <!-- =================================================================== -->

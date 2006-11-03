@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO_8859-1"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-      <section title="Neueingabe eines jpinst" xml:lang="de">
+      <section title="Institutions anlegen" xml:lang="de">
             <p></p>
             <editor id="author-jpinst-de">
                   <include uri="webapp:editor/editor-author-jpinst.xml"/>
@@ -10,7 +10,7 @@
             <br />
             <p></p>
       </section>
-      <section title="Create a new jpinst" xml:lang="en">
+      <section title="Create institution" xml:lang="en">
             <p></p>
             <br />
             <p></p>

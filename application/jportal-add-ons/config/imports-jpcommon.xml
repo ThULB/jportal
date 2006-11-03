@@ -10,12 +10,9 @@
       <!-- *** Text area *** -->
       <textarea id="TFarea4096" width="62" height="6" maxlength="4096" />
       <!-- *** Language List *** -->
-      <list id="Slang" width="60" type="dropdown">
-<!--            <include 
-                  uri="request:servlets/MCRQueryServlet?XSL.sortOrder=alphabetic&amp;XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;query=/mycoreclass%5b@ID='DocPortal_class_10000030'%5d" 
-                  />-->
+<!--      <list id="Slang" width="60" type="dropdown">
 		    <include uri="classification:editor:-1:children:DocPortal_class_10000030" />		  
-      </list>
+      </list>-->
       <!-- *** contribu/@type List *** -->
       <list id="contribu_input_repeater_type" type="dropdown">
             <item value="authorOfReviewer">
@@ -78,8 +75,6 @@
                   <label xml:lang="de">Veranstalter</label>
 				<label xml:lang="ru">Организатор</label>
             </item>
-	  
-		  	  		  
       </list>
       <!-- *** author_input_repeater_type List *** -->
       <list id="author_input_repeater_type" type="dropdown">
@@ -165,24 +160,19 @@
       </list>
       <panel id="righstManag_access_input">
             <hidden var="service/servflags/servflag/@inherited" default="0" />
-            <hidden var="service/servflags/servflag/@lang" default="de" />
+<!--            <hidden var="service/servflags/servflag/@lang" default="de" />-->
             <hidden var="service/servflags/servflag" default="Access:public" />
-            <!--            <cell col="1" row="1" anchor="WEST" ref="SAccess" var="service/servflags/servflag" ordernr="2" />
-            <cell col="2" row="1" anchor="NORTHWEST" ref="AFlagsAccess" />-->
       </panel>
       <panel id="righstManag_state_input">
             <hidden var="service/servflags/servflag[2]/@inherited" default="0" />
-            <hidden var="service/servflags/servflag[2]/@lang" default="de" />
+<!--            <hidden var="service/servflags/servflag[2]/@lang" default="de" />-->
             <hidden var="service/servflags/servflag[2]" default="State:commited" />
             <!--            <cell col="1" row="1" anchor="WEST" ref="SState" var="service/servflags/servflag[2]" default="State:commited" />-->
       </panel>
       <panel id="righstManag_ip_input">
             <hidden var="service/servflags/servflag[3]/@inherited" default="0" />
-            <hidden var="service/servflags/servflag[3]/@lang" default="de" />
+<!--            <hidden var="service/servflags/servflag[3]/@lang" default="de" />-->
             <hidden var="service/servflags/servflag[3]" default="IP:" />
-            <!--            <cell col="1" row="3" anchor="WEST" var="service/servflags/servflag[3]" ordernr="2" >
-                  <textfield id="TFzeile1024" width="64" maxlength="1024" default="IP:" />
-            </cell>-->
       </panel>
       <!-- parent ================================================================== -->
       <panel id="jpvolume_parent_input">
