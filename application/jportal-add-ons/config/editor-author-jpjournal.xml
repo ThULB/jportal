@@ -5,14 +5,17 @@
 <!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
 	<target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" /> 
       <components root="author-jpjournal" var="/mycoreobject">
+		  
             <include uri="webapp:editor/imports-jpjournal.xml" />            
-            <headline anchor="LEFT">
+		  
+<!--            <headline anchor="LEFT">
                   <text>
                         <label xml:lang="de"><b>Plichtfelder:</b></label>
 					  <label xml:lang="ru"><b>Поле для заполнения:</b></label>
 					  <label xml:lang="pl"><b>pola obowiązkowe:</b></label>
                   </text>
-            </headline>
+            </headline>-->
+		  
             <panel id="author-jpjournal" lines="on">
                   <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jpjournal" />
             </panel>

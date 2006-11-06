@@ -215,8 +215,11 @@
 	<!-- *** Data for the identi *** -->
 	<text id="identi_label">
 		<label xml:lang="de">
-			<span class="editorlabel">Bezeichner:</span>
+			<span class="editorlabel">ID:</span>
 		</label>
+		<label xml:lang="en">
+			<span class="editorlabel">ID:</span>
+		</label>		
 		<label xml:lang="ru">
 			<span class="editorlabel">Идентификатор:</span>
 		</label>
@@ -230,7 +233,7 @@
 	<!-- *** Data for the right *** -->
 	<text id="right_label">
 		<label xml:lang="de">
-			<span class="editorlabel">Besitznachweis:</span>
+			<span class="editorlabel">Urheberrecht:</span>
 		</label>
 		<label xml:lang="ru">
 			<span class="editorlabel">Правообладание:</span>

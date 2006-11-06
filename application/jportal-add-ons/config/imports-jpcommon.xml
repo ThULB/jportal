@@ -10,9 +10,9 @@
       <!-- *** Text area *** -->
       <textarea id="TFarea4096" width="62" height="6" maxlength="4096" />
       <!-- *** Language List *** -->
-<!--      <list id="Slang" width="60" type="dropdown">
-		    <include uri="classification:editor:-1:children:DocPortal_class_10000030" />		  
-      </list>-->
+      <list id="Slang" width="60" type="dropdown">
+		    <include uri="classification:editor:-1:children:jportal_class_00000002" />
+      </list>
       <!-- *** contribu/@type List *** -->
       <list id="contribu_input_repeater_type" type="dropdown">
             <item value="authorOfReviewer">
@@ -212,4 +212,25 @@
                   uri="request:servlets/MCRQueryServlet?XSL.Style=jpjournal-to-items&amp;type=alljpjournal&amp;hosts=local&amp;lang=de&amp;query=/mycoreobject%5b@ID%20like%20'*'%5d" 
                   />-->
       </list>      
+	
+      <!--get person / institution list ======================================================-->	
+	<panel id="getPersonAndInst">
+         <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />				   
+         <cell row="1" col="2" width="100%">
+		       <output var="@label" />
+               <text   label=" (" />
+			   <output var="@href" />
+               <text   label=")" />				 
+          </cell>
+		 <cell row="2" col="1" >
+               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
+          </cell>			   
+		  <cell row="2" col="2" >
+               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
+         </cell>			   			   
+         <cell row="3" col="1" width="100%">
+               <text   label="-" />
+         </cell>			   	
+	</panel>
+	    		   	
 </imports>

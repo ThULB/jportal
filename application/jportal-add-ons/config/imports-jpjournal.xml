@@ -78,12 +78,12 @@
             <cell row="19" col="3" anchor="WEST" ref="successor_help" />
             <!-- service data -->
 <!--            <cell row="200" col="1" anchor="NORTHWEST" ref="rightsManag_label" />-->
-            <cell row="200" col="2" anchor="NORTHWEST" ref="righstManag_input" />
-<!--            <cell row="200" col="3" anchor="WEST" ref="rightsManag_help" /> -->           
-            <!-- place holder -->
+<!--            <cell row="200" col="2" anchor="NORTHWEST" ref="righstManag_input" />
+<!-#-            <cell row="200" col="3" anchor="WEST" ref="rightsManag_help" /> -#->           
+            <!-#- place holder -#->
             <cell row="210" col="1" anchor="NORTHWEST" >
                   <space height="14" />
-            </cell>
+            </cell>-->
             <!-- save / cancel button -->
             <cell row="220" col="1" anchor="EAST"/>
             <cell row="220" col="2" anchor="EAST" ref="save" />
@@ -97,9 +97,9 @@
             <hidden var="metadata/maintitles/@notinherit" default="false" />
             <hidden var="metadata/maintitles/@heritable" default="false" />
             <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" ordernr="1" 
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" 
                   default="de" />
-            <cell col="2" row="1" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" ordernr="1" />
+            <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
       </panel>
       <!-- end: MainTitle -->
       <!-- SubTitle ================================================================== -->
@@ -108,14 +108,14 @@
             <hidden var="metadata/subtitles/@parasearch" default="true" />
             <hidden var="metadata/subtitles/@textsearch" default="true" />
             <hidden var="metadata/subtitles/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle" ordernr="1" >
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle" >
                   <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
             </cell>
       </panel>
       <panel id="subtitle_input_repeater">
-            <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" ordernr="1" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="2" row="2" anchor="NORTHWEST" ref="TFarea4096"  />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" />		  
+            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />		  
+            <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096"  />
       </panel>
       <!-- end: SubTitle -->
       <!-- mainedi ================================================================== -->
@@ -125,31 +125,21 @@
             <hidden var="metadata/mainedis/@textsearch" default="true" />
             <hidden var="metadata/mainedis/@notinherit" default="false" />
             <hidden var="metadata/mainedis/@heritable" default="false" />
-            <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />
-		  
-	    <cell col="2" row="1" anchor="EAST" var="metadata/mainedis/mainedi">
-         <repeater min="1" max="10">
-           <panel lines="off">
-			 <hidden var="@inherited" default="0" />
-			 <hidden var="@type" default="locator" />
-            <hidden var="@title" default="Herausgeber" />			   
-			 <hidden var="@label" />
-			 <hidden var="@href" />			
-             <cell row="1" col="2" width="100%">
-		       <output var="@label" />
-               <text   label=" (" />
-			   <output var="@href" />
-               <text   label=")" />				 
-             </cell>
-			 <cell row="1" col="3" >
-               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
-             </cell>			   
-			 <cell row="1" col="4" >
-               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
-             </cell>			   			   
-           </panel>
-         </repeater>
-       </cell>	  		  
+
+		    <cell row="1" col="1" anchor="EAST" var="metadata/mainedis/mainedi">
+	         <repeater min="1" max="10">
+	           <panel lines="off">
+				 <hidden var="@inherited" default="0" />
+				 <hidden var="@type" default="locator" />
+		         <hidden var="@title" default="Herausgeber" />			   
+				 <hidden var="@label" />
+				 <hidden var="@href" />			
+				   
+				 <cell row="1" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
+
+	           </panel>
+	         </repeater>
+	       </cell>	  		  
       </panel>
       <!-- end: mainedi -->
       <!-- subedi ================================================================== -->
@@ -159,31 +149,19 @@
             <hidden var="metadata/subedis/@textsearch" default="true" />
             <hidden var="metadata/subedis/@notinherit" default="false" />
             <hidden var="metadata/subedis/@heritable" default="false" />
-            <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />
-		  
-	    <cell col="2" row="1" anchor="EAST" var="metadata/subedis/subedi">
-         <repeater min="1" max="10">
-           <panel lines="off">
-			 <hidden var="@inherited" default="0" />
-			 <hidden var="@type" default="locator" />
-            <hidden var="@title" default="Mitherausgeber" />			   
-			 <hidden var="@label" />
-			 <hidden var="@href" />			
-             <cell row="1" col="2" width="100%">
-		       <output var="@label" />
-               <text   label=" (" />
-			   <output var="@href" />
-               <text   label=")" />				 
-             </cell>
-			 <cell row="1" col="3" >
-               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
-             </cell>			   
-			 <cell row="1" col="4" >
-               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
-             </cell>			   			   
-           </panel>
-         </repeater>
-       </cell>	  			  
+			  
+		    <cell row="1" col="2" anchor="EAST" var="metadata/subedis/subedi">
+	         <repeater min="1" max="10">
+	           <panel lines="off">
+				 <hidden var="@inherited" default="0" />
+				 <hidden var="@type" default="locator" />
+	            <hidden var="@title" default="Mitherausgeber" />			   
+				 <hidden var="@label" />
+				 <hidden var="@href" />			
+				 <cell row="1" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>   
+	           </panel>
+	         </repeater>
+	       </cell>	  			  
       </panel>
       <!-- end: subedi -->
       <!-- author ================================================================== -->
@@ -198,20 +176,9 @@
 			 <hidden var="@type" default="locator" />
 			 <hidden var="@label" />
 			 <hidden var="@href" />			
-             <cell col="1" row="1" anchor="NORTHWEST" ref="author_input_repeater_type" var="@title" />			   
-             <cell row="2" col="1" width="100%">
-		       <output var="@label" />
-               <text   label=" (" />
-			   <output var="@href" />
-               <text   label=")" />				 
-             </cell>
-			 <cell row="2" col="2" >
-               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
-             </cell>			   
-			 <cell row="2" col="3" >
-               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
-             </cell>			   			   
-           </panel>
+             <cell col="1" row="1" anchor="NORTHWEST" ref="author_input_repeater_type" var="@title" />
+			 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
+           </panel>		 
          </repeater>
        </cell>	  
 	  </panel>
@@ -231,18 +198,7 @@
 				 <hidden var="@label" />
 				 <hidden var="@href" />			
 	             <cell col="1" row="1" anchor="NORTHWEST" ref="contribu_input_repeater_type" var="@title" />			   
-	             <cell row="2" col="1" width="100%">
-			       <output var="@label" />
-	               <text   label=" (" />
-				   <output var="@href" />
-	               <text   label=")" />				 
-	             </cell>
-				 <cell row="2" col="2" >
-	               <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
-	             </cell>			   
-				 <cell row="2" col="3" >
-	               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />
-	             </cell>			   			   
+				 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
 	           </panel>
 	         </repeater>
 	       </cell>	  
@@ -255,7 +211,7 @@
             <hidden var="metadata/keywords/@textsearch" default="true" />
             <hidden var="metadata/keywords/@heritable" default="true" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/keywords/keyword/@lang" ordernr="1" default="de" />
-            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/keywords/keyword" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/keywords/keyword" ordernr="1" />
       </panel>
       <!-- end: keyword -->
       <!-- classi ================================================================== -->
@@ -271,18 +227,11 @@
       </panel>
       <panel id="classi_input_repeater">
             <hidden var="@inherited" default="0" />
-            <hidden var="@classid" default="DocPortal_class_00000009" />
+            <hidden var="@classid" default="jportal_class_00000003" />
             <cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassi" var="@categid" ordernr="18" />
       </panel>
       <list id="Cclassi" width="300" type="dropdown">
-            <item value="">
-                  <label xml:lang="de">
-                  </label>
-            </item>
-<!--            <include 
-                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_00000009'%5d" 
-                  />-->
-		    <include uri="classification:editor:-1:children:DocPortal_class_00000009" />		  
+		    <include uri="classification:editor:-1:children:jportal_class_00000003" />		  
       </list>
       <!-- end: classi -->
       <!-- abstract ================================================================== -->
@@ -298,7 +247,7 @@
       <panel id="abstract_input_repeater">
             <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="2" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
+            <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
       </panel>
       <!-- end: abstract -->
       <!-- coverage ================================================================== -->
@@ -312,8 +261,8 @@
             </cell>
       </panel>
       <panel id="coverage_input_repeater">
-            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
+<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
+            <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
       </panel>
       <!-- end: coverage -->
       <!-- identi ================================================================== -->
@@ -328,8 +277,8 @@
       </panel>
       <panel id="identi_input_repeater">
             <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+<!--            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
       </panel>
       <!-- end: identi -->
       <!-- Lang ================================================================== -->
@@ -340,18 +289,15 @@
             <hidden var="metadata/languages/@notinherit" default="false" />
             <hidden var="metadata/languages/@heritable" default="false" />
             <hidden var="metadata/languages/language/@inherited" default="0" />
-            <hidden var="metadata/languages/language/@classid" default="DocPortal_class_00000004" />
-            <cell col="1" row="1" anchor=" NORTHWEST" ref="CLanguage" var="metadata/languages/language/@categid" ordernr="18" />
+            <hidden var="metadata/languages/language/@classid" default="jportal_class_00000004" />
+            <cell col="1" row="1" anchor=" NORTHWEST" ref="CLanguage" var="metadata/languages/language/@categid" />
       </panel>
       <list id="CLanguage" width="300" type="dropdown">
             <item value="">
                   <label xml:lang="de">
                   </label>
             </item>
-<!--            <include 
-                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_00000004'%5d" 
-                  />-->
-		    <include uri="classification:editor:-1:children:DocPortal_class_00000004" />		  
+		    <include uri="classification:editor:-1:children:jportal_class_00000004" />		  
       </list>
       <!-- end: Lang -->
       <!-- right ================================================================== -->
@@ -361,7 +307,7 @@
             <hidden var="metadata/rights/@textsearch" default="true" />
             <hidden var="metadata/rights/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/rights/right/@lang" ordernr="1" default="de" />
-            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/rights/right" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/rights/right" ordernr="1" />
       </panel>
       <!-- end: right -->
       <!-- note ================================================================== -->
@@ -371,7 +317,7 @@
             <hidden var="metadata/notes/@textsearch" default="true" />
             <hidden var="metadata/notes/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="1" default="de" />
-            <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/notes/note" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
       </panel>
       <!-- end: note -->
       <!-- type ================================================================== -->
@@ -382,14 +328,11 @@
             <hidden var="metadata/types/@notinherit" default="false" />
             <hidden var="metadata/types/@heritable" default="false" />
             <hidden var="metadata/types/type/@inherited" default="0" />
-            <hidden var="metadata/types/type/@classid" default="DocPortal_class_10000001" />
+            <hidden var="metadata/types/type/@classid" default="jportal_class_00000005" />
             <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" ordernr="18" />
       </panel>
       <list id="Ctype" width="300" type="dropdown">
-<!--            <include 
-                  uri="request:servlets/MCRQueryServlet?XSL.Style=classif-to-items&amp;type=class&amp;hosts=local&amp;lang=de&amp;query=/mycoreclass%5b@ID='DocPortal_class_10000001'%5d" 
-                  />-->
-		    <include uri="classification:editor:-1:children:DocPortal_class_10000001" />		  
+		    <include uri="classification:editor:-1:children:jportal_class_00000005" />		  
       </list>
       <!-- end: type -->
       <!-- predece ================================================================== -->
@@ -457,17 +400,17 @@
       </panel>
       <!-- end: successor -->
       <!--rights management =======================================================================-->
-      <panel id="righstManag_input">
+<!--      <panel id="righstManag_input">
             <hidden var="service/servflags/@class" default="MCRMetaLangText" />
             <hidden var="service/servflags/@parasearch" default="true" />
             <hidden var="service/servflags/@textsearch" default="false" />
             <hidden var="service/servflags/@notinherit" default="true" />
             <hidden var="service/servflags/@heritable" default="false" />
-<!--            <cell row="1" col="1" anchor="NORTHWEST" ref="righstManag_access_label" />-->
+<!-#-            <cell row="1" col="1" anchor="NORTHWEST" ref="righstManag_access_label" />-#->
             <cell row="1" col="2" anchor="NORTHWEST" ref="righstManag_access_input" />
-<!--            <cell row="20" col="1" anchor="NORTHWEST" ref="righstManag_state_label" />-->
+<!-#-            <cell row="20" col="1" anchor="NORTHWEST" ref="righstManag_state_label" />-#->
             <cell row="20" col="2" anchor="NORTHWEST" ref="righstManag_state_input" />
-<!--            <cell row="30" col="1" anchor="NORTHWEST" ref="righstManag_ip_label" />-->
+<!-#-            <cell row="30" col="1" anchor="NORTHWEST" ref="righstManag_ip_label" />-#->
             <cell row="30" col="2" anchor="NORTHWEST" ref="righstManag_ip_input" />
             <hidden var="service/servflags/servflag[4]/@inherited" default="0" />
             <hidden var="service/servflags/servflag[4]/@lang" default="de" />
@@ -478,7 +421,7 @@
             <hidden var="service/servflags/servflag[6]/@inherited" default="0" />
             <hidden var="service/servflags/servflag[6]/@lang" default="de" />
             <hidden var="service/servflags/servflag[6]" />
-      </panel>
+      </panel>-->
       <!--end: rights management-->
       <!-- end: panel definitions -->
 </imports>
