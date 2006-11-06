@@ -12,4 +12,7 @@
   <xsl:include href="document.xsl" />
   <xsl:include href="author.xsl" />
   <xsl:include href="institution.xsl" />
+	
+  <xsl:include href="jp_objecttypes.xsl" />    	   
+	   	
 </xsl:stylesheet>
