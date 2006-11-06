@@ -7,6 +7,9 @@
             <hidden var="ID" />
             <hidden var="label" />
             <hidden var="metadata/@lang" default="de" />
+			<hidden var="service/servdates" descendants="true"/>
+			<hidden var="service/servacls" descendants="true"/>
+			<hidden var="service/servflags" descendants="true"/>		  
             <!-- required fields ......................................... -->
             <!-- maintitle -->
             <cell row="1" col="1" anchor="NORTHWEST" ref="maintitle_label" />
@@ -155,7 +158,7 @@
 	           <panel lines="off">
 				 <hidden var="@inherited" default="0" />
 				 <hidden var="@type" default="locator" />
-	            <hidden var="@title" default="Mitherausgeber" />			   
+	             <hidden var="@title" default="Mitherausgeber" />			   
 				 <hidden var="@label" />
 				 <hidden var="@href" />			
 				 <cell row="1" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>   
