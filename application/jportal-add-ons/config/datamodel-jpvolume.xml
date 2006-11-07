@@ -67,7 +67,7 @@
                   <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
             </element>                        
             <!-- 12 - language -->
-            <element name="languages" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+            <element name="languages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='1' maxOccurs='unbounded' />
             </element>                        
             <!-- 13 - rights -->
@@ -79,7 +79,7 @@
                   <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
             </element>                        
             <!-- 15 - type -->
-            <element name="types" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+            <element name="types" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetaclassification name="type" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
             </element>                                    
       </metadata>
