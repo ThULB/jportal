@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<configuration type="jpjournal">
+<configuration type="jpvolume">
       <structure>
+            <!-- Object Parent -->
+            <element name="parents" minOccurs='1' maxOccurs='1' parasearch="false" textsearch="false">
+                  <mcrmetalinkid name="parent" class="MCRMetaLinkID" minOccurs='1' maxOccurs='1' />
+            </element>
             <!-- Object Children -->
             <element name="children" minOccurs='0' maxOccurs='1' parasearch="false" textsearch="false">
                   <mcrmetalinkid name="child" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
@@ -20,9 +24,9 @@
             <element name="subtitles" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
                   <mcrmetalangtext name="subtitle" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
             </element>
-            <!-- 03 - Maineditor -->
-            <element name="mainedis" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalinkid name="mainedi" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
+            <!-- 03 - mainedi -->
+            <element name="mainedis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="mainedi" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
             </element>
             <!-- 04 - subedi -->
             <!-- type = subedi -->
@@ -35,7 +39,7 @@
                   <mcrmetalinkid name="author" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
             </element>
             <!-- 06 - contribus -->
-            <!-- xlinktitle = Fotograf, Komponist, Maler, Redakteur, Veranstalter, Illustrator, Sponsor, ?bersetzer, Moderator, Kommentator -->
+            <!-- xlinktitle = Fotograf, Komponist, Maler, Redakteur, Veranstalter, Illustrator, Sponsor, Übersetzer, Moderator, Kommentator -->
             <element name="contribus" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
                   <mcrmetalinkid name="contribu" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
             </element>                        
@@ -44,7 +48,7 @@
                   <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
             </element>            
             <!-- 08 - classis -->
-            <!--ddc or something thulb specifically-->
+            <!-- heritated -->
             <element name="classis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetaclassification name="classi" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
             </element>                                    
@@ -78,23 +82,25 @@
             <element name="types" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetaclassification name="type" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
             </element>                                    
-            <!-- 16 - predeces -->
-            <element name="predeces" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalink name="predece" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
-            </element>                                    
-            <!-- 17 - successor -->
-            <element name="successors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalink name="successor" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
-            </element>                                    
       </metadata>
       <service>
-            <!-- Service Dates -->
-            <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetadate name="servdate" class="MCRMetaDate" minOccurs='1' maxOccurs='unbounded'/>
-            </element>
-            <!-- Service Flags -->
-            <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="256" />
-            </element>
+			<!-- Service Dates -->
+			<element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true"
+				textsearch="false">
+				<mcrmetaiso8601date name="servdate" class="MCRMetaISO8601Date"
+					minOccurs='1' maxOccurs='unbounded'/>
+			</element>
+			<!-- Service Flags -->
+			<element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true"
+				textsearch="false">
+				<mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1'
+					maxOccurs='unbounded' length="256"/>
+			</element>
+			<!-- Service ACLs -->
+			<element name="servacls" minOccurs='0' maxOccurs='1' parasearch="true"
+				textsearch="false">
+				<mcrmetaaccessrule name="servacl" class="MCRMetaAccessRule"
+					minOccurs='1' maxOccurs='unbounded' length="512"/>
+			</element>		  		  
       </service>
 </configuration>

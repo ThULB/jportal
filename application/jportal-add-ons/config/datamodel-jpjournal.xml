@@ -88,15 +88,6 @@
             </element>                                    
       </metadata>
       <service>
-<!--            <!-#- Service Dates -#->
-            <element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetadate name="servdate" class="MCRMetaDate" minOccurs='1' maxOccurs='unbounded'/>
-            </element>
-            <!-#- Service Flags -#->
-            <element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="256" />
-            </element>
--->
 			<!-- Service Dates -->
 			<element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true"
 				textsearch="false">
