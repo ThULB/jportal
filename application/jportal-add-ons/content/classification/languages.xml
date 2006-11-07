@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
       ID="jportal_class_00000004" >
-s      <label xml:lang="de" text="Sprachen" description="Sprachen nach ISO 639-1" />
+      <label xml:lang="de" text="Sprachen" description="Sprachen nach ISO 639-1" />
       <categories>
 <!--            <category ID="aa">
                   <label xml:lang="de" text="Afar" />
