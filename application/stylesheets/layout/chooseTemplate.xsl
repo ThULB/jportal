@@ -10,9 +10,6 @@
 	<!-- ===================================================================================== -->
 	<xsl:template name="chooseTemplate">
 		
-		<!-- JPortal specific templates -->
-		<xsl:call-template name="jp.chooseTemplate" />
-		
 		<xsl:choose>
 			<xsl:when test=" $template = 'template_wcms' " >
 				<xsl:call-template name="template_wcms"/>
