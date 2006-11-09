@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO_8859-1"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-      <section title="Neueingabe eines jstcontainerschild" xml:lang="de">
+      <section title="Band anlegen" xml:lang="de">
             <p></p>
             <editor id="author-jpvolume-de">
                   <include uri="webapp:editor/editor-author-jpvolume.xml"/>
@@ -10,7 +10,7 @@
             <br />
             <p></p>
       </section>
-      <section title="Create a new jpvolume" xml:lang="en">
+      <section title="Create a volume" xml:lang="en">
             <p></p>
             <br />
             <p></p>

@@ -123,6 +123,17 @@
 			<span class="editorlabel">osoba/instytucja:</span>
 		</label>
 	</text>
+	<text id="inst_label">
+		<label xml:lang="de">
+			<span class="editorlabel">Institution:</span>
+		</label>
+		<label xml:lang="ru">
+			<span class="editorlabel">Институт:</span>
+		</label>
+		<label xml:lang="pl">
+			<span class="editorlabel">instytucja:</span>
+		</label>
+	</text>	
 	<helpPopup id="mainedi_help" width="400px" height="250px">
 		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
 	</helpPopup>
@@ -823,4 +834,18 @@
 			<span class="editorhints">   Country</span>
 		</label>
 	</text>
+	<text id="date_howToUse" >
+		<label xml:lang="de">
+			Das Datum ist im Formt JJJJ-MM-TT ("Jahr-Monat-Tag") einzugeben <br/>
+		</label>
+		<label xml:lang="de">
+			 Z.B. 15. August 2003 -> "2003-08-15"
+		</label>
+	</text>
+	<text id="date_label" >
+		<label xml:lang="de">
+			<span class="editorlabel">Datum</span>
+		</label>
+	</text>	
+	
 </imports>

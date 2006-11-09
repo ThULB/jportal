@@ -12,81 +12,72 @@
 			<hidden var="service/servflags" descendants="true"/>		  
             <!-- required fields ......................................... -->
             <!-- maintitle -->
-            <cell row="1" col="1" anchor="NORTHWEST" ref="maintitle_label" />
-            <cell row="1" col="2" anchor="NORTHWEST" ref="maintitle_input" />
-            <cell row="1" col="3" anchor="WEST" ref="maintitle_help" />
+            <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
+            <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
+            <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
             <!-- subtitle -->
-            <cell row="2" col="1" anchor="NORTHWEST" ref="subtitle_label" />
-            <cell row="2" col="2" anchor="NORTHWEST" ref="subtitle_input" />
-            <cell row="2" col="3" anchor="NORTHWEST" ref="subtitle_help" />
+            <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
+            <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
+            <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
             <!-- mainedi -->
-            <cell row="3" col="1" anchor="NORTHWEST" ref="mainedi_label_bold" />
-            <cell row="3" col="2" anchor="NORTHWEST" ref="mainedi_input" />
-            <cell row="3" col="3" anchor="WEST" ref="mainedi_help" />
+            <cell row="30" col="1" anchor="NORTHWEST" ref="mainedi_label_bold" />
+            <cell row="30" col="2" anchor="NORTHWEST" ref="mainedi_input" />
+            <cell row="30" col="3" anchor="WEST" ref="mainedi_help" />
             <!-- subedi -->
-            <cell row="4" col="1" anchor="NORTHWEST" ref="subedi_label" />
-            <cell row="4" col="2" anchor="NORTHWEST" ref="subedi_input" />
-            <cell row="4" col="3" anchor="WEST" ref="subedi_help" />
+            <cell row="40" col="1" anchor="NORTHWEST" ref="subedi_label" />
+            <cell row="40" col="2" anchor="NORTHWEST" ref="subedi_input" />
+            <cell row="40" col="3" anchor="WEST" ref="subedi_help" />
             <!-- mainauthor -->
-            <cell row="5" col="1" anchor="NORTHWEST" ref="author_label" />
-            <cell row="5" col="2" anchor="NORTHWEST" ref="author_input" />
-            <cell row="5" col="3" anchor="WEST" ref="author_help" />
+            <cell row="50" col="1" anchor="NORTHWEST" ref="author_label" />
+            <cell row="50" col="2" anchor="NORTHWEST" ref="author_input" />
+            <cell row="50" col="3" anchor="WEST" ref="author_help" />
             <!-- contribu -->
-            <cell row="7" col="1" anchor="NORTHWEST" ref="contribu_label" />
-            <cell row="7" col="2" anchor="NORTHWEST" ref="contribu_input" />
-            <cell row="7" col="3" anchor="WEST" ref="contribu_help" />
+            <cell row="70" col="1" anchor="NORTHWEST" ref="contribu_label" />
+            <cell row="70" col="2" anchor="NORTHWEST" ref="contribu_input" />
+            <cell row="70" col="3" anchor="WEST" ref="contribu_help" />
+            <!-- date -->
+            <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
+            <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
             <!-- keyword -->
-            <cell row="8" col="1" anchor="NORTHWEST" ref="keyword_label" />
-            <cell row="8" col="2" anchor="NORTHWEST" ref="keyword_input" />
-            <cell row="8" col="3" anchor="WEST" ref="keyword_help" />
+            <cell row="80" col="1" anchor="NORTHWEST" ref="keyword_label" />
+            <cell row="80" col="2" anchor="NORTHWEST" ref="keyword_input" />
+            <cell row="80" col="3" anchor="WEST" ref="keyword_help" />
             <!-- classi -->
-            <cell row="9" col="1" anchor="NORTHWEST" ref="classi_label" />
-            <cell row="9" col="2" anchor="NORTHWEST" ref="classi_input" />
-            <cell row="9" col="3" anchor="WEST" ref="classi_help" />
+            <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
+            <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
+            <cell row="90" col="3" anchor="WEST" ref="classi_help" />
             <!-- abstract -->
-            <cell row="10" col="1" anchor="NORTHWEST" ref="abstract_label" />
-            <cell row="10" col="2" anchor="NORTHWEST" ref="abstract_input" />
-            <cell row="10" col="3" anchor="WEST" ref="abstract_help" />
-            <!-- coverage -->
-            <cell row="12" col="1" anchor="NORTHWEST" ref="coverage_label" />
-            <cell row="12" col="2" anchor="NORTHWEST" ref="coverage_input" />
-            <cell row="12" col="3" anchor="WEST" ref="coverage_help" />
+            <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
+            <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
+            <cell row="100" col="3" anchor="WEST" ref="abstract_help" />
             <!-- identi -->
-            <cell row="13" col="1" anchor="NORTHWEST" ref="identi_label" />
-            <cell row="13" col="2" anchor="NORTHWEST" ref="identi_input" />
-            <cell row="13" col="3" anchor="WEST" ref="identi_help" />
+            <cell row="130" col="1" anchor="NORTHWEST" ref="identi_label" />
+            <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input" />
+            <cell row="130" col="3" anchor="WEST" ref="identi_help" />
             <!-- lang -->
-            <cell row="14" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
-            <cell row="14" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
-            <cell row="14" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
+            <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
+            <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
+            <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
             <!-- right -->
-            <cell row="15" col="1" anchor="NORTHWEST" ref="right_label" />
-            <cell row="15" col="2" anchor="NORTHWEST" ref="right_input" />
-            <cell row="15" col="3" anchor="WEST" ref="right_help" />
+            <cell row="150" col="1" anchor="NORTHWEST" ref="right_label" />
+            <cell row="150" col="2" anchor="NORTHWEST" ref="right_input" />
+            <cell row="150" col="3" anchor="WEST" ref="right_help" />
             <!-- note -->
-            <cell row="16" col="1" anchor="NORTHWEST" ref="note_label" />
-            <cell row="16" col="2" anchor="NORTHWEST" ref="note_input" />
-            <cell row="16" col="3" anchor="WEST" ref="note_help" />
+            <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
+            <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
+            <cell row="160" col="3" anchor="WEST" ref="note_help" />
             <!-- type -->
-            <cell row="17" col="1" anchor="NORTHWEST" ref="type_label_bold" />
-            <cell row="17" col="2" anchor="NORTHWEST" ref="type_input" />
-            <cell row="17" col="3" anchor="NORTHWEST" ref="type_help" />
+            <cell row="170" col="1" anchor="NORTHWEST" ref="type_label_bold" />
+            <cell row="170" col="2" anchor="NORTHWEST" ref="type_input" />
+            <cell row="170" col="3" anchor="NORTHWEST" ref="type_help" />
             <!-- predece -->
-            <cell row="18" col="1" anchor="NORTHWEST" ref="predece_label" />
-            <cell row="18" col="2" anchor="NORTHWEST" ref="predece_input" />
-            <cell row="18" col="3" anchor="WEST" ref="predece_help" />
+            <cell row="180" col="1" anchor="NORTHWEST" ref="predece_label" />
+            <cell row="180" col="2" anchor="NORTHWEST" ref="predece_input" />
+            <cell row="180" col="3" anchor="WEST" ref="predece_help" />
             <!-- successor -->
-            <cell row="19" col="1" anchor="NORTHWEST" ref="successor_label" />
-            <cell row="19" col="2" anchor="NORTHWEST" ref="successor_input" />
-            <cell row="19" col="3" anchor="WEST" ref="successor_help" />
-            <!-- service data -->
-<!--            <cell row="200" col="1" anchor="NORTHWEST" ref="rightsManag_label" />-->
-<!--            <cell row="200" col="2" anchor="NORTHWEST" ref="righstManag_input" />
-<!-#-            <cell row="200" col="3" anchor="WEST" ref="rightsManag_help" /> -#->           
-            <!-#- place holder -#->
-            <cell row="210" col="1" anchor="NORTHWEST" >
-                  <space height="14" />
-            </cell>-->
+            <cell row="190" col="1" anchor="NORTHWEST" ref="successor_label" />
+            <cell row="190" col="2" anchor="NORTHWEST" ref="successor_input" />
+            <cell row="190" col="3" anchor="WEST" ref="successor_help" />
             <!-- save / cancel button -->
             <cell row="220" col="1" anchor="EAST"/>
             <cell row="220" col="2" anchor="EAST" ref="save" />
@@ -253,21 +244,22 @@
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
       </panel>
       <!-- end: abstract -->
-      <!-- coverage ================================================================== -->
-      <panel id="coverage_input">
-            <hidden var="metadata/coverages/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/coverages/@parasearch" default="true" />
-            <hidden var="metadata/coverages/@textsearch" default="true" />
-            <hidden var="metadata/coverages/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/coverages/coverage" ordernr="1" >
-                  <repeater min="0" max="10" anchor="NORTHWEST" ref="coverage_input_repeater" />
+      <!-- date ================================================================== -->
+      <panel id="date_input">
+            <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
+            <hidden var="metadata/dates/@parasearch" default="true" />
+            <hidden var="metadata/dates/@textsearch" default="true" />
+            <hidden var="metadata/dates/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1" >
+                  <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
             </cell>
       </panel>
-      <panel id="coverage_input_repeater">
-<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
-            <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
+      <panel id="date_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="date_type" var="@type" ordernr="1" />		  
+            <cell col="1" row="3" anchor="NORTHWEST" ref="TFzeile10" var="" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="date_howToUse" />
       </panel>
-      <!-- end: coverage -->
+      <!-- end: date -->
       <!-- identi ================================================================== -->
       <panel id="identi_input">
             <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
@@ -280,7 +272,6 @@
       </panel>
       <panel id="identi_input_repeater">
             <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
-<!--            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
       </panel>
       <!-- end: identi -->
@@ -401,30 +392,16 @@
                   <textfield id="successor_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
             </cell>
       </panel>
-      <!-- end: successor -->
-      <!--rights management =======================================================================-->
-<!--      <panel id="righstManag_input">
-            <hidden var="service/servflags/@class" default="MCRMetaLangText" />
-            <hidden var="service/servflags/@parasearch" default="true" />
-            <hidden var="service/servflags/@textsearch" default="false" />
-            <hidden var="service/servflags/@notinherit" default="true" />
-            <hidden var="service/servflags/@heritable" default="false" />
-<!-#-            <cell row="1" col="1" anchor="NORTHWEST" ref="righstManag_access_label" />-#->
-            <cell row="1" col="2" anchor="NORTHWEST" ref="righstManag_access_input" />
-<!-#-            <cell row="20" col="1" anchor="NORTHWEST" ref="righstManag_state_label" />-#->
-            <cell row="20" col="2" anchor="NORTHWEST" ref="righstManag_state_input" />
-<!-#-            <cell row="30" col="1" anchor="NORTHWEST" ref="righstManag_ip_label" />-#->
-            <cell row="30" col="2" anchor="NORTHWEST" ref="righstManag_ip_input" />
-            <hidden var="service/servflags/servflag[4]/@inherited" default="0" />
-            <hidden var="service/servflags/servflag[4]/@lang" default="de" />
-            <hidden var="service/servflags/servflag[4]" />
-            <hidden var="service/servflags/servflag[5]/@inherited" default="0" />
-            <hidden var="service/servflags/servflag[5]/@lang" default="de" />
-            <hidden var="service/servflags/servflag[5]" />
-            <hidden var="service/servflags/servflag[6]/@inherited" default="0" />
-            <hidden var="service/servflags/servflag[6]/@lang" default="de" />
-            <hidden var="service/servflags/servflag[6]" />
-      </panel>-->
-      <!--end: rights management-->
-      <!-- end: panel definitions -->
+      <!--date types =======================================================================-->
+      <list id="date_type" type="dropdown">
+            <item value="published">
+                  <label xml:lang="de">Erschienen</label>
+            </item>
+            <item value="published_from">
+                  <label xml:lang="de">Erschienen von</label>
+            </item>
+            <item value="published_until">
+                  <label xml:lang="de">Erschienen bis</label>
+            </item>	    
+      </list>	
 </imports>

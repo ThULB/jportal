@@ -209,13 +209,6 @@
             </cell>
       </panel>
       <!-- end: safe -->      
-      <!--jstcontoplist ======================================================-->
-      <list id="list_jpjournal" width="300" type="dropdown">
-<!--            <include cacheable="false" 
-                  uri="request:servlets/MCRQueryServlet?XSL.Style=jpjournal-to-items&amp;type=alljpjournal&amp;hosts=local&amp;lang=de&amp;query=/mycoreobject%5b@ID%20like%20'*'%5d" 
-                  />-->
-      </list>      
-	
       <!--get person / institution list ======================================================-->	
 	<panel id="getPersonAndInst">
          <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />				   
@@ -226,8 +219,6 @@
                <text   label=")" />				 
           </cell>
 		 <cell row="2" col="1" >
-     <!--          <subselect label="Person auswählen" id="sub.select" type="webpage" href="index/subselect/index.html?virgincall=true" />
-	 -->
 				<subselect id="sub.select1" type="webpage"
 					href="indexpage?searchclass=creators_sub" >
 					<label xml:lang="de">Person auswählen</label>
@@ -235,7 +226,6 @@
 				</subselect>			 
           </cell>			   
 		  <cell row="2" col="2" >
-<!--               <subselect label="Institution auswählen" id="getinst" type="webpage" href="index/getinst/index.html?virgincall=true" />-->
 				<subselect id="sub.select1" type="webpage"
 					href="indexpage?searchclass=creators_sub" >
 					<label xml:lang="de">Institution auswählen</label>
@@ -246,5 +236,24 @@
                <text   label="-" />
          </cell>			   	
 	</panel>
-	    		   	
+      <!--get institution list ======================================================-->	
+	<panel id="getInst">
+         <cell row="1" col="1" anchor="NORTHWEST" ref="inst_label" />				   
+         <cell row="1" col="2" width="100%">
+		       <output var="@label" />
+               <text   label=" (" />
+			   <output var="@href" />
+               <text   label=")" />				 
+          </cell>
+		  <cell row="2" col="2" >
+				<subselect id="sub.select1" type="webpage"
+					href="indexpage?searchclass=creators_sub" >
+					<label xml:lang="de">Institution auswählen</label>
+					<label xml:lang="en">Choose institution</label>
+				</subselect>			 			  
+         </cell>			   			   
+         <cell row="3" col="1" width="100%">
+               <text   label="-" />
+         </cell>			   	
+	</panel>
 </imports>
