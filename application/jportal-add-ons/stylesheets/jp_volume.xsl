@@ -15,7 +15,7 @@
   <xsl:param name="objectHost" select="'local'"/>
 
   <!-- Template for result list hit -->
-  <xsl:template match="mcr:hit[contains(@id,'_jpjournal_')]">
+  <xsl:template match="mcr:hit[contains(@id,'_jpvolume_')]">
     <xsl:param name="mcrobj" />
     <xsl:param name="mcrobjlink" />
     <xsl:variable name="DESCRIPTION_LENGTH" select="100" />
@@ -46,7 +46,7 @@
     </tr>
   </xsl:template>
 
-  <xsl:template match="/mycoreobject[contains(@ID,'_jpjournal_')]" mode="resulttitle" priority="1">
+  <xsl:template match="/mycoreobject[contains(@ID,'_jpvolume_')]" mode="resulttitle" priority="1">
     <xsl:choose>
       <xsl:when test="metadata/names">
         <xsl:apply-templates select="metadata/names" mode="present" />
@@ -68,11 +68,11 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="/mycoreobject[contains(@ID,'_jpjournal_')]"
+  <xsl:template match="/mycoreobject[contains(@ID,'_jpvolume_')]"
     mode="title" priority="1">
     <xsl:apply-templates select="/mycoreobject/metadata/names" />
   </xsl:template>
-  <xsl:template match="/mycoreobject[contains(@ID,'_jpjournal_')]"
+  <xsl:template match="/mycoreobject[contains(@ID,'_jpvolume_')]"
     mode="present" priority="1">
     <xsl:param name="obj_host" select="$objectHost"/>
     <xsl:param name="accessedit" />
@@ -355,7 +355,19 @@
 		    <xsl:with-param name="imagePath" select="'images/classdown.gif'" />
 		</xsl:call-template>
 	  </td></tr>
-		
+
+	  <tr><td colspan="2">
+		<xsl:call-template name="appendChild">
+		    <xsl:with-param name="accessedit" select="$accessedit" />
+		    <xsl:with-param name="id" select="./@ID"/>
+		    <xsl:with-param name="type" select="'jparticle'" />
+<!--		    <xsl:with-param name="label" select="i18:translate('metadata.appendVolume')" />			-->
+		    <xsl:with-param name="label" select="'Artikel in diesem Band anlegen'" />						
+		    <xsl:with-param name="imagePath" select="'images/classdown.gif'" />
+		</xsl:call-template>
+	  </td></tr>
+				
+				
     </table>
   </xsl:template>
 	

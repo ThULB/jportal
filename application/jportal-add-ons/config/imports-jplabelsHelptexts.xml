@@ -53,8 +53,9 @@
 	<helpPopup id="subtitle_help" width="400px" height="250px">
 		<label xml:lang="de"> Es ist der Titel des Objektes einzugeben.</label>
 	</helpPopup>
+	
 	<!-- *** Data for the mainedi *** -->
-	<text id="mainedi_label">
+	<text id="mainedi_label_bold">
 		<label xml:lang="de">
 			<span class="editorlabel">
 				<b>Herausgeber:</b>
@@ -71,6 +72,24 @@
 			</span>
 		</label>
 	</text>
+	<text id="mainedi_label">
+		<label xml:lang="de">
+			<span class="editorlabel">
+				Herausgeber:
+			</span>
+		</label>
+		<label xml:lang="ru">
+			<span class="editorlabel">
+				Редактор:
+			</span>
+		</label>
+		<label xml:lang="pl">
+			<span class="editorlabel">
+				wydawca:
+			</span>
+		</label>
+	</text>
+		
 	<text id="person_label">
 		<label xml:lang="de">
 			<span class="editorlabel">Person:</span>
@@ -291,7 +310,7 @@
 		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
 	</helpPopup>
 	<!-- *** Data for the type *** -->
-	<text id="type_label">
+	<text id="type_label_bold">
 		<label xml:lang="de">
 			<span class="editorlabel">
 				<b>Publikationstyp:</b>
@@ -308,6 +327,23 @@
 			</span>
 		</label>
 	</text>
+	<text id="type_label">
+		<label xml:lang="de">
+			<span class="editorlabel">
+				Publikationstyp:
+			</span>
+		</label>
+		<label xml:lang="ru">
+			<span class="editorlabel">
+				Тип публикации:
+			</span>
+		</label>
+		<label xml:lang="pl">
+			<span class="editorlabel">
+				rodzaj publikacji:
+			</span>
+		</label>
+	</text>
 	<helpPopup id="type_help" width="400px" height="250px">
 		<label xml:lang="de"> Es ist der Typ des Objektes einzugeben.</label>
 	</helpPopup>
@@ -315,17 +351,7 @@
 	<text id="parent_label">
 		<label xml:lang="de">
 			<span class="editorlabel">
-				<b>Zugehörige Zeitschrift:</b>
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				<b>Сопутствующий журнал:</b>
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>czasopismo związane:</b>
+				<b>Übergeordnetes Dokument</b>
 			</span>
 		</label>
 	</text>
@@ -333,7 +359,7 @@
 		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
 	</helpPopup>
 	<!-- *** Data for the lang *** -->
-	<text id="cont_lang_label">
+	<text id="cont_lang_label_bold">
 		<label xml:lang="de">
 			<b>Sprache:</b>
 		</label>
@@ -344,6 +370,18 @@
 			<b>język:</b>
 		</label>
 	</text>
+	<text id="cont_lang_label">
+		<label xml:lang="de">
+			Sprache:
+		</label>
+		<label xml:lang="ru">
+			Язык:
+		</label>
+		<label xml:lang="pl">
+			język:
+		</label>
+	</text>
+	
 	<helpPopup id="cont_lang_help" width="400px" height="250px">
 		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
 	</helpPopup>

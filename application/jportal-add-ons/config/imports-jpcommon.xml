@@ -175,7 +175,7 @@
             <hidden var="service/servflags/servflag[3]" default="IP:" />
       </panel>
       <!-- parent ================================================================== -->
-      <panel id="jpvolume_parent_input">
+      <panel id="parent_input_hided">
             <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
             <hidden var="structure/parents/@parasearch" default="true" />
             <hidden var="structure/parents/@textsearch" default="true" />
@@ -183,10 +183,13 @@
             <hidden var="structure/parents/@heritable" default="true" />
             <hidden var="structure/parents/parent/@inherited" default="0" />
             <hidden var="structure/parents/parent/@type" default="locator" />
-            <hidden var="structure/parents/parent/@title" default="ArticleCollection" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="list_jpjournal" var="structure/parents/parent/@href" />
+            <hidden var="structure/parents/parent/@title" />
+		    <hidden var="structure/parents/parent/@href" />
+            <cell col="1" row="1" anchor="NORTHWEST" >
+		       <output var="structure/parents/parent/@href" />
+			</cell>
       </panel>
-      <!-- end: parent -->            
+      <!-- end: parent -->         
       <!-- save ================================================================== -->
       <panel id="save">
             <cell row="1" col="1" anchor="WEST" >

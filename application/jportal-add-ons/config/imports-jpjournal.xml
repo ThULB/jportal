@@ -20,7 +20,7 @@
             <cell row="2" col="2" anchor="NORTHWEST" ref="subtitle_input" />
             <cell row="2" col="3" anchor="NORTHWEST" ref="subtitle_help" />
             <!-- mainedi -->
-            <cell row="3" col="1" anchor="NORTHWEST" ref="mainedi_label" />
+            <cell row="3" col="1" anchor="NORTHWEST" ref="mainedi_label_bold" />
             <cell row="3" col="2" anchor="NORTHWEST" ref="mainedi_input" />
             <cell row="3" col="3" anchor="WEST" ref="mainedi_help" />
             <!-- subedi -->
@@ -56,7 +56,7 @@
             <cell row="13" col="2" anchor="NORTHWEST" ref="identi_input" />
             <cell row="13" col="3" anchor="WEST" ref="identi_help" />
             <!-- lang -->
-            <cell row="14" col="1" anchor="NORTHWEST" ref="cont_lang_label" />
+            <cell row="14" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
             <cell row="14" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
             <cell row="14" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
             <!-- right -->
@@ -68,7 +68,7 @@
             <cell row="16" col="2" anchor="NORTHWEST" ref="note_input" />
             <cell row="16" col="3" anchor="WEST" ref="note_help" />
             <!-- type -->
-            <cell row="17" col="1" anchor="NORTHWEST" ref="type_label" />
+            <cell row="17" col="1" anchor="NORTHWEST" ref="type_label_bold" />
             <cell row="17" col="2" anchor="NORTHWEST" ref="type_input" />
             <cell row="17" col="3" anchor="NORTHWEST" ref="type_help" />
             <!-- predece -->
