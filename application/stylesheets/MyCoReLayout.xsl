@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.42 $ $Date: 2006/10/06 08:15:17 $ -->
+<!-- $Revision: 1.10 $ $Date: 2006/10/27 06:24:17 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -81,6 +81,69 @@
     <xsl:value-of select="@ID" />
   </xsl:template>
 
+  <xsl:template name="printMetaDate">
+  <!-- prints a table row for a given nodeset -->
+    <xsl:param name="nodes" />
+    <xsl:param name="label" select="local-name($nodes[1])" />
+    <xsl:if test="$nodes">
+      <tr>
+        <td valign="top" class="metaname">
+          <xsl:value-of select="concat($label,':')" />
+        </td>
+        <td class="metavalue">
+          <xsl:for-each select="$nodes">
+            <xsl:choose>
+              <xsl:when test="../@class='MCRMetaClassification'">
+                <xsl:call-template name="printClass">
+                  <xsl:with-param name="nodes" select="." />
+                  <xsl:with-param name="host" select="$objectHost" />
+                </xsl:call-template>
+                <xsl:call-template name="printClassInfo">
+                  <xsl:with-param name="nodes" select="." />
+                  <xsl:with-param name="host" select="$objectHost" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="../@class='MCRMetaISO8601Date'">
+                <xsl:variable name="format">
+                  <xsl:choose>
+                    <xsl:when test="string-length(normalize-space(.))=4">
+                      <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                    </xsl:when>
+                    <xsl:when test="string-length(normalize-space(.))=7">
+                      <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                    </xsl:when>
+                    <xsl:when test="string-length(normalize-space(.))=10">
+                      <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <xsl:call-template name="formatISODate">
+                  <xsl:with-param name="date" select="." />
+                  <xsl:with-param name="format" select="$format" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:when test="../@class='MCRMetaLinkID'">
+                <xsl:call-template name="objectLink">
+                  <xsl:with-param name="obj_id" select="@xlink:href" />
+                </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="printI18N">
+                  <xsl:with-param name="nodes" select="." />
+                  <xsl:with-param name="host" select="$objectHost" />
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="position()!=last()"><br/></xsl:if>
+          </xsl:for-each>
+        </td>
+      </tr>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template name="printClass">
     <xsl:param name="nodes" />
     <xsl:param name="host" />
@@ -133,6 +196,58 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="printClassInfo">
+    <xsl:param name="nodes" />
+    <xsl:param name="host" />
+    <xsl:for-each select="$nodes">
+      <xsl:if test="position() != 1">
+        <br />
+      </xsl:if>
+      <xsl:variable name="classlink">
+        <xsl:call-template name="ClassCategLink">
+          <xsl:with-param name="classid" select="@classid" />
+          <xsl:with-param name="categid" select="@categid" />
+          <xsl:with-param name="host" select="$host" />
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:for-each select="document($classlink)/mycoreclass/categories/category">
+        <xsl:variable name="categurl">
+          <xsl:if test="url">
+            <xsl:choose>
+              <!-- MCRObjectID should not contain a ':' so it must be an external link then -->
+              <xsl:when test="contains(url/@xlink:href,':')">
+                <xsl:value-of select="url/@xlink:href" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',url/@xlink:href,$HttpSession)" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="selectLang">
+          <xsl:call-template name="selectLang">
+            <xsl:with-param name="nodes" select="./label" />
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:for-each select="./label[lang($selectLang)]">
+          <xsl:choose>
+            <xsl:when test="string-length($categurl) != 0">
+              <a href="{$categurl}">
+                <xsl:if test="$wcms.useTargets = 'yes'">
+                  <xsl:attribute name="target">_blank</xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="concat('(',@description,')')" />
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat('(',@description,')')" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="printI18N">
     <xsl:param name="nodes" />
     <xsl:variable name="selectPresentLang">
@@ -140,17 +255,10 @@
         <xsl:with-param name="nodes" select="$nodes" />
       </xsl:call-template>
     </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$nodes[lang($selectPresentLang)]">
-        <xsl:for-each select="$nodes[lang($selectPresentLang)]" >
-          <xsl:if test="position() != 1">, </xsl:if>
-          <xsl:value-of select="." />
-        </xsl:for-each>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$nodes" />
-     </xsl:otherwise>
-   </xsl:choose>
+    <xsl:for-each select="$nodes[lang($selectPresentLang)]">
+      <xsl:if test="position() != 1">,</xsl:if>
+      <xsl:value-of select="." />
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="webLink">

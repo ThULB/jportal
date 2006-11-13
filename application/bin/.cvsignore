@@ -5,3 +5,4 @@ jettystart.sh
 jettystop.sh
 listPlugins.sh
 mycore.sh
+wsclient.sh

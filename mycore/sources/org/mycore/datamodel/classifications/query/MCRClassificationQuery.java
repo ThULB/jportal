@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationQuery.java,v $
- * $Revision: 1.7 $ $Date: 2006/05/04 16:13:13 $
+ * $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.datamodel.metadata.MCRLinkTableManager;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.7 $ $Date: 2006/05/04 16:13:13 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
  */
 public class MCRClassificationQuery {
 
@@ -162,7 +162,7 @@ public class MCRClassificationQuery {
      * @param levels
      * @return
      */
-    private static Classification getClassification(Document cl, int levels, boolean withCounter) {
+    static Classification getClassification(Document cl, int levels, boolean withCounter) {
         Classification returns = ClassificationFactory.getClassification(cl.getRootElement());
         returns.setCounterEnabled(withCounter);
         fillCategory(returns.getId(), returns, cl.getRootElement().getChild("categories"), levels, withCounter);

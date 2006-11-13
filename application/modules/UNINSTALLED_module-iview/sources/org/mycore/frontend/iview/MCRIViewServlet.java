@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -880,12 +881,13 @@ public class MCRIViewServlet extends MCRServlet {
 		iViewConfig = (Properties) (MCRConfiguration.instance().getProperties().clone());
 
 		// SESSION: Read all *.xsl attributes that are stored in the browser's session
-		HttpSession session = request.getSession(true);
-		if (session != null) {
-			for (Enumeration e = session.getAttributeNames(); e.hasMoreElements();) {
-				String key = (String) (e.nextElement());
+		MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+		Iterator sessionKeys = mcrSession.getObjectsKeyList();
+		if (mcrSession != null) {
+			while (sessionKeys.hasNext()) {
+				String key = (String) (sessionKeys.next());
 				if (key.startsWith("XSL.")) {
-					iViewConfig.put(key.substring(4), session.getAttribute(key));
+					iViewConfig.put(key.substring(4), mcrSession.get(key));
 				}
 			}
 		}
@@ -895,7 +897,7 @@ public class MCRIViewServlet extends MCRServlet {
 	public void updateIViewConfig(Properties iViewConfig, HttpServletRequest request, Properties dateUp, String logMessage){
 		LOGGER.debug("updating iViewConfig ("+logMessage+").....................................");
 		
-		HttpSession session = request.getSession(true);
+		MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
 		Enumeration e = dateUp.keys();
 		while (e.hasMoreElements()) {
 			String key 		= e.nextElement().toString();
@@ -908,7 +910,7 @@ public class MCRIViewServlet extends MCRServlet {
 					String key4Session 		= key.substring(0, key.length() - 8);
 					
 					iViewConfig.put(key4IViewConfig, value);
-					session.setAttribute(key4Session, value);	
+					mcrSession.put(key4Session, value);	
 					LOGGER.debug("update IViewConfig: found " + key
 							+ "=" + dateUp.getProperty(key)+ " that should be saved in session, safed "
 							+ key4Session + "="+ value);					
@@ -930,12 +932,13 @@ public class MCRIViewServlet extends MCRServlet {
 		Properties iViewConfig = (Properties) (MCRConfiguration.instance().getProperties().clone());
 		
 		// SESSION: Read all *.xsl attributes that are stored in the browser
-		HttpSession session = request.getSession(true);
-		if (session != null) {
-			for (Enumeration e = session.getAttributeNames(); e.hasMoreElements();) {
-				String name = (String) (e.nextElement());
+		MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+		Iterator sessionKeys = mcrSession.getObjectsKeyList();
+		if (mcrSession != null) {
+			while (sessionKeys.hasNext()) {
+				String name = (String) (sessionKeys.next());
 				if (name.startsWith("XSL.")) {
-					iViewConfig.put(name.substring(4), session.getAttribute(name));
+					iViewConfig.put(name.substring(4), mcrSession.get(name));
 				}
 			}
 		}
@@ -950,10 +953,13 @@ public class MCRIViewServlet extends MCRServlet {
 				} // store parameter in session if ends with *.SESSION
 				else {
 					iViewConfig.put(name.substring(4, name.length() - 8),request.getParameter(name));
-					session.setAttribute(name.substring(0, name.length() - 8),request.getParameter(name));
-					LOGGER.debug("found HTTP-Req.-Parameter "
-							+ name + "=" + request.getParameter(name)+ " that should be saved in session, safed "
-							+ name.substring(0, name.length() - 8) + "="+ request.getParameter(name));
+					if (mcrSession!=null) {
+						mcrSession.put(name.substring(0, name.length() - 8),request.getParameter(name));
+						LOGGER.debug("found HTTP-Req.-Parameter "
+								+ name + "=" + request.getParameter(name)+ " that should be saved in session, safed "
+								+ name.substring(0, name.length() - 8) + "="+ request.getParameter(name));						
+					}
+					
 				}
 			}
 		}
@@ -968,10 +974,13 @@ public class MCRIViewServlet extends MCRServlet {
 				} // store parameter in session if ends with *.SESSION
 				else {
 					iViewConfig.put(name.substring(4, name.length() - 8),request.getAttribute(name));
-					session.setAttribute(name.substring(0, name.length() - 8),request.getAttribute(name));
-					LOGGER.debug("found Req.-Attribut " + name
-							+ "=" + request.getAttribute(name)+ " that should be saved in session, safed "
-							+ name.substring(0, name.length() - 8) + "="+ request.getAttribute(name));
+					if (mcrSession!=null) {
+						mcrSession.put(name.substring(0, name.length() - 8),request.getAttribute(name));
+						LOGGER.debug("found Req.-Attribut " + name
+								+ "=" + request.getAttribute(name)+ " that should be saved in session, safed "
+								+ name.substring(0, name.length() - 8) + "="+ request.getAttribute(name));	
+					}
+					
 				}
 			}
 

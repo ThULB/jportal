@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRMetaISO8601Date.java,v $
- * $Revision: 1.9 $ $Date: 2006/02/23 15:31:17 $
+ * $Revision: 1.11 $ $Date: 2006/11/03 08:59:36 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -59,7 +59,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.9 $ $Date: 2006/02/23 15:31:17 $
+ * @version $Revision: 1.11 $ $Date: 2006/11/03 08:59:36 $
  * @since 1.3
  */
 public final class MCRMetaISO8601Date extends MCRMetaDefault implements MCRMetaInterface {
@@ -233,7 +233,8 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault implements MCRMetaI
                 result=new DateTime(pDate.getTime());
                 return result;
             } catch (ParseException e) {
-                LOGGER.debug("Date guess failed for locale: "+locale,e);
+                LOGGER.warn("Date guess failed for locale: "+locale);                
+                //we need no big exception in the logs, if we can't guess what it is, a warning should be enough
             }
         }
         LOGGER.error("Error trying to guess date for string: "+date);
@@ -375,18 +376,8 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault implements MCRMetaI
      * @see java.lang.Object#clone()
      */
     public Object clone() {
-        MCRMetaISO8601Date out = null;
-
-        try {
-            out = (MCRMetaISO8601Date) super.clone();
-        } catch (CloneNotSupportedException e) {
-            LOGGER.warn(new StringBuffer(MCRMetaISO8601Date.class.getName()).append(" could not be cloned."), e);
-
-            return null;
-        }
-
-        out.changed = true;
-
+        MCRMetaISO8601Date out = new MCRMetaISO8601Date();
+        out.setFromDOM((Element)createXML().clone());
         return out;
     }
 
@@ -417,7 +408,7 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault implements MCRMetaI
      * 
      * @author Thomas Scheffler (yagee)
      *
-     * @version $Revision: 1.9 $ $Date: 2006/02/23 15:31:17 $
+     * @version $Revision: 1.11 $ $Date: 2006/11/03 08:59:36 $
      * @since 1.3
      */
     protected static final class FormatChooser {

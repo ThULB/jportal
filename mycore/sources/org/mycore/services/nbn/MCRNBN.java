@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRNBN.java,v $
- * $Revision: 1.18 $ $Date: 2006/03/02 18:27:17 $
+ * $Revision: 1.19 $ $Date: 2006/06/01 15:23:27 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,7 +45,8 @@ import org.mycore.common.MCRConfigurationException;
  * 
  * @author Frank L&uuml;tzenkirchen
  * @author Werner Gre&szlig;hoff
- * @version $Revision: 1.18 $ $Date: 2006/03/02 18:27:17 $
+ * @version $Revision: 1.19 $ $Date: 2006/06/01 15:23:27 $
+ * @deprecated
  */
 public class MCRNBN {
     /** Logger */

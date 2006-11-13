@@ -6,46 +6,46 @@
   <index id="metadata">
 
     <!-- Search in service/structural metadata -->  
-	<field name="id"            type="identifier" source="objectMetadata" xpath="/mycoreobject" value="@ID" />
+    <field name="id"            type="identifier" source="objectMetadata" xpath="/mycoreobject" value="@ID" />
     <field name="objectType"    type="identifier" source="objectMetadata" xpath="/mycoreobject" value="substring-before(substring-after(@ID,'_'),'_')" />
     <field name="link"          type="identifier" source="objectMetadata" xpath="/mycoreobject/descendant::*[@xlink:href]" value="@xlink:href" />
     <field name="parent"        type="identifier" source="objectMetadata" xpath="/mycoreobject/structure/parents/parent" value="@xlink:href" />
-    <field name="modified"      type="timestamp"  source="objectMetadata" xpath="/mycoreobject/service/servdates/servdate[@type='modifydate']" value="concat(substring(.,1,10),' ',substring(.,12,8))" />
+    <field name="modified"      type="timestamp"  source="objectMetadata" xpath="/mycoreobject/service/servdates/servdate[@type='modifydate']" value="concat(substring(.,1,10),' ',substring(.,12,8))" i18n="editor.search.document.datemod" />
 
     <!-- Search in all metadata fields (that have an xml:lang attribute) -->
-    <field name="allMeta"       type="text"       source="objectMetadata" xpath="/mycoreobject/metadata/*/*" value="text()" />
+    <field name="allMeta"       type="text"       source="objectMetadata" xpath="/mycoreobject/metadata/*/*" value="text()" i18n="editor.search.metadata" />
 
     <!-- Search in document metadata -->    
-    <field name="title"         type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/titles/title" value="text()" sortable="true" />
-    <field name="author"        type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creators/creator | /mycoreobject/metadata/publishers/publisher" value="text()" />
+    <field name="title"         type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/titles/title" value="text()" sortable="true" i18n="editor.search.document.title" />
+    <field name="author"        type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creators/creator | /mycoreobject/metadata/publishers/publisher" value="text()" i18n="editor.search.document.author" />
     <field name="authorID"      type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creatorlinks/creatorlink | /mycoreobject/metadata/publisherlinks/publisherlink" value="@xlink:href" />
-    <field name="creator"       type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creators/creator" value="text()" />
+    <field name="creator"       type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creators/creator" value="text()" i18n="editor.search.document.creator" />
     <field name="creatorID"     type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/creatorlinks/creatorlink" value="@xlink:href" />
-    <field name="publisher"     type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/publishers/publisher" value="text()" />
+    <field name="publisher"     type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/publishers/publisher" value="text()" i18n="editor.search.document.publisher" />
     <field name="publisherID"   type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/publisherlinks/publisherlink" value="@xlink:href" />
-    <field name="contributor"   type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/contributors/contributor" value="text()" />
+    <field name="contributor"   type="name"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/contributors/contributor" value="text()" i18n="editor.search.document.contrib" />
     <field name="contributorID" type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/contributorlinks/contributorlink" value="@xlink:href" />
-    <field name="origin"        type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/origins/origin" value="@ID" />
-    <field name="subject"       type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/subjects/subject" value="@ID" />
-    <field name="format"        type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/formats/format" value="@ID" />
-    <field name="language"      type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/languages/language" value="@ID" />
-    <field name="type"          type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/types/type" value="@ID" />
-    <field name="keywords"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" />
-    <field name="description"   type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/descriptions/description" value="text()" />
-    <field name="source"        type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/sources/source" value="text()" />
-    <field name="coverage"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/coverages/coverage" value="text()" />
-    <field name="rights"        type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/rights/right" value="text()" />
-    <field name="relation"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/relations/relation" value="text()" />
+    <field name="origin"        type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/origins/origin" value="@ID" i18n="editor.search.document.origin" classification="DocPortal_class_00000003" />
+    <field name="subject"       type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/subjects/subject" value="@ID" i18n="editor.search.document.subject" classification="DocPortal_class_00000007" />
+    <field name="format"        type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/formats/format" value="@ID" i18n="editor.search.document.format" classification="DocPortal_class_00000006" />
+    <field name="language"      type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/languages/language" value="@ID" i18n="editor.search.document.lang" classification="DocPortal_class_00000004" />
+    <field name="type"          type="identifier" source="objectCategory" objects="document" xpath="/mycoreobject/metadata/types/type" value="@ID" i18n="editor.search.document.type" classification="DocPortal_class_00000005" />
+    <field name="keywords"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editor.search.document.keyword" />
+    <field name="description"   type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/descriptions/description" value="text()" i18n="editor.search.document.descript" />
+    <field name="source"        type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/sources/source" value="text()" i18n="editor.search.document.source" />
+    <field name="coverage"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/coverages/coverage" value="text()" i18n="editor.search.document.coverage" />
+    <field name="rights"        type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/rights/right" value="text()" i18n="editor.search.document.rights" />
+    <field name="relation"      type="text"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/relations/relation" value="text()" i18n="editor.search.document.relation" />
     <field name="isbn"          type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/isbns/isbn" value="text()" />
-    <field name="dateCreated"   type="date"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/dates/date[starts-with(@type,'create')]" value="ext:normalizeDate(string(text()))" sortable="true" />
-    <field name="identifier"    type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/identifiers/identifier" value="text()" />
+    <field name="dateCreated"   type="date"       source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/dates/date[starts-with(@type,'create')]" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.datecr" />
+    <field name="identifier"    type="identifier" source="objectMetadata" objects="document" xpath="/mycoreobject/metadata/identifiers/identifier" value="text()" i18n="editor.search.document.identifier" />
 
     <!-- Search in author or institution metadata -->
     <field name="callname"      type="name"       source="objectMetadata" objects="author" xpath="/mycoreobject/metadata/names/name/callname" value="text()" />
-    <field name="surname"       type="name"       source="objectMetadata" objects="author" xpath="/mycoreobject/metadata/names/name/surname"  value="text()" />
-    <field name="name"          type="name"       source="objectMetadata" objects="author institution" xpath="/mycoreobject/metadata/names/name" value="concat(surname,' ',callname,' ',fullname,' ',nickname)" sortable="true" />
+    <field name="surname"       type="name"       source="objectMetadata" objects="author" xpath="/mycoreobject/metadata/names/name/surname"  value="text()" i18n="editor.search.author.surname" />
+    <field name="name"          type="name"       source="objectMetadata" objects="author institution" xpath="/mycoreobject/metadata/names/name" value="concat(surname,' ',callname,' ',fullname,' ',nickname)" sortable="true" i18n="editor.search.author.label" />
     <field name="national"      type="identifier" source="objectCategory" objects="author" xpath="/mycoreobject/metadata/nationals/national" value="@ID" />
-    <field name="institution"   type="identifier" source="objectCategory" objects="author" xpath="/mycoreobject/metadata/institutions/institution" value="@ID" />
+    <field name="institution"   type="identifier" source="objectCategory" objects="author" xpath="/mycoreobject/metadata/institutions/institution" value="@ID" i18n="editor.search.institution.label" classification="DocPortal_class_00000002" />
     <field name="profession"    type="text"       source="objectMetadata" objects="author" xpath="/mycoreobject/metadata/professions/profession" value="text()" />
     <field name="profclass"     type="identifier" source="objectCategory" objects="author" xpath="/mycoreobject/metadata/profclasses/profclass" value="@ID" />
 
@@ -55,7 +55,7 @@
   <index id="content">
   
     <!-- Search in fulltext of pdf and txt files -->
-    <field name="content" type="text" source="fileTextContent" objects="http pdf ps txt xml msword95 msword97 msppt rtf otd sxw" />
+    <field name="content" type="text" source="fileTextContent" objects="http pdf ps txt xml msword95 msword97 msppt rtf otd sxw" i18n="editor.search.fulltext" />
 	
     <!-- Search in technical metadata of files -->
     <field name="fileID"            type="identifier" source="fileMetadata" xpath="file/@id" value="." />

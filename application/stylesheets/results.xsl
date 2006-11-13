@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.16 $ $Date: 2006/10/06 08:15:17 $ -->
+<!-- $Revision: 1.17 $ $Date: 2006/10/11 12:38:37 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -18,6 +18,15 @@
 
   <!-- Trefferliste ausgeben -->
   <xsl:template match="/mcr:results">
+    <xsl:variable name="ResultPages">
+      <xsl:call-template name="PageGenNew">
+        <xsl:with-param name="i" select="1" />
+        <xsl:with-param name="id" select="@id" />
+        <xsl:with-param name="size" select="@numPerPage" />
+        <xsl:with-param name="currentpage" select="@page" />
+        <xsl:with-param name="totalpage" select="@numPages" />
+      </xsl:call-template>
+    </xsl:variable>
     <table cellpadding="0" cellspacing="0" class="resultHeader">
       <tr>
         <td class="resort">
@@ -32,6 +41,10 @@
             href="{$WebApplicationBaseURL}{@mask}?XSL.editor.source.new=true">
             <xsl:value-of select="i18n:translate('results.newSearch')" />
           </a>
+        </td>
+        <td class="resultPages">
+          <xsl:value-of select="i18n:translate('results.size')" />
+          <xsl:value-of select="$ResultPages" />
         </td>
         <td class="resultCount">
           <strong>
@@ -93,13 +106,7 @@
     <xsl:comment>RESULT LIST END</xsl:comment>
     <div id="pageSelection">
       <xsl:value-of select="i18n:translate('results.size')" />
-      <xsl:call-template name="PageGenNew">
-        <xsl:with-param name="i" select="1" />
-        <xsl:with-param name="id" select="@id" />
-        <xsl:with-param name="size" select="@numPerPage" />
-        <xsl:with-param name="currentpage" select="@page" />
-        <xsl:with-param name="totalpage" select="@numPages" />
-      </xsl:call-template>
+      <xsl:value-of select="$ResultPages" />
     </div>
   </xsl:template>
 

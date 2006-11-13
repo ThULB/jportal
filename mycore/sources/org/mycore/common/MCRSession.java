@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSession.java,v $
- * $Revision: 1.29 $ $Date: 2006/02/10 23:33:50 $
+ * $Revision: 1.30 $ $Date: 2006/05/16 13:19:52 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,10 +23,13 @@
 
 package org.mycore.common;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.mapping.Collection;
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
 
 /**
@@ -35,9 +38,9 @@ import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * 
- * @version $Revision: 1.29 $ $Date: 2006/02/10 23:33:50 $
+ * @version $Revision: 1.30 $ $Date: 2006/05/16 13:19:52 $
  */
 public class MCRSession implements Cloneable {
     /** A map storing arbitrary session data * */
@@ -58,7 +61,7 @@ public class MCRSession implements Cloneable {
     /** A cache of MCRSession objects, used for method getSession( String ) */
     private static MCRCache sessions = new MCRCache(1000);
 
-    /** -ASC- für MCRClassificationBrowser Class session daten */
+    /** -ASC- fï¿½r MCRClassificationBrowser Class session daten */
     public MCRClassificationBrowserData BData = null;
 
     private String FullName = null;
@@ -135,6 +138,13 @@ public class MCRSession implements Cloneable {
         return sessionID;
     }
 
+    /**
+     * @return Returns a list of all stored object keys within MCRSession as java.util.Ierator 
+     */
+    public Iterator getObjectsKeyList() {
+    	return Collections.unmodifiableSet(map.keySet()).iterator();
+    }
+    
     /** returns the current user ID */
     public final String getCurrentUserID() {
         return userID.trim();

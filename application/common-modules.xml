@@ -105,7 +105,7 @@
       <pathelement location="${mycore.schema}" />
       <pathelement location="${mycore.config}" />
       <fileset dir="${mycore.lib}" includes="*.jar" />
-      <!-- fileset dir="../mycore" includes="modules/module-*/config"/ -->
+      <fileset dir="${ant.library.dir}" includes="ant.jar"/>
 
       <!-- add lib path of module -->
       <fileset dir="${env.MYCORE_HOME}" includes="modules/module-*/lib/*.jar" />

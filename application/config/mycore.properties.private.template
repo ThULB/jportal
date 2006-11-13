@@ -138,7 +138,10 @@ MCR.persistence_sql_max_connections=5
 
 # This is the default. It use the Hibernate class for NBN
   MCR.NBN.ManagerImplementation=org.mycore.backend.hibernate.MCRHIBNBNManager
-  
+
+# This is the default. It use the Hibernate class for URN
+  MCR.URN.Store=org.mycore.backend.hibernate.MCRHIBURNStore
+    
 # This is the default. It use the Hibernate class for AccessControll
   MCR.accessstore_class_name=org.mycore.backend.hibernate.MCRHIBAccessStore
   MCR.rulestore_class_name=org.mycore.backend.hibernate.MCRHIBRuleStore
@@ -281,6 +284,9 @@ MCR.access_store_sql_table_map=MCRACCESS
 
 # NBN table
 MCR.nbn_store_sql_table=MCRNBN
+
+# URN table
+MCR.url_store_sql_table=MCRURN
 
 # Content Store table
 MCR.content_store_sql_table=MCRCSTORE
@@ -473,6 +479,25 @@ SIGN.Country=Germany
   MCR.oai.setscheme.classids.MCROAIProvider.format=DocPortal_class_00000006
   MCR.oai.setscheme.classids.MCROAIProvider.type=DocPortal_class_00000005
   MCR.oai.setscheme.classids.MCROAIProvider.subject=DocPortal_class_00000009
+
+##############################################################################
+# The MyCoRe properties URN file for the DocPortal                           #
+##############################################################################
+
+# By default, all users in group "admins" can add a URN to a document
+# If another group should also be able to do this, set the group name here
+# MCR.URN.AdminGroup=mitarbeiter
+
+# CHANGE: Subnamespace for Campus MyCoRe
+MCR.URN.SubNamespace.UBL.Prefix=urn:nbn:de:mcr:1-
+MCR.URN.SubNamespace.UBL.NISSBuilder=org.mycore.services.urn.MCRNISSBuilderDateCounter
+MCR.URN.SubNamespace.UBL.NISSPattern=yyyyMMdd-HHmmss-
+
+# URL of the master resolver at Deutsche Bibliothek
+MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
+
+# URL for local redirects to registered documents
+MCR.URN.Resolver.DocumentURL=receive/
 
 ##############################################################################
 # The MyCoRe properties NBN file for the Dublin Core Demo                    #

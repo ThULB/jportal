@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.14 $ $Date: 2006/10/11 12:38:37 $ -->
+<!-- $Revision: 1.16 $ $Date: 2006/11/09 15:49:32 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -78,7 +78,88 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="present" priority="0">
-    <xsl:value-of select="i18n:translate('metaData.noTemplate')"/>
+    <xsl:variable name="objectType" select="substring-before(substring-after(@ID,'_'),'_')"/>
+    <xsl:value-of select="i18n:translate('metaData.noTemplate')" />
+    <form method="get" style="padding:20px;background-color:yellow">
+      <fieldset>
+        <legend>Automatisches Erzeugen von Vorlagen</legend>
+        <table>
+          <tr>
+            <td><label>Was erzeugen?</label></td>
+            <td>
+              <select name="XSL.Style">
+                <option value="generateMessages">messages_*.properties Vorlage</option>
+                <option value="generateStylesheet"><xsl:value-of select="concat($objectType,'.xsl Vorlage')"/></option>
+              </select>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend><xsl:value-of select="concat('Optionen für Erzeugen von ',$objectType,'.xsl')"/></legend>
+        <table>
+          <tr>
+            <td><label>Objekt kann Derivate enthalten</label></td>
+            <td>
+              <input type="checkbox" name="XSL.withDerivates"/>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Unterstützung für IView</label></td>
+            <td>
+              <input type="checkbox" name="XSL.useIView"/>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Kindobjekttypen</label></td>
+            <td>
+              <input name="XSL.childObjectTypes"/>
+              (durch Leerzeichen getrennt)
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <input type="submit" value="erstellen"/>
+    </form>
+    <xsl:variable name="objectBaseURL">
+      <xsl:if test="$objectHost != 'local'">
+        <xsl:value-of
+          select="document('webapp:hosts.xml')/mcr:hosts/mcr:host[@alias=$objectHost]/mcr:url[@type='object']/@href" />
+      </xsl:if>
+      <xsl:if test="$objectHost = 'local'">
+        <xsl:value-of select="concat($WebApplicationBaseURL,'receive/')" />
+      </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="staticURL">
+      <xsl:value-of select="concat($objectBaseURL,@ID)" />
+    </xsl:variable>
+    <table id="metaData" cellpadding="0" cellspacing="0">
+      <!-- display all metadata -->
+      <xsl:for-each select="./metadata/*">
+        <xsl:call-template name="printMetaDate">
+          <xsl:with-param name="nodes" select="./*" />
+        </xsl:call-template>
+      </xsl:for-each>
+      <!-- Created ***************************************************** -->
+      <xsl:call-template name="printMetaDate">
+        <xsl:with-param name="nodes" select="./service/servdates/servdate[@type='createdate']" />
+        <xsl:with-param name="label" select="i18n:translate('metaData.createdAt')" />
+      </xsl:call-template>
+      <!-- Last Change ************************************************* -->
+      <xsl:call-template name="printMetaDate">
+        <xsl:with-param name="nodes" select="./service/servdates/servdate[@type='modifydate']" />
+        <xsl:with-param name="label" select="i18n:translate('metaData.lastChanged')" />
+      </xsl:call-template>
+      <!-- MyCoRe ID *************************************************** -->
+      <tr>
+        <td class="metaname">
+          <xsl:value-of select="concat(i18n:translate('metaData.ID'),' :')" />
+        </td>
+        <td class="metavalue">
+          <xsl:value-of select="./@ID" />
+        </td>
+      </tr>
+    </table>
   </xsl:template>
 
   <!-- Generates a header for the metadata output -->

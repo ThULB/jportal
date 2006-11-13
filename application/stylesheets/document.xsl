@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.19 $ $Date: 2006/09/07 14:30:52 $ -->
+<!-- $Revision: 1.20 $ $Date: 2006/10/06 08:15:17 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -100,14 +100,9 @@
   <xsl:template match="/mycoreobject[contains(@ID,'_document_')]" mode="resulttitle" priority="1">
     <xsl:choose>
       <xsl:when test="metadata/titles">
-        <xsl:choose>
-          <xsl:when test="metadata/titles/title[lang($CurrentLang)]">
-            <xsl:value-of select="metadata/titles/title[lang($CurrentLang)]" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="metadata/titles/title[lang($DefaultLang)]" />
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="printI18N">
+          <xsl:with-param name="nodes" select="metadata/titles/title"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="@label" />
@@ -582,8 +577,7 @@
       <xsl:if
         test="./metadata/descriptions or ./metadata/descripturls">
 
-        <xsl:for-each
-          select="./metadata/descriptions/description[contains(@type,'abstract') and lang($CurrentLang)]">
+        <xsl:if test="./metadata/descriptions/description[contains(@type,'abstract')]">
           <tr>
             <xsl:choose>
               <xsl:when test="position() = 1">
@@ -597,10 +591,12 @@
               </xsl:otherwise>
             </xsl:choose>
             <td class="metavalue">
-              <xsl:value-of select="." />
+              <xsl:call-template name="printI18N">
+                <xsl:with-param name="nodes" select="./metadata/descriptions/description[contains(@type,'abstract')]" />
+              </xsl:call-template>
             </td>
           </tr>
-        </xsl:for-each>
+        </xsl:if>
 
         <xsl:for-each
           select="./metadata/descripturls/decripturl[contains(@type,'abstract')]">
@@ -622,8 +618,7 @@
           </tr>
         </xsl:for-each>
 
-        <xsl:for-each
-          select="./metadata/descriptions/description[contains(@type,'description') and lang($CurrentLang)]">
+        <xsl:if test="./metadata/descriptions/description[contains(@type,'description')]">
           <tr>
             <xsl:choose>
               <xsl:when test="position() = 1">
@@ -637,10 +632,12 @@
               </xsl:otherwise>
             </xsl:choose>
             <td class="metavalue">
-              <xsl:value-of select="." />
+              <xsl:call-template name="printI18N">
+                <xsl:with-param name="nodes" select="./metadata/descriptions/description[contains(@type,'description')]" />
+              </xsl:call-template>
             </td>
           </tr>
-        </xsl:for-each>
+        </xsl:if>
 
         <xsl:for-each
           select="./metadata/descripturls/decripturl[contains(@type,'description')]">
@@ -662,8 +659,7 @@
           </tr>
         </xsl:for-each>
 
-        <xsl:for-each
-          select="./metadata/descriptions/description[contains(@type,'content') and lang($CurrentLang)]">
+        <xsl:if test="./metadata/descriptions/description[contains(@type,'content')]">
           <tr>
             <xsl:choose>
               <xsl:when test="position() = 1">
@@ -677,10 +673,12 @@
               </xsl:otherwise>
             </xsl:choose>
             <td class="metavalue">
-              <xsl:value-of select="." />
+              <xsl:call-template name="printI18N">
+                <xsl:with-param name="nodes" select="./metadata/descriptions/description[contains(@type,'content')]" />
+              </xsl:call-template>
             </td>
           </tr>
-        </xsl:for-each>
+        </xsl:if>
 
         <xsl:for-each
           select="./metadata/descripturls/decripturl[contains(@type,'content')]">

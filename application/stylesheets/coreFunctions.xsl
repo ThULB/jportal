@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.35 $ $Date: 2006/10/05 12:55:18 $ -->
+<!-- $Revision: 1.36 $ $Date: 2006/10/12 11:45:14 $ -->
 <!-- ============================================== -->
 <!-- Authors: Thomas Scheffler (yagee) -->
 <!-- Authors: Andreas Trappe (lezard) -->
@@ -772,5 +772,37 @@ parameters:
 	</xsl:template> 
 
 <!-- =================================================================================== -->
+
+    <!--
+    Template: Tokenizer
+    synopsis: splits a string to tokens elements when ever a delimiter occurs
+    param:
+    
+    string: the string to split into token
+    delimiter: a string that acts a token delimiter in "string"
+    -->
+  <xsl:template name="Tokenizer">
+    <xsl:param name="string" />
+    <xsl:param name="delimiter" select="' '" />
+    <xsl:message>
+      called Tokenizer with string=<xsl:value-of select="$string"/>
+    </xsl:message>
+    <xsl:choose>
+      <xsl:when test="$delimiter and contains($string, $delimiter)">
+        <token>
+          <xsl:value-of select="substring-before($string,$delimiter)" />
+        </token>
+        <xsl:call-template name="Tokenizer">
+          <xsl:with-param name="string" select="substring-after($string,$delimiter)" />
+          <xsl:with-param name="delimiter" select="$delimiter" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <token>
+          <xsl:value-of select="$string" />
+        </token>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
 </xsl:stylesheet>

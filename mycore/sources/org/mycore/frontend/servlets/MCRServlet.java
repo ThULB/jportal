@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRServlet.java,v $
- * $Revision: 1.57 $ $Date: 2006/07/04 12:45:32 $
+ * $Revision: 1.58 $ $Date: 2006/09/22 13:24:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -52,13 +53,13 @@ import org.mycore.datamodel.metadata.MCRActiveLinkException;
 /**
  * This is the superclass of all MyCoRe servlets. It provides helper methods for
  * logging and managing the current session data. Part of the code has been
- * taken from MilessServlet.java written by Frank Lützenkirchen.
+ * taken from MilessServlet.java written by Frank Lï¿½tzenkirchen.
  * 
  * @author Detlev Degenhardt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.57 $ $Date: 2006/07/04 12:45:32 $
+ * @version $Revision: 1.58 $ $Date: 2006/09/22 13:24:10 $
  */
 public class MCRServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -420,5 +421,20 @@ public class MCRServlet extends HttpServlet {
         }
 
 		return addr;
+	}
+
+	public static void putParamsToSession(HttpServletRequest request) {
+		Enumeration e = request.getParameterNames();
+		MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+		
+		while (e.hasMoreElements()) {
+			String name = (String) (e.nextElement());
+			if (name.startsWith("XSL.") && name.endsWith(".SESSION") && (mcrSession!=null)) {
+            	mcrSession.put(name.substring(0, name.length() - 8), request.getParameter(name));
+                LOGGER.debug("Found HTTP-Req.-Parameter " + name + "=" + request.getParameter(name) 
+                		+ " that should be saved in session, safed " + name.substring(0, name.length() - 8) + "=" 
+                		+ request.getParameter(name));
+			}
+		}
 	}
 }

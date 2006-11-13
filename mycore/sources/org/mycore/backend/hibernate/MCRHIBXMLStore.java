@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRHIBXMLStore.java,v $
- * $Revision: 1.18 $ $Date: 2006/02/10 23:33:51 $
+ * $Revision: 1.19 $ $Date: 2006/03/02 13:15:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,6 +45,8 @@ import org.mycore.datamodel.metadata.MCRXMLTableInterface;
 public class MCRHIBXMLStore implements MCRXMLTableInterface {
     // logger
     static Logger logger = Logger.getLogger(MCRHIBXMLStore.class.getName());
+
+    private String classname = "org.mycore.backend.hibernate.tables.MCRXMLTABLE";
 
     private String type;
 
@@ -233,7 +235,7 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
     	
           Session session = getSession(); 
           Transaction tx = session.beginTransaction();
-          List l = session.createQuery("select max(key.id) from MCRXMLTABLE where MCRID like '"+project+"_"+type+"%'").list();
+          List l = session.createQuery("select max(key.id) from "+classname+" where MCRID like '"+project+"_"+type+"%'").list();
           tx.commit(); 
           session.close();
           

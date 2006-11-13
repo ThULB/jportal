@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRNBNManager.java,v $
+ * $Revision: 1.12 $ $Date: 2005/09/28 07:49:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,9 +31,10 @@ import java.util.Set;
  * Provides persistency functions for managing NBN URNs. This is still work in
  * progress.
  * 
- * @author Frank Lützenkirchen
- * @author Werner Greßhoff
- * @version $Revision: 1.11 $ $Date: 2005/08/15 15:02:31 $
+ * @author Frank L&uuml;tzenkirchen
+ * @author Werner Gre&szlig;hoff
+ * @version $Revision: 1.12 $ $Date: 2005/09/28 07:49:10 $
+ * @deprecated
  */
 public interface MCRNBNManager {
     /**

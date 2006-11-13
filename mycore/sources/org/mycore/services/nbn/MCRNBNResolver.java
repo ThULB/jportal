@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRNBNResolver.java,v $
- * $Revision: 1.9 $ $Date: 2005/09/28 07:49:10 $
+ * $Revision: 1.10 $ $Date: 2006/01/26 13:07:57 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,8 +39,9 @@ import org.mycore.common.MCRConfiguration;
  * request is redirected to the national URN resolver, as specified by the
  * configuration parameter MCR.NBN.TopLevelResolver.
  * 
- * @author Frank Lützenkirchen
- * @version $Revision: 1.9 $ $Date: 2005/09/28 07:49:10 $
+ * @author Frank L&uuml;tzenkirchen
+ * @version $Revision: 1.10 $ $Date: 2006/01/26 13:07:57 $
+ * @deprecated
  */
 public class MCRNBNResolver extends HttpServlet {
     /** Logger */

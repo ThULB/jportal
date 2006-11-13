@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObjectService.java,v $
- * $Revision: 1.40 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.41 $ $Date: 2006/03/27 06:42:57 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,7 @@ import org.mycore.common.MCRConfiguration;
  * </ul>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.40 $ $Date: 2006/02/10 23:33:48 $
+ * @version $Revision: 1.41 $ $Date: 2006/03/27 06:42:57 $
  */
 public class MCRObjectService {
     // service data
@@ -549,6 +549,7 @@ public class MCRObjectService {
      * 
      * @param value
      *            the value of a flag as string
+     * @return the index number or -1 if the value was not found
      */
     public final int getFlagIndex(String value) {
         if ((value == null) || ((value = value.trim()).length() == 0)) {

@@ -2,7 +2,7 @@
 
 <!-- =================================================================== -->
 <!-- MyCoRe sample application build file for use with Apache Ant        -->
-<!-- $Revision: 1.129 $ $Date: 2006/10/16 10:44:11 $                      -->
+<!-- $Revision: 1.143 $ $Date: 2006/11/10 11:29:24 $                      -->
 <!-- =================================================================== -->
 
 <project name="DocPortal" default="usage" basedir=".">
@@ -31,6 +31,7 @@
         create.metastore     --> Create datastore structures for XML persistency from configuration
         create.schema        --> Generates all schema files from the configuration files
         create.scripts       --> Create the commandline scripts
+        create.searchmask    --> Create a search mask from searchfields.xml
         create.users         --> Laden der Start-User, Groups and Privilegs.
 
         webservice.deploy    --> Switch the WebService on
@@ -56,7 +57,7 @@
     <echo>Operating system   : ${os.name} Version ${os.version} on ${os.arch} </echo>
     <echo>Java version       : JDK ${ant.java.version} Version ${java.version} from ${java.vendor}</echo>
     <echo>Java home          : ${env.JAVA_HOME}</echo>
-    <echo>Ant build file     : $Revision: 1.129 $ $Date: 2006/10/16 10:44:11 $</echo>
+    <echo>Ant build file     : $Revision: 1.143 $ $Date: 2006/11/10 11:29:24 $</echo>
     <echo>Ant version        : ${ant.version}</echo>
     <echo>Ant home           : ${env.ANT_HOME}</echo>
     <echo>XML Store type     : ${MCR.XMLStore.Type}</echo>
@@ -644,7 +645,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Build the web application directory and copy webpages               -->
   <!-- =================================================================== -->
 
-  <target name="webapps" depends="init,webapps.base,webapps.i18n,webapps.modules,safeWebContent" description="Build the complete sample web application directory" >
+  <target name="webapps" depends="init,webapps.directories,webapps.templates,webapps.base,webapps.i18n,webapps.modules,safeWebContent" description="Build the complete sample web application directory" >
     <echo>Creating web application in directory ${docportal.webapps}</echo>
   </target>
 	
@@ -668,8 +669,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     </subant>
   </target>
   
-  <target name="webapps.base">
-
+  <target name="webapps.directories">
     <!-- Create necessary directories  -->
     <mkdir dir="${docportal.webapps}"/>
     <mkdir dir="${docportal.webapps}/editor"/>
@@ -678,7 +678,9 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mkdir dir="${docportal.webapps}/WEB-INF/classes"/>
     <mkdir dir="${docportal.webapps}/WEB-INF/lib"/>
     <mkdir dir="${docportal.webapps}/WEB-INF/stylesheets"/>
+  </target>
 
+  <target name="webapps.base">
     <!-- Copy editor stylesheets from MyCoRe and the DocPortal Application -->
     <copy file="${env.MYCORE_HOME}/stylesheets/MCRJDOMSearch.xsl" todir="${docportal.webapps}/WEB-INF/classes"/>
     <copy file="${env.MYCORE_HOME}/stylesheets/editor/editor.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
@@ -687,8 +689,10 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <copy file="${env.MYCORE_HOME}/stylesheets/editor/imports-help-popup.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
 
     <!-- Copy the files from various directories to build the webapps -->
-    <copy todir="${docportal.webapps}">
-      <fileset dir="${docportal.webpages}"/>
+    <copy todir="${docportal.webapps}" preservelastmodified="true">
+      <fileset dir="${docportal.webpages}" >
+        <exclude name="**/*.xsl" />
+      </fileset>
       <fileset dir="${docportal.config}" includes="FileContentTypes.xml" />
       <fileset dir="${docportal.config}" includes="searchfields.xml" />
       <fileset dir="${docportal.config}" includes="hosts.xml" />
@@ -698,12 +702,6 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <fileset dir="${mycore}/documentation/UserGuide" includes="UserGuide.pdf" />
       <fileset dir="${mycore}/documentation/ProgGuide" includes="ProgrammerGuide.pdf" />
     </copy>
-    <copy todir="${docportal.webapps}" overwrite="false">
-      <fileset dir="${docportal.webpages}" >
-        <exclude name="**/*.xsl" />
-      </fileset>
-    </copy>
-  	<copy file="${basedir}/webpages/index.html" todir="${basedir}/webapps" overwrite="false" />
   	
     <copy todir="${docportal.webapps}/editor">
       <fileset dir="${docportal.config}" includes="editor-*.xml" />
@@ -790,21 +788,28 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     </copy>
   </target>
 	
+  <!-- create a new chooseTemplate.xsl -->	
+  <target name="webapps.templates">
+  	<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="docportal.classpath" />
+  	<templatecheck templatepath="${env.DOCPORTAL_HOME}/webpages/templates/master/"
+  		choosepath="${docportal.webapps}/WEB-INF/stylesheets/chooseTemplate.xsl" />
+  </target>		
+	
   <!-- save modified static web content -->	
   <target name="safeWebContent">
-	    <copy todir="${docportal.webpages}/config/" failonerror="false" >
+	    <copy todir="${docportal.webpages}/config/" preservelastmodified="true" failonerror="false">
 	      <fileset file="${docportal.webapps}/config/navigation.xml" />
 	    </copy>  	
-	    <copy todir="${docportal.webpages}/content" failonerror="false">
+	    <copy todir="${docportal.webpages}/content" preservelastmodified="true" failonerror="false">
 	      <fileset dir="${docportal.webapps}/content" />
 	    </copy>  	
-	    <copy todir="${docportal.webpages}/templates" failonerror="false">
+	    <copy todir="${docportal.webpages}/templates" preservelastmodified="true" failonerror="false">
 	      <fileset dir="${docportal.webapps}/templates" />
 	    </copy>  	  
-	    <copy todir="${docportal.webpages}/images" failonerror="false">
+	    <copy todir="${docportal.webpages}/images" preservelastmodified="true" failonerror="false">
 	      <fileset dir="${docportal.webapps}/images/" />
 	    </copy>  	
-	    <copy todir="${docportal.webpages}/documents" failonerror="false">
+	    <copy todir="${docportal.webpages}/documents" preservelastmodified="true" failonerror="false">
 	      <fileset dir="${docportal.webapps}/documents" />
 	    </copy>  	
   </target>
@@ -1128,6 +1133,81 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
      </java>
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Generate search mask from searchfields.xml                          -->
+  <!-- =================================================================== -->
+
+  <target name="create.searchmask" description="Generate search mask from searchfields.xml" depends="init">
+		
+    <!-- Filename of the editor definition file that defines the search mask form -->
+    <property name="filename.editor"  value="editor-search-generated.xml" />
+    <!-- Filename of the webpage that contains the search mask -->
+    <property name="filename.webpage" value="editor_form_search-generated.xml" />
+    <!-- i18n key of search mask headline -->
+    <property name="headline.i18n" value="editor.search.document.label" />
+    <!-- Title of webpage in German -->
+    <property name="title.de" value="Suche nach Dokumenten" />
+    <!-- Title of webpage in English -->
+    <property name="title.en" value="Search for documents" />
+    <!-- ID of the search index(es) to include, multiple indexes separated by blanks -->
+    <!-- If this property is set, by default all fields in those indexes are included -->
+    <property name="search.indexes" value="" />
+    <!-- Name(s) of the search fields to skip, separated by blanks. -->
+    <!-- If this property and search.indexes is set, the listed fields are NOT included in search mask -->
+    <property name="skip.fields" value="" />
+    <!-- Name(s) of the search fields to include, separated by blanks. -->
+    <!-- If this property is set, ONLY these search fields will be included in search mask -->
+    <property name="search.fields" value="title author creator publisher contributor origin subject format language type keywords description source coverage rights relation dateCreated identifier" />
+    <!-- Optional restriction (hidden condition) for search -->
+    <!-- Syntax: "field operator value", separated by blanks -->
+    <!-- Example: "objectType = document" -->
+    <property name="restriction" value="objectType = document" />
+    <!-- List of fields to include as sort criteria of results -->
+    <!-- If empty, sort panel is not displayed -->
+    <property name="sort.fields" value="title dateCreated" />
+    <!-- If true, include a panel to select hosts to query -->
+    <property name="include.hostsSelectionPanel" value="true" />
+  	<!-- Layout of search mask: simple or advanced -->
+  	<!-- simple: one line per field, default operator, combine conditions with and -->
+  	<!-- advanced: choose fields and operators from drop-down list, choose and/or -->
+  	<property name="layout" value="advanced" />
+		
+  	<echo>Generating search mask from searchfields.xml</echo>
+  	
+    <copy file="${mycore.config}/fieldtypes.xml" toDir="${docportal.config}" />
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.config}/${filename.editor}"
+    	    force="true">
+      <param name="mode" expression="editor" />
+      <param name="filename.webpage" expression="${filename.webpage}" />
+      <param name="headline.i18n" expression="${headline.i18n}" />
+      <param name="search.indexes" expression="${search.indexes}" />
+      <param name="search.fields" expression="${search.fields}" />
+      <param name="skip.fields" expression="${skip.fields}" />
+    	<param name="restriction" expression="${restriction}" />
+      <param name="sort.fields" expression="${sort.fields}" />
+      <param name="include.hostsSelectionPanel" expression="${include.hostsSelectionPanel}" />
+    	<param name="layout" expression="${layout}" />
+    </xslt>
+  	<echo>Generated editor definition file ${filename.editor}</echo>
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.webpages}/${filename.webpage}"
+    	    force="true">
+      <param name="mode" expression="webpage" />
+      <param name="filename.editor" expression="${filename.editor}" />
+      <param name="title.de" expression="${title.de}" />
+      <param name="title.en" expression="${title.en}" />
+    </xslt>
+  	<echo>Generated webpage ${filename.webpage}</echo>
+    <delete file="${docportal.config}/fieldtypes.xml" />
+  </target>
+	
 </project>
 
 <!-- ======================== End of file ======================== -->

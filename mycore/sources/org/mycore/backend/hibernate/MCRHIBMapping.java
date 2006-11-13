@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRHIBMapping.java,v $
- * $Revision: 1.30 $ $Date: 2006/05/22 12:37:34 $
+ * $Revision: 1.31 $ $Date: 2006/07/12 09:56:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -141,6 +141,12 @@ public class MCRHIBMapping {
             map.addIDColumn("mcrto", "MCRTO", dbString, 194, "assigned", false);
             map.addIDColumn("mcrtype", "MCRTYPE", dbString, 75, "assigned", false);
             map.addColumn("mcrattr", "MCRATTR", dbString, 194, false, false, false);
+            cfg.addXML(map.getTableXML());
+
+            // URN store
+            map = new MCRTableGenerator(config.getString("MCR.urn_store_sql_table", "MCRURN"), "org.mycore.backend.hibernate.tables.MCRURN", "", 2);
+            map.addIDColumn("mcrid", "MCRID", dbString, 64, "assigned", false);
+            map.addIDColumn("mcrurn", "MCRURN", dbString, 194, "assigned", false);
             cfg.addXML(map.getTableXML());
 
             // NBN Manager

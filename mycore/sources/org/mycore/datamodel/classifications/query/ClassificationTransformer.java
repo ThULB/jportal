@@ -1,6 +1,6 @@
 /*
  * $RCSfile: ClassificationTransformer.java,v $
- * $Revision: 1.7 $ $Date: 2006/04/06 15:09:21 $
+ * $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.common.MCRDefaults;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.7 $ $Date: 2006/04/06 15:09:21 $
+ * @version $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
  */
 public class ClassificationTransformer {
 
@@ -65,6 +65,23 @@ public class ClassificationTransformer {
      */
     public static Document getEditorDocument(Classification cl) {
         return ItemElementFactory.getDocument(cl, STANDARD_LABEL);
+    }
+
+    /**
+     * transforms a MCR Classification into a <code>Classification</code>.
+     * 
+     * @param cl
+     *            MCR Classification as a JDOM Document
+     * @return
+     *            null if <code>cl</code> is not valid
+     */
+    public static Classification getClassification(Document cl) {
+        Element categories = cl.getRootElement().getChild("categories");
+        if (categories == null) {
+            return null;
+        }
+        boolean withCounter = (categories.getChild("category").getAttribute("counter") != null);
+        return MCRClassificationQuery.getClassification(cl, -1, withCounter);
     }
 
     /**

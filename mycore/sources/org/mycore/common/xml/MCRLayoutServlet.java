@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRLayoutServlet.java,v $
- * $Revision: 1.65 $ $Date: 2006/06/20 12:38:18 $
+ * $Revision: 1.69 $ $Date: 2006/11/13 15:07:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -67,10 +67,10 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * Does the layout for other MyCoRe servlets by transforming XML input to
  * various output formats, using XSL stylesheets.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.65 $ $Date: 2006/06/20 12:38:18 $
+ * @version $Revision: 1.69 $ $Date: 2006/11/13 15:07:50 $
  */
 public class MCRLayoutServlet extends MCRServlet {
     // TODO: we should invent something here
@@ -257,35 +257,40 @@ public class MCRLayoutServlet extends MCRServlet {
 
         // PROPERTIES: Read all properties from system configuration
         Properties parameters = (Properties) (MCRConfiguration.instance().getProperties().clone());
-
-        // SESSION: Read all *.xsl attributes that are stored in the browser
-        // session
-        HttpSession session = request.getSession(false);
-        if (session != null) {
+        
+        // SESSION: Read all *.xsl attributes that are stored in the browser session
+        if (request.getSession(false) != null) {
+        	HttpSession session = request.getSession(false);
             for (Enumeration e = session.getAttributeNames(); e.hasMoreElements();) {
                 String name = (String) (e.nextElement());
                 if (name.startsWith("XSL."))
                     parameters.put(name.substring(4), session.getAttribute(name));
             }
+        }        
+        MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+        Iterator sessObjKeys = mcrSession.getObjectsKeyList();
+        if (mcrSession != null) {
+        	while (sessObjKeys.hasNext()) {
+        		String name = (String) sessObjKeys.next();
+        		if (name.startsWith("XSL."))
+                    parameters.put(name.substring(4), mcrSession.get(name)); 
+        	}
         }
 
         // HTTP-REQUEST-PARAMETER: Read all *.xsl attributes from the client
         // HTTP request parameters
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String name = (String) (e.nextElement());
-
             if (name.startsWith("XSL.")) {
-                if (!name.endsWith(".SESSION")) {
+                if (!name.endsWith(".SESSION")) 
                     parameters.put(name.substring(4), request.getParameter(name));
-                } // store parameter in session if ends with *.SESSION
-                else {
+                // store parameter in session if ends with *.SESSION
+                else 
                     parameters.put(name.substring(4, name.length() - 8), request.getParameter(name));
-                    session.setAttribute(name.substring(0, name.length() - 8), request.getParameter(name));
-                    LOGGER.debug("MCRLayoutServlet: found HTTP-Req.-Parameter " + name + "=" + request.getParameter(name) + " that should be saved in session, safed " + name.substring(0, name.length() - 8) + "=" + request.getParameter(name));
-                }
             }
         }
-
+        putParamsToSession(request);
+        
         // SERVLETS-REQUEST-ATTRIBUTES: Read all *.xsl attributes provided by
         // the invoking servlet
         for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
@@ -298,8 +303,10 @@ public class MCRLayoutServlet extends MCRServlet {
                 } // store parameter in session if ends with *.SESSION
                 else {
                     parameters.put(name.substring(4, name.length() - 8), request.getAttribute(name));
-                    session.setAttribute(name.substring(0, name.length() - 8), request.getAttribute(name));
-                    LOGGER.debug("MCRLayoutServlet: found Req.-Attribut " + name + "=" + request.getAttribute(name) + " that should be saved in session, safed " + name.substring(0, name.length() - 8) + "=" + request.getAttribute(name));
+                    if (mcrSession!=null) {
+                    	mcrSession.put(name.substring(0, name.length() - 8), request.getAttribute(name));
+                        LOGGER.debug("MCRLayoutServlet: found Req.-Attribut " + name + "=" + request.getAttribute(name) + " that should be saved in session, safed " + name.substring(0, name.length() - 8) + "=" + request.getAttribute(name));	
+                    }
                 }
             }
 
@@ -317,6 +324,7 @@ public class MCRLayoutServlet extends MCRServlet {
         }
 
         // handle HttpSession
+        HttpSession session = request.getSession(false);
         String jSessionID = CONFIG.getString("MCR.session.param", ";jsessionid=");
 
         if ((session != null) && !request.isRequestedSessionIdFromCookie()) {
@@ -325,9 +333,7 @@ public class MCRLayoutServlet extends MCRServlet {
 
         if (session != null) {
             parameters.put("JSessionID", jSessionID + session.getId());
-
-            MCRSession mcrSession = (MCRSession) (session.getAttribute("mycore.session"));
-
+            //MCRSession mcrSession2 = (MCRSession) (session.getAttribute("mycore.session"));
             if (mcrSession != null) {
                 user = mcrSession.getCurrentUserID();
                 lang = mcrSession.getCurrentLanguage();
@@ -524,6 +530,7 @@ public class MCRLayoutServlet extends MCRServlet {
         // Set char encoding from "<xsl:output encoding = "...">
         String ct = xsl.getOutputProperties().getProperty("media-type");
         String enc = xsl.getOutputProperties().getProperty("encoding");
+        response.setCharacterEncoding(enc);
         response.setContentType(ct + "; charset=" + enc);
         LOGGER.debug("MCRLayoutServlet starts to output " + ct + "; charset=" + enc);
 

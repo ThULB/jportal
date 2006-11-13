@@ -922,13 +922,9 @@
 		color:white;
 	}
 
-    #statistic2-width {
-		float:left;
-		border-width: 0;
-		}
-
     #statistic2 { 
-		width:auto;
+		border-collapse:collapse;
+		max-width:700px;
 		border-style: solid;
 		border-color: #15516e;
 		background-color: #FAF3EB;
@@ -942,10 +938,6 @@
 		font-size:86%;
 	}
 
-	#statistic2 table {
-		border-collapse:collapse;
-		width:100%;
-	}
 	#statistic2 th {
 		border:1px solid #15516e;
 		background:#15516e;
@@ -1006,4 +998,3 @@
 	}
 
 /* -------------------------------------------------------------------------- */
-
