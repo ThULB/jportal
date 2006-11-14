@@ -6,6 +6,7 @@ MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRRemoveAclEventHandler
 MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRRemoveAclEventHandler
 MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRObjectTypeStrategy
 
+MCR.UriResolver.externalResolver.class=org.mycore.common.xml.MCRJportalClassificationResolver
 
 ##############################################################################
 # The data model configuration
