@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRURIResolver.MCRResolver;
@@ -101,9 +102,15 @@ public class MCRJportalClassificationResolver implements MCRResolverProvider {
             
             //MCRSessionMgr.getCurrentSession().
             //String type = parameters[1];
-            
+            String paramPrefix = "jportalClassification";
+            LOGGER.debug("########################################## prefix="+paramPrefix+"..................................");
+            MCRSession session = MCRSessionMgr.getCurrentSession();
+            String key = "XSL."+paramPrefix+"."+parameters[1];
+            LOGGER.debug(" key="+key+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");            
+            String classID = (String) session.get(key);
+            LOGGER.debug("value="+classID+"..................................");
             // get classification ID from session using $type --> classID
-            String classID = "jportal_class_00000001";
+            ///String classID = "jportal_class_00000001";
             String axis = "children"; 
             String categ = "";
             int depth = -1;

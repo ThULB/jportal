@@ -97,6 +97,21 @@
             <element name="refs" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetalangtext name="ref" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="4096" />				
             </element>                        
+		    <!-- ================================================================================================= -->
+		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            
+            <!-- id's of rubrics classi in articles -->
+            <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+            </element>                      		  
+            <!-- id's of rubrics classi in articles -->
+            <element name="hidden_rubricsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="hidden_rubricID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+            </element>                                    		  
+            <!-- id's of pub-type classi in articles -->
+            <element name="hidden_pubTypesID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalangtext name="hidden_pubTypeID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+            </element>                       		  
+		    <!-- ================================================================================================= -->		  		  
       </metadata>
       <service>
 			<!-- Service Dates -->

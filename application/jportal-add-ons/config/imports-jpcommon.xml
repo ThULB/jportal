@@ -256,4 +256,28 @@
                <text   label="-" />
          </cell>			   	
 	</panel>
+      <!-- jpjournalID_hidden ================================================================== -->
+      <panel id="jpjournalID_input_hidden">
+            <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_jpjournalsID/@parasearch" default="true" />
+            <hidden var="metadata/hidden_jpjournalsID/@textsearch" default="true" />
+            <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
+            <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+      </panel>
+      <!-- rubricsID ================================================================== -->
+      <panel id="rubricID_input_hidden">
+            <hidden var="metadata/hidden_rubricsID/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
+            <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
+            <hidden var="metadata/hidden_rubricsID/@heritable" default="true" />
+            <hidden var="metadata/hidden_rubricsID/hidden_rubricID" />
+      </panel>
+      <!-- pubTypeID ================================================================== -->
+      <panel id="pubTypeID_input_hidden">
+            <hidden var="metadata/hidden_pubTypesID/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_pubTypesID/@parasearch" default="true" />
+            <hidden var="metadata/hidden_pubTypesID/@textsearch" default="true" />
+            <hidden var="metadata/hidden_pubTypesID/@heritable" default="true" />
+            <hidden var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
+      </panel>			
 </imports>

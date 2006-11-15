@@ -848,4 +848,24 @@
 		</label>
 	</text>	
 	
+	<text id="jpjournalID_label" >
+		<label xml:lang="de">
+			<span class="editorlabel">ID der Zeitschrift für Vererbung</span>
+		</label>
+	</text>	
+	<text id="rubricID_label" >
+		<label xml:lang="de">
+			<span class="editorlabel">Klassifikations-ID für Rubrikenklassif. für Artikel</span>
+		</label>
+	</text>	
+	<text id="pubTypeID_label" >
+		<label xml:lang="de">
+			<span class="editorlabel">Klassifikations-ID für Pub.-typ-Klassif. für Artikel</span>
+		</label>
+	</text>				
+	<text id="Admin_label" >
+		<label xml:lang="de">
+			<br/><br/><b><span class="editorlabel">Interne administrative Einstellungen</span></b><br/>
+		</label>
+	</text>					
 </imports>

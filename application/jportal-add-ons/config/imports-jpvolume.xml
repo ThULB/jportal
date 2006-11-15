@@ -66,8 +66,16 @@
             <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
             <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
             <cell row="160" col="3" anchor="WEST" ref="note_help" />
-            <cell row="220" col="1" anchor="EAST"/>
-            <cell row="220" col="2" anchor="EAST" ref="save" />
+		    <!-- ================================================================================================= -->
+		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            
+            <!-- .. -->
+            <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+            <!-- ... -->
+            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" />
+            <!-- ... -->
+            <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" />
+		    <!-- ================================================================================================= -->		  
+            <cell row="170" col="2" anchor="EAST" ref="save" />
       </panel>
       <!-- panel definitions -->
       <!-- MainTitle ================================================================== -->

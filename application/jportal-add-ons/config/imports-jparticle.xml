@@ -96,6 +96,15 @@
             <cell row="180" col="1" anchor="NORTHWEST" >
                   <space height="14" />
             </cell>
+		    <!-- ================================================================================================= -->
+		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            
+            <!-- .. -->
+            <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+            <!-- ... -->
+            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" />
+            <!-- ... -->
+            <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" />
+		    <!-- ================================================================================================= -->	
             <!-- save / cancel button -->
             <cell row="190" col="1" anchor="EAST"/>
             <cell row="190" col="2" anchor="EAST" ref="save" />
@@ -309,11 +318,11 @@
             <hidden var="metadata/types/@notinherit" default="false" />
             <hidden var="metadata/types/@heritable" default="false" />
             <hidden var="metadata/types/type/@inherited" default="0" />
-            <hidden var="metadata/types/type/@classid" default="jportal_class_00000004" />
+            <hidden var="metadata/types/type/@classid" default="jportal_class_00000001" />
             <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" />
       </panel>
       <list id="Ctype" width="300" type="dropdown">
-		    <include uri="classification:editor:-1:children:jportal_class_00000004" />
+		    <include uri="jportalClassification:classIDPubTypes" />
       </list>
       <!-- end: type -->
       <!-- rubric ================================================================== -->
@@ -329,7 +338,7 @@
       </panel>
 	  <panel id="rubric_input_repeater">
             <hidden var="@inherited" default="0" />
-            <hidden var="@classid" default="jportal_class_00000004" />
+            <hidden var="@classid" default="jportal_class_00000005" />
             <cell col="1" row="1" anchor=" NORTHWEST" ref="Crubric" var="@categid" />		  
 	  </panel>
       <list id="Crubric" type="dropdown">
@@ -337,7 +346,7 @@
                   <label xml:lang="de">
                   </label>
             </item>            
-		    <include uri="classification:editor:-1:children:jportal_class_00000004" />		  
+		    <include uri="jportalClassification:classIDRubrics" />
       </list>	
       <!-- end: rubric -->
       <!-- size ================================================================== -->
