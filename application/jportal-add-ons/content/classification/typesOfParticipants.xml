@@ -82,5 +82,8 @@
 			<label text="Rezensent" xml:lang="de"></label>
 			<label text="Рецензент" xml:lang="ru"></label>
 		</category>
+		<category ID="publisherOfOriginal">
+			<label text="Verlag des rezensierten Werkes" xml:lang="de"/>
+		</category>
 	</categories>
 </mycoreclass>
