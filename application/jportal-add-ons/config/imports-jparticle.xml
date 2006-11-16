@@ -22,17 +22,16 @@
             <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
             <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
             <!-- publisher -->
-            <cell row="25" col="1" anchor="NORTHWEST" ref="publisher_label" />
+<!--            <cell row="25" col="1" anchor="NORTHWEST" ref="publisher_label" />
             <cell row="25" col="2" anchor="NORTHWEST" ref="publisher_input" />
-            <cell row="25" col="3" anchor="NORTHWEST" ref="publisher_help" />
+            <cell row="25" col="3" anchor="NORTHWEST" ref="publisher_help" />-->
             <!-- author -->
-            <cell row="30" col="1" anchor="NORTHWEST" ref="author_label" />
-            <cell row="30" col="2" anchor="NORTHWEST" ref="author_input" />
-            <cell row="30" col="3" anchor="WEST" ref="author_help" />
+            <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
+            <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
             <!-- contribu -->
-            <cell row="40" col="1" anchor="NORTHWEST" ref="contribu_label" />
+<!--            <cell row="40" col="1" anchor="NORTHWEST" ref="contribu_label" />
             <cell row="40" col="2" anchor="NORTHWEST" ref="contribu_input" />
-            <cell row="40" col="3" anchor="WEST" ref="contribu_help" />
+            <cell row="40" col="3" anchor="WEST" ref="contribu_help" />-->
             <!-- date -->
             <cell row="45" col="1" anchor="NORTHWEST" ref="date_label" />
             <cell row="45" col="2" anchor="NORTHWEST" ref="date_input" />		  
@@ -45,9 +44,9 @@
                   <cell row="60" col="2" anchor="NORTHWEST" ref="classi_input" />
                   <cell row="60" col="3" anchor="WEST" ref="classi_help" />-->
             <!-- classipub -->
-            <cell row="60" col="1" anchor="NORTHWEST" ref="classipub_label" />
+<!--            <cell row="60" col="1" anchor="NORTHWEST" ref="classipub_label" />
             <cell row="60" col="2" anchor="NORTHWEST" ref="classipub_input" />
-            <cell row="60" col="3" anchor="NORTHWEST" ref="classipub_help" />
+            <cell row="60" col="3" anchor="NORTHWEST" ref="classipub_help" />-->
 <!--            <!-#- classipub2 -#->
             <cell row="65" col="1" anchor="NORTHWEST" ref="classipub2_label" />
             <cell row="65" col="2" anchor="NORTHWEST" ref="classipub2_input" />
@@ -135,66 +134,6 @@
             <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
       </panel>
-      <!-- end: SubTitle -->
-      <!-- publisher ================================================================== -->
-      <panel id="publisher_input">
-        <hidden var="metadata/publishers/@class" default="MCRMetaLinkID" sortnr="3" />
-        <hidden var="metadata/publishers/@parasearch" default="true" sortnr="3" />
-        <hidden var="metadata/publishers/@textsearch" default="true" sortnr="3" />
-	    <cell col="1" row="1" anchor="EAST" var="metadata/publishers/publisher" sortnr="3" >
-         <repeater min="1" max="10">
-           <panel lines="off">
-			 <hidden var="@inherited" default="0" />
-			 <hidden var="@type" default="locator" />
-			 <hidden var="@label" />
-			 <hidden var="@href" />			
-             <cell col="1" row="1" anchor="NORTHWEST" ref="publisher_input_repeater_type" var="@title" />			   
-			 <cell row="2" col="1" anchor="NORTHWEST" ref="getInst"/>
-           </panel>
-         </repeater>
-       </cell>	  
-	  </panel>
-      <!-- end: publisher -->
-      <!-- author ================================================================== -->
-      <panel id="author_input">
-        <hidden var="metadata/authors/@class" default="MCRMetaLinkID" sortnr="3" />
-        <hidden var="metadata/authors/@parasearch" default="true" sortnr="3" />
-        <hidden var="metadata/authors/@textsearch" default="true" sortnr="3" />
-	    <cell col="1" row="1" anchor="EAST" var="metadata/authors/author" sortnr="3" >
-         <repeater min="1" max="10">
-           <panel lines="off">
-			 <hidden var="@inherited" default="0" />
-			 <hidden var="@type" default="locator" />
-			 <hidden var="@label" />
-			 <hidden var="@href" />			
-             <cell col="1" row="1" anchor="NORTHWEST" ref="author_input_repeater_type" var="@title" />			   
-			 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-           </panel>
-         </repeater>
-       </cell>	  
-	  </panel>
-      <!-- end: author -->
-      <!-- contribu ================================================================== -->
-      <panel id="contribu_input">
-            <hidden var="metadata/contribus/@class" default="MCRMetaLinkID" />
-            <hidden var="metadata/contribus/@parasearch" default="true" />
-            <hidden var="metadata/contribus/@textsearch" default="true" />
-            <hidden var="metadata/contribus/@notinherit" default="false" />
-            <hidden var="metadata/contribus/@heritable" default="false" />
-		    <cell col="1" row="1" anchor="EAST" var="metadata/contribus/contribu" >
-	         <repeater min="1" max="10">
-	           <panel lines="off">
-				 <hidden var="@inherited" default="0" />
-				 <hidden var="@type" default="locator" />
-				 <hidden var="@label" />
-				 <hidden var="@href" />			
-	             <cell col="1" row="1" anchor="NORTHWEST" ref="contribu_input_repeater_type" var="@title" />			   
-				 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-	           </panel>
-	         </repeater>
-	       </cell>	  
-	  </panel>
-      <!-- end: contribu -->
       <!-- date ================================================================== -->
       <panel id="date_input">
             <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
@@ -226,15 +165,6 @@
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
       </panel>	
       <!-- end: keyword -->
-      <!-- classi ================================================================== -->
-      <panel id="classi_input">
-            <hidden var="metadata/classis/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/classis/@parasearch" default="true" />
-            <hidden var="metadata/classis/@textsearch" default="false" />
-            <hidden var="metadata/classis/@notinherit" default="false" />
-            <hidden var="metadata/classis/@heritable" default="true" />
-      </panel>
-      <!-- end: classi -->
       <!-- abstract ================================================================== -->
       <panel id="abstract_input">
             <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
@@ -342,8 +272,8 @@
 		    <include cacheable="false" uri="jportalClassification:rubrics" />
       </list>
       <!-- end: rubric -->
-      <!-- size ================================================================== -->
 	
+      <!-- size ================================================================== -->
       <panel id="size_input">
             <hidden var="metadata/sizes/@class" default="MCRMetaLangText" />
             <hidden var="metadata/sizes/@parasearch" default="true" />

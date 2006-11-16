@@ -153,35 +153,18 @@
 		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
 	</helpPopup>
 	<!-- *** Data for the mainauthor *** -->
-	<text id="author_label">
+	<text id="participants_label">
 		<label xml:lang="de">
-			<span class="editorlabel">Autor:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Автор:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">autor:</span>
+			<span class="editorlabel">Mitwirkende:</span>
 		</label>
 	</text>
-	<helpPopup id="author_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
-	<!-- *** Data for the contribu *** -->
-	<text id="contribu_label">
+	<text id="participants_label_bold">
 		<label xml:lang="de">
-			<span class="editorlabel">Beitragender</span>
+			<b>
+				<span class="editorlabel">Mitwirkende:</span>
+			</b>				
 		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Соавтор</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">współautor</span>
-		</label>
-	</text>
-	<helpPopup id="contribu_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	</text>	
 	<!-- *** Data for the keyword *** -->
 	<text id="keyword_label">
 		<label xml:lang="de">

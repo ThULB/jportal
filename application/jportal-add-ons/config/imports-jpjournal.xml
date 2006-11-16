@@ -19,22 +19,9 @@
             <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
             <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
             <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
-            <!-- mainedi -->
-            <cell row="30" col="1" anchor="NORTHWEST" ref="mainedi_label_bold" />
-            <cell row="30" col="2" anchor="NORTHWEST" ref="mainedi_input" />
-            <cell row="30" col="3" anchor="WEST" ref="mainedi_help" />
-            <!-- subedi -->
-            <cell row="40" col="1" anchor="NORTHWEST" ref="subedi_label" />
-            <cell row="40" col="2" anchor="NORTHWEST" ref="subedi_input" />
-            <cell row="40" col="3" anchor="WEST" ref="subedi_help" />
-            <!-- mainauthor -->
-            <cell row="50" col="1" anchor="NORTHWEST" ref="author_label" />
-            <cell row="50" col="2" anchor="NORTHWEST" ref="author_input" />
-            <cell row="50" col="3" anchor="WEST" ref="author_help" />
-            <!-- contribu -->
-            <cell row="70" col="1" anchor="NORTHWEST" ref="contribu_label" />
-            <cell row="70" col="2" anchor="NORTHWEST" ref="contribu_input" />
-            <cell row="70" col="3" anchor="WEST" ref="contribu_help" />
+            <!-- partic -->
+            <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label_bold" />
+            <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
             <!-- date -->
             <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
             <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
@@ -125,92 +112,6 @@
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096"  />
       </panel>
       <!-- end: SubTitle -->
-      <!-- mainedi ================================================================== -->
-      <panel id="mainedi_input">
-            <hidden var="metadata/mainedis/@class" default="MCRMetaLinkID" />
-            <hidden var="metadata/mainedis/@parasearch" default="true" />
-            <hidden var="metadata/mainedis/@textsearch" default="true" />
-            <hidden var="metadata/mainedis/@notinherit" default="false" />
-            <hidden var="metadata/mainedis/@heritable" default="false" />
-
-		    <cell row="1" col="1" anchor="EAST" var="metadata/mainedis/mainedi">
-	         <repeater min="1" max="10">
-	           <panel lines="off">
-				 <hidden var="@inherited" default="0" />
-				 <hidden var="@type" default="locator" />
-		         <hidden var="@title" default="Herausgeber" />			   
-				 <hidden var="@label" />
-				 <hidden var="@href" />			
-				   
-				 <cell row="1" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-
-	           </panel>
-	         </repeater>
-	       </cell>	  		  
-      </panel>
-      <!-- end: mainedi -->
-      <!-- subedi ================================================================== -->
-      <panel id="subedi_input">
-            <hidden var="metadata/subedis/@class" default="MCRMetaLinkID" />
-            <hidden var="metadata/subedis/@parasearch" default="true" />
-            <hidden var="metadata/subedis/@textsearch" default="true" />
-            <hidden var="metadata/subedis/@notinherit" default="false" />
-            <hidden var="metadata/subedis/@heritable" default="false" />
-			  
-		    <cell row="1" col="2" anchor="EAST" var="metadata/subedis/subedi">
-	         <repeater min="1" max="10">
-	           <panel lines="off">
-				 <hidden var="@inherited" default="0" />
-				 <hidden var="@type" default="locator" />
-	             <hidden var="@title" default="Mitherausgeber" />			   
-				 <hidden var="@label" />
-				 <hidden var="@href" />			
-				 <cell row="1" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>   
-	           </panel>
-	         </repeater>
-	       </cell>	  			  
-      </panel>
-      <!-- end: subedi -->
-      <!-- author ================================================================== -->
-      <panel id="author_input">
-        <hidden var="metadata/authors/@class" default="MCRMetaLinkID" sortnr="3" />
-        <hidden var="metadata/authors/@parasearch" default="true" sortnr="3" />
-        <hidden var="metadata/authors/@textsearch" default="true" sortnr="3" />
-	    <cell col="1" row="1" anchor="EAST" var="metadata/authors/author" sortnr="3" >
-         <repeater min="1" max="10">
-           <panel lines="off">
-			 <hidden var="@inherited" default="0" />
-			 <hidden var="@type" default="locator" />
-			 <hidden var="@label" />
-			 <hidden var="@href" />			
-             <cell col="1" row="1" anchor="NORTHWEST" ref="author_input_repeater_type" var="@title" />
-			 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-           </panel>		 
-         </repeater>
-       </cell>	  
-	  </panel>
-      <!-- end: author -->
-      <!-- contribu ================================================================== -->
-      <panel id="contribu_input">
-            <hidden var="metadata/contribus/@class" default="MCRMetaLinkID" />
-            <hidden var="metadata/contribus/@parasearch" default="true" />
-            <hidden var="metadata/contribus/@textsearch" default="true" />
-            <hidden var="metadata/contribus/@notinherit" default="false" />
-            <hidden var="metadata/contribus/@heritable" default="false" />
-		    <cell col="1" row="1" anchor="EAST" var="metadata/contribus/contribu" >
-	         <repeater min="1" max="10">
-	           <panel lines="off">
-				 <hidden var="@inherited" default="0" />
-				 <hidden var="@type" default="locator" />
-				 <hidden var="@label" />
-				 <hidden var="@href" />			
-	             <cell col="1" row="1" anchor="NORTHWEST" ref="contribu_input_repeater_type" var="@title" />			   
-				 <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-	           </panel>
-	         </repeater>
-	       </cell>	  
-	  </panel>
-      <!-- end: contribu -->
       <!-- keyword ================================================================== -->
       <panel id="keyword_input">
             <hidden var="metadata/keywords/@class" default="MCRMetaLangText" />
@@ -227,13 +128,12 @@
             <hidden var="metadata/classis/@parasearch" default="true" />
             <hidden var="metadata/classis/@textsearch" default="false" />
             <hidden var="metadata/classis/@notinherit" default="false" />
-            <hidden var="metadata/classis/@heritable" default="true" />
+            <hidden var="metadata/classis/@heritable" default="false" />
             <cell col="1" row="1" anchor=" NORTHWEST" var="metadata/classis/classi" ordernr="18">
                   <repeater min="0" max="10" anchor="NORTHWEST" ref="classi_input_repeater" />
             </cell>
       </panel>
       <panel id="classi_input_repeater">
-            <hidden var="@inherited" default="0" />
             <hidden var="@classid" default="jportal_class_00000003" />
             <cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassi" var="@categid" ordernr="18" />
       </panel>

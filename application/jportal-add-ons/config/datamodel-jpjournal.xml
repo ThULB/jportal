@@ -20,25 +20,11 @@
             <element name="subtitles" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
                   <mcrmetalangtext name="subtitle" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
             </element>
-            <!-- 03 - Maineditor -->
-            <element name="mainedis" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalinkid name="mainedi" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
-            </element>
-            <!-- 04 - subedi -->
-            <!-- type = subedi -->
-            <element name="subedis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalinkid name="subedi" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
-            </element>
-            <!-- 05 - author -->
-            <!-- type = mainauthor | subauthor-->            
-            <element name="authors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalinkid name="author" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
-            </element>
-            <!-- 06 - contribus -->
-            <!-- xlinktitle = Fotograf, Komponist, Maler, Redakteur, Veranstalter, Illustrator, Sponsor, ?bersetzer, Moderator, Kommentator -->
-            <element name="contribus" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalinkid name="contribu" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
-            </element>             
+            <!-- 03 - participantss -->
+			  <!-- for @types watch jportal_class_00000007 -->
+            <element name="participants" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="true">
+                  <mcrmetalinkid name="participant" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
+            </element>		             
 		    <!-- date -->
 			<element name="dates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 				<mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2'/>

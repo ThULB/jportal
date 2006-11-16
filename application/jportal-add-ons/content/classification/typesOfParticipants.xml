@@ -85,5 +85,11 @@
 		<category ID="publisherOfOriginal">
 			<label text="Verlag des rezensierten Werkes" xml:lang="de"/>
 		</category>
+		<category ID="mainPublisher">
+			<label text="Hauptherausgeber" xml:lang="de"/>
+		</category>
+		<category ID="subPublisher">
+			<label text="Mitherausgeber" xml:lang="de"/>
+		</category>
 	</categories>
 </mycoreclass>
