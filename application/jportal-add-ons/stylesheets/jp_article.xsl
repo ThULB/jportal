@@ -149,25 +149,13 @@
 					name="label"/>
 			</xsl:call-template>
 			<!--*** Editor Buttons ************************************* -->
-			<xsl:variable name="aliasRubrics">
-				<xsl:value-of select="'classIDRubrics'"/>
-			</xsl:variable>
-			<xsl:variable name="aliasPubTypes">
-				<xsl:value-of select="'classIDPubTypes'"/>
-			</xsl:variable>			
-			<xsl:variable name="param_classIDRubrics">
-				<xsl:value-of select="concat('XSL.jportalClassification.',$aliasRubrics,'.SESSION=',./metadata/hidden_rubricsID/hidden_rubricID/text())"/>
-			</xsl:variable>
-			<xsl:variable name="param_classIDPubTypes">
-				<xsl:value-of select="concat('XSL.jportalClassification.',$aliasPubTypes,'.SESSION=',./metadata/hidden_pubTypesID/hidden_pubTypeID/text())"/>
-			</xsl:variable>
-			<xsl:variable name="classis">
-				<xsl:value-of select="concat('&amp;',$param_classIDRubrics,'&amp;',$param_classIDPubTypes)"/>
+			<xsl:variable name="params_dynamicClassis">
+				<xsl:call-template name="get.params_dynamicClassis"/>
 			</xsl:variable>
 			<xsl:call-template name="editobject_with_der">
 				<xsl:with-param select="$accessedit" name="accessedit"/>
 				<xsl:with-param select="./@ID" name="id"/>
-				<xsl:with-param select="$classis" name="layout"/>
+				<xsl:with-param select="$params_dynamicClassis" name="layout"/>
 			</xsl:call-template>
 			
 			<!--*** List children per object type ************************************* -->

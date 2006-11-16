@@ -121,8 +121,17 @@
       </xsl:call-template>
       <xsl:call-template name="addChild2">
         <xsl:with-param name="id" select="./@ID"/>
-        <xsl:with-param name="types" select="'jpvolume jparticle'"/>
+        <xsl:with-param name="types" select="'jpvolume'"/>
       </xsl:call-template>
+	
+		<xsl:variable name="params_dynamicClassis">
+			<xsl:call-template name="get.params_dynamicClassis"/>
+		</xsl:variable>		
+      <xsl:call-template name="addChild2">
+        <xsl:with-param name="id" select="./@ID"/>
+        <xsl:with-param name="types" select="'jparticle'"/>
+		<xsl:with-param select="$params_dynamicClassis" name="layout"/>		  
+      </xsl:call-template>		
 
       <!--*** List children per object type ************************************* -->
       <!--
