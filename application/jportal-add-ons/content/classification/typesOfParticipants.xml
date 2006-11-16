@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
-	ID="jportal_class_00000006">
+	ID="jportal_class_00000007">
 	<label xml:lang="de" text="Weitere Titeltypen"
 		description="Weitere Titeltypen"/>
 	<categories>
