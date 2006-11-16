@@ -192,6 +192,254 @@
     </javac>
   </target>	
 	
-  <!-- =================================================================== -->		
+  <!-- =================================================================== -->	
+	
+  <!-- =================================================================== -->
+  <!-- Generate search mask from searchfields.xml                          -->
+  <!-- =================================================================== -->
+
+  <target name="jp.create.searchmask" description="Generate search masks from searchfields.xml" depends="init,searchmask-journal,searchmask-volume,searchmask-article" />		
+
+  <!-- =================================================================== -->	
+  <target name="searchmask-journal" description="Generate search mask from searchfields.xml">
+		
+    <!-- Filename of the editor definition file that defines the search mask form -->
+    <property name="filename.editor"  value="editor-search-journal.xml" />
+    <!-- Filename of the webpage that contains the search mask -->
+    <property name="filename.webpage" value="editor_form_search-journal.xml" />
+    <!-- i18n key of search mask headline -->
+    <property name="headline.i18n" value="editor.search.journal.label" />
+    <!-- Title of webpage in German -->
+    <property name="title.de" value="Suche nach Journals" />
+    <!-- Title of webpage in English -->
+    <property name="title.en" value="Search for journals" />
+    <!-- ID of the search index(es) to include, multiple indexes separated by blanks -->
+    
+  	<!-- If this property is set, by default all fields in those indexes are included -->
+    <property name="search.indexes" value="metadata" />
+    <!-- Name(s) of the search fields to skip, separated by blanks. -->
+    
+  	<!-- If this property and search.indexes is set, the listed fields are NOT included in search mask -->
+    <property name="skip.fields" value="" />
+    <!-- Name(s) of the search fields to include, separated by blanks. -->
+    
+  	<!-- If this property is set, ONLY these search fields will be included in search mask -->
+    <property name="search.fields" value="maintitles subtitles mainedis subedis authors contribus dates keywords classis abstracts
+    	identis languages rightsjournal notes types predeces predeceslink successors successorslink" />
+    
+  	<!-- Optional restriction (hidden condition) for search -->
+    <!-- Syntax: "field operator value", separated by blanks -->
+    <!-- Example: "objectType = document" -->
+    <property name="restriction" value="objectType = jpjournal" />
+    
+  	<!-- List of fields to include as sort criteria of results -->
+    <!-- If empty, sort panel is not displayed -->
+    <property name="sort.fields" value="maintitles dates" />
+
+    <!-- If true, include a panel to select hosts to query -->
+    <property name="include.hostsSelectionPanel" value="true" />
+  	
+  	<!-- Layout of search mask: simple or advanced -->
+  	<!-- simple: one line per field, default operator, combine conditions with and -->
+  	<!-- advanced: choose fields and operators from drop-down list, choose and/or -->
+  	<property name="layout" value="advanced" />
+		
+  	<echo>Generating search mask from searchfields.xml</echo>
+  	
+    <copy file="${mycore.config}/fieldtypes.xml" toDir="${docportal.config}" />
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.config}/${filename.editor}"
+    	    force="true">
+      <param name="mode" expression="editor" />
+      <param name="filename.webpage" expression="${filename.webpage}" />
+      <param name="headline.i18n" expression="${headline.i18n}" />
+      <param name="search.indexes" expression="${search.indexes}" />
+      <param name="search.fields" expression="${search.fields}" />
+      <param name="skip.fields" expression="${skip.fields}" />
+    	<param name="restriction" expression="${restriction}" />
+      <param name="sort.fields" expression="${sort.fields}" />
+      <param name="include.hostsSelectionPanel" expression="${include.hostsSelectionPanel}" />
+    	<param name="layout" expression="${layout}" />
+    </xslt>
+  	<echo>Generated editor definition file ${filename.editor}</echo>
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.webpages}/${filename.webpage}"
+    	    force="true">
+      <param name="mode" expression="webpage" />
+      <param name="filename.editor" expression="${filename.editor}" />
+      <param name="title.de" expression="${title.de}" />
+      <param name="title.en" expression="${title.en}" />
+    </xslt>
+  	<echo>Generated webpage ${filename.webpage}</echo>
+    <delete file="${docportal.config}/fieldtypes.xml" />
+  </target>	
+	
+  <!-- =================================================================== -->
+  <target name="searchmask-volume" description="Generates search mask for volumes">
+		
+    <!-- Filename of the editor definition file that defines the search mask form -->
+    <property name="filename.editor2"  value="editor-search-volume.xml" />
+    <!-- Filename of the webpage that contains the search mask -->
+    <property name="filename.webpage2" value="editor_form_search-volume.xml" />
+    <!-- i18n key of search mask headline -->
+    <property name="headline.i18n2" value="editor.search.volume.label" />
+    <!-- Title of webpage in German -->
+    <property name="title.de2" value="Suche nach Ausgaben" />
+    <!-- Title of webpage in English -->
+    <property name="title.en2" value="Search for volumes" />
+    <!-- ID of the search index(es) to include, multiple indexes separated by blanks -->
+    
+  	<!-- If this property is set, by default all fields in those indexes are included -->
+    <property name="search.indexes2" value="metadata" />
+    <!-- Name(s) of the search fields to skip, separated by blanks. -->
+    
+  	<!-- If this property and search.indexes is set, the listed fields are NOT included in search mask -->
+    <property name="skip.fields2" value="" />
+    <!-- Name(s) of the search fields to include, separated by blanks. -->
+    
+  	<!-- If this property is set, ONLY these search fields will be included in search mask -->
+    <property name="search.fields2" value="maintitles2 subtitles2 mainedis2 subedis2 authors2 contribus2 dates2 
+    	keywords2 abstracts2 identis2 languages2 rightsjournal2 notes2" />
+    
+  	<!-- Optional restriction (hidden condition) for search -->
+    <!-- Syntax: "field operator value", separated by blanks -->
+    <!-- Example: "objectType = document" -->
+    <property name="restriction2" value="objectType = jpvolume" />
+    
+  	<!-- List of fields to include as sort criteria of results -->
+    <!-- If empty, sort panel is not displayed -->
+    <property name="sort.fields2" value="maintitles dates" />
+
+    <!-- If true, include a panel to select hosts to query -->
+    <property name="include.hostsSelectionPanel2" value="true" />
+  	
+  	<!-- Layout of search mask: simple or advanced -->
+  	<!-- simple: one line per field, default operator, combine conditions with and -->
+  	<!-- advanced: choose fields and operators from drop-down list, choose and/or -->
+  	<property name="layout2" value="advanced" />
+		
+  	<echo>Generating search mask from searchfields.xml</echo>
+  	
+    <copy file="${mycore.config}/fieldtypes.xml" toDir="${docportal.config}" />
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.config}/${filename.editor2}"
+    	    force="true">
+      <param name="mode" expression="editor" />
+      <param name="filename.webpage" expression="${filename.webpage2}" />
+      <param name="headline.i18n" expression="${headline.i18n2}" />
+      <param name="search.indexes" expression="${search.indexes2}" />
+      <param name="search.fields" expression="${search.fields2}" />
+      <param name="skip.fields" expression="${skip.fields2}" />
+    	<param name="restriction" expression="${restriction2}" />
+      <param name="sort.fields" expression="${sort.fields2}" />
+      <param name="include.hostsSelectionPanel" expression="${include.hostsSelectionPanel2}" />
+    	<param name="layout" expression="${layout2}" />
+    </xslt>
+  	<echo>Generated editor definition file ${filename.editor2}</echo>
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.webpages}/${filename.webpage2}"
+    	    force="true">
+      <param name="mode" expression="webpage" />
+      <param name="filename.editor" expression="${filename.editor2}" />
+      <param name="title.de" expression="${title.de2}" />
+      <param name="title.en" expression="${title.en2}" />
+    </xslt>
+  	<echo>Generated webpage ${filename.webpage2}</echo>
+    <delete file="${docportal.config}/fieldtypes.xml" />
+  </target>	
+
+  <!-- =================================================================== -->
+  <target name="searchmask-article" description="Generates search mask for volumes">
+		
+    <!-- Filename of the editor definition file that defines the search mask form -->
+    <property name="filename.editor3"  value="editor-search-article.xml" />
+    <!-- Filename of the webpage that contains the search mask -->
+    <property name="filename.webpage3" value="editor_form_search-article.xml" />
+    <!-- i18n key of search mask headline -->
+    <property name="headline.i18n3" value="editor.search.article.label" />
+    <!-- Title of webpage in German -->
+    <property name="title.de3" value="Suche nach Artikeln" />
+    <!-- Title of webpage in English -->
+    <property name="title.en3" value="Search for articles" />
+    <!-- ID of the search index(es) to include, multiple indexes separated by blanks -->
+    
+  	<!-- If this property is set, by default all fields in those indexes are included -->
+    <property name="search.indexes3" value="metadata" />
+    <!-- Name(s) of the search fields to skip, separated by blanks. -->
+    
+  	<!-- If this property and search.indexes is set, the listed fields are NOT included in search mask -->
+    <property name="skip.fields3" value="" />
+    <!-- Name(s) of the search fields to include, separated by blanks. -->
+    
+  	<!-- If this property is set, ONLY these search fields will be included in search mask -->
+    <property name="search.fields3" value="maintitles3 subtitles3 publishers3 authors3 contribus3 dates3 
+    	keywords3 classis3 classispub classispub2 classispub3 abstracts3 identis3 languages3 rightsjournal3
+    	notes3 types3 rubrics3 sizes3 refs3" />
+    
+  	<!-- Optional restriction (hidden condition) for search -->
+    <!-- Syntax: "field operator value", separated by blanks -->
+    <!-- Example: "objectType = document" -->
+    <property name="restriction3" value="objectType = jparticle" />
+    
+  	<!-- List of fields to include as sort criteria of results -->
+    <!-- If empty, sort panel is not displayed -->
+    <property name="sort.fields3" value="maintitles dates" />
+
+    <!-- If true, include a panel to select hosts to query -->
+    <property name="include.hostsSelectionPanel3" value="true" />
+  	
+  	<!-- Layout of search mask: simple or advanced -->
+  	<!-- simple: one line per field, default operator, combine conditions with and -->
+  	<!-- advanced: choose fields and operators from drop-down list, choose and/or -->
+  	<property name="layout3" value="advanced" />
+		
+  	<echo>Generating search mask from searchfields.xml</echo>
+  	
+    <copy file="${mycore.config}/fieldtypes.xml" toDir="${docportal.config}" />
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.config}/${filename.editor3}"
+    	    force="true">
+      <param name="mode" expression="editor" />
+      <param name="filename.webpage" expression="${filename.webpage3}" />
+      <param name="headline.i18n" expression="${headline.i18n3}" />
+      <param name="search.indexes" expression="${search.indexes3}" />
+      <param name="search.fields" expression="${search.fields3}" />
+      <param name="skip.fields" expression="${skip.fields3}" />
+    	<param name="restriction" expression="${restriction3}" />
+      <param name="sort.fields" expression="${sort.fields3}" />
+      <param name="include.hostsSelectionPanel" expression="${include.hostsSelectionPanel3}" />
+    	<param name="layout" expression="${layout3}" />
+    </xslt>
+  	<echo>Generated editor definition file ${filename.editor3}</echo>
+    <xslt basedir="${docportal.config}"
+          classpathref="docportal.classpath"
+          in="${docportal.config}/searchfields.xml"
+          style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+          out="${docportal.webpages}/${filename.webpage3}"
+    	    force="true">
+      <param name="mode" expression="webpage" />
+      <param name="filename.editor" expression="${filename.editor3}" />
+      <param name="title.de" expression="${title.de3}" />
+      <param name="title.en" expression="${title.en3}" />
+    </xslt>
+  	<echo>Generated webpage ${filename.webpage3}</echo>
+    <delete file="${docportal.config}/fieldtypes.xml" />
+  </target>
+	
 	
 </project>
