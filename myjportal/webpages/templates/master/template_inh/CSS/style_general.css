@@ -1,0 +1,88 @@
+html, body {
+    margin: 0px;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+
+#border {
+	border-top: 0px solid #BAB6A9; 
+	border-left: 0px solid #BAB6A9; 
+	border-right: 0px solid #BAB6A9;
+	height : 100%; 
+	width : 990px;
+	}
+
+#footer1 {
+	width : 990px;
+	height : 40px;
+	border: 0px solid black;
+	margin : 0px;
+	}
+#login_div {
+	width: 200px; 
+	height : 25px; 
+	float : left;
+	text-align: left;
+	padding-top : 120px;
+	padding-left : 55px;
+}
+#navigation {
+	width : 435px;
+	height : 25px;
+    float: right;
+	margin-top: 15px;
+	text-align : right;
+    margin-left: 300px;
+    margin-right 0px;
+}
+#banner {
+	width : 990px;
+	height : 140px;
+	border : 0px solid red;
+	/*padding-top : 0px;*/
+	/*padding-left : 0px;*/
+}
+#banner_left {
+	width : 255px;
+	height : 140px;
+	border : 0px solid red;
+	/*padding-top : 0px;*/
+	/*padding-left : 0px;*/
+	float: left;
+}
+#banner_right {
+	width : 735px;
+	height : 140px;
+	border : 0px solid red;
+	/*padding-top : 0px;*/
+	/*padding-left : 0px;*/
+	float: right;
+}
+#div_navi_main {
+	float: left;
+	width : 230px;
+	min-height : 156px;
+	background-color: #a0dbdd;
+	/*height : 200px;*/	
+	padding-left : 25px;
+	border: 0px solid black;
+	repeat: repeat-y;
+}
+#contentArea {
+	width : 720px;
+	float: right;
+    border : 0px solid black;
+}
+#navi_under {
+	width : 255px;
+	height: 181px;
+	float: left;
+    border : 0px solid black;
+}
+#navi_all {
+	width : 255px;
+	float: left;
+    border : 0px solid black;
+}      	

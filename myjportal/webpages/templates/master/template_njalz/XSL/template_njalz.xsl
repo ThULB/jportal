@@ -11,25 +11,32 @@
 <!-- ============================================== -->
 <!-- the template                                   -->
 <!-- ============================================== -->
-<xsl:template name="template_jalz">
+<xsl:template name="template_njalz">
     <html>
 	<head>
-	    <!--<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>-->
-            <title>
-		<xsl:call-template name="PageTitle"/>
-            </title>
-            <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" 
-                  rel="stylesheet" type="text/css"/>
-            <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" 
-                  rel="stylesheet" type="text/css"/>
-            <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css" 
-                  rel="stylesheet" type="text/css"/>
-		    <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" 
-				  rel="stylesheet" type="text/css"/>
-            <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
-				  type="text/javascript"/>
-		    <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
-				  type="text/javascript"/>		
+		
+		<!--<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>-->
+		<title>
+			<xsl:call-template name="PageTitle"/>
+		</title>
+		<link
+			href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css"
+			rel="stylesheet" type="text/css"/>
+		<link
+			href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css"
+			rel="stylesheet" type="text/css"/>
+		<link
+			href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
+			rel="stylesheet" type="text/css"/>
+		<link
+			href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
+			rel="stylesheet" type="text/css"/>
+		<script language="JavaScript"
+			src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
+			type="text/javascript"/>
+		<script language="JavaScript"
+			src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
+			type="text/javascript"/>
 	</head>
 
 	<body>
@@ -50,7 +57,7 @@
 		    <td class="login_navi_row"/>
 		    <!-- Begin: Login ===================================================================== -->
 		    <td rowspan="3" class="login_row">
-			    <xsl:call-template name="template_jalz.userInfo"/>
+			    <xsl:call-template name="template_njalz.userInfo"/>
 		    </td>
 		    <!-- End: Login ======================================================================= -->
 		
@@ -167,11 +174,10 @@
 		    
 		    <!-- Begin: Content Area  ============================================================== -->
 		    <td id="contentArea">
-			   <xsl:call-template name="getFastWCMS" />									
 		    <div id="contentWrapper">
-			<xsl:call-template name="template_jalz.write.content"/>
+			<xsl:call-template name="getFastWCMS" />	
+			<xsl:call-template name="template_njalz.write.content"/>
 		    </div>
-
 		    </td>
 		    <!-- End: Content Area  ================================================================ -->
 		</tr>
@@ -195,7 +201,7 @@
 </xsl:template>
 
 <!-- Template for Content ================================================================================== -->
-<xsl:template name="template_jalz.write.content">
+<xsl:template name="template_njalz.write.content">
    <div class="headline">
            <xsl:value-of select="$PageTitle"/>
    </div>
@@ -203,7 +209,7 @@
 </xsl:template>
 
 <!-- Template for User info ================================================================================ -->	
-<xsl:template name="template_jalz.userInfo">
+<xsl:template name="template_njalz.userInfo">
 
     <!-- BEGIN: login values -->
     <xsl:variable 
@@ -214,7 +220,7 @@
 	<table class="login_window" border="0" cellspacing="0" cellpadding="0">
 	    <tr>
 		<td class="login_text">
-		   <text i18n="editor.start.LoginText.label"/>:
+		    <text i18n="editor.start.LoginText.label"/>:
 		</td>
 		<td class="user_id">
 		    <p class="whitebox"><xsl:value-of select="$CurrentUser" /></p>

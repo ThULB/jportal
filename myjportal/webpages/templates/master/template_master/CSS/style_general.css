@@ -1,0 +1,193 @@
+/* =================================================================== */
+/* The page is build as following:								   */
+/* 	the .border class enclose .mainSite_MenuArea class wich enclose	   */
+/*	.mainSite_ContentArea class									   */
+/*	wich eclose most of the rest, logo, content area etc.			   */
+/*	except main menu on the left which lies outside of 			   */
+/*	.mainSite_ContentArea											   */
+/* =================================================================== */
+/* general page                                                        */
+/* =================================================================== */
+
+html, body {
+	margin: 0px;
+	color: #000000; 
+    background-color: #ffffff;
+    font-family: Verdana, Helvetica, sans-serif, Myriad Pro, Myriad ;
+    font-size: 11px;
+    height: 100%;
+}
+
+.logoBar{
+	margin: 0px;
+	background: #ffffff url(../IMAGES/logo_bar.gif) no-repeat;
+	height: 212px;
+}
+
+/* =================================================================== */
+/* .border class is responsible for the border around everything you   */
+/* can see	  		   											   */
+/* =================================================================== */
+.border{
+	position: relative;
+	min-height: 100%;
+    height: auto !important;
+    height: 100%;
+	width: 996px;
+	background: url(../IMAGES/bg_line.gif) repeat-y;
+	border-style: solid solid solid solid;
+    border-width: 1px;
+    border-color: #253767;
+}
+
+/* =================================================================== */
+/* Supress an overflow of the outer box							   */
+/* =================================================================== */
+div:after{
+	content: ".";
+	display: block;
+	height: 0px;
+	clear: both;
+	visibility: hidden;
+}
+
+/* =================================================================== */
+/* .dot_line class is responsible for the dotted line you can see 	   */
+/* beside the UrMEL logo  		   								   */
+/* =================================================================== */
+.dotLine{
+	height: 1px;
+	width: 655px;
+	float: right;
+	clear: right;
+	background: url(../IMAGES/dot_line.gif) repeat-x;
+}
+
+.greyBar{
+	height: 37px;
+	width: 655px;
+	float:right;
+	background: #dfe1e1;
+}
+
+.greyBar div{
+	float: right;
+	padding-top: 13px;
+	padding-right: 10px;
+}
+
+* html .greyBar{
+	margin-top: -12px;
+}
+
+/* =================================================================== */
+/* .blackbar class is responsible for the black bar with the 	 	   */
+/* navigation links		  		   								   */
+/* =================================================================== */
+.blackBar{
+	height: 26px;
+	width: 655px;
+	float: right;
+	clear: right;
+	background: #444444;
+	border-top-style: solid;
+	border-top-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-width: 8px;
+    border-color: #ffffff;
+}
+
+/* =================================================================== */
+/* this below is for the right spacing of the links inside of blackbar */
+/* =================================================================== */
+.blackBar div{
+	float: right;
+	padding-top: 6px;
+}
+
+#footer {
+	position: absolute;
+	bottom: 0px;
+	margin-left: 35px;
+	background: #dfe1e1;
+	clear: both;
+}
+
+#footer a, #footer span{
+	padding-top: 10px;
+	margin-left: 3px;
+	margin-right: 3px;
+	float: left;
+}
+
+#footer a{
+	color: #717171;
+	text-decoration: none;
+}
+#footer a:hover {
+	color: #253767;
+	text-decoration: underline;
+}
+
+#thulb{
+	display: block;
+	height: 21px;
+	width: 65px;
+	background: url(../IMAGES/logo_thulb.gif) no-repeat;
+	border-width: 1px;
+}
+
+#thulb:hover {
+	background-image: url(../IMAGES/logo_thulb_red.gif);
+}
+
+/* ================================================================= */
+/* = old 													    = */
+/* ================================================================= */
+#head {
+	min-width: 500px;
+	height:150px;
+	background: URL('../IMAGES/bg_urmel1.jpg') repeat-x;
+	border-top: 5px solid #fff;
+	position:relative;
+}
+
+
+#head2 {
+	float: right;
+	text-align: right;
+	margin: 0; 
+	padding:0;
+	}
+
+#head div {margin: 0; padding:0;}
+
+#head2 div.p1 {
+	height: px;
+	padding: 55px 5px 5px 0;
+	}
+
+#head2 div.flag {
+	height: px;
+	padding: 55px 5px 5px 0;
+	}
+
+#head2 div.p2 {
+	padding: 46px 70px 0px 0px;
+	color: #fff:
+	border : 1px solid #000;
+	}
+
+#menu {
+	clear:both;
+	float: left;
+	padding-left: 25px;
+	width: 190px;
+	position:relative;
+}
+#content {
+	margin-left: 260px;
+	margin-top: 15px;
+	width:70%;
+	position:relative;
+}

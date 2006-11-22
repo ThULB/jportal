@@ -25,6 +25,15 @@
 				<link
 					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css"
 					rel="stylesheet" type="text/css"/>
+				<link
+					href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
+					rel="stylesheet" type="text/css"/>
+				<script language="JavaScript"
+					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
+					type="text/javascript"/>
+				<script language="JavaScript"
+					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
+					type="text/javascript"/>
 				<xsl:copy-of select="$head.additional"/>
 			</head>
 			
@@ -119,6 +128,7 @@
 										
 										<!-- IE Fix: contentWrapper needed :o( -->
 										<div id="contentWrapper">
+											<xsl:call-template name="getFastWCMS" />
 											<xsl:call-template
 												name="template_pamietnik.write.content"/>
 										</div>
@@ -160,7 +170,7 @@
 			select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?lang=',$CurrentLang,'&amp;amp;url=', encoder:encode( string( $RequestURL ) ) )"/>
 		<!-- END OF: login values -->
 		
-<!--		<xsl:value-of select="$Layout.LoginText"/>:-->
+        <text i18n="editor.start.LoginText.label"/>:       
 		<a href="{$LoginURL}">
 			<xsl:value-of select="$CurrentUser"/>
 		</a>
