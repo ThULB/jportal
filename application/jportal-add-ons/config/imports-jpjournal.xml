@@ -25,10 +25,6 @@
             <!-- date -->
             <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
             <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
-            <!-- keyword -->
-            <cell row="80" col="1" anchor="NORTHWEST" ref="keyword_label" />
-            <cell row="80" col="2" anchor="NORTHWEST" ref="keyword_input" />
-            <cell row="80" col="3" anchor="WEST" ref="keyword_help" />
             <!-- classi -->
             <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
             <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
@@ -53,10 +49,6 @@
             <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
             <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
             <cell row="160" col="3" anchor="WEST" ref="note_help" />
-            <!-- type -->
-            <cell row="170" col="1" anchor="NORTHWEST" ref="type_label_bold" />
-            <cell row="170" col="2" anchor="NORTHWEST" ref="type_input" />
-            <cell row="170" col="3" anchor="NORTHWEST" ref="type_help" />
             <!-- predece -->
             <cell row="180" col="1" anchor="NORTHWEST" ref="predece_label" />
             <cell row="180" col="2" anchor="NORTHWEST" ref="predece_input" />
@@ -112,16 +104,6 @@
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096"  />
       </panel>
       <!-- end: SubTitle -->
-      <!-- keyword ================================================================== -->
-      <panel id="keyword_input">
-            <hidden var="metadata/keywords/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/keywords/@parasearch" default="true" />
-            <hidden var="metadata/keywords/@textsearch" default="true" />
-            <hidden var="metadata/keywords/@heritable" default="true" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/keywords/keyword/@lang" ordernr="1" default="de" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/keywords/keyword" ordernr="1" />
-      </panel>
-      <!-- end: keyword -->
       <!-- classi ================================================================== -->
       <panel id="classi_input">
             <hidden var="metadata/classis/@class" default="MCRMetaClassification" />
@@ -227,21 +209,6 @@
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
       </panel>
       <!-- end: note -->
-      <!-- type ================================================================== -->
-      <panel id="type_input">
-            <hidden var="metadata/types/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/types/@parasearch" default="true" />
-            <hidden var="metadata/types/@textsearch" default="false" />
-            <hidden var="metadata/types/@notinherit" default="false" />
-            <hidden var="metadata/types/@heritable" default="false" />
-            <hidden var="metadata/types/type/@inherited" default="0" />
-            <hidden var="metadata/types/type/@classid" default="jportal_class_00000005" />
-            <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" ordernr="18" />
-      </panel>
-      <list id="Ctype" width="300" type="dropdown">
-		    <include uri="classification:editor:-1:children:jportal_class_00000005" />		  
-      </list>
-      <!-- end: type -->
       <!-- predece ================================================================== -->
       <panel id="predece_input">
             <hidden var="metadata/predeces/@class" default="MCRMetaLink" />

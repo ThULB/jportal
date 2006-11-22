@@ -32,29 +32,7 @@
 		    <!-- date -->
 			<element name="dates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 				<mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='1'/>
-			</element>		             
-            <!-- 07 - keywords -->
-            <element name="keywords" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
-            </element>                                    
-            <!-- 09 - abstract -->
-            <!-- type = short | long | toc -->
-            <element name="abstracts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-                  <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
-            </element>
-            <!-- 11 - identis -->
-            <!-- type = issn | isbn | nbn | doi | misc. -->
-            <element name="identis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
-            </element>                        
-            <!-- 12 - language -->
-            <element name="languages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='1' maxOccurs='unbounded' />
-            </element>                        
-            <!-- 13 - rights -->
-            <element name="rights" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
-            </element>                        
+			</element>		                     
             <!-- 14 - notes -->
             <element name="notes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />

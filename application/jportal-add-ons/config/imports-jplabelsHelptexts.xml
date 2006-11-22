@@ -155,13 +155,13 @@
 	<!-- *** Data for the mainauthor *** -->
 	<text id="participants_label">
 		<label xml:lang="de">
-			<span class="editorlabel">Mitwirkende:</span>
+			<span class="editorlabel">Beteiligte:</span>
 		</label>
 	</text>
 	<text id="participants_label_bold">
 		<label xml:lang="de">
 			<b>
-				<span class="editorlabel">Mitwirkende:</span>
+				<span class="editorlabel">Beteiligte:</span>
 			</b>				
 		</label>
 	</text>	
@@ -485,7 +485,7 @@
 	<!-- *** size *** -->
 	<text id="size_label">
 		<label xml:lang="de">
-			<span class="editorlabel">Umfang:</span>
+			<span class="editorlabel">Seitenbereich:</span>
 		</label>
 		<label xml:lang="ru">
 			<span class="editorlabel">Размер:</span>
@@ -636,12 +636,19 @@
 	</helpPopup>
 	<text id="LINameP">
 		<label xml:lang="de">
-			<span class="editorlabel">   Name (*)   </span>
+			<span class="editorlabel">   Name       </span>
 		</label>
 		<label xml:lang="en">
-			<span class="editorlabel">   Name (*)   </span>
+			<span class="editorlabel">   Name       </span>
 		</label>
 	</text>
+	<text id="LINameP_bold">
+		<label xml:lang="de">
+			<b><span class="editorlabel">   Name       </span></b>
+		</label>
+		<label xml:lang="en"><b><span class="editorlabel">   Name       </span></b>
+		</label>
+	</text>	
 	<helpPopup id="HIName" width="400px" height="250px">
 		<label xml:lang="de"> In diesem Feld tragen Sie bitte den Namen der Einrichtung oder
 			Institution ein. Die Eingabe kann auch aus Wortstücken bestehen, welche mit

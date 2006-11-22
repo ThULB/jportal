@@ -5,17 +5,7 @@
       <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />
       <components root="editor-jpinst" var="/mycoreobject">
             <include uri="webapp:editor/imports-jpinst.xml" />
-            <headline anchor="LEFT">
-                  <text>
-                        <label xml:lang="de">
-                              <b>Plichtfelder sind fett</b>
-                        </label>
-					  <label xml:lang="ru">
-                              <b>Поля для обязательного заплнения обозначены жирным шрифтом</b>
-                        </label>
-                  </text>
-            </headline>
-            <panel id="editor-jpinst">
+		    <panel id="editor-jpinst">
                   <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jpinst" />
             </panel>
       </components>

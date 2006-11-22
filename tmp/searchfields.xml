@@ -52,19 +52,14 @@
 	<!-- Search in journals metadata -->
     <field name="maintitles"     type="name"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
 	<field name="subtitles"      type="name"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
-	<field name="mainedis"       type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/mainedis/mainedi" value="@xlink:href" i18n="editor.search.document.mainedi" />
-	<field name="subedis"        type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subedis/subedi" value="@xlink:href" i18n="editor.search.document.subedi" />
-	<field name="authors"        type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/authors/author" value="@xlink:href" i18n="editor.search.document.author" />
-	<field name="contribus"      type="name"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/contribus/contribu" value="text()" i18n="editor.search.document.contribu" />
-	<field name="dates"          type="date"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
-	<field name="keywords"       type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editor.search.document.keyword" />
+	<field name="participants"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" i18n="editor.search.document.mainedi" />
+  	<field name="dates"          type="date"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
 	<field name="classis"        type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/classis/classi" value="classid" i18n="editor.search.document.classi" />
 	<field name="abstracts"      type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editor.search.document.abstract" />
 	<field name="identis"        type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editor.search.document.identi" />
 	<field name="languages"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/languages/language" value="@xlink:href" i18n="editor.search.document.language" />
 	<field name="rightsjournal"  type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/rights/right" value="text()" i18n="editor.search.document.right" />                
 	<field name="notes"          type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
-	<field name="types"          type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/types/type" value="@xlink:href" i18n="editor.search.document.type" />
 	<field name="predeces"       type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/predeces/predece" value="@xlink:title" i18n="editor.search.document.predece" />
 	<field name="predeceslink"   type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/predeces/predece" value="@xlink:href" i18n="editor.search.document.predecelink" />  	  
 	<field name="successors"     type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/successors/successor" value="@xlink:title" i18n="editor.search.document.successor" />
@@ -73,25 +68,14 @@
 	<!-- Search in volumes metadata -->  
 	<field name="maintitles2"     type="name"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
 	<field name="subtitles2"      type="name"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
-	<field name="mainedis2"       type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/mainedis/mainedi" value="@xlink:href" i18n="editor.search.document.mainedi" />
-	<field name="subedis2"        type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subedis/subedi" value="@xlink:href" i18n="editor.search.document.subedi" />
-	<field name="authors2"        type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/authors/author" value="@xlink:href" i18n="editor.search.document.author" />
-	<field name="contribus2"      type="name"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/contribus/contribu" value="text()" i18n="editor.search.document.contribu" />
+	<field name="participants2"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" i18n="editor.search.document.mainedi" />
 	<field name="dates2"          type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
-	<field name="keywords2"       type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editor.search.document.keyword" />
-	<field name="abstracts2"      type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editor.search.document.abstract" />
-	<field name="identis2"        type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editor.search.document.identi" />
-	<field name="languages2"      type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/languages/language" value="@xlink:href" i18n="editor.search.document.language" />
-	<field name="rightsjournal2"  type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/rights/right" value="text()" i18n="editor.search.document.right" />                
 	<field name="notes2"          type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
-	<field name="types2"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/types/type" value="@xlink:href" i18n="editor.search.document.type" />  
 	
 	<!-- Search in article metadata -->
     <field name="maintitles3"     type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
 	<field name="subtitles3"      type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
-	<field name="publishers3"     type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/publishers/publisher" value="@xlink:href" i18n="editor.search.document.publisher" />
-	<field name="authors3"        type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/authors/author" value="@xlink:href" i18n="editor.search.document.author" />
-	<field name="contribus3"      type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/contribus/contribu" value="text()" i18n="editor.search.document.contribu" />
+	<field name="participants3"   type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" i18n="editor.search.document.mainedi" />
 	<field name="dates3"          type="date"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
 	<field name="keywords3"       type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editor.search.document.keyword" />
 	<field name="classis3"        type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/classis/classi" value="classid" i18n="editor.search.document.classi" />
@@ -100,8 +84,6 @@
 	<field name="classispub3"     type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/classispub1/classipub3" value="classid" i18n="editor.search.document.classi3" />
 	<field name="abstracts3"      type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editor.search.document.abstract" />
 	<field name="identis3"        type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editor.search.document.identi" />
-	<field name="languages3"      type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/languages/language" value="@xlink:href" i18n="editor.search.document.language" />
-	<field name="rightsjournal3"  type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/rights/right" value="text()" i18n="editor.search.document.right" />                
 	<field name="notes3"          type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
 	<field name="types3"          type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/types/type" value="@xlink:href" i18n="editor.search.document.type" />
 	<field name="rubrics3"        type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/rubrics/rubric" value="text()" i18n="editor.search.document.rubric" />

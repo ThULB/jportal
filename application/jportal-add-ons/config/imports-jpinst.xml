@@ -10,11 +10,9 @@
 		<hidden var="service/servacls" descendants="true"/>
 		<hidden var="service/servflags" descendants="true"/>
 		<!--name-->
-		<cell col="1" row="10" anchor="NORTHWEST" ref="LINameP"/>
+		<cell col="1" row="10" anchor="NORTHWEST" ref="LINameP_bold"/>
 		<cell col="2" row="10" anchor="NORTHWEST" ref="DIName"/>
-		<cell col="3" row="10" anchor="NORTHWEST">
-			<space width="20" height="0"/>
-		</cell>
+		<cell col="3" row="10" anchor="NORTHWEST"><space width="20" height="0"/></cell>
 		<cell col="4" row="10" anchor="WEST" ref="HIName"/>
 		<!-- address -->
 		<cell col="1" row="20" anchor="NORTHWEST" ref="LAddress"/>
@@ -51,13 +49,11 @@
 			<space width="20" height="0"/>
 		</cell>
 		<cell col="4" row="60" anchor="WEST" ref="HNote"/>
-		<!-- hidden service data -->
-<!--		<cell row="70" col="2" anchor="NORTHWEST" ref="righstManag_input"/>-->
 		<!-- save / cancel button -->
 		<cell row="190" col="1" anchor="EAST"/>
 		<cell row="190" col="2" anchor="EAST" ref="save"/>
 	</panel>
-	
+	<!-- ========================================================================================================================= -->
 	<panel id="DIName">
 		<hidden var="metadata/names/@class" default="MCRMetaInstitutionName"/>
 		<hidden var="metadata/names/@parasearch" default="true"/>
@@ -65,49 +61,33 @@
 		<hidden var="metadata/names/@notinherit" default="false"/>
 		<hidden var="metadata/names/@heritable" default="true"/>
 		<hidden var="metadata/names/name/@inherited" default="0"/>
-		
-		<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/names/name/@lang" ordernr="1" default="de" />-->
-		<cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128"
-			var="metadata/names/name/fullname" ordernr="1"/>
+		<cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/names/name/fullname" ordernr="1"/>
 		<cell col="3" row="1" anchor="NORTHWEST" ref="AINameName"/>
-		<cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile32"
-			var="metadata/names/name/nickname" ordernr="1"/>
+		<cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/names/name/nickname" ordernr="1"/>
 		<cell col="3" row="2" anchor="NORTHWEST" ref="AINameNick"/>
-		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile32"
-			var="metadata/names/name/property" ordernr="1"/>
+		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile32" var="metadata/names/name/property" ordernr="1"/>
 		<cell col="3" row="3" anchor="NORTHWEST" ref="AINameProp"/>
 	</panel>
+	<!-- ========================================================================================================================= -->	
 	<panel id="DAddress">
 		<hidden var="metadata/addresses/@class" default="MCRMetaAddress"/>
 		<hidden var="metadata/addresses/@parasearch" default="false"/>
 		<hidden var="metadata/addresses/@textsearch" default="false"/>
 		<hidden var="metadata/addresses/@notinherit" default="false"/>
 		<hidden var="metadata/addresses/@heritable" default="true"/>
-		<hidden var="metadata/addresses/address/@inherited" default="0"/>
--		<cell col="2" row="1" anchor="NORTHWEST" var="metadata/addresses/address/country" >
-			<list width="160" type="dropdown">
-				<item value="unknown">
-					<label xml:lang="de">unbekannt</label>
-				</item>
-				<include
-					uri="classification:editor:-1:children:jportal_class_00000001"/>
-			</list>
-		</cell>
+		<hidden var="metadata/addresses/address/@inherited" default="0"/> -
+		<cell col="2" row="1" anchor="NORTHWEST" var="metadata/addresses/address/country" ref="TFzeile128"/>
 		<cell col="3" row="1" anchor="NORTHWEST" ref="AAddressCountry"/>
-		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile10"
-			var="metadata/addresses/address/zipcode" ordernr="2"/>
+		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile10" var="metadata/addresses/address/zipcode" ordernr="2"/>
 		<cell col="3" row="3" anchor="NORTHWEST" ref="AAddressZIP"/>
-		<cell col="2" row="4" anchor="NORTHWEST" ref="TFzeile128"
-			var="metadata/addresses/address/city" ordernr="2"/>
+		<cell col="2" row="4" anchor="NORTHWEST" ref="TFzeile128" var="metadata/addresses/address/city" ordernr="2"/>
 		<cell col="3" row="4" anchor="NORTHWEST" ref="AAddressCity"/>
-		<cell col="2" row="5" anchor="NORTHWEST" ref="TFzeile128"
-			var="metadata/addresses/address/street" ordernr="2"/>
+		<cell col="2" row="5" anchor="NORTHWEST" ref="TFzeile128" var="metadata/addresses/address/street" ordernr="2"/>
 		<cell col="3" row="5" anchor="NORTHWEST" ref="AAddressStreet"/>
-		<cell col="2" row="6" anchor="NORTHWEST" ref="TFzeile10"
-			var="metadata/addresses/address/number" ordernr="2"/>
-		<cell col="3" row="6" anchor="NORTHWEST" ref="AAddressNumber"/>
+		<cell col="2" row="6" anchor="NORTHWEST" ref="TFzeile10" var="metadata/addresses/address/number" ordernr="2"/>
+		<cell col="3" row="6" anchor="NORTHWEST" ref="AAddressNumber"/> 
 	</panel>
-	
+	<!-- ========================================================================================================================= -->	
 	<panel id="DPhone">
 		<hidden var="metadata/phones/@class" default="MCRMetaLangText"/>
 		<hidden var="metadata/phones/@parasearch" default="false"/>
@@ -118,12 +98,14 @@
 			<repeater min="1" max="5" ref="DPhoneRef"/>
 		</cell>
 	</panel>
+	<!-- ========================================================================================================================= -->
 	<panel id="DPhoneRef">
 		<hidden var="@inherited" default="0"/>
 		<hidden var="@lang" default="de"/>
 		<cell col="1" row="1" anchor="NORTHWEST" ref="Sphone" var="@type" sortnr="3"/>
 		<cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" sortnr="3"/>
 	</panel>
+	<!-- ========================================================================================================================= -->	
 	<panel id="DURL">
 		<hidden var="metadata/urls/@class" default="MCRMetaLink"/>
 		<hidden var="metadata/urls/@parasearch" default="false"/>
@@ -142,6 +124,7 @@
 			var="metadata/urls/url/@href" ordernr="4"/>
 		<cell col="3" row="2" anchor="NORTHWEST" ref="AURLReference"/>
 	</panel>
+	<!-- ========================================================================================================================= -->	
 	<panel id="DEmail">
 		<hidden var="metadata/emails/@class" default="MCRMetaLangText"/>
 		<hidden var="metadata/emails/@parasearch" default="false"/>
@@ -149,11 +132,10 @@
 		<hidden var="metadata/emails/@notinherit" default="false"/>
 		<hidden var="metadata/emails/@heritable" default="true"/>
 		<hidden var="metadata/emails/email/@inherited" default="0"/>
-		
-		<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/emails/email/@lang" ordernr="5" default="de" />-->
 		<cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128"
 			var="metadata/emails/email" ordernr="5"/>
 	</panel>
+	<!-- ========================================================================================================================= -->	
 	<panel id="DNote">
 		<hidden var="metadata/notes/@class" default="MCRMetaLangText"/>
 		<hidden var="metadata/notes/@parasearch" default="false"/>
@@ -161,39 +143,7 @@
 		<hidden var="metadata/notes/@notinherit" default="false"/>
 		<hidden var="metadata/notes/@heritable" default="true"/>
 		<hidden var="metadata/notes/note/@inherited" default="0"/>
-		
-		<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="6" default="de" />-->
 		<cell col="2" row="1" anchor="NORTHWEST" ref="TFarea4096"
 			var="metadata/notes/note" ordernr="6" default=""/>
 	</panel>
-	
-	<!--rights management =======================================================================-->
-	<panel id="righstManag_input">
-		<hidden var="service/servflags/@class" default="MCRMetaLangText"/>
-		<hidden var="service/servflags/@parasearch" default="true"/>
-		<hidden var="service/servflags/@textsearch" default="false"/>
-		<hidden var="service/servflags/@notinherit" default="true"/>
-		<hidden var="service/servflags/@heritable" default="false"/>
-		
-		<!--            <cell row="1" col="1" anchor="NORTHWEST" ref="righstManag_access_label" />-->
-		<cell row="1" col="2" anchor="NORTHWEST" ref="righstManag_access_input"/>
-		
-		<!--            <cell row="20" col="1" anchor="NORTHWEST" ref="righstManag_state_label" />-->
-		<cell row="20" col="2" anchor="NORTHWEST" ref="righstManag_state_input"/>
-		
-		<!--            <cell row="30" col="1" anchor="NORTHWEST" ref="righstManag_ip_label" />-->
-		<cell row="30" col="2" anchor="NORTHWEST" ref="righstManag_ip_input"/>
-		<hidden var="service/servflags/servflag[4]/@inherited" default="0"/>
-		
-		<!--            <hidden var="service/servflags/servflag[4]/@lang" default="de" />-->
-		<hidden var="service/servflags/servflag[4]"/>
-		<hidden var="service/servflags/servflag[5]/@inherited" default="0"/>
-		
-		<!--            <hidden var="service/servflags/servflag[5]/@lang" default="de" />-->
-		<hidden var="service/servflags/servflag[5]"/>
-		<hidden var="service/servflags/servflag[6]/@inherited" default="0"/>
-		
-		<!--            <hidden var="service/servflags/servflag[6]/@lang" default="de" />-->
-		<hidden var="service/servflags/servflag[6]"/>
-	</panel>
-	<!--end: rights management--> </imports>
+ </imports>

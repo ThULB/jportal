@@ -25,30 +25,6 @@
             <!-- date -->
             <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
             <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
-            <!-- keyword -->
-            <cell row="80" col="1" anchor="NORTHWEST" ref="keyword_label" />
-            <cell row="80" col="2" anchor="NORTHWEST" ref="keyword_input" />
-            <cell row="80" col="3" anchor="WEST" ref="keyword_help" />
-            <!-- classi -->
-<!--            <cell row="9" col="1" anchor="NORTHWEST" ref="classi_label" />-->
-            <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
-<!--            <cell row="9" col="3" anchor="WEST" ref="classi_help" />-->
-            <!-- abstract -->
-            <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
-            <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
-            <cell row="100" col="3" anchor="WEST" ref="abstract_help" />
-            <!-- identi -->
-            <cell row="130" col="1" anchor="NORTHWEST" ref="identi_label" />
-            <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input" />
-            <cell row="130" col="3" anchor="WEST" ref="identi_help" />
-            <!-- lang -->
-            <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label" />
-            <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
-            <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
-            <!-- right -->
-            <cell row="150" col="1" anchor="NORTHWEST" ref="right_label" />
-            <cell row="150" col="2" anchor="NORTHWEST" ref="right_input" />
-            <cell row="150" col="3" anchor="WEST" ref="right_help" />
             <!-- note -->
             <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
             <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
@@ -94,32 +70,6 @@
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096"  />
       </panel>
       <!-- end: SubTitle -->
-      <!-- keyword ================================================================== -->
-      <panel id="keyword_input">
-            <hidden var="metadata/keywords/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/keywords/@parasearch" default="true" />
-            <hidden var="metadata/keywords/@textsearch" default="true" />
-            <hidden var="metadata/keywords/@heritable" default="true" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/keywords/keyword/@lang" ordernr="1" default="de" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/keywords/keyword" ordernr="1" />
-      </panel>
-      <!-- end: keyword -->
-      <!-- abstract ================================================================== -->
-      <panel id="abstract_input">
-            <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/abstracts/@parasearch" default="true" />
-            <hidden var="metadata/abstracts/@textsearch" default="true" />
-            <hidden var="metadata/abstracts/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/abstracts/abstract" ordernr="1" >
-                  <repeater min="0" max="3" anchor="NORTHWEST" ref="abstract_input_repeater" />
-            </cell>
-      </panel>
-      <panel id="abstract_input_repeater">
-            <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
-      </panel>
-      <!-- end: abstract -->
       <!-- date ================================================================== -->
       <panel id="date_input">
             <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
@@ -131,51 +81,6 @@
             <cell col="1" row="3" anchor="NORTHWEST" ref="TFzeile10" var="metadata/dates/date" />
       </panel>
       <!-- end: date -->
-      <!-- identi ================================================================== -->
-      <panel id="identi_input">
-            <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/identis/@parasearch" default="true" />
-            <hidden var="metadata/identis/@textsearch" default="true" />
-            <hidden var="metadata/identis/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identis/identi" ordernr="1" >
-                  <repeater min="0" max="10" anchor="NORTHWEST" ref="identi_input_repeater" />
-            </cell>
-      </panel>
-      <panel id="identi_input_repeater">
-            <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
-<!--            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
-            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
-      </panel>
-      <!-- end: identi -->
-      <!-- Lang ================================================================== -->
-      <panel id="cont_lang_input">
-            <hidden var="metadata/languages/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/languages/@parasearch" default="true" />
-            <hidden var="metadata/languages/@textsearch" default="false" />
-            <hidden var="metadata/languages/@notinherit" default="false" />
-            <hidden var="metadata/languages/@heritable" default="false" />
-            <hidden var="metadata/languages/language/@inherited" default="0" />
-            <hidden var="metadata/languages/language/@classid" default="jportal_class_00000004" />
-            <cell col="1" row="1" anchor=" NORTHWEST" ref="CLanguage" var="metadata/languages/language/@categid" />
-      </panel>
-      <list id="CLanguage" width="300" type="dropdown">
-            <item value="">
-                  <label xml:lang="de">
-                  </label>
-            </item>
-		    <include uri="classification:editor:-1:children:jportal_class_00000004" />		  
-      </list>
-      <!-- end: Lang -->
-      <!-- right ================================================================== -->
-      <panel id="right_input">
-            <hidden var="metadata/rights/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/rights/@parasearch" default="true" />
-            <hidden var="metadata/rights/@textsearch" default="true" />
-            <hidden var="metadata/rights/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/rights/right/@lang" ordernr="1" default="de" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/rights/right" ordernr="1" />
-      </panel>
-      <!-- end: right -->
       <!-- note ================================================================== -->
       <panel id="note_input">
             <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
@@ -186,84 +91,6 @@
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
       </panel>
       <!-- end: note -->
-      <!-- type ================================================================== -->
-      <panel id="type_input">
-            <hidden var="metadata/types/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/types/@parasearch" default="true" />
-            <hidden var="metadata/types/@textsearch" default="false" />
-            <hidden var="metadata/types/@notinherit" default="false" />
-            <hidden var="metadata/types/@heritable" default="false" />
-            <hidden var="metadata/types/type/@inherited" default="0" />
-            <hidden var="metadata/types/type/@classid" default="jportal_class_00000005" />
-            <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" ordernr="18" />
-      </panel>
-      <list id="Ctype" width="300" type="dropdown">
-		    <include uri="classification:editor:-1:children:jportal_class_00000005" />		  
-      </list>
-      <!-- end: type -->
-      <!-- predece ================================================================== -->
-      <panel id="predece_input">
-            <hidden var="metadata/predeces/@class" default="MCRMetaLink" />
-            <hidden var="metadata/predeces/@parasearch" default="true" />
-            <hidden var="metadata/predeces/@textsearch" default="true" />
-            <hidden var="metadata/predeces/@notinherit" default="false" />
-            <hidden var="metadata/predeces/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/predeces/predece">
-                  <repeater min="0" max="10" anchor="NORTHWEST" ref="predece_input_repeater" />
-            </cell>
-      </panel>
-      <panel id="predece_input_repeater">
-            <hidden var="@inherited" default="0" />
-            <hidden var="@type" default="locator" />
-            <cell col="1" row="1" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Name:</label>
-                  </text>
-            </cell>
-            <cell col="2" row="1" anchor="NORTHWEST" var="@title">
-                  <textfield id="predece_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
-            </cell>
-            <cell col="1" row="2" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Link:</label>
-                  </text>
-            </cell>
-            <cell col="2" row="2" anchor="NORTHWEST" var="@href" >
-                  <textfield id="predece_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
-            </cell>
-      </panel>
-      <!-- end: predece -->
-      <!-- successor ================================================================== -->
-      <panel id="successor_input">
-            <hidden var="metadata/successors/@class" default="MCRMetaLink" />
-            <hidden var="metadata/successors/@parasearch" default="true" />
-            <hidden var="metadata/successors/@textsearch" default="true" />
-            <hidden var="metadata/successors/@notinherit" default="false" />
-            <hidden var="metadata/successors/@heritable" default="false" />
-            <cell col="1" row="1" anchor="NORTHWEST" ordernr="3" var="metadata/successors/successor">
-                  <repeater min="0" max="10" anchor="NORTHWEST" ref="successor_input_repeater" />
-            </cell>
-      </panel>
-      <panel id="successor_input_repeater">
-            <hidden var="@inherited" default="0" />
-            <hidden var="@type" default="locator" />
-            <cell col="1" row="1" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Name:</label>
-                  </text>
-            </cell>
-            <cell col="2" row="1" anchor="NORTHWEST" var="@title">
-                  <textfield id="successor_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
-            </cell>
-            <cell col="1" row="2" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Link:</label>
-                  </text>
-            </cell>
-            <cell col="2" row="2" anchor="NORTHWEST" var="@href" >
-                  <textfield id="successor_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
-            </cell>
-      </panel>
       <!--date =======================================================================-->
       <list id="date_type" type="dropdown">
             <item value="published">

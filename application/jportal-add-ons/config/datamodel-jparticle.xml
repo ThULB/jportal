@@ -59,15 +59,7 @@
             <!-- type = issn | isbn | nbn | doi | misc. -->
             <element name="identis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
-            </element>                        
-            <!-- 10 - language -->
-            <element name="languages" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
-            </element>                        
-            <!-- 11 - rights -->
-            <element name="rights" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-                  <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
-            </element>                        
+            </element>                         
             <!-- 12 - notes -->
             <element name="notes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
                   <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="4096" />
