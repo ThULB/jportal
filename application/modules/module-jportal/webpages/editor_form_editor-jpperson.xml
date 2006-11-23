@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+      <section title="Bearbeiten eines jpperson" xml:lang="de">
+            <p></p>
+            <br />
+            <p></p>
+            <editor id="editor-jpperson">
+                  <include uri="webapp:editor/editor-editor-jpperson.xml" />
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+</MyCoReWebPage>

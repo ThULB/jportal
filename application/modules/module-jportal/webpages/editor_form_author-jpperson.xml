@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+      <section title="Neueingabe eines jpperson" xml:lang="de">
+            <p></p>
+            <editor id="author-jpperson-de">
+                  <include uri="webapp:editor/editor-author-jpperson.xml"/>
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+      <section title="Create a new jpperson" xml:lang="en">
+            <p></p>
+            <br />
+            <p></p>
+            <editor id="author-jpperson-en">
+                  <include uri="webapp:editor/editor-author-jpperson.xml"/>
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+</MyCoReWebPage>

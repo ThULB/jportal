@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ?xml version="1.0" encoding="ISO-8859-1"?-->
+<!DOCTYPE editor>
+<editor>
+<!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
+	<target type="debug" name="MCRCheckCommitDataServlet" method="post" format="xml" />            
+      <components root="author-jpperson" var="/mycoreobject">
+            <include uri="webapp:editor/imports-jpperson.xml" />
+            <headline anchor="LEFT">
+                  <text>
+                        <label xml:lang="de">
+                              <b>Plichtfelder sind fett</b>
+                        </label>
+					  <label xml:lang="ru">
+                              <b>Поля для обязательного заполнения обозначены жирным шрифтом</b>
+                        </label>
+                  </text>
+            </headline>
+            <panel id="author-jpperson">
+                  <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jpperson" />
+            </panel>
+      </components>
+</editor>
