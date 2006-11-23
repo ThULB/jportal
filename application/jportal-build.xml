@@ -464,11 +464,9 @@
 	    <property name="skip.fields4" value="" />
 	    <!-- Name(s) of the search fields to include, separated by blanks. -->
 	    
-	  	<!-- If this property is set, ONLY these search fields will be included in search mask 
-	    <property name="search.fields3" value="maintitles3 subtitles3 publishers3 authors3 contribus3 dates3 
-	    	keywords3 classis3 classispub classispub2 classispub3 abstracts3 identis3 languages3 rightsjournal3
-	    	notes3 types3 rubrics3 sizes3 refs3" />
-	    -->
+	  	<!-- If this property is set, ONLY these search fields will be included in search mask -->
+	    <property name="search.fields3" value="name" />
+	    
 	  	<!-- Optional restriction (hidden condition) for search -->
 	    <!-- Syntax: "field operator value", separated by blanks -->
 	    <!-- Example: "objectType = document" -->
