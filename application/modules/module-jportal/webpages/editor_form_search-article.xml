@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Suche nach Artikeln">
+    <editor id="searchmask-de">
+      <include uri="webapp:editor/editor-search-article.xml"/>
+    </editor>
+  </section>
+  <section xml:lang="en" title="Search for articles">
+    <editor id="searchmask-en">
+      <include uri="webapp:editor/editor-search-article.xml"/>
+    </editor>
+  </section>
+</MyCoReWebPage>
