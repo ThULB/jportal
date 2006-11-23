@@ -173,7 +173,7 @@
             <hidden var="metadata/addresses/@textsearch" default="false" />
             <hidden var="metadata/addresses/@notinherit" default="false" />
             <hidden var="metadata/addresses/@heritable" default="true" />
-            <hidden var="metadata/addresses/address/@inherited" default="0" />
+<!--            <hidden var="metadata/addresses/address/@inherited" default="0" />-->
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/addresses/address/@lang" ordernr="4" default="de" 
                   />
             <cell col="2" row="1" anchor="NORTHWEST" ref="Scountry" var="metadata/addresses/address/country" ordernr="4" />

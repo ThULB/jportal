@@ -3,7 +3,7 @@
 <!DOCTYPE editor>
 <editor>
 <!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
-	<target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />            
+	<target type="debug" name="MCRCheckCommitDataServlet" method="post" format="xml" />            
       <components root="author-jpperson" var="/mycoreobject">
             <include uri="webapp:editor/imports-jpperson.xml" />
             <headline anchor="LEFT">

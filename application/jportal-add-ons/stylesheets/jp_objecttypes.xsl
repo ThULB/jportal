@@ -3,4 +3,5 @@
 	<xsl:include href="jp_journal.xsl" />		
 	<xsl:include href="jp_volume.xsl" />			
 	<xsl:include href="jp_article.xsl" />				
+	<xsl:include href="jp_inst.xsl" />					
 </xsl:stylesheet>
