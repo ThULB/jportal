@@ -4,7 +4,7 @@
 	<import file="${basedir}/build.xml" />
 
 	  <property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal" />	
-	  <property name="env.JPORTAL_HOME" value="${basedir}/jportal-add-ons" />		
+	  <property name="env.JPORTAL_HOME" value="${basedir}/modules/module-jportal" />		
 	
 	  <!-- Read in properties from config/mycore.properties.jp -->
 	  <loadproperties srcFile="${basedir}/config/mycore.properties.jp">
@@ -164,7 +164,7 @@
 	</target>
 
   <!-- =================================================================== -->	
-	
+	<!--
   <target name="jp.jar" depends="jar" description="creates lib/jportal.jar">
     <echo>Creating jportal.jar containing all compiled classes...</echo>
     <mkdir dir="${env.JPORTAL_HOME}/classes"/>
@@ -175,8 +175,9 @@
     <jar destfile="${docportal.lib}/jportal.jar" >
       <fileset dir="${env.JPORTAL_HOME}/classes" includes="**/*.class"       />
     </jar>
-  </target>	
+  </target>	-->
   <!-- =================================================================== -->	
+	<!--
   <target name="jp.javac" depends="init">
     <echo>Compiling ${packages}</echo>
     <javac srcdir="${env.JPORTAL_HOME}/sources"
@@ -191,7 +192,7 @@
            deprecation="${deprecation}">
     </javac>
   </target>	
-	
+	-->
   <!-- =================================================================== -->	
 	
   <!-- =================================================================== -->
