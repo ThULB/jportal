@@ -128,11 +128,18 @@
 				</subselect>			 
           </cell>			   
 		  <cell row="2" col="2" >
-				<subselect id="sub.select1" type="webpage"
+<!--				<subselect id="sub.select1" type="webpage"
 					href="indexpage?searchclass=creators_sub" >
 					<label xml:lang="de">Institution auswählen</label>
 					<label xml:lang="en">Choose institution</label>
 				</subselect>			 			  
+-->
+				<subselect id="sub.select2" type="webpage"
+					href="indexpage?searchclass=jpinst_sub" sortnr="6">
+					<label xml:lang="de">Institution auswählen</label>
+					<label xml:lang="en">Select institution</label>
+				</subselect>			  
+			  			  
          </cell>			   			   
          <cell row="3" col="1" width="100%">
                <text   label="-" />
@@ -148,11 +155,11 @@
                <text   label=")" />				 
           </cell>
 		  <cell row="2" col="2" >
-				<subselect id="sub.select1" type="webpage"
-					href="indexpage?searchclass=creators_sub" >
-					<label xml:lang="de">Institution auswählen</label>
-					<label xml:lang="en">Choose institution</label>
-				</subselect>			 			  
+				<subselect id="sub.select2" type="webpage"
+					href="indexpage?searchclass=jpinst_sub" sortnr="6">
+					<label xml:lang="de">Institution Auswählen</label>
+					<label xml:lang="en">Select institution</label>
+				</subselect>					 			  
          </cell>			   			   
          <cell row="3" col="1" width="100%">
                <text   label="-" />
