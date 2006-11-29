@@ -107,6 +107,16 @@
     </tr>
   </xsl:template>
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
   <!-- ======== indexpage ======== -->
   <xsl:template match="indexpage">
     <table>
@@ -117,6 +127,16 @@
     </table>
   </xsl:template>
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
   <xsl:variable name="up.url">
     <xsl:text>indexpage?searchclass=</xsl:text>
     <xsl:value-of select="$IndexID" />

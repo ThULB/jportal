@@ -24,8 +24,8 @@
       <hidden var="conditions/boolean/condition1/@value"    default="jpinst" />
 
       <!-- Search in field "name" with operator "contains" -->
-      <hidden var="conditions/boolean/condition2/@field" default="name" />
-      <hidden var="conditions/boolean/condition2/@operator" default="contains" />
+      <hidden var="conditions/boolean/condition2/@field" default="instname" />
+      <hidden var="conditions/boolean/condition2/@operator" default="like" />
       <cell row="1" col="1" anchor="EAST">
         <text i18n="editor.search.institution.name" />
       </cell>
@@ -43,7 +43,7 @@
             <text i18n="editor.search.max" />
           </cell>
           <cell row="1" col="2" anchor="WEST" var="@maxResults">
-            <list type="dropdown" default="100">
+            <list type="dropdown" default="0">
               <item value="20"  label="20"  />
               <item value="100" label="100" />
               <item value="500" label="500" />            
