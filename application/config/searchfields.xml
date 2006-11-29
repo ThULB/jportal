@@ -109,7 +109,7 @@
 	<field name="refs3"           type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editor.search.document.ref" />
 
 	<!-- Search in institutions metadata -->
-    <field name="name"          type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
+    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
 	  
   </index>
 
