@@ -29,6 +29,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -243,6 +244,7 @@ public class MCRObjectCommands extends MCRAbstractCommands {
     }
 
     String[] list = dir.list();
+    Arrays.sort(list);
 
     if (list.length == 0) {
       LOGGER.warn("No files found in directory " + directory);
