@@ -71,8 +71,23 @@ MCR.editor_jpinst_directory=%MCR.basedir%/workflow/jpinst
 ##############################################################################
 
 MCR.IndexBrowser.jpinst_sub.Table=jpinst
-MCR.IndexBrowser.jpinst_sub.Searchfield=name
-MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=id,fullname
-MCR.IndexBrowser.jpinst_sub.FieldsToSort=fullname
+MCR.IndexBrowser.jpinst_sub.Searchfield=instname
+MCR.IndexBrowser.jpinst_sub.FieldsToSort=instname
 MCR.IndexBrowser.jpinst_sub.Style=jpinst_sub
 MCR.IndexBrowser.jpinst_sub.MaxPerPage=30
+MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=fullname
+MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
