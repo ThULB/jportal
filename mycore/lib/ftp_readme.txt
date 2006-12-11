@@ -57,7 +57,10 @@ Enterprise Distributed Technologies Ltd.
  * 
  *  Change Log:  
  *
- *	  $Log: readme.txt,v $
+ *	  $Log: ftp_readme.txt,v $
+ *	  Revision 1.1  2002/06/04 08:01:32  mcrjkupf
+ *	  Rename the readme.txt.
+ *	
  *	  Revision 1.1  2002/06/04 07:50:36  mcrfluet
  *	  Added a readme file that describes the contents and license of ftp.jar and
  *	  ftp.zip

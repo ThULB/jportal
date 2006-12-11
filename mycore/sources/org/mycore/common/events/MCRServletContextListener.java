@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRServletContextListener.java,v $
- * $Revision: 1.0 $ $Date: 23.06.2006 16:46:09 $
+ * $Revision: 1.2 $ $Date: 2006/11/29 14:44:39 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -28,6 +28,8 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 
+import org.mycore.common.MCRConfiguration;
+
 /**
  * is a shutdown hook for the current <code>ServletContext</code>.
  * 
@@ -47,6 +49,8 @@ public class MCRServletContextListener implements ServletContextListener {
     private static final Logger LOGGER = Logger.getLogger(MCRServletContextListener.class);
 
     public void contextInitialized(ServletContextEvent sce) {
+        //Make sure logging is configured
+        MCRConfiguration.instance();
         // register to MCRShutdownHandler
         LOGGER.info("Register ServletContextListener to MCRShutdownHandler");
         MCRShutdownHandler.getInstance().isWebAppRunning = true;

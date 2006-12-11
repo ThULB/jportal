@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRMetadata2Fields.java,v $
- * $Revision: 1.4 $ $Date: 2005/08/11 13:47:35 $
+ * $RCSfile: MCRMailAuthenticator.java,v $
+ * $Revision: 1.1 $ $Date: 2005/12/21 08:28:31 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

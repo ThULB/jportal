@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8MetaLangText.java,v $
- * $Revision: 1.14 $ $Date: 2006/01/26 13:46:13 $
+ * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * data model type MetaLangText.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.14 $ $Date: 2006/01/26 13:46:13 $
+ * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  */
 public class MCRCM8MetaLangText implements DKConstantICM, MCRCM8MetaInterface {
     /**

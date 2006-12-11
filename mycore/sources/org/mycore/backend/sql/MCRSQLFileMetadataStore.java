@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLFileMetadataStore.java,v $
- * $Revision: 1.9 $ $Date: 2005/10/13 07:54:32 $
+ * $Revision: 1.10 $ $Date: 2006/01/27 10:38:31 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

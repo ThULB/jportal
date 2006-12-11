@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8ItemTypeCommon.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 11:53:28 $
+ * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.7 $ $Date: 2005/09/28 11:53:28 $
+ * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  */
 final class MCRCM8ItemTypeCommon implements DKConstantICM {
     /**

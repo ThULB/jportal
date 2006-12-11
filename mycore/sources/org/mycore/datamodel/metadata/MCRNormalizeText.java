@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRNormalizeText.java,v $
- * $Revision: 1.5 $ $Date: 2005/09/28 07:40:25 $
+ * $Revision: 1.6 $ $Date: 2005/09/28 13:35:19 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +31,7 @@ import org.mycore.common.MCRNormalizer;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.5 $ $Date: 2005/09/28 07:40:25 $
+ * @version $Revision: 1.6 $ $Date: 2005/09/28 13:35:19 $
  */
 public class MCRNormalizeText {
     /**

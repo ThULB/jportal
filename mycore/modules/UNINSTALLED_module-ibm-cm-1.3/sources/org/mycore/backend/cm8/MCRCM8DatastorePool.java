@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCM8ConnectionPool.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * $RCSfile: MCRCM8DatastorePool.java,v $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * dkDatastores needs to release it after use.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  */
 public class MCRCM8DatastorePool implements Closeable {
     /** The user ID to be used for connecting to the library server */

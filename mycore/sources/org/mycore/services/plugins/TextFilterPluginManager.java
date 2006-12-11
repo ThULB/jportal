@@ -1,6 +1,6 @@
 /*
  * $RCSfile: TextFilterPluginManager.java,v $
- * $Revision: 1.23 $ $Date: 2006/03/16 17:10:23 $
+ * $Revision: 1.24 $ $Date: 2006/08/01 09:41:21 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

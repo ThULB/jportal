@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFieldValue.java,v $
- * $Revision: 1.4 $ $Date: 2006/05/19 07:12:22 $
+ * $Revision: 1.5 $ $Date: 2006/05/30 11:29:39 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

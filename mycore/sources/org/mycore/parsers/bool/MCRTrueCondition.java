@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRTrueCondition.java,v $
- * $Revision: 1.5 $ $Date: 2006/01/16 11:21:33 $
+ * $Revision: 1.6 $ $Date: 2006/03/24 14:17:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

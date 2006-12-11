@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRWS.java,v $
- * $Revision: 1.2 $ $Date: 2006/05/02 08:14:32 $
+ * $Revision: 1.3 $ $Date: 2006/09/20 11:31:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

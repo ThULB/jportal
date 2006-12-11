@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MSWordPlugin.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:49:09 $
+ * $Revision: 1.5 $ $Date: 2006/02/10 23:33:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

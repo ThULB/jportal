@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8MetaInstitutionName.java,v $
- * $Revision: 1.7 $ $Date: 2006/01/26 14:32:41 $
+ * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * data model type MetaInstitutionName.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.7 $ $Date: 2006/01/26 14:32:41 $
+ * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  */
 public class MCRCM8MetaInstitutionName implements DKConstantICM, MCRCM8MetaInterface {
     /**

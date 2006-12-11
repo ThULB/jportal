@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRFileImportExport.java,v $
+ * $Revision: 1.11 $ $Date: 2005/09/28 07:40:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.mycore.common.MCRUtils;
  * MCRDirectory structures.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.10 $ $Date: 2005/08/15 15:02:11 $
+ * @version $Revision: 1.11 $ $Date: 2005/09/28 07:40:24 $
  */
 public class MCRFileImportExport {
     /**

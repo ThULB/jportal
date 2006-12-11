@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRBase.java,v $
- * $Revision: 1.25 $ $Date: 2006/05/08 06:28:25 $
+ * $Revision: 1.27 $ $Date: 2006/11/25 23:32:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,10 +23,11 @@
 
 package org.mycore.datamodel.metadata;
 
+import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
+
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 
@@ -35,7 +36,7 @@ import org.mycore.common.MCRPersistenceException;
  * the frame to produce a full functionality object.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.25 $ $Date: 2006/05/08 06:28:25 $
+ * @version $Revision: 1.27 $ $Date: 2006/11/25 23:32:50 $
  */
 public abstract class MCRBase {
     /**
@@ -88,7 +89,7 @@ public abstract class MCRBase {
             mcr_conf = MCRConfiguration.instance();
 
             // Default Encoding
-            mcr_encoding = mcr_conf.getString("MCR.metadata_default_encoding", MCRDefaults.ENCODING);
+            mcr_encoding = mcr_conf.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
             logger.debug("Encoding = " + mcr_encoding);
         } catch (Exception e) {
             logger.error("error occured: ", e);

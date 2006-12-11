@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFileViewWorkflowServlet.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:51:44 $
+ * $Revision: 1.5 $ $Date: 2006/01/24 13:24:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,7 +45,7 @@ import org.mycore.datamodel.ifs.MCRFileContentTypeFactory;
  * <em>path_to_file</em> ?type=... </b>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.4 $ $Date: 2005/09/28 07:51:44 $
+ * @version $Revision: 1.5 $ $Date: 2006/01/24 13:24:16 $
  */
 public class MCRFileViewWorkflowServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;

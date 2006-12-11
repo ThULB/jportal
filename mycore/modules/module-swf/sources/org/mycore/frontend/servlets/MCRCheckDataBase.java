@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCheckDataBase.java,v $
- * $Revision: 1.20 $ $Date: 2006/02/15 14:13:45 $
+ * $Revision: 1.23 $ $Date: 2006/12/01 14:04:51 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,8 +29,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-
 import org.jdom.Document;
 
 import org.mycore.common.MCRConfigurationException;
@@ -38,7 +36,6 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUtils;
-import org.mycore.datamodel.metadata.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
@@ -50,7 +47,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.20 $ $Date: 2006/02/15 14:13:45 $
+ * @version $Revision: 1.23 $ $Date: 2006/12/01 14:04:51 $
  */
 abstract public class MCRCheckDataBase extends MCRCheckBase {
     /**
@@ -280,11 +277,7 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
         }
 
         // restart editor
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdom);
-        job.getRequest().setAttribute("XSL.Style", lang);
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), jdom);
     }
 
 }

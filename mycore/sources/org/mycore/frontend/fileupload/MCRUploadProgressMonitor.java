@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadProgressMonitor.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:45:46 $
+ * $Revision: 1.8 $ $Date: 2006/02/10 23:33:51 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -58,7 +58,7 @@ import javax.swing.WindowConstants;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.7 $ $Date: 2005/09/28 07:45:46 $
+ * @version $Revision: 1.8 $ $Date: 2006/02/10 23:33:51 $
  */
 public class MCRUploadProgressMonitor extends JDialog {
     protected MCRUploadApplet applet;

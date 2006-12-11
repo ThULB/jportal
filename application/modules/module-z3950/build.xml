@@ -2,7 +2,7 @@
 
 <!-- =================================================================== -->
 <!-- UserAdmin module build file for use with Apache Ant                 -->
-<!-- $Revision: 1.2 $ $Date: 2006/06/21 11:07:25 $                      -->
+<!-- $Revision: 1.4 $ $Date: 2006/11/22 12:34:27 $                      -->
 <!-- =================================================================== -->
 
 <project name="MyCoReModule - z3950" default="webapps" basedir="../..">
@@ -14,7 +14,7 @@
   <!-- =================================================================== -->
 
   <target name="usage">
-    <echo>
+    <echo level="info">
       Usage:
         ant [target]
 
@@ -30,7 +30,7 @@
   <!-- =================================================================== -->
 	
   <target name="webapps">
-	<echo>
+	<echo level="info">
 			building ${ant.project.name} webapp
 	</echo>
 	<available property="web.xml.present" file="${mycore.modules}/module-z3950/config/web.xml" />

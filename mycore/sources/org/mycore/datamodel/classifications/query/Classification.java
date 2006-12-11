@@ -1,6 +1,6 @@
 /*
  * $RCSfile: Classification.java,v $
- * $Revision: 1.2 $ $Date: 2006/04/03 08:53:19 $
+ * $Revision: 1.3 $ $Date: 2006/05/22 14:15:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,7 +27,7 @@ package org.mycore.datamodel.classifications.query;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.2 $ $Date: 2006/04/03 08:53:19 $
+ * @version $Revision: 1.3 $ $Date: 2006/05/22 14:15:06 $
  */
 public class Classification extends ClassificationObject {
     

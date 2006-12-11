@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
 <!--      MyCoRe-WCMS build file for use with ANT        -->
-<!-- $Revision: 1.15 $ $Date: 2006/10/05 11:57:24 $ -->
+<!-- $Revision: 1.18 $ $Date: 2006/12/11 13:45:57 $ -->
 <!-- ============================================== -->
 
 <project name="MyCoReModule - WCMS" default="usage" basedir="../..">
@@ -13,47 +13,40 @@
 	<!-- ============================================== -->
 
 	<target name="usage">
-		<echo>
+		<echo level="info">
       All targets are internal!
 		</echo>
 	</target>
 	
-	<!-- ============================================== -->		
-	
-	<target name="compile">
-		<echo>
-			Module WCMS - dummy compile to support modules/* installation process
-		</echo>
-	</target>
 	<!-- ============================================== -->	
 	
 	<target name="webapps">
-		<echo>
+		<echo level="info">
 		      Running MyCoRe-WCMS installation script...
 	    </echo>
 
         <!-- copy mycore.properties.iview.template if it isn't -->
-        <copy file="${basedir}/modules/module-wcms/aif/config/mycore.properties.wcms.template" tofile="${basedir}/modules/module-wcms/aif/config/mycore.properties.wcms" overwrite="false" />
+        <copy file="${docportal.modules}/module-wcms/aif/config/mycore.properties.wcms.template" tofile="${docportal.modules}/module-wcms/aif/config/mycore.properties.wcms" overwrite="false" />
 
 				<!-- create log directory -->
-		<mkdir dir="${env.DOCPORTAL_HOME}/modules/module-wcms/aif/archive/logs" />
+		<mkdir dir="${docportal.modules}/module-wcms/aif/archive/logs" />
 		
 	    <!-- copy libs from MYCORE_HOME -->
-	    <copy todir="${basedir}/webapps/WEB-INF/lib">
+	    <copy todir="${build.webapps}/WEB-INF/lib">
 	      <fileset dir="${env.MYCORE_HOME}/modules/module-wcms/aif/lib">
 	        <include name="*.jar" />
 	      </fileset>
 	    </copy>			
 		
 	    <!-- copy stylesheets from MYCORE_HOME -->
-	    <copy todir="${basedir}/webapps/WEB-INF/stylesheets" flatten="true">
+	    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true">
 		      <fileset dir="${env.MYCORE_HOME}/modules/module-wcms/aif/xsl">
 		         <include name="**/*.xsl" />
 		      </fileset>
 	    </copy>
 
 	    <!-- copy web stuff  -->
-	    <copy todir="${basedir}/webapps/modules/module-wcms/aif/web/" preservelastmodified="yes">
+	    <copy todir="${build.webapps}/modules/module-wcms/aif/web/" preservelastmodified="yes">
 	    	<fileset dir="${env.MYCORE_HOME}/modules/module-wcms/aif/web/">
 <!--	         <include name="login.xml" />
 	         <include name="help.xml" />
@@ -63,37 +56,37 @@
 	    </copy>
 		
 	    <!-- copy config data from DOCPORTAL_HOME -->
-	    <copy file="${basedir}/modules/module-wcms/aif/config/mycore.properties.wcms" todir="${basedir}/webapps/WEB-INF/classes" overwrite="true" />
+	    <copy file="${docportal.modules}/module-wcms/aif/config/mycore.properties.wcms" todir="${build.webapps}/WEB-INF/classes" overwrite="true" />
 
 		<!-- ============ web stuff ================== -->
 		<!-- noSession info file -->
-		<copy todir="${env.DOCPORTAL_HOME}/webapps/modules/module-wcms/aif/web/error/" >
-			<fileset dir="${env.DOCPORTAL_HOME}/modules/module-wcms/aif/web/error/" >
+		<copy todir="${build.webapps}/modules/module-wcms/aif/web/error/" >
+			<fileset dir="${docportal.modules}/module-wcms/aif/web/error/" >
 		         <include name="noSession.xml" />
 			</fileset>
 		</copy>				
 
-	    <copy todir="${docportal.webapps}/WEB-INF/stylesheets" flatten="true">
+	    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true">
 	  	  <!-- templates -->
-			<fileset dir="${basedir}/modules/module-wcms/templates/master">
+			<fileset dir="${docportal.modules}/module-wcms/templates/master">
 				<include name="**/*.xsl" />
 			</fileset>	  
 	    </copy>
 		
-		<copy todir="${docportal.webapps}/templates/master/" flatten="false">
+		<copy todir="${build.webapps}/templates/master/" flatten="false">
 	  	  <!-- template wcms -->
-			<fileset dir="${basedir}/modules/module-wcms/templates/master/">
+			<fileset dir="${docportal.modules}/module-wcms/templates/master/">
 		         <exclude name="**/*.xsl" />
 			</fileset>
 	    </copy>
 				
 	    <!-- create WCMS working directories ant set permissions -->
-        <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+        <loadproperties srcFile="${docportal.config}/mycore.properties.private">
 		  <filterchain>
 		    <linecontains><contains value="MCR.basedir=" /></linecontains>
 		  </filterchain>
 		</loadproperties>
-        <loadproperties srcFile="${basedir}/modules/module-wcms/aif/config/mycore.properties.wcms">
+        <loadproperties srcFile="${docportal.modules}/module-wcms/aif/config/mycore.properties.wcms">
 		  <filterchain>
 		    <linecontains><contains value="MCR.WebApplication.basedir=" /></linecontains>
 		    <tokenfilter>
@@ -101,7 +94,7 @@
 		    </tokenfilter>
 		  </filterchain>
 		</loadproperties>
-	    <loadproperties srcFile="${basedir}/modules/module-wcms/aif/config/mycore.properties.wcms">
+	    <loadproperties srcFile="${docportal.modules}/module-wcms/aif/config/mycore.properties.wcms">
 	      <filterchain>
 	        <linecontains>
 	          <contains value="MCR.WCMS."/>
@@ -128,7 +121,7 @@
 	      <param name="web.xml.file"   value="${mycore.modules}/module-wcms/config/web.xml" />
 	    </antcall>
 
-	  	<mcr-config action="addInclude" propertyfile="${docportal.webapps}/WEB-INF/classes/mycore.properties" value="mycore.properties.wcms"/>
+	  	<mcr-config action="addInclude" propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" value="mycore.properties.wcms"/>
 
 		<antcall target="properties.merge">
 			<param name="module" value="${mycore.modules}/module-wcms/config/messages_de.properties"/>

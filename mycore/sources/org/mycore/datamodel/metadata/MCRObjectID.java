@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObjectID.java,v $
- * $Revision: 1.31 $ $Date: 2006/03/07 12:28:54 $
+ * $Revision: 1.32 $ $Date: 2006/08/08 08:48:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.31 $ $Date: 2006/03/07 12:28:54 $
+ * @version $Revision: 1.32 $ $Date: 2006/08/08 08:48:16 $
  */
 public final class MCRObjectID {
     /**

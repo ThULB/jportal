@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUserAdminServlet.java,v $
- * $Revision: 1.8 $ $Date: 2006/02/14 19:59:27 $
+ * $Revision: 1.9 $ $Date: 2006/03/03 22:33:18 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  * management of the mycore system.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.8 $ $Date: 2006/02/14 19:59:27 $
+ * @version $Revision: 1.9 $ $Date: 2006/03/03 22:33:18 $
  */
 public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
     /**

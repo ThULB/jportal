@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRConditionVisitor.java,v $
+ * $Revision: 1.2 $ $Date: 2005/09/28 07:48:29 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

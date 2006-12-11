@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRJDOMMemoryStore.java,v $
- * $Revision: 1.22 $ $Date: 2006/02/10 23:33:54 $
+ * $Revision: 1.24 $ $Date: 2006/11/25 23:32:52 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,6 +23,8 @@
 
 package org.mycore.backend.jdom;
 
+import static org.mycore.common.MCRConstants.XSL_NAMESPACE;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -32,7 +34,6 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.metadata.MCRNormalizeText;
@@ -45,7 +46,7 @@ import org.mycore.datamodel.metadata.MCRXMLTableManager;
  * @author Jens Kupferschmidt
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.22 $ $Date: 2006/02/10 23:33:54 $
+ * @version $Revision: 1.24 $ $Date: 2006/11/25 23:32:52 $
  */
 public class MCRJDOMMemoryStore {
     /** The connection pool singleton */
@@ -58,9 +59,6 @@ public class MCRJDOMMemoryStore {
     private Hashtable trees = new Hashtable();
 
     private org.jdom.Document xslorig = null;
-
-    /** The XSL namespace */
-    private org.jdom.Namespace ns = null;
 
     /** Timestamp of the last SQL read and the default reload time in seconds */
     private long tslast = 0;
@@ -86,9 +84,6 @@ public class MCRJDOMMemoryStore {
      * Creates a new JDOM memory store
      */
     private MCRJDOMMemoryStore() {
-        // XSL Namespace
-        ns = org.jdom.Namespace.getNamespace("xsl", MCRDefaults.XSL_URL);
-
         // Read stylesheet
         InputStream searchxsl = MCRJDOMMemoryStore.class.getResourceAsStream("/MCRJDOMSearch.xsl");
 
@@ -117,7 +112,7 @@ public class MCRJDOMMemoryStore {
      */
     org.jdom.Document getStylesheet(String query) {
         org.jdom.Document xslfile = (org.jdom.Document) (xslorig.clone());
-        xslfile.getRootElement().getChild("template", ns).getChild("result").getChild("choose", ns).getChild("when", ns).setAttribute("test", query);
+        xslfile.getRootElement().getChild("template", XSL_NAMESPACE).getChild("result").getChild("choose", XSL_NAMESPACE).getChild("when", XSL_NAMESPACE).setAttribute("test", query);
 
         // debug
         // org.jdom.output.XMLOutputter outputter = new

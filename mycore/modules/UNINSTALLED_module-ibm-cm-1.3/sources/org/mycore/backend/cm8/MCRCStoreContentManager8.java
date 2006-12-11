@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCStoreContentManager8.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -79,7 +79,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  */
 public class MCRCStoreContentManager8 extends MCRContentStore implements DKConstantICM, MCRTextSearchInterface {
     /** The ItemType name to store the content */

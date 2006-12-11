@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRTranslationTest.java,v $
- * $Revision: 1.0 $ $Date: 04.05.2006 10:15:33 $
+ * $Revision: 1.1 $ $Date: 2006/05/04 08:44:05 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: HashCipher.java,v $
- * $Revision: 1.7 $ $Date: 2006/01/26 14:19:37 $
+ * $Revision: 1.8 $ $Date: 2006/06/06 09:24:54 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

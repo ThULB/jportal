@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRIndexBrowserServlet.java,v $
- * $Revision: 1.2 $ $Date: 2006/05/30 11:15:59 $
+ * $Revision: 1.4 $ $Date: 2006/11/27 12:32:33 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,8 +24,6 @@
 package org.mycore.frontend.indexbrowser;
 
 import java.util.Enumeration;
-
-import javax.servlet.RequestDispatcher;
 
 import org.jdom.Document;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -56,13 +54,7 @@ public class MCRIndexBrowserServlet extends MCRServlet {
         indexbrowser.getResultList();        
         Document pageContent = indexbrowser.getXMLContent();   
         
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", pageContent);
         job.getRequest().setAttribute("XSL.Style", searchclass);
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(),job.getResponse(),pageContent);
     }
-
-    // **************************************************************************
-
 }

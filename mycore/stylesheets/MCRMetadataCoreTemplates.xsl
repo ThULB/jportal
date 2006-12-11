@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- ============================================== -->
+<!-- $Revision: 1.32 $ $Date: 2006/12/07 12:53:34 $ -->
+<!-- ============================================== -->
+
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xsd='http://www.w3.org/2001/XMLSchema'
   version="1.0">
-
-<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-
-<xsl:param name="mycore_home"/>
-<xsl:param name="mycore_appl"/>
-
-<xsl:variable name="newline">
- <xsl:text>
- </xsl:text>
-</xsl:variable>
 
 <!-- Dummy Template fo label -->
 
@@ -88,10 +82,13 @@
 <xsl:template match="mcrmetaxml">
 <xsd:sequence>
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
-   <xsd:complexType>
-    <xsd:sequence>
-     <xsd:any processContents="skip"/>
+   <xsd:complexType mixed="true">
+    <xsd:sequence maxOccurs="unbounded">
+     <xsd:any namespace="##any" minOccurs="0" processContents="skip"/>
     </xsd:sequence>
+    <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
+    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+    <xsd:attribute ref="xml:lang" use="optional" />
    </xsd:complexType>
  </xsd:element>
 </xsd:sequence>
@@ -106,6 +103,7 @@
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
    <xsd:complexType>
      <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+     <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
      <xsd:attribute ref="xlink:type" />
      <xsd:attribute ref="xlink:href" use="optional"/>
      <xsd:attribute ref="xlink:title" use="optional"/>
@@ -126,6 +124,7 @@
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
    <xsd:complexType>
      <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+     <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
      <xsd:attribute ref="xlink:type" />
      <xsd:attribute ref="xlink:href" use="optional"/>
      <xsd:attribute ref="xlink:title" use="optional"/>
@@ -205,7 +204,7 @@
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
   <xsd:complexType>
    <xsd:sequence>
-    <xsd:element name="text" type="xsd:string" minOccurs='1' maxOccurs='1'/>
+    <xsd:element name="text" type="xsd:string" minOccurs='0' maxOccurs='1'/>
     <xsd:element name="von"  type="xsd:string" minOccurs='0' maxOccurs='1'/>
     <xsd:element name="ivon"  type="xsd:integer" minOccurs='0' maxOccurs='1'/>
     <xsd:element name="bis"  type="xsd:string" minOccurs='0' maxOccurs='1'/>
@@ -214,7 +213,6 @@
    <xsd:attribute name="type" use="optional" type="xsd:string" />
    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
    <xsd:attribute ref="xml:lang" />
-   <xsd:attribute name="rv" use="optional" type="xsd:string" />
   </xsd:complexType>
  </xsd:element>
 </xsd:sequence>
@@ -263,32 +261,36 @@
   fixed="MCRMetaNumber" />
 </xsl:template>
 
-<!-- Template for the metadata MCRMetaPerson -->
+<!-- Template for the metadata MCRMetaPersonName -->
 
-<xsl:template match="mcrmetaperson">
+<xsl:template match="mcrmetapersonname">
 <xsd:sequence>
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
   <xsd:complexType>
-   <xsd:sequence>
-    <xsd:element name="firstname" type="xsd:string" minOccurs='0' 
+   <xsd:all>
+    <xsd:element name="firstname" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-    <xsd:element name="callname" type="xsd:string" minOccurs='0' 
+    <xsd:element name="callname" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-    <xsd:element name="surname" type="xsd:string" minOccurs='0' 
+    <xsd:element name="surname" type="xsd:string" minOccurs='1'
      maxOccurs='1'/>
-    <xsd:element name="academic" type="xsd:string" minOccurs='0' 
+    <xsd:element name="fullname" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-    <xsd:element name="peerage" type="xsd:string" minOccurs='0' 
+    <xsd:element name="academic" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-   </xsd:sequence>
+    <xsd:element name="peerage" type="xsd:string" minOccurs='0'
+     maxOccurs='1'/>
+    <xsd:element name="prefix" type="xsd:string" minOccurs='0'
+     maxOccurs='1'/>
+   </xsd:all>
    <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
    <xsd:attribute ref="xml:lang" />
    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
   </xsd:complexType>
  </xsd:element>
 </xsd:sequence>
-<xsd:attribute name="class" type="xsd:string" use="required" 
-  fixed="MCRMetaPerson"/>
+<xsd:attribute name="class" type="xsd:string" use="required"
+  fixed="MCRMetaPersonName"/>
 </xsl:template>
 
 <!-- Template for the metadata MCRMetaAddress -->
@@ -321,31 +323,31 @@
   fixed="MCRMetaAddress"/>
 </xsl:template>
 
-<!-- Template for the metadata MCRMetaCorporation -->
+<!-- Template for the metadata MCRMetaInstitutionName -->
 
-<xsl:template match="mcrmetacorporation">
+<xsl:template match="mcrmetainstitutionname">
 <xsd:sequence>
  <xsd:element name="{@name}" minOccurs="{@minOccurs}" maxOccurs="{@maxOccurs}">
   <xsd:complexType>
-   <xsd:sequence>
-    <xsd:element name="name" type="xsd:string" minOccurs='0' 
+   <xsd:all>
+    <xsd:element name="fullname" type="xsd:string" minOccurs='1'
      maxOccurs='1'/>
-    <xsd:element name="nickname" type="xsd:string" minOccurs='0' 
+    <xsd:element name="nickname" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-    <xsd:element name="parent" type="xsd:string" minOccurs='0' 
+    <xsd:element name="property" type="xsd:string" minOccurs='0'
      maxOccurs='1'/>
-    <xsd:element name="property" type="xsd:string" minOccurs='0' 
-     maxOccurs='1'/>
-   </xsd:sequence>
+   </xsd:all>
    <xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
    <xsd:attribute name="inherited" use="optional" type="xsd:integer" />
    <xsd:attribute ref="xml:lang" />
   </xsd:complexType>
  </xsd:element>
 </xsd:sequence>
-<xsd:attribute name="class" type="xsd:string" use="required" 
-  fixed="MCRMetaCorporation"/>
+<xsd:attribute name="class" type="xsd:string" use="required"
+  fixed="MCRMetaInstitutionName"/>
 </xsl:template>
+
+<!-- Template for the metadata MCRMetaBoolean -->
 
 <xsl:template match="mcrmetaboolean">
 <xsd:sequence>

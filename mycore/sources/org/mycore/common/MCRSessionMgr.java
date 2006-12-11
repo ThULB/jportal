@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRSessionMgr.java,v $
+ * $Revision: 1.9 $ $Date: 2005/09/28 07:36:44 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ package org.mycore.common;
  * written by Morgan Delagrange. Please see <http://www.apache.org/>.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.8 $ $Date: 2005/08/15 15:02:25 $
+ * @version $Revision: 1.9 $ $Date: 2005/09/28 07:36:44 $
  */
 public class MCRSessionMgr {
     /**

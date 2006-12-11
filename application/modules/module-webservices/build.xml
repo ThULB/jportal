@@ -2,7 +2,7 @@
 
 <!-- =================================================================== -->
 <!-- WebServices module build file for use with Apache Ant               -->
-<!-- $Revision: 1.1 $ $Date: 2006/06/21 05:57:03 $                      -->
+<!-- $Revision: 1.6 $ $Date: 2006/12/11 13:45:58 $                      -->
 <!-- =================================================================== -->
 
 <project name="MyCoReModule - WebService" default="usage" basedir="../..">
@@ -18,7 +18,7 @@
   <!-- =================================================================== -->
 
   <target name="usage">
-    <echo>
+    <echo level="info">
       Usage:
         ant [target]
 
@@ -48,9 +48,9 @@
   <!-- =================================================================== -->
 
   <target name="copy" description="Copy the data of the WebService module" >
-    <copy todir="${docportal.config}" file="${mycore}/modules/module-webservices/config/client_deploy.wsdd" overwrite="true" />
-    <copy todir="${docportal.config}" file="${mycore}/modules/module-webservices/config/deploy.wsdd" overwrite="true" />
-    <copy todir="${docportal.config}" file="${mycore}/modules/module-webservices/config/undeploy.wsdd" overwrite="true" />
+    <copy todir="${build.config}" file="${mycore}/modules/module-webservices/config/client_deploy.wsdd" overwrite="true" />
+    <copy todir="${build.config}" file="${mycore}/modules/module-webservices/config/deploy.wsdd" overwrite="true" />
+    <copy todir="${build.config}" file="${mycore}/modules/module-webservices/config/undeploy.wsdd" overwrite="true" />
   </target>
 
   <!-- =================================================================== -->
@@ -58,25 +58,29 @@
   <!-- =================================================================== -->
 	
   <target name="webapps" depends="copy">
-	<echo>
+	<echo level="info">
 			building ${ant.project.name} webapp
     </echo>
     <!-- Copy files  -->
-    <copy todir="${docportal.webapps}/WEB-INF/lib">
+    <copy todir="${build.webapps}/WEB-INF/lib">
       <fileset dir="${mycore}/modules/module-webservices/lib" includes="*.jar" />
     </copy>
-    <copy todir="${docportal.webapps}/WEB-INF/classes" file="${docportal.config}/client_deploy.wsdd" />
-    <copy todir="${docportal.webapps}/WEB-INF/classes" file="${docportal.config}/deploy.wsdd" />
-    <copy todir="${docportal.webapps}/WEB-INF/classes" file="${docportal.config}/undeploy.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/client_deploy.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/deploy.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/undeploy.wsdd" />
      <!-- merge the web.xml of the module to the application -->
     <available property="web.xml.present" file="${mycore.modules}/module-swf/config/web.xml" />
     <antcall target="do.merge" >
       <param name="web.xml.file"   value="${mycore.modules}/module-webservices/config/web.xml" />
     </antcall>
+    <echo level="info">
+       Generate file with user for axis, only this user is allowd to deploy/undeploy webservices
+     </echo>
+     <echo file="${build.webapps}/WEB-INF/users.lst">${MCR.ws_admin} ${MCR.ws_adminpasswd}</echo>    
  </target>
 
   <!-- =================================================================== -->
-  <!-- Undeploy the WebServices                                            -->
+  <!-- Deploy the WebServices                                              -->
   <!-- =================================================================== -->
 
   <target name="deploy" description="deploys all webservices to a running axis admin servlet">
@@ -86,7 +90,7 @@
   </target>
 
   <!-- =================================================================== -->
-  <!-- Deploy the WebServices                                              -->
+  <!-- Undeploy the WebServices                                            -->
   <!-- =================================================================== -->
 	
   <target name="undeploy" description="undeploys all webservices from a running axis admin servlet">
@@ -96,7 +100,7 @@
   </target>
   
   <!-- =================================================================== -->
-  <!-- The WebServices adnim tool                                          -->
+  <!-- The WebServices admin tool                                          -->
   <!-- =================================================================== -->
 	
   <target name="axis.admin">
@@ -105,12 +109,30 @@
       <fileset dir="${mycore}/lib" includes="*.jar" />
       <fileset dir="${mycore}/modules/module-webservices/lib" includes="*.jar" />
     </path>
+    <fail unless="MCR.ws_admin" message="user for Axis admin is not set with property MCR.ws_admin" />
+		<!--
+    <fail message="length of property MCR.ws_admin is zero">
+      <condition>
+        <length string="${MCR.ws_admin}" when="equal" length="0" />
+      </condition>
+    </fail>
+			-->
+    <fail unless="MCR.ws_adminpasswd" message="password for user Axis admin is not set with property MCR.ws_adminpasswd" />
+		<!--
+    <fail message="length of property MCR.ws_adminpasswd is zero">
+      <condition>
+        <length string="${MCR.ws_adminpasswd}" when="equal" length="0" />
+      </condition>
+    </fail>    
+			-->
     <taskdef resource="axis-tasks.properties" classpathref="deploy.classpath" />
     <axis-admin 
       url="${wsadminurl}"
       failonerror="true" 
       debug="true" 
-      xmlfile="config/${wsdd}.wsdd" 
+      xmlfile="${build.config}/${wsdd}.wsdd" 
+      username="${MCR.ws_admin}"
+      password="${MCR.ws_adminpasswd}" 
     />
   </target>
 	
@@ -121,40 +143,39 @@
   <target name="create.scripts" depends="init,compile.client,script.windows, script.unix" description="Create commandline scripts" />
 
   <target name="script.windows" if="os.is.windows" depends="init" description="Generates wsclient.cmd for starting wsclient from Command Line">
-    <echo>
+    <echo level="info">
       Generating wsclient.cmd for starting wsclient from Command Line
     </echo>
     
-    <echo file="bin/wsclient.cmd">@echo off 
+    <echo file="${build.bin}/wsclient.cmd">@echo off 
 SET AXISCLASSPATH=${docportal.classpath.translated};%CLASSPATH% 
 java -Xms128m -Xmx512m -classpath "%AXISCLASSPATH%" org.mycore.services.wsclient.MCRWebServiceClient %1 %2 %3 %4 %5 %6 %7 %8 %9
     </echo>
   </target>
 	
   <target name="script.unix" if="os.is.unix" depends="init" description="Generates wsclient.sh for starting wsclient from Command Line">
-    <echo>
+    <echo level="info">
       Generating wsclient.sh for starting wsclient from Command Line
     </echo>
     
-    <echo file="bin/wsclient.sh">#!/bin/sh
+    <echo file="${build.bin}/wsclient.sh">#!/bin/sh
 export AXISCLASSPATH=${docportal.classpath.translated}:$CLASSPATH
 java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclient.MCRWebServiceClient $@
     </echo>
-    <chmod file="bin/wsclient.sh" perm="755" />
+    <chmod file="${build.bin}/wsclient.sh" perm="755" />
   </target>
 	
   <target name="compile.client" depends="wsdl2java">
-    <echo>
+    <echo level="info">
       Compiling WebServices client
     </echo>
-    <javac destdir="${docportal.classes}" classpathref="docportal.classpath" encoding="ISO-8859-1">
+    <javac destdir="${build.classes}" classpathref="docportal.classpath" encoding="ISO-8859-1">
       <src path="${docportal.modules}/module-webservices/sources/org/mycore/services/wsclient" />
-      <src path="${mycore}/modules/module-webservices/sources/org/mycore/services/wsclient" />
     </javac>
   </target>
 	
   <target name="wsdl2java" depends="java2wsdl">
-    <echo>
+    <echo level="info">
       Building stubs from MCRWebService.wsdl
     </echo>
     <taskdef name="axis-wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="docportal.classpath" />
@@ -171,28 +192,28 @@ java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclien
       testcase="false"
       verbose="true"
       serverside="true"
-      url="MCRWebService.wsdl" 
+      url="${build.config}/MCRWebService.wsdl" 
     >
       <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" /> 
     </axis-wsdl2java>
   </target>
 
   <target name="java2wsdl" depends="compile.ws">
-    <echo>
+    <echo level="info">
       Building wsdl from MCRWS.class
     </echo>
-    <delete file="MCRWebService.wsdl" />
+    <delete file="${build.config}/MCRWebService.wsdl" />
     <path id="wsdl2java.classpath">
       <fileset dir="${mycore}/lib" includes="*.jar" />
       <fileset dir="${mycore}/modules/module-webservices/lib" includes="*.jar" />
-      <pathelement location="${docportal}/classes" />
+      <pathelement location="${build.classes}" />
     </path>
     <taskdef name="axis-java2wsdl" classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask" classpathref="wsdl2java.classpath" />	
     <axis-java2wsdl 
       classname="org.mycore.services.webservices.MCRWS"
       namespace="wsclient.services.mycore.org"
       location="${wsurl}" 
-      output="MCRWebService.wsdl"
+      output="${build.config}/MCRWebService.wsdl"
       style="RPC"
     >
       <classpath refid="wsdl2java.classpath" />       
@@ -201,11 +222,10 @@ java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclien
   </target>
 	
   <target name="compile.ws">
-    <echo>
+    <echo level="info">
       Compiling WebServices interface
     </echo>
-    <mkdir dir="${docportal.classes}" />
-    <javac destdir="${docportal.classes}" encoding="ISO-8859-1">
+    <javac destdir="${build.classes}" encoding="ISO-8859-1">
       <src path="${mycore}/modules/module-webservices/sources/org/mycore/services/webservices" />
       <include name="**/MCRWS.java" /> 
     </javac>
@@ -216,8 +236,8 @@ java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclien
   <!-- =================================================================== -->
 	
   <target name="clean" depends="init">
-    <echo>
-      Delete directory "build"
+    <echo level="info">
+      Delete generated sources
     </echo>
     
     <delete dir="${docportal.modules}/module-webservices/sources" />
@@ -226,5 +246,3 @@ java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclien
   <!-- =================================================================== -->
 	
 </project>
-
-

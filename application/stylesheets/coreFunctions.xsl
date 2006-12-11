@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.36 $ $Date: 2006/10/12 11:45:14 $ -->
+<!-- $Revision: 1.38 $ $Date: 2006/11/29 10:49:00 $ -->
 <!-- ============================================== -->
 <!-- Authors: Thomas Scheffler (yagee) -->
 <!-- Authors: Andreas Trappe (lezard) -->
@@ -286,99 +286,7 @@
         </xsl:choose>
     </xsl:template>
     <!--
-    Tamplate: PageGen
-    synopsis: returns a list of links to access other pages of a result list
-    
-    parameters:
-        i: running indicator - leave untouched
-        type: document type
-        href: baselink to access resultlists
-        size: howmany results per page
-        offset: start at which result offset
-        currentpage: what is the current page displayed?
-        totalpage: how many pages exist?
-    -->
-    <xsl:template name="PageGen">
-        <xsl:param name="i"           select="1" />
-        <xsl:param name="type"                   />
-        <xsl:param name="href"        select="concat($WebApplicationBaseURL, 'servlets/MCRQueryServlet',$JSessionID,'?mode=CachedResultList&amp;type=', $type)" />
-        <xsl:param name="size"                   />
-        <xsl:param name="currentpage"            />
-        <xsl:param name="totalpage"              />
-        <xsl:variable name="PageWindowSize" select="10" />
-        <!-- jumpSize is to determine the pages to be skipped -->
-        <xsl:variable name="jumpSize">
-            <xsl:choose>
-                <!-- current printed page number is smaller than current displayed page -->
-                <xsl:when test="$i &lt; $currentpage"> 
-                    <xsl:choose>
-                        <!-- This is to support a bigger PageWindow at the end of page listing and
-                        to skip a jump of 2 -->
-                        <xsl:when test="(($totalpage - $PageWindowSize - 1) &lt;= $i) or
-                        (($currentpage - floor(($PageWindowSize -1) div 2) - 1) = 2)">
-                            <xsl:value-of select="1"/>
-                        </xsl:when>
-                        <!-- This is to support a bigger PageWindow at the begin of page listing -->
-                        <xsl:when test="($totalpage - $currentpage) &lt; $PageWindowSize">
-                            <xsl:value-of select="($totalpage - $PageWindowSize - 1)"/>
-                        </xsl:when>
-                        <xsl:when test="(($currentpage - $i) &lt;= floor(($PageWindowSize -1) div 2))">
-                            <xsl:value-of select="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="($currentpage - floor(($PageWindowSize -1) div 2) - 1)"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:when test="$i &gt; $currentpage"> 
-                    <xsl:choose>
-                        <!-- jump only one if your near currentpage,
-                        or at last page 
-                        or to support bigger window at beginning
-                        or to skip a jump of 2 -->
-                        <xsl:when test="( (($i - $currentpage) &lt; round(($PageWindowSize -1) div 2)) or ($i = $totalpage) or ($currentpage &lt;=$PageWindowSize and $i &lt;= $PageWindowSize) or ($totalpage - $i = 2))">
-                            <xsl:value-of select="1"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="($totalpage - $i)"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="1"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="running">
-            <xsl:if test="$i &lt;= $totalpage">
-                <xsl:text>true</xsl:text>
-            </xsl:if>
-        </xsl:variable>
-        <xsl:variable name="offset" select="($i - 1) * $size"/>
-        <xsl:if test="$running='true'">
-            <xsl:if test="$i=$currentpage"><xsl:text>[</xsl:text></xsl:if>
-            <a href="{concat($href, '&amp;offset=', $offset, '&amp;size=', $size)}">
-                <xsl:value-of select="$i"/>
-            </a>
-            <xsl:if test="$i=$currentpage"><xsl:text>]</xsl:text></xsl:if>
-            <xsl:if test="$jumpSize &gt; 1"><xsl:text>&#160;...</xsl:text></xsl:if>
-            <xsl:text>&#160;</xsl:text><!--
-                <xsl:comment>
-                    <xsl:value-of select="concat('$i=',$i,                                       ' $totalpage=',$totalpage,' $jumpSize=',$jumpSize,' floor=',floor(($PageWindowSize -1) div 2),' round=',round(($PageWindowSize -1) div 2))"/>
-                </xsl:comment>
-                <xsl:text>
-                </xsl:text>  -->
-            <xsl:call-template name="PageGen">
-                <xsl:with-param name="i"           select="$i + $jumpSize"/>
-                <xsl:with-param name="href"        select="$href"         />
-                <xsl:with-param name="size"        select="$size"         />
-                <xsl:with-param name="currentpage" select="$currentpage"  />
-                <xsl:with-param name="totalpage"   select="$totalpage"    />
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-    <!--
-    Template: PageGenNew
+    Template: PageGen
     synopsis: returns a list of links to access other pages of a result list
     
     parameters:
@@ -390,7 +298,7 @@
         currentpage: what is the current page displayed?
         totalpage: how many pages exist?
     -->
-    <xsl:template name="PageGenNew">
+    <xsl:template name="PageGen">
     <!--
     MCRSearchServlet?mode=results&amp;id={@id}&amp;numPerPage={@numPerPage}&amp;page={number(@page)+1}
     -->
@@ -462,7 +370,7 @@
                 </xsl:comment>
                 <xsl:text>
                 </xsl:text>-->
-            <xsl:call-template name="PageGenNew">
+            <xsl:call-template name="PageGen">
                 <xsl:with-param name="i"           select="$i + $jumpSize"/>
                 <xsl:with-param name="id"          select="$id"           />
                 <xsl:with-param name="href"        select="$href"         />
@@ -482,51 +390,6 @@
         <xsl:param name="id" />
         <xsl:variable name="delim" select="'_'"/>
         <xsl:value-of select="substring-before(substring-after($id,$delim),$delim)"/>
-    </xsl:template>
-    <!-- Template mappedTypeOfObjectID
-    synopsis: returns the mapped type of the ObjectID submitted usally the second part of the ID.
-        Use this when calling an ObjectMetaData or ResultList page.
-    
-    parameters:
-    id: MCRObjectID
-    -->
-    <xsl:template name="mappedTypeOfObjectID">
-        <xsl:param name="id" />
-        <xsl:variable name="type">
-            <xsl:call-template name="typeOfObjectID">
-                <xsl:with-param name="id" select="$id"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="mapping">
-            <xsl:call-template name="getValue">
-                <xsl:with-param name="pairs" select="$TypeMapping"/>
-                <xsl:with-param name="name" select="$type"/>
-            </xsl:call-template>
-        </xsl:variable>
-        <!-- the mapping -->
-        <xsl:choose>
-            <xsl:when test="string-length($mapping) > 0">
-                <xsl:value-of select="$mapping"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$type"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <!-- Template getValue
-    synopsis: returns the value of name value pairs in this layout:
-        name1:value1;name2:value2;...;
-    parameters:
-    pairs: the name value pairs as described above
-    name: a name to return the value for
-    -->
-    <xsl:template name="getValue">
-        <xsl:param name="pairs"/>
-        <xsl:param name="name"/>
-        <xsl:if test="string-length($pairs) > string-length($name) and string-length($name) > 0">
-            <xsl:value-of select="substring-before(substring-after($pairs,concat($name,':')),';')"/>
-        </xsl:if>
     </xsl:template>
 
     <!-- Template selectLang

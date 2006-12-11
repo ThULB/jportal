@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRObjectTypeStrategy.java,v $
- * $Revision: 1.0 $ $Date: 12.10.2006 15:14:00 $
+ * $RCSfile: MCRParentRuleStrategy.java,v $
+ * $Revision: 1.2 $ $Date: 2006/11/25 23:32:52 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,12 +23,12 @@
 
 package org.mycore.access.strategies;
 
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
-
 import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRDefaults;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
@@ -41,7 +41,7 @@ import org.mycore.datamodel.metadata.MCRXMLTableManager;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.0 $ $Date: 12.10.2006 15:14:00 $
+ * @version $Revision: 1.2 $ $Date: 2006/11/25 23:32:52 $
  */
 public class MCRParentRuleStrategy implements MCRAccessCheckStrategy {
 
@@ -66,7 +66,7 @@ public class MCRParentRuleStrategy implements MCRAccessCheckStrategy {
         Document parentDoc = MCRXMLTableManager.instance().readDocument(new MCRObjectID(objectID));
         final Element parentElement = parentDoc.getRootElement().getChild("structure").getChild("parent");
         if (parentElement != null) {
-            return parentElement.getAttributeValue("href", MCRDefaults.XLINK_URL);
+            return parentElement.getAttributeValue("href", XLINK_NAMESPACE);
         }
         return null;
     }

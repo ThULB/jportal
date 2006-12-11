@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8ItemType.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import com.ibm.mm.sdk.common.dkDatastore;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  */
 public final class MCRCM8ItemType implements DKConstantICM {
     private static final Logger LOGGER = Logger.getLogger(MCRCM8ItemType.class);

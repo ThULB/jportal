@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.3 $ $Date: 2005/08/02 13:39:38 $ -->
+<!-- $Revision: 1.5 $ $Date: 2006/11/29 06:32:31 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -22,12 +22,6 @@
   </xsl:attribute>
   <xsl:attribute name="heritable">
     <xsl:value-of select="./@heritable" />
-  </xsl:attribute>
-  <xsl:attribute name="parasearch">
-    <xsl:value-of select="./@parasearch" />
-  </xsl:attribute>
-  <xsl:attribute name="textsearch">
-    <xsl:value-of select="./@textsearch" />
   </xsl:attribute>
 </xsl:attribute-set>
 

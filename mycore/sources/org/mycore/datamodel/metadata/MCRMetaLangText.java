@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaLangText.java,v $
- * $Revision: 1.33 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.35 $ $Date: 2006/12/05 12:35:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,9 +32,9 @@ import org.mycore.common.MCRException;
  * has triples of a text and his corresponding language and optional a type.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.33 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.35 $ $Date: 2006/12/05 12:35:07 $
  */
-public class MCRMetaLangText extends MCRMetaDefault implements MCRMetaInterface {
+public class MCRMetaLangText extends MCRMetaDefault {
     // MetaLangText data
     protected String text;
 
@@ -198,7 +198,7 @@ public class MCRMetaLangText extends MCRMetaDefault implements MCRMetaInterface 
 
         org.jdom.Element elm = new org.jdom.Element(subtag);
         elm.setAttribute("lang", lang, Namespace.XML_NAMESPACE);
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
+        elm.setAttribute("inherited", Integer.toString(inherited));
 
         if ((form != null) && ((form = form.trim()).length() != 0)) {
             elm.setAttribute("form", form);
@@ -211,24 +211,6 @@ public class MCRMetaLangText extends MCRMetaDefault implements MCRMetaInterface 
         elm.addContent(text);
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return a String with the text value
-     */
-    public String createTextSearch(boolean textsearch) throws MCRException {
-        if (textsearch) {
-            return text;
-        }
-
-        return "";
     }
 
     /**

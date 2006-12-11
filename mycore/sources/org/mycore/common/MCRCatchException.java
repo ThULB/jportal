@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCatchException.java,v $
- * $Revision: 1.1 $ $Date: 2005/12/15 10:16:33 $
+ * $Revision: 1.2 $ $Date: 2006/02/10 23:33:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ package org.mycore.common;
  * some way.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $ $Date: 2005/12/15 10:16:33 $
+ * @version $Revision: 1.2 $ $Date: 2006/02/10 23:33:50 $
  * 
  * @see java.lang.Exception
  */

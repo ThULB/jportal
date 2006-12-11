@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRPrincipal.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:49:55 $
+ * $RCSfile$
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +31,7 @@ package org.mycore.user2;
  * 
  * @author Detlev Degenhardt
  * @author Benno Süselbeck
- * @version $Revision: 1.4 $ $Date: 2005/09/28 07:49:55 $
+ * @version $Revision$ $Date$
  */
 public interface MCRPrincipal {
     /** Principals are stored by their identity in ACLs */

@@ -26,12 +26,10 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -760,7 +758,7 @@ public class MCRIViewServlet extends MCRServlet {
 		return valPoint;
 	}
 
-	public void forwardJDOM(HttpServletRequest request, HttpServletResponse response, Element elem) throws ServletException, IOException {
+	public void forwardJDOM(HttpServletRequest request, HttpServletResponse response, Element elem) throws IOException {
 
 		// name of target xsl
 		if (getProperty(request, "XSL.Style") == null) 	request.setAttribute("XSL.Style", "iview");
@@ -768,9 +766,7 @@ public class MCRIViewServlet extends MCRServlet {
 		Element root = new Element("mcr-module");
 		root.addContent(elem);
 		Document jdom = new Document(root);
-		request.setAttribute("MCRLayoutServlet.Input.JDOM", jdom);
-		RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-		rd.forward(request, response);
+        getLayoutService().doLayout(request,response,jdom);
 	}
 
 	/**

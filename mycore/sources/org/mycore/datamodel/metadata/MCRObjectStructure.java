@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObjectStructure.java,v $
- * $Revision: 1.30 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.33 $ $Date: 2006/11/24 11:20:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Mathias Hegner
  * @author Jens Kupferschmidt
- * @version $Revision: 1.30 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.33 $ $Date: 2006/11/24 11:20:10 $
  */
 public class MCRObjectStructure {
 
@@ -280,30 +280,6 @@ public class MCRObjectStructure {
     }
 
     /**
-     * <em>searchForDerivate</em> returns the index of the derivate array if
-     * the comparsion of the MCRMetaLinkID input with an item of the derivate
-     * array is true.
-     * 
-     * @param input
-     *            the MCRMetaLinkID input
-     * @return the index of the derivate in the array or -1 if the link was not
-     *         found.
-     */
-    public final int searchForDerivate(MCRMetaLinkID input) {
-        int r = -1;
-
-        for (int i = 0; i < derivates.size(); i++) {
-            if (((MCRMetaLinkID) derivates.get(i)).compare(input)) {
-                r = i;
-
-                break;
-            }
-        }
-
-        return r;
-    }
-
-    /**
      * <em>removeDerivate</em> the derivate link from the derivate vector for
      * the given number.
      * 
@@ -399,8 +375,6 @@ public class MCRObjectStructure {
             elmm.setAttribute("class", "MCRMetaLinkID");
             elmm.setAttribute("heritable", "false");
             elmm.setAttribute("notinherit", "false");
-            elmm.setAttribute("parasearch", "false");
-            elmm.setAttribute("textsearch", "false");
 
             for (i = 0; i < children.size(); ++i) {
                 elmm.addContent(((MCRMetaLink) children.get(i)).createXML());
@@ -414,8 +388,6 @@ public class MCRObjectStructure {
             elmm.setAttribute("class", "MCRMetaLinkID");
             elmm.setAttribute("heritable", "false");
             elmm.setAttribute("notinherit", "false");
-            elmm.setAttribute("parasearch", "false");
-            elmm.setAttribute("textsearch", "false");
             elmm.addContent(parent.createXML());
             elm.addContent(elmm);
         }
@@ -425,8 +397,6 @@ public class MCRObjectStructure {
             elmm.setAttribute("class", "MCRMetaLinkID");
             elmm.setAttribute("heritable", "false");
             elmm.setAttribute("notinherit", "false");
-            elmm.setAttribute("parasearch", "true");
-            elmm.setAttribute("textsearch", "false");
 
             for (i = 0; i < derivates.size(); ++i) {
                 elmm.addContent(((MCRMetaLink) derivates.get(i)).createXML());

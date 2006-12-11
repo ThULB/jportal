@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFileMetadataStore.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:40:24 $
+ * $Revision: 1.8 $ $Date: 2006/02/10 23:33:47 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.common.MCRPersistenceException;
  * @see MCRContentStore
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.7 $ $Date: 2005/09/28 07:40:24 $
+ * @version $Revision: 1.8 $ $Date: 2006/02/10 23:33:47 $
  */
 public interface MCRFileMetadataStore {
     /**

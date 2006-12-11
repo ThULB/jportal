@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRPRIVSM.java,v $
- * $Revision: 1.3 $ $Date: 2005/09/28 07:29:46 $
+ * $Revision: 1.4 $ $Date: 2006/02/15 15:47:02 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -23,6 +23,8 @@
 
 package org.mycore.frontend.cli;
 
+import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ import org.apache.log4j.Logger;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRXMLHelper;
@@ -633,7 +634,8 @@ public class MCRUserCommands2 extends MCRAbstractCommands {
      *            flag to determine whether we use password encryption or not
      */
     private static final void createUserFromFile(String filename, boolean useEncryption) throws MCRException {
-        if (!checkFilename(filename)) {
+        MCRUserMgr mcrUserMgr = MCRUserMgr.instance();
+    	if (!checkFilename(filename)) {
             return;
         }
 
@@ -651,7 +653,12 @@ public class MCRUserCommands2 extends MCRAbstractCommands {
 
             for (int i = 0; i < listelm.size(); i++) {
                 MCRUser u = new MCRUser((org.jdom.Element) listelm.get(i), useEncryption);
-                MCRUserMgr.instance().createUser(u);
+                if(!mcrUserMgr.existUser(u.getID())){
+                	mcrUserMgr.createUser(u);
+                }
+                else{
+                	 LOGGER.info("User "+u.getID()+" was not created, because it already exists.");
+                }
             }
         } catch (Exception e) {
             throw new MCRException("Error while loading user data.", e);
@@ -704,6 +711,7 @@ public class MCRUserCommands2 extends MCRAbstractCommands {
      *            the filename of the user data input
      */
     public static final void createGroupFromFile(String filename) throws MCRException {
+    	MCRUserMgr mcrUserMgr = MCRUserMgr.instance();
         if (!checkFilename(filename)) {
             return;
         }
@@ -722,7 +730,12 @@ public class MCRUserCommands2 extends MCRAbstractCommands {
 
             for (int i = 0; i < listelm.size(); i++) {
                 MCRGroup g = new MCRGroup((org.jdom.Element) listelm.get(i));
-                MCRUserMgr.instance().createGroup(g);
+                if(!mcrUserMgr.existGroup(g.getID())){
+                	MCRUserMgr.instance().createGroup(g);
+                }
+                else{
+                	LOGGER.info("Group "+g.getID()+" was not created, because it already exists.");
+                }
             }
         } catch (Exception e) {
             throw new MCRException("Error while loading group data.", e);
@@ -878,7 +891,7 @@ public class MCRUserCommands2 extends MCRAbstractCommands {
         // get encoding
         CONFIG = MCRConfiguration.instance();
 
-        String mcr_encoding = CONFIG.getString("MCR.metadata_default_encoding", MCRDefaults.ENCODING);
+        String mcr_encoding = CONFIG.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
 
         // Create the output
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat().setEncoding(mcr_encoding));

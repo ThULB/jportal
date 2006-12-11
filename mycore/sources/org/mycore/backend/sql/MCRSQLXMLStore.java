@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLXMLStore.java,v $
- * $Revision: 1.15 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.16 $ $Date: 2006/02/19 20:20:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import org.mycore.datamodel.metadata.MCRXMLTableInterface;
  * store of a table with a MCRObjectID and the corresponding XML file.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.15 $ $Date: 2006/02/10 23:33:48 $
+ * @version $Revision: 1.16 $ $Date: 2006/02/19 20:20:50 $
  * @deprecated
  */
 public class MCRSQLXMLStore implements MCRXMLTableInterface {

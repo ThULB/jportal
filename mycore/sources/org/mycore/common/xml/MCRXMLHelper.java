@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRXMLHelper.java,v $
- * $Revision: 1.16 $ $Date: 2006/01/31 07:05:17 $
+ * $Revision: 1.17 $ $Date: 2006/02/10 11:02:22 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.common.MCRException;
  * @author Detlev Degenhardt
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.16 $ $Date: 2006/01/31 07:05:17 $
+ * @version $Revision: 1.17 $ $Date: 2006/02/10 11:02:22 $
  */
 public class MCRXMLHelper {
     private static MCRParserInterface PARSER;

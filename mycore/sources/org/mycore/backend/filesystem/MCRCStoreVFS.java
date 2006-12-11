@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCStoreVFS.java,v $
- * $Revision: 1.3 $ $Date: 2006/07/04 12:45:31 $
+ * $Revision: 1.4 $ $Date: 2006/07/05 09:09:35 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * @author Werner Greßhoff
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.3 $ $Date: 2006/07/04 12:45:31 $
+ * @version $Revision: 1.4 $ $Date: 2006/07/05 09:09:35 $
  */
 public class MCRCStoreVFS extends MCRContentStore {
 

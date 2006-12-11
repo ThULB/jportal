@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAccessManager.java,v $
- * $Revision: 1.34 $ $Date: 2006/06/13 14:22:08 $
+ * $Revision: 1.35 $ $Date: 2006/10/12 14:10:05 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler
  * 
- * @version $Revision: 1.34 $ $Date: 2006/06/13 14:22:08 $
+ * @version $Revision: 1.35 $ $Date: 2006/10/12 14:10:05 $
  */
 public class MCRAccessManager {
 

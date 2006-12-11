@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFieldDef.java,v $
- * $Revision: 1.15 $ $Date: 2006/05/11 12:12:59 $
+ * $Revision: 1.17 $ $Date: 2006/12/08 14:21:37 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,10 +45,7 @@ public class MCRFieldDef {
     /** The logger */
     private static final Logger LOGGER = Logger.getLogger(MCRFieldDef.class);
 
-    /**
-     * name -> MCRFieldDef
-     */
-    private static Hashtable fieldTable = new Hashtable();
+    private static Hashtable<String,MCRFieldDef> fieldTable = new Hashtable<String,MCRFieldDef>();
 
     public final static Namespace xslns = Namespace.getNamespace("xsl", "http://www.w3.org/1999/XSL/Transform");
 
@@ -142,7 +139,7 @@ public class MCRFieldDef {
      * @return the MCRFieldDef instance representing this field
      */
     public static MCRFieldDef getDef(String name) {
-        return (MCRFieldDef) (fieldTable.get(name));
+        return fieldTable.get(name);
     }
 
     /**
@@ -152,8 +149,8 @@ public class MCRFieldDef {
      *            the ID of the index
      * @return a List of MCRFieldDef objects for that index
      */
-    public static List getFieldDefs(String index) {
-        List fields = new ArrayList();
+    public static List<MCRFieldDef> getFieldDefs(String index) {
+        List<MCRFieldDef> fields = new ArrayList<MCRFieldDef>();
         for (Iterator iter = fieldTable.values().iterator(); iter.hasNext();) {
             MCRFieldDef field = (MCRFieldDef) (iter.next());
             if (field.index.equals(index))

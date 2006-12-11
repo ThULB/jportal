@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRWebService.java,v $
- * $Revision: 1.12 $ $Date: 2006/05/26 11:28:36 $
+ * $Revision: 1.13 $ $Date: 2006/09/20 11:31:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.services.fieldquery.MCRResults;
  * 
  * @author Harald Richter
  * 
- * @version $Revision: 1.12 $ $Date: 2006/05/26 11:28:36 $
+ * @version $Revision: 1.13 $ $Date: 2006/09/20 11:31:24 $
  * 
  */
 public class MCRWebService implements MCRWS {

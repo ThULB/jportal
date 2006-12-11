@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAccessInterface.java,v $
- * $Revision: 1.14 $ $Date: 2006/02/16 10:11:55 $
+ * $Revision: 1.15 $ $Date: 2006/02/16 13:43:23 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.mycore.user2.MCRUser;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.14 $ $Date: 2006/02/16 10:11:55 $
+ * @version $Revision: 1.15 $ $Date: 2006/02/16 13:43:23 $
  * @since 1.3
  */
 public interface MCRAccessInterface {

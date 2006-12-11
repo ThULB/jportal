@@ -1,6 +1,6 @@
 /*
- * $RCSfile: ServletHelper.java,v $
- * $Revision: 1.3 $ $Date: 2006/01/06 23:21:46 $
+ * $RCSfile: MCREditorServletHelper.java,v $
+ * $Revision: 1.1 $ $Date: 2006/01/06 16:44:30 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.jdom.Element;
  * 
  * @author Thomas Scheffler (yagee)
  *
- * @version $Revision: 1.3 $ $Date: 2006/01/06 23:21:46 $
+ * @version $Revision: 1.1 $ $Date: 2006/01/06 16:44:30 $
  */
 public final class MCREditorServletHelper {
     

@@ -3,7 +3,7 @@
 
 <!-- =================================================================== -->
 <!-- MyCoRe Papyri application configuration file for jetty              -->
-<!-- $Revision: 1.2 $ $Date: 2005/11/03 14:29:01 $                      -->
+<!-- $Revision: 1.1 $ $Date: 2005/11/28 12:13:10 $                      -->
 <!-- =================================================================== -->
 
 <Configure class="org.mortbay.jetty.Server">

@@ -20,23 +20,13 @@
       <hidden var="conditions/@format" default="xml" />
 
       <!-- Search only for object type document -->
+      <hidden var="conditions/boolean/@operator" default="and" />
       <hidden var="conditions/boolean/condition1/@field"    default="objectType" />
       <hidden var="conditions/boolean/condition1/@operator" default="=" />
       <hidden var="conditions/boolean/condition1/@value"    default="document" />
 
-      <!-- Alternatively: search for both object types document or disshab  -->      
-      <!-- 
-      <hidden var="conditions/boolean/boolean/@operator" default="or" />
-      <hidden var="conditions/boolean/boolean/condition/@field"    default="objectType" />
-      <hidden var="conditions/boolean/boolean/condition/@operator" default="=" />
-      <hidden var="conditions/boolean/boolean/condition/@value"    default="document" />
-      <hidden var="conditions/boolean/boolean/condition[2]/@field"    default="objectType" />
-      <hidden var="conditions/boolean/boolean/condition[2]/@operator" default="=" />
-      <hidden var="conditions/boolean/boolean/condition[2]/@value"    default="disshab" />
-      -->
-      
       <!-- Search in metadata fields that are text -->
-      <cell row="1" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/condition2">
+      <cell row="1" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/boolean/condition2">
         <repeater min="1" max="10">
           <panel lines="off">
             <cell row="1" col="1" anchor="WEST" var="@field">
@@ -60,7 +50,7 @@
       </cell>
       
       <!-- Search in metadata fields that are names -->
-      <cell row="2" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/condition3">
+      <cell row="2" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/boolean/condition3">
         <repeater min="1" max="10">
           <panel lines="off">
             <cell row="1" col="1" anchor="WEST" var="@field">
@@ -90,22 +80,22 @@
       </cell>
       
       <!-- Search in field "identifier" -->
-      <hidden var="conditions/boolean/condition4/@field" default="identifier" />
+      <hidden var="conditions/boolean/boolean/condition4/@field" default="identifier" />
       <cell row="4" col="1" anchor="SOUTHEAST" height="50px">
         <text i18n="editor.search.document.identifier"/>
       </cell>
-      <cell row="4" col="2" anchor="SOUTHWEST" var="conditions/boolean/condition4/@operator" ref="list.operators.identifier" />
-      <cell row="4" col="3" width="100%" anchor="SOUTHWEST" var="conditions/boolean/condition4/@value">
+      <cell row="4" col="2" anchor="SOUTHWEST" var="conditions/boolean/boolean/condition4/@operator" ref="list.operators.identifier" />
+      <cell row="4" col="3" width="100%" anchor="SOUTHWEST" var="conditions/boolean/boolean/condition4/@value">
         <textfield width="40" />
       </cell>
       
       <!-- Search in field "origin" -->
-      <hidden var="conditions/boolean/condition5/@field" default="origin" />
-      <hidden var="conditions/boolean/condition5/@operator" default="=" />
+      <hidden var="conditions/boolean/boolean/condition5/@field" default="origin" />
+      <hidden var="conditions/boolean/boolean/condition5/@operator" default="=" />
       <cell row="5" col="1" anchor="EAST">
         <text i18n="editor.search.document.origin"/>
       </cell>
-      <cell row="5" col="2" colspan="2" anchor="WEST" var="conditions/boolean/condition5/@value">
+      <cell row="5" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition5/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
           <include cacheable="false" uri="classification:editor[textcounter]:2:children:DocPortal_class_00000003" />
@@ -113,12 +103,12 @@
       </cell>
 
       <!-- Search in field "subject" with operator "=" -->
-      <hidden var="conditions/boolean/condition6/@field" default="subject" />
-      <hidden var="conditions/boolean/condition6/@operator" default="=" />
+      <hidden var="conditions/boolean/boolean/condition6/@field" default="subject" />
+      <hidden var="conditions/boolean/boolean/condition6/@operator" default="=" />
       <cell row="6" col="1" anchor="EAST">
         <text i18n="editor.search.document.subject"/>
       </cell>
-      <cell row="6" col="2" colspan="2" anchor="WEST" var="conditions/boolean/condition6/@value">
+      <cell row="6" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition6/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
           <include cacheable="false" uri="classification:editor[textcounter]:2:children:DocPortal_class_00000007" />
@@ -126,12 +116,12 @@
       </cell>
 
       <!-- Search in field "format" with operator "=" -->
-      <hidden var="conditions/boolean/condition7/@field" default="format" />
-      <hidden var="conditions/boolean/condition7/@operator" default="=" />
+      <hidden var="conditions/boolean/boolean/condition7/@field" default="format" />
+      <hidden var="conditions/boolean/boolean/condition7/@operator" default="=" />
       <cell row="7" col="1" anchor="EAST">
         <text i18n="editor.search.document.format"/>
       </cell>
-      <cell row="7" col="2" colspan="2" anchor="WEST" var="conditions/boolean/condition7/@value">
+      <cell row="7" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition7/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
           <include cacheable="false" uri="classification:editor[textcounter]:2:children:DocPortal_class_00000006" />
@@ -139,12 +129,12 @@
       </cell>
 
       <!-- Search in field "language" with operator "=" -->
-      <hidden var="conditions/boolean/condition8/@field" default="language" />
-      <hidden var="conditions/boolean/condition8/@operator" default="=" />
+      <hidden var="conditions/boolean/boolean/condition8/@field" default="language" />
+      <hidden var="conditions/boolean/boolean/condition8/@operator" default="=" />
       <cell row="8" col="1" anchor="EAST">
         <text i18n="editor.search.document.lang"/>
       </cell>
-      <cell row="8" col="2" colspan="2" anchor="WEST" var="conditions/boolean/condition8/@value">
+      <cell row="8" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition8/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
           <include cacheable="false" uri="classification:editor[textcounter]:2:children:DocPortal_class_00000004" />
@@ -152,12 +142,12 @@
       </cell>
 
       <!-- Search in field "type" with operator "=" -->
-      <hidden var="conditions/boolean/condition9/@field" default="type" />
-      <hidden var="conditions/boolean/condition9/@operator" default="=" />
+      <hidden var="conditions/boolean/boolean/condition9/@field" default="type" />
+      <hidden var="conditions/boolean/boolean/condition9/@operator" default="=" />
       <cell row="9" col="1" anchor="EAST">
         <text i18n="editor.search.document.type"/>
       </cell>
-      <cell row="9" col="2" colspan="2" anchor="WEST" var="conditions/boolean/condition9/@value">
+      <cell row="9" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition9/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
           <include cacheable="false" uri="classification:editor[textcounter]:2:children:DocPortal_class_00000005" />
@@ -165,14 +155,14 @@
       </cell>
        
        <!-- Search in field "dateCreated" -->
-      <hidden var="conditions/boolean/condition10/@field" default="dateCreated" />
+      <hidden var="conditions/boolean/boolean/condition10/@field" default="dateCreated" />
       <cell row="10" col="1" anchor="EAST">
         <text i18n="editor.search.document.datecr" />
       </cell>
 	    <cell row="10" col="2" colspan="2" anchor="WEST">
 	      <panel lines="off">  
-          <cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition10/@operator" ref="list.operators" />
-          <cell row="1" col="2" anchor="WEST" var="conditions/boolean/condition10/@value">
+          <cell row="1" col="1" anchor="WEST" var="conditions/boolean/boolean/condition10/@operator" ref="list.operators" />
+          <cell row="1" col="2" anchor="WEST" var="conditions/boolean/boolean/condition10/@value">
             <textfield width="15" />
           </cell>
         </panel>
@@ -183,52 +173,52 @@
       </cell>
 
       <!-- Search in field "content" -->
-      <hidden var="conditions/boolean/condition11/@field" default="content" />
+      <hidden var="conditions/boolean/boolean/condition11/@field" default="content" />
       <cell row="12" col="1" anchor="EAST">
         <text i18n="editor.search.fulltext" />
       </cell>
-	    <cell row="12" col="2" anchor="WEST" var="conditions/boolean/condition11/@operator" ref="list.operators.text" />
-      <cell row="12" col="3" anchor="WEST" var="conditions/boolean/condition11/@value">
+	    <cell row="12" col="2" anchor="WEST" var="conditions/boolean/boolean/condition11/@operator" ref="list.operators.text" />
+      <cell row="12" col="3" anchor="WEST" var="conditions/boolean/boolean/condition11/@value">
         <textfield width="15" />
       </cell>
 
       <!-- Search in field "fileName" -->
-      <hidden var="conditions/boolean/condition12/@field" default="fileName" />
+      <hidden var="conditions/boolean/boolean/condition12/@field" default="fileName" />
       <cell row="13" col="1" anchor="EAST">
         <text i18n="editor.search.document.filename" />
       </cell>
-	    <cell row="13" col="2" anchor="WEST" var="conditions/boolean/condition12/@operator" ref="list.operators.identifier" />
-      <cell row="13" col="3" anchor="WEST" var="conditions/boolean/condition12/@value">
+	    <cell row="13" col="2" anchor="WEST" var="conditions/boolean/boolean/condition12/@operator" ref="list.operators.identifier" />
+      <cell row="13" col="3" anchor="WEST" var="conditions/boolean/boolean/condition12/@value">
         <textfield width="40" />
       </cell>
 
       <!-- Search in field "fileSize" -->
-      <hidden var="conditions/boolean/condition13/@field" default="fileSize" />
+      <hidden var="conditions/boolean/boolean/condition13/@field" default="fileSize" />
       <cell row="14" col="1" anchor="EAST">
         <text i18n="editor.search.document.filesize" />
       </cell>
-	    <cell row="14" col="2" anchor="WEST" var="conditions/boolean/condition13/@operator" ref="list.operators" />
-      <cell row="14" col="3" anchor="WEST" var="conditions/boolean/condition13/@value">
+	    <cell row="14" col="2" anchor="WEST" var="conditions/boolean/boolean/condition13/@operator" ref="list.operators" />
+      <cell row="14" col="3" anchor="WEST" var="conditions/boolean/boolean/condition13/@value">
         <textfield width="15" />
       </cell>
 
       <!-- Search in field "fileExtension" -->
-      <hidden var="conditions/boolean/condition14/@field" default="fileExtension" />
+      <hidden var="conditions/boolean/boolean/condition14/@field" default="fileExtension" />
       <cell row="15" col="1" anchor="EAST">
         <text i18n="editor.search.document.extension" />
       </cell>
-	    <cell row="15" col="2" anchor="WEST" var="conditions/boolean/condition14/@operator" ref="list.operators.identifier" />
-      <cell row="15" col="3" anchor="WEST" var="conditions/boolean/condition14/@value">
+	    <cell row="15" col="2" anchor="WEST" var="conditions/boolean/boolean/condition14/@operator" ref="list.operators.identifier" />
+      <cell row="15" col="3" anchor="WEST" var="conditions/boolean/boolean/condition14/@value">
         <textfield width="10" />
       </cell>
 
       <!-- Search in field "fileDateModified" -->
-      <hidden var="conditions/boolean/condition15/@field" default="fileDateModified" />
+      <hidden var="conditions/boolean/boolean/condition15/@field" default="fileDateModified" />
       <cell row="16" col="1" anchor="EAST">
         <text i18n="editor.search.document.datemod" />
       </cell>
-	    <cell row="16" col="2" anchor="WEST" var="conditions/boolean/condition15/@operator" ref="list.operators" />
-      <cell row="16" col="3" anchor="WEST" var="conditions/boolean/condition15/@value">
+	    <cell row="16" col="2" anchor="WEST" var="conditions/boolean/boolean/condition15/@operator" ref="list.operators" />
+      <cell row="16" col="3" anchor="WEST" var="conditions/boolean/boolean/condition15/@value">
         <textfield width="15" />
       </cell>
 
@@ -279,7 +269,7 @@
           <cell row="1" col="1" anchor="WEST">
             <text i18n="editor.search.connect" />
           </cell>
-          <cell row="1" col="2" anchor="WEST" var="conditions/boolean/@operator">
+          <cell row="1" col="2" anchor="WEST" var="conditions/boolean/boolean/@operator">
             <list type="dropdown" default="and">
               <item value="and" i18n="editor.search.and" />
               <item value="or" i18n="editor.search.or" />

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCheckACLBase.java,v $
- * $Revision: 1.6 $ $Date: 2006/05/17 12:34:44 $
+ * $Revision: 1.8 $ $Date: 2006/11/27 12:35:18 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,8 +28,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
@@ -44,7 +42,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.6 $ $Date: 2006/05/17 12:34:44 $
+ * @version $Revision: 1.8 $ $Date: 2006/11/27 12:35:18 $
  */
 abstract public class MCRCheckACLBase extends MCRCheckBase {
     /**
@@ -313,11 +311,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
         }
 
         // restart editor
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdom);
         job.getRequest().setAttribute("XSL.Style", lang);
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(),job.getResponse(),jdom);
     }
-
 }

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRServlet.java,v $
- * $Revision: 1.58 $ $Date: 2006/09/22 13:24:10 $
+ * $Revision: 1.65 $ $Date: 2006/12/08 14:37:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -42,12 +42,12 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.xml.MCRLayoutServlet;
+import org.mycore.common.xml.MCRLayoutService;
+import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.metadata.MCRActiveLinkException;
 
 /**
@@ -56,10 +56,10 @@ import org.mycore.datamodel.metadata.MCRActiveLinkException;
  * taken from MilessServlet.java written by Frank Lï¿½tzenkirchen.
  * 
  * @author Detlev Degenhardt
- * @author Frank Lï¿½tzenkirchen
+ * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.58 $ $Date: 2006/09/22 13:24:10 $
+ * @version $Revision: 1.65 $ $Date: 2006/12/08 14:37:16 $
  */
 public class MCRServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -81,10 +81,20 @@ public class MCRServlet extends HttpServlet {
 	private final static boolean GET = true;
 
 	private final static boolean POST = false;
+    
+    private static MCRLayoutService LAYOUT_SERVICE;
+    
+    public static MCRLayoutService getLayoutService() {
+        return LAYOUT_SERVICE;
+    }
 
-	protected static MCRCache requestParamCache = new MCRCache(40);
+    public void init() throws ServletException {
+        super.init();
+        String dir = getServletContext().getRealPath("WEB-INF/stylesheets");
+        LAYOUT_SERVICE = new MCRLayoutService(dir);
+    }
 
-	/** returns the base URL of the mycore system */
+    /** returns the base URL of the mycore system */
 	public static String getBaseURL() {
 		return BASE_URL;
 	}
@@ -98,7 +108,7 @@ public class MCRServlet extends HttpServlet {
 	 * Initialisation of the static values for the base URL and servlet URL of
 	 * the mycore system.
 	 */
-	private static synchronized void prepareURLs(HttpServletRequest req) {
+	private static synchronized void prepareURLs(ServletContext context, HttpServletRequest req) {
 		String contextPath = req.getContextPath();
 
 		if (contextPath == null) {
@@ -112,6 +122,7 @@ public class MCRServlet extends HttpServlet {
         
 		BASE_URL = CONFIG.getString("MCR.baseurl",requestURL.substring(0, pos) + contextPath);
 		SERVLET_URL = BASE_URL + "servlets/";
+        MCRURIResolver.init(context, getBaseURL());
 	}
 
 	// The methods doGet() and doPost() simply call the private method
@@ -213,7 +224,7 @@ public class MCRServlet extends HttpServlet {
 		}
 
 		if (BASE_URL == null) {
-			prepareURLs(req);
+			prepareURLs(getServletContext(), req);
 		}
 
 		try {
@@ -308,13 +319,13 @@ public class MCRServlet extends HttpServlet {
 	}
 
 	protected void generateErrorPage(HttpServletRequest request, HttpServletResponse response, int error, String msg, Exception ex, boolean xmlstyle)
-			throws IOException, ServletException {
+			throws IOException {
 		LOGGER.error(getClass().getName() + ": Error " + error + " occured. The following message was given: " + msg, ex);
 
 		String rootname = "mcr_error";
         String style=getProperty(request,"XSL.Style");
-        if ((style!=null) && !(style.equals("xml"))){
-            style=null;
+        if ((style == null) || !(style.equals("xml"))) {
+            style = "default";
         }
 		Element root = new Element(rootname);
 		root.setAttribute("HttpError", Integer.toString(error)).setText(msg);
@@ -323,6 +334,7 @@ public class MCRServlet extends HttpServlet {
 
 		while (ex != null) {
 			Element exception = new Element("exception");
+            exception.setAttribute( "type", ex.getClass().getName() );
 			Element trace = new Element("trace");
 			Element message = new Element("message");
 			trace.setText(MCRException.getStackTraceAsString(ex));
@@ -337,15 +349,14 @@ public class MCRServlet extends HttpServlet {
 			}
 		}
 
-		request.setAttribute(MCRLayoutServlet.JDOM_ATTR, errorDoc);
         request.setAttribute("XSL.Style", style);
         
         final String requestAttr="MCRServlet.generateErrorPage";
         if ((!response.isCommitted()) && (request.getAttribute(requestAttr)==null)){
             response.setStatus(error);
-            RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
             request.setAttribute(requestAttr,msg);
-            rd.forward(request, response);
+            LAYOUT_SERVICE.doLayout(request,response,errorDoc);
+            return;
         } else {
             if (request.getAttribute(requestAttr)!=null){
                 LOGGER.warn("Could not send error page. Generating error page failed. The original message:\n"+request.getAttribute(requestAttr));
@@ -356,7 +367,7 @@ public class MCRServlet extends HttpServlet {
 	}
 
 	protected void generateActiveLinkErrorpage(HttpServletRequest request, HttpServletResponse response, String msg, MCRActiveLinkException activeLinks)
-			throws IOException, ServletException {
+			throws IOException {
 		StringBuffer msgBuf = new StringBuffer(msg);
 		msgBuf.append("\nThere are links active preventing the commit of work, see error message for details. The following links where affected:");
 		Map links = activeLinks.getActiveLinks();
@@ -392,7 +403,7 @@ public class MCRServlet extends HttpServlet {
         return -1; //time is not known
     }
 
-    protected static String getProperty(HttpServletRequest request, String name) {
+    public static String getProperty(HttpServletRequest request, String name) {
 		String value = (String) request.getAttribute(name);
 
 		// if Attribute not given try Parameter
@@ -424,17 +435,24 @@ public class MCRServlet extends HttpServlet {
 	}
 
 	public static void putParamsToSession(HttpServletRequest request) {
-		Enumeration e = request.getParameterNames();
-		MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-		
-		while (e.hasMoreElements()) {
-			String name = (String) (e.nextElement());
-			if (name.startsWith("XSL.") && name.endsWith(".SESSION") && (mcrSession!=null)) {
-            	mcrSession.put(name.substring(0, name.length() - 8), request.getParameter(name));
-                LOGGER.debug("Found HTTP-Req.-Parameter " + name + "=" + request.getParameter(name) 
-                		+ " that should be saved in session, safed " + name.substring(0, name.length() - 8) + "=" 
-                		+ request.getParameter(name));
-			}
-		}
-	}
+        MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+
+        for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
+            String name = e.nextElement().toString();
+            if (name.startsWith("XSL.") && name.endsWith(".SESSION")) {
+                mcrSession.put(name.substring(0, name.length() - 8), request.getParameter(name));
+                LOGGER.debug("Found HTTP-Req.-Parameter " + name + "=" + request.getParameter(name) + " that should be saved in session, safed "
+                        + name.substring(0, name.length() - 8) + "=" + request.getParameter(name));
+            }
+        }
+        for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
+            String name = e.nextElement().toString();
+            if (name.startsWith("XSL.") && name.endsWith(".SESSION")) {
+                mcrSession.put(name.substring(0, name.length() - 8), request.getAttribute(name));
+                LOGGER.debug("Found HTTP-Req.-Attribute " + name + "=" + request.getParameter(name) + " that should be saved in session, safed "
+                        + name.substring(0, name.length() - 8) + "=" + request.getParameter(name));
+            }
+
+        }
+    }
 }

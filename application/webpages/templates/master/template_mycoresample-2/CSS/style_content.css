@@ -288,19 +288,20 @@ div.submitButton{
 /* Editor forms (see editor.xsl and org.mycore.frontend.editor.*       */
 /* =================================================================== */
 
-table.editor                   { background-color:#CAD9E0; border:1px solid #7791ac; }
-td.editorHeadline              { color:#FFFFFF; background-color:#15516E; padding:3px; }
-td.editorValidationMessage     { color:#FFFFFF; background-color:#FF0000; padding:3px; }
-td.editorCellWithPanelLinesOff { }
-td.editorCellWithPanelLinesOn  { border-left:1px solid #7791ac }
-td.editorCellWithCompLinesOff  { padding:3px; }
-td.editorCellWithCompLinesOn   { padding:3px; border-left:1px solid #7791ac }
-td.editorCellValidationFailed  { padding:3px; border:2px solid #FF0000 }
-table.editorPanel              { }
-td.editorRepeaterButton        { padding-right:3px; padding-bottom:3px }
-.editorText                    { font-size:12px; font-family:Verdana,Arial,Helvetica,SansSerif; line-height:16px }
-td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px solid #7791ac }
-.editorButton                  { color:#ffffff; background-color:#7791ac; 
-                                 font-weight:bold; font-family:Verdana,Arial,Helvetica,SansSerif; 
-                                 font-size:10px; letter-spacing:1px }
+table.editor                       { background-color:#CAD9E0; border:1px solid #7791ac; }
+td.editorHeadline                  { color:#FFFFFF; background-color:#15516E; padding:3px; }
+td.editorValidationMessage         { color:#FFFFFF; background-color:#FF0000; padding:3px; }
+td.editorCellWithPanelLinesOff     { }
+td.editorCellWithPanelLinesOn      { border-left:1px solid #7791ac }
+td.editorCellWithCompLinesOff      { padding:3px; }
+td.editorCellWithCompLinesOn       { padding:3px; border-left:1px solid #7791ac }
+td.editorCellValidationFailed      { padding:3px; border:2px solid #FF0000 }
+table.editorPanelValidationFailed  { padding:3px; border:2px solid #FF0000 }
+table.editorPanel                  { }
+td.editorRepeaterButton            { padding-right:3px; padding-bottom:3px }
+.editorText                        { font-size:12px; font-family:Verdana,Arial,Helvetica,SansSerif; line-height:16px }
+td.editorHLine                     { border-top:1px solid #7791ac; border-left:1px solid #7791ac }
+.editorButton                      { color:#ffffff; background-color:#7791ac; 
+                                     font-weight:bold; font-family:Verdana,Arial,Helvetica,SansSerif; 
+                                     font-size:10px; letter-spacing:1px }
 

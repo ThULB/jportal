@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.4 $ $Date: 2006/09/04 12:16:27 $ -->
+<!-- $Revision: 1.9 $ $Date: 2006/11/29 06:32:31 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -26,12 +26,6 @@
   </xsl:attribute>
   <xsl:attribute name="notinherit">
     <xsl:value-of select="./@notinherit" />
-  </xsl:attribute>
-  <xsl:attribute name="parasearch">
-    <xsl:value-of select="./@parasearch" />
-  </xsl:attribute>
-  <xsl:attribute name="textsearch">
-    <xsl:value-of select="./@textsearch" />
   </xsl:attribute>
 </xsl:attribute-set>
 

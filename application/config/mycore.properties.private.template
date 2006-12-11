@@ -9,36 +9,51 @@
   MCR.nameOfProject=DocPortal - The MyCoRe-Sample
 
 # The base directory of the DocPortal installation, e.g. for windows c:/program files/docportal
-  MCR.basedir=/mcradmin/docportal
+  MCR.basedir=/home/mcradmin/docportal
 # MCR.basedir=$INSTALL_PATH
 # The base URL of the web application, e.g. for tomcat http://localhost:8080/docportal/
   MCR.baseurl=http://localhost:8291/
 # any textfilter plugins in this path
-  MCR.PluginDirectory=%MCR.basedir%/lib
+  MCR.PluginDirectory=%MCR.basedir%/build/lib
+  
 
 ##############################################################################
-# Plugins for text index                                                     #
+# Configure ACL Checking                                                     #
 ##############################################################################
 
-# Classes for TextFilterPluginManager to convert files to text for indexing with lucene 
-  MCR.TextFilterPlugin.1.class=org.mycore.services.plugins.MSWordPlugin
-  MCR.TextFilterPlugin.2.class=org.mycore.services.plugins.OpenDocumentTextPlugin
-  MCR.TextFilterPlugin.3.class=org.mycore.services.plugins.OoTextPlugin
-  MCR.TextFilterPlugin.4.class=org.mycore.services.plugins.PdfPlugin
-  MCR.TextFilterPlugin.5.class=org.mycore.services.plugins.PlainTextPlugin
-  MCR.TextFilterPlugin.6.class=org.mycore.services.plugins.PostScriptPlugin
-  MCR.TextFilterPlugin.7.class=org.mycore.services.plugins.XmlHtmlPlugin
+# Option 1
+# Default, sets ACL rules after servacl section in metadata xml
+
+  MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRAccessEventHandler
+  MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRAccessEventHandler
+  MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRObjectIDStrategy
+
+# Option 2
+# You can set the ACL per object (servacl rule is ignored),
+# fallback to ACL per object type or finally to rule "default"
+
+#  MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRRemoveAclEventHandler
+#  MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRRemoveAclEventHandler
+#  MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRObjectTypeStrategy
+
+# Option 3
+# You can set the ACL per object (servacl rule is ignored),
+# fallback to ACL of parent object (and so on)
+
+#  MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRRemoveAclEventHandler
+#  MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRRemoveAclEventHandler
+#  MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRParentRuleStrategy
 
 ##############################################################################
 # Event handlers used for ALL persistence configurations
 ##############################################################################
 
-  MCR.EventHandler.MCRObject.1.class=org.mycore.access.MCRAccessEventHandler
+# MCR.EventHandler.MCRObject.1.class is defined above in "Configure ACL checking"
   MCR.EventHandler.MCRObject.2.class=org.mycore.datamodel.metadata.MCRXMLTableEventHandler
   MCR.EventHandler.MCRObject.3.class=org.mycore.datamodel.metadata.MCRLinkTableEventHandler
 # MCR.EventHandler.MCRObject.4.class is defined below (new query indexing with JDOM/Lucene/Hibernate)
 
-  MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRAccessEventHandler
+# MCR.EventHandler.MCRDerivate.1.class is defined above in "Configure ACL checking"
   MCR.EventHandler.MCRDerivate.2.class=org.mycore.datamodel.metadata.MCRXMLTableEventHandler
 # MCR.EventHandler.MCRDerivate.3.class is defined in the searcher definition and hold only a repair
 
@@ -55,7 +70,7 @@
 # New query implementation using Lucene - use for metadata and/or content    #
 ##############################################################################
 
-  MCR.Lucene.LockDir=%MCR.basedir%/lucene-locks
+  MCR.Lucene.LockDir=%MCR.basedir%/data/lucene-locks
 
   MCR.EventHandler.MCRDerivate.3.class=org.mycore.datamodel.ifs.MCRContentIndexEventHandler
   MCR.EventHandler.MCRObject.4.Indexer=lucene-metadata
@@ -63,11 +78,11 @@
 
   MCR.Searcher.lucene-metadata.Index=metadata
   MCR.Searcher.lucene-metadata.Class=org.mycore.backend.lucene.MCRLuceneSearcher
-  MCR.Searcher.lucene-metadata.IndexDir=%MCR.basedir%/lucene-index4metadata
+  MCR.Searcher.lucene-metadata.IndexDir=%MCR.basedir%/data/lucene-index4metadata
 
   MCR.Searcher.lucene-content.Index=content
   MCR.Searcher.lucene-content.Class=org.mycore.backend.lucene.MCRLuceneSearcher
-  MCR.Searcher.lucene-content.IndexDir=%MCR.basedir%/lucene-index4content
+  MCR.Searcher.lucene-content.IndexDir=%MCR.basedir%/data/lucene-index4content
 
 ##############################################################################
 # New query implementation using Hibernate - use only for metadata search    #
@@ -102,13 +117,13 @@
 
 # JDBC parameters for connecting to HSQLDB
   MCR.persistence_sql_type=hsqldb
-  MCR.persistence_sql_data_directory=%MCR.basedir%/hsqldb-data
+  MCR.persistence_sql_data_directory=%MCR.basedir%/data/hsqldb-data
   MCR.persistence_sql_database_name=docportal
 # HSQLDB in server mode  
   MCR.persistence_sql_database_port=8298
   MCR.persistence_sql_database_url=jdbc:hsqldb:hsql://localhost:8298
 # HSQLDB in connection mode
-# MCR.persistence_sql_database_url=jdbc:hsqldb:file://%MCR.basedir%/hsqldb-data/docportal
+# MCR.persistence_sql_database_url=jdbc:hsqldb:file://%MCR.basedir%/data/hsqldb-data/docportal
   MCR.persistence_sql_driver=org.hsqldb.jdbcDriver
   MCR.persistence_sql_database_userid=sa
   MCR.persistence_sql_database_passwd=
@@ -136,9 +151,6 @@ MCR.persistence_sql_max_connections=5
   MCR.IFS.FileMetadataStore.Class=org.mycore.backend.hibernate.MCRHIBFileMetadataStore
   MCR.IFS.ContentStore.SQLDB.Class=org.mycore.backend.hibernate.MCRHIBCStore
 
-# This is the default. It use the Hibernate class for NBN
-  MCR.NBN.ManagerImplementation=org.mycore.backend.hibernate.MCRHIBNBNManager
-
 # This is the default. It use the Hibernate class for URN
   MCR.URN.Store=org.mycore.backend.hibernate.MCRHIBURNStore
     
@@ -151,7 +163,7 @@ MCR.persistence_sql_max_connections=5
 ##############################################################################
 
 # if you don't set this, hibernate-mapping.dtd is stored in your system-temp-directory
-  MCR.dtd.directory=%MCR.basedir%/schema
+  MCR.dtd.directory=%MCR.basedir%/build/schema
   
 # additional hibernate-mapping-files
   MCR.hibernate.hbm.xml.MCRRESUMPTIONTOKEN=MCRRESUMPTIONTOKEN.hbm.xml
@@ -173,7 +185,7 @@ MCR.persistence_sql_max_connections=5
 
 # Sample file content store with ID = FS, uses local filesystem
   MCR.IFS.ContentStore.FS.Class=org.mycore.backend.filesystem.MCRCStoreVFS
-  MCR.IFS.ContentStore.FS.URI=%MCR.basedir%/filestore
+  MCR.IFS.ContentStore.FS.URI=%MCR.basedir%/data/filestore
 
 ##############################################################################
 # Internal Filesystem SQL with Hibernate                                     #
@@ -282,9 +294,6 @@ MCR.users_store_sql_table_group_admins=MCRGROUPADMINS
 MCR.access_store_sql_table_rule=MCRACCESSRULE
 MCR.access_store_sql_table_map=MCRACCESS
 
-# NBN table
-MCR.nbn_store_sql_table=MCRNBN
-
 # URN table
 MCR.url_store_sql_table=MCRURN
 
@@ -311,10 +320,22 @@ MCR.users_guestuser_userpasswd=gast
 MCR.users_guestuser_groupname=gastgroup
 
 ##############################################################################
+# Webservices                                                                #
+##############################################################################
+
+# The user which is allowed to deploy/undeploy Webservices
+# Values are stored in WEB-INF/users.lst and used by Axis-AdminServlet 
+# Values are used in ant-task (see docportal/modules/module-webservices/build.xml)
+# to deploy/undeploy webservice
+# if these values are not set deployment results in an error message
+MCR.ws_admin=
+MCR.ws_adminpasswd=
+
+##############################################################################
 # Save Directory                                                             #
 ##############################################################################
 
-  MCR.Save.FileSystem=%MCR.basedir%/save
+  MCR.Save.FileSystem=%MCR.basedir%/data/save
 
 ##############################################################################
 # Editor                                                                     #
@@ -327,7 +348,7 @@ MCR.users_guestuser_groupname=gastgroup
   MCR.Editor.FileUpload.MaxSize=5000000
 
 # Directory where files may be temporary stored during upload
-  MCR.Editor.FileUpload.TempStoragePath=%MCR.basedir%/fileupload
+  MCR.Editor.FileUpload.TempStoragePath=%MCR.basedir%/data/fileupload
 
 # FileUpload connection
 # MCR.FileUpload.IP=
@@ -345,11 +366,11 @@ MCR.document_project_id=DocPortal
 MCR.institution_project_id=DocPortal
 
 # Editor path
-MCR.editor_base_directory=%MCR.basedir%/workflow
-MCR.editor_author_directory=%MCR.basedir%/workflow/author
-MCR.editor_document_directory=%MCR.basedir%/workflow/document
-MCR.editor_derivate_directory=%MCR.basedir%/workflow/document
-MCR.editor_institution_directory=%MCR.basedir%/workflow/institution
+MCR.editor_base_directory=%MCR.basedir%/data/workflow
+MCR.editor_author_directory=%MCR.basedir%/data/workflow/author
+MCR.editor_document_directory=%MCR.basedir%/data/workflow/document
+MCR.editor_derivate_directory=%MCR.basedir%/data/workflow/document
+MCR.editor_institution_directory=%MCR.basedir%/data/workflow/institution
 
 # Editor Mail adresses for Messages add1@serv1,add2,@serv2,...
 MCR.editor_mail=user@domain.xyz
@@ -407,7 +428,7 @@ MCR.editor_baseurl=local
 SIGN.Alias=docportal
 
 # File where the keys are stored in
-SIGN.KeyStore=%MCR.basedir%/keystore
+SIGN.KeyStore=%MCR.basedir%/build/keystore
 
 # Password for keystore and key pair
 # SET IN PRIVATE.PROPERTIES: SIGN.Password
@@ -431,7 +452,7 @@ SIGN.Country=Germany
   MCR.oai.adminemail=%MCR.editor_mail%
 
 # A temporary directory to store the resumption tokens
-  MCR.oai.resumptiontoken.dir=%MCR.basedir%/tmp
+  MCR.oai.resumptiontoken.dir=%MCR.basedir%/build/tmp
 
 # timeout, after which the resumption tokens will be deleted (in hours)
   MCR.oai.resumptiontoken.timeout=48
@@ -452,9 +473,9 @@ SIGN.Country=Germany
   MCR.oai.resumptiontoken.store=org.mycore.backend.hibernate.MCRHIBResumptionTokenStore
 
 # qualified Dublin Core
-# MCR.oai.metadata.transformer.oai_qdc=MyCoReOAI-mycore2dcqualified.xsl
-# MCR.oai.metadata.namespace.oai_qdc=http://www.mycore.de/xmlns/qdc
-# MCR.oai.metadata.schema.oai_qdc=http://www.mycore.de/schema/qdc.xsd
+  MCR.oai.metadata.transformer.oai_qdc=MyCoReOAI-mycore2dcqualified.xsl
+  MCR.oai.metadata.namespace.oai_qdc=http://www.mycore.de/xmlns/qdc
+  MCR.oai.metadata.schema.oai_qdc=http://www.mycore.de/schema/qdc.xsd
 
 # xMetaDiss
 # MCR.oai.metadata.transformer.xmetadiss=MyCoReOAI-mycore2xMetaDiss.xsl
@@ -498,50 +519,6 @@ MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
 
 # URL for local redirects to registered documents
 MCR.URN.Resolver.DocumentURL=receive/
-
-##############################################################################
-# The MyCoRe properties NBN file for the Dublin Core Demo                    #
-##############################################################################
-
-# The URL of the national NBN resolver for "urn:nbn:de:..."  URNs
-  MCR.NBN.TopLevelResolver=http://nbn-resolving.de/urn/resolver.pl?urn=
-
-# The prefix of all local NBN URLs, e. g. "urn:nbn:de:hbz:465-"
-  MCR.NBN.NamespacePrefix=urn:nbn:de:hbz:6-
-
-# Name of the DB table
-  MCR.NBN.PersistenceStore.TableName=MCRNBN
-
-# Name of the Stylesheet
-  MCR.NBN.Stylesheet=MyCoReNBN-ddb.xsl
-
-# Document types which are relevant for DDB registration
-  MCR.NBN.contenttypes=ps pdf
-
-# Local eMail address 
-  MCR.NBN.localcontact=%MCR.editor_mail%
-
-# eMail of DDB
-# MCR.NBN.ddbcontact=ep@ddb.de
-  MCR.NBN.ddbcontact=%MCR.editor_mail%
-
-# temporary directory for zip file creation
-  MCR.NBN.tmpDirectory=/tmp
-
-# contact id delivered by the DDB
-  MCR.NBN.DDBContactID=L6000-0708
-
-# The university name
-  MCR.NBN.ToplevelContributor=MyCoRe Community
-
-# The corporate name
-MCR.NBN.CorporateName=MyCoRe Developer Group
-
-# The corporate address
-MCR.NBN.CorporateName.Address=MyCoRe Developer Group, Essen, Hamburg, Jena, Leipzig, Muenchen, Rostock, Germany
-
-# the classification of Die Deutsche Bibliothek
-MCR.NBN.Subject=DNBSG
 
 ##############################################################################
 # MCRUploadApplet                                                            #

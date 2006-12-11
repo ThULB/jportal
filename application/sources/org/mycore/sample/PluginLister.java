@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: PluginLister.java,v $
+ * $Revision: 1.4 $ $Date: 2005/09/28 08:00:29 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

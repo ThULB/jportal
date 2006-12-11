@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSearcher.java,v $
- * $Revision: 1.18 $ $Date: 2006/05/24 09:34:57 $
+ * $Revision: 1.21 $ $Date: 2006/12/08 14:40:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -190,7 +190,7 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      *            later
      * @return the query results
      */
-    public abstract MCRResults search(MCRCondition condition, int maxResults, List sortBy, boolean addSortData);
+    public abstract MCRResults search(MCRCondition condition, int maxResults, List<MCRSortBy> sortBy, boolean addSortData);
 
     /**
      * Adds field values needed for sorting for those hits that do not have sort
@@ -203,6 +203,6 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      * @param sortBy
      *            the MCRFieldDef fields that are sort criteria
      */
-    public void addSortData(Iterator hits, List sortBy) {
+    public void addSortData(Iterator hits, List<MCRSortBy> sortBy) {
     }
 }

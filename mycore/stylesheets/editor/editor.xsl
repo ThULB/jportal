@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.48 $ $Date: 2006/05/26 15:30:17 $ -->
+<!-- $Revision: 1.56 $ $Date: 2006/12/08 12:36:13 $ -->
 <!-- ============================================== --> 
 
 <xsl:stylesheet 
@@ -16,10 +16,7 @@
 
 <!-- ======== http request parameters ======== -->
 
-<xsl:param name="editor.session.id" /> <!-- reload session after plus minus up down button -->
-
 <xsl:param name="StaticFilePath"  /> <!-- path of static webpage including this editor -->
-<xsl:param name="RequestParamKey" /> <!-- key for accessing http request params in session -->
 
 <!-- ======== constants, do not change ======== -->
 <xsl:variable name="editor.delimiter.internal"  select="'_'" />
@@ -43,34 +40,9 @@
 <!-- ======== handles editor ======== -->
 
 <xsl:template match="editor">
-
-  <!-- ======== import editor definition ======== -->
-  <xsl:variable name="uri" select="concat('webapp:', $StaticFilePath)" />
-  <xsl:variable name="query">
-    <xsl:choose>
-      <xsl:when test="string-length($editor.session.id) &gt; 0">
-        <xsl:text>?_action=load.session&amp;_session=</xsl:text>
-        <xsl:value-of select="$editor.session.id" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>?_requestParamKey=</xsl:text>
-        <xsl:value-of select="$RequestParamKey" />
-        <xsl:text>&amp;_ref=</xsl:text>
-        <xsl:value-of select="@id" />
-        <xsl:text>&amp;_action=start.session&amp;_uri=</xsl:text>
-        <xsl:value-of select="$uri" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="url">
-    <xsl:value-of select="concat('request:servlets/XMLEditor',$JSessionID,$query)" />
-  </xsl:variable>
-
   <!-- ======== build nested panel structure ======== -->
-  <xsl:apply-templates select="document($url)/editor/components" />
+  <xsl:apply-templates select="components" />
 </xsl:template>
-
-<!-- ========================================================================= -->
 
 <!-- ======== handle components ======== -->
 <xsl:template match="components">
@@ -83,7 +55,7 @@
       <xsl:apply-templates select="headline" />
 
       <!-- ======== if validation errors exist, display message ======== -->
-      <xsl:apply-templates select="/editor/failed">
+      <xsl:apply-templates select="ancestor::editor/failed">
         <xsl:with-param name="lines" select="panel[@id=current()/@root]/@lines" />
       </xsl:apply-templates>
 
@@ -204,7 +176,7 @@
   <tr>
     <td class="editorValidationMessage">
 
-      <xsl:for-each select="/editor/validationMessage">
+      <xsl:for-each select="ancestor::editor/validationMessage">
         <xsl:call-template name="output.label">
           <xsl:with-param name="usefont" select="'yes'" />
         </xsl:call-template>
@@ -416,13 +388,31 @@
 <!-- ======== handle panel ======== -->
 <xsl:template match="panel">
   <xsl:param name="var"      />
-  <xsl:param name="pos"      />
+  <xsl:param name="pos" select="1" />
   <xsl:param name="num.next" />
 
   <!-- ======== include cells of other panels by include/@ref ======== -->
   <xsl:variable name="cells" select="ancestor::components/panel[@id = current()/include/@ref]/cell|cell" />
 
-  <table border="0" cellpadding="0" cellspacing="0" class="editorPanel">
+  <table border="0" cellpadding="0" cellspacing="0">
+    <xsl:attribute name="class">
+      <xsl:choose>
+        <xsl:when test="ancestor::editor/failed/field[@sortnr=$pos]">editorPanelValidationFailed</xsl:when>
+        <xsl:otherwise>editorPanel</xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    <xsl:if test="ancestor::editor/failed/field[@sortnr=$pos]">
+      <xsl:variable name="message">
+        <xsl:for-each select="//condition[@id=ancestor::editor/failed/field[@sortnr=$pos]/@condition]">
+          <xsl:call-template name="output.label" />
+        </xsl:for-each>
+      </xsl:variable>
+      <tr>
+        <td>
+          <img border="0" align="absbottom" src="{$WebApplicationBaseURL}images/validation-error.png" alt="{$message}" title="{$message}" />
+        </td>
+      </tr>
+    </xsl:if>
 
     <!-- ======== iterate rows in panel ======== -->
     <xsl:call-template name="editor.row">
@@ -443,6 +433,7 @@
   <!-- ======== handle panel validation conditions ======== -->
   <xsl:for-each select="ancestor::components/panel[@id = current()/include/@ref]/condition|condition">
     <input type="hidden" name="{$editor.delimiter.internal}cond-{$var}" value="{@id}" />
+    <input type="hidden" name="{$editor.delimiter.internal}sortnr-{$var}" value="{$pos}" />
   </xsl:for-each>
   
 </xsl:template>
@@ -596,7 +587,7 @@
     <xsl:if test="position() = 1">
       <xsl:attribute name="class">
         <xsl:choose>
-          <xsl:when test="/editor/failed/field[@sortnr=$pos] and contains('textfield textarea password file list checkbox display ', concat(name(),' '))">editorCellValidationFailed</xsl:when>
+          <xsl:when test="ancestor::editor/failed/field[@sortnr=$pos] and contains('textfield textarea password file list checkbox display ', concat(name(),' '))">editorCellValidationFailed</xsl:when>
           <xsl:when test="$first='true'">
             <xsl:choose>
 			  <xsl:when test="$lines='off' and @lines='on'">editorCellWithPanelLinesOn</xsl:when>
@@ -625,9 +616,9 @@
 
     <!-- ======== show failed input validation message ======== -->
     <xsl:if test="contains('textfield textarea password file list checkbox display ', concat(name(),' '))">
-      <xsl:if test="/editor/failed/field[@sortnr=$pos]">
+      <xsl:if test="ancestor::editor/failed/field[@sortnr=$pos]">
         <xsl:variable name="message">
-          <xsl:for-each select="//condition[@id=/editor/failed/field[@sortnr=$pos]/@condition]">
+          <xsl:for-each select="//condition[@id=ancestor::editor/failed/field[@sortnr=$pos]/@condition]">
             <xsl:call-template name="output.label" />
           </xsl:for-each>
         </xsl:variable>
@@ -687,7 +678,34 @@
   <xsl:if test="(string-length($var) &gt; 0) and (string-length(@var) &gt; 0)">
     <xsl:value-of select="$editor.delimiter.element" />
   </xsl:if>
-  <xsl:value-of select="@var" />
+  <xsl:call-template name="subst.cond">
+    <xsl:with-param name="rest" select="@var" />
+  </xsl:call-template>
+</xsl:template>
+
+<!--  title[@type='main'] becomes title__type__main -->
+<xsl:template name="subst.cond">
+  <xsl:param name="rest" />
+  
+  <xsl:variable name="apos">'</xsl:variable>
+  
+  <xsl:choose>
+    <xsl:when test="contains($rest,'[@')">
+      <xsl:value-of select="normalize-space(substring-before($rest,'[@'))" />
+      <xsl:variable name="tmp1" select="substring-after($rest,'[@')" />
+      <xsl:text>__</xsl:text>
+      <xsl:value-of select="normalize-space(substring-before($tmp1,'='))" />
+      <xsl:variable name="tmp2" select="substring-after($tmp1,'=')" />
+      <xsl:text>__</xsl:text>
+      <xsl:value-of select="normalize-space(translate(substring-before($tmp2,']'),$apos,''))" />
+      <xsl:call-template name="subst.cond">
+        <xsl:with-param name="rest" select="substring-after($tmp2,']')" />
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:value-of select="$rest" />
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ========================================================================= -->
@@ -888,12 +906,10 @@
         </xsl:text></script>
     </xsl:if>
     
-    <xsl:variable name="wrap" select="''" />
- 
     <xsl:text disable-output-escaping="yes">&lt;textarea </xsl:text>
       <xsl:text>cols="</xsl:text><xsl:value-of select="@width"/><xsl:text>" </xsl:text>
       <xsl:text>rows="</xsl:text><xsl:value-of select="@height"/><xsl:text>" </xsl:text>
-      <xsl:text>wrap="</xsl:text><xsl:value-of select="$wrap"/><xsl:text>" </xsl:text>
+      <xsl:text>wrap="</xsl:text><xsl:value-of select="@wrap"/><xsl:text>" </xsl:text>
       <xsl:text>name="</xsl:text><xsl:value-of select="$var"/><xsl:text>" </xsl:text>
       <xsl:text disable-output-escaping="yes">&gt;</xsl:text>
 
@@ -1023,11 +1039,21 @@
 <xsl:template match="list">
   <xsl:param name="var" />
 
+  <!-- When any value exists, do not use the given default value -->
+  <xsl:variable name="default">
+    <xsl:choose>
+      <xsl:when test="(string-length(@default)=0) or (@default and ancestor::editor/input/var[(@name=$var) or starts-with(@name,concat($var,'['))])">
+        <xsl:text>--DuMmY--</xsl:text>
+      </xsl:when>
+      <xsl:otherwise><xsl:value-of select="@default" /></xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <!-- ====== type multirow ======== -->
   <xsl:if test="@type='multirow'">
     <xsl:call-template name="editor.list">
       <xsl:with-param name="var"     select="$var"      />
-      <xsl:with-param name="default" select="@default"  />
+      <xsl:with-param name="default" select="$default"  />
       <xsl:with-param name="rows"    select="@rows"     />
       <xsl:with-param name="multi"   select="@multiple" />
     </xsl:call-template>
@@ -1036,14 +1062,14 @@
   <xsl:if test="@type='dropdown'">
     <xsl:call-template name="editor.list">
       <xsl:with-param name="var"     select="$var"      />
-      <xsl:with-param name="default" select="@default"  />
+      <xsl:with-param name="default" select="$default"  />
     </xsl:call-template>
   </xsl:if>
   <!-- ====== type radio ======== -->
   <xsl:if test="(@type='radio') or (@type='checkbox')">
     <xsl:call-template name="editor.list.radio.cb">
       <xsl:with-param name="var"     select="$var"      />
-      <xsl:with-param name="default" select="@default"  />
+      <xsl:with-param name="default" select="$default"  />
     </xsl:call-template>
   </xsl:if>
 </xsl:template>

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRLinkTableManager.java,v $
- * $Revision: 1.20.2.1 $ $Date: 2006/09/29 13:22:20 $
+ * $Revision: 1.21 $ $Date: 2006/09/29 13:28:23 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import org.mycore.datamodel.classifications.MCRClassificationItem;
  * holds all informations about links between MCRObjects/MCRClassifications.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.20.2.1 $ $Date: 2006/09/29 13:22:20 $
+ * @version $Revision: 1.21 $ $Date: 2006/09/29 13:28:23 $
  */
 public class MCRLinkTableManager {
     /** The list of entry types */

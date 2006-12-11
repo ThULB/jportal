@@ -2,7 +2,7 @@
 
 <!-- =================================================================== -->
 <!-- MyCoRe sample application build file for use with Apache Ant        -->
-<!-- $Revision: 1.143 $ $Date: 2006/11/10 11:29:24 $                      -->
+<!-- $Revision: 1.149 $ $Date: 2006/12/11 13:48:51 $                      -->
 <!-- =================================================================== -->
 
 <project name="DocPortal" default="usage" basedir=".">
@@ -13,35 +13,10 @@
   <!-- Help on usage                                                       -->
   <!-- =================================================================== -->
 
-  <target name="usage">
-    <echo>
-      Usage:
-        ant [target]
-
-      Available targets are:
-        info                 --> Shows Java/Ant/Operating System version, CLASSPATH etc.
-        clean                --> Removes all generated files, cleaning up
-
-        compile              --> Compiles all sources under the sample directory
-        jar                  --> Generate a docportal.jar file of the compiled classes
-
-        create.class         --> load all default classifications
-        create.directories   --> Create all working directories
-        create.genkeys       --> Create a key pair to sign the Java applets
-        create.metastore     --> Create datastore structures for XML persistency from configuration
-        create.schema        --> Generates all schema files from the configuration files
-        create.scripts       --> Create the commandline scripts
-        create.searchmask    --> Create a search mask from searchfields.xml
-        create.users         --> Laden der Start-User, Groups and Privilegs.
-
-        webservice.deploy    --> Switch the WebService on
-        webservice.undeploy  --> Switch the WebService off
-
-        webapps              --> Build the complete sample web application directory
-        war                  --> Build the web application archive (war)
-
-      Please do not use any of the other targets, they are internal.
-    </echo>
+  <target name="usage" description="Display main targets by running 'ant -projecthelp'">
+    <java classname="org.apache.tools.ant.Main" fork="false">
+      <arg value="-projecthelp" />
+    </java>
   </target>
 
   <!-- =================================================================== -->
@@ -51,20 +26,19 @@
   <target name="info" depends="show" description="Shows Java/Ant/Operating System version, CLASSPATH etc." />
 
   <target name="show" depends="init">
-    <echo>Base directory     : ${basedir}</echo>
-    <echo>MyCoRe home dir    : ${env.MYCORE_HOME}</echo>
-    <echo>DocPortal home dir : ${env.DOCPORTAL_HOME}</echo>
-    <echo>Operating system   : ${os.name} Version ${os.version} on ${os.arch} </echo>
-    <echo>Java version       : JDK ${ant.java.version} Version ${java.version} from ${java.vendor}</echo>
-    <echo>Java home          : ${env.JAVA_HOME}</echo>
-    <echo>Ant build file     : $Revision: 1.143 $ $Date: 2006/11/10 11:29:24 $</echo>
-    <echo>Ant version        : ${ant.version}</echo>
-    <echo>Ant home           : ${env.ANT_HOME}</echo>
-    <echo>XML Store type     : ${MCR.XMLStore.Type}</echo>
-    <echo>JDBC Store type    : ${MCR.JDBCStore.Type}</echo>
-    <echo>System CLASSPATH   : ${build.sysclasspath}</echo>
-    <echo>Active CLASSPATH   : ${docportal.classpath.translated}</echo>
-    <echo>Active LIBPATH     : ${docportal.libpath.translated}</echo>
+    <echo level="info">Base directory     : ${basedir}</echo>
+    <echo level="info">MyCoRe home dir    : ${env.MYCORE_HOME}</echo>
+    <echo level="info">DocPortal home dir : ${env.DOCPORTAL_HOME}</echo>
+    <echo level="info">Operating system   : ${os.name} Version ${os.version} on ${os.arch} </echo>
+    <echo level="info">Java version       : JDK ${ant.java.version} Version ${java.version} from ${java.vendor}</echo>
+    <echo level="info">Java home          : ${env.JAVA_HOME}</echo>
+    <echo level="info">Ant build file     : $Revision: 1.149 $ $Date: 2006/12/11 13:48:51 $</echo>
+    <echo level="info">Ant version        : ${ant.version}</echo>
+    <echo level="info">XML Store type     : ${MCR.XMLStore.Type}</echo>
+    <echo level="info">JDBC Store type    : ${MCR.JDBCStore.Type}</echo>
+    <echo level="info">System CLASSPATH   : ${build.sysclasspath}</echo>
+    <echo level="info">Active CLASSPATH   : ${docportal.classpath.translated}</echo>
+    <echo level="info">Active LIBPATH     : ${docportal.libpath.translated}</echo>
   </target>
 
 
@@ -75,9 +49,13 @@
   <target name="create.schema" depends="init" description="Generates all schema files from the configuration files">
 
     <!-- copy the stylesheets from MyCoRe -->
-    <copy todir="${docportal.stylesheets}">
-      <fileset dir="${mycore.stylesheets}" includes="*.xsl"/>
-    </copy>
+    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataCoreTemplates.xsl" />
+    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataCoreTypes.xsl" />
+    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataSchema.xsl" />
+    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataTemplates.xsl" />
+    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataTypes.xsl" />
+    <copy todir="${build.stylesheets}" file="${docportal.stylesheets}/MCRMetadataTemplates.xsl" overwrite="true" failonerror="false" />
+    <copy todir="${build.stylesheets}" file="${docportal.stylesheets}/MCRMetadataTypes.xsl" overwrite="true" failonerror="false" />
 
     <!-- Load the properties that define the XML metadata configuration files -->
     <loadproperties srcFile="${basedir}/config/mycore.properties">
@@ -88,16 +66,14 @@
       </filterchain>
     </loadproperties>
 
-    <mkdir dir="${docportal.schema}"  />
-
     <!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
-    <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_document}"    /></antcall>
-    <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_derivate}"    /></antcall>
+    <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_document}" /></antcall>
+    <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_derivate}" /></antcall>
     <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_author}" /></antcall>
     <antcall target="do.transform"><param name="metadata.schema" value="${MCR.persistence_config_institution}" /></antcall>
 
-    <move todir="${docportal.schema}">
-      <fileset dir="${docportal.schema}" 
+    <move todir="${build.schema}">
+      <fileset dir="${build.schema}" 
         includes="${MCR.persistence_config_document} ${MCR.persistence_config_derivate} ${MCR.persistence_config_author} ${MCR.persistence_config_institution}"
       />
       <mapper type="glob" from="*.xml" to="*.xsd"/>
@@ -105,99 +81,102 @@
   </target>
 
   <target name="do.transform" depends="init">
-    <echo>Transforming ${metadata.schema}...</echo>
+    <echo level="info">Transforming ${metadata.schema}...</echo>
     <xslt basedir="${docportal.config}"
           classpathref="docportal.classpath"
           in="${docportal.config}/${metadata.schema}"
-          style="stylesheets/MCRMetadataSchema.xsl"
-          out="schema/${metadata.schema}" />
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Create local working directories                                    -->
-  <!-- =================================================================== -->
-
-  <target name="create.directories" depends="init">
-    <!-- configuration indipendence directories -->
-    <mkdir dir="${docportal.lib}/jetty/logs" />
-    <mkdir dir="${docportal.classes}" />
-    <mkdir dir="${docportal.schema}" />
-    <mkdir dir="${docportal.webapps}" />
-    <!-- configuration dependence directories -->
-    <mkdir dir="${MCR.Editor.FileUpload.TempStoragePath}" />
-    <mkdir dir="${MCR.Save.FileSystem}"  />
-    <mkdir dir="${MCR.oai.resumptiontoken.dir}"  />
-    <mkdir dir="${MCR.editor_base_directory}" />
-    <mkdir dir="${MCR.editor_author_directory}" />
-    <mkdir dir="${MCR.editor_document_directory}" />
-    <mkdir dir="${MCR.editor_institution_directory}" />
-    <mkdir dir="${MCR.Searcher.lucene-metadata.IndexDir}" />
-    <mkdir dir="${MCR.Searcher.lucene-content.IndexDir}" />
-    <antcall target="create.directories.sql_data" />
-  </target>
-
-  <target name="create.directories.sql_data" if="MCR.persistence_sql_data_directory">
-    <mkdir dir="${MCR.persistence_sql_data_directory}" />
+          style="${build.stylesheets}/MCRMetadataSchema.xsl"
+          out="${build.schema}/${metadata.schema}" />
   </target>
 
   <!-- =================================================================== -->
   <!-- Create scripts in bin like mycore.cmd/.sh a.s.o.                    -->
   <!-- =================================================================== -->
 
-  <target name="create.scripts" depends="init, script.windows, script.unix, create.scripts.modules" description="Create commandline scripts" />
+  <target name="create.scripts" depends="init, script.copy, script.windows, script.unix, scripts.modules" description="Create commandline scripts" >
+    <chmod perm="755" >
+      <fileset dir="${build.bin}" includes="*.sh" />
+    </chmod>
+  </target>
 
-  <target name="create.scripts.modules">
-    <echo>
+  <target name="scripts.modules">
+    <echo level="info">
       do 'create.scripts' in all modules...
     </echo>
     <subant target="create.scripts" inheritall="true" inheritrefs="true">
-      <fileset dir="." includes="modules/module-*/build.xml">
+      <fileset dir="${basedir}" includes="modules/module-*/build.xml" excludes="modules/module-webservices/build.xml">
       	<containsregexp expression="\u003ctarget.*name=\u0022create.scripts\u0022"/> 
       </fileset>
     </subant>
   </target>
 	
+  <target name="script.copy">
+    <mkdir dir="${build.bin}" />
+    <copy todir="${build.config}" overwrite="true">
+      <fileset dir="${docportal.config}" includes="ContentStoreSelectionRules.xml"/>
+      <fileset dir="${docportal.config}" includes="FileContentTypes.xml"/>
+      <fileset dir="${docportal.config}" includes="mycore.properties"/>
+      <fileset dir="${docportal.config}" includes="mycore.properties.application"/>
+      <fileset dir="${docportal.config}" includes="mycore.properties.iview"/>
+      <fileset dir="${docportal.config}" includes="searchfields.xml"/>
+      <fileset dir="${docportal.config}" includes="mycore.properties.private"/>
+      <fileset dir="${docportal.config}" includes="MCRRESUMPTIONTOKEN.hbm.xml"/>
+    </copy>	  
+    <mkdir dir="${build.lib}/jetty"/>
+    <mkdir dir="${docportal.lib}/jetty/logs" />
+    <copy todir="${build.lib}/jetty">
+      <fileset dir="${docportal.lib}/jetty"/>
+    </copy>	  
+    <copy todir="${build.stylesheets}">
+      <fileset dir="${docportal.stylesheets}" includes="mcr_save-derivate.xsl"/>
+      <fileset dir="${docportal.stylesheets}" includes="mcr_save-object.xsl"/>
+    </copy>	  
+  </target>
+
   <target name="script.windows" if="os.is.windows">
+    <!-- build commandline tool -->
     <antcall target="script.windows.write">
       <param name="mycore.cmd.file"  value="mycore.cmd" />
       <param name="mycore.cmd.class" value="org.mycore.frontend.cli.MCRCommandLineInterface %1 %2 %3 %4 %5 %6 %7 %8 %9" />
-      <param name="mycore.cmd.dir" value="docportal"/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
     <antcall target="script.windows.write">
-      <param name="mycore.cmd.file"  value="hsqldbadmin.cmd" />
-      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing $*" />
-      <param name="mycore.cmd.dir" value="docportal"/>
+      <param name="mycore.cmd.file" value="listPlugins.cmd"/>
+      <param name="mycore.cmd.class" value="org.mycore.sample.PluginLister $*"/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
-  	
+    <!-- build jetty scripts -->  	
     <pathconvert targetos="windows" property="jetty.home">
-      <path><pathelement location="${docportal.lib}/jetty"/></path>
+      <path><pathelement location="${build.lib}/jetty"/></path>
     </pathconvert>
-    <pathconvert targetos="windows" property="hsqldb.datadir">
-      <path><pathelement location="${MCR.persistence_sql_data_directory}/${MCR.persistence_sql_database_name}"/></path>
-    </pathconvert>
-  	
-    <antcall target="script.windows.server" />
     <antcall target="script.windows.write">
       <param name="mycore.cmd.file"  value="jettystart.cmd"/>
       <param name="mycore.cmd.class" value="-Djetty.home=${jetty.home} -Djetty.class.path=${jetty.home} -Djetty.port=8291 -jar ${jetty.home}\start.jar ${jetty.home}\webapp.xml"/>
-      <param name="mycore.cmd.dir"   value="${docportal}"/>
+      <param name="mycore.cmd.dir"   value="${build.bin}"/>
     </antcall>
     <antcall target="script.windows.write">
       <param name="mycore.cmd.file"  value="jettystop.cmd"/>
       <param name="mycore.cmd.class" value="-Djetty.home=${jetty.home} -Djetty.class.path=${jetty.home} -Djetty.port=8291 -jar ${jetty.home}\stop.jar"/>
-      <param name="mycore.cmd.dir"   value="${docportal}"/>
+      <param name="mycore.cmd.dir"   value="${build.bin}"/>
     </antcall>
+    <!-- copy static command scripts -->
+    <!-- build HSQLDB scripts (if it is configured) -->
+    <pathconvert targetos="windows" property="hsqldb.datadir">
+      <path><pathelement location="${MCR.persistence_sql_data_directory}/${MCR.persistence_sql_database_name}"/></path>
+    </pathconvert>
+    <antcall target="script.windows.server" />
   </target>
 
-  <target name="script.windows.server" if="MCR.persistence_sql_database_port">
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+  <target name="script.windows.server" if="MCR.persistence_sql_data_directory">
+    <mkdir dir="${MCR.persistence_sql_data_directory}" />
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <linecontains>
           <contains value="MCR.persistence_sql_database_port=" />
         </linecontains>
       </filterchain>
     </loadproperties>
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <tokenfilter>
           <replacestring from="%MCR.persistence_sql_database_port%" to="${MCR.persistence_sql_database_port}" />
@@ -214,50 +193,64 @@
       <param name="mycore.cmd.class" value="org.hsqldb.util.ShutdownServer -url ${MCR.persistence_sql_database_url}"/>
       <param name="mycore.cmd.dir"   value="${MCR.persistence_sql_data_directory}"/>
     </antcall>
+    <antcall target="script.windows.write">
+      <param name="mycore.cmd.file"  value="hsqldbadmin.cmd" />
+      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing $*" />
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
+    </antcall>
   </target>
 
   <target name="script.unix" if="os.is.unix">
+    <!-- build commandline tool -->
     <antcall target="script.unix.write">
       <param name="mycore.cmd.file" value="mycore.sh"/>
       <param name="mycore.cmd.class" value="org.mycore.frontend.cli.MCRCommandLineInterface $*"/>
-      <param name="mycore.cmd.dir" value="${docportal}"/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
-    <antcall target="script.unix.write">
-      <param name="mycore.cmd.file" value="hsqldbadmin.sh"/>
-      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing $*"/>
-      <param name="mycore.cmd.dir" value="."/>
-    </antcall>
-    <antcall target="script.unix.server" />
     <antcall target="script.unix.write">
       <param name="mycore.cmd.file" value="listPlugins.sh"/>
       <param name="mycore.cmd.class" value="org.mycore.sample.PluginLister $*"/>
-      <param name="mycore.cmd.dir" value="."/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
+    <!-- build jetty scripts -->  	
     <antcall target="script.unix.write">
       <param name="mycore.cmd.file" value="jettystart.sh"/>
-      <param name="mycore.cmd.class" value="-Djetty.home=${docportal.lib}/jetty -Djetty.class.path=${docportal.lib}/jetty -Djetty.port=8291 -jar ${docportal.lib}/jetty/start.jar ${docportal.lib}/jetty/webapp.xml"/>
-      <param name="mycore.cmd.dir" value="${docportal}"/>
+      <param name="mycore.cmd.class" value="-Djetty.home=${build.lib}/jetty -Djetty.class.path=${build.lib}/jetty -Djetty.port=8291 -jar ${build.lib}/jetty/start.jar ${build.lib}/jetty/webapp.xml"/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
     <antcall target="script.unix.write">
       <param name="mycore.cmd.file" value="jettystop.sh"/>
-      <param name="mycore.cmd.class" value="-Djetty.home=${docportal.lib}/jetty -Djetty.class.path=${docportal.lib}/jetty -Djetty.port=8291 -jar ${docportal.lib}/jetty/stop.jar"/>
-      <param name="mycore.cmd.dir" value="${docportal}"/>
+      <param name="mycore.cmd.class" value="-Djetty.home=${build.lib}/jetty -Djetty.class.path=${build.lib}/jetty -Djetty.port=8291 -jar ${build.lib}/jetty/stop.jar"/>
+      <param name="mycore.cmd.dir" value="${build.bin}"/>
     </antcall>
+    <!-- copy static command scripts -->
+    <copy todir="${build.bin}">
+      <fileset dir="${docportal.bin}" includes="Save*.sh"/>
+      <fileset dir="${docportal.bin}" includes="SQL*.sh"/>
+      <fileset dir="${docportal.bin}" includes="sqltool.rc"/>
+      <fileset dir="${docportal.bin}" includes="RepairIndex.sh"/>
+      <fileset dir="${docportal.unixtools}" includes="*.sh"/>
+    </copy>	  
+    <!-- build HSQLDB scripts (if it is configured) -->
+    <pathconvert targetos="unix" property="hsqldb.datadir">
+      <path><pathelement location="${MCR.persistence_sql_data_directory}/${MCR.persistence_sql_database_name}"/></path>
+    </pathconvert>
+    <antcall target="script.unix.server" />
     <chmod perm="755" >
-      <fileset dir="${docportal.bin}" includes="*.sh" />
-      <fileset dir="${docportal.unixtools}" includes="*.sh" />
+      <fileset dir="${build.bin}" includes="*.sh" />
 	</chmod>
   </target>
 
-  <target name="script.unix.server" if="MCR.persistence_sql_database_port">
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+  <target name="script.unix.server" if="MCR.persistence_sql_data_directory">
+    <mkdir dir="${MCR.persistence_sql_data_directory}" />
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <linecontains>
           <contains value="MCR.persistence_sql_database_port=" />
         </linecontains>
       </filterchain>
     </loadproperties>
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <linecontains>
           <contains value="MCR.persistence_sql_database_url=" />
@@ -277,11 +270,16 @@
       <param name="mycore.cmd.class" value="org.hsqldb.util.ShutdownServer -url ${MCR.persistence_sql_database_url}"/>
       <param name="mycore.cmd.dir" value="${MCR.persistence_sql_data_directory}"/>
     </antcall>
+    <antcall target="script.unix.write">
+      <param name="mycore.cmd.file" value="hsqldbadmin.sh"/>
+      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing $*"/>
+      <param name="mycore.cmd.dir" value="."/>
+    </antcall>
   </target>
 
   <target name="script.windows.write">
-    <property name="tmp.cmd.file" value="${docportal.bin}/${mycore.cmd.file}" />
-    <echo>Creating ${mycore.cmd.file} to invoke ${mycore.cmd.class}</echo>
+    <property name="tmp.cmd.file" value="${build.bin}/${mycore.cmd.file}" />
+    <echo level="info">Creating ${mycore.cmd.file} to invoke ${mycore.cmd.class}</echo>
     <echo file="${tmp.cmd.file}" append="false">@echo off
 
 rem
@@ -297,8 +295,8 @@ java -Xmx${java.maxmemory} ${mycore.cmd.class}
   </target>
 
   <target name="script.unix.write">
-    <property name="tmp.cmd.file" value="${docportal.bin}/${mycore.cmd.file}" />
-    <echo>Creating ${mycore.cmd.file} to invoke ${mycore.cmd.class}</echo>
+    <property name="tmp.cmd.file" value="${build.bin}/${mycore.cmd.file}" />
+    <echo level="info">Creating ${mycore.cmd.file} to invoke ${mycore.cmd.class}</echo>
     <echo file="${tmp.cmd.file}" append="false">#!/bin/sh
 
 #
@@ -509,13 +507,51 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   </target>
 
   <!-- =================================================================== -->
+  <!-- Build a jar file with all third party classes                       -->
+  <!-- =================================================================== -->
+
+  <target name="third-party">
+    <echo level="info">Build third-party.jar</echo>
+    <mkdir dir="${build.lib}/third-party" />
+    <!-- unpack jar and zip -->
+	  <!--
+    <unjar dest="${build.lib}/third-party" >
+      <fileset dir="${mycore.lib}" includes="*.jar" excludes="mycore.jar" />
+	</unjar>
+    <unzip dest="${build.lib}/third-party" >
+      <fileset dir="${mycore.lib}" includes="*.zip" />
+	</unzip>
+    <unjar dest="${build.lib}/third-party" >
+      <fileset dir="${mycore.modules}" includes="module-*/lib/*.jar" />
+	</unjar>
+		  -->
+    <!-- pack to one jar -->
+    <jar destfile="${build.lib}/third-party.jar" >
+      <fileset dir="${build.lib}/third-party" includes="**/*" />
+    </jar>
+	<copy todir="${build.lib}">
+      <fileset dir="${mycore.lib}" includes="*.jar" />
+      <fileset dir="${mycore.lib}" includes="*.zip" />
+      <fileset dir="${mycore.modules}" includes="module-*/lib/*.jar" />
+	</copy>
+    <!-- remove unpacked jar and zip files -->
+    <delete dir="${build.lib}/third-party" />
+    <!-- copy license files -->
+    <copy todir="${build.lib}" >
+      <fileset dir="${mycore.lib}" includes="*.txt" />
+      <fileset dir="${mycore.modules}" includes="module-*/lib/*.txt" />		
+	</copy>
+    <echo level="info">---------------------------------------------------------</echo>
+  </target>
+
+  <!-- =================================================================== -->
   <!-- Compiles all application classes                                    -->
   <!-- =================================================================== -->
 
   <target name="javac" depends="init">
-    <echo>Compiling ${packages}</echo>
+    <echo level="info">Compiling ${packages}</echo>
     <javac srcdir="${docportal.sources}"
-           destdir="${docportal.classes}"
+           destdir="${build.classes}"
            includes="${packages}"
            classpathref="docportal.classpath"
            debug="${debug}"
@@ -525,12 +561,11 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
            encoding="${sourceencoding}"
            deprecation="${deprecation}">
     </javac>
-    <echo>---------------------------------------------------------</echo>
+    <echo level="info">---------------------------------------------------------</echo>
   </target>
 
-  <target name="compile" description="Compiles all sources under the sample directory" > 
-    <mkdir dir="${docportal.classes}"/>
-    <echo>Compiling a DocPortal classes...</echo>
+  <target name="compile" depends="third-party" description="Compiles all sources under the sample directory" > 
+    <echo level="info">Compiling a DocPortal classes...</echo>
     <antcall target="javac">
       <param name="packages" value="org/mycore/**"/>
     </antcall>
@@ -546,15 +581,14 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="jar" depends="compile" description="creates lib/docportal.jar">
-    <echo>Creating docportal.jar containing all compiled classes.
-..</echo>
+    <echo level="info">Creating docportal.jar containing all compiled classes.</echo>
     <jar
-      destfile="${docportal.lib}/docportal.jar"
+      destfile="${build.lib}/docportal.jar"
     >
-      <fileset dir="${docportal.classes}" includes="**/*.class"       />
-      <fileset dir="${docportal.schema}"  includes="*.xsd *.dtd"      />
+      <fileset dir="${build.classes}" includes="**/*.class"       />
+      <fileset dir="${build.schema}"  includes="*.xsd *.dtd"      />
     </jar>
-    <echo>---------------------------------------------------------</echo>
+    <echo level="info">---------------------------------------------------------</echo>
   </target>
 
   <!-- =================================================================== -->
@@ -577,9 +611,21 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Create all metadata stores for XML mapped stores                    -->
   <!-- =================================================================== -->
 
-  <target name="create.metastore" depends="init,create.directories,create.hibernate" description="Create all metadata stores for XML mapped stores" />
+  <target name="create.metastore" depends="init,create.hibernate" description="Create all metadata stores for XML mapped stores" >
+    <mkdir dir="${MCR.Editor.FileUpload.TempStoragePath}" />
+    <mkdir dir="${MCR.IFS.ContentStore.FS.URI}" />
+    <mkdir dir="${MCR.Save.FileSystem}"  />
+    <mkdir dir="${MCR.oai.resumptiontoken.dir}"  />
+    <mkdir dir="${MCR.editor_base_directory}" />
+    <mkdir dir="${MCR.editor_author_directory}" />
+    <mkdir dir="${MCR.editor_document_directory}" />
+    <mkdir dir="${MCR.editor_institution_directory}" />
+    <mkdir dir="${MCR.Searcher.lucene-metadata.IndexDir}" />
+    <mkdir dir="${MCR.Searcher.lucene-content.IndexDir}" />
+  </target>
 
   <target name="create.hibernate" depends="init" if="db.is.hibernate">
+    <mkdir dir="${MCR.persistence_sql_data_directory}" />
     <copy todir="${MCR.dtd.directory}" overwrite="true">
       <fileset file="${env.MYCORE_HOME}/schema/hibernate-mapping.dtd"/>
     </copy>
@@ -613,14 +659,14 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="create.genkeys" depends="init" description="Generates the keys to sign the applets">
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <linecontains>
           <contains value="SIGN."/>
         </linecontains>
       </filterchain>
     </loadproperties>
-    <echo>
+    <echo level="info">
 
       Generating a key pair for signing applets ...
     </echo>
@@ -645,23 +691,22 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Build the web application directory and copy webpages               -->
   <!-- =================================================================== -->
 
-  <target name="webapps" depends="init,webapps.directories,webapps.templates,webapps.base,webapps.i18n,webapps.modules,safeWebContent" description="Build the complete sample web application directory" >
-    <echo>Creating web application in directory ${docportal.webapps}</echo>
+  <target name="webapps" depends="init,webapps.directories,webapps.base,webapps.i18n,webapps.modules,safeWebContent,webapps.templates" description="Build the complete sample web application directory" >
+    <echo level="info">Creating web application in directory ${build.webapps}</echo>
   </target>
 	
   <target name="webapps.i18n">
-  	<copy todir="${docportal.webapps}/WEB-INF/classes/" overwrite="true">
+  	<copy todir="${build.webapps}/WEB-INF/classes/" overwrite="true">
   		<fileset dir="${docportal.config}">
   			<include name="messages_*.properties"/>
   		</fileset>
     </copy>
-  	<move file="${docportal.webapps}/WEB-INF/classes/messages_${MCR.metadata_default_lang}.properties" tofile="${docportal.webapps}/WEB-INF/classes/messages.properties"/>
-  	<echo file="${docportal.webapps}/WEB-INF/classes/messages_${MCR.metadata_default_lang}.properties" append="false">#look for properties in messages.properties</echo>
+  	<move file="${build.webapps}/WEB-INF/classes/messages_${MCR.metadata_default_lang}.properties" tofile="${build.webapps}/WEB-INF/classes/messages.properties"/>
+  	<echo file="${build.webapps}/WEB-INF/classes/messages_${MCR.metadata_default_lang}.properties" append="false">#look for properties in messages.properties</echo>
   </target>
 
   <target name="webapps.modules">
-    <mkdir dir="${docportal.webapps}"/>
-    <echo>
+    <echo level="info">
       do 'webapps' in all modules...
     </echo>
     <subant target="webapps" inheritall="true" inheritrefs="true">
@@ -671,25 +716,25 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   
   <target name="webapps.directories">
     <!-- Create necessary directories  -->
-    <mkdir dir="${docportal.webapps}"/>
-    <mkdir dir="${docportal.webapps}/editor"/>
-    <mkdir dir="${docportal.webapps}/applet"/>
-    <mkdir dir="${docportal.webapps}/WEB-INF"/>
-    <mkdir dir="${docportal.webapps}/WEB-INF/classes"/>
-    <mkdir dir="${docportal.webapps}/WEB-INF/lib"/>
-    <mkdir dir="${docportal.webapps}/WEB-INF/stylesheets"/>
+    <mkdir dir="${build.webapps}"/>
+    <mkdir dir="${build.webapps}/editor"/>
+    <mkdir dir="${build.webapps}/applet"/>
+    <mkdir dir="${build.webapps}/WEB-INF"/>
+    <mkdir dir="${build.webapps}/WEB-INF/classes"/>
+    <mkdir dir="${build.webapps}/WEB-INF/lib"/>
+    <mkdir dir="${build.webapps}/WEB-INF/stylesheets"/>
   </target>
 
   <target name="webapps.base">
     <!-- Copy editor stylesheets from MyCoRe and the DocPortal Application -->
-    <copy file="${env.MYCORE_HOME}/stylesheets/MCRJDOMSearch.xsl" todir="${docportal.webapps}/WEB-INF/classes"/>
-    <copy file="${env.MYCORE_HOME}/stylesheets/editor/editor.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
-    <copy file="${env.MYCORE_HOME}/stylesheets/editor/editor-common.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
-    <copy file="${env.MYCORE_HOME}/stylesheets/editor/helpPopup.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
-    <copy file="${env.MYCORE_HOME}/stylesheets/editor/imports-help-popup.xsl" todir="${docportal.webapps}/WEB-INF/stylesheets"/>
+    <copy file="${mycore}/stylesheets/MCRJDOMSearch.xsl" todir="${build.webapps}/WEB-INF/classes"/>
+    <copy file="${mycore}/stylesheets/editor/editor.xsl" todir="${build.webapps}/WEB-INF/stylesheets"/>
+    <copy file="${mycore}/stylesheets/editor/editor-common.xsl" todir="${build.webapps}/WEB-INF/stylesheets"/>
+    <copy file="${mycore}/stylesheets/editor/helpPopup.xsl" todir="${build.webapps}/WEB-INF/stylesheets"/>
+    <copy file="${mycore}/stylesheets/editor/imports-help-popup.xsl" todir="${build.webapps}/WEB-INF/stylesheets"/>
 
     <!-- Copy the files from various directories to build the webapps -->
-    <copy todir="${docportal.webapps}" preservelastmodified="true">
+    <copy todir="${build.webapps}" preservelastmodified="true">
       <fileset dir="${docportal.webpages}" >
         <exclude name="**/*.xsl" />
       </fileset>
@@ -703,51 +748,74 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <fileset dir="${mycore}/documentation/ProgGuide" includes="ProgrammerGuide.pdf" />
     </copy>
   	
-    <copy todir="${docportal.webapps}/editor">
+    <copy todir="${build.webapps}/editor">
       <fileset dir="${docportal.config}" includes="editor-*.xml" />
       <fileset dir="${docportal.config}" includes="imports-*.xml" />
     </copy>
-    <copy todir="${docportal.webapps}/WEB-INF">
+    <copy todir="${build.webapps}/WEB-INF">
       <fileset dir="${docportal.config}" includes="web.xml ibm*.xmi" />
-      <fileset dir="${env.MYCORE_HOME}/schema" includes="web-app_2_3.dtd" />
+      <fileset dir="${mycore}/schema" includes="web-app_2_3.dtd" />
     </copy>
-    <copy todir="${docportal.webapps}/WEB-INF/lib">
-      <fileset dir="${env.MYCORE_HOME}/lib" includes="*.jar" excludes="servlet-api*" />
+    <copy todir="${build.webapps}/WEB-INF/lib">
+      <fileset dir="${mycore}/lib" includes="*.jar" excludes="servlet-api*" />
       <fileset dir="${docportal.lib}" includes="*.jar" />
     </copy>
-    <copy todir="${docportal.webapps}/WEB-INF/classes">
-      <fileset dir="${docportal.classes}" />
+    <copy todir="${build.webapps}/WEB-INF/classes">
+      <fileset dir="${build.classes}" />
       <fileset dir="${docportal.config}" excludes="user/*" />
-      <fileset dir="${docportal.schema}" />
+      <fileset dir="${build.schema}" />
     </copy>
-    <copy todir="${docportal.webapps}/WEB-INF/stylesheets" flatten="true">
+    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true">
       <fileset dir="${docportal.stylesheets}"   includes="**/*.xsl" />
-      <fileset dir="${env.MYCORE_HOME}/stylesheets" includes="**/*.xsl" />
+      <fileset dir="${mycore}/stylesheets" includes="**/*.xsl" />
       <!-- templates -->
       <fileset dir="${basedir}/webpages/templates/master">
         <include name="**/*.xsl" />
       </fileset>
     </copy>
 
-    <echo>
+    <echo level="info">
 
       Building the upload applet used for file uploads...
     </echo>
-  	<copy file="${mycore.config}/messages_de.MCRUploadApplet" tofile="${docportal.webapps}/applet/messages_de.properties"/>
-  	<copy file="${mycore.config}/messages_en.MCRUploadApplet" tofile="${docportal.webapps}/applet/messages_en.properties"/>
-    <jar jarfile="webapps/applet/unsigned.jar">
-      <fileset dir="${mycore}/classes">
+    <!-- Compile applet to JDK 1.4 -->
+	<mkdir dir="${build.webapps}/applet/sources" />
+	<mkdir dir="${build.webapps}/applet/classes" />
+    <copy todir="${build.webapps}/applet/sources">
+      <fileset dir="${mycore}/sources">
+        <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.java"/>
+        <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.java"/>
+        <include name="org/mycore/frontend/fileupload/MCRUploadExce*.java"/>
+        <include name="org/mycore/frontend/fileupload/MCRUploadProg*.java"/>
+      </fileset>		
+	</copy>
+    <javac srcdir="${build.webapps}/applet/sources"
+           destdir="${build.webapps}/applet/classes"
+           includes="org/mycore/**"
+           classpathref="docportal.classpath"
+           debug="${debug}"
+           optimize="${optimize}"
+           target="1.4"
+           source="1.4"
+           encoding="${sourceencoding}"
+           deprecation="${deprecation}">
+    </javac>
+    <!-- build applet jar -->
+  	<copy file="${mycore.config}/messages_de.MCRUploadApplet" tofile="${build.webapps}/applet/messages_de.properties"/>
+  	<copy file="${mycore.config}/messages_en.MCRUploadApplet" tofile="${build.webapps}/applet/messages_en.properties"/>
+    <jar jarfile="${build.webapps}/applet/unsigned.jar">
+      <fileset dir="${build.webapps}/applet/classes">
         <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.class"/>
         <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.class"/>
         <include name="org/mycore/frontend/fileupload/MCRUploadExce*.class"/>
         <include name="org/mycore/frontend/fileupload/MCRUploadProg*.class"/>
       </fileset>
-      <fileset dir="${docportal.webapps}/applet">
+      <fileset dir="${build.webapps}/applet">
         <include name="messages*"/>
         <include name="mycore.properties*"/>
       </fileset>
     </jar>
-    <loadproperties srcFile="${basedir}/config/mycore.properties.private">
+    <loadproperties srcFile="${docportal.config}/mycore.properties.private">
       <filterchain>
         <linecontains>
           <contains value="SIGN."/>
@@ -755,30 +823,30 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       </filterchain>
     </loadproperties>
     <signjar
-      jar       = "webapps/applet/unsigned.jar"
-      signedjar = "webapps/applet/upload.jar"
+      jar       = "${build.webapps}/applet/unsigned.jar"
+      signedjar = "${build.webapps}/applet/upload.jar"
       alias     = "${SIGN.Alias}"
       keystore  = "${SIGN.KeyStore}/keys"
       storepass = "${SIGN.Password}"
       keypass   = "${SIGN.Password}"
     />
-    <delete file="webapps/applet/unsigned.jar"/>
-    <chmod dir="webapps/applet" perm="ugo+r"/>
+    <delete file="${build.webapps}/applet/unsigned.jar"/>
+    <chmod dir="${build.webapps}/applet" perm="ugo+r"/>
 
     <!-- Copy the web.xml of the core to the webapps -->
-    <delete file="${docportal.webapps}/WEB-INF/web.xml" />
-    <copy file="${mycore.config}/web.xml" todir="${docportal.webapps}/WEB-INF" />
+    <delete file="${build.webapps}/WEB-INF/web.xml" />
+    <copy file="${mycore.config}/web.xml" todir="${build.webapps}/WEB-INF" />
 
     <antcall target="copy.webapp.shared.jars" />
     <antcall target="webapp.info.shared.jars" />
     <antcall target="webapp.info.unix" />
 
     <!-- Copy / Unpack fckEditor files (WYSIWYG HTML Editor) -->
-    <unzip src="${env.MYCORE_HOME}/lib/fckEditor.zip" dest="${docportal.webapps}" />
-    <copy file="${env.MYCORE_HOME}/config/fckconfig.js" todir="${docportal.webapps}/fck" />
+    <unzip src="${env.MYCORE_HOME}/lib/fckEditor.zip" dest="${build.webapps}" />
+    <copy file="${env.MYCORE_HOME}/config/fckconfig.js" todir="${build.webapps}/fck" />
 
     <!-- Replace URL in browser search plug-in -->
-    <copy todir="${docportal.webapps}" overwrite="yes">
+    <copy todir="${build.webapps}" overwrite="yes">
       <fileset dir="${docportal.webpages}" includes="docportal-plugin.xml docportal-plugin.src" />
       <filterchain>
         <tokenfilter>
@@ -792,30 +860,30 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <target name="webapps.templates">
   	<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="docportal.classpath" />
   	<templatecheck templatepath="${env.DOCPORTAL_HOME}/webpages/templates/master/"
-  		choosepath="${docportal.webapps}/WEB-INF/stylesheets/chooseTemplate.xsl" />
+  		choosepath="${build.webapps}/WEB-INF/stylesheets/chooseTemplate.xsl" />
   </target>		
 	
   <!-- save modified static web content -->	
   <target name="safeWebContent">
 	    <copy todir="${docportal.webpages}/config/" preservelastmodified="true" failonerror="false">
-	      <fileset file="${docportal.webapps}/config/navigation.xml" />
+	      <fileset file="${build.webapps}/config/navigation.xml" />
 	    </copy>  	
 	    <copy todir="${docportal.webpages}/content" preservelastmodified="true" failonerror="false">
-	      <fileset dir="${docportal.webapps}/content" />
+	      <fileset dir="${build.webapps}/content" />
 	    </copy>  	
 	    <copy todir="${docportal.webpages}/templates" preservelastmodified="true" failonerror="false">
-	      <fileset dir="${docportal.webapps}/templates" />
+	      <fileset dir="${build.webapps}/templates" />
 	    </copy>  	  
 	    <copy todir="${docportal.webpages}/images" preservelastmodified="true" failonerror="false">
-	      <fileset dir="${docportal.webapps}/images/" />
+	      <fileset dir="${build.webapps}/images/" />
 	    </copy>  	
 	    <copy todir="${docportal.webpages}/documents" preservelastmodified="true" failonerror="false">
-	      <fileset dir="${docportal.webapps}/documents" />
+	      <fileset dir="${build.webapps}/documents" />
 	    </copy>  	
   </target>
 
   <target name="webapp.info.shared.jars" unless="MCR.WebAppServer.SharedJarsDir">
-    <echo>
+    <echo level="info">
       NOTE: MyCoRe copied the jar files listed above as specified by MCR.XMLStore.Jars and MCR.JDBCStore.Jars to the web applicaton WEB-INF/lib directory.
             Your build.properties configuration file lists them as needed to connect to your local XML database and/or JDBC database system.
             If these files load native libraries to connect to the database, this may cause trouble at runtime when you run multiple web applications in the same JVM or use dynamic servlet reloading. In this case, put these jars in a separate directory where they are just loaded once, for tomcat for example move these files to the directory 'shared'. Set the propery MCR.WebAppServer.SharedJarsDir in build.properties to control this.
@@ -823,7 +891,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   </target>
 
   <target name="webapp.info.unix" if="os.is.unix">
-    <echo>
+    <echo level="info">
       NOTE: For UNIX systems like AIX, Linux, set the environment variables LIBPATH and LD_LIBRARY_PATH as needed for your database system.
             From your configuration in build.properties, MyCoRe suggests to set these variables as follows:
 
@@ -834,15 +902,15 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   </target>
 
   <target name="copy.webapp.shared.jars">
-    <delete dir="${docportal.webapps}/WEB-INF/lib/tmp" />
-    <mkdir  dir="${docportal.webapps}/WEB-INF/lib/tmp" />
+    <delete dir="${build.webapps}/WEB-INF/lib/tmp" />
+    <mkdir  dir="${build.webapps}/WEB-INF/lib/tmp" />
     <antcall target="copy.webapp.jdbc" />
     <antcall target="copy.webapp.xml"  />
     <antcall target="copy.webapp.system"  />
     <condition property="shared.jars.dir" value="${MCR.WebAppServer.SharedJarsDir}">
       <available file="${MCR.WebAppServer.SharedJarsDir}" type="dir" />
     </condition>
-    <condition property="shared.jars.dir" value="${docportal.webapps}/WEB-INF/lib">
+    <condition property="shared.jars.dir" value="${build.webapps}/WEB-INF/lib">
       <not>
         <available file="${MCR.WebAppServer.SharedJarsDir}" type="dir" />
       </not>
@@ -850,35 +918,35 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <antcall target="list.jars.unix" />
     <antcall target="list.jars.windows" />
     <move toDir="${shared.jars.dir}">
-      <fileset dir="${docportal.webapps}/WEB-INF/lib/tmp" includes="*" />
+      <fileset dir="${build.webapps}/WEB-INF/lib/tmp" includes="*" />
     </move>
-    <delete dir="${docportal.webapps}/WEB-INF/lib/tmp" />
+    <delete dir="${build.webapps}/WEB-INF/lib/tmp" />
   </target>
 
   <target name="list.jars.unix" if="os.is.unix">
-    <exec dir="${docportal.webapps}/WEB-INF/lib/tmp" executable="ls" />
+    <exec dir="${build.webapps}/WEB-INF/lib/tmp" executable="ls" />
   </target>
 
   <target name="list.jars.windows" if="os.is.windows">
-    <exec dir="${docportal.webapps}/WEB-INF/lib/tmp" executable="cmd.exe" >
+    <exec dir="${build.webapps}/WEB-INF/lib/tmp" executable="cmd.exe" >
       <arg line="/c dir *.*"/>
     </exec>
   </target>
 
   <target name="copy.webapp.jdbc" if="MCR.JDBCStore.BaseDir">
-    <copy todir="${docportal.webapps}/WEB-INF/lib/tmp" flatten="true">
+    <copy todir="${build.webapps}/WEB-INF/lib/tmp" flatten="true">
       <fileset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.Jars}" />
     </copy>
   </target>
 
   <target name="copy.webapp.xml" if="MCR.XMLStore.BaseDir">
-    <copy todir="${docportal.webapps}/WEB-INF/lib/tmp" flatten="true">
+    <copy todir="${build.webapps}/WEB-INF/lib/tmp" flatten="true">
       <fileset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.Jars}" />
     </copy>
   </target>
 	
   <target name="copy.webapp.system" if="MCR.System.SharedJarsDir">
-    <copy todir="${docportal.webapps}/WEB-INF/lib/tmp" flatten="true">
+    <copy todir="${build.webapps}/WEB-INF/lib/tmp" flatten="true">
       <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
     </copy>
   </target>
@@ -888,7 +956,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="war" depends="webapps" description="Build web application archive (war)" >
-    <jar jarfile="docportal.war" basedir="${docportal.webapps}" />
+    <jar jarfile="${build}/docportal.war" basedir="${build.webapps}" />
   </target>
 
   <!-- =================================================================== -->
@@ -898,32 +966,17 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <target name="clean" depends="safeWebContent,clean.system" description="Removes all generated files, cleaning up" />
 
   <target name="clean.system" description="Removes only all system files, cleaning up" >
-    <delete dir="${docportal.schema}"    />
-    <delete dir="${docportal.classes}"   />
-    <delete dir="${docportal.javadocs}"  />
-    <delete dir="${docportal.changelogs}"/>
-    <delete file="${docportal.stylesheets}/MCRMetadataCoreTemplates.xsl" />
-    <delete file="${docportal.stylesheets}/MCRMetadataCoreTypes.xsl" />
-    <delete file="${docportal.stylesheets}/MCRMetadataSchema.xsl" />
-    <delete dir="${docportal.webapps}"/>
-    <delete file="${docportal}/docportal.war" />
-    <delete file="${docportal}/docportal-installable.jar" />
-    <delete includeEmptyDirs="true" >
-      <fileset dir="${docportal.lib}" includes="docportal.jar" />
-    </delete>
+    <!-- Remove all build files -->
+    <delete dir="${build}" />
   </target>
 
   <target name="clean.data" description="Removes only all data files, cleaning up" >
-    <delete dir="${SIGN.KeyStore}"/>
-    <delete dir="${MCR.oai.resumptiontoken.dir}"/>
+    <delete dir="${MCR.IFS.ContentStore.FS.URI}" />
     <delete dir="${MCR.editor_base_directory}"/>
     <delete dir="${MCR.Editor.FileUpload.TempStoragePath}"/>
     <delete dir="${MCR.Searcher.lucene-metadata.IndexDir}"/>
     <delete dir="${MCR.Searcher.lucene-content.IndexDir}"/>
     <delete dir="${MCR.Lucene.LockDir}"/>
-    <delete dir="${docportal.lib}/jetty/logs"/>
-    <delete file="${docportal.config}/mycore.properties.private" />
-    <delete file="${docportal}/modules/module-wcms/aif/config/mycore.properties.wcms" />
     <antcall target="clean.directories.sql_data" />
   </target>
 
@@ -958,7 +1011,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="changelog" depends="init">
-    <echo>
+    <echo level="info">
 
       Building CVS ChangeLog, please be patient...
     </echo>
@@ -1010,7 +1063,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="javadocs" depends="up2date" if="javadocs.outdated" description="creates JavaDoc API documentation in HTML format">
-    <echo>Building the DocPortal JavaDoc API documentation...</echo>
+    <echo level="info">Building the DocPortal JavaDoc API documentation...</echo>
     
     <mkdir dir="${basedir}/javadocs" />
     <javadoc
@@ -1042,7 +1095,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <link href="http://logging.apache.org/log4j/docs/api/"/>
       <link href="http://jakarta.apache.org/lucene/docs/api/" />
     </javadoc>
-    <echo>---------------------------------------------------------</echo>
+    <echo level="info">---------------------------------------------------------</echo>
 
     <chmod dir="${basedir}/javadocs" type="file" perm="ugo+r"  includes="**/*" />
     <chmod dir="${basedir}/javadocs" type="dir"  perm="ugo+rx" includes="**/*" />
@@ -1123,7 +1176,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <!-- =================================================================== -->
 
   <target name="create.hibindexer" description="dynamic class generation">
-     <echo message="Generating Hibernate getter/setter class for query" />
+     <echo level="info" message="Generating Hibernate getter/setter class for query" />
      <property file="${docportal.config}/mycore.properties.query" />
      <mkdir dir="${basedir}/sources/org/mycore/backend/query" />
      <java classname="org.mycore.backend.query.helper.GenClasses"
@@ -1172,7 +1225,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   	<!-- advanced: choose fields and operators from drop-down list, choose and/or -->
   	<property name="layout" value="advanced" />
 		
-  	<echo>Generating search mask from searchfields.xml</echo>
+  	<echo level="info">Generating search mask from searchfields.xml</echo>
   	
     <copy file="${mycore.config}/fieldtypes.xml" toDir="${docportal.config}" />
     <xslt basedir="${docportal.config}"
@@ -1192,7 +1245,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <param name="include.hostsSelectionPanel" expression="${include.hostsSelectionPanel}" />
     	<param name="layout" expression="${layout}" />
     </xslt>
-  	<echo>Generated editor definition file ${filename.editor}</echo>
+  	<echo level="info">Generated editor definition file ${filename.editor}</echo>
     <xslt basedir="${docportal.config}"
           classpathref="docportal.classpath"
           in="${docportal.config}/searchfields.xml"
@@ -1204,7 +1257,7 @@ $JAVA_HOME/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <param name="title.de" expression="${title.de}" />
       <param name="title.en" expression="${title.en}" />
     </xslt>
-  	<echo>Generated webpage ${filename.webpage}</echo>
+  	<echo level="info">Generated webpage ${filename.webpage}</echo>
     <delete file="${docportal.config}/fieldtypes.xml" />
   </target>
 	

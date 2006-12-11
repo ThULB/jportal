@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaClassification.java,v $
- * $Revision: 1.24 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.26 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,9 +37,9 @@ import org.mycore.datamodel.classifications.MCRClassificationItem;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.24 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.26 $ $Date: 2006/12/05 12:35:06 $
  */
-public class MCRMetaClassification extends MCRMetaDefault implements MCRMetaInterface {
+public class MCRMetaClassification extends MCRMetaDefault {
     /** The length of the classification ID * */
     public static final int MAX_CLASSID_LENGTH = MCRObjectID.MAX_LENGTH;
 
@@ -178,25 +178,11 @@ public class MCRMetaClassification extends MCRMetaDefault implements MCRMetaInte
             elm.setAttribute("type", type);
         }
 
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
+        elm.setAttribute("inherited", Integer.toString(inherited));
         elm.setAttribute("classid", classid);
         elm.setAttribute("categid", categid);
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public String createTextSearch(boolean textsearch) throws MCRException {
-        return "";
     }
 
     /**

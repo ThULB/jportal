@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRTranslation.java,v $
- * $Revision: 1.2 $ $Date: 2006/05/04 08:43:18 $
+ * $RCSfile: MCRNISSBuilderDateCounter.java,v $
+ * $Revision: 1.1 $ $Date: 2006/06/22 19:43:41 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

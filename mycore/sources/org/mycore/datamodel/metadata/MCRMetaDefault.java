@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaDefault.java,v $
- * $Revision: 1.26 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.28 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,8 +24,8 @@
 package org.mycore.datamodel.metadata;
 
 import org.apache.log4j.Logger;
+
 import org.mycore.common.MCRException;
-import org.mycore.common.MCRUtils;
 
 /**
  * This class implements any methods for handling the basic data for all
@@ -33,9 +33,9 @@ import org.mycore.common.MCRUtils;
  * createTypedContent() and createTextSearch() are abstract methods.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.26 $ $Date: 2006/02/10 23:33:48 $
+ * @version $Revision: 1.28 $ $Date: 2006/12/05 12:35:06 $
  */
-public abstract class MCRMetaDefault {
+public abstract class MCRMetaDefault implements MCRMetaInterface {
     // public data
     public static final int DEFAULT_LANG_LENGTH = 12;
 
@@ -44,13 +44,13 @@ public abstract class MCRMetaDefault {
     public static final int DEFAULT_STRING_LENGTH = 4096;
 
     // common data
-    protected static String NL = new String((System.getProperties()).getProperty("line.separator"));
+    protected static final String NL = System.getProperties().getProperty("line.separator");
 
-    protected static String DEFAULT_LANGUAGE = "en";
+    protected static final String DEFAULT_LANGUAGE = "en";
 
-    protected static String DEFAULT_DATAPART = "metadata";
+    protected static final String DEFAULT_DATAPART = "metadata";
 
-    protected static int DEFAULT_INHERITED = 0;
+    protected static final int DEFAULT_INHERITED = 0;
 
     // logger
     static Logger LOGGER = Logger.getLogger(MCRMetaDefault.class.getName());
@@ -254,7 +254,7 @@ public abstract class MCRMetaDefault {
      * @return the inherited flag as string
      */
     public final String getInheritedToString() {
-        return (new Integer(inherited)).toString();
+        return Integer.toString(inherited);
     }
 
     /**
@@ -349,15 +349,6 @@ public abstract class MCRMetaDefault {
     public abstract org.jdom.Element createXML() throws MCRException;
 
     /**
-     * This abstract method create a String for the text searchable data.
-     * 
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return a String with the text search data
-     */
-    public abstract String createTextSearch(boolean textsearch) throws MCRException;
-
-    /**
      * This method check the validation of the content of this class. The method
      * returns <em>true</em> if
      * <ul>
@@ -386,4 +377,6 @@ public abstract class MCRMetaDefault {
         LOGGER.debug("DataPart           = " + datapart);
         LOGGER.debug("Inhreited          = " + String.valueOf(inherited));
     }
+    
+    public abstract Object clone();
 }

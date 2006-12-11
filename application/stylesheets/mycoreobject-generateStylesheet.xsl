@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.2 $ $Date: 2006/11/10 09:58:15 $ -->
+<!-- $Revision: 1.5 $ $Date: 2006/11/15 16:22:45 $ -->
 <!-- ============================================== -->
 <gxsl:stylesheet version="1.0" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:gxsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsl="http://www.w3.org/1999/XSL/TransformAlias">
@@ -131,9 +131,6 @@
   <gxsl:template name="generateMetaTemplate">
     <gxsl:comment>Template for metadata view: see mycoreobject.xsl</gxsl:comment>
     <xsl:template match="/mycoreobject[contains(@ID,'_{$objectType}_')]" mode="present" priority="1">
-      <xsl:param name="obj_host" select="$objectHost" />
-      <xsl:param name="accessedit" />
-      <xsl:param name="accessdelete" />
       <xsl:variable name="objectBaseURL">
         <xsl:if test="$objectHost != 'local'">
           <xsl:value-of
@@ -155,7 +152,7 @@
             
             We define a helper variable to perform this filtering now.
           -->
-        <gxsl:variable name="unique-list" select="./metadata/*/*[not(local-name()=local-name(following::*) and (@type=following::*/@type))]"/>
+        <gxsl:variable name="unique-list" select="./metadata/*/*[not(local-name()=local-name(following::*) and ((@type=following::*/@type) or (not(@type) and (following::*[not(@type)]))))]"/>
         <gxsl:for-each select="$unique-list">
           <gxsl:variable name="defTag" select="local-name(..)" />
           <gxsl:variable name="curTag" select="local-name()" />
@@ -185,22 +182,26 @@
         <gxsl:choose>
           <gxsl:when test="$withDerivates = 'on'">
             <xsl:call-template name="editobject_with_der">
-              <xsl:with-param name="accessedit" select="$accessedit" />
               <xsl:with-param name="id" select="./@ID" />
             </xsl:call-template>
           </gxsl:when>
           <gxsl:otherwise>
             <xsl:call-template name="editobject">
-              <xsl:with-param name="accessedit" select="$accessedit" />
               <xsl:with-param name="id" select="./@ID" />
             </xsl:call-template>
           </gxsl:otherwise>
         </gxsl:choose>
         <gxsl:if test="string-length($childObjectTypes)>0">
-          <xsl:call-template name="addChild">
+          <xsl:variable name="typeToken">
+            <types>
+              <xsl:call-template name="Tokenizer">
+                <xsl:with-param name="string" select="'{$childObjectTypes}'" />
+              </xsl:call-template>
+            </types>
+          </xsl:variable>
+          <xsl:apply-templates select="xalan:nodeset($typeToken)/types" mode="addChild">
             <xsl:with-param select="./@ID" name="id" />
-            <xsl:with-param select="'{$childObjectTypes}'" name="types" />
-          </xsl:call-template>
+          </xsl:apply-templates>
         </gxsl:if>
 
         <gxsl:comment>*** List children per object type ************************************* </gxsl:comment>
@@ -242,10 +243,9 @@
 
         <!-- Derivate *** interne und externe Referenzen ******************* -->
         <gxsl:if test="$withDerivates = 'on'">
-          <xsl:call-template name="Derobjects">
+          <xsl:apply-templates select="." mode="printDerivates">
             <xsl:with-param name="staticURL" select="$staticURL" />
-            <xsl:with-param name="obj_host" select="$obj_host" />
-          </xsl:call-template>
+          </xsl:apply-templates>
         </gxsl:if>
 
         <gxsl:comment>*** Created ************************************* </gxsl:comment>
@@ -271,27 +271,21 @@
     </xsl:template>
 
     <gxsl:if test="string-length($childObjectTypes)>0">
-      <xsl:template name="addChild">
+      <xsl:template match="types[token]" mode="addChild">
         <xsl:param name="id" />
         <xsl:param name="layout" />
-        <xsl:param name="types" />
         <xsl:param name="xmltempl" select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)" />
         <xsl:variable name="suffix">
           <xsl:if test="string-length($layout)>0">
             <xsl:value-of select="concat('&amp;layout=',$layout)" />
           </xsl:if>
         </xsl:variable>
-        <xsl:variable name="typeToken">
-          <xsl:call-template name="Tokenizer">
-            <xsl:with-param name="string" select="$types" />
-          </xsl:call-template>
-        </xsl:variable>
         <xsl:if test="acl:checkPermission($id,'writedb')">
           <tr>
             <td class="metaname"><xsl:value-of select="concat(i18n:translate('metaData.addChildObject'),':')"/></td>
             <td class="metavalue">
               <ul>
-                <xsl:for-each select="xalan:nodeset($typeToken)/token">
+                <xsl:for-each select="token">
                   <xsl:variable name="type" select="." />
                   <li>
                     <a
@@ -310,8 +304,7 @@
     <gxsl:if test="$withDerivates = 'on'">
       <!-- *** Derobjects *** interne und externe Referenzen ******************* -->
       <!-- FileAdd, FileEdit, FileDelete -->
-      <xsl:template name="Derobjects">
-        <xsl:param name="obj_host" />
+      <xsl:template match="/mycoreobject" mode="printDerivates">
         <xsl:param name="staticURL" />
         <xsl:param name="layout" />
         <!--        <xsl:param name="xmltempl" select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)"/> -->

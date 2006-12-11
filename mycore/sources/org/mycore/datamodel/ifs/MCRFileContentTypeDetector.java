@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRFileContentTypeDetector.java,v $
+ * $Revision: 1.7 $ $Date: 2005/09/28 07:40:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.jdom.Element;
  * @see MCRSimpleFCTDetector
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.6 $ $Date: 2005/08/15 15:02:12 $
+ * @version $Revision: 1.7 $ $Date: 2005/09/28 07:40:24 $
  */
 public interface MCRFileContentTypeDetector {
     /**

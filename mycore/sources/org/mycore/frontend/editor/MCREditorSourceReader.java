@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCREditorSourceReader.java,v $
- * $Revision: 1.5 $ $Date: 2006/02/10 23:33:49 $
+ * $Revision: 1.8 $ $Date: 2006/12/07 15:49:03 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -70,7 +70,13 @@ public class MCREditorSourceReader {
                 }
             }
         } else if ((source != null) && (source.getAttributeValue("url", "").trim().length() > 0)) {
-            url = source.getAttributeValue("url");
+            //start new session if token attribute is present
+            if (source.getAttributeValue("token")==null){
+                url = source.getAttributeValue("url");
+            } else {
+                //as there is no sessionId yet we can not replace token in url
+                url = null;
+            }
         }
 
         if ((url == null) || (url.trim().length() == 0)) {
@@ -95,6 +101,6 @@ public class MCREditorSourceReader {
 
         Element input = MCRURIResolver.instance().resolve(url);
 
-        return new MCREditorSubmission(input);
+        return new MCREditorSubmission(input,editor);
     }
 }

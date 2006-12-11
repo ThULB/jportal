@@ -1,6 +1,6 @@
 /*
- * $RCSfile: OoTextPlugin.java,v $
- * $Revision: 1.12 $ $Date: 2006/02/10 23:33:50 $
+ * $RCSfile: OpenDocumentTextPlugin.java,v $
+ * $Revision: 1.1 $ $Date: 2006/03/16 17:11:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

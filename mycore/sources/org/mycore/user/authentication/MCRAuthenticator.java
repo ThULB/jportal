@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRMetadata2Fields.java,v $
- * $Revision: 1.4 $ $Date: 2005/08/11 13:47:35 $
+ * $RCSfile: MCRAuthenticator.java,v $
+ * $Revision: 1.1 $ $Date: 2005/12/21 08:22:56 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -27,7 +27,7 @@ package org.mycore.user.authentication;
  * Authenticates a userID by checking a given password for that userID.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.16 $ $Date: 2005/09/28 07:49:10 $
+ * @version $Revision: 1.1 $ $Date: 2005/12/21 08:22:56 $
  */
 public interface MCRAuthenticator
 {

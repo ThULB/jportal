@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRBuildLuceneQuery.java,v $
- * $Revision: 1.18 $ $Date: 2006/05/18 10:25:08 $
+ * $Revision: 1.19 $ $Date: 2006/09/13 12:36:33 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.services.fieldquery.MCRFieldDef;
  * 
  * @author Harald Richter
  * 
- * @version $Revision: 1.18 $ $Date: 2006/05/18 10:25:08 $
+ * @version $Revision: 1.19 $ $Date: 2006/09/13 12:36:33 $
  * 
  */
 public class MCRBuildLuceneQuery {

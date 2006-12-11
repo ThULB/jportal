@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAbstractCommands.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:46:54 $
+ * $Revision: 1.6 $ $Date: 2006/11/24 12:19:41 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,14 +33,14 @@ import org.mycore.common.MCRConfiguration;
  * 
  * @author Jens Kupferschmidt
  * 
- * @version $Revision: 1.4 $ $Date: 2005/09/28 07:46:54 $
+ * @version $Revision: 1.6 $ $Date: 2006/11/24 12:19:41 $
  */
 public class MCRAbstractCommands implements MCRExternalCommandInterface {
     /** The configuration instance */
     protected static MCRConfiguration CONFIG = null;
 
     /** The array holding all known commands */
-    protected ArrayList command = null;
+    protected ArrayList<MCRCommand> command = null;
 
     /**
      * Initialize common data.
@@ -53,7 +53,7 @@ public class MCRAbstractCommands implements MCRExternalCommandInterface {
      * The constrctor.
      */
     protected MCRAbstractCommands() {
-        command = new ArrayList();
+        command = new ArrayList<MCRCommand>();
     }
 
     /**

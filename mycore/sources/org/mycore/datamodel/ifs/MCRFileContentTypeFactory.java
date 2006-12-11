@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFileContentTypeFactory.java,v $
- * $Revision: 1.9 $ $Date: 2005/09/28 07:40:24 $
+ * $Revision: 1.10 $ $Date: 2006/02/10 23:33:47 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRClassificationEditor.java,v $
- * $Revision: 1.1 $ $Date: 2006/09/25 09:31:38 $
+ * $Revision: 1.4 $ $Date: 2006/11/27 14:03:37 $
  *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,10 @@
 
 package org.mycore.datamodel.classifications;
 
+import static org.jdom.Namespace.XML_NAMESPACE;
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
@@ -32,9 +36,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.metadata.MCRActiveLinkException;
@@ -85,7 +87,7 @@ public class MCRClassificationEditor {
             Element clroot = indoc.getRootElement();
             if (clroot == null)
                 return false;
-            Element categories = (Element) clroot.getChild("categories");
+            Element categories = clroot.getChild("categories");
             if (categories == null)
                 return false;
             Element newCateg = (Element) categories.getChild("category").clone();
@@ -237,8 +239,8 @@ public class MCRClassificationEditor {
                 return false;
             }
 
-            mycoreclass.addNamespaceDeclaration(org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
-            mycoreclass.setAttribute("noNamespaceSchemaLocation", "MCRClassification.xsd", org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
+            mycoreclass.addNamespaceDeclaration(XSI_NAMESPACE);
+            mycoreclass.setAttribute("noNamespaceSchemaLocation", "MCRClassification.xsd", XSI_NAMESPACE);
             mycoreclass.setAttribute("ID", cli.toString());
             mycoreclass.setAttribute("counter", "0");
             List tagList = clroot.getChildren("label");
@@ -246,7 +248,7 @@ public class MCRClassificationEditor {
             for (int i = 0; i < tagList.size(); i++) {
                 element = (Element) tagList.get(i);
                 Element newE = new Element("label");
-                newE.setAttribute("lang", element.getAttributeValue("lang"), Namespace.XML_NAMESPACE);
+                newE.setAttribute("lang", element.getAttributeValue("lang"), XML_NAMESPACE);
                 newE.setAttribute("text", element.getAttributeValue("text"));
                 if (element.getAttributeValue("description") != null) {
                     newE.setAttribute("description", element.getAttributeValue("description"));
@@ -286,7 +288,7 @@ public class MCRClassificationEditor {
             for (int i = 0; i < tagList.size(); i++) {
                 element = (Element) tagList.get(i);
                 Element newE = new Element("label");
-                newE.setAttribute("lang", element.getAttributeValue("lang"), Namespace.XML_NAMESPACE);
+                newE.setAttribute("lang", element.getAttributeValue("lang"), XML_NAMESPACE);
                 newE.setAttribute("text", element.getAttributeValue("text"));
                 newE.setAttribute("description", element.getAttributeValue("description"));
                 cljdom.getRootElement().addContent(newE);
@@ -404,13 +406,13 @@ public class MCRClassificationEditor {
         Element element;
         for (int i = 0; i < tagList.size(); i++) {
             element = (Element) tagList.get(i);
-            element.setAttribute("lang", element.getAttributeValue("lang"), Namespace.XML_NAMESPACE);
+            element.setAttribute("lang", element.getAttributeValue("lang"), XML_NAMESPACE);
             element.removeAttribute("lang");
         }
         // process url, if given
         element = newCateg.getChild("url");
         if (element != null) {
-            element.setAttribute("href", element.getAttributeValue("href"), Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+            element.setAttribute("href", element.getAttributeValue("href"), XLINK_NAMESPACE);
             element.removeAttribute("href");
         }
         return newCateg;

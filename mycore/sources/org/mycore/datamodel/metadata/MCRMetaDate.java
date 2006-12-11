@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaDate.java,v $
- * $Revision: 1.24 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.26 $ $Date: 2006/12/05 12:35:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,9 +39,10 @@ import org.mycore.common.MCRUtils;
  * GregorianCalendar.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.24 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.26 $ $Date: 2006/12/05 12:35:07 $
+ * @deprecated use MCRMetaISO8601Date
  */
-final public class MCRMetaDate extends MCRMetaDefault implements MCRMetaInterface {
+final public class MCRMetaDate extends MCRMetaDefault {
     // common data
     // MetaDate data
     private GregorianCalendar date;
@@ -264,20 +265,6 @@ final public class MCRMetaDate extends MCRMetaDefault implements MCRMetaInterfac
         elm.addContent(getDateToString());
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public final String createTextSearch(boolean textsearch) throws MCRException {
-        return "";
     }
 
     /**

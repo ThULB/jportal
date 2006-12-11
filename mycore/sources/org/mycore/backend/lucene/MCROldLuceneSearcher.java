@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCROldLuceneSearcher.java,v $
- * $Revision: 1.1 $ $Date: 2006/08/22 09:45:34 $
+ * $Revision: 1.5 $ $Date: 2006/12/08 14:42:43 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
+import org.jdom.Element;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRNormalizer;
@@ -65,6 +65,7 @@ import org.mycore.services.plugins.TextFilterPluginManager;
  * Based on MCRLucenesearcher Version 1.43 for miless-software 
  * 
  * @author Harald Richter
+ * @deprecated use MCRLuceneSearcher
  */
 public class MCROldLuceneSearcher extends MCRSearcher {
     /** The logger */
@@ -389,11 +390,11 @@ public class MCROldLuceneSearcher extends MCRSearcher {
         searcher.close();
     }
 
-    public MCRResults search(MCRCondition condition, int maxResults, List sortBy, boolean addSortData) {
+    public MCRResults search(MCRCondition condition, int maxResults, List<MCRSortBy> sortBy, boolean addSortData) {
         MCRResults results = new MCRResults();
 
         try {
-            List f = new ArrayList();
+            List<Element> f = new ArrayList<Element>();
             f.add(condition.toXML());
 
             boolean reqf = true;
@@ -426,23 +427,23 @@ public class MCROldLuceneSearcher extends MCRSearcher {
             deleteLuceneLocks(LOCK_DIR, 100);
         }
 
-        TopDocs hits = searcher.search(luceneQuery, null, maxResults);
-        int found = hits.scoreDocs.length;
+        Hits hits = searcher.search( luceneQuery );
+        int found = hits.length();
+//        TopDocs hits = searcher.search(luceneQuery, null, maxResults);
+//        int found = hits.scoreDocs.length;
 
         LOGGER.info("Number of Objects found : " + found);
 
         MCRResults result = new MCRResults();
 
         for (int i = 0; i < found; i++) {
-            // org.apache.lucene.document.Document doc = hits.doc(i);
-            org.apache.lucene.document.Document doc = searcher.doc(hits.scoreDocs[i].doc);
+            org.apache.lucene.document.Document doc = hits.doc(i);
+            //org.apache.lucene.document.Document doc = searcher.doc(hits.scoreDocs[i].doc);
 
             String id = doc.get("returnid");
             if (null == id)    // für miless
               id = doc.get("mcrid");
-            LOGGER.debug("returnid: " + id);
             MCRHit hit = new MCRHit(id);
-            
             
             Enumeration fields = doc.fields();
             while (fields.hasMoreElements()) {

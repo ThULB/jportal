@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAudioVideoExtender.java,v $
- * $Revision: 1.11 $ $Date: 2006/02/10 23:33:46 $
+ * $Revision: 1.13 $ $Date: 2006/11/27 12:34:17 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 
-import org.mycore.common.MCRArgumentChecker;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -44,7 +43,7 @@ import org.mycore.common.MCRUtils;
  * size etc. and to start a player to stream the asset to a browser.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.11 $ $Date: 2006/02/10 23:33:46 $
+ * @version $Revision: 1.13 $ $Date: 2006/11/27 12:34:17 $
  */
 public abstract class MCRAudioVideoExtender {
     /** Constant for media type = video */
@@ -226,10 +225,6 @@ public abstract class MCRAudioVideoExtender {
      * @return the duration of this asset, formatted as a String
      */
     public String getDurationFormatted(String hourLabel, String minutesLabel, String secondsLabel) {
-        MCRArgumentChecker.ensureNotEmpty(hourLabel, "hourLabel");
-        MCRArgumentChecker.ensureNotEmpty(minutesLabel, "minutesLabel");
-        MCRArgumentChecker.ensureNotEmpty(secondsLabel, "secondsLabel");
-
         StringBuffer sb = new StringBuffer();
 
         if (durationHours > 0) {

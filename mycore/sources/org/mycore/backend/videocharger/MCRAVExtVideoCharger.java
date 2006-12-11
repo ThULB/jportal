@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAVExtVideoCharger.java,v $
- * $Revision: 1.9 $ $Date: 2006/06/20 09:50:58 $
+ * $Revision: 1.10 $ $Date: 2006/09/25 16:14:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,7 +51,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * This class also provides a method to list all assets in a VideoCharger store.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.9 $ $Date: 2006/06/20 09:50:58 $
+ * @version $Revision: 1.10 $ $Date: 2006/09/25 16:14:01 $
  */
 public class MCRAVExtVideoCharger extends MCRAudioVideoExtender {
     /** The logger */

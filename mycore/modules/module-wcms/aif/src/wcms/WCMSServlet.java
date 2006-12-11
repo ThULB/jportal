@@ -1,6 +1,6 @@
 /*
  * $RCSfile: WCMSServlet.java,v $
- * $Revision: 1.9 $ $Date: 2006/08/15 09:12:44 $
+ * $Revision: 1.10 $ $Date: 2006/09/22 10:30:44 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

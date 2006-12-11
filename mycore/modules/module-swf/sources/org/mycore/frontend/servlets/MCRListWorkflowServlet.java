@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRListWorkflowServlet.java,v $
- * $Revision: 1.17 $ $Date: 2006/05/27 17:21:54 $
+ * $Revision: 1.21 $ $Date: 2006/11/27 12:38:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,22 +24,22 @@
 // package
 package org.mycore.frontend.servlets;
 
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
-
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.xml.MCRXMLHelper;
@@ -67,7 +67,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * <b>.../servlets/MCRListWorkflowServlet/XSL.Style=xml&type=...&step=... </b>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.17 $ $Date: 2006/05/27 17:21:54 $
+ * @version $Revision: 1.21 $ $Date: 2006/11/27 12:38:32 $
  */
 public class MCRListWorkflowServlet extends MCRServlet {
     // The LOGGER
@@ -93,7 +93,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
 
     /**
      * This method overrides doGetPost of MCRServlet and put the generated DOM
-     * in the LayoutServlet. <br />
+     * in the LayoutService. <br />
      * Input parameter are <br />
      * <ul>
      * <li>type - the MyCoRe type</li>
@@ -165,7 +165,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
                         org.jdom.Element s3 = s2.getChild("linkmeta");
 
                         if (s3 != null) {
-                            objid = s3.getAttributeValue("href", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+                            objid = s3.getAttributeValue("href", XLINK_NAMESPACE);
                         }
                     }
 
@@ -196,7 +196,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
 
         // build the frame of mcr_workflow
         org.jdom.Element root = new org.jdom.Element("mcr_workflow");
-        root.addNamespaceDeclaration(org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
+        root.addNamespaceDeclaration(XSI_NAMESPACE);
         root.setAttribute("type", type);
         root.setAttribute("step", step);
 
@@ -322,12 +322,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
         }
 
         org.jdom.Document workflow_doc = new org.jdom.Document(root);
-
-        // return the JDOM
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", workflow_doc);
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(),job.getResponse(),workflow_doc);
     }
 
     /**

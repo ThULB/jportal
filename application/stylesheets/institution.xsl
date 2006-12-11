@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.7 $ $Date: 2006/08/15 11:16:02 $ -->
+<!-- $Revision: 1.9 $ $Date: 2006/11/14 10:49:45 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -75,8 +75,6 @@
   <xsl:template match="/mycoreobject[contains(@ID,'_institution_')]"
     mode="present" priority="1">
     <xsl:param name="obj_host" select="$objectHost"/>
-    <xsl:param name="accessedit" />
-    <xsl:param name="accessdelete" />
     <xsl:variable name="objectBaseURL">
       <xsl:if test="$objectHost != 'local'">
         <xsl:value-of
@@ -340,8 +338,6 @@
       <!-- Editor Buttons ********************************************** -->
 
       <xsl:call-template name="editobject">
-        <xsl:with-param name="accessedit" select="$accessedit" />
-        <xsl:with-param name="accessdelete" select="$accessdelete" />
         <xsl:with-param name="id" select="./@ID" />
       </xsl:call-template>
     </table>

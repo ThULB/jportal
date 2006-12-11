@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8Item.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * item. </B>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  */
 final class MCRCM8Item implements DKConstantICM {
     private ArrayList ddolist = new ArrayList();

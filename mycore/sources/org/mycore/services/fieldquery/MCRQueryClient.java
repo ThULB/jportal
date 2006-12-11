@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRQueryClient.java,v $
- * $Revision: 1.11 $ $Date: 2006/08/15 13:35:35 $
+ * $Revision: 1.14 $ $Date: 2006/12/08 14:21:37 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,18 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import javax.xml.namespace.QName;
-
-import org.apache.axis.client.Service;
-import org.apache.axis.constants.Style;
-import org.apache.axis.constants.Use;
-import org.apache.axis.description.OperationDesc;
-import org.apache.axis.description.ParameterDesc;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.input.DOMBuilder;
 import org.jdom.output.DOMOutputter;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
@@ -47,14 +39,15 @@ import org.mycore.common.xml.MCRURIResolver;
 /**
  * Executes a query on remote hosts using a webservice
  * 
- * @author Frank Lützenkirchen @author Jens Kupferschmidt
+ * @author Frank Lützenkirchen 
+ * @author Jens Kupferschmidt
  */
 public class MCRQueryClient {
     /** The logger */
     private final static Logger LOGGER = Logger.getLogger(MCRQueryClient.class);
 
     /** A list containing the aliases of all hosts */
-    public final static List ALL_HOSTS;
+    public final static List<String> ALL_HOSTS;
 
     /** A map from host alias to classes for access types */
     private static Properties accessclass = new Properties();
@@ -63,7 +56,7 @@ public class MCRQueryClient {
         // Read hosts.xml configuration file
         Element hosts = MCRURIResolver.instance().resolve("resource:hosts.xml");
 
-        ALL_HOSTS = new ArrayList();
+        ALL_HOSTS = new ArrayList<String>();
         List children = hosts.getChildren();
         for (int i = 0; i < children.size(); i++) {
             Element host = (Element) (children.get(i));
@@ -82,8 +75,8 @@ public class MCRQueryClient {
             } catch (InstantiationException e) {
                 throw new MCRException(classname + " InstantiationException",e);
             }
-            ((MCRQueryClientInterface)qi).init(host);
-            String alias = ((MCRQueryClientInterface)qi).getAlias();
+            qi.init(host);
+            String alias = qi.getAlias();
             LOGGER.debug("Host " + alias + " uses class "+classname);
             accessclass.put(alias, qi);
             ALL_HOSTS.add(alias);

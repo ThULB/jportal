@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.7 $ $Date: 2006/09/20 14:22:20 $ -->
+<!-- $Revision: 1.10 $ $Date: 2006/11/14 20:25:33 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -201,8 +201,8 @@
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@title={concat(idx, ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
-          <xsl:value-of select="concat(idx, ', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@title={concat(col[@name='surname'], ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
+          <xsl:value-of select="concat(col[@name='surname'],', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
         </a>
       </td>
     </tr>

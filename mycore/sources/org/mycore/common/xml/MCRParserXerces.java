@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRParserXerces.java,v $
- * $Revision: 1.18 $ $Date: 2005/09/28 07:39:07 $
+ * $Revision: 1.23 $ $Date: 2006/11/23 13:56:30 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,56 +43,51 @@ import org.xml.sax.SAXParseException;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.18 $ $Date: 2005/09/28 07:39:07 $
+ * @version $Revision: 1.23 $ $Date: 2006/11/23 13:56:30 $
  */
 public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
-    // the Xerces parser to be used
+
+    /** The logger */
+    private final static Logger LOGGER = Logger.getLogger(MCRParserXerces.class);
+
+    /** A xerces parser instance that will validate */
     SAXBuilder builderValid;
 
+    /** A xerces parser instance that will not validate */
     SAXBuilder builder;
 
-    // parser configuration flags
+    /** By default, validate xml or not? */
     private static boolean FLAG_VALIDATION = false;
 
-    private static boolean FLAG_NAMESPACES = true;
+    private static String FEATURE_NAMESPACES = "http://xml.org/sax/features/namespaces";
 
-    private static boolean FLAG_SCHEMA_SUPPORT = true;
+    private static String FEATURE_SCHEMA_SUPPORT = "http://apache.org/xml/features/validation/schema";
 
-    private static boolean FLAG_NO_SCHEMA_SUPPORT = false;
-
-    private static boolean FLAG_NO_SCHEMA_FULL_SUPPORT = false;
-
-    private static String SET_NAMESPACES = "http://xml.org/sax/features/namespaces";
-
-    private static String SET_SCHEMA_SUPPORT = "http://apache.org/xml/features/validation/schema";
-
-    private static String SET_FULL_SCHEMA_SUPPORT = "http://apache.org/xml/features/validation/schema-full-checking";
+    private static String FEATURE_FULL_SCHEMA_SUPPORT = "http://apache.org/xml/features/validation/schema-full-checking";
 
     /**
-     * Constructor for the xerces parser. Sets default validation flag as
+     * Constructor for the Xerces parser. Sets default validation flag as
      * specified by the property MCR.parser_schema_validation in
      * mycore.properties
      */
     public MCRParserXerces() {
         FLAG_VALIDATION = MCRConfiguration.instance().getBoolean("MCR.parser_schema_validation", FLAG_VALIDATION);
+
         builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
-
-        builder.setFeature(SET_NAMESPACES, FLAG_NAMESPACES);
-        builder.setFeature(SET_SCHEMA_SUPPORT, FLAG_NO_SCHEMA_SUPPORT);
-        builder.setFeature(SET_FULL_SCHEMA_SUPPORT, FLAG_NO_SCHEMA_FULL_SUPPORT);
-        builderValid.setFeature(SET_NAMESPACES, FLAG_NAMESPACES);
-        builderValid.setFeature(SET_SCHEMA_SUPPORT, FLAG_SCHEMA_SUPPORT);
-        builderValid.setFeature(SET_FULL_SCHEMA_SUPPORT, FLAG_NO_SCHEMA_FULL_SUPPORT);
-
-        builder.setReuseParser(true);
-        builderValid.setReuseParser(true);
-
-        builder.setErrorHandler(this);
+        builderValid.setFeature(FEATURE_NAMESPACES, true);
+        builderValid.setFeature(FEATURE_SCHEMA_SUPPORT, true);
+        builderValid.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
+        builderValid.setReuseParser(false);
         builderValid.setErrorHandler(this);
-
-        builder.setEntityResolver(MCRURIResolver.instance());
         builderValid.setEntityResolver(MCRURIResolver.instance());
+
+        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
+        builder.setFeature(FEATURE_NAMESPACES, true);
+        builder.setFeature(FEATURE_SCHEMA_SUPPORT, false);
+        builder.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
+        builder.setReuseParser(false);
+        builder.setErrorHandler(this);
+        builder.setEntityResolver(MCRURIResolver.instance());
     }
 
     /**
@@ -185,7 +180,6 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      */
     public Document parseXML(byte[] xml, boolean validate) {
         InputSource source = new InputSource(new ByteArrayInputStream(xml));
-
         return parse(source, validate);
     }
 
@@ -207,39 +201,40 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
         try {
             return builder.build(source);
         } catch (Exception ex) {
-            logger.error("Error while parsing XML document", ex);
-            throw new MCRException("Error while parsing XML document", ex);
+            if (ex instanceof MCRException)
+                throw (MCRException) ex;
+
+            throw new MCRException(msg, ex);
         }
     }
 
-    /** The logger */
-    private Logger logger = Logger.getLogger(MCRParserXerces.class);
+    private final static String msg = "Error while parsing XML document: ";
 
     /**
      * Handles parser warnings
      */
     public void warning(SAXParseException ex) {
-        logger.warn(getSAXErrorMessage(ex), ex);
+        LOGGER.warn(getSAXErrorMessage(ex), ex);
     }
 
     /**
-     * Handles fatal parse errors
+     * Handles parse errors
      */
     public void error(SAXParseException ex) {
-        logger.error(getSAXErrorMessage(ex), ex);
-        throw new MCRException("Error parsing XML document: " + ex.getMessage(), ex);
+        LOGGER.error(getSAXErrorMessage(ex), ex);
+        throw new MCRException(msg + getSAXErrorMessage(ex), ex);
     }
 
     /**
      * Handles fatal parse errors
      */
     public void fatalError(SAXParseException ex) {
-        logger.fatal(getSAXErrorMessage(ex));
-        throw new MCRException("Error parsing XML document: " + ex.getMessage(), ex);
+        LOGGER.fatal(getSAXErrorMessage(ex));
+        throw new MCRException(msg + getSAXErrorMessage(ex), ex);
     }
 
     /**
-     * This methode returns a string of the location.
+     * Returns a text indicating at which line and column the error occured.
      * 
      * @param ex
      *            the SAXParseException exception
@@ -247,8 +242,8 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      */
     private String getSAXErrorMessage(SAXParseException ex) {
         StringBuffer str = new StringBuffer();
-        String systemId = ex.getSystemId();
 
+        String systemId = ex.getSystemId();
         if (systemId != null) {
             int index = systemId.lastIndexOf('/');
 
@@ -256,14 +251,12 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
                 systemId = systemId.substring(index + 1);
             }
 
-            str.append(systemId);
+            str.append(systemId).append(": ");
         }
 
-        str.append(": line=");
-        str.append(ex.getLineNumber());
-        str.append(" : column=");
-        str.append(ex.getColumnNumber());
-        str.append(" : message=");
+        str.append("line ").append(ex.getLineNumber());
+        str.append(", column ").append(ex.getColumnNumber());
+        str.append(", ");
         str.append(ex.getLocalizedMessage());
 
         return str.toString();

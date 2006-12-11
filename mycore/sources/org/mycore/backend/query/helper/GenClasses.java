@@ -1,6 +1,6 @@
 /*
  * $RCSfile: GenClasses.java,v $
- * $Revision: 1.9 $ $Date: 2006/02/03 22:13:17 $
+ * $Revision: 1.10 $ $Date: 2006/02/08 11:32:05 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

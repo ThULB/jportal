@@ -4,9 +4,9 @@
 # XML SQL store
 #
 
-$DOCPORTAL_HOME/bin/mycore.sh repair metadata search of type institution
-$DOCPORTAL_HOME/bin/mycore.sh repair metadata search of type author
-$DOCPORTAL_HOME/bin/mycore.sh repair metadata search of type document
+$DOCPORTAL_HOME/build/bin/mycore.sh repair metadata search of type institution
+$DOCPORTAL_HOME/build/bin/mycore.sh repair metadata search of type author
+$DOCPORTAL_HOME/build/bin/mycore.sh repair metadata search of type document
 
-$DOCPORTAL_HOME/bin/mycore.sh repair derivate search of type derivate
+#$DOCPORTAL_HOME/build/bin/mycore.sh repair derivate search of type derivate
 

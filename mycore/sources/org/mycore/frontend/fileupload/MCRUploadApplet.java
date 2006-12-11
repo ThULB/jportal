@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadApplet.java,v $
- * $Revision: 1.13 $ $Date: 2006/09/21 12:07:52 $
+ * $Revision: 1.14 $ $Date: 2006/09/22 14:45:42 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,7 +54,7 @@ import javax.swing.UIManager;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.13 $ $Date: 2006/09/21 12:07:52 $
+ * @version $Revision: 1.14 $ $Date: 2006/09/22 14:45:42 $
  */
 public class MCRUploadApplet extends JApplet {
     protected String uploadId;

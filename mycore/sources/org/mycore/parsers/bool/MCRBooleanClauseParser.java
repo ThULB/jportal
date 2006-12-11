@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRBooleanClauseParser.java,v $
- * $Revision: 1.13 $ $Date: 2006/03/27 09:51:30 $
+ * $Revision: 1.14 $ $Date: 2006/03/29 09:52:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

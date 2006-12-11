@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRDataExtractorJPEG.java,v $
- * $Revision: 1.1 $ $Date: 2006/09/15 07:11:34 $
+ * $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import com.drew.metadata.Tag;
  * http://www.drewnoakes.com/code/exif/ for details.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.1 $ $Date: 2006/09/15 07:11:34 $
+ * @version $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
  */
 public class MCRDataExtractorJPEG extends MCRDataExtractor {
 

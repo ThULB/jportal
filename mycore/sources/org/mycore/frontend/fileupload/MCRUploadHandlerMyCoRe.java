@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadHandlerMyCoRe.java,v $
- * $Revision: 1.10 $ $Date: 2006/02/10 23:33:51 $
+ * $Revision: 1.11 $ $Date: 2006/05/19 06:27:23 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * @author Jens Kupferschmidt
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.10 $ $Date: 2006/02/10 23:33:51 $
+ * @version $Revision: 1.11 $ $Date: 2006/05/19 06:27:23 $
  * 
  * @see MCRUploadHandler
  */

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCheckBase.java,v $
- * $Revision: 1.13 $ $Date: 2006/03/22 13:51:58 $
+ * $Revision: 1.14 $ $Date: 2006/03/29 09:53:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import org.mycore.user2.MCRUserMgr;
  * output XML for metadata object and derivate objects.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.13 $ $Date: 2006/03/22 13:51:58 $
+ * @version $Revision: 1.14 $ $Date: 2006/03/29 09:53:10 $
  */
 abstract public class MCRCheckBase extends MCRServlet {
     protected static Logger LOGGER = Logger.getLogger(MCRCheckBase.class);
@@ -111,7 +111,7 @@ abstract public class MCRCheckBase extends MCRServlet {
      * 
      * @author Thomas Scheffler (yagee)
      * 
-     * @version $Revision: 1.13 $ $Date: 2006/03/22 13:51:58 $
+     * @version $Revision: 1.14 $ $Date: 2006/03/29 09:53:10 $
      */
     protected class EditorValidator extends MCREditorOutValidator {
         /**

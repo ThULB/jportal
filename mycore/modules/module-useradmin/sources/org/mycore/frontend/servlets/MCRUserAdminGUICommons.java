@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUserAdminGUICommons.java,v $
- * $Revision: 1.3 $ $Date: 2005/09/28 07:52:25 $
+ * $Revision: 1.6 $ $Date: 2006/11/27 12:38:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,6 @@ import java.net.URLEncoder;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import org.jdom.Document;
@@ -40,7 +39,7 @@ import org.mycore.common.MCRSessionMgr;
  * management of the mycore system.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.3 $ $Date: 2005/09/28 07:52:25 $
+ * @version $Revision: 1.6 $ $Date: 2006/11/27 12:38:32 $
  */
 public class MCRUserAdminGUICommons extends MCRServlet {
     protected String pageDir = null;
@@ -124,38 +123,19 @@ public class MCRUserAdminGUICommons extends MCRServlet {
     }
 
     /**
-     * This methods forwards a jdom document with XSL.Style=xml using the
-     * MCRLayoutServlet
-     * 
-     * @param jdomDoc
-     *            The XML document to be forwarded by the LayoutServlet
-     * @throws ServletException
-     *             for errors from the servlet engine.
-     * @throws IOException
-     *             for java I/O errors.
-     */
-    protected void forwardXML(MCRServletJob job, Document jdomDoc) throws ServletException, IOException {
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdomDoc);
-        job.getRequest().setAttribute("XSL.Style", "xml");
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
-    }
-
-    /**
      * Gather information about the XML document to be shown and the
      * corresponding XSLT stylesheet and redirect the request to the
-     * LayoutServlet
+     * LayoutService
      * 
      * @param job
      *            The MCRServletJob instance
      * @param styleSheet
      *            String value to select the correct XSL stylesheet
      * @param jdomDoc
-     *            The XML representation to be presented by the LayoutServlet
+     *            The XML representation to be presented by the LayoutService
      * @param useStrict
      *            If true, the parameter styleSheet must be used directly as
-     *            name of a stylesheet when forwarding to the MCRLayoutServlet.
+     *            name of a stylesheet when forwarding to the MCRLayoutService.
      *            If false, styleSheet will be appended by the signature of the
      *            current language. useStrict=true is used when not using a
      *            stylesheet at all because one simply needs the raw XML output.
@@ -165,7 +145,7 @@ public class MCRUserAdminGUICommons extends MCRServlet {
      * @throws IOException
      *             for java I/O errors.
      */
-    protected void doLayout(MCRServletJob job, String styleSheet, Document jdomDoc, boolean useStrict) throws ServletException, IOException {
+    protected void doLayout(MCRServletJob job, String styleSheet, Document jdomDoc, boolean useStrict) throws IOException {
         String language = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
 
         if (!useStrict) {
@@ -173,10 +153,7 @@ public class MCRUserAdminGUICommons extends MCRServlet {
         }
 
         job.getRequest().getSession().setAttribute("mycore.language", language);
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdomDoc);
         job.getRequest().setAttribute("XSL.Style", styleSheet);
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), jdomDoc);
     }
 }

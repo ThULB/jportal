@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRURNResolver.java,v $
- * $Revision: 1.1 $ $Date: 2006/06/23 09:08:23 $
+ * $Revision: 1.2 $ $Date: 2006/06/23 11:51:23 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.MCRConfiguration;
  * 
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.1 $ $Date: 2006/06/23 09:08:23 $
+ * @version $Revision: 1.2 $ $Date: 2006/06/23 11:51:23 $
  */
 public class MCRURNResolver extends HttpServlet {
 

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8ConnectionPool.java,v $
- * $Revision: 1.13 $ $Date: 2005/09/28 11:53:28 $
+ * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * 
  * @author Frank Luetzenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.13 $ $Date: 2005/09/28 11:53:28 $
+ * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
  */
 class MCRCM8ConnectionPool {
     /** The internal list of free connections */

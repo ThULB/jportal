@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCrypt.java,v $
- * $Revision: 1.5 $ $Date: 2006/01/26 12:27:56 $
+ * $RCSfile$
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ package org.mycore.user2;
  * derivative, the same license applies.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.5 $ $Date: 2006/01/26 12:27:56 $
+ * @version $Revision$ $Date$
  */
 public class MCRCrypt {
     private MCRCrypt() {

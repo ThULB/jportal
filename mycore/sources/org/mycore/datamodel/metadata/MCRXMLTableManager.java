@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRXMLTableManager.java,v $
- * $Revision: 1.20 $ $Date: 2006/05/02 12:24:04 $
+ * $Revision: 1.21 $ $Date: 2006/05/15 15:38:59 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,7 +45,7 @@ import org.mycore.common.xml.MCRXMLHelper;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.20 $ $Date: 2006/05/02 12:24:04 $
+ * @version $Revision: 1.21 $ $Date: 2006/05/15 15:38:59 $
  */
 public class MCRXMLTableManager {
     /** The link table manager singleton */

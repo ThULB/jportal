@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8MetaISBN.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +31,7 @@ import com.ibm.mm.sdk.common.DKException;
  * data model type MetaISBN.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  */
 public class MCRCM8MetaISBN extends MCRAbstractCM8ComponentType {
 

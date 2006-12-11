@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRURNManager.java,v $
- * $Revision: 1.2 $ $Date: 2006/06/27 06:45:00 $
+ * $Revision: 1.3 $ $Date: 2006/06/27 06:45:36 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

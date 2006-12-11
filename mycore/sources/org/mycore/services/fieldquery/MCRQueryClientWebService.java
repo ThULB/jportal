@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRQueryClientWebService.java,v $
- * $Revision: 1.3 $ $Date: 2006/08/15 18:03:47 $
+ * $Revision: 1.4 $ $Date: 2006/09/20 11:31:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

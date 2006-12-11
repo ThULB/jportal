@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLRuleStore.java,v $
- * $Revision: 1.9 $ $Date: 2006/02/10 23:33:47 $
+ * $Revision: 1.10 $ $Date: 2006/04/19 13:12:56 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

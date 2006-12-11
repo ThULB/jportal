@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSimpleWorkflowManager.java,v $
- * $Revision: 1.9 $ $Date: 2006/05/17 12:35:11 $
+ * $Revision: 1.12 $ $Date: 2006/11/29 10:29:31 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRDefaults;
+import static org.mycore.common.MCRConstants.*;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.xml.MCRParserXerces;
 import org.mycore.common.xml.MCRXMLHelper;
@@ -57,7 +57,7 @@ import org.mycore.frontend.cli.MCRObjectCommands;
  * This class holds methods to manage the workflow file system of MyCoRe.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.9 $ $Date: 2006/05/17 12:35:11 $
+ * @version $Revision: 1.12 $ $Date: 2006/11/29 10:29:31 $
  */
 /**
  * @author mcradmin
@@ -307,7 +307,7 @@ public class MCRSimpleWorkflowManager {
             return false;
         }
 
-        String DID = linkmeta.getAttributeValue("href", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+        String DID = linkmeta.getAttributeValue("href", XLINK_NAMESPACE);
         logger.debug("The linked object ID of derivate is " + DID);
 
         if (!ID.equals(DID)) {
@@ -644,7 +644,7 @@ public class MCRSimpleWorkflowManager {
         }
         MCRObjectService service = new MCRObjectService();
         org.jdom.Element elm = service.createXML();
-        MCREditorOutValidator.setDefaultDerivateACLs(elm, DD);
+        MCREditorOutValidator.setDefaultDerivateACLs(elm);
         service.setFromDOM(elm);
         der.setService(service);
 

@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRAccessEventHandler.java,v $
- * $Revision: 1.15 $ $Date: 2006/07/18 13:23:17 $
+ * $Revision: 1.16 $ $Date: 2006/07/21 10:11:13 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * simple workflow.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.15 $ $Date: 2006/07/18 13:23:17 $
+ * @version $Revision: 1.16 $ $Date: 2006/07/21 10:11:13 $
  */
 public class MCRAccessEventHandler extends MCREventHandlerBase {
 

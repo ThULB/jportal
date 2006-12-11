@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAVExtRealHelix.java,v $
- * $Revision: 1.10 $ $Date: 2005/09/28 07:32:42 $
+ * $Revision: 1.11 $ $Date: 2006/06/20 09:51:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * </code>
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.10 $ $Date: 2005/09/28 07:32:42 $
+ * @version $Revision: 1.11 $ $Date: 2006/06/20 09:51:16 $
  */
 public class MCRAVExtRealHelix extends MCRAudioVideoExtender {
     

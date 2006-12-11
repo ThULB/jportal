@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationInterface.java,v $
- * $Revision: 1.10 $ $Date: 2005/09/28 07:39:06 $
+ * $Revision: 1.11 $ $Date: 2005/12/07 13:30:17 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +31,7 @@ import java.util.ArrayList;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.10 $ $Date: 2005/09/28 07:39:06 $
+ * @version $Revision: 1.11 $ $Date: 2005/12/07 13:30:17 $
  */
 public interface MCRClassificationInterface {
     /**

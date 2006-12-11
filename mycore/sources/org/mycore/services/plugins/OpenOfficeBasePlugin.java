@@ -1,6 +1,6 @@
 /*
  * $RCSfile: OpenOfficeBasePlugin.java,v $
- * $Revision: 1.1 $ $Date: 2006/03/16 17:11:32 $
+ * $Revision: 1.2 $ $Date: 2006/03/17 10:16:27 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

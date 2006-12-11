@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationBrowser.java,v $
- * $Revision: 1.1 $ $Date: 2006/09/18 11:02:17 $
+ * $Revision: 1.5 $ $Date: 2006/11/27 12:45:14 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.frontend.servlets;
 
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
+import org.mycore.frontend.servlets.MCRServlet;
 import org.apache.log4j.Logger;
 import org.mycore.common.*;
 import org.jdom.*;
@@ -120,27 +121,24 @@ public class MCRClassificationBrowser extends MCRServlet {
     /**
      * Gather information about the XML document to be shown and the
      * corresponding XSLT stylesheet and redirect the request to the
-     * LayoutServlet
+     * LayoutService
      * 
      * @param job
      *            The MCRServletJob instance
      * @param styleBase
      *            String value to select the correct XSL stylesheet
      * @param jdomDoc
-     *            The XML representation to be presented by the LayoutServlet
+     *            The XML representation to be presented by the LayoutService
      * @throws ServletException
      *             for errors from the servlet engine.
      * @throws Exception
      */
-    protected void doLayout(MCRServletJob job, String styleBase, Document jdomDoc) throws ServletException, Exception {
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdomDoc);
+    protected void doLayout(MCRServletJob job, String styleBase, Document jdomDoc) throws Exception {
         if (getProperty(job.getRequest(), "XSL.Style") == null) {
             LOGGER.info("Set XSL.Style to: " + styleBase);
             job.getRequest().setAttribute("XSL.Style", styleBase);
         }
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().doLayout(job.getRequest(),job.getResponse(),jdomDoc);
     }
 
 }

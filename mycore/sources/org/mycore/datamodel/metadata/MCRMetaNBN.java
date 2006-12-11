@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaNBN.java,v $
- * $Revision: 1.6 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.8 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,9 +32,9 @@ import org.mycore.common.MCRException;
  * a NBN.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.6 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.8 $ $Date: 2006/12/05 12:35:06 $
  */
-public class MCRMetaNBN extends MCRMetaDefault implements MCRMetaInterface {
+public class MCRMetaNBN extends MCRMetaDefault {
     // MetaNBN data
     protected String nbn;
 
@@ -144,7 +144,7 @@ public class MCRMetaNBN extends MCRMetaDefault implements MCRMetaInterface {
 
         org.jdom.Element elm = new org.jdom.Element(subtag);
         elm.setAttribute("lang", lang, Namespace.XML_NAMESPACE);
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
+        elm.setAttribute("inherited", Integer.toString(inherited));
 
         if ((type != null) && ((type = type.trim()).length() != 0)) {
             elm.setAttribute("type", type);
@@ -153,24 +153,6 @@ public class MCRMetaNBN extends MCRMetaDefault implements MCRMetaInterface {
         elm.addContent(nbn);
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return a String with the text value
-     */
-    public String createTextSearch(boolean textsearch) throws MCRException {
-        if (textsearch) {
-            return nbn;
-        }
-
-        return "";
     }
 
     /**

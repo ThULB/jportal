@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8ViewItem.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import com.ibm.mm.sdk.common.dkIterator;
  * @author Holger König
  * @author Jens Kupferschmidt
  * @author Kathleen Krebs
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:08 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  */
 public class MCRCM8ViewItem implements DKConstantICM {
     // The configuration

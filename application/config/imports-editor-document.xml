@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.5 $ $Date: 2006/05/16 11:54:32 $ -->
+<!-- $Revision: 1.7 $ $Date: 2006/11/28 13:03:59 $ -->
 <!-- ============================================== -->
 
 <imports>
@@ -191,8 +191,6 @@
 
   <panel id="DTitle">
     <hidden var="metadata/titles/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/titles/@parasearch" default="true"/>
-    <hidden var="metadata/titles/@textsearch" default="true"/>
     <hidden var="metadata/titles/@notinherit" default="false"/>
     <hidden var="metadata/titles/@heritable" default="true"/>
     <cell col="1" row="1" anchor="WEST" var="metadata/titles/title" >
@@ -218,8 +216,6 @@
 
   <panel id="DCreator">
     <hidden var="metadata/creators/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/creators/@parasearch" default="true"/>
-    <hidden var="metadata/creators/@textsearch" default="true"/>
     <hidden var="metadata/creators/@notinherit" default="false"/>
     <hidden var="metadata/creators/@heritable" default="true"/>
     <hidden var="metadata/creators/creator/@inherited" default="0"/>
@@ -243,8 +239,6 @@
 
   <panel id="DCreatorLink">
     <hidden var="metadata/creatorlinks/@class" default="MCRMetaLinkID"/>
-    <hidden var="metadata/creatorlinks/@parasearch" default="true"/>
-    <hidden var="metadata/creatorlinks/@textsearch" default="false"/>
     <hidden var="metadata/creatorlinks/@notinherit" default="false"/>
     <hidden var="metadata/creatorlinks/@heritable" default="true"/>
     <cell row="1" col="1" anchor="NORTHWEST" sortnr="5" var="metadata/creatorlinks/creatorlink">
@@ -273,8 +267,6 @@
 
   <panel id="DOrigin">
     <hidden var="metadata/origins/@class" default="MCRMetaClassification"/>
-    <hidden var="metadata/origins/@parasearch" default="true"/>
-    <hidden var="metadata/origins/@textsearch" default="false"/>
     <hidden var="metadata/origins/@notinherit" default="false"/>
     <hidden var="metadata/origins/@heritable" default="true"/>
     <cell col="1" row="1" anchor="WEST" var="metadata/origins/origin">
@@ -292,8 +284,6 @@
 
   <panel id="DDescription">
     <hidden var="metadata/descriptions/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/descriptions/@parasearch" default="true"/>
-    <hidden var="metadata/descriptions/@textsearch" default="true"/>
     <hidden var="metadata/descriptions/@notinherit" default="false"/>
     <hidden var="metadata/descriptions/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/descriptions/description">
@@ -312,8 +302,6 @@
 
   <panel id="DPublisher">
     <hidden var="metadata/publishers/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/publishers/@parasearch" default="true"/>
-    <hidden var="metadata/publishers/@textsearch" default="true"/>
     <hidden var="metadata/publishers/@notinherit" default="false"/>
     <hidden var="metadata/publishers/@heritable" default="true"/>
     <hidden var="metadata/publishers/publisher/@inherited" default="0"/>
@@ -327,8 +315,6 @@
 
   <panel id="DPublisherLink">
     <hidden var="metadata/publishlinks/@class" default="MCRMetaLinkID"/>
-    <hidden var="metadata/publishlinks/@parasearch" default="true"/>
-    <hidden var="metadata/publishlinks/@textsearch" default="false"/>
     <hidden var="metadata/publishlinks/@notinherit" default="false"/>
     <hidden var="metadata/publishlinks/@heritable" default="true"/>
     <cell row="1" col="1" anchor="NORTHWEST" sortnr="13" var="metadata/publishlinks/publishlink">
@@ -379,8 +365,6 @@
 
   <panel id="DContributor">
     <hidden var="metadata/contributors/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/contributors/@parasearch" default="true"/>
-    <hidden var="metadata/contributors/@textsearch" default="true"/>
     <hidden var="metadata/contributors/@notinherit" default="false"/>
     <hidden var="metadata/contributors/@heritable" default="true"/>
     <hidden var="metadata/contributors/contributor/@inherited" default="0"/>
@@ -394,8 +378,6 @@
 
   <panel id="DContributorLink">
     <hidden var="metadata/contriblinks/@class" default="MCRMetaLinkID"/>
-    <hidden var="metadata/contriblinks/@parasearch" default="true"/>
-    <hidden var="metadata/contriblinks/@textsearch" default="false"/>
     <hidden var="metadata/contriblinks/@notinherit" default="false"/>
     <hidden var="metadata/contriblinks/@heritable" default="true"/>
     <cell row="1" col="1" anchor="NORTHWEST" sortnr="19" var="metadata/contriblinks/contriblink">
@@ -446,8 +428,6 @@
 
   <panel id="DDate">
     <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date"/>
-    <hidden var="metadata/dates/@parasearch" default="true"/>
-    <hidden var="metadata/dates/@textsearch" default="false"/>
     <hidden var="metadata/dates/@notinherit" default="false"/>
     <hidden var="metadata/dates/@heritable" default="true"/>
     <hidden var="metadata/dates/date/@inherited" default="0"/>
@@ -459,8 +439,6 @@
 
   <panel id="DType">
     <hidden var="metadata/types/@class" default="MCRMetaClassification"/>
-    <hidden var="metadata/types/@parasearch" default="true"/>
-    <hidden var="metadata/types/@textsearch" default="false"/>
     <hidden var="metadata/types/@notinherit" default="false"/>
     <hidden var="metadata/types/@heritable" default="true"/>
     <hidden var="metadata/types/type/@inherited" default="0"/>
@@ -472,8 +450,6 @@
 
   <panel id="DFormat">
     <hidden var="metadata/formats/@class" default="MCRMetaClassification"/>
-    <hidden var="metadata/formats/@parasearch" default="true"/>
-    <hidden var="metadata/formats/@textsearch" default="false"/>
     <hidden var="metadata/formats/@notinherit" default="false"/>
     <hidden var="metadata/formats/@heritable" default="true"/>
     <hidden var="metadata/formats/format/@inherited" default="0"/>
@@ -485,8 +461,6 @@
 
   <panel id="DIdentifier">
     <hidden var="metadata/identifiers/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/identifiers/@parasearch" default="true"/>
-    <hidden var="metadata/identifiers/@textsearch" default="true"/>
     <hidden var="metadata/identifiers/@notinherit" default="false"/>
     <hidden var="metadata/identifiers/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identifiers/identifier">
@@ -504,8 +478,6 @@
 
   <panel id="DSource">
     <hidden var="metadata/sources/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/sources/@parasearch" default="true"/>
-    <hidden var="metadata/sources/@textsearch" default="true"/>
     <hidden var="metadata/sources/@notinherit" default="false"/>
     <hidden var="metadata/sources/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/sources/source">
@@ -523,8 +495,6 @@
 
   <panel id="DLanguage">
     <hidden var="metadata/languages/@class" default="MCRMetaClassification"/>
-    <hidden var="metadata/languages/@parasearch" default="true"/>
-    <hidden var="metadata/languages/@textsearch" default="false"/>
     <hidden var="metadata/languages/@notinherit" default="false"/>
     <hidden var="metadata/languages/@heritable" default="true"/>
     <hidden var="metadata/languages/language/@inherited" default="0"/>
@@ -536,8 +506,6 @@
 
   <panel id="DKeywords">
     <hidden var="metadata/keywords/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/keywords/@parasearch" default="true"/>
-    <hidden var="metadata/keywords/@textsearch" default="true"/>
     <hidden var="metadata/keywords/@notinherit" default="false"/>
     <hidden var="metadata/keywords/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/keywords/keyword">
@@ -555,8 +523,6 @@
 
   <panel id="DCoverage">
     <hidden var="metadata/coverages/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/coverages/@parasearch" default="true"/>
-    <hidden var="metadata/coverages/@textsearch" default="true"/>
     <hidden var="metadata/coverages/@notinherit" default="false"/>
     <hidden var="metadata/coverages/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/coverages/coverage">
@@ -574,8 +540,6 @@
 
   <panel id="DRelation">
     <hidden var="metadata/relations/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/relations/@parasearch" default="true"/>
-    <hidden var="metadata/relations/@textsearch" default="true"/>
     <hidden var="metadata/relations/@notinherit" default="false"/>
     <hidden var="metadata/relations/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/relations/relation">
@@ -593,8 +557,6 @@
 
   <panel id="DRights">
     <hidden var="metadata/rights/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/rights/@parasearch" default="true"/>
-    <hidden var="metadata/rights/@textsearch" default="true"/>
     <hidden var="metadata/rights/@notinherit" default="false"/>
     <hidden var="metadata/rights/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/rights/right">
@@ -619,8 +581,6 @@
 
   <panel id="DSize">
     <hidden var="metadata/sizes/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/sizes/@parasearch" default="true"/>
-    <hidden var="metadata/sizes/@textsearch" default="false"/>
     <hidden var="metadata/sizes/@notinherit" default="false"/>
     <hidden var="metadata/sizes/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/sizes/size">
@@ -638,8 +598,6 @@
 
   <panel id="DContact">
     <hidden var="metadata/contacts/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/contacts/@parasearch" default="false"/>
-    <hidden var="metadata/contacts/@textsearch" default="false"/>
     <hidden var="metadata/contacts/@notinherit" default="false"/>
     <hidden var="metadata/contacts/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/contacts/contact">
@@ -657,8 +615,6 @@
 
   <panel id="DNote">
     <hidden var="metadata/notes/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/notes/@parasearch" default="true"/>
-    <hidden var="metadata/notes/@textsearch" default="true"/>
     <hidden var="metadata/notes/@notinherit" default="false"/>
     <hidden var="metadata/notes/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/notes/note">
@@ -676,8 +632,6 @@
 
   <panel id="DCitation">
     <hidden var="metadata/citations/@class" default="MCRMetaLangText"/>
-    <hidden var="metadata/citations/@parasearch" default="false"/>
-    <hidden var="metadata/citations/@textsearch" default="false"/>
     <hidden var="metadata/citations/@notinherit" default="false"/>
     <hidden var="metadata/citations/@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/citations/citation">

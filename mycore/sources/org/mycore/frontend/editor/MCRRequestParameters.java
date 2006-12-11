@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRRequestParameters.java,v $
- * $Revision: 1.6 $ $Date: 2006/02/10 23:33:49 $
+ * $Revision: 1.7 $ $Date: 2006/07/21 05:59:03 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.common.MCRException;
  * same way.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.6 $ $Date: 2006/02/10 23:33:49 $
+ * @version $Revision: 1.7 $ $Date: 2006/07/21 05:59:03 $
  */
 public class MCRRequestParameters {
     protected final static Logger logger = Logger.getLogger(MCREditorServlet.class);

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRDerivateCommands.java,v $
- * $Revision: 1.48.2.2 $ $Date: 2006/10/04 12:20:14 $
+ * $Revision: 1.50 $ $Date: 2006/10/05 08:43:38 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -62,7 +62,7 @@ import org.mycore.datamodel.metadata.MCRXMLTableManager;
  * 
  * @author Jens Kupferschmidt
  * @author Frank Luetzenkirchen
- * @version $Revision: 1.48.2.2 $ $Date: 2006/10/04 12:20:14 $
+ * @version $Revision: 1.50 $ $Date: 2006/10/05 08:43:38 $
  */
 public class MCRDerivateCommands extends MCRAbstractCommands {
     /** The logger */

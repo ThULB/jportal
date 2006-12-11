@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRStartClassEditorServlet.java,v $
- * $Revision: 1.5 $ $Date: 2006/09/26 09:53:49 $
+ * $Revision: 1.7 $ $Date: 2006/11/16 14:46:50 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Anja Schaar
  * @author Jens Kupferschmidt
- * @version $Revision: 1.5 $ $Date: 2006/09/26 09:53:49 $
+ * @version $Revision: 1.7 $ $Date: 2006/11/16 14:46:50 $
  */
 
 public class MCRStartClassEditorServlet extends MCRServlet {
@@ -143,11 +143,9 @@ public class MCRStartClassEditorServlet extends MCRServlet {
                 if ("create-category".equals(todo2)) {
                     // create
                     bret = clE.createCategoryInClassification(indoc, clid, categid);
-                    session.BData.cleanClassificationFromCache(clid);
                 } else {
                     // modify
                     bret = clE.modifyCategoryInClassification(indoc, clid, categid);
-                    session.BData.cleanClassificationFromCache(clid);
                 }
                 if (bret)
                     job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(path + "&categid=" + categid + "&clid=" + clid));
@@ -173,7 +171,6 @@ public class MCRStartClassEditorServlet extends MCRServlet {
                     }
                 }
                 if (bret)
-                    session.BData.cleanClassificationFromCache(clid);
                     job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(path));
 
             }
@@ -185,7 +182,6 @@ public class MCRStartClassEditorServlet extends MCRServlet {
         if ("up-category".equals(todo) || "down-category".equals(todo) || "left-category".equals(todo) || "right-category".equals(todo)) {
             boolean bret = clE.moveCategoryInClassification(categid, clid, todo.substring(0, todo.indexOf("-")));
             if (bret) {
-                session.BData.cleanClassificationFromCache(clid);
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(path + "&categid=" + categid + "&clid=" + clid));
             } else {
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + imerrorpage));
@@ -198,7 +194,6 @@ public class MCRStartClassEditorServlet extends MCRServlet {
             // l�schen
             int cnt = clE.deleteCategoryInClassification(clid, categid);
             if (cnt == 0) { // deleted, no more references
-                session.BData.cleanClassificationFromCache(clid);
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(path + "&clid=" + clid));
             } else { // not delete cause references exist
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + iderrorpage));
@@ -214,7 +209,6 @@ public class MCRStartClassEditorServlet extends MCRServlet {
                     // Classification cut
                     path = path.substring(0, path.indexOf("&clid"));
                 }
-                session.BData.cleanClassificationFromCache(clid);
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(path));
             } else { // not delete cause references exist
                 job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + iderrorpage));

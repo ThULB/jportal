@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRAccessBaseImpl.java,v $
- * $Revision: 1.13 $ $Date: 2006/03/23 11:12:27 $
+ * $Revision: 1.14 $ $Date: 2006/05/26 12:15:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

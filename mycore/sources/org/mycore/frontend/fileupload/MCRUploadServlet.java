@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadServlet.java,v $
- * $Revision: 1.19 $ $Date: 2006/05/26 12:29:47 $
+ * $Revision: 1.21 $ $Date: 2006/11/30 13:32:37 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -65,7 +65,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * @author Frank Lützenkirchen
  * @author Harald Richter
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.19 $ $Date: 2006/05/26 12:29:47 $
+ * @version $Revision: 1.21 $ $Date: 2006/11/30 13:32:37 $
  * @see org.mycore.frontend.fileupload.MCRUploadHandler
  */
 public final class MCRUploadServlet extends MCRServlet implements Runnable {
@@ -254,15 +254,14 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             Element uploads = sub.getXML().getRootElement();
             List paths = uploads.getChildren("path");
-            List files = sub.getFiles();
 
-            if ((files != null) && (files.size() >= 0)) {
-                int numFiles = files.size();
+            if ((paths != null) && (paths.size() >= 0)) {
+                int numFiles = paths.size();
                 LOGGER.info("UploadHandler uploading " + numFiles + " file(s)");
                 handler.startUpload(numFiles);
 
                 for (int i = 0; i < numFiles; i++) {
-                    FileItem item = (FileItem) (files.get(i));
+                    FileItem item = sub.getFile(paths.get(i));
                     InputStream in = item.getInputStream();
                     String path = ((Element) (paths.get(i))).getTextTrim();
                     path = getFileName(path);

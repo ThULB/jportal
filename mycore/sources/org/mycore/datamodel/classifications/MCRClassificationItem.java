@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationItem.java,v $
- * $Revision: 1.12 $ $Date: 2006/02/10 23:33:53 $
+ * $Revision: 1.13 $ $Date: 2006/02/13 08:36:23 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.jdom.Element;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.12 $ $Date: 2006/02/10 23:33:53 $
+ * @version $Revision: 1.13 $ $Date: 2006/02/13 08:36:23 $
  */
 public class MCRClassificationItem extends MCRClassificationObject {
     /**

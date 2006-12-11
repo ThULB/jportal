@@ -1,6 +1,6 @@
 /*
  * $RCSfile: ClassificationObject.java,v $
- * $Revision: 1.1 $ $Date: 2006/03/31 15:33:21 $
+ * $Revision: 1.3 $ $Date: 2006/11/24 15:39:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,22 +30,23 @@ import java.util.List;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.1 $ $Date: 2006/03/31 15:33:21 $
+ * @version $Revision: 1.3 $ $Date: 2006/11/24 15:39:10 $
  */
 public class ClassificationObject {
 
     String id;
 
-    List labels, catgegories;
+    List<Label> labels;
+    List<Category> catgegories;
 
-    public List getCatgegories() {
+    public List<Category> getCategories() {
         if (catgegories == null) {
-            catgegories = new ArrayList();
+            catgegories = new ArrayList<Category>();
         }
         return catgegories;
     }
 
-    public void setCatgegories(List catgegories) {
+    public void setCatgegories(List<Category> catgegories) {
         this.catgegories = catgegories;
     }
 
@@ -57,14 +58,14 @@ public class ClassificationObject {
         this.id = id;
     }
 
-    public List getLabels() {
+    public List<Label> getLabels() {
         if (labels == null) {
-            labels = new ArrayList();
+            labels = new ArrayList<Label>();
         }
         return labels;
     }
 
-    public void setLabels(List labels) {
+    public void setLabels(List<Label> labels) {
         this.labels = labels;
     }
 

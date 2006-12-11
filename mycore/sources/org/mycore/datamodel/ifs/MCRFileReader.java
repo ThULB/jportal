@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFileReader.java,v $
- * $Revision: 1.10 $ $Date: 2005/09/28 07:40:24 $
+ * $Revision: 1.11 $ $Date: 2006/03/16 14:45:49 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ package org.mycore.datamodel.ifs;
  * class MCROldFile. The interface will be obsolete in the future.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.10 $ $Date: 2005/09/28 07:40:24 $
+ * @version $Revision: 1.11 $ $Date: 2006/03/16 14:45:49 $
  */
 public interface MCRFileReader {
     /**

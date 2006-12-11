@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRGROUPMEMBERS.java,v $
- * $Revision: 1.9 $ $Date: 2006/02/10 23:33:51 $
+ * $Revision: 1.10 $ $Date: 2006/03/03 22:35:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

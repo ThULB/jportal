@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRLinkTableEventHandler.java,v $
- * $Revision: 1.11 $ $Date: 2006/02/28 10:37:17 $
+ * $Revision: 1.12 $ $Date: 2006/05/24 15:43:05 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

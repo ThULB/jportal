@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRQueryManager.java,v $
- * $Revision: 1.18 $ $Date: 2006/05/26 11:25:39 $
+ * $Revision: 1.21 $ $Date: 2006/12/08 14:40:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -98,13 +98,9 @@ public class MCRQueryManager {
      *            the result list to be sorted
      */
     private static void sortResults(MCRQuery query, final MCRResults results) {
-        List sortBy = query.getSortBy();
+        List<MCRSortBy> sortBy = query.getSortBy();
         if ((results.getNumHits() == 0) || results.isSorted() || sortBy.isEmpty())
             return;
-
-        List fields = new ArrayList(sortBy.size());
-        for (int i = 0; i < sortBy.size(); i++)
-            fields.add(((MCRSortBy) (sortBy.get(i))).getField());
 
         // Iterator over all MCRHits that have no sort data set
         Iterator hitIterator = new Iterator() {
@@ -132,9 +128,9 @@ public class MCRQueryManager {
             }
         };
 
-        String index = ((MCRSortBy) (sortBy.get(0))).getField().getIndex(); 
+        String index = sortBy.get(0).getField().getIndex(); 
         MCRSearcher searcher = MCRSearcherFactory.getSearcherForIndex(index);
-        searcher.addSortData(hitIterator, fields);
+        searcher.addSortData(hitIterator, sortBy);
         results.sortBy(query.getSortBy());
     }
 
@@ -170,7 +166,7 @@ public class MCRQueryManager {
     }
 
     /** Executes query, if necessary splits into subqueries for each index */
-    private static MCRResults buildResults(MCRCondition cond, int maxResults, List sortBy, boolean addSortData) {
+    private static MCRResults buildResults(MCRCondition cond, int maxResults, List<MCRSortBy> sortBy, boolean addSortData) {
         String index = getIndex(cond);
         if (index != mixed) {
             // All fields are from same index, just one searcher
@@ -185,7 +181,7 @@ public class MCRQueryManager {
     }
 
     /** Split query into subqueries for each index, recombine results */
-    private static MCRResults buildCombinedResults(MCRCondition cond, List sortBy, boolean not) {
+    private static MCRResults buildCombinedResults(MCRCondition cond, List<MCRSortBy> sortBy, boolean not) {
         boolean and = (cond instanceof MCRAndCondition);
         Hashtable table = groupConditionsByIndex(cond);
         MCRResults totalResults = null;
@@ -214,7 +210,7 @@ public class MCRQueryManager {
      * index
      */
     private static Hashtable groupConditionsByIndex(MCRCondition cond) {
-        Hashtable table = new Hashtable();
+        Hashtable<String,List<MCRCondition>> table = new Hashtable<String,List<MCRCondition>>();
         List children = null;
 
         if (cond instanceof MCRAndCondition)
@@ -226,9 +222,9 @@ public class MCRQueryManager {
             MCRCondition child = (MCRCondition) (children.get(i));
             String index = getIndex(child);
 
-            List conditions = (List) (table.get(index));
+            List<MCRCondition> conditions = table.get(index);
             if (conditions == null) {
-                conditions = new ArrayList();
+                conditions = new ArrayList<MCRCondition>();
                 table.put(index, conditions);
             }
             conditions.add(child);

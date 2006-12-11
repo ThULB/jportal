@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRURNPK.java,v $
- * $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
+ * $Revision: 1.1 $ $Date: 2006/11/03 21:42:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @author Heiko Helmbrecht
  * @author Jens Kupferschmidt
- * @version $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
+ * @version $Revision: 1.1 $ $Date: 2006/11/03 21:42:06 $
  */
 public class MCRURNPK implements Serializable {
     private String mcrid;

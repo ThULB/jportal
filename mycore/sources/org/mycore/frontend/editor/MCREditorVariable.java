@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCREditorVariable.java,v $
+ * $Revision: 1.7 $ $Date: 2005/09/28 07:45:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.jdom.Element;
  * form.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.6 $ $Date: 2005/08/15 15:02:14 $
+ * @version $Revision: 1.7 $ $Date: 2005/09/28 07:45:46 $
  */
 public class MCREditorVariable implements Comparable {
     // Required attributes

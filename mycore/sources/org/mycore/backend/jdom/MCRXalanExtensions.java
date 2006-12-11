@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRXalanExtensions.java,v $
+ * $Revision: 1.5 $ $Date: 2005/09/28 07:31:43 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ import org.mycore.common.MCRUtils;
  * This class implements Xalan extension functions for the JDOM search.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.4 $ $Date: 2005/08/15 15:02:30 $
+ * @version $Revision: 1.5 $ $Date: 2005/09/28 07:31:43 $
  */
 public class MCRXalanExtensions {
     /**

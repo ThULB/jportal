@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRTableGenerator.java,v $
- * $Revision: 1.10 $ $Date: 2006/03/24 12:08:49 $
+ * $Revision: 1.11 $ $Date: 2006/05/05 09:45:20 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

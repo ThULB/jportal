@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRContentIndexEventHandler.java,v $
- * $Revision: 1.7 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.1 $ $Date: 2006/05/11 13:45:40 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

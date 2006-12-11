@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRStartEditorServletMyToDo.java,v $
- * $Revision: 1.1 $ $Date: 2006/11/03 09:04:50 $
+ * $Revision: 1.2 $ $Date: 2006/11/24 11:37:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.mycore.services.urn.MCRURNManager;
  * The class extends the MCRStartEditorServlet with methods for NBN integration and email service to the DNB.
 * 
 * @author Jens Kupferschmidt
-* @version $Revision: 1.1 $ $Date: 2006/11/03 09:04:50 $
+* @version $Revision: 1.2 $ $Date: 2006/11/24 11:37:46 $
 */
 public class MCRStartEditorServletMyToDo extends MCRStartEditorServlet {
 
@@ -68,7 +68,7 @@ public class MCRStartEditorServletMyToDo extends MCRStartEditorServlet {
                 String urn = MCRURNManager.buildURN("UBL");
                 MCRMetaNBN nbn = new MCRMetaNBN("metadata","nbn",0,urn);
                 ArrayList list = new ArrayList();
-                elm = new MCRMetaElement("de","MCRMeatNBN","nbns",true,false,true,false,list);
+                elm = new MCRMetaElement("de","MCRMeatNBN","nbns",true,false,list);
                 elm.addMetaObject(nbn);
                 obj.getMetadata().setMetadataElement(elm,"nbns");
                 try {

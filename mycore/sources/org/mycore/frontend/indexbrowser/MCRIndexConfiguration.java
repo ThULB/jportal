@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRIndexConfiguration.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:47:48 $
+ * $Revision: 1.5 $ $Date: 2005/12/19 10:37:57 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

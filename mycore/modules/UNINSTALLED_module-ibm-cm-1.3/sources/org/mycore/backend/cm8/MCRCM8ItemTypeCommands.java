@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8ItemTypeCommands.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.frontend.cli.MCRCommand;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:01 $
  */
 public class MCRCM8ItemTypeCommands extends MCRAbstractCommands {
     private static final Logger logger = Logger.getLogger(MCRCM8ItemTypeCommands.class.getName());

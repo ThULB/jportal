@@ -16,7 +16,7 @@ Values themselves may be configured objects that are created with the
 Values are matched to arguments on a best effort approach, but types
 my be specified if a match is not achieved.
 
-$Id: configure_1_2.dtd,v 1.1 2005/11/03 07:50:21 mcrjkupf Exp $
+$Id: configure_1_2.dtd,v 1.1 2005/11/28 12:13:10 mcrjkupf Exp $
 -->
 
 <!ENTITY % CONFIG "Get|Set|Put|Call|New">

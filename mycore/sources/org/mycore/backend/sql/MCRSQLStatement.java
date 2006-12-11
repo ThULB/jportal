@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLStatement.java,v $
- * $Revision: 1.22 $ $Date: 2005/10/25 13:54:10 $
+ * $Revision: 1.23 $ $Date: 2006/02/10 23:33:47 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -36,7 +36,7 @@ import org.mycore.common.MCRUtils;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.22 $ $Date: 2005/10/25 13:54:10 $
+ * @version $Revision: 1.23 $ $Date: 2006/02/10 23:33:47 $
  */
 public class MCRSQLStatement {
     protected final static String NULL = "NULL";

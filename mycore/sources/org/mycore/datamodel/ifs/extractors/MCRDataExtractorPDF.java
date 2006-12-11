@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRDataExtractorPDF.java,v $
- * $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
+ * $Revision: 1.3 $ $Date: 2006/09/15 11:37:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
  * for details.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
+ * @version $Revision: 1.3 $ $Date: 2006/09/15 11:37:50 $
  */
 public class MCRDataExtractorPDF extends MCRDataExtractor {
 

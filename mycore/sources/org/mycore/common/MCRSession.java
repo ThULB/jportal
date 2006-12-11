@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSession.java,v $
- * $Revision: 1.30 $ $Date: 2006/05/16 13:19:52 $
+ * $Revision: 1.32 $ $Date: 2006/11/21 12:24:14 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.mapping.Collection;
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
 
 /**
@@ -40,7 +39,7 @@ import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
  * @author Jens Kupferschmidt
  * @author Frank L�tzenkirchen
  * 
- * @version $Revision: 1.30 $ $Date: 2006/05/16 13:19:52 $
+ * @version $Revision: 1.32 $ $Date: 2006/11/21 12:24:14 $
  */
 public class MCRSession implements Cloneable {
     /** A map storing arbitrary session data * */
@@ -241,6 +240,16 @@ public class MCRSession implements Cloneable {
     
     public final long getLoginTime(){
         return loginTime;
+    }
+
+    public void close() {
+        // clear bound objects
+        logger.debug("Clearing local map.");
+        map.clear();
+        // remove from session list
+        logger.debug("Remove myself from MCRSession list");
+        sessions.remove(getID());
+        this.sessionID=null;
     }
 
 }

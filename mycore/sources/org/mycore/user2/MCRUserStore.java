@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUserStore.java,v $
- * $Revision: 1.11 $ $Date: 2005/09/28 07:49:55 $
+ * $RCSfile$
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.mycore.common.MCRException;
  * <code>MCR.userstore_class_name</code> from mycore.properties.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.11 $ $Date: 2005/09/28 07:49:55 $
+ * @version $Revision$ $Date$
  */
 public interface MCRUserStore {
     /**

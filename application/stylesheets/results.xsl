@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.17 $ $Date: 2006/10/11 12:38:37 $ -->
+<!-- $Revision: 1.19 $ $Date: 2006/11/29 10:49:32 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -19,7 +19,7 @@
   <!-- Trefferliste ausgeben -->
   <xsl:template match="/mcr:results">
     <xsl:variable name="ResultPages">
-      <xsl:call-template name="PageGenNew">
+      <xsl:call-template name="PageGen">
         <xsl:with-param name="i" select="1" />
         <xsl:with-param name="id" select="@id" />
         <xsl:with-param name="size" select="@numPerPage" />
@@ -43,8 +43,8 @@
           </a>
         </td>
         <td class="resultPages">
-          <xsl:value-of select="i18n:translate('results.size')" />
-          <xsl:value-of select="$ResultPages" />
+          <xsl:value-of select="concat(i18n:translate('results.size'),' ')" />
+          <xsl:copy-of select="$ResultPages" />
         </td>
         <td class="resultCount">
           <strong>
@@ -105,8 +105,8 @@
     </table>
     <xsl:comment>RESULT LIST END</xsl:comment>
     <div id="pageSelection">
-      <xsl:value-of select="i18n:translate('results.size')" />
-      <xsl:value-of select="$ResultPages" />
+      <xsl:value-of select="concat(i18n:translate('results.size'),' ')" />
+      <xsl:copy-of select="$ResultPages" />
     </div>
   </xsl:template>
 

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationCommands.java,v $
- * $Revision: 1.18 $ $Date: 2006/01/16 12:43:16 $
+ * $Revision: 1.19 $ $Date: 2006/02/10 23:33:47 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Frank Lützenkirchen
- * @version $Revision: 1.18 $ $Date: 2006/01/16 12:43:16 $
+ * @version $Revision: 1.19 $ $Date: 2006/02/10 23:33:47 $
  */
 public class MCRClassificationCommands extends MCRAbstractCommands {
     /** The logger */

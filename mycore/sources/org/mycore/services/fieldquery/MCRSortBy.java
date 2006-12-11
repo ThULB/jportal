@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSortBy.java,v $
- * $Revision: 1.1 $ $Date: 2006/01/27 09:38:16 $
+ * $Revision: 1.2 $ $Date: 2006/02/03 08:38:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRParserInterface.java,v $
+ * $Revision: 1.7 $ $Date: 2005/09/28 07:39:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.6 $ $Date: 2005/08/15 15:02:04 $
+ * @version $Revision: 1.7 $ $Date: 2005/09/28 07:39:07 $
  */
 public interface MCRParserInterface {
     /**

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUtils.java,v $
- * $Revision: 1.44 $ $Date: 2006/08/01 09:41:21 $
+ * $Revision: 1.50 $ $Date: 2006/11/27 12:34:48 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -22,6 +22,9 @@
  */
 
 package org.mycore.common;
+
+import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
+import static org.mycore.common.MCRConstants.SUPPORTED_LANG;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,7 +65,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.44 $ $Date: 2006/08/01 09:41:21 $
+ * @version $Revision: 1.50 $ $Date: 2006/11/27 12:34:48 $
  */
 public class MCRUtils {
     // The file slash
@@ -90,8 +93,8 @@ public class MCRUtils {
             return false;
         }
 
-        for (int i = 0; i < MCRDefaults.SUPPORTED_LANG.length; i++) {
-            if (lang.equals(MCRDefaults.SUPPORTED_LANG[i])) {
+        for (int i = 0; i < SUPPORTED_LANG.length; i++) {
+            if (lang.equals(SUPPORTED_LANG[i])) {
                 return true;
             }
         }
@@ -112,8 +115,8 @@ public class MCRUtils {
             return -1;
         }
 
-        for (int i = 0; i < MCRDefaults.SUPPORTED_LANG.length; i++) {
-            if (lang.equals(MCRDefaults.SUPPORTED_LANG[i])) {
+        for (int i = 0; i < SUPPORTED_LANG.length; i++) {
+            if (lang.equals(SUPPORTED_LANG[i])) {
                 return i;
             }
         }
@@ -135,7 +138,7 @@ public class MCRUtils {
             return DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
         }
 
-        return MCRDefaults.DATE_FORMAT[i];
+        return MCRConstants.DATE_FORMAT[i];
     }
 
     /**
@@ -250,8 +253,8 @@ public class MCRUtils {
         }
 
         if (!test) {
-            for (int i = 0; i < MCRDefaults.SUPPORTED_LANG.length; i++) {
-                DateFormat df = getDateFormat(MCRDefaults.SUPPORTED_LANG[i]);
+            for (int i = 0; i < SUPPORTED_LANG.length; i++) {
+                DateFormat df = getDateFormat(SUPPORTED_LANG[i]);
                 df.setLenient(false);
 
                 try {
@@ -317,8 +320,8 @@ public class MCRUtils {
         }
 
         if (!test) {
-            for (int i = 0; i < MCRDefaults.SUPPORTED_LANG.length; i++) {
-                DateFormat df = getDateFormat(MCRDefaults.SUPPORTED_LANG[i]);
+            for (int i = 0; i < SUPPORTED_LANG.length; i++) {
+                DateFormat df = getDateFormat(SUPPORTED_LANG[i]);
 
                 try {
                     calendar.setTime(df.parse(indate.substring(start, indate.length())));
@@ -412,11 +415,11 @@ public class MCRUtils {
      */
     public static final byte[] getByteArray(org.jdom.Document jdom) throws MCRPersistenceException {
         MCRConfiguration conf = MCRConfiguration.instance();
-        String mcr_encoding = conf.getString("MCR.metadata_default_encoding", MCRDefaults.ENCODING);
+        String mcr_encoding = conf.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
         ByteArrayOutputStream outb = new ByteArrayOutputStream();
 
         try {
-            XMLOutputter outp = new XMLOutputter(Format.getCompactFormat().setEncoding(mcr_encoding));
+            XMLOutputter outp = new XMLOutputter(Format.getRawFormat().setEncoding(mcr_encoding));
             outp.output(jdom, outb);
         } catch (Exception e) {
             throw new MCRPersistenceException("Can't produce byte array.");
@@ -797,11 +800,34 @@ public class MCRUtils {
         return sb.toString();
     }
 
-    public static final void saveJDOM(Document jdom, File xml) throws IOException {
+    /**
+     * The method write a given JDOM Document to a file.
+     * 
+     * @param jdom
+     *            the JDOM Document
+     * @param xml
+     *            the File instance
+     * @throws IOException
+     */
+    public static final void writeJDOMToFile(Document jdom, File xml) throws IOException {
         XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
         BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(xml));
         xout.output(jdom, out);
         out.close();
+    }
+    
+    /**
+     * The method write a given JDOM Document to the system output.
+     * 
+     * @param jdom
+     *            the JDOM Document
+     * @throws IOException
+     */
+    public static final void writeJDOMToSysout(Document jdom) throws IOException {
+        XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
+        BufferedOutputStream out = new BufferedOutputStream(System.out);
+        xout.output(jdom, out);
+        out.flush();
     }
 
     /**
@@ -915,51 +941,47 @@ public class MCRUtils {
 
         return buf.toString();
     }
-    
+
     public static String parseDocumentType(InputStream in) {
-      SAXParser parser = null;
+        SAXParser parser = null;
 
-      try {
-          parser = SAXParserFactory.newInstance().newSAXParser();
-      } catch (Exception ex) {
-          String msg = "Could not build a SAX Parser for processing XML input";
-          throw new MCRConfigurationException(msg, ex);
-      }
+        try {
+            parser = SAXParserFactory.newInstance().newSAXParser();
+        } catch (Exception ex) {
+            String msg = "Could not build a SAX Parser for processing XML input";
+            throw new MCRConfigurationException(msg, ex);
+        }
 
-      final Properties detected = new Properties();
-      final String forcedInterrupt = "mcr.forced.interrupt";
+        final Properties detected = new Properties();
+        final String forcedInterrupt = "mcr.forced.interrupt";
 
-      DefaultHandler handler = new DefaultHandler() {
-          public void startElement(String uri, String localName, String qName, Attributes attributes) {
-              LOGGER.debug("MCRLayoutServlet detected root element = " + qName);
-              detected.setProperty("docType", qName);
-              throw new MCRException(forcedInterrupt);
-          }
+        DefaultHandler handler = new DefaultHandler() {
+            public void startElement(String uri, String localName, String qName, Attributes attributes) {
+                LOGGER.debug("MCRLayoutService detected root element = " + qName);
+                detected.setProperty("docType", qName);
+                throw new MCRException(forcedInterrupt);
+            }
 
-          // We would need SAX 2.0 to be able to do this, for later use:
-          public void startDTD(String name, String publicId, String systemId) {
-              if (LOGGER.isDebugEnabled()){
-              LOGGER.debug(new StringBuffer(1024)
-                      .append("MCRUtils detected DOCTYPE declaration = ").append(name)
-                      .append(" publicId = ").append(publicId)
-                      .append(" systemId = ").append(systemId).toString());
-              }
-              detected.setProperty("docType", name);
-              throw new MCRException(forcedInterrupt);
-          }
-      };
+            // We would need SAX 2.0 to be able to do this, for later use:
+            public void startDTD(String name, String publicId, String systemId) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug(new StringBuffer(1024).append("MCRUtils detected DOCTYPE declaration = ").append(name).append(" publicId = ").append(publicId).append(" systemId = ").append(systemId).toString());
+                }
+                detected.setProperty("docType", name);
+                throw new MCRException(forcedInterrupt);
+            }
+        };
 
-      try {
-          parser.parse(new InputSource(in), handler);
-      } catch (Exception ex) {
-          if (!forcedInterrupt.equals(ex.getMessage())) {
-              String msg = "Error while detecting XML document type from input source";
-              throw new MCRException(msg, ex);
-          }
-      }
+        try {
+            parser.parse(new InputSource(in), handler);
+        } catch (Exception ex) {
+            if (!forcedInterrupt.equals(ex.getMessage())) {
+                String msg = "Error while detecting XML document type from input source";
+                throw new MCRException(msg, ex);
+            }
+        }
 
-      return detected.getProperty("docType");
-  }
+        return detected.getProperty("docType");
+    }
 
-    
 }

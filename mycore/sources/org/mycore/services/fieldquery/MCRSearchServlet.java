@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSearchServlet.java,v $
- * $Revision: 1.15 $ $Date: 2006/09/01 13:22:54 $
+ * $Revision: 1.20 $ $Date: 2006/12/08 14:21:37 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -63,7 +62,7 @@ public class MCRSearchServlet extends MCRServlet {
 
     /** Cached queries as XML, for re-use in editor form */
     private static final String QUERIES_KEY = "MCRSearchServlet.queries";
-    
+
     /** Cached queries as XML, for re-use in editor form */
     private static final String RESORT_KEY = "MCRSearchServlet.resort";
 
@@ -87,7 +86,7 @@ public class MCRSearchServlet extends MCRServlet {
         defaultSearchOperator = config.getString(prefix + "DefaultSearchOperator", "contains");
     }
 
-    public void doGetPost(MCRServletJob job) throws IOException, ServletException {
+    public void doGetPost(MCRServletJob job) throws IOException {
         HttpServletRequest request = job.getRequest();
         HttpServletResponse response = job.getResponse();
 
@@ -104,20 +103,19 @@ public class MCRSearchServlet extends MCRServlet {
      * Returns a query that was previously submitted, to reload it into the
      * editor search mask. Usage: MCRSearchServlet?mode=load&id=XXXXX
      */
-    protected void loadQuery(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void loadQuery(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String id = request.getParameter("id");
         Document query = (Document) (getCache(QUERIES_KEY).get(id));
 
         // Send query XML to editor
-        request.setAttribute("XSL.Style", "xml");
-        forwardRequest(request, response, query);
+        getLayoutService().sendXML(request, response, query);   
     }
 
     /**
      * Shows a results page. Usage:
      * MCRSearchServlet?mode=results&numPerPage=10&page=1
      */
-    protected void showResults(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void showResults(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         // Get cached results
         String id = request.getParameter("id");
@@ -176,7 +174,8 @@ public class MCRSearchServlet extends MCRServlet {
         xml.addContent(new Element("condition").setAttribute("format", "xml").addContent(cond.toXML()));
 
         // Send output to LayoutServlet
-        forwardRequest(request, response, new Document(xml));        
+        sendToLayout(request, response, new Document(xml));        
+
     }
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {
@@ -283,18 +282,18 @@ public class MCRSearchServlet extends MCRServlet {
         if (root.getChild("conditions").getAttributeValue("format", "xml").equals("xml")) {
             // Query is in XML format
 
-            // Rename condition elements from search mask: condition1 ->
-            // condition
-            List ch = root.getChild("conditions").getChild("boolean").getChildren();
-            for (int i = 0; i < ch.size(); i++) {
-                Element condition = (Element) (ch.get(i));
-                if (condition.getName().startsWith("condition"))
-                    condition.setName("condition");
+            // Rename condition elements from search mask:
+            // condition1 -> condition
+            Iterator it = root.getDescendants(new ElementFilter());
+            while (it.hasNext()) {
+                Element elem = (Element) it.next();
+                if ((!elem.getName().equals("conditions")) && elem.getName().startsWith("condition"))
+                    elem.setName("condition");
             }
 
             // Find condition fields without values
-            Iterator it = root.getDescendants(new ElementFilter("condition"));
-            Vector help = new Vector();
+            it = root.getDescendants(new ElementFilter("condition"));
+            Vector<Element> help = new Vector<Element>();
             while (it.hasNext()) {
                 Element condition = (Element) it.next();
                 if (condition.getAttribute("value") == null) {
@@ -304,7 +303,7 @@ public class MCRSearchServlet extends MCRServlet {
 
             // Remove found conditions without values
             for (int i = help.size() - 1; i >= 0; i--)
-                ((Element) (help.get(i))).detach();
+                help.get(i).detach();
 
             Element condElem = (Element) (root.getChild("conditions").getChildren().get(0));
             cond = new MCRQueryParser().parse(condElem);
@@ -326,8 +325,9 @@ public class MCRSearchServlet extends MCRServlet {
                 }
             }
 
-            //Remove empty sort criteria list
-            if(sortBy.getChildren().size() == 0) sortBy.detach();
+            // Remove empty sort criteria list
+            if (sortBy.getChildren().size() == 0)
+                sortBy.detach();
         }
 
         // Execute query
@@ -341,7 +341,7 @@ public class MCRSearchServlet extends MCRServlet {
         // Store query and results in cache
         getCache(RESULTS_KEY).put(result.getID(), result);
         getCache(QUERIES_KEY).put(result.getID(), clonedQuery);
-        getCache(RESORT_KEY).put(result.getID(), input); 
+        getCache(RESORT_KEY).put(result.getID(), input);
         getCache(CONDIDTIONS_KEY).put(result.getID(), cond);
 
         // Redirect browser to first results page
@@ -365,9 +365,9 @@ public class MCRSearchServlet extends MCRServlet {
     }
 
     public static String getResortKey() {
-		return RESORT_KEY;
-	}
-    
+        return RESORT_KEY;
+    }
+
     public static MCRCache getCache(String key) {
         MCRCache c = (MCRCache) MCRSessionMgr.getCurrentSession().get(key);
         if (c == null) {
@@ -379,29 +379,30 @@ public class MCRSearchServlet extends MCRServlet {
 
     public static class SearchParameters {
         public int numPerPage;
+
         public int page;
     }
-    
-    /** 
-     *  Forwards the document to the output
-     *  @author A.Schaar
-     *  @see its overwritten in jspdocportal 
+
+   /**
+     * Forwards the document to the output
+     * 
+     * @author A.Schaar
+     * @see its overwritten in jspdocportal
      */
-    protected void forwardRequest(HttpServletRequest req, HttpServletResponse res, Document jdom) throws IOException, ServletException {
-    	req.setAttribute("MCRLayoutServlet.Input.JDOM", jdom);
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(req, res);    	        
+    protected void sendToLayout(HttpServletRequest req, HttpServletResponse res, Document jdom) throws IOException {
+        getLayoutService().doLayout(req, res, jdom);
     }
 
-    /** 
-     *  Redirect browser to results page
-     *  @author A.Schaar
-     *  @see its overwritten in jspdocportal 
+    /**
+     * Redirect browser to results page
+     * 
+     * @author A.Schaar
+     * @see its overwritten in jspdocportal
      */
-    protected void sendRedirect( HttpServletRequest req, HttpServletResponse res, String id, String numPerPage) throws IOException {
-	    // Redirect browser to first results page
-	    String url = "MCRSearchServlet?mode=results&id=" + id + "&numPerPage=" + numPerPage;
-	    res.sendRedirect(res.encodeRedirectURL(url));
+    protected void sendRedirect(HttpServletRequest req, HttpServletResponse res, String id, String numPerPage) throws IOException {
+        // Redirect browser to first results page
+        String url = "MCRSearchServlet?mode=results&id=" + id + "&numPerPage=" + numPerPage;
+        res.sendRedirect(res.encodeRedirectURL(url));
     }
 
 }

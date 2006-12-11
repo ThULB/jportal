@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRNormalizer.java,v $
- * $Revision: 1.4 $ $Date: 2006/08/23 12:40:46 $
+ * $Revision: 1.5 $ $Date: 2006/10/16 08:38:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.4 $ $Date: 2006/08/23 12:40:46 $
+ * @version $Revision: 1.5 $ $Date: 2006/10/16 08:38:32 $
  */
 public class MCRNormalizer {
     /** List of characters that will be replaced */

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.5 $ $Date: 2006/09/20 14:22:20 $ -->
+<!-- $Revision: 1.7 $ $Date: 2006/11/14 10:53:20 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -181,14 +181,13 @@
         <img border="0" src="images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <xsl:value-of select="concat(sort,', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
+        <xsl:value-of select="concat(col[@name='surname'],', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
         <a href="{$urlAuthor}"><xsl:value-of
 						select="i18n:translate('indexpage.link.details')"/></a>
       </td>
     </tr>
-
   </xsl:template>
 
   <!-- ========== range ========== -->

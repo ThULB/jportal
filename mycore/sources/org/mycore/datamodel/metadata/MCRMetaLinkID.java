@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRMetaLinkID.java,v $
+ * $Revision: 1.11 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * two MCRObject's. Optional you can append the reference with the label
  * attribute. See to W3C XLink Standard for more informations.
  * <p>
- * &lt;tag class="MCRMetaLinkMCRObject" heritable="..." parasearch="..."&gt;
+ * &lt;tag class="MCRMetaLinkID"&gt;
  * <br>
  * &lt;subtag xlink:type="locator" xlink:href=" <em>MCRObjectID</em>"
  * xlink:label="..." xlink:title="..."/&gt; <br>
@@ -41,9 +41,9 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.8 $ $Date: 2005/08/15 15:02:06 $
+ * @version $Revision: 1.11 $ $Date: 2006/12/05 12:35:06 $
  */
-final public class MCRMetaLinkID extends MCRMetaLink implements MCRMetaInterface {
+final public class MCRMetaLinkID extends MCRMetaLink {
     /**
      * This is the constructor. <br>
      * The language element was set to <b>en </b>. All other elemnts was set to

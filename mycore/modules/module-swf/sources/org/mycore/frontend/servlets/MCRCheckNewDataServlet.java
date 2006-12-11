@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCheckNewDataServlet.java,v $
- * $Revision: 1.8 $ $Date: 2006/02/07 11:01:14 $
+ * $Revision: 1.9 $ $Date: 2006/03/29 09:53:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.8 $ $Date: 2006/02/07 11:01:14 $
+ * @version $Revision: 1.9 $ $Date: 2006/03/29 09:53:10 $
  */
 public class MCRCheckNewDataServlet extends MCRCheckDataBase {
 

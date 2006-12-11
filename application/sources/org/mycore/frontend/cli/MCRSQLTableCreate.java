@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLTableCreate.java,v $
- * $Revision: 1.3 $ $Date: 2005/09/28 08:00:29 $
+ * $Revision: 1.4 $ $Date: 2006/02/28 08:51:49 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -36,7 +36,7 @@ import org.mycore.common.MCRPersistenceException;
  * This class implements a command collection to create SQL tables via JDBC.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.3 $ $Date: 2005/09/28 08:00:29 $
+ * @version $Revision: 1.4 $ $Date: 2006/02/28 08:51:49 $
  */
 public class MCRSQLTableCreate extends MCRAbstractCommands {
     // LOGGER

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationManager.java,v $
- * $Revision: 1.18 $ $Date: 2006/02/13 08:36:23 $
+ * $Revision: 1.19 $ $Date: 2006/05/15 15:38:59 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

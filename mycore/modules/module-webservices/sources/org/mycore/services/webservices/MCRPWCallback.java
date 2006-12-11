@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRWebService.java,v $
- * $Revision: 1.2 $ $Date: 2005/12/20 13:06:29 $
+ * $RCSfile: MCRPWCallback.java,v $
+ * $Revision: 1.1 $ $Date: 2006/01/26 13:18:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*-- 
 
- $Id: LICENSE.txt,v 1.8 2002/01/19 10:15:17 jhunter Exp $
+ $Id: jdom-License.txt,v 1.1 2002/12/16 08:55:35 mcrjkupf Exp $
 
  Copyright (C) 2000-2002 Brett McLaughlin & Jason Hunter.
  All rights reserved.

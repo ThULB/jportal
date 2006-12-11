@@ -26,7 +26,7 @@
       <hidden var="conditions/boolean/condition1/@value"    default="institution" />
 
       <!-- Search in field "name" with operator "contains" -->
-      <hidden var="conditions/boolean/condition2/@field" default="name" />
+      <hidden var="conditions/boolean/condition2/@field" default="instname" />
       <hidden var="conditions/boolean/condition2/@operator" default="contains" />
       <cell row="1" col="1" anchor="EAST">
         <text i18n="editor.search.institution.name" />

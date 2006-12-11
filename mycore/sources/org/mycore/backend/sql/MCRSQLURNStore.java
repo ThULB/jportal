@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRSQLURNStore.java,v $
- * $Revision: 1.1 $ $Date: 2006/06/23 09:17:02 $
+ * $Revision: 1.2 $ $Date: 2006/06/23 11:47:33 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

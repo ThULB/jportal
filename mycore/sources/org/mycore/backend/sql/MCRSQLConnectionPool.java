@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLConnectionPool.java,v $
- * $Revision: 1.19 $ $Date: 2006/05/31 13:33:15 $
+ * $Revision: 1.20 $ $Date: 2006/05/31 13:35:21 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.MCRPersistenceException;
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
  * 
- * @version $Revision: 1.19 $ $Date: 2006/05/31 13:33:15 $
+ * @version $Revision: 1.20 $ $Date: 2006/05/31 13:35:21 $
  */
 public class MCRSQLConnectionPool {
     /** The connection pool singleton */

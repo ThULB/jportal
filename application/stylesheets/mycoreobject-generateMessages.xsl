@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.1.1.1 $ $Date: 2006/10/18 14:19:21 $ -->
+<!-- $Revision: 1.2 $ $Date: 2006/11/15 16:22:45 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <!-- 
@@ -28,7 +28,7 @@
       We define a helper variable to perform this filtering now.
     -->
     <xsl:variable name="unique-list"
-      select="./metadata/*/*[not(local-name()=local-name(following::*) and (@type=following::*/@type))]" />
+      select="./metadata/*/*[not(local-name()=local-name(following::*) and ((@type=following::*/@type) or (not(@type) and (following::*[not(@type)]))))]" />
     <xsl:for-each select="$unique-list">
       <xsl:sort select="local-name()" />
       <xsl:sort select="@type" />

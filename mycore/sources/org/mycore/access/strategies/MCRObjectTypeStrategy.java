@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObjectTypeStrategy.java,v $
- * $Revision: 1.0 $ $Date: 12.10.2006 15:14:00 $
+ * $Revision: 1.1 $ $Date: 2006/10/12 14:10:05 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.access.MCRAccessManager;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.0 $ $Date: 12.10.2006 15:14:00 $
+ * @version $Revision: 1.1 $ $Date: 2006/10/12 14:10:05 $
  */
 public class MCRObjectTypeStrategy implements MCRAccessCheckStrategy {
     private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");

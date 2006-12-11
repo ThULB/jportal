@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRHIBLinkTableStore.java,v $
- * $Revision: 1.24.2.1 $ $Date: 2006/09/29 13:21:56 $
+ * $Revision: 1.26 $ $Date: 2006/11/27 15:18:51 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -100,7 +100,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
             tx.rollback();
             logger.error(e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
     }
 
@@ -140,7 +140,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
             tx.rollback();
             logger.error(e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
     }
 
@@ -182,7 +182,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
             logger.error(e);
             throw new MCRException("Error during countTo(" + fromtype + "," + to + "," + type + "," + restriction + ")", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
 
         return returns.intValue();
@@ -201,7 +201,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
      * 
      */
     public Map getCountedMapOfMCRTO(String mcrtoPrefix) {
-        Map map = new HashMap();
+        Map<Object, Object> map = new HashMap<Object, Object>();
         Session session = getSession();
         String query = "select count(key.mcrfrom), key.mcrto from " + classname + " where MCRTO like '" + mcrtoPrefix + "%' group by key.mcrto";
         logger.debug("HQL-Statement: " + query);
@@ -212,10 +212,9 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
                 map.put(row[1], row[0]);
             }
         } catch (Exception e) {
-            logger.error("catched error@getCountedMapOfMCRTO:", e);
             throw new MCRException("Error during getCountedMapOfMCRTO", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
         return map;
     }
@@ -242,10 +241,9 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         try {
             returns = session.createQuery(query).list();
         } catch (Exception e) {
-            logger.error("catched error@getSourceOf:", e);
             throw new MCRException("Error during getSourceOf", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
         return returns;
     }
@@ -271,10 +269,9 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         try {
             returns = session.createQuery(query).list();
         } catch (Exception e) {
-            logger.error("catched error@getDestinationOf:", e);
             throw new MCRException("Error during getDestinationOf", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
         return returns;
     }

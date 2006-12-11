@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCStoreVideoCharger.java,v $
- * $Revision: 1.8 $ $Date: 2006/07/04 12:45:31 $
+ * $Revision: 1.9 $ $Date: 2006/09/25 16:14:01 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -59,7 +59,7 @@ import com.enterprisedt.net.ftp.FTPTransferType;
  * to a directory.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.8 $ $Date: 2006/07/04 12:45:31 $
+ * @version $Revision: 1.9 $ $Date: 2006/09/25 16:14:01 $
  * 
  * @see MCRAVExtVideoCharger
  */

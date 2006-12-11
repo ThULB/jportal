@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRAccessEventHandler.java,v $
- * $Revision: 1.13 $ $Date: 2006/02/21 14:22:39 $
+ * $RCSfile: MCRRemoveAclEventHandler.java,v $
+ * $Revision: 1.1 $ $Date: 2006/05/26 12:12:42 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * MCRObjects.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.13 $ $Date: 2006/02/21 14:22:39 $
+ * @version $Revision: 1.1 $ $Date: 2006/05/26 12:12:42 $
  */
 public class MCRRemoveAclEventHandler extends MCREventHandlerBase {
 

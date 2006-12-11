@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRGoogleSitemapServlet.java,v $
- * $Revision: 1.1 $ $Date: 2006/10/05 18:29:09 $
+ * $Revision: 1.4 $ $Date: 2006/11/27 12:45:14 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -48,7 +46,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * 
  * @author Frank Luetzenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.1 $ $Date: 2006/10/05 18:29:09 $
+ * @version $Revision: 1.4 $ $Date: 2006/11/27 12:45:14 $
  */
 public final class MCRGoogleSitemapServlet extends MCRServlet {
 
@@ -154,10 +152,6 @@ public final class MCRGoogleSitemapServlet extends MCRServlet {
         calcurrent = new GregorianCalendar();
         timecurrent = df.format(calcurrent.getTime());
         LOGGER.info("Stop Google access on " + timecurrent);
-        job.getRequest().setAttribute("MCRLayoutServlet.Input.JDOM", jdom);
-        job.getRequest().setAttribute("XSL.Style", "xml");
-
-        RequestDispatcher rd = getServletContext().getNamedDispatcher("MCRLayoutServlet");
-        rd.forward(job.getRequest(), job.getResponse());
+        getLayoutService().sendXML(job.getRequest(), job.getResponse(), jdom);
     }
 }

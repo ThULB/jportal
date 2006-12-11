@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCommand.java,v $
- * $Revision: 1.9 $ $Date: 2005/09/28 07:46:54 $
+ * $Revision: 1.10 $ $Date: 2005/09/30 11:43:20 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.common.MCRConfigurationException;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.9 $ $Date: 2005/09/28 07:46:54 $
+ * @version $Revision: 1.10 $ $Date: 2005/09/30 11:43:20 $
  */
 public class MCRCommand {
     /** The input format used for invoking this command */

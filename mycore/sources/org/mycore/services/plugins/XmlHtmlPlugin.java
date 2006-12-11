@@ -1,6 +1,6 @@
 /*
  * $RCSfile: XmlHtmlPlugin.java,v $
- * $Revision: 1.10 $ $Date: 2006/03/29 14:11:21 $
+ * $Revision: 1.11 $ $Date: 2006/03/29 16:19:49 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

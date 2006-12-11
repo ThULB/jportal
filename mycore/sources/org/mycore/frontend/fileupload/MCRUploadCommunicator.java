@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadCommunicator.java,v $
- * $Revision: 1.12 $ $Date: 2005/09/28 07:45:46 $
+ * $Revision: 1.13 $ $Date: 2006/06/08 14:46:32 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -60,7 +60,7 @@ import java.util.zip.ZipOutputStream;
  * @author Harald Richter
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.12 $ $Date: 2005/09/28 07:45:46 $
+ * @version $Revision: 1.13 $ $Date: 2006/06/08 14:46:32 $
  * @see org.mycore.frontend.fileupload.MCRUploadServlet
  */
 public class MCRUploadCommunicator {

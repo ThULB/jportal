@@ -6,7 +6,7 @@
 // Andreas Trappe 	- idea, concept
 // Chi Vu Huu		- concept, development
 //
-// $Revision$ $Date$ 
+// $Revision: 1.1 $ $Date: 2006/05/08 15:11:43 $ 
 // ============================================== 
 
 package org.mycore.services.imaging;

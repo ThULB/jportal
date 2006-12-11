@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaAddress.java,v $
- * $Revision: 1.23 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.25 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,9 +32,9 @@ import org.mycore.common.MCRException;
  * specified by a list of names.
  * 
  * @author J. Vogler
- * @version $Revision: 1.23 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.25 $ $Date: 2006/12/05 12:35:06 $
  */
-final public class MCRMetaAddress extends MCRMetaDefault implements MCRMetaInterface, Cloneable {
+final public class MCRMetaAddress extends MCRMetaDefault {
     // MetaAddress data
     private String country;
 
@@ -266,7 +266,7 @@ final public class MCRMetaAddress extends MCRMetaDefault implements MCRMetaInter
 
         org.jdom.Element elm = new org.jdom.Element(subtag);
         elm.setAttribute("lang", lang, Namespace.XML_NAMESPACE);
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
+        elm.setAttribute("inherited", Integer.toString(inherited));
 
         if ((type != null) && ((type = type.trim()).length() != 0)) {
             elm.setAttribute("type", type);
@@ -300,20 +300,6 @@ final public class MCRMetaAddress extends MCRMetaDefault implements MCRMetaInter
     }
 
     /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public final String createTextSearch(boolean textsearch) throws MCRException {
-        return "";
-    }
-
-    /**
      * This method checks the validation of the content of this class. The
      * method returns <em>false</em> if
      * <ul>
@@ -340,25 +326,6 @@ final public class MCRMetaAddress extends MCRMetaDefault implements MCRMetaInter
      * This method make a clone of this class.
      */
     public Object clone() {
-        /*
-         * TODO: Is it really necessary to implement Clonable in this class?
-         * 
-         * java-lang.Object.clone() allready clones all simply types of an
-         * Object. As this class is a collection of simple types like String and
-         * int, there should be no need for it. Either way I call super.clone()
-         * here and leave the rest of the decission process open.
-         * 
-         */
-        MCRMetaAddress out = null;
-
-        try {
-            out = (MCRMetaAddress) super.clone();
-        } catch (CloneNotSupportedException e) {
-            LOGGER.warn(new StringBuffer(MCRMetaAddress.class.getName()).append(" could not be cloned."), e);
-
-            return null;
-        }
-
-        return out;
+        return new MCRMetaAddress(datapart, subtag, DEFAULT_LANGUAGE, type, inherited, country, state, zipcode, city, street, number);
     }
 }

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRMyCommand.java,v $
+ * $Revision: 1.5 $ $Date: 2005/09/28 08:00:29 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ import org.apache.log4j.Logger;
  * XML data objects.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.4 $ $Date: 2005/08/15 15:01:54 $
+ * @version $Revision: 1.5 $ $Date: 2005/09/28 08:00:29 $
  */
 public class MCRMyCommand extends MCRAbstractCommands {
     // logger

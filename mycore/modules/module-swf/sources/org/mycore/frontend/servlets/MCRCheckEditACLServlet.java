@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCheckEditACLServlet.java,v $
- * $Revision: 1.2 $ $Date: 2006/03/22 13:51:58 $
+ * $Revision: 1.3 $ $Date: 2006/03/29 09:53:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.datamodel.metadata.MCRObjectService;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.2 $ $Date: 2006/03/22 13:51:58 $
+ * @version $Revision: 1.3 $ $Date: 2006/03/29 09:53:10 $
  */
 public class MCRCheckEditACLServlet extends MCRCheckACLBase {
 

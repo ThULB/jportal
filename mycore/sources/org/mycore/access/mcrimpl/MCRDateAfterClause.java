@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRDateAfterClause.java,v $
- * $Revision: 1.11 $ $Date: 2006/01/25 12:39:51 $
+ * $RCSfile$
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFile.java,v $
- * $Revision: 1.36 $ $Date: 2006/07/26 11:52:41 $
+ * $Revision: 1.37 $ $Date: 2006/07/31 12:48:22 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
  * Represents a stored file with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.36 $ $Date: 2006/07/26 11:52:41 $
+ * @version $Revision: 1.37 $ $Date: 2006/07/31 12:48:22 $
  */
 public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
     /** The ID of the store that holds this file's content */

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRUsageException.java,v $
+ * $Revision: 1.5 $ $Date: 2005/09/28 07:36:44 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ package org.mycore.common;
  * arguments to a method.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.4 $ $Date: 2005/08/15 15:02:25 $
+ * @version $Revision: 1.5 $ $Date: 2005/09/28 07:36:44 $
  */
 public class MCRUsageException extends MCRException {
     /**

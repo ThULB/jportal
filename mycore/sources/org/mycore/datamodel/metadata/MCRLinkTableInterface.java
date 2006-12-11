@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRLinkTableInterface.java,v $
- * $Revision: 1.16 $ $Date: 2006/02/21 07:17:26 $
+ * $Revision: 1.17 $ $Date: 2006/02/27 20:53:43 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ import java.util.Map;
  * This interface is designed to choose the persistence for the link tables.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.16 $ $Date: 2006/02/21 07:17:26 $
+ * @version $Revision: 1.17 $ $Date: 2006/02/27 20:53:43 $
  */
 public interface MCRLinkTableInterface {
 

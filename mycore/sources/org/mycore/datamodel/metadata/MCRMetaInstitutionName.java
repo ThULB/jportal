@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaInstitutionName.java,v $
- * $Revision: 1.5 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.7 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,9 +32,9 @@ import org.mycore.common.MCRException;
  * class represents a name of an institution or corporation.
  * 
  * @author J. Kupferschmidt
- * @version $Revision: 1.5 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.7 $ $Date: 2006/12/05 12:35:06 $
  */
-final public class MCRMetaInstitutionName extends MCRMetaDefault implements MCRMetaInterface {
+final public class MCRMetaInstitutionName extends MCRMetaDefault {
     // data
     private String fullname;
 
@@ -174,7 +174,7 @@ final public class MCRMetaInstitutionName extends MCRMetaDefault implements MCRM
 
         org.jdom.Element elm = new org.jdom.Element(subtag);
         elm.setAttribute("lang", lang, Namespace.XML_NAMESPACE);
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
+        elm.setAttribute("inherited", Integer.toString(inherited));
 
         if ((type != null) && ((type = type.trim()).length() != 0)) {
             elm.setAttribute("type", type);
@@ -193,20 +193,6 @@ final public class MCRMetaInstitutionName extends MCRMetaDefault implements MCRM
         }
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public final String createTextSearch(boolean textsearch) throws MCRException {
-        return fullname;
     }
 
     /**

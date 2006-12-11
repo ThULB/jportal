@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.5 $ $Date: 2006/03/29 11:38:18 $ -->
+<!-- $Revision: 1.7 $ $Date: 2006/11/28 13:03:59 $ -->
 <!-- ============================================== -->
 
 <imports>
@@ -12,8 +12,6 @@
    <hidden var="servflags" descendants="true"/>
 	  
    <hidden var="servacls/@class" default="MCRMetaAccessRules"/>
-   <hidden var="servacls/@parasearch" default="false"/>
-   <hidden var="servacls/@textsearch" default="false"/>
    <hidden var="servacls/@notinherit" default="false"/>
    <hidden var="servacls/@heritable" default="true"/>
    <cell col="1" row="1" anchor="NORTHWEST" var="servacls/servacl">

@@ -2,7 +2,7 @@
 #
 # windows user replace '/' with '\\'
 # e.g. MCR.WCMS.wcmsUserDBFile=c:\\programme\docportal\\modules\\module-wcms\\aif\\config\\WCMSUserDB.xml
-MCR.WebApplication.basedir=%MCR.basedir%/webapps
+MCR.WebApplication.basedir=%MCR.basedir%/build/webapps
 
 #########################################################################
 ### content and configuratin stuff

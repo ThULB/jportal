@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMailer.java,v $
- * $Revision: 1.16 $ $Date: 2006/04/11 12:34:39 $
+ * $Revision: 1.17 $ $Date: 2006/04/13 13:49:44 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,7 +51,7 @@ import org.jdom.Element;
  * @author Frank Lützenkirchen
  * @author Werner Greßhoff
  * 
- * @version $Revision: 1.16 $ $Date: 2006/04/11 12:34:39 $
+ * @version $Revision: 1.17 $ $Date: 2006/04/13 13:49:44 $
  */
 public class MCRMailer {
     /** Logger */

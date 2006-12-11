@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCREventManager.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:39:07 $
+ * $Revision: 1.8 $ $Date: 2006/01/18 12:07:28 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

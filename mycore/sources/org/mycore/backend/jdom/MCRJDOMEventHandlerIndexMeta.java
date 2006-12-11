@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRJDOMEventHandlerIndexMeta.java,v $
- * $Revision: 1.6 $ $Date: 2006/02/10 23:33:54 $
+ * $Revision: 1.7 $ $Date: 2006/03/03 12:20:41 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

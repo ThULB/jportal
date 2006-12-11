@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaIFS.java,v $
- * $Revision: 1.11 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.13 $ $Date: 2006/12/05 12:35:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,9 +35,9 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.11 $ $Date: 2006/02/10 23:33:48 $
+ * @version $Revision: 1.13 $ $Date: 2006/12/05 12:35:06 $
  */
-final public class MCRMetaIFS extends MCRMetaDefault implements MCRMetaInterface {
+final public class MCRMetaIFS extends MCRMetaDefault {
     // MCRMetaIFS data
     private String sourcepath;
 
@@ -182,20 +182,6 @@ final public class MCRMetaIFS extends MCRMetaDefault implements MCRMetaInterface
         elm.setAttribute("ifsid", ifsid);
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public final String createTextSearch(boolean textsearch) throws MCRException {
-        return "";
     }
 
     /**

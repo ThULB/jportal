@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRUploadHandler.java,v $
+ * $Revision: 1.2 $ $Date: 2005/09/28 07:45:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.apache.log4j.Logger;
  * @author Harald Richter
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.1 $ $Date: 2005/09/12 11:37:07 $
+ * @version $Revision: 1.2 $ $Date: 2005/09/28 07:45:46 $
  * 
  * @see MCRUploadHandlerManager
  */

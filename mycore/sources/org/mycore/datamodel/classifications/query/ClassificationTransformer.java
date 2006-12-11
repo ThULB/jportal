@@ -1,6 +1,6 @@
 /*
  * $RCSfile: ClassificationTransformer.java,v $
- * $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
+ * $Revision: 1.14 $ $Date: 2006/12/04 15:27:34 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,6 +23,10 @@
 
 package org.mycore.datamodel.classifications.query;
 
+import static org.jdom.Namespace.XML_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -31,15 +35,11 @@ import java.util.regex.Pattern;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
-
-import org.mycore.common.MCRDefaults;
-
 /**
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.8 $ $Date: 2006/05/22 14:15:06 $
+ * @version $Revision: 1.14 $ $Date: 2006/12/04 15:27:34 $
  */
 public class ClassificationTransformer {
 
@@ -63,8 +63,8 @@ public class ClassificationTransformer {
      *            Classification
      * @return
      */
-    public static Document getEditorDocument(Classification cl) {
-        return ItemElementFactory.getDocument(cl, STANDARD_LABEL);
+    public static Document getEditorDocument(Classification cl, boolean sort) {
+        return ItemElementFactory.getDocument(cl, STANDARD_LABEL, sort);
     }
 
     /**
@@ -72,8 +72,7 @@ public class ClassificationTransformer {
      * 
      * @param cl
      *            MCR Classification as a JDOM Document
-     * @return
-     *            null if <code>cl</code> is not valid
+     * @return null if <code>cl</code> is not valid
      */
     public static Classification getClassification(Document cl) {
         Element categories = cl.getRootElement().getChild("categories");
@@ -104,26 +103,23 @@ public class ClassificationTransformer {
      *            format String as specified above
      * @return
      */
-    public static Document getEditorDocument(Classification cl, String labelFormat) {
-        return ItemElementFactory.getDocument(cl, labelFormat);
+    public static Document getEditorDocument(Classification cl, String labelFormat, boolean sort) {
+        return ItemElementFactory.getDocument(cl, labelFormat, sort);
     }
 
     private static class MetaDataElementFactory {
         static Document getDocument(Classification cl) {
             Document cd = new Document(new Element("mycoreclass"));
-            cd.getRootElement().setAttribute("noNamespaceSchemaLocation", "MCRClassification.xsd", Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
+            cd.getRootElement().setAttribute("noNamespaceSchemaLocation", "MCRClassification.xsd", XSI_NAMESPACE);
             cd.getRootElement().setAttribute("ID", cl.getId());
-            Iterator it = cl.getLabels().iterator();
-            while (it.hasNext()) {
-                // add Labels
-                cd.getRootElement().addContent(getElement((Label) it.next()));
+            cd.getRootElement().addNamespaceDeclaration(XLINK_NAMESPACE);
+            for (Label label : cl.getLabels()) {
+                cd.getRootElement().addContent(getElement(label));
             }
             Element categories = new Element("categories");
             cd.getRootElement().addContent(categories);
-            it = cl.getCatgegories().iterator();
-            while (it.hasNext()) {
-                // add child categories
-                categories.addContent(getElement((Category) it.next(),cl.isCounterEnabled()));
+            for (Category category : cl.getCategories()) {
+                categories.addContent(getElement(category, cl.isCounterEnabled()));
             }
             return cd;
         }
@@ -131,7 +127,7 @@ public class ClassificationTransformer {
         static Element getElement(Label label) {
             Element le = new Element("label");
             if (stringNotEmpty(label.getLang())) {
-                le.setAttribute("lang", label.getLang(), Namespace.XML_NAMESPACE);
+                le.setAttribute("lang", label.getLang(), XML_NAMESPACE);
             }
             if (stringNotEmpty(label.getText())) {
                 le.setAttribute("text", label.getText());
@@ -148,17 +144,33 @@ public class ClassificationTransformer {
             if (withCounter) {
                 ce.setAttribute("counter", Integer.toString(category.getNumberOfObjects()));
             }
-            Iterator it = category.getLabels().iterator();
-            while (it.hasNext()) {
-                // add labels
-                ce.addContent(getElement((Label) it.next()));
+            for (Label label : category.getLabels()) {
+                ce.addContent(getElement(label));
             }
-            it = category.getCatgegories().iterator();
-            while (it.hasNext()) {
-                // add child categories
-                ce.addContent(getElement((Category) it.next(),withCounter));
+            if (category.getLink()!=null){
+                ce.addContent(getElement(category.getLink()));
+            }
+            for (Category cat : category.getCategories()) {
+                ce.addContent(getElement(cat, withCounter));
             }
             return ce;
+        }
+        
+        static Element getElement(Link link){
+            Element le = new Element ("url");
+            if (link.getHref()!=null){
+                le.setAttribute("href", link.getHref(), XLINK_NAMESPACE);
+            }
+            if (link.getLabel()!=null){
+                le.setAttribute("label", link.getLabel(), XLINK_NAMESPACE);
+            }
+            if (link.getTitle()!=null){
+                le.setAttribute("title", link.getTitle(), XLINK_NAMESPACE);
+            }
+            if (link.getType()!=null){
+                le.setAttribute("type", link.getType(), XLINK_NAMESPACE);
+            }
+            return le;
         }
 
         static boolean stringNotEmpty(String test) {
@@ -178,31 +190,33 @@ public class ClassificationTransformer {
 
         private static final Pattern COUNT_PATTERN = Pattern.compile("\\{count\\}");
 
-        static Document getDocument(Classification cl, String labelFormat) {
+        @SuppressWarnings("unchecked")
+        static Document getDocument(Classification cl, String labelFormat, boolean sort) {
             Document cd = new Document(new Element("items"));
-            Iterator it = cl.getCatgegories().iterator();
-            while (it.hasNext()) {
-                // add child categories
-                cd.getRootElement().addContent(getElement((Category) it.next(), labelFormat, cl.isCounterEnabled()));
+            for (Category category : cl.getCategories()) {
+                cd.getRootElement().addContent(getElement(category, labelFormat, cl.isCounterEnabled()));
             }
-            sortItems(cd.getRootElement().getChildren("item"));
+            if (sort) {
+                sortItems(cd.getRootElement().getChildren("item"));
+            }
             return cd;
         }
 
-        private static void sortItems(List items) {
+        @SuppressWarnings("unchecked")
+        private static void sortItems(List<Element> items) {
             sort(items, EditorItemComparator.CURRENT_LANG_TEXT_ORDER);
-            Iterator it = items.iterator();
+            Iterator<Element> it = items.iterator();
             while (it.hasNext()) {
-                Element item = (Element) it.next();
-                List children = item.getChildren("item");
+                Element item = it.next();
+                List<Element> children = item.getChildren("item");
                 if (children.size() > 0) {
                     sortItems(children);
                 }
             }
         }
 
-        private static void sort(List list, Comparator c) {
-            Element[] a = (Element[]) list.toArray(new Element[list.size()]);
+        private static void sort(List<Element> list, Comparator<Element> c) {
+            Element[] a = list.toArray(new Element[list.size()]);
             Arrays.sort(a, c);
             for (int i = 0; i < a.length; i++) {
                 a[i].detach();
@@ -215,7 +229,7 @@ public class ClassificationTransformer {
         static Element getElement(Label label, Category cat, String labelFormat, boolean withCounter) {
             Element le = new Element("label");
             if (stringNotEmpty(label.getLang())) {
-                le.setAttribute("lang", label.getLang(), Namespace.XML_NAMESPACE);
+                le.setAttribute("lang", label.getLang(), XML_NAMESPACE);
             }
             le.setText(getLabelText(label, cat, labelFormat, withCounter));
             return le;
@@ -225,7 +239,7 @@ public class ClassificationTransformer {
             String text = TEXT_PATTERN.matcher(labelFormat).replaceAll(label.getText());
             text = ID_PATTERN.matcher(text).replaceAll(cat.getId());
             text = DESCR_PATTERN.matcher(text).replaceAll(label.description);
-            if (withCounter){
+            if (withCounter) {
                 text = COUNT_PATTERN.matcher(text).replaceAll(Integer.toString(cat.getNumberOfObjects()));
             }
             return text;
@@ -234,15 +248,11 @@ public class ClassificationTransformer {
         static Element getElement(Category category, String labelFormat, boolean withCounter) {
             Element ce = new Element("item");
             ce.setAttribute("value", category.getId());
-            Iterator it = category.getLabels().iterator();
-            while (it.hasNext()) {
-                // add labels
-                ce.addContent(getElement((Label) it.next(), category, labelFormat, withCounter));
+            for (Label label : category.getLabels()) {
+                ce.addContent(getElement(label, category, labelFormat, withCounter));
             }
-            it = category.getCatgegories().iterator();
-            while (it.hasNext()) {
-                // add child categories
-                ce.addContent(getElement((Category) it.next(), labelFormat, withCounter));
+            for (Category cat : category.getCategories()) {
+                ce.addContent(getElement(cat, labelFormat, withCounter));
             }
             return ce;
         }

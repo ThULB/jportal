@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLAccessStore.java,v $
- * $Revision: 1.12 $ $Date: 2006/02/10 23:33:47 $
+ * $Revision: 1.13 $ $Date: 2006/03/29 10:21:43 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.MCRException;
  * from mycore.properties.
  * 
  * @author Arne Seifert
- * @version $Revision: 1.12 $ $Date: 2006/02/10 23:33:47 $
+ * @version $Revision: 1.13 $ $Date: 2006/03/29 10:21:43 $
  */
 public class MCRSQLAccessStore extends MCRAccessStore {
     public void createTables() {

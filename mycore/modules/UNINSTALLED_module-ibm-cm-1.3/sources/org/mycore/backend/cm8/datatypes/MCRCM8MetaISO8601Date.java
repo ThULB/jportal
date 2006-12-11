@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCM8MetaNBN.java,v $
- * $Revision: 1.1 $ $Date: 07.09.2006 16:57:32 $
+ * $RCSfile: MCRCM8MetaISO8601Date.java,v $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ import com.ibm.mm.sdk.common.DKException;
 
 /**
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $Date: 07.09.2006 16:57:32 $
+ * @version $Revision: 1.1 $Date: 2006/09/08 10:21:00 $
  */
 public class MCRCM8MetaISO8601Date extends MCRAbstractCM8ComponentType {
     private static final int TIMESTAMP_LENGTH = 26;

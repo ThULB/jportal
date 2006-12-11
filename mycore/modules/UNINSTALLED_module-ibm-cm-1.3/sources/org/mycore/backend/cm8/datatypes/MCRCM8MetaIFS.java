@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCM8MetaInstitutionName.java,v $
- * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * $RCSfile: MCRCM8MetaIFS.java,v $
+ * $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import com.ibm.mm.sdk.common.DKException;
  * data model type MetaInstitutionName.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
+ * @version $Revision: 1.1 $ $Date: 2006/09/08 10:21:00 $
  */
 public class MCRCM8MetaIFS extends MCRAbstractCM8ComponentType {
 

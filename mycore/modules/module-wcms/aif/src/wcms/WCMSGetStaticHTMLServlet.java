@@ -1,6 +1,6 @@
 /*
  * $RCSfile: WCMSGetStaticHTMLServlet.java,v $
- * $Revision: 1.13 $ $Date: 2005/09/28 07:53:28 $
+ * $Revision: 1.14 $ $Date: 2006/01/26 14:19:37 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

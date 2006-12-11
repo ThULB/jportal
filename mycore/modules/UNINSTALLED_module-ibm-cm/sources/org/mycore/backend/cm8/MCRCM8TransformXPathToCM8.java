@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCM8TransformXPathToCM8.java,v $
- * $Revision: 1.27 $ $Date: 2006/02/23 14:51:52 $
+ * $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import com.ibm.mm.sdk.server.DKDatastoreICM;
  * Search Engine language (this is XPath like).
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.27 $ $Date: 2006/02/23 14:51:52 $
+ * @version $Revision: 1.1 $ $Date: 2006/07/12 08:59:07 $
  */
 public class MCRCM8TransformXPathToCM8 implements MCRMetaSearchInterface, DKConstantICM {
     // private data

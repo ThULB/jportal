@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRUploadHandlerIFS.java,v $
- * $Revision: 1.3 $ $Date: 2006/05/17 12:35:46 $
+ * $Revision: 1.4 $ $Date: 2006/06/09 08:22:55 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.3 $ $Date: 2006/05/17 12:35:46 $
+ * @version $Revision: 1.4 $ $Date: 2006/06/09 08:22:55 $
  * 
  * @see MCRUploadHandler
  */

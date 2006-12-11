@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLLinkTableStore.java,v $
- * $Revision: 1.22 $ $Date: 2006/02/21 07:17:26 $
+ * $Revision: 1.23 $ $Date: 2006/02/27 20:54:45 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.22 $ $Date: 2006/02/21 07:17:26 $
+ * @version $Revision: 1.23 $ $Date: 2006/02/27 20:54:45 $
  * @deprecated
  */
 public class MCRSQLLinkTableStore implements MCRLinkTableInterface {

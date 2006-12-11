@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRFilesystemNode.java,v $
- * $Revision: 1.15 $ $Date: 2006/09/21 11:50:57 $
+ * $Revision: 1.16 $ $Date: 2006/09/21 11:56:48 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.mycore.common.MCRArgumentChecker;
  * Represents a stored file or directory node with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.15 $ $Date: 2006/09/21 11:50:57 $
+ * @version $Revision: 1.16 $ $Date: 2006/09/21 11:56:48 $
  */
 public abstract class MCRFilesystemNode {
     protected static MCRFileMetadataManager manager = MCRFileMetadataManager.instance();

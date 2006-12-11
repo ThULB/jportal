@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCStoreSQLDB.java,v $
- * $Revision: 1.5 $ $Date: 2006/07/04 12:45:32 $
+ * $Revision: 1.6 $ $Date: 2006/07/05 14:32:45 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * MCRFile objects in a sql database.
  * 
  * @author Harald Richter
- * @version $Revision: 1.5 $ $Date: 2006/07/04 12:45:32 $
+ * @version $Revision: 1.6 $ $Date: 2006/07/05 14:32:45 $
  */
 public class MCRCStoreSQLDB extends MCRContentStore {
     public void init(String storeID) {

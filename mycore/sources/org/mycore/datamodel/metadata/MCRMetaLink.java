@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaLink.java,v $
- * $Revision: 1.30 $ $Date: 2006/01/26 14:01:39 $
+ * $Revision: 1.35 $ $Date: 2006/12/07 12:53:34 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,7 +23,8 @@
 
 package org.mycore.datamodel.metadata;
 
-import org.mycore.common.MCRDefaults;
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+
 import org.mycore.common.MCRException;
 
 /**
@@ -33,7 +34,7 @@ import org.mycore.common.MCRException;
  * Optional you can append the reference with the label attribute. See to W3C
  * XLink Standard for more informations.
  * <p>
- * &lt;tag class="MCRMetaLink" heritable="..." parasearch="..."&gt; <br>
+ * &lt;tag class="MCRMetaLink"&gt; <br>
  * &lt;subtag xlink:type="locator" xlink:href=" <em>URL</em>"
  * xlink:label="..." xlink:title="..."/&gt; <br>
  * &lt;subtag xlink:type="arc" xlink:from=" <em>URL</em>" xlink:to="URL"/&gt;
@@ -41,9 +42,9 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.30 $ $Date: 2006/01/26 14:01:39 $
+ * @version $Revision: 1.35 $ $Date: 2006/12/07 12:53:34 $
  */
-public class MCRMetaLink extends MCRMetaDefault implements MCRMetaInterface {
+public class MCRMetaLink extends MCRMetaDefault {
     /** The length of XLink:type * */
     public static final int MAX_XLINK_TYPE_LENGTH = 8;
 
@@ -279,9 +280,8 @@ public class MCRMetaLink extends MCRMetaDefault implements MCRMetaInterface {
      */
     public void setFromDOM(org.jdom.Element element) throws MCRException {
         super.setFromDOM(element);
-        super.type = "";
 
-        String temp = element.getAttributeValue("type", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+        String temp = element.getAttributeValue("type", XLINK_NAMESPACE);
 
         if ((temp != null) && ((temp = temp.trim()).length() != 0)) {
             if ((temp.equals("locator")) || (temp.equals("arc"))) {
@@ -296,14 +296,14 @@ public class MCRMetaLink extends MCRMetaDefault implements MCRMetaInterface {
         }
 
         if (linktype.equals("locator")) {
-            String temp1 = element.getAttributeValue("href", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-            String temp2 = element.getAttributeValue("label", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-            String temp3 = element.getAttributeValue("title", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+            String temp1 = element.getAttributeValue("href", XLINK_NAMESPACE);
+            String temp2 = element.getAttributeValue("label", XLINK_NAMESPACE);
+            String temp3 = element.getAttributeValue("title", XLINK_NAMESPACE);
             setReference(temp1, temp2, temp3);
         } else {
-            String temp1 = element.getAttributeValue("from", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-            String temp2 = element.getAttributeValue("to", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-            String temp3 = element.getAttributeValue("title", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+            String temp1 = element.getAttributeValue("from", XLINK_NAMESPACE);
+            String temp2 = element.getAttributeValue("to", XLINK_NAMESPACE);
+            String temp3 = element.getAttributeValue("title", XLINK_NAMESPACE);
             setBiLink(temp1, temp2, temp3);
         }
     }
@@ -323,43 +323,32 @@ public class MCRMetaLink extends MCRMetaDefault implements MCRMetaInterface {
         }
 
         org.jdom.Element elm = new org.jdom.Element(subtag);
-        elm.setAttribute("inherited", (new Integer(inherited)).toString());
-        elm.setAttribute("type", linktype, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+        elm.setAttribute("inherited", Integer.toString(inherited));
+        if ((type != null) && ((type = type.trim()).length() != 0)) {
+            elm.setAttribute("type", type);
+        }
+        elm.setAttribute("type", linktype, XLINK_NAMESPACE);
 
         if (linktype.equals("locator")) {
-            elm.setAttribute("href", href, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+            elm.setAttribute("href", href, XLINK_NAMESPACE);
 
             if ((label != null) && ((label = label.trim()).length() != 0)) {
-                elm.setAttribute("label", label, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+                elm.setAttribute("label", label, XLINK_NAMESPACE);
             }
 
             if ((title != null) && ((title = title.trim()).length() != 0)) {
-                elm.setAttribute("title", title, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+                elm.setAttribute("title", title, XLINK_NAMESPACE);
             }
         } else {
-            elm.setAttribute("from", from, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-            elm.setAttribute("to", to, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+            elm.setAttribute("from", from, XLINK_NAMESPACE);
+            elm.setAttribute("to", to, XLINK_NAMESPACE);
 
             if ((title != null) && ((title = title.trim()).length() != 0)) {
-                elm.setAttribute("title", title, org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+                elm.setAttribute("title", title, XLINK_NAMESPACE);
             }
         }
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance. Only the title string was returned.
-     * 
-     * @param textsearch
-     *            true if the data should text searchable
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return an empty String, because the content is not text searchable.
-     */
-    public final String createTextSearch(boolean textsearch) throws MCRException {
-        return title;
     }
 
     /**

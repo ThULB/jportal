@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLConnection.java,v $
- * $Revision: 1.34 $ $Date: 2005/11/22 13:08:55 $
+ * $Revision: 1.35 $ $Date: 2006/02/10 23:33:48 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -55,7 +55,7 @@ import org.mycore.common.MCRPersistenceException;
  * @see MCRSQLConnectionPool
  * @author Frank Lützenkirchen
  * @author Johannes Buehler
- * @version $Revision: 1.34 $ $Date: 2005/11/22 13:08:55 $
+ * @version $Revision: 1.35 $ $Date: 2006/02/10 23:33:48 $
  */
 public class MCRSQLConnection {
     /** The wrapped JDBC connection */

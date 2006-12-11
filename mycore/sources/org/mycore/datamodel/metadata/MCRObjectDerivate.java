@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObjectDerivate.java,v $
- * $Revision: 1.16 $ $Date: 2006/03/23 10:54:36 $
+ * $Revision: 1.18 $ $Date: 2006/11/24 11:20:10 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.mycore.common.MCRException;
  * This class implements all methode for handling one derivate data.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.16 $ $Date: 2006/03/23 10:54:36 $
+ * @version $Revision: 1.18 $ $Date: 2006/11/24 11:20:10 $
  */
 public class MCRObjectDerivate {
     
@@ -43,7 +43,7 @@ public class MCRObjectDerivate {
     // derivate data
     private MCRMetaLinkID linkmeta = null;
 
-    private ArrayList externals = null;
+    private ArrayList<MCRMetaLink> externals = null;
 
     private MCRMetaIFS internals = null;
 
@@ -52,7 +52,7 @@ public class MCRObjectDerivate {
      * to null.
      */
     public MCRObjectDerivate() {
-        externals = new ArrayList();
+        externals = new ArrayList<MCRMetaLink>();
         internals = null;
     }
 
@@ -164,7 +164,7 @@ public class MCRObjectDerivate {
             throw new IndexOutOfBoundsException("Index error in getExternal.");
         }
 
-        return (MCRMetaLink) externals.get(index);
+        return externals.get(index);
     }
 
     /**
@@ -207,8 +207,6 @@ public class MCRObjectDerivate {
         org.jdom.Element linkmetas = new org.jdom.Element("linkmetas");
         linkmetas.setAttribute("class", "MCRMetaLinkID");
         linkmetas.setAttribute("heritable", "false");
-        linkmetas.setAttribute("parasearch", "true");
-        linkmetas.setAttribute("textsearch", "false");
         linkmetas.addContent(linkmeta.createXML());
         elm.addContent(linkmetas);
 
@@ -216,11 +214,9 @@ public class MCRObjectDerivate {
             org.jdom.Element extEl = new org.jdom.Element("externals");
             extEl.setAttribute("class", "MCRMetaLink");
             extEl.setAttribute("heritable", "false");
-            extEl.setAttribute("parasearch", "true");
-            extEl.setAttribute("textsearch", "false");
 
             for (int i = 0; i < externals.size(); i++) {
-                extEl.addContent(((MCRMetaLink) externals.get(i)).createXML());
+                extEl.addContent(externals.get(i).createXML());
             }
 
             elm.addContent(extEl);
@@ -230,8 +226,6 @@ public class MCRObjectDerivate {
             org.jdom.Element intEl = new org.jdom.Element("internals");
             intEl.setAttribute("class", "MCRMetaIFS");
             intEl.setAttribute("heritable", "false");
-            intEl.setAttribute("parasearch", "false");
-            intEl.setAttribute("textsearch", "false");
             intEl.addContent(internals.createXML());
             elm.addContent(intEl);
         }

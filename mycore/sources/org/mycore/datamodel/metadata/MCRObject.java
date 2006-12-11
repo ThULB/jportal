@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRObject.java,v $
- * $Revision: 1.102 $ $Date: 2006/05/08 06:28:25 $
+ * $Revision: 1.106 $ $Date: 2006/11/25 23:32:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,12 +23,14 @@
 
 package org.mycore.datamodel.metadata;
 
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
+
 import java.util.Iterator;
 import java.util.List;
 
 import org.jdom.Document;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
@@ -45,7 +47,7 @@ import org.mycore.common.xml.MCRXMLHelper;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 1.102 $ $Date: 2006/05/08 06:28:25 $
+ * @version $Revision: 1.106 $ $Date: 2006/11/25 23:32:50 $
  */
 final public class MCRObject extends MCRBase {
     // the object content
@@ -142,8 +144,8 @@ final public class MCRObject extends MCRBase {
         if ((mcr_version == null) || ((mcr_version = mcr_version.trim()).length() == 0)) {
             setVersion();
         }
-        
-        mcr_schema = jdom_element_root.getAttribute("noNamespaceSchemaLocation", org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL)).getValue().trim();
+
+        mcr_schema = jdom_element_root.getAttribute("noNamespaceSchemaLocation", XSI_NAMESPACE).getValue().trim();
         logger.debug("MCRObject set schemafile: " + mcr_schema);
     }
 
@@ -258,9 +260,9 @@ final public class MCRObject extends MCRBase {
 
         org.jdom.Element elm = new org.jdom.Element("mycoreobject");
         org.jdom.Document doc = new org.jdom.Document(elm);
-        elm.addNamespaceDeclaration(org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
-        elm.addNamespaceDeclaration(org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
-        elm.setAttribute("noNamespaceSchemaLocation", mcr_schema, org.jdom.Namespace.getNamespace("xsi", MCRDefaults.XSI_URL));
+        elm.addNamespaceDeclaration(XSI_NAMESPACE);
+        elm.addNamespaceDeclaration(XLINK_NAMESPACE);
+        elm.setAttribute("noNamespaceSchemaLocation", mcr_schema, XSI_NAMESPACE);
         elm.setAttribute("ID", mcr_id.getId());
         elm.setAttribute("label", mcr_label);
         elm.setAttribute("version", mcr_version);
@@ -269,18 +271,6 @@ final public class MCRObject extends MCRBase {
         elm.addContent(mcr_service.createXML());
 
         return doc;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return a String with the text values from the metadata object
-     */
-    public final String createTextSearch() throws MCRException {
-        return mcr_metadata.createTextSearch();
     }
 
     /**
@@ -377,13 +367,22 @@ final public class MCRObject extends MCRBase {
     public final void addDerivateInDatastore(String id, MCRMetaLinkID link) throws MCRPersistenceException {
         receiveFromDatastore(id);
         // don't put the same derivates twice in an object!
-        if(	getStructure().searchForDerivate(link) >= 0)
-        	return;
-        if(!importMode) {
-        	mcr_service.setDate("modifydate");	
+        MCRMetaLinkID testlink = null;
+        boolean checklink = false;
+        for (int i = 0; i < mcr_struct.getDerivateSize(); i++) {
+            testlink = mcr_struct.getDerivate(i);
+            if (link.href.equals(testlink.getXLinkHref())) {
+                checklink = true;
+            }
         }
-       	getStructure().addDerivate(link);
-       	updateThisInDatastore();
+        if (checklink)
+            return;
+        // add link
+        if (!importMode) {
+            mcr_service.setDate("modifydate");
+        }
+        mcr_struct.addDerivate(link);
+        updateThisInDatastore();
     }
 
     /**
@@ -392,23 +391,22 @@ final public class MCRObject extends MCRBase {
      * 
      * @param id
      *            the object ID
-     * @param link
-     *            a link to a derivate as MCRMetaLinkID
+     * @param der_id
+     *            the derivate ID
      * @exception MCRPersistenceException
      *                if a persistence problem is occured
      */
-    public final void removeDerivateInDatastore(String id, MCRMetaLinkID link) throws MCRPersistenceException {
+    public final void removeDerivateInDatastore(String id, String der_id) throws MCRPersistenceException {
         receiveFromDatastore(id);
         mcr_service.setDate("modifydate");
-
-        int j = getStructure().searchForDerivate(link);
-
-        if (j != -1) {
-            getStructure().removeDerivate(j);
-            updateThisInDatastore();
-        } else {
-            throw new MCRPersistenceException("The derivate link " + link.getXLinkHref() + " was not found.");
+        MCRMetaLinkID link = null;
+        for (int i = 0; i < mcr_struct.getDerivateSize(); i++) {
+            link = mcr_struct.getDerivate(i);
+            if (link.href.equals(der_id)) {
+                mcr_struct.removeDerivate(i);
+            }
         }
+        updateThisInDatastore();
     }
 
     /**
@@ -746,10 +744,9 @@ final public class MCRObject extends MCRBase {
         }
 
         // if not imported via cli, createdate remains unchanged
-        if(!importMode || mcr_service.getDate("createdate") == null ){
-        	mcr_service.setDate("createdate", old.getService().getDate("createdate"));	
+        if (!importMode || mcr_service.getDate("createdate") == null) {
+            mcr_service.setDate("createdate", old.getService().getDate("createdate"));
         }
-        
 
         // update this dataset
         updateThisInDatastore();
@@ -788,9 +785,9 @@ final public class MCRObject extends MCRBase {
      * The method updates this object in the persistence layer.
      */
     private final void updateThisInDatastore() throws MCRPersistenceException {
-    	if(!importMode || mcr_service.getDate("modifydate") == null){
-    		mcr_service.setDate("modifydate");
-    	}
+        if (!importMode || mcr_service.getDate("modifydate") == null) {
+            mcr_service.setDate("modifydate");
+        }
         // handle events
         MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.UPDATE_EVENT);
         evt.put("object", this);
@@ -849,8 +846,8 @@ final public class MCRObject extends MCRBase {
     }
 
     /**
-     * The method updates the persistence layer with the data from the XLM
-     * store.
+     * The method updates the search index with the data from the XLM
+     * store. Also it check the derivate links of itself.
      * 
      * @param id
      *            the MCRObjectID as string
@@ -860,14 +857,23 @@ final public class MCRObject extends MCRBase {
     }
 
     /**
-     * The method updates the persistence layer with the data from the XLM
-     * store.
+     * The method updates the search index with the data from the XLM
+     * store. Also it check the derivate links of itself.
      * 
      * @param id
      *            the MCRObjectID
      */
     public final void repairPersitenceDatastore(MCRObjectID id) throws MCRPersistenceException {
+        // receive metadata for ID
         receiveFromDatastore(id);
+        // check derivate link
+        MCRMetaLinkID link = null;
+        for (int i = 0; i < mcr_struct.getDerivateSize(); i++) {
+            link = mcr_struct.getDerivate(i);
+            if (!MCRDerivate.existInDatastore(link.getXLinkHref())) {
+                logger.error("Can't find MCRDerivate "+link.getXLinkHref());
+            }
+        }
         // handle events
         MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.REPAIR_EVENT);
         evt.put("object", this);

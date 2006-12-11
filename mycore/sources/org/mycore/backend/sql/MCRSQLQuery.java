@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLQuery.java,v $
- * $Revision: 1.11 $ $Date: 2006/01/30 08:41:34 $
+ * $Revision: 1.12 $ $Date: 2006/02/10 23:33:47 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

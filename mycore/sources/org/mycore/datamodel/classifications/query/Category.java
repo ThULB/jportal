@@ -1,6 +1,6 @@
 /*
  * $RCSfile: Category.java,v $
- * $Revision: 1.2 $ $Date: 2006/04/03 08:53:18 $
+ * $Revision: 1.4 $ $Date: 2006/12/04 15:27:34 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,13 +27,23 @@ package org.mycore.datamodel.classifications.query;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.2 $ $Date: 2006/04/03 08:53:18 $
+ * @version $Revision: 1.4 $ $Date: 2006/12/04 15:27:34 $
  */
 public class Category extends ClassificationObject {
 
     private int numberOfObjects;
 
     private String classID;
+    
+    private Link link;
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
 
     public String getClassID() {
         return classID;

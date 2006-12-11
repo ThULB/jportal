@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRXMLFunctions.java,v $
- * $Revision: 1.8 $ $Date: 2006/06/13 16:24:45 $
+ * $Revision: 1.9 $ $Date: 2006/09/28 14:22:53 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRSimpleCondition.java,v $
- * $Revision: 1.4 $ $Date: 2005/09/28 07:48:29 $
+ * $RCSfile: MCRQueryCondition.java,v $
+ * $Revision: 1.4 $ $Date: 2006/01/27 16:40:52 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

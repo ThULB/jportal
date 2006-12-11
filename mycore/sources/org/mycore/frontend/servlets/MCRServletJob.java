@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRServletJob.java,v $
+ * $Revision: 1.6 $ $Date: 2005/09/28 07:47:49 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -36,7 +36,7 @@ import org.mycore.common.MCRConfigurationException;
  * get-methods to return the objects set while constructing the job object.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 1.5 $ $Date: 2005/08/15 15:02:28 $
+ * @version $Revision: 1.6 $ $Date: 2005/09/28 07:47:49 $
  */
 public class MCRServletJob {
     /** The HttpServletRequest object */

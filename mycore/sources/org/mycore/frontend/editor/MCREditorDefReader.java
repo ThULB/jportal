@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCREditorDefReader.java,v $
- * $Revision: 1.3 $ $Date: 2005/09/28 07:45:46 $
+ * $Revision: 1.11 $ $Date: 2006/11/23 21:34:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,20 +23,110 @@
 
 package org.mycore.frontend.editor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.jdom.Comment;
+import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.Namespace;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRCache;
+import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xml.MCRXMLHelper;
 
 public class MCREditorDefReader {
+
+    private final static Logger logger = Logger.getLogger(MCREditorDefReader.class);
+
     /**
      * Reads the editor definition from the given URI
+     * 
+     * @param validate
+     *            if true, validate editor definition against schema
      */
-    static Element readDef(String uri, String ref) {
+    static Element readDef(String uri, String ref, boolean validate) {
         Element editor = new Element("editor");
+        editor.setAttribute("id", ref);
         editor.addContent(resolveInclude(uri, ref, true).getIncludedElements());
 
+        if (validate) {
+            Document doc = new Document(editor);
+            Namespace xsi = Namespace.getNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            editor.setAttribute("noNamespaceSchemaLocation", "editor.xsd", xsi);
+
+            XMLOutputter xout = new XMLOutputter();
+            xout.setFormat(Format.getPrettyFormat());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            try {
+                xout.output(doc, baos);
+                baos.close();
+            } catch (IOException ex) {
+                throw new MCRException("Exception while validating editor definition", ex);
+            }
+
+            logger.info("Validating editor definition against XML schema...");
+            try {
+                MCRXMLHelper.parseXML(baos.toByteArray(), true);
+            } catch (Exception ex) {
+                logger.error("Editor definition did not validate.");
+                return buildDummyEditorForErrorMessage(uri, ex, editor2String(doc));
+            }
+            logger.info("Editor definition successfully validated.");
+            editor.detach();
+            editor.removeAttribute("noNamespaceSchemaLocation", xsi);
+        }
+
+        return editor;
+    }
+
+    private static String editor2String(Document doc) {
+        XMLOutputter xout = new XMLOutputter();
+        xout.setFormat(Format.getPrettyFormat());
+        return xout.outputString(doc);
+    }
+
+    private static Element buildDummyEditorForErrorMessage(String uri, Exception ex, String editorDef) {
+        Element editor = new Element("editor");
+        editor.setAttribute("id", "validationError");
+        Element components = new Element("components");
+        components.setAttribute("root", "root");
+        editor.addContent(components);
+        Element headline = new Element("headline");
+        components.addContent(headline);
+        Element text = new Element("text");
+        text.setAttribute("label", "Error in editor definition: " + uri);
+        headline.addContent(text);
+        Element panel = new Element("panel");
+        panel.setAttribute("lines", "off");
+        panel.setAttribute("id", "root");
+        components.addContent(panel);
+        Element cell = new Element("cell");
+        cell.setAttribute("row", "1");
+        cell.setAttribute("col", "1");
+        panel.addContent(cell);
+        Element tf = new Element("textarea");
+        tf.setAttribute("width", "80");
+        tf.setAttribute("height", "1");
+        tf.setAttribute("wrap", "off");
+        tf.setAttribute("default", ex.getLocalizedMessage());
+        cell.addContent(tf);
+        cell = new Element("cell");
+        cell.setAttribute("row", "2");
+        cell.setAttribute("col", "1");
+        panel.addContent(cell);
+        Element ta = new Element("textarea");
+        ta.setAttribute("width", "80");
+        ta.setAttribute("height", "30");
+        ta.setAttribute("wrap", "off");
+        Element def = new Element("default");
+        def.addContent(editorDef);
+        ta.addContent(def);
+        cell.addContent(ta);
         return editor;
     }
 
@@ -105,7 +195,7 @@ public class MCREditorDefReader {
         if (cached != null) {
             MCREditorServlet.logger.debug("Editor resolved include from cache: " + key);
 
-            return new MCRResolvedInclude(cached, cacheable);
+            return new MCRResolvedInclude(cached, cacheable, uri, idref);
         }
 
         // Get the elements to include from uri
@@ -124,7 +214,7 @@ public class MCREditorDefReader {
             includesCache.put(key, container);
         }
 
-        return new MCRResolvedInclude(container, cacheable);
+        return new MCRResolvedInclude(container, cacheable, uri, idref);
     }
 
     /**
@@ -138,9 +228,11 @@ public class MCREditorDefReader {
      */
     protected static boolean resolveIncludes(Element container) {
         boolean allCacheable = true;
-        List children = container.getChildren();
+        List children = container.getContent();
 
         for (int i = 0; i < children.size(); i++) {
+            if (!(children.get(i) instanceof Element))
+                continue;
             Element child = (Element) (children.get(i));
 
             if (child.getName().equals("include")) {
@@ -173,9 +265,14 @@ class MCRResolvedInclude {
 
     private boolean cacheable;
 
-    MCRResolvedInclude(Element container, boolean cacheable) {
+    MCRResolvedInclude(Element container, boolean cacheable, String uri, String idref) {
         this.cacheable = cacheable;
         this.included = new java.util.Vector();
+
+        String src = uri;
+        if ((idref != null) && (idref.trim().length() != 0))
+            src += "#" + idref;
+        included.add(new Comment(" ========== Begin of include from " + src + " ========== "));
 
         List children = container.getChildren();
 
@@ -183,6 +280,8 @@ class MCRResolvedInclude {
             Element child = (Element) (children.get(i));
             included.add(child.clone());
         }
+
+        included.add(new Comment(" ========== End of include from " + src + " ========== "));
     }
 
     boolean isCacheable() {

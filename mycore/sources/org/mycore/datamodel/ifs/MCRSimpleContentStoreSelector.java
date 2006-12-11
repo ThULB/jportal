@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSimpleContentStoreSelector.java,v $
- * $Revision: 1.11 $ $Date: 2005/09/28 07:40:24 $
+ * $Revision: 1.12 $ $Date: 2005/10/04 11:30:43 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,7 +37,7 @@ import org.mycore.common.xml.MCRURIResolver;
  * 
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.11 $ $Date: 2005/09/28 07:40:24 $
+ * @version $Revision: 1.12 $ $Date: 2005/10/04 11:30:43 $
  */
 public class MCRSimpleContentStoreSelector implements MCRContentStoreSelector {
     /** the default content store to use if no other rule matches */

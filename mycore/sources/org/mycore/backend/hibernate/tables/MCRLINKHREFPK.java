@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRLINKHREFPK.java,v $
- * $Revision: 1.4 $ $Date: 2006/02/19 20:21:41 $
+ * $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @author Heiko Helmbrecht
  * @author Jens Kupferschmidt
- * @version $Revision: 1.16 $ $Date: 2006/02/21 07:17:26 $
+ * @version $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
  */
 public class MCRLINKHREFPK implements Serializable {
     private String mcrfrom;

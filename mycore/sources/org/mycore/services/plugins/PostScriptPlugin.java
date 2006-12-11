@@ -1,6 +1,6 @@
 /*
  * $RCSfile: PostScriptPlugin.java,v $
- * $Revision: 1.5 $ $Date: 2006/01/26 13:17:19 $
+ * $Revision: 1.6 $ $Date: 2006/02/10 23:33:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

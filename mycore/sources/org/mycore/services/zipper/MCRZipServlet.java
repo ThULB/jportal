@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRZipServlet.java,v $
- * $Revision: 1.12 $ $Date: 2006/05/04 11:51:16 $
+ * $Revision: 1.15 $ $Date: 2006/11/27 12:32:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -22,6 +22,8 @@
  */
 
 package org.mycore.services.zipper;
+
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -47,9 +49,7 @@ import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRDefaults;
 import org.mycore.common.MCRException;
-import org.mycore.common.xml.MCRLayoutServlet;
 import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -73,7 +73,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * 
  * @author Heiko Helmbrecht
  * 
- * @version $Revision: 1.12 $ $Date: 2006/05/04 11:51:16 $
+ * @version $Revision: 1.15 $ $Date: 2006/11/27 12:32:06 $
  */
 public class MCRZipServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
@@ -98,7 +98,7 @@ public class MCRZipServlet extends MCRServlet {
     /**
      * Handles the HTTP request
      */
-    public void doGetPost(MCRServletJob job) throws IOException, ServletException {
+    public void doGetPost(MCRServletJob job) throws IOException {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
 
@@ -294,7 +294,7 @@ public class MCRZipServlet extends MCRServlet {
      */
     protected void sendObject(Document jdom, HttpServletRequest req, ZipOutputStream out) throws IOException {
         // zip the object's Metadata
-        Properties parameters = MCRLayoutServlet.buildXSLParameters(req);
+        Properties parameters = getLayoutService().buildXSLParameters(req);
         sendZipped(jdom, parameters, out);
 
         // zip all derivates
@@ -305,7 +305,7 @@ public class MCRZipServlet extends MCRServlet {
             LOGGER.debug(el.getName());
 
             if (el.getAttributeValue("inherited").equals("0")) {
-                String ownerID = el.getAttributeValue("href", org.jdom.Namespace.getNamespace("xlink", MCRDefaults.XLINK_URL));
+                String ownerID = el.getAttributeValue("href", XLINK_NAMESPACE);
                 // here the access check is tested only against the derivate
                 if(AI.checkPermission(ownerID,"read")) {
                 	String dir = null;

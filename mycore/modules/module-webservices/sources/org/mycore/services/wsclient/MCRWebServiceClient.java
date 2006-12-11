@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRWebServiceClient.java,v $
- * $Revision: 1.5 $ $Date: 2006/04/11 13:00:18 $
+ * $Revision: 1.6 $ $Date: 2006/09/20 11:31:24 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import org.apache.axis.description.ParameterDesc;
  * Test client for MyCoRe MCRWebService
  * 
  * @author Harald Richter
- * @version $Revision: 1.5 $ $Date: 2006/04/11 13:00:18 $
+ * @version $Revision: 1.6 $ $Date: 2006/09/20 11:31:24 $
  **/
 public class MCRWebServiceClient
 {

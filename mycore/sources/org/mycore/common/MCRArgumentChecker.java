@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MCRArgumentChecker.java,v $
+ * $Revision: 1.8 $ $Date: 2006/11/21 12:22:00 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,6 +37,8 @@ package org.mycore.common;
  *     System.out.println(&quot;Hello &quot; + name);
  * }
  * </pre>
+ * 
+ * @deprecated
  */
 public abstract class MCRArgumentChecker {
     /**

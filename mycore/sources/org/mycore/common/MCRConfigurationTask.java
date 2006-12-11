@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRConfigurationTask.java,v $
- * $Revision: 1.1 $ $Date: 2006/05/30 12:17:21 $
+ * $Revision: 1.2 $ $Date: 2006/05/30 15:15:09 $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

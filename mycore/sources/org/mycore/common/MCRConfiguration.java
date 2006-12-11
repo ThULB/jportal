@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.32 $ $Date: 2006/05/15 15:38:59 $
+ * $Revision: 1.33 $ $Date: 2006/08/01 09:41:21 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -104,7 +104,7 @@ import org.mycore.services.plugins.FilterPluginInstantiationException;
  * @see #store
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.32 $ $Date: 2006/05/15 15:38:59 $
+ * @version $Revision: 1.33 $ $Date: 2006/08/01 09:41:21 $
  */
 public class MCRConfiguration {
     /**

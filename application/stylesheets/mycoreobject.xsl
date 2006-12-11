@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.16 $ $Date: 2006/11/09 15:49:32 $ -->
+<!-- $Revision: 1.18 $ $Date: 2006/11/14 10:49:45 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -50,24 +50,10 @@
       </div>
     </xsl:if>
     <xsl:call-template name="resultsub" />
-    <!-- Check the access right -->
-    <xsl:variable name="accessurl"
-      select="concat($ServletsBaseURL,'MCRAccessCheckServlet',$JSessionID,'?XSL.Style=xml&amp;permission=read&amp;objid=',./mcr_result/mycoreobject/@ID)" />
-    <xsl:variable name="accessedit"
-      select="concat($ServletsBaseURL,'MCRAccessCheckServlet',$JSessionID,'?XSL.Style=xml&amp;permission=writedb&amp;objid=',./mcr_result/mycoreobject/@ID)" />
-    <xsl:variable name="accessdelete"
-      select="concat($ServletsBaseURL,'MCRAccessCheckServlet',$JSessionID,'?XSL.Style=xml&amp;permission=deletedb&amp;objid=',./mcr_result/mycoreobject/@ID)" />
     <xsl:choose>
-      <!--
-        <xsl:when test="document($accessurl)/mycoreaccesscheck/accesscheck/@return = 'true'">
-      -->
       <xsl:when test="($obj_host != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
         <!-- if access granted: print metadata -->
-        <xsl:apply-templates select="." mode="present">
-          <xsl:with-param name="obj_host" select="$obj_host" />
-          <xsl:with-param name="accessedit" select="$accessedit" />
-          <xsl:with-param name="accessdelete" select="$accessdelete" />
-        </xsl:apply-templates>
+        <xsl:apply-templates select="." mode="present" />
         <!-- IE Fix for padding and border -->
         <hr />
       </xsl:when>

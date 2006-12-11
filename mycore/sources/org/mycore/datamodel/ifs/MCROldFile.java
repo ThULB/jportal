@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCROldFile.java,v $
- * $Revision: 1.13 $ $Date: 2005/10/26 13:44:18 $
+ * $Revision: 1.15 $ $Date: 2006/11/21 12:21:59 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,8 @@ import org.mycore.common.MCRPersistenceException;
  * ONLY!
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.13 $ $Date: 2005/10/26 13:44:18 $
+ * @version $Revision: 1.15 $ $Date: 2006/11/21 12:21:59 $
+ * @deprecated use MCRFile
  */
 public class MCROldFile implements MCRFileReader {
     /** The ID of the store that holds this file's content */

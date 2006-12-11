@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRMetaElement.java,v $
- * $Revision: 1.30 $ $Date: 2005/12/07 14:10:25 $
+ * $Revision: 1.33 $ $Date: 2006/11/28 11:48:58 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRUtils;
 
@@ -41,19 +43,17 @@ import org.mycore.common.MCRUtils;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 1.30 $ $Date: 2005/12/07 14:10:25 $
+ * @version $Revision: 1.33 $ $Date: 2006/11/28 11:48:58 $
  */
 public class MCRMetaElement {
     // common data
-    public static String DEFAULT_LANGUAGE = "de";
+    public final static String DEFAULT_LANGUAGE = "de";
 
-    public static boolean DEFAULT_PARAMETRIC_SEARCH = true;
+    public final static boolean DEFAULT_HERITABLE = false;
 
-    public static boolean DEFAULT_TEXT_SEARCH = false;
-
-    public static boolean DEFAULT_HERITABLE = false;
-
-    public static boolean DEFAULT_NOT_INHERIT = false;
+    public final static boolean DEFAULT_NOT_INHERIT = false;
+    
+    protected final static MCRConfiguration CONFIG = MCRConfiguration.instance();
 
     private String META_PACKAGE_NAME = "org.mycore.datamodel.metadata.";
 
@@ -71,10 +71,6 @@ public class MCRMetaElement {
 
     private boolean notinherit;
 
-    private boolean parasearch;
-
-    private boolean textsearch;
-
     private ArrayList list = null;
 
     /**
@@ -82,14 +78,12 @@ public class MCRMetaElement {
      * for the element was set to <b>en </b>.
      */
     public MCRMetaElement() {
-        lang = DEFAULT_LANGUAGE;
-        classname = "";
-        tag = "";
-        parasearch = DEFAULT_PARAMETRIC_SEARCH;
-        textsearch = DEFAULT_TEXT_SEARCH;
-        heritable = DEFAULT_HERITABLE;
-        notinherit = DEFAULT_NOT_INHERIT;
-        list = new ArrayList();
+        this(DEFAULT_LANGUAGE,
+                CONFIG.getString("MCR.MetaElement.defaults.class",""),
+                "",
+                CONFIG.getBoolean("MCR.MetaElement.defaults.heritable",DEFAULT_HERITABLE),
+                CONFIG.getBoolean("MCR.MetaElement.defaults.notinherit",DEFAULT_NOT_INHERIT),
+                new ArrayList());
     }
 
     /**
@@ -101,19 +95,12 @@ public class MCRMetaElement {
      *            the default language
      */
     public MCRMetaElement(String default_lang) {
-        if ((default_lang == null) || ((default_lang = default_lang.trim()).length() == 0)) {
-            lang = DEFAULT_LANGUAGE;
-        } else {
-            lang = default_lang;
-        }
-
-        classname = "";
-        tag = "";
-        parasearch = DEFAULT_PARAMETRIC_SEARCH;
-        textsearch = DEFAULT_TEXT_SEARCH;
-        heritable = DEFAULT_HERITABLE;
-        notinherit = DEFAULT_NOT_INHERIT;
-        list = new ArrayList();
+        this(default_lang,
+                CONFIG.getString("MCR.MetaElement.defaults.class",""),
+                "",
+                CONFIG.getBoolean("MCR.MetaElement.defaults.heritable",DEFAULT_HERITABLE),
+                CONFIG.getBoolean("MCR.MetaElement.defaults.notinherit",DEFAULT_NOT_INHERIT),
+                new ArrayList());
     }
 
     /**
@@ -125,13 +112,7 @@ public class MCRMetaElement {
      *            the name of the MCRMeta... class
      * @param set_tag
      *            the name of this tag
-     * @param set_parasearch
-     *            set this flag to true if you want to have this element in a
-     *            parametric search
-     * @param set_textsearch
-     *            set this flag to true if you want to have this element in a
-     *            text search
-     * @param set_hreitable
+     * @param set_heritable
      *            set this flag to true if all child objects of this element can
      *            inherit this data
      * @param set_notinherit
@@ -140,7 +121,7 @@ public class MCRMetaElement {
      * @param set_list
      *            a list of MCRMeta... data lines to add in this element
      */
-    public MCRMetaElement(String set_lang, String set_classname, String set_tag, boolean set_parasearch, boolean set_textsearch, boolean set_hreitable, boolean set_notinherit, ArrayList set_list) {
+    public MCRMetaElement(String set_lang, String set_classname, String set_tag, boolean set_heritable, boolean set_notinherit, ArrayList set_list) {
         if ((set_lang != null) && ((set_lang = set_lang.trim()).length() != 0)) {
             lang = set_lang;
         }
@@ -149,9 +130,7 @@ public class MCRMetaElement {
         setClassName(set_classname);
         tag = "";
         setTag(set_tag);
-        parasearch = set_parasearch;
-        textsearch = set_textsearch;
-        heritable = set_hreitable;
+        heritable = set_heritable;
         notinherit = set_notinherit;
         list = new ArrayList();
 
@@ -183,26 +162,6 @@ public class MCRMetaElement {
         }
 
         return (MCRMetaInterface) list.get(index);
-    }
-
-    /**
-     * This methode return the parametric search flag of this metadata as
-     * boolean value.
-     * 
-     * @return the parametric search flag of this metadata class
-     */
-    public final boolean getParametricSearch() {
-        return parasearch;
-    }
-
-    /**
-     * This methode return the text search flag of this metadata as boolean
-     * value.
-     * 
-     * @return the text search flag of this metadata class
-     */
-    public final boolean getTextSearch() {
-        return textsearch;
     }
 
     /**
@@ -240,78 +199,6 @@ public class MCRMetaElement {
      */
     public final String getTag() {
         return tag;
-    }
-
-    /**
-     * This methode set the parametric search flag for the metadata class.
-     * 
-     * @param parasearch
-     *            the parametric search flag as string
-     */
-    public void setParametricSearch(String parasearch) {
-        this.parasearch = DEFAULT_PARAMETRIC_SEARCH;
-
-        if ((parasearch == null) || ((parasearch = parasearch.trim()).length() == 0)) {
-            return;
-        }
-
-        if (parasearch.toLowerCase().equals("true")) {
-            this.parasearch = true;
-
-            return;
-        }
-
-        if (parasearch.toLowerCase().equals("false")) {
-            this.parasearch = false;
-
-            return;
-        }
-    }
-
-    /**
-     * This methode set the parametric search flag for the metadata class.
-     * 
-     * @param parasearch
-     *            the parametric search flag as boolean value
-     */
-    public void setParametricSearch(boolean parasearch) {
-        this.parasearch = parasearch;
-    }
-
-    /**
-     * This methode set the text search flag for the metadata class.
-     * 
-     * @param textsearch
-     *            the text search flag as string
-     */
-    public void setTextSearch(String textsearch) {
-        this.textsearch = DEFAULT_TEXT_SEARCH;
-
-        if ((textsearch == null) || ((textsearch = textsearch.trim()).length() == 0)) {
-            return;
-        }
-
-        if (textsearch.toLowerCase().equals("true")) {
-            this.textsearch = true;
-
-            return;
-        }
-
-        if (textsearch.toLowerCase().equals("false")) {
-            this.textsearch = false;
-
-            return;
-        }
-    }
-
-    /**
-     * This methode set the text search flag for the metadata class.
-     * 
-     * @param textsearch
-     *            the text search flag as boolean value
-     */
-    public void setTextSearch(boolean textsearch) {
-        this.textsearch = textsearch;
     }
 
     /**
@@ -465,8 +352,6 @@ public class MCRMetaElement {
         String fullname = META_PACKAGE_NAME + classname;
         setHeritable(element.getAttributeValue("heritable"));
         setNotInherit(element.getAttributeValue("notinherit"));
-        setParametricSearch(element.getAttributeValue("parasearch"));
-        setTextSearch(element.getAttributeValue("textsearch"));
 
         List element_list = element.getChildren();
         int len = element_list.size();
@@ -525,8 +410,6 @@ public class MCRMetaElement {
         elm.setAttribute("class", classname);
         elm.setAttribute("heritable", new Boolean(heritable).toString());
         elm.setAttribute("notinherit", new Boolean(notinherit).toString());
-        elm.setAttribute("parasearch", new Boolean(parasearch).toString());
-        elm.setAttribute("textsearch", new Boolean(textsearch).toString());
 
         for (int i = 0; i < list.size(); i++) {
             if (!flag) {
@@ -539,49 +422,6 @@ public class MCRMetaElement {
         }
 
         return elm;
-    }
-
-    /**
-     * This methode create a String for all text searchable data in this
-     * instance.
-     * 
-     * @param flag
-     *            true if all inherited data should be include, els false
-     * @exception MCRException
-     *                if the content of this class is not valid
-     * @return a String with the searchable text
-     */
-    public final String createTextSearch(boolean flag) throws MCRException {
-        if (!textsearch) {
-            return "";
-        }
-
-        StringBuffer sb = new StringBuffer(1024);
-        int j = 0;
-
-        for (int i = 0; i < list.size(); i++) {
-            if (((MCRMetaInterface) list.get(i)).getInherited() > 0) {
-                ;
-            }
-
-            j++;
-        }
-
-        if ((j == 0) && (!flag)) {
-            return sb.toString();
-        }
-
-        for (int i = 0; i < list.size(); i++) {
-            if (!flag) {
-                if (((MCRMetaInterface) list.get(i)).getInherited() > 0) {
-                    continue;
-                }
-            }
-
-            sb.append(((MCRMetaInterface) list.get(i)).createTextSearch(textsearch)).append(' ');
-        }
-
-        return sb.toString();
     }
 
     /**
@@ -624,8 +464,6 @@ public class MCRMetaElement {
         MCRMetaElement out = new MCRMetaElement(lang);
         out.setClassName(classname);
         out.setTag(tag);
-        out.setParametricSearch(parasearch);
-        out.setTextSearch(textsearch);
         out.setHeritable(heritable);
         out.setNotInherit(notinherit);
 
@@ -646,8 +484,6 @@ public class MCRMetaElement {
         logger.debug("Language           = " + lang);
         logger.debug("Heritable          = " + String.valueOf(heritable));
         logger.debug("NotInherit         = " + String.valueOf(notinherit));
-        logger.debug("ParametricSearch   = " + String.valueOf(parasearch));
-        logger.debug("TextSearch         = " + String.valueOf(textsearch));
         logger.debug("Elements           = " + String.valueOf(list.size()));
     }
 }

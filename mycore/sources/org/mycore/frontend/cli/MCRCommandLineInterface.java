@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCommandLineInterface.java,v $
- * $Revision: 1.66 $ $Date: 2006/02/14 20:10:11 $
+ * $Revision: 1.67 $ $Date: 2006/05/16 13:19:52 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -60,7 +60,7 @@ import org.mycore.datamodel.metadata.MCRActiveLinkException;
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.66 $ $Date: 2006/02/14 20:10:11 $
+ * @version $Revision: 1.67 $ $Date: 2006/05/16 13:19:52 $
  */
 public class MCRCommandLineInterface {
 	/** The Logger */

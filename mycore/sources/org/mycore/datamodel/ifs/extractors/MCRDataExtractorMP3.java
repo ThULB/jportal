@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRDataExtractorMP3.java,v $
- * $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
+ * $Revision: 1.4 $ $Date: 2006/11/24 12:19:16 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.MCRUtils;
  * http://sourceforge.net/projects/javamusictag/ for details.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.2 $ $Date: 2006/09/15 11:34:05 $
+ * @version $Revision: 1.4 $ $Date: 2006/11/24 12:19:16 $
  */
 public class MCRDataExtractorMP3 extends MCRDataExtractor {
 
@@ -141,8 +141,8 @@ public class MCRDataExtractorMP3 extends MCRDataExtractor {
             String key = (String) (keys.nextElement());
             String method = p.getProperty(key);
             try {
-                Method m = tag.getClass().getMethod(method, null);
-                String value = (String) (m.invoke(tag, null));
+                Method m = tag.getClass().getMethod(method, new Class[]{});
+                String value = (String) (m.invoke(tag, new Object[]{}));
                 addDataValue(parent, key, value);
             } catch (Exception ex) {
                 continue;

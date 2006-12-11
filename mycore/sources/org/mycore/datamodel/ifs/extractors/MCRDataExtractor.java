@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRDataExtractor.java,v $
- * $Revision: 1.3 $ $Date: 2006/09/15 11:37:50 $
+ * $Revision: 1.4 $ $Date: 2006/09/21 11:51:18 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.datamodel.ifs.MCRFile;
  * @see org.mycore.datamodel.ifs.MCRFilesystemNode#getAdditionalData()
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.3 $ $Date: 2006/09/15 11:37:50 $
+ * @version $Revision: 1.4 $ $Date: 2006/09/21 11:51:18 $
  */
 public abstract class MCRDataExtractor extends MCREventHandlerBase {
 

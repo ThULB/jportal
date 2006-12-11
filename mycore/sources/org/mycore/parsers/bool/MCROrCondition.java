@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCROrCondition.java,v $
- * $Revision: 1.5 $ $Date: 2006/03/24 14:17:32 $
+ * $Revision: 1.6 $ $Date: 2006/05/09 09:54:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

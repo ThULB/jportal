@@ -1,6 +1,6 @@
 /*
  * $RCSfile: Label.java,v $
- * $Revision: 1.1 $ $Date: 2006/03/31 15:33:21 $
+ * $Revision: 1.2 $ $Date: 2006/04/03 08:53:19 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,7 +27,7 @@ package org.mycore.datamodel.classifications.query;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.1 $ $Date: 2006/03/31 15:33:21 $
+ * @version $Revision: 1.2 $ $Date: 2006/04/03 08:53:19 $
  */
 public class Label {
 

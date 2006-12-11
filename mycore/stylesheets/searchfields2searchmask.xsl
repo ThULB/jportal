@@ -131,7 +131,7 @@
     <target type="servlet" name="MCRSearchServlet" method="post" format="xml" />
 
     <components root="root" var="/query">
-      <headline anchor="LEFT">
+      <headline anchor="WEST">
         <text i18n="{$headline.i18n}"/>
       </headline>
 
@@ -139,9 +139,7 @@
       
         <hidden var="@mask" default="{$filename.webpage}" />
         <hidden var="conditions/@format" default="xml" />
-        <xsl:if test="$layout = 'simple'">
-          <hidden var="conditions/boolean/@operator" default="and" />
-        </xsl:if>
+        <hidden var="conditions/boolean/@operator" default="and" />
 
         <xsl:if test="$layout = 'simple'">
           <xsl:call-template name="build.from.list">
@@ -246,45 +244,47 @@
     </xsl:variable>
     
     <xsl:if test="starts-with($type,'@')">
-      <hidden var="conditions/boolean/condition{$pos}/@operator" default="=" /> 
+      <hidden var="conditions/boolean/boolean/condition{$pos}/@operator" default="=" /> 
     </xsl:if>
     <xsl:if test="not(contains(normalize-space($fields.for.type),' '))">
-      <hidden var="conditions/boolean/condition{$pos}/@field" default="{normalize-space($fields.for.type)}" /> 
+      <hidden var="conditions/boolean/boolean/condition{$pos}/@field" default="{normalize-space($fields.for.type)}" /> 
     </xsl:if>
-    <cell row="{$pos}" col="1" anchor="EAST" var="conditions/boolean/condition{$pos}/@field">
-      <xsl:choose>
-        <xsl:when test="contains(normalize-space($fields.for.type),' ')">
-          <list type="dropdown">
-            <xsl:call-template name="build.field.items">
-              <xsl:with-param name="list" select="$fields.for.type" />
-            </xsl:call-template>        
-          </list>
-        </xsl:when>
-        <xsl:otherwise>
-          <text i18n="{mcr:index/mcr:field[@name=normalize-space($fields.for.type)]/@i18n}" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </cell>    
-    <cell row="{$pos}" col="2" anchor="WEST">
-      <xsl:choose>
-        <xsl:when test="starts-with($type,'@')">
-          <xsl:attribute name="var">
-            <xsl:text>conditions/boolean/condition</xsl:text>
-            <xsl:value-of select="$pos" />
-            <xsl:text>/@value</xsl:text>
-          </xsl:attribute>
-          <list type="dropdown">
-            <item value="" i18n="editor.search.choose" />
-            <include uri="classification:editor[textcounter]:2:children:{substring-after($type,'@')}" />
-          </list>
-        </xsl:when>
-        <xsl:otherwise>
-          <panel lines="off">
-            <cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition{$pos}/@operator" ref="operators.{$type}" />
-            <cell row="1" col="2" anchor="WEST" var="conditions/boolean/condition{$pos}/@value" ref="input.{$type}" />
-          </panel>
-        </xsl:otherwise>
-      </xsl:choose>
+    
+    <cell row="{$pos}" col="1" colspan="2" anchor="NORTHWEST" var="conditions/boolean/boolean/condition{$pos}">
+      <repeater min="1" max="10">
+        <panel lines="off">
+        
+          <cell row="1" col="1" anchor="EAST" width="200px" var="@field">
+            <xsl:choose>
+              <xsl:when test="contains(normalize-space($fields.for.type),' ')">
+                <list type="dropdown">
+                  <xsl:call-template name="build.field.items">
+                    <xsl:with-param name="list" select="$fields.for.type" />
+                  </xsl:call-template>        
+                </list>
+              </xsl:when>
+              <xsl:otherwise>
+                <text i18n="{mcr:index/mcr:field[@name=normalize-space($fields.for.type)]/@i18n}" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </cell>    
+          <xsl:choose>
+            <xsl:when test="starts-with($type,'@')">
+              <cell row="1" col="2" anchor="WEST" var="@value"> 
+                <list type="dropdown">
+                  <item value="" i18n="editor.search.choose" />
+                  <include uri="classification:editor[textcounter]:2:children:{substring-after($type,'@')}" />
+                </list>
+              </cell>
+            </xsl:when>
+            <xsl:otherwise>
+              <cell row="1" col="2" anchor="WEST" var="@operator" ref="operators.{$type}" />
+              <cell row="1" col="3" anchor="WEST" var="@value" ref="input.{$type}" />
+            </xsl:otherwise>
+          </xsl:choose>
+    
+        </panel>
+      </repeater>
     </cell>    
     
     <xsl:call-template name="build.type.selectors">
@@ -431,7 +431,7 @@
   <cell row="93" col="1" anchor="EAST">
     <text i18n="editor.search.connect" />
   </cell>
-  <cell row="93" col="2" anchor="WEST" var="conditions/boolean/@operator">
+  <cell row="93" col="2" anchor="WEST" var="conditions/boolean/boolean/@operator">
     <list type="dropdown" default="and">
       <item value="and" i18n="editor.search.and" />
       <item value="or" i18n="editor.search.or" />

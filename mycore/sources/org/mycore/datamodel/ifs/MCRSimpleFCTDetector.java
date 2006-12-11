@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSimpleFCTDetector.java,v $
- * $Revision: 1.13 $ $Date: 2005/12/01 11:19:58 $
+ * $Revision: 1.14 $ $Date: 2006/02/10 23:33:46 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -55,7 +55,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @see MCRFileContentTypeFactory
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.13 $ $Date: 2005/12/01 11:19:58 $
+ * @version $Revision: 1.14 $ $Date: 2006/02/10 23:33:46 $
  */
 public class MCRSimpleFCTDetector implements MCRFileContentTypeDetector {
     /** List of file content types we have rules for */

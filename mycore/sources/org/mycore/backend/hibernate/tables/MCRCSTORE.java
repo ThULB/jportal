@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRCSTORE.java,v $
- * $Revision: 1.4 $ $Date: 2005/10/12 17:04:23 $
+ * $Revision: 1.5 $ $Date: 2006/07/04 12:45:31 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

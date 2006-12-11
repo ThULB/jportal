@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRURIResolver.java,v $
- * $Revision: 1.45 $ $Date: 2006/10/13 07:19:57 $
+ * $Revision: 1.51 $ $Date: 2006/12/08 21:18:06 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,10 +54,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.DOMBuilder;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMSource;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRCache;
@@ -74,8 +72,12 @@ import org.mycore.datamodel.ifs.MCRDirectoryXML;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
 import org.mycore.frontend.servlets.MCRServlet;
+import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryClient;
-import org.mycore.services.query.MCRQueryCache;
+import org.mycore.services.fieldquery.MCRQueryManager;
+import org.mycore.services.fieldquery.MCRResults;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 /**
  * Reads XML documents from various URI types. This resolver is used to read
@@ -90,10 +92,10 @@ import org.mycore.services.query.MCRQueryCache;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  */
-public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityResolver {
+public final class MCRURIResolver implements javax.xml.transform.URIResolver, EntityResolver {
     private static final Logger LOGGER = Logger.getLogger(MCRURIResolver.class);
     
-    private static Map SUPPORTED_SCHEMES;
+    private static Map<String, MCRResolver> SUPPORTED_SCHEMES;
 
     private static final String CONFIG_PREFIX = "MCR.UriResolver.";
 
@@ -139,15 +141,14 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
         }
     }
 
-    private HashMap getResolverMapping() {
-        final Map extResolverMapping = EXT_RESOLVER.getResolverMapping();
+    private HashMap<String, MCRResolver> getResolverMapping() {
+        final Map<String, MCRResolver> extResolverMapping = EXT_RESOLVER.getResolverMapping();
         // set Map to final size with loadfactor: full
-        HashMap supportedSchemes = new HashMap(10 + extResolverMapping.size(), 1);
+        HashMap<String, MCRResolver> supportedSchemes = new HashMap<String, MCRResolver>(10 + extResolverMapping.size(), 1);
         // don't let interal mapping be overwritten
         supportedSchemes.putAll(extResolverMapping);
         supportedSchemes.put("webapp", new MCRWebAppResolver());
         supportedSchemes.put("file", new MCRFileResolver());
-        supportedSchemes.put("query", new MCRQueryResolver());
         supportedSchemes.put("ifs", new MCRIFSResolver());
         supportedSchemes.put("mcrobject", new MCRObjectResolver());
         supportedSchemes.put("mcrws", new MCRWSResolver());
@@ -158,6 +159,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
         supportedSchemes.put("resource", new MCRResourceResolver());
         supportedSchemes.put("localclass", new MCRLocalClassResolver());
         supportedSchemes.put("classification", new MCRClassificationResolver());
+        supportedSchemes.put("query", new MCRQueryResolver());
         return supportedSchemes;
     }
 
@@ -214,6 +216,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
         return null;
     }
     
+    @SuppressWarnings("unchecked")
     private void addDebugInfo(String href, String base){
         final MCRSession session=MCRSessionMgr.getCurrentSession();
         Object obj=session.get(SESSION_OBJECT_NAME);
@@ -232,7 +235,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
      * 
      * @see org.xml.sax.EntityResolver
      */
-    public InputSource resolveEntity(String publicId, String systemId) throws org.xml.sax.SAXException, java.io.IOException {
+    public InputSource resolveEntity(String publicId, String systemId) throws java.io.IOException {
         LOGGER.debug("Resolving " + publicId + " :: " + systemId);
 
         if (systemId == null) {
@@ -329,7 +332,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
 
     MCRResolver getResolver(String scheme) {
         if (SUPPORTED_SCHEMES.containsKey(scheme)) {
-            return (MCRResolver) SUPPORTED_SCHEMES.get(scheme);
+            return SUPPORTED_SCHEMES.get(scheme);
         }
         String msg = "Unsupported scheme type: " + scheme;
         throw new MCRUsageException(msg);
@@ -357,7 +360,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
      * 
      * @author Thomas Scheffler (yagee)
      * 
-     * @version $Revision: 1.45 $ $Date: 2006/10/13 07:19:57 $
+     * @version $Revision: 1.51 $ $Date: 2006/12/08 21:18:06 $
      */
     public static interface MCRResolver {
         /**
@@ -379,7 +382,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
      * 
      * @author Thomas Scheffler
      *
-     * @version $Revision: 1.45 $ $Date: 2006/10/13 07:19:57 $
+     * @version $Revision: 1.51 $ $Date: 2006/12/08 21:18:06 $
      */
     public static interface MCRResolverProvider {
         /**
@@ -389,12 +392,13 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
          * @see MCRResolver
          * @return a Map of Resolver mappings
          */
-        public Map getResolverMapping();
+        public Map<String, MCRResolver> getResolverMapping();
     }
     
     private static class MCREmptyResolverProvider implements MCRResolverProvider{
         
-        public Map getResolverMapping() {
+        @SuppressWarnings("unchecked")
+        public Map<String, MCRResolver> getResolverMapping() {
             return Collections.EMPTY_MAP;
         }
         
@@ -449,7 +453,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
 
             String[] param;
             StringTokenizer tok = new StringTokenizer(key, "&");
-            HashMap params = new HashMap();
+            HashMap<String, String> params = new HashMap<String, String>();
             while (tok.hasMoreTokens()) {
                 param = tok.nextToken().split("=");
                 params.put(param[0], param[1]);
@@ -459,16 +463,16 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
                 return null;
             }
             if (params.get(OPERATION_KEY).equals("MCRDoRetrieveObject")) {
-                org.w3c.dom.Document document = MCRQueryClient.doRetrieveObject(params.get(HOST_KEY).toString(), params.get(OBJECT_KEY).toString());
+                org.w3c.dom.Document document = MCRQueryClient.doRetrieveObject(params.get(HOST_KEY), params.get(OBJECT_KEY));
                 return DOM_BUILDER.build(document).detachRootElement();
             }
             if (params.get(OPERATION_KEY).equals("MCRDoRetrieveClassification")) {
-                String hostAlias=params.get(HOST_KEY).toString();
-                String level=params.get(LEVEL_KEY).toString();
-                String type=params.get(TYPE_KEY).toString();
-                String classId=params.get(CLASS_KEY).toString();
-                String categId=params.get(CATEG_KEY).toString();
-                String format=params.get(FORMAT_KEY).toString();
+                String hostAlias=params.get(HOST_KEY);
+                String level=params.get(LEVEL_KEY);
+                String type=params.get(TYPE_KEY);
+                String classId=params.get(CLASS_KEY);
+                String categId=params.get(CATEG_KEY);
+                String format=params.get(FORMAT_KEY);
                 org.w3c.dom.Document document = MCRQueryClient.doRetrieveClassification(hostAlias, level, type, classId, categId, format);
                 return DOM_BUILDER.build(document).detachRootElement();
             }
@@ -726,77 +730,6 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
 
     }
 
-    private static class MCRQueryResolver implements MCRResolver {
-
-        private static final String HOST_PARAM = "host";
-
-        private static final String TYPE_PARAM = "type";
-
-        private static final String QUERY_PARAM = "query";
-
-        private static final String HOST_DEFAULT = "local";
-
-        private static final String URL_ENCODING = MCRConfiguration.instance().getString("MCR.request_charencoding", "UTF-8");
-
-        /**
-         * Returns query results as XML
-         */
-        public Element resolveElement(String uri) {
-            String key = uri.substring(uri.indexOf(":") + 1);
-            LOGGER.debug("Reading xml from query result using key :" + key);
-
-            String[] param;
-            String host;
-            String type;
-            String query;
-            StringTokenizer tok = new StringTokenizer(key, "&");
-            Hashtable params = new Hashtable();
-
-            while (tok.hasMoreTokens()) {
-                param = tok.nextToken().split("=");
-                params.put(param[0], param[1]);
-            }
-
-            if (params.get(HOST_PARAM) == null) {
-                host = HOST_DEFAULT;
-            } else {
-                host = (String) params.get(HOST_PARAM);
-            }
-
-            type = (String) params.get(TYPE_PARAM);
-            query = (String) params.get(QUERY_PARAM);
-
-            if (type == null) {
-                return null;
-            }
-
-            StringTokenizer hosts = new StringTokenizer(host, ",");
-            MCRXMLContainer results = new MCRXMLContainer();
-
-            while (hosts.hasMoreTokens()) {
-                try {
-                    results.importElements(query(hosts.nextToken(), type, query));
-                } catch (NumberFormatException e) {
-                    LOGGER.error("Error while processing query: " + key, e);
-                } catch (UnsupportedEncodingException e) {
-                    LOGGER.error("Error while processing query: " + key, e);
-                }
-            }
-
-            return results.exportAllToDocument().getRootElement();
-        }
-
-        private MCRXMLContainer query(String host, String type, String query) throws NumberFormatException, UnsupportedEncodingException {
-            if (query == null) {
-                query = "";
-            }
-
-            return MCRQueryCache.getResultList(URLDecoder.decode(host, URL_ENCODING), URLDecoder.decode(query, URL_ENCODING), URLDecoder.decode(type,
-                    URL_ENCODING), MCRConfiguration.instance().getInt("MCR.query_max_results", 10));
-        }
-
-    }
-
     private static class MCRACLResolver implements MCRResolver {
 
         private static final String ACTION_PARAM = "action";
@@ -812,15 +745,15 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
 
             String[] param;
             StringTokenizer tok = new StringTokenizer(key, "&");
-            Hashtable params = new Hashtable();
+            Hashtable<String, String> params = new Hashtable<String, String>();
 
             while (tok.hasMoreTokens()) {
                 param = tok.nextToken().split("=");
                 params.put(param[0], param[1]);
             }
 
-            String action = (String) params.get(ACTION_PARAM);
-            String objId = (String) params.get(OBJECT_ID_PARAM);
+            String action = params.get(ACTION_PARAM);
+            String objId = params.get(OBJECT_ID_PARAM);
 
             if (action == null || objId == null) {
                 return null;
@@ -863,6 +796,7 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
         private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
 
         private static final String FORMAT_CONFIG_PREFIX = CONFIG_PREFIX+"classification.format.";
+        private static final String SORT_CONFIG_PREFIX = CONFIG_PREFIX+"classification.sort.";
         
         private static MCRCache CLASS_CACHE;
         
@@ -960,10 +894,11 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
             Element returns;
             LOGGER.debug("start transformation of ClassificationQuery");
             if (format.startsWith("editor")) {
+                boolean sort=shouldSortCategories(classID);
                 if (labelFormat == null) {
-                    returns = ClassificationTransformer.getEditorDocument(cl).getRootElement();
+                    returns = ClassificationTransformer.getEditorDocument(cl, sort).getRootElement();
                 } else {
-                    returns = ClassificationTransformer.getEditorDocument(cl, labelFormat).getRootElement();
+                    returns = ClassificationTransformer.getEditorDocument(cl, labelFormat, sort).getRootElement();
                 }
             } else if (format.equals("metadata")) {
                 returns = ClassificationTransformer.getMetaDataDocument(cl).getRootElement();
@@ -982,6 +917,88 @@ public class MCRURIResolver implements javax.xml.transform.URIResolver, EntityRe
                 return CONFIG.getString(FORMAT_CONFIG_PREFIX + formatDef);
             }
             return null;
+        }
+        
+        private static boolean shouldSortCategories(String classId){
+            return CONFIG.getBoolean(SORT_CONFIG_PREFIX+classId,true);
+        }
+
+    }
+
+    private static class MCRQueryResolver implements MCRResolver {
+
+        private static final String QUERY_PARAM = "term";
+
+        private static final String SORT_PARAM = "sortby";
+
+        private static final String ORDER_PARAM = "order";
+
+        /**
+         * Returns query results for query in "term" parameter
+         */
+        public Element resolveElement(String uri) {
+            String key = uri.substring(uri.indexOf(":") + 1);
+            LOGGER.debug("Reading xml from query result using key :" + key);
+
+            Hashtable<String, String> params = getParameterMap(key);
+
+            String query;
+            try {
+                query = URLDecoder.decode(params.get(QUERY_PARAM), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                return null;
+            }
+            String sortby = params.get(SORT_PARAM);
+            String order = params.get(ORDER_PARAM);
+
+            if (query == null) {
+                return null;
+            }
+            Document input = getQueryDocument(query, sortby, order);
+            // Execute query
+            long start = System.currentTimeMillis();
+            MCRResults result = MCRQueryManager.search(MCRQuery.parseXML(input));
+            long qtime = System.currentTimeMillis() - start;
+            LOGGER.debug("MCRSearchServlet total query time: " + qtime);
+            return result.buildXML();
+        }
+
+        private static Hashtable<String, String> getParameterMap(String key) {
+            String[] param;
+            StringTokenizer tok = new StringTokenizer(key, "&");
+            Hashtable<String, String> params = new Hashtable<String, String>();
+
+            while (tok.hasMoreTokens()) {
+                param = tok.nextToken().split("=");
+                params.put(param[0], param[1]);
+            }
+            return params;
+        }
+
+        private static Document getQueryDocument(String query, String sortby, String order) {
+            Element queryElement = new Element("query");
+            queryElement.setAttribute("maxResults", "0");
+            queryElement.setAttribute("numPerPage", "0");
+            Document input = new Document(queryElement);
+
+            Element conditions = new Element("conditions");
+            queryElement.addContent(conditions);
+            conditions.setAttribute("format", "text");
+            conditions.addContent(query);
+            org.jdom.Element root = input.getRootElement();
+            if (sortby != null) {
+                final Element fieldElement = new Element("field").setAttribute("name", sortby);
+                if (order != null) {
+                    fieldElement.setAttribute("order", order);
+                }
+                root.addContent(new Element("sortBy").addContent(fieldElement));
+            }
+            if (LOGGER.isDebugEnabled()) {
+                XMLOutputter out = new XMLOutputter(org.jdom.output.Format.getPrettyFormat());
+                LOGGER.debug(out.outputString(input));
+            }
+            return input;
         }
 
     }

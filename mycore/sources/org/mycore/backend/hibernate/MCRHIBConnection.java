@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRHIBConnection.java,v $
- * $Revision: 1.28 $ $Date: 2006/04/09 23:35:36 $
+ * $Revision: 1.30 $ $Date: 2006/11/27 15:18:51 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -193,7 +194,9 @@ public class MCRHIBConnection implements Closeable {
      * @return Session current session object
      */
     public Session getSession() {
-        return sessions.openSession();
+        Session session =  sessions.openSession();
+        session.setFlushMode(FlushMode.COMMIT);
+        return session;
     }
 
     public Configuration getConfiguration() {

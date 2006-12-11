@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRSQLClassificationStore.java,v $
- * $Revision: 1.21 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 1.22 $ $Date: 2006/02/19 20:20:50 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.datamodel.metadata.MCRMetaClassification;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.21 $ $Date: 2006/02/10 23:33:48 $
+ * @version $Revision: 1.22 $ $Date: 2006/02/19 20:20:50 $
  * @deprecated
  */
 public class MCRSQLClassificationStore implements MCRClassificationInterface {

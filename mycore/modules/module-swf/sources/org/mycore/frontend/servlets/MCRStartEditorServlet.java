@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRStartEditorServlet.java,v $
- * $Revision: 1.48 $ $Date: 2006/11/02 14:08:40 $
+ * $Revision: 1.50 $ $Date: 2006/11/27 12:35:18 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -77,7 +77,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * <br />
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.48 $ $Date: 2006/11/02 14:08:40 $
+ * @version $Revision: 1.50 $ $Date: 2006/11/27 12:35:18 $
  */
 public class MCRStartEditorServlet extends MCRServlet {
 
@@ -824,7 +824,7 @@ public class MCRStartEditorServlet extends MCRServlet {
             try {
                 generateActiveLinkErrorpage(job.getRequest(), job.getResponse(), "Error while commiting work to the server.", e);
                 return;
-            } catch (ServletException se) {
+            } catch (Exception se) {
                 myfile = storeerrorpage;
             }
         } catch (MCRException e) {

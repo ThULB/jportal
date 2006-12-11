@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConfiguration.java,v $
- * $Revision: 1.25 $ $Date: 2005/09/02 14:26:23 $
+ * $RCSfile: MakeDocs.java,v $
+ * $Revision: 1.3 $ $Date: 2005/09/28 08:00:29 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import org.mycore.common.MCRUtils;
  * mb
  * 
  * @author Harald Richter
- * @version $Revision: 1.2 $ $Date: 2005/08/15 15:01:54 $
+ * @version $Revision: 1.3 $ $Date: 2005/09/28 08:00:29 $
  */
 public class MakeDocs {
     public static void buildMCRDocs(String templ, File file, String dir) throws Exception {

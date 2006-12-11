@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRHIBURNStore.java,v $
- * $Revision: 1.19 $ $Date: 2006/03/02 13:15:10 $
+ * $Revision: 1.2 $ $Date: 2006/11/27 15:18:51 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -79,9 +79,9 @@ public class MCRHIBURNStore implements MCRURNStore {
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            logger.error(e);
+            logger.error("create: error: ", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
     }
 
@@ -123,9 +123,9 @@ public class MCRHIBURNStore implements MCRURNStore {
             tx.commit();
         } catch (Exception e) {
             tx.rollback();
-            logger.error(e);
+            logger.error("delete: error", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
     }
 
@@ -161,10 +161,9 @@ public class MCRHIBURNStore implements MCRURNStore {
             if (returns.size() != 1) return ret;
             ret = (String) returns.get(0);
         } catch (Exception e) {
-            logger.error("catched error@:getURNforDocument", e);
             throw new MCRException("Error during getURNforDocument", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }        
         return ret;
     }
@@ -189,10 +188,9 @@ public class MCRHIBURNStore implements MCRURNStore {
             if (returns.size() != 1) return ret;
             ret = (String) returns.get(0);
         } catch (Exception e) {
-            logger.error("catched error@:getDocumentIDforURN", e);
             throw new MCRException("Error during getDocumentIDforURN", e);
         } finally {
-            session.close();
+             if ( session != null ) session.close();
         }
         return ret;
     }
@@ -207,15 +205,12 @@ public class MCRHIBURNStore implements MCRURNStore {
         if (urn == null || (urn.length() == 0)) { return exists; }
 
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
         StringBuffer query = new StringBuffer("select key.id from ").append(classname).append(" where URN = '").append(urn).append("'");
         List l = session.createQuery(query.toString()).list();
         if (l.size() > 0) {
             exists = true;
         }
-        tx.commit();
         session.close();
-
         return exists;
     }
 

@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCREventHandlerBase.java,v $
- * $Revision: 1.15 $ $Date: 2006/05/11 13:44:32 $
+ * $Revision: 1.16 $ $Date: 2006/05/26 12:29:28 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

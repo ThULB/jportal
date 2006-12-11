@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRArgumentChecker.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:36:44 $
+ * $RCSfile: MCRLanguageDetector.java,v $
+ * $Revision: 1.1 $ $Date: 2005/12/16 12:35:41 $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
  * German, englisch and french are currently supported.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.11 $ $Date: 2005/09/30 11:54:54 $
+ * @version $Revision: 1.1 $ $Date: 2005/12/16 12:35:41 $
  */
 public class MCRLanguageDetector {
     private static Logger LOGGER = Logger.getLogger(MCRLanguageDetector.class);
