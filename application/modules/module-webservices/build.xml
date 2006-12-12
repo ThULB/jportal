@@ -2,7 +2,7 @@
 
 <!-- =================================================================== -->
 <!-- WebServices module build file for use with Apache Ant               -->
-<!-- $Revision: 1.6 $ $Date: 2006/12/11 13:45:58 $                      -->
+<!-- $Revision: 1.7 $ $Date: 2006/12/11 14:45:23 $                      -->
 <!-- =================================================================== -->
 
 <project name="MyCoReModule - WebService" default="usage" basedir="../..">
@@ -53,6 +53,76 @@
     <copy todir="${build.config}" file="${mycore}/modules/module-webservices/config/undeploy.wsdd" overwrite="true" />
   </target>
 
+  <!-- =================================================================== -->
+  <!-- Build and compiles all application classes                          -->
+  <!-- =================================================================== -->
+
+  <target name="compile" depends="copy,wsdl2java" description="Build and compiles all webservice classes" >
+    <echo level="info">
+      Compiling WebServices client
+    </echo>
+    <javac destdir="${build.classes}" classpathref="docportal.classpath" encoding="ISO-8859-1">
+      <src path="${docportal.modules}/module-webservices/sources/org/mycore/services/wsclient" />
+    </javac>
+  </target>
+	
+  <target name="wsdl2java" depends="java2wsdl">
+    <echo level="info">
+      Building stubs from MCRWebService.wsdl
+    </echo>
+    <taskdef name="axis-wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="docportal.classpath" />
+    <delete dir="${docportal.modules}/module-webservices/sources" />
+	<mkdir dir="${docportal.modules}/module-webservices" />
+	<mkdir dir="${docportal.modules}/module-webservices/sources" />
+	<mkdir dir="${docportal.modules}/module-webservices/sources/org" />
+	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore" />
+	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore/services" />
+	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore/services/wsclient" />
+    <axis-wsdl2java 
+      all="true"
+      output="${docportal.modules}/module-webservices/sources"
+      testcase="false"
+      verbose="true"
+      serverside="true"
+      url="${build.config}/MCRWebService.wsdl" 
+    >
+      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" /> 
+    </axis-wsdl2java>
+  </target>
+
+  <target name="java2wsdl" depends="compile.ws">
+    <echo level="info">
+      Building wsdl from MCRWS.class
+    </echo>
+    <delete file="${build.config}/MCRWebService.wsdl" />
+    <path id="wsdl2java.classpath">
+      <fileset dir="${mycore}/lib" includes="*.jar" />
+      <fileset dir="${mycore}/modules/module-webservices/lib" includes="*.jar" />
+      <pathelement location="${build.classes}" />
+    </path>
+    <taskdef name="axis-java2wsdl" classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask" classpathref="wsdl2java.classpath" />	
+    <axis-java2wsdl 
+      classname="org.mycore.services.webservices.MCRWS"
+      namespace="wsclient.services.mycore.org"
+      location="${wsurl}" 
+      output="${build.config}/MCRWebService.wsdl"
+      style="RPC"
+    >
+      <classpath refid="wsdl2java.classpath" />       
+      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" />
+    </axis-java2wsdl>
+  </target>
+	
+  <target name="compile.ws">
+    <echo level="info">
+      Compiling WebServices interface
+    </echo>
+    <javac destdir="${build.classes}" encoding="ISO-8859-1">
+      <src path="${mycore}/modules/module-webservices/sources/org/mycore/services/webservices" />
+      <include name="**/MCRWS.java" /> 
+    </javac>
+  </target>
+	
   <!-- =================================================================== -->
   <!-- Build the web application directory and copy webpages               -->
   <!-- =================================================================== -->
@@ -140,7 +210,7 @@
   <!-- Create scripts in bin like mycore.cmd/.sh a.s.o.                    -->
   <!-- =================================================================== -->
 
-  <target name="create.scripts" depends="init,compile.client,script.windows, script.unix" description="Create commandline scripts" />
+  <target name="create.scripts" depends="init,script.windows, script.unix" description="Create commandline scripts" />
 
   <target name="script.windows" if="os.is.windows" depends="init" description="Generates wsclient.cmd for starting wsclient from Command Line">
     <echo level="info">
@@ -163,72 +233,6 @@ export AXISCLASSPATH=${docportal.classpath.translated}:$CLASSPATH
 java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclient.MCRWebServiceClient $@
     </echo>
     <chmod file="${build.bin}/wsclient.sh" perm="755" />
-  </target>
-	
-  <target name="compile.client" depends="wsdl2java">
-    <echo level="info">
-      Compiling WebServices client
-    </echo>
-    <javac destdir="${build.classes}" classpathref="docportal.classpath" encoding="ISO-8859-1">
-      <src path="${docportal.modules}/module-webservices/sources/org/mycore/services/wsclient" />
-    </javac>
-  </target>
-	
-  <target name="wsdl2java" depends="java2wsdl">
-    <echo level="info">
-      Building stubs from MCRWebService.wsdl
-    </echo>
-    <taskdef name="axis-wsdl2java" classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask" classpathref="docportal.classpath" />
-    <delete dir="${docportal.modules}/module-webservices/sources" />
-	<mkdir dir="${docportal.modules}/module-webservices" />
-	<mkdir dir="${docportal.modules}/module-webservices/sources" />
-	<mkdir dir="${docportal.modules}/module-webservices/sources/org" />
-	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore" />
-	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore/services" />
-	<mkdir dir="${docportal.modules}/module-webservices/sources/org/mycore/services/wsclient" />
-    <axis-wsdl2java 
-      all="true"
-      output="${docportal.modules}/module-webservices/sources"
-      testcase="false"
-      verbose="true"
-      serverside="true"
-      url="${build.config}/MCRWebService.wsdl" 
-    >
-      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" /> 
-    </axis-wsdl2java>
-  </target>
-
-  <target name="java2wsdl" depends="compile.ws">
-    <echo level="info">
-      Building wsdl from MCRWS.class
-    </echo>
-    <delete file="${build.config}/MCRWebService.wsdl" />
-    <path id="wsdl2java.classpath">
-      <fileset dir="${mycore}/lib" includes="*.jar" />
-      <fileset dir="${mycore}/modules/module-webservices/lib" includes="*.jar" />
-      <pathelement location="${build.classes}" />
-    </path>
-    <taskdef name="axis-java2wsdl" classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask" classpathref="wsdl2java.classpath" />	
-    <axis-java2wsdl 
-      classname="org.mycore.services.webservices.MCRWS"
-      namespace="wsclient.services.mycore.org"
-      location="${wsurl}" 
-      output="${build.config}/MCRWebService.wsdl"
-      style="RPC"
-    >
-      <classpath refid="wsdl2java.classpath" />       
-      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" />
-    </axis-java2wsdl>
-  </target>
-	
-  <target name="compile.ws">
-    <echo level="info">
-      Compiling WebServices interface
-    </echo>
-    <javac destdir="${build.classes}" encoding="ISO-8859-1">
-      <src path="${mycore}/modules/module-webservices/sources/org/mycore/services/webservices" />
-      <include name="**/MCRWS.java" /> 
-    </javac>
   </target>
 	
   <!-- =================================================================== -->

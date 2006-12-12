@@ -1,6 +1,7 @@
 Version 1.3.1
 =============
 - Added "ant create.searchmask" to generate search masks from searchfields.xml
+- Refactoring the build process for the application. Split to a source, a build and a data tree.
 
 Version 1.3
 ===========

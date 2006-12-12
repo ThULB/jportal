@@ -335,7 +335,7 @@ MCR.ws_adminpasswd=
 # Save Directory                                                             #
 ##############################################################################
 
-  MCR.Save.FileSystem=%MCR.basedir%/data/save
+  MCR.Save.FileSystem=%MCR.basedir%/save
 
 ##############################################################################
 # Editor                                                                     #
@@ -452,7 +452,7 @@ SIGN.Country=Germany
   MCR.oai.adminemail=%MCR.editor_mail%
 
 # A temporary directory to store the resumption tokens
-  MCR.oai.resumptiontoken.dir=%MCR.basedir%/build/tmp
+  MCR.oai.resumptiontoken.dir=%MCR.basedir%/data/tmp
 
 # timeout, after which the resumption tokens will be deleted (in hours)
   MCR.oai.resumptiontoken.timeout=48
