@@ -4,4 +4,5 @@
 	<xsl:include href="jp_volume.xsl" />			
 	<xsl:include href="jp_article.xsl" />				
 	<xsl:include href="jp_inst.xsl" />					
+	<xsl:include href="person.xsl" />						
 </xsl:stylesheet>

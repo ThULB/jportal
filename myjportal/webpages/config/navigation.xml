@@ -10,64 +10,71 @@
 			<label xml:lang="de">Suche</label>
 			<label xml:lang="en">Retrieval</label>
 			<item
-				href="/editor_form_search-journal.xml?XSL.editor.source.new=true"
+				href="/editor_form_search-jpjournal.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false"
 				constrainPopUp="false">
 				<label xml:lang="de">nach Zeitschriften</label>
 			</item>
 			<item
-				href="/editor_form_search-volume.xml?XSL.editor.source.new=true"
+				href="/editor_form_search-jpvolume.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false"
 				constrainPopUp="false">
 				<label xml:lang="de">nach Bänden</label>
 			</item>
 			<item
-				href="/editor_form_search-article.xml?XSL.editor.source.new=true"
+				href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false"
 				constrainPopUp="false">
 				<label xml:lang="de">nach Artikeln</label>
 			</item>
-			<item href="/editor_form_search-inst.xml?XSL.editor.source.new=true"
+			<item href="/editor_form_search-jpinst.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false"
 				constrainPopUp="false">
-				<label xml:lang="de">nach JPInst</label>
+				<label xml:lang="de">nach Institutionen</label>
 			</item>
 			<item
-				href="/editor_form_search-simpledocument.xml?XSL.editor.source.new=true"
-				type="extern" target="_self" style="normal" replaceMenu="false">
-				<label xml:lang="de">nach Dokumenten einfach</label>
-				<label xml:lang="en">for documents simple</label>
-			</item>
-			<item
-				href="/editor_form_search-complexdocument.xml?XSL.editor.source.new=true"
-				type="extern" target="_self" style="normal" replaceMenu="false">
-				<label xml:lang="de">nach Dokumenten erweitert</label>
-				<label xml:lang="en">for documents extended</label>
-			</item>
-			<item
-				href="/editor_form_search-expertdocument.xml?XSL.editor.source.new=true"
-				type="extern" target="_self" style="normal" replaceMenu="false">
-				<label xml:lang="de">nach Dokumenten komplex</label>
-				<label xml:lang="en">for documents complex</label>
-			</item>
-			<item
-				href="/editor_form_search-person.xml?XSL.editor.source.new=true"
-				type="extern" target="_self" style="normal" replaceMenu="false">
+				href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true"
+				type="extern" target="_self" style="normal" replaceMenu="false"
+				constrainPopUp="false">
 				<label xml:lang="de">nach Personen</label>
-				<label xml:lang="en">for a person</label>
+			</item>						
+			<!--			<item
+			href="/editor_form_search-simpledocument.xml?XSL.editor.source.new=true"
+			type="extern" target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">nach Dokumenten einfach</label>
+			<label xml:lang="en">for documents simple</label>
+			</item>
+			<item
+			href="/editor_form_search-complexdocument.xml?XSL.editor.source.new=true"
+			type="extern" target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">nach Dokumenten erweitert</label>
+			<label xml:lang="en">for documents extended</label>
+			</item>
+			<item
+			href="/editor_form_search-expertdocument.xml?XSL.editor.source.new=true"
+			type="extern" target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">nach Dokumenten komplex</label>
+			<label xml:lang="en">for documents complex</label>
+			</item>
+			<item
+			href="/editor_form_search-person.xml?XSL.editor.source.new=true"
+			type="extern" target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">nach Personen</label>
+			<label xml:lang="en">for a person</label>
 			</item>
 			<item href="/indexpage?searchclass=creators" type="extern"
-				target="_self" style="normal" replaceMenu="false">
-				<label xml:lang="de">Index Personen</label>
-				<label xml:lang="en">index of persons</label>
+			target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">Index Personen</label>
+			<label xml:lang="en">index of persons</label>
 			</item>
 			
 			<item
-				href="/editor_form_search-institution.xml?XSL.editor.source.new=true"
-				type="extern" target="_self" style="normal" replaceMenu="false">
-				<label xml:lang="de">nach Institutionen</label>
-				<label xml:lang="en">for institutions</label>
+			href="/editor_form_search-institution.xml?XSL.editor.source.new=true"
+			type="extern" target="_self" style="normal" replaceMenu="false">
+			<label xml:lang="de">nach Institutionen</label>
+			<label xml:lang="en">for institutions</label>
 			</item>
+			-->
 			<item
 				href="/editor_form_search-expert.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false">
@@ -133,7 +140,7 @@
 				<label xml:lang="pl">nowy artykuł</label>
 			</item>
 			<item
-				href="/servlets/MCRStartEditorServlet?type=jpperson&amp;step=author&amp;todo=wnewobj"
+				href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj"
 				type="extern" target="_self" style="normal" replaceMenu="false">
 				<label xml:lang="de">neue Person</label>
 				<label xml:lang="en">new person</label>

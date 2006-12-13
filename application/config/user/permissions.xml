@@ -141,8 +141,8 @@
 			</boolean>
 		</condition>
 	</mcrpermission>				
-	<mcrpermission name="create-jpperson"
-		description="Create rights for JP-Persons">
+	<mcrpermission name="create-person"
+		description="Create rights for persons">
 		<condition format="xml">
 			<boolean operator="or">
 				<condition value="admingroup" operator="=" field="group"/>

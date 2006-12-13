@@ -30,14 +30,14 @@
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpjournal}"    /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpvolume}"    /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jparticle}" /></antcall>
-	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpperson}" /></antcall>
+	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_person}" /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpinst}" /></antcall>		
-	    <move todir="${docportal.schema}">
-	      <fileset dir="${docportal.schema}" 
+	    <move todir="${build.schema}">
+	      <fileset dir="${build.schema}" 
 	        includes="${MCR.persistence_config_jpjournal} 
 	      	${MCR.persistence_config_jpvolume} 
 	      	${MCR.persistence_config_jparticle} 
-	      	${MCR.persistence_config_jpperson} 
+	      	${MCR.persistence_config_person} 
 	      	${MCR.persistence_config_jpinst}" 
 	      />
 	      <mapper type="glob" from="*.xml" to="*.xsd"/>
@@ -49,21 +49,21 @@
 	    <xslt basedir="${env.JPORTAL_HOME}/config/${metadata.schema}"
 	          classpathref="docportal.classpath"
 	          in="${env.JPORTAL_HOME}/config/${metadata.schema}"
-	          style="stylesheets/MCRMetadataSchema.xsl"
-	          out="schema/${metadata.schema}" />
+	          style="${build.stylesheets}/MCRMetadataSchema.xsl"
+	          out="${build.schema}/${metadata.schema}" />	    	
 	  </target>		
 
   <!-- =================================================================== -->
   <!-- Create local working directories                                    -->
   <!-- =================================================================== -->	
-	<target name="jp.create.directories" depends="create.directories">
+<!--	<target name="jp.create.directories" depends="create.directories">
 	    <mkdir dir="${MCR.editor_jpjournal_directory}" />
 	    <mkdir dir="${MCR.editor_jpvolume_directory}" />
 	    <mkdir dir="${MCR.editor_jparticle_directory}" />
-	    <mkdir dir="${MCR.editor_jpperson_directory}" />
+	    <mkdir dir="${MCR.editor_person_directory}" />
 	    <mkdir dir="${MCR.editor_jpinst_directory}" />		
 	</target>
-	
+	-->
   <!-- =================================================================== -->
   <!-- Load all classifications                                            -->
   <!-- =================================================================== -->

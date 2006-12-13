@@ -30,11 +30,11 @@ MCR.type_jparticle_in=alljparticles
 MCR.type_alljparticle=jparticle
 MCR.persistence_config_jparticle=datamodel-jparticle.xml
 
-### jpperson
-MCR.type_jpperson=true
-MCR.type_jpperson_in=alljppersons
-MCR.type_alljpperson=jpperson
-MCR.persistence_config_jpperson=datamodel-jpperson.xml
+### person
+MCR.type_person=true
+MCR.type_person_in=allpersons
+MCR.type_allperson=person
+MCR.persistence_config_person=datamodel-person.xml
 
 ### jpinst
 MCR.type_jpinst=true
@@ -54,7 +54,7 @@ MCR.default_project_type=jparticle
 MCR.jpjournal_project_id=jportal
 MCR.jpvolume_project_id=jportal
 MCR.jparticle_project_id=jportal
-MCR.jpperson_project_id=jportal
+MCR.person_project_id=jportal
 MCR.jpinst_project_id=jportal
 
 # Editor path
@@ -62,7 +62,7 @@ MCR.editor_base_directory=%MCR.basedir%/workflow
 MCR.editor_jpjournal_directory=%MCR.basedir%/workflow/jpjournal
 MCR.editor_jpvolume_directory=%MCR.basedir%/workflow/jpvolume
 MCR.editor_jparticle_directory=%MCR.basedir%/workflow/jparticle
-MCR.editor_jpperson_directory=%MCR.basedir%/workflow/jpperson
+MCR.editor_person_directory=%MCR.basedir%/workflow/person
 MCR.editor_derivate_directory=%MCR.basedir%/workflow/jparticle
 MCR.editor_jpinst_directory=%MCR.basedir%/workflow/jpinst
 

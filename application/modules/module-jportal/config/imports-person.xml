@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<components xmlns:xhtml="http://www.w3.org/1999/xhtml"
+	xsi:noNamespaceSchemaLocation="editor.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<include uri="webapp:editor/editor-commons.xml"/>
+	
+	<panel id="globalImport.person" lines="on">
+		<hidden var="@ID"/>
+		<hidden var="@label"/>
+		<cell col="1" row="1" var="metadata">
+			<panel>
+				<cell col="1" row="1" anchor="NORTHWEST" ref="Lheading"/>
+				<cell col="2" row="1" anchor="NORTHWEST" ref="Dheading"
+					var="def.heading"/>
+				<cell col="3" row="1" anchor="WEST" ref="Hheading"/>
+				
+				<cell col="1" row="2" anchor="NORTHWEST" ref="Lalternative"/>
+				<cell col="2" row="2" anchor="NORTHWEST" ref="Dalternative"
+					var="def.alternative"/>
+				<cell col="3" row="2" anchor="WEST" ref="Halternative"/>
+				
+				<cell col="1" row="3" anchor="NORTHWEST" ref="Lpeerage"/>
+				<cell col="2" row="3" anchor="NORTHWEST" ref="Dpeerage"
+					var="def.peerage"/>
+				<cell col="3" row="3" anchor="WEST" ref="Hpeerage"/>
+				
+				<cell col="1" row="4" anchor="NORTHWEST" ref="Lgender"/>
+				<cell col="2" row="4" anchor="NORTHWEST" ref="Dgender"
+					var="def.gender"/>
+				<cell col="3" row="4" anchor="WEST" ref="Hgender"/>
+				
+				<cell col="1" row="5" anchor="NORTHWEST" ref="Lrole"/>
+				<cell col="2" row="5" anchor="NORTHWEST" ref="Drole" var="def.role"/>
+				<cell col="3" row="5" anchor="WEST" ref="Hrole"/>
+				
+				<cell col="1" row="6" anchor="NORTHWEST" ref="LplaceOfActivity"/>
+				<cell col="2" row="6" anchor="NORTHWEST" ref="DplaceOfActivity"
+					var="def.placeOfActivity"/>
+				<cell col="3" row="6" anchor="WEST" ref="HplaceOfActivity"/>
+				
+				<cell col="1" row="7" anchor="NORTHWEST" ref="LdateOfBirth"/>
+				<cell col="2" row="7" anchor="NORTHWEST" ref="DdateOfBirth"
+					var="def.dateOfBirth"/>
+				<cell col="3" row="7" anchor="WEST" ref="HdateOfBirth"/>
+				
+				<cell col="1" row="8" anchor="NORTHWEST" ref="LplaceOfBirth"/>
+				<cell col="2" row="8" anchor="NORTHWEST" ref="DplaceOfBirth"
+					var="def.placeOfBirth"/>
+				<cell col="3" row="8" anchor="WEST" ref="HplaceOfBirth"/>
+				
+				<cell col="1" row="9" anchor="NORTHWEST" ref="LdateOfDeath"/>
+				<cell col="2" row="9" anchor="NORTHWEST" ref="DdateOfDeath"
+					var="def.dateOfDeath"/>
+				<cell col="3" row="9" anchor="WEST" ref="HdateOfDeath"/>
+				
+				<cell col="1" row="10" anchor="NORTHWEST" ref="LplaceOfDeath"/>
+				<cell col="2" row="10" anchor="NORTHWEST" ref="DplaceOfDeath"
+					var="def.placeOfDeath"/>
+				<cell col="3" row="10" anchor="WEST" ref="HplaceOfDeath"/>
+				
+				<cell col="1" row="11" anchor="NORTHWEST" ref="Lnote"/>
+				<cell col="2" row="11" anchor="NORTHWEST" ref="Dnote"
+					var="def.note"/>
+				<cell col="3" row="11" anchor="WEST" ref="Hnote"/>
+				
+				<cell col="1" colspan="2" row="12" anchor="EAST" ref="TwoButtons"/>
+				<cell col="2" row="12"/>
+			</panel>
+		</cell>
+	</panel>
+	
+	<panel id="personName">
+		<cell col="1" row="1" anchor="NORTHWEST" var="lastName">
+			<label xml:lang="de">
+				<xhtml:span class="editorlabel">Nachname: </xhtml:span>
+			</label>
+		</cell>		
+		<cell col="2" row="1" anchor="NORTHWEST" var="lastName">
+			<textfield width="16" maxlength="128"/>
+		</cell>
+		
+		<cell col="1" row="2" anchor="NORTHWEST" var="lastName">
+			<label xml:lang="de">
+				<xhtml:span class="editorlabel">Vorname: </xhtml:span>
+			</label>
+		</cell>				
+		<cell col="2" row="2" anchor="NORTHWEST" var="firstName">
+			<textfield width="16" maxlength="128"/>
+		</cell>
+	</panel>
+	
+	<!-- *** Ansetzungsform: Name ** -->
+	<panel id="Dheading">
+		<hidden var="@class" default="MCRMetaXML"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName"/>
+	</panel>
+	<text id="Lheading">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Name in Ansetzungsform (*)
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="Hheading" width="400" height="250">
+		<label xml:lang="de">Name in Ansetzungsform</label>
+	</helpPopup>
+	
+	<!-- *** Namensformen ** -->
+	<panel id="Dalternative">
+		<hidden var="@class" default="MCRMetaXML"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST"
+			var="alternative[@type='complete']">
+			<repeater min="0" max="10" ref="personName"/>
+		</cell>
+		<cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
+			<repeater min="0" max="10">
+				<panel>
+					<cell var="name">
+						<textfield width="35" maxlength="128"/>
+					</cell>
+				</panel>
+			</repeater>
+		</cell>
+	</panel>
+	<text id="Lalternative">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Weitere Namensformen
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="Halternative" width="400" height="250">
+		<label xml:lang="de">Hier können alternative zum leichteren Auffinden des
+			Objektes eingetragen werden.</label>
+	</helpPopup>
+	
+	<!-- *** Geschlecht ** -->
+	<panel id="Dgender">
+		<hidden var="@class" default="MCRMetaClassification"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="gender">
+			<panel>
+				<hidden var="@classid" default="urmel_class_00000001"/>
+				<hidden var="@inherited" default="0"/>
+				<cell var="@categid"  >
+					<list width="300" type="radio" default="unknown">
+						<include
+							uri="classification:editor:-1:children:urmel_class_00000001"/>
+					</list>
+				</cell>
+			</panel>
+		</cell>
+	</panel>
+	<text id="Lgender">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Geschlecht (*)
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="Hgender" width="400" height="250">
+		<label xml:lang="de">Wählen sie das Geschlecht aus</label>
+	</helpPopup>
+	
+	<!-- *** Adelstitel ** -->
+	<panel id="Dpeerage">
+		<hidden var="@class" default="MCRMetaLangText"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="peerage" ref="TFzeile128"/>
+	</panel>
+	<text id="Lpeerage">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Adelstitel
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="Hpeerage" width="400" height="250">
+		<label xml:lang="de">Adelstitel, z.B. Graf</label>
+	</helpPopup>
+	
+	<!-- *** Ämter und Funktionen ** -->
+	<panel id="Drole">
+		<hidden var="@class" default="MCRMetaLangText"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="role">
+			<repeater min="0" max="10" ref="repeater32"/>
+		</cell>
+	</panel>
+	<text id="Lrole">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Ämter und Funktionen
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="Hrole" width="400" height="250">
+		<label xml:lang="de"> Hier können Ämter und Funktionen eingetragen werden, z.B.
+			"Professor für Geschichte". </label>
+	</helpPopup>
+	
+	<!-- *** Lebens- und Wirkungsorte ** -->
+	<panel id="DplaceOfActivity">
+		<hidden var="@class" default="MCRMetaLangText"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="placeOfActivity">
+			<repeater min="0" max="10" ref="repeater32"/>
+		</cell>
+	</panel>
+	<text id="LplaceOfActivity">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Lebens- und Wirkungsorte
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="HplaceOfActivity" width="400" height="250">
+		<label xml:lang="de"> Hier können Lebens- und Wirkungsorte eingetragen werden,
+			z.B. "Jena". </label>
+	</helpPopup>
+	
+	<!-- *** Geburtsdatum ** -->
+	<panel id="DdateOfBirth">
+		<hidden var="@class" default="MCRMetaISO8601Date"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="dateOfBirth" ref="TFzeile10"/>
+	</panel>
+	<text id="LdateOfBirth">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Geburtsdatum
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="HdateOfBirth" width="400" height="250">
+		<label xml:lang="de"> Geben sie bitte das Geburtsdatum - so weit bekannt - ein.
+			Dieses muss in der Form JJJJ-MM-TT eingegeben werden. Falls nicht näher
+			bekannt, können Monat und Tag weggelassen werden. </label>
+	</helpPopup>
+	
+	<!-- *** Geburtsort ** -->
+	<panel id="DplaceOfBirth">
+		<hidden var="@class" default="MCRMetaLangText"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="placeOfBirth"
+			ref="TFzeile128"/>
+	</panel>
+	<text id="LplaceOfBirth">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Geburtsort
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="HplaceOfBirth" width="400" height="250">
+		<label xml:lang="de">Sie können hier den Geburtsort der Person angeben.</label>
+	</helpPopup>
+	
+	<!-- *** Sterbedatum ** -->
+	<panel id="DdateOfDeath">
+		<hidden var="@class" default="MCRMetaISO8601Date"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="dateOfDeath" ref="TFzeile10"/>
+	</panel>
+	<text id="LdateOfDeath">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Sterbedatum
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="HdateOfDeath" width="400" height="250">
+		<label xml:lang="de"> Geben sie bitte das Sterbedatum - so weit bekannt - ein. Dieses
+			muss in der Form JJJJ-MM-TT eingegeben werden. Falls nicht näher bekannt,
+			können Monat und Tag weggelassen werden. </label>
+	</helpPopup>
+	
+	<!-- *** Sterbeort ** -->
+	<panel id="DplaceOfDeath">
+		<cell col="1" row="1" anchor="NORTHWEST" var="placeOfDeath"
+			ref="TFzeile128"/>
+		<hidden var="@class" default="MCRMetaLangText"/>
+		<hidden var="@notinherit" default="true"/>
+		<hidden var="@heritable" default="true"/>
+	</panel>
+	<text id="LplaceOfDeath">
+		<label xml:lang="de">
+			<xhtml:span class="editorlabel">&#160;Sterbeort
+				&#160;</xhtml:span>
+		</label>
+	</text>
+	<helpPopup id="HplaceOfDeath" width="400" height="250">
+		<label xml:lang="de">Sie können hier den Sterbeort der Person angeben.</label>
+	</helpPopup>
+</components>

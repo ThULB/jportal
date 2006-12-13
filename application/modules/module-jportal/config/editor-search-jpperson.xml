@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editor id="searchmask">
+	<source token="[ID]"
+		url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]"/>
+	<target format="xml" method="post" name="MCRSearchServlet" type="servlet"/>
+	<components var="/query" root="root">
+		<headline anchor="WEST">
+			<text i18n="editor.search.person.label"/>
+		</headline>
+		<panel lines="off" id="root">
+			<hidden default="editor_form_search-jpperson.xml" var="@mask"/>
+			<hidden default="xml" var="conditions/@format"/>
+			<hidden default="and" var="conditions/boolean/@operator"/>
+			<!-- Search in field 'heading' with operator 'contains' -->
+			<hidden default="heading" var="conditions/boolean/condition1/@field"/>
+			<hidden default="contains"
+				var="conditions/boolean/condition1/@operator"/>
+			<cell anchor="EAST" col="1" row="1">
+				<text i18n="editor.search.person.name"/>
+			</cell>
+			<cell var="conditions/boolean/condition1/@value" anchor="WEST" col="2"
+				row="1" ref="input.name"/>
+			<!-- Search in field 'anyname' with operator 'contains' -->
+			<hidden default="anyname" var="conditions/boolean/condition2/@field"/>
+			<hidden default="contains"
+				var="conditions/boolean/condition2/@operator"/>
+			<cell anchor="EAST" col="1" row="2">
+				<text i18n="editor.search.person.anyName"/>
+			</cell>
+			<cell var="conditions/boolean/condition2/@value" anchor="WEST" col="2"
+				row="2" ref="input.name"/>
+			<!-- Search in field 'place' with operator 'contains' -->
+			<hidden default="place" var="conditions/boolean/condition3/@field"/>
+			<hidden default="contains"
+				var="conditions/boolean/condition3/@operator"/>
+			<cell anchor="EAST" col="1" row="3">
+				<text i18n="editor.search.person.place"/>
+			</cell>
+			<cell var="conditions/boolean/condition3/@value" anchor="WEST" col="2"
+				row="3" ref="input.name"/>
+			<!-- Search in field 'note' with operator 'contains' -->
+			<hidden default="note" var="conditions/boolean/condition4/@field"/>
+			<hidden default="contains"
+				var="conditions/boolean/condition4/@operator"/>
+			<cell anchor="EAST" col="1" row="4">
+				<text i18n="editor.search.note"/>
+			</cell>
+			<cell var="conditions/boolean/condition4/@value" anchor="WEST" col="2"
+				row="4" ref="input.text"/>
+			<cell height="20px" anchor="WEST" colspan="2" col="1" row="92">
+				<text>
+					<label/>
+				</text>
+			</cell>
+			<!-- Search only for objectType = person -->
+			<hidden default="objectType"
+				var="conditions/boolean/condition94/@field"/>
+			<hidden default="=" var="conditions/boolean/condition94/@operator"/>
+			<hidden default="person" var="conditions/boolean/condition94/@value"/>
+			<!-- Select sort order of results -->
+			<cell anchor="NORTHEAST" col="1" row="97">
+				<text i18n="editor.search.sortby"/>
+			</cell>
+			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="97">
+				<repeater max="3" min="1">
+					<panel lines="off">
+						<cell var="@name" anchor="WEST" col="1" row="1">
+							<list type="dropdown">
+								<item i18n="editor.search.choose" value=""/>
+								<item i18n="editor.search.person.name"
+									value="heading"/>
+								<item i18n="editor.search.document.datecr"
+									value="dateCreated"/>
+							</list>
+						</cell>
+						<cell var="@order" anchor="WEST" col="2" row="1">
+							<list default="ascending" type="dropdown">
+								<item i18n="editor.search.ascending"
+									value="ascending"/>
+								<item i18n="editor.search.descending"
+									value="descending"/>
+							</list>
+						</cell>
+					</panel>
+				</repeater>
+			</cell>
+			<!-- Select maximum number of results and num per page -->
+			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="98">
+				<panel lines="off">
+					<cell anchor="WEST" col="1" row="1">
+						<text i18n="editor.search.max"/>
+					</cell>
+					<cell var="@maxResults" anchor="WEST" col="2" row="1">
+						<list default="100" type="dropdown">
+							<item label="20" value="20"/>
+							<item label="100" value="100"/>
+							<item label="500" value="500"/>
+							<item i18n="editor.search.all" value="0"/>
+						</list>
+					</cell>
+					<cell anchor="WEST" col="3" row="1">
+						<text i18n="editor.search.label"/>
+					</cell>
+					<cell var="@numPerPage" anchor="WEST" col="4" row="1">
+						<list default="10" type="dropdown">
+							<item label="10" value="10"/>
+							<item label="20" value="20"/>
+							<item label="50" value="50"/>
+							<item i18n="editor.search.all" value="0"/>
+						</list>
+					</cell>
+					<cell anchor="WEST" col="5" row="1">
+						<text i18n="editor.search.perpage"/>
+					</cell>
+				</panel>
+			</cell>
+			<cell anchor="EAST" colspan="2" col="1" row="99">
+				<submitButton width="150px" i18n="editor.search.search"/>
+			</cell>
+		</panel>
+		<!-- Input elements included depending on field type -->
+		<textfield id="input.text" width="40"/>
+		<textfield id="input.name" width="30"/>
+		<textfield id="input.identifier" width="20"/>
+		<textfield id="input.date" width="10"/>
+		<textfield id="input.time" width="8"/>
+		<textfield id="input.timestamp" width="18"/>
+		<list id="input.boolean" default="" rows="1" type="checkbox">
+			<item value="" i18n="editor.search.choose"/>
+			<item value="true" i18n="editor.search.true"/>
+			<item value="false" i18n="editor.search.false"/>
+		</list>
+		<textfield id="input.decimal" width="10"/>
+		<textfield id="input.integer" width="10"/>
+	</components>
+</editor>
