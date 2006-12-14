@@ -25,7 +25,7 @@
   <!-- =================================================================== -->
   <!-- Create schemas					                                   -->
   <!-- =================================================================== -->	
-	<target name="jp.create.schema" depends="create.schema">
+	<target name="jp.create.schema" >
 	    <!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpjournal}"    /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpvolume}"    /></antcall>
@@ -54,16 +54,30 @@
 	  </target>		
 
   <!-- =================================================================== -->
-  <!-- Create local working directories                                    -->
+  <!-- Create Command Line Interface                                       -->
   <!-- =================================================================== -->	
-<!--	<target name="jp.create.directories" depends="create.directories">
-	    <mkdir dir="${MCR.editor_jpjournal_directory}" />
-	    <mkdir dir="${MCR.editor_jpvolume_directory}" />
-	    <mkdir dir="${MCR.editor_jparticle_directory}" />
-	    <mkdir dir="${MCR.editor_person_directory}" />
-	    <mkdir dir="${MCR.editor_jpinst_directory}" />		
+	<target name="jp.create.scripts" depends="create.scripts,copy.prop" />
+
+  <!-- =================================================================== -->
+  <!-- Copy properties                                        -->
+  <!-- =================================================================== -->	
+	<target name="copy.prop">
+		<copy todir="${build.config}" overwrite="true">
+		      <fileset dir="${docportal.config}" includes="mycore.properties.jp"/>		
+		</copy>	
 	</target>
-	-->
+    
+  <!-- =================================================================== -->
+  <!-- .. 							                                       -->
+  <!-- =================================================================== -->		
+  <target name="jp.create.metastore" depends="create.metastore" >
+    <mkdir dir="${MCR.editor_jpjournal_directory}" />
+    <mkdir dir="${MCR.editor_jpvolume_directory}" />
+    <mkdir dir="${MCR.editor_jparticle_directory}" />
+    <mkdir dir="${MCR.editor_person_directory}" />
+    <mkdir dir="${MCR.editor_jpinst_directory}" />    	
+  </target>	
+	
   <!-- =================================================================== -->
   <!-- Load all classifications                                            -->
   <!-- =================================================================== -->

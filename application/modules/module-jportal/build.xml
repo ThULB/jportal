@@ -25,34 +25,42 @@
 			building JPortal-Module webapp
 	    </echo>
 
-          	<!-- get JPORTAL sources -->
-          	<!-- ############################# -->
-        	  	<!-- get editors -->
-            <copy todir="${basedir}/build/webapps/editor/">
-              <fileset dir="${env.JPORTAL_HOME}/config" includes="editor-*.xml" />
-              <fileset dir="${env.JPORTAL_HOME}/config" includes="imports-*.xml" />
-            </copy>  	
-        	<antcall target="jp.webapps.copyWebPages">
-        		<param name="sourcedir.webpages" value="${env.JPORTAL_HOME}/webpages" />
-        	</antcall>
-        	<antcall target="jp.webapps.copyXSL">
-        		<param name="sourcedir.XSL" value="${env.JPORTAL_HOME}/stylesheets" />
-        	</antcall>  	
-          	
-          	<!-- get MYJPORTAL sources -->
-          	<!-- ############################# -->  	
-        	  	<!-- webpages stuff to "webapps" -->
-        	<antcall target="jp.webapps.copyWebPages">
-        		<param name="sourcedir.webpages" value="${env.MYJPORTAL_HOME}/webpages" />
-        	</antcall>
-        	<antcall target="jp.webapps.copyXSL">
-        		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/stylesheets" />
-        	</antcall>  	  	
-          	<!-- get templates  -->
-        	<antcall target="jp.webapps.copyXSL">
-        		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/webpages/templates/master" />
-        	</antcall>  	  	  	
+        <copy todir="${build.webapps}/WEB-INF/classes/">
+          <fileset dir="${basedir}/config" includes="mycore.properties.jp" />
+        </copy>  	    	
     	
+      	<!-- get JPORTAL sources -->
+      	<!-- ############################# -->
+    	  	<!-- get editors -->
+        <copy todir="${build.webapps}/editor/">
+          <fileset dir="${env.JPORTAL_HOME}/config" includes="editor-*.xml" />
+          <fileset dir="${env.JPORTAL_HOME}/config" includes="imports-*.xml" />
+        </copy>  	
+    	<antcall target="jp.webapps.copyWebPages">
+    		<param name="sourcedir.webpages" value="${env.JPORTAL_HOME}/webpages" />
+    	</antcall>
+    	<antcall target="jp.webapps.copyXSL">
+    		<param name="sourcedir.XSL" value="${env.JPORTAL_HOME}/stylesheets" />
+    	</antcall>  	
+      	
+      	<!-- get MYJPORTAL sources -->
+      	<!-- ############################# -->  	
+    	  	<!-- webpages stuff to "webapps" -->
+    	<antcall target="jp.webapps.copyWebPages">
+    		<param name="sourcedir.webpages" value="${env.MYJPORTAL_HOME}/webpages" />
+    	</antcall>
+    	<antcall target="jp.webapps.copyXSL">
+    		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/stylesheets" />
+    	</antcall>  	  	
+      	<!-- copy templates  -->
+    		<!-- copy to application/webpages/... to ensure registering in chooseTemplate.xsl -->
+	    <copy todir="${basedir}/webpages/templates/master" failonerror="false">
+	      <fileset dir="${env.MYJPORTAL_HOME}/webpages/templates/master/" />
+	    </copy>    	
+			<!-- copy to deployed folder -->    	
+    	<antcall target="jp.webapps.copyXSL">
+    		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/webpages/templates/master" />
+    	</antcall>  	  	  	
 
         <!-- i18n -->
         <antcall target="properties.merge">

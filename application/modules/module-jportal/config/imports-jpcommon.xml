@@ -122,7 +122,7 @@
           </cell>
 		 <cell row="2" col="1" >
 				<subselect id="sub.select1" type="webpage"
-					href="indexpage?searchclass=creators_sub" >
+					href="indexpage?searchclass=jpperson_sub" >
 					<label xml:lang="de">Person auswählen</label>
 					<label xml:lang="en">Choose person</label>
 				</subselect>			 
