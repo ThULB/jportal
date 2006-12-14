@@ -6,7 +6,7 @@
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
-	<xsl:include href="mcr-module-startIview.xsl"/>
+<!--	<xsl:include href="mcr-module-startIview.xsl"/>-->
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jpjournal_')]">
 		<xsl:param name="mcrobj"/>
@@ -586,7 +586,7 @@
 			</tr>
 			<!-- MCR-IView ..start -->
 			<!-- example implementation -->
-			<xsl:if test="$objectHost = 'local'">
+<!--			<xsl:if test="$objectHost = 'local'">
 				<xsl:for-each select="./structure/derobjects/derobject">
 					<xsl:variable select="@xlink:href" name="deriv"/>
 					<xsl:variable name="firstSupportedFile">
@@ -624,7 +624,7 @@
 						</xsl:when>
 					</xsl:choose>
 				</xsl:for-each>
-			</xsl:if>
+			</xsl:if>-->
 			<!-- MCR - IView ..end -->
 		</xsl:if>
 	</xsl:template>
