@@ -101,79 +101,238 @@
     <xsl:variable name="staticURL">
       <xsl:value-of select="concat($objectBaseURL,@ID)"/>
     </xsl:variable>
-    <table cellspacing="0" cellpadding="0" id="metaData">
-      <!--1***name*************************************-->
-
-      <xsl:call-template name="printMetaDate">
-        <xsl:with-param select="./metadata/names/name" name="nodes"/>
-        <xsl:with-param select="i18n:translate('metaData.jpinst.name')" name="label"/>
-      </xsl:call-template>
-      <!--*** Editor Buttons ************************************* -->
-      <xsl:call-template name="editobject">
-        <xsl:with-param select="$accessedit" name="accessedit"/>
-        <xsl:with-param select="./@ID" name="id"/>
-      </xsl:call-template>
-
-      <!--*** List children per object type ************************************* -->
-      <!--
-          1.) get a list of objectTypes of all child elements
-          2.) remove duplicates from this list
-          3.) for-each objectTyp id list child elements
-        -->
-      <xsl:variable name="objectTypes">
-        <xsl:for-each select="./structure/children/child/@xlink:href">
-          <id>
-            <xsl:copy-of select="substring-before(substring-after(.,'_'),'_')"/>
-          </id>
-        </xsl:for-each>
-      </xsl:variable>
-
-      <xsl:variable select="xalan:nodeset($objectTypes)/id[not(.=following::id)]" name="unique-ids"/>
-      <!--
-        the for-each would iterate over <id> with root not beeing /mycoreobject
-        so we save the current node in variable context to access needed nodes
-        -->
-      <xsl:variable select="." name="context"/>
-      <xsl:for-each select="$unique-ids">
-        <xsl:variable select="." name="thisObjectType"/>
-        <xsl:variable name="label">
-          <xsl:choose>
-            <xsl:when test="count($context/structure/children/child[contains(@xlink:href,$thisObjectType)])=1">
-              <xsl:value-of select="i18n:translate(concat('metaData.',$thisObjectType,'.[singular]'))"/>
-
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="i18n:translate(concat('metaData.',$thisObjectType,'.[plural]'))"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:variable>
-        <xsl:call-template name="printMetaDate">
-          <xsl:with-param select="$context/structure/children/child[contains(@xlink:href, concat('_',$thisObjectType,'_'))]" name="nodes"/>
-          <xsl:with-param select="$label" name="label"/>
-
-        </xsl:call-template>
-      </xsl:for-each>
-      <!--*** Created ************************************* -->
-      <xsl:call-template name="printMetaDate">
-        <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes"/>
-        <xsl:with-param select="i18n:translate('metaData.createdAt')" name="label"/>
-      </xsl:call-template>
-      <!--*** Last Modified ************************************* -->
-      <xsl:call-template name="printMetaDate">
-
-        <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes"/>
-        <xsl:with-param select="i18n:translate('metaData.lastChanged')" name="label"/>
-      </xsl:call-template>
-      <!--*** MyCoRe-ID ************************************* -->
-      <tr>
-        <td class="metaname">
-          <xsl:value-of select="concat(i18n:translate('metaData.ID'),' :')"/>
-        </td>
-        <td class="metavalue">
-
-          <xsl:value-of select="./@ID"/>
-        </td>
-      </tr>
-    </table>
+    <div id="detailed-frame">
+			<table border="0" cellspacing="0">
+				<tr>
+					<td id="detailed-cube">
+						<xsl:value-of select="i18n:translate('metaData.type.inst')"/>
+					</td>
+					<td id="detailed-mainheadline">
+						<xsl:value-of select="./metadata/names/name/fullname"/>
+					</td>
+					<td id="detailed-links" colspan="1" rowspan="3">
+						
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" rowspan="1">
+						<table cellspacing="0" cellpadding="0" id="detailed-view">
+							
+							<!--1***name*************************************-->
+							
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/names/name/fullname"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.fullname')"
+									name="label"/>
+							</xsl:call-template>
+							
+							<!--1***nickname*************************************-->
+							
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/names/name/nickname"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.nickname')"
+									name="label"/>
+							</xsl:call-template>
+							
+							<!--1***property*************************************-->
+							
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/names/name/property"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.property')"
+									name="label"/>
+							</xsl:call-template>
+							
+							<!--2***address*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/addresses/address/street"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.street')"
+									name="label"/>
+							</xsl:call-template>
+							<!--2***address*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/addresses/address/number"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.number')"
+									name="label"/>
+							</xsl:call-template>
+							<!--2***address*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/addresses/address/zipcode"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.zipcode')"
+									name="label"/>
+							</xsl:call-template>
+							<!--2***address*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/addresses/address/city"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.city')"
+									name="label"/>
+							</xsl:call-template>
+							<!--2***address*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/addresses/address/country"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.country')"
+									name="label"/>
+							</xsl:call-template>
+							
+							<!--3***phone*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./metadata/phones/phone[@type='Telefon']"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.phone.Telefon')"
+									name="label"/>
+							</xsl:call-template>
+							<!--4***url*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/urls/url"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.url')"
+									name="label"/>
+								
+							</xsl:call-template>
+							
+							<!--5***email*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/emails/email"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('metaData.jpinst.email')"
+									name="label"/>
+							</xsl:call-template>
+							<!--6***note*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="./metadata/notes/note"
+									name="nodes"/>
+								
+								<xsl:with-param
+									select="i18n:translate('editor.search.document.note')"
+									name="label"/>
+							</xsl:call-template>
+							<tr id="detailed-dividingline">
+								<td style="text-align:right;">
+									_________________________________</td>
+								<td>_________________________________</td>
+							</tr>
+							<tr>
+								<td id="detailed-headlines">Systemdaten</td>
+							</tr>
+							
+							<!--*** Created ************************************* -->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./service/servdates/servdate[@type='createdate']"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('editor.search.document.datecr')"
+									name="label"/>
+							</xsl:call-template>
+							
+							<!--*** Last Modified ************************************* -->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param
+									select="./service/servdates/servdate[@type='modifydate']"
+									name="nodes"/>
+								<xsl:with-param
+									select="i18n:translate('editor.search.document.datemod')"
+									name="label"/>
+								
+							</xsl:call-template>
+							
+							<!--*** MyCoRe-ID ************************************* -->
+							<tr>
+								<td class="metaname" style="text-align:right; padding-right: 5px;">
+									<xsl:value-of
+										select="concat(i18n:translate('metaData.ID'),':')"/>
+								</td>
+								<td class="metavalue">
+									<xsl:value-of select="./@ID"/>
+								</td>
+							</tr>
+							<!-- Static URL ************************************************** -->
+							<xsl:call-template name="get.staticURL">
+								<xsl:with-param name="stURL" select="$staticURL"/>
+							</xsl:call-template>
+							<xsl:call-template name="emptyRow"/>
+							<!--*** Editor Buttons ************************************* -->
+							<xsl:call-template name="editobject">
+								<xsl:with-param select="$accessedit"
+									name="accessedit"/>
+								<xsl:with-param select="./@ID" name="id"/>
+							</xsl:call-template>
+							<!--*** List children per object type ************************************* -->
+							<!--
+							1.) get a list of objectTypes of all child elements
+							2.) remove duplicates from this list
+							3.) for-each objectTyp id list child elements
+							-->
+							
+							<xsl:variable name="objectTypes">
+								<xsl:for-each
+									select="./structure/children/child/@xlink:href">
+									<id>
+										<xsl:copy-of
+											select="substring-before(substring-after(.,'_'),'_')"/>
+									</id>
+								</xsl:for-each>
+							</xsl:variable>
+							<xsl:variable
+								select="xalan:nodeset($objectTypes)/id[not(.=following::id)]"
+								name="unique-ids"/>
+							<!--
+							the for-each would iterate over <id> with root not beeing /mycoreobject
+							so we save the current node in variable context to access needed nodes
+							-->
+							
+							<xsl:variable select="." name="context"/>
+							<xsl:for-each select="$unique-ids">
+								<xsl:variable select="." name="thisObjectType"/>
+								<xsl:variable name="label">
+									<xsl:choose>
+										<xsl:when
+											test="count($context/structure/children/child[contains(@xlink:href,$thisObjectType)])=1">
+											<xsl:value-of
+												select="i18n:translate(concat('metaData.',$thisObjectType,'.[singular]'))"/>
+										</xsl:when>
+										<xsl:otherwise>
+											
+											<xsl:value-of
+												select="i18n:translate(concat('metaData.',$thisObjectType,'.[plural]'))"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:variable>
+								<xsl:call-template name="printMetaDates">
+									<xsl:with-param
+										select="$context/structure/children/child[contains(@xlink:href, concat('_',$thisObjectType,'_'))]"
+										name="nodes"/>
+									<xsl:with-param select="$label" name="label"/>
+								</xsl:call-template>
+							</xsl:for-each>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
   </xsl:template>
 </xsl:stylesheet>
