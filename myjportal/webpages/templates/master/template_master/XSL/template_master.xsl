@@ -22,6 +22,8 @@
 				<link
 					href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
 					rel="stylesheet" type="text/css"/>
+				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet"
+					type="text/css"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
 					type="text/javascript"/>
@@ -55,7 +57,7 @@
 							<div class="history">
 								<xsl:call-template name="navigation.history"/>
 							</div>
-
+							
 						</div>
 						<!-- navigationBelow / Navigation right top corner -->
 						
@@ -72,7 +74,7 @@
 					<!-- mainSite_MenuArea -->
 					
 					<div class="mainSite_ContentArea">
-						<xsl:call-template name="getFastWCMS" />
+						<xsl:call-template name="getFastWCMS"/>
 						<div id="contentArea">
 							
 							<xsl:call-template
@@ -81,13 +83,16 @@
 					</div>
 					<!-- mainSite_ContentArea -->
 					
-					<div style="clear: both;"><br/></div> <!-- a small buffer beetween logo and content -->
-			
-				</div> <!-- border -->
+					<div style="clear: both;">
+						<br/>
+					</div> <!-- a small buffer beetween logo and content -->
 					
+				</div> <!-- border -->
+				
 			</body>
 		</html>
 	</xsl:template>
+	
 	
 	<!-- ======================================================================================================== -->
 	<xsl:template name="template_master.write.content">
@@ -106,6 +111,5 @@
 		<text i18n="editor.start.LoginText.label"/>:
 		<a href="{$LoginURL}">
 			<xsl:value-of select="$CurrentUser"/>
-		</a>
-	</xsl:template>
+		</a> </xsl:template>
 </xsl:stylesheet>
