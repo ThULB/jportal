@@ -112,9 +112,13 @@
     <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
 	  
     <!-- Search in person metadata -->
-    <field name="heading" type="name" source="objectMetadata" objects="person"
-      xpath="/mycoreobject/metadata/def.heading/heading" value="concat(lastName,', ',firstName)" sortable="true"
-      i18n="editor.search.person.name" />
+    <field name="headingFirstName" type="name" source="objectMetadata" objects="person"
+      xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true"
+      i18n="editor.search.person.firstName" />
+    <field name="headingLastName" type="name" source="objectMetadata" objects="person"
+      xpath="/mycoreobject/metadata/def.heading/heading" value="lastName" sortable="true"
+      i18n="editor.search.person.lastName" />
+	  	
     <field name="lastname" type="name" source="objectMetadata" objects="person"
       xpath="/mycoreobject/metadata/def.heading/heading/lastName | /mycoreobject/metadata/def.alternative/alternative/lastName"
       value="text()" i18n="editor.search.person.lastName" />

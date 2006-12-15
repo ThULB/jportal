@@ -106,37 +106,17 @@
       </td>
     </tr>
   </xsl:template>
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
   <!-- ======== indexpage ======== -->
   <xsl:template match="indexpage">
-    <table>
-      <xsl:call-template name="index.headline" />
-      <xsl:call-template name="index.intro" />
-      <xsl:call-template name="index.search" />
-      <xsl:apply-templates select="results" />
-    </table>
+		<table>
+			<xsl:call-template name="index.headline"/>
+			<xsl:call-template name="index.intro"/>
+			<xsl:call-template name="index.search"/>
+			<xsl:apply-templates select="results"/>
+		</table>				
   </xsl:template>
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+<!--	http://141.35.20.199:8291/indexpage?searchclass=jpperson_sub&mode=prefix&search=G&XSL.subselect.session=9r4c5hhb96cc-pm0fvqve&XSL.subselect.varpath=/mycoreobject/metadata/participants/participant&XSL.subselect.webpage=editor_form_commit-jpjournal.xml-->
   <xsl:variable name="up.url">
     <xsl:text>indexpage?searchclass=</xsl:text>
     <xsl:value-of select="$IndexID" />
@@ -216,13 +196,16 @@
       '?_action=end.subselect&amp;subselect.session=',$subselect.session,
       '&amp;subselect.varpath=', $subselect.varpath,
       '&amp;subselect.webpage=', $subselect.webpage)" />
+	<xsl:variable name="label">
+		<xsl:value-of select="concat(sort, ', ',idx)"/>  
+	</xsl:variable>
     <tr>
       <td class="td1" valign="top">
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@title={concat(idx, ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
-          <xsl:value-of select="concat(idx, ', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}">
+          <xsl:value-of select="$label" />
         </a>
       </td>
     </tr>

@@ -77,11 +77,11 @@ MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=fullname
 MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=id
 
 MCR.IndexBrowser.jpperson_sub.Table=person
-MCR.IndexBrowser.jpperson_sub.Searchfield=lastname
-MCR.IndexBrowser.jpperson_sub.FieldsToSort=lastname
+MCR.IndexBrowser.jpperson_sub.Searchfield=headingLastName
+MCR.IndexBrowser.jpperson_sub.FieldsToSort=headingLastName,headingFirstName
 MCR.IndexBrowser.jpperson_sub.Style=jpperson_sub
 MCR.IndexBrowser.jpperson_sub.MaxPerPage=30
-MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=lastname,firstname
+#MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=headingLastName,headingFirstName
 MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
 
 

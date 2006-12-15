@@ -106,36 +106,16 @@
       </td>
     </tr>
   </xsl:template>
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
   <!-- ======== indexpage ======== -->
   <xsl:template match="indexpage">
-    <table>
-      <xsl:call-template name="index.headline" />
-      <xsl:call-template name="index.intro" />
-      <xsl:call-template name="index.search" />
-      <xsl:apply-templates select="results" />
-    </table>
+		<table>
+			<xsl:call-template name="index.headline"/>
+			<xsl:call-template name="index.intro"/>
+			<xsl:call-template name="index.search"/>
+			<xsl:apply-templates select="results"/>
+		</table>				
   </xsl:template>
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
   <xsl:variable name="up.url">
     <xsl:text>indexpage?searchclass=</xsl:text>
@@ -216,13 +196,16 @@
       '?_action=end.subselect&amp;subselect.session=',$subselect.session,
       '&amp;subselect.varpath=', $subselect.varpath,
       '&amp;subselect.webpage=', $subselect.webpage)" />
+	  <xsl:variable name="label">
+		  <xsl:value-of select="sort"/>
+	  </xsl:variable>
     <tr>
       <td class="td1" valign="top">
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@title={concat(idx, ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
-          <xsl:value-of select="concat(idx, ', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}">
+          <xsl:value-of select="$label" />
         </a>
       </td>
     </tr>
