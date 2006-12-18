@@ -9,7 +9,7 @@
   xmlns:xalan="http://xml.apache.org/xalan">
 
   <xsl:variable name="MainTitle" select="i18n:translate('indexpage.sub.maintitle')" />
-  <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle')" />
+  <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle.institution')" />
   <xsl:variable name="Servlet" select="'MCRIndexBrowserServlet'" />
   <xsl:include href="MyCoReLayout.xsl" />
   <xsl:param name="WebApplicationBaseURL" />
@@ -231,11 +231,11 @@
   </xsl:template>
 
   <!-- ========== Titel ========== -->
-  <xsl:variable name="IndexTitle" select="i18n:translate('indexpage.sub.indextitle')" />
+  <xsl:variable name="IndexTitle" select="i18n:translate('indexpage.sub.indextitle.institution')" />
 
   <!-- ========== Einleitender Text ========== -->
   <xsl:template name="IntroText">
-    <xsl:value-of select="i18n:translate('indexpage.sub.introtext')"/>
+    <xsl:value-of select="i18n:translate('indexpage.sub.introtext.institution')"/>
     <p>
       <form
         action="{$WebApplicationBaseURL}{$subselect.webpage}{$HttpSession}?XSL.editor.session.id={$subselect.session}"

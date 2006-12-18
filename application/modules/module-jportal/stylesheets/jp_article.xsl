@@ -412,6 +412,7 @@
 							name="obj_host"/>
 							</xsl:call-template>-->
 							
+							
 							<!--*** Created ************************************* -->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'"
@@ -450,11 +451,13 @@
 									<xsl:value-of select="./@ID"/>
 								</td>
 							</tr>
+							
 							<!-- Static URL ************************************************** -->
 							<xsl:call-template name="get.staticURL">
 								<xsl:with-param name="stURL" select="$staticURL"/>
 							</xsl:call-template>
 							<xsl:call-template name="emptyRow"/>
+							
 							<!--*** Editor Buttons ************************************* -->
 							<!--      <xsl:call-template name="editobject_with_der">
 							<xsl:with-param select="$accessedit" name="accessedit"/>

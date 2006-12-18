@@ -235,7 +235,7 @@
 
   <!-- ========== Einleitender Text ========== -->
   <xsl:template name="IntroText">
-    <xsl:value-of select="i18n:translate('indexpage.sub.introtext')"/>
+    <xsl:value-of select="i18n:translate('indexpage.sub.introtext.person')"/>
     <p>
       <form
         action="{$WebApplicationBaseURL}{$subselect.webpage}{$HttpSession}?XSL.editor.session.id={$subselect.session}"

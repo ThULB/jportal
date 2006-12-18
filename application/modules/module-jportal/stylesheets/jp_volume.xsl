@@ -6,126 +6,10 @@
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
-	<xsl:param name="view.objectmetadata"/>
-	
-	<xsl:template match="/mycoreobject" priority="2">
 
-		<!--<xsl:variable name="test">
-			<xsl:value-of select="./structure/children/child/@xlink:href"/>
-		</xsl:variable>
-		
-		<xsl:if test="$test=''">
-			<xsl:variable name="view.objectmetadata">
-				<xsl:value-of select="'false'"/>
-			</xsl:variable>
-		</xsl:if>-->		
-		<xsl:call-template name="setParameter">
-			<xsl:with-param name="param" select="'view.objectmetadata'"/>
-			<xsl:with-param name="paramValue" select="$view.objectmetadata"/>
-			<xsl:with-param name="labelON" select="'&gt; Detailansicht'"/>
-			<xsl:with-param name="labelOFF" select="'&gt; Blätteransicht'"/>
-		</xsl:call-template>
-		
-		<xsl:choose>
-			<xsl:when test="$view.objectmetadata = 'false'">
-				
-				<xsl:choose>
-					<!--
-					<xsl:when test="document($accessurl)/mycoreaccesscheck/accesscheck/@return = 'true'">
-					-->
-					<xsl:when
-						test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
-						<!-- if access granted: print metadata -->
-						<xsl:apply-templates select="." mode="present">
-							<xsl:with-param name="obj_host" select="$objectHost"/>
-						</xsl:apply-templates>
-						<!-- IE Fix for padding and border -->
-						<hr/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of
-							select="i18n:translate('metaData.accessDenied')"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:otherwise>
-				<table cellpadding="0" cellspacing="0">
-					<tr>
-						
-						<td id="leaf-headline2">
-							
-							<xsl:if test="./structure/parents/parent/@xlink:href!=''">
-							<xsl:variable name="parent_name">
-								<xsl:value-of
-									select="document(concat('mcrobject:',./structure/parents/parent/@xlink:href))/mycoreobject/metadata/maintitles/maintitle/text()"/>
-							</xsl:variable>
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="./structure/parents/parent/@xlink:href"/>
-								<xsl:with-param name="obj_name" select="$parent_name"/>
-							</xsl:call-template>
-							</xsl:if>
-							>
-							<span>
-							<xsl:value-of
-								select="/mycoreobject/metadata/maintitles/maintitle/text()"/>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<td id="leaf-headline1">
-							_________________________________________________</td>
-						
-					</tr>
-					<tr>
-						<td colspan="2" rowspan="1" id="leaf-headline2"> 
-						</td>
-						<td colspan="1" rowspan="2" id="leaf-preview">
-							<img
-								src="{concat($WebApplicationBaseURL,'preview.png')}"/>
-						</td>
-					</tr>
-					<tr>
-						<td id="leaf-leafarea">
-							<br/>
-							<table cellpadding="0" cellspacing="0" border="0">
-								<xsl:variable select="." name="context"/>
-								<xsl:for-each
-									select="./structure/children/child">
-									<tr id="leaf-all">
-										<td id="leaf-front">
-											<div></div>
-										</td>
-										<td id="leaf-linkarea">
-											
-											<xsl:variable name="name">
-												<xsl:value-of
-													select="document(concat('mcrobject:',@xlink:href))/mycoreobject/metadata/maintitles/maintitle/text()"/>
-											</xsl:variable>
-											<!--<xsl:variable name="date">
-											<xsl:call-template name="dateConvert">
-											<xsl:with-param name="dateUnconverted"
-											select="document(concat('mcrobject:',@xlink:href))/mycoreobject/metadata/dates/date[@type='published']"/>
-											</xsl:call-template>
-											</xsl:variable>-->
-											<xsl:call-template
-												name="objectLinking">
-												<xsl:with-param name="obj_id"
-													select="@xlink:href"/>
-												<xsl:with-param name="obj_name"
-													select="$name"/>
-											</xsl:call-template>
-											
-										</td>
-									</tr>
-									<tr id="leaf-whitespaces"></tr>
-								</xsl:for-each>
-							</table>
-						</td>
-					</tr>
-				</table>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+    <xsl:param name="PageTitle" select="'Inhaltsverzeichnis'" />
+	
+	<!-- ===================================================================================================== -->	
 	
 	<xsl:template name="dateConvert">
 		<xsl:param name="dateUnconverted"/>
@@ -153,48 +37,7 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template name="objectLinking">
-		<xsl:param name="obj_id"/>
-		<xsl:param name="obj_name"/>
-		<!-- 
-		LOCAL REQUEST
-		-->
-		<xsl:if test="$objectHost = 'local'">
-			<xsl:variable name="mcrobj"
-				select="document(concat('mcrobject:',$obj_id))/mycoreobject"/>
-			<xsl:choose>
-				<xsl:when test="acl:checkPermission($obj_id,'read')">
-					<a
-						href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}">
-						<xsl:value-of select="$obj_name"/>
-					</a>
-				</xsl:when>
-				<xsl:otherwise>
-					<!-- Build Login URL for LoginServlet -->
-					<xsl:variable xmlns:encoder="xalan://java.net.URLEncoder"
-						name="LoginURL"
-						select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )"/>
-					<xsl:apply-templates select="$mcrobj" mode="resulttitle"/>
-					&#160;
-					<a href="{$LoginURL}">
-						<img
-							src="{concat($WebApplicationBaseURL,'images/paper_lock.gif')}"/>
-					</a>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:if>
-		<!-- 
-		REMOTE REQUEST
-		-->
-		<xsl:if test="$objectHost != 'local'">
-			<xsl:variable name="mcrobj"
-				select="document(concat('mcrws:operation=MCRDoRetrieveObject&amp;host=',$objectHost,'&amp;ID=',$obj_id))/mycoreobject"/>
-			<a
-				href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}?host={@host}">
-				<xsl:apply-templates select="$mcrobj" mode="resulttitle"/>
-			</a>
-		</xsl:if>
-	</xsl:template>
+	<!-- ===================================================================================================== -->	
 	
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jpvolume_')]">
@@ -249,9 +92,9 @@
 		</tr>
 	</xsl:template>
 	
+	<!-- ===================================================================================================== -->	
 	
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
-	
 	<xsl:template priority="1" mode="resulttitle"
 		match="/mycoreobject[contains(@ID,'_jpvolume_')]">
 		<xsl:choose>
@@ -300,6 +143,7 @@
 		<xsl:param select="$objectHost" name="obj_host"/>
 		<xsl:param name="accessedit"/>
 		<xsl:param name="accessdelete"/>
+		
 		<xsl:variable name="objectBaseURL">
 			<xsl:if test="$objectHost != 'local'">
 				<xsl:value-of
@@ -698,67 +542,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<!-- ************************ -->
-	<xsl:template name="setParameter">
-		<xsl:param name="param"/>
-		<xsl:param name="paramValue"/> <!-- to verify within template -->
-		<xsl:param name="labelOFF"/>
-		<xsl:param name="labelON"/>
-		
-		<xsl:variable name="RequestURL_view-Deleted">
-			<xsl:call-template name="UrlDelParam">
-				<xsl:with-param name="url" select="$RequestURL"/>
-				
-				
-				<!--				<xsl:with-param name="par" select="'XSL.view.objectmetadata'"/>-->
-				<xsl:with-param name="par" select="concat('XSL.',$param)"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="targetURL">
-			<xsl:call-template name="UrlDelParam">
-				<xsl:with-param name="url" select="$RequestURL_view-Deleted"/>
-				<xsl:with-param name="par"
-					select="concat('XSL.',$param,'.SESSION')"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<table id="switch">
-			<tr>
-				<td>
-					<xsl:choose>
-						<xsl:when test="$paramValue='false'">
-							<xsl:variable name="targetURL_withParam">
-								<xsl:call-template name="UrlSetParam">
-									<xsl:with-param name="url"
-										select="$targetURL"/>
-									<xsl:with-param name="par"
-										select="concat('XSL.',$param,'.SESSION')"/>
-									<xsl:with-param name="value" select="'true'"/>
-								</xsl:call-template>
-							</xsl:variable>
-							<a href="{$targetURL_withParam}">
-								<xsl:value-of select="$labelOFF"/>
-							</a>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:variable name="targetURL_withParam">
-								<xsl:call-template name="UrlSetParam">
-									<xsl:with-param name="url"
-										select="$targetURL"/>
-									<xsl:with-param name="par"
-										select="concat('XSL.',$param,'.SESSION')"/>
-									<xsl:with-param name="value"
-										select="'false'"/>
-								</xsl:call-template>
-							</xsl:variable>
-							<a href="{$targetURL_withParam}">
-								<xsl:value-of select="$labelON"/>
-							</a>
-						</xsl:otherwise>
-					</xsl:choose>
-				</td>
-			</tr>
-		</table>
-	</xsl:template>
+	<!-- ===================================================================================================== -->	
 	
 	<xsl:template name="printMetaDates">
   <!-- prints a table row for a given nodeset -->

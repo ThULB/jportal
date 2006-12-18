@@ -26,9 +26,9 @@
             <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
             <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
             <!-- classi -->
-            <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
+<!--            <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
             <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
-            <cell row="90" col="3" anchor="WEST" ref="classi_help" />
+            <cell row="90" col="3" anchor="WEST" ref="classi_help" />-->
             <!-- abstract -->
             <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
             <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
@@ -80,8 +80,8 @@
             <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
             <hidden var="metadata/maintitles/@parasearch" default="true" />
             <hidden var="metadata/maintitles/@textsearch" default="true" />
-            <hidden var="metadata/maintitles/@notinherit" default="false" />
-            <hidden var="metadata/maintitles/@heritable" default="false" />
+<!--            <hidden var="metadata/maintitles/@notinherit" default="false" />-->
+            <hidden var="metadata/maintitles/@heritable" default="true" />
             <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" 
                   default="de" />
@@ -105,7 +105,7 @@
       </panel>
       <!-- end: SubTitle -->
       <!-- classi ================================================================== -->
-      <panel id="classi_input">
+<!--      <panel id="classi_input">
             <hidden var="metadata/classis/@class" default="MCRMetaClassification" />
             <hidden var="metadata/classis/@parasearch" default="true" />
             <hidden var="metadata/classis/@textsearch" default="false" />
@@ -121,7 +121,7 @@
       </panel>
       <list id="Cclassi" width="300" type="dropdown">
 		    <include uri="classification:editor:-1:children:jportal_class_00000003" />		  
-      </list>
+      </list>-->
       <!-- end: classi -->
       <!-- abstract ================================================================== -->
       <panel id="abstract_input">
@@ -144,7 +144,7 @@
             <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
             <hidden var="metadata/dates/@parasearch" default="true" />
             <hidden var="metadata/dates/@textsearch" default="true" />
-            <hidden var="metadata/dates/@heritable" default="false" />
+            <hidden var="metadata/dates/@heritable" default="true" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1" >
                   <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
             </cell>
