@@ -4,7 +4,7 @@
 	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
 	exclude-result-prefixes="xlink mcr i18n acl xalan">
 	<xsl:param name="view.objectmetadata"/>
-	<xsl:param name="toc.pos"/>
+	<xsl:param name="toc.pos" select="0"/>
 	<xsl:param name="toc.pageSize" select="10"/>
 	
 	<!-- ===================================================================================================== -->
