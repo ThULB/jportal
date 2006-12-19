@@ -125,48 +125,14 @@
 		<div id="detailed-frame">
 			<table border="0" cellspacing="0">
 				<tr>
-					<td id="detailed-cube">
-						<xsl:value-of
-							select="i18n:translate('metaData.type.article')"/>
-					</td>
-					<td id="detailed-mainheadline">
-						<xsl:value-of select="./metadata/maintitles/maintitle"/>
-					</td>
-					<td id="detailed-links" colspan="1" rowspan="3">
-						<table id="detailed-contenttable" border="0"
-							cellspacing="0">
-							<tr id="detailed-contents">
-								<td>
-									<div>PDF ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>PDF ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>JPEG ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>TIFF ansehen >></div>
-								</td>
-							</tr>
-						</table>
+					<td></td>
+					<td>
+				<xsl:call-template name="printDerivates">
+					<xsl:with-param name="obj_id" select="@ID"/>
+					</xsl:call-template>						
 					</td>
 				</tr>
+
 				<tr>
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
