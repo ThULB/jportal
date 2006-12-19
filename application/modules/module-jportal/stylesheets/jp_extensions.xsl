@@ -756,10 +756,10 @@
 		<table cellpadding="0" cellspacing="0" border="0">
 			<tr>
 				<td colspan="2">
-					<xsl:call-template name="printTOCNavi"/>					
+					<xsl:call-template name="printTOCNavi"/>
 				</td>
 			</tr>
-
+			
 			<xsl:for-each select="./structure/children/child">
 				
 				<!-- take care on children result list lenght -->
@@ -824,24 +824,25 @@
 			</xsl:for-each>
 			<tr>
 				<td colspan="2">
-					<xsl:call-template name="printTOCNavi"/>					
+					<xsl:call-template name="printTOCNavi"/>
 				</td>
 			</tr>
-
+			
 		</table>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
 	<xsl:template name="printTOCNavi">
 		<table>
-			<!--		<xsl:if test="count(/mycoreobject/structure/children//child)>number($toc.pageSize)">-->
+			<xsl:variable name="pred">
+				<xsl:value-of select="number($toc.pos)-(number($toc.pageSize)+1)"/>
+			</xsl:variable>
+			<xsl:variable name="succ">
+				<xsl:value-of select="number($toc.pos)+number($toc.pageSize)+1"/>
+			</xsl:variable>
+			<xsl:variable name="numChildren">
+				<xsl:value-of select="count(/mycoreobject/structure/children//child)"/>
+			</xsl:variable>
 			<tr>
-				<xsl:variable name="pred">
-					<xsl:value-of select="number($toc.pos)-(number($toc.pageSize)+1)"/>
-				</xsl:variable>
-				<xsl:variable name="succ">
-					<xsl:value-of select="number($toc.pos)+number($toc.pageSize)+1"/>
-				</xsl:variable>
-				
 				<td>
 					<xsl:if test="$pred>=0">
 						<a
@@ -850,7 +851,32 @@
 						</a>
 					</xsl:if>
 				</td>
+				<xsl:variable name="to">
+					<xsl:choose>
+						<xsl:when test="(number($toc.pageSize)+number($toc.pos))>number($numChildren)">
+							<xsl:value-of select="number($numChildren)"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="number($toc.pos)+number($toc.pageSize)"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:variable>
+				<td align="center">
+					<xsl:if test="$pred>=0 or number($numChildren)>= $succ">
+						<xsl:value-of select="concat($toc.pos,'-',number($to),' von ',number($numChildren))"/>
+					</xsl:if>
+				</td>
 				<td>
+					<xsl:if test="number($numChildren)>= $succ">
+						<a
+							href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$succ}">
+							&gt;&gt;
+						</a>
+					</xsl:if>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" align="center">
 					<form id="pageSize" target="_self"
 						action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}" method="post">
 						<p>
@@ -869,18 +895,7 @@
 						</p>
 					</form>
 				</td>
-				<td>
-					<xsl:if test="count(/mycoreobject/structure/children//child)>= $succ">
-						<a
-							href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$succ}">
-							&gt;&gt;
-						</a>
-					</xsl:if>
-				</td>
 			</tr>
-			<!--		</xsl:if>-->
-			
 		</table>
-		
 	</xsl:template>
 </xsl:stylesheet>
