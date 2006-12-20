@@ -148,7 +148,7 @@
 								<xsl:with-param select="'right'"
 									name="textalign"/>
 								<xsl:with-param
-									select="./metadata/maintitles/maintitle"
+									select="./metadata/maintitles/maintitle[@inherited='0']"
 									name="nodes"/>
 								<xsl:with-param
 									select="i18n:translate('editor.search.document.maintitle')"
@@ -161,7 +161,7 @@
 								<xsl:with-param select="'right'"
 									name="textalign"/>
 								<xsl:with-param
-									select="./metadata/subtitles/subtitle[@type='title_spokenAbout']"
+									select="./metadata/subtitles/subtitle"
 									name="nodes"/>
 								<xsl:with-param
 									select="i18n:translate('editor.search.document.subtitle')"
@@ -185,7 +185,7 @@
 								<xsl:with-param select="'right'"
 									name="textalign"/>
 								<xsl:with-param
-									select="./metadata/dates/date[@type='published']"
+									select="./metadata/dates/date"
 									name="nodes"/>
 								<xsl:with-param
 									select="i18n:translate('editor.search.document.date')"
@@ -210,7 +210,7 @@
 								<xsl:with-param select="'right'"
 									name="textalign"/>
 								<xsl:with-param
-									select="./metadata/identis/identi[@type='issn']"
+									select="./metadata/identis/identi"
 									name="nodes"/>
 								<xsl:with-param
 									select="i18n:translate('metaData.jparticle.identi.issn')"
@@ -246,7 +246,7 @@
 								<xsl:with-param select="'right'"
 									name="textalign"/>
 								<xsl:with-param
-									select="./metadata/abstracts/abstract[@type='extend']"
+									select="./metadata/abstracts/abstract"
 									name="nodes"/>
 								<xsl:with-param
 									select="i18n:translate('metaData.jparticle.abstract.extend')"

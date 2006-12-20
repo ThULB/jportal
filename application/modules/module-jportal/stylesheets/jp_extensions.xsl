@@ -216,15 +216,11 @@
 	<xsl:template name="emptyRow">
 		<tr>
 			<td>
-				
 				<br/>
-				
 				<br/>
 			</td>
 			<td>
-				
 				<br/>
-				
 				<br/>
 			</td>
 		</tr>
@@ -233,78 +229,128 @@
 	
 	<!-- ============================================================================================================================ -->
 	<xsl:template name="printHistoryRow">
+		<xsl:param name="underline" select="'false'"/>
+		<xsl:param name="sortOrder" select="'descending'"/>
+		
 		<table>
 			<tr>
 				<td id="leaf-headline2">
-					
-					<xsl:for-each select="./metadata/maintitles/maintitle">
-						
-						<xsl:sort select="@inherited" order="descending"/>
-						
-						<xsl:choose>
-							
-							<xsl:when test="@inherited='0'">
-								
-								<span>
-									
-									<xsl:value-of select="text()"/>
-									
-								</span>
-								
-							</xsl:when>
-							
-							<xsl:when test="@inherited='1' ">
-								
-								<xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
-									
-									<xsl:variable name="parent_name">
-										
-										<xsl:value-of
-											select="document(concat('mcrobject:',/mycoreobject/structure/parents/parent/@xlink:href))/mycoreobject/metadata/maintitles/maintitle/text()"/>
-										
-									</xsl:variable>
-									
-									<xsl:variable name="href">
-										
-										<xsl:value-of select="/mycoreobject/structure/parents/parent/@xlink:href"/>
-										
-									</xsl:variable>
-									
-									<xsl:call-template name="objectLinking">
-										
-										<xsl:with-param name="obj_id" select="$href"/>
-										
-										<xsl:with-param name="obj_name" select="$parent_name"/>
-										<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-										
-									</xsl:call-template>
-									
-									<xsl:value-of select="' &gt; '"/>
-									
-								</xsl:if>
-								
-							</xsl:when>
-							
-							<xsl:otherwise>
-								
-								<xsl:value-of select="concat(text(),' > ')"/>
-								
-							</xsl:otherwise>
-							
-						</xsl:choose>
-						
-					</xsl:for-each>
-					
+					<xsl:choose>
+						<xsl:when test="$sortOrder='descending'">
+							<xsl:for-each select="./metadata/maintitles/maintitle">
+								<xsl:sort select="@inherited" order="descending"/>
+								<xsl:call-template name="printHistoryRow.rows">
+									<xsl:with-param name="sortOrder" select="$sortOrder"/>
+								</xsl:call-template>
+							</xsl:for-each>							
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:for-each select="./metadata/maintitles/maintitle">
+								<xsl:sort select="@inherited" order="ascending"/>
+								<xsl:call-template name="printHistoryRow.rows">
+									<xsl:with-param name="sortOrder" select="$sortOrder"/>									
+								</xsl:call-template>
+							</xsl:for-each>														
+						</xsl:otherwise>
+					</xsl:choose>
 				</td>
 			</tr>
-			<tr>
-				<td id="leaf-headline1"> _________________________________________________</td>
-			</tr>
+			<xsl:if test="$underline='true'">
+				<tr>
+					<td id="leaf-headline1"> _________________________________________________</td>
+				</tr>
+			</xsl:if>
 		</table>
 	</xsl:template>
 	
-	
 	<!-- ============================================================================================================================ -->
+	
+	<xsl:template name="printHistoryRow.rows">
+		<xsl:param name="sortOrder"/>
+		<xsl:choose>
+			<xsl:when test="@inherited='0'">
+				<span>
+					<xsl:variable name="date">
+						<xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
+							<xsl:value-of
+								select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')"/>
+						</xsl:if>
+					</xsl:variable>
+					<xsl:variable name="text">
+						<xsl:call-template name="ShortenText">
+							<xsl:with-param name="text" select="text()"/>
+							<xsl:with-param name="length" select="25"/>
+						</xsl:call-template>
+					</xsl:variable>						
+					<xsl:variable name="label">
+						<xsl:value-of select="concat($text,$date)"/>
+					</xsl:variable>
+					<xsl:value-of select="$label"/>
+				</span>
+			</xsl:when>
+			<xsl:when test="@inherited='1' ">
+				<xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
+					<xsl:variable name="date">
+						<xsl:if test="/mycoreobject/metadata/dates/date[@inherited='1']">
+							<xsl:value-of
+								select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='1']/text(),')')"/>
+						</xsl:if>
+					</xsl:variable>
+					<xsl:variable name="text">
+						<xsl:call-template name="ShortenText">
+							<xsl:with-param name="text" select="text()"/>
+							<xsl:with-param name="length" select="25"/>
+						</xsl:call-template>
+					</xsl:variable>								
+					<xsl:variable name="label">
+						<xsl:choose>
+							<xsl:when test="$sortOrder='descending'">
+								<xsl:value-of select="concat($text,$date, ' > ')"/>								
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="concat(' > ',$text,$date)"/>																
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
+						<xsl:with-param name="obj_name" select="$label"/>
+						<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
+					</xsl:call-template>
+				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:variable name="heritedLevel">
+					<xsl:value-of select="@inherited"/>
+				</xsl:variable>
+				<xsl:variable name="date">
+					<xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]">
+						<xsl:value-of
+							select="concat(' (',/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]/text(),')')"/>
+					</xsl:if>
+				</xsl:variable>
+				<xsl:variable name="text">
+					<xsl:call-template name="ShortenText">
+						<xsl:with-param name="text" select="text()"/>
+						<xsl:with-param name="length" select="25"/>
+					</xsl:call-template>
+				</xsl:variable>							
+				<xsl:variable name="label">
+						<xsl:choose>
+							<xsl:when test="$sortOrder='descending'">
+								<xsl:value-of select="concat($text,$date, ' > ')"/>								
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="concat(' > ',$text,$date)"/>																
+							</xsl:otherwise>
+						</xsl:choose>					
+				</xsl:variable>
+				<xsl:value-of select="$label"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<!-- ============================================================================================================================ -->	
 	
 	<xsl:template name="objectLinking">
 		<xsl:param name="obj_id"/>
@@ -463,38 +509,22 @@
 	
 	<xsl:template name="printTOCLink">
 		<xsl:choose>
-			
 			<xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]">
-				
 				<xsl:call-template name="objectLinking">
-					
 					<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
-					
 					<xsl:with-param name="obj_name"
 						select="concat('Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(), ' &gt;')"/>
-					
 					<xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true'"/>
-					
 				</xsl:call-template>
-				
 			</xsl:when>
-			
 			<xsl:otherwise>
-				
 				<xsl:call-template name="setParameter">
-					
 					<xsl:with-param name="param" select="'view.objectmetadata'"/>
-					
 					<xsl:with-param name="paramValue" select="$view.objectmetadata"/>
-					
 					<xsl:with-param name="labelON" select="'Detailansicht &gt;'"/>
-					
 					<xsl:with-param name="labelOFF" select="'Inhaltsverzeichnis &gt;'"/>
-					
 				</xsl:call-template>
-				
 			</xsl:otherwise>
-			
 		</xsl:choose>
 	</xsl:template>
 	
