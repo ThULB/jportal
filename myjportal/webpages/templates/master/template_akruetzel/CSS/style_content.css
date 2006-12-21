@@ -284,3 +284,126 @@ div.submitButton{
 #browseClass div.comment{
     font-style: italic;
 }
+
+
+/* =================================================================== */
+/*                     						   						   */
+/* new layout for journals, volumes, articles, 						   */
+/* persons and institutions                    						   */
+/* 						                    						   */
+/* =================================================================== */
+
+/* =================================================================== */
+/*  used colors:													   */
+/* 			                                                           */
+/* 			                                                           */
+/* 	darkest red: #660000; for outer frame, content-links...            */
+/*  dark red: 	 #7C0000; for headlines, leaf-links                    */
+/* 	light red: 	 #C25454; descriptions...                              */
+/*  white:		 #FFFFFF; hover link color                             */
+/* 			                                                           */
+/* 			                                                           */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/* leafs view                                                          */
+/* =================================================================== */
+#leaf-all {	
+	color: #7C0000;
+	border: 1px solid #7C0000;
+}
+
+#leaf-front{
+	border: 1px solid #7C0000;
+	background-color: #7C0000;
+	color: #FFFFFF;
+}
+
+#leaf-front div{
+    background-color: #7C0000;
+	color: #FFFFFF;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+    color:#7C0000;
+}
+
+#leaf-linkarea a:hover {
+	background-color:#7C0000;
+    color:#FFFFFF;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+    color:#7C0000;
+}
+
+#leaf-linkarea2 a:hover {
+	background-color:#7C0000;
+    color:#FFFFFF;
+}
+
+#leaf-whitespaces{
+    color:#FFFFFF;
+}
+
+#leaf-headline1 {
+	color: #660000;
+}
+
+#leaf-headline2 {
+	color: #660000;
+}
+
+#leaf-preview img{
+	border: 1px solid #000000;
+}
+
+/* =================================================================== */
+/* detailed view                                                       */
+/* =================================================================== */
+#detailed-headlines {
+    color: #7C0000;
+}
+
+#detailed-cube {
+	background-color:#660000;
+	color: #FFFFFF;
+}
+
+#detailed-view {
+	color: #C25454; 
+}
+
+#detailed-labels {
+	color: #C25454;
+}
+
+#detailed-frame{
+	border: 2px solid #660000;
+}
+
+#detailed-dividingline hr{
+	color: #660000;
+	background-color: #660000;
+}
+
+/* =================================================================== */
+/* detailed-view content links                                         */
+/* =================================================================== */
+
+#detailed-contents {
+	background-color: #660000;
+}
+
+#detailed-contents a {
+    color: #FFFFFF;
+}
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks a {
+	color: #C25454;
+}

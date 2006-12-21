@@ -22,6 +22,8 @@
 				<link
 					href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
 					rel="stylesheet" type="text/css"/>
+				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet"
+					type="text/css"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
 					type="text/javascript"/>

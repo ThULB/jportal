@@ -283,3 +283,125 @@ div.submitButton{
 #browseClass div.comment{
     font-style: italic;
 }
+
+/* =================================================================== */
+/*                     						   						   */
+/* new layout for journals, volumes, articles, 						   */
+/* persons and institutions                    						   */
+/* 						                    						   */
+/* =================================================================== */
+
+/* =================================================================== */
+/*  used colors:													   */
+/* 			                                                           */
+/* 			                                                           */
+/* 	darkest red: #415979; for outer frame, content-links...            */
+/*  dark red: 	 #455B7C; for headlines, leaf-links                    */
+/* 	light red: 	 #B5A75C; descriptions...                              */
+/*  white:		 #FFFFFF; hover link color                             */
+/* 			                                                           */
+/* 			                                                           */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/* leafs view                                                          */
+/* =================================================================== */
+#leaf-all {	
+	color: #455B7C;
+	border: 1px solid #455B7C;
+}
+
+#leaf-front{
+	border: 1px solid #455B7C;
+	background-color: #455B7C;
+	color: #FFFFFF;
+}
+
+#leaf-front div{
+    background-color: #455B7C;
+	color: #FFFFFF;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+    color:#455B7C;
+}
+
+#leaf-linkarea a:hover {
+	background-color:#455B7C;
+    color:#FFFFFF;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+    color:#455B7C;
+}
+
+#leaf-linkarea2 a:hover {
+	background-color:#455B7C;
+    color:#FFFFFF;
+}
+
+#leaf-whitespaces{
+    color:#FFFFFF;
+}
+
+#leaf-headline1 {
+	color: #415979;
+}
+
+#leaf-headline2 {
+	color: #415979;
+}
+
+#leaf-preview img{
+	border: 1px solid #000000;
+}
+
+/* =================================================================== */
+/* detailed view                                                       */
+/* =================================================================== */
+#detailed-headlines {
+    color: #455B7C;
+}
+
+#detailed-cube {
+	background-color:#415979;
+	color: #FFFFFF;
+}
+
+#detailed-view {
+	color: #B5A75C; 
+}
+
+#detailed-labels {
+	color: #B5A75C;
+}
+
+#detailed-frame{
+	border: 2px solid #415979;
+}
+
+#detailed-dividingline hr{
+	color: #415979;
+	background-color: #415979;
+}
+
+/* =================================================================== */
+/* detailed-view content links                                         */
+/* =================================================================== */
+
+#detailed-contents {
+	background-color: #415979;
+}
+
+#detailed-contents a {
+    color: #FFFFFF;
+}
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks a {
+	color: #B5A75C;
+}

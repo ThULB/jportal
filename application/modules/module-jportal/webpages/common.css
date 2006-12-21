@@ -4,19 +4,7 @@
 /* =================================================================== */
 
 /* =================================================================== */
-/*  used colors:													   */
-/* 			                                                           */
-/* 			                                                           */
-/* 	darkest red: #660000 for outer frame, content-links...             */
-/*  dark red: 	 #7C0000 for headlines, leaf-links                     */
-/* 	light red: 	 descriptions...                                       */
-/*  white:		 FFFFFF hover link color                               */
-/* 			                                                           */
-/* 			                                                           */
-/* =================================================================== */
-
-/* =================================================================== */
-/* view switch                                                         */
+/* view switch (detailed/leafs)                                        */
 /* =================================================================== */
 
 #switch {
@@ -27,15 +15,11 @@
 	text-align: right;
 }
 
-
 /* =================================================================== */
 /* leafs view                                                          */
 /* =================================================================== */
 
-#leaf-all {
-    height: 20px;
-	width: 200px;	
-	color: #7C0000;
+#leaf-all {	
     font-size: 16px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
@@ -43,26 +27,24 @@
 }
 
 #leaf-front{
-	width: 15px;
-	border: 1px solid;
-    border-color: #7C0000;
-	background-color: #7C0000;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 3px;
 }
 
 #leaf-front div{
 	width: 15px;
-    background-color: #7C0000;
+	text-align: center;
+	font-size: 12px;
+	font-weight: bold;
 }
 
 #leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
 	display:block;
 	line-height:26px;
-	width: 180px;
-	background-color:#FFFFFF;
-	border: solid 1px #7C0000;
-    color:#7C0000;
+	width: 300px;
     text-decoration:none;
-
     font-size: 12px;
     font-family: verdana, sans-serif;
 	padding-left:10px;
@@ -70,9 +52,16 @@
     margin:0px;
 }
 
-#leaf-linkarea a:hover {
-	background-color:#7C0000;
-    color:#FFFFFF;
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+	display:block;
+	line-height:26px;
+	width: 600px;
+    text-decoration:none;
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+	padding-left:10px;
+    padding-bottom:0px;
+    margin:0px;
 }
 
 #leaf-whitespaces{
@@ -81,14 +70,12 @@
 
 #leaf-headline1 {
 	vertical-align: top;
-	color: #660000;
 	padding-right: 20px;
 	padding-top: 0px;
 }
 
 #leaf-headline2 {
 	vertical-align: top;
-	color: #660000;
 	font-size: 12px;
 	padding-right: 20px;
 }
@@ -100,10 +87,6 @@
 #leaf-preview{
 	padding-top: 15px;
 }	
-
-#leaf-preview img{
-	border: 1px solid #000000;
-}
 
 #leaf-leafarea {
 	vertical-align: top;
@@ -121,9 +104,9 @@
 }
 
 #detailed-headlines {
+	width: 230px;
 	text-align: right;
 	font-size: 16px;
-    color: #7C0000;
 	padding-top: 10px;
 	padding-right: 5px;
 }
@@ -131,32 +114,27 @@
 #detailed-cube {
 	width: 35px; 
 	height: 35px; 
-	background-color:#660000;
-	color: #FFFFFF;
 	text-align: center;
 	font-size: 12px;
 	font-weight: bold;
 }
 
 #detailed-view {
-	color: #c25454;
 	padding: 10px; 
 }
 
 #detailed-labels {
 	text-align: right;
-	color: #c25454;
 	padding-right: 5px;
 }
 
 #detailed-frame{
 	width: 670px;
-	border: 2px solid #660000;
 	padding: 0px;
 }
 
-#detailed-dividingline {
-	color: #660000;
+#detailed-dividingline hr{
+	height: 1px;
 }
 
 #detailed-staticurl1 {
@@ -189,16 +167,26 @@
 	text-align: center;
 	vertical-align: middle;
     height: 25px;
-	background-color: #660000;
-	color: #FFFFFF;
 	padding-right: 20px;
 }
 
-#detailed-contents div:hover {
-    text-decoration:underline;
+#detailed-contents a {
 }
 
+#detailed-contents a:hover {
+    text-decoration: underline;
+}
 
 #detailed-whitespaces {
 	height: 10px;
+}
+
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks {
+	font-size: 10px;
+	padding-left: 10px;
 }
