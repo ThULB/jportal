@@ -45,40 +45,69 @@
 			
 			<xsl:value-of select="@id"/>
 		</xsl:variable>
-		<tr>
-			<td colspan="2" class="resultTitle">
-				<xsl:copy-of select="$mcrobjlink"/>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2" class="description">
-				
-				<div>please edit &lt;template match=mcr:hit[contains(@id,'_jpvolume_')]&gt; for object type: jpvolume</div>
-				<!--
-				you could insert here a preview for your metadata, e.g.
-				uncomment the next block and replace "your-tags/here"
-				by something of your metadata
-				-->
-				<!--
-				<div>D
-				short description:
-				<xsl:call-template name="printI18N">
-				<xsl:with-param name="nodes" select="$mcrobj/metadata/your-tags/here" />
-				</xsl:call-template>
-				</div>
-				-->
-				<span class="properties">
-					<xsl:variable name="date">
-						<xsl:call-template name="formatISODate">
-							<xsl:with-param select="$mcrobj/service/servdates/servdate[@type='modifydate']" name="date"/>
-							
-							<xsl:with-param select="i18n:translate('metaData.date')" name="format"/>
-						</xsl:call-template>
+		<xsl:variable name="cXML">
+			<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
+		</xsl:variable>
+		<table cellspacing="0" cellpadding="0" id="leaf-all">
+			<tr>
+				<td id="leaf-front" colspan="1" rowspan="2">
+					
+					<xsl:value-of select="i18n:translate('metaData.type.volume')"/>
+					
+				</td>
+				<td id="leaf-linkarea2">
+					
+					<xsl:variable name="name">
+						<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
 					</xsl:variable>
-					<xsl:value-of select="i18n:translate('results.lastChanged',$date)"/>
-				</span>
-			</td>
-		</tr>
+					<xsl:variable name="date">
+						<xsl:choose>
+							<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+								<xsl:variable name="date">
+									<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+								</xsl:variable>
+								<xsl:value-of select="concat(' (',$date,')')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:variable name="label">
+						<xsl:value-of select="concat($name,$date)"/>
+					</xsl:variable>
+					<xsl:choose>
+						<xsl:when test="contains(@id,'_jparticle_')">
+							<xsl:call-template name="objectLinking">
+								<xsl:with-param name="obj_id" select="@id"/>
+								<xsl:with-param name="obj_name" select="$label"/>
+								<xsl:with-param name="requestParam"
+									select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="objectLinking">
+								<xsl:with-param name="obj_id" select="@id"/>
+								<xsl:with-param name="obj_name" select="$label"/>
+								<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
+							</xsl:call-template>
+						</xsl:otherwise>
+					</xsl:choose>
+				</td>
+			</tr>
+			<tr>
+				<xsl:call-template name="printDerivates">
+					<xsl:with-param name="obj_id" select="@id"/>
+					<xsl:with-param name="knoten" select="$cXML"/>
+				</xsl:call-template>
+			</tr>
+		</table>
+		<table cellspacing="0" cellpadding="0">
+			<tr id="leaf-whitespaces">
+				<td>
+				</td>
+			</tr>
+		</table>
 	</xsl:template>
 	
 	<!-- ===================================================================================================== -->
@@ -152,35 +181,9 @@
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
-							<tr id="detailed-contents">
-								<td>
-									<div>PDF ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>PDF ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>JPEG ansehen >></div>
-								</td>
-							</tr>
-							<tr id="detailed-whitespaces">
-								<td></td>
-							</tr>
-							<tr id="detailed-contents">
-								<td>
-									<div>TIFF ansehen >></div>
-								</td>
-							</tr>
+							<xsl:call-template name="printDerivates">
+								<xsl:with-param name="obj_id" select="@ID"/>
+							</xsl:call-template>
 						</table>
 					</td>
 				</tr>
@@ -224,8 +227,9 @@
 								<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
 							</xsl:call-template>
 							<tr id="detailed-dividingline">
-								<td style="text-align:right;"> _________________________________</td>
-								<td>_________________________________</td>
+								<td colspan="2">
+									<hr noshade="noshade" width="460"/>
+								</td>
 							</tr>
 							<tr>
 								<td id="detailed-headlines">Systemdaten</td>
@@ -477,8 +481,9 @@
 		<xsl:if test="$nodes">
 			<xsl:if test="$volume-node='true'">
 				<tr id="detailed-dividingline">
-					<td style="text-align:right;">_________________________________</td>
-					<td>_________________________________</td>
+					<td colspan="2">
+						<hr noshade="noshade" width="460"/>
+					</td>
 				</tr>
 				<tr>
 					<td id="detailed-headlines">Inhaltliche Beschreibung</td>
