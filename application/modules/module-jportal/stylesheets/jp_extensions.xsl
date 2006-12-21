@@ -912,15 +912,15 @@
 						<p>
 							<select onChange="document.getElementById('pageSize').submit()"
 								name="XSL.toc.pageSize.SESSION" size="1">
-								<option value="" selected="selected">Anzahl angezeigter Treffer aendern</option>
-								<option value="5">5</option>
-								<option value="10">10</option>
-								<option value="15">15</option>
-								<option value="20">20</option>
-								<option value="30">30</option>
-								<option value="40">40</option>
-								<option value="50">50</option>
-								<option value="1000000">alle</option>
+								<option value="" selected="selected">Inhaltsverzeichnis unterteilen</option>
+								<option value="5">in 5'er Gruppen</option>
+								<option value="10">in 10'er Gruppen</option>
+								<option value="15">in 15'er Gruppen</option>
+								<option value="20">in 20'er Gruppen</option>
+								<option value="30">in 30'er Gruppen</option>
+								<option value="40">in 40'er Gruppen</option>
+								<option value="50">in 50'er Gruppen</option>
+								<option value="1000000">keine Unterteilung</option>
 							</select>
 						</p>
 					</form>
