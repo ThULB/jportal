@@ -242,15 +242,15 @@
 								<xsl:call-template name="printHistoryRow.rows">
 									<xsl:with-param name="sortOrder" select="$sortOrder"/>
 								</xsl:call-template>
-							</xsl:for-each>							
+							</xsl:for-each>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:for-each select="./metadata/maintitles/maintitle">
 								<xsl:sort select="@inherited" order="ascending"/>
 								<xsl:call-template name="printHistoryRow.rows">
-									<xsl:with-param name="sortOrder" select="$sortOrder"/>									
+									<xsl:with-param name="sortOrder" select="$sortOrder"/>
 								</xsl:call-template>
-							</xsl:for-each>														
+							</xsl:for-each>
 						</xsl:otherwise>
 					</xsl:choose>
 				</td>
@@ -262,6 +262,7 @@
 			</xsl:if>
 		</table>
 	</xsl:template>
+	
 	
 	<!-- ============================================================================================================================ -->
 	
@@ -281,7 +282,7 @@
 							<xsl:with-param name="text" select="text()"/>
 							<xsl:with-param name="length" select="25"/>
 						</xsl:call-template>
-					</xsl:variable>						
+					</xsl:variable>
 					<xsl:variable name="label">
 						<xsl:value-of select="concat($text,$date)"/>
 					</xsl:variable>
@@ -301,14 +302,14 @@
 							<xsl:with-param name="text" select="text()"/>
 							<xsl:with-param name="length" select="25"/>
 						</xsl:call-template>
-					</xsl:variable>								
+					</xsl:variable>
 					<xsl:variable name="label">
 						<xsl:choose>
 							<xsl:when test="$sortOrder='descending'">
-								<xsl:value-of select="concat($text,$date, ' > ')"/>								
+								<xsl:value-of select="concat($text,$date, ' > ')"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="concat(' > ',$text,$date)"/>																
+								<xsl:value-of select="concat(' > ',$text,$date)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
@@ -334,23 +335,24 @@
 						<xsl:with-param name="text" select="text()"/>
 						<xsl:with-param name="length" select="25"/>
 					</xsl:call-template>
-				</xsl:variable>							
+				</xsl:variable>
 				<xsl:variable name="label">
-						<xsl:choose>
-							<xsl:when test="$sortOrder='descending'">
-								<xsl:value-of select="concat($text,$date, ' > ')"/>								
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="concat(' > ',$text,$date)"/>																
-							</xsl:otherwise>
-						</xsl:choose>					
+					<xsl:choose>
+						<xsl:when test="$sortOrder='descending'">
+							<xsl:value-of select="concat($text,$date, ' > ')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="concat(' > ',$text,$date)"/>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:variable>
 				<xsl:value-of select="$label"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
-	<!-- ============================================================================================================================ -->	
+	
+	<!-- ============================================================================================================================ -->
 	
 	<xsl:template name="objectLinking">
 		<xsl:param name="obj_id"/>
@@ -777,91 +779,93 @@
 				
 				<!-- take care on children result list lenght -->
 				<xsl:if test="(position()>=$toc.pos) and ($toc.pos+$toc.pageSize>=position())">
-					
-					<xsl:variable name="cXML">
-						<xsl:copy-of select="document(concat('mcrobject:',@xlink:href))"/>
-					</xsl:variable>
-					<table cellspacing="0" cellpadding="0" id="leaf-all">
-						<tr>
-							<td id="leaf-front" colspan="1" rowspan="2">
-								<xsl:variable name="OID">
-									<xsl:call-template name="typeOfObjectID">
-										<xsl:with-param name="id" select="@xlink:href"/>
-									</xsl:call-template>
-								</xsl:variable>
-								<xsl:choose>
-									<xsl:when test="$OID='jpvolume'">
-										<xsl:value-of select="i18n:translate('metaData.type.volume')"/>
-									</xsl:when>
-									<xsl:when test="$OID='jpjournal'">
-										<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
-									</xsl:when>
-									<xsl:when test="$OID='jparticle'">
-										<xsl:value-of select="i18n:translate('metaData.type.article')"/>
-									</xsl:when>
-									<xsl:otherwise>
-									</xsl:otherwise>
-								</xsl:choose>
-							</td>
-							<td id="leaf-linkarea">
-								
-								<xsl:variable name="name">
-									<xsl:value-of
-										select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
-								</xsl:variable>
-								<xsl:variable name="date">
-									<xsl:choose>
-										<xsl:when
-											test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-											<xsl:variable name="date">
-												<xsl:value-of
-													select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
-											</xsl:variable>
-											<xsl:value-of select="concat(' (',$date,')')"/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="''"/>
-										</xsl:otherwise>
-									</xsl:choose>
-								</xsl:variable>
-								<xsl:variable name="label">
-									<xsl:value-of select="concat($name,$date)"/>
-								</xsl:variable>
-								<xsl:variable name="shortlabel">
-									<xsl:call-template name="ShortenText">
-										<xsl:with-param name="text" select="$label"/>
-										<xsl:with-param name="length" select="40"/>
-									</xsl:call-template>
-								</xsl:variable>
-								<xsl:choose>
-									<xsl:when test="contains(@xlink:href,'_jparticle_')">
-										<xsl:call-template name="objectLinking">
-											<xsl:with-param name="obj_id" select="@xlink:href"/>
-											<xsl:with-param name="obj_name" select="$shortlabel"/>
-											<xsl:with-param name="requestParam"
-												select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-										</xsl:call-template>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:call-template name="objectLinking">
-											<xsl:with-param name="obj_id" select="@xlink:href"/>
-											<xsl:with-param name="obj_name" select="$shortlabel"/>
-											<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-										</xsl:call-template>
-									</xsl:otherwise>
-								</xsl:choose>
-							</td>
-						</tr>
-						<tr>
-							<xsl:call-template name="printDerivates">
-								<xsl:with-param name="obj_id" select="@xlink:href"/>
-								<xsl:with-param name="knoten" select="$cXML"/>
-							</xsl:call-template>
-						</tr>
-					</table>
 					<tr id="leaf-whitespaces">
 						<td colspan="2">
+							<xsl:variable name="cXML">
+								<xsl:copy-of select="document(concat('mcrobject:',@xlink:href))"/>
+							</xsl:variable>
+							<table cellspacing="0" cellpadding="0" id="leaf-all">
+								<tr>
+									<td id="leaf-front" colspan="1" rowspan="2">
+										<xsl:variable name="OID">
+											<xsl:call-template name="typeOfObjectID">
+												<xsl:with-param name="id" select="@xlink:href"/>
+											</xsl:call-template>
+										</xsl:variable>
+										<xsl:choose>
+											<xsl:when test="$OID='jpvolume'">
+												<xsl:value-of select="i18n:translate('metaData.type.volume')"/>
+											</xsl:when>
+											<xsl:when test="$OID='jpjournal'">
+												<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
+											</xsl:when>
+											<xsl:when test="$OID='jparticle'">
+												<xsl:value-of select="i18n:translate('metaData.type.article')"/>
+											</xsl:when>
+											<xsl:otherwise>
+											</xsl:otherwise>
+										</xsl:choose>
+									</td>
+									<td id="leaf-linkarea">
+										
+										<xsl:variable name="name">
+											<xsl:value-of
+												select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+										</xsl:variable>
+										<xsl:variable name="date">
+											<xsl:choose>
+												<xsl:when
+													test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+													<xsl:variable name="date">
+														<xsl:value-of
+															select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+													</xsl:variable>
+													<xsl:value-of select="concat(' (',$date,')')"/>
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="''"/>
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:variable>
+										<xsl:variable name="label">
+											<xsl:value-of select="concat($name,$date)"/>
+										</xsl:variable>
+										<xsl:variable name="shortlabel">
+											<xsl:call-template name="ShortenText">
+												<xsl:with-param name="text" select="$label"/>
+												<xsl:with-param name="length" select="40"/>
+											</xsl:call-template>
+										</xsl:variable>
+										<xsl:choose>
+											<xsl:when test="contains(@xlink:href,'_jparticle_')">
+												<xsl:call-template name="objectLinking">
+													<xsl:with-param name="obj_id" select="@xlink:href"/>
+													<xsl:with-param name="obj_name" select="$shortlabel"/>
+													<xsl:with-param name="requestParam"
+														select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+												</xsl:call-template>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:call-template name="objectLinking">
+													<xsl:with-param name="obj_id" select="@xlink:href"/>
+													<xsl:with-param name="obj_name" select="$shortlabel"/>
+													<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
+												</xsl:call-template>
+											</xsl:otherwise>
+										</xsl:choose>
+									</td>
+								</tr>
+								<tr>
+									<xsl:call-template name="printDerivates">
+										<xsl:with-param name="obj_id" select="@xlink:href"/>
+										<xsl:with-param name="knoten" select="$cXML"/>
+									</xsl:call-template>
+								</tr>
+							</table>
 						</td>
+					</tr>
+					<tr>
+						<td><br/></td>
 					</tr>
 				</xsl:if>
 			</xsl:for-each>
@@ -870,9 +874,9 @@
 					<xsl:call-template name="printTOCNavi"/>
 				</td>
 			</tr>
-			
 		</table>
 	</xsl:template>
+	
 	<!-- ===================================================================================================== -->
 	<xsl:template name="printTOCNavi">
 		<table>
