@@ -12,11 +12,11 @@
 			<hidden default="xml" var="conditions/@format"/>
 			<hidden default="and" var="conditions/boolean/@operator"/>
 			<!-- Search in field 'heading' with operator 'contains' -->
-			<hidden default="heading" var="conditions/boolean/condition1/@field"/>
+			<hidden default="headingLastName" var="conditions/boolean/condition1/@field"/>
 			<hidden default="contains"
 				var="conditions/boolean/condition1/@operator"/>
 			<cell anchor="EAST" col="1" row="1">
-				<text i18n="editor.search.person.name"/>
+				<text i18n="editor.search.person.lastName"/>
 			</cell>
 			<cell var="conditions/boolean/condition1/@value" anchor="WEST" col="2"
 				row="1" ref="input.name"/>
@@ -67,8 +67,8 @@
 						<cell var="@name" anchor="WEST" col="1" row="1">
 							<list type="dropdown">
 								<item i18n="editor.search.choose" value=""/>
-								<item i18n="editor.search.person.name"
-									value="heading"/>
+								<item i18n="editor.search.person.lastName"
+									value="headingLastName"/>
 								<item i18n="editor.search.document.datecr"
 									value="dateCreated"/>
 							</list>
