@@ -84,6 +84,13 @@ MCR.IndexBrowser.jpperson_sub.MaxPerPage=30
 #MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=headingLastName,headingFirstName
 MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
 
+##############################################################################
+# The DOM parser configuration
+##############################################################################
+
+# The name of the Java class of the XML parser
+MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
+
 
 
 
