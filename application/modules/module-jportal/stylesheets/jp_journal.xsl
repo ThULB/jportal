@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xalan="http://xml.apache.org/xalan"
-	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-	xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
-<!--	<xsl:include href="mcr-module-startIview.xsl"/>-->
+	<!--	<xsl:include href="mcr-module-startIview.xsl"/>-->
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jpjournal_')]">
 		<xsl:param name="mcrobj"/>
@@ -28,9 +26,11 @@
 					
 				</td>
 				<td id="leaf-linkarea2">
-					
 					<xsl:variable name="name">
-						<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="25"/>
+							</xsl:call-template>						
 					</xsl:variable>
 					<xsl:variable name="date">
 						<xsl:choose>
@@ -48,23 +48,12 @@
 					<xsl:variable name="label">
 						<xsl:value-of select="concat($name,$date)"/>
 					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="contains(@id,'_jparticle_')">
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam"
-									select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="@id"/>
+						<xsl:with-param name="obj_name" select="$label"/>
+						<xsl:with-param name="requestParam"
+							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
@@ -73,19 +62,17 @@
 					<xsl:with-param name="knoten" select="$cXML"/>
 				</xsl:call-template>
 			</tr>
-			</table>
-		    <table cellspacing="0" cellpadding="0">
+		</table>
+		<table cellspacing="0" cellpadding="0">
 			<tr id="leaf-whitespaces">
 				<td>
 				</td>
 			</tr>
-			</table>
+		</table>
 	</xsl:template>
 	
-	
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
-	<xsl:template priority="1" mode="resulttitle"
-		match="/mycoreobject[contains(@ID,'_jpjournal_')]">
+	<xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
 		<xsl:choose>
 			<!--
 			you could insert any title-like metadata here, e.g.
@@ -93,8 +80,7 @@
 			-->
 			<xsl:when test="./metadata/your-tags">
 				<xsl:call-template name="printI18N">
-					<xsl:with-param select="./metadata/your-tags/here"
-						name="nodes"/>
+					<xsl:with-param select="./metadata/your-tags/here" name="nodes"/>
 				</xsl:call-template>
 			</xsl:when>
 			
@@ -104,8 +90,7 @@
 		</xsl:choose>
 	</xsl:template>
 	<!--Template for title in metadata view: see mycoreobject.xsl-->
-	<xsl:template priority="1" mode="title"
-		match="/mycoreobject[contains(@ID,'_jpjournal_')]">
+	<xsl:template priority="1" mode="title" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
 		<xsl:choose>
 			<!--
 			you could insert any title-like metadata here, e.g.
@@ -114,8 +99,7 @@
 			
 			<xsl:when test="./metadata/your-tags">
 				<xsl:call-template name="printI18N">
-					<xsl:with-param select="./metadata/your-tags/here"
-						name="nodes"/>
+					<xsl:with-param select="./metadata/your-tags/here" name="nodes"/>
 				</xsl:call-template>
 			</xsl:when>
 			<xsl:otherwise>
@@ -125,8 +109,7 @@
 		
 	</xsl:template>
 	<!--Template for metadata view: see mycoreobject.xsl-->
-	<xsl:template priority="1" mode="present"
-		match="/mycoreobject[contains(@ID,'_jpjournal_')]">
+	<xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
 		<xsl:param select="$objectHost" name="obj_host"/>
 		<xsl:param name="accessedit"/>
 		<xsl:param name="accessdelete"/>
@@ -137,8 +120,7 @@
 				
 			</xsl:if>
 			<xsl:if test="$objectHost = 'local'">
-				<xsl:value-of
-					select="concat($WebApplicationBaseURL,'receive/')"/>
+				<xsl:value-of select="concat($WebApplicationBaseURL,'receive/')"/>
 			</xsl:if>
 		</xsl:variable>
 		<xsl:variable name="staticURL">
@@ -151,13 +133,19 @@
 						<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:value-of select="./metadata/maintitles/maintitle"/>
+						<xsl:variable name="maintitle_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="./metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="25"/>
+							</xsl:call-template>
+						</xsl:variable>						
+						<xsl:value-of select="$maintitle_shorted"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
-									<xsl:call-template name="printDerivates">
-										<xsl:with-param name="obj_id" select="@ID"/>
-									</xsl:call-template>
+							<xsl:call-template name="printDerivates">
+								<xsl:with-param name="obj_id" select="@ID"/>
+							</xsl:call-template>
 						</table>
 					</td>
 				</tr>
@@ -165,147 +153,92 @@
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<tr>
-								<td id="detailed-headlines">Formale
-									Beschreibung</td>
+								<td id="detailed-headlines">Formale Beschreibung</td>
 							</tr>
-							
 							
 							<!--1***maintitle*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/maintitles/maintitle"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.maintitle')"
-									name="label"/>
+								<xsl:with-param select="./metadata/maintitles/maintitle" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--2***subtitle*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/subtitles/subtitle[@type='title_spokenAbout']"
+								<xsl:with-param select="./metadata/subtitles/subtitle[@type='title_spokenAbout']"
 									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.subtitle')"
-									name="label"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.subtitle')" name="label"/>
 								
 							</xsl:call-template>
-							
 							
 							<!--3***participant*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/participants/participant"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('metaData.jpjournal.participant')"
-									name="label"/>
+								<xsl:with-param select="./metadata/participants/participant" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jpjournal.participant')" name="label"/>
 							</xsl:call-template>
 							<!--4***date*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/dates/date[@type='published_from']"
-									name="nodes"/>
+								<xsl:with-param select="./metadata/dates/date[@type='published_from']" name="nodes"/>
 								
-								<xsl:with-param
-									select="i18n:translate('metaData.jpjournal.date.published_from')"
+								<xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_from')"
 									name="label"/>
 							</xsl:call-template>
 							<!--5***date*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/dates/date[@type='published_until']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('metaData.jpjournal.date.published_until')"
+								<xsl:with-param select="./metadata/dates/date[@type='published_until']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_until')"
 									name="label"/>
 							</xsl:call-template>
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-								<hr noshade="noshade" width="460"/>	
-								</td>	
+									<hr noshade="noshade" width="460"/>
+								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines">Inhaltliche
-									Beschreibung</td>
+								<td id="detailed-headlines">Inhaltliche Beschreibung</td>
 							</tr>
-							
 							
 							<!--6***classi*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/classis/classi"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.classi')"
-									name="label"/>
+								<xsl:with-param select="./metadata/classis/classi" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.classi')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--7***abstract*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/abstracts/abstract[@type='extend']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.abstract')"
-									name="label"/>
+								<xsl:with-param select="./metadata/abstracts/abstract[@type='extend']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.abstract')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--8***identi*************************************-->
 							
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/identis/identi[@type='issn']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('metaData.jpjournal.identi.issn')"
-									name="label"/>
+								<xsl:with-param select="./metadata/identis/identi[@type='issn']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jpjournal.identi.issn')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--9***identi*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/identis/identi[@type='nbn']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('metaData.jpjournal.identi.nbn')"
-									name="label"/>
+								<xsl:with-param select="./metadata/identis/identi[@type='nbn']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jpjournal.identi.nbn')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--10***language*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./metadata/languages/language"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.language')"
-									name="label"/>
+								<xsl:with-param select="./metadata/languages/language" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.language')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--11***right*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/rights/right"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.right')"
-									name="label"/>
+								<xsl:with-param select="./metadata/rights/right" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.right')" name="label"/>
 								
 							</xsl:call-template>
 							
-							
 							<!--12***note*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/notes/note"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.note')"
-									name="label"/>
+								<xsl:with-param select="./metadata/notes/note" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
 							</xsl:call-template>
 							
 							<!--<!-#-13***hidden_jpjournalID*************************************-#->
@@ -343,12 +276,12 @@
 							</xsl:call-template>-->
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-								<hr noshade="noshade" width="460"/>	
-								</td>	
+									<hr noshade="noshade" width="460"/>
+								</td>
 							</tr>
 							<tr>
 								<td id="detailed-headlines">Systemdaten</td>
-							</tr>							
+							</tr>
 							<!--<!-#-*** List children per object type ************************************* -#->
 							<!-#-
 							1.) get a list of objectTypes of all child elements
@@ -406,33 +339,21 @@
 							</xsl:call-template>-->
 							<!--*** Created ************************************* -->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./service/servdates/servdate[@type='createdate']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.datecr')"
-									name="label"/>
+								<xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label"/>
 							</xsl:call-template>
-							
 							
 							<!--*** Last Modified ************************************* -->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param
-									select="./service/servdates/servdate[@type='modifydate']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.datemod')"
-									name="label"/>
+								<xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label"/>
 								
 							</xsl:call-template>
 							
-							
 							<!--*** MyCoRe-ID ************************************* -->
 							<tr>
-								<td class="metaname"
-									style="text-align:right;  padding-right: 5px;">
-									<xsl:value-of
-										select="concat(i18n:translate('metaData.ID'),':')"/>
+								<td class="metaname" style="text-align:right;  padding-right: 5px;">
+									<xsl:value-of select="concat(i18n:translate('metaData.ID'),':')"/>
 								</td>
 								<td class="metavalue">
 									<xsl:value-of select="./@ID"/>
@@ -445,8 +366,7 @@
 							<xsl:call-template name="emptyRow"/>
 							<!--*** Editor Buttons ************************************* -->
 							<xsl:call-template name="editobject_with_der">
-								<xsl:with-param select="$accessedit"
-									name="accessedit"/>
+								<xsl:with-param select="$accessedit" name="accessedit"/>
 								<xsl:with-param select="./@ID" name="id"/>
 							</xsl:call-template>
 							<xsl:call-template name="addChild">
@@ -464,9 +384,7 @@
 		<xsl:param name="id"/>
 		<xsl:param name="layout"/>
 		<xsl:param name="types"/>
-		<xsl:param
-			select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)"
-			name="xmltempl"/>
+		<xsl:param select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)" name="xmltempl"/>
 		<xsl:variable name="suffix">
 			
 			<xsl:if test="string-length($layout)&gt;0">
@@ -482,8 +400,7 @@
 		<xsl:if test="acl:checkPermission($id,'writedb')">
 			<tr>
 				<td class="metaname">
-					<xsl:value-of
-						select="concat(i18n:translate('metaData.addChildObject'),':')"/>
+					<xsl:value-of select="concat(i18n:translate('metaData.addChildObject'),':')"/>
 				</td>
 				<td class="metavalue">
 					<ul>
@@ -493,8 +410,7 @@
 							<li>
 								<a
 									href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
-									<xsl:value-of
-										select="i18n:translate(concat('metaData.',$type,'.[singular]'))"/>
+									<xsl:value-of select="i18n:translate(concat('metaData.',$type,'.[singular]'))"/>
 								</a>
 							</li>
 						</xsl:for-each>
@@ -509,8 +425,7 @@
 		<xsl:param name="staticURL"/>
 		<xsl:param name="layout"/>
 		<xsl:param name="xmltempl"/>
-		<xsl:variable select="substring-before(substring-after(./@ID,'_'),'_')"
-			name="type"/>
+		<xsl:variable select="substring-before(substring-after(./@ID,'_'),'_')" name="type"/>
 		<xsl:variable name="suffix">
 			
 			<xsl:if test="string-length($layout)&gt;0">
@@ -520,8 +435,7 @@
 		<xsl:if test="./structure/derobjects">
 			<tr>
 				<td style="vertical-align:top;" class="metaname">
-					<xsl:value-of
-						select="i18n:translate('metaData.jpjournal.[derivates]')"/>
+					<xsl:value-of select="i18n:translate('metaData.jpjournal.[derivates]')"/>
 				</td>
 				
 				<td class="metavalue">
@@ -530,29 +444,20 @@
 					</xsl:if>
 					<xsl:if test="$objectHost = 'local'">
 						<xsl:for-each select="./structure/derobjects/derobject">
-							<table cellpadding="0" cellspacing="0" border="0"
-								width="100%">
+							<table cellpadding="0" cellspacing="0" border="0" width="100%">
 								<tr>
 									
 									<td valign="top" align="left">
 										<div class="derivateBox">
-											<xsl:variable select="@xlink:href"
-												name="deriv"/>
-											<xsl:variable
-												select="concat('mcrobject:',$deriv)"
-												name="derivlink"/>
-											<xsl:variable
-												select="document($derivlink)"
-												name="derivate"/>
-											<xsl:apply-templates
-												select="$derivate/mycorederivate/derivate/internals"/>
-											<xsl:apply-templates
-												select="$derivate/mycorederivate/derivate/externals"/>
+											<xsl:variable select="@xlink:href" name="deriv"/>
+											<xsl:variable select="concat('mcrobject:',$deriv)" name="derivlink"/>
+											<xsl:variable select="document($derivlink)" name="derivate"/>
+											<xsl:apply-templates select="$derivate/mycorederivate/derivate/internals"/>
+											<xsl:apply-templates select="$derivate/mycorederivate/derivate/externals"/>
 										</div>
 									</td>
 									
-									<xsl:if
-										test="acl:checkPermission(./@ID,'writedb')">
+									<xsl:if test="acl:checkPermission(./@ID,'writedb')">
 										<td align="right" valign="top">
 											<a
 												href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;re_mcrid={../../../@ID}&amp;se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;todo=saddfile{$suffix}{$xmltempl}">
@@ -581,44 +486,44 @@
 			</tr>
 			<!-- MCR-IView ..start -->
 			<!-- example implementation -->
-<!--			<xsl:if test="$objectHost = 'local'">
-				<xsl:for-each select="./structure/derobjects/derobject">
-					<xsl:variable select="@xlink:href" name="deriv"/>
-					<xsl:variable name="firstSupportedFile">
-						<xsl:call-template name="iview.getSupport">
-							<xsl:with-param select="$deriv" name="derivID"/>
-							
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="$firstSupportedFile != ''">
-							<tr>
-								<td colspan="2" class="metanone">
-									<br/>
-									<xsl:call-template name="iview">
-										<xsl:with-param select="$deriv"
-											name="derivID"/>
-										
-										<xsl:with-param
-											select="$firstSupportedFile"
-											name="pathOfImage"/>
-										<xsl:with-param select="'500'"
-											name="height"/>
-										<xsl:with-param select="'750'"
-											name="width"/>
-										<xsl:with-param select="'fitToWidth'"
-											name="scaleFactor"/>
-										<xsl:with-param select="'normal'"
-											name="display"/>
-										<xsl:with-param select="'image'"
-											name="style"/>
-									</xsl:call-template>
-								</td>
-							</tr>
-							
-						</xsl:when>
-					</xsl:choose>
-				</xsl:for-each>
+			<!--			<xsl:if test="$objectHost = 'local'">
+			<xsl:for-each select="./structure/derobjects/derobject">
+			<xsl:variable select="@xlink:href" name="deriv"/>
+			<xsl:variable name="firstSupportedFile">
+			<xsl:call-template name="iview.getSupport">
+			<xsl:with-param select="$deriv" name="derivID"/>
+			
+			</xsl:call-template>
+			</xsl:variable>
+			<xsl:choose>
+			<xsl:when test="$firstSupportedFile != ''">
+			<tr>
+			<td colspan="2" class="metanone">
+			<br/>
+			<xsl:call-template name="iview">
+			<xsl:with-param select="$deriv"
+			name="derivID"/>
+			
+			<xsl:with-param
+			select="$firstSupportedFile"
+			name="pathOfImage"/>
+			<xsl:with-param select="'500'"
+			name="height"/>
+			<xsl:with-param select="'750'"
+			name="width"/>
+			<xsl:with-param select="'fitToWidth'"
+			name="scaleFactor"/>
+			<xsl:with-param select="'normal'"
+			name="display"/>
+			<xsl:with-param select="'image'"
+			name="style"/>
+			</xsl:call-template>
+			</td>
+			</tr>
+			
+			</xsl:when>
+			</xsl:choose>
+			</xsl:for-each>
 			</xsl:if>-->
 			<!-- MCR - IView ..end -->
 		</xsl:if>

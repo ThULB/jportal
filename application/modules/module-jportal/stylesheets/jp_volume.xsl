@@ -4,9 +4,6 @@
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
-	
-	<xsl:param name="PageTitle" select="'Inhaltsverzeichnis'"/>
-	
 	<!-- ===================================================================================================== -->
 	
 	<xsl:template name="dateConvert">
@@ -56,9 +53,11 @@
 					
 				</td>
 				<td id="leaf-linkarea2">
-					
 					<xsl:variable name="name">
-						<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="75"/>
+							</xsl:call-template>
 					</xsl:variable>
 					<xsl:variable name="date">
 						<xsl:choose>
@@ -76,23 +75,12 @@
 					<xsl:variable name="label">
 						<xsl:value-of select="concat($name,$date)"/>
 					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="contains(@id,'_jparticle_')">
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam"
-									select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="@id"/>
+						<xsl:with-param name="obj_name" select="$label"/>
+						<xsl:with-param name="requestParam"
+							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
@@ -177,7 +165,13 @@
 						<xsl:value-of select="i18n:translate('metaData.type.volume')"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:value-of select="./metadata/maintitles/maintitle"/>
+						<xsl:variable name="maintitle_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="./metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="75"/>
+							</xsl:call-template>
+						</xsl:variable>						
+						<xsl:value-of select="$maintitle_shorted"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">

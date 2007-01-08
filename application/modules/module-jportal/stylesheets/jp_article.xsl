@@ -11,7 +11,7 @@
 		<xsl:variable select="100" name="DESCRIPTION_LENGTH"/>
 		<xsl:variable select="@host" name="host"/>
 		<xsl:variable name="obj_id">
-
+			
 			<xsl:value-of select="@id"/>
 		</xsl:variable>
 		
@@ -26,10 +26,13 @@
 					
 				</td>
 				<td id="leaf-linkarea2">
-					
 					<xsl:variable name="name">
-						<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="75"/>
+							</xsl:call-template>
 					</xsl:variable>
+										
 					<xsl:variable name="date">
 						<xsl:choose>
 							<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
@@ -46,23 +49,12 @@
 					<xsl:variable name="label">
 						<xsl:value-of select="concat($name,$date)"/>
 					</xsl:variable>
-					<xsl:choose>
-						<xsl:when test="contains(@id,'_jparticle_')">
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam"
-									select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:call-template name="objectLinking">
-								<xsl:with-param name="obj_id" select="@id"/>
-								<xsl:with-param name="obj_name" select="$label"/>
-								<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-							</xsl:call-template>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="@id"/>
+						<xsl:with-param name="obj_name" select="$label"/>
+						<xsl:with-param name="requestParam"
+							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
@@ -71,13 +63,13 @@
 					<xsl:with-param name="knoten" select="$cXML"/>
 				</xsl:call-template>
 			</tr>
-			</table>
-		    <table cellspacing="0" cellpadding="0">
+		</table>
+		<table cellspacing="0" cellpadding="0">
 			<tr id="leaf-whitespaces">
 				<td>
 				</td>
 			</tr>
-			</table>
+		</table>
 	</xsl:template>
 	
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
@@ -143,7 +135,13 @@
 						<xsl:value-of select="i18n:translate('metaData.type.article')"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:value-of select="./metadata/maintitles/maintitle"/>
+						<xsl:variable name="maintitle_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="./metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="length" select="75"/>
+							</xsl:call-template>
+						</xsl:variable>						
+						<xsl:value-of select="$maintitle_shorted"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
@@ -168,14 +166,9 @@
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/maintitles/maintitle" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
-								<xsl:with-param select="'right'"
-									name="textalign"/>
-								<xsl:with-param
-									select="./metadata/maintitles/maintitle[@inherited='0']"
-									name="nodes"/>
-								<xsl:with-param
-									select="i18n:translate('editor.search.document.maintitle')"
-									name="label"/>
+								<xsl:with-param select="'right'" name="textalign"/>
+								<xsl:with-param select="./metadata/maintitles/maintitle[@inherited='0']" name="nodes"/>
+								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
 							</xsl:call-template>
 							
 							<!--2***subtitle*************************************-->

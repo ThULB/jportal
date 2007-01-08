@@ -25,11 +25,21 @@
 						</div>
 					</td>
 					<td id="leaf-linkarea">
-						
+						<xsl:variable name="lastName_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/lastName/text()"/>
+								<xsl:with-param name="length" select="30"/>
+							</xsl:call-template>
+						</xsl:variable>									
+						<xsl:variable name="firstName_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/firstName/text()"/>
+								<xsl:with-param name="length" select="30"/>
+							</xsl:call-template>
+						</xsl:variable>			
 						<xsl:variable name="name">
-							<xsl:value-of
-								select="concat(xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/lastName/text(),', ',xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/firstName/text())"/>
-						</xsl:variable>
+							<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
+						</xsl:variable>						
 						<xsl:variable name="date">
 							<xsl:choose>
 								<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
@@ -47,23 +57,12 @@
 						<xsl:variable name="label">
 							<xsl:value-of select="concat($name,$date)"/>
 						</xsl:variable>
-						<xsl:choose>
-							<xsl:when test="contains(@id,'_jparticle_')">
-								<xsl:call-template name="objectLinking">
-									<xsl:with-param name="obj_id" select="@id"/>
-									<xsl:with-param name="obj_name" select="$label"/>
-									<xsl:with-param name="requestParam"
-										select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-								</xsl:call-template>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:call-template name="objectLinking">
-									<xsl:with-param name="obj_id" select="@id"/>
-									<xsl:with-param name="obj_name" select="$label"/>
-									<xsl:with-param name="requestParam" select="'XSL.toc.pos.SESSION=0'"/>
-								</xsl:call-template>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:call-template name="objectLinking">
+							<xsl:with-param name="obj_id" select="@id"/>
+							<xsl:with-param name="obj_name" select="$label"/>
+							<xsl:with-param name="requestParam"
+								select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+						</xsl:call-template>
 					</td>
 				</tr>
 				<tr id="leaf-whitespaces">
@@ -109,7 +108,20 @@
 						<xsl:value-of select="i18n:translate('metaData.type.pers')"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:value-of select="concat(./metadata/def.heading/heading/lastName/text(),', ',./metadata/def.heading/heading/firstName/text())"/>
+						<xsl:variable name="lastName_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="./metadata/def.heading/heading/lastName/text()"/>
+								<xsl:with-param name="length" select="30"/>
+							</xsl:call-template>
+						</xsl:variable>									
+						<xsl:variable name="firstName_shorted">
+							<xsl:call-template name="ShortenText">
+								<xsl:with-param name="text" select="./metadata/def.heading/heading/firstName/text()"/>
+								<xsl:with-param name="length" select="30"/>
+							</xsl:call-template>
+						</xsl:variable>			
+						<xsl:value-of
+							select="concat($lastName_shorted,', ',$firstName_shorted)"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
