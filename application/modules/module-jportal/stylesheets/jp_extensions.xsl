@@ -4,7 +4,7 @@
 	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
 	exclude-result-prefixes="xlink mcr i18n acl xalan">
 	
-	<xsl:include href="mcr-module-startIview.xsl"/>	
+	<xsl:include href="mcr-module-startIview.xsl"/>
 	
 	<xsl:param name="view.objectmetadata"/>
 	<xsl:param name="toc.pos" select="0"/>
@@ -104,39 +104,6 @@
 		<xsl:value-of
 			select="document(concat('mcrobject:',$jpjournalID))/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>
 	</xsl:template>
-	
-	
-	<!-- ============================================================================================================================ -->
-	<!--  <xsl:template name="appendChild">
-	<xsl:param name="accessedit" />
-	<xsl:param name="id" />
-	<xsl:param name="layout" />
-	<xsl:param name="label" />	  
-	<xsl:param name="imagePath" />
-	<xsl:param name="type" select="'dokument'" />
-	<xsl:param name="xmltempl" select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)" />
-	<xsl:param name="label" />	  
-	
-	<xsl:variable name="suffix">
-	<xsl:if test="string-length($layout)>0">
-	<xsl:value-of select="concat('&amp;layout=',$layout)" />
-	</xsl:if>
-	</xsl:variable>
-	<xsl:if test="acl:checkPermission($id,'writedb')">
-	<tr>
-	<td class="metaname">
-	<xsl:value-of select="$label" />:
-	</td>
-	<td class="metavalue">
-	<a
-	href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
-	<img src="{concat($WebApplicationBaseURL,$imagePath)}" title="{$label}" />
-	</a>
-	</td>
-	</tr>
-	</xsl:if>
-	
-	</xsl:template>	-->
 	
 	
 	<!-- ============================================================================================================================ -->
@@ -319,7 +286,7 @@
 					<xsl:call-template name="objectLinking">
 						<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
 						<xsl:with-param name="obj_name" select="$label"/>
-						<xsl:with-param name="requestParam" 
+						<xsl:with-param name="requestParam"
 							select=" concat('XSL.toc.pos.SESSION=0&amp;XSL.view.objectmetadata.SESSION=',$view.objectmetadata)"/>
 					</xsl:call-template>
 				</xsl:if>
@@ -516,14 +483,14 @@
 	<xsl:template name="printTOCLink">
 		<xsl:variable name="children">
 			<xsl:choose>
-					<xsl:when test="/mycoreobject/structure/children)">
-						<xsl:value-of select="'true'"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="'false'"/>
-					</xsl:otherwise>
-			</xsl:choose>		
-		</xsl:variable>		
+				<xsl:when test="/mycoreobject/structure/children)">
+					<xsl:value-of select="'true'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="'false'"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
 				or  $children='false'">
@@ -739,36 +706,42 @@
 				select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[@ID=$ctype]/label"/>
 			<xsl:variable name="size" select="$details/mcr_directory/size"/>
 			
-			
-				<xsl:variable name="href">
-
-						<xsl:variable name="supportedMainFile">
-							<xsl:call-template name="iview.getSupport">
-								<xsl:with-param name="derivID" select="$derivid"/>
-							</xsl:call-template>
-						</xsl:variable>
-						<xsl:choose>
-							<xsl:when test="$supportedMainFile != ''">
-								<xsl:call-template name="iview.getAddress">
-									<xsl:with-param name="derivID" select="$derivid"/>
-									<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
-									<xsl:with-param name="height" select="'510'"/>
-									<xsl:with-param name="width" select="'605'"/>
-									<xsl:with-param name="scaleFactor" select="'fitToWidth'"/>
-									<xsl:with-param name="display" select="'extended'"/>
-									<xsl:with-param name="style" select="'image'"/>
-								</xsl:call-template>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="concat($derivbase,$derivmain)"/>			
-							</xsl:otherwise>
-						</xsl:choose>
-					
+			<xsl:variable name="href">
+				<!-- IView available ? -->
+				<xsl:variable name="supportedMainFile">
+					<xsl:call-template name="iview.getSupport">
+						<xsl:with-param name="derivID" select="$derivid"/>
+					</xsl:call-template>
 				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="$supportedMainFile != ''">
+						<xsl:call-template name="iview.getAddress">
+							<xsl:with-param name="derivID" select="$derivid"/>
+							<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
+							<xsl:with-param name="height" select="'510'"/>
+							<xsl:with-param name="width" select="'605'"/>
+							<xsl:with-param name="scaleFactor" select="'fitToWidth'"/>
+							<xsl:with-param name="display" select="'extended'"/>
+							<xsl:with-param name="style" select="'image'"/>
+						</xsl:call-template>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($derivbase,$derivmain)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				
+			</xsl:variable>
 			
 			<a href="{$href}">
 				<xsl:value-of select="concat($ctype,' ansehen &gt;&gt;')"/>
 			</a>
+			
+			<br/>
+			<xsl:if test="$CurrentUser!='gast'">
+				<a href="{$derivbase}">
+					<xsl:value-of select="'Details &gt;&gt;'"/>
+				</a>
+			</xsl:if>
 			<!--				<xsl:variable name="ziplink"
 			select="concat($ServletsBaseURL,'MCRZipServlet',$JSessionID,'?id=',$derivid)"/>
 			<a class="linkButton" href="{$ziplink}">
@@ -861,7 +834,8 @@
 											</xsl:choose>
 										</xsl:variable>
 										<xsl:choose>
-											<xsl:when test="(contains(@xlink:href,'_jparticle_')) 
+											<xsl:when
+												test="(contains(@xlink:href,'_jparticle_')) 
 												or ($children='false') ">
 												<xsl:call-template name="objectLinking">
 													<xsl:with-param name="obj_id" select="@xlink:href"/>
@@ -891,7 +865,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td><br/></td>
+						<td>
+							<br/>
+						</td>
 					</tr>
 				</xsl:if>
 			</xsl:for-each>
@@ -902,7 +878,6 @@
 			</tr>
 		</table>
 	</xsl:template>
-	
 	<!-- ===================================================================================================== -->
 	<xsl:template name="printTOCNavi">
 		<table>
@@ -971,18 +946,32 @@
 			</tr>
 		</table>
 	</xsl:template>
-
+	<!-- ===================================================================================================== -->
 	<xsl:template name="haveChildren">
 		<xsl:param name="object"/>
-		
 		<xsl:choose>
-				<xsl:when test="xalan:nodeset($object)/mycoreobject/structure/children)">
-					<xsl:value-of select="'true'"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="'false'"/>
-				</xsl:otherwise>
-			</xsl:choose>		
+			<xsl:when test="xalan:nodeset($object)/mycoreobject/structure/children)">
+				<xsl:value-of select="'true'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'false'"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- ===================================================================================================== -->
+	<xsl:template name="showAdminHead">
+		<xsl:if test="acl:checkPermission(./@ID,'writedb') or acl:checkPermission(./@ID,'deletedb')">
+			<tr id="detailed-dividingline">
+				<td colspan="2">
+					<hr noshade="noshade" width="460"/>
+				</td>
+			</tr>
+			<tr>
+				<td id="detailed-headlines">
+					<xsl:value-of select="concat(i18n:translate('metaData.admin'),':')"/>
+				</td>
+			</tr>
+		</xsl:if>
 	</xsl:template>
 	
 </xsl:stylesheet>

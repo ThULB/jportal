@@ -24,7 +24,7 @@
 	</text>
 	<text id="maintitle_label_contchild">
 		<label xml:lang="de">
-			<span class="editorlabel">Bibliographische Beschreibung:</span>
+			<span class="editorlabel">Titel:</span>
 		</label>
 		<label xml:lang="ru">
 			<span class="editorlabel">Заголовок:</span>

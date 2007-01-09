@@ -167,7 +167,7 @@
 					<td id="detailed-mainheadline">
 						<xsl:variable name="maintitle_shorted">
 							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="./metadata/maintitles/maintitle/text()"/>
+								<xsl:with-param name="text" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
 								<xsl:with-param name="length" select="75"/>
 							</xsl:call-template>
 						</xsl:variable>						
@@ -191,35 +191,34 @@
 							<!--1***maintitle*************************************-->
 							
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/maintitles/maintitle" name="nodes"/>
+								<xsl:with-param select="./metadata/maintitles/maintitle[@inherited='0']" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
 							</xsl:call-template>
 							
 							<!--2***subtitle*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/subtitles/subtitle[@type='short']" name="nodes"/>
+								<xsl:with-param select="./metadata/subtitles/subtitle" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.subtitle')" name="label"/>
 							</xsl:call-template>
-							
-							<!--3***subtitle*************************************-->
+							<!--3***participant*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/subtitles/subtitle[@type='title_rezensation']"
-									name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpvolume.subtitle.title_rezensation')"
-									name="label"/>
+								<xsl:with-param select="'right'" name="textalign"/>
+								<xsl:with-param select="./metadata/participants/participant" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jparticle.participant')" name="label"/>
 							</xsl:call-template>
 							<!--4***date*************************************-->
 							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/dates/date[@type='published']" name="nodes"/>
+								<xsl:with-param select="./metadata/dates/date" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.date')" name="label"/>
-								
 							</xsl:call-template>
-							<!--5***note*************************************-->
-							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="'true'" name="volume-node"/>
-								<xsl:with-param select="./metadata/notes/note" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
-							</xsl:call-template>
+							<xsl:if test="./metadata/notes/note">
+								<!--5***note*************************************-->
+								<xsl:call-template name="printMetaDates">
+									<xsl:with-param select="'true'" name="volume-node"/>
+									<xsl:with-param select="./metadata/notes/note" name="nodes"/>
+									<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
+								</xsl:call-template>
+							</xsl:if>
 							<tr id="detailed-dividingline">
 								<td colspan="2">
 									<hr noshade="noshade" width="460"/>
@@ -228,80 +227,6 @@
 							<tr>
 								<td id="detailed-headlines">Systemdaten</td>
 							</tr>
-							<!--<!-#-6***hidden_jpjournalID*************************************-#->
-							<xsl:call-template name="printMetaDates">
-							<xsl:with-param select="'right'" name="textalign"/>
-							<xsl:with-param select="./metadata/hidden_jpjournalsID/hidden_jpjournalID" name="nodes"/>
-							<xsl:with-param select="i18n:translate('metaData.jpvolume.hidden_jpjournalID')" name="label"/>
-							</xsl:call-template>
-							<!-#-7***hidden_rubricID*************************************-#->
-							<xsl:call-template name="printMetaDates">
-							<xsl:with-param select="'right'" name="textalign"/>
-							<xsl:with-param select="./metadata/hidden_rubricsID/hidden_rubricID" name="nodes"/>
-							<xsl:with-param select="i18n:translate('metaData.jpvolume.hidden_rubricID')" name="label"/>
-							</xsl:call-template>
-							<!-#-8***hidden_pubTypeID*************************************-#->
-							<xsl:call-template name="printMetaDates">
-							<xsl:with-param select="'right'" name="textalign"/>
-							<xsl:with-param select="./metadata/hidden_pubTypesID/hidden_pubTypeID" name="nodes"/>
-							<xsl:with-param select="i18n:translate('metaData.jpvolume.hidden_pubTypeID')" name="label"/>
-							</xsl:call-template>-->
-							
-							<!--<!-#-*** List children per object type ************************************* -#->
-							<!-#-
-							1.) get a list of objectTypes of all child elements
-							2.) remove duplicates from this list
-							3.) for-each objectTyp id list child elements
-							-#->
-							<xsl:variable name="objectTypes">
-							<xsl:for-each
-							select="./structure/children/child/@xlink:href">
-							<id>
-							<xsl:copy-of
-							select="substring-before(substring-after(.,'_'),'_')"/>
-							
-							</id>
-							</xsl:for-each>
-							</xsl:variable>
-							<xsl:variable
-							select="xalan:nodeset($objectTypes)/id[not(.=following::id)]"
-							name="unique-ids"/>
-							<!-#-
-							the for-each would iterate over <id> with root not beeing /mycoreobject
-							so we save the current node in variable context to access needed nodes
-							-#->
-							<xsl:variable select="." name="context"/>
-							<xsl:for-each select="$unique-ids">
-							<xsl:variable select="." name="thisObjectType"/>
-							<xsl:variable name="label">
-							
-							<xsl:choose>
-							<xsl:when
-							test="count($context/structure/children/child[contains(@xlink:href,$thisObjectType)])=1">
-							<xsl:value-of
-							select="i18n:translate(concat('metaData.',$thisObjectType,'.[singular]'))"/>
-							</xsl:when>
-							<xsl:otherwise>
-							<xsl:value-of
-							select="i18n:translate(concat('metaData.',$thisObjectType,'.[plural]'))"/>
-							</xsl:otherwise>
-							</xsl:choose>
-							</xsl:variable>
-							
-							<xsl:call-template name="printMetaDates">
-							<xsl:with-param
-							select="$context/structure/children/child[contains(@xlink:href, concat('_',$thisObjectType,'_'))]"
-							name="nodes"/>
-							<xsl:with-param select="$label" name="label"/>
-							</xsl:call-template>
-							</xsl:for-each>
-							<xsl:call-template name="Derobjects2">
-							<xsl:with-param select="$staticURL"
-							name="staticURL"/>
-							<xsl:with-param select="$obj_host"
-							name="obj_host"/>
-							</xsl:call-template>-->
-							
 							<!--*** Created ************************************* -->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes"/>
@@ -330,15 +255,17 @@
 								<xsl:with-param name="stURL" select="$staticURL"/>
 							</xsl:call-template>
 							<xsl:call-template name="emptyRow"/>
+							
+							<!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+							<xsl:call-template name="showAdminHead"/>
 							<!--*** Editor Buttons ************************************* -->
 							<xsl:call-template name="editobject_with_der">
 								<xsl:with-param select="$accessedit" name="accessedit"/>
 								<xsl:with-param select="./@ID" name="id"/>
 							</xsl:call-template>
 							<xsl:call-template name="addChild2">
-								
 								<xsl:with-param name="id" select="./@ID"/>
-								<xsl:with-param name="types" select="'jpvolume jparticle'"/>
+								<xsl:with-param name="types" select="'jpvolume'"/>
 							</xsl:call-template>
 							<xsl:variable name="params_dynamicClassis">
 								<xsl:call-template name="get.params_dynamicClassis"/>
