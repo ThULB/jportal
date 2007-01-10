@@ -24,7 +24,7 @@
       <list id="subtitle_type" width="120" type="dropdown">
 		    <include uri="classification:editor:-1:children:jportal_class_00000006" />		  
       </list>
-      <list id="abstract_type" width="120" type="dropdown">
+<!--      <list id="abstract_type" width="120" type="dropdown">
             <item value="extend">
                   <label xml:lang="de">ausführlich</label>
 				<label xml:lang="ru">подробно</label>
@@ -37,28 +37,9 @@
                   <label xml:lang="de">kurz</label>
 				<label xml:lang="ru">коротко</label>
             </item>
-      </list>
+      </list>-->
       <list id="identi_type" width="120" type="dropdown">
-            <item value="issn">
-                  <label xml:lang="de">ISSN</label>
-				 <label xml:lang="ru">ISSN</label>
-            </item>
-            <item value="isbn">
-                  <label xml:lang="de">ISBN</label>
-				<label xml:lang="ru">ISBN</label>
-            </item>
-            <item value="nbn">
-                  <label xml:lang="de">NBN</label>
-				<label xml:lang="ru">NBN</label>
-            </item>
-            <item value="doi">
-                  <label xml:lang="de">DOI</label>
-				<label xml:lang="ru">DOI</label>
-            </item>
-            <item value="misc">
-                  <label xml:lang="de">sonst.</label>
-				<label xml:lang="ru">другое</label>
-            </item>
+		    <include uri="classification:editor:-1:children:jportal_class_00000010" />		  
       </list>
       <panel id="righstManag_access_input">
             <hidden var="service/servflags/servflag/@inherited" default="0" />
@@ -86,10 +67,7 @@
             <hidden var="structure/parents/parent/@inherited" default="0" />
             <hidden var="structure/parents/parent/@type" default="locator" />
             <hidden var="structure/parents/parent/@title" />
-		    <hidden var="structure/parents/parent/@href" />
-            <cell col="1" row="1" anchor="NORTHWEST" >
-		       <output var="structure/parents/parent/@href" />
-			</cell>
+            <cell col="1" row="1" anchor="NORTHWEST" var="structure/parents/parent/@href" ref="TFzeile32"/>
       </panel>
       <!-- end: parent -->         
       <!-- save ================================================================== -->

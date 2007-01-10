@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000010">
+	<label xml:lang="de" text="ID-Typen" description="ID-Typen"/>
+	<categories>
+		<category ID="issn">
+			<label xml:lang="de" text="ISSN"/>
+		</category>
+		<category ID="isbn">
+			<label xml:lang="de" text="ISBN"></label>
+		</category>
+		<category ID="nbn">
+			<label xml:lang="de" text="NBN"></label>
+		</category>
+		<category ID="doi">
+			<label xml:lang="de" text="DOI"></label>
+		</category>
+		<category ID="misc">
+			<label xml:lang="de" text="sonstige"></label>
+			<label xml:lang="ru" text="другое"></label>
+		</category>
+	</categories>
+</mycoreclass>

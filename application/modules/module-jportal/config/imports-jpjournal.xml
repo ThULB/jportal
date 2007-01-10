@@ -134,9 +134,9 @@
             </cell>
       </panel>
       <panel id="abstract_input_repeater">
-            <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-            <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
+<!--            <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1" />-->
+            <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
       </panel>
       <!-- end: abstract -->
       <!-- date ================================================================== -->
@@ -274,15 +274,7 @@
       </panel>
       <!--date types =======================================================================-->
       <list id="date_type" type="dropdown">
-            <item value="published">
-                  <label xml:lang="de">Erschienen</label>
-            </item>
-            <item value="published_from">
-                  <label xml:lang="de">Erschienen von</label>
-            </item>
-            <item value="published_until">
-                  <label xml:lang="de">Erschienen bis</label>
-            </item>	    
+		<include uri="classification:editor:-1:children:jportal_class_00000009"/>	    
       </list>	
 	
       <!-- jpjournalID ================================================================== -->

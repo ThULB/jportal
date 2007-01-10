@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000009">
+	<label xml:lang="de" text="Datums-Typen in Journalen" description="Datums-Typen in Journalen"/>
+	<categories>
+		<category ID="published">
+			<label xml:lang="de" text="Erschienen"/>
+		</category>
+		<category ID="published_from">
+			<label xml:lang="de" text="Erschienen von"/>
+		</category>
+		<category ID="published_until">
+			<label xml:lang="de" text="Erschienen bis"/>
+		</category>
+	</categories>
+</mycoreclass>
