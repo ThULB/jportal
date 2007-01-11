@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
+	xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink"
+	xmlns:encoder="xalan://java.net.URLEncoder" >
 	
 	<!-- any XML elements defined here will go into the head -->
 	<!-- other stylesheets may override this variable -->
