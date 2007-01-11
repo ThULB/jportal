@@ -376,6 +376,17 @@ td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px s
 	border: 1px solid #000000;
 }
 
+#leaf-horizontalnaviup{
+	text-align: center;
+	vertical-align: top;
+	padding-top: 57px;
+}
+
+#leaf-horizontalnavidown{
+	text-align: center;
+	vertical-align: bottom;
+	padding-bottom: 20px;
+}
 /* =================================================================== */
 /* detailed view                                                       */
 /* =================================================================== */

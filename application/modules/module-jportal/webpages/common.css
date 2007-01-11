@@ -8,11 +8,42 @@
 /* =================================================================== */
 
 #switch {
-	width: 600px;
+	border: none;
 }
 
 #switch td{
 	text-align: right;
+}
+
+#switch-current{
+	width: 150px;
+	text-align: center;
+	padding-top: 3px;
+	height: 20px;
+	background-color: #848A65;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	width: 150px;
+	text-align: center;
+	padding-top: 3px;
+	height: 20px;
+	background-color: #55593F;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	width: 20px;
+	background-color: #848A65;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
 }
 
 /* =================================================================== */
