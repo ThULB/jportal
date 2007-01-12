@@ -260,10 +260,11 @@
             </category>
             <category ID="pa">
                   <label xml:lang="de" text="Pundjabisch" />
-            </category>
+            </category>-->
             <category ID="pl">
                   <label xml:lang="de" text="Polnisch" />
             </category>
+		  <!--
             <category ID="ps">
                   <label xml:lang="de" text="Paschtu" />
             </category>
