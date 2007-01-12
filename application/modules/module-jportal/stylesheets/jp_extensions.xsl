@@ -8,7 +8,7 @@
 	
 	<xsl:param name="view.objectmetadata"/>
 	<xsl:param name="toc.pos" select="0"/>
-	<xsl:param name="toc.pageSize" select="10"/>
+	<xsl:param name="toc.pageSize" select="5"/>
 	
 	<!-- ===================================================================================================== -->
 	
@@ -18,7 +18,7 @@
 		| /mycoreobject[contains(@ID,'_jparticle_')]"
 		priority="2">
 		
-		<xsl:call-template name="printTOCLink"/>
+		<xsl:call-template name="printSwitchViewBar"/>
 		
 		<xsl:choose>
 			<!-- metadaten -->
@@ -458,7 +458,7 @@
 	
 	<!-- ===================================================================================================== -->
 	
-	<xsl:template name="printTOCLink">
+	<xsl:template name="printSwitchViewBar">
 		<xsl:variable name="children">
 			<xsl:choose>
 				<xsl:when test="/mycoreobject/structure/children)">
@@ -469,26 +469,79 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-<!--		<xsl:choose>
-			<xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
-				or  $children='false'">
-					<xsl:call-template name="objectLinking">
-						<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
-						<xsl:with-param name="obj_name"
-							select="concat('Zeige Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(), ' &gt;')"/>
-						<xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true'"/>
-					</xsl:call-template>
-			</xsl:when>
-			<xsl:otherwise>-->
-				<xsl:call-template name="setParameter">
-					<xsl:with-param name="param" select="'view.objectmetadata'"/>
-					<xsl:with-param name="labelON" select="'Detailansicht'"/>
-					<xsl:with-param name="paramValue" select="$view.objectmetadata"/>
-					<xsl:with-param name="labelOFF" select="'Inhaltsverzeichnis'"/>
-				</xsl:call-template>
-				<br></br>
-<!--			</xsl:otherwise>
-		</xsl:choose>-->
+		
+		<table id="switch" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td>
+					<xsl:choose>
+						<xsl:when test="$view.objectmetadata='false'">
+							<div id="switch-current">						
+								<xsl:value-of select="'- Detailansicht aktiviert-'"/> 
+							</div>									
+						</xsl:when>
+						<xsl:otherwise>
+							<div id="switch-notcurrent">						
+								<xsl:variable name="URLDetails">
+									<xsl:call-template name="UrlSetParam">
+										<xsl:with-param name="url" select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)"/>
+										<xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'"/>
+										<xsl:with-param name="value" select="'false'"/>
+									</xsl:call-template>											
+								</xsl:variable>
+								<a href="{$URLDetails}">
+									<xsl:value-of select="'- Detailansicht anzeigen -'"/> 											
+								</a>
+							</div>																		
+						</xsl:otherwise>
+					</xsl:choose>
+				</td>						
+				<td width="20"></td>						
+				<td>
+					<xsl:choose>
+						<xsl:when test="$view.objectmetadata='true'">
+							<div id="switch-current">						
+								<xsl:value-of select="'- Inhaltsverzeichnis aktiviert -'"/> 
+							</div>									
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:choose>
+								<xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
+									or  $children='false'">
+									<div id="switch-notcurrent">						
+										<xsl:variable name="URLDetails">
+											<xsl:call-template name="UrlSetParam">
+												<xsl:with-param name="url" 
+													select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/structure/parents/parent/@xlink:href,$HttpSession)"/>
+												<xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'"/>
+												<xsl:with-param name="value" select="'true'"/>
+											</xsl:call-template>											
+										</xsl:variable>
+										<a href="{$URLDetails}">
+											<xsl:value-of select="concat('- Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(),' anzeigen -')"/>
+										</a>
+									</div>																				
+								</xsl:when>
+								<xsl:otherwise>
+									<div id="switch-notcurrent">						
+										<xsl:variable name="URLDetails">
+											<xsl:call-template name="UrlSetParam">
+												<xsl:with-param name="url" select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)"/>
+												<xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'"/>
+												<xsl:with-param name="value" select="'true'"/>
+											</xsl:call-template>											
+										</xsl:variable>
+										<a href="{$URLDetails}">
+											<xsl:value-of select="'- Inhaltsverzeichnis anzeigen -'"/> 											
+										</a>
+									</div>																		
+								</xsl:otherwise>
+							</xsl:choose>							
+						</xsl:otherwise>
+					</xsl:choose>
+				</td>										
+
+			</tr>
+		</table>		
 		<br/>
 	</xsl:template>
 	
@@ -900,20 +953,16 @@
 								<p>
 									<select onChange="document.getElementById('pageSize').submit()"
 										name="XSL.toc.pageSize.SESSION" size="1">
-										<option value="" selected="selected">Inhaltsverzeichnis unterteilen</option>
-										<option value="5">in 5'er Gruppen</option>
-										<option value="10">in 10'er Gruppen</option>
-										<option value="15">in 15'er Gruppen</option>
-										<option value="20">in 20'er Gruppen</option>
-										<option value="30">in 30'er Gruppen</option>
-										<option value="40">in 40'er Gruppen</option>
-										<option value="50">in 50'er Gruppen</option>
-										<option value="1000000">keine Unterteilung</option>
+										<option selected="selected" value="" >Trefferanzahl begrenzen</option>										
+										<option value="5">max. 5 Treffer</option>												
+										<option value="10">max. 10 Treffer</option>
+										<option value="25">max. 25 Treffer</option>
+										<option value="1000000">Trefferanzahl nicht begrenzen</option>
 									</select>
 								</p>
 							</form>
 						</td>
-						<td align="center">
+<!--						<td align="center">
 							<form id="sort" target="_self"
 								action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}" method="post">
 								<p>
@@ -925,7 +974,7 @@
 									</select>
 								</p>
 							</form>
-						</td>
+						</td>-->
 					</tr>
 				</table>
 			</xsl:when>
@@ -938,7 +987,7 @@
 								<td>
 									<a
 										href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$pred}">
-										&lt;&lt;
+										<img src="{$WebApplicationBaseURL}up.jpg"/>
 									</a>
 								</td>
 								<xsl:variable name="to">
@@ -966,7 +1015,7 @@
 								<td>
 									<a
 										href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$succ}">
-										&gt;&gt;
+										<img src="{$WebApplicationBaseURL}down.jpg"/>
 									</a>
 								</td>
 								<xsl:variable name="to">
