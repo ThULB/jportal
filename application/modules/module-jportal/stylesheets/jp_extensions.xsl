@@ -394,7 +394,6 @@
 		<xsl:variable name="RequestURL_view-Deleted">		
 			<xsl:call-template name="UrlDelParam">			
 				<xsl:with-param name="url" select="$RequestURL"/>				
-				<!--				<xsl:with-param name="par" select="'XSL.view.objectmetadata'"/>-->				
 				<xsl:with-param name="par" select="concat('XSL.',$param)"/>				
 			</xsl:call-template>			
 		</xsl:variable>		
@@ -409,6 +408,12 @@
 				<xsl:choose>
 					<xsl:when test="$paramValue='false'">
 						<td>
+							<div id="switch-current">						
+								<xsl:value-of select="$labelON"/> 
+							</div>
+						</td>						
+						<td width="20"></td>						
+						<td>
 							<div id="switch-notcurrent">
 								<xsl:variable name="targetURL_withParam">
 									<xsl:call-template name="UrlSetParam">
@@ -422,36 +427,9 @@
 								</a>
 							</div>
 						</td>
-						<td width="20"></td>
-						<td id="switch-currentside">
-							<a href="">&lt;&lt;
-							</a>
-						</td>
-						<td>
-							<div id="switch-current">						
-								<xsl:value-of select="$labelON"/>
-							</div>
-						</td>
-						<td id="switch-currentside">
-							<a href="">&gt;&gt;
-							</a>
-						</td>
+
 					</xsl:when>
 					<xsl:otherwise>
-						<td id="switch-currentside">
-						<a href="">&lt;&lt;
-							</a>
-						</td>
-						<td>
-							<div id="switch-current">
-								<xsl:value-of select="$labelOFF"/>
-							</div>
-						</td>
-						<td id="switch-currentside">
-							<a href="">&gt;&gt;
-								</a>
-						</td>
-						<td width="20"></td>
 						<td>
 							<div id="switch-notcurrent">
 								<xsl:variable name="targetURL_withParam">
@@ -462,8 +440,14 @@
 									</xsl:call-template>
 								</xsl:variable>
 								<a href="{$targetURL_withParam}">
-									<xsl:value-of select="$labelON"/>
+									<xsl:value-of select="concat($labelON,' anzeigen')"/> 
 								</a>
+							</div>
+						</td>						
+						<td width="20"></td>						
+						<td>
+							<div id="switch-current">
+								<xsl:value-of select="$labelOFF"/> 
 							</div>
 						</td>
 					</xsl:otherwise>
@@ -485,26 +469,27 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:choose>
+<!--		<xsl:choose>
 			<xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
 				or  $children='false'">
-				<xsl:call-template name="objectLinking">
-					<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
-					<xsl:with-param name="obj_name"
-						select="concat('Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(), ' &gt;')"/>
-					<xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true'"/>
-				</xsl:call-template>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
+						<xsl:with-param name="obj_name"
+							select="concat('Zeige Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(), ' &gt;')"/>
+						<xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true'"/>
+					</xsl:call-template>
 			</xsl:when>
-			<xsl:otherwise>
+			<xsl:otherwise>-->
 				<xsl:call-template name="setParameter">
 					<xsl:with-param name="param" select="'view.objectmetadata'"/>
 					<xsl:with-param name="labelON" select="'Detailansicht'"/>
 					<xsl:with-param name="paramValue" select="$view.objectmetadata"/>
 					<xsl:with-param name="labelOFF" select="'Inhaltsverzeichnis'"/>
 				</xsl:call-template>
-						<br></br>
-			</xsl:otherwise>
-		</xsl:choose>
+				<br></br>
+<!--			</xsl:otherwise>
+		</xsl:choose>-->
+		<br/>
 	</xsl:template>
 	
 	<!-- ===================================================================================================== -->

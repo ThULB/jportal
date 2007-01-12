@@ -48,12 +48,12 @@
 					<xsl:variable name="label">
 						<xsl:value-of select="concat($name,$date)"/>
 					</xsl:variable>
-<!--					<xsl:call-template name="objectLinking">
+					<xsl:call-template name="objectLinking">
 						<xsl:with-param name="obj_id" select="@id"/>
 						<xsl:with-param name="obj_name" select="$label"/>
 						<xsl:with-param name="requestParam"
 							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-					</xsl:call-template>-->
+					</xsl:call-template>
 				</td>
 			</tr>
 			<tr>
