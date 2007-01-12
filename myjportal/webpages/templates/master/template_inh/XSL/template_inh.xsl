@@ -108,7 +108,7 @@
 	<xsl:template name="template_inh.write.content">
 		<div class="headline">
 			<xsl:call-template name="getFastWCMS" />
-			<xsl:value-of select="$PageTitle"/>
+			<xsl:copy-of select="$PageTitle"/>
 		</div>
 		<xsl:apply-templates/>
 	</xsl:template>

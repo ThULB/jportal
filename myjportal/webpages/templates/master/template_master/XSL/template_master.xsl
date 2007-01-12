@@ -97,7 +97,7 @@
 	<!-- ======================================================================================================== -->
 	<xsl:template name="template_master.write.content">
 		<div class="headline">
-			<xsl:value-of select="$PageTitle"/>
+			<xsl:copy-of select="$PageTitle"/>
 		</div>
 		<xsl:apply-templates/>
 	</xsl:template>

@@ -116,7 +116,7 @@
 <!-- ======================================================================================================== -->
 <xsl:template name="template_mycoresample-2.write.content">
    <div class="headline">
-           <xsl:value-of select="$PageTitle"/>
+           <xsl:copy-of select="$PageTitle"/>
    </div>
 	
    <xsl:call-template name="getFastWCMS" />		

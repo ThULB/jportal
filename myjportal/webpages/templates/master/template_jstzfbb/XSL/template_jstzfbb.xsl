@@ -211,7 +211,7 @@
             </xsl:when>
             <xsl:otherwise>
 		        <div class="headline">
-		            <xsl:value-of select="$PageTitle"/>
+		            <xsl:copy-of select="$PageTitle"/>
 		        </div>                  
 	     </xsl:otherwise>
       </xsl:choose>
