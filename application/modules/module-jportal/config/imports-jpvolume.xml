@@ -37,6 +37,10 @@
             <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" />
             <!-- ... -->
             <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" />
+			<!-- optional classifications for articles -->
+			<cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/>
+			<cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input_hidden"/>
+			<cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input_hidden"/>				  
 		    <!-- ================================================================================================= -->		  
             <cell row="170" col="2" anchor="EAST" ref="save" />
       </panel>

@@ -181,5 +181,31 @@
             <hidden var="metadata/hidden_pubTypesID/@heritable" default="true" />
             <hidden var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
       </panel>			
+      <!-- classipub ================================================================== -->
+      <panel id="classipub_input_hidden">
+            <hidden var="metadata/hidden_classispub/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub/hidden_classipub" />
+      </panel>
+      <!-- classipub2 ================================================================== -->
+      <panel id="classipub2_input_hidden">
+            <hidden var="metadata/hidden_classispub2/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub2/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub2/hidden_classipub2" />
+      </panel>
+      <!-- classipub3 ================================================================== -->
+      <panel id="classipub3_input_hidden">
+            <hidden var="metadata/hidden_classispub3/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub3/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub3/hidden_classipub3" />
+      </panel>
+
+		
 	<!-- HIDDEN ============================================================================================ -->	
 </imports>

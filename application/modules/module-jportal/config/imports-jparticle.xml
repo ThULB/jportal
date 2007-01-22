@@ -35,18 +35,6 @@
 		<!--                  <cell row="60" col="1" anchor="NORTHWEST" ref="classi_label" />
 		<cell row="60" col="2" anchor="NORTHWEST" ref="classi_input" />
 		<cell row="60" col="3" anchor="WEST" ref="classi_help" />-->
-		<!-- classipub -->
-		<!--            <cell row="60" col="1" anchor="NORTHWEST" ref="classipub_label" />
-		<cell row="60" col="2" anchor="NORTHWEST" ref="classipub_input" />
-		<cell row="60" col="3" anchor="NORTHWEST" ref="classipub_help" />-->
-		<!--            <!-#- classipub2 -#->
-		<cell row="65" col="1" anchor="NORTHWEST" ref="classipub2_label" />
-		<cell row="65" col="2" anchor="NORTHWEST" ref="classipub2_input" />
-		<cell row="65" col="3" anchor="NORTHWEST" ref="classipub2_help" />
-		<!-#- classipub3 -#->
-		<cell row="67" col="1" anchor="NORTHWEST" ref="classipub3_label" />
-		<cell row="67" col="2" anchor="NORTHWEST" ref="classipub3_input" />
-		<cell row="67" col="3" anchor="NORTHWEST" ref="classipub3_help" />-->
 		<!-- abstract -->
 		<cell row="70" col="1" anchor="NORTHWEST" ref="abstract_label"/>
 		<cell row="70" col="2" anchor="NORTHWEST" ref="abstract_input"/>
@@ -67,6 +55,18 @@
 		<cell row="150" col="1" anchor="NORTHWEST" ref="rubric_label"/>
 		<cell row="150" col="2" anchor="NORTHWEST" ref="rubric_input"/>
 		<cell row="150" col="3" anchor="NORTHWEST" ref="rubric_help"/>
+		<!-- classipub -->
+        <cell row="152" col="1" anchor="NORTHWEST" ref="classipub_label" />
+		<cell row="152" col="2" anchor="NORTHWEST" ref="classipub_input" />
+		<cell row="152" col="3" anchor="NORTHWEST" ref="classipub_help" />
+        <!-- classipub2 -->
+		<cell row="153" col="1" anchor="NORTHWEST" ref="classipub2_label" />
+		<cell row="153" col="2" anchor="NORTHWEST" ref="classipub2_input" />
+		<cell row="153" col="3" anchor="NORTHWEST" ref="classipub2_help" />
+		<!-- classipub3 -->
+		<cell row="154" col="1" anchor="NORTHWEST" ref="classipub3_label" />
+		<cell row="154" col="2" anchor="NORTHWEST" ref="classipub3_input" />
+		<cell row="154" col="3" anchor="NORTHWEST" ref="classipub3_help" />		
 		<!-- size -->
 		<cell row="160" col="1" anchor="NORTHWEST" ref="size_label"/>
 		<cell row="160" col="2" anchor="NORTHWEST" ref="size_input"/>
@@ -87,6 +87,10 @@
 		<cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden"/>
 		<!-- ... -->
 		<cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden"/>
+		<!-- optional classifications for articles -->
+		<cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/>
+		<cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input_hidden"/>
+		<cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input_hidden"/>				
 		<!-- ================================================================================================= -->
 		<!-- save / cancel button -->
 		<cell row="190" col="1" anchor="EAST"/>
@@ -228,7 +232,63 @@
 		<include cacheable="false" uri="jportalClassification:rubrics"/>
 	</list>
 	<!-- end: rubric -->
-	
+
+	<!-- classipub ================================================================== -->
+	<panel id="classipub_input">
+		<hidden var="metadata/classispub/@class" default="MCRMetaClassification"/>
+		<hidden var="metadata/classispub/@parasearch" default="true"/>
+		<hidden var="metadata/classispub/@textsearch" default="false"/>
+		<hidden var="metadata/classispub/@notinherit" default="false"/>
+		<hidden var="metadata/classispub/@heritable" default="false"/>
+		<hidden var="metadata/classispub/classipub/@classid"/>
+		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub" var="metadata/classispub/classipub/@categid"/>
+	</panel>
+	<list id="Cclassipub" width="300" type="dropdown">
+		<item value="">
+			<label xml:lang="de">
+			</label>
+		</item>
+		<include cacheable="false" uri="jportalClassification:classipub"/>
+	</list>
+	<!-- end: classipub -->	
+	<!-- classipub ================================================================== -->
+	<panel id="classipub2_input">
+		<hidden var="metadata/classispub2/@class" default="MCRMetaClassification"/>
+		<hidden var="metadata/classispub2/@parasearch" default="true"/>
+		<hidden var="metadata/classispub2/@textsearch" default="false"/>
+		<hidden var="metadata/classispub2/@notinherit" default="false"/>
+		<hidden var="metadata/classispub2/@heritable" default="false"/>
+		<hidden var="metadata/classispub2/classipub2/@classid"/>
+		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub2" var="metadata/classispub2/classipub2/@categid"/>
+	</panel>
+	<list id="Cclassipub2" width="300" type="dropdown">
+		<item value="">
+			<label xml:lang="de">
+			</label>
+		</item>
+		<include cacheable="false" uri="jportalClassification:classipub2"/>
+	</list>
+	<!-- end: classipub2 -->
+	<!-- classipub3 ================================================================== -->
+	<panel id="classipub3_input">
+		<hidden var="metadata/classispub3/@class" default="MCRMetaClassification"/>
+		<hidden var="metadata/classispub3/@parasearch" default="true"/>
+		<hidden var="metadata/classispub3/@textsearch" default="false"/>
+		<hidden var="metadata/classispub3/@notinherit" default="false"/>
+		<hidden var="metadata/classispub3/@heritable" default="false"/>
+		<hidden var="metadata/classispub3/classipub3/@classid"/>
+		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub3" var="metadata/classispub3/classipub3/@categid"/>
+	</panel>
+	<list id="Cclassipub3" width="300" type="dropdown">
+		<item value="">
+			<label xml:lang="de">
+			</label>
+		</item>
+		<include cacheable="false" uri="jportalClassification:classipub3"/>
+	</list>
+	<!-- end: classipub3 -->
+
+				
 	<!-- size ================================================================== -->
 	<panel id="size_input">
 		<hidden var="metadata/sizes/@class" default="MCRMetaLangText"/>

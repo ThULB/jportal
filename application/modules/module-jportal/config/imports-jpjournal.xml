@@ -69,10 +69,19 @@
             <!-- ... -->
             <cell row="220" col="1" anchor="NORTHWEST" ref="pubTypeID_label" />
             <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input" />
+
+            <cell row="230" col="1" anchor="NORTHWEST" ref="classipub_label" />
+            <cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input" />
+		  
+            <cell row="240" col="1" anchor="NORTHWEST" ref="classipub2_label" />
+            <cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input" />
+		  
+            <cell row="250" col="1" anchor="NORTHWEST" ref="classipub3_label" />
+            <cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input" />		  		  		  		  
 		    <!-- ================================================================================================= -->
             <!-- save / cancel button -->
-            <cell row="230" col="1" anchor="EAST"/>
-            <cell row="230" col="2" anchor="EAST" ref="save" />
+            <cell row="300" col="1" anchor="EAST"/>
+            <cell row="300" col="2" anchor="EAST" ref="save" />
       </panel>
       <!-- panel definitions -->
       <!-- MainTitle ================================================================== -->
@@ -300,5 +309,35 @@
             <hidden var="metadata/hidden_pubTypesID/@textsearch" default="true" />
             <hidden var="metadata/hidden_pubTypesID/@heritable" default="true" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
+      </panel>		
+      <!-- hidden_classispub ================================================================== -->
+      <panel id="classipub_input">
+            <hidden var="metadata/hidden_classispub/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub" >
+		      <textfield width="32" maxlength="32" default="jportal_class_00000011"/>				
+			</cell>
+      </panel>		
+      <!-- hidden_classispub2 ================================================================== -->
+      <panel id="classipub2_input">
+            <hidden var="metadata/hidden_classispub2/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub2/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2"  >
+		      <textfield width="32" maxlength="32" default="jportal_class_00000012"/>								
+		 	</cell>
+      </panel>		
+      <!-- hidden_classispub ================================================================== -->
+      <panel id="classipub3_input">
+            <hidden var="metadata/hidden_classispub3/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub3/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3" >
+		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
+		 	</cell>				
       </panel>		
 </imports>

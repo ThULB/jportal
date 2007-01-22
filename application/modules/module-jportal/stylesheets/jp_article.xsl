@@ -239,13 +239,31 @@
 							</xsl:call-template>
 							
 							<!--10***rubric*************************************-->
-							
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/rubrics/rubric" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.rubric')" name="label"/>
 							</xsl:call-template>
+							<!--10***classipub*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="'right'" name="textalign"/>
+								<xsl:with-param select="./metadata/classispub/classipub" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jparticle.classipub')" name="label"/>
+							</xsl:call-template>
+							<!--10***classipub2*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="'right'" name="textalign"/>
+								<xsl:with-param select="./metadata/classispub2/classipub2" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jparticle.classipub2')" name="label"/>
+							</xsl:call-template>
+							<!--10***classipub3*************************************-->
+							<xsl:call-template name="printMetaDates">
+								<xsl:with-param select="'right'" name="textalign"/>
+								<xsl:with-param select="./metadata/classispub3/classipub3" name="nodes"/>
+								<xsl:with-param select="i18n:translate('metaData.jparticle.classipub3')" name="label"/>
+							</xsl:call-template>							
 							
+														
 							<!--12***ref*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>

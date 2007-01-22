@@ -858,4 +858,20 @@
 			<br/><br/><b><span class="editorlabel">Interne administrative Einstellungen</span></b><br/>
 		</label>
 	</text>					
+	<text id="classipub_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">Optionale Klassifikation zur inhaltl. Erschließung</span></i>
+		</label>
+	</text>		
+	<text id="classipub2_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">2. Optionale Klassifikation zur inhaltl. Erschließung</span></i>
+		</label>
+	</text>		
+	<text id="classipub3_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">3. Optionale Klassifikation zur inhaltl. Erschließung</span></i>
+		</label>
+	</text>					
+	
 </imports>
