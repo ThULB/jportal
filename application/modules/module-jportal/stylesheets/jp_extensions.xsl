@@ -9,6 +9,7 @@
 	<xsl:param name="view.objectmetadata"/>
 	<xsl:param name="toc.pos" select="0"/>
 	<xsl:param name="toc.pageSize" select="5"/>
+	<xsl:param name="toc.sortBy" select="'nothing'"/>	
 	
 	<!-- ===================================================================================================== -->
 	
@@ -805,31 +806,73 @@
 	<!-- ===================================================================================================== -->
 	
 	<xsl:template name="printChildren">
+
+		<xsl:variable name="kindOfChildren">
+			<xsl:choose>
+				<xsl:when test="./structure/children/child[position()=1]/@xlink:href">
+					<xsl:call-template name="typeOfObjectID">
+						<xsl:with-param name="id" select="./structure/children/child[position()=1]/@xlink:href"/>
+					</xsl:call-template>					
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+
+		</xsl:variable>		
+		
 		<table>
 			<tr>
 				<td colspan="1" rowspan="2">
 					<table cellpadding="0" cellspacing="0">
+						
+						<xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
+							<xsl:value-of select="encoder:encode(concat('parent = ',./@ID))"/>
+						</xsl:variable>
+						<xsl:variable name="sort">
+							<xsl:choose>
+								<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy='title')">
+									<xsl:value-of select="'&amp;sortby=maintitles2'"/>										
+								</xsl:when>
+								<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy='title')">
+									<xsl:value-of select="'&amp;sortby=maintitles3'"/>										
+								</xsl:when>								
+								<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy='size')">
+									<xsl:value-of select="'&amp;sortby=sizes3'"/>										
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="''"/>																			
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
+						<xsl:variable name="children">
+							<xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=ascending')))"/>
+						</xsl:variable>						
+						
 						<tr>
 							<td>
 								<xsl:call-template name="printTOCNavi">
 									<xsl:with-param name="location" select="'navi'"/>
+									<xsl:with-param name="childrenKinds" select="$kindOfChildren"/>
+									<xsl:with-param name="childrenXML" select="xalan:nodeset($children)"/>
 								</xsl:call-template>
 							</td>
 						</tr>
-						<xsl:for-each select="./structure/children/child">
+<!--						<xsl:for-each select="xalan:nodeset($children)/mcr:results/mcr:hit[position()>=number($toc.pos)+1 and (number($toc.pos)+number($toc.pageSize)>=position())]">-->
+						<xsl:for-each select="xalan:nodeset($children)/mcr:results/mcr:hit[position()>=number($toc.pos)+1]">							
 							<!-- take care on children result list lenght -->
 							<xsl:if test="(position()>=$toc.pos) and ($toc.pos+$toc.pageSize>=position())">
 								<tr id="leaf-whitespaces">
 									<td colspan="2">
 										<xsl:variable name="cXML">
-											<xsl:copy-of select="document(concat('mcrobject:',@xlink:href))"/>
+											<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
 										</xsl:variable>
 										<table cellspacing="0" cellpadding="0" id="leaf-all">
 											<tr>
 												<td id="leaf-front" colspan="1" rowspan="2">
 													<xsl:variable name="OID">
 														<xsl:call-template name="typeOfObjectID">
-															<xsl:with-param name="id" select="@xlink:href"/>
+															<xsl:with-param name="id" select="@id"/>
 														</xsl:call-template>
 													</xsl:variable>
 													<xsl:choose>
@@ -891,10 +934,10 @@
 													</xsl:variable>
 													<xsl:choose>
 														<xsl:when
-															test="(contains(@xlink:href,'_jparticle_')) 
+															test="(contains(@id,'_jparticle_')) 
 												or ($children='false') ">
 															<xsl:call-template name="objectLinking">
-																<xsl:with-param name="obj_id" select="@xlink:href"/>
+																<xsl:with-param name="obj_id" select="@id"/>
 																<xsl:with-param name="obj_name" select="$shortlabel"/>
 																<xsl:with-param name="requestParam"
 																	select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
@@ -902,7 +945,7 @@
 														</xsl:when>
 														<xsl:otherwise>
 															<xsl:call-template name="objectLinking">
-																<xsl:with-param name="obj_id" select="@xlink:href"/>
+																<xsl:with-param name="obj_id" select="@id"/>
 																<xsl:with-param name="obj_name" select="$shortlabel"/>
 																<xsl:with-param name="requestParam"
 																	select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=0'"/>
@@ -913,7 +956,7 @@
 											</tr>
 											<tr>
 												<xsl:call-template name="printDerivates">
-													<xsl:with-param name="obj_id" select="@xlink:href"/>
+													<xsl:with-param name="obj_id" select="@id"/>
 													<xsl:with-param name="knoten" select="$cXML"/>
 												</xsl:call-template>
 											</tr>
@@ -948,6 +991,8 @@
 	<!-- ===================================================================================================== -->
 	<xsl:template name="printTOCNavi">
 		<xsl:param name="location"/>
+		<xsl:param name="childrenKinds"/>
+		<xsl:param name="childrenXML"/>
 		
 		<xsl:variable name="pred">
 			<xsl:value-of select="number($toc.pos)-(number($toc.pageSize)+1)"/>
@@ -978,20 +1023,34 @@
 								</p>
 							</form>
 						</td>
-<!--						<td align="center">
+						<td align="center">
 							<form id="sort" target="_self"
 								action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}" method="post">
 								<p>
-									<select onChange="document.getElementById('pageSize').submit()"
-										name="XSL.toc.pageSize.SESSION" size="1">
-										<option value="" selected="selected">sortieren</option>
-										<option value="ascending">aufsteigend</option>
-										<option value="descending">absteigend</option>
+									<select onChange="document.getElementById('sort').submit()"
+										name="XSL.toc.sortBy.SESSION" size="1">
+										<option value="nothing" >nicht sortieren</option>										
+										<option value="title" >nach Titeln sortieren</option>
+										<xsl:if test="$childrenKinds='jparticle'">
+											<option value="size" >nach Seiten sortieren</option>											
+										</xsl:if>
 									</select>
 								</p>
 							</form>
-						</td>-->
+						</td>
 					</tr>
+					<xsl:variable name="numberOfChildren">
+						<xsl:value-of select="count(xalan:nodeset($childrenXML)/mcr:results/mcr:hit)"/>
+					</xsl:variable>
+					<xsl:if test="number($numberOfChildren)>number($toc.pageSize)">
+						<tr>
+							<td colspan="2">
+								trefferlisten:<xsl:value-of select="round(number($numberOfChildren) div number($toc.pageSize))+1"/>...
+								<br></br><br></br>
+							</td>
+						</tr>						
+					</xsl:if>
+
 				</table>
 			</xsl:when>
 			<xsl:otherwise>

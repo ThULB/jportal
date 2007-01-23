@@ -103,8 +103,8 @@
 						<cell var="@name" anchor="WEST" col="1" row="1">
 							<list type="dropdown">
 								<item i18n="editor.search.choose" value=""/>
-								<item i18n="editor.search.document.maintitle" value="maintitles"/>
-								<item i18n="editor.search.document.date" value="dates"/>
+								<item i18n="editor.search.document.maintitle" value="maintitles3"/>
+								<item i18n="editor.search.document.date" value="dates3"/>
 							</list>
 						</cell>
 						<cell var="@order" anchor="WEST" col="2" row="1">
