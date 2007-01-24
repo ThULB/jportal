@@ -782,6 +782,11 @@
 						<xsl:call-template name="iview.getAddress">
 							<xsl:with-param name="derivID" select="$derivid"/>
 							<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
+							<xsl:with-param name="height" select="'510'"/>
+							<xsl:with-param name="width" select="'605'"/>
+							<xsl:with-param name="scaleFactor" select="'fitToWidth'"/>
+							<xsl:with-param name="display" select="'extended'"/>
+							<xsl:with-param name="style" select="'image'"/>							
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:otherwise>
@@ -791,13 +796,12 @@
 			</xsl:variable>
 
 			<xsl:if test="($supportedMainFile!='') and ($view.objectmetadata='false')">
-				<xsl:call-template name="iview.getEmbedded.thumbnail">
-					<xsl:with-param name="derivID" select="$derivid"/>
-					<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
-				</xsl:call-template>					
-				<br/>				
+					<xsl:call-template name="iview.getEmbedded.thumbnail">
+						<xsl:with-param name="derivID" select="$derivid"/>
+						<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
+					</xsl:call-template>					
 			</xsl:if>						
-
+			<br/>
 			<a href="{$href}">
 				<xsl:value-of select="concat($ctype,' ansehen &gt;&gt;')"/>
 			</a>
