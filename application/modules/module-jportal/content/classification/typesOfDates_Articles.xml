@@ -9,5 +9,11 @@
 		<category ID="published_Original">
 			<label xml:lang="de" text="Erscheinungsjahr der rez. Werkes"></label>
 		</category>
+		<category ID="published_Original_From">
+			<label xml:lang="de" text="Erscheinungsbeginn der rez. Werke"/>
+		</category>
+		<category ID="published_Original_Till">
+			<label xml:lang="de" text="Erscheinungsende der rez. Werke"/>
+		</category>
 	</categories>
 </mycoreclass>
