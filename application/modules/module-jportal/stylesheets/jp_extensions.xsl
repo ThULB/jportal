@@ -23,6 +23,10 @@
 		priority="2">
 		
 		<xsl:call-template name="printSwitchViewBar"/>
+
+		<xsl:call-template name="printHistoryRow">
+			<xsl:with-param name="sortOrder" select="'descending'"/>
+		</xsl:call-template>		
 		
 		<xsl:choose>
 			<!-- metadaten -->
@@ -223,24 +227,30 @@
 		<table>
 			<tr>
 				<td id="leaf-headline2">
-					<xsl:choose>
-						<xsl:when test="$sortOrder='descending'">
-							<xsl:for-each select="mycoreobject/metadata/maintitles/maintitle">
-								<xsl:sort select="@inherited" order="descending"/>
-								<xsl:call-template name="printHistoryRow.rows">
-									<xsl:with-param name="sortOrder" select="$sortOrder"/>
-								</xsl:call-template>
-							</xsl:for-each>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:for-each select="mycoreobject/metadata/maintitles/maintitle">
-								<xsl:sort select="@inherited" order="ascending"/>
-								<xsl:call-template name="printHistoryRow.rows">
-									<xsl:with-param name="sortOrder" select="$sortOrder"/>
-								</xsl:call-template>
-							</xsl:for-each>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:if test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')">
+						<b>Erschienen: </b>
+						<xsl:choose>
+							<xsl:when test="$sortOrder='descending'">
+								<xsl:for-each select="/mycoreobject/metadata/maintitles/maintitle">
+									<xsl:sort select="@inherited" order="descending"/>
+									<xsl:call-template name="printHistoryRow.rows">
+										<xsl:with-param name="sortOrder" select="$sortOrder"/>
+										<xsl:with-param name="printCurrent" select="'false'"/>
+									</xsl:call-template>
+								</xsl:for-each>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:for-each select="/mycoreobject/metadata/maintitles/maintitle">
+									<xsl:sort select="@inherited" order="ascending"/>
+									<xsl:call-template name="printHistoryRow.rows">
+										<xsl:with-param name="sortOrder" select="$sortOrder"/>
+										<xsl:with-param name="printCurrent" select="'false'"/>										
+									</xsl:call-template>
+								</xsl:for-each>
+							</xsl:otherwise>
+						</xsl:choose>
+						<br/><br/>
+					</xsl:if>						
 				</td>
 			</tr>
 			<xsl:if test="$underline='true'">
@@ -256,8 +266,9 @@
 	
 	<xsl:template name="printHistoryRow.rows">
 		<xsl:param name="sortOrder"/>
+		<xsl:param name="printCurrent"/>
 		<xsl:choose>
-			<xsl:when test="@inherited='0'">
+			<xsl:when test="@inherited='0' and $printCurrent='true' ">
 				<span>
 					<xsl:variable name="date">
 						<xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
@@ -294,10 +305,10 @@
 					<xsl:variable name="label">
 						<xsl:choose>
 							<xsl:when test="$sortOrder='descending'">
-								<xsl:value-of select="concat($text,$date, ' > ')"/>
+								<xsl:value-of select="concat($text,$date, ' \ ')"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="concat(' > ',$text,$date)"/>
+								<xsl:value-of select="concat(' \ ',$text,$date)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
@@ -310,7 +321,7 @@
 					</xsl:call-template>
 				</xsl:if>
 			</xsl:when>
-			<xsl:otherwise>
+			<xsl:when test="@inherited!='1' and @inherited!='0'">
 				<xsl:variable name="heritedLevel">
 					<xsl:value-of select="@inherited"/>
 				</xsl:variable>
@@ -329,15 +340,15 @@
 				<xsl:variable name="label">
 					<xsl:choose>
 						<xsl:when test="$sortOrder='descending'">
-							<xsl:value-of select="concat($text,$date, ' > ')"/>
+							<xsl:value-of select="concat($text,$date, ' \ ')"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat(' > ',$text,$date)"/>
+							<xsl:value-of select="concat(' \ ',$text,$date)"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-				<xsl:value-of select="$label"/>
-			</xsl:otherwise>
+				<xsl:value-of select="$label"/>				
+			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
 	
@@ -494,22 +505,72 @@
 		
 		<table id="switch" cellspacing="0" cellpadding="0" border="0">
 			<tr>
+				<!-- oncle buttons :-) -->
 				<xsl:if test="/mycoreobject/structure/parents/parent/@xlink:href">
-					<td>
-						<a href="{concat($WebApplicationBaseURL,'receive/',/mycoreobject/structure/parents/parent/@xlink:href,$HttpSession)}?XSL.toc.pos.SESSION=1"
-							alt="Gehe zu: {/mycoreobject/metadata/maintitles/maintitle[@inherited=1]/text()}"
-							title="Gehe zu: {/mycoreobject/metadata/maintitles/maintitle[@inherited=1]/text()}">
-							<img src="{$WebApplicationBaseURL}up.jpg"/>						
-						</a>
-					</td>					
+					<xsl:variable name="currentID">
+						<xsl:value-of select="/mycoreobject/@ID"/>
+					</xsl:variable>					
+					<xsl:variable name="OID">
+						<xsl:call-template name="typeOfObjectID">
+							<xsl:with-param name="id" select="/mycoreobject/@ID"/>
+						</xsl:call-template>
+					</xsl:variable>		
+					<xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
+						<xsl:value-of select="encoder:encode(concat('parent = ',/mycoreobject/structure/parents/parent/@xlink:href))"/>
+					</xsl:variable>								
+					<xsl:variable name="sort">
+						<xsl:call-template name="get.sortKey">
+							<xsl:with-param name="kindOfChildren" select="$OID"/>
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:variable name="siblings">
+						<xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=ascending')))"/>
+					</xsl:variable>								
+					<xsl:variable name="currentNode">
+						<xsl:copy-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[@id=$currentID]"/>
+					</xsl:variable>			
+
+					<xsl:for-each select="xalan:nodeset($siblings)/mcr:results/mcr:hit">
+						<xsl:variable name="pos">
+							<xsl:value-of select="position()"/>
+						</xsl:variable>
+						<xsl:if test="@id=$currentID"	>
+							<xsl:variable name="pred">
+								<xsl:value-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[position()=number($pos)-1]/@id"/>
+							</xsl:variable>
+							<xsl:variable name="suc">
+								<xsl:value-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[position()=number($pos)+1]/@id"/>
+							</xsl:variable>
+							
+							<xsl:if test="$pred!=''">
+								<td>
+									<a href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
+										alt="voriger Band"
+										title="voriger Band">
+										<img src="{$WebApplicationBaseURL}up.jpg"/>						
+									</a>
+								</td>									
+							</xsl:if>
+							<xsl:if test="$suc!=''">
+								<td>
+									<a href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
+										alt="naechster Band"
+										title="naechster Band">
+										<img src="{$WebApplicationBaseURL}down.jpg"/>						
+									</a>
+								</td>									
+							</xsl:if>
+						</xsl:if>
+					</xsl:for-each>
 				</xsl:if>
+				
 				<td>
 					<xsl:choose>
 						<xsl:when test="$view.objectmetadata='false'">
 							<div id="switch-current">						
 								<xsl:value-of select="'- Detailansicht aktiviert-'"/> 
 							</div>									
-						</xsl:when>3
+						</xsl:when>
 						<xsl:otherwise>
 							<div id="switch-notcurrent">						
 								<xsl:variable name="URLDetails">
@@ -577,6 +638,26 @@
 	</xsl:template>
 	
 	<!-- ===================================================================================================== -->
+	
+	<xsl:template name="get.sortKey">
+		<xsl:param name="kindOfChildren"/>
+		<xsl:choose>
+			<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
+				<xsl:value-of select="'&amp;sortby=maintitles2'"/>										
+			</xsl:when>
+			<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
+				<xsl:value-of select="'&amp;sortby=maintitles3'"/>										
+			</xsl:when>								
+			<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='size')">
+				<xsl:value-of select="'&amp;sortby=sizes3'"/>										
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="''"/>																			
+			</xsl:otherwise>
+		</xsl:choose>		
+	</xsl:template>	
+
+	<!-- ===================================================================================================== -->		
 	
 	<xsl:template name="printDerivates">
 		<xsl:param name="obj_id"/>
@@ -796,10 +877,10 @@
 			</xsl:variable>
 
 			<xsl:if test="($supportedMainFile!='') and ($view.objectmetadata='false')">
-					<xsl:call-template name="iview.getEmbedded.thumbnail">
-						<xsl:with-param name="derivID" select="$derivid"/>
-						<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
-					</xsl:call-template>					
+				<xsl:call-template name="iview.getEmbedded.thumbnail">
+					<xsl:with-param name="derivID" select="$derivid"/>
+					<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
+				</xsl:call-template>					
 			</xsl:if>						
 			<br/>
 			<a href="{$href}">
@@ -827,7 +908,7 @@
 	
 	<xsl:template name="printChildren">
 
-		<xsl:variable name="kindOfChildren">
+		<xsl:variable name="kindOfChildren2">
 			<xsl:choose>
 				<xsl:when test="./structure/children/child[position()=1]/@xlink:href">
 					<xsl:call-template name="typeOfObjectID">
@@ -850,7 +931,10 @@
 							<xsl:value-of select="encoder:encode(concat('parent = ',./@ID))"/>
 						</xsl:variable>
 						<xsl:variable name="sort">
-							<xsl:choose>
+							<xsl:call-template name="get.sortKey">
+								<xsl:with-param name="kindOfChildren" select="$kindOfChildren2"/>
+							</xsl:call-template>
+<!--							<xsl:choose>
 								<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
 									<xsl:value-of select="'&amp;sortby=maintitles2'"/>										
 								</xsl:when>
@@ -863,7 +947,7 @@
 								<xsl:otherwise>
 									<xsl:value-of select="''"/>																			
 								</xsl:otherwise>
-							</xsl:choose>
+							</xsl:choose>-->
 						</xsl:variable>
 						<xsl:variable name="children">
 							<xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=ascending')))"/>
@@ -872,7 +956,7 @@
 							<td>
 								<xsl:call-template name="printTOCNavi">
 									<xsl:with-param name="location" select="'navi'"/>
-									<xsl:with-param name="childrenKinds" select="$kindOfChildren"/>
+									<xsl:with-param name="childrenKinds" select="$kindOfChildren2"/>
 									<xsl:with-param name="childrenXML" select="xalan:nodeset($children)"/>
 								</xsl:call-template>
 							</td>
