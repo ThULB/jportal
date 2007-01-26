@@ -873,5 +873,25 @@
 			<i><span class="editorlabel">3. Optionale Klassifikation zur inhaltl. Erschließung</span></i>
 		</label>
 	</text>					
-	
+	<text id="websitecontext_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">Optionale Adresse des Website-Kontextes</span></i>
+		</label>
+	</text>					
+	<text id="genhiddenfield1_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">1. Optionaler beliebiger Wert</span></i>
+		</label>
+	</text>					
+	<text id="genhiddenfield2_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">2. Optionaler beliebiger Wert</span></i>
+		</label>
+	</text>					
+	<text id="genhiddenfield3_label" >
+		<label xml:lang="de">
+			<i><span class="editorlabel">3. Optionaler beliebiger Wert</span></i>
+		</label>
+	</text>								
+		
 </imports>

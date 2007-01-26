@@ -78,6 +78,18 @@
 		  
             <cell row="250" col="1" anchor="NORTHWEST" ref="classipub3_label" />
             <cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input" />		  		  		  		  
+		  
+            <cell row="260" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
+            <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input" />		  		  		  		  
+		  
+            <cell row="270" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label" />
+            <cell row="270" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input" />		  		  		  		  
+		  
+            <cell row="280" col="1" anchor="NORTHWEST" ref="genhiddenfield2_label" />
+            <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input" />		  		  		  		  		  		  		  
+		  
+            <cell row="290" col="1" anchor="NORTHWEST" ref="genhiddenfield3_label" />
+            <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input" />		  		  		  		  		  
 		    <!-- ================================================================================================= -->
             <!-- save / cancel button -->
             <cell row="300" col="1" anchor="EAST"/>
@@ -340,4 +352,36 @@
 		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
 		 	</cell>				
       </panel>		
+      <!-- websitecontext ================================================================== -->
+      <panel id="websitecontext_input">
+            <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_websitecontexts/@parasearch" default="true" />
+            <hidden var="metadata/hidden_websitecontexts/@textsearch" default="true" />
+            <hidden var="metadata/hidden_websitecontexts/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
+      </panel>	
+      <!-- gehiddenfield1 ================================================================== -->
+      <panel id="genhiddenfield1_input">
+            <hidden var="metadata/hidden_genhiddenfields1/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_genhiddenfields1/@parasearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields1/@textsearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />
+      </panel>	
+      <!-- genhiddenfield2 ================================================================== -->
+      <panel id="genhiddenfield2_input">
+            <hidden var="metadata/hidden_genhiddenfields2/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_genhiddenfields2/@parasearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields2/@textsearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields2/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields2/hidden_genhiddenfield2" />
+      </panel>	
+      <!-- genhiddenfield3 ================================================================== -->
+      <panel id="genhiddenfield3_input">
+            <hidden var="metadata/hidden_genhiddenfields3/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_genhiddenfields3/@parasearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields3/@textsearch" default="true" />
+            <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="true" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
+      </panel>				
 </imports>

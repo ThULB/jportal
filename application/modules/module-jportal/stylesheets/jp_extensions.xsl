@@ -547,7 +547,7 @@
 									<a href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
 										alt="voriger Band"
 										title="voriger Band">
-										<img src="{$WebApplicationBaseURL}up.jpg"/>						
+										<img src="{$WebApplicationBaseURL}left.jpg"/>						
 									</a>
 								</td>									
 							</xsl:if>
@@ -556,7 +556,7 @@
 									<a href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
 										alt="naechster Band"
 										title="naechster Band">
-										<img src="{$WebApplicationBaseURL}down.jpg"/>						
+										<img src="{$WebApplicationBaseURL}right.jpg"/>						
 									</a>
 								</td>									
 							</xsl:if>
