@@ -129,18 +129,18 @@
 			<xsl:value-of select="concat($objectBaseURL,@ID)"/>
 		</xsl:variable>
 		<div id="detailed-frame">
+			<xsl:variable name="maintitle_shorted">
+				<xsl:call-template name="ShortenText">
+					<xsl:with-param name="text" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
+					<xsl:with-param name="length" select="75"/>
+				</xsl:call-template>
+			</xsl:variable>					
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
 						<xsl:value-of select="i18n:translate('metaData.type.article')"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:variable name="maintitle_shorted">
-							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
-								<xsl:with-param name="length" select="75"/>
-							</xsl:call-template>
-						</xsl:variable>						
 						<xsl:value-of select="$maintitle_shorted"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
@@ -157,35 +157,55 @@
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<tr>
-								<td id="detailed-headlines">Formale Beschreibung</td>
+								<td id="detailed-headlines" >Formale Beschreibung</td>
 							</tr>
 							
-							<!--1***maintitle*************************************-->
-							
-							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
-								<xsl:with-param select="'right'" name="textalign"/>
-								<xsl:with-param select="./metadata/maintitles/maintitle[@inherited='0']" name="nodes"/>
-							</xsl:call-template>
+							<!--1***maintitle*************************************-->	
+							<!-- take care on cuted main title-->
+							<tr>
+								<td valign="top" id="detailed-labels">
+									<xsl:value-of select="i18n:translate('editor.search.document.maintitle')"/>
+								</td>
+								<td class="metavalue">
+									<xsl:variable name="mainTitle">
+										<xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']"/>
+									</xsl:variable>
+									<xsl:choose>
+										<!-- cuted -->
+										<xsl:when test="string-length($mainTitle)>75)">
+											<xsl:value-of select="concat('...',substring($mainTitle,1,70))"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="$mainTitle" />
+										</xsl:otherwise>
+									</xsl:choose>									
+								</td>
+							</tr>
 							
 							<!--2***subtitle*************************************-->
-							<xsl:call-template name="printMetaDates">
+							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/subtitles/subtitle" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.subtitle')" name="label"/>
+								<xsl:with-param name="typeClassi" select="'jportal_class_00000006'"/>
+								<xsl:with-param name="mode" select="'text'"/>
 							</xsl:call-template>
 							
 							<!--3***participant*************************************-->
-							<xsl:call-template name="printMetaDates">
+							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/participants/participant" name="nodes"/>
 								<xsl:with-param select="i18n:translate('metaData.jparticle.participant')" name="label"/>
+								<xsl:with-param name="typeClassi" select="'jportal_class_00000007'"/>								
+								<xsl:with-param name="mode" select="'xlink'"/>
 							</xsl:call-template>
 							<!--4***date*************************************-->
-							<xsl:call-template name="printMetaDates">
+							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/dates/date[@inherited='0']" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editor.search.document.date')" name="label"/>
+								<xsl:with-param name="typeClassi" select="'jportal_class_00000008'"/>								
+								<xsl:with-param name="mode" select="'date'"/>								
 							</xsl:call-template>
 							
 							<!--11***size*************************************-->
@@ -196,10 +216,12 @@
 							</xsl:call-template>
 							
 							<!--7***identi*************************************-->
-							<xsl:call-template name="printMetaDates">
+							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/identis/identi" name="nodes"/>
 								<xsl:with-param select="i18n:translate('metaData.jparticle.identi.issn')" name="label"/>
+								<xsl:with-param name="typeClassi" select="'jportal_class_00000010'"/>								
+								<xsl:with-param name="mode" select="'text'"/>
 							</xsl:call-template>
 							
 							<tr id="detailed-dividingline">
