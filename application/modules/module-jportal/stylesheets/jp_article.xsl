@@ -173,7 +173,7 @@
 									<xsl:choose>
 										<!-- cuted -->
 										<xsl:when test="string-length($mainTitle)>75)">
-											<xsl:value-of select="concat('...',substring($mainTitle,1,70))"/>
+											<xsl:value-of select="concat('...',substring-after($mainTitle, substring-before($maintitle_shorted,'...')))"/>											
 										</xsl:when>
 										<xsl:otherwise>
 											<xsl:value-of select="$mainTitle" />

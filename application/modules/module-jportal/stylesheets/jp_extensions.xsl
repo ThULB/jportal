@@ -24,10 +24,6 @@
 		
 		<xsl:call-template name="printSwitchViewBar"/>
 		
-		<xsl:call-template name="printHistoryRow">
-			<xsl:with-param name="sortOrder" select="'descending'"/>
-		</xsl:call-template>
-		
 		<xsl:choose>
 			<!-- metadaten -->
 			<xsl:when test="$view.objectmetadata = 'false'">
@@ -223,19 +219,19 @@
 	<xsl:template name="printHistoryRow">
 		<xsl:param name="underline" select="'false'"/>
 		<xsl:param name="sortOrder" select="'descending'"/>
+		<xsl:param name="printCurrent" select="'true'" />
 		
 		<table>
 			<tr>
 				<td id="leaf-headline2">
 					<xsl:if test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')">
-						<b>Erschienen: </b>
 						<xsl:choose>
 							<xsl:when test="$sortOrder='descending'">
 								<xsl:for-each select="/mycoreobject/metadata/maintitles/maintitle">
 									<xsl:sort select="@inherited" order="descending"/>
 									<xsl:call-template name="printHistoryRow.rows">
 										<xsl:with-param name="sortOrder" select="$sortOrder"/>
-										<xsl:with-param name="printCurrent" select="'false'"/>
+										<xsl:with-param name="printCurrent2" select="$printCurrent"/>
 									</xsl:call-template>
 								</xsl:for-each>
 							</xsl:when>
@@ -244,13 +240,11 @@
 									<xsl:sort select="@inherited" order="ascending"/>
 									<xsl:call-template name="printHistoryRow.rows">
 										<xsl:with-param name="sortOrder" select="$sortOrder"/>
-										<xsl:with-param name="printCurrent" select="'false'"/>
+										<xsl:with-param name="printCurrent2" select="$printCurrent"/>
 									</xsl:call-template>
 								</xsl:for-each>
 							</xsl:otherwise>
 						</xsl:choose>
-						<br/>
-						<br/>
 					</xsl:if>
 				</td>
 			</tr>
@@ -267,27 +261,37 @@
 	
 	<xsl:template name="printHistoryRow.rows">
 		<xsl:param name="sortOrder"/>
-		<xsl:param name="printCurrent"/>
+		<xsl:param name="printCurrent2"/>
 		<xsl:choose>
-			<xsl:when test="@inherited='0' and $printCurrent='true' ">
-				<span>
-					<xsl:variable name="date">
-						<xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
-							<xsl:value-of
-								select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')"/>
-						</xsl:if>
-					</xsl:variable>
-					<xsl:variable name="text">
-						<xsl:call-template name="ShortenText">
-							<xsl:with-param name="text" select="text()"/>
-							<xsl:with-param name="length" select="25"/>
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:variable name="label">
-						<xsl:value-of select="concat($text,$date)"/>
-					</xsl:variable>
-					<xsl:value-of select="$label"/>
-				</span>
+			<xsl:when test="@inherited='0' ">
+				<xsl:choose>
+					<xsl:when test="$printCurrent2='true' ">
+						<span>
+							<xsl:variable name="date">
+								<xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
+									<xsl:value-of
+										select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')"/>
+								</xsl:if>
+							</xsl:variable>
+							<xsl:variable name="text">
+								<xsl:call-template name="ShortenText">
+									<xsl:with-param name="text" select="text()"/>
+									<xsl:with-param name="length" select="25"/>
+								</xsl:call-template>
+							</xsl:variable>
+							<xsl:variable name="label">
+								<xsl:value-of select="concat($text,$date)"/>
+							</xsl:variable>
+							<xsl:value-of select="$label"/>
+						</span>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="' ...'"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				
+				
+				
 			</xsl:when>
 			<xsl:when test="@inherited='1' ">
 				<xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
