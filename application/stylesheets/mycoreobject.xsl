@@ -266,8 +266,7 @@
 				
 				<a href="{$derivifs}">
 					<xsl:value-of select="$derivmain"/>
-				</a>
-				(
+				</a> (
 				<xsl:value-of select="ceiling(number($size) div 1024)"/>
 				&#160;kB) &#160;&#160;
 				<xsl:variable name="ziplink"
@@ -380,8 +379,7 @@
 						
 					</xsl:variable>
 					<xsl:if test="position() = $pos + 1">
-						<a href="{$WebApplicationBaseURL}receive/{$child}{$HttpSession}{$hostParam}"> --&#62;
-							</a>
+						<a href="{$WebApplicationBaseURL}receive/{$child}{$HttpSession}{$hostParam}"> --&#62; </a>
 					</xsl:if>
 				</xsl:for-each>
 			</xsl:when>
@@ -508,8 +506,7 @@
 								</a>
 							</xsl:if>
 							
-							<xsl:if
-								test="acl:checkPermission($id,'deletedb')">
+							<xsl:if test="acl:checkPermission($id,'deletedb')">
 								<xsl:choose>
 									<xsl:when test="contains($id,'_jpjournal_')"/>
 									<xsl:otherwise>
@@ -518,7 +515,7 @@
 											<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
 												title="{i18n:translate('swf.object.delObject')}"/>
 											
-										</a>										
+										</a>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:if>
@@ -534,14 +531,30 @@
 		<xsl:choose>
 			<xsl:when
 				test="contains(/mycoreobject/@ID,'_jpjournal_') 
-				or contains(/mycoreobject/@ID,'_jpvolume_')  ">
+				or contains(/mycoreobject/@ID,'_jpvolume_') 
+				or contains(/mycoreobject/@ID,'_jparticle_')  ">
+				
 				<xsl:variable name="title">
 					<xsl:call-template name="ShortenText">
-						<xsl:with-param name="text" select="mycoreobject/metadata/maintitles/maintitle[@inherited=0]/text()"/>
+						<xsl:with-param name="text"
+							select="mycoreobject/metadata/maintitles/maintitle[@inherited=0]/text()"/>
 						<xsl:with-param name="length" select="75"/>
 					</xsl:call-template>
-				</xsl:variable>					
-				<xsl:value-of select="$title"/>				
+				</xsl:variable>
+				<xsl:choose>
+					<xsl:when test="$view.objectmetadata='false'">
+						<xsl:call-template name="printHistoryRow">
+							<xsl:with-param name="sortOrder" select="'descending'"/>
+							<xsl:with-param name="printCurrent" select="'false'"/>
+						</xsl:call-template>						
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:call-template name="printHistoryRow">
+							<xsl:with-param name="sortOrder" select="'descending'"/>
+							<xsl:with-param name="printCurrent" select="'true'"/>
+						</xsl:call-template>						
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="'Metadaten'"/>
