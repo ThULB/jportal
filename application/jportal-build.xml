@@ -82,7 +82,7 @@
   <!-- Load all classifications                                            -->
   <!-- =================================================================== -->
 
-  <target name="jp.create.class" depends="init" description="Load all JPortal/MYJPORTAL classifications">
+  <target name="jp.create.class" depends="create.class" description="Load all JPortal/MYJPORTAL classifications">
     <property name="commands.file" value="${basedir}/commands.txt"/>
     <delete file="${commands.file}" />
     <echo file="${commands.file}" append="false">
