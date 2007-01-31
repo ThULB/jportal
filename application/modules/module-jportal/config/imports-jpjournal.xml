@@ -358,7 +358,7 @@
             <hidden var="metadata/hidden_websitecontexts/@parasearch" default="true" />
             <hidden var="metadata/hidden_websitecontexts/@textsearch" default="true" />
             <hidden var="metadata/hidden_websitecontexts/@heritable" default="true" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
       </panel>	
       <!-- gehiddenfield1 ================================================================== -->
       <panel id="genhiddenfield1_input">

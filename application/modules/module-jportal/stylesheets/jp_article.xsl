@@ -54,6 +54,7 @@
 						<xsl:with-param name="obj_name" select="$label"/>
 						<xsl:with-param name="requestParam"
 							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+						<xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
 					</xsl:call-template>
 				</td>
 			</tr>
@@ -62,6 +63,15 @@
 					<xsl:with-param name="obj_id" select="@id"/>
 					<xsl:with-param name="knoten" select="$cXML"/>
 				</xsl:call-template>
+			</tr>
+			<tr>
+				<td id="leaf-front" ></td>
+				<td >Erschienen:<xsl:call-template name="printHistoryRow">
+							<xsl:with-param name="sortOrder" select="'descending'"/>
+							<xsl:with-param name="printCurrent" select="'false'"/>
+							<xsl:with-param name="node" select="xalan:nodeset($cXML)"/>
+						</xsl:call-template>
+				</td>
 			</tr>
 		</table>
 		<table cellspacing="0" cellpadding="0">

@@ -507,17 +507,12 @@
 							</xsl:if>
 							
 							<xsl:if test="acl:checkPermission($id,'deletedb')">
-								<xsl:choose>
-									<xsl:when test="contains($id,'_jpjournal_')"/>
-									<xsl:otherwise>
 										<a
 											href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
 											<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
 												title="{i18n:translate('swf.object.delObject')}"/>
 											
 										</a>
-									</xsl:otherwise>
-								</xsl:choose>
 							</xsl:if>
 						</td>
 					</tr>
@@ -534,13 +529,6 @@
 				or contains(/mycoreobject/@ID,'_jpvolume_') 
 				or contains(/mycoreobject/@ID,'_jparticle_')  ">
 				
-				<xsl:variable name="title">
-					<xsl:call-template name="ShortenText">
-						<xsl:with-param name="text"
-							select="mycoreobject/metadata/maintitles/maintitle[@inherited=0]/text()"/>
-						<xsl:with-param name="length" select="75"/>
-					</xsl:call-template>
-				</xsl:variable>
 				<xsl:choose>
 					<xsl:when test="$view.objectmetadata='false'">
 						<xsl:call-template name="printHistoryRow">

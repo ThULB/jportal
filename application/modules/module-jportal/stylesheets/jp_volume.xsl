@@ -88,7 +88,7 @@
 					<xsl:with-param name="obj_id" select="@id"/>
 					<xsl:with-param name="knoten" select="$cXML"/>
 				</xsl:call-template>
-			</tr>
+			</tr>		
 		</table>
 		<table cellspacing="0" cellpadding="0">
 			<tr id="leaf-whitespaces">

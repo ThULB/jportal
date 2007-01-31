@@ -13,7 +13,7 @@
 			<hidden default="and" var="conditions/boolean/@operator"/>
 			<!-- Search in field 'heading' with operator 'contains' -->
 			<hidden default="headingLastName" var="conditions/boolean/condition1/@field"/>
-			<hidden default="contains"
+			<hidden default="="
 				var="conditions/boolean/condition1/@operator"/>
 			<cell anchor="EAST" col="1" row="1">
 				<text i18n="editor.search.person.lastName"/>
