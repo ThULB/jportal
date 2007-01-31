@@ -17,7 +17,7 @@
 			<label text="Erwähnte Institution" xml:lang="de"></label>
 		</category>
 		<category ID="mentionedPerson">
-			<label text="" xml:lang="de">Erwähnte Person</label>
+			<label text="Erwähnte Person" xml:lang="de"/>
 		</category>
 		<category ID="fotographer">
 			<label text="Fotograf" xml:lang="de"></label>
