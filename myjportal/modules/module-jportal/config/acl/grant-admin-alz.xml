@@ -4,6 +4,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="MCRCondition.xsd">
   <boolean operator="or">
-    <condition value="Berarbeiter_ALZ" operator="=" field="group" />
+    <condition value="admin_ALZ" operator="=" field="group" />
   </boolean>
 </condition>
