@@ -6,7 +6,7 @@
 	
 	<xsl:include href="mcr-module-startIview.xsl"/>
 	
-	<xsl:param name="view.objectmetadata"/>
+	<xsl:param name="view.objectmetadata" select="'false'"/>
 	<xsl:param name="toc.pos">
 		<xsl:call-template name="get.toc.pos"/>
 	</xsl:param>
@@ -219,19 +219,20 @@
 	<xsl:template name="printHistoryRow">
 		<xsl:param name="underline" select="'false'"/>
 		<xsl:param name="sortOrder" select="'descending'"/>
-		<xsl:param name="printCurrent" select="'true'" />
+		<xsl:param name="printCurrent" select="'true'"/>
 		<xsl:param name="node" select="."/>
 		
 		<table>
 			<tr>
 				<td id="leaf-headline2">
-					<xsl:if test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
+					<xsl:if
+						test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
 						or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
 						">
 						<xsl:choose>
 							<xsl:when test="$sortOrder='descending'">
 								<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
-									<xsl:sort select="@inherited" order="descending"/>									
+									<xsl:sort select="@inherited" order="descending"/>
 									<xsl:call-template name="printHistoryRow.rows">
 										<xsl:with-param name="sortOrder" select="$sortOrder"/>
 										<xsl:with-param name="printCurrent2" select="$printCurrent"/>
@@ -293,8 +294,6 @@
 					</xsl:otherwise>
 				</xsl:choose>
 				
-				
-				
 			</xsl:when>
 			<xsl:when test="@inherited='1' ">
 				<xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
@@ -325,6 +324,7 @@
 						<xsl:with-param name="obj_name" select="$label"/>
 						<xsl:with-param name="hoverText" select="text()"/>
 						<!--						<xsl:with-param name="requestParam"
+						
 						
 						
 						
@@ -582,7 +582,7 @@
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:if>
-
+				
 				<xsl:if test="contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
 					<td>
 						<xsl:choose>
@@ -626,7 +626,8 @@
 												<xsl:call-template name="UrlSetParam">
 													<xsl:with-param name="url"
 														select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/structure/parents/parent/@xlink:href,$HttpSession)"/>
-													<xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'"/>
+													<xsl:with-param name="par"
+														select="'XSL.view.objectmetadata.SESSION'"/>
 													<xsl:with-param name="value" select="'true'"/>
 												</xsl:call-template>
 											</xsl:variable>
@@ -642,7 +643,8 @@
 												<xsl:call-template name="UrlSetParam">
 													<xsl:with-param name="url"
 														select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)"/>
-													<xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'"/>
+													<xsl:with-param name="par"
+														select="'XSL.view.objectmetadata.SESSION'"/>
 													<xsl:with-param name="value" select="'true'"/>
 												</xsl:call-template>
 											</xsl:variable>
@@ -655,9 +657,9 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</td>
-										
-					</xsl:if>				
-
+					
+				</xsl:if>
+				
 			</tr>
 		</table>
 		<br/>
@@ -901,19 +903,17 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			
-			<xsl:if test="($supportedMainFile!='') and ($view.objectmetadata='false') ">
+			<xsl:if test="($supportedMainFile!='') and ($view.objectmetadata='false') and (/mycoreobject/@ID) ">
 				<xsl:call-template name="iview.getEmbedded.thumbnail">
 					<xsl:with-param name="derivID" select="$derivid"/>
 					<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
 				</xsl:call-template>
+				<br/>
 			</xsl:if>
-			<br/>
-			<a href="{$href}">
-				<xsl:value-of select="concat($ctype,' ansehen &gt;&gt;')"/>
-			</a>
+			<a href="{$href}"> Digitalisat (
+				<xsl:value-of select="$ctype"/>) ansehen </a>
 			
-			<br/>
+			<!--			<br/>-->
 			<xsl:if test="$CurrentUser!='gast'">
 				<a href="{$derivbase}">
 					<xsl:value-of select="'Details &gt;&gt;'"/>
@@ -1489,5 +1489,51 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>
+	<!-- ===================================================================================================== -->
+	<xsl:template name="get.rightPage">
+		<xsl:choose>
+			<!-- jpjournal or jpvolume or jparticle with own webcontext called -->
+			<!-- ### -->
+			<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
+			<xsl:when
+				test="(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())
+				&amp; ($loaded_navigation_xml//item[@href=/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
+				<xsl:variable name="object_webContext">
+					<xsl:value-of select="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+				</xsl:variable>
+				<!-- does $lastPage exist? -->
+				<xsl:choose>
+					<xsl:when test="($lastPage!='') and ($loaded_navigation_xml//item[@href=$lastPage])">
+						<xsl:for-each select="$loaded_navigation_xml//item[@href=$lastPage]">
+							
+							<xsl:choose>
+								<!-- $webcontext within ancestor axis ? -> choose $lastPage -->
+								<xsl:when test="ancestor::item[@href=$object_webContext]">
+									<xsl:value-of select="$lastPage"/>
+								</xsl:when>
+								<!-- $webcontext NOT within ancestor axis ? -> choose $webcontext -->
+								<xsl:otherwise>
+									<xsl:value-of select="$object_webContext"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of
+							select="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of xmlns:decoder="xalan://java.net.URLDecoder" select="decoder:decode($lastPage,'UTF-8')"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 	
 </xsl:stylesheet>
+
+
+
+
+
+

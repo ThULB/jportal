@@ -21,9 +21,7 @@
 		<table cellspacing="0" cellpadding="0" id="leaf-all">
 			<tr>
 				<td id="leaf-front" colspan="1" rowspan="2">
-					
 					<xsl:value-of select="i18n:translate('metaData.type.article')"/>
-					
 				</td>
 				<td id="leaf-linkarea2">
 					<xsl:variable name="name">
