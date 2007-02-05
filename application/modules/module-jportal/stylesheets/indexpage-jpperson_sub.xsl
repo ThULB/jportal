@@ -76,7 +76,14 @@
                   </option>
                 </select>
                 <xsl:text></xsl:text>
-                <input type="text" class="button" size="30" name="search" value="{$search}" />
+				  <xsl:choose>
+					  <xsl:when test="$search='xxxxxxxxxxxxxxxxxxxxx'">
+			                <input type="text" class="button" size="30" name="search" value="" />						  
+					  </xsl:when>
+					  <xsl:otherwise>
+			                <input type="text" class="button" size="30" name="search" value="{$search}" />						  
+					  </xsl:otherwise>
+				  </xsl:choose>
                 <xsl:text></xsl:text>
                 <input type="hidden" name="XSL.subselect.session" value="{$subselect.session}" />
                 <input type="hidden" name="XSL.subselect.varpath" value="{$subselect.varpath}" />
@@ -97,7 +104,7 @@
                   <input type="hidden" name="XSL.subselect.session" value="{$subselect.session}" />
                   <input type="hidden" name="XSL.subselect.varpath" value="{$subselect.varpath}" />
                   <input type="hidden" name="XSL.subselect.webpage" value="{$subselect.webpage}" />
-                  <input type="submit" class="button" value="{i18n:translate('indexpage.sub.buttons.filter.disable')}" />
+<!--                  <input type="submit" class="button" value="{i18n:translate('indexpage.sub.buttons.filter.disable')}" />-->
                 </form>
               </td>
             </xsl:if>
@@ -244,18 +251,18 @@
       </form>
     </p>
     <p>
-      <xsl:value-of select="' | '" />
+<!--      <xsl:value-of select="' | '" />
       <xsl:for-each select="xalan:nodeset($AtoZ)/search">
         <a
           href="{$WebApplicationBaseURL}indexpage{$HttpSession}?searchclass={$IndexID}&amp;mode=prefix&amp;search={@prefix}&amp;{$subselect.params}">
           <xsl:value-of select="@prefix" />
         </a>
         <xsl:value-of select="' | '" />
-      </xsl:for-each>
+      </xsl:for-each>-->
     </p>
   </xsl:template>
 
-  <xsl:variable name="AtoZ">
+<!--  <xsl:variable name="AtoZ">
     <search prefix="A" />
     <search prefix="B" />
     <search prefix="C" />
@@ -282,6 +289,6 @@
     <search prefix="X" />
     <search prefix="Y" />
     <search prefix="Z" />
-  </xsl:variable>
+  </xsl:variable>-->
 
 </xsl:stylesheet>
