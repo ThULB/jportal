@@ -39,12 +39,12 @@
 
   <!-- ======== headline ======== -->
   <xsl:template name="index.headline">
-    <tr valign="top">
+<!--    <tr valign="top">
       <td class="metaname">
         <xsl:value-of select="i18n:translate('indexpage.sub.headline.select')" />
         <xsl:value-of select="$IndexTitle" />
       </td>
-    </tr>
+    </tr>-->
   </xsl:template>
 
   <!-- ======== intro text ======== -->
