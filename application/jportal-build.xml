@@ -97,31 +97,66 @@
   </target>	
 	
   <!-- =================================================================== -->
-  <!-- Build web application                                               -->
+  <!-- generate default righmanagement                                     -->
   <!-- =================================================================== -->
 	
-	<target name="create.default-rules" depends="init" description="Load default ACL rules">
+	<target name="jp.create.default-rules" depends="init" description="Load JPortal default ACL rules">
 		<property name="commands.file" value="${basedir}/commands.txt" />
 		<echo file="${commands.file}" append="false">
-	    	update permission read for id default with rulefile grant-all.xml
-	    	update permission writedb for id default with rulefile grant-editors.xml
-	    	update permission deletedb for id default with rulefile grant-admins.xml
+			
+			load permissions data from file system_permissions.xml
+
+	    	update permission read for id default with rulefile grant-all.xml			
+			
+			update permission read for id default_jpjournal with rulefile grant-all.xml
+			update permission read for id default_jpvolume with rulefile grant-all.xml
+			update permission read for id default_jparticle with rulefile grant-all.xml
+			update permission read for id default_person with rulefile grant-all.xml
+			update permission read for id default_jpinst with rulefile grant-all.xml
+
+			update permission writedb for id default_jpjournal with rulefile grant-journalgroup.xml
+			update permission writedb for id default_jpvolume with rulefile grant-volumegroup.xml
+			update permission writedb for id default_jparticle with rulefile grant-editorsgroup.xml
+			update permission writedb for id default_person with rulefile grant-editorsgroup.xml
+			update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml
+			
+			update permission deletedb for id default_jpjournal with rulefile grant-rootgroup.xml			
+			update permission deletedb for id default_jpvolume with rulefile grant-volumegroup.xml
+			update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml
+			update permission deletedb for id default_person with rulefile grant-editorsgroup.xml
+			update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml			
+
 	    </echo>
-		<!-- this demonstrates how to specify default rules on a basis of an object type -->
-		<!--
-		<echo file="${commands.file}" append="true">
-	    	update permission read for id default_akte with rulefile grant-all.xml
-	    	update permission writedb for id default_akte with rulefile grant-editors.xml
-	    	update permission deletedb for id default_akte with rulefile grant-admins.xml
-	    </echo>
-	    -->
 		<antcall target="invoke.cli">
-			<param name="cli.directory" value="${basedir}/config/acl" />
+			<param name="cli.directory" value="${basedir}/modules/module-jportal/config/rightsManag" />
 			<param name="cli.command" value="process ${commands.file}" />
 		</antcall>
 		<delete file="${commands.file}" />
 	</target>	
 
+    <!-- =================================================================== -->
+    <!-- Load users and groups into database                     -->
+    <!-- =================================================================== -->
+
+  <target name="jp.create.usermanag" depends="init" description="Load JPortal base groups into database">
+    <property name="commands.file" value="${basedir}/commands.txt"/>
+    <echo file="${commands.file}" append="false">
+
+      init superuser
+      change to user root with alleswirdgut
+
+      create group data from file journalgroup.xml
+      create group data from file volumegroup.xml
+      create group data from file editorsgroup.xml
+
+    </echo>
+    <antcall target="invoke.cli">
+      <param name="cli.directory" value="${basedir}/modules/module-jportal/config/usersAndGroups"  />
+      <param name="cli.command"   value="process ${commands.file}" />
+    </antcall>
+    <delete file="${commands.file}" />
+  </target>
+	
   <!-- =================================================================== -->
   <!-- Generate search mask from searchfields.xml                          -->
   <!-- =================================================================== -->

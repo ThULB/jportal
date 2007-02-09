@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
 	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+	xmlns:aclObjID="xalan://org.mycore.access.strategies.MCRObjectIDStrategy"
+	xmlns:aclObjType="xalan://org.mycore.access.strategies.MCRJPortalStrategy"
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
@@ -137,7 +139,6 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	
 	<!-- =================================================================================================================================== -->
 	<!--Template for metadata view: see mycoreobject.xsl-->
 	<xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jpvolume_')]">
@@ -263,18 +264,27 @@
 								<xsl:with-param select="$accessedit" name="accessedit"/>
 								<xsl:with-param select="./@ID" name="id"/>
 							</xsl:call-template>
-							<xsl:call-template name="addChild2">
-								<xsl:with-param name="id" select="./@ID"/>
-								<xsl:with-param name="types" select="'jpvolume'"/>
-							</xsl:call-template>
+							<xsl:if test="acl:checkPermission(./@ID,'writedb')">
+								<xsl:call-template name="addChild2">
+									<xsl:with-param name="id" select="./@ID"/>
+									<xsl:with-param name="types" select="'jpvolume'"/>
+								</xsl:call-template>
+							</xsl:if>
 							<xsl:variable name="params_dynamicClassis">
 								<xsl:call-template name="get.params_dynamicClassis"/>
 							</xsl:variable>
-							<xsl:call-template name="addChild2">
-								<xsl:with-param name="id" select="./@ID"/>
-								<xsl:with-param name="types" select="'jparticle'"/>
-								<xsl:with-param select="$params_dynamicClassis" name="layout"/>
-							</xsl:call-template>
+							
+							<xsl:variable name="journalID">
+								<xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()"/>
+							</xsl:variable>
+							
+							<xsl:if test="aclObjType:checkPermissionOfType('jportal_jparticle_xxxxxxxx','writedb') and aclObjID:checkPermission($journalID,'writedb')">
+								<xsl:call-template name="addChild2">
+									<xsl:with-param name="id" select="./@ID"/>
+									<xsl:with-param name="types" select="'jparticle'"/>
+									<xsl:with-param select="$params_dynamicClassis" name="layout"/>
+								</xsl:call-template>
+							</xsl:if>
 						</table>
 					</td>
 				</tr>
@@ -302,7 +312,7 @@
 			</xsl:call-template>
 		</xsl:variable>
 		
-		<xsl:if test="acl:checkPermission($id,'writedb')">
+<!--		<xsl:if test="acl:checkPermission($id,'writedb')">-->
 			<tr>
 				<td class="metaname">
 					<xsl:value-of select="concat(i18n:translate('metaData.addChildObject'),':')"/>
@@ -323,8 +333,11 @@
 				</td>
 			</tr>
 			
-		</xsl:if>
+<!--		</xsl:if>-->
 	</xsl:template>
+	
+	<!-- =================================================================================================================================== -->	
+	
 	<xsl:template name="Derobjects2">
 		<xsl:param name="obj_host"/>
 		<xsl:param name="staticURL"/>

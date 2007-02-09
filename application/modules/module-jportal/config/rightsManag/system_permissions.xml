@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mcrpermissions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="MCRPermissions.xsd"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace">
+	<mcrpermission name="create-jpjournal"
+		description="Create rights for JP-Journals">
+		<condition format="xml">
+			<boolean operator="or">
+				<condition value="journalgroup" operator="=" field="group"/>
+			</boolean>
+		</condition>
+	</mcrpermission>	
+	<mcrpermission name="create-jpvolume"
+		description="Base rights to create JPVolumes">
+		<condition format="xml">
+			<boolean operator="or">
+				<condition value="volumegroup" operator="=" field="group"/>
+			</boolean>
+		</condition>
+	</mcrpermission>	
+	<mcrpermission name="create-jparticle"
+		description="Base rights to create JPArticles">
+		<condition format="xml">
+			<boolean operator="or">
+				<condition value="editorsgroup" operator="=" field="group"/>
+			</boolean>
+		</condition>
+	</mcrpermission>				
+	<mcrpermission name="create-person"
+		description="Base rights to create Persons">
+		<condition format="xml">
+			<boolean operator="or">
+				<condition value="editorsgroup" operator="=" field="group"/>
+			</boolean>
+		</condition>
+	</mcrpermission>		
+	<mcrpermission name="create-jpinst"
+		description="Base rights to create to JPInst">
+		<condition format="xml">
+			<boolean operator="or">
+				<condition value="editorsgroup" operator="=" field="group"/>
+			</boolean>
+		</condition>
+	</mcrpermission>		
+	
+</mcrpermissions>
