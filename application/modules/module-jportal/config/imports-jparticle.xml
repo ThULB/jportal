@@ -83,18 +83,18 @@
 		<!-- Hidden information to be used in heritated objects (volumes, articles) -->
 		<!-- .. -->
 		<cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden"/>
-		<!-- ... -->
+<!--		<!-#- ... -#->
 		<cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden"/>
-		<!-- ... -->
+		<!-#- ... -#->
 		<cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden"/>
-		<!-- optional classifications for articles -->
+		<!-#- optional classifications for articles -#->
 		<cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/>
 		<cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input_hidden"/>
 		<cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input_hidden"/>			
         <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input_hidden" />		  		  		  		  
         <cell row="270" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input_hidden" />		  		  		  		  
         <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input_hidden" />		  		  		  		  		  		  		  
-        <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />				  			
+        <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />		-->		  			
 		<!-- ================================================================================================= -->
 		<!-- save / cancel button -->
 		<cell row="190" col="1" anchor="EAST"/>

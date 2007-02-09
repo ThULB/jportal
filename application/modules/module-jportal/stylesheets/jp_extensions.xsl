@@ -98,22 +98,24 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>
-	
+
 	<!-- ===================================================================================================== -->
-	<xsl:template name="getJPJournalAsXML">
-		<xsl:param name="jpjournalID"/>
-		
-		<xsl:value-of
-			select="document(concat('mcrobject:',$jpjournalID))/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>
+	<xsl:template name="getJournalXML">
+		<xsl:param name="id"/>
+		<xsl:copy-of select="document(concat('mcrobject:',$id))"/>
 	</xsl:template>
-	
 	
 	<!-- ============================================================================================================================ -->
 	
 	<xsl:template name="get.params_dynamicClassis">
 		
+		<xsl:variable name="journalXML">
+			<xsl:call-template name="getJournalXML">
+				<xsl:with-param name="id" select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()"/>
+			</xsl:call-template>
+		</xsl:variable>
 		<xsl:variable name="IDTypes">
-			<xsl:value-of select="./metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>
+			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>			
 		</xsl:variable>
 		<xsl:variable name="param_types">
 			<xsl:value-of select="concat('XSL.jportalClassification.types.SESSION=',$IDTypes)"/>
@@ -122,7 +124,7 @@
 			<xsl:value-of select="concat('_xml_metadata/types/type/@classid=',$IDTypes)"/>
 		</xsl:variable>
 		<xsl:variable name="IDRubrics">
-			<xsl:value-of select="./metadata/hidden_rubricsID/hidden_rubricID/text()"/>
+			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_rubrics">
 			<xsl:value-of select="concat('XSL.jportalClassification.rubrics.SESSION=',$IDRubrics)"/>
@@ -130,9 +132,8 @@
 		<xsl:variable name="param_rubrics_editor">
 			<xsl:value-of select="concat('_xml_metadata/rubrics/rubric/@classid=',$IDRubrics)"/>
 		</xsl:variable>
-		
 		<xsl:variable name="IDclassipub">
-			<xsl:value-of select="./metadata/hidden_classispub/hidden_classipub/text()"/>
+			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub/hidden_classipub/text()"/>						
 		</xsl:variable>
 		<xsl:variable name="param_classipub">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub.SESSION=',$IDclassipub)"/>
@@ -142,7 +143,7 @@
 		</xsl:variable>
 		
 		<xsl:variable name="IDclassipub2">
-			<xsl:value-of select="./metadata/hidden_classispub2/hidden_classipub2/text()"/>
+			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub2/hidden_classipub2/text()"/>									
 		</xsl:variable>
 		<xsl:variable name="param_classipub2">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub2.SESSION=',$IDclassipub2)"/>
@@ -152,7 +153,7 @@
 		</xsl:variable>
 		
 		<xsl:variable name="IDclassipub3">
-			<xsl:value-of select="./metadata/hidden_classispub3/hidden_classipub3/text()"/>
+			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub3/hidden_classipub3/text()"/>			
 		</xsl:variable>
 		<xsl:variable name="param_classipub3">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub3.SESSION=',$IDclassipub3)"/>
@@ -1491,15 +1492,19 @@
 	</xsl:template>
 	<!-- ===================================================================================================== -->
 	<xsl:template name="get.rightPage">
+		<xsl:variable name="journalXML">
+			<xsl:call-template name="getJournalXML">
+				<xsl:with-param name="id" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()"/>
+			</xsl:call-template>
+		</xsl:variable>
 		<xsl:choose>
 			<!-- jpjournal or jpvolume or jparticle with own webcontext called -->
-			<!-- ### -->
-			<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
+				<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
 			<xsl:when
-				test="(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())
-				&amp; ($loaded_navigation_xml//item[@href=/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
+				test="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())
+				&amp; ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
 				<xsl:variable name="object_webContext">
-					<xsl:value-of select="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+					<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
 				</xsl:variable>
 				<!-- does $lastPage exist? -->
 				<xsl:choose>
@@ -1520,7 +1525,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of
-							select="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+							select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

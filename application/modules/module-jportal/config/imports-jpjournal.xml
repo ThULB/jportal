@@ -311,7 +311,7 @@
             <hidden var="metadata/hidden_rubricsID/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
             <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
-            <hidden var="metadata/hidden_rubricsID/@heritable" default="true" />
+            <hidden var="metadata/hidden_rubricsID/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_rubricsID/hidden_rubricID" />
       </panel>
       <!-- pubTypeID ================================================================== -->
@@ -319,7 +319,7 @@
             <hidden var="metadata/hidden_pubTypesID/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_pubTypesID/@parasearch" default="true" />
             <hidden var="metadata/hidden_pubTypesID/@textsearch" default="true" />
-            <hidden var="metadata/hidden_pubTypesID/@heritable" default="true" />
+            <hidden var="metadata/hidden_pubTypesID/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
       </panel>		
       <!-- hidden_classispub ================================================================== -->
@@ -327,7 +327,7 @@
             <hidden var="metadata/hidden_classispub/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
             <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
-            <hidden var="metadata/hidden_classispub/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub" >
 		      <textfield width="32" maxlength="32" default="jportal_class_00000011"/>				
 			</cell>
@@ -337,7 +337,7 @@
             <hidden var="metadata/hidden_classispub2/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
             <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
-            <hidden var="metadata/hidden_classispub2/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub2/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2"  >
 		      <textfield width="32" maxlength="32" default="jportal_class_00000012"/>								
 		 	</cell>
@@ -347,7 +347,7 @@
             <hidden var="metadata/hidden_classispub3/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
             <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
-            <hidden var="metadata/hidden_classispub3/@heritable" default="true" />
+            <hidden var="metadata/hidden_classispub3/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3" >
 		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
 		 	</cell>				
@@ -357,7 +357,7 @@
             <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_websitecontexts/@parasearch" default="true" />
             <hidden var="metadata/hidden_websitecontexts/@textsearch" default="true" />
-            <hidden var="metadata/hidden_websitecontexts/@heritable" default="true" />
+            <hidden var="metadata/hidden_websitecontexts/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
       </panel>	
       <!-- gehiddenfield1 ================================================================== -->

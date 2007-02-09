@@ -166,14 +166,14 @@
             <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
       </panel>
       <!-- rubricsID ================================================================== -->
-      <panel id="rubricID_input_hidden">
+ <!--     <panel id="rubricID_input_hidden">
             <hidden var="metadata/hidden_rubricsID/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
             <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
             <hidden var="metadata/hidden_rubricsID/@heritable" default="true" />
             <hidden var="metadata/hidden_rubricsID/hidden_rubricID" />
       </panel>
-      <!-- pubTypeID ================================================================== -->
+      <!-#- pubTypeID ================================================================== -#->
       <panel id="pubTypeID_input_hidden">
             <hidden var="metadata/hidden_pubTypesID/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_pubTypesID/@parasearch" default="true" />
@@ -181,7 +181,7 @@
             <hidden var="metadata/hidden_pubTypesID/@heritable" default="true" />
             <hidden var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
       </panel>			
-      <!-- classipub ================================================================== -->
+      <!-#- classipub ================================================================== -#->
       <panel id="classipub_input_hidden">
             <hidden var="metadata/hidden_classispub/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
@@ -189,7 +189,7 @@
             <hidden var="metadata/hidden_classispub/@heritable" default="true" />
             <hidden var="metadata/hidden_classispub/hidden_classipub" />
       </panel>
-      <!-- classipub2 ================================================================== -->
+      <!-#- classipub2 ================================================================== -#->
       <panel id="classipub2_input_hidden">
             <hidden var="metadata/hidden_classispub2/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
@@ -197,7 +197,7 @@
             <hidden var="metadata/hidden_classispub2/@heritable" default="true" />
             <hidden var="metadata/hidden_classispub2/hidden_classipub2" />
       </panel>
-      <!-- classipub3 ================================================================== -->
+      <!-#- classipub3 ================================================================== -#->
       <panel id="classipub3_input_hidden">
             <hidden var="metadata/hidden_classispub3/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
@@ -205,7 +205,7 @@
             <hidden var="metadata/hidden_classispub3/@heritable" default="true" />
             <hidden var="metadata/hidden_classispub3/hidden_classipub3" />
       </panel>
-      <!-- websitecontext ================================================================== -->
+      <!-#- websitecontext ================================================================== -#->
       <panel id="websitecontext_input_hidden">
             <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_websitecontexts/@parasearch" default="true" />
@@ -213,7 +213,7 @@
             <hidden var="metadata/hidden_websitecontexts/@heritable" default="true" />
             <hidden var="metadata/hidden_websitecontexts/hidden_websitecontext" />
       </panel>	
-      <!-- gehiddenfield1 ================================================================== -->
+      <!-#- gehiddenfield1 ================================================================== -#->
       <panel id="genhiddenfield1_input_hidden">
             <hidden var="metadata/hidden_genhiddenfields1/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_genhiddenfields1/@parasearch" default="true" />
@@ -221,7 +221,7 @@
             <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="true" />
             <hidden var="metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />
       </panel>	
-      <!-- genhiddenfield2 ================================================================== -->
+      <!-#- genhiddenfield2 ================================================================== -#->
       <panel id="genhiddenfield2_input_hidden">
             <hidden var="metadata/hidden_genhiddenfields2/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_genhiddenfields2/@parasearch" default="true" />
@@ -229,7 +229,7 @@
             <hidden var="metadata/hidden_genhiddenfields2/@heritable" default="true" />
             <hidden var="metadata/hidden_genhiddenfields2/hidden_genhiddenfield2" />
       </panel>	
-      <!-- genhiddenfield3 ================================================================== -->
+      <!-#- genhiddenfield3 ================================================================== -#->
       <panel id="genhiddenfield3_input_hidden">
             <hidden var="metadata/hidden_genhiddenfields3/@class" default="MCRMetaLangText" />
             <hidden var="metadata/hidden_genhiddenfields3/@parasearch" default="true" />
@@ -237,6 +237,6 @@
             <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="true" />
             <hidden var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
       </panel>		
-		
+		-->
 	<!-- HIDDEN ============================================================================================ -->	
 </imports>

@@ -43,42 +43,6 @@
 		<element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
 			<mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
 		</element>
-		<!-- id's of rubrics classi in articles -->
-		<element name="hidden_rubricsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_rubricID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>
-		<!-- id's of pub-type classi in articles -->
-		<element name="hidden_pubTypesID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_pubTypeID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>
-		<!-- optional classification for articles -->
-		<element name="hidden_classispub" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_classipub" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>
-		<!-- optional 2. classification for articles -->
-		<element name="hidden_classispub2" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_classipub2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>
-		<!-- optional 3. classification for articles -->
-		<element name="hidden_classispub3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_classipub3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>
-		<!-- optional value for websitecontext -->
-		<element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>		
-		<!-- 1. optional generic value -->
-		<element name="hidden_genhiddenfields1" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_genhiddenfield1" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>				
-		<!-- 2. optional generic value -->
-		<element name="hidden_genhiddenfields2" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_genhiddenfield2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>				
-		<!-- 3. optional generic value -->
-		<element name="hidden_genhiddenfields3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-			<mcrmetalangtext name="hidden_genhiddenfield3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
-		</element>								
 		<!-- ================================================================================================= -->
 	</metadata>
 	<service>

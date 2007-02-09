@@ -11,7 +11,6 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
 	private static final Logger LOGGER = Logger.getLogger(MCRParentRuleStrategy.class);
 	private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");	
 	
-	//private final static MCRAccessCheckStrategy TYPE_STRATEGY = new MCRObjectTypeStrategy();
 	private final static MCRAccessCheckStrategy ANCASTOR_STRATEGY = new MCRParentRuleStrategy();
 
 	public boolean checkPermission(String id, String permission) {
