@@ -23,11 +23,24 @@
       <xsl:variable name="MainTitle">
             <xsl:value-of select="$MCR.nameOfProject"/>
       </xsl:variable>
-      <!-- assign right browser address -->
+	
 	  <xsl:param name="href"/>
-      <xsl:param name="browserAddress" >
+      <xsl:variable name="browserAddress_tmp">
             <xsl:call-template name="getBrowserAddress" />
-      </xsl:param>
+      </xsl:variable>
+	  <!-- has web context been reset -->
+	  <xsl:variable name="wcReset">
+		  <xsl:call-template name="haveWCReset">
+			  <xsl:with-param name="detectionString" select="$browserAddress_tmp"/>
+		  </xsl:call-template>
+	  </xsl:variable>
+	  <!-- assign right browser address -->	
+	  <xsl:param name="browserAddress">
+		<xsl:call-template name="getBrowserAddressFromTmp">
+			<xsl:with-param name="bat" select="$browserAddress_tmp"/>
+		</xsl:call-template>		  
+	  </xsl:param>
+		
       <!-- look for appropriate template entry and assign -> $template -->
       <xsl:param name="template" >
             <xsl:call-template name="getTemplate" >
@@ -50,7 +63,7 @@
 	<xsl:include href="navigation.xsl" /> 
 	<xsl:include href="wcms_common.xsl" />     
 	<xsl:include href="jp_extensions.xsl" />	
-	
+
       <!-- =================================================================================================== -->
       <xsl:template name="generatePage">
             <!-- call the appropriate template -->
@@ -68,4 +81,28 @@
 		</xsl:choose>
 	</xsl:template>
       <!-- ================================================================================= -->
+	<xsl:template name="getBrowserAddressFromTmp">
+		<xsl:param name="bat" />
+		<xsl:choose>
+			<xsl:when test="contains($bat,'wcReset')">
+				<xsl:value-of select="substring-after($bat,'wcReset')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$bat"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>	
+      <!-- =================================================================================================== -->		
+	<xsl:template name="haveWCReset">
+		<xsl:param name="detectionString" />
+		<xsl:choose>
+			<xsl:when test="contains($detectionString,'wcReset')">
+				<xsl:value-of select="substring-after($detectionString,'wcReset')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'false'"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>		
+      <!-- =================================================================================================== -->		
 </xsl:stylesheet>

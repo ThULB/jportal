@@ -22,6 +22,10 @@
 		| /mycoreobject[contains(@ID,'_jparticle_')]"
 		priority="2">
 		
+		<xsl:if test="$wcReset!='false'">
+			<xsl:call-template name="hideIFrame"/>
+		</xsl:if>
+		
 		<xsl:call-template name="printSwitchViewBar"/>
 		
 		<xsl:choose>
@@ -1510,7 +1514,6 @@
 				<xsl:choose>
 					<xsl:when test="($lastPage!='') and ($loaded_navigation_xml//item[@href=$lastPage])">
 						<xsl:for-each select="$loaded_navigation_xml//item[@href=$lastPage]">
-							
 							<xsl:choose>
 								<!-- $webcontext within ancestor axis ? -> choose $lastPage -->
 								<xsl:when test="ancestor::item[@href=$object_webContext]">
@@ -1518,14 +1521,14 @@
 								</xsl:when>
 								<!-- $webcontext NOT within ancestor axis ? -> choose $webcontext -->
 								<xsl:otherwise>
-									<xsl:value-of select="$object_webContext"/>
+									<xsl:value-of select="concat('wcReset',$object_webContext)"/>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of
-							select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+							select="concat('wcReset',xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())"/>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
@@ -1534,11 +1537,9 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+	<!-- ===================================================================================================== -->	
+	<xsl:template name="hideIFrame">
+			<iframe src="{$WebApplicationBaseURL}iframeDummy.xml?XSL.Style=xml&amp;XSL.lastPage.SESSION={$wcReset}" width="0" height="0" />					
+	</xsl:template>
+	<!-- ===================================================================================================== -->		
 </xsl:stylesheet>
-
-
-
-
-
-
