@@ -13,7 +13,7 @@
 	<xsl:param name="toc.pageSize" select="5"/>
 	<xsl:param name="toc.sortBy.jpvolume" select="'nothing'"/>
 	<xsl:param name="toc.sortBy.jparticle" select="'nothing'"/>
-	
+	<xsl:param select="5" name="maxLinkedArts"/>	
 	<!-- ===================================================================================================== -->
 	
 	<xsl:template
@@ -61,7 +61,7 @@
 		
 		<xsl:if test="$wcReset!='false'">
 			<xsl:call-template name="hideIFrame"/>
-		</xsl:if>		
+		</xsl:if>
 		
 	</xsl:template>
 	
@@ -103,12 +103,13 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>
-
+	
 	<!-- ===================================================================================================== -->
 	<xsl:template name="getJournalXML">
 		<xsl:param name="id"/>
 		<xsl:copy-of select="document(concat('mcrobject:',$id))"/>
 	</xsl:template>
+	
 	
 	<!-- ============================================================================================================================ -->
 	
@@ -120,7 +121,8 @@
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="IDTypes">
-			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>			
+			<xsl:value-of
+				select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_types">
 			<xsl:value-of select="concat('XSL.jportalClassification.types.SESSION=',$IDTypes)"/>
@@ -129,7 +131,8 @@
 			<xsl:value-of select="concat('_xml_metadata/types/type/@classid=',$IDTypes)"/>
 		</xsl:variable>
 		<xsl:variable name="IDRubrics">
-			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID/text()"/>
+			<xsl:value-of
+				select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_rubrics">
 			<xsl:value-of select="concat('XSL.jportalClassification.rubrics.SESSION=',$IDRubrics)"/>
@@ -138,7 +141,8 @@
 			<xsl:value-of select="concat('_xml_metadata/rubrics/rubric/@classid=',$IDRubrics)"/>
 		</xsl:variable>
 		<xsl:variable name="IDclassipub">
-			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub/hidden_classipub/text()"/>						
+			<xsl:value-of
+				select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub/hidden_classipub/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_classipub">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub.SESSION=',$IDclassipub)"/>
@@ -148,7 +152,8 @@
 		</xsl:variable>
 		
 		<xsl:variable name="IDclassipub2">
-			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub2/hidden_classipub2/text()"/>									
+			<xsl:value-of
+				select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub2/hidden_classipub2/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_classipub2">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub2.SESSION=',$IDclassipub2)"/>
@@ -158,7 +163,8 @@
 		</xsl:variable>
 		
 		<xsl:variable name="IDclassipub3">
-			<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub3/hidden_classipub3/text()"/>			
+			<xsl:value-of
+				select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub3/hidden_classipub3/text()"/>
 		</xsl:variable>
 		<xsl:variable name="param_classipub3">
 			<xsl:value-of select="concat('XSL.jportalClassification.classipub3.SESSION=',$IDclassipub3)"/>
@@ -226,44 +232,81 @@
 		<xsl:param name="underline" select="'false'"/>
 		<xsl:param name="sortOrder" select="'descending'"/>
 		<xsl:param name="printCurrent" select="'true'"/>
+		<xsl:param name="linkCurrent" select="'false'"/>
+		<xsl:param name="layout" select="'false'"/>
 		<xsl:param name="node" select="."/>
 		
-		<table>
-			<tr>
-				<td id="leaf-headline2">
-					<xsl:if
-						test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-						or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
-						">
-						<xsl:choose>
-							<xsl:when test="$sortOrder='descending'">
-								<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
-									<xsl:sort select="@inherited" order="descending"/>
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder"/>
-										<xsl:with-param name="printCurrent2" select="$printCurrent"/>
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
-									<xsl:sort select="@inherited" order="ascending"/>
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder"/>
-										<xsl:with-param name="printCurrent2" select="$printCurrent"/>
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:otherwise>
-						</xsl:choose>
+		<xsl:choose>
+			<xsl:when test="$layout='true'">
+				<table>
+					<tr>
+						<td id="leaf-headline2">
+							<xsl:if
+								test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
+								or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
+								">
+								<xsl:choose>
+									<xsl:when test="$sortOrder='descending'">
+										<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+											<xsl:sort select="@inherited" order="descending"/>
+											<xsl:call-template name="printHistoryRow.rows">
+												<xsl:with-param name="sortOrder" select="$sortOrder"/>
+												<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+												<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+											</xsl:call-template>
+										</xsl:for-each>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+											<xsl:sort select="@inherited" order="ascending"/>
+											<xsl:call-template name="printHistoryRow.rows">
+												<xsl:with-param name="sortOrder" select="$sortOrder"/>
+												<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+												<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+											</xsl:call-template>
+										</xsl:for-each>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:if>
+						</td>
+					</tr>
+					<xsl:if test="$underline='true'">
+						<tr>
+							<td id="leaf-headline1"> _________________________________________________</td>
+						</tr>
 					</xsl:if>
-				</td>
-			</tr>
-			<xsl:if test="$underline='true'">
-				<tr>
-					<td id="leaf-headline1"> _________________________________________________</td>
-				</tr>
-			</xsl:if>
-		</table>
+				</table>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if
+					test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
+					or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
+					">
+					<xsl:choose>
+						<xsl:when test="$sortOrder='descending'">
+							<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+								<xsl:sort select="@inherited" order="descending"/>
+								<xsl:call-template name="printHistoryRow.rows">
+									<xsl:with-param name="sortOrder" select="$sortOrder"/>
+									<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+									<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+								</xsl:call-template>
+							</xsl:for-each>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+								<xsl:sort select="@inherited" order="ascending"/>
+								<xsl:call-template name="printHistoryRow.rows">
+									<xsl:with-param name="sortOrder" select="$sortOrder"/>
+									<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+									<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+								</xsl:call-template>
+							</xsl:for-each>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	
@@ -272,6 +315,7 @@
 	<xsl:template name="printHistoryRow.rows">
 		<xsl:param name="sortOrder"/>
 		<xsl:param name="printCurrent2"/>
+		<xsl:param name="linkCurrent"/>
 		<xsl:choose>
 			<xsl:when test="@inherited='0' ">
 				<xsl:choose>
@@ -292,7 +336,20 @@
 							<xsl:variable name="label">
 								<xsl:value-of select="concat($text,$date)"/>
 							</xsl:variable>
-							<xsl:value-of select="$label"/>
+							<xsl:choose>
+								<xsl:when test="$linkCurrent='true'">
+									<a
+										href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.view.objectmetadata.SESSION=false"
+										alt="{text()}" title="{text()}">
+										<b>
+											<xsl:value-of select="$label"/>
+										</b>
+									</a>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$label"/>
+								</xsl:otherwise>
+							</xsl:choose>
 						</span>
 					</xsl:when>
 					<xsl:otherwise>
@@ -321,7 +378,7 @@
 								<xsl:value-of select="concat($text,$date, ' \ ')"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="concat(' \ ',$text,$date)"/>
+								<xsl:value-of select="concat(' - ',$text,$date)"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
@@ -329,13 +386,6 @@
 						<xsl:with-param name="obj_id" select="/mycoreobject/structure/parents/parent/@xlink:href"/>
 						<xsl:with-param name="obj_name" select="$label"/>
 						<xsl:with-param name="hoverText" select="text()"/>
-						<!--						<xsl:with-param name="requestParam"
-						
-						
-						
-						
-						
-						select=" concat('XSL.toc.pos.SESSION=1&amp;XSL.view.objectmetadata.SESSION=',$view.objectmetadata)"/>-->
 						<xsl:with-param name="requestParam"
 							select="'XSL.toc.pos.SESSION=1&amp;XSL.view.objectmetadata.SESSION=true'"/>
 					</xsl:call-template>
@@ -363,7 +413,7 @@
 							<xsl:value-of select="concat($text,$date, ' \ ')"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat(' \ ',$text,$date)"/>
+							<xsl:value-of select="concat(' - ',$text,$date)"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
@@ -1504,12 +1554,13 @@
 		</xsl:variable>
 		<xsl:choose>
 			<!-- jpjournal or jpvolume or jparticle with own webcontext called -->
-				<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
+			<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
 			<xsl:when
 				test="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())
 				&amp; ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
 				<xsl:variable name="object_webContext">
-					<xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
+					<xsl:value-of
+						select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
 				</xsl:variable>
 				<!-- does $lastPage exist? -->
 				<xsl:choose>
@@ -1538,10 +1589,55 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- ===================================================================================================== -->	
+	<!-- ===================================================================================================== -->
 	<xsl:template name="hideIFrame">
-			<iframe src="{$WebApplicationBaseURL}iframeDummy.xml?XSL.Style=xml&amp;XSL.lastPage.SESSION={$wcReset}" width="0" height="0" 
-				style="visibility:hidden;" />					
+		<iframe src="{$WebApplicationBaseURL}iframeDummy.xml?XSL.Style=xml&amp;XSL.lastPage.SESSION={$wcReset}" width="0"
+			height="0" style="visibility:hidden;"/>
 	</xsl:template>
-	<!-- ===================================================================================================== -->		
+	<!-- ===================================================================================================== -->
+	<xsl:template name="listLinkedArts">
+		<xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
+			<xsl:value-of select="encoder:encode(concat('link = ',/mycoreobject/@ID))"/>
+		</xsl:variable>
+		<xsl:variable name="linkedArt">
+			<xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql)))"/>
+		</xsl:variable>
+		<xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit)">
+			<tr>
+				<td valign="top" id="detailed-labels">
+					<br></br>
+					<xsl:value-of select="i18n:translate('metaData.person.linked')"/>
+				</td>
+				<td>
+					<ul>
+						<xsl:for-each
+							select="xalan:nodeset($linkedArt)/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
+							<xsl:variable name="art">
+								<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
+							</xsl:variable>
+							<li>
+								<xsl:call-template name="printHistoryRow">
+									<xsl:with-param name="sortOrder" select="'ascending'"/>
+									<xsl:with-param name="printCurrent" select="'true'"/>
+									<xsl:with-param name="linkCurrent" select="'true'"/>
+									<xsl:with-param name="layout" select="'false'"/>
+									<xsl:with-param name="node" select="xalan:nodeset($art)"/>
+								</xsl:call-template>
+							</li>
+						</xsl:for-each>
+						<xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
+							<li>
+								<a xmlns:encoder="xalan://java.net.URLEncoder"
+									href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
+									<xsl:value-of
+										select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')"/>
+								</a>
+							</li>
+						</xsl:if>
+					</ul>
+				</td>
+			</tr>
+		</xsl:if>
+	</xsl:template>
+	<!-- ===================================================================================================== -->
 </xsl:stylesheet>

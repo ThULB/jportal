@@ -27,19 +27,21 @@
 					<td id="leaf-linkarea">
 						<xsl:variable name="lastName_shorted">
 							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/lastName/text()"/>
-								<xsl:with-param name="length" select="30"/>
+								<xsl:with-param name="text"
+									select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/lastName/text()"/>
+								<xsl:with-param name="length" select="50"/>
 							</xsl:call-template>
-						</xsl:variable>									
+						</xsl:variable>
 						<xsl:variable name="firstName_shorted">
 							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/firstName/text()"/>
-								<xsl:with-param name="length" select="30"/>
+								<xsl:with-param name="text"
+									select="xalan:nodeset($cXML)/mycoreobject/metadata/def.heading/heading/firstName/text()"/>
+								<xsl:with-param name="length" select="50"/>
 							</xsl:call-template>
-						</xsl:variable>			
+						</xsl:variable>
 						<xsl:variable name="name">
 							<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
-						</xsl:variable>						
+						</xsl:variable>
 						<xsl:variable name="date">
 							<xsl:choose>
 								<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
@@ -109,19 +111,12 @@
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:variable name="lastName_shorted">
-							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="./metadata/def.heading/heading/lastName/text()"/>
-								<xsl:with-param name="length" select="30"/>
-							</xsl:call-template>
-						</xsl:variable>									
+							<xsl:value-of select="./metadata/def.heading/heading/lastName/text()"/>
+						</xsl:variable>
 						<xsl:variable name="firstName_shorted">
-							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="./metadata/def.heading/heading/firstName/text()"/>
-								<xsl:with-param name="length" select="30"/>
-							</xsl:call-template>
-						</xsl:variable>			
-						<xsl:value-of
-							select="concat($lastName_shorted,', ',$firstName_shorted)"/>
+							<xsl:value-of select="./metadata/def.heading/heading/firstName/text()"/>
+						</xsl:variable>
+						<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
@@ -137,10 +132,10 @@
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<!--1***heading*************************************-->
-							<xsl:call-template name="printPersonName">
-								<xsl:with-param select="./metadata/def.heading/heading" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.heading')" name="label"/>
-							</xsl:call-template>
+							<!--							<xsl:call-template name="printPersonName">
+							<xsl:with-param select="./metadata/def.heading/heading" name="nodes"/>
+							<xsl:with-param select="i18n:translate('metaData.person.heading')" name="label"/>
+							</xsl:call-template>-->
 							<!--2***alternative*************************************-->
 							<xsl:call-template name="printPersonName">
 								<xsl:with-param select="./metadata/def.alternative/alternative" name="nodes"/>
@@ -182,10 +177,15 @@
 								<xsl:with-param select="i18n:translate('metaData.person.placeOfDeath')" name="label"/>
 							</xsl:call-template>
 							<!--10***note*************************************-->
-							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/def.note/note" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.note')" name="label"/>
-							</xsl:call-template>
+							<xsl:if test="$CurrentUser!='gast'">
+								<xsl:call-template name="printMetaDates">
+									<xsl:with-param select="./metadata/def.note/note" name="nodes"/>
+									<xsl:with-param select="i18n:translate('metaData.person.note')" name="label"/>
+								</xsl:call-template>
+							</xsl:if>
+							<!-- linked articles-->
+							<xsl:call-template name="listLinkedArts"/>
+							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
 									<hr noshade="noshade" width="460"/>
@@ -247,6 +247,7 @@
 								<xsl:with-param select="i18n:translate('metaData.lastChanged')" name="label"/>
 							</xsl:call-template>
 							<!--*** MyCoRe-ID ************************************* -->
+							
 							<tr>
 								<td class="metaname" style="text-align:right;  padding-right: 5px;">
 									<xsl:value-of select="concat(i18n:translate('metaData.ID'),':')"/>
@@ -255,22 +256,6 @@
 									<xsl:value-of select="./@ID"/>
 								</td>
 							</tr>
-							<!-- More from the person **************************************** -->
-							
-							<xsl:if test="$objectHost = 'local'">
-								<tr>
-									<td class="metaname" style="text-align:right;  padding-right: 5px;">
-										<xsl:value-of select="concat(i18n:translate('metaData.person.refered'),':')"/>
-									</td>
-									<td class="metavalue">
-										<a xmlns:encoder="xalan://java.net.URLEncoder"
-											href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
-											<xsl:value-of select="i18n:translate('buttons.startSearch')"/>
-										</a>
-									</td>
-								</tr>
-							</xsl:if>
-							
 							<!-- Static URL ************************************************** -->
 							<xsl:call-template name="get.staticURL">
 								<xsl:with-param name="stURL" select="$staticURL"/>
