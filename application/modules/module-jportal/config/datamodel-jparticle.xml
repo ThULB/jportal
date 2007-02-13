@@ -33,11 +33,6 @@
 		<element name="keywords" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
 			<mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024"/>
 		</element>
-		<!--            <!-#- 06 - classis -#->
-		<!-#- heritated -#->            
-		<element name="classis" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-		<mcrmetaclassification name="classi" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
-		</element>                                    -->
 		<!-- 07 - abstract -->
 		<!-- type = short | long -->
 		<element name="abstracts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
@@ -72,7 +67,6 @@
 		<element name="classispub3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 			<mcrmetaclassification name="classipub3" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded'/>
 		</element>
-		
 		<!-- 16 - sizes -->
 		<element name="sizes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 			<mcrmetalangtext name="size" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024"/>
