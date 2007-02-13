@@ -155,27 +155,27 @@
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<tr>
-								<td id="detailed-headlines">Formale Beschreibung</td>
+								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.formaldiscr')"/></td>
 							</tr>
 							
 							<!--1***maintitle*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/maintitles/maintitle" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.maintitle')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.bibdescript')" name="label"/>
 							</xsl:call-template>
 							
 							<!--2***subtitle*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/subtitles/subtitle[@type='title_spokenAbout']"
 									name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.subtitle')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.subtitle')" name="label"/>
 								
 							</xsl:call-template>
 							
 							<!--3***participant*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/participants/participant" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpjournal.participant')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.participants_label')" name="label"/>
 							</xsl:call-template>
 							<!--4***date*************************************-->
 							<xsl:call-template name="printMetaDates">
@@ -196,19 +196,19 @@
 								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines">Inhaltliche Beschreibung</td>
+								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')"/></td>
 							</tr>
 							
 							<!--6***classi*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/classis/classi" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.classi')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.classi')" name="label"/>
 							</xsl:call-template>
 							
 							<!--7***abstract*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/abstracts/abstract[@type='extend']" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.abstract')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.abstract')" name="label"/>
 							</xsl:call-template>
 							
 							<!--8***identi*************************************-->
@@ -227,20 +227,20 @@
 							<!--10***language*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/languages/language" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.language')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.pub_lang')" name="label"/>
 							</xsl:call-template>
 							
 							<!--11***right*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/rights/right" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.right')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.right')" name="label"/>
 								
 							</xsl:call-template>
 							
 							<!--12***note*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/notes/note" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.note')" name="label"/>
 							</xsl:call-template>
 							
 							<!--<!-#-13***hidden_jpjournalID*************************************-#->
@@ -282,7 +282,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines">Systemdaten</td>
+								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/></td>
 							</tr>
 							<!--<!-#-*** List children per object type ************************************* -#->
 							<!-#-
@@ -443,7 +443,7 @@
 				
 				<td class="metavalue">
 					<xsl:if test="$objectHost != 'local'">
-						<a href="{$staticURL}">nur auf original Server</a>
+						<a href="{$staticURL}"><xsl:value-of select="i18n:translate('metaData.origserver')"/></a>
 					</xsl:if>
 					<xsl:if test="$objectHost = 'local'">
 						<xsl:for-each select="./structure/derobjects/derobject">

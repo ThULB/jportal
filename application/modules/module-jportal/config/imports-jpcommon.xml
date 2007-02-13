@@ -73,19 +73,10 @@
       <!-- save ================================================================== -->
       <panel id="save">
             <cell row="1" col="1" anchor="WEST" >
-                  <cancelButton id="BCancel" width="100px" >
-                        <label xml:lang="de">[Abbrechen]</label>
-                        <label xml:lang="en">[Cancel]</label>
-					    <label xml:lang="ru">[Отменить]</label>
-					    <label xml:lang="pl">[przerwać]</label>
-                  </cancelButton>
+                  <cancelButton id="BCancel" width="100px" i18n="editormask.common.BCancel"/>
             </cell>
-            <cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save" >
-                  <submitButton id="BSubmit" width="100px" >
-                        <label xml:lang="de">[Speichern]</label>
-                        <label xml:lang="en">[Save]</label>
-					    <label xml:lang="ru">[Сохранить]</label>
-                  </submitButton>
+            <cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save">
+                  <submitButton id="BSubmit" width="100px" i18n="editormask.common.BSubmit"/>         
             </cell>
       </panel>
       <!-- end: safe -->      
@@ -100,18 +91,11 @@
           </cell>
 		 <cell row="2" col="1" >
 				<subselect id="sub.select1" type="webpage"
-					href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" >
-					<label xml:lang="de">Person auswählen</label>
-					<label xml:lang="en">Choose person</label>
-				</subselect>			 
+					href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select1"/>			 
           </cell>			   
 		  <cell row="2" col="2" >
 				<subselect id="sub.select2" type="webpage"
-					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6">
-					<label xml:lang="de">Institution auswählen</label>
-					<label xml:lang="en">Select institution</label>
-				</subselect>			  
-			  			  
+					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6" i18n="editormask.common.sub.select2"/>		  
          </cell>			   			   
          <cell row="3" col="1" width="100%">
                <text   label="-" />
@@ -128,10 +112,7 @@
           </cell>
 		  <cell row="2" col="2" >
 				<subselect id="sub.select2" type="webpage"
-					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6">
-					<label xml:lang="de">Institution Auswählen</label>
-					<label xml:lang="en">Select institution</label>
-				</subselect>					 			  
+					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6" i18n="editormask.common.sub.select2"/>				 			  
          </cell>			   			   
          <cell row="3" col="1" width="100%">
                <text   label="-" />

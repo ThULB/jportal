@@ -146,78 +146,79 @@
 							
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/names/name/fullname" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.fullname')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AINameName')" name="label"/>
 							</xsl:call-template>
 							
 							<!--1***nickname*************************************-->
 							
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/names/name/nickname" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.nickname')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AINameNick')" name="label"/>
 							</xsl:call-template>
 							
 							<!--1***property*************************************-->
 							
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/names/name/property" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.property')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AINameProp')" name="label"/>
 							</xsl:call-template>
 							
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/street" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.street')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressStreet')" name="label"/>
 							</xsl:call-template>
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/number" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.number')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressNumber')" name="label"/>
 							</xsl:call-template>
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/zipcode" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.zipcode')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressZIP')" name="label"/>
 							</xsl:call-template>
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/city" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.city')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressCity')" name="label"/>
 							</xsl:call-template>
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/country" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.country')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressCountry')" name="label"/>
 							</xsl:call-template>
 							
 							<!--3***phone*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/phones/phone[@type='Telefon']" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.phone.Telefon')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.LPhone')" name="label"/>
 							</xsl:call-template>
 							<!--4***url*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/urls/url" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.url')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.LURL')" name="label"/>
 								
 							</xsl:call-template>
 							
 							<!--5***email*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/emails/email" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.jpinst.email')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.LEmail')" name="label"/>
 							</xsl:call-template>
 							<!--6***note*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/notes/note" name="nodes"/>
 								
-								<xsl:with-param select="i18n:translate('editor.search.document.note')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.LNote')" name="label"/>
 							</xsl:call-template>
 							<tr id="detailed-dividingline">
-								<td style="text-align:right;"> _________________________________</td>
-								<td>_________________________________</td>
+								<td colspan="2">
+									<hr noshade="noshade" width="460"/>
+								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines">Systemdaten</td>
+								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/></td>
 							</tr>
 							
 							<!--*** Created ************************************* -->

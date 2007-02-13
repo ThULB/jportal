@@ -149,7 +149,7 @@
               <xsl:choose>
                 <xsl:when test="contains(/indexpage/@path,'-')">
                   <b>
-                    <a class="nav" href="{$up.url}">Zurück...</a>
+                    <a class="nav" href="{$up.url}"><xsl:value-of select="i18n:translate('metaData.back')"/></a>
                   </b>
                 </xsl:when>
                 <xsl:when test="string-length($search) &gt; 0">

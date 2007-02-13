@@ -245,17 +245,13 @@
             <hidden var="@inherited" default="0" />
             <hidden var="@type" default="locator" />
             <cell col="1" row="1" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Name:</label>
-                  </text>
+                  <text i18n="editormask.jpjournal.Name"/>
             </cell>
             <cell col="2" row="1" anchor="NORTHWEST" var="@title">
                   <textfield id="predece_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
             </cell>
             <cell col="1" row="2" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Link:</label>
-                  </text>
+                  <text i18n="editormask.jpjournal.Link"/>
             </cell>
             <cell col="2" row="2" anchor="NORTHWEST" var="@href" >
                   <textfield id="predece_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
@@ -277,17 +273,13 @@
             <hidden var="@inherited" default="0" />
             <hidden var="@type" default="locator" />
             <cell col="1" row="1" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Name:</label>
-                  </text>
+                  <text i18n="editormask.jpjournal.Name"/>
             </cell>
             <cell col="2" row="1" anchor="NORTHWEST" var="@title">
                   <textfield id="successor_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
             </cell>
             <cell col="1" row="2" anchor="NORTHEAST" >
-                  <text>
-                        <label xml:lang="de">Link:</label>
-                  </text>
+                  <text i18n="editormask.jpjournal.Link"/>
             </cell>
             <cell col="2" row="2" anchor="NORTHWEST" var="@href" >
                   <textfield id="successor_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />

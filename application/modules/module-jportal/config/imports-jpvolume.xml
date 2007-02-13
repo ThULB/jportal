@@ -99,8 +99,6 @@
       <!-- end: note -->
       <!--date =======================================================================-->
       <list id="date_type" type="dropdown">
-            <item value="published">
-                  <label xml:lang="de">Erschienen</label>
-            </item>
+            <item value="published" i18n="editormask.jpvolume.published"/>
       </list>	
 </imports>

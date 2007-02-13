@@ -644,7 +644,7 @@
 						<xsl:choose>
 							<xsl:when test="$view.objectmetadata='false'">
 								<div id="switch-current">
-									<xsl:value-of select="'- Detailansicht aktiviert-'"/>
+									<xsl:value-of select="i18n:translate('metadata.navi.detailact')"/>
 								</div>
 							</xsl:when>
 							<xsl:otherwise>
@@ -658,7 +658,7 @@
 										</xsl:call-template>
 									</xsl:variable>
 									<a href="{$URLDetails}">
-										<xsl:value-of select="'- Detailansicht anzeigen -'"/>
+										<xsl:value-of select="i18n:translate('metadata.navi.showdetail')"/>
 									</a>
 								</div>
 							</xsl:otherwise>
@@ -669,7 +669,7 @@
 						<xsl:choose>
 							<xsl:when test="$view.objectmetadata='true'">
 								<div id="switch-current">
-									<xsl:value-of select="'- Inhaltsverzeichnis aktiviert -'"/>
+									<xsl:value-of select="i18n:translate('metadata.navi.contentact')"/>
 								</div>
 							</xsl:when>
 							<xsl:otherwise>
@@ -689,7 +689,7 @@
 											</xsl:variable>
 											<a href="{$URLDetails}">
 												<xsl:value-of
-													select="concat('- Inhaltsverzeichnis ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(),' anzeigen -')"/>
+													select="concat(i18n:translate('metadata.navi.content'),' ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(),' ',i18n:translate('metadata.navi.show'))"/>
 											</a>
 										</div>
 									</xsl:when>
@@ -705,7 +705,7 @@
 												</xsl:call-template>
 											</xsl:variable>
 											<a href="{$URLDetails}">
-												<xsl:value-of select="'- Inhaltsverzeichnis anzeigen -'"/>
+												<xsl:value-of select="i18n:translate('metadata.navi.showcontent')"/>
 											</a>
 										</div>
 									</xsl:otherwise>
@@ -966,8 +966,8 @@
 				</xsl:call-template>
 				<br/>
 			</xsl:if>
-			<a href="{$href}"> Digitalisat (
-				<xsl:value-of select="$ctype"/>) ansehen </a>
+			<a href="{$href}"><xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
+				<xsl:value-of select="$ctype"/><xsl:value-of select="i18n:translate('metaData.digiansehn')"/></a>
 			
 			<!--			<br/>-->
 			<xsl:if test="$CurrentUser!='gast'">
@@ -1190,7 +1190,7 @@
 			<xsl:when test="$location='navi'">
 				<table>
 					<tr>
-						<td colspan="2"> Anzahl Ergebnisse:
+						<td colspan="2"><xsl:value-of select="i18n:translate('metaData.sortbuttons.numberofres')"/>
 							<b>
 								<xsl:value-of select="$numChildren"/>
 							</b> </td>
@@ -1209,35 +1209,35 @@
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
 													<xsl:with-param name="compVal2" select="5"/>
 												</xsl:call-template>
-												<xsl:value-of select="'max. 5 Ergebnisse pro Seite'"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max5')"/>
 											</option>
 											<option value="10">
 												<xsl:call-template name="checkSelection">
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
 													<xsl:with-param name="compVal2" select="10"/>
 												</xsl:call-template>
-												<xsl:value-of select="'max. 10 Ergebnisse pro Seite'"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max10')"/>
 											</option>
 											<option value="25">
 												<xsl:call-template name="checkSelection">
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
 													<xsl:with-param name="compVal2" select="25"/>
 												</xsl:call-template>
-												<xsl:value-of select="'max. 25 Ergebnisse pro Seite'"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max25')"/>
 											</option>
 											<option value="75">
 												<xsl:call-template name="checkSelection">
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
 													<xsl:with-param name="compVal2" select="75"/>
 												</xsl:call-template>
-												<xsl:value-of select="'max. 75 Ergebnisse pro Seite'"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max75')"/>
 											</option>
 											<option value="1000000">
 												<xsl:call-template name="checkSelection">
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
 													<xsl:with-param name="compVal2" select="1000000"/>
 												</xsl:call-template>
-												<xsl:value-of select="'Ergebnisse nicht einschr?nken'"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.notrestrictres')"/>
 											</option>
 										</select>
 									</p>
@@ -1257,21 +1257,21 @@
 														<xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
 														<xsl:with-param name="compVal2" select="'nothing'"/>
 													</xsl:call-template>
-													<xsl:value-of select="'nicht sortieren'"/>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.dontsort')"/>
 												</option>
 												<option value="title">
 													<xsl:call-template name="checkSelection">
 														<xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
 														<xsl:with-param name="compVal2" select="'title'"/>
 													</xsl:call-template>
-													<xsl:value-of select="'nach Titeln sortieren'"/>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.aftertitles')"/>
 												</option>
 												<option value="size">
 													<xsl:call-template name="checkSelection">
 														<xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
 														<xsl:with-param name="compVal2" select="'size'"/>
 													</xsl:call-template>
-													<xsl:value-of select="'nach Seiten sortieren'"/>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.afterpages')"/>
 												</option>
 											</select>
 										</xsl:when>
@@ -1283,14 +1283,14 @@
 														<xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume"/>
 														<xsl:with-param name="compVal2" select="'nothing'"/>
 													</xsl:call-template>
-													<xsl:value-of select="'nicht sortieren'"/>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.dontsort')"/>
 												</option>
 												<option value="title">
 													<xsl:call-template name="checkSelection">
 														<xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume"/>
 														<xsl:with-param name="compVal2" select="'title'"/>
 													</xsl:call-template>
-													<xsl:value-of select="'nach Titeln sortieren'"/>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.aftertitles')"/>
 												</option>
 											</select>
 										</xsl:otherwise>
@@ -1328,7 +1328,7 @@
 		</xsl:variable>
 		<xsl:if test="number($numberOfChildren)>number($toc.pageSize)">
 			<tr>
-				<td colspan="2"> Ergebnisseiten:
+				<td colspan="2"> <xsl:value-of select="i18n:translate('metaData.resultpage')"/>
 					<xsl:for-each select="./structure/children/child[number($numberOfHitPages)>=position()]">
 						<xsl:variable name="jumpToPos">
 							<xsl:value-of select="(position()*number($toc.pageSize))-number($toc.pageSize)"/>
@@ -1376,7 +1376,7 @@
 			</tr>
 			<tr>
 				<td id="detailed-headlines">
-					<xsl:value-of select="concat(i18n:translate('metaData.admin'),':')"/>
+					<xsl:value-of select="i18n:translate('metaData.headlines.admin')"/>
 				</td>
 			</tr>
 		</xsl:if>
@@ -1401,7 +1401,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td id="detailed-headlines">Inhaltliche Beschreibung</td>
+					<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')"/></td>
 				</tr>
 			</xsl:if>
 			<tr>

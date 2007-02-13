@@ -5,893 +5,257 @@
 	
 	<!-- JST-Container ========================================================================== -->
 	<!-- *** Data for the MainTITLE *** -->
-	<text id="maintitle_label">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				<b>Bibliographische Beschreibung: </b>
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				<b>Заголовок:</b>
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>tytuł główny:</b>
-			</span>
-		</label>
-	</text>
-	<text id="maintitle_label_contchild">
-		<label xml:lang="de">
-			<span class="editorlabel">Titel:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Заголовок:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>tytuł główny:</b>
-			</span>
-		</label>
-	</text>
-	<helpPopup id="maintitle_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Titel des Objektes einzugeben.</label>
-	</helpPopup>
+
+	<text id="maintitle_label" i18n="editormask.labels.bibdescript"/>
+		
+	<text id="maintitle_label_contchild" i18n="editormask.labels.contchild"/>
+	
+	<helpPopup id="maintitle_help" width="400px" height="250px" i18n="editormask.labels.maintitlehelppop"/>
+		
 	<!-- *** Data for the subTITLE *** -->
-	<text id="subtitle_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Weitere Titel:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Подзаголовок:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">tytuł dodatkowy:</span>
-		</label>
-	</text>
-	<helpPopup id="subtitle_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Titel des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="subtitle_label" i18n="editormask.labels.subtitle"/>
+		
+	<helpPopup id="subtitle_help" width="400px" height="250px" i18n="editormask.labels.subhelppop"/>
 	
 	<!-- *** Data for the mainedi *** -->
-	<text id="mainedi_label_bold">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				<b>Herausgeber:</b>
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				<b>Редактор:</b>
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>wydawca:</b>
-			</span>
-		</label>
-	</text>
-	<text id="mainedi_label">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				Herausgeber:
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				Редактор:
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				wydawca:
-			</span>
-		</label>
-	</text>
+	<text id="mainedi_label_bold" i18n="editormask.labels.mainedi"/>
+	
+	<text id="mainedi_label" i18n="editormask.labels.mainedi"/>
 		
-	<text id="person_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Person:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Автор:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">osoba:</span>
-		</label>
-	</text>
-	<text id="institution_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Institution:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Институт:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">instytucja:</span>
-		</label>
-	</text>
-	<text id="personInst_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Person/Institution:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Автор/Институт:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">osoba/instytucja:</span>
-		</label>
-	</text>
-	<text id="inst_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Institution:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Институт:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">instytucja:</span>
-		</label>
-	</text>	
-	<helpPopup id="mainedi_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="person_label" i18n="editormask.labels.person_label"/>
+		
+	<text id="institution_label" i18n="editormask.labels.institution_label"/>
+		
+	
+		
+	<text id="inst_label" i18n="editormask.labels.institution_label"/>
+	
+	<helpPopup id="mainedi_help" width="400px" height="250px" i18n="editormask.labels.mainedihelppop"/>
+		
 	<!-- *** Data for the subedi *** -->
-	<text id="subedi_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Mitherausgeber:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Соиздатель:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">współwydawca:</span>
-		</label>
-	</text>
-	<helpPopup id="subedi_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="subedi_label" i18n="editormask.labels.subedi_label"/>
+	
+	<helpPopup id="subedi_help" width="400px" height="250px" i18n="editormask.labels.subedihelppop"/>
+		
 	<!-- *** Data for the mainauthor *** -->
-	<text id="participants_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Beteiligte:</span>
-		</label>
-	</text>
-	<text id="participants_label_bold">
-		<label xml:lang="de">
-			<b>
-				<span class="editorlabel">Beteiligte:</span>
-			</b>				
-		</label>
-	</text>	
+	<text id="participants_label" i18n="editormask.labels.participants_label"/>
+		
+	<text id="participants_label_bold" i18n="editormask.labels.participants_label"/>
+	
 	<!-- *** Data for the keyword *** -->
-	<text id="keyword_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Schlagwort:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Ключевое-, Ключевые слово(а):</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">hasła rzeczowe, przedmiotowe:</span>
-		</label>
-	</text>
-	<helpPopup id="keyword_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="keyword_label" i18n="editormask.labels.keyword"/>
+		
+		
 	<!-- *** Data for the classi *** -->
-	<text id="classi_label">
-		<label xml:lang="de">
-			<span class="editorlabel">DDC:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">DDC:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">DDC:</span>
-		</label>
-	</text>
-	<helpPopup id="classi_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="classi_label" i18n="editormask.labels.classi"/>
+		
+	<helpPopup id="classi_help" width="400px" height="250px" i18n="editormask.labels.classihelppop"/>
+		
 	<!-- *** Data for the abstract *** -->
-	<text id="abstract_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Zusammenfsg.:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Итог:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">streszczenie:</span>
-		</label>
-	</text>
-	<helpPopup id="abstract_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="abstract_label" i18n="editormask.labels.abstract"/>
+		
+	<helpPopup id="abstract_help" width="400px" height="250px" i18n="editormask.labels.abstracthelppop"/>
+
 	<!-- *** Data for the coverage *** -->
-	<text id="coverage_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Erscheinungsjahr der rez. Werkes:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Промежуток времени:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">okres:</span>
-		</label>
-	</text>
-	<helpPopup id="coverage_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="coverage_label" i18n="editormask.labels.coverage"/>
+	
+	<helpPopup id="coverage_help" width="400px" height="250px" i18n="editormask.labels.coveragehelppop"/>
+		
 	<!-- *** Data for the identi *** -->
-	<text id="identi_label">
-		<label xml:lang="de">
-			<span class="editorlabel">ID:</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">ID:</span>
-		</label>		
-		<label xml:lang="ru">
-			<span class="editorlabel">Идентификатор:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">identyfikowanie:</span>
-		</label>
-	</text>
-	<helpPopup id="identi_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="identi_label" i18n="editormask.labels.identi"/>
+		
+	<helpPopup id="identi_help" width="400px" height="250px" i18n="editormask.labels.identihelppop"/>
+		
 	<!-- *** Data for the right *** -->
-	<text id="right_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Urheberrecht:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Правообладание:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">copyright:</span>
-		</label>
-	</text>
-	<helpPopup id="right_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="right_label" i18n="editormask.labels.right"/>
+	
+	<helpPopup id="right_help" width="400px" height="250px" i18n="editormask.labels.righthelppop"/>
+		
 	<!-- *** Data for the note *** -->
-	<text id="note_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Bemerkung:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Примечание:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">uwaga:</span>
-		</label>
-	</text>
-	<helpPopup id="note_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="note_label" i18n="editormask.labels.note"/>
+		
+	<helpPopup id="note_help" width="400px" height="250px" i18n="editormask.labels.notehelppop"/>
+		
 	<!-- *** Data for the predece *** -->
-	<text id="predece_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Vorgänger:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Предыдущий:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">predecessor:</span>
-		</label>
-	</text>
-	<helpPopup id="predecep" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="predece_label" i18n="editormask.labels.predecessor"/>
+		
+	<helpPopup id="predecessor_help" width="400px" height="250px" i18n="editormask.labels.predeceshelppop"/>
+
 	<!-- *** Data for the successor *** -->
-	<text id="successor_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Nachfolger:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Последующий:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">successor:</span>
-		</label>
-	</text>
-	<helpPopup id="successor_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Herausgeber des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="successor_label" i18n="editormask.labels.successor"/>
+	
+	<helpPopup id="successor_help" width="400px" height="250px" i18n="editormask.labels.successorhelppop"/>
+	
 	<!-- *** Data for the type *** -->
-	<text id="type_label_bold">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				<b>Publikationstyp:</b>
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				<b>Тип публикации:</b>
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>rodzaj publikacji:</b>
-			</span>
-		</label>
-	</text>
-	<text id="type_label">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				Publikationstyp:
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				Тип публикации:
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				rodzaj publikacji:
-			</span>
-		</label>
-	</text>
-	<helpPopup id="type_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Typ des Objektes einzugeben.</label>
-	</helpPopup>
+	<text id="type_label_bold" i18n="editormask.labels.type"/>
+		
+	<text id="type_label" i18n="editormask.labels.type"/>
+	
+	<helpPopup id="type_help" width="400px" height="250px" i18n="editormask.labels.typehelppop"/>
+
 	<!-- *** Data for the parent *** -->
-	<text id="parent_label">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				<b>Übergeordnetes Dokument</b>
-			</span>
-		</label>
-	</text>
-	<helpPopup id="parent_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="parent_label" i18n="editormask.labels.parent"/>
+		
+	<helpPopup id="parent_help" width="400px" height="250px" i18n="editormask.labels.parenthelppop"/>
+		
 	<!-- *** Data for the lang *** -->
-	<text id="cont_lang_label_bold">
-		<label xml:lang="de">
-			<b>Sprache:</b>
-		</label>
-		<label xml:lang="ru">
-			<b>Язык:</b>
-		</label>
-		<label xml:lang="pl">
-			<b>język:</b>
-		</label>
-	</text>
-	<text id="cont_lang_label">
-		<label xml:lang="de">
-			Sprache:
-		</label>
-		<label xml:lang="ru">
-			Язык:
-		</label>
-		<label xml:lang="pl">
-			język:
-		</label>
-	</text>
-	
-	<helpPopup id="cont_lang_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="cont_lang_label_bold" i18n="editormask.labels.cont_lang_label"/>
+		
+	<text id="cont_lang_label" i18n="editormask.labels.cont_lang_label"/>
+		
+	<helpPopup id="cont_lang_help" width="400px" height="250px" i18n="editormask.labels.cont_langhelppop"/>
+		
 	<!-- *** Data for the parent_jpvolume *** -->
-	<text id="jpvolume_parent_label">
-		<label xml:lang="de">
-			<b>Zugehörige Zeitschrift:</b>
-		</label>
-		<label xml:lang="ru">
-			<b>Журнал:</b>
-		</label>
-		<label xml:lang="pl">
-			<b>czasopismo związane:</b>
-		</label>
-	</text>
-	<helpPopup id="jpvolume_parent_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die zugehörige Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="jpvolume_parent_label" i18n="editormask.labels.jpvolume_parent"/>
+		
+	<helpPopup id="jpvolume_parent_help" width="400px" height="250px" i18n="editormask.labels.jpvolume_parenthelppop"/>
+	
 	<!-- jpvolume_mainedi -->
-	<text id="jpvolume_mainedi_label">
-		<label xml:lang="de">Herausgeber:</label>
-		<label xml:lang="ru">Редактор:</label>
-		<label xml:lang="pl">wydawca:</label>
-	</text>
-	<text id="jpvolume_person_label">
-		<label xml:lang="de">
-			<span class="editorlabel">bla:</span>
-		</label>
-	</text>
-	
-	
+	<text id="jpvolume_mainedi_label" i18n="editormask.labels.jpvolume_mainedi"/>
+		
+	<text id="jpvolume_person_label" i18n="editormask.labels.jpvolume_person"/>
+			
 	<!-- JST-Content Collection ========================================================================== -->
 	<!-- *** Data for the parent_jpvolume *** -->
-	<text id="jstcontentcoll_parent_label">
-		<label xml:lang="de">
-			<b>Zugehöriger Container:</b>
-		</label>
-		<label xml:lang="ru">
-			<b>Принадлежащий контейнер:</b>
-		</label>
-	</text>
-	<helpPopup id="jstcontentcoll_parent_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-		<!-- <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
-	</helpPopup>
-	<text id="jstcontentcoll_maintitle_label">
-		<label xml:lang="de">Hauptsachtitel</label>
-		<label xml:lang="ru">Основной заголовок</label>
-		<label xml:lang="pl">tytuł główny</label>
-	</text>
-	<helpPopup id="jstcontentcoll_maintitle_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-		<!--<label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
-	</helpPopup>
-	<text id="jstcontentcoll_timebeha_label">
-		<label xml:lang="de">
-			<b>Zeitliche Zuordnung</b>
-		</label>
-		<label xml:lang="ru">
-			<b>Временная идентификация</b>
-		</label>
-	</text>
-	<helpPopup id="jstcontentcoll_timebeha_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-		<!--  <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
-	</helpPopup>
+	<text id="jstcontentcoll_parent_label" i18n="editormask.labels.jstcontentcoll_parent"/>
 	
+	<helpPopup id="jstcontentcoll_parent_help" width="400px" height="250px" i18n="editormask.labels.jstcontentcoll_parenthelppop"/>
+	
+	<text id="jstcontentcoll_maintitle_label" i18n="editormask.labels.jstcontentcoll_maintitle"/>
+	
+	<helpPopup id="jstcontentcoll_maintitle_help" width="400px" height="250px" i18n="editormask.labels.jstcontentcoll_maintitlehelppop"/>
+	
+	<text id="jstcontentcoll_timebeha_label" i18n="editormask.labels.jstcontentcoll_timebeha"/>
+
+	<helpPopup id="jstcontentcoll_timebeha_help" width="400px" height="250px" i18n="editormask.labels.jstcontentcoll_timebehahelppop"/>	
 	
 	<!-- jparticle ========================================================================== -->
 	<!-- *** timebeha *** -->
-	<text id="timebeha_label">
-		<label xml:lang="de">
-			<span class="editorlabel">
-				<b>Erschienen:</b>
-			</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">
-				<b>Выход из печати:</b>
-			</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">
-				<b>rok wydania:</b>
-			</span>
-		</label>
-	</text>
-	<helpPopup id="timebeha_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-		<!-- <label xml:lang="ru"> Представлен вышестоящий журнал.</label>-->
-	</helpPopup>
+	<text id="timebeha_label" i18n="editormask.labels.timebeha"/>
+		
+	<helpPopup id="timebeha_help" width="400px" height="250px" i18n="editormask.labels.timebehahelppop"/>
+		
 	<!-- *** rubric *** -->
-	<text id="rubric_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Rubrik:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Рубрика:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">rubryka:</span>
-		</label>
-	</text>
-	<helpPopup id="rubric_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="rubric_label" i18n="editormask.labels.rubric"/>
+		
+	<helpPopup id="rubric_help" width="400px" height="250px" i18n="editormask.labels.rubrichelppop"/>
+	
 	<!-- *** size *** -->
-	<text id="size_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Seitenbereich:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Размер:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">objętość:</span>
-		</label>
-	</text>
-	<helpPopup id="size_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="size_label" i18n="editormask.labels.size"/>
+		
+	<helpPopup id="size_help" width="400px" height="250px" i18n="editormask.labels.sizehelppop"/>
+	
 	<!-- *** reference *** -->
-	<text id="pub_reference_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Referenz:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Референция:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">referencje:</span>
-		</label>
-	</text>
-	<helpPopup id="pub_reference_help" width="400px" height="250px">
-		<label xml:lang="de">...</label>
-	</helpPopup>
+	<text id="pub_reference_label" i18n="editormask.labels.pub_reference"/>
+		
+	<helpPopup id="pub_reference_help" width="400px" height="250px" i18n="editormask.labels.pub_referencehelppop"/>
+	
 	<!-- *** Data for the lang *** -->
-	<text id="pub_lang_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Sprache:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Язык:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">język:</span>
-		</label>
-	</text>
-	<helpPopup id="pub_lang_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist die übergeordnete Zeitschrift einzugeben.</label>
-	</helpPopup>
+	<text id="pub_lang_label" i18n="editormask.labels.pub_lang"/>
+	
+	<helpPopup id="pub_lang_help" width="400px" height="250px" i18n="editormask.labels.pub_langhelppop"/>
+
 	<!--common used-->
 	<!-- *** Data for the flags *** -->
-	<text id="rightsManag_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Rechteverwaltung:</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">Rights management:</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorlabel">Правовое администрирование:</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorlabel">Rights management:</span>
-		</label>
-	</text>
-	<helpPopup id="rightsManag_help" width="400px" height="250px">
-		<label xml:lang="de"> Hier können nun Leserechte vergeben werden. Weiterhin
-			können Host- oder Domainnamen angegeben werden, welche Zugriffsberechtigung
-			haben.
-			<p/>Beispiel: myhost.mynet.com oder .mynet.com . </label>
-		<label xml:lang="en"> Here you can add the read access of the object. Also you can add a
-			host or domain name for the access host.
-			<p/>Example: myhost.mynet.com or .mynet.com . </label>
-	</helpPopup>
-	<text id="righstManag_access_label">
-		<label xml:lang="de">
-			<span class="editorhints">Zugriff</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">Access</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorhints">Доступ</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorhints">Access</span>
-		</label>
-	</text>
-	<text id="righstManag_state_label">
-		<label xml:lang="de">
-			<span class="editorhints">Status</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">State</span>
-		</label>
-		<label xml:lang="ru">
-			<span class="editorhints">Статус</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorhints">status</span>
-		</label>
-	</text>
-	<text id="righstManag_ip_label">
-		<label xml:lang="de">
-			<span class="editorhints">IP</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">IP</span>
-		</label>
-		<label xml:lang="de">
-			<span class="editorhints">Status</span>
-		</label>
-		<label xml:lang="pl">
-			<span class="editorhints">Status</span>
-		</label>
-	</text>
+	<text id="rightsManag_label" i18n="editormask.labels.rightsManag"/>
+		
+	<helpPopup id="rightsManag_help" width="400px" height="250px" i18n="editormask.labels.rightsManaghelppop"/>
+		
+	<text id="righstManag_access_label" i18n="editormask.labels.rightsManag_access"/>
+		
+	<text id="righstManag_state_label" i18n="editormask.labels.rightsManag_state"/>
+		
+	<text id="righstManag_ip_label" i18n="editormask.labels.rightsManag_ip"/>
+		
 	<!-- *** Data for the subTITLE *** -->
-	<text id="publisher_label">
-		<label xml:lang="de">
-			<span class="editorlabel">Verlag des rezensierten Werkes:</span>
-		</label>
-	</text>
-	<helpPopup id="publisher_help" width="400px" height="250px">
-		<label xml:lang="de"> Es ist der Titel des Verlages einzugeben.</label>
-	</helpPopup>
-	<text id="LPhone">
-		<label xml:lang="de">
-			<span class="editorlabel">   Telefon   </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   Phone   </span>
-		</label>
-	</text>
+	<text id="publisher_label" i18n="editormask.labels.publisher_label"/>
+
+	<helpPopup id="publisher_help" width="400px" height="250px" i18n="editormask.labels.publisherhelppop"/>
+		
+	<text id="LPhone" i18n="editormask.labels.LPhone"/>
 	
 	<list id="Sphone" width="160" type="dropdown">
-		<item value="Telefon">
-			<label xml:lang="de">Telefon</label>
-			<label xml:lang="en">phone</label>
-		</item>
-		<item value="Fax">
-			<label xml:lang="de">Fax</label>
-			<label xml:lang="en">fax</label>
-		</item>
-		<item value="Mobil">
-			<label xml:lang="de">Mobil</label>
-			<label xml:lang="en">mobil</label>
-		</item>
+		<item value="Telefon" i18n="editormask.labels.SphoneTelefon"/>
+		<item value="Fax" i18n="editormask.labels.SphoneFax"/>		
+		<item value="Mobil" i18n="editormask.labels.SphoneMobil"/>
 	</list>
 	
-	<helpPopup id="HPhone" width="400px" height="250px">
-		<label xml:lang="de"> In dieses Feld tragen Sie bitte die Telefonnummern ein.
-			Vergessen Sie nicht ggf. Orts- und Landesvorwahl anzugeben. Die Telefonnummer
-			sollte so aussehen +49 (0)341 97-33348. </label>
-		<label xml:lang="en"> You can enter a telephone number. Please do not forget to enter
-			both country prefix and area code. The form is +49 (0)341 97-33348. </label>
-	</helpPopup>
-	<text id="LINameP">
-		<label xml:lang="de">
-			<span class="editorlabel">   Name       </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   Name       </span>
-		</label>
-	</text>
-	<text id="LINameP_bold">
-		<label xml:lang="de">
-			<b><span class="editorlabel">   Name       </span></b>
-		</label>
-		<label xml:lang="en"><b><span class="editorlabel">   Name       </span></b>
-		</label>
-	</text>	
-	<helpPopup id="HIName" width="400px" height="250px">
-		<label xml:lang="de"> In diesem Feld tragen Sie bitte den Namen der Einrichtung oder
-			Institution ein. Die Eingabe kann auch aus Wortstücken bestehen, welche mit
-			einem * zu ergänzen sind. Es sind mindestens 3 Zeichen erforderlich. </label>
-		<label xml:lang="en"> You can enter the name of an institution or organisation to be
-			queried. In addition you can enter a nickname and the legal status, is GmbH, Inc.
-			or SA. </label>
-	</helpPopup>
-	<text id="LAddress">
-		<label xml:lang="de">
-			<span class="editorlabel">   Adresse   </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   Address   </span>
-		</label>
-	</text>
-	<helpPopup id="HAddress" width="400px" height="250px">
-		<label xml:lang="de"> Dieses Feld ist optional. Tragen Sie hier ggf. eine gültige
-			Adresse ein. Diese muss auf jeden Fall in den Feldern Ort, Straße und Nummer
-			ausgefüllt sein. </label>
-		<label xml:lang="en"> This field is optional.You can enter a valid address which
-			must contain city, street and street number. </label>
-	</helpPopup>
+	<helpPopup id="HPhone" width="400px" height="250px" i18n="editormask.labels.Phonehelppop"/>
+		
+	<text id="LINameP" i18n="editormask.labels.LINameP"/>
+		
+	<text id="LINameP_bold" i18n="editormask.labels.LINameP"/>
 	
-	<text id="LURL">
-		<label xml:lang="de">
-			<span class="editorlabel">   URL   </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   URL   </span>
-		</label>
-	</text>
+	<helpPopup id="HIName" width="400px" height="250px" i18n="editormask.labels.LINamePhelppop"/>
+		
+	<text id="LAddress" i18n="editormask.labels.LAddress"/>
+		
+	<helpPopup id="HAddress" width="400px" height="250px" i18n="editormask.labels.LAddresshelppop"/>
+			
+	<text id="LURL" i18n="editormask.labels.LURL"/>
 	
-	<text id="AURLTitle">
-		<label xml:lang="de">
-			<span class="editorhints">   Titeltext</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Titletext</span>
-		</label>
-	</text>
-	<text id="AURLReference">
-		<label xml:lang="de">
-			<span class="editorhints">   Referenz als http://...</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Reference as http://...</span>
-		</label>
-	</text>
+	<text id="AURLTitle" i18n="editormask.labels.AURLTitle"/>
+		
+	<text id="AURLReference" i18n="editormask.labels.AURLReference"/>
 	
-	<helpPopup id="HURL" width="400px" height="250px">
-		<label xml:lang="de"> Tragen Sie in dieses Feld eine gültige URL in der Form
-			http://..., z. B. die Adresse der Homepage ein. Vergeben Sie für den Eintrag auch
-			einen Titel welcher für den Link angezeigt werden soll.. </label>
-		<label xml:lang="en"> You can enter a valid URL as http://..., (an example would be
-			the homepage address). You should enter a title (name) to be displayed for the
-			link. </label>
-	</helpPopup>
+	<helpPopup id="HURL" width="400px" height="250px" i18n="editormask.labels.HURLhelppop"/>
 	
 	<!-- *** Data for the EMAIL ** -->
 	
-	<text id="LEmail">
-		<label xml:lang="de">
-			<span class="editorlabel">   e-Mail   </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   e-Mail   </span>
-		</label>
-	</text>
+	<text id="LEmail" i18n="editormask.labels.LEmail"/>
 	
-	<helpPopup id="HEmail" width="400px" height="250px">
-		<label xml:lang="de"> Tragen Sie in dieses Feld eine gültige e-Mail Adresse ein.
-			</label>
-		<label xml:lang="en"> You can enter a valid e-mail address. </label>
-	</helpPopup>
+	<helpPopup id="HEmail" width="400px" height="250px" i18n="editormask.labels.HEmailhelppop"/>
 	
 	<!-- *** Data for the Note ** -->
 	
-	<text id="LNote">
-		<label xml:lang="de">
-			<span class="editorlabel">   Anmerkungen   </span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorlabel">   Note   </span>
-		</label>
-	</text>
+	<text id="LNote" i18n="editormask.labels.LNote"/>
 	
-	<helpPopup id="HNote" width="400px" height="250px">
-		<label xml:lang="de"> Dieses Feld ist optional. Hier können Sie zusätzliche
-			Anmerkungen eintragen. </label>
-		<label xml:lang="en"> This field is optional. You can enter additional
-			information, such as notes and comments. </label>
-	</helpPopup>
-	<text id="AINameName">
-		<label xml:lang="de">
-			<span class="editorhints">   voller Name</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Full name</span>
-		</label>
-	</text>
-	<text id="AINameNick">
-		<label xml:lang="de">
-			<span class="editorhints">   Kurzform</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Short name</span>
-		</label>
-	</text>
-	<text id="AINameProp">
-		<label xml:lang="de">
-			<span class="editorhints">   Rechtsform</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   State</span>
-		</label>
-	</text>
+	<helpPopup id="HNote" width="400px" height="250px" i18n="editormask.labels.HNotehelppop"/>
+		
+	<text id="AINameName" i18n="editormask.labels.AINameName"/>
+		
+	<text id="AINameNick" i18n="editormask.labels.AINameNick"/>
+		
+	<text id="AINameProp" i18n="editormask.labels.AINameProp"/>
 	
-	<helpPopup id="HIName" width="400px" height="250px">
-		<label xml:lang="de"> In diesem Feld tragen Sie bitte den Namen der Einrichtung oder
-			Institution ein. Die Eingabe kann auch aus Wortstücken bestehen, welche mit
-			einem * zu ergänzen sind. Es sind mindestens 3 Zeichen erforderlich. </label>
-		<label xml:lang="en"> You can enter the name of an institution or organisation to be
-			queried. In addition you can enter a nickname and the legal status, is GmbH, Inc.
-			or SA. </label>
-	</helpPopup>
+	<helpPopup id="HIName" width="400px" height="250px" i18n="editormask.labels.HINamehelppop"/>
 	
-	<helpPopup id="SMIName" width="400px" height="250px">
-		<label xml:lang="de"> In diesem Feld tragen Sie bitte den Namen der Einrichtung oder
-			Institution ein, nach der später gesucht werden soll. Es sind minimal 3 Zeichen
-			erforderlich. </label>
-		<label xml:lang="en"> You can enter the name of an institution or organisation.
-			Input can be word segments with an '*' extension. A minimum of 3 characters is
-			required. </label>
-	</helpPopup>
-	<text id="AAddressZIP">
-		<label xml:lang="de">
-			<span class="editorhints">   Postleitzahl</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   ZIP Code</span>
-		</label>
-	</text>
-	<text id="AAddressCity">
-		<label xml:lang="de">
-			<span class="editorhints">   Ort</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   City</span>
-		</label>
-	</text>
-	<text id="AAddressStreet">
-		<label xml:lang="de">
-			<span class="editorhints">   Straße</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Street</span>
-		</label>
-	</text>
-	<text id="AAddressNumber">
-		<label xml:lang="de">
-			<span class="editorhints">   Nummer</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Number</span>
-		</label>
-	</text>
-	<text id="AAddressCountry">
-		<label xml:lang="de">
-			<span class="editorhints">   Staat</span>
-		</label>
-		<label xml:lang="en">
-			<span class="editorhints">   Country</span>
-		</label>
-	</text>
-	<text id="date_howToUse" >
-		<label xml:lang="de">
-			Das Datum ist im Formt JJJJ-MM-TT ("Jahr-Monat-Tag") einzugeben <br/>
-		</label>
-		<label xml:lang="de">
-			 Z.B. 15. August 2003 -> "2003-08-15"
-		</label>
-	</text>
-	<text id="date_label" >
-		<label xml:lang="de">
-			<span class="editorlabel">Datum</span>
-		</label>
-	</text>	
+	<helpPopup id="SMIName" width="400px" height="250px" i18n="editormask.labels.SMINamehelppop"/>
+		
+	<text id="AAddressZIP" i18n="editormask.labels.AAddressZIP"/>
+		
+	<text id="AAddressCity" i18n="editormask.labels.AAddressCity"/>
+		
+	<text id="AAddressStreet" i18n="editormask.labels.AAddressStreet"/>
+		
+	<text id="AAddressNumber" i18n="editormask.labels.AAddressNumber"/>
+		
+	<text id="AAddressCountry" i18n="editormask.labels.AAddressCountry"/>
+		
+	<text id="date_howToUse" i18n="editormask.labels.date_howToUse"/>
+		
+	<text id="date_label" i18n="editormask.labels.date_label"/>
+		
+	<text id="jpjournalID_label" i18n="editormask.labels.jpjournalID"/>
+		
+	<text id="rubricID_label" i18n="editormask.labels.rubricID"/>
 	
-	<text id="jpjournalID_label" >
-		<label xml:lang="de">
-			<span class="editorlabel">ID der Zeitschrift für Vererbung</span>
-		</label>
-	</text>	
-	<text id="rubricID_label" >
-		<label xml:lang="de">
-			<span class="editorlabel">Klassifikations-ID für Rubrikenklassif. für Artikel</span>
-		</label>
-	</text>	
-	<text id="pubTypeID_label" >
-		<label xml:lang="de">
-			<span class="editorlabel">Klassifikations-ID für Pub.-typ-Klassif. für Artikel</span>
-		</label>
-	</text>				
-	<text id="Admin_label" >
-		<label xml:lang="de">
-			<br/><br/><b><span class="editorlabel">Interne administrative Einstellungen</span></b><br/>
-		</label>
-	</text>					
-	<text id="classipub_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">Optionale Klassifikation zur inhaltl. Erschließung</span></i>
-		</label>
-	</text>		
-	<text id="classipub2_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">2. Optionale Klassifikation zur inhaltl. Erschließung</span></i>
-		</label>
-	</text>		
-	<text id="classipub3_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">3. Optionale Klassifikation zur inhaltl. Erschließung</span></i>
-		</label>
-	</text>					
-	<text id="websitecontext_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">Optionale Adresse des Website-Kontextes</span></i>
-		</label>
-	</text>					
-	<text id="genhiddenfield1_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">1. Optionaler beliebiger Wert</span></i>
-		</label>
-	</text>					
-	<text id="genhiddenfield2_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">2. Optionaler beliebiger Wert</span></i>
-		</label>
-	</text>					
-	<text id="genhiddenfield3_label" >
-		<label xml:lang="de">
-			<i><span class="editorlabel">3. Optionaler beliebiger Wert</span></i>
-		</label>
-	</text>								
+	<text id="pubTypeID_label" i18n="editormask.labels.pubTypeID"/>
+			
+	<text id="Admin_label" i18n="editormask.labels.Admin"/>
+					
+	<text id="classipub_label" i18n="editormask.labels.classipub"/>
+				
+	<text id="classipub2_label" i18n="editormask.labels.classipub2"/>
+	
+	<text id="classipub3_label" i18n="editormask.labels.classipub3"/>
+						
+	<text id="websitecontext_label" i18n="editormask.labels.websitecontext"/>
+						
+	<text id="genhiddenfield1_label" i18n="editormask.labels.genhiddenfield1"/>
+						
+	<text id="genhiddenfield2_label" i18n="editormask.labels.genhiddenfield2"/>
+							
+	<text id="genhiddenfield3_label" i18n="editormask.labels.genhiddenfield3"/>						
 		
 </imports>
