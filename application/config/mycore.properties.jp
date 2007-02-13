@@ -67,6 +67,8 @@ MCR.editor_jparticle_directory=%MCR.basedir%/data/workflow/jparticle
 MCR.editor_person_directory=%MCR.basedir%/data/workflow/person
 MCR.editor_jpinst_directory=%MCR.basedir%/data/workflow/jpinst
 
+MCR.editor_page_error_formular=editor_error_formular_jp.xml
+
 ##############################################################################
 # Index-Browser                                                              #
 ##############################################################################
