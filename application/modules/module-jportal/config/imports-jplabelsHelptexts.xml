@@ -26,8 +26,6 @@
 		
 	<text id="institution_label" i18n="editormask.labels.institution_label"/>
 		
-	
-		
 	<text id="inst_label" i18n="editormask.labels.institution_label"/>
 	
 	<helpPopup id="mainedi_help" width="400px" height="250px" i18n="editormask.labels.mainedihelppop"/>

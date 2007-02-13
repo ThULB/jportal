@@ -132,55 +132,55 @@
 					<td colspan="2" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<!--1***heading*************************************-->
-							<!--							<xsl:call-template name="printPersonName">
+							<!--<xsl:call-template name="printPersonName">
 							<xsl:with-param select="./metadata/def.heading/heading" name="nodes"/>
 							<xsl:with-param select="i18n:translate('metaData.person.heading')" name="label"/>
 							</xsl:call-template>-->
 							<!--2***alternative*************************************-->
 							<xsl:call-template name="printPersonName">
 								<xsl:with-param select="./metadata/def.alternative/alternative" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.alternative')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.Lalternative')" name="label"/>
 							</xsl:call-template>
 							<!--3***peerage*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.peerage/peerage" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.peerage')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.Lpeerage')" name="label"/>
 							</xsl:call-template>
 							<!--4***role*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.role/role" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.role')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.Lrole')" name="label"/>
 							</xsl:call-template>
 							<!--5***placeOfActivity*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.placeOfActivity/placeOfActivity" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.placeOfActivity')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.LplaceOfActivity')" name="label"/>
 							</xsl:call-template>
 							<!--6***dateOfBirth*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.dateOfBirth/dateOfBirth" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.dateOfBirth')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.LdateOfBirth')" name="label"/>
 							</xsl:call-template>
 							<!--7***placeOfBirth*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.placeOfBirth/placeOfBirth" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.placeOfBirth')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.LplaceOfBirth')" name="label"/>
 							</xsl:call-template>
 							<!--8***dateOfDeath*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.dateOfDeath/dateOfDeath" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.dateOfDeath')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.LdateOfDeath')" name="label"/>
 							</xsl:call-template>
 							<!--9***placeOfDeath*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/def.placeOfDeath/placeOfDeath" name="nodes"/>
-								<xsl:with-param select="i18n:translate('metaData.person.placeOfDeath')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.person.LplaceOfDeath')" name="label"/>
 							</xsl:call-template>
 							<!--10***note*************************************-->
 							<xsl:if test="$CurrentUser!='gast'">
 								<xsl:call-template name="printMetaDates">
 									<xsl:with-param select="./metadata/def.note/note" name="nodes"/>
-									<xsl:with-param select="i18n:translate('metaData.person.note')" name="label"/>
+									<xsl:with-param select="i18n:translate('editormask.labels.note')" name="label"/>
 								</xsl:call-template>
 							</xsl:if>
 							<!-- linked articles-->
@@ -192,7 +192,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines">Systemdaten</td>
+								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/></td>
 							</tr>
 							<!--*** List children per object type ************************************* -->
 							<!--
