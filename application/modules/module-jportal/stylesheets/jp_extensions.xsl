@@ -7,10 +7,10 @@
 	<xsl:include href="mcr-module-startIview.xsl"/>
 	
 	<xsl:param name="view.objectmetadata" select="'false'"/>
-	<xsl:param name="toc.pos">
-		<xsl:call-template name="get.toc.pos"/>
-	</xsl:param>
+
 	<xsl:param name="toc.pageSize" select="5"/>
+	<xsl:param name="toc.pos"/>
+		
 	<xsl:param name="toc.sortBy.jpvolume" select="'nothing'"/>
 	<xsl:param name="toc.sortBy.jparticle" select="'nothing'"/>
 	<xsl:param select="5" name="maxLinkedArts"/>	
@@ -727,13 +727,13 @@
 		<xsl:param name="kindOfChildren"/>
 		<xsl:choose>
 			<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
-				<xsl:value-of select="'&amp;sortby=maintitles2'"/>
+				<xsl:value-of select="'&amp;sortby=maintitles_vol'"/>
 			</xsl:when>
 			<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
-				<xsl:value-of select="'&amp;sortby=maintitles3'"/>
+				<xsl:value-of select="'&amp;sortby=maintitles_art'"/>
 			</xsl:when>
 			<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='size')">
-				<xsl:value-of select="'&amp;sortby=sizes3'"/>
+				<xsl:value-of select="'&amp;sortby=sizes_art'"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="''"/>
@@ -1001,14 +1001,11 @@
 					<xsl:value-of select="''"/>
 				</xsl:otherwise>
 			</xsl:choose>
-			
 		</xsl:variable>
-		
 		<table>
 			<tr>
 				<td colspan="1" rowspan="2">
 					<table cellpadding="0" cellspacing="0">
-						
 						<xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
 							<xsl:value-of select="encoder:encode(concat('parent = ',./@ID))"/>
 						</xsl:variable>
@@ -1016,20 +1013,6 @@
 							<xsl:call-template name="get.sortKey">
 								<xsl:with-param name="kindOfChildren" select="$kindOfChildren2"/>
 							</xsl:call-template>
-							<!--							<xsl:choose>
-							<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
-							<xsl:value-of select="'&amp;sortby=maintitles2'"/>										
-							</xsl:when>
-							<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
-							<xsl:value-of select="'&amp;sortby=maintitles3'"/>										
-							</xsl:when>								
-							<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='size')">
-							<xsl:value-of select="'&amp;sortby=sizes3'"/>										
-							</xsl:when>
-							<xsl:otherwise>
-							<xsl:value-of select="''"/>																			
-							</xsl:otherwise>
-							</xsl:choose>-->
 						</xsl:variable>
 						<xsl:variable name="children">
 							<xsl:copy-of
@@ -1044,8 +1027,18 @@
 								</xsl:call-template>
 							</td>
 						</tr>
+						<xsl:variable name="toc.pos.verif">
+							<xsl:choose>
+								<xsl:when test="$toc.pageSize>count(xalan:nodeset($children)/mcr:results/mcr:hit)">
+									<xsl:value-of select="1"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$toc.pos"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:variable>
 						<xsl:for-each
-							select="xalan:nodeset($children)/mcr:results/mcr:hit[(position()>=$toc.pos) and ($toc.pos+$toc.pageSize>position())]">
+							select="xalan:nodeset($children)/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
 							<tr id="leaf-whitespaces">
 								<td colspan="2">
 									<xsl:variable name="cXML">
@@ -1232,12 +1225,12 @@
 												</xsl:call-template>
 												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max75')"/>
 											</option>
-											<option value="1000000">
+											<option value="150">
 												<xsl:call-template name="checkSelection">
 													<xsl:with-param name="compVal1" select="$toc.pageSize"/>
-													<xsl:with-param name="compVal2" select="1000000"/>
+													<xsl:with-param name="compVal2" select="150"/>
 												</xsl:call-template>
-												<xsl:value-of select="i18n:translate('metaData.sortbuttons.notrestrictres')"/>
+												<xsl:value-of select="i18n:translate('metaData.sortbuttons.max150')"/>
 											</option>
 										</select>
 									</p>
@@ -1382,11 +1375,13 @@
 		</xsl:if>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
-	<xsl:template name="get.toc.pos">
+<!--	<xsl:template name="get.toc.pos">
+		<xsl:value-of select="'hallo'"/>
+		<!-#-
 		<xsl:if test="number($toc.pageSize)=1000000">
 			<xsl:value-of select="1"/>
-		</xsl:if>
-	</xsl:template>
+		</xsl:if>-#->
+	</xsl:template>-->
 	<!-- ===================================================================================================== -->
 	<xsl:template name="printMetaDates">
 		<!-- prints a table row for a given nodeset -->
