@@ -32,7 +32,8 @@
 	<field name="notes"          type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
 	<field name="predeces"       type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/predeces/predece" value="text()" i18n="editor.search.document.predece" />
 	<field name="successors"     type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/successors/successor" value="text()" i18n="editor.search.document.successor" />
-	
+	<field name="webcontext"   	  type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext" value="text()" />	  	
+	  
 	<!-- Search in volumes metadata -->  
 	<field name="maintitles_vol"     type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
 	<field name="subtitles_vol"      type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
@@ -41,7 +42,8 @@
 	<field name="participants_vol_type"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" />	  	  
 	<field name="dates_vol"          type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
 	<field name="notes_vol"          type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
-	
+	<field name="journalID_vol"     	  type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+	  	
 	<!-- Search in article metadata -->
     <field name="maintitles_art"     type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
 	<field name="subtitles_art"      type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editormask.labels.subtitle" />
@@ -62,7 +64,8 @@
 	<field name="classispub3"        type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub3/classipub3" value="@ID" i18n="editor.search.document.classi3" />-->
 	<field name="sizes_art"          type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />  	  
 	<field name="refs_art"           type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
-
+	<field name="journalID_art"    	  type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+	  
 	<!-- Search in institutions metadata -->
     <field name="instData"        type="text"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/*/*" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
 	  
