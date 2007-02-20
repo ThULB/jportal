@@ -211,13 +211,14 @@
 		<hidden var="metadata/types/@textsearch" default="false"/>
 		<hidden var="metadata/types/@notinherit" default="false"/>
 		<hidden var="metadata/types/@heritable" default="false"/>
-		<hidden var="metadata/types/type/@classid"/>
+		<hidden var="metadata/types/type/@classid" />
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid"/>
 	</panel>
 	<list id="Ctype" width="300" type="dropdown">
-		<include cacheable="false" uri="jportalClassification:types"/>
+		<include cacheable="false" uri="jportalClassification:getClass:types"/>
 	</list>
 	<!-- end: type -->
+<!--http://141.35.20.199:8291/servlets/MCRStartEditorServlet?tf_mcrid=jportal_jparticle_00000008&re_mcrid=jportal_jparticle_00000008&se_mcrid=jportal_jparticle_00000008&type=jparticle&layout=&XSL.jportalClassification.types.SESSION=jportal_class_00000006&_xml_metadata/types/type/@classid=jportal_class_00000006&XSL.jportalClassification.rubrics.SESSION=jportal_class_00000003&_xml_metadata/rubrics/rubric/@classid=jportal_class_00000003&XSL.jportalClassification.classipub.SESSION=jportal_class_00000011&_xml_metadata/classispub/classipub/@classid=jportal_class_00000011&XSL.jportalClassification.classipub2.SESSION=jportal_class_00000012&_xml_metadata/classispub2/classipub2/@classid=jportal_class_00000012&XSL.jportalClassification.classipub3.SESSION=jportal_class_00000013&_xml_metadata/classispub3/classipub3/@classid=jportal_class_00000013&step=commit&todo=seditobj	-->
 	<!-- rubric ================================================================== -->
 	<panel id="rubric_input">
 		<hidden var="metadata/rubrics/@class" default="MCRMetaClassification"/>
@@ -225,7 +226,8 @@
 		<hidden var="metadata/rubrics/@textsearch" default="false"/>
 		<hidden var="metadata/rubrics/@notinherit" default="false"/>
 		<hidden var="metadata/rubrics/@heritable" default="false"/>
-		<hidden var="metadata/rubrics/rubric/@classid"/>
+<!--		<hidden var="metadata/rubrics/rubric/@classid" default="jportal_class_00000003"/>-->
+		<include cacheable="false" uri="jportalClassification:getClassID:rubrics:metadata/rubrics/rubric/@classid"/>		
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Crubric" var="metadata/rubrics/rubric/@categid"/>
 	</panel>
 	<list id="Crubric" width="300" type="dropdown">
@@ -233,10 +235,9 @@
 			<label xml:lang="de">
 			</label>
 		</item>
-		<include cacheable="false" uri="jportalClassification:rubrics"/>
+		<include cacheable="false" uri="jportalClassification:getClass:rubrics"/>
 	</list>
 	<!-- end: rubric -->
-
 	<!-- classipub ================================================================== -->
 	<panel id="classipub_input">
 		<hidden var="metadata/classispub/@class" default="MCRMetaClassification"/>
@@ -252,7 +253,7 @@
 			<label xml:lang="de">
 			</label>
 		</item>
-		<include cacheable="false" uri="jportalClassification:classipub"/>
+		<include cacheable="false" uri="jportalClassification:getClass:classipub"/>
 	</list>
 	<!-- end: classipub -->	
 	<!-- classipub ================================================================== -->
@@ -270,7 +271,7 @@
 			<label xml:lang="de">
 			</label>
 		</item>
-		<include cacheable="false" uri="jportalClassification:classipub2"/>
+		<include cacheable="false" uri="jportalClassification:getClass:classipub2"/>
 	</list>
 	<!-- end: classipub2 -->
 	<!-- classipub3 ================================================================== -->
@@ -288,7 +289,7 @@
 			<label xml:lang="de">
 			</label>
 		</item>
-		<include cacheable="false" uri="jportalClassification:classipub3"/>
+		<include cacheable="false" uri="jportalClassification:getClass:classipub3"/>
 	</list>
 	<!-- end: classipub3 -->
 

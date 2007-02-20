@@ -10,7 +10,7 @@
 			<!-- Only in one specified journal -->
 			<hidden var="conditions/boolean/condition90/@field" default="journalID_art"/>
 			<hidden var="conditions/boolean/condition90/@operator" default="="/>
-			<hidden var="conditions/boolean/condition90/@value" default="jportal_jpjournal_00100003"/>
+			<hidden var="conditions/boolean/condition90/@value" default="jportal_jpjournal_00000002"/>
 			<hidden var="conditions/boolean/@operator" default="and"/>
 			
 			<!-- Search for fields of type name -->
