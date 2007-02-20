@@ -1,30 +1,31 @@
 package org.mycore.access.strategies;
 
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
 	
 	private static final Logger LOGGER = Logger.getLogger(MCRParentRuleStrategy.class);
 	private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");	
 	
-	private final static MCRAccessCheckStrategy ANCASTOR_STRATEGY = new MCRParentRuleStrategy();
+	//private final static MCRAccessCheckStrategy ANCASTOR_STRATEGY = new MCRParentRuleStrategy();
+	private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
 
 	public boolean checkPermission(String id, String permission) {
-		if ((id.contains("_jpjournal_") || (id.contains("_person_")) || id.contains("_jpinst_"))) {
-			//LOGGER.debug("#####################################################################################################");
-			//LOGGER.debug("journal oder person oder institution mit permission="+permission+" zu überprüfen: ergebnis="+checkPermissionOfType(id, permission)+"...");
-			//LOGGER.debug("#####################################################################################################");
+		if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_")
+				|| permission.equals("read")) {
 			return checkPermissionOfType(id, permission);
 		}
-		if ((ANCASTOR_STRATEGY.checkPermission(id, permission)) && (checkPermissionOfType(id, permission))) {
-			//LOGGER.debug("#####################################################################################################");			
-			//LOGGER.debug("NICHT person oder institution mit permission="+permission+" zu überprüfen: ergebnis=TypeCheck("+
-			//checkPermissionOfType(id, permission)+") & AncastorCheck("+ANCASTOR_STRATEGY.checkPermission(id, permission)+")...");
-			//LOGGER.debug("#####################################################################################################");			
+		else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
 			return true;
 		}
 		return false;
@@ -48,4 +49,22 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
         }
         return "";
     }	
+    
+    public boolean checkPermissionOfTopObject(String id, String permission) {
+    	boolean allowed = false;
+    	if (id!=null && permission!=null && !id.equals("") && !permission.equals("")) {
+    		Document objXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
+    		final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild("hidden_jpjournalID");
+            String journalID="";
+            if (journalElem != null) 
+            	journalID=journalElem.getText();
+            if (!journalID.equals("")) {
+            	LOGGER.debug("Using journal access rule defined for: " + journalID);
+            	allowed = ID_STRATEGY.checkPermission(journalID,permission);
+			}
+            else
+            	LOGGER.debug("No journal access rule found for: " + journalID);
+		}
+    	return allowed;
+    }
 }

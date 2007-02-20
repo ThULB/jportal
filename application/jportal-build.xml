@@ -113,6 +113,7 @@
 			update permission read for id default_jparticle with rulefile grant-all.xml
 			update permission read for id default_person with rulefile grant-all.xml
 			update permission read for id default_jpinst with rulefile grant-all.xml
+			update permission read for id default_derivate with rulefile grant-all.xml
 
 			update permission writedb for id default_jpjournal with rulefile grant-journalgroup.xml
 			update permission writedb for id default_jpvolume with rulefile grant-volumegroup.xml
