@@ -22,7 +22,7 @@ MCR.EventHandler.MCRFile.2.class=org.mycore.services.imaging.MCRImgCacheEventHan
 MCR.EventHandler.MCRFile.3.class=org.mycore.frontend.iview.MCRIViewEventHandler
 
 ### content types that shall be displayed by iview
-MCR.Module-iview.SupportedContentTypes=jpeg,gif,tiff,tif,bmp,png,FlashPix,flashpix
+MCR.Module-iview.SupportedContentTypes=jpg,jpeg,gif,tiff,tif,bmp,png,FlashPix,flashpix
 
  #### default sort (name | size | lastModified)
 MCR.Module-iview.defaultSort=name

@@ -14,6 +14,8 @@
 	<xsl:param name="toc.sortBy.jpvolume" select="'nothing'"/>
 	<xsl:param name="toc.sortBy.jparticle" select="'nothing'"/>
 	<xsl:param select="5" name="maxLinkedArts"/>	
+	
+	<xsl:param name="MCR.Module-iview.SupportedContentTypes"/>
 	<!-- ===================================================================================================== -->
 	
 	<xsl:template
@@ -750,9 +752,6 @@
 		<xsl:choose>
 			<xsl:when test="$knoten=''">
 				<xsl:if test="./structure/derobjects">
-					<!--					<xsl:if test="$objectHost != 'local'">
-					<a href="{$staticURL}">nur auf original Server</a>
-					</xsl:if>-->
 					<xsl:if test="$objectHost = 'local'">
 						<xsl:for-each select="./structure/derobjects/derobject">
 							<xsl:variable name="deriv" select="@xlink:href"/>
@@ -899,7 +898,6 @@
 								<xsl:for-each
 									select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
 									<xsl:variable name="deriv" select="@xlink:href"/>
-									<xsl:variable name="deriv" select="@xlink:href"/>
 									<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
 									<xsl:variable name="derivate" select="document($derivlink)"/>
 									<tr>
@@ -921,38 +919,34 @@
 	<!-- ===================================================================================================== -->
 	<xsl:template match="internals" priority="2">
 		<xsl:if test="$objectHost = 'local'">
-			<xsl:variable name="obj_host" select="../../../@host"/>
+<!--			<xsl:variable name="obj_host" select="../../../@host"/>-->
 			<xsl:variable name="derivid" select="../../@ID"/>
-			<xsl:variable name="derivlabel" select="../../@label"/>
+<!--			<xsl:variable name="derivlabel" select="../../@label"/>-->
 			<xsl:variable name="derivmain" select="internal/@maindoc"/>
 			<xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')"/>
-			<xsl:variable name="derivifs" select="concat($derivbase,$derivmain,$HttpSession,'?hosts=',$obj_host)"/>
+<!--			<xsl:variable name="derivifs" select="concat($derivbase,$derivmain,$HttpSession,'?hosts=',$obj_host)"/>
 			<xsl:variable name="derivdir" select="concat($derivbase,$HttpSession,'?hosts=',$obj_host)"/>
 			<xsl:variable name="derivxml" select="concat('ifs:/',$derivid,'?hosts=',$obj_host)"/>
 			<xsl:variable name="details" select="document($derivxml)"/>
 			<xsl:variable name="ctype" select="$details/mcr_directory/children/child[name=$derivmain]/contentType"/>
 			<xsl:variable name="ftype"
 				select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[@ID=$ctype]/label"/>
-			<xsl:variable name="size" select="$details/mcr_directory/size"/>
-			
+			<xsl:variable name="size" select="$details/mcr_directory/size"/>-->
+
 			<!-- IView available ? -->
 			<xsl:variable name="supportedMainFile">
-				<xsl:call-template name="iview.getSupport">
-					<xsl:with-param name="derivID" select="$derivid"/>
+				<xsl:call-template name="iview.getSupport.hack">
+					<xsl:with-param name="derivid_2" select="$derivid"/>
+					<xsl:with-param name="mainFile" select="$derivmain"/>
 				</xsl:call-template>
+<!--				<xsl:call-template name="iview.getSupport">
+					<xsl:with-param name="derivID" select="$derivid"/>
+				</xsl:call-template>-->
 			</xsl:variable>
 			<xsl:variable name="href">
 				<xsl:choose>
 					<xsl:when test="$supportedMainFile != ''">
-						<xsl:call-template name="iview.getAddress">
-							<xsl:with-param name="derivID" select="$derivid"/>
-							<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
-							<xsl:with-param name="height" select="'510'"/>
-							<xsl:with-param name="width" select="'605'"/>
-							<xsl:with-param name="scaleFactor" select="'fitToWidth'"/>
-							<xsl:with-param name="display" select="'extended'"/>
-							<xsl:with-param name="style" select="'image'"/>
-						</xsl:call-template>
+						<xsl:value-of select="$supportedMainFile"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="concat($derivbase,$derivmain)"/>
@@ -966,28 +960,61 @@
 				</xsl:call-template>
 				<br/>
 			</xsl:if>
-			<a href="{$href}"><xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
-				<xsl:value-of select="$ctype"/><xsl:value-of select="i18n:translate('metaData.digiansehn')"/></a>
-			
+			<a href="{$href}">
+				<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
+<!--				<xsl:value-of select="$ctype"/>-->
+				<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
+			</a>
 			<!--			<br/>-->
 			<xsl:if test="$CurrentUser!='gast'">
 				<a href="{$derivbase}">
 					<xsl:value-of select="'Details &gt;&gt;'"/>
 				</a>
 			</xsl:if>
-			<!--				<xsl:variable name="ziplink"
-			select="concat($ServletsBaseURL,'MCRZipServlet',$JSessionID,'?id=',$derivid)"/>
-			<a class="linkButton" href="{$ziplink}">
-			<xsl:value-of select="i18n:translate('buttons.zipGen')"/>
-			</a>-->
-			<!--				&#160;
-			<a href="{$derivdir}">
-			<xsl:value-of select="i18n:translate('buttons.details')"/>
-			</a>-->
 		</xsl:if>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
-	
+	<xsl:template name="iview.getSupport.hack">
+		<xsl:param name="derivid_2"/>
+		<xsl:param name="mainFile"/>
+		
+		<xsl:variable name="fileType">
+			<xsl:value-of select="substring-after($mainFile,'.')"/>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="$fileType!=''">
+				<xsl:choose>
+					<xsl:when test="contains($MCR.Module-iview.SupportedContentTypes,$fileType)">
+						<xsl:call-template name="iview.getAddress.hack">
+							<xsl:with-param name="fullPathOfImage" select="concat($derivid_2,'/',$mainFile)"/>
+							<xsl:with-param name="height" select="'510'"/>
+							<xsl:with-param name="width" select="'605'"/>
+							<xsl:with-param name="scaleFactor" select="'fitToWidth'"/>
+							<xsl:with-param name="display" select="'extended'"/>
+							<xsl:with-param name="style" select="'image'"/>
+						</xsl:call-template>						
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="''" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="''" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- ===================================================================================================== -->
+	<xsl:template name="iview.getAddress.hack">
+		<xsl:param name="fullPathOfImage"/>		
+		<xsl:param name="height" />
+		<xsl:param name="width" />
+		<xsl:param name="scaleFactor" />						
+		<xsl:param name="display" />	
+		<xsl:param name="style" />		
+		   <xsl:value-of select="concat($iview.home,$fullPathOfImage,$HttpSession,'?mode=generateLayout&amp;XSL.MCR.Module-iview.navi.zoom.SESSION=',$scaleFactor,'&amp;XSL.MCR.Module-iview.display.SESSION=',$display,'&amp;XSL.MCR.Module-iview.style.SESSION=',$style,'&amp;XSL.MCR.Module-iview.lastEmbeddedURL.SESSION=',$lastEmbeddedURL,'&amp;XSL.MCR.Module-iview.embedded.SESSION=false&amp;XSL.MCR.Module-iview.move=reset')" />
+	</xsl:template>
+	<!-- ===================================================================================================== -->		
 	<xsl:template name="printChildren">
 		
 		<xsl:variable name="kindOfChildren2">
