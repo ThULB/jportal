@@ -85,20 +85,8 @@ public class MCRJportalClassificationResolver implements MCRResolverProvider {
             String[] parameters = uri.split(":");
             Element returnXML;
             if (parameters[1].equals("getClassID")) {
-            	returnXML = new Element("hidden");
-            	returnXML.setAttribute("var", parameters[3]);
-            	returnXML.setAttribute("default",classID);
-            	LOGGER.debug("1########################");
-            	LOGGER.debug("get ClassID, return=");
-            	XMLOutputter out = new XMLOutputter();
-            	try {
-					out.output(returnXML, System.out);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            	LOGGER.debug("2#############################################################################################");            	
-            	
+            	returnXML = new Element("dummyRoot");
+            	returnXML.addContent(new Element("hidden").setAttribute("var", parameters[3]).setAttribute("default",classID));
 			} else {
 				if (CONFIG.getSystemLastModified() > CACHE_INIT_TIME){
 	                initCache();
@@ -111,23 +99,7 @@ public class MCRJportalClassificationResolver implements MCRResolverProvider {
 	                    CLASS_CACHE.put(classiURI,returnXML);
 	                }
 	            }
-            	LOGGER.debug("1#############################################################################################");
-            	LOGGER.debug("get Class");
-            	LOGGER.debug("2#############################################################################################"); 
 			}
-            if (parameters[1].equals("getClassID")) {
-            	LOGGER.debug("1########################");
-            	LOGGER.debug("das kommt raus =");
-            	XMLOutputter out = new XMLOutputter();
-            	try {
-    				out.output(returnXML, System.out);
-    			} catch (IOException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
-            	LOGGER.debug("2#############################################################################################");  
-			}
- 
             return returnXML;
         }
 

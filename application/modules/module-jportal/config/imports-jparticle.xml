@@ -218,7 +218,6 @@
 		<include cacheable="false" uri="jportalClassification:getClass:types"/>
 	</list>
 	<!-- end: type -->
-<!--http://141.35.20.199:8291/servlets/MCRStartEditorServlet?tf_mcrid=jportal_jparticle_00000008&re_mcrid=jportal_jparticle_00000008&se_mcrid=jportal_jparticle_00000008&type=jparticle&layout=&XSL.jportalClassification.types.SESSION=jportal_class_00000006&_xml_metadata/types/type/@classid=jportal_class_00000006&XSL.jportalClassification.rubrics.SESSION=jportal_class_00000003&_xml_metadata/rubrics/rubric/@classid=jportal_class_00000003&XSL.jportalClassification.classipub.SESSION=jportal_class_00000011&_xml_metadata/classispub/classipub/@classid=jportal_class_00000011&XSL.jportalClassification.classipub2.SESSION=jportal_class_00000012&_xml_metadata/classispub2/classipub2/@classid=jportal_class_00000012&XSL.jportalClassification.classipub3.SESSION=jportal_class_00000013&_xml_metadata/classispub3/classipub3/@classid=jportal_class_00000013&step=commit&todo=seditobj	-->
 	<!-- rubric ================================================================== -->
 	<panel id="rubric_input">
 		<hidden var="metadata/rubrics/@class" default="MCRMetaClassification"/>
@@ -226,7 +225,6 @@
 		<hidden var="metadata/rubrics/@textsearch" default="false"/>
 		<hidden var="metadata/rubrics/@notinherit" default="false"/>
 		<hidden var="metadata/rubrics/@heritable" default="false"/>
-<!--		<hidden var="metadata/rubrics/rubric/@classid" default="jportal_class_00000003"/>-->
 		<include cacheable="false" uri="jportalClassification:getClassID:rubrics:metadata/rubrics/rubric/@classid"/>		
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Crubric" var="metadata/rubrics/rubric/@categid"/>
 	</panel>
@@ -245,7 +243,7 @@
 		<hidden var="metadata/classispub/@textsearch" default="false"/>
 		<hidden var="metadata/classispub/@notinherit" default="false"/>
 		<hidden var="metadata/classispub/@heritable" default="false"/>
-		<hidden var="metadata/classispub/classipub/@classid"/>
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub:metadata/classispub/classipub/@classid"/>		
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub" var="metadata/classispub/classipub/@categid"/>
 	</panel>
 	<list id="Cclassipub" width="300" type="dropdown">
@@ -263,7 +261,7 @@
 		<hidden var="metadata/classispub2/@textsearch" default="false"/>
 		<hidden var="metadata/classispub2/@notinherit" default="false"/>
 		<hidden var="metadata/classispub2/@heritable" default="false"/>
-		<hidden var="metadata/classispub2/classipub2/@classid"/>
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub2:metadata/classispub2/classipub2/@classid"/>				
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub2" var="metadata/classispub2/classipub2/@categid"/>
 	</panel>
 	<list id="Cclassipub2" width="300" type="dropdown">
@@ -281,7 +279,7 @@
 		<hidden var="metadata/classispub3/@textsearch" default="false"/>
 		<hidden var="metadata/classispub3/@notinherit" default="false"/>
 		<hidden var="metadata/classispub3/@heritable" default="false"/>
-		<hidden var="metadata/classispub3/classipub3/@classid"/>
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub3:metadata/classispub3/classipub3/@classid"/>				
 		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub3" var="metadata/classispub3/classipub3/@categid"/>
 	</panel>
 	<list id="Cclassipub3" width="300" type="dropdown">
