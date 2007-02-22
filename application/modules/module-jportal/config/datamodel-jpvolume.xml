@@ -43,6 +43,9 @@
 		<element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
 			<mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
 		</element>
+		<element name="hidden_positions" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+			<mcrmetalangtext name="hidden_position" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
+		</element>		
 		<!-- ================================================================================================= -->
 	</metadata>
 	<service>
