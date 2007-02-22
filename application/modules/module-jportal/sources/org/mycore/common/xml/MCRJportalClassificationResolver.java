@@ -146,7 +146,9 @@ private static class MCRJPortalURI implements MCRResolver {
          * Syntax:
          * <code>jportalURI:getClass:alias
          * or
-         * <code>jportalURI:getJPJournalID:conditions/boolean/condition90/@value
+         * <code>jportalURI:getJPJournalID:conditions/boolean/condition90/@value 
+         * -> use if you want to know the id of ONE journal that has an own layout template
+         * -> do NOT use if more than one journal are accociated to an own layout template! 
          * 
          * @param uri
          *            URI in the syntax above
@@ -219,8 +221,8 @@ private static class MCRJPortalURI implements MCRResolver {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				if (resultIDs.getNumHits()>1)
-					throw new IllegalStateException("More than one journal found that contains current website context="+webSiteContext);
+				//if (resultIDs.getNumHits()>1)
+				//	throw new IllegalStateException("More than one journal found that contains current website context="+webSiteContext);
 				
 				String journalID = resultIDs.getHit(0).getID();
 				LOGGER.debug("S-ID:#################################");
