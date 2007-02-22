@@ -3,15 +3,25 @@
  */
 package org.mycore.common.xml;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.log4j.Logger;
+import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
+import org.jdom.transform.JDOMResult;
+import org.jdom.transform.JDOMSource;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
@@ -24,6 +34,9 @@ import org.mycore.datamodel.classifications.query.Classification;
 import org.mycore.datamodel.classifications.query.ClassificationTransformer;
 import org.mycore.datamodel.classifications.query.MCRClassificationQuery;
 import org.mycore.frontend.servlets.MCRServlet;
+import org.mycore.services.fieldquery.MCRQuery;
+import org.mycore.services.fieldquery.MCRQueryManager;
+import org.mycore.services.fieldquery.MCRResults;
 
 /**
  * @author mcrclient
@@ -34,6 +47,7 @@ public class MCRJportalClassificationResolver implements MCRResolverProvider {
 	public Map getResolverMapping() {
 		Map map=new HashMap(1);
 		map.put("jportalClassification",new MCRJPortalClassification());
+		map.put("jportalURI",new MCRJPortalURI());		
 		return map;
 	}
 	
@@ -121,4 +135,152 @@ public class MCRJportalClassificationResolver implements MCRResolverProvider {
             return false;
 		}
     }
+    
+private static class MCRJPortalURI implements MCRResolver {
+    	
+    	private static final Logger LOGGER = Logger.getLogger(MCRURIResolver.class);
+        private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
+        private static String URI_PREFIX = "jportalURI";
+        static javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
+        /**
+         * Syntax:
+         * <code>jportalURI:getClass:alias
+         * or
+         * <code>jportalURI:getJPJournalID:conditions/boolean/condition90/@value
+         * 
+         * @param uri
+         *            URI in the syntax above
+         *            
+         * @return the root element of the XML document
+         */
+        public Element resolveElement(String uri) {
+            LOGGER.debug("start resolving "+uri);
+            
+            if (!wellURI(uri)) 
+            	throw new IllegalArgumentException("Invalid format of uri given to resolve jportalURI:"+uri);
+            
+            String[] uriParams = uri.split(":");
+            Element returnXML = new Element("dummyRoot");
+            
+            if (uriParams[1].equals("getJPJournalID")) {
+            	MCRSession session = MCRSessionMgr.getCurrentSession();
+            	
+            	// get website context 
+            	Element webSiteContextElem = new Element("root");
+            	String lastPage = "";
+            	if (session.get("XSL.lastPage")!=null) {
+            		lastPage=(String)session.get("XSL.lastPage");
+            	}
+            	LOGGER.debug("S-gefundene lastPage:#################################");
+            	LOGGER.debug("gefundene lastPage= "+lastPage);
+            	LOGGER.debug("E:#################################");
+            	String baseDir = CONFIG.getString("MCR.basedir");
+            	String xslPath = baseDir+"/build/webapps/WEB-INF/stylesheets/getWebsiteContext.xsl";
+            	StreamSource xsl = new StreamSource(new File(xslPath));
+        		JDOMSource source = new JDOMSource(webSiteContextElem);
+        		JDOMResult result = new JDOMResult();            	
+        		try {
+					Transformer transformer = factory.newTransformer(xsl);
+					transformer.setParameter("lastpage", lastPage);
+					transformer.setParameter("basedir", baseDir);
+					transformer.transform(source, result); 
+					
+				} catch (TransformerConfigurationException e) {
+					e.printStackTrace();
+				} catch (TransformerException e) {
+					e.printStackTrace();
+				}
+				webSiteContextElem = result.getDocument().getRootElement();
+				
+				if (webSiteContextElem==null || webSiteContextElem.getTextTrim().equals(""))
+					throw new IllegalStateException("Didn't find website context URL in navigation");
+				XMLOutputter out = new XMLOutputter();
+				try {
+					LOGGER.debug("S-gefundener websitecontext:#################################");
+					LOGGER.debug("--gefundener websitecontext=");out.output(webSiteContextElem,System.out);
+					LOGGER.debug("E-gefundener websitecontext:#################################");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				String webSiteContext = webSiteContextElem.getTextTrim();
+				
+            	// search for all jpjournal ids containing this website context
+				String query = "(objectType = \"jpjournal\") and (webcontext = \""+webSiteContext+"\")";
+	            Document input = getQueryDocument(query, null, null);
+	            	// Execute query
+	            long start = System.currentTimeMillis();
+	            MCRResults resultIDs = MCRQueryManager.search(MCRQuery.parseXML(input));
+	            long qtime = System.currentTimeMillis() - start;
+	            LOGGER.debug("MCRSearching total query time: " + qtime);
+				try {
+					LOGGER.debug("S-gefundener jids:#################################");
+					LOGGER.debug("--gefundener jids=");out.output(resultIDs.buildXML(),System.out);
+					LOGGER.debug("E-gefundener jids:#################################");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if (resultIDs.getNumHits()>1)
+					throw new IllegalStateException("More than one journal found that contains current website context="+webSiteContext);
+				
+				String journalID = resultIDs.getHit(0).getID();
+				LOGGER.debug("S-ID:#################################");
+				LOGGER.debug("--ID="+journalID);
+				LOGGER.debug("E-ID:#################################");
+				
+            	// put ids in returnXML
+				returnXML.addContent(new Element("hidden").setAttribute("var", uriParams[2]).setAttribute("default",journalID));
+				
+            	// store in cache 
+					
+            }
+            
+            return returnXML;
+        }
+
+		private boolean wellURI(String uri) {
+			String[] parameters = uri.split(":");
+            if ( parameters.length==3
+            		&& parameters[0].equals(URI_PREFIX)
+            		&& parameters[1].equals("getJPJournalID")
+            		&& (parameters[2]!=null && !parameters[2].equals("")) ){
+                return true;
+            }
+            return false;
+		}
+
+        private static Document getQueryDocument(String query, String sortby, String order) {
+            Element queryElement = new Element("query");
+            queryElement.setAttribute("maxResults", "0");
+            queryElement.setAttribute("numPerPage", "0");
+            Document input = new Document(queryElement);
+
+            Element conditions = new Element("conditions");
+            queryElement.addContent(conditions);
+            conditions.setAttribute("format", "text");
+            conditions.addContent(query);
+            org.jdom.Element root = input.getRootElement();
+            if (sortby != null) {
+                final Element fieldElement = new Element("field").setAttribute("name", sortby);
+                if (order != null) {
+                    fieldElement.setAttribute("order", order);
+                }
+                root.addContent(new Element("sortBy").addContent(fieldElement));
+            }
+            if (LOGGER.isDebugEnabled()) {
+                XMLOutputter out = new XMLOutputter(org.jdom.output.Format.getPrettyFormat());
+                LOGGER.debug(out.outputString(input));
+            }
+            return input;
+        }
+        
+    }    
 }
+
+
+
+
+
+
+
+
+
