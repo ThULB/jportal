@@ -731,6 +731,9 @@
 			<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
 				<xsl:value-of select="'&amp;sortby=maintitles_vol'"/>
 			</xsl:when>
+			<xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='position')">
+				<xsl:value-of select="'&amp;sortby=position_vol'"/>
+			</xsl:when>			
 			<xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
 				<xsl:value-of select="'&amp;sortby=maintitles_art'"/>
 			</xsl:when>
@@ -1312,6 +1315,13 @@
 													</xsl:call-template>
 													<xsl:value-of select="i18n:translate('metaData.sortbuttons.aftertitles')"/>
 												</option>
+												<option value="position">
+													<xsl:call-template name="checkSelection">
+														<xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume"/>
+														<xsl:with-param name="compVal2" select="'position'"/>
+													</xsl:call-template>
+													<xsl:value-of select="i18n:translate('metaData.sortbuttons.position')"/>
+												</option>												
 											</select>
 										</xsl:otherwise>
 									</xsl:choose>

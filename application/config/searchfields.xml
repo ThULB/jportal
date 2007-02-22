@@ -43,6 +43,7 @@
 	<field name="dates_vol"          	type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
 	<field name="notes_vol"          	type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
 	<field name="journalID_vol"     	type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+	<field name="position_vol"     		type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />
 	<!-- Search in article metadata -->
     <field name="maintitles_art"     	type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
 	<field name="subtitles_art"      	type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editormask.labels.subtitle" />

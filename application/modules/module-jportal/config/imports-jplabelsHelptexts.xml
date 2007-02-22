@@ -71,6 +71,8 @@
 		
 	<!-- *** Data for the note *** -->
 	<text id="note_label" i18n="editormask.labels.note"/>
+	
+	<text id="position_label" i18n="editormask.labels.volume.position"/>
 		
 	<helpPopup id="note_help" width="400px" height="250px" i18n="editormask.labels.notehelppop"/>
 		

@@ -30,10 +30,12 @@
             <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
             <cell row="160" col="3" anchor="WEST" ref="note_help" />
 		    <!-- ================================================================================================= -->
-		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            
+		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            		  
+            <cell row="170" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />		  
+            <!-- position -->
+            <cell row="180" col="1" anchor="NORTHWEST" ref="position_label" />
+            <cell row="180" col="2" anchor="NORTHWEST" ref="position_input" />
             <!-- .. -->
-            <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
-		  
 <!--            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" />
             <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" />
 			<cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/>
@@ -44,7 +46,7 @@
             <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input_hidden" />		  		  		  		  		  		  		  
             <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />	-->			  
 		    <!-- ================================================================================================= -->		  
-            <cell row="170" col="2" anchor="EAST" ref="save" />
+            <cell row="190" col="2" anchor="EAST" ref="save" />
       </panel>
       <!-- panel definitions -->
       <!-- MainTitle ================================================================== -->
@@ -97,6 +99,15 @@
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
       </panel>
       <!-- end: note -->
+      <!-- hidden_position ================================================================== -->
+      <panel id="position_input">
+            <hidden var="metadata/hidden_positions/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_positions/@parasearch" default="true" />
+            <hidden var="metadata/hidden_positions/@textsearch" default="true" />
+            <hidden var="metadata/hidden_positions/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile10" var="metadata/hidden_positions/hidden_position"  />
+      </panel>
+      <!-- end: hidden_position -->	
       <!--date =======================================================================-->
       <list id="date_type" type="dropdown">
             <item value="published" i18n="editormask.jpvolume.published"/>
