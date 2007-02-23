@@ -21,7 +21,8 @@
 		<table cellspacing="0" cellpadding="0" id="leaf-all">
 			<tr>
 				<td id="leaf-front" colspan="1" rowspan="2">
-					<xsl:value-of select="i18n:translate('metaData.type.article')"/>
+					<!--<xsl:value-of select="i18n:translate('metaData.type.article')"/>-->
+					<img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
 				</td>
 				<td id="leaf-linkarea2">
 					<xsl:variable name="name">
@@ -146,7 +147,8 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<xsl:value-of select="i18n:translate('metaData.type.article')"/>
+						<!--<xsl:value-of select="i18n:translate('metaData.type.article')"/>-->
+						<img src="{$WebApplicationBaseURL}images/artikel.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:value-of select="$maintitle_shorted"/>

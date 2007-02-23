@@ -23,9 +23,7 @@
 		<table cellspacing="0" cellpadding="0" id="leaf-all">
 			<tr>
 				<td id="leaf-front" colspan="1" rowspan="2">
-					
-					<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
-					
+					<img src="{$WebApplicationBaseURL}images/zeitung2.gif"/>				
 				</td>
 				<td id="leaf-linkarea2">
 					<xsl:variable name="name">
@@ -132,7 +130,7 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
+						<img src="{$WebApplicationBaseURL}images/zeitung.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:variable name="maintitle_shorted">

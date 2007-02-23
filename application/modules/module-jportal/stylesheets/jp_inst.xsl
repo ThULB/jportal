@@ -22,7 +22,7 @@
 				<tr id="leaf-all">
 					<td id="leaf-front">
 						<div>
-							<xsl:value-of select="i18n:translate('metaData.type.inst')"/>
+							<img src="{$WebApplicationBaseURL}images/institut2.gif"/>
 						</div>
 					</td>
 					<td id="leaf-linkarea">
@@ -123,7 +123,7 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<xsl:value-of select="i18n:translate('metaData.type.inst')"/>
+						<img src="{$WebApplicationBaseURL}images/institut.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:variable name="name_shorted">

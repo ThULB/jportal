@@ -21,7 +21,7 @@
 				<tr id="leaf-all">
 					<td id="leaf-front">
 						<div>
-							<xsl:value-of select="i18n:translate('metaData.type.pers')"/>
+							<img src="{$WebApplicationBaseURL}images/person2.gif"/>
 						</div>
 					</td>
 					<td id="leaf-linkarea">
@@ -107,7 +107,7 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<xsl:value-of select="i18n:translate('metaData.type.pers')"/>
+						<img src="{$WebApplicationBaseURL}images/person.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:variable name="lastName_shorted">

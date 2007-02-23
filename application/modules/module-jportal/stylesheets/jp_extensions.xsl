@@ -619,24 +619,52 @@
 									select="xalan:nodeset($siblings)/mcr:results/mcr:hit[position()=number($pos)+1]/@id"/>
 							</xsl:variable>
 							
-							<xsl:if test="$pred!=''">
-								<td>
-									<a
-										href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
-										alt="voriger Band" title="voriger Band">
-										<img src="{$WebApplicationBaseURL}left.jpg"/>
-									</a>
-								</td>
-							</xsl:if>
-							<xsl:if test="$suc!=''">
-								<td>
-									<a
-										href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
-										alt="naechster Band" title="naechster Band">
-										<img src="{$WebApplicationBaseURL}right.jpg"/>
-									</a>
-								</td>
-							</xsl:if>
+							<xsl:choose>
+								<xsl:when test="$OID='jparticle'">
+									<xsl:if test="$pred!=''">
+										<td>
+											<a
+												href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
+												alt="{i18n:translate('metaData.jparticle.switchleft')}"
+												title="{i18n:translate('metaData.jparticle.switchleft')}">
+												<img src="{$WebApplicationBaseURL}left.jpg"/>
+											</a>
+										</td>
+									</xsl:if>
+									<xsl:if test="$suc!=''">
+										<td>
+											<a
+												href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
+												alt="{i18n:translate('metaData.jparticle.switchright')}"
+												title="{i18n:translate('metaData.jparticle.switchright')}">
+												<img src="{$WebApplicationBaseURL}right.jpg"/>
+											</a>
+										</td>
+									</xsl:if>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:if test="$pred!=''">
+										<td>
+											<a
+												href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
+												alt="{i18n:translate('metaData.jpvolume.switchleft')}"
+												title="{i18n:translate('metaData.jpvolume.switchleft')}">
+												<img src="{$WebApplicationBaseURL}left.jpg"/>
+											</a>
+										</td>
+									</xsl:if>
+									<xsl:if test="$suc!=''">
+										<td>
+											<a
+												href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
+												alt="{i18n:translate('metaData.jpvolume.switchright')}"
+												title="{i18n:translate('metaData.jpvolume.switchright')}">
+												<img src="{$WebApplicationBaseURL}right.jpg"/>
+											</a>
+										</td>
+									</xsl:if>
+								</xsl:otherwise>
+							</xsl:choose>
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:if>
@@ -1084,13 +1112,13 @@
 												</xsl:variable>
 												<xsl:choose>
 													<xsl:when test="$OID='jpvolume'">
-														<xsl:value-of select="i18n:translate('metaData.type.volume')"/>
+														<img src="{$WebApplicationBaseURL}images/band2.gif"/>
 													</xsl:when>
 													<xsl:when test="$OID='jpjournal'">
-														<xsl:value-of select="i18n:translate('metaData.type.journal')"/>
+														<img src="{$WebApplicationBaseURL}images/zeitung2.gif"/>
 													</xsl:when>
 													<xsl:when test="$OID='jparticle'">
-														<xsl:value-of select="i18n:translate('metaData.type.article')"/>
+														<img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
 													</xsl:when>
 													<xsl:otherwise>
 													</xsl:otherwise>
