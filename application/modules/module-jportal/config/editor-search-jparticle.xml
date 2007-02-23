@@ -37,15 +37,17 @@
 				<br/>
 			</cell>
 			
-			<!-- Search for fields of type participant -->
-			<cell var="conditions/boolean/boolean/boolean[1]" col="1" row="3" colspan="2">
+			<!-- Search for fields of type contributor -->
+			<hidden var="conditions/boolean/boolean/boolean/@operator" default="and"/>
+			<cell var="conditions/boolean/boolean/boolean/boolean" col="1" row="3" colspan="2">
+				
 				<repeater min="1" max="10">
 					<panel lines="off">
 						<hidden var="@operator" default="and"/>
 						<cell width="230" anchor="EAST" col="1" row="1">
 							<text i18n="editormask.labels.participants_label"/>
 						</cell>
-						<cell var="condition2[1]" col="2" row="1">
+						<cell var="condition2" col="2" row="1">
 							<panel lines="off">
 								<hidden var="@field" default="participants_art_type"/>
 								<hidden var="@operator" default="="/>
@@ -57,7 +59,7 @@
 								</cell>
 							</panel>
 						</cell>
-						<cell col="2" row="2" var="condition2[2]">
+						<cell var="condition2[2]" col="2" row="2">
 							<panel lines="off">
 								<hidden default="participants_art" var="@field"/>
 								<hidden var="@operator" default="="/>								
@@ -78,14 +80,16 @@
 			</cell>
 
 			<!-- Search for fields of type date -->
-			<cell var="conditions/boolean/boolean/boolean[2]" col="1" row="6" colspan="2">
+			<hidden var="conditions/boolean/boolean/boolean[2]/@operator" default="and"/>
+			<cell var="conditions/boolean/boolean/boolean[2]/boolean" col="1" row="6" colspan="2">
+				
 				<repeater min="1" max="4">
 					<panel lines="off">
 						<hidden var="@operator" default="and"/>
 						<cell anchor="EAST" width="230" col="1" row="1">
 							<text i18n="editormask.labels.date_label"/>
 						</cell>
-						<cell var="condition3[1]" col="2" row="1">
+						<cell var="condition3" col="2" row="1">
 							<panel lines="off">
 								<hidden default="dates_art_type" var="@field"/>
 								<hidden var="@operator" default="="/>
