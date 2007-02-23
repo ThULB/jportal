@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
-      ID="jportal_class_00000006" >
-      <label xml:lang="de" text="Weitere Titeltypen" description="Weitere Titeltypen" />
-      <categories>
-		    <category ID="title_spokenAbout">
-				<label xml:lang="de" text="Erwähntes Werk (bei Rezensionen)"/>
-			</category>		  
-		    <category ID="title_main">
-				<label xml:lang="de" text="Hauptsachtitel"></label>
-			</category>
-            <category ID="short">
-                  <label xml:lang="de" text="Kurztitel"></label>
-				<label xml:lang="ru" text="Сокращенный заголовок"></label>
-   			</category>
-		    <category ID="title_beside">
-				<label xml:lang="de" text="Nebentitel"></label>
-			</category>
-            <category ID="misc">
-                  <label xml:lang="de" text="Sonst. Titel"></label>
-				<label xml:lang="ru" text="др. заголовок?"></label>
-            </category>
-		    <category ID="title_rezensation">
-				<label xml:lang="de" text="Titel des rezensierten Werkes"></label>
-			</category>
-		    <category ID="title_original">
-				<label xml:lang="de" text="Titel laut Vorlage"></label>
-			</category>
-            <category ID="additional">
-                <label xml:lang="de" text="Zusatztitel"></label>
-				<label xml:lang="ru" text="Вспомогательный заголовок"></label>
-				<label xml:lang="pl" text="tytuł dodatkowy"></label>
-            </category>
-      </categories>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000006">
+	<label xml:lang="de" text="Titeltypen" description="Titeltypen"/>
+	<label xml:lang="en" text="Title types" description="Title types"/>
+	<categories>
+		<category ID="title_spokenAbout">
+			<label xml:lang="de" text="Erwähntes Werk (bei Rezensionen)"/>
+			<label xml:lang="en" text="Reviewed work"/>
+		</category>
+		<category ID="title_main">
+			<label xml:lang="de" text="Hauptsachtitel"></label>
+			<label xml:lang="en" text="Main title"/>
+		</category>
+		<category ID="short">
+			<label xml:lang="de" text="Kurztitel"></label>
+			<label xml:lang="en" text="Short title"/>
+			<label xml:lang="ru" text="Сокращенный заголовок"></label>
+		</category>
+		<category ID="title_beside">
+			<label xml:lang="de" text="Nebentitel"></label>
+			<label xml:lang="en" text="Subtitle"/>
+		</category>
+		<category ID="title_rezensation">
+			<label xml:lang="de" text="Titel des rezensierten Werkes"></label>
+			<label xml:lang="en" text="Title of reviewed work"/>
+		</category>
+		<category ID="title_original">
+			<label xml:lang="de" text="Titel laut Vorlage"></label>
+			<label xml:lang="en" text="Title according to orginal"></label>
+		</category>
+		<category ID="additional">
+			<label xml:lang="de" text="Zusatztitel"></label>
+			<label xml:lang="en" text="Additional title"></label>
+			<label xml:lang="ru" text="Вспомогательный заголовок"></label>
+			<label xml:lang="pl" text="tytuł dodatkowy"></label>
+		</category>
+		<category ID="misc">
+			<label xml:lang="de" text="Sonst. Titel"></label>
+			<label xml:lang="en" text="Other"/>
+			<label xml:lang="ru" text="др. заголовок?"></label>
+		</category>
+	</categories>
 </mycoreclass>
-

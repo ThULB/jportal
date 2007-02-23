@@ -2,6 +2,7 @@
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
 	ID="jportal_class_00000010">
 	<label xml:lang="de" text="ID-Typen" description="ID-Typen"/>
+	<label xml:lang="en" text="ID types" description="ID types"/>
 	<categories>
 		<category ID="issn">
 			<label xml:lang="de" text="ISSN"/>
@@ -17,6 +18,7 @@
 		</category>
 		<category ID="misc">
 			<label xml:lang="de" text="sonstige"></label>
+			<label xml:lang="en" text="Other"></label>
 			<label xml:lang="ru" text="другое"></label>
 		</category>
 	</categories>
