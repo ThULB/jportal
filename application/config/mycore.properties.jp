@@ -9,7 +9,7 @@ MCR.EventHandler.MCRDerivate.1.class=org.mycore.access.MCRRemoveAclEventHandler
 MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRJPortalStrategy
 
 # dynamic classification in editors for articles
-MCR.UriResolver.externalResolver.class=org.mycore.common.xml.MCRJportalClassificationResolver
+MCR.UriResolver.externalResolver.class=org.mycore.common.xml.MCRJPortalURIResolver
 
 ##############################################################################
 # The data model configuration
