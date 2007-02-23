@@ -211,9 +211,11 @@
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}">
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}
+			&amp;_var_@field=participants_art&amp;_var_@operator==&amp;_var_@value={col[@name='id']}">
           <xsl:value-of select="$label" />
-        </a>
+        </a>		  
+		  
       </td>
     </tr>
   </xsl:template>

@@ -60,14 +60,22 @@
 							</panel>
 						</cell>
 						<cell var="condition2[2]" col="2" row="2">
-							<panel lines="off">
-								<hidden default="participants_art" var="@field"/>
-								<hidden var="@operator" default="="/>								
-								<cell anchor="WEST" col="1" row="1" var="@value">
-<!--											<subselect id="sub.select_search1" type="webpage"
-												href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
-												i18n="editormask.common.sub.select1"/>-->
-											<textfield width="50" />
+							<panel>
+								<hidden var="@field"/>
+								<hidden var="@operator"/>
+								<hidden var="@value"/>
+								<cell row="1" col="1">
+									<output var="@label"/>
+								</cell>
+								<cell row="2" col="1">
+									<subselect id="sub.select_search1" type="webpage"
+										href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+										i18n="editormask.common.sub.select1"/>
+								</cell>
+								<cell row="2" col="2">
+									<subselect id="sub.select2" type="webpage"
+										href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+										sortnr="6" i18n="editormask.common.sub.select2"/>
 								</cell>
 							</panel>
 						</cell>
