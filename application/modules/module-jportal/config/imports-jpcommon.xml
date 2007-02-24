@@ -95,7 +95,7 @@
           </cell>			   
 		  <cell row="2" col="2" >
 				<subselect id="sub.select2" type="webpage"
-					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6" i18n="editormask.common.sub.select2"/>		  
+					href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select2"/>		  
          </cell>			   			   
          <cell row="3" col="1" width="100%">
                <text   label="-" />

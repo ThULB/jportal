@@ -65,9 +65,10 @@
 	<field name="sizes_art"          	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />  	  
 	<field name="refs_art"           	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
     <field name="journalID_art"    	    type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
-	<!-- Search in institutions metadata -->
-    <field name="instData"        type="text"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/*/*" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
 	  
+	<!-- Search in institutions metadata -->
+    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
+		  
     <!-- Search in person metadata -->
     <field name="headingFirstName"  type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true" i18n="editor.search.person.firstName" />
     <field name="headingLastName" 	type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="lastName" sortable="true" i18n="editor.search.person.lastName" />
