@@ -544,6 +544,12 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
+			<xsl:when test="contains(/mycoreobject/@ID,'_person_') ">
+				<xsl:value-of select="'Person - Metadaten'"/>				
+			</xsl:when>
+			<xsl:when test="contains(/mycoreobject/@ID,'_jpinst_') ">
+				<xsl:value-of select="'Institution - Metadaten'"/>				
+			</xsl:when>			
 			<xsl:otherwise>
 				<xsl:value-of select="'Metadaten'"/>
 			</xsl:otherwise>
