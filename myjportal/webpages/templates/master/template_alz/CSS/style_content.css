@@ -386,6 +386,11 @@ div.submitButton{
 	background-color: #415979;
 }
 
+#detailed-browse{
+    border: 1px solid #415979;
+	background-color: #B5A75C;	
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
@@ -404,4 +409,29 @@ div.submitButton{
 
 #searchmask-contentlinks a {
 	color: #B5A75C;
+}
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #B5A75C;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #415979;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #B5A75C;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
 }

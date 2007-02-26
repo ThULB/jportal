@@ -416,6 +416,11 @@ td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px s
 	background-color: #59563F;
 }
 
+#detailed-browse{
+    border: 1px solid #55593F;
+	background-color: #848A65;	
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
@@ -434,4 +439,30 @@ td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px s
 
 #searchmask-contentlinks a {
 	color: #848A65;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #848A65;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #59563F;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #848A65;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
 }

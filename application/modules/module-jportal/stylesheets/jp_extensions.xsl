@@ -229,7 +229,7 @@
 		<tr>
 			<td id="detailed-staticurl1">
 				
-				<xsl:value-of select="concat(i18n:translate('metaData.staticURL'),':')"/>
+				<xsl:value-of select="i18n:translate('metaData.staticURL')"/>
 			</td>
 			<td>
 			</td>
@@ -278,9 +278,7 @@
 		
 		<xsl:choose>
 			<xsl:when test="$layout='true'">
-				<table>
-					<tr>
-						<td id="leaf-headline2">
+						<span id="leaf-headline2">
 							<xsl:if
 								test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
 								or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
@@ -308,43 +306,43 @@
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:if>
-						</td>
-					</tr>
+						</span>
 					<xsl:if test="$underline='true'">
-						<tr>
-							<td id="leaf-headline1"> _________________________________________________</td>
-						</tr>
+						<table>
+							<tr>
+								<td id="leaf-headline1"> _________________________________________________</td>
+							</tr>
+						</table>
 					</xsl:if>
-				</table>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:if
-					test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-					or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
-					">
-					<xsl:choose>
-						<xsl:when test="$sortOrder='descending'">
-							<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
-								<xsl:sort select="@inherited" order="descending"/>
-								<xsl:call-template name="printHistoryRow.rows">
-									<xsl:with-param name="sortOrder" select="$sortOrder"/>
-									<xsl:with-param name="printCurrent2" select="$printCurrent"/>
-									<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
-								</xsl:call-template>
-							</xsl:for-each>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
-								<xsl:sort select="@inherited" order="ascending"/>
-								<xsl:call-template name="printHistoryRow.rows">
-									<xsl:with-param name="sortOrder" select="$sortOrder"/>
-									<xsl:with-param name="printCurrent2" select="$printCurrent"/>
-									<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
-								</xsl:call-template>
-							</xsl:for-each>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
+						<span id="leaf-headline2">
+							<xsl:if test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
+					         or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')">
+								<xsl:choose>
+									<xsl:when test="$sortOrder='descending'">
+										<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+											<xsl:sort select="@inherited" order="descending"/>
+											<xsl:call-template name="printHistoryRow.rows">
+												<xsl:with-param name="sortOrder" select="$sortOrder"/>
+												<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+												<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+											</xsl:call-template>
+										</xsl:for-each>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+											<xsl:sort select="@inherited" order="ascending"/>
+											<xsl:call-template name="printHistoryRow.rows">
+												<xsl:with-param name="sortOrder" select="$sortOrder"/>
+												<xsl:with-param name="printCurrent2" select="$printCurrent"/>
+												<xsl:with-param name="linkCurrent" select="$linkCurrent"/>
+											</xsl:call-template>
+										</xsl:for-each>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:if>
+						</span>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -387,13 +385,13 @@
 									</a>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="$label"/>
+									<b><xsl:value-of select="$label"/></b>
 								</xsl:otherwise>
 							</xsl:choose>
 						</span>
 					</xsl:when>
 					<xsl:otherwise>
-						<xsl:value-of select="' ...'"/>
+						<b><xsl:value-of select="' ...'"/></b>
 					</xsl:otherwise>
 				</xsl:choose>
 				
@@ -660,44 +658,44 @@
 							<xsl:choose>
 								<xsl:when test="$OID='jparticle'">
 									<xsl:if test="$pred!=''">
-										<td>
-											<a
+										<td id="detailed-browse">
+											<a  
 												href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
 												alt="{i18n:translate('metaData.jparticle.switchleft')}"
 												title="{i18n:translate('metaData.jparticle.switchleft')}">
-												<img src="{$WebApplicationBaseURL}left.jpg"/>
-											</a>
+												<img src="{$WebApplicationBaseURL}left.gif"/>												
+											</a>	
 										</td>
 									</xsl:if>
 									<xsl:if test="$suc!=''">
-										<td> &#160;&#160;
-											<a
+										<td id="detailed-browse">
+											<a  
 												href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
 												alt="{i18n:translate('metaData.jparticle.switchright')}"
 												title="{i18n:translate('metaData.jparticle.switchright')}">
-												<img src="{$WebApplicationBaseURL}right.jpg"/>
+												<img src="{$WebApplicationBaseURL}right.gif"/>	
 											</a>
 										</td>
 									</xsl:if>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:if test="$pred!=''">
-										<td>
-											<a
+										<td id="detailed-browse">
+											<a  
 												href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
 												alt="{i18n:translate('metaData.jpvolume.switchleft')}"
 												title="{i18n:translate('metaData.jpvolume.switchleft')}">
-												<img src="{$WebApplicationBaseURL}left.jpg"/>
-											</a>
+												<img src="{$WebApplicationBaseURL}left.gif"/>
+											</a>	
 										</td>
 									</xsl:if>
 									<xsl:if test="$suc!=''">
-										<td> &#160;&#160;
-											<a
+										<td id="detailed-browse"> 
+											<a  
 												href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
 												alt="{i18n:translate('metaData.jpvolume.switchright')}"
 												title="{i18n:translate('metaData.jpvolume.switchright')}">
-												<img src="{$WebApplicationBaseURL}right.jpg"/>
+												<img src="{$WebApplicationBaseURL}right.gif"/>
 											</a>
 										</td>
 									</xsl:if>
@@ -784,7 +782,7 @@
 					
 				</xsl:if>
 				<td>
-					&#160;&#160;&#160;&#160;&#160;&#160;					
+					&#160;&#160;&#160;&#160;&#160;&#160;
 				</td>
 				<xsl:call-template name="browseCtrlJP"/>
 			</tr>
@@ -1725,6 +1723,7 @@
 									<xsl:with-param name="node" select="xalan:nodeset($art)"/>
 								</xsl:call-template>
 							</li>
+							<div id="detailed-linkedart"></div>
 						</xsl:for-each>
 						<xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
 							<li>
@@ -1750,10 +1749,11 @@
 					<xsl:value-of select="concat('?host=',$previousObjectHost)"/>
 				</xsl:if>
 			</xsl:variable>
-			<td>
+			<td id="detailed-browse">
 				<a href="{$WebApplicationBaseURL}receive/{$previousObject}{$HttpSession}{$hostParam}"
-					alt="{i18n:translate('metaData.resultlist.prev')}" title="{i18n:translate('metaData.resultlist.prev')}">
-					<img src="{$WebApplicationBaseURL}left.jpg"/>
+					alt="{i18n:translate('metaData.resultlist.prev')}"
+					title="{i18n:translate('metaData.resultlist.prev')}">
+					<img src="{$WebApplicationBaseURL}left.gif"/>
 				</a>
 			</td>
 			
@@ -1764,10 +1764,8 @@
 				<div id="switch-notcurrent">
 					<a
 						href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
-						&#160;&#160;
-						<xsl:value-of
-							select="i18n:translate('metaData.resultlist')"/>
-						&#160;&#160;</a>
+						<xsl:value-of select="i18n:translate('metaData.resultlist')"/>					
+					</a>
 				</div>
 			</td>
 			
@@ -1779,10 +1777,11 @@
 					<xsl:value-of select="concat('?host=',$nextObjectHost)"/>
 				</xsl:if>
 			</xsl:variable>
-			<td>
+			<td id="detailed-browse">
 				<a href="{$WebApplicationBaseURL}receive/{$nextObject}{$HttpSession}{$hostParam}"
-					alt="{i18n:translate('metaData.resultlist.next')}" title="{i18n:translate('metaData.resultlist.next')}">
-					<img src="{$WebApplicationBaseURL}right.jpg"/>
+					alt="{i18n:translate('metaData.resultlist.next')}"
+					title="{i18n:translate('metaData.resultlist.next')}">
+					<img src="{$WebApplicationBaseURL}right.gif"/>
 				</a>
 			</td>
 			

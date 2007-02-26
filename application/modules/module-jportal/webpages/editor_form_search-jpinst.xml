@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyCoReWebPage>
-  <section xml:lang="de" title="Suche nach Artikeln">
+  <section xml:lang="de" title="Suche nach Institutionen">
     <editor id="searchmask-de">
       <include uri="webapp:editor/editor-search-jpinst.xml"/>
     </editor>
   </section>
-  <section xml:lang="en" title="Search for inst">
+  <section xml:lang="en" title="Search for institutions">
     <editor id="searchmask-en">
       <include uri="webapp:editor/editor-search-jpinst.xml"/>
     </editor>

@@ -296,10 +296,10 @@ div.submitButton{
 /*  used colors:													   */
 /* 			                                                           */
 /* 			                                                           */
-/* 	darkest red: #193340; for outer frame, content-links...            */
-/*  dark red: 	 #2C4351; for headlines, leaf-links                    */
-/* 	light red: 	 #5C727F; descriptions...                              */
-/*  white:		 FFFFFF hover link color                               */
+/* 	darkest: #193340; for outer frame, content-links...          	   */
+/*  dark: 	 #2C4351; for headlines, leaf-links                 	   */
+/* 	light: 	 #5C727F; descriptions...                           	   */
+/*  white:	 FFFFFF hover link color                	               */
 /* 			                                                           */
 /* 			                                                           */
 /* =================================================================== */
@@ -387,6 +387,11 @@ div.submitButton{
 	background-color: #193340;
 }
 
+#detailed-browse{
+    border: 1px solid #193340;
+	background-color: #5C727F;	
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
@@ -405,4 +410,30 @@ div.submitButton{
 
 #searchmask-contentlinks a {
 	color: #5C727F;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #5C727F;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #193340;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #5C727F;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
 }

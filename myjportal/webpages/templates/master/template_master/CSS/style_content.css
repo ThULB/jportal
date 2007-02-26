@@ -1,6 +1,6 @@
 /* =================================================================== */
 /* .mainSite_ContentArea class is responsible for the white space 	   */
-/* under the content  											   */
+/* under the content  											       */
 /* =================================================================== */
 .mainSite_ContentArea{
 	width: 768px;
@@ -413,6 +413,10 @@ div.submitButton{
 	background-color: #273667;
 }
 
+#detailed-browse{
+    border: 1px solid #273667;
+	background-color: #D9DDE6;	
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
@@ -431,4 +435,30 @@ div.submitButton{
 
 #searchmask-contentlinks a {
 	color: #7C8EB5;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #D9DDE6;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #273667;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #D9DDE6;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
 }
