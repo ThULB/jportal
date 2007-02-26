@@ -64,12 +64,17 @@
 				</xsl:call-template>
 			</tr>
 			<tr>
-				<td id="leaf-front" ></td>
-				<td ><xsl:value-of select="i18n:translate('metaData.published')"/><xsl:call-template name="printHistoryRow">
+				<td id="leaf-front"></td>
+				<td>
+					<span id="leaf-published">
+						<xsl:value-of select="i18n:translate('metaData.published')"/>
+						<xsl:text>: </xsl:text>
+						<xsl:call-template name="printHistoryRow">
 							<xsl:with-param name="sortOrder" select="'descending'"/>
 							<xsl:with-param name="printCurrent" select="'false'"/>
 							<xsl:with-param name="node" select="xalan:nodeset($cXML)"/>
 						</xsl:call-template>
+					</span>
 				</td>
 			</tr>
 		</table>
@@ -329,7 +334,7 @@
 							<!--*** MyCoRe-ID ************************************* -->
 							<tr>
 								<td class="metaname" style="text-align:right;  padding-right: 5px;">
-									<xsl:value-of select="concat(i18n:translate('metaData.ID'),':')"/>
+									<xsl:value-of select="i18n:translate('metaData.ID')"/>
 									
 								</td>
 								<td class="metavalue">
