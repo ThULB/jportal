@@ -4,9 +4,6 @@
 		url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]"/>
 	<target format="xml" method="post" name="MCRSearchServlet" type="servlet"/>
 	<components var="/query" root="root">
-		<headline anchor="WEST">
-			<text i18n="editor.search.person.label"/>
-		</headline>
 		<panel lines="off" id="root">
 			<hidden default="editor_form_search-jpperson.xml" var="@mask"/>
 			<hidden default="xml" var="conditions/@format"/>

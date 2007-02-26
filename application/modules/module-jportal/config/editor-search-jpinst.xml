@@ -8,9 +8,6 @@
 <!--	  
     <include uri="webapp:editor/imports-common.xml"/>
 	  -->
-    <headline anchor="LEFT">
-      <text i18n="editor.search.institution.label" />
-    </headline>
 
     <panel id="root" lines="off">
       <hidden var="@mask" default="editor_form_search-jpinst.xml" />
