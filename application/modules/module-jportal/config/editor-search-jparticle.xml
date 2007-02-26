@@ -9,9 +9,9 @@
 			<hidden default="xml" var="conditions/@format"/>
 			
 			<!-- Only in one specified journal -->
-			<hidden var="conditions/boolean/condition90/@field" default="journalID_art"/>			
-			<hidden var="conditions/boolean/condition90/@operator" default="="/>			
-			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/condition90/@value"/>		
+			<hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>			
+			<hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>			
+			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/boolean/condition90/@value"/>		
 						
 			<hidden var="conditions/boolean/@operator" default="and"/>
 			<!-- Search for fields of type name -->
