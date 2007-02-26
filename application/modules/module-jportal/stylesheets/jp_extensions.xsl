@@ -25,6 +25,10 @@
 	<xsl:param name="nextObject"/>
 	<xsl:param name="nextObjectHost"/>
 	
+	<xsl:variable name="thumbnail">
+		<xsl:call-template name="get.thumbnailSupport" />
+	</xsl:variable>
+	
 	<!-- ===================================================================================================== -->
 	<xsl:template
 		match="/mycoreobject[contains(@ID,'_jpjournal_')] 
@@ -987,19 +991,9 @@
 	<!-- ===================================================================================================== -->
 	<xsl:template match="internals" priority="2">
 		<xsl:if test="$objectHost = 'local'">
-			<!--			<xsl:variable name="obj_host" select="../../../@host"/>-->
 			<xsl:variable name="derivid" select="../../@ID"/>
-			<!--			<xsl:variable name="derivlabel" select="../../@label"/>-->
 			<xsl:variable name="derivmain" select="internal/@maindoc"/>
 			<xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')"/>
-			<!--			<xsl:variable name="derivifs" select="concat($derivbase,$derivmain,$HttpSession,'?hosts=',$obj_host)"/>
-			<xsl:variable name="derivdir" select="concat($derivbase,$HttpSession,'?hosts=',$obj_host)"/>
-			<xsl:variable name="derivxml" select="concat('ifs:/',$derivid,'?hosts=',$obj_host)"/>
-			<xsl:variable name="details" select="document($derivxml)"/>
-			<xsl:variable name="ctype" select="$details/mcr_directory/children/child[name=$derivmain]/contentType"/>
-			<xsl:variable name="ftype"
-			select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[@ID=$ctype]/label"/>
-			<xsl:variable name="size" select="$details/mcr_directory/size"/>-->
 			
 			<!-- IView available ? -->
 			<xsl:variable name="supportedMainFile">
@@ -1007,9 +1001,6 @@
 					<xsl:with-param name="derivid_2" select="$derivid"/>
 					<xsl:with-param name="mainFile" select="$derivmain"/>
 				</xsl:call-template>
-				<!--				<xsl:call-template name="iview.getSupport">
-				<xsl:with-param name="derivID" select="$derivid"/>
-				</xsl:call-template>-->
 			</xsl:variable>
 			<xsl:variable name="href">
 				<xsl:choose>
@@ -1021,24 +1012,24 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:if test="($supportedMainFile!='') and ($view.objectmetadata='false') and (/mycoreobject/@ID) ">
+			<xsl:if test="($supportedMainFile!='') and $thumbnail='true'">			
 				<xsl:call-template name="iview.getEmbedded.thumbnail">
 					<xsl:with-param name="derivID" select="$derivid"/>
-					<xsl:with-param name="pathOfImage" select="$supportedMainFile"/>
+					<xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
 				</xsl:call-template>
 				<br/>
 			</xsl:if>
+			
 			<a href="{$href}">
 				<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
-				<!--				<xsl:value-of select="$ctype"/>-->
 				<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
 			</a>
-			<!--			<br/>-->
 			<xsl:if test="$CurrentUser!='gast'">
 				<a href="{$derivbase}">
 					<xsl:value-of select="'Details &gt;&gt;'"/>
 				</a>
-			</xsl:if>
+			</xsl:if>						
+
 		</xsl:if>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
@@ -1798,5 +1789,16 @@
 		</xsl:if>
 		
 	</xsl:template>
+<!-- ===================================================================================================== -->
+	<xsl:template name="get.thumbnailSupport">
+		<xsl:choose>
+			<xsl:when test="/mycoreobject and $view.objectmetadata='false'">
+				<xsl:value-of select="'true'"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'false'"/>				
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>	
 	
 </xsl:stylesheet>
