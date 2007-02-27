@@ -192,16 +192,16 @@
 	vertical-align: top;
 	border: 0px;
 	padding: 0px;
-	width: 100%;
+	width: 150px;
 }
 
 #detailed-contenttable {
-	width: 100%;
+	width: 150px;
 	border: 0px;
 }
 
 #detailed-contenttablewb {
-	width: 100%;
+	width: 150px;
 	border-left: 1px solid #273667;
 }
 
@@ -210,7 +210,7 @@
 	vertical-align: middle;
     height: 25px;
 	padding-right: 20px;
-	width: 100%;
+	width: 150px;
 }
 
 #detailed-contentsimg {
