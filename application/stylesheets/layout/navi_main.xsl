@@ -20,7 +20,9 @@
         <xsl:with-param name="borderWidthSides" select="'7'" />
         <!-- use percent values -->
     </xsl:call-template>
-    <center><br />MyCoRe Version 1.3.0<br /></center>
+    <br/>
+	<center><img src="{$WebApplicationBaseURL}images/poweredby.gif"/></center>
+	<br/>
 </xsl:template>
 <!-- ================================================================================= -->
 </xsl:stylesheet>
