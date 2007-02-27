@@ -677,6 +677,7 @@
 											</a>
 										</td>
 									</xsl:if>
+									<td width="20"></td>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:if test="$pred!=''">
@@ -699,6 +700,7 @@
 											</a>
 										</td>
 									</xsl:if>
+									<td width="20"></td>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:if>
@@ -938,11 +940,11 @@
 									<td width="10"/>
 								</xsl:if>
 								<td align="left" valign="top" id="detailed-links">
-									<table id="detailed-contenttable" border="0" cellspacing="0">
+									<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
 										<xsl:variable name="deriv" select="@xlink:href"/>
 										<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
 										<xsl:variable name="derivate" select="document($derivlink)"/>
-										<tr id="detailed-contents">
+										<tr>
 											<td>
 												<xsl:apply-templates
 													select="$derivate/mycorederivate/derivate/internals"/>
@@ -962,9 +964,9 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
-					<td id="searchmask-contentlinkarea">
+					<td>
 						<xsl:if test="$objectHost = 'local'">
-							<table border="0" cellspacing="0" id="searchmask-contentlinks">
+							<table cellpadding="0" cellspacing="0">
 								<xsl:for-each
 									select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
 									<xsl:variable name="deriv" select="@xlink:href"/>
@@ -988,6 +990,7 @@
 	</xsl:template>
 	<!-- ===================================================================================================== -->
 	<xsl:template match="internals" priority="2">
+		<xsl:param name="detailed-view"/>
 		<xsl:if test="$objectHost = 'local'">
 			<xsl:variable name="derivid" select="../../@ID"/>
 			<xsl:variable name="derivmain" select="internal/@maindoc"/>
@@ -1010,24 +1013,49 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:variable>
-			<xsl:if test="($supportedMainFile!='') and $thumbnail='true'">			
-				<xsl:call-template name="iview.getEmbedded.thumbnail">
-					<xsl:with-param name="derivID" select="$derivid"/>
-					<xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
-				</xsl:call-template>
-				<br/>
-			</xsl:if>
-			
-			<a href="{$href}">
-				<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
-				<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
-			</a>
-			<xsl:if test="$CurrentUser!='gast'">
-				<a href="{$derivbase}">
-					<xsl:value-of select="'Details &gt;&gt;'"/>
-				</a>
-			</xsl:if>						
-
+			<xsl:choose>
+				
+				<xsl:when test="($supportedMainFile!='') and $thumbnail='true'">
+					<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+						<tr id="detailed-contentsimg">
+							<td id="detailed-contentsimgpadd">
+								<xsl:call-template name="iview.getEmbedded.thumbnail">
+									<xsl:with-param name="derivID" select="$derivid"/>
+									<xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
+								</xsl:call-template>
+								<br/>
+							</td>
+						</tr>
+						<tr id="detailed-contents">
+							<td>
+								<a href="{$href}">
+									<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
+									<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
+								</a>
+								<xsl:text>
+								</xsl:text>
+								<xsl:if test="$CurrentUser!='gast'">
+									<a href="{$derivbase}">
+										<xsl:value-of select="' Details &gt;&gt;'"/>
+									</a>
+								</xsl:if>
+							</td>
+						</tr>
+					</table>
+				</xsl:when>
+				
+				<xsl:otherwise>					
+					<a href="{$href}">
+						<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
+						<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
+					</a>
+					<xsl:if test="$CurrentUser!='gast'">
+						<a href="{$derivbase}">
+							<xsl:value-of select="'Details &gt;&gt;'"/>
+						</a>
+					</xsl:if>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:if>
 	</xsl:template>
 	<!-- ===================================================================================================== -->

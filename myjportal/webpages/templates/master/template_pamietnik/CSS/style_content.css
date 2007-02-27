@@ -433,6 +433,10 @@ td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px s
     color: #FFFFFF;
 }
 
+#detailed-contentsimg img {
+	border: 1px solid #59563F;
+}
+
 /* =================================================================== */
 /* searchmask-view content links                                       */
 /* =================================================================== */

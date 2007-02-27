@@ -200,11 +200,26 @@
 	border: 0px;
 }
 
+#detailed-contenttablewb {
+	width: 100%;
+	border-left: 1px solid #273667;
+}
+
 #detailed-contents {
 	text-align: center;
 	vertical-align: middle;
     height: 25px;
 	padding-right: 20px;
+	width: 100%;
+}
+
+#detailed-contentsimg {
+	text-align: center;
+	width: 100%;
+}
+
+#detailed-contentsimgpadd {
+	padding-top: 3px;
 }
 
 #detailed-contents a {
@@ -217,7 +232,6 @@
 #detailed-whitespaces {
 	height: 10px;
 }
-
 
 /* =================================================================== */
 /* searchmask-view content links                                       */

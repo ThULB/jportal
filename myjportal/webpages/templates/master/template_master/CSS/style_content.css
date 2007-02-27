@@ -339,13 +339,13 @@ div.submitButton{
 	border: 1px solid #2B3C6B;
 }
 
-#leaf-front{
+#leaf-front {
 	border: 1px solid #2B3C6B;
 	background-color: #2B3C6B;
 	color: #FFFFFF;
 }
 
-#leaf-front div{
+#leaf-front div {
     background-color: #2B3C6B;
 	color: #FFFFFF;
 }
@@ -380,7 +380,7 @@ div.submitButton{
 	color: #273667;
 }
 
-#leaf-preview img{
+#leaf-preview img {
 	border: 1px solid #000000;
 }
 
@@ -404,18 +404,18 @@ div.submitButton{
 	color: #7C8EB5;
 }
 
-#detailed-frame{
+#detailed-frame {
 	border: 2px solid #273667;
 }
 
-#detailed-dividingline hr{
+#detailed-dividingline hr {
 	color: #273667;
 	background-color: #273667;
 }
 
-#detailed-browse{
+#detailed-browse {
     border: 1px solid #273667;
-	background-color: #D9DDE6;	
+	background-color: #A0B4E2;	
 }
 /* =================================================================== */
 /* detailed-view content links                                         */
@@ -427,6 +427,10 @@ div.submitButton{
 
 #detailed-contents a {
     color: #FFFFFF;
+}
+
+#detailed-contentsimg img {
+	border: 1px solid #273667;
 }
 
 /* =================================================================== */
@@ -441,24 +445,24 @@ div.submitButton{
 /* switches for detailed and leaf view                                 */
 /* =================================================================== */
 
-#switch-current{
-	background-color: #D9DDE6;
+#switch-current {
+	background-color: #A0B4E2;
 	color: #FFFFFF;
 }
 
-#switch-notcurrent{
+#switch-notcurrent {
 	background-color: #273667;
 }
 
-#switch-notcurrent a{
+#switch-notcurrent a {
 	color: #FFFFFF;
 }
 
-#switch-currentside{
-	background-color: #D9DDE6;
+#switch-currentside {
+	background-color: #A0B4E2;
 	color: #FFFFFF;
 }
 
-#switch-currentside a{
+#switch-currentside a {
 	color: #FFFFFF;
 }

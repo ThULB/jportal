@@ -407,6 +407,10 @@ div.submitButton{
     color: #FFFFFF;
 }
 
+#detailed-contentsimg img {
+	border: 1px solid #2C519D;
+}
+
 /* =================================================================== */
 /* searchmask-view content links                                       */
 /* =================================================================== */
