@@ -169,7 +169,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="1">
+					<td colspan="3" rowspan="1">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<tr>
 								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.formaldiscr')"/></td>

@@ -51,6 +51,7 @@
 	font-size: 12px;
 	font-weight: bold;
 	padding: 3px;
+	border: none;
 }
 
 #leaf-front div{
@@ -122,6 +123,7 @@
 /* detailed view                                                       */
 /* =================================================================== */
 #detailed-mainheadline {
+	width: 550px; 
 	padding-left: 30px; 
 	vertical-align: bottom; 
 	font-size: 20px; 
@@ -144,7 +146,8 @@
 }
 
 #detailed-view {
-	padding: 10px; 
+	padding: 10px;
+	width: 550px; 
 }
 
 #detailed-labels {
@@ -192,16 +195,16 @@
 	vertical-align: top;
 	border: 0px;
 	padding: 0px;
-	width: 100%;
+	width: 150px;
 }
 
 #detailed-contenttable {
-	width: 100%;
+	width: 150px;
 	border: 0px;
 }
 
 #detailed-contenttablewb {
-	width: 100%;
+	width: 150px;
 	border-left: 1px solid #273667;
 }
 
@@ -210,7 +213,7 @@
 	vertical-align: middle;
     height: 25px;
 	padding-right: 20px;
-	width: 100%;
+	width: 150px;
 }
 
 #detailed-contentsimg {
@@ -219,7 +222,7 @@
 }
 
 #detailed-contentsimgpadd {
-	padding-top: 3px;
+	padding: 3px;
 }
 
 #detailed-contents a {
