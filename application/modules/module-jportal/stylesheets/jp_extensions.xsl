@@ -945,7 +945,7 @@
 										<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
 										<xsl:variable name="derivate" select="document($derivlink)"/>
 										<tr>
-											<td>
+											<td style="padding-left: 10px;">
 												<xsl:apply-templates
 													select="$derivate/mycorederivate/derivate/internals"/>
 												<xsl:apply-templates
@@ -973,7 +973,7 @@
 									<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
 									<xsl:variable name="derivate" select="document($derivlink)"/>
 									<tr>
-										<td>
+										<td style="padding-left: 10px;">
 											<xsl:apply-templates select="$derivate/mycorederivate/derivate/internals"/>
 											<xsl:apply-templates select="$derivate/mycorederivate/derivate/externals"/>
 										</td>
@@ -1015,17 +1015,19 @@
 			</xsl:variable>
 			<xsl:choose>
 				
-				<xsl:when test="($supportedMainFile!='') and $thumbnail='true'">
+				<xsl:when test="$thumbnail='true'">
 					<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-						<tr id="detailed-contentsimg">
-							<td id="detailed-contentsimgpadd">
-								<xsl:call-template name="iview.getEmbedded.thumbnail">
-									<xsl:with-param name="derivID" select="$derivid"/>
-									<xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
-								</xsl:call-template>
-								<br/>
-							</td>
-						</tr>
+						<xsl:if test="($supportedMainFile!='')">
+							<tr id="detailed-contentsimg">
+								<td id="detailed-contentsimgpadd">
+									<xsl:call-template name="iview.getEmbedded.thumbnail">
+										<xsl:with-param name="derivID" select="$derivid"/>
+										<xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
+									</xsl:call-template>
+									<br/>
+								</td>
+							</tr>
+						</xsl:if>
 						<tr id="detailed-contents">
 							<td>
 								<a href="{$href}">
