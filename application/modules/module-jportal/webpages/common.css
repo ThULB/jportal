@@ -51,7 +51,6 @@
 	font-size: 12px;
 	font-weight: bold;
 	padding: 3px;
-	border: none;
 }
 
 #leaf-front div{
@@ -123,16 +122,15 @@
 /* detailed view                                                       */
 /* =================================================================== */
 #detailed-mainheadline {
-	width: 550px; 
 	padding-left: 30px; 
 	vertical-align: bottom; 
-	font-size: 20px; 
+	font-size: 16px; 
 }
 
 #detailed-headlines {
 	width: 230px;
 	text-align: right;
-	font-size: 16px;
+	font-size: 15px;
 	padding-top: 10px;
 	padding-right: 5px;
 }
@@ -146,8 +144,7 @@
 }
 
 #detailed-view {
-	padding: 10px;
-	width: 550px; 
+	padding: 10px; 
 }
 
 #detailed-labels {
@@ -195,16 +192,16 @@
 	vertical-align: top;
 	border: 0px;
 	padding: 0px;
-	width: 150px;
+	width: 100%;
 }
 
 #detailed-contenttable {
-	width: 150px;
+	width: 100%;
 	border: 0px;
 }
 
 #detailed-contenttablewb {
-	width: 150px;
+	width: 100%;
 	border-left: 1px solid #273667;
 }
 
@@ -213,7 +210,7 @@
 	vertical-align: middle;
     height: 25px;
 	padding-right: 20px;
-	width: 150px;
+	width: 100%;
 }
 
 #detailed-contentsimg {
@@ -222,7 +219,7 @@
 }
 
 #detailed-contentsimgpadd {
-	padding: 3px;
+	padding-top: 3px;
 }
 
 #detailed-contents a {

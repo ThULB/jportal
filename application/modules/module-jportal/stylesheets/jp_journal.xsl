@@ -29,7 +29,7 @@
 					<xsl:variable name="name">
 							<xsl:call-template name="ShortenText">
 								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
-								<xsl:with-param name="length" select="25"/>
+								<xsl:with-param name="length" select="75"/>
 							</xsl:call-template>						
 					</xsl:variable>
 					<xsl:variable name="date">
@@ -136,7 +136,7 @@
 						<xsl:variable name="maintitle_shorted">
 							<xsl:call-template name="ShortenText">
 								<xsl:with-param name="text" select="./metadata/maintitles/maintitle/text()"/>
-								<xsl:with-param name="length" select="25"/>
+								<xsl:with-param name="length" select="150"/>
 							</xsl:call-template>
 						</xsl:variable>						
 						<xsl:value-of select="$maintitle_shorted"/>

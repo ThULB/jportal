@@ -28,7 +28,7 @@
 					<xsl:variable name="name">
 							<xsl:call-template name="ShortenText">
 								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
-								<xsl:with-param name="length" select="75"/>
+								<xsl:with-param name="length" select="125"/>
 							</xsl:call-template>
 					</xsl:variable>
 										
@@ -146,7 +146,7 @@
 			<xsl:variable name="maintitle_shorted">
 				<xsl:call-template name="ShortenText">
 					<xsl:with-param name="text" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
-					<xsl:with-param name="length" select="75"/>
+					<xsl:with-param name="length" select="150"/>
 				</xsl:call-template>
 			</xsl:variable>					
 			<table border="0" cellspacing="0">
@@ -187,7 +187,7 @@
 									</xsl:variable>
 									<xsl:choose>
 										<!-- cuted -->
-										<xsl:when test="string-length($mainTitle)>75)">
+										<xsl:when test="string-length($mainTitle)>150)">
 											<xsl:value-of select="concat('...',substring-after($mainTitle, substring-before($maintitle_shorted,'...')))"/>											
 										</xsl:when>
 										<xsl:otherwise>
