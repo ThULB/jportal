@@ -1731,11 +1731,24 @@
 		<xsl:variable name="linkedArt">
 			<xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql)))"/>
 		</xsl:variable>
+		<xsl:variable name="OID">
+			<xsl:call-template name="typeOfObjectID">
+				<xsl:with-param name="id" select="/mycoreobject/@ID"/>
+			</xsl:call-template>
+		</xsl:variable>
 		<xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit)">
 			<tr>
 				<td valign="top" id="detailed-labels">
 					<br></br>
-					<xsl:value-of select="i18n:translate('metaData.person.linked')"/>
+					<xsl:choose>
+						<xsl:when test="$OID='person'">
+							<xsl:value-of select="i18n:translate('metaData.person.linked')"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="i18n:translate('metaData.jpinst.linked')"/>
+						</xsl:otherwise>
+					</xsl:choose>
+					
 				</td>
 				<td>
 					<ul>

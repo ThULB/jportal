@@ -14,54 +14,52 @@
 			
 			<xsl:value-of select="@id"/>
 		</xsl:variable>
-		<tr>
-			<td colspan="2">
-				<xsl:variable name="cXML">
-					<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
-				</xsl:variable>
-				<tr id="leaf-all">
-					<td id="leaf-front">
-						<div>
-							<img src="{$WebApplicationBaseURL}images/institut2.gif"/>
-						</div>
-					</td>
-					<td id="leaf-linkarea">
-						
-						<xsl:variable name="name">
-							<xsl:value-of
-								select="xalan:nodeset($cXML)/mycoreobject/metadata/names/name/fullname/text()"/>
-						</xsl:variable>
-						<xsl:variable name="date">
-							<xsl:choose>
-								<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-									<xsl:variable name="date">
-										<xsl:value-of
-											select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
-									</xsl:variable>
-									<xsl:value-of select="concat(' (',$date,')')"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of select="''"/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<xsl:variable name="label">
-							<xsl:value-of select="concat($name,$date)"/>
-						</xsl:variable>
-						<xsl:call-template name="objectLinking">
-							<xsl:with-param name="obj_id" select="@id"/>
-							<xsl:with-param name="obj_name" select="$label"/>
-							<xsl:with-param name="requestParam"
-								select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-						</xsl:call-template>
-					</td>
-				</tr>
-				<tr id="leaf-whitespaces">
-					<td colspan="2">
-					</td>
-				</tr>
-			</td>
-		</tr>
+		<xsl:variable name="cXML">
+			<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
+		</xsl:variable>
+		<table cellspacing="0" cellpadding="0" id="leaf-all">
+			<tr>
+				<td id="leaf-front">
+					<div>
+						<img src="{$WebApplicationBaseURL}images/institut2.gif"/>
+					</div>
+				</td>
+				<td id="leaf-linkarea">
+					
+					<xsl:variable name="name">
+						<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/names/name/fullname/text()"/>
+					</xsl:variable>
+					<xsl:variable name="date">
+						<xsl:choose>
+							<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+								<xsl:variable name="date">
+									<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+								</xsl:variable>
+								<xsl:value-of select="concat(' (',$date,')')"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="''"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:variable>
+					<xsl:variable name="label">
+						<xsl:value-of select="concat($name,$date)"/>
+					</xsl:variable>
+					<xsl:call-template name="objectLinking">
+						<xsl:with-param name="obj_id" select="@id"/>
+						<xsl:with-param name="obj_name" select="$label"/>
+						<xsl:with-param name="requestParam"
+							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+					</xsl:call-template>
+				</td>
+			</tr>
+		</table>
+		<table cellspacing="0" cellpadding="0">
+			<tr id="leaf-whitespaces">
+				<td colspan="2">
+				</td>
+			</tr>
+		</table>
 	</xsl:template>
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
 	
@@ -212,6 +210,10 @@
 								
 								<xsl:with-param select="i18n:translate('editormask.labels.LNote')" name="label"/>
 							</xsl:call-template>
+							
+							<!-- linked articles-->
+							<xsl:call-template name="listLinkedArts"/>
+							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
 									<hr noshade="noshade" width="460"/>

@@ -11,8 +11,10 @@
 		<xsl:variable select="100" name="DESCRIPTION_LENGTH"/>
 		<xsl:variable select="@host" name="host"/>
 		<xsl:variable name="obj_id">
+			
 			<xsl:value-of select="@id"/>
 		</xsl:variable>
+		
 		<xsl:variable name="cXML">
 			<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
 		</xsl:variable>
