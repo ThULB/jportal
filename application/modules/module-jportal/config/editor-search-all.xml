@@ -15,22 +15,18 @@
 			<hidden var="conditions/boolean/@operator" default="and"/>
 			
 			<!-- Only in one specified journal -->
-			<hidden var="conditions/boolean/condition90/@field" default="journalID_art"/>			
-			<hidden var="conditions/boolean/condition90/@operator" default="="/>			
-			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/condition90/@value"/>					
+			<hidden var="conditions/boolean/condition90/@field" default="journalID_art"/>
+			<hidden var="conditions/boolean/condition90/@operator" default="="/>
+			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/condition90/@value"/>
 			
 			<!-- Search in field "name" with operator "contains" -->
 			<hidden var="conditions/boolean/condition2/@field" default="allMeta,content"/>
 			<hidden var="conditions/boolean/condition2/@operator" default="contains"/>
-			<cell row="1" col="1" anchor="EAST">
-				<text i18n="editor.search.inall.label"/>
+			<cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition2/@value">
+				<textfield width="25"/>
 			</cell>
-			<cell row="1" col="2" anchor="WEST" var="conditions/boolean/condition2/@value">
-				<textfield width="15"/>
-			</cell>
-			
-			<cell row="1" col="3" colspan="2" anchor="EAST">
-				<submitButton i18n="editor.search.all" width="15px"/>
+			<cell row="1" col="2" anchor="EAST">
+				<submitButton i18n="editor.search.all.startSearch" width="18px"/>
 			</cell>
 		</panel>
 	</components>
