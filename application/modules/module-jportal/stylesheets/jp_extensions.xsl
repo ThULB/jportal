@@ -28,6 +28,9 @@
 	<xsl:variable name="thumbnail">
 		<xsl:call-template name="get.thumbnailSupport" />
 	</xsl:variable>
+	<xsl:variable name="JPID_zfbbHack">
+		<xsl:call-template name="get.JPID_zfbbHack" />
+	</xsl:variable>
 	
 	<!-- ===================================================================================================== -->
 	<xsl:template
@@ -994,7 +997,16 @@
 		<xsl:if test="$objectHost = 'local'">
 			<xsl:variable name="derivid" select="../../@ID"/>
 			<xsl:variable name="derivmain" select="internal/@maindoc"/>
-			<xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')"/>
+			<xsl:variable name="derivbase">
+				<xsl:choose>
+					<xsl:when test="$JPID_zfbbHack!='null'">
+						<xsl:value-of select="concat($ServletsBaseURL,'MCRZFBBServlet/',$derivid,'/')"/>						
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:variable> 
 			
 			<!-- IView available ? -->
 			<xsl:variable name="supportedMainFile">
@@ -1842,5 +1854,24 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>	
-	
+	<!-- ===================================================================================================== -->	
+	<xsl:template name="get.JPID_zfbbHack">
+		<xsl:choose>
+			<xsl:when test="/mycoreobject//hidden_jpjournalID/text()='jportal_jpjournal_00000014'">
+				<xsl:value-of select="/mycoreobject//hidden_jpjournalID/text()"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="'null'"/>				
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	<!-- ===================================================================================================== -->		
 </xsl:stylesheet>
+
+
+
+
+
+
+
+
