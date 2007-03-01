@@ -1060,7 +1060,6 @@
 					<a href="{$href}">
 						<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
 						<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
-						###<xsl:value-of select="$template"></xsl:value-of>###
 					</a>
 					<xsl:if test="$CurrentUser!='gast'">
 						<a href="{$derivbase}">
