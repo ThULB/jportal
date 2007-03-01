@@ -29,7 +29,7 @@
 		<xsl:call-template name="get.thumbnailSupport" />
 	</xsl:variable>
 	<xsl:variable name="JPID_zfbbHack">
-		<xsl:call-template name="get.JPID_zfbbHack" />
+		<xsl:call-template name="get.zfbbSupport" />
 	</xsl:variable>
 	
 	<!-- ===================================================================================================== -->
@@ -992,14 +992,14 @@
 		
 	</xsl:template>
 	<!-- ===================================================================================================== -->
-	<xsl:template match="internals" priority="2">
+	<xsl:template match="internals" priority="2" >
 		<xsl:param name="detailed-view"/>
 		<xsl:if test="$objectHost = 'local'">
 			<xsl:variable name="derivid" select="../../@ID"/>
 			<xsl:variable name="derivmain" select="internal/@maindoc"/>
 			<xsl:variable name="derivbase">
 				<xsl:choose>
-					<xsl:when test="$JPID_zfbbHack!='null'">
+					<xsl:when test="$JPID_zfbbHack='true'">
 						<xsl:value-of select="concat($ServletsBaseURL,'MCRZFBBServlet/',$derivid,'/')"/>						
 					</xsl:when>
 					<xsl:otherwise>
@@ -1026,7 +1026,6 @@
 				</xsl:choose>
 			</xsl:variable>
 			<xsl:choose>
-				
 				<xsl:when test="$thumbnail='true'">
 					<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
 						<xsl:if test="($supportedMainFile!='')">
@@ -1057,11 +1056,11 @@
 						</tr>
 					</table>
 				</xsl:when>
-				
 				<xsl:otherwise>					
 					<a href="{$href}">
 						<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
 						<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
+						###<xsl:value-of select="$template"></xsl:value-of>###
 					</a>
 					<xsl:if test="$CurrentUser!='gast'">
 						<a href="{$derivbase}">
@@ -1855,13 +1854,13 @@
 		</xsl:choose>
 	</xsl:template>	
 	<!-- ===================================================================================================== -->	
-	<xsl:template name="get.JPID_zfbbHack">
+	<xsl:template name="get.zfbbSupport">
 		<xsl:choose>
-			<xsl:when test="/mycoreobject//hidden_jpjournalID/text()='jportal_jpjournal_00000014'">
-				<xsl:value-of select="/mycoreobject//hidden_jpjournalID/text()"/>
+			<xsl:when test="$template='template_jstzfbb'">
+				<xsl:value-of select="'true'"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="'null'"/>				
+				<xsl:value-of select="'false'"/>				
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
