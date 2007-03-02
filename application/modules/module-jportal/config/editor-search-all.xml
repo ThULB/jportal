@@ -5,6 +5,10 @@
 	
 	<target type="servlet" name="MCRSearchServlet" method="post" format="xml"/>
 	
+	<validationMessage>
+		<label xml:lang="de">Bitte Suchbegriff eingeben!</label>
+	</validationMessage>
+	
 	<components root="root" var="/query">
 		<panel id="root" lines="off">
 			<hidden var="@mask" default="content/main/search.xml"/>
@@ -23,7 +27,11 @@
 			<hidden var="conditions/boolean/condition2/@field" default="allMeta,content"/>
 			<hidden var="conditions/boolean/condition2/@operator" default="contains"/>
 			<cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition2/@value">
-				<textfield width="25"/>
+				<textfield id="input" width="25">
+					<condition id="cond" required="true">
+						<label xml:lang="de">Bitte geben Sie einen Suchbegriff ein </label>
+					</condition>
+				</textfield>
 			</cell>
 			<cell row="1" col="2" anchor="EAST">
 				<submitButton i18n="editor.search.all.startSearch" width="18px"/>
