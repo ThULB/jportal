@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO_8859-1"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-      <section title="Neueingabe eines person" xml:lang="de">
+      <section title="Person anlegen" xml:lang="de">
             <p></p>
             <editor id="author-person-de">
                   <include uri="webapp:editor/editor-author-person.xml"/>
@@ -10,7 +10,7 @@
             <br />
             <p></p>
       </section>
-      <section title="Create a new person" xml:lang="en">
+      <section title="Create a person" xml:lang="en">
             <p></p>
             <br />
             <p></p>
