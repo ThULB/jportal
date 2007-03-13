@@ -606,7 +606,7 @@
 	<xsl:template name="printSwitchViewBar">
 		<xsl:variable name="children">
 			<xsl:choose>
-				<xsl:when test="/mycoreobject/structure/children)">
+				<xsl:when test="/mycoreobject/structure/children">
 					<xsl:value-of select="'true'"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -1493,7 +1493,7 @@
 	<xsl:template name="haveChildren">
 		<xsl:param name="object"/>
 		<xsl:choose>
-			<xsl:when test="xalan:nodeset($object)/mycoreobject/structure/children)">
+			<xsl:when test="xalan:nodeset($object)/mycoreobject/structure/children">
 				<xsl:value-of select="'true'"/>
 			</xsl:when>
 			<xsl:otherwise>
@@ -1686,17 +1686,22 @@
 	</xsl:template>
 	<!-- ===================================================================================================== -->
 	<xsl:template name="get.rightPage">
+		
 		<xsl:variable name="journalXML">
-			<xsl:call-template name="getJournalXML">
-				<xsl:with-param name="id" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()"/>
-			</xsl:call-template>
+			<xsl:if test="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()">
+				<xsl:call-template name="getJournalXML">
+					<xsl:with-param name="id"
+						select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()"/>
+				</xsl:call-template>
+			</xsl:if>
 		</xsl:variable>
+		
 		<xsl:choose>
 			<!-- jpjournal or jpvolume or jparticle with own webcontext called -->
 			<!-- webcontext is not empty AND $navigation.xml contains webcontext -->
 			<xsl:when
-				test="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())
-				&amp; ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
+				test="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()
+				and ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
 				<xsl:variable name="object_webContext">
 					<xsl:value-of
 						select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()"/>
@@ -1746,7 +1751,7 @@
 				<xsl:with-param name="id" select="/mycoreobject/@ID"/>
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit)">
+		<xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit">
 			<tr>
 				<td valign="top" id="detailed-labels">
 					<br></br>
@@ -1865,11 +1870,3 @@
 	</xsl:template>
 	<!-- ===================================================================================================== -->		
 </xsl:stylesheet>
-
-
-
-
-
-
-
-
