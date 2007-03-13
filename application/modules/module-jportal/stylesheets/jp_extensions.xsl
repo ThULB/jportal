@@ -1076,7 +1076,7 @@
 		<xsl:param name="mainFile"/>
 		
 		<xsl:variable name="fileType">
-			<xsl:value-of select="substring-after($mainFile,'.')"/>
+			<xsl:value-of select="substring($mainFile,number(string-length($mainFile)-2))"/>
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$fileType!=''">
