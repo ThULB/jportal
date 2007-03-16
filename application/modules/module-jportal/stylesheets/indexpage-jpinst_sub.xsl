@@ -206,16 +206,33 @@
 	  <xsl:variable name="label">
 		  <xsl:value-of select="sort"/>
 	  </xsl:variable>
+	<xsl:variable name="nameXML">
+		<xsl:copy-of select="document(concat('mcrobject:',col[@name='id']))/mycoreobject/metadata"/>
+	</xsl:variable>
+	  <xsl:variable name="name">
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/names/name/fullname/text()"/>
+	  </xsl:variable>
+	  <xsl:variable name="city">
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/addresses/address/city/text()"/>
+	  </xsl:variable>	  
+	<xsl:variable name="beautiLabel">
+		<xsl:choose>
+			<xsl:when test="$city!=''" >
+				<xsl:value-of select="concat($name,' (',$city,')')"/>				
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$name" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>	  
     <tr>
       <td class="td1" valign="top">
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}
-			&amp;_var_@field=participants_art&amp;_var_@operator==&amp;_var_@value={col[@name='id']}">
-          <xsl:value-of select="$label" />
-        </a>		  
-		  
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$beautiLabel}">
+          <xsl:value-of select="$beautiLabel" />
+        </a>
       </td>
     </tr>
   </xsl:template>
@@ -252,45 +269,6 @@
         <input type="submit" class="submit" value="{i18n:translate('indexpage.sub.select.cancel')}" />
       </form>
     </p>
-    <p>
-<!--      <xsl:value-of select="' | '" />
-      <xsl:for-each select="xalan:nodeset($AtoZ)/search">
-        <a
-          href="{$WebApplicationBaseURL}indexpage{$HttpSession}?searchclass={$IndexID}&amp;mode=prefix&amp;search={@prefix}&amp;{$subselect.params}">
-          <xsl:value-of select="@prefix" />
-        </a>
-        <xsl:value-of select="' | '" />
-      </xsl:for-each>-->
-    </p>
   </xsl:template>
 
-<!--  <xsl:variable name="AtoZ">
-    <search prefix="A" />
-    <search prefix="B" />
-    <search prefix="C" />
-    <search prefix="D" />
-    <search prefix="E" />
-    <search prefix="F" />
-    <search prefix="G" />
-    <search prefix="H" />
-    <search prefix="I" />
-    <search prefix="J" />
-    <search prefix="K" />
-    <search prefix="L" />
-    <search prefix="M" />
-    <search prefix="N" />
-    <search prefix="O" />
-    <search prefix="P" />
-    <search prefix="Q" />
-    <search prefix="R" />
-    <search prefix="S" />
-    <search prefix="T" />
-    <search prefix="U" />
-    <search prefix="V" />
-    <search prefix="W" />
-    <search prefix="X" />
-    <search prefix="Y" />
-    <search prefix="Z" />
-  </xsl:variable>
--->
 </xsl:stylesheet>

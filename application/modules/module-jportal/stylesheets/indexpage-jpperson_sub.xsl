@@ -218,7 +218,7 @@
 	<xsl:variable name="beautiLabel">
 		<xsl:choose>
 			<xsl:when test="$firstName!=''" >
-				<xsl:value-of select="concat(xalan:nodeset($nameXML)/heading/lastName/text(),', ',xalan:nodeset($nameXML)/heading/firstName/text())"/>				
+				<xsl:value-of select="concat($lastName,', ',$firstName)"/>				
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$lastName" />
@@ -230,7 +230,7 @@
         <img border="0" src="{$WebApplicationBaseURL}images/folder_plain.gif" />
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
-        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$label}
+        <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$beautiLabel}
 			&amp;_var_@field=participants_art&amp;_var_@operator==&amp;_var_@value={col[@name='id']}">
 			<xsl:copy-of select="$beautiLabel"/>
         </a>
