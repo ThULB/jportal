@@ -38,7 +38,7 @@
 		| /mycoreobject[contains(@ID,'_jpvolume_')] 
 		| /mycoreobject[contains(@ID,'_jparticle_')]"
 		priority="2">
-		
+
 		<xsl:call-template name="printSwitchViewBar"/>
 		
 		<xsl:choose>
@@ -49,7 +49,6 @@
 						<xsl:apply-templates select="." mode="present">
 							<xsl:with-param name="obj_host" select="$objectHost"/>
 						</xsl:apply-templates>
-						<hr/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="i18n:translate('metaData.accessDenied')"/>
@@ -1868,5 +1867,4 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	<!-- ===================================================================================================== -->		
 </xsl:stylesheet>

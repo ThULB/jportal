@@ -305,6 +305,7 @@ div.submitButton{
 /* leafs view                                                          */
 /* =================================================================== */
 #leaf-all {	
+	width: 100%;
 	color: #436767;
 	border: 1px solid #8AB267;
 }
@@ -327,6 +328,7 @@ div.submitButton{
 #leaf-linkarea a:hover {
 	background-color:#8AB267;
     color:#FFFFFF;
+	text-decoration: none;
 }
 
 #leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
@@ -336,6 +338,7 @@ div.submitButton{
 #leaf-linkarea2 a:hover {
 	background-color:#8AB267;
     color:#FFFFFF;
+	text-decoration: none;
 }
 
 #leaf-whitespaces{
