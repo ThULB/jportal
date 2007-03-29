@@ -9,23 +9,23 @@
 		</category>
 		<category ID="002">
 			<label xml:lang="de" text="economics"/>
-			<label xml:lang="en" text="business administration"/>			
+			<label xml:lang="en" text="economics"/>
 		</category>
 		<category ID="003">
 			<label xml:lang="de" text="experimental economics"/>
-			<label xml:lang="en" text="business administration"/>			
+			<label xml:lang="en" text="experimental economics"/>
 		</category>				
 		<category ID="004">
 			<label xml:lang="de" text="evolutionary economics"/>
-			<label xml:lang="en" text="business administration"/>			
+			<label xml:lang="en" text="evolutionary economics"/>
 		</category>				
 		<category ID="005">
 			<label xml:lang="de" text="entrepreneurship"/>
-			<label xml:lang="en" text="business administration"/>			
+			<label xml:lang="en" text="entrepreneurship"/>
 		</category>				
 		<category ID="006">
 			<label xml:lang="de" text="public policy"/>
-			<label xml:lang="en" text="business administration"/>
+			<label xml:lang="en" text="public policy"/>
 		</category>
 	</categories>
 </mycoreclass>
