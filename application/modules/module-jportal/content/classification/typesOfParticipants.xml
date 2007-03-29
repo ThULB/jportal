@@ -105,5 +105,9 @@
 			<label text="Other" xml:lang="en"/>
 			<label text="Другой сотрудник" xml:lang="ru"></label>
 		</category>
-	</categories>
+		<category ID="author">
+			<label text="Autor" xml:lang="de"></label>
+			<label text="author" xml:lang="en"/>
+		</category>		
+		
 </mycoreclass>
