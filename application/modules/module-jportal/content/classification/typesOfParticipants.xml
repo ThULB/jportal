@@ -108,6 +108,6 @@
 		<category ID="author">
 			<label text="Autor" xml:lang="de"></label>
 			<label text="author" xml:lang="en"/>
-		</category>		
-		
+		</category>
+	</categories>
 </mycoreclass>
