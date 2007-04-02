@@ -22,8 +22,7 @@
 			<tr>
 				<td id="leaf-front">
 					<div>
-						<!--img src="{$WebApplicationBaseURL}images/person2.gif"/-->
-						<img src="{$WebApplicationBaseURL}images/person-f-15x15.gif"/>
+						<img src="{$WebApplicationBaseURL}images/person2.gif"/>
 					</div>
 				</td>
 				<td id="leaf-linkarea">
