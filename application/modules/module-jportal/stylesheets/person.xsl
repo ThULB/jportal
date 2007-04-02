@@ -157,7 +157,7 @@
 							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/def.contact/contact" name="nodes"/>
-								<xsl:with-param select="i18n:translate('contactData.address')" name="label"/>
+								<xsl:with-param select="i18n:translate('metaData.person.contact')" name="label"/>
 								<xsl:with-param name="typeClassi" select="'urmel_class_002'"/>
 								<xsl:with-param name="mode" select="'text'"/>
 							</xsl:call-template>
