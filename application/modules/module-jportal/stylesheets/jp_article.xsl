@@ -4,6 +4,7 @@
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
+	<!-- =============================================================================================== -->
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jparticle_')]">
 		<xsl:param name="mcrobj"/>
@@ -21,7 +22,6 @@
 		<table cellspacing="0" cellpadding="0" id="leaf-all">
 			<tr>
 				<td id="leaf-front" colspan="1" rowspan="2">
-					<!--<xsl:value-of select="i18n:translate('metaData.type.article')"/>-->
 					<img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
 				</td>
 				<td id="leaf-linkarea2">
@@ -85,9 +85,8 @@
 			</tr>
 		</table>
 	</xsl:template>
-	
+	<!-- =============================================================================================== -->	
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
-	
 	<xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jparticle_')]">
 		<xsl:choose>
 			<!--
@@ -123,7 +122,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+	<!-- =============================================================================================== -->	
 	<!--Template for metadata view: see mycoreobject.xsl-->
 	<xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jparticle_')]">
 		<xsl:param select="$objectHost" name="obj_host"/>
@@ -152,7 +151,6 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<!--<xsl:value-of select="i18n:translate('metaData.type.article')"/>-->
 						<img src="{$WebApplicationBaseURL}images/artikel.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
@@ -183,17 +181,21 @@
 								</td>
 								<td class="metavalue">
 									<xsl:variable name="mainTitle">
-										<xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']"/>
+										<xsl:call-template name="printI18N">
+											<xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
+										</xsl:call-template>
+<!--										<xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']"/>-->
 									</xsl:variable>
 									<xsl:choose>
 										<!-- cuted -->
 										<xsl:when test="string-length($mainTitle)>150)">
-											<xsl:value-of select="concat('...',substring-after($mainTitle, substring-before($maintitle_shorted,'...')))"/>											
+											<xsl:copy-of
+												select="concat('...',substring-after($mainTitle, substring-before($maintitle_shorted,'...')))"/>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="$mainTitle" />
+											<xsl:copy-of select="$mainTitle"/>
 										</xsl:otherwise>
-									</xsl:choose>									
+									</xsl:choose>
 								</td>
 							</tr>
 							
@@ -437,4 +439,5 @@
 			</tr>
 		</xsl:if>
 	</xsl:template>
+	<!-- =============================================================================================== -->	
 </xsl:stylesheet>
