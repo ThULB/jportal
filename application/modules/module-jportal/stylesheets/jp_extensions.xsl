@@ -1671,7 +1671,10 @@
 												</xsl:call-template>
 											</xsl:when>
 											<xsl:otherwise>
-												<xsl:value-of select="./text()"/>
+												<!--xsl:value-of select="./text()"/-->
+												<xsl:call-template name="printI18N">
+													<xsl:with-param name="nodes" select="./text()"/>
+												</xsl:call-template>
 											</xsl:otherwise>
 										</xsl:choose>
 									</li>
