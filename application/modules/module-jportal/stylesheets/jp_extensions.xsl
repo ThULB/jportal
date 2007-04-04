@@ -830,129 +830,130 @@
 						<xsl:for-each select="./structure/derobjects/derobject">
 							<xsl:variable name="deriv" select="@xlink:href"/>
 							<tr>
-								<xsl:if test="acl:checkPermission($obj_id,'writedb')">
-									<td width="10"/>
-									<td width="30" valign="top" align="center">
-										<form method="get">
-											<xsl:attribute name="action">
-												<xsl:value-of
-													select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
-											</xsl:attribute>
-											<input name="lang" type="hidden" value="{$CurrentLang}"/>
-											<input name="se_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="te_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="re_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="$obj_id"/>
-												</xsl:attribute>
-											</input>
-											<xsl:variable name="type">
-												<xsl:copy-of
-													select="substring-before(substring-after($obj_id,'_'),'_')"/>
-											</xsl:variable>
-											<input name="type" type="hidden" value="{$type}"/>
-											<input name="todo" type="hidden" value="saddfile"/>
-											<input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
-												title="{i18n:translate('swf.derivate.addFile')}"/>
-										</form>
-									</td>
-									<td width="10"/>
-									<td width="30" valign="top" align="center">
-										<form method="get">
-											<xsl:attribute name="action">
-												<xsl:value-of
-													select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
-											</xsl:attribute>
-											<input name="lang" type="hidden" value="{$CurrentLang}"/>
-											<input name="se_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="te_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="re_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="$obj_id"/>
-												</xsl:attribute>
-											</input>
-											<xsl:variable name="type">
-												<xsl:copy-of
-													select="substring-before(substring-after($obj_id,'_'),'_')"/>
-											</xsl:variable>
-											<input name="type" type="hidden" value="{$type}"/>
-											<input name="todo" type="hidden" value="seditder"/>
-											<input name="extparm" type="hidden">
-												<xsl:variable name="deriv" select="@xlink:href"/>
-												<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
-												<xsl:attribute name="value">
-													<xsl:value-of
-														select="document($derivlink)/mcr_results/mcr_result/@label"/>
-												</xsl:attribute>
-											</input>
-											<input type="image" src="{$WebApplicationBaseURL}images/workflow_deredit.gif"
-												title="{i18n:translate('swf.derivate.editDerivate')}"/>
-										</form>
-									</td>
-									<td width="10"/>
-									<td width="30" valign="top" align="center">
-										<form method="get">
-											<xsl:attribute name="action">
-												<xsl:value-of
-													select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
-											</xsl:attribute>
-											<input name="lang" type="hidden" value="{$CurrentLang}"/>
-											<input name="se_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="te_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="@xlink:href"/>
-												</xsl:attribute>
-											</input>
-											<input name="re_mcrid" type="hidden">
-												<xsl:attribute name="value">
-													<xsl:value-of select="$obj_id"/>
-												</xsl:attribute>
-											</input>
-											<xsl:variable name="type">
-												<xsl:copy-of
-													select="substring-before(substring-after($obj_id,'_'),'_')"/>
-											</xsl:variable>
-											<input name="type" type="hidden" value="{$type}"/>
-											<input name="todo" type="hidden" value="sdelder"/>
-											<input type="image"
-												src="{$WebApplicationBaseURL}images/workflow_derdelete.gif"
-												title="{i18n:translate('swf.derivate.delDerivate')}"/>
-										</form>
-									</td>
-									<td width="10"/>
-								</xsl:if>
 								<td align="left" valign="top" id="detailed-links">
 									<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
 										<xsl:variable name="deriv" select="@xlink:href"/>
 										<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)"/>
 										<xsl:variable name="derivate" select="document($derivlink)"/>
 										<tr>
-											<td style="padding-left: 10px;">
+											<td colspan="3" style="padding-left: 10px;">
 												<xsl:apply-templates
 													select="$derivate/mycorederivate/derivate/internals"/>
 												<xsl:apply-templates
 													select="$derivate/mycorederivate/derivate/externals"/>
 											</td>
+										</tr>
+										<tr>
+											<xsl:if test="acl:checkPermission($obj_id,'writedb')">
+												<td width="30" valign="top" align="center">
+													<form method="get">
+														<xsl:attribute name="action">
+															<xsl:value-of
+																select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
+														</xsl:attribute>
+														<input name="lang" type="hidden" value="{$CurrentLang}"/>
+														<input name="se_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="te_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="re_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="$obj_id"/>
+															</xsl:attribute>
+														</input>
+														<xsl:variable name="type">
+															<xsl:copy-of
+																select="substring-before(substring-after($obj_id,'_'),'_')"/>
+														</xsl:variable>
+														<input name="type" type="hidden" value="{$type}"/>
+														<input name="todo" type="hidden" value="saddfile"/>
+														<input type="image"
+															src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
+															title="{i18n:translate('swf.derivate.addFile')}"/>
+													</form>
+												</td>
+												<td width="30" valign="top" align="center">
+													<form method="get">
+														<xsl:attribute name="action">
+															<xsl:value-of
+																select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
+														</xsl:attribute>
+														<input name="lang" type="hidden" value="{$CurrentLang}"/>
+														<input name="se_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="te_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="re_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="$obj_id"/>
+															</xsl:attribute>
+														</input>
+														<xsl:variable name="type">
+															<xsl:copy-of
+																select="substring-before(substring-after($obj_id,'_'),'_')"/>
+														</xsl:variable>
+														<input name="type" type="hidden" value="{$type}"/>
+														<input name="todo" type="hidden" value="seditder"/>
+														<input name="extparm" type="hidden">
+															<xsl:variable name="deriv" select="@xlink:href"/>
+															<xsl:variable name="derivlink"
+																select="concat('mcrobject:',$deriv)"/>
+															<xsl:attribute name="value">
+																<xsl:value-of
+																	select="document($derivlink)/mcr_results/mcr_result/@label"/>
+															</xsl:attribute>
+														</input>
+														<input type="image"
+															src="{$WebApplicationBaseURL}images/workflow_deredit.gif"
+															title="{i18n:translate('swf.derivate.editDerivate')}"/>
+													</form>
+												</td>
+												<td width="30" valign="top" align="center">
+													<form method="get">
+														<xsl:attribute name="action">
+															<xsl:value-of
+																select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)"/>
+														</xsl:attribute>
+														<input name="lang" type="hidden" value="{$CurrentLang}"/>
+														<input name="se_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="te_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="@xlink:href"/>
+															</xsl:attribute>
+														</input>
+														<input name="re_mcrid" type="hidden">
+															<xsl:attribute name="value">
+																<xsl:value-of select="$obj_id"/>
+															</xsl:attribute>
+														</input>
+														<xsl:variable name="type">
+															<xsl:copy-of
+																select="substring-before(substring-after($obj_id,'_'),'_')"/>
+														</xsl:variable>
+														<input name="type" type="hidden" value="{$type}"/>
+														<input name="todo" type="hidden" value="sdelder"/>
+														<input type="image"
+															src="{$WebApplicationBaseURL}images/workflow_derdelete.gif"
+															title="{i18n:translate('swf.derivate.delDerivate')}"/>
+													</form>
+												</td>
+											</xsl:if>
 										</tr>
 									</table>
 								</td>
