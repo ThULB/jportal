@@ -231,7 +231,7 @@
       </td>
       <td class="td1" valign="top" style="padding-right:5px;">
         <a href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@label={$beautiLabel}">
-          <xsl:value-of select="$beautiLabel" />
+			<xsl:copy-of select="concat($beautiLabel,' (',col[@name='id'],')')"/>			
         </a>
       </td>
     </tr>
