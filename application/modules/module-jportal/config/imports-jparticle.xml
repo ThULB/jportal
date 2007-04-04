@@ -225,9 +225,14 @@
 		<hidden var="metadata/rubrics/@textsearch" default="false"/>
 		<hidden var="metadata/rubrics/@notinherit" default="false"/>
 		<hidden var="metadata/rubrics/@heritable" default="false"/>
-		<include cacheable="false" uri="jportalClassification:getClassID:rubrics:metadata/rubrics/rubric/@classid"/>		
-		<cell col="1" row="1" anchor=" NORTHWEST" ref="Crubric" var="metadata/rubrics/rubric/@categid"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/rubrics/rubric">
+			<repeater min="0" max="10" anchor="NORTHWEST" ref="rubric_input_repeater"/>
+		</cell>		
 	</panel>
+	<panel id="rubric_input_repeater">
+		<include cacheable="false" uri="jportalClassification:getClassID:rubrics:@classid"/>	
+		<cell col="1" row="2" anchor=" NORTHWEST" ref="Crubric" var="@categid"/>
+	</panel>		
 	<list id="Crubric" width="300" type="dropdown">
 		<item value="">
 			<label xml:lang="de">
@@ -243,9 +248,14 @@
 		<hidden var="metadata/classispub/@textsearch" default="false"/>
 		<hidden var="metadata/classispub/@notinherit" default="false"/>
 		<hidden var="metadata/classispub/@heritable" default="false"/>
-		<include cacheable="false" uri="jportalClassification:getClassID:classipub:metadata/classispub/classipub/@classid"/>		
-		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub" var="metadata/classispub/classipub/@categid"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub/classipub">
+			<repeater min="0" max="10" anchor="NORTHWEST" ref="classispub_input_repeater"/>
+		</cell>			
 	</panel>
+	<panel id="classispub_input_repeater">
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub:@classid"/>		
+		<cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub" var="@categid"/>
+	</panel>		
 	<list id="Cclassipub" width="300" type="dropdown">
 		<item value="">
 			<label xml:lang="de">
@@ -261,9 +271,15 @@
 		<hidden var="metadata/classispub2/@textsearch" default="false"/>
 		<hidden var="metadata/classispub2/@notinherit" default="false"/>
 		<hidden var="metadata/classispub2/@heritable" default="false"/>
-		<include cacheable="false" uri="jportalClassification:getClassID:classipub2:metadata/classispub2/classipub2/@classid"/>				
-		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub2" var="metadata/classispub2/classipub2/@categid"/>
+<!--		<include cacheable="false" uri="jportalClassification:getClassID:classipub2:metadata/classispub2/classipub2/@classid"/>				-->
+		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub2/classipub2">
+			<repeater min="0" max="10" anchor="NORTHWEST" ref="classispub2_input_repeater"/>
+		</cell>			
 	</panel>
+	<panel id="classispub2_input_repeater">
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub2:@classid"/>		
+		<cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub2" var="@categid"/>
+	</panel>		
 	<list id="Cclassipub2" width="300" type="dropdown">
 		<item value="">
 			<label xml:lang="de">
@@ -279,9 +295,15 @@
 		<hidden var="metadata/classispub3/@textsearch" default="false"/>
 		<hidden var="metadata/classispub3/@notinherit" default="false"/>
 		<hidden var="metadata/classispub3/@heritable" default="false"/>
-		<include cacheable="false" uri="jportalClassification:getClassID:classipub3:metadata/classispub3/classipub3/@classid"/>				
-		<cell col="1" row="1" anchor=" NORTHWEST" ref="Cclassipub3" var="metadata/classispub3/classipub3/@categid"/>
+<!--		<include cacheable="false" uri="jportalClassification:getClassID:classipub3:metadata/classispub3/classipub3/@classid"/>				-->
+		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub3/classipub3">
+			<repeater min="0" max="10" anchor="NORTHWEST" ref="classispub3_input_repeater"/>
+		</cell>			
 	</panel>
+	<panel id="classispub3_input_repeater">
+		<include cacheable="false" uri="jportalClassification:getClassID:classipub3:@classid"/>		
+		<cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub3" var="@categid"/>
+	</panel>		
 	<list id="Cclassipub3" width="300" type="dropdown">
 		<item value="">
 			<label xml:lang="de">
@@ -290,8 +312,6 @@
 		<include cacheable="false" uri="jportalClassification:getClass:classipub3"/>
 	</list>
 	<!-- end: classipub3 -->
-
-				
 	<!-- size ================================================================== -->
 	<panel id="size_input">
 		<hidden var="metadata/sizes/@class" default="MCRMetaLangText"/>
