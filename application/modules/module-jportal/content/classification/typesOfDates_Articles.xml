@@ -9,7 +9,7 @@
 			<label xml:lang="en" text="Published"/>
 		</category>
 		<category ID="published_Original">
-			<label xml:lang="de" text="Erscheinungsjahr der rez. Werkes"></label>
+			<label xml:lang="de" text="Erscheinungsjahr des rez. Werkes"></label>
 			<label xml:lang="en" text="Reviewed work published"/>
 		</category>
 		<category ID="published_Original_From">
