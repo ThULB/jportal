@@ -184,7 +184,8 @@
 							<!--2***address*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/addresses/address/country" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.AAddressCountry')" name="label"/>
+								<xsl:with-param select="i18n:translate('editormask.labels.AAddressCountry')"
+									name="label"/>
 							</xsl:call-template>
 							
 							<!--3***phone*************************************-->
@@ -193,12 +194,18 @@
 								<xsl:with-param select="i18n:translate('editormask.labels.LPhone')" name="label"/>
 							</xsl:call-template>
 							<!--4***url*************************************-->
-							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/urls/url" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.LURL')" name="label"/>
-								
-							</xsl:call-template>
-							
+							<xsl:if test="./metadata/urls/url/@xlink:href">
+								<tr>
+									<td valign="top" id="detailed-labels">
+										<xsl:value-of select="i18n:translate('editormask.labels.LURL')"/>
+									</td>
+									<td>
+										<a href="{./metadata/urls/url/@xlink:href}">
+											<xsl:value-of select="./metadata/urls/url/@xlink:href"/>
+										</a>
+									</td>
+								</tr>
+							</xsl:if>
 							<!--5***email*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/emails/email" name="nodes"/>
@@ -207,7 +214,6 @@
 							<!--6***note*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="./metadata/notes/note" name="nodes"/>
-								
 								<xsl:with-param select="i18n:translate('editormask.labels.LNote')" name="label"/>
 							</xsl:call-template>
 							
@@ -220,7 +226,9 @@
 								</td>
 							</tr>
 							<tr>
-								<td id="detailed-headlines"><xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/></td>
+								<td id="detailed-headlines">
+									<xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/>
+								</td>
 							</tr>
 							
 							<!--*** Created ************************************* -->
