@@ -142,13 +142,14 @@
 		</xsl:variable>
 		<div id="detailed-frame">
 			<xsl:variable name="mainTitle">
-				<xsl:call-template name="printI18N">
+				<xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+<!--				<xsl:call-template name="printI18N">
 					<xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
-				</xsl:call-template>
+				</xsl:call-template>-->
 			</xsl:variable>
 			<xsl:variable name="maintitle_shorted">
 				<xsl:call-template name="ShortenText">
-					<xsl:with-param name="text" select="$mainTitle"/>
+					<xsl:with-param name="text" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
 					<xsl:with-param name="length" select="150"/>
 				</xsl:call-template>
 			</xsl:variable>
@@ -194,13 +195,15 @@
 							<!--1***maintitle*************************************-->
 							<!-- only if in headline cut -->
 							<xsl:if test="string-length($mainTitle)>150)">
-								<!-- take care on cut main title-->
 								<tr>
 									<td valign="top" id="detailed-labels">
 										<xsl:value-of select="i18n:translate('editormask.labels.bibdescript')"/>
 									</td>
 									<td class="metavalue">
-										<xsl:copy-of select="$mainTitle"/>
+										<xsl:call-template name="printI18N">
+											<xsl:with-param name="nodes"
+												select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
+										</xsl:call-template>
 									</td>
 								</tr>
 							</xsl:if>
