@@ -1633,7 +1633,7 @@
 							<!-- label of category -->
 							<i>
 								<xsl:value-of
-									select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label/@text"/>
+									select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text"/>
 								: </i>
 							<br/>
 							<ul>
@@ -1672,7 +1672,6 @@
 												</xsl:call-template>
 											</xsl:when>
 											<xsl:otherwise>
-												<!--xsl:value-of select="./text()"/-->
 												<xsl:call-template name="printI18N">
 													<xsl:with-param name="nodes" select="./text()"/>
 												</xsl:call-template>
