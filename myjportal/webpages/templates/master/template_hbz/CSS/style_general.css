@@ -1,0 +1,124 @@
+html, body {
+    margin: 0px;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+#second-line {
+	width: 100%; 
+	height:100%;  
+}	
+#div_navi_main {
+	height: 100%; 
+	float: left; 
+	width: 297px;
+}
+
+#div_navi_main_topa {
+	height: 39px;
+	padding: 0px;
+	padding-left: 30px; 
+	margin: 0px;
+	width: 297px;
+}
+
+#div_navi_main_topb {
+	padding: 0px;
+	padding-left: 30px; 
+	margin: 0px;
+	width: 297px;
+}
+
+#div_navi_main_middlea {
+	height: 31px; 
+	margin: 0px;
+	padding: 0px;
+	width: 297px;
+}
+
+#div_navi_main_middleb { 
+	height: 29px; 
+	margin: 0px;
+	padding: 0px;
+	width: 297px;
+}
+
+#div_navi_main_bottom { 
+	height: 55%;
+	padding: 0px;
+	margin: 0px;
+	width: 297px;
+}
+
+#navi_box {
+	text-align: right;
+	width: 100%; 
+	height: 73px;
+	padding-top: 8px;
+	vertical-align: top;
+}
+
+#navi_history {
+	text-align: left;
+	width: 100%; 
+	height: 60px;
+	padding-left: 275px;
+	vertical-align: bottom;
+	padding-bottom: 0px;
+}
+#navi_history a{
+	color: #5E5946;
+	text-decoration: none;
+}
+#navi_history a:hover{
+	color: #5E5946;
+	text-decoration: underline;
+}
+#navi_history_inside {
+	padding: 2px;
+	margin-left:2px;
+	width: auto;
+	margin-right:0px;
+	padding-right:0px;
+}
+#contentArea {
+	width: max;
+	margin-left: 270px; 
+}
+#footer {
+	width: 100%; 
+	height:150px; 
+	margin: 0px;
+	}
+#footer_bottom {
+	float: left; 
+	position: relative;
+	width: 255px;
+	height: 32px;
+}	
+#login_div {
+	vertical-align: bottom;
+	width: 273px;
+	height: 25px; 
+	padding-left: 33px;
+}
+#login_div_inside {
+	padding: 2px;
+}
+#thulb_logo { 
+	height: 150px;
+	vertical-align: top;
+	text-align: right;
+	padding-top: 5px;
+	padding-right: 12px;
+}
+
+#banner-left {
+	vertical-align: top;
+}
+
+#banner-right {
+	padding-right: 5px; 
+	width: 90px;
+}
