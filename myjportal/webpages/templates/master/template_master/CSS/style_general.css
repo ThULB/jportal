@@ -16,6 +16,7 @@ html, body {
     font-family: Verdana, Helvetica, sans-serif, Myriad Pro, Myriad ;
     font-size: 11px;
     height: 100%;
+	width: 100%;
 }
 
 .logoBar{
@@ -29,27 +30,14 @@ html, body {
 /* can see	  		   											   */
 /* =================================================================== */
 .border{
-	position: relative;
 	min-height: 100%;
     height: auto !important;
     height: 100%;
 	width: 996px;
 	background: url(../IMAGES/bg_line.gif) repeat-y;
-	border-style: solid solid solid solid;
-    border-width: 1px;
-    border-color: #253767;
+
 }
 
-/* =================================================================== */
-/* Supress an overflow of the outer box							   */
-/* =================================================================== */
-div:after{
-	content: ".";
-	display: block;
-	height: 0px;
-	clear: both;
-	visibility: hidden;
-}
 
 /* =================================================================== */
 /* .dot_line class is responsible for the dotted line you can see 	   */
@@ -188,6 +176,6 @@ div:after{
 #content {
 	margin-left: 260px;
 	margin-top: 15px;
-	width:70%;
+	width: 100%;
 	position:relative;
 }

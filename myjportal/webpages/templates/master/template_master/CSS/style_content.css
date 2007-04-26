@@ -3,13 +3,13 @@
 /* under the content  											       */
 /* =================================================================== */
 .mainSite_ContentArea{
-	width: 768px;
+	width: 75%;
 	float: right;
 	clear: right;
 }
 
 * html .mainSite_ContentArea{
-	width: 753px;
+	width: 100%;
 }
 
 /* =================================================================== */
@@ -52,9 +52,9 @@
 
 #contentArea {
 	padding-top: 14px;
-   	margin-left: auto;
+   	margin-left: 10px;
    	margin-right: auto;
-   	width : 80%;
+   	width : 100%;
     color: #444444;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
