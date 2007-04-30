@@ -39,6 +39,7 @@
 		<script language="JavaScript"
 			src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 			type="text/javascript"/>
+		<xsl:call-template name="module-broadcasting.getHeader"/>		
 	</head>
 	<body style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/bg_body_akruetzel.jpg); background-repeat: repeat-y;">
 	<div id="border" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/bg_body_akruetzel.jpg); background-repeat: repeat-y;">

@@ -5,6 +5,7 @@
 	exclude-result-prefixes="xlink mcr i18n acl xalan">
 	
 	<xsl:include href="mcr-module-startIview.xsl"/>
+	<xsl:include href="mcr-module-broadcasting.xsl" />	
 	
 	<xsl:param name="view.objectmetadata" select="'false'"/>
 	

@@ -10,26 +10,22 @@
 				<title>
 					<xsl:call-template name="PageTitle"/>
 				</title>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
-					rel="stylesheet" type="text/css"/>
-				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet"
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet"
 					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
+					rel="stylesheet" type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet"
+					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet"
+					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
 					type="text/javascript"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
+				<xsl:call-template name="module-broadcasting.getHeader"/>
 			</head>
 			<body>
 				<div class="border">
