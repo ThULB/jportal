@@ -48,7 +48,7 @@ cvs -d :pserver:anoncvs@ulbaix03.thulb.uni-jena.de:/content/cvsroot co jportal
 
 Nutzerverwaltung:
 
-    * config/user/permission.xmlgehackt um eigene Objekttypen --> Modularisieren
+    * config/user/permission.xml gehackt um eigene Objekttypen --> Modularisieren
 
 Properties:
 
@@ -64,8 +64,8 @@ XSL:
 
 JAVA:
 
-    * MCRObjectsollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen 
-    * BUGFIX MCRParentRuleStrategysollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen
+    * MCRObject sollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen 
+    * BUGFIX MCRParentRuleStrategy sollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen
     * session problem:
           o MCRStartEditorServlet (MYCORE_HEAD) 
           o MCRUriResolver (MYCORE_HEAD) 
