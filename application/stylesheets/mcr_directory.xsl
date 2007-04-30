@@ -17,11 +17,11 @@
     <xsl:variable name="sourcelink"
       select="concat('mcrobject:',$derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href)" />
     <xsl:variable name="sourcedoc" select="document($sourcelink)" />
-    <xsl:variable name="accesseditvalue">
+	<xsl:variable name="accesseditvalue">
       <xsl:choose>
         <!-- if source object and derivate allows writing -->
         <xsl:when
-          test="acl:checkPermission($derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href,'writedb') and acl:checkPermission(ownerID,'writedb')">
+          test="acl:checkPermission($derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href,'writedb') ">
           <xsl:value-of select="'true'" />
         </xsl:when>
         <xsl:otherwise>
