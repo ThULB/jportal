@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<navigation dir="/content" template="template_jalz"
-	hrefStartingPage="/content/below/index.xml" mainTitle="MyCoReSample">
+<navigation dir="/content" template="template_master"
+	hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal">
 	<!-- main menu  -->
 	<navi-main dir="/main/">
 		<label xml:lang="de">Hauptmenü links</label>
