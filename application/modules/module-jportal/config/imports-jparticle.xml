@@ -134,7 +134,7 @@
 		<hidden var="metadata/dates/@textsearch" default="true"/>
 		<hidden var="metadata/dates/@heritable" default="false"/>
 		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1">
-			<repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater"/>
+			<repeater min="0" max="5" anchor="NORTHWEST" ref="date_input_repeater"/>
 		</cell>
 	</panel>
 	<panel id="date_input_repeater">

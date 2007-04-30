@@ -125,7 +125,7 @@
         <hidden var="metadata/participants/@parasearch" default="true" sortnr="3" />
         <hidden var="metadata/participants/@textsearch" default="true" sortnr="3" />
 	    <cell col="1" row="1" anchor="EAST" var="metadata/participants/participant" sortnr="3" >
-         <repeater min="1" max="10">
+         <repeater min="1" max="20">
            <panel lines="off">
 			 <hidden var="@inherited" default="0" />
 			 <hidden var="@type" default="locator" />
