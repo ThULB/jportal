@@ -70,18 +70,18 @@
 			<div id="banner_right">
 				<map name="uni_ilmenau">
 					<area shape="rect" coords="8,5,243,140"
-						href="http://ulbaix06.thulb.uni-jena.de:8080/iun"
+						href="http://zs.thulb.uni-jena.de/content/main/journals/iun.xml?XSL.lastPage.SESSION=/content/main/journals/iun.xml"
 						alt="Ilmenauer Uni-Nachrichten"/>
 					<area shape="rect" coords="252,5,489,140"
-						href="http://ulbaix06.thulb.uni-jena.de:8080/ihb"
+						href="http://zs.thulb.uni-jena.de/content/main/journals/ihb.xml?XSL.lastPage.SESSION=/content/main/journals/ihb.xml"
 						alt="Ilmenauer Hochschulblatt"/>
 					<area shape="rect" coords="498,5,735,140"
-						href="http://ulbaix06.thulb.uni-jena.de:8080/inh"
+						href="http://zs.thulb.uni-jena.de/content/main/journals/inh.xml?XSL.lastPage.SESSION=/content/main/journals/inh.xml"
 						alt="Neue Hochschule"/>
 				</map>
 				<img
 					src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top_right.gif"
-					width="735" height="140" alt="Universitï¿½t Ilmenau"
+					width="735" height="140" alt="Universität Ilmenau"
 					usemap="#uni_ilmenau" border="0"/>
 			</div>
 			</div>		 		
