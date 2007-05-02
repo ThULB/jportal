@@ -75,11 +75,11 @@
           </div>
      	   <div id="navi_under">
 		   <map name="navi_under">
-				<area shape="rect" coords="50,9,255,34" href="http://www.urmel-dl.de/" alt="xxx"/>
-				<area shape="rect" coords="50,36,255,75" href="http://www.urmel-dl.de/" alt="xxx"/>
-				<area shape="rect" coords="50,77,255,153" href="http://www.urmel-dl.de/" alt="xxx"/>
-				<area shape="rect" coords="50,155,255,208" href="http://www.urmel-dl.de/" alt="xxx"/>
-				<area shape="rect" coords="50,210,255,267" href="http://www.urmel-dl.de/" alt="xxx"/>
+				<area shape="rect" coords="50,9,255,34" href="http://zs.thulb.uni-jena.de/content/main/journals/phil1.xml" alt="xxx"/>
+				<area shape="rect" coords="50,36,255,75" href="http://zs.thulb.uni-jena.de/content/main/journals/phil2.xml" alt="xxx"/>
+				<area shape="rect" coords="50,77,255,153" href="http://zs.thulb.uni-jena.de/content/main/journals/phil3.xml" alt="xxx"/>
+				<area shape="rect" coords="50,155,255,208" href="http://zs.thulb.uni-jena.de/content/main/journals/phil4.xml" alt="xxx"/>
+				<area shape="rect" coords="50,210,255,267" href="http://zs.thulb.uni-jena.de/content/main/journals/phil5.xml" alt="xxx"/>
 			</map>
 		    <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_under.gif" width="255" height="267" alt="sitemap" usemap="#navi_under" border="none"/>
 			</div>
