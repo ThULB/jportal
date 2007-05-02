@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000044">
+	<label xml:lang="de" text="PHIL 4 - Classification for PHIL."/>
+	<categories>
+		<category ID="00001000">
+			<label xml:lang="de" text="Abbildungen"/>
+		</category>
+		<category ID="00002000">
+			<label xml:lang="de" text="Anzeigen"/>
+		</category>
+		<category ID="00003000">
+			<label xml:lang="de" text="Artikel"/>
+		</category>
+		<category ID="00004000">
+			<label xml:lang="de" text="Bibliographie"/>
+		</category>
+		<category ID="00005000">
+			<label xml:lang="de" text="Katalog"/>
+		</category>
+		<category ID="00006000">
+			<label xml:lang="de" text="Rezension"/>
+		</category>
+		<category ID="00007000">
+			<label xml:lang="de" text="Tabellen"/>
+		</category>
+		<category ID="00008000">
+			<label xml:lang="de" text="Verzeichnis"/>
+		</category>
+	</categories>
+</mycoreclass>
