@@ -109,5 +109,13 @@
 			<label text="Autor" xml:lang="de"></label>
 			<label text="author" xml:lang="en"/>
 		</category>
+		<category ID="interviewer">
+			<label text="Interviewer" xml:lang="de"/>
+			<label text="Interviewer" xml:lang="en"/>
+		</category>		
+		<category ID="interviewee">
+			<label text="befragte Person / Interviewter" xml:lang="de"/>
+			<label text="Asked person / Interviewee" xml:lang="en"/>
+		</category>				
 	</categories>
 </mycoreclass>
