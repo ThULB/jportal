@@ -54,30 +54,58 @@
         <cell col="2" row="110" anchor="NORTHWEST" ref="Dnote" var="def.note"/>
         <cell col="3" row="110" anchor="WEST" ref="Hnote"/>
 
+        <cell col="1" row="115" anchor="NORTHWEST" >
+		  <text i18n="jportal.editor.required"/>					
+		</cell>
+		  
         <cell col="1" colspan="2" row="120" anchor="EAST" ref="TwoButtons"/>
         <cell col="2" row="120"/>
       </panel>
     </cell>
   </panel>
-  <panel id="personName">
-    <cell col="1" row="1" anchor="NORTHWEST" var="lastName" i18n="editormask.person.lastName"/>
+  <panel id="personName_required">
+	  <!-- lastname -->
+    <cell col="1" row="1" anchor="NORTHWEST">
+	  <text i18n="editor.search.lastName"/>		
+	</cell>
     <cell col="2" row="1" anchor="NORTHWEST" var="lastName">
       <textfield width="16" maxlength="128"/>
     </cell>
-    <cell col="1" row="2" anchor="NORTHWEST" var="firstName" i18n="editormask.person.firstName"/>
+	  <!-- firstname -->	  
+    <cell col="1" row="2" anchor="NORTHWEST">
+	  <text i18n="editor.search.person.firstName"/>		
+	</cell>	  
     <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
       <textfield width="16" maxlength="128"/>
     </cell>
   </panel>
+  <panel id="personName">
+	  <!-- lastname -->
+    <cell col="1" row="1" anchor="NORTHWEST">
+	  <text i18n="editor.search.person.lastName"/>		
+	</cell>
+    <cell col="2" row="1" anchor="NORTHWEST" var="lastName">
+      <textfield width="16" maxlength="128"/>
+    </cell>
+	  <!-- firstname -->	  
+    <cell col="1" row="2" anchor="NORTHWEST">
+	  <text i18n="editor.search.person.firstName"/>		
+	</cell>	  
+    <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
+      <textfield width="16" maxlength="128"/>
+    </cell>
+  </panel>	
+	
 <!-- *** Ansetzungsform: Name ** -->
   <panel id="Dheading">
     <hidden var="@class" default="MCRMetaXML"/>
     <hidden var="@notinherit" default="true"/>
     <hidden var="@heritable" default="true"/>
-    <cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName_required"/>
   </panel>
   <text id="Lheading" i18n="editormask.person.Lheading"/>
   <helpPopup id="Hheading" width="400" height="250" i18n="editormask.person.Hheading"/>
+	
 <!-- *** Namensformen ** -->
   <panel id="Dalternative">
     <hidden var="@class" default="MCRMetaXML"/>
@@ -89,7 +117,10 @@
     <cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
       <repeater min="0" max="10">
         <panel>
-          <cell var="name">
+		    <cell col="1" row="1" anchor="NORTHWEST">
+			  <text i18n="editor.search.person.freetext"/>		
+			</cell>			
+          <cell col="2" row="1" var="name">
             <textfield width="35" maxlength="128"/>
           </cell>
         </panel>
