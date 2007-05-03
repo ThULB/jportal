@@ -1044,7 +1044,6 @@
 							<td>
 								<a href="{$href}">
 									<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
-									<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
 								</a>
 								<xsl:text>
 								</xsl:text>
@@ -1060,7 +1059,6 @@
 				<xsl:otherwise>					
 					<a href="{$href}">
 						<xsl:value-of select="i18n:translate('metaData.digitalisat')"/>
-						<xsl:value-of select="i18n:translate('metaData.digiansehn')"/>
 					</a>
 					<xsl:if test="$CurrentUser!='gast'">
 						<a href="{$derivbase}">
