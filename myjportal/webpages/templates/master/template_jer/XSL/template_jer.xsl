@@ -41,7 +41,7 @@
 										<tr>
 											<td>
 												<div id="max-planck-logo"> 
-													<a href="http://www.bgc-jena.mpg.de" target="_blank">
+													<a href="http://www.econ.mpg.de" target="_blank">
 														<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/max-planck-logo.jpg" border="0"/>
 													</a>
 												</div>
