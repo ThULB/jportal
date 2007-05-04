@@ -15,7 +15,7 @@
 			
 			<xsl:value-of select="@id"/>
 		</xsl:variable>
-		
+			
 		<xsl:variable name="cXML">
 			<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
 		</xsl:variable>

@@ -9,21 +9,40 @@
 			<hidden default="xml" var="conditions/@format"/>
 			
 			<!-- Only in one specified journal -->
-			<hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>			
-			<hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>			
-			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/boolean/condition90/@value"/>		
-						
+			<hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>
+			<hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>
+			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/boolean/condition90/@value"/>
+			
+			<!-- search in formal description -->
+			<cell anchor="WEST" colspan="4" col="1" row="1">
+				<text>
+					<label css-style="editorHeadlines" i18n="metaData.headlines.formaldiscr"/>
+				</text>
+			</cell>
+			
 			<hidden var="conditions/boolean/@operator" default="and"/>
 			<!-- Search for fields of type name -->
-			<cell var="conditions/boolean/boolean/condition1" col="1" row="1" colspan="2">
-				<repeater min="1" max="2">
+			<cell var="conditions/boolean/boolean/condition1" col="1" row="2" colspan="2">
+				<panel lines="off">
+					<cell width="230" anchor="EAST" col="1" row="1">
+						<text i18n="editormask.labels.bibdescript"/>
+					</cell>
+					<hidden default="maintitles_art" var="@field"/>
+					<cell anchor="WEST" col="2" row="1">
+						<panel lines="off">
+							<cell ref="operators.name" var="@operator" anchor="WEST" col="1" row="1"/>
+							<cell ref="input.name" var="@value" anchor="WEST" col="2" row="1"/>
+						</panel>
+					</cell>
+				</panel>
+			</cell>
+			<cell var="conditions/boolean/boolean/condition2" col="1" row="3" colspan="2">
+				<repeater min="0" max="10">
 					<panel lines="off">
-						<cell var="@field" width="230" anchor="EAST" col="1" row="1">
-							<list type="dropdown">
-								<item i18n="editormask.labels.bibdescript" value="maintitles_art"/>
-								<item i18n="editormask.labels.subtitle" value="subtitles_art"/>
-							</list>
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.subtitle"/>
 						</cell>
+						<hidden default="subtitles_art" var="@field"/>
 						<cell anchor="WEST" col="2" row="1">
 							<panel lines="off">
 								<cell ref="operators.name" var="@operator" anchor="WEST" col="1" row="1"/>
@@ -32,38 +51,23 @@
 						</cell>
 					</panel>
 				</repeater>
-			</cell>
-			<cell col="1" row="2">
 				<br/>
 			</cell>
 			
 			<!-- Search for fields of type contributor -->
-			<hidden var="conditions/boolean/boolean/boolean/@operator" default="and"/>
-			<cell var="conditions/boolean/boolean/boolean/boolean" col="1" row="3" colspan="2">
+			<cell var="conditions/boolean/boolean/condition3" col="1" row="4" colspan="2">
 				
-				<repeater min="1" max="10">
+				<repeater min="0" max="6">
 					<panel lines="off">
-						<hidden var="@operator" default="and"/>
 						<cell width="230" anchor="EAST" col="1" row="1">
 							<text i18n="editormask.labels.participants_label"/>
 						</cell>
-						<cell var="condition2" col="2" row="1">
-							<panel lines="off">
-								<hidden var="@field" default="participants_art_type"/>
-								<hidden var="@operator" default="="/>
-								<cell var="@value" anchor="EAST" col="1" row="1">
-									<list type="dropdown">
-										<item i18n="editormask.labels.participantdummy" value=""/>
-										<include uri="classification:editor:-1:children:jportal_class_00000007"/>
-									</list>
-								</cell>
-							</panel>
-						</cell>
-						<cell var="condition2[2]" col="2" row="2">
+						<cell col="2" row="1">
 							<panel>
-								<hidden var="@field"/>
-								<hidden var="@operator"/>
+								<hidden var="@field" default="participants_art"/>
+								<hidden var="@operator" default="="/>
 								<hidden var="@value"/>
+								<hidden var="@label"/>								
 								<cell row="1" col="1">
 									<output var="@label"/>
 								</cell>
@@ -77,73 +81,60 @@
 										href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
 										sortnr="6" i18n="editormask.common.sub.select2"/>
 								</cell>
-							</panel>
-						</cell>
-					</panel>
-				</repeater>
-			</cell>
-
-			<cell col="1" row="5">
-				<br/>
-			</cell>
-
-			<!-- Search for fields of type date -->
-			<hidden var="conditions/boolean/boolean/boolean[2]/@operator" default="and"/>
-			<cell var="conditions/boolean/boolean/boolean[2]/boolean" col="1" row="6" colspan="2">
 				
-				<repeater min="1" max="4">
-					<panel lines="off">
-						<hidden var="@operator" default="and"/>
-						<cell anchor="EAST" width="230" col="1" row="1">
-							<text i18n="editormask.labels.date_label"/>
-						</cell>
-						<cell var="condition3" col="2" row="1">
-							<panel lines="off">
-								<hidden default="dates_art_type" var="@field"/>
-								<hidden var="@operator" default="="/>
-								<cell var="@value" anchor="EAST" col="1" row="1">
-									<list type="dropdown">
-										<item i18n="editormask.labels.datedummy" value=""/>
-										<include uri="classification:editor:-1:children:jportal_class_00000008"/>
-									</list>
-								</cell>
-							</panel>
-						</cell>
-						<cell anchor="EAST" width="230" col="1" row="2">
-							<text i18n="editormask.labels.dateform"/>
-						</cell>
-						<cell var="condition3[2]" col="2" row="2">
-							<panel lines="off">
-								<hidden default="dates_art" var="@field"/>
-								<cell anchor="WEST" col="1" row="1">
-									<panel lines="off">
-										<cell ref="operators.date" var="@operator" anchor="WEST" col="1" row="1"/>
-										<cell ref="input.date" var="@value" anchor="WEST" col="2" row="1"/>
-									</panel>
-								</cell>
 							</panel>
 						</cell>
 					</panel>
 				</repeater>
 			</cell>
-			<cell col="1" row="8">
+			
+			<cell col="1" row="6">
 				<br/>
 			</cell>
 			
+			<!-- Search for fields of type date -->
+			<cell var="conditions/boolean/boolean/condition4" col="1" row="7" colspan="2">
+				<panel lines="off">
+					<cell anchor="EAST" width="230" col="1" row="1">
+						<text i18n="editormask.labels.date_label"/>
+						<text i18n="editormask.labels.dateform"/>
+					</cell>
+					<cell col="2" row="1">
+						<panel lines="off">
+							<hidden default="dates_art" var="@field"/>
+							<cell anchor="WEST" col="1" row="1">
+								<panel lines="off">
+									<cell ref="operators.date" var="@operator" anchor="WEST" col="1" row="1"/>
+									<cell ref="input.date" var="@value" anchor="WEST" col="2" row="1"/>
+								</panel>
+							</cell>
+						</panel>
+					</cell>
+				</panel>
+			</cell>
+			
 			<!-- Search for fields of type text -->
-			<cell var="conditions/boolean/boolean/condition4" col="1" row="9" colspan="2">
-				<repeater min="1" max="6">
+			<cell var="conditions/boolean/boolean/condition5" col="1" row="8" colspan="2">
+				<panel lines="off">
+					<cell width="230" anchor="EAST" col="1" row="1">
+						<text i18n="editormask.labels.size"/>
+					</cell>
+					<hidden default="sizes_art" var="@field"/>
+					<cell anchor="WEST" col="2" row="1">
+						<panel lines="off">
+							<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+							<cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+						</panel>
+					</cell>
+				</panel>
+			</cell>
+			<cell var="conditions/boolean/boolean/condition6" col="1" row="9" colspan="2">
+				<repeater min="1" max="5">
 					<panel lines="off">
-						<cell var="@field" width="150" anchor="EAST" col="1" row="1">
-							<list type="dropdown" default="sizes_art">
-								<item i18n="editormask.labels.size" value="sizes_art"/>
-								<item i18n="editormask.labels.identi" value="identis_art"/>
-								<item i18n="editormask.labels.keyword" value="keywords_art"/>
-								<item i18n="editormask.labels.abstract" value="abstracts_art"/>
-								<item i18n="editormask.labels.note" value="notes_art"/>
-								<item i18n="editormask.labels.pub_reference" value="refs_art"/>
-							</list>
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.identi"/>
 						</cell>
+						<hidden default="identis_art" var="@field"/>
 						<cell anchor="WEST" col="2" row="1">
 							<panel lines="off">
 								<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
@@ -153,16 +144,98 @@
 					</panel>
 				</repeater>
 			</cell>
-			<cell col="1" row="10">
+			<cell col="1" row="11">
 				<br/>
 				<br/>
 			</cell>
 			
+			<!-- search in content descriptions-->
+			<cell anchor="WEST" colspan="4" col="1" row="12">
+				<text>
+					<label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr"/>
+				</text>
+			</cell>
+			<!-- Search for fields of type text -->
+			<cell var="conditions/boolean/boolean/condition7" col="1" row="13" colspan="2">
+				<repeater min="1" max="5">
+					<panel lines="off">
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.keyword"/>
+						</cell>
+						<hidden default="keywords_art" var="@field"/>
+						<cell anchor="WEST" col="2" row="1">
+							<panel lines="off">
+								<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+								<cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+							</panel>
+						</cell>
+					</panel>
+				</repeater>
+			</cell>
+			<cell var="conditions/boolean/boolean/condition8" col="1" row="14" colspan="2">
+				<repeater min="1" max="5">
+					<panel lines="off">
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.abstract"/>
+						</cell>
+						<hidden default="abstracts_art" var="@field"/>
+						<cell anchor="WEST" col="2" row="1">
+							<panel lines="off">
+								<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+								<cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+							</panel>
+						</cell>
+					</panel>
+				</repeater>
+			</cell>
+			<cell var="conditions/boolean/boolean/condition9" col="1" row="15" colspan="2">
+				<repeater min="1" max="5">
+					<panel lines="off">
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.note"/>
+						</cell>
+						<hidden default="notes_art" var="@field"/>
+						<cell anchor="WEST" col="2" row="1">
+							<panel lines="off">
+								<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+								<cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+							</panel>
+						</cell>
+					</panel>
+				</repeater>
+			</cell>
+			<cell var="conditions/boolean/boolean/condition10" col="1" row="16" colspan="2">
+				<repeater min="1" max="5">
+					<panel lines="off">
+						<cell width="230" anchor="EAST" col="1" row="1">
+							<text i18n="editormask.labels.pub_reference"/>
+						</cell>
+						<hidden default="refs_art" var="@field"/>
+						<cell anchor="WEST" col="2" row="1">
+							<panel lines="off">
+								<cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+								<cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+							</panel>
+						</cell>
+					</panel>
+				</repeater>
+			</cell>
+			<cell col="1" row="17">
+				<br/>
+				<br/>
+			</cell>
+			
+			<cell anchor="WEST" colspan="4" col="1" row="18">
+				<text>
+					<label css-style="editorHeadlines" i18n="metaData.headlines.specials"/>
+				</text>
+			</cell>
+			
 			<!-- Operators -->
-			<cell anchor="EAST" col="1" row="12">
+			<cell width="230" anchor="EAST" col="1" row="19">
 				<text i18n="editor.search.connect"/>
 			</cell>
-			<cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="12">
+			<cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="19">
 				<list default="and" type="dropdown">
 					<item i18n="editor.search.and" value="and"/>
 					<item i18n="editor.search.or" value="or"/>
@@ -178,10 +251,10 @@
 			<hidden var="hosts/@target" default="local"/>
 			
 			<!-- Select sort order of results -->
-			<cell anchor="NORTHEAST" col="1" row="13">
+			<cell width="230" anchor="NORTHEAST" col="1" row="20">
 				<text i18n="editor.search.sortby"/>
 			</cell>
-			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="13">
+			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="20">
 				<repeater max="3" min="1">
 					<panel lines="off">
 						<cell var="@name" anchor="WEST" col="1" row="1">
@@ -202,7 +275,7 @@
 			</cell>
 			
 			<!-- Select maximum number of results and num per page -->
-			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="14">
+			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="22">
 				<panel lines="off">
 					<hidden var="@maxResults" value="0"/>
 					<cell var="@numPerPage" anchor="WEST" col="4" row="1">
@@ -218,13 +291,13 @@
 					</cell>
 				</panel>
 			</cell>
-			<cell anchor="EAST" colspan="2" col="1" row="16">
+			<cell anchor="EAST" colspan="2" col="1" row="23">
 				<submitButton width="150px" i18n="editor.search.search"/>
 			</cell>
 		</panel>
 		
 		<!-- Input elements included depending on field type -->
-		<textfield id="input.text" width="40"/>
+		<textfield id="input.text" width="35"/>
 		<textfield id="input.name" width="30"/>
 		<textfield id="input.identifier" width="20"/>
 		<textfield id="input.date" width="10"/>
