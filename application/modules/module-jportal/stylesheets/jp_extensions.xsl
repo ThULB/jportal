@@ -1606,9 +1606,7 @@
 		<xsl:param name="nodes"/>
 		<xsl:param name="label"/>
 		<xsl:param name="typeClassi"/>
-		<xsl:param name="mode">
-			
-		</xsl:param>
+		<xsl:param name="mode"/>
 		
 		<xsl:if test="$nodes">
 			

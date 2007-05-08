@@ -104,6 +104,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<!-- =============================================================================================== -->		
 	<!--Template for title in metadata view: see mycoreobject.xsl-->
 	<xsl:template priority="1" mode="title" match="/mycoreobject[contains(@ID,'_jparticle_')]">
 		<xsl:choose>
@@ -193,7 +194,7 @@
 								</xsl:when>
 							</xsl:choose>
 							<!--1***maintitle*************************************-->
-							<!-- only if in headline cut -->
+							<!-- only if headline cut -->
 							<xsl:if test="string-length($mainTitle)>150)">
 								<tr>
 									<td valign="top" id="detailed-labels">
@@ -215,7 +216,6 @@
 								<xsl:with-param name="typeClassi" select="'jportal_class_00000006'"/>
 								<xsl:with-param name="mode" select="'text'"/>
 							</xsl:call-template>
-							
 							<!--3***participant*************************************-->
 							<xsl:call-template name="printMetaDate_typeSensitive">
 								<xsl:with-param select="'right'" name="textalign"/>

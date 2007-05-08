@@ -4,6 +4,7 @@
 	xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink"
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
+	<!-- ============================================================================================================ -->
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jpinst_')]">
 		<xsl:param name="mcrobj"/>
@@ -62,24 +63,33 @@
 		</table>
 	</xsl:template>
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
-	
+	<!-- ============================================================================================================ -->	
 	<xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpinst_')]">
 		<xsl:choose>
 			<!--
 			you could insert any title-like metadata here, e.g.
 			replace "your-tags/here" by something of your metadata
 			-->
-			<xsl:when test="./metadata/your-tags">
+			<xsl:when test="./metadata/names/name/fullname">
 				<xsl:call-template name="printI18N">
-					<xsl:with-param select="./metadata/your-tags/here" name="nodes"/>
+					<xsl:with-param select="./metadata/names/name/fullname" name="nodes"/>
 				</xsl:call-template>
+				
+				<xsl:if test="./metadata/addresses/address/city">
+					<xsl:variable name="city">
+						<xsl:call-template name="printI18N">
+							<xsl:with-param select="./metadata/addresses/address/city" name="nodes"/>
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:value-of select="concat(' (',$city,')')"/>
+				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
-				
 				<xsl:value-of select="@label"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<!-- ============================================================================================================ -->	
 	<!--Template for title in metadata view: see mycoreobject.xsl-->
 	<xsl:template priority="1" mode="title" match="/mycoreobject[contains(@ID,'_jpinst_')]">
 		<xsl:choose>
@@ -98,7 +108,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
-	
+	<!-- ============================================================================================================ -->	
 	<!--Template for metadata view: see mycoreobject.xsl-->
 	<xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jpinst_')]">
 		<xsl:param select="$objectHost" name="obj_host"/>
@@ -314,4 +324,5 @@
 			</table>
 		</div>
 	</xsl:template>
+	<!-- ============================================================================================================ -->	
 </xsl:stylesheet>
