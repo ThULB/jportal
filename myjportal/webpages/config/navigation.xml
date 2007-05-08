@@ -37,44 +37,7 @@
 				type="extern" target="_self" style="normal" replaceMenu="false"
 				constrainPopUp="false">
 				<label xml:lang="de">nach Personen</label>
-			</item>						
-			<!--			<item
-			href="/editor_form_search-simpledocument.xml?XSL.editor.source.new=true"
-			type="extern" target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">nach Dokumenten einfach</label>
-			<label xml:lang="en">for documents simple</label>
-			</item>
-			<item
-			href="/editor_form_search-complexdocument.xml?XSL.editor.source.new=true"
-			type="extern" target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">nach Dokumenten erweitert</label>
-			<label xml:lang="en">for documents extended</label>
-			</item>
-			<item
-			href="/editor_form_search-expertdocument.xml?XSL.editor.source.new=true"
-			type="extern" target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">nach Dokumenten komplex</label>
-			<label xml:lang="en">for documents complex</label>
-			</item>
-			<item
-			href="/editor_form_search-person.xml?XSL.editor.source.new=true"
-			type="extern" target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">nach Personen</label>
-			<label xml:lang="en">for a person</label>
-			</item>
-			<item href="/indexpage?searchclass=creators" type="extern"
-			target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">Index Personen</label>
-			<label xml:lang="en">index of persons</label>
-			</item>
-			
-			<item
-			href="/editor_form_search-institution.xml?XSL.editor.source.new=true"
-			type="extern" target="_self" style="normal" replaceMenu="false">
-			<label xml:lang="de">nach Institutionen</label>
-			<label xml:lang="en">for institutions</label>
-			</item>
-			-->
+			</item>					
 			<item
 				href="/editor_form_search-expert.xml?XSL.editor.source.new=true"
 				type="extern" target="_self" style="normal" replaceMenu="false">
@@ -154,17 +117,6 @@
 				<label xml:lang="en">new institution</label>
 				<label xml:lang="ru">ноый институт</label>
 				<label xml:lang="pl">nowa instytucja</label>
-			</item>
-			<item href="/workflow.xml" type="extern" target="_self" style="normal"
-				replaceMenu="false">
-				<label xml:lang="de">Workflow</label>
-				<label xml:lang="en">workflow</label>
-				<label xml:lang="ru">workflow</label>
-				<label xml:lang="pl">Workflow</label>
-			</item>
-			<item href="/editor_jpjournal_editor.xml" type="extern" target="_self"
-				style="normal" replaceMenu="false" constrainPopUp="false">
-				<label xml:lang="de">Workflow Journal</label>
 			</item>
 		</item>
 		<item href="/content/main/authorsArea.xml" type="intern" target="_self"
