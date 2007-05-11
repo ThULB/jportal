@@ -244,11 +244,17 @@
 			
 	<text id="Admin_label" i18n="editormask.labels.Admin"/>
 					
-	<text id="classipub_label" i18n="editormask.labels.classipub"/>
+	<text id="classipub_label">
+		<include cacheable="false" uri="jportal_getClassLabel:hidden_classispub/hidden_classipub"/>		
+	</text>
 				
-	<text id="classipub2_label" i18n="editormask.labels.classipub2"/>
+	<text id="classipub2_label">
+		<include cacheable="false" uri="jportal_getClassLabel:hidden_classispub2/hidden_classipub2"/>
+	</text>
 	
-	<text id="classipub3_label" i18n="editormask.labels.classipub3"/>
+	<text id="classipub3_label">
+		<include cacheable="false" uri="jportal_getClassLabel:hidden_classispub3/hidden_classipub3"/>
+	</text>
 						
 	<text id="websitecontext_label" i18n="editormask.labels.websitecontext"/>
 						

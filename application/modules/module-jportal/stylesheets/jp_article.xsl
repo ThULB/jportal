@@ -304,7 +304,6 @@
 								<xsl:with-param select="./metadata/types/type" name="nodes"/>
 								<xsl:with-param select="i18n:translate('editormask.labels.type')" name="label"/>
 							</xsl:call-template>
-							
 							<!--10***rubric*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>
@@ -312,24 +311,32 @@
 								<xsl:with-param select="i18n:translate('editormask.labels.rubric')" name="label"/>
 							</xsl:call-template>
 							<!--10***classipub*************************************-->
+							<xsl:variable name="label_classipub">
+								<xsl:value-of select="document('jportal_getClassLabel:hidden_classispub/hidden_classipub')//label/text()" />
+							</xsl:variable>
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/classispub/classipub" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.classipub')" name="label"/>
+								<xsl:with-param select="$label_classipub" name="label"/>
 							</xsl:call-template>
 							<!--10***classipub2*************************************-->
+							<xsl:variable name="label_classipub2">
+								<xsl:value-of select="document('jportal_getClassLabel:hidden_classispub2/hidden_classipub2')//label/text()" />
+							</xsl:variable>							
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/classispub2/classipub2" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.classipub2')" name="label"/>
+								<xsl:with-param select="$label_classipub2" name="label"/>
 							</xsl:call-template>
 							<!--10***classipub3*************************************-->
+							<xsl:variable name="label_classipub3">
+								<xsl:value-of select="document('jportal_getClassLabel:hidden_classispub3/hidden_classipub3')//label/text()" />
+							</xsl:variable>														
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>
 								<xsl:with-param select="./metadata/classispub3/classipub3" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.classipub3')" name="label"/>
+								<xsl:with-param select="$label_classipub3" name="label"/>
 							</xsl:call-template>
-							
 							<!--12***ref*************************************-->
 							<xsl:call-template name="printMetaDates">
 								<xsl:with-param select="'right'" name="textalign"/>

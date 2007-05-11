@@ -11,7 +11,7 @@
 			<!-- Only in one specified journal -->
 			<hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>
 			<hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>
-			<include cacheable="false" uri="jportalURI:getJPJournalID:conditions/boolean/boolean/condition90/@value"/>
+			<include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value"/>
 			
 			<!-- search in formal description -->
 			<cell anchor="WEST" colspan="4" col="1" row="1">
