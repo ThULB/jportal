@@ -183,7 +183,7 @@
     <hidden var="@notinherit" default="true"/>
     <hidden var="@heritable" default="true"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="role">
-      <repeater min="0" max="10" ref="repeater32"/>
+      <repeater min="0" max="10" ref="repeater4096"/>
     </cell>
   </panel>
   <text id="Lrole" i18n="editormask.person.Lrole"/>

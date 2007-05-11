@@ -207,21 +207,54 @@
 		<xsl:value-of select="concat(sort, ', ',idx)"/>  
 	</xsl:variable>
 	<xsl:variable name="nameXML">
-		<xsl:copy-of select="document(concat('mcrobject:',col[@name='id']))/mycoreobject/metadata/def.heading/heading"/>
+		<xsl:copy-of select="document(concat('mcrobject:',col[@name='id']))/mycoreobject/metadata"/>
 	</xsl:variable>
 	  <xsl:variable name="lastName">
-		  <xsl:value-of select="xalan:nodeset($nameXML)/heading/lastName/text()"/>
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/def.heading/heading/lastName/text()"/>
 	  </xsl:variable>
 	  <xsl:variable name="firstName">
-		  <xsl:value-of select="xalan:nodeset($nameXML)/heading/firstName/text()"/>
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/def.heading/heading/firstName/text()"/>
 	  </xsl:variable>	  
+	  <xsl:variable name="birthday">
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/def.dateOfBirth/dateOfBirth/text()"/>		  
+	  </xsl:variable>
+	  <xsl:variable name="death">
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/def.dateOfDeath/dateOfDeath/text()"/>		  
+	  </xsl:variable>	  
+	  <xsl:variable name="role">
+		  <xsl:value-of select="xalan:nodeset($nameXML)/metadata/def.role/role/text()"/>		  
+	  </xsl:variable>	  
+	  <xsl:variable name="live">
+		  <xsl:choose>
+			  <xsl:when test="$death!=''">
+				  <xsl:value-of select="concat($birthday,' - ',$death)"/>
+			  </xsl:when>
+			  <xsl:when test="$death=''">
+				  <xsl:value-of select="$birthday"/>
+			  </xsl:when>			  
+		  </xsl:choose>
+	  </xsl:variable>
+	  <xsl:variable name="extension">
+		  <xsl:choose>
+			  <xsl:when test="$live!='' and $role!=''">
+				  <xsl:value-of select="concat('(',$live,', ',$role,')')"/>
+			  </xsl:when>
+			  <xsl:when test="$live='' and $role!=''">
+				  <xsl:value-of select="concat('(',$role,')')"/>
+			  </xsl:when>			  
+			  <xsl:when test="$live!='' and $role=''">
+				  <xsl:value-of select="concat('(',$live,')')"/>
+			  </xsl:when>			  			  
+		  </xsl:choose>
+	  </xsl:variable>
+	  
 	<xsl:variable name="beautiLabel">
 		<xsl:choose>
 			<xsl:when test="$firstName!=''" >
-				<xsl:value-of select="concat($lastName,', ',$firstName)"/>				
+				<xsl:value-of select="concat($lastName,', ',$firstName,' ',$extension)"/>				
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$lastName" />
+				<xsl:value-of select="concat($lastName,' ',$extension)" />
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
