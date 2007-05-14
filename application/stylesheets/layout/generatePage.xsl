@@ -28,12 +28,7 @@
       <xsl:variable name="browserAddress_tmp">
             <xsl:call-template name="getBrowserAddress" />
       </xsl:variable>
-	  <!-- has web context been reset -->
-	  <xsl:variable name="wcReset">
-		  <xsl:call-template name="haveWCReset">
-			  <xsl:with-param name="detectionString" select="$browserAddress_tmp"/>
-		  </xsl:call-template>
-	  </xsl:variable>
+	
 	  <!-- assign right browser address -->	
 	  <xsl:param name="browserAddress">
 		<xsl:call-template name="getBrowserAddressFromTmp">
@@ -65,10 +60,14 @@
 	<xsl:include href="jp_extensions.xsl" />	
 
       <!-- =================================================================================================== -->
-      <xsl:template name="generatePage">
-            <!-- call the appropriate template -->
-            <xsl:call-template name="chooseTemplate" />
-      </xsl:template>
+		<xsl:template name="generatePage">
+			<!-- dummy call to store last page in session if web context has been reset -->
+			<xsl:call-template name="saveLastPage">
+				<xsl:with-param name="detectionString" select="$browserAddress_tmp"/>
+			</xsl:call-template>
+			<!-- call the appropriate template -->
+			<xsl:call-template name="chooseTemplate"/>
+		</xsl:template>
       <!-- ================================================================================= -->
 	  <xsl:template name="get.naviBase">
 		<xsl:choose>
@@ -93,16 +92,20 @@
 		</xsl:choose>
 	</xsl:template>	
       <!-- =================================================================================================== -->		
-	<xsl:template name="haveWCReset">
-		<xsl:param name="detectionString" />
-		<xsl:choose>
-			<xsl:when test="contains($detectionString,'wcReset')">
+	<xsl:template name="saveLastPage">
+		<xsl:param name="detectionString"/>
+		<xsl:if test="contains($detectionString,'wcReset')">
+			<!-- send last page to server to be stored in session -->
+			<xsl:variable name="lastPageStoreURL">
 				<xsl:value-of select="substring-after($detectionString,'wcReset')"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="'false'"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>		
+			</xsl:variable>
+			<xsl:variable name="callURL">
+				<xsl:value-of select="concat('request:iframeDummy.xml?XSL.lastPage.SESSION=',$lastPageStoreURL)"/>
+			</xsl:variable>
+			<xsl:variable name="dummy">
+				<xsl:copy-of select="document($callURL)"/>
+			</xsl:variable>
+		</xsl:if>
+	</xsl:template>
       <!-- =================================================================================================== -->		
 </xsl:stylesheet>

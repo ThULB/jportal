@@ -39,7 +39,7 @@
 		| /mycoreobject[contains(@ID,'_jpvolume_')] 
 		| /mycoreobject[contains(@ID,'_jparticle_')]"
 		priority="2">
-
+		
 		<xsl:call-template name="printSwitchViewBar"/>
 		
 		<xsl:choose>
@@ -75,10 +75,6 @@
 				</table>
 			</xsl:otherwise>
 		</xsl:choose>
-		
-		<xsl:if test="$wcReset!='false'">
-			<xsl:call-template name="hideIFrame"/>
-		</xsl:if>
 		
 	</xsl:template>
 	
@@ -1731,11 +1727,6 @@
 				<xsl:value-of xmlns:decoder="xalan://java.net.URLDecoder" select="decoder:decode($lastPage,'UTF-8')"/>
 			</xsl:otherwise>
 		</xsl:choose>
-	</xsl:template>
-	<!-- ===================================================================================================== -->
-	<xsl:template name="hideIFrame">
-		<iframe src="{$WebApplicationBaseURL}iframeDummy.xml?XSL.Style=xml&amp;XSL.lastPage.SESSION={$wcReset}" width="0"
-			height="0" style="visibility:hidden;"/>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
 	<xsl:template name="listLinkedArts">
