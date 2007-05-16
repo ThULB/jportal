@@ -33,7 +33,7 @@
 				<xsl:call-template name="module-broadcasting.getHeader"/>				
 			</head>
             <body>
-                <table cellspacing="0" cellpadding="0" style="width: 970px; height: 100%; border:1px; border-style:none solid none solid; border-color:#000000; margin: 0px 15px; background-color: #dbdfe7; padding:0px;">
+                <table cellspacing="0" cellpadding="0" style="width: max; height: 100%; border:1px; border-style:none solid none solid; border-color:#000000; margin: 0px 15px; background-color: #dbdfe7; padding:0px;">
                     <tr>
                         <td colspan="4" bgcolor="#DBDFE7" height="10" 
                             style="padding:0px; margin:0px; border:0px; border-style:none">

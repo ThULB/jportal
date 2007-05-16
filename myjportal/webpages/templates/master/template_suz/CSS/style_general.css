@@ -2,7 +2,6 @@ html, body {
     margin: 0px;
     font-family: Verdana, Helvetica, sans-serif;
     font-size: 12px;
-    height: 100%;
     width: 100%;
 }
 
@@ -10,7 +9,6 @@ html, body {
 	border-top: 0px solid #BAB6A9; 
 	border-left: 0px solid #BAB6A9; 
 	border-right: 0px solid #BAB6A9;
-	height : 100%; 
 	width : 100%;
 	}
 
@@ -94,7 +92,7 @@ html, body {
 }
 #contentArea {
 	min-width:585px;
-	width: 70%; 
+	width: 75%; 
 	min-height:155px; 
 	height:auto; 
 	float: left; 

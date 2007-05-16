@@ -190,7 +190,7 @@
 							</xsl:call-template>
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" width="460"/>
+									<hr noshade="noshade" style="width: max; min-width: 600px;"/>
 								</td>
 							</tr>
 							<tr>
@@ -276,7 +276,7 @@
 							</xsl:call-template>-->
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" width="460"/>
+									<hr noshade="noshade" style="width: max; min-width: 600px;"/>
 								</td>
 							</tr>
 							<tr>

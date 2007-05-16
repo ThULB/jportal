@@ -8,29 +8,28 @@
 /* =================================================================== */
 #contentArea {
     vertical-align: top;
-<!--    height: 85%;-->
     padding-top: 1em;
     padding-left: 2px;
     padding-right: 2px;
-    
+    color:  #314759;
+    font-size: 12px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight : normal;
+    text-decoration: none;
+    border : 0px solid black;	
+	position: absolute;
 }
+
+#contentArea[id] {
+	padding-left: 285px;
+}
+
 /*IE Fix to have content inside the table: stupid browser*/
 #contentWrapper {
     width: 95%;
     margin: 0px auto;
 }
 
-#contentArea {
-    /* color: #041B26; */
-    /* JLZ */
-    color:  #314759;
-    /* background-color: #EFF4F6; */	/* taken out for JLZ, using standard JLZ background*/
-    font-size: 12px;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-weight : normal;
-    text-decoration: none;
-    border : 0px solid black;	
-}
 #contentArea .headline {
     font-weight : bold;
     padding: 3px;

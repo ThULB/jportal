@@ -47,7 +47,10 @@ html, body {
 	padding-right:0px;
 }
 #contentArea {
-	width: max;
+	position: absolute;
+	width: 75%;
+}
+#contentArea[id]{
 	margin-left: 270px; 
 }
 #footer {

@@ -178,19 +178,24 @@ div.main_menu {
 /* =================================================================== */
 /* General Main navigation column                                      */
 /* =================================================================== */
-#navi_history
-{
-    top : 110px;
+#navi_history{
+	padding-top: 10px;
+	position: absolute;
     color: #314759; 
     font-size: 11px;
     font-weight : bold;
     border: 0px solid black;
     width: 600px;
     height: 11px;    
-    margin-left: 290px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     vertical-align: middle;
+	margin-left: 5px;
 }
+
+#navi_history[id]{
+    margin-left: 295px;
+}
+
 #navi_history a
 {
     color: #12265F;

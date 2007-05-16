@@ -52,6 +52,8 @@ html, body {
 	float: left;
 }
 #banner_right {
+	text-align: right;
+	position: absolute;
 	width : 735px;
 	height : 140px;
 	border : 0px solid red;
@@ -59,6 +61,11 @@ html, body {
 	/*padding-left : 0px;*/
 	float: right;
 }
+
+#banner_right[id]{
+	position: relative;
+}
+
 #div_navi_main {
 	float: left;
 	width : 230px;
@@ -67,12 +74,10 @@ html, body {
 	/*height : 200px;*/	
 	padding-left : 25px;
 	border: 0px solid black;
-	repeat: repeat-y;
 }
+
 #contentArea {
 	padding-left: 10px;
-	width :100%;
-	float: left;
     border : 0px solid black;
 }
 #navi_under {

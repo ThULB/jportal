@@ -265,14 +265,14 @@
 								| ./metadata/participants/participant | ./metadata/subtitles/subtitle)">
 									<tr id="detailed-dividingline">
 										<td colspan="2">
-											<hr noshade="noshade" width="460"/>
+											<hr noshade="noshade" style="width: max; min-width: 600px;"/>
 										</td>
 									</tr>
 								</xsl:when>
 								<xsl:when test="string-length($mainTitle)>150)">
 									<tr id="detailed-dividingline">
 										<td colspan="2">
-											<hr noshade="noshade" width="460"/>
+											<hr noshade="noshade" style="width: max; min-width: 600px;"/>
 										</td>
 									</tr>
 								</xsl:when>
@@ -358,7 +358,7 @@
 							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" width="460"/>
+									<hr noshade="noshade" style="width: max; min-width: 600px;"/>
 								</td>
 							</tr>							
 							<tr>

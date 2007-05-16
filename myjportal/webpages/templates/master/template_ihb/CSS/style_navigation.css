@@ -175,8 +175,9 @@ div.main_menu {
 /* =================================================================== */
 /* General Main navigation column                                      */
 /* =================================================================== */
-#navi_history
-{
+#navi_history{
+	padding-top: 5px;
+	position:absolute;
     color: #00877f; 
     font-size: 11px;
     font-weight : bold;
@@ -190,6 +191,11 @@ div.main_menu {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     /* JLZ */
 }
+
+#navi_history[id]{
+	padding-left: 260px;
+}
+
 #navi_history a
 {
     color: #12265F;
