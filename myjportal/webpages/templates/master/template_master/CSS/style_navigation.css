@@ -4,8 +4,8 @@
 /* =================================================================== */
 .mainSite_MenuArea{
     margin-left: 19px;
-    float: left;
-    clear: left;
+	height: 100%;
+	float: left;
 }
 
 * html .mainSite_MenuArea{

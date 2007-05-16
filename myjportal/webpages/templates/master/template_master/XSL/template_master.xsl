@@ -69,7 +69,7 @@
 					</div>
 					<!-- mainSite_MenuArea -->
 					
-					<div class="mainSite_ContentArea">
+					<div class="mainSite_ContentArea" id="mca">
 						<xsl:call-template name="getFastWCMS"/>
 						<div id="contentArea">
 							

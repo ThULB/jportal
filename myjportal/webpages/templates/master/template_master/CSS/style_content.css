@@ -3,9 +3,14 @@
 /* under the content  											       */
 /* =================================================================== */
 .mainSite_ContentArea{
-	width: 75%;
-	float: right;
-	padding-right: 25px;
+	min-width: 700px;
+	width: 80%;
+	margin-right: 55px;
+	position: absolute;
+}
+
+#mca[id]{
+	padding-left: 230px;
 }
 
 /* =================================================================== */
@@ -50,7 +55,7 @@
 	padding-top: 14px;
    	margin-left: 10px;
    	margin-right: auto;
-   	width : 100%;
+   	width : 95%;
     color: #444444;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
