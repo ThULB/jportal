@@ -10,18 +10,12 @@ html, body {
 
 table.main {
     height: 100%;
-    /*width: 100%;*/
-    width: 996px;
+    width: 100%;
     /*margin-left: auto;
     margin-right: auto;*/
     color: #5C727E;
     background: #FFFAE5 url(../IMAGES/bg_pix.gif);
     background-repeat: repeat-x repeat-y;
-}
-
-* html table.main {  /* nur fuer Internet Explorer */
-    width:1076px;     /* Version 5.x */
-    w\idth:996px;    /* Version 6 */
 }
 
 /* ==================================================== */
@@ -85,7 +79,7 @@ img.balk1 {
 }
 
 td.balk2 {
-    background: #5C727E /*url(../IMAGES/balk1.gif)*/;
+    background: url(../IMAGES/balk3.gif);
 }
 
 img.balk2 {

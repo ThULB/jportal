@@ -10,8 +10,7 @@ html, body {
 
 table.main {
     height: 100%;
-    /*width: 100%;*/
-    width: 991px;
+    width: 100%;
     /*margin-left: auto;
     margin-right: auto;*/
     color: #384F43;
@@ -49,8 +48,7 @@ td.decor_line {
     height: 1px;
     /*line-height: 1px;*/
     background: black url(../IMAGES/black_dot.gif);
-    background-repeat: repeat-y;
-	
+    background-repeat: repeat-y;	
 }
 
 td.decor_spc {
@@ -77,7 +75,7 @@ img.balk1 {
 }
 
 td.balk2 {
-    background: #5A7C6A /*url(../IMAGES/balk1.gif)*/;
+    background: url(../IMAGES/balk3.gif);
 }
 
 img.balk2 {

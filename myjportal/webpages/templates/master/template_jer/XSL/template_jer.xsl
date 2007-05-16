@@ -30,63 +30,62 @@
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
-				<xsl:call-template name="module-broadcasting.getHeader"/>				
+				<xsl:call-template name="module-broadcasting.getHeader"/>
 			</head>
 			<body>
-						<table cellspacing="0" cellpadding="0" id="footer">
-							<tr>
-								<td
-									style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_left.jpg) no-repeat;">
-									<table cellspacing="0" cellpadding="0" width="400px">
-										<tr>
-											<td>
-												<div id="max-planck-logo"> 
-													<a href="http://www.econ.mpg.de" target="_blank">
-														<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/max-planck-logo.jpg" border="0"/>
-													</a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div id="login_div">
-													<div id="login_div_inside">
-														<xsl:call-template name="template_jer.userInfo"/>
-													</div>
-												</div>
-											</td>
-										</tr>
-									</table>
-								</td>
-								<td	width="600px" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_middle.jpg); repeat x;">
-								</td>
-								<td
-									style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_right.jpg) no-repeat;">
-									<table cellspacing="0" cellpadding="0" width="641px">
-										<tr>
-											<td>
-												<div id="fsu-logo"> 
-													<a href="http://www.uni-jena.de" target="_blank">
-													<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/fsu-logo.jpg" border="0"/>
-													</a>
-												</div>
-											</td>
-										</tr>
-										<tr>
-											<td>
-												<div id="thulb_logo"> 
-													<a href="http://www.thulb.uni-jena.de" target="_blank">
-														<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb_logo.gif" border="0"/>
-													</a>
-												</div>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-						</table>
-					<div id="second-line">
-					<div id="div_navi_main"	style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_left.jpg) no-repeat;">
+				<table cellspacing="0" cellpadding="0" id="footer">
+					<tr>
+						<td
+							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_left.jpg) no-repeat;">
+							<table cellspacing="0" cellpadding="0" width="400px">
+								<tr>
+									<td>
+										<div id="max-planck-logo"> <a href="http://www.econ.mpg.de" target="_blank"> <img
+												src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/max-planck-logo.jpg"
+												border="0"/> </a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="login_div">
+											<div id="login_div_inside">
+												<xsl:call-template name="template_jer.userInfo"/>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td width="600px"
+							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_middle.jpg); repeat x;">
+						</td>
+						<td
+							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_right.jpg) no-repeat;">
+							<table cellspacing="0" cellpadding="0" width="641px">
+								<tr>
+									<td>
+										<div id="fsu-logo"> <a href="http://www.uni-jena.de" target="_blank"> <img
+												src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/fsu-logo.jpg"
+												border="0"/> </a>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="thulb_logo"> <a href="http://www.thulb.uni-jena.de" target="_blank"> <img
+												src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb_logo.gif"
+												border="0"/> </a>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<div id="second-line">
+					<div id="div_navi_main"
+						style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_left.jpg) no-repeat;">
 						<br/>
 						<xsl:call-template name="Navigation_main"/>
 					</div>
@@ -111,7 +110,7 @@
 							<xsl:call-template name="template_jer.write.content"/>
 						</div>
 					</div>
-				</div>	
+				</div>
 			</body>
 		</html>
 		

@@ -2,8 +2,8 @@
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
+	exclude-result-prefixes="xlink">
 	
 	<!-- ============================================== -->
 	<!-- the template                                   -->
@@ -16,34 +16,29 @@
 				<title>
 					<xsl:call-template name="PageTitle"/>
 				</title>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
-					rel="stylesheet" type="text/css"/>
-				<link
-					href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css"
-					rel="stylesheet" type="text/css"/>
-				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet"
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet"
 					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet"
+					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
+					rel="stylesheet" type="text/css"/>
+				<link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet"
+					type="text/css"/>
+				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js"
 					type="text/javascript"/>
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
-				<xsl:call-template name="module-broadcasting.getHeader"/>				
+				<xsl:call-template name="module-broadcasting.getHeader"/>
 			</head>
 			
 			<body>
 				
+				
 				<!-- Begin: Big fat Maintable =========================================================================== -->
 				<table class="main" border="0" cellspacing="0" cellpadding="0">
-					
 					
 					<!-- Begin: Top margin and define column ================================================== -->
 					<tr>
@@ -59,7 +54,6 @@
 					
 					<!-- End: Top margin and define column ==================================================== -->
 					
-					
 					<!-- Begin: Login-row and Navigation-row ================================================== -->
 					<tr>
 						<td class="login_navi_row"/>
@@ -71,7 +65,6 @@
 						
 						<!-- End: Login ======================================================================= -->
 						
-						
 						<!-- Begin: Navigation ================================================================ -->
 						<td id="navi_below_cell">
 							<xsl:call-template name="navigation.row">
@@ -79,12 +72,9 @@
 								<!--xsl:with-param name="rootNode" select="$loaded_navigation_xml/navi-below" /-->
 								<xsl:with-param name="rootNode"
 									select="document($navigationBase) /navigation/navi-below"/>
-								<xsl:with-param name="CSSLayoutClass"
-									select="'navi_below'"/>
-								<xsl:with-param name="menuPointHeigth"
-									select="'21'"/> <!-- use pixel values -->
-								<xsl:with-param name="spaceBetweenLinks"
-									select="'12'"/> <!-- use pixel values -->
+								<xsl:with-param name="CSSLayoutClass" select="'navi_below'"/>
+								<xsl:with-param name="menuPointHeigth" select="'21'"/> <!-- use pixel values -->
+								<xsl:with-param name="spaceBetweenLinks" select="'12'"/> <!-- use pixel values -->
 							</xsl:call-template>
 						</td>
 						
@@ -93,10 +83,11 @@
 					
 					<!-- End: Login-row and Navigation-row ===================================================== -->
 					
-					
 					<!-- Begin: Decoration lines =============================================================== -->
 					<tr>
 						<!-- td class="decor_line">&#160;</td-->
+						<td class="decor_line">&#160;
+						</td>
 						<td class="decor_line">&#160;
 						</td>
 						<td class="decor_line">&#160;
@@ -109,18 +100,18 @@
 						</td>
 						<td class="decor_spc">&#160;
 						</td>
+						<td class="decor_spc">&#160;
+						</td>
 						<!--td class="decor_spc"/>
 						<td class="decor_spc"/-->
 					</tr>
 					
 					<!-- End: Decoration lines ================================================================= -->
 					
-					
 					<!-- Begin: Main Graphics ================================================================== -->
 					<tr>
 						<td class="balk1" colspan="2"> <img class="balk1"
-								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/balk1.gif"
-								alt="balk1"/>
+								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/balk1.gif" alt="balk1"/>
 						</td>
 						<td class="balk2"> <img class="balk2"
 								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/balk2.gif"/>
@@ -129,11 +120,9 @@
 					
 					<!-- End: Main Graphics ==================================================================== -->
 					
-					
 					<!-- Begin: Navigation history ============================================================= -->
 					<tr>
 						<td class="navi_history"/>
-						
 						
 						<!-- Begin: Part of Main Graphics / rest of the book =================================== -->
 						<td rowspan="4" class="balk_u"> <img class="balk_u"
@@ -143,12 +132,10 @@
 						<!-- End: Part of Main Graphics / rest of the book ===================================== -->
 						
 						<td class="navi_history">
-							<table class="navi_history" border="0" cellspacing="0"
-								cellpadding="0">
+							<table class="navi_history" border="0" cellspacing="0" cellpadding="0">
 								<tr>
 									<td class="navi_history">
-										<xsl:call-template
-											name="navigation.history"/>
+										<xsl:call-template name="navigation.history"/>
 									</td>
 								</tr>
 							</table>
@@ -157,23 +144,24 @@
 					
 					<!-- End: Navigation history =============================================================== -->
 					
-					
 					<!-- Begin: Decoration lines =============================================================== -->
 					<tr>
 						<td class="decor_spc"/>
 						<td class="decor_spc"/>
+						<td class="decor_spc"/>
 					</tr>
 					<tr>
 						<td class="decor_line"/>
 						<td class="decor_line"/>
+						<td class="decor_line"/>
 					</tr>
 					<tr>
+						<td class="decor_big_spc"/>
 						<td class="decor_big_spc"/>
 						<td class="decor_big_spc"/>
 					</tr>
 					
 					<!-- End: Decoration lines ================================================================= -->
-					
 					
 					<!-- Begin: Main Menu / Content Area ======================================================= -->
 					<tr>
@@ -188,8 +176,7 @@
 								<table border="0" cellspacing="0" cellpadding="0">
 									<tr>
 										<td>
-											<xsl:call-template
-												name="Navigation_main"/>
+											<xsl:call-template name="Navigation_main"/>
 										</td>
 									</tr>
 									<tr>
@@ -207,13 +194,11 @@
 						
 						<!-- End: Main Menu  =================================================================== -->
 						
-						
 						<!-- Begin: Content Area  ============================================================== -->
 						<td id="contentArea">
 							<xsl:call-template name="getFastWCMS"/>
 							<div id="contentWrapper">
-								<xsl:call-template
-									name="template_jalz.write.content"/>
+								<xsl:call-template name="template_jalz.write.content"/>
 							</div>
 							
 						</td>
@@ -222,7 +207,6 @@
 					</tr>
 					
 					<!-- End: Main Menu / Content Area ========================================================= -->
-					
 					
 					<!-- Begin: Thulb-Logo ===================================================================== -->
 					<tr>
@@ -238,12 +222,12 @@
 					<!-- End: Thulb-Logo ======================================================================= -->
 				</table>
 				
+				
 				<!-- End: Big fat Maintable ============================================================================= -->
 			</body>
 		</html>
 		
 	</xsl:template>
-	
 	
 	<!-- Template for Content ================================================================================== -->
 	<xsl:template name="template_jalz.write.content">
@@ -252,7 +236,6 @@
 		</div>
 		<xsl:apply-templates/>
 	</xsl:template>
-	
 	
 	<!-- Template for User info ================================================================================ -->
 	<xsl:template name="template_jalz.userInfo">

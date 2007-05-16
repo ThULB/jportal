@@ -5,11 +5,7 @@
 .mainSite_ContentArea{
 	width: 75%;
 	float: right;
-	clear: right;
-}
-
-* html .mainSite_ContentArea{
-	width: 100%;
+	padding-right: 25px;
 }
 
 /* =================================================================== */

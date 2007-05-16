@@ -231,6 +231,7 @@
 				<xsl:value-of select="i18n:translate('metaData.staticURL')"/>
 			</td>
 			<td>
+				<br/>
 			</td>
 		</tr>
 		<tr>

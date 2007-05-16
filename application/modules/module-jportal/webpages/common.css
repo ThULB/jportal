@@ -39,7 +39,8 @@
 /* leafs view                                                          */
 /* =================================================================== */
 
-#leaf-all {	
+#leaf-all {
+	width: 100%;
     font-size: 12px;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
@@ -47,6 +48,7 @@
 }
 
 #leaf-front{
+	width: 15px;
 	text-align: center;
 	font-size: 12px;
 	font-weight: bold;
@@ -61,29 +63,35 @@
 	font-weight: bold;
 }
 
-#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+#leaf-linkarea{
+	text-indent: 10px;
+}
+
+#leaf-linkarea, #leaf-linkarea a:link , #leaf-linkarea a:visited, #leaf-linkarea a:hover, #leaf-linkarea a:active{
 	display:block;
 	line-height:26px;
 	width: 300px;
     text-decoration:none;
     font-size: 12px;
     font-family: verdana, sans-serif;
-	padding-left:10px;
     padding-bottom:0px;
     margin:0px;
 }
 
-#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+#leaf-linkarea2{
+	text-indent: 10px;
+}
+
+#leaf-linkarea2, #leaf-linkarea2 a:link , #leaf-linkarea2 a:visited, #leaf-linkarea2 a:hover, #leaf-linkarea2 a:active{
 	display:block;
 	line-height:26px;
-	width: 600px;
+	width: 100%;
     text-decoration:none;
     font-size: 12px;
     font-family: verdana, sans-serif;
-	padding-left:10px;
     padding-bottom:0px;
     margin:0px;
-}
+} 
 
 #leaf-whitespaces{
 	height: 20px;
@@ -123,10 +131,14 @@
 /* detailed view                                                       */
 /* =================================================================== */
 #detailed-mainheadline {
-	width: 530px; 
+	width: 100%; 
 	padding-left: 30px; 
 	vertical-align: bottom; 
 	font-size: 16px; 
+}
+
+#detailed-headline-frame {
+	width:max;
 }
 
 #detailed-headlines {
@@ -147,16 +159,17 @@
 
 #detailed-view {
 	padding: 10px;
-	width: 530px; 
+	width: 90%; 
 }
 
 #detailed-labels {
 	text-align: right;
 	padding-right: 5px;
+	width: 240px;
 }
 
 #detailed-frame{
-	width: 670px;
+	width: 100%;
 	padding: 0px;
 }
 
@@ -327,4 +340,8 @@ input[type=image]{
 
 select{
 	border: solid 1px #000000;
+}
+
+.metavalue{
+	padding-left: 15px;
 }

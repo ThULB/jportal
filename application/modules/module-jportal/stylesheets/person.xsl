@@ -108,7 +108,7 @@
 			<table border="0" cellspacing="0">
 				<tr>
 					<td id="detailed-cube">
-						<img src="{$WebApplicationBaseURL}images/person-f-25x25.gif"/>
+						<img src="{$WebApplicationBaseURL}images/person.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
 						<xsl:variable name="lastName_shorted">

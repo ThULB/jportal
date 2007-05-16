@@ -160,7 +160,9 @@
 						<img src="{$WebApplicationBaseURL}images/artikel.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
-						<xsl:copy-of select="$maintitle_shorted"/>
+						<div id="detailed-headline-frame">
+							<xsl:copy-of select="$maintitle_shorted"/>
+						</div>
 					</td>
 					<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
@@ -173,7 +175,7 @@
 				</tr>
 				<tr>
 					<td colspan="3" rowspan="1">
-						<table cellspacing="0" cellpadding="0" id="detailed-view">
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
 							<xsl:choose>
 								<xsl:when
 									test="(./metadata/identis/identi | ./metadata/sizes/size 
@@ -183,12 +185,18 @@
 										<td id="detailed-headlines">
 											<xsl:value-of select="i18n:translate('metaData.headlines.formaldiscr')"/>
 										</td>
+										<td>
+											<br/>
+										</td>
 									</tr>
 								</xsl:when>
 								<xsl:when test="string-length($mainTitle)>150)">
 									<tr>
 										<td id="detailed-headlines">
 											<xsl:value-of select="i18n:translate('metaData.headlines.formaldiscr')"/>
+										</td>
+										<td>
+											<br/>
 										</td>
 									</tr>
 								</xsl:when>
@@ -201,6 +209,7 @@
 										<xsl:value-of select="i18n:translate('editormask.labels.bibdescript')"/>
 									</td>
 									<td class="metavalue">
+										<br></br>
 										<xsl:call-template name="printI18N">
 											<xsl:with-param name="nodes"
 												select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
@@ -271,6 +280,9 @@
 							<tr>
 								<td id="detailed-headlines">
 									<xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')"/>
+								</td>
+								<td>
+									<br/>
 								</td>
 							</tr>
 							
@@ -352,6 +364,9 @@
 							<tr>
 								<td id="detailed-headlines">
 									<xsl:value-of select="i18n:translate('metaData.headlines.systemdata')"/>
+								</td>
+								<td>
+									<br/>
 								</td>
 							</tr>							
 							<xsl:if test="$CurrentUser!='gast'">

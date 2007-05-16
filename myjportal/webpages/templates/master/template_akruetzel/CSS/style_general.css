@@ -7,68 +7,76 @@ html, body {
 }
 #area_left {
 	width: 257px;
-	float: left;
 	padding-top: 0px;
 }
-#border {
-	height : 100%; 
-	width : 1043px;
-	}
+
 #contentArea {
-	width:727px; 
+	min-width: 700px;
+	margin-left: 35px;
+	width: 90%; 
 	min-height:155px; 
-	float:left; 
 }	
 #div_navi_main {
-	width:256px; 
-	float:left; 
+	width:256px;  
 	padding : 0px;
 	margin: 0px;
 }
 #end {
-	float:left;
+	height: 13px;
 	padding: 0px;
+	padding-bottom: 2px;
+	padding-left: 5px;
 /*	padding-right:81px;*/
 	margin:0px;
 }
 #end img{
 	height : 20px;
-	padding:0px;
-	margin:0px;
-	border:0px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }
-#footer {
- 	float:left;
-	width:1043px; 
-	height:166px; 
-	margin : 0px;
-	}
+
+#header_bg_left{
+	background:url(../IMAGES/banner_akruetzel_top_left.jpg) no-repeat;
+}
+
+#header_bg_right{
+	background:url(../IMAGES/banner_akruetzel_top_right.jpg) no-repeat;
+}
+
+#header_filler{
+	background:url(../IMAGES/banner_akruetzel_top_filler.jpg);
+	width: max; 
+	height: 100px;
+}
+
+#dummy{
+	width: 100%;
+}
+
 #footer2 {
- 	float:left;
-	width:1043px; 
+	width:1043px;
 	margin : 0px;
-	padding:0px;
+	padding: 0px;
 	height : 30px;
-	}
+}
+
 #footer_bottom {
-	float : left; 
 	position : relative;
 	width : 255px;
 	height : 32px;
 }
 #login_div {
+	height: 12px;
 	padding : 0px;
 	width: 255px;
-	height: 25px; 
-	float : left;
 	padding-bottom: 3px;
 	background-color: #FFFFFF;
 	}
 #login_div_inside {
 	padding: 2px;
 	border: 1px solid black;
-	background-color: #E6E2CC;
-	
+	background-color: #E6E2CC;	
 }	
 #navi {
 	height: 30px;
@@ -80,33 +88,25 @@ html, body {
 }	
 
 #navi_box {
-	width: 365px; 
-	height: 29px; 
-	border: 0px;
-	float: left;
+	width: 330px;
 }
 #navi_history {
-	float:left;
+	height: 12px; 
 	padding : 0px;
-	height: 25px; 
-	width: 962px;
+	padding-bottom: 3px;
 	background-color: #FFFFFF;
-	margin:0px;
-	padding-bottom: 7px;
 }
 #navi_history_inside {
-	float:left;
 	padding: 2px;
 	margin-left:2px;
 	border-left: 1px solid black;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 	background-color: #E6E2CC;
-	width: 682px;
+	width: 100%;
 	margin-right:0px;
 	padding-right:0;
 }
 #thulb_logo {
-	width:64px; 
-	float: left;
+	width: 64px; 
 }

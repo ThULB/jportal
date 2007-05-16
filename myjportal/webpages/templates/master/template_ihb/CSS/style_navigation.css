@@ -182,14 +182,13 @@ div.main_menu {
     font-weight : bold;
     border: 0px solid black;
     width: 715px;
-    height: 11px;    
+    height: 11px;
     /*border-width: 5px;*/
     /*border-color: #14516E; */	/* taken out for JLZ */
     /*margin-right: 20px;*/
     margin-left: 20px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     /* JLZ */
-    vertical-align: middle;
 }
 #navi_history a
 {

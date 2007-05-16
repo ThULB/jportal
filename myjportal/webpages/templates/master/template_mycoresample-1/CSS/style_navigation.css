@@ -1,66 +1,15 @@
 /* =================================================================== */
-/* .mainSite_MenuArea class is responsible for the red grey column on  */
-/* the left	   													   */
+/* template_mycoresample-1/CSS/style_navigation.css                    */
+/* $Revision$ $Date$                                                   */
 /* =================================================================== */
-.mainSite_MenuArea{
-    margin-left: 19px;
-    float: left;
-    clear: left;
-}
-
-* html .mainSite_MenuArea{
-    margin-left: 10px;
-}
 
 /* =================================================================== */
 /* Navigation below                                                    */
 /* =================================================================== */
-/* =================================================================== */
-
-.navigationBelow{
- 	height: 77px;
-}
-
-.navigationBelow .top{
-	padding-top: 150px;
-	padding-left: 440px;
-	float: left;
-}
-
-.navigationBelow .history{
-	padding-left: 250px;
-	padding-top: 20px;
-	float: left;
-	clear:both;
-    	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	color: #253767;	
-}
-
-* html .navigationBelow .history{
-	padding-left: 250px;
-	width: 700px;
-}
-
-.navigationBelow .history a{
-	color: #253767;	
-	text-decoration: none;
-}
-
-
-.navigationBelow .history a:hover{
-	text-decoration: underline;
-}
-.mainMenu{
-	width: 208px;
-	float: left;
-}
-
 #navi_below_cell {
     padding: 3px;
     text-align: right;
 }
-
 #navi_below_cell table{
     margin-right: 0px;
     margin-left: auto;
@@ -69,13 +18,13 @@
 
 .navi_below th, .navi_below td, .navi_below a
 {
-	color: #ffffff;
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+	color: #15516E; /* ocean */
+        font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
 }
 .navi_below a
 {
-	color: #ffffff;
+	color: #15516E; /* ocean */
 	text-decoration: none;
 } 
 .navi_below a:hover
@@ -108,33 +57,35 @@ table.navi_history
     background : transparent;
     font-size: 11px;
     font-weight : bold;
-    width: 50%;
-	margin-left: 10px;
-	padding-left: 100px;
+    border-style: none none solid none;
+    border-width: 5px;
+    border-color: #14516E;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
     font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 .navi_history a
 {
-        color: #444444;
+        color: #8F3D00;
 		font-weight : normal;
 		text-decoration: none;
 }
 .navi_history a:hover
 {
-        color: #253767;
 		text-decoration: underline;
 }
-/* td.navi_history{/*
-/*     text-align:left;/*
-/*     padding-left: 3%;/*
-/*     padding-bottom: 5px;/*
-/* }/*
-/* /*
-/* td.navi_history_user{/*
-/*     text-align:right;/*
-/*     padding-right: 3%;/*
-/*     padding-bottom: 5px;/*
-/* }/*
+td.navi_history{
+    text-align:left;
+    padding-left: 3%;
+    padding-bottom: 5px;
+}
+
+td.navi_history_user{
+    text-align:right;
+    padding-right: 3%;
+    padding-bottom: 5px;
+}
 
 /* =================================================================== */
 /* Main navigation menu                                                */
@@ -146,19 +97,20 @@ table.navi_history
     font-family: Verdana, Arial, Helvetica, sans-serif;
 	border-style: none;
 	border-width: 0px;
-    min-width: 200px; 
-    width: 200px; 
+    min-width: 200px;
+    width: 200px;
 }
 div.navi_main{
-    background-color:#DBDFE7;
+    background-color:#14516E;
     vertical-align: top;
-    min-width: 200px; 
+    min-width: 200px;
     width: auto;
     border-style: none;
     margin-left:20px;
 }
 .navi_main img{
     display:block;
+    border:none;
 }
 .navi_main tr, .navi_main td
 {
@@ -170,12 +122,12 @@ div.navi_main{
 }
 .navi_main th a
 {
-	color: #253767;	
+	color: #EFF4F6;	
 	font-weight : bold;	
 }
 .navi_main a
 {
-    color: #444444;
+    color: #EFF4F6;
     font-weight : normal;
     text-decoration: none;
 }
@@ -187,30 +139,3 @@ div.navi_main{
 {
     text-decoration: none;
 }
-
-/* =================================================================== */
-/* special navi bar
-/* =================================================================== */
-.p2 a {
-	text-decoration: none;
-	font-size: 13px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	color : #ffffff;
-	background-repeat: no-repeat;
-	background-position: 0 0;
-	background-attachment: fixed;
-	background: url(../IMAGES/viereck_link.gif) no-repeat;
-	padding-left : 15px;
-	}
-
-.p2 a:hover {
-	text-decoration: underline;
-	background: url(../IMAGES/viereck_hover.gif) no-repeat;
-}
-
-.p2 .marked a
-{
-	text-decoration: underline;
-	background: url(../IMAGES/viereck_hover.gif) no-repeat;
-}
-

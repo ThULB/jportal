@@ -16,8 +16,7 @@
 }
 /*IE Fix to have content inside the table: stupid browser*/
 #contentWrapper {
-    width: 90%;
-    margin: 0px auto;
+	margin: auto;
 }
 
 #contentArea {
@@ -242,6 +241,7 @@ div.submitButton{
     color: black;
     padding-left: 10px;
 }
+
 #files .metaname, #files .metavalue{
     width: auto;
 }
@@ -325,20 +325,22 @@ div.submitButton{
 	color: #FFFFFF;
 }
 
-#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+#leaf-linkarea a:link , #leaf-linkarea a:visited {
     color:#7C0000;
+	background-color:transparent;
 }
 
-#leaf-linkarea a:hover {
+#leaf-linkarea a:hover, #leaf-linkarea a:active {
 	background-color:#7C0000;
     color:#FFFFFF;
 }
 
-#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited {
     color:#7C0000;
+	background-color:transparent;
 }
 
-#leaf-linkarea2 a:hover {
+#leaf-linkarea2 a:hover, #leaf-linkarea2 a:active  {
 	background-color:#7C0000;
     color:#FFFFFF;
 }

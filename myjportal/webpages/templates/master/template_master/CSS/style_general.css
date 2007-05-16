@@ -23,6 +23,7 @@ html, body {
 	margin: 0px;
 	background: #ffffff url(../IMAGES/logo_bar.gif) no-repeat;
 	height: 212px;
+	width: 100%;
 }
 
 /* =================================================================== */
@@ -33,7 +34,7 @@ html, body {
 	min-height: 100%;
     height: auto !important;
     height: 100%;
-	width: 996px;
+	width: 100%;
 	background: url(../IMAGES/bg_line.gif) repeat-y;
 
 }
@@ -176,6 +177,6 @@ html, body {
 #content {
 	margin-left: 260px;
 	margin-top: 15px;
-	width: 100%;
+	width: 99%;
 	position:relative;
 }

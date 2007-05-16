@@ -179,15 +179,15 @@ div.main_menu {
 /* =================================================================== */
 #navi_history
 {
+	float: right;
     color: #003100; 
     font-size: 11px;
     font-weight : normal;
     border: 0px solid black;
-    width: 600px;
+    width: 700px;
     min-width: 600px;
     padding-top: 118px;
-    height: 15px;
-    padding-left: 40px;    
+    height: 15px;    
     /*border-width: 5px;*/
     /*border-color: #14516E; */	/* taken out for JLZ */
     /*margin-right: 20px;*/
