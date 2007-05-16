@@ -8,7 +8,7 @@
 	<!-- ============================================== -->
 	<!-- the template                                   -->
 	<!-- ============================================== -->
-	<xsl:template name="template_hbz">
+	<xsl:template name="template_suhler">
 		<html>
 			<head>
 				<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
@@ -36,7 +36,7 @@
 				<table cellspacing="0" cellpadding="0" border="0" id="footer">
 					<tr>
 						<td id="banner-left"
-							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_top_left.gif) no-repeat;">
+							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_top_left.gif) no-repeat;">
 							<table cellspacing="0" cellpadding="0" border="0" style="width: 100%; text-align: right;">
 								<tr>
 									<td id="navi_box">
@@ -67,7 +67,7 @@
 							</table>
 						</td>
 						<td id="banner-right"
-							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_top_right.gif) no-repeat;">
+							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_top_right.gif) no-repeat;">
 							<div id="thulb_logo"> <a href="http://www.thulb.uni-jena.de" target="_blank"> <img
 									src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb_logo.gif"
 									border="0"/> </a>
@@ -80,10 +80,10 @@
 						<table cellspacing="0" cellpadding="0" border="0" style="height:90%;">
 							<tr>
 								<td id="div_navi_main_top"
-									style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_top.gif) no-repeat;">
+									style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_navi_top.gif) no-repeat;">
 									<div id="login_div">
 										<div id="login_div_inside">
-											<xsl:call-template name="template_hbz.userInfo"/>
+											<xsl:call-template name="template_suhler.userInfo"/>
 										</div>
 									</div>
 									<br/>
@@ -92,18 +92,18 @@
 							</tr>
 							<tr>
 								<td> 
-							      <div id="div_navi_main_middlea" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle1.gif) no-repeat;"/>
+							      <div id="div_navi_main_middlea" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_navi_middle2.gif) no-repeat;"/>
 								</td>
 							</tr>
 							<tr>
-								<td id="div_navi_main_middleb"> <a href="http://zs.thulb.uni-jena.de/content/main/journals/suhler.xml" target="_self"><img
-										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle2.gif"
+								<td id="div_navi_main_middleb"> <a href="http://zs.thulb.uni-jena.de/content/main/journals/henneberger.xml" target="_self"><img
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_navi_middle1.gif"
 										border="0"/></a>
 								</td>
 							</tr>
 							<tr>
 								<td id="div_navi_main_bottom">
-								<div style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_bottom.gif); background-repeat: repeat-y; height: 100%;">
+								<div style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_suhler_navi_bottom.gif); background-repeat: repeat-y; height: 100%;">
 								<br/>
 								</div>		
 								</td>
@@ -113,7 +113,7 @@
 					<div id="contentArea">
 						<div id="contentWrapper">
 							<xsl:call-template name="getFastWCMS"/>
-							<xsl:call-template name="template_hbz.write.content"/>
+							<xsl:call-template name="template_suhler.write.content"/>
 						</div>
 					</div>
 				</div>
@@ -123,7 +123,7 @@
 	</xsl:template>
 	
 	<!-- Template for Content ================================================================================== -->
-	<xsl:template name="template_hbz.write.content">
+	<xsl:template name="template_suhler.write.content">
 		<div class="headline">
 			<xsl:copy-of select="$PageTitle"/>
 		</div>
@@ -131,7 +131,7 @@
 	</xsl:template>
 	
 	<!-- Template for User info ================================================================================ -->
-	<xsl:template name="template_hbz.userInfo">
+	<xsl:template name="template_suhler.userInfo">
 		
 		<!-- BEGIN: login values -->
 		<xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="LoginURL"
