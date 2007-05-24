@@ -7,7 +7,6 @@
 	exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
 	<xsl:param select="'local'" name="objectHost"/>
 	<!-- ===================================================================================================== -->
-	
 	<xsl:template name="dateConvert">
 		<xsl:param name="dateUnconverted"/>
 		<xsl:variable name="format">
@@ -31,9 +30,7 @@
 			<xsl:with-param name="format" select="$format"/>
 		</xsl:call-template>
 	</xsl:template>
-	
 	<!-- ===================================================================================================== -->
-	
 	<!--Template for result list hit: see results.xsl-->
 	<xsl:template match="mcr:hit[contains(@id,'_jpvolume_')]">
 		<xsl:param name="mcrobj"/>
@@ -47,49 +44,48 @@
 		<xsl:variable name="cXML">
 			<xsl:copy-of select="document(concat('mcrobject:',@id))"/>
 		</xsl:variable>
-		<table cellspacing="0" cellpadding="0" id="leaf-all">
-			<tr>
-				<td id="leaf-front" colspan="1" rowspan="2">
-					<img src="{$WebApplicationBaseURL}images/band2.gif"/>	
-				</td>
-				<td id="leaf-linkarea2">
-					<xsl:variable name="name">
-							<xsl:call-template name="ShortenText">
-								<xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
-								<xsl:with-param name="length" select="75"/>
-							</xsl:call-template>
-					</xsl:variable>
-					<xsl:variable name="date">
-						<xsl:choose>
-							<xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-								<xsl:variable name="date">
-									<xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
-								</xsl:variable>
-								<xsl:value-of select="concat(' (',$date,')')"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="''"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-					<xsl:variable name="label">
-						<xsl:value-of select="concat($name,$date)"/>
-					</xsl:variable>
-					<xsl:call-template name="objectLinking">
-						<xsl:with-param name="obj_id" select="@id"/>
-						<xsl:with-param name="obj_name" select="$label"/>
-						<xsl:with-param name="requestParam"
-							select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
-					</xsl:call-template>
-				</td>
-			</tr>
-			<tr>
-				<xsl:call-template name="printDerivates">
-					<xsl:with-param name="obj_id" select="@id"/>
-					<xsl:with-param name="knoten" select="$cXML"/>
-				</xsl:call-template>
-			</tr>		
-		</table>
+    <table cellspacing="0" cellpadding="0" id="leaf-all">
+      <tr>
+        <td id="leaf-front" colspan="1" rowspan="2">
+          <img src="{$WebApplicationBaseURL}images/band2.gif"/>
+        </td>
+        <td id="leaf-linkarea2">
+          <xsl:variable name="name">
+            <xsl:call-template name="ShortenText">
+              <xsl:with-param name="text"
+                select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+              <xsl:with-param name="length" select="75"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:variable name="date">
+            <xsl:choose>
+              <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+                <xsl:variable name="date">
+                  <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+                </xsl:variable>
+                <xsl:value-of select="concat(' (',$date,')')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="''"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="label">
+            <xsl:value-of select="concat($name,$date)"/>
+          </xsl:variable>
+          <xsl:call-template name="objectLinking">
+            <xsl:with-param name="obj_id" select="@id"/>
+            <xsl:with-param name="obj_name" select="$label"/>
+            <xsl:with-param name="requestParam"
+              select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'"/>
+          </xsl:call-template>
+        </td>
+      </tr>
+      <xsl:call-template name="printDerivates">
+        <xsl:with-param name="obj_id" select="@id"/>
+        <xsl:with-param name="knoten" select="$cXML"/>
+      </xsl:call-template>
+    </table>
 		<table cellspacing="0" cellpadding="0">
 			<tr id="leaf-whitespaces">
 				<td>
@@ -97,8 +93,86 @@
 			</tr>
 		</table>
 	</xsl:template>
-	
-	<!-- ===================================================================================================== -->
+  <!-- =============================================================================================== -->
+  <xsl:template match="mcr:hit[contains(@id,'_jpvolume_')]" mode="toc">
+    <xsl:param name="mcrobj"/>
+    <xsl:param name="mcrobjlink"/>
+    
+    <xsl:variable name="cXML">
+      <xsl:copy-of select="document(concat('mcrobject:',@id))"/>
+    </xsl:variable>
+    
+    <table cellspacing="0" cellpadding="0" id="leaf-all">
+      <tr>
+        <td id="leaf-front" colspan="1" rowspan="2">
+          <img src="{$WebApplicationBaseURL}images/band2.gif"/>
+        </td>
+        <td id="leaf-linkarea2">
+          <xsl:variable name="name">
+            <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+          </xsl:variable>
+          <xsl:variable name="date">
+            <xsl:choose>
+              <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+                <xsl:variable name="date">
+                  <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+                </xsl:variable>
+                <xsl:value-of select="concat(' (',$date,')')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="''"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="label">
+            <xsl:value-of select="concat($name,$date)"/>
+          </xsl:variable>
+          <xsl:variable name="shortlabel">
+            <xsl:call-template name="ShortenText">
+              <xsl:with-param name="text" select="$label"/>
+              <xsl:with-param name="length" select="400"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:variable name="children">
+            <xsl:choose>
+              <xsl:when test="(xalan:nodeset($cXML)/mycoreobject/structure/children)">
+                <xsl:value-of select="'true'"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'false'"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="(contains(@id,'_jparticle_')) 
+              or ($children='false') ">
+              <xsl:call-template name="objectLinking">
+                <xsl:with-param name="obj_id" select="@id"/>
+                <xsl:with-param name="obj_name" select="$shortlabel"/>
+                <xsl:with-param name="hoverText" select="$name"/>
+                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="objectLinking">
+                <xsl:with-param name="obj_id" select="@id"/>
+                <xsl:with-param name="obj_name" select="$shortlabel"/>
+                <xsl:with-param name="hoverText" select="$name"/>
+                <xsl:with-param name="requestParam"
+                  select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=1'"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <xsl:call-template name="printDerivates">
+        <xsl:with-param name="obj_id" select="@id"/>
+        <xsl:with-param name="knoten" select="$cXML"/>
+      </xsl:call-template>
+    </table>
+    <br/>
+  </xsl:template>
+<!-- ================================================================================================================= -->  	
 	
 	<!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
 	<xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpvolume_')]">

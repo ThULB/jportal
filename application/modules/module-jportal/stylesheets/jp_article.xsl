@@ -12,8 +12,7 @@
     <xsl:variable select="100" name="DESCRIPTION_LENGTH"/>
     <xsl:variable select="@host" name="host"/>
     <xsl:variable name="obj_id">
-      
-      <xsl:value-of select="@id"/>
+          <xsl:value-of select="@id"/>
     </xsl:variable>
     
     <xsl:variable name="cXML">
@@ -59,12 +58,10 @@
           </xsl:call-template>
         </td>
       </tr>
-      <tr>
         <xsl:call-template name="printDerivates">
           <xsl:with-param name="obj_id" select="@id"/>
           <xsl:with-param name="knoten" select="$cXML"/>
         </xsl:call-template>
-      </tr>
       <tr>
         <td id="leaf-front"></td>
         <td>
@@ -88,6 +85,99 @@
     </table>
   </xsl:template>
   <!-- =============================================================================================== -->
+  <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]" mode="toc">
+    <xsl:param name="mcrobj"/>
+    <xsl:param name="mcrobjlink"/>
+    
+    <xsl:variable name="cXML">
+      <xsl:copy-of select="document(concat('mcrobject:',@id))"/>
+    </xsl:variable>
+    
+    <table cellspacing="0" cellpadding="0" id="leaf-all">
+      <tr>
+        <td id="leaf-front" colspan="1" rowspan="4">
+          <img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
+        </td>
+        <td id="leaf-linkarea2">
+          <xsl:variable name="name">
+            <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
+          </xsl:variable>
+          <xsl:variable name="date">
+            <xsl:choose>
+              <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+                <xsl:variable name="date">
+                  <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
+                </xsl:variable>
+                <xsl:value-of select="concat(' (',$date,')')"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="''"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:variable name="label">
+            <xsl:value-of select="concat($name,$date)"/>
+          </xsl:variable>
+          <xsl:variable name="shortlabel">
+            <xsl:call-template name="ShortenText">
+              <xsl:with-param name="text" select="$label"/>
+              <xsl:with-param name="length" select="400"/>
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:variable name="children">
+            <xsl:choose>
+              <xsl:when test="(xalan:nodeset($cXML)/mycoreobject/structure/children)">
+                <xsl:value-of select="'true'"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'false'"/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+          <xsl:choose>
+            <xsl:when test="(contains(@id,'_jparticle_')) 
+              or ($children='false') ">
+              <xsl:call-template name="objectLinking">
+                <xsl:with-param name="obj_id" select="@id"/>
+                <xsl:with-param name="obj_name" select="$shortlabel"/>
+                <xsl:with-param name="hoverText" select="$name"/>
+                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="objectLinking">
+                <xsl:with-param name="obj_id" select="@id"/>
+                <xsl:with-param name="obj_name" select="$shortlabel"/>
+                <xsl:with-param name="hoverText" select="$name"/>
+                <xsl:with-param name="requestParam"
+                  select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=1'"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <xsl:call-template name="getAuthorList">
+            <xsl:with-param name="objectXML" select="xalan:nodeset($cXML)"/>
+          </xsl:call-template>
+        </td>
+      </tr>
+      <xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
+        <tr>
+          <td>
+            <br/>
+          </td>
+        </tr>
+      </xsl:if>
+      <xsl:call-template name="printDerivates">
+        <xsl:with-param name="obj_id" select="@id"/>
+        <xsl:with-param name="knoten" select="$cXML"/>
+      </xsl:call-template>
+    </table>
+    <br/>
+  </xsl:template>
+<!-- ================================================================================================================= -->  
   <!-- Latest objects -->
   <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]" mode="latestObjects">
     <xsl:param name="mcrobj"/>
