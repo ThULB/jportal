@@ -1087,7 +1087,7 @@
     <xsl:param name="fileName"/>
     <xsl:value-of select="substring($fileName,number(string-length($fileName)-2))"/>
   </xsl:template>
-  <!-- ===================================================================================================== -->  
+  <!-- ===================================================================================================== -->
   <xsl:template name="iview.getAddress.hack">
     <xsl:param name="fullPathOfImage"/>
     <xsl:param name="height"/>
@@ -1840,18 +1840,30 @@
   <!-- ===================================================================================================== -->
   <xsl:template name="getAuthorList">
     <xsl:param name="objectXML"/>
-    <xsl:for-each select="xalan:nodeset($objectXML)/mycoreobject/metadata/participants/participant[6>position()]">
+    <xsl:param name="listLength"/>
+    <xsl:for-each
+      select="xalan:nodeset($objectXML)/mycoreobject/metadata/participants/participant[number($listLength)+1>position()]">
       <xsl:if test="position()=1">
-        <br/>
+        <xsl:call-template name="lineSpace"/>
+      </xsl:if>
+      <xsl:if test="position()>1">
+        <xsl:copy-of select="';  '"/>
       </xsl:if>
       <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@xlink:href))/mycoreobject"/>
       <xsl:call-template name="objectLink">
         <xsl:with-param name="obj_id" select="@xlink:href"/>
       </xsl:call-template>
-      <xsl:copy-of select="';  '"/>
     </xsl:for-each>
+    <xsl:if test="number(count($objectXML/mycoreobject/metadata/participants/participant))>number($listLength)">
+      <xsl:copy-of select="';   ...'"/>
+    </xsl:if>
   </xsl:template>
-	<!-- ===================================================================================================== -->	  
+  
+  <!-- ================================================================================================================= -->
+  <xsl:template name="lineSpace">
+    <div style="height:0.7em;"/>
+  </xsl:template>
+  <!-- ===================================================================================================== -->
 </xsl:stylesheet>
 
 

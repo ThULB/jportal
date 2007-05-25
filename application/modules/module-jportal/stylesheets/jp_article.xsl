@@ -94,8 +94,9 @@
     </xsl:variable>
     
     <table cellspacing="0" cellpadding="0" id="leaf-all">
+      <!-- title -->
       <tr>
-        <td id="leaf-front" colspan="1" rowspan="4">
+        <td id="leaf-front" colspan="1" rowspan="6">
           <img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
         </td>
         <td id="leaf-linkarea2">
@@ -156,17 +157,68 @@
           </xsl:choose>
         </td>
       </tr>
+      <!-- date -->
+      <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']">
+        <tr>
+          <td>
+            <xsl:call-template name="lineSpace"/>
+            <xsl:value-of select="concat(i18n:translate('editormask.labels.date_label'),': ')"/>
+            <xsl:variable name="format">
+              <xsl:choose>
+                <xsl:when
+                  test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']))=4">
+                  <xsl:value-of select="i18n:translate('metaData.dateYear')"/>
+                </xsl:when>
+                <xsl:when
+                  test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']))=7">
+                  <xsl:value-of select="i18n:translate('metaData.dateYearMonth')"/>
+                </xsl:when>
+                <xsl:when
+                  test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']))=10">
+                  <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="i18n:translate('metaData.dateTime')"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:for-each
+              select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']">
+              <xsl:call-template name="formatISODate">
+                <xsl:with-param name="date"
+                  select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']/text()"/>
+                <xsl:with-param name="format" select="$format"/>
+              </xsl:call-template>
+            </xsl:for-each>
+          </td>
+        </tr>
+      </xsl:if>
+      <!-- authors -->
       <tr>
         <td>
           <xsl:call-template name="getAuthorList">
             <xsl:with-param name="objectXML" select="xalan:nodeset($cXML)"/>
+            <xsl:with-param name="listLength" select="3"/>
           </xsl:call-template>
         </td>
       </tr>
+      
+      <!-- page area -->
+      <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size">
+        <tr>
+          <td>
+            <xsl:call-template name="lineSpace"/>
+            <xsl:value-of select="concat(i18n:translate('editormask.labels.size'),': ')"/>            
+            <xsl:copy-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size/text()"/>
+          </td>
+        </tr>
+      </xsl:if>      
+      
+      <!-- derivates -->
       <xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
         <tr>
           <td>
-            <br/>
+            <xsl:call-template name="lineSpace"/>
           </td>
         </tr>
       </xsl:if>
@@ -177,7 +229,7 @@
     </table>
     <br/>
   </xsl:template>
-<!-- ================================================================================================================= -->  
+<!-- ================================================================================================================= -->    
   <!-- Latest objects -->
   <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]" mode="latestObjects">
     <xsl:param name="mcrobj"/>
