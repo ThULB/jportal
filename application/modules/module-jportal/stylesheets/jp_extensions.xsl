@@ -1029,10 +1029,6 @@
                     </xsl:when>
                     <xsl:otherwise>
                       <img src="{concat($WebApplicationBaseURL,'/images/dummyPreview.png')}"/>
-                      <xsl:call-template name="iview.getEmbedded.thumbnail">
-                        <xsl:with-param name="derivID" select="$derivid"/>
-                        <xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
-                      </xsl:call-template>                      
                     </xsl:otherwise>
                   </xsl:choose>
                   <br/>
