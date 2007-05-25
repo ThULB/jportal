@@ -12,8 +12,8 @@
   <xsl:param name="toc.pageSize" select="5"/>
   <xsl:param name="toc.pos"/>
   
-  <xsl:param name="toc.sortBy.jpvolume" select="'nothing'"/>
-  <xsl:param name="toc.sortBy.jparticle" select="'nothing'"/>
+  <xsl:param name="toc.sortBy.jpvolume" select="'position'"/>
+  <xsl:param name="toc.sortBy.jparticle" select="'size'"/>
   <xsl:param select="5" name="maxLinkedArts"/>
   
   <xsl:param name="MCR.Module-iview.SupportedContentTypes"/>
@@ -58,21 +58,7 @@
       </xsl:when>
       <!-- inhaltsverzeichnis -->
       <xsl:otherwise>
-        <!--				<table cellpadding="0" cellspacing="0">
-        <!-#-					<tr>
-        <td colspan="2" rowspan="1" id="leaf-headline2">
-        </td>
-        <td colspan="1" rowspan="2" id="leaf-preview">
-        <img src="{concat($WebApplicationBaseURL,'preview.png')}"/>
-        </td>
-        </tr>-#->
-        <tr>
-        <td id="leaf-leafarea">
-        <br/>-->
         <xsl:call-template name="printChildren"/>
-        <!--						</td>
-        </tr>
-        </table>-->
       </xsl:otherwise>
     </xsl:choose>
     
@@ -630,8 +616,15 @@
               <xsl:with-param name="kindOfChildren" select="$OID"/>
             </xsl:call-template>
           </xsl:variable>
+          <xsl:variable name="sortOrder">
+            <xsl:call-template name="get.sortOrder">
+              <xsl:with-param name="kindOfChildren" select="$OID"/>
+            </xsl:call-template>
+          </xsl:variable>
+          
+          
           <xsl:variable name="siblings">
-            <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=ascending')))"/>
+            <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder)))"/>
           </xsl:variable>
           <xsl:variable name="currentNode">
             <xsl:copy-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[@id=$currentID]"/>
@@ -696,8 +689,7 @@
             </xsl:if>
           </xsl:for-each>
         </xsl:if>
-        
-        <xsl:if test="contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
+        <xsl:if test="$CurrentUser!='gast' and contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
           <td>
             <xsl:choose>
               <xsl:when test="$view.objectmetadata='false'">
@@ -796,12 +788,29 @@
       <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='size')">
         <xsl:value-of select="'&amp;sortby=sizes_art'"/>
       </xsl:when>
+      <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='position')">
+        <xsl:value-of select="'&amp;sortby=dates_art'"/>
+      </xsl:when>      
       <xsl:otherwise>
         <xsl:value-of select="''"/>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
   
+<!-- ===================================================================================================== -->
+  
+  <xsl:template name="get.sortOrder">
+    <xsl:param name="kindOfChildren"/>
+    <xsl:choose>
+      <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='position')">
+        <xsl:value-of select="'descending'"/>
+      </xsl:when>      
+      <xsl:otherwise>
+        <xsl:value-of select="'ascending'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+    
   <!-- ===================================================================================================== -->
   
   <xsl:template name="printDerivates">
@@ -1009,45 +1018,54 @@
       <xsl:choose>
         <xsl:when test="$thumbnail='true'">
           <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-            <xsl:if test="($supportedMainFile!='')">
               <tr id="detailed-contentsimg">
-                <td id="detailed-contentsimgpadd">
-                  <xsl:call-template name="iview.getEmbedded.thumbnail">
-                    <xsl:with-param name="derivID" select="$derivid"/>
-                    <xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
-                  </xsl:call-template>
+                <td id="detailed-contentsimgpadd">            
+                  <xsl:choose>
+                    <xsl:when test="($supportedMainFile!='')">
+                      <xsl:call-template name="iview.getEmbedded.thumbnail">
+                        <xsl:with-param name="derivID" select="$derivid"/>
+                        <xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
+                      </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <img src="{concat($WebApplicationBaseURL,'/images/dummyPreview.png')}"/>
+                      <xsl:call-template name="iview.getEmbedded.thumbnail">
+                        <xsl:with-param name="derivID" select="$derivid"/>
+                        <xsl:with-param name="pathOfImage" select="concat('/',$derivmain)"/>
+                      </xsl:call-template>                      
+                    </xsl:otherwise>
+                  </xsl:choose>
                   <br/>
                 </td>
               </tr>
-            </xsl:if>
-            <tr id="detailed-contents">
-              <td>
+              <tr id="detailed-contents">
+                <td>
+                  <a href="{$href}">
+                    <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$fileType,')')"/>
+                  </a>
+                  <xsl:text>
+                  </xsl:text>
+                  <xsl:if test="$CurrentUser!='gast'">
+                    <a href="{$derivbase}">
+                      <xsl:value-of select="', Details &gt;&gt;'"/>
+                    </a>
+                  </xsl:if>
+                </td>
+              </tr>
+              </table>
+              </xsl:when>
+              <xsl:otherwise>
                 <a href="{$href}">
                   <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$fileType,')')"/>
                 </a>
-                <xsl:text>
-                </xsl:text>
                 <xsl:if test="$CurrentUser!='gast'">
                   <a href="{$derivbase}">
                     <xsl:value-of select="', Details &gt;&gt;'"/>
                   </a>
                 </xsl:if>
-              </td>
-            </tr>
-          </table>
-        </xsl:when>
-        <xsl:otherwise>
-          <a href="{$href}">
-            <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$fileType,')')"/>
-          </a>
-          <xsl:if test="$CurrentUser!='gast'">
-            <a href="{$derivbase}">
-              <xsl:value-of select="', Details &gt;&gt;'"/>
-            </a>
-          </xsl:if>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
+              </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
   </xsl:template>
   <!-- ===================================================================================================== -->
   <xsl:template name="iview.getSupport.hack">
@@ -1113,10 +1131,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <!--		<table>
-    <tr>
-    <td>
-    <table cellpadding="0" cellspacing="0">-->
     <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
       <xsl:value-of select="encoder:encode(concat('parent = ',./@ID))"/>
     </xsl:variable>
@@ -1125,18 +1139,19 @@
         <xsl:with-param name="kindOfChildren" select="$kindOfChildren2"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="children">
-      <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=ascending')))"/>
+    <xsl:variable name="sortOrder">
+      <xsl:call-template name="get.sortOrder">
+        <xsl:with-param name="kindOfChildren" select="$kindOfChildren2"/>
+      </xsl:call-template>
     </xsl:variable>
-    <!--						<tr>
-    <td>-->
+    <xsl:variable name="children">
+      <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder)))"/>
+    </xsl:variable>
     <xsl:call-template name="printTOCNavi">
       <xsl:with-param name="location" select="'navi'"/>
       <xsl:with-param name="childrenKinds" select="$kindOfChildren2"/>
       <xsl:with-param name="childrenXML" select="xalan:nodeset($children)"/>
     </xsl:call-template>
-    <!--							</td>
-    </tr>-->
     <xsl:variable name="toc.pos.verif">
       <xsl:choose>
         <xsl:when test="$toc.pageSize>count(xalan:nodeset($children)/mcr:results/mcr:hit)">
@@ -1151,7 +1166,6 @@
     <table id="resultList" cellpadding="0" cellspacing="0">
       <xsl:for-each
         select="xalan:nodeset($children)/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
-        
         <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject"/>
         <xsl:apply-templates select="." mode="toc">
           <xsl:with-param name="mcrobj" select="$mcrobj"/>
@@ -1161,119 +1175,8 @@
             </xsl:call-template>
           </xsl:with-param>
         </xsl:apply-templates>
-        
-        <!--							<tr id="leaf-whitespaces">
-        <td colspan="2">
-        <xsl:variable name="cXML">
-        <xsl:copy-of select="document(concat('mcrobject:',@id))"/>
-        </xsl:variable>
-        <table cellspacing="0" cellpadding="0" id="leaf-all">
-        <tr>
-        <td id="leaf-front" colspan="1" rowspan="2">
-        <xsl:variable name="OID">
-        <xsl:call-template name="typeOfObjectID">
-        <xsl:with-param name="id" select="@id"/>
-        </xsl:call-template>
-        </xsl:variable>
-        <xsl:choose>
-        <xsl:when test="$OID='jpvolume'">
-        <img src="{$WebApplicationBaseURL}images/band2.gif"/>
-        </xsl:when>
-        <xsl:when test="$OID='jpjournal'">
-        <img src="{$WebApplicationBaseURL}images/zeitung2.gif"/>
-        </xsl:when>
-        <xsl:when test="$OID='jparticle'">
-        <img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
-        </xsl:when>
-        <xsl:otherwise>
-        </xsl:otherwise>
-        </xsl:choose>
-        </td>
-        <td id="leaf-linkarea">
-        <xsl:variable name="name">
-        <xsl:value-of
-        select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()"/>
-        </xsl:variable>
-        <xsl:variable name="date">
-        <xsl:choose>
-        <xsl:when
-        test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-        <xsl:variable name="date">
-        <xsl:value-of
-        select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()"/>
-        </xsl:variable>
-        <xsl:value-of select="concat(' (',$date,')')"/>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:value-of select="''"/>
-        </xsl:otherwise>
-        </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="label">
-        <xsl:value-of select="concat($name,$date)"/>
-        </xsl:variable>
-        <xsl:variable name="shortlabel">
-        <xsl:call-template name="ShortenText">
-        <xsl:with-param name="text" select="$label"/>
-        <xsl:with-param name="length" select="40"/>
-        </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="children">
-        <xsl:choose>
-        <xsl:when
-        test="(xalan:nodeset($cXML)/mycoreobject/structure/children)">
-        <xsl:value-of select="'true'"/>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:value-of select="'false'"/>
-        </xsl:otherwise>
-        </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-        <xsl:when
-        test="(contains(@id,'_jparticle_')) 
-        or ($children='false') ">
-        <xsl:call-template name="objectLinking">
-        <xsl:with-param name="obj_id" select="@id"/>
-        <xsl:with-param name="obj_name" select="$shortlabel"/>
-        <xsl:with-param name="hoverText" select="$name"/>
-        <xsl:with-param name="requestParam"
-        select="'XSL.view.objectmetadata.SESSION=false'"/>
-        </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-        <xsl:call-template name="objectLinking">
-        <xsl:with-param name="obj_id" select="@id"/>
-        <xsl:with-param name="obj_name" select="$shortlabel"/>
-        <xsl:with-param name="hoverText" select="$name"/>
-        <xsl:with-param name="requestParam"
-        select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=1'"/>
-        </xsl:call-template>
-        </xsl:otherwise>
-        </xsl:choose>
-        </td>
-        </tr>
-        <tr>
-        <xsl:call-template name="printDerivates">
-        <xsl:with-param name="obj_id" select="@id"/>
-        <xsl:with-param name="knoten" select="$cXML"/>
-        </xsl:call-template>
-        </tr>
-        </table>
-        </td>
-        </tr>
-        <tr>
-        <td>
-        <br/>
-        </td>
-        </tr>
-        -->
-        
       </xsl:for-each>
     </table>
-    <!--				</td>
-    </tr>
-    </table>-->
     
   </xsl:template>
   <!-- ===================================================================================================== -->
@@ -1297,14 +1200,17 @@
         <table>
           <tr>
             <td colspan="2">
-              <xsl:value-of select="i18n:translate('metaData.sortbuttons.numberofres')"/>
+              <xsl:value-of select="concat(i18n:translate('metaData.sortbuttons.numberofres'),': ')"/>
               <b>
                 <xsl:value-of select="$numChildren"/>
               </b>
+              <xsl:call-template name="printTOCNavi.chooseHitPage">
+                <xsl:with-param name="children" select="xalan:nodeset($childrenXML)"/>
+              </xsl:call-template>
             </td>
           </tr>
           <tr>
-            <td align="center">
+            <td align="left">
               <xsl:if test="number($numChildren)>5">
                 <form id="pageSize" target="_self"
                   action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}" method="post">
@@ -1351,7 +1257,7 @@
                 </form>
               </xsl:if>
             </td>
-            <td align="center">
+            <td align="left">
               <form id="sort" target="_self" action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}"
                 method="post">
                 <p>
@@ -1359,13 +1265,6 @@
                     <xsl:when test="$childrenKinds='jparticle'">
                       <select onChange="document.getElementById('sort').submit()" name="XSL.toc.sortBy.jparticle.SESSION"
                         size="1">
-                        <option value="nothing">
-                          <xsl:call-template name="checkSelection">
-                            <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
-                            <xsl:with-param name="compVal2" select="'nothing'"/>
-                          </xsl:call-template>
-                          <xsl:value-of select="i18n:translate('metaData.sortbuttons.dontsort')"/>
-                        </option>
                         <option value="title">
                           <xsl:call-template name="checkSelection">
                             <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
@@ -1380,18 +1279,18 @@
                           </xsl:call-template>
                           <xsl:value-of select="i18n:translate('metaData.sortbuttons.afterpages')"/>
                         </option>
+                        <option value="position">
+                          <xsl:call-template name="checkSelection">
+                            <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle"/>
+                            <xsl:with-param name="compVal2" select="'position'"/>
+                          </xsl:call-template>
+                          <xsl:value-of select="i18n:translate('metaData.sortbuttons.position')"/>
+                        </option>                        
                       </select>
                     </xsl:when>
                     <xsl:otherwise>
                       <select onChange="document.getElementById('sort').submit()" name="XSL.toc.sortBy.jpvolume.SESSION"
                         size="1">
-                        <option value="nothing">
-                          <xsl:call-template name="checkSelection">
-                            <xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume"/>
-                            <xsl:with-param name="compVal2" select="'nothing'"/>
-                          </xsl:call-template>
-                          <xsl:value-of select="i18n:translate('metaData.sortbuttons.dontsort')"/>
-                        </option>
                         <option value="title">
                           <xsl:call-template name="checkSelection">
                             <xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume"/>
@@ -1413,9 +1312,6 @@
               </form>
             </td>
           </tr>
-          <xsl:call-template name="printTOCNavi.chooseHitPage">
-            <xsl:with-param name="children" select="xalan:nodeset($childrenXML)"/>
-          </xsl:call-template>
         </table>
       </xsl:when>
     </xsl:choose>
@@ -1441,32 +1337,23 @@
       <xsl:value-of select="ceiling(number($numberOfChildren) div number($toc.pageSize))"/>
     </xsl:variable>
     <xsl:if test="number($numberOfChildren)>number($toc.pageSize)">
-      <tr>
-        <td colspan="2">
-          <xsl:value-of select="i18n:translate('metaData.resultpage')"/>
-          <xsl:for-each select="./structure/children/child[number($numberOfHitPages)>=position()]">
-            <xsl:variable name="jumpToPos">
-              <xsl:value-of select="(position()*number($toc.pageSize))-number($toc.pageSize)"/>
-            </xsl:variable>
-            <xsl:choose>
-              <xsl:when test="number($jumpToPos)+1=number($toc.pos)">
-                <xsl:value-of select="concat(' [',position(),'] ')"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <a
-                  href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$jumpToPos+1}">
-                  <xsl:value-of select="concat(' ',position(),' ')"/>
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each>
-        </td>
-      </tr>
-      <tr>
-        <td colspan="2">
-          <br/>
-        </td>
-      </tr>
+      <xsl:value-of select="concat(', ',i18n:translate('metaData.resultpage'))"/>
+      <xsl:for-each select="./structure/children/child[number($numberOfHitPages)>=position()]">
+        <xsl:variable name="jumpToPos">
+          <xsl:value-of select="(position()*number($toc.pageSize))-number($toc.pageSize)"/>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="number($jumpToPos)+1=number($toc.pos)">
+            <xsl:value-of select="concat(' [',position(),'] ')"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <a
+              href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}?XSL.toc.pos.SESSION={$jumpToPos+1}">
+              <xsl:value-of select="concat(' ',position(),' ')"/>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
     </xsl:if>
     
   </xsl:template>
