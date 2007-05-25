@@ -198,7 +198,7 @@
         <td>
           <xsl:call-template name="getAuthorList">
             <xsl:with-param name="objectXML" select="xalan:nodeset($cXML)"/>
-            <xsl:with-param name="listLength" select="3"/>
+            <xsl:with-param name="listLength" select="5"/>
           </xsl:call-template>
         </td>
       </tr>
