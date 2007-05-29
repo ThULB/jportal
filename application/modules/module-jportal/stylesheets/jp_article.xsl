@@ -7,7 +7,6 @@
   <!-- =============================================================================================== -->
   <!--Template for result list hit: see results.xsl-->
   <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]">
-    <xsl:param name="mcrobj"/>
     <xsl:param name="mcrobjlink"/>
     <xsl:variable select="100" name="DESCRIPTION_LENGTH"/>
     <xsl:variable select="@host" name="host"/>
@@ -18,9 +17,9 @@
     <xsl:variable name="cXML">
       <xsl:copy-of select="document(concat('mcrobject:',@id))"/>
     </xsl:variable>
-    <table cellspacing="0" cellpadding="0" id="leaf-all">
+    <table cellspacing="0" cellpadding="0" id="leaf-all" >
       <tr>
-        <td id="leaf-front" colspan="1" rowspan="2">
+        <td id="leaf-front" colspan="1" rowspan="3">
           <img src="{$WebApplicationBaseURL}images/artikel2.gif"/>
         </td>
         <td id="leaf-linkarea2">
@@ -63,7 +62,6 @@
           <xsl:with-param name="knoten" select="$cXML"/>
         </xsl:call-template>
       <tr>
-        <td id="leaf-front"></td>
         <td>
           <span id="leaf-published">
             <xsl:value-of select="i18n:translate('metaData.published')"/>
