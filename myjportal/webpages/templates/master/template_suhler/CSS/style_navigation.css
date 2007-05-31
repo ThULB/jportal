@@ -50,7 +50,7 @@ td.login_text {
 td.user_id {
 	font-weight : normal;
     text-align: left;
-    padding-left: 3%;
+    padding-left: 42px;
     width: 135px;
     /*padding-bottom: 5px;*/
 }
@@ -216,6 +216,8 @@ td.empty_box {
 /* ============================================= */
 
 .navi_main img{
+	border-style: none;
+    border-width: 0px;
     display:block;
 }
 .navi_main tr, .navi_main td

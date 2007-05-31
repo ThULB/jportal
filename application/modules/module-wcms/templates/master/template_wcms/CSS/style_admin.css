@@ -1,4 +1,5 @@
 #dropmenudiv{
+z-index:100;
 position:absolute;
 border:1px solid black;
 border-bottom-width: 0;

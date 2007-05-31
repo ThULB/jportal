@@ -3,7 +3,7 @@ html, body {
     font-family: Verdana, Helvetica, sans-serif;
     font-size: 12px;
     height: 100%;
-    width: 100%;
+    min-width: 1000px;
 }
 
 #footer1 {
@@ -44,7 +44,7 @@ html, body {
 	repeat: repeat-y;
 }
 #contentArea {
-	padding-left: 300px;
+	padding-left: 290px;
 	width :100%;
 	float: left;
     border : 0px solid black;

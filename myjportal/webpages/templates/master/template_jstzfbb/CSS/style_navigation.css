@@ -178,6 +178,8 @@ div.navi_main{
 }
 .navi_main img{
     display:block;
+	border-style: none;
+	border-width: 0px;
 }
 .navi_main tr, .navi_main td
 {

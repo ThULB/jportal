@@ -15,15 +15,12 @@ html, body {
     background-color: #ffffff;
     font-family: Verdana, Helvetica, sans-serif, Myriad Pro, Myriad ;
     font-size: 11px;
-    height: 100%;
-	width: 100%;
 }
 
 .logoBar{
 	margin: 0px;
 	background: #ffffff url(../IMAGES/logo_bar.gif) no-repeat;
 	height: 212px;
-	width: 100%;
 }
 
 /* =================================================================== */
@@ -34,7 +31,7 @@ html, body {
 	min-height: 100%;
     height: auto !important;
     height: 100%;
-	width: 100%;
+	width: 996px;
 	background: url(../IMAGES/bg_line.gif) repeat-y;
 
 }
@@ -177,6 +174,6 @@ html, body {
 #content {
 	margin-left: 260px;
 	margin-top: 15px;
-	width: 99%;
+	width: 100%;
 	position:relative;
 }

@@ -20,6 +20,25 @@ html, body {
 	border: 0px solid black;
 	margin : 0px;
 	}
+
+#footer2 {
+	width : 100%;
+	text-align: left;
+	vertical-align: top;
+	}
+
+#footer2-left {
+	width : 240px;
+	text-align: left;
+	vertical-align: top;
+	}
+
+#footer2-right {
+	width : 100%;
+	text-align: left;
+	vertical-align: top;
+	}
+
 #login_div {
 	width: 200px; 
 	height : 25px; 

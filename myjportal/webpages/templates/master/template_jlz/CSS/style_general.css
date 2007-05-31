@@ -63,7 +63,8 @@ td.decor_big_spc {
 
 /* Main graphics */
 td.balk1 {
-    background: #5A7C6A /*url(../IMAGES/balk1.gif)*/;
+	text-align: right;
+    background: #517161 /*url(../IMAGES/balk1.gif)*/;
 }
 
 img.balk1 {

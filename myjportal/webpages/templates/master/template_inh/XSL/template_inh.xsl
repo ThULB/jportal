@@ -2,8 +2,8 @@
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n">
 	
 	<!-- ============================================== -->
 	<!-- the template                                   -->
@@ -78,41 +78,47 @@
 									alt="Neue Hochschule"/>
 							</map> <img
 								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top_right.gif"
-								width="735" height="140" alt="Universität Ilmenau" usemap="#uni_ilmenau" border="0"/>
+								width="735" height="140" alt="Universitï¿½t Ilmenau" usemap="#uni_ilmenau" border="0"/>
 						</div>
 					</div>
-					<div id="navi_all">
-						<div id="div_navi_main">
-							<xsl:call-template name="Navigation_main"/>
-						</div>
-						<div id="navi_under"
-							style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_below.gif) repeat-y;">
-						</div>
-					</div>
-					<div id="navi_history">
-						<xsl:call-template name="navigation.history"/>
-					</div>
-					<br/>
-					<div id="contentArea">
-						<xsl:call-template name="template_inh.write.content"/>
-					</div>
+					<table id="footer2" border="0" cellpadding="0" cellspacing="0">
+						<tr>
+							<td valign="top" id="footer2-left">
+								<div id="navi_all">
+									<div id="div_navi_main">
+										<xsl:call-template name="Navigation_main"/>
+									</div>
+									<div id="navi_under"
+										style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_below.gif) repeat-y;">
+									</div>
+								</div>
+							</td>
+							<td valign="top" id="footer2-right">
+								<div id="navi_history">
+									<xsl:call-template name="navigation.history"/>
+								</div>
+								<br/>
+								<div id="contentArea">
+									<xsl:call-template name="getFastWCMS"/>
+									<xsl:call-template name="template_inh.write.content"/>
+								</div>
+							</td>
+						</tr>
+					</table>
 				</div>
 			</body>
 		</html>
 		
 	</xsl:template>
-	
-	
+		
 	<!-- Template for Content ================================================================================== -->
 	<xsl:template name="template_inh.write.content">
 		<div class="headline">
-			<xsl:call-template name="getFastWCMS" />
 			<xsl:copy-of select="$PageTitle"/>
 		</div>
 		<xsl:apply-templates/>
 	</xsl:template>
-	
-	
+		
 	<!-- Template for User info ================================================================================ -->
 	<xsl:template name="template_inh.userInfo">
 		
@@ -123,19 +129,18 @@
 		<table class="login_window" border="0" cellspacing="0" cellpadding="0">
 			<tr>
 				<td class="login_text">
-					<text i18n="editor.start.LoginText.label"/>:
+					<xsl:value-of select="i18n:translate('editor.start.LoginText.label')"/>:
 				</td>
 				<td class="user_id">
 					<p class="whitebox">
 						<xsl:value-of select="$CurrentUser"/>
 					</p>
 				</td>
-				<td class="login_window">
-					
+				<td class="login_window">	
 					<!-- Login-Button / 2 Pfeile =================================== -->
 					<a href="{$LoginURL}">
-						<div class="buttons">&#x25B6;
-							<br/>&#160;&#x25C0;</div>
+						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/login-switch.gif"
+							border="0"/>
 					</a>
 				</td>
 			</tr>

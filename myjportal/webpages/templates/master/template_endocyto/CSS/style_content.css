@@ -13,8 +13,8 @@
 }
 /*IE Fix to have content inside the table: stupid browser*/
 #contentWrapper {
-    width: 85%;
-    margin: 0px auto;
+    width: 100%;
+
 }
 
 #contentArea {
@@ -27,6 +27,7 @@
     font-weight : normal;
     text-decoration: none;
     border : 0px solid black;
+	min-width: 700px;
     width: 70%;
 }
 #contentArea .headline {

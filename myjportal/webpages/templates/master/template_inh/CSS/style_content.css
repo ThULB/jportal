@@ -9,7 +9,6 @@
 #contentArea {
     vertical-align: top;
     padding-top: 1em;
-	position: absolute;
 	margin-left: 10px;
 	color:  #00877f;
 	font-size: 12px;
@@ -17,11 +16,8 @@
     font-weight : normal;
     text-decoration: none;
     border : 0px solid black;
-    width: 75%;
-}
-
-#contentArea[id]{
-	padding-left: 260px;
+    width: 95%;
+    margin: 0px auto;
 }
 
 #contentArea .headline {
@@ -37,7 +33,6 @@
 #contentArea hr{
     height: 2px;
     color: #43351D;
-<!--    background-color: #15516E; -->
     border-style: none;
 }
 #contentArea a { 
@@ -59,13 +54,6 @@
     border-width: 1px;
     margin: 2px;
     margin-left: 0px;
-}
-
-/*IE Fix to have content inside the table: stupid browser*/
-#contentWrapper {
-	position: fixed;
-    width: 90%;
-    margin: 0px auto;
 }
 
 /* =================================================================== */
@@ -211,7 +199,6 @@ div.submitButton{
 /* =================================================================== */
 
 #metaHeading, #metaData, #files {
-<!--    width: 100%; -->
 }
 #metaHeading a img, #metaData a img, #files a img {
     border: none;
@@ -394,6 +381,10 @@ div.submitButton{
 #detailed-browse{
     border: 1px solid #00716A;
 	background-color: #01658B;	
+}
+
+#detailed-staticurl1 {
+	color: #01658B;
 }
 
 /* =================================================================== */

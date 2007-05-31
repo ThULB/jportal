@@ -58,11 +58,6 @@ p.whitebox {
     padding: 2px;
 }
 
-div.buttons {
-    line-height: 5px;
-    padding-left: 3px;
-}
-
 td.login_window a:link {
     color:  #436767;
     text-decoration: none;
@@ -123,7 +118,6 @@ div.main_menu {
 #navi_below_cell table{
     margin-right: 0px;
     margin-left: auto;
-
 }
 
 .navi_below th, .navi_below td, .navi_below a
@@ -165,6 +159,7 @@ table.navi_history
 {
     font-size: 11px;
     font-weight : bold;
+	min-width: 700px;
     width: 100%;
     margin-right: auto;
     margin-left: auto;
@@ -236,6 +231,8 @@ td.empty_box {
 /* ============================================= */
 
 .navi_main img{
+	border-style: none;
+    border-width: 0px;
     display:block;
 }
 .navi_main tr, .navi_main td

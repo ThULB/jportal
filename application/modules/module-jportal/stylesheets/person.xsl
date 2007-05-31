@@ -119,7 +119,7 @@
 						</xsl:variable>
 						<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
 					</td>
-					<td id="detailed-links" colspan="1" rowspan="3">
+					<!--<td id="detailed-links" colspan="1" rowspan="3">
 						<table id="detailed-contenttable" border="0" cellspacing="0">
 							
 							<xsl:call-template name="printDerivates">
@@ -127,10 +127,10 @@
 							</xsl:call-template>
 							
 						</table>
-					</td>
+					</td>-->
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="1">
+					<td colspan="2">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							<!--1***heading*************************************-->
 							<!--<xsl:call-template name="printPersonName">
@@ -203,7 +203,7 @@
 							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" style="width: max; min-width: 600px;"/>
+									<hr noshade="noshade" style="width: 100%;"/>
 								</td>
 							</tr>
 							<tr>

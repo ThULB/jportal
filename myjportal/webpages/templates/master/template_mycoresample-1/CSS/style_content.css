@@ -421,6 +421,10 @@ td.editorHLine                    { border-top:1px solid #7791ac; border-left:1p
 	background-color: #2B6E8D;	
 }
 
+#detailed-staticurl1 {
+	color: #2B6E8D;
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */

@@ -441,15 +441,15 @@
 									<img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
 										title="{i18n:translate('swf.object.editObject')}"/>
 								</a>
-								<a
+								<!--<a
 									href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
 									<img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
 										title="{i18n:translate('swf.object.editACL')}"/>
-								</a>
+								</a>-->
 							</xsl:if>
 							<xsl:if test="acl:checkPermission($id,'deletedb')">
 								
-								<a
+								<a id="obj_del"
 									href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
 									<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
 										title="{i18n:translate('swf.object.delObject')}"/>
@@ -482,7 +482,7 @@
 					
 					<tr>
 						
-						<td class="metaname">
+						<td id="detailed-labels">
 							<xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')"/>
 						</td>
 						<td class="metavalue">
@@ -493,12 +493,12 @@
 										title="{i18n:translate('swf.object.editObject')}"/>
 									
 								</a>
-								<a
+								<!--<a
 									href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
 									
 									<img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
 										title="{i18n:translate('swf.object.editACL')}"/>
-								</a>
+								</a>-->
 								<a
 									href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
 									<img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
@@ -507,7 +507,7 @@
 							</xsl:if>
 							
 							<xsl:if test="acl:checkPermission($id,'deletedb')">
-										<a
+										<a id="obj_del"
 											href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
 											<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
 												title="{i18n:translate('swf.object.delObject')}"/>

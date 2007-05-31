@@ -75,48 +75,52 @@
 						</td>
 					</tr>
 				</table>
-				<div id="second-line">
-					<div id="div_navi_main">
-						<table cellspacing="0" cellpadding="0" border="0" style="height:90%;">
-							<tr>
-								<td id="div_navi_main_top"
-									style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_top.gif) no-repeat;">
-									<div id="login_div">
-										<div id="login_div_inside">
-											<xsl:call-template name="template_hbz.userInfo"/>
-										</div>
-									</div>
-									<br/>
-									<xsl:call-template name="Navigation_main"/>
-								</td>
-							</tr>
-							<tr>
-								<td> 
-							      <div id="div_navi_main_middlea" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle1.gif) no-repeat;"/>
-								</td>
-							</tr>
-							<tr>
-								<td id="div_navi_main_middleb"> <a href="http://zs.thulb.uni-jena.de/content/main/journals/suhler.xml" target="_self"><img
-										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle2.gif"
-										border="0"/></a>
-								</td>
-							</tr>
-							<tr>
-								<td id="div_navi_main_bottom">
-								<div style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_bottom.gif); background-repeat: repeat-y; height: 100%;">
-								<br/>
-								</div>		
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div id="contentArea">
-						<div id="contentWrapper">
-							<xsl:call-template name="getFastWCMS"/>
-							<xsl:call-template name="template_hbz.write.content"/>
-						</div>
-					</div>
-				</div>
+				<table id="second-line" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td valign="top" halign="left" id="footer2-left">
+								<table cellspacing="0" cellpadding="0" border="0" style="height:90%;">
+									<tr>
+										<td id="div_navi_main_top"
+											style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_top.gif) no-repeat;">
+											<div id="login_div">
+												<div id="login_div_inside">
+													<xsl:call-template name="template_hbz.userInfo"/>
+												</div>
+											</div>
+											<br/>
+											<xsl:call-template name="Navigation_main"/>
+										</td>
+									</tr>
+									<tr>
+										<td id="div_navi_main_middlea"
+											style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle1.gif) no-repeat;">
+											<br/>
+										</td>
+									</tr>
+									<tr>
+										<td id="div_navi_main_middleb"> <a
+												href="http://zs.thulb.uni-jena.de/content/main/journals/suhler.xml"
+												target="_self"><img
+												src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_middle2.gif"
+												border="0"/></a>
+										</td>	
+									</tr>
+									<tr>
+										<td id="div_navi_main_bottom"
+											style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_hbz_navi_bottom.gif); background-repeat: repeat-y;">
+											<br/>
+										</td>
+									</tr>
+								</table>
+						</td>
+						<td valign="top" halign="left" id="footer2-right">
+							<div id="contentArea">
+								<xsl:call-template name="getFastWCMS"/>
+								<xsl:call-template name="template_hbz.write.content"/>							
+							</div>
+						</td>
+					</tr>
+				</table>
 			</body>
 		</html>
 		

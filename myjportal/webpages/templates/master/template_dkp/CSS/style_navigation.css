@@ -54,6 +54,7 @@ td.login_text {
     text-align: left;
 	padding-left: 15px;
 	color: white; 
+	width: 80px;
 }
 
 td.user_id {
@@ -194,13 +195,13 @@ td.navi_history_user{
     border-style: none;
     border-width: 0px;
     min-width: 200px;
-    width: 245px;
+    width: 268px;
     vertical-align: top;
 }
 div.navi_main{
     vertical-align: top;
     min-width: 200px;
-    width: auto;
+    width: 268px;
     border-style: none;
     background: #E7D4B0 url(../IMAGES/menu_pix.gif);
     background-repeat: repeat-x repeat-y;
@@ -223,8 +224,11 @@ td.empty_box {
 /* ============================================= */
 
 .navi_main img{
+	border-style: none;
+    border-width: 0px;
     display:block;
-	padding-left: 30px;
+	padding-left: 25px;
+	vertical-align: top;
 }
 .navi_main tr, .navi_main td
 {
@@ -232,7 +236,8 @@ td.empty_box {
 }
 
 .navi_main th
-{
+{	
+	padding-left: 0px;
     font-size: 11px;
     border-top: 1px solid #95A8B7;
     padding-top: 10px;

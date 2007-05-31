@@ -1,55 +1,54 @@
 html, body {
-    margin: 0px;
+	margin-top: 0px;
+	margin-left: 0px;
     font-family: Verdana, Helvetica, sans-serif;
     font-size: 12px;
-    height: 100%;
-    width: 100%;
-}
-#second-line {
-	width: 100%; 
-	height:100%;  
-}	
-#div_navi_main {
-	height: 100%; 
-	float: left; 
-	width: 297px;
 }
 
-#div_navi_main_topa {
+#footer2-left {
+	width : 275px;
+	text-align: left;
 	vertical-align: top;
-	height: 39px;
-	padding: 0px;
-	padding-left: 30px; 
-	margin: 0px;
-	width: 297px;
+	}
+
+#footer2-right {
+	width : 100%;
+	text-align: left;
+	vertical-align: top;
+	}
+
+#div_navi_main {
+	width: 275px;
 }
 
-#div_navi_main_topb {
-	padding: 0px;
-	padding-left: 30px; 
+#div_navi_main_top {
+	vertical-align: top;
+	padding: 0px; 
 	margin: 0px;
-	width: 297px;
+	width: 275px;
+	padding-left: 8px;
 }
 
 #div_navi_main_middlea {
 	height: 31px; 
 	margin: 0px;
 	padding: 0px;
-	width: 297px;
+	width: 275px;
 }
 
-#div_navi_main_middleb { 
-	height: 29px; 
+#div_navi_main_middleb {
+	line-height:0px;
+	height: 31px; 
 	margin: 0px;
 	padding: 0px;
-	width: 297px;
+	width: 275px;
 }
 
 #div_navi_main_bottom { 
-	height: 55%;
+	height: 100%;
 	padding: 0px;
 	margin: 0px;
-	width: 297px;
+	width: 280px;
 }
 
 #navi_box {
@@ -68,6 +67,11 @@ html, body {
 	vertical-align: bottom;
 	padding-bottom: 0px;
 }
+
+#navi_history[id] {
+	height: 67px;
+}
+
 #navi_history a{
 	color: #5E5946;
 	text-decoration: none;
@@ -83,10 +87,7 @@ html, body {
 	margin-right:0px;
 	padding-right:0px;
 }
-#contentArea {
-	width: max;
-	margin-left: 270px; 
-}
+
 #footer {
 	width: 100%; 
 	height:150px; 
@@ -100,9 +101,9 @@ html, body {
 }	
 #login_div {
 	vertical-align: bottom;
-	width: 273px;
+	width: 250px;
 	height: 25px; 
-	padding-left: 33px;
+	padding-left: 25px;
 }
 #login_div_inside {
 	padding: 2px;

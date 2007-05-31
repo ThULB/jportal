@@ -70,7 +70,7 @@
 #leaf-linkarea, #leaf-linkarea a:link , #leaf-linkarea a:visited, #leaf-linkarea a:hover, #leaf-linkarea a:active{
 	display:block;
 	line-height:26px;
-	width: 300px;
+	width: 100%;
     text-decoration:none;
     font-size: 12px;
     font-family: verdana, sans-serif;
@@ -139,6 +139,7 @@
 
 #detailed-headline-frame {
 	width:max;
+	color: #000000;
 }
 
 #detailed-headlines {
@@ -158,14 +159,19 @@
 }
 
 #detailed-view {
-	padding: 10px;
-	width: 90%; 
+	padding: 3px;
+	width: auto;
+	color: #000000; 
+}
+
+#detailed-view[id] {
+	width: 100%;
 }
 
 #detailed-labels {
 	text-align: right;
 	padding-right: 5px;
-	width: 240px;
+	width: 230px;
 }
 
 #detailed-frame{
@@ -174,10 +180,17 @@
 }
 
 #detailed-dividingline hr{
+	width: 500px;
+	height: 1px;
+}
+
+#detailed-dividingline[id] hr{
+	width: 100%;
 	height: 1px;
 }
 
 #detailed-staticurl1 {
+	width: 230px;
 	text-align:right; 
 	padding-right: 5px;
 }
@@ -199,6 +212,10 @@
 	vertical-align: middle;
 }
 
+#detailed-derivate-div {
+	width: 153px;
+	float: right;
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
@@ -236,9 +253,6 @@
 
 #detailed-contentsimgpadd {
 	padding: 3px;
-}
-
-#detailed-contents a {
 }
 
 #detailed-contents a:hover {
@@ -344,4 +358,17 @@ select{
 
 .metavalue{
 	padding-left: 15px;
+}
+
+.metavalue a{
+	padding-left: 10px;
+}
+
+.metavalue img{
+	border-width: 1px;
+	border-style: outset;
+}
+
+#obj_del {
+	margin-left: 50px;
 }

@@ -2,8 +2,8 @@
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-	exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+	exclude-result-prefixes="xlink i18n">
 	
 	<!-- ============================================== -->
 	<!-- the template                                   -->
@@ -62,7 +62,7 @@
 						</td>
 						<td
 							style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_top_right.jpg) no-repeat;">
-							<table cellspacing="0" cellpadding="0" width="641px">
+							<table cellspacing="0" cellpadding="0" width="570px">
 								<tr>
 									<td>
 										<div id="fsu-logo"> <a href="http://www.uni-jena.de" target="_blank"> <img
@@ -83,34 +83,54 @@
 						</td>
 					</tr>
 				</table>
-				<div id="second-line">
-					<div id="div_navi_main"
-						style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_left.jpg) no-repeat;">
-						<br/>
-						<xsl:call-template name="Navigation_main"/>
-					</div>
-					<div id="navi_box">
-						<xsl:call-template name="navigation.row">
-							<xsl:with-param name="rootNode" select="document($navigationBase) /navigation/navi-below"/>
-							<xsl:with-param name="CSSLayoutClass" select="'navi_below'"/>
-							<xsl:with-param name="menuPointHeigth" select="'21'"/>
-							<!-- use pixel values -->
-							<xsl:with-param name="spaceBetweenLinks" select="'12'"/>
-							<!-- use pixel values -->
-						</xsl:call-template>
-					</div>
-					<div id="navi_history">
-						<div id="navi_history_inside">
-							<xsl:call-template name="navigation.history"/>
-						</div>
-					</div>
-					<div id="contentArea">
-						<div id="contentWrapper">
-							<xsl:call-template name="getFastWCMS"/>
-							<xsl:call-template name="template_jer.write.content"/>
-						</div>
-					</div>
-				</div>
+				<table border="0" cellspacing="0" cellpadding="0" id="second-line">
+					<tr>
+						<td style="width: 297px; vertical-align: top; text-align: left;">
+							<div id="div_navi_main"
+								style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jer_left.jpg) no-repeat;">
+								<br/>
+								<xsl:call-template name="Navigation_main"/>
+							</div>
+						</td>
+						<td style="vertical-align: top; text-align: left; height: 100%;">
+							<table border="0" cellspacing="0" cellpadding="0" style="width: 100%; height: 20px; text-align: right;">
+								<tr>
+									<td style="width: 800px;">
+										<br/>
+									</td>
+									<td style="width: 500px; text-align: right; padding-right: 20px;">
+										<table id="navi_box">
+											<tr>
+												<td>
+													<xsl:call-template name="navigation.row">
+														<xsl:with-param name="rootNode"
+															select="document($navigationBase) /navigation/navi-below"/>
+														<xsl:with-param name="CSSLayoutClass" select="'navi_below'"/>
+														<xsl:with-param name="menuPointHeigth" select="'21'"/>
+														<!-- use pixel values -->
+														<xsl:with-param name="spaceBetweenLinks" select="'12'"/>
+														<!-- use pixel values -->
+													</xsl:call-template>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+							</table>
+							<div id="navi_history">
+								<div id="navi_history_inside">
+									<xsl:call-template name="navigation.history"/>
+								</div>
+							</div>
+							<div id="contentArea">
+								<div id="contentWrapper">
+									<xsl:call-template name="getFastWCMS"/>
+									<xsl:call-template name="template_jer.write.content"/>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
 			</body>
 		</html>
 		
@@ -137,12 +157,11 @@
 				<td class="login_window">
 					<!-- Login-Button / 2 Pfeile =================================== -->
 					<a href="{$LoginURL}">
-						<div class="buttons">&#x25B6;
-							<br/>&#160;&#x25C0;</div>
+						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/login-switch.gif" border="0"/>
 					</a>
 				</td>
 				<td class="login_text">
-					<text i18n="editor.start.LoginText.label"/>: </td>
+					<xsl:value-of select="i18n:translate('editor.start.LoginText.label')"/>: </td>
 				<td class="user_id">
 					<p class="whitebox">
 						<xsl:value-of select="$CurrentUser"/>

@@ -116,21 +116,13 @@
 				alt="new language: German" title="Deutsch" 
 				style="width:24px; height:12px; vertical-align:bottom; border-style:none;" />
 		</xsl:variable>
-		<xsl:variable name="polishFlag">
+		<!--<xsl:variable name="polishFlag">
 			<img src="{$WebApplicationBaseURL}images/naviMenu/lang-pl.gif" 
 				alt="new language: Polish" title="Polish" 
 				style="width:24px; height:12px; vertical-align:bottom; border-style:none;" />
-		</xsl:variable>
+		</xsl:variable>-->
 		<xsl:choose>
 			<xsl:when test="$CurrentLang = 'en'">
-				<xsl:call-template name="FlagPrinter">
-					<xsl:with-param name="flag" select="$polishFlag" />
-					<xsl:with-param name="lang" select="'pl'" />
-					<xsl:with-param name="url" select="$RequestURL" />
-					<xsl:with-param name="alternative" select="concat($RequestURL, '?lang=pl')" />
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="$CurrentLang = 'pl'">
 				<xsl:call-template name="FlagPrinter">
 					<xsl:with-param name="flag" select="$germanFlag" />
 					<xsl:with-param name="lang" select="'de'" />

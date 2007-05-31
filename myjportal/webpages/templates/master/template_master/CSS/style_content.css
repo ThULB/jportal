@@ -3,14 +3,10 @@
 /* under the content  											       */
 /* =================================================================== */
 .mainSite_ContentArea{
-	min-width: 700px;
-	width: 80%;
-	margin-right: 55px;
-	position: absolute;
-}
-
-#mca[id]{
-	padding-left: 230px;
+	width: 75%;
+	float: right;
+	clear: right;
+	margin: 0px auto;
 }
 
 /* =================================================================== */
@@ -55,7 +51,6 @@
 	padding-top: 14px;
    	margin-left: 10px;
    	margin-right: auto;
-   	width : 95%;
     color: #444444;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
@@ -397,10 +392,6 @@ div.submitButton{
 	color: #FFFFFF;
 }
 
-#detailed-view {
-	color: #7C8EB5; 
-}
-
 #detailed-labels {
 	color: #7C8EB5;
 }
@@ -418,6 +409,11 @@ div.submitButton{
     border: 1px solid #273667;
 	background-color: #A0B4E2;	
 }
+
+#detailed-staticurl1 {
+	color: #7C8EB5;
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */

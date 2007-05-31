@@ -6,22 +6,21 @@ html, body {
     width: 100%;
 }
 #second-line {
-	width: 100%; 
-	height:100%;  
+	text-align: left;
+	vertical-align: top;
+	width: 98%;   
 }	
 #div_navi_main { 
-	float:left; 
 	padding: 0px;
 	margin: 0px;
 	height: 506px;
 	width: 297px;
 }
 #navi_box {
-	float: right; 
-	width: auto; 
+	display: inline;
+	width: 470px;
 	height: 14px; 
 	border: 0px;
-	padding-right: 50px;
 	padding-top: 3px;
 }
 #navi_history {
@@ -29,7 +28,6 @@ html, body {
 	vertical-align: top;
 	height: 14px; 
 	margin:0px;
-	padding-top: 25px;	
 }
 #navi_history a{
 	color: #436767;
@@ -42,28 +40,22 @@ html, body {
 #navi_history_inside {
 	padding: 2px;
 	margin-left:2px;
-	width: auto;
+	width: 99%;
 	margin-right:0px;
 	padding-right:0px;
 }
+
 #contentArea {
-	position: absolute;
-	width: 75%;
+	margin: 2px auto;
+	width: 100%;
 }
-#contentArea[id]{
-	margin-left: 270px; 
-}
+
 #footer {
 	width: max; 
 	height:170px; 
 	margin: 0px;
-	}
-#footer_bottom {
-	float: left; 
-	position: relative;
-	width: 255px;
-	height: 32px;
-}	
+}
+	
 #login_div {
 	text-align: left;
 	vertical-align: bottom;
@@ -72,6 +64,12 @@ html, body {
 	height: 25px; 
 	padding-top: 50px;
 }
+
+#login_div[id] {
+	padding-top: 47px;
+	padding-bottom: 7px;
+}
+
 #login_div_inside {
 	padding: 2px;
 }
@@ -90,4 +88,8 @@ html, body {
 	padding-left: 8px;
 	vertical-align: top;
 	text-align: left;
+}
+
+#contentWrapper{
+	width: 98%;
 }

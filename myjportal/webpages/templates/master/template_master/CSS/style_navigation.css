@@ -4,8 +4,8 @@
 /* =================================================================== */
 .mainSite_MenuArea{
     margin-left: 19px;
-	height: 100%;
-	float: left;
+    float: left;
+    clear: left;
 }
 
 * html .mainSite_MenuArea{
@@ -22,9 +22,9 @@
 }
 
 .navigationBelow .top{
-	padding-top: 150px;
-	padding-left: 440px;
-	float: left;
+	padding-top: 153px;
+	padding-right: 250px;
+	float: right;
 }
 
 .navigationBelow .history{
@@ -39,6 +39,7 @@
 
 * html .navigationBelow .history{
 	padding-left: 250px;
+	padding-top: 185px;
 	width: 700px;
 }
 

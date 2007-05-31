@@ -67,8 +67,13 @@ div.buttons {
 }
 
 td.login_window a:link {
+	z-index: 100;
     color:  #455B7C;
     text-decoration: none;
+}
+
+td.login_window img{
+	margin-left: 4px;
 }
 
 td.login_window a:visited {
@@ -179,6 +184,7 @@ div.main_menu {
 /* =================================================================== */
 #navi_history
 {
+	position: absolute;
 	float: right;
     color: #003100; 
     font-size: 11px;
@@ -196,6 +202,11 @@ div.main_menu {
     /* JLZ */
     vertical-align: middle;
 }
+
+#navi_history[id] {
+	margin-left: 270px;
+}
+
 #navi_history a
 {
     color: #003100;
@@ -266,6 +277,8 @@ td.empty_box {
 /* ============================================= */
 
 .navi_main img{
+	border-style: none;
+    border-width: 0px;
     display:block;
 }
 .navi_main tr

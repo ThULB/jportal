@@ -17,11 +17,6 @@
     font-weight : normal;
     text-decoration: none;
     border : 0px solid black;	
-	position: absolute;
-}
-
-#contentArea[id] {
-	padding-left: 285px;
 }
 
 /*IE Fix to have content inside the table: stupid browser*/
@@ -392,6 +387,10 @@ div.submitButton{
 #detailed-browse{
     border: 1px solid #2C519D;
 	background-color: #7289B2;	
+}
+
+#detailed-staticurl1 {
+	color: #7289B2;
 }
 
 /* =================================================================== */

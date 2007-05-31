@@ -2,8 +2,8 @@
 <!-- ============================================== -->
 <!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-	exclude-result-prefixes="xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+	exclude-result-prefixes="xlink i18n">
 	
 	<!-- ============================================== -->
 	<!-- the template                                   -->
@@ -113,7 +113,7 @@
 							</td>
 							<td>
 								<div id="end"><img
-										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/end_akruetzel.jpg"
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/end_akruetzel.gif"
 										alt="text" border="0"></img>
 									
 								</div>
@@ -173,12 +173,11 @@
 				<td class="login_window">
 					<!-- Login-Button / 2 Pfeile =================================== -->
 					<a href="{$LoginURL}">
-						<div class="buttons">&#x25B6;
-							<br/>&#160;&#x25C0;</div>
+						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/login-switch.gif" border="0"/>
 					</a>
 				</td>
 				<td class="login_text">
-					<text i18n="editor.start.LoginText.label"/>: </td>
+					<xsl:value-of select="i18n:translate('editor.start.LoginText.label')"/>: </td>
 				<td class="user_id">
 					<p class="whitebox">
 						<xsl:value-of select="$CurrentUser"/>

@@ -180,20 +180,15 @@ div.main_menu {
 /* =================================================================== */
 #navi_history{
 	padding-top: 10px;
-	position: absolute;
     color: #314759; 
     font-size: 11px;
     font-weight : bold;
     border: 0px solid black;
-    width: 600px;
+    width: 700px;
     height: 11px;    
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    vertical-align: middle;
+    vertical-align: top;
 	margin-left: 5px;
-}
-
-#navi_history[id]{
-    margin-left: 295px;
 }
 
 #navi_history a
@@ -263,6 +258,8 @@ td.empty_box {
 /* ============================================= */
 
 .navi_main img{
+	border-style: none;
+    border-width: 0px;
     display:block;
 }
 .navi_main tr

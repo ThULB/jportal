@@ -142,12 +142,9 @@
 						</xsl:variable>						
 						<xsl:value-of select="$name_shorted"/>
 					</td>
-					<td id="detailed-links" colspan="1" rowspan="3">
-						
-					</td>
 				</tr>
 				<tr>
-					<td colspan="2" rowspan="1">
+					<td colspan="2">
 						<table cellspacing="0" cellpadding="0" id="detailed-view">
 							
 							<!--1***name*************************************-->
@@ -232,7 +229,7 @@
 							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" style="width: max; min-width: 600px;"/>
+									<hr noshade="noshade" style="width: 100%;"/>
 								</td>
 							</tr>
 							<tr>
