@@ -79,12 +79,9 @@
 					<!-- Begin: Decoration lines =============================================================== -->
 					<tr>
 						<!-- td class="decor_line">&#160;</td-->
-						<td class="decor_line">&#160;
-						</td>
-						<td class="decor_line">&#160;
-						</td>
-						<td class="decor_line">&#160;
-						</td>
+						<td class="decor_line"></td>
+						<td class="decor_line"></td>
+						<td class="decor_line"></td>
 						<!--td class="decor_line"/>
 						<td class="decor_line"/-->
 					</tr>
@@ -244,6 +241,5 @@
 			</tr>
 		</table>
 		
-	</xsl:template>
-	
+	</xsl:template>	
 </xsl:stylesheet>

@@ -44,11 +44,11 @@ td.right_margin {
 
 /* Decoration Stuff */
 td.decor_line {
-    font-size: 2px;
+    /*font-size: 2px;*/
     height: 1px;
-    line-height: 1px;
+    /*line-height: 1px;*/
     background: black url(../IMAGES/black_dot.gif);
-    background-repeat: repeat-x;
+    background-repeat: repeat-y;	
 }
 
 td.decor_spc {
@@ -74,10 +74,6 @@ img.balk1 {
     border-width: 0px;
     display: block;
 }
-* html img.balk1 {  /* nur fuer Internet Explorer */
-    width:323px;     /* Version 5.x */
-    w\idth:243px;    /* Version 6 */
-}
 
 td.balk2 {
     background: url(../IMAGES/balk3.gif);
@@ -85,7 +81,7 @@ td.balk2 {
 
 img.balk2 {
     height: 111px;
-    width: 753px;
+    width: 748px;
     border-style: none;
     border-width: 0px;
     display: block;
@@ -93,11 +89,12 @@ img.balk2 {
 
 td.balk_u {
     background: #D6CCA2 url(../IMAGES/menu_pix.gif);
+	vertical-align: top;
 }
 			
 
 img.balk_u {
-    height: 54px;
+    height: 53px;
     width: 222px;
     border-style: none;
     border-width: 0px;
@@ -105,7 +102,7 @@ img.balk_u {
 }
 
 img.jahr {
-    height: 115px;
+    height: 113px;
     width: 222px;
     border-style: none;
     border-width: 0px;

@@ -36,7 +36,6 @@
 			
 			<body>
 				
-				
 				<!-- Begin: Big fat Maintable =========================================================================== -->
 				<table class="main" border="0" cellspacing="0" cellpadding="0">
 					
@@ -51,24 +50,20 @@
 							<p/>
 						</td>
 					</tr>
-					
 					<!-- End: Top margin and define column ==================================================== -->
 					
 					<!-- Begin: Login-row and Navigation-row ================================================== -->
 					<tr>
-						<td class="login_navi_row"/>
-						
+						<td class="login_navi_row"/>				
 						<!-- Begin: Login ===================================================================== -->
 						<td rowspan="3" class="login_row">
 							<xsl:call-template name="template_jalz.userInfo"/>
 						</td>
-						
 						<!-- End: Login ======================================================================= -->
 						
 						<!-- Begin: Navigation ================================================================ -->
 						<td id="navi_below_cell">
-							<xsl:call-template name="navigation.row">
-								
+							<xsl:call-template name="navigation.row">			
 								<!--xsl:with-param name="rootNode" select="$loaded_navigation_xml/navi-below" /-->
 								<xsl:with-param name="rootNode"
 									select="document($navigationBase) /navigation/navi-below"/>
@@ -77,21 +72,16 @@
 								<xsl:with-param name="spaceBetweenLinks" select="'12'"/> <!-- use pixel values -->
 							</xsl:call-template>
 						</td>
-						
 						<!-- End: Navigation =================================================================== -->
-					</tr>
-					
+					</tr>				
 					<!-- End: Login-row and Navigation-row ===================================================== -->
 					
 					<!-- Begin: Decoration lines =============================================================== -->
 					<tr>
 						<!-- td class="decor_line">&#160;</td-->
-						<td class="decor_line">&#160;
-						</td>
-						<td class="decor_line">&#160;
-						</td>
-						<td class="decor_line">&#160;
-						</td>
+						<td class="decor_line"></td>
+						<td class="decor_line"></td>
+						<td class="decor_line"></td>
 						<!--td class="decor_line"/>
 						<td class="decor_line"/-->
 					</tr>
@@ -105,7 +95,6 @@
 						<!--td class="decor_spc"/>
 						<td class="decor_spc"/-->
 					</tr>
-					
 					<!-- End: Decoration lines ================================================================= -->
 					
 					<!-- Begin: Main Graphics ================================================================== -->
@@ -116,8 +105,7 @@
 						<td class="balk2"> <img class="balk2"
 								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/balk2.gif"/>
 						</td>
-					</tr>
-					
+					</tr>			
 					<!-- End: Main Graphics ==================================================================== -->
 					
 					<!-- Begin: Navigation history ============================================================= -->
@@ -127,8 +115,7 @@
 						<!-- Begin: Part of Main Graphics / rest of the book =================================== -->
 						<td rowspan="4" class="balk_u"> <img class="balk_u"
 								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/balk_u.gif"/>
-						</td>
-						
+						</td>		
 						<!-- End: Part of Main Graphics / rest of the book ===================================== -->
 						
 						<td class="navi_history">
@@ -140,8 +127,7 @@
 								</tr>
 							</table>
 						</td>
-					</tr>
-					
+					</tr>			
 					<!-- End: Navigation history =============================================================== -->
 					
 					<!-- Begin: Decoration lines =============================================================== -->
@@ -159,14 +145,12 @@
 						<td class="decor_big_spc"/>
 						<td class="decor_big_spc"/>
 						<td class="decor_big_spc"/>
-					</tr>
-					
+					</tr>			
 					<!-- End: Decoration lines ================================================================= -->
 					
 					<!-- Begin: Main Menu / Content Area ======================================================= -->
 					<tr>
-						<td/>
-						
+						<td/>				
 						<!-- Begin: Main Menu  ================================================================= -->
 						<!-- Anmerkung: Fuer ein aufgeklapptes Menu wird eine Grafik in form eines "L" verwendet,
 						das irgendwo im System liegt. Evtl. kann man dieses "L" durch ein Unicode
@@ -190,22 +174,18 @@
 									</tr>
 								</table>
 							</div>
-						</td>
-						
+						</td>				
 						<!-- End: Main Menu  =================================================================== -->
 						
 						<!-- Begin: Content Area  ============================================================== -->
 						<td id="contentArea">
-							<xsl:call-template name="getFastWCMS"/>
 							<div id="contentWrapper">
+								<xsl:call-template name="getFastWCMS"/>
 								<xsl:call-template name="template_jalz.write.content"/>
-							</div>
-							
-						</td>
-						
+							</div>		
+						</td>				
 						<!-- End: Content Area  ================================================================ -->
-					</tr>
-					
+					</tr>		
 					<!-- End: Main Menu / Content Area ========================================================= -->
 					
 					<!-- Begin: Thulb-Logo ===================================================================== -->
@@ -217,11 +197,9 @@
 									alt="Thulb-Logo"/>
 							</div>
 						</td>
-					</tr>
-					
+					</tr>		
 					<!-- End: Thulb-Logo ======================================================================= -->
 				</table>
-				
 				
 				<!-- End: Big fat Maintable ============================================================================= -->
 			</body>
@@ -253,8 +231,7 @@
 						<xsl:value-of select="$CurrentUser"/>
 					</p>
 				</td>
-				<td class="login_window">
-					
+				<td class="login_window">	
 					<!-- Login-Button / 2 Pfeile =================================== -->
 					<a href="{$LoginURL}">
 						<div class="buttons">&#x25B6;

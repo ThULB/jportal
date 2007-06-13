@@ -83,6 +83,10 @@
 .sitemap a:hover {
     text-decoration: underline;
 }
+.sitemap img {
+	border-style: none;
+    border-width: 0px;
+}
 /* headlines like "menu below..." */
 .sitemap th {
     font-weight : bold;         
@@ -393,6 +397,9 @@ div.submitButton{
 #detailed-browse{
     border: 1px solid #193340;
 	background-color: #5C727F;	
+}
+#detailed-staticurl1 {
+	color: #5C727F;
 }
 /* =================================================================== */
 /* detailed-view content links                                         */

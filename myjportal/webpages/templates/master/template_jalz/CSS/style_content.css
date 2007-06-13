@@ -83,6 +83,10 @@
 .sitemap a:hover {
     text-decoration: underline;
 }
+.sitemap img {
+	border-style: none;
+    border-width: 0px;
+}
 /* headlines like "menu below..." */
 .sitemap th {
     font-weight : bold;         
@@ -194,6 +198,9 @@ div.submitButton{
 #resultList td.description{
     padding: 3px;
     background-color: white;
+	#border-bottom-width: 8px;
+    #border-bottom-style: solid;
+    #border-bottom-color: #EFF4F6; /* same as background */
 }
 #pageSelection{
     border-top-style: solid;
@@ -283,7 +290,6 @@ div.submitButton{
 #browseClass div.comment{
     font-style: italic;
 }
-
 
 /* =================================================================== */
 /*                     						   						   */
@@ -390,6 +396,9 @@ div.submitButton{
 #detailed-browse{
     border: 1px solid #193340;
 	background-color: #5C727F;	
+}
+#detailed-staticurl1 {
+	color: #5C727F;
 }
 
 /* =================================================================== */

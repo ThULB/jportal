@@ -89,12 +89,6 @@ td.login_window a:focus {
     text-decoration: none;
 }
 
-/* Navigation history line */
-/*td.navi_history {
-    height: 22px;
-    background: #BBC3C1 url(../IMAGES/navi_pix.gif);
-    background-repeat: repeat-x repeat-y;
-}*/
 
 /* ==================================================== */
 /* Style for the main menu				*/
@@ -111,7 +105,6 @@ td.menus {
 }
 						
 div.main_menu {
-    /*background-color: #D6CCA2;*/
     background: #D6CCA2 url(../IMAGES/menu_pix.gif);
     background-repeat: repeat-x repeat-y
     vertical-align: top;
@@ -138,9 +131,6 @@ div.main_menu {
 
 .navi_below th, .navi_below td, .navi_below a
 {
-    /*color: #15516E;*/ /* ocean */
-    /* JLZ */
-    /*color:  #5C727E;5C727E*/
     color:  #5C727E;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -269,6 +259,8 @@ td.empty_box {
 
 .navi_main img{
     display:block;
+	border-style: none;
+    border-width: 0px;
 }
 .navi_main tr, .navi_main td
 {

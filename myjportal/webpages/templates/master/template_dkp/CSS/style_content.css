@@ -80,6 +80,11 @@
 .sitemap a:hover {
     text-decoration: underline;
 }
+
+.sitemap img {
+	border-style: none;
+    border-width: 0px;
+}
 /* headlines like "menu below..." */
 .sitemap th {
     font-weight : bold;         

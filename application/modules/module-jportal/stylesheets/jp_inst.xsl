@@ -206,7 +206,7 @@
 									<td valign="top" id="detailed-labels">
 										<xsl:value-of select="i18n:translate('editormask.labels.LURL')"/>
 									</td>
-									<td>
+									<td id="detailed-labels-link">
 										<a href="{./metadata/urls/url/@xlink:href}">
 											<xsl:value-of select="./metadata/urls/url/@xlink:href"/>
 										</a>

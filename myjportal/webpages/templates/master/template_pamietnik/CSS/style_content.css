@@ -75,6 +75,10 @@
 .sitemap a:hover {
     text-decoration: underline;
 }
+.sitemap img {
+	border-style: none;
+    border-width: 0px;
+}
 /* headlines like "menu below..." */
 .sitemap th {
     font-weight : bold;         
@@ -420,7 +424,9 @@ td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px s
     border: 1px solid #55593F;
 	background-color: #848A65;	
 }
-
+#detailed-staticurl1 {
+	color: #848A65;
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
