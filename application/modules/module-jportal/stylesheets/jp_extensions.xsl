@@ -75,6 +75,10 @@
 				<table>
 					<tr>
 						<xsl:call-template name="browseCtrlJP"/>
+						<td>
+							&#160;&#160;&#160;&#160;&#160;&#160;
+						</td>
+						<xsl:call-template name="SwitchToXMLview"/>
 					</tr>
 				</table>
 				
@@ -781,6 +785,10 @@
 					&#160;&#160;&#160;&#160;&#160;&#160;
 				</td>
 				<xsl:call-template name="browseCtrlJP"/>
+				<td>
+					&#160;&#160;&#160;&#160;&#160;&#160;
+				</td>
+				<xsl:call-template name="SwitchToXMLview"/>	
 			</tr>
 		</table>
 		<br/>
@@ -1403,19 +1411,23 @@
 	<!-- ===================================================================================================== -->
 	<xsl:template name="showAdminHead">
 		<xsl:if test="acl:checkPermission(./@ID,'writedb') or acl:checkPermission(./@ID,'deletedb')">
-			<tr id="detailed-dividingline">
-				<td colspan="2">
-					<hr noshade="noshade" size="1px"/>
-				</td>
-			</tr>
-			<tr>
-				<td id="detailed-headlines">
-					<xsl:value-of select="i18n:translate('metaData.headlines.admin')"/>
-				</td>
-				<td>
-					<br/>
-				</td>
-			</tr>
+			<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+				<tr>
+					<td colspan="2" id="detailed-innerdivlines">
+						<br/>
+					</td>
+				</tr>
+			</table>
+			<table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+				<tr>
+					<td id="detailed-headlines">
+						<xsl:value-of select="i18n:translate('metaData.headlines.admin')"/>
+					</td>
+					<td>
+						<br/>
+					</td>
+				</tr>
+			</table>
 		</xsl:if>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
@@ -1436,7 +1448,13 @@
 			<xsl:if test="$volume-node='true'">
 				<tr id="detailed-dividingline">
 					<td colspan="2">
-						<hr noshade="noshade" size="1px"/>
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+							<tr>
+								<td colspan="2" id="detailed-innerdivlines">
+									<br/>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 				<tr>
@@ -1793,4 +1811,23 @@
 		<div style="height:0.7em;"/>
 	</xsl:template>
 	<!-- ===================================================================================================== -->
+
+	<!-- ================================================================================================================= -->
+	<xsl:template name="SwitchToXMLview">
+		<xsl:variable name="newurl">
+			<xsl:call-template name="UrlSetParam">
+				<xsl:with-param name="url" select="$RequestURL"/>
+				<xsl:with-param name="par" select="'XSL.Style'"/>
+				<xsl:with-param name="value" select="'xml'"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<td id="detailed-xmlbutton">
+			<a href="{$newurl}" alt="{i18n:translate('metaData.xmlView')}" title="{i18n:translate('metaData.xmlView')}" target="_blank">
+				<img src="{$WebApplicationBaseURL}images/xml.png"/>
+			</a>
+		</td>
+	</xsl:template>
+	<!-- ===================================================================================================== -->
+	
+	
 </xsl:stylesheet>

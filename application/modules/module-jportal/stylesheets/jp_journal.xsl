@@ -207,10 +207,10 @@
 									name="label"/>
 							</xsl:call-template>
 						</table>
-						<table cellspacing="0" cellpadding="0" id="detailed-view">
-							<tr id="detailed-dividingline">
-								<td colspan="2">
-									<hr noshade="noshade" size="1px"/>
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+							<tr>
+								<td colspan="2" id="detailed-innerdivlines">
+									<br/>
 								</td>
 							</tr>
 						</table>
@@ -306,10 +306,10 @@
 						select="i18n:translate('metaData.jpjournal.hidden_pubTypeID')"
 						name="label"/>
 						</xsl:call-template>-->
-						<table cellspacing="0" cellpadding="0" id="detailed-view">
-							<tr id="detailed-dividingline">
-								<td colspan="2">
-									<hr noshade="noshade" size="1px"/>
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+							<tr>
+								<td colspan="2" id="detailed-innerdivlines">
+									<br/>
 								</td>
 							</tr>
 						</table>

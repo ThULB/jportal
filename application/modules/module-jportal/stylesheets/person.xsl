@@ -41,7 +41,15 @@
 						</xsl:call-template>
 					</xsl:variable>
 					<xsl:variable name="name">
-						<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
+						<xsl:choose>	
+							<xsl:when
+								test="xalan:nodeset($cXML)/mycoreobject/metadata/def.dateOfDeath/dateOfDeath/text()">
+								<xsl:value-of select="concat('† ',$lastName_shorted,', ',$firstName_shorted)"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)"/>
+							</xsl:otherwise>
+						</xsl:choose>
 					</xsl:variable>
 					<xsl:variable name="date">
 						<xsl:choose>
@@ -83,7 +91,15 @@
 	<xsl:template priority="1" mode="title" match="/mycoreobject[contains(@ID,'_person_')]">
 		<xsl:choose>
 			<xsl:when test="./metadata/def.heading/heading">
-				<xsl:apply-templates select="./metadata/def.heading/heading"/>
+				<xsl:choose>	
+					<xsl:when
+						test="./metadata/def.dateOfDeath/dateOfDeath/text()">
+						<xsl:value-of select="concat('† ',./metadata/def.heading/heading/lastName/text(),', ',./metadata/def.heading/heading/firstName/text())"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat(./metadata/def.heading/heading/lastName/text(),', ',./metadata/def.heading/heading/firstName/text())"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="@ID"/>
@@ -111,6 +127,9 @@
 						<img src="{$WebApplicationBaseURL}images/person.gif"/>
 					</td>
 					<td id="detailed-mainheadline">
+						<xsl:if test="/mycoreobject/metadata/def.dateOfDeath/dateOfDeath/text()">
+							†
+						</xsl:if>
 						<xsl:variable name="lastName_shorted">
 							<xsl:value-of select="./metadata/def.heading/heading/lastName/text()"/>
 						</xsl:variable>
@@ -203,7 +222,13 @@
 							
 							<tr id="detailed-dividingline">
 								<td colspan="2">
-									<hr noshade="noshade" style="width: 100%;"/>
+									<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+										<tr>
+											<td colspan="2" id="detailed-innerdivlines">
+												<br/>
+											</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 							<tr>

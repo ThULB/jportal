@@ -420,7 +420,12 @@ td.editorHLine                     { border-top:1px solid #7791ac; border-left:1
 #detailed-staticurl1 {
 	color: #0B1F29;
 }
-
+#detailed-innerdivlines{
+	border-top: 1px solid #0C5C4A;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #0C5C4A;
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */

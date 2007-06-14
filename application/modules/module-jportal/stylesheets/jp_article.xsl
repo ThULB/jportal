@@ -445,7 +445,6 @@
 										<xsl:value-of select="i18n:translate('editormask.labels.bibdescript')"/>
 									</td>
 									<td class="metavalue">
-										<br></br>
 										<xsl:call-template name="printI18N">
 											<xsl:with-param name="nodes"
 												select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
@@ -503,22 +502,22 @@
 								<xsl:with-param name="mode" select="'text'"/>
 							</xsl:call-template>
 						</table>
-						<table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
 							<xsl:choose>
 								<xsl:when
 									test="(./metadata/identis/identi | ./metadata/sizes/size 
 								| ./metadata/dates/date[@inherited='0']/text()
 								| ./metadata/participants/participant | ./metadata/subtitles/subtitle)">
-									<tr id="detailed-dividingline">
-										<td colspan="2">
-											<hr noshade="noshade" size="1px"/>
+									<tr>
+										<td colspan="2" id="detailed-innerdivlines">
+											<br/>
 										</td>
 									</tr>
 								</xsl:when>
 								<xsl:when test="string-length($mainTitle)>150)">
-									<tr id="detailed-dividingline">
-										<td colspan="2">
-											<hr noshade="noshade" size="1px"/>
+									<tr>
+										<td colspan="2" id="detailed-innerdivlines">
+											<br/>
 										</td>
 									</tr>
 								</xsl:when>
@@ -620,10 +619,10 @@
 								<xsl:with-param select="i18n:translate('editormask.labels.pub_reference')" name="label"/>
 							</xsl:call-template>
 						</table>
-						<table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-							<tr id="detailed-dividingline">
-								<td>
-									<hr noshade="noshade" size="1px"/>
+						<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+							<tr>
+								<td colspan="2" id="detailed-innerdivlines">
+									<br/>
 								</td>
 							</tr>
 						</table>
@@ -679,9 +678,7 @@
 							<xsl:call-template name="emptyRow"/>
 						</table>
 						<!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-						<table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
 							<xsl:call-template name="showAdminHead"/>
-						</table>
 						<!--*** Editor Buttons ************************************* -->
 						<!--      <xsl:call-template name="editobject_with_der">
 						<xsl:with-param select="$accessedit" name="accessedit"/>

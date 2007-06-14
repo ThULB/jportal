@@ -162,10 +162,19 @@
 	padding: 3px;
 	width: auto;
 	color: #000000; 
+	text-align: justify;
 }
 
 #detailed-view[id] {
 	width: 100%;
+}
+
+#detailed-divlines{
+	height: 1px;
+	width: auto;
+	margin: 0px auto; 
+	margin-top: 15px;
+	width: 90%;
 }
 
 #detailed-labels {
@@ -220,6 +229,10 @@
 	width: 153px;
 	float: right;
 }
+#detailed-xmlbutton{
+	line-height: 0px;
+}
+
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */

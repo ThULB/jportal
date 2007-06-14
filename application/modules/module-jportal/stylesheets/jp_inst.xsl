@@ -227,9 +227,15 @@
 							<!-- linked articles-->
 							<xsl:call-template name="listLinkedArts"/>
 							
-							<tr id="detailed-dividingline">
+							<tr>
 								<td colspan="2">
-									<hr noshade="noshade" style="width: 100%;"/>
+									<table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+										<tr>
+											<td colspan="2" id="detailed-innerdivlines">
+												<br/>
+											</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 							<tr>

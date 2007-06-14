@@ -390,7 +390,12 @@ div.submitButton{
     border: 1px solid #5E5946;
 	background-color: #878064;	
 }
-
+#detailed-innerdivlines{
+	border-top: 1px solid #5E5946;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #5E5946;
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */

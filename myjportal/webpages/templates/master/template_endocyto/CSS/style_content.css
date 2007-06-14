@@ -401,6 +401,12 @@ div.submitButton{
 #detailed-staticurl1 {
 	color: #7BAA89;
 }
+#detailed-innerdivlines{
+	border-top: 1px solid #003100;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #003100;
+}
 /* =================================================================== */
 /* detailed-view content links                                         */
 /* =================================================================== */
