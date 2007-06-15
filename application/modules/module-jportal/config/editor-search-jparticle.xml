@@ -339,10 +339,10 @@
 		</list>
 		<list id="operators.date" default="=" rows="1" type="dropdown">
 			<item value="=" label="="/>
-			<item value="&gt;" label="neuer als"/>
-			<item value="&lt;" label="älter als"/>
-			<item value="&gt;=" label="neuer gleich"/>
-			<item value="&lt;=" label="älter gleich"/>
+			<item value="&gt;" i18n="editor.search.date.cond.newer"/>
+			<item value="&lt;" i18n="editor.search.date.cond.older"/>
+			<item value="&gt;=" i18n="editor.search.date.cond.newer_equal"/>
+			<item value="&lt;=" i18n="editor.search.date.cond.older_equal"/>
 		</list>
 		<list id="operators.time" default="=" rows="1" type="dropdown">
 			<item value="=" label="="/>
