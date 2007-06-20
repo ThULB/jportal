@@ -31,7 +31,7 @@
 		</element>
 		<!-- date -->
 		<element name="dates" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
-			<mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='1'/>
+			<mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2'/>            
 		</element>
 		<!-- 14 - notes -->
 		<element name="notes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">

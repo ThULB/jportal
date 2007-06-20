@@ -84,10 +84,16 @@
             <hidden var="metadata/dates/@parasearch" default="true" />
             <hidden var="metadata/dates/@textsearch" default="true" />
             <hidden var="metadata/dates/@heritable" default="true" />
-            <cell col="1" row="1" anchor="NORTHWEST" ref="date_type" var="metadata/dates/date/@type" />
-            <cell col="1" row="2" anchor="NORTHWEST" ref="date_howToUse" />
-            <cell col="1" row="3" anchor="NORTHWEST" ref="TFzeile10" var="metadata/dates/date" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1" >
+                  <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
+            </cell>
       </panel>
+      <panel id="date_input_repeater">
+            <cell col="1" row="1" anchor="NORTHWEST" ref="date_type" var="@type" ordernr="1" />		  
+            <cell col="1" row="3" anchor="NORTHWEST" ref="TFzeile10" var="" ordernr="1" />
+            <cell col="1" row="2" anchor="NORTHWEST" ref="date_howToUse" />
+      </panel>    
+    
       <!-- end: date -->
       <!-- note ================================================================== -->
       <panel id="note_input">
@@ -110,6 +116,7 @@
       <!-- end: hidden_position -->	
       <!--date =======================================================================-->
       <list id="date_type" type="dropdown">
-            <item value="published" i18n="editormask.jpvolume.published"/>
-      </list>	
+		<include uri="classification:editor:-1:children:jportal_class_00000009"/>	    
+      </list>	        
+    
 </imports>
