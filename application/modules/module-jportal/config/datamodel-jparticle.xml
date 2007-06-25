@@ -67,6 +67,10 @@
 		<element name="classispub3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 			<mcrmetaclassification name="classipub3" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded'/>
 		</element>
+		<!--classiPub4-->
+		<element name="classispub4" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
+			<mcrmetaclassification name="classipub4" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded'/>
+		</element>        
 		<!-- 16 - sizes -->
 		<element name="sizes" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
 			<mcrmetalangtext name="size" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024"/>

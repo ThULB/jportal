@@ -255,7 +255,11 @@
 	<text id="classipub3_label">
 		<include cacheable="false" uri="jportal_getClassLabel:hidden_classispub3/hidden_classipub3"/>
 	</text>
-						
+					
+	<text id="classipub4_label">
+		<include cacheable="false" uri="jportal_getClassLabel:hidden_classispub4/hidden_classipub4"/>
+	</text>    
+    	
 	<text id="websitecontext_label" i18n="editormask.labels.websitecontext"/>
 						
 	<text id="genhiddenfield1_label" i18n="editormask.labels.genhiddenfield1"/>

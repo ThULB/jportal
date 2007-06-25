@@ -3,98 +3,101 @@
             <include uri="webapp:editor/imports-jpcommon.xml" />
             <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />            
       
-      <panel id="globalImport.jpjournal" lines="on">
-            <hidden var="ID" />
-            <hidden var="label" />
-            <hidden var="metadata/@lang" default="de" />
-			<hidden var="service/servdates" descendants="true"/>
-			<hidden var="service/servacls" descendants="true"/>
-			<hidden var="service/servflags" descendants="true"/>		  
+        <panel id="globalImport.jpjournal" lines="on">
+            <hidden var="ID"/>
+            <hidden var="label"/>
+            <hidden var="metadata/@lang" default="de"/>
+            <hidden var="service/servdates" descendants="true"/>
+            <hidden var="service/servacls" descendants="true"/>
+            <hidden var="service/servflags" descendants="true"/>
             <!-- required fields ......................................... -->
             <!-- maintitle -->
-            <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
-            <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
-            <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
+            <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label"/>
+            <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input"/>
+            <cell row="10" col="3" anchor="WEST" ref="maintitle_help"/>
             <!-- subtitle -->
-            <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
-            <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
-            <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
+            <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label"/>
+            <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input"/>
+            <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help"/>
             <!-- partic -->
-            <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label_bold" />
-            <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
+            <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label_bold"/>
+            <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input"/>
             <!-- date -->
-            <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
-            <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
+            <cell row="75" col="1" anchor="NORTHWEST" ref="date_label"/>
+            <cell row="75" col="2" anchor="NORTHWEST" ref="date_input"/>
             <!-- classi -->
-<!--            <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
+            <!--            <cell row="90" col="1" anchor="NORTHWEST" ref="classi_label" />
             <cell row="90" col="2" anchor="NORTHWEST" ref="classi_input" />
             <cell row="90" col="3" anchor="WEST" ref="classi_help" />-->
             <!-- abstract -->
-            <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
-            <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
-            <cell row="100" col="3" anchor="WEST" ref="abstract_help" />
+            <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label"/>
+            <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input"/>
+            <cell row="100" col="3" anchor="WEST" ref="abstract_help"/>
             <!-- identi -->
-            <cell row="130" col="1" anchor="NORTHWEST" ref="identi_label" />
-            <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input" />
-            <cell row="130" col="3" anchor="WEST" ref="identi_help" />
+            <cell row="130" col="1" anchor="NORTHWEST" ref="identi_label"/>
+            <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input"/>
+            <cell row="130" col="3" anchor="WEST" ref="identi_help"/>
             <!-- lang -->
-            <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
-            <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
-            <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
+            <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold"/>
+            <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input"/>
+            <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help"/>
             <!-- right -->
-            <cell row="150" col="1" anchor="NORTHWEST" ref="right_label" />
-            <cell row="150" col="2" anchor="NORTHWEST" ref="right_input" />
-            <cell row="150" col="3" anchor="WEST" ref="right_help" />
+            <cell row="150" col="1" anchor="NORTHWEST" ref="right_label"/>
+            <cell row="150" col="2" anchor="NORTHWEST" ref="right_input"/>
+            <cell row="150" col="3" anchor="WEST" ref="right_help"/>
             <!-- note -->
-            <cell row="160" col="1" anchor="NORTHWEST" ref="note_label" />
-            <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
-            <cell row="160" col="3" anchor="WEST" ref="note_help" />
+            <cell row="160" col="1" anchor="NORTHWEST" ref="note_label"/>
+            <cell row="160" col="2" anchor="NORTHWEST" ref="note_input"/>
+            <cell row="160" col="3" anchor="WEST" ref="note_help"/>
             <!-- predece -->
-            <cell row="180" col="1" anchor="NORTHWEST" ref="predece_label" />
-            <cell row="180" col="2" anchor="NORTHWEST" ref="predece_input" />
-            <cell row="180" col="3" anchor="WEST" ref="predece_help" />
+            <cell row="180" col="1" anchor="NORTHWEST" ref="predece_label"/>
+            <cell row="180" col="2" anchor="NORTHWEST" ref="predece_input"/>
+            <cell row="180" col="3" anchor="WEST" ref="predece_help"/>
             <!-- successor -->
-            <cell row="190" col="1" anchor="NORTHWEST" ref="successor_label" />
-            <cell row="190" col="2" anchor="NORTHWEST" ref="successor_input" />
-            <cell row="190" col="3" anchor="WEST" ref="successor_help" />
-		    <!-- ================================================================================================= -->
-		    <!-- Hidden information to be used in heritated objects (volumes, articles) -->                            
-            <cell row="195" col="2" anchor="NORTHWEST" ref="Admin_label" />		  
+            <cell row="190" col="1" anchor="NORTHWEST" ref="successor_label"/>
+            <cell row="190" col="2" anchor="NORTHWEST" ref="successor_input"/>
+            <cell row="190" col="3" anchor="WEST" ref="successor_help"/>
+            <!-- ================================================================================================= -->
+            <!-- Hidden information to be used in heritated objects (volumes, articles) -->
+            <cell row="195" col="2" anchor="NORTHWEST" ref="Admin_label"/>
             <!-- .. -->
-            <cell row="200" col="1" anchor="NORTHWEST" ref="jpjournalID_label" />
-            <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input" />
+            <cell row="200" col="1" anchor="NORTHWEST" ref="jpjournalID_label"/>
+            <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input"/>
             <!-- ... -->
-            <cell row="210" col="1" anchor="NORTHWEST" ref="rubricID_label" />
-            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input" />
+            <cell row="210" col="1" anchor="NORTHWEST" ref="rubricID_label"/>
+            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input"/>
             <!-- ... -->
-            <cell row="220" col="1" anchor="NORTHWEST" ref="pubTypeID_label" />
-            <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input" />
-
-            <cell row="230" col="1" anchor="NORTHWEST" ref="classipub_label" />
-            <cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input" />
-		  
-            <cell row="240" col="1" anchor="NORTHWEST" ref="classipub2_label" />
-            <cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input" />
-		  
-            <cell row="250" col="1" anchor="NORTHWEST" ref="classipub3_label" />
-            <cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input" />		  		  		  		  
-		  
-            <cell row="260" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
-            <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input" />		  		  		  		  
-		  
-            <cell row="270" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label" />
-            <cell row="270" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input" />		  		  		  		  
-		  
-            <cell row="280" col="1" anchor="NORTHWEST" ref="genhiddenfield2_label" />
-            <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input" />		  		  		  		  		  		  		  
-		  
-            <cell row="290" col="1" anchor="NORTHWEST" ref="genhiddenfield3_label" />
-            <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input" />		  		  		  		  		  
-		    <!-- ================================================================================================= -->
+            <cell row="220" col="1" anchor="NORTHWEST" ref="pubTypeID_label"/>
+            <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input"/>
+            
+            <cell row="230" col="1" anchor="NORTHWEST" ref="classipub_label"/>
+            <cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input"/>
+            
+            <cell row="240" col="1" anchor="NORTHWEST" ref="classipub2_label"/>
+            <cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input"/>
+            
+            <cell row="250" col="1" anchor="NORTHWEST" ref="classipub3_label"/>
+            <cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input"/>
+            
+            <cell row="255" col="1" anchor="NORTHWEST" ref="classipub4_label"/>
+            <cell row="255" col="2" anchor="NORTHWEST" ref="classipub4_input"/>
+            
+            <cell row="260" col="1" anchor="NORTHWEST" ref="websitecontext_label"/>
+            <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input"/>
+            
+            <cell row="270" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label"/>
+            <cell row="270" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input"/>
+            
+            <cell row="280" col="1" anchor="NORTHWEST" ref="genhiddenfield2_label"/>
+            <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input"/>
+            
+            <cell row="290" col="1" anchor="NORTHWEST" ref="genhiddenfield3_label"/>
+            <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input"/>
+            <!-- ================================================================================================= -->
             <!-- save / cancel button -->
             <cell row="300" col="1" anchor="EAST"/>
-            <cell row="300" col="2" anchor="EAST" ref="save" />
-      </panel>
+            <cell row="300" col="2" anchor="EAST" ref="save"/>
+        </panel>
       <!-- panel definitions -->
       <!-- MainTitle ================================================================== -->
       <panel id="maintitle_input">
@@ -344,6 +347,16 @@
 		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
 		 	</cell>				
       </panel>		
+      <!-- hidden_classispub ================================================================== -->
+      <panel id="classipub4_input">
+            <hidden var="metadata/hidden_classispub4/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_classispub4/@parasearch" default="true" />
+            <hidden var="metadata/hidden_classispub4/@textsearch" default="true" />
+            <hidden var="metadata/hidden_classispub4/@heritable" default="false" />
+            <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4" >
+		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
+		 	</cell>				
+      </panel>		    
       <!-- websitecontext ================================================================== -->
       <panel id="websitecontext_input">
             <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />

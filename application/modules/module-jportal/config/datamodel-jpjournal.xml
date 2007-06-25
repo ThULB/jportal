@@ -90,6 +90,10 @@
 		<element name="hidden_classispub3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
 			<mcrmetalangtext name="hidden_classipub3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
 		</element>						
+		<!-- optional 4. classification for articles -->		
+		<element name="hidden_classispub4" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+			<mcrmetalangtext name="hidden_classipub4" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>
+		</element>	        
 		<!-- optional value for websitecontext -->
 		<element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
 			<mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1'/>

@@ -66,7 +66,10 @@
 		<!-- classipub3 -->
 		<cell row="154" col="1" anchor="NORTHWEST" ref="classipub3_label" />
 		<cell row="154" col="2" anchor="NORTHWEST" ref="classipub3_input" />
-		<cell row="154" col="3" anchor="NORTHWEST" ref="classipub3_help" />		
+		<cell row="154" col="3" anchor="NORTHWEST" ref="classipub3_help" />	
+		<!-- classipub4 -->
+		<cell row="156" col="1" anchor="NORTHWEST" ref="classipub4_label" />
+		<cell row="156" col="2" anchor="NORTHWEST" ref="classipub4_input" />
 		<!-- size -->
 		<cell row="160" col="1" anchor="NORTHWEST" ref="size_label"/>
 		<cell row="160" col="2" anchor="NORTHWEST" ref="size_input"/>
@@ -312,6 +315,28 @@ XSL.jportalClassification.types.SESSION=jportal_class_00000015&_xml_metadata/typ
 		</item>
 		<include cacheable="false" uri="jportal_getClass:hidden_classispub3/hidden_classipub3"/>
 	</list>
+	<!-- classipub4 ================================================================== -->
+	<panel id="classipub4_input">
+		<hidden var="metadata/classispub4/@class" default="MCRMetaClassification"/>
+		<hidden var="metadata/classispub4/@parasearch" default="true"/>
+		<hidden var="metadata/classispub4/@textsearch" default="false"/>
+		<hidden var="metadata/classispub4/@notinherit" default="false"/>
+		<hidden var="metadata/classispub4/@heritable" default="false"/>
+		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub4/classipub4">
+			<repeater min="0" max="10" anchor="NORTHWEST" ref="classispub4_input_repeater"/>
+		</cell>			
+	</panel>
+	<panel id="classispub4_input_repeater">
+		<include cacheable="false" uri="jportal_getClassID:hidden_classispub4/hidden_classipub4:@classid"/>		
+		<cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub4" var="@categid"/>
+	</panel>		
+	<list id="Cclassipub4" width="300" type="dropdown">
+		<item value="">
+			<label xml:lang="de">
+			</label>
+		</item>
+		<include cacheable="false" uri="jportal_getClass:hidden_classispub4/hidden_classipub4"/>
+	</list>    
 	<!-- size ================================================================== -->
 	<panel id="size_input">
 		<hidden var="metadata/sizes/@class" default="MCRMetaLangText"/>

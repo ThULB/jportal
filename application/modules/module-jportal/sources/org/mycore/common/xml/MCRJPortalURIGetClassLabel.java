@@ -63,17 +63,15 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         // get label
         String label = "";
         String[] params = uri.split(":");
-        	// get from class
-        if (journalID!=null && !journalID.equals("")) {
-            String classID = MCRJPortalURIGetClassID.getClassID(journalID, params[1]);
-            if (classID==null)
-            	throw new MCRException("Could not resolve given alias "+uri+" into MCRClassificationID");
-            label = getClassLabel(classID);	
-		}	
+        String classID=null;
+        // get from class
+        if (journalID!=null && !journalID.equals("")) 
+            classID = MCRJPortalURIGetClassID.getClassID(journalID, params[1]);
+        if (classID!=null)
+            label = getClassLabel(classID);
         	// use default i18n one's 
-        else {
+        else 
         	label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX+params[1]);
-		}
         
         // answer xml 
         Element returnXML;
