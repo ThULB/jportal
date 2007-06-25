@@ -300,12 +300,48 @@
 							</xsl:call-template>
 						</table>
 						<!--4***date*************************************-->
-						<table cellspacing="0" cellpadding="0" id="detailed-view">
-							<xsl:call-template name="printMetaDates">
-								<xsl:with-param select="./metadata/dates/date" name="nodes"/>
-								<xsl:with-param select="i18n:translate('editormask.labels.date_label')" name="label"/>
-							</xsl:call-template>
-						</table>
+                        <xsl:choose>
+                            <xsl:when test="./metadata/dates/date[@type='published']">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/dates/date[@type='published' and @inherited='0']" name="nodes"/>
+                                        <xsl:with-param select="i18n:translate('editormask.labels.date_label')" name="label"/>
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/dates/date[@type='published_from' and @inherited='0']" name="nodes"/>
+                                        <xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_from')" name="label"/>
+                                    </xsl:call-template>
+                                </table>
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/dates/date[@type='published_until' and @inherited='0']" name="nodes"/>
+                                        <xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_until')" name="label"/>
+                                    </xsl:call-template>
+                                </table>
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                                    <tr>
+                                        <td colspan="2" id="detailed-innerdivlines">
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <tr>
+                                        <td id="detailed-headlines">
+                                            <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')"/>
+                                        </td>
+                                        <td>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        
 						<xsl:if test="./metadata/notes/note">
 							<!--5***note*************************************-->
 							<table cellspacing="0" cellpadding="0" id="detailed-view">
