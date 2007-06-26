@@ -32,10 +32,10 @@ html, body {
 }
 
 .minheight{
-   height: 1%;
+   	height: 1%;
 }
 .maygrow{
-   height: auto;
+  	height: auto;
 }
 .autowidth {
     width: auto;

@@ -1,30 +1,29 @@
 /* =================================================================== */
 /* template_mycoresample-1/CSS/style_content.css                       */
-/* $Revision: 1.1 $ $Date: 2005/07/07 18:40:14 $                                                   */
+/* $Revision: 1.1 $ $Date: 2005/07/07 18:40:14 $                       */
 /* =================================================================== */
 
 /* =================================================================== */
 /* content area                                                        */
 /* =================================================================== */
-#contentArea {
-    vertical-align: top;
-    height: 85%;
-    padding-top: 1em;
-}
+
 /*IE Fix to have content inside the table: stupid browser*/
-#contentWrapper {
-    //float:right;
-    padding-top: 4em;
-    padding-bottom: 3em;
-    padding-right: 3em;
-    margin-left:20em;
-    padding-left: 2em;
-    height: 100%
+#contentArea {
+	vertical-align: top;
+	text-align: left;
+    padding-top: 40px;
+	margin: auto;
+	padding-left: 20px;
+	padding-right: 20px;
+    height: 100%;
+	width: 98%;
 }
 
 #contentArea {
-    color: #041B26;
-    background-color: #EFF4F6;
+	width: 100%;
+	text-align: left;
+	vertical-align: top;
+    color: #000000;
     font-size: 12px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
@@ -35,7 +34,7 @@
     padding: 3px;
     border-style: none none solid none;
     border-width: 1px;
-    border-color: #041B26;
+    border-color: #000000;
     margin-bottom: 1.5em;
 }
 #contentArea hr{
@@ -45,7 +44,7 @@
     border-style: none;
 }
 #contentArea a {
-    color: #9A5B11;
+    color: #003e68;
     text-decoration: none;
     font-weight : normal;	
 }
@@ -69,7 +68,7 @@
 /* sitemap                                                             */
 /* =================================================================== */
 .sitemap tr, .sitemap th, .sitemap td, .sitemap a {
-    color: #9A5B11;
+    color: #006ab2;
     background : #FFFFFF; /* white */
     font-size: 12;
     font-family: Verdana, Arial, Helvetica, sans-serif; 
@@ -77,7 +76,7 @@
     text-decoration: none;  
 }
 .sitemap a {
-    color: #9A5B11;
+    color: #006ab2;
     font-size: 12;
     text-decoration: none;
     font-weight : normal;   
@@ -109,7 +108,7 @@
     background: #EDEDED; 
 }
 .sitemap th.mainMenuPoint a:hover {
-    color: #9A5B11;
+    color: #006ab2;
     font-weight : bold;         
     background: #EDEDED; 
 }
@@ -299,22 +298,161 @@ tr.actrow{
 }
 
 /* =================================================================== */
-/* Editor forms (see editor.xsl and org.mycore.frontend.editor.*       */
+/*                     						   						   */
+/* new layout for journals, volumes, articles, 						   */
+/* persons and institutions                    						   */
+/* 						                    						   */
 /* =================================================================== */
 
-table.editor                   { background-color:#CAD9E0; border:1px solid #7791ac; }
-td.editorHeadline              { color:#FFFFFF; background-color:#15516E; padding:3px; }
-td.editorValidationMessage     { color:#FFFFFF; background-color:#FF0000; padding:3px; }
-td.editorCellWithPanelLinesOff { }
-td.editorCellWithPanelLinesOn  { border-left:1px solid #7791ac }
-td.editorCellWithCompLinesOff  { padding:3px; }
-td.editorCellWithCompLinesOn   { padding:3px; border-left:1px solid #7791ac }
-td.editorCellValidationFailed  { padding:3px; border:2px solid #FF0000 }
-table.editorPanel              { }
-td.editorRepeaterButton        { padding-right:3px; padding-bottom:3px }
-.editorText                    { font-size:12px; font-family:Verdana,Arial,Helvetica,SansSerif; line-height:16px }
-td.editorHLine                 { border-top:1px solid #7791ac; border-left:1px solid #7791ac }
-.editorButton                  { color:#ffffff; background-color:#7791ac; 
-                                 font-weight:bold; font-family:Verdana,Arial,Helvetica,SansSerif; 
-                                 font-size:10px; letter-spacing:1px }
+/* =================================================================== */
+/*  used colors:													   */
+/* 			                                                           */
+/* 			                                                           */
+/* 	darkest: #0C374C; for outer frame, content-links...            	   */
+/*  dark: 	 #14516E; for headlines, leaf-links                        */
+/* 	light: 	 #2B6E8D; descriptions...                                  */
+/*  white:		 #FFFFFF; hover link color                             */
+/* 			                                                           */
+/* 			                                                           */
+/* =================================================================== */
+/* =================================================================== */
+/* leafs view                                                          */
+/* =================================================================== */
+#leaf-all {	
+	color: #006ab2;
+	border: 1px solid #006ab2;
+}
 
+#leaf-front{
+	border: 1px solid #006ab2;
+	background-color: #006ab2;
+	color: #FFFFFF;
+}
+
+#leaf-front div{
+    background-color: #006ab2;
+	color: #FFFFFF;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+    color:#006ab2;
+}
+
+#leaf-linkarea a:hover {
+	background-color:#006ab2;
+    color:#FFFFFF;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+    color:#006ab2;
+}
+
+#leaf-linkarea2 a:hover {
+	background-color:#006ab2;
+    color:#FFFFFF;
+}
+
+#leaf-whitespaces{
+    color:#FFFFFF;
+}
+
+#leaf-headline1 {
+	color: #006ab2;
+}
+
+#leaf-headline2 {
+	color: #006ab2;
+}
+
+#leaf-preview img{
+	border: 1px solid #000000;
+}
+
+/* =================================================================== */
+/* detailed view                                                       */
+/* =================================================================== */
+#detailed-headlines {
+    color: #006ab2;
+}
+
+#detailed-cube {
+	background-color:#006ab2;
+	color: #FFFFFF;
+}
+
+#detailed-labels {
+	color: #006ab2;
+}
+
+#detailed-frame{
+	border: 2px solid #006ab2;
+}
+
+#detailed-dividingline hr{
+	color: #006ab2;
+	background-color: #006ab2;
+}
+
+#detailed-browse{
+    border: 1px solid #006ab2;
+	background-color: #006ab2;	
+}
+
+#detailed-staticurl1 {
+	color: #006ab2;
+}
+#detailed-innerdivlines{
+	border-top: 1px solid #006ab2;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #006ab2;
+}
+/* =================================================================== */
+/* detailed-view content links                                         */
+/* =================================================================== */
+
+#detailed-contents {
+	background-color: #006ab2;
+}
+
+#detailed-contents a {
+    color: #FFFFFF;
+}
+
+#detailed-contentsimg img {
+	border: 1px solid #006ab2;
+}
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks a {
+	color: #006ab2;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #006ab2;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #006ab2;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #006ab2;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
+}
