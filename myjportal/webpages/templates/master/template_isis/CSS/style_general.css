@@ -54,7 +54,6 @@ img.borderless{
 #menuContentWrapper{
     margin-top: 3px;
     border-top: solid 3px #cccccc;
-    padding-top: 10px;
     height: 100%;
 }
 
@@ -70,6 +69,27 @@ img.borderless{
     display:block;
     position:absolute;
     right:0px;
+}
+
+#navi_history {
+	text-align: left;
+	vertical-align: top;
+	height: 20px;
+	margin-bottom: 15px; 
+}
+#navi_history a{
+	color: ##003e68;
+	text-decoration: none;
+}
+#navi_history a:hover{
+	text-decoration: underline;
+}
+#navi_history_inside {
+	padding: 2px;
+	margin-left:2px;
+	width: 99%;
+	margin-right:0px;
+	padding-right:0px;
 }
 
 /* =================================================================== */

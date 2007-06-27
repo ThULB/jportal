@@ -7,7 +7,6 @@
 	color: white;
 	text-align:right;
 	position:absolute;
- 	background-color:#52818B;
 	top:10px;
 	left:550px;
 	min-width:1000em,;
@@ -24,7 +23,6 @@
 #navi_left a,a:link,a:active,a:hover,a:focus
 {
 	color:black;
-	font-size:small;
 }
 
 #navi_left
@@ -38,7 +36,6 @@
 {
 	margin:0px;
 	padding: 0px;
-	padding-bottom:6px;
 	border:0px;
 	text-align:left;	
 }
@@ -216,7 +213,7 @@ td.empty_box {
 	display:block;
 }
 .navi_main tr, .navi_main td {
-font-size:small;
+	font-size:11px;
 }
 .navi_main th a:hover {
 	text-decoration:underline;

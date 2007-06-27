@@ -31,7 +31,7 @@
 	border-color:#52818B;
 	border-style:none none solid;
 	border-width:1px;
-	color:#52818B;
+	color:#000000;
 	font-weight:bold;
 	margin-bottom:1.5em;
 	padding:3px;
@@ -319,7 +319,7 @@ div.submitButton {
 }
 
 #leaf-headline2 {
-	color: #0C374C;
+	color: #000000;
 }
 
 #leaf-preview img{

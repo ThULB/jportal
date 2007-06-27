@@ -25,8 +25,6 @@
 					rel="stylesheet" type="text/css"/>
 				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet"
 					type="text/css"/>
-				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/ie6.css" rel="stylesheet"
-					type="text/css"/>
 				<link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet"
 					type="text/css"/>
 				<link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css"/>
@@ -39,8 +37,7 @@
 				<xsl:copy-of select="$head.additional"/>
 			</head>
 			
-			<body>
-				
+			<body>			
 				<div id="img_head" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/2.png) no-repeat;">
 					<div id="navi_top">
 						<xsl:call-template name="navigation.row">
@@ -64,13 +61,14 @@
 					</td>
 					<td id="content">
 						<div style="width:98%;">
+						<div id="navi_history">
+							<div id="navi_history_inside">
+								<xsl:call-template name="navigation.history"/>
+							</div>
+						</div>	
 						<!--<xsl:choose>
 						<xsl:when test="$readAccess='true'">-->
-						<div class="headline">
-							<xsl:copy-of select="$PageTitle"/>
-						</div>
-						<xsl:call-template name="getFastWCMS"/>
-						<xsl:apply-templates/>
+						<xsl:call-template name="template_aaz.write.content"/>
 						<!--</xsl:when>
 						<xsl:otherwise> verboten! </xsl:otherwise>
 						</xsl:choose>-->
@@ -82,6 +80,16 @@
 			
 		</html>
 		
+	</xsl:template>
+	<!-- ======================================================================================================== -->
+	<xsl:template name="template_aaz.write.content">
+		<div class="headline">
+			<xsl:copy-of select="$PageTitle"/>
+		</div>
+		
+		<xsl:call-template name="getFastWCMS"/>
+		
+		<xsl:apply-templates/>
 	</xsl:template>
 	
 </xsl:stylesheet>

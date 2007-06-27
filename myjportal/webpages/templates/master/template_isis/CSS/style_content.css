@@ -11,24 +11,19 @@
 #contentArea {
 	vertical-align: top;
 	text-align: left;
-    padding-top: 40px;
+    padding-top: 31px;
 	margin: auto;
 	padding-left: 20px;
 	padding-right: 20px;
     height: 100%;
-	width: 98%;
-}
-
-#contentArea {
 	width: 100%;
-	text-align: left;
-	vertical-align: top;
     color: #000000;
     font-size: 12px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-weight : normal;
     text-decoration: none;	
 }
+
 #contentArea .headline {
     font-weight : bold;
     padding: 3px;
@@ -44,7 +39,7 @@
     border-style: none;
 }
 #contentArea a {
-    color: #003e68;
+    color: #591F45;
     text-decoration: none;
     font-weight : normal;	
 }
@@ -308,7 +303,7 @@ tr.actrow{
 /*  used colors:													   */
 /* 			                                                           */
 /* 			                                                           */
-/* 	darkest: #0C374C; for outer frame, content-links...            	   */
+/* 	darkest: #006ab2; for outer frame, content-links...            	   */
 /*  dark: 	 #14516E; for headlines, leaf-links                        */
 /* 	light: 	 #2B6E8D; descriptions...                                  */
 /*  white:		 #FFFFFF; hover link color                             */

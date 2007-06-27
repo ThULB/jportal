@@ -34,8 +34,7 @@
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
-				<xsl:copy-of select="$head.additional"/>
-				
+				<xsl:copy-of select="$head.additional"/>			
 			</head>
 			
 			<body>
@@ -62,36 +61,32 @@
 							<div id="leftmenu"> <img id="blueimg"
 									src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/muh.jpg"
 									alt="Kasten"></img>
-								
-								<xsl:call-template name="Navigation_main"/>
-								
-								<ul id="sponsor">
-									
-									<li class="sponsors"> <a href="http://www.dfg.de" target="_blank"><img class="logos"
-											src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/logo_dfg.gif"
-											alt="Logo DFG"></img></a>
-									</li>
-									
-									<li class="sponsors"> <a href="http://www.thulb.uni-jena.de" target="_blank"><img
-											class="logos"
-											src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.gif"
-											alt="Logo ThulB"></img></a>
-									</li>
-									
-									<li class="sponsors"> <a href="http://www.klassik-stiftung.de" target="_blank"><img
-											class="logos"
-											src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/weimar_logo.gif"
-											alt="Logo Klassik Stiftung"></img></a>
-									</li>
-									
-									<li class="sponsors lastlink"> <a href="http://www.bibliothek.uni-halle.de"
-											target="_blank"> ULB Sachen Anhalt</a>
-									</li>
-								</ul>
+								<div id="navmain">
+									<xsl:call-template name="Navigation_main"/>
+								</div>							
+									<a href="http://www.dfg.de" target="_blank" id="logos"><img
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/dfg.png"
+										alt="Logo DFG"></img></a>
+								<div id="sponsor-line" /> 
+									<a href="http://www.thulb.uni-jena.de" target="_blank" id="logos"><img
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.png"
+										alt="Logo ThulB"></img></a>
+								<div id="sponsor-line" /> 
+									<a href="http://www.klassik-stiftung.de" target="_blank" id="logos"><img
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/ksw.png"
+										alt="Logo Klassik Stiftung"></img></a>
+								<div id="sponsor-line" /> 
+								<div id="lastlink">
+									<a href="http://www.bibliothek.uni-halle.de" target="_blank"> ULB Sachen Anhalt</a>
+								</div>
 							</div>
 						</td>
-						<!-- IE Fix: contentWrapper needed :o( -->
 						<td id="contentArea">
+							<div id="navi_history">
+								<div id="navi_history_inside">
+									<xsl:call-template name="navigation.history"/>
+								</div>
+							</div>
 							<xsl:call-template name="template_isis.write.content"/>
 						</td>
 					</tr>
@@ -103,7 +98,7 @@
 	<!-- ======================================================================================================== -->
 	<xsl:template name="template_isis.write.content">
 		<div class="headline">
-			<xsl:value-of select="$PageTitle"/>
+			<xsl:copy-of select="$PageTitle"/>
 		</div>
 		
 		<xsl:call-template name="getFastWCMS"/>

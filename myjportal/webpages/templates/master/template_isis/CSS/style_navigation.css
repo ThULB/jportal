@@ -153,18 +153,23 @@ div.navi_main{
 /* =================================================================== */
 
 #menu-width {
-	float:left;
 	width: 240px;
-	padding-top: 20px;
+	height: 75%;
+	vertical-align: top;
+	text-align: left;
+	padding-top: 25px;
 }
-
 #topmenu { 
     background-image: url(../IMAGES/headfade.gif); 
     background-repeat: repeat-x; 
     height: 57px;
 }
+#navmain{
+	padding-left: 15px;
+}
 
 #leftmenu { 
+	height: 100%;
 	width: 240px;
     position:relative;
     background-image:url(../IMAGES/head.jpg); 
@@ -173,29 +178,30 @@ div.navi_main{
     padding-bottom: 100%;
 }
 
-#sponsor {   
-    list-style-type:none; 
-    text-align: right;  
+#sponsor-line {  
+	height: 2px;
+    border-bottom: solid 2px #B2B2B2;
+	width: 150px;
+	margin: 0px auto;
+ 	text-align: center;
 }
 
-.sponsors { 
-    margin: 1px 0px; 
-    border-bottom: solid 2px #B2B2B2; 
-    padding: 5px 0px; 
-    margin-right: 5em;
+#logos { 
+    border: none;
+	line-height: 0px; 
 }
 
-.logos{ 
+#logos img{ 
     border: none; 
-    padding-right: 0.5em
 }
 
-.lastlink {
-    border-bottom: none;
-    margin-right: 5.3em;
+#lastlink {
+	padding-top: 5px;
+	margin: 0px auto;
+ 	text-align: center;
 }
 
-.lastlink a {
+#lastlink a {
     text-decoration:none;
     color:#000000;
 }
