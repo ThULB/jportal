@@ -58,6 +58,10 @@
 						<a href="http://www.thulb.uni-jena.de" target="_blank" id="thulb_logo">
 							<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.png" />
 						</a>
+						<br/>
+						<a href="http://www.thueringen.de/de/staatsarchive/rudolstadt/content.html" target="_blank" style="margin-left: 8px;">
+							Staatsarchiv Rudolstadt
+						</a>
 					</td>
 					<td id="content">
 						<div style="width:98%;">

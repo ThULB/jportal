@@ -72,13 +72,9 @@
 										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.png"
 										alt="Logo ThulB"></img></a>
 								<div id="sponsor-line" /> 
-									<a href="http://www.klassik-stiftung.de" target="_blank" id="logos"><img
-										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/ksw.png"
-										alt="Logo Klassik Stiftung"></img></a>
-								<div id="sponsor-line" /> 
-								<div id="lastlink">
-									<a href="http://www.bibliothek.uni-halle.de" target="_blank"> ULB Sachen Anhalt</a>
-								</div>
+									<a href="http://www2.uni-jena.de/biologie/ehh/haeckel.htm" target="_blank" id="logos"><img
+										src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/ehh.png"
+										alt="Logo Ernst Haeckel Haus"></img></a>
 							</div>
 						</td>
 						<td id="contentArea">
