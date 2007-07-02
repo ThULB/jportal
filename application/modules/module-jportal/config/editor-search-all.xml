@@ -20,9 +20,15 @@
             <hidden var="conditions/boolean/@operator" default="and"/>
             
             <!-- Only in one specified journal -->
-            <hidden var="conditions/boolean/condition90/@field" default="journalID_art"/>
-            <hidden var="conditions/boolean/condition90/@operator" default="="/>
-            <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/condition90/@value"/>
+            <hidden var="conditions/boolean/boolean/@operator" default="or"/>
+            <!-- volumes -->
+            <hidden var="conditions/boolean/boolean/condition80/@field" default="journalID_vol"/>
+            <hidden var="conditions/boolean/boolean/condition80/@operator" default="="/>
+            <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition80/@value"/>
+            <!-- articles -->
+            <hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>
+            <hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>
+            <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value"/>
             
             <!-- Search in field "name" with operator "contains" -->
             <hidden var="conditions/boolean/condition2/@field" default="allMeta,content"/>
