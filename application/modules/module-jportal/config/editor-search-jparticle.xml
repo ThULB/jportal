@@ -220,22 +220,51 @@
 					</panel>
 				</repeater>
 			</cell>
-			<cell col="1" row="17">
+            
+            <!-- fulltext -->
+			<cell col="1" row="18">
+				<br/>
+				<br/>
+			</cell>
+			<cell anchor="WEST" colspan="4" col="1" row="19">
+				<text>
+					<label css-style="editorHeadlines" i18n="metaData.headlines.digitalMedia"/>
+				</text>
+			</cell>            
+            <cell var="conditions/boolean/boolean/condition11" col="1" row="30" colspan="2">
+                <panel lines="off">
+                    <cell width="230" anchor="EAST" col="1" row="1">
+                        <text i18n="editor.search.fulltext"/>
+                    </cell>
+                    <hidden default="content" var="@field"/>
+                    <cell anchor="WEST" col="2" row="1">
+                        <panel lines="off">
+                            <cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1"/>
+                            <cell ref="input.text" var="@value" anchor="WEST" col="2" row="1"/>
+                        </panel>
+                    </cell>
+                </panel>
+            </cell>
+            
+            
+            
+            <!-- options -->
+			<cell col="1" row="170">
 				<br/>
 				<br/>
 			</cell>
 			
-			<cell anchor="WEST" colspan="4" col="1" row="18">
+			<cell anchor="WEST" colspan="4" col="1" row="180">
 				<text>
 					<label css-style="editorHeadlines" i18n="metaData.headlines.specials"/>
 				</text>
 			</cell>
 			
 			<!-- Operators -->
-			<cell width="230" anchor="EAST" col="1" row="19">
+			<cell width="230" anchor="EAST" col="1" row="190">
 				<text i18n="editor.search.connect"/>
 			</cell>
-			<cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="19">
+			<cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="190">
 				<list default="and" type="dropdown">
 					<item i18n="editor.search.and" value="and"/>
 					<item i18n="editor.search.or" value="or"/>
@@ -251,10 +280,10 @@
 			<hidden var="hosts/@target" default="local"/>
 			
 			<!-- Select sort order of results -->
-			<cell width="230" anchor="NORTHEAST" col="1" row="20">
+			<cell width="230" anchor="NORTHEAST" col="1" row="200">
 				<text i18n="editor.search.sortby"/>
 			</cell>
-			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="20">
+			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="200">
 				<repeater max="3" min="1">
 					<panel lines="off">
 						<cell var="@name" anchor="WEST" col="1" row="1">
@@ -275,7 +304,7 @@
 			</cell>
 			
 			<!-- Select maximum number of results and num per page -->
-			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="22">
+			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="220">
 				<panel lines="off">
 					<hidden var="@maxResults" value="0"/>
 					<cell var="@numPerPage" anchor="WEST" col="4" row="1">
@@ -291,7 +320,7 @@
 					</cell>
 				</panel>
 			</cell>
-			<cell anchor="EAST" colspan="2" col="1" row="23">
+			<cell anchor="EAST" colspan="2" col="1" row="230">
 				<submitButton width="150px" i18n="editor.search.search"/>
 			</cell>
 		</panel>
