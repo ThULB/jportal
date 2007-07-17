@@ -66,6 +66,10 @@
                                 <b>
                                     <xsl:value-of select="i18n:translate('indexpage.sub.index')" />
                                 </b>
+                                mode=
+                                <xsl:value-of select="$mode" />
+                                ...
+                                <br />
                                 <select name="mode" size="1" class="button">
                                     <option value="prefix">
                                         <xsl:if test="$mode = 'prefix'">
@@ -284,7 +288,7 @@
     <xsl:template match="range">
         <xsl:variable name="url">
             <xsl:value-of select="concat($WebApplicationBaseURL,'indexpage',$HttpSession,'?searchclass=',$IndexID,'&amp;fromTo=', from/@pos,'-', to/@pos )" />
-            <xsl:value-of select="concat('&amp;',$subselect.params)" />
+            <xsl:value-of select="concat('&amp;',$subselect.params,'&amp;mode=',$mode)" />
             <xsl:if test="string-length($search) &gt; 0">
                 <xsl:value-of select="concat('&amp;search=',$search)" />
             </xsl:if>

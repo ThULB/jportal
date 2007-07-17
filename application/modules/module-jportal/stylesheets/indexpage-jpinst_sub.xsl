@@ -252,7 +252,7 @@
     <xsl:template match="range">
         <xsl:variable name="url">
             <xsl:value-of select="concat($WebApplicationBaseURL,'indexpage',$HttpSession,'?searchclass=',$IndexID,'&amp;fromTo=', from/@pos,'-', to/@pos )" />
-            <xsl:value-of select="concat('&amp;',$subselect.params)" />
+            <xsl:value-of select="concat('&amp;',$subselect.params,'&amp;mode=',$mode)" />
             <xsl:if test="string-length($search) &gt; 0">
                 <xsl:value-of select="concat('&amp;search=',$search)" />
             </xsl:if>
