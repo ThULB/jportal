@@ -66,9 +66,6 @@
                                 <b>
                                     <xsl:value-of select="i18n:translate('indexpage.sub.index')" />
                                 </b>
-                                mode=
-                                <xsl:value-of select="$mode" />
-                                ...
                                 <br />
                                 <select name="mode" size="1" class="button">
                                     <option value="prefix">
