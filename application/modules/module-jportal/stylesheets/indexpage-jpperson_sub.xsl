@@ -69,9 +69,15 @@
                                 <select name="mode" size="1" class="button">
                                     <option value="prefix">
                                         <xsl:if test="$mode = 'prefix'">
-                                            <xsl:attribute name="selected">selected</xsl:attribute>
+                                            <xsl:attribute name="selected" select="selected" />
                                         </xsl:if>
                                         <xsl:value-of select="i18n:translate('indexpage.sub.contains')" />
+                                    </option>
+                                    <option value="equals">
+                                        <xsl:if test="$mode = 'equals'">
+                                            <xsl:attribute name="selected" select="selected" />
+                                        </xsl:if>
+                                        <xsl:value-of select="'='" />
                                     </option>
                                 </select>
                                 <xsl:text></xsl:text>
