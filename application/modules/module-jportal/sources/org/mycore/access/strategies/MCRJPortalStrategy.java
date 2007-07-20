@@ -1,7 +1,5 @@
 package org.mycore.access.strategies;
 
-import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,26 +7,33 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
-	
-	private static final Logger LOGGER = Logger.getLogger(MCRParentRuleStrategy.class);
-	private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");	
-	private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
 
-	public boolean checkPermission(String id, String permission) {
-		if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_")
-				|| permission.equals("read")) {
-			return checkPermissionOfType(id, permission);
-		}
-		else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
-			return true;
-		}
-		return false;
-	}
-	
+    private static final Logger LOGGER = Logger.getLogger(MCRParentRuleStrategy.class);
+
+    private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");
+
+    private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
+
+    public boolean checkPermission(String id, String permission) {
+        if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
+            return checkPermissionOfType(id, permission);
+        }
+        // hack to block deletion of jpvolumes
+        else if (id.contains("_jpvolume_") && (permission.equals("deletedb") || permission.equals("deletewf"))) {
+            // root ?
+            if (MCRSessionMgr.getCurrentSession().getCurrentUserID().equals("root"))
+                return true;
+            else
+                return false;
+        } else
+            return ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission)));
+    }
+
     public boolean checkPermissionOfType(String id, String permission) {
         String objectType = getObjectType(id);
 
@@ -38,31 +43,30 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
         }
         LOGGER.debug("using system default access rule.");
         return MCRAccessManager.getAccessImpl().checkPermission("default", permission);
-    }	
-	
+    }
+
     private static String getObjectType(String id) {
         Matcher m = TYPE_PATTERN.matcher(id);
         if (m.find() && (m.groupCount() == 1)) {
             return m.group(1);
         }
         return "";
-    }	
-    
+    }
+
     public boolean checkPermissionOfTopObject(String id, String permission) {
-    	boolean allowed = false;
-    	if (id!=null && permission!=null && !id.equals("") && !permission.equals("")) {
-    		Document objXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
-    		final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild("hidden_jpjournalID");
-            String journalID="";
-            if (journalElem != null) 
-            	journalID=journalElem.getText();
+        boolean allowed = false;
+        if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
+            Document objXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
+            final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild("hidden_jpjournalID");
+            String journalID = "";
+            if (journalElem != null)
+                journalID = journalElem.getText();
             if (!journalID.equals("")) {
-            	LOGGER.debug("Using journal access rule defined for: " + journalID);
-            	allowed = ID_STRATEGY.checkPermission(journalID,permission);
-			}
-            else
-            	LOGGER.debug("No journal access rule found for: " + journalID);
-		}
-    	return allowed;
+                LOGGER.debug("Using journal access rule defined for: " + journalID);
+                allowed = ID_STRATEGY.checkPermission(journalID, permission);
+            } else
+                LOGGER.debug("No journal access rule found for: " + journalID);
+        }
+        return allowed;
     }
 }
