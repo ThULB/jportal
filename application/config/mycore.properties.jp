@@ -96,15 +96,42 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
 # The name of the Java class of the XML parser
 MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
 
+##############################################################################
+# Index Browser - Access for robots
+##############################################################################
 
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPJournal.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPJournal.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPJournal.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPJournal.Order=desc
+  MCR.IndexBrowser.robotJPJournal.Style=robots
+  MCR.IndexBrowser.robotJPJournal.MaxPerPage=100
+  MCR.IndexBrowser.robotJPJournal.FilterCondition=MCRID like '%_jpjournal_%'
+  
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPArticle.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPArticle.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPArticle.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPArticle.Order=desc
+  MCR.IndexBrowser.robotJPArticle.Style=robots
+  MCR.IndexBrowser.robotJPArticle.MaxPerPage=100
+  MCR.IndexBrowser.robotJPArticle.FilterCondition=MCRID like '%_jparticle_%'
+  
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPInst.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPInst.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPInst.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPInst.Order=desc
+  MCR.IndexBrowser.robotJPInst.Style=robots
+  MCR.IndexBrowser.robotJPInst.MaxPerPage=100
+  MCR.IndexBrowser.robotJPInst.FilterCondition=MCRID like '%_jpinst_%'
 
-
-
-
-
-
-
-
-
-
-
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotPerson.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotPerson.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotPerson.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotPerson.Order=desc
+  MCR.IndexBrowser.robotPerson.Style=robots
+  MCR.IndexBrowser.robotPerson.MaxPerPage=100
+  MCR.IndexBrowser.robotPerson.FilterCondition=MCRID like '%_person_%'
