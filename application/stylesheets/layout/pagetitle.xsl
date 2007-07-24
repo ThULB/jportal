@@ -4,7 +4,7 @@
 
 <!-- ================================================================================= -->
 <xsl:template name="PageTitle">
-	<xsl:value-of select="concat($PageTitle,' @ ',$MainTitle)"/>
+	<xsl:value-of select="concat($PageTitle,' - ',$MainTitle)"/>
 </xsl:template>
 <!-- ================================================================================= -->
 
