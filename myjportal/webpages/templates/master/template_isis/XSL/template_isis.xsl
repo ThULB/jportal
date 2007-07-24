@@ -16,9 +16,14 @@
 		<html>
 			<head>
 				<!--<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>-->
-				<title>
-					<xsl:call-template name="HTMLPageTitle"/>
-				</title>
+    <title>
+	<xsl:call-template name="HTMLPageTitle"/>
+    </title>
+    <meta content="Zeitschriften-Portal" lang="de" name="description"/>
+    <meta content="Journal-Portal" lang="en" name="description"/>
+    <meta content="Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung,Andreas Trappe" lang="de" name="keywords"/>
+    <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation,Andreas Trappe" lang="en" name="keywords"/>
+    <meta content="MyCoRe" lang="de" name="generator"/>
 				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet"
 					type="text/css"/>
 				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css"
