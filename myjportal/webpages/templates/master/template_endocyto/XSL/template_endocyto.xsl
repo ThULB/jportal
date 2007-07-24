@@ -14,7 +14,7 @@
 				<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
 				<title>
 					
-					<xsl:call-template name="PageTitle"/>
+					<xsl:call-template name="HTMLPageTitle"/>
 				</title>
 				<link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet"
 					type="text/css"/>

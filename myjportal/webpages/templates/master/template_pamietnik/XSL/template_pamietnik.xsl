@@ -15,7 +15,7 @@
 		<html>
 			<head>
 				<title>
-					<xsl:call-template name="PageTitle"/>
+					<xsl:call-template name="HTMLPageTitle"/>
 				</title>
 				<link
 					href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css"
