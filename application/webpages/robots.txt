@@ -1,12 +1,7 @@
 User-agent: *
-Disallow: /servlets/PAPSearchMaskServlet
-Disallow: /servlets/MCRLoginServlet
-Disallow: /servlets/MCRNBNResolver
-Disallow: /servlets/MCROAIDataProvider
-Disallow: /servlets/MCRQueryServlet
-Disallow: /servlets/MCRSearchMaskServlet
-Disallow: /servlets/MCRUserServlet
-Disallow: /servlets/XMLEditor
-Disallow: /servlets/MCRUploadServlet
-Disallow: /servlets/MCRZipServlet
-
+Disallow: /servlets
+Disallow: /indexpage
+Disallow: /index
+Disallow: /browse
+Disallow: /editor_form_search-*
+Disallow: /content/main/internal
