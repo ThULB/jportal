@@ -30,7 +30,7 @@
 <!-- ========== value ========== -->
 <xsl:template match="value">
   <li>
-    <a class="metavalue" href="{$WebApplicationBaseURL}receive/{idx}{$HttpSession}">
+    <a class="metavalue" href="{$WebApplicationBaseURL}receive/{idx}">
       <xsl:value-of select="idx"/>
     </a><br/>
   </li>
