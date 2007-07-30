@@ -22,16 +22,10 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     public boolean checkPermission(String id, String permission) {
         if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
             return checkPermissionOfType(id, permission);
+        } else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
+            return true;
         }
-        // hack to block deletion of jpvolumes
-        else if (id.contains("_jpvolume_") && (permission.equals("deletedb") || permission.equals("deletewf"))) {
-            // root ?
-            if (MCRSessionMgr.getCurrentSession().getCurrentUserID().equals("root"))
-                return true;
-            else
-                return false;
-        } else
-            return ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission)));
+        return false;
     }
 
     public boolean checkPermissionOfType(String id, String permission) {
