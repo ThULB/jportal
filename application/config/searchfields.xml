@@ -75,7 +75,8 @@
     <field name="lastname" 			type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/lastName | /mycoreobject/metadata/def.alternative/alternative/lastName" value="text()" i18n="editor.search.person.lastName" />
     <field name="firstname" 		type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/firstName | /mycoreobject/metadata/def.alternative/alternative/firstName" value="text()" i18n="editor.search.person.firstName" />
     <field name="anyname" 			type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/* | /mycoreobject/metadata/def.alternative/alternative/*" value="text()" i18n="editor.search.person.anyName" />
-    <field name="place" 			type="name" source="objectMetadata" objects="person corporation" xpath="/mycoreobject/metadata/*[contains(local-name(),'placeOf')]/* | /mycoreobject/metadata/def.location/location" value="text()" i18n="editor.search.person.place" />	  
+    <field name="place" 			type="name" source="objectMetadata" objects="person corporation" xpath="/mycoreobject/metadata/*[contains(local-name(),'placeOf')]/* | /mycoreobject/metadata/def.location/location" value="text()" i18n="editor.search.person.place" />
+ 	<field name="personNote" 		type="text" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.note/note" value="text()"  />
 	  
   </index>
 
