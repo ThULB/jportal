@@ -24,7 +24,7 @@ Disallow: /servlets/WCMSGetStaticHTMLServlet
 Disallow: /servlets/AxisServlet
 Disallow: /servlets/AxisAdminServlet
 Disallow: /indexpage
-Disallow: /index
-Disallow: /browse
+Disallow: /index/
+Disallow: /browse/
 Disallow: /editor_form_search-*
 Disallow: /content/main/internal
