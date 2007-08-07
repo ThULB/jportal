@@ -23,8 +23,7 @@ Disallow: /servlets/WCMSFileUploadServlet
 Disallow: /servlets/WCMSGetStaticHTMLServlet
 Disallow: /servlets/AxisServlet
 Disallow: /servlets/AxisAdminServlet
-Disallow: /indexpage
-Disallow: /index/
+Disallow: /indexpage/
 Disallow: /browse/
 Disallow: /editor_form_search-*
 Disallow: /content/main/internal
