@@ -29,6 +29,12 @@
           <fileset dir="${basedir}/config" includes="mycore.properties.jp" />
         </copy>  	    	
     	
+        <!-- merge the web.xml of the module to the application -->
+        <available property="web.xml.present" file="${env.JPORTAL_HOME}/config/web.xml" />
+        <antcall target="do.merge" >
+          <param name="web.xml.file" value="${env.JPORTAL_HOME}/config/web.xml" />
+        </antcall>    	
+    	
       	<!-- get JPORTAL sources -->
       	<!-- ############################# -->
     	  	<!-- get editors -->
