@@ -24,12 +24,15 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
@@ -39,6 +42,8 @@ public class MCRJPortalCLIServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCLIServlet.class);;
+
+    private final static int derStartNumber = 19476;
 
     public void init() throws ServletException {
         super.init();
@@ -61,7 +66,31 @@ public class MCRJPortalCLIServlet extends MCRServlet {
     }
 
     private void executeCommand() {
-        MCRImgCacheCommands.createCache();
+
+        MCRXMLTableManager xmlTableManager = MCRXMLTableManager.instance();
+        List derivateList = xmlTableManager.retrieveAllIDs("derivate");
+
+        for (Iterator it = derivateList.iterator(); it.hasNext();) {
+            String derivateID = (String) it.next();
+            int derNumber = Integer.parseInt(derivateID.substring(17, 25));
+            if (derNumber < derStartNumber) {
+                LOGGER.info("\n\n NOTHING done - Derivate " + derivateID + " is already image cached\n");
+            } else {
+                try {
+                    LOGGER.info("Caching Derivate " + derivateID);
+                    MCRImgCacheCommands.cacheDeriv(derivateID);
+                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " completed successfull!\n");
+                } catch (MCRException ex) {
+                    LOGGER.error(ex.getMessage());
+                    LOGGER.error("");
+                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " failed, will be skipped!\n");
+                } catch (Exception e) {
+                    LOGGER.error(e);
+                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " failed, will be skipped!\n");
+                }
+            }
+        }
+        LOGGER.info("\n\n Creating image cache for all derivates completed successfull!\n");
     }
 
     private final Element getAnswerXML(boolean allowed4Action) {
