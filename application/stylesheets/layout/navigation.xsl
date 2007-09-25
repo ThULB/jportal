@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:param name="MCR.baseurl" />
 
     <!-- ================================================================================= -->
     <xsl:template match="TOC | toc">
@@ -13,55 +14,35 @@
     </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="navigation.history">
-        <!-- get href of starting page -->
-        <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
-        <!-- END OF: get href of starting page -->
-        Navigation:
-        <xsl:for-each select="$loaded_navigation_xml//item[@href]">
-            <xsl:if test="@href = $browserAddress ">
-                <a>
-                    <xsl:attribute name="href">
-                                <xsl:call-template name="UrlAddSession">
-                                    <xsl:with-param name="url" select="concat($WebApplicationBaseURL,substring-after($hrefStartingPage,'/'))" />
-                                </xsl:call-template>
-                            </xsl:attribute>
-                    <xsl:value-of select="$MainTitle" />
-                </a>
-                <xsl:for-each select="ancestor-or-self::item">
-                    <xsl:if test="$browserAddress != $hrefStartingPage ">
-                        >
-                        <xsl:choose>
-                            <xsl:when test="position() != last()">
-                                <a>
-                                    <xsl:attribute name="href">
-                                        <xsl:call-template name="UrlAddSession">
-                                            <xsl:with-param name="url" select="concat($WebApplicationBaseURL,substring-after(@href,'/'))" />
-                                        </xsl:call-template>
-                                    </xsl:attribute>
-                                    <xsl:choose>
-                                        <xsl:when test="./label[lang($CurrentLang)] != ''">
-                                            <xsl:value-of select="./label[lang($CurrentLang)]" />
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="./label[lang($DefaultLang)]" />
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </a>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:choose>
-                                    <xsl:when test="./label[lang($CurrentLang)] != ''">
-                                        <xsl:value-of select="./label[lang($CurrentLang)]" />
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="./label[lang($DefaultLang)]" />
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:if>
+        <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
+            <!-- start page -->
+            <xsl:copy-of select="'Navigation: '" />
+            <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
+            <a href="{concat($MCR.baseurl,'?XSL.lastPage.SESSION=',$hrefStartingPage)}">
+                <xsl:copy-of select="$MainTitle" />
+            </a>
+            <!-- ancestors -->
+            <xsl:for-each select="ancestor-or-self::item">
+                <xsl:if test="@href!=$hrefStartingPage">
+                    <xsl:choose>
+                        <xsl:when test="position()!=last()">
+                            <xsl:value-of select="' > '" />
+                            <xsl:call-template name="addLink" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:copy-of select="' > '" />
+                            <xsl:choose>
+                                <xsl:when test="./label[lang($CurrentLang)] != ''">
+                                    <xsl:value-of select="./label[lang($CurrentLang)]" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="./label[lang($DefaultLang)]" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:if>
+            </xsl:for-each>
         </xsl:for-each>
     </xsl:template>
     <!-- ================================================================================= -->
