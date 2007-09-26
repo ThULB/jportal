@@ -1,0 +1,420 @@
+/* neue Einträge */
+
+#content-table{
+	width: 95%;
+	position: absolute;
+	top:245px;
+	left:40px;
+	z-index: 2;
+}
+
+#content{
+	vertical-align: top;
+	text-align: left;
+	margin: 5px auto;
+}
+	
+/* alte Einträge */
+
+#contentArea {
+	color:#000000;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:12px;
+	font-weight:normal;
+	padding-left:2px;
+	padding-right:2px;
+	padding-top:1em;
+	text-decoration:none;
+	vertical-align:top;
+}
+#content .headline {
+	border-color:#52818B;
+	border-style:none none solid;
+	border-width:1px;
+	color:#000000;
+	font-weight:bold;
+	margin-bottom:1.5em;
+	padding:3px;
+}
+#content hr {
+	border-style:none;
+	color:#52818B;
+	height:2px;
+}
+#content a {
+	font-size: 12px;
+	color:#52818B;
+	text-decoration:none;
+	font-weight: normal;
+}
+#content a:hover {
+	font-size: 12px;
+	font-weight: normal;
+	text-decoration:underline;
+}
+#content input, input.helpButton, #searchMask input.submitButton, #searchMask input.resort, a.submitButton {
+	border:1px outset #5A8594;
+}
+#content input.radio, #searchMask input.checkbox, #searchMask select {
+	border:1px inset #5A8594;
+	margin:2px 2px 2px 0px;
+}
+.site.sitemap tr, .sitemap th, .sitemap td, .sitemap a {
+	background:#FFFFFF none repeat scroll 0%;
+	color:#52818B;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-weight:normal;
+	text-decoration:none;
+}
+.sitemap a {
+	color:#52818B;
+	font-weight:normal;
+	text-decoration:none;
+}
+.sitemap a:hover {
+	text-decoration:underline;
+}
+.sitemap img {
+	border-style:none;
+	border-width:0px;
+}
+.sitemap th {
+	background:#CAD9E0 none repeat scroll 0%;
+	border:1px solid #000000;
+	color:#52818B;
+	font-weight:bold;
+	padding:3px;
+	text-align:left;
+}
+.sitemap th.mainMenuPoint {
+	background:#EDEDED none repeat scroll 0%;
+	border-color:#454545;
+	color:#52818B;
+	padding:3px;
+}
+.sitemap th.mainMenuPoint a {
+	background:#EDEDED none repeat scroll 0%;
+	color:#52818B;
+	font-size:100%;
+	font-weight:bold;
+}
+.sitemap th.mainMenuPoint a:hover {
+	background:#EDEDED none repeat scroll 0%;
+	color:#52818B;
+	font-weight:bold;
+}
+#searchMask {
+}
+#searchMask input.text, #searchMask textarea.text, #userAction input.text {
+	background-color:white;
+	border:1px dashed #5A8594;
+	font-size:0.9em;
+	font-weight:bold;
+	margin:2px 2px 2px 0px;
+	padding-left:2px;
+	padding-right:2px;
+}
+#searchMask td.inputCaption, #userAction td.inputCaption {
+	background-color:transparent;
+	color:black;
+	font-weight:bold;
+	padding-right:5px;
+	text-align:right;
+}
+#searchMask td.inputField, #searchMask td.help, #userAction td.inputField {
+	background-color:transparent;
+	font-weight:bold;
+	padding-left:5px;
+}
+#userAction .inputHead {
+	padding-bottom:10px;
+	padding-top:20px;
+}
+div.submitButton {
+	padding-top:5px;
+	text-align:center;
+}
+#contentArea a.submitButton {
+	color:black;
+	font-size:12px;
+	font-weight:normal;
+	padding:0px 5px;
+	text-decoration:none;
+}
+#resortForm {
+	border-bottom:2px solid #5A8594;
+	margin:0px;
+	padding-bottom:5px;
+}
+#resortForm table {
+	width:100%;
+}
+#resortForm table tr {
+	height:20px;
+}
+#resortForm td.resort, #resortForm td.resultCount {
+}
+#resortForm td.resultCount {
+	text-align:right;
+}
+#resultList {
+	margin:5px 0px;
+}
+#resultList td.resultTitle, #resultList td.author {
+	background-color:white;
+}
+#resultList td.resultTitle a {
+	font-weight:bold;
+}
+#resultList div.description {
+	margin-bottom:3px;
+}
+#resultList td.description {
+	background-color:white;
+	padding:3px;
+}
+#pageSelection {
+	border-top:2px solid #5A8594;
+	padding:5px 8px;
+}
+#metaHeading, #metaData, #files {
+}
+#metaHeading a img, #metaData a img, #files a img {
+	border:medium none;
+}
+#metaHeading .titles {
+	background-color:transparent;
+	color:black;
+	font-weight:bold;
+}
+#metaHeading .browseCtrl {
+	text-align:right;
+}
+#metaData, #files {
+	padding:10px 0px;
+}
+#metaData td, #files td {
+	padding:0px;
+}
+#metaData .metaname, #files .metaname {
+	background-color:transparent;
+	color:black;
+	font-weight:bold;
+	padding-right:10px;
+	text-align:right;
+	vertical-align:top;
+	width:20%;
+}
+#metaData .metavalue, #files .metavalue {
+	background-color:white;
+	color:black;
+	padding-left:10px;
+	width:80%;
+}
+#files .metaname, #files .metavalue {
+	width:auto;
+}
+#metaData .metahead, #files .metahead {
+	background-color:transparent;
+	color:#5A8594;
+	font-weight:bold;
+	text-align:center;
+}
+#metaData .adressBox {
+}
+#metaData .addressType {
+	font-weight:bold;
+}
+#metaData .address {
+	padding-left:2em;
+}
+#metaData .derivateBox {
+}
+#metaData .derivateHeading {
+	font-weight:bold;
+}
+#metaData .derivate {
+	padding-left:2em;
+}
+#browseClass {
+	margin-left:20px;
+}
+#browseClass td.img {
+}
+#browseClass td.numDocs {
+}
+#browseClass td.descr {
+	padding-left:10px;
+}
+#browseClass div.comment {
+	font-style:italic;
+}
+/* =================================================================== */
+/*                     						   						   */
+/* new layout for journals, volumes, articles, 						   */
+/* persons and institutions                    						   */
+/* 						                    						   */
+/* =================================================================== */
+
+/* =================================================================== */
+/*  used colors:													   */
+/* 			                                                           */
+/* 			                                                           */
+/* 	darkest red: #0C374C; for outer frame, content-links...            */
+/*  dark red: 	 #14516E; for headlines, leaf-links                    */
+/* 	light red: 	 #2B6E8D; descriptions...                              */
+/*  white:		 #FFFFFF; hover link color                             */
+/* 			                                                           */
+/* 			                                                           */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/* leafs view                                                          */
+/* =================================================================== */
+#leaf-all {	
+	color: #14516E;
+	border: 1px solid #14516E;
+}
+
+#leaf-front{
+	border: 1px solid #14516E;
+	background-color: #14516E;
+	color: #FFFFFF;
+}
+
+#leaf-front div{
+    background-color: #14516E;
+	color: #FFFFFF;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+    color:#14516E;
+	font-weight: normal;
+}
+
+#leaf-linkarea a:hover {
+	background-color:#14516E;
+    color:#FFFFFF;
+	font-weight: normal;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+    color:#14516E;
+	font-weight: normal;
+}
+
+#leaf-linkarea2 a:hover {
+	background-color:#14516E;
+    color:#FFFFFF;
+	font-weight: normal;
+}
+
+#leaf-whitespaces{
+    color:#FFFFFF;
+}
+
+#leaf-headline1 {
+	color: #0C374C;
+}
+
+#leaf-headline2 {
+	color: #000000;
+}
+
+#leaf-preview img{
+	border: 1px solid #000000;
+}
+
+/* =================================================================== */
+/* detailed view                                                       */
+/* =================================================================== */
+#detailed-headlines {
+    color: #14516E;
+}
+
+#detailed-cube {
+	background-color:#0C374C;
+	color: #FFFFFF;
+}
+
+#detailed-view {
+	color: #2B6E8D; 
+}
+
+#detailed-labels {
+	color: #2B6E8D;
+}
+
+#detailed-frame{
+	border: 2px solid #0C374C;
+}
+
+#detailed-dividingline hr{
+	color: #0C374C;
+	background-color: #0C374C;
+}
+
+#detailed-browse{
+    border: 1px solid #0C374C;
+	background-color: #2B6E8D;	
+}
+
+#detailed-staticurl1 {
+	color: #2B6E8D;
+}
+#detailed-innerdivlines{
+	border-top: 1px solid #0C374C;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #0C374C;
+}
+/* =================================================================== */
+/* detailed-view content links                                         */
+/* =================================================================== */
+
+#detailed-contents {
+	background-color: #0C374C;
+}
+
+#detailed-contents a {
+    color: #FFFFFF;
+}
+
+#detailed-contentsimg img {
+	border: 1px solid #0C374C;
+}
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks a {
+	color: #2B6E8D;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #2B6E8D;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #0C374C;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #2B6E8D;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
+}
