@@ -59,7 +59,7 @@
 
 						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/Link1.gif" usemap="#Link" border="0">
 							<map name="Link">
-								<area shape="rect" coords="0,0,130,46" href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz.xsl" />
+								<area shape="rect" coords="0,0,130,46" href="http://zs.thulb.uni-jena.de/content/main/journals/aaz_pilot.xml" />
 							</map>
 						</img> 
 
