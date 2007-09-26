@@ -57,7 +57,7 @@
 					<tr>
 					<td id="navi_left">
 
-						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/link1.gif" usemap="#Link" border="0">
+						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/Link1.gif" usemap="#Link" border="0">
 							<map name="Link">
 								<area shape="rect" coords="0,0,130,46" href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz.xsl" />
 							</map>
