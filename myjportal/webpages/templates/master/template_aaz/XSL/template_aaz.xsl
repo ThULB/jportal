@@ -56,10 +56,19 @@
 				<table id="content-table" cellspacing="0" cellpadding="0" border="0">
 					<tr>
 					<td id="navi_left">
+										
+						<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/link.gif" usemap="#Link" border="0">
+							<map name="Link">
+								<area shape="rect" coords="0,46,130,92" href="http://zs.thulb.uni-jena.de/content/main/journals/aaz_pilot.xml" />
+							</map>
+						</img> 
+						
+
 						<!--<a href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz.xsl">aaz</a>
 						<br />	
 						<a href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz_pilot.xsl">aaz_pilot</a>-->
 						<xsl:call-template name="Navigation_main"/>
+
 						<a href="http://www.thulb.uni-jena.de" target="_blank" id="thulb_logo">
 							<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.png" />
 						</a>
