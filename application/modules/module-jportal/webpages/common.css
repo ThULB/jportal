@@ -165,8 +165,8 @@
 	text-align: justify;
 }
 
-#detailed-view[id] {
-	width: 100%;
+#detailed-view[id]{
+
 }
 
 #detailed-divlines{
@@ -174,7 +174,7 @@
 	width: auto;
 	margin: 0px auto; 
 	margin-top: 15px;
-	width: 90%;
+	width: 82%;
 }
 
 #detailed-labels {
