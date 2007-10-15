@@ -43,7 +43,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCLIServlet.class);;
 
-    private final static int derStartNumber = 19476;
+    private final static int derStartNumber = 18260;
 
     public void init() throws ServletException {
         super.init();
@@ -74,7 +74,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
             String derivateID = (String) it.next();
             int derNumber = Integer.parseInt(derivateID.substring(17, 25));
             if (derNumber < derStartNumber) {
-                LOGGER.info("NOTHING done - Derivate " + derivateID + " is already image cached\n");
+                LOGGER.info("\n\n NOTHING done - Derivate " + derivateID + " is already image cached\n");
             } else {
                 try {
                     LOGGER.info("Caching Derivate " + derivateID);
