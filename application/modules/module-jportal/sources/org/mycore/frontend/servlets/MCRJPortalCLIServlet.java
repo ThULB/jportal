@@ -24,6 +24,7 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,6 +37,9 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.frontend.cli.MCRCommand;
+import org.mycore.frontend.cli.MCRCommandLineInterface;
+import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.services.imaging.MCRImgCacheCommands;
 
 public class MCRJPortalCLIServlet extends MCRServlet {
@@ -54,7 +58,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
         String user = session.getCurrentUserID();
         if (user.equals("root")) {
             LOGGER.info("#########################################################");
-            LOGGER.info("'Create Image cache' has involced by MCRJPortalCLIServlet");
+            LOGGER.info("'Repair has been started.");
             LOGGER.info("#########################################################");
             Document answerXML = new Document(getAnswerXML(true));
             getLayoutService().sendXML(job.getRequest(), job.getResponse(), answerXML);
@@ -66,7 +70,20 @@ public class MCRJPortalCLIServlet extends MCRServlet {
     }
 
     private void executeCommand() {
-
+        /*String command = "repair metadata search of type jpjournal";
+        MCRCommand com = new MCRCommand(command, "org.mycore.frontend.cli.MCRObjectCommands.repairMetadataSearch String", "Reads the SQL store table of MCRObject XML files for the type {0} and restore them to the search store.");
+        com.invoke(command, this.getClass().getClassLoader());
+        */
+        MCRObjectCommands.repairMetadataSearch("person");
+        MCRObjectCommands.repairMetadataSearch("jpinst");
+        MCRObjectCommands.repairMetadataSearch("jpjournal");
+        MCRObjectCommands.repairMetadataSearch("jpvolume");
+        MCRObjectCommands.repairMetadataSearch("jparticle");
+        
+        
+        //com.
+/*MCRCommandLineInterface cli = new MCRCommandLineInterface();
+cli.executeShellCommand(command)
         MCRXMLTableManager xmlTableManager = MCRXMLTableManager.instance();
         List derivateList = xmlTableManager.retrieveAllIDs("derivate");
 
@@ -91,14 +108,16 @@ public class MCRJPortalCLIServlet extends MCRServlet {
             }
         }
         LOGGER.info("\n\n Creating image cache for all derivates completed successfull!\n");
-    }
+*/    }
 
     private final Element getAnswerXML(boolean allowed4Action) {
+        String tn = Thread.currentThread().getName();
         Element xml = new Element("cliRoot");
         String tag = "requestExecuted";
         xml.addContent(new Element(tag));
+        
         if (allowed4Action) {
-            xml.getChild(tag).setText("yes, watch your web log to see what happens currently !");
+            xml.getChild(tag).setText("yes, watch your web log to see what happens currently (Thread: ["+tn+"]) !");
         } else {
             xml.getChild(tag).setText("no, permission does not exist !");
         }
