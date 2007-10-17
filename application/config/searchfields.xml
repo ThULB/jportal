@@ -57,14 +57,14 @@
 	<field name="notes_art"          	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editormask.labels.note" />
 	<field name="dates_art_type" 		type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/dates/date" value="@type" />
     <field name="notes_art"          	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
-<!--<field name="types_art"        		type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/types/type" value="@ID" i18n="editor.search.document.type" />
-	<field name="rubrics_art"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/rubrics/rubric" value="@ID" i18n="editor.search.document.rubric" />
-	<field name="classispub"         	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub/classipub" value="@ID" i18n="editor.search.document.classi1" />
-	<field name="classispub2"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub2/classipub2" value="@ID" i18n="editor.search.document.classi2" />
-	<field name="classispub3"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub3/classipub3" value="@ID" i18n="editor.search.document.classi3" />-->
+    <field name="types_art"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/types/type" value="@ID" />
+	<field name="rubrics_art"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/rubrics/rubric" value="@ID"/>
+	<field name="classispub"         	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub/classipub" value="@ID"/>
+	<field name="classispub2"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub2/classipub2" value="@ID" />
+	<field name="classispub3"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub3/classipub3" value="@ID" />
 	<field name="sizes_art"          	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />  	  
 	<field name="refs_art"           	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
-    <field name="journalID_art"    	    type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+    <field name="journalID_art"    	type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
 	  
 	<!-- Search in institutions metadata -->
     <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
