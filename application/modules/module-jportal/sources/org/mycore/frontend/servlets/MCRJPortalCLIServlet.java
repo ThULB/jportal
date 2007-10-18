@@ -47,7 +47,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCLIServlet.class);;
 
-    private final static int derStartNumber = 18260;
+    // private final static int derStartNumber = 18260;
 
     public void init() throws ServletException {
         super.init();
@@ -70,54 +70,23 @@ public class MCRJPortalCLIServlet extends MCRServlet {
     }
 
     private void executeCommand() {
-        /*String command = "repair metadata search of type jpjournal";
-        MCRCommand com = new MCRCommand(command, "org.mycore.frontend.cli.MCRObjectCommands.repairMetadataSearch String", "Reads the SQL store table of MCRObject XML files for the type {0} and restore them to the search store.");
-        com.invoke(command, this.getClass().getClassLoader());
-        */
-        MCRObjectCommands.repairMetadataSearch("person");
-        MCRObjectCommands.repairMetadataSearch("jpinst");
-        MCRObjectCommands.repairMetadataSearch("jpjournal");
-        MCRObjectCommands.repairMetadataSearch("jpvolume");
-        MCRObjectCommands.repairMetadataSearch("jparticle");
-        
-        
-        //com.
-/*MCRCommandLineInterface cli = new MCRCommandLineInterface();
-cli.executeShellCommand(command)
-        MCRXMLTableManager xmlTableManager = MCRXMLTableManager.instance();
-        List derivateList = xmlTableManager.retrieveAllIDs("derivate");
 
-        for (Iterator it = derivateList.iterator(); it.hasNext();) {
-            String derivateID = (String) it.next();
-            int derNumber = Integer.parseInt(derivateID.substring(17, 25));
-            if (derNumber < derStartNumber) {
-                LOGGER.info("\n\n NOTHING done - Derivate " + derivateID + " is already image cached\n");
-            } else {
-                try {
-                    LOGGER.info("Caching Derivate " + derivateID);
-                    MCRImgCacheCommands.cacheDeriv(derivateID);
-                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " completed successfull!\n");
-                } catch (MCRException ex) {
-                    LOGGER.error(ex.getMessage());
-                    LOGGER.error("");
-                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " failed, will be skipped!\n");
-                } catch (Exception e) {
-                    LOGGER.error(e);
-                    LOGGER.info("\n\n Creating image cache for derivate " + derivateID + " failed, will be skipped!\n");
-                }
-            }
-        }
-        LOGGER.info("\n\n Creating image cache for all derivates completed successfull!\n");
-*/    }
+        //MCRObjectCommands.repairMetadataSearch("person");
+        //MCRObjectCommands.repairMetadataSearch("jpinst");
+        //MCRObjectCommands.repairMetadataSearch("jpjournal");
+        //MCRObjectCommands.repairMetadataSearch("jpvolume");
+        MCRObjectCommands.repairMetadataSearch("jparticle");
+
+    }
 
     private final Element getAnswerXML(boolean allowed4Action) {
         String tn = Thread.currentThread().getName();
         Element xml = new Element("cliRoot");
         String tag = "requestExecuted";
         xml.addContent(new Element(tag));
-        
+
         if (allowed4Action) {
-            xml.getChild(tag).setText("yes, watch your web log to see what happens currently (Thread: ["+tn+"]) !");
+            xml.getChild(tag).setText("yes, watch your web log to see what happens currently (Thread: [" + tn + "]) !");
         } else {
             xml.getChild(tag).setText("no, permission does not exist !");
         }
