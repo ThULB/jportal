@@ -220,104 +220,17 @@
                     </panel>
                 </repeater>
             </cell>
-            <!-- pub type classification -->
-            <cell row="17" col="1" anchor="WEST" var="conditions/boolean/boolean/condition11" colspan="2">
-                <repeater min="1" max="10">
-                    <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
-                            <text i18n="editormask.labels.type" />
-                        </cell>
-                        <hidden var="@field" default="types_art" />
-                        <hidden var="@operator" default="=" />
-                        <cell row="1" col="2" anchor="WEST" var="@value">
-                            <list type="dropdown">
-                                <item value="" i18n="editor.search.choose" />
-                                <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:@dummy:getInclude" />
-                            </list>
-                        </cell>
-                    </panel>
-                </repeater>
-            </cell>
-            <!-- TODO: replace this static code by a filtering resolver -->
-            <!-- rubric classification  -->
-            <cell row="18" col="1" anchor="WEST" var="conditions/boolean/boolean/condition12" colspan="2">
-                <repeater min="1" max="10">
-                    <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
-                            <text i18n="editormask.labels.rubric" />
-                        </cell>
-                        <hidden var="@field" default="rubrics_art" />
-                        <hidden var="@operator" default="=" />
-                        <cell row="1" col="2" anchor="WEST" var="@value">
-                            <list type="dropdown">
-                                <item value="" i18n="editor.search.choose" />
-                                <include cacheable="false" uri="jportal_getClassID:hidden_rubricsID/hidden_rubricID:@dummy:getInclude" />
-                            </list>
-                        </cell>
-                    </panel>
-                </repeater>
-            </cell>
-            <!-- classipub classification  -->
-            <cell row="19" col="1" anchor="WEST" var="conditions/boolean/boolean/condition13" colspan="2">
-                <repeater min="1" max="10">
-                    <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
-                            <text>
-                                <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub/hidden_classipub" />
-                            </text>
-                        </cell>
-                        <hidden var="@field" default="classispub" />
-                        <hidden var="@operator" default="=" />
-                        <cell row="1" col="2" anchor="WEST" var="@value">
-                            <list type="dropdown">
-                                <item value="" i18n="editor.search.choose" />
-                                <include cacheable="false" uri="jportal_getClassID:hidden_classispub/hidden_classipub:@dummy:getInclude" />
-                            </list>
-                        </cell>
-                    </panel>
-                </repeater>
-            </cell>
-            <!-- classipub2 classification -->
-            <cell row="20" col="1" anchor="WEST" var="conditions/boolean/boolean/condition14" colspan="2">
-                <repeater min="1" max="10">
-                    <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
-                            <text>
-                                <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub2/hidden_classipub2" />
-                            </text>
-                        </cell>
-                        <hidden var="@field" default="classispub2" />
-                        <hidden var="@operator" default="=" />
-                        <cell row="1" col="2" anchor="WEST" var="@value">
-                            <list type="dropdown">
-                                <item value="" i18n="editor.search.choose" />
-                                <include cacheable="false" uri="jportal_getClassID:hidden_classispub2/hidden_classipub2:@dummy:getInclude" />
-                            </list>
-                        </cell>
-                    </panel>
-                </repeater>
-            </cell>
-            <!-- classipub3 classification -->
-            <cell row="21" col="1" anchor="WEST" var="conditions/boolean/boolean/condition15" colspan="2">
-                <repeater min="1" max="10">
-                    <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
-                            <text>
-                                <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub3/hidden_classipub3" />
-                            </text>
-                        </cell>
-                        <hidden var="@field" default="classispub3" />
-                        <hidden var="@operator" default="=" />
-                        <cell row="1" col="2" anchor="WEST" var="@value">
-                            <list type="dropdown">
-                                <item value="" i18n="editor.search.choose" />
-                                <include cacheable="false" uri="jportal_getClassID:hidden_classispub3/hidden_classipub3:@dummy:getInclude" />
-                            </list>
-                        </cell>
-                    </panel>
-                </repeater>
-            </cell>
-            <!-- TODO END: replace this static code by a filtering resolver -->
+            <!-- classis if within a journal -->
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-search-jparticle_inludes.xml:include_pubType" />
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-search-jparticle_inludes.xml:include_rubric" />
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-search-jparticle_inludes.xml:include_classipub" />
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-search-jparticle_inludes.xml:include_classipub2" />
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-search-jparticle_inludes.xml:include_classipub3" />
 
             <!-- fulltext -->
             <cell col="1" row="28">

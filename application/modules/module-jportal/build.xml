@@ -66,7 +66,11 @@
 			<!-- copy to deployed folder -->    	
     	<antcall target="jp.webapps.copyXSL">
     		<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/webpages/templates/master" />
-    	</antcall>  	  	  	
+    	</antcall>
+    	<!-- config file -->
+        <copy todir="${build.webapps}/WEB-INF/classes/">
+          <fileset dir="${env.MYJPORTAL_HOME}/modules/module-jportal/config/" includes="mycore.properties.myjp" />
+        </copy>      	
 
         <!-- i18n -->
         <antcall target="properties.merge">
