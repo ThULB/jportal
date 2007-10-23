@@ -39,6 +39,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
 import org.mycore.frontend.cli.MCRCommand;
 import org.mycore.frontend.cli.MCRCommandLineInterface;
+import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.services.imaging.MCRImgCacheCommands;
 
@@ -58,7 +59,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
         String user = session.getCurrentUserID();
         if (user.equals("root")) {
             LOGGER.info("#########################################################");
-            LOGGER.info("'Repair has been started.");
+            LOGGER.info("'Started.");
             LOGGER.info("#########################################################");
             Document answerXML = new Document(getAnswerXML(true));
             getLayoutService().sendXML(job.getRequest(), job.getResponse(), answerXML);
@@ -75,8 +76,16 @@ public class MCRJPortalCLIServlet extends MCRServlet {
         //MCRObjectCommands.repairMetadataSearch("jpinst");
         //MCRObjectCommands.repairMetadataSearch("jpjournal");
         //MCRObjectCommands.repairMetadataSearch("jpvolume");
-        MCRObjectCommands.repairMetadataSearch("jparticle");
-
+        //MCRObjectCommands.repairMetadataSearch("jparticle");
+        
+        String derFolder = "/mcr/jp/migration/generic/tools/migration/eisenberger_nb/results/derivates/";
+        //jportal_derivate_00066214.xml
+        
+        for (int i = 66214; i < 77394; i++) {
+            String fileLoc = derFolder + "jportal_derivate_000" + Integer.toString(i) + ".xml";
+            MCRDerivateCommands.loadFromFile(fileLoc);
+            LOGGER.debug("############################# load derivate from "+fileLoc);
+        }
     }
 
     private final Element getAnswerXML(boolean allowed4Action) {
