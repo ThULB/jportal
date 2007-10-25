@@ -153,7 +153,7 @@
 		<hidden var="metadata/keywords/@textsearch" default="true"/>
 		<hidden var="metadata/keywords/@heritable" default="true"/>
 		<cell col="2" row="1" anchor="NORTHWEST" var="metadata/keywords/keyword" ordernr="1">
-			<repeater min="0" max="20" anchor="NORTHWEST" ref="keyword_input_repeater"/>
+			<repeater min="0" max="60" anchor="NORTHWEST" ref="keyword_input_repeater"/>
 		</cell>
 	</panel>
 	<panel id="keyword_input_repeater">
