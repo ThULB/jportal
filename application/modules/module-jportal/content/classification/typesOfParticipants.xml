@@ -120,6 +120,14 @@
     <category ID="publisher">
       <label text="Verlag" xml:lang="de"/>
       <label text="Publisher" xml:lang="en"/>
-    </category>    
+    </category>   
+    <category ID="contributor">
+      <label text="Beitragender" xml:lang="de"/>
+      <label text="Contributor" xml:lang="en"/>
+    </category>
+    <category ID="director">
+      <label text="Regisseur" xml:lang="de"/>
+      <label text="Director" xml:lang="en"/>
+    </category>
   </categories>
 </mycoreclass>
