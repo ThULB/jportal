@@ -62,6 +62,7 @@
 	<field name="classispub"         	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub/classipub" value="@ID"/>
 	<field name="classispub2"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub2/classipub2" value="@ID" />
 	<field name="classispub3"        	type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub3/classipub3" value="@ID" />
+    <field name="classispub4"          type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub4/classipub4" value="@ID" />    
 	<field name="sizes_art"          	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />  	  
 	<field name="refs_art"           	type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
     <field name="journalID_art"    	type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
