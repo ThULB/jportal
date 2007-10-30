@@ -25,7 +25,7 @@
   <!-- =================================================================== -->
   <!-- Create schemas					                                   -->
   <!-- =================================================================== -->	
-	<target name="jp.create.schema" >
+	<target name="jp.create.schema" depends="create.schema">
 	    <!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpjournal}"    /></antcall>
 	    <antcall target="jp.do.transform"><param name="metadata.schema" value="${MCR.persistence_config_jpvolume}"    /></antcall>
@@ -63,7 +63,8 @@
   <!-- =================================================================== -->	
 	<target name="copy.prop">
 		<copy todir="${build.config}" overwrite="true">
-		      <fileset dir="${docportal.config}" includes="mycore.properties.jp"/>		
+		      <fileset dir="${docportal.config}" includes="mycore.properties.jp"/>
+			  <fileset dir="${env.MYJPORTAL_HOME}/modules/module-jportal/config" includes="mycore.properties.myjp"/>			
 		</copy>	
 	</target>
     

@@ -222,15 +222,17 @@
             </cell>
             <!-- classis if within a journal -->
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-search-jparticle_inludes.xml:include_pubType" />
+                uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-seach" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-search-jparticle_inludes.xml:include_rubric" />
+                uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-seach" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-search-jparticle_inludes.xml:include_classipub" />
+                uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-seach" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-search-jparticle_inludes.xml:include_classipub2" />
+                uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-seach" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-search-jparticle_inludes.xml:include_classipub3" />
+                uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-seach" />
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-seach" />
 
             <!-- fulltext -->
             <cell col="1" row="28">
