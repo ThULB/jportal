@@ -48,9 +48,10 @@
         <cell row="120" col="2" anchor="NORTHWEST" ref="note_input" />
         <cell row="120" col="3" anchor="WEST" ref="note_help" />
 
+        <cell row="121" col="1" anchor="NORTHWEST" ref="type_label" />
+        <cell row="121" col="2" anchor="NORTHWEST" ref="type_input" />
+
         <!-- dynamic includes, if used within a journal -->
-        <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
         <include cacheable="false"
             uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code_head" />
         <include cacheable="false"
@@ -74,22 +75,8 @@
         <cell row="180" col="1" anchor="NORTHWEST">
             <space height="14" />
         </cell>
-        <!-- ================================================================================================= -->
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
-        <!-- .. -->
         <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
-        <!--		<!-#- ... -#->
-            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden"/>
-            <!-#- ... -#->
-            <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden"/>
-            <!-#- optional classifications for articles -#->
-            <cell row="230" col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/>
-            <cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input_hidden"/>
-            <cell row="250" col="2" anchor="NORTHWEST" ref="classipub3_input_hidden"/>			
-            <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input_hidden" />		  		  		  		  
-            <cell row="270" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input_hidden" />		  		  		  		  
-            <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input_hidden" />		  		  		  		  		  		  		  
-            <cell row="290" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />		-->
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
         <cell row="190" col="1" anchor="EAST" />
@@ -199,9 +186,21 @@
     </panel>
     <!-- end: note -->
 
+    <!-- type ==================================================================  -->
+    <panel id="type_input">
+        <hidden var="metadata/types/@class" default="MCRMetaClassification" />
+        <hidden var="metadata/types/@parasearch" default="true" />
+        <hidden var="metadata/types/@textsearch" default="false" />
+        <hidden var="metadata/types/@notinherit" default="false" />
+        <hidden var="metadata/types/@heritable" default="false" />
+        <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:metadata/types/type/@classid" />
+        <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" />
+    </panel>
+    <list id="Ctype" width="300" type="dropdown">
+        <include cacheable="false" uri="jportal_getClass:hidden_pubTypesID/hidden_pubTypeID" />
+    </list>
+
     <!-- dynamic includes, if used within a journal -->
-    <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
     <include cacheable="false" uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
     <include cacheable="false"
         uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code" />
@@ -212,128 +211,7 @@
     <include cacheable="false"
         uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code" />
 
-
-
-    <!-- type ==================================================================
-        <panel id="type_input">
-        <hidden var="metadata/types/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/types/@parasearch" default="true" />
-        <hidden var="metadata/types/@textsearch" default="false" />
-        <hidden var="metadata/types/@notinherit" default="false" />
-        <hidden var="metadata/types/@heritable" default="false" />
-        <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:metadata/types/type/@classid" />
-        
-        <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" />
-        </panel>
-        <list id="Ctype" width="300" type="dropdown">
-        <include cacheable="false" uri="jportal_getClass:hidden_pubTypesID/hidden_pubTypeID" />
-        </list>
-        rubric ==================================================================
-        <panel id="rubric_input">
-        <hidden var="metadata/rubrics/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/rubrics/@parasearch" default="true" />
-        <hidden var="metadata/rubrics/@textsearch" default="false" />
-        <hidden var="metadata/rubrics/@notinherit" default="false" />
-        <hidden var="metadata/rubrics/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/rubrics/rubric">
-        <repeater min="0" max="10" anchor="NORTHWEST" ref="rubric_input_repeater" />
-        </cell>
-        </panel>
-        <panel id="rubric_input_repeater">
-        <include cacheable="false" uri="jportal_getClassID:hidden_rubricsID/hidden_rubricID:@classid" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="Crubric" var="@categid" />
-        </panel>
-        <list id="Crubric" width="300" type="dropdown">
-        <item value="">
-        <label xml:lang="de"></label>
-        </item>
-        <include cacheable="false" uri="jportal_getClass:hidden_rubricsID/hidden_rubricID" />
-        </list>
-        classipub ==================================================================
-        <panel id="classipub_input">
-        <hidden var="metadata/classispub/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/classispub/@parasearch" default="true" />
-        <hidden var="metadata/classispub/@textsearch" default="false" />
-        <hidden var="metadata/classispub/@notinherit" default="false" />
-        <hidden var="metadata/classispub/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub/classipub">
-        <repeater min="0" max="10" anchor="NORTHWEST" ref="classispub_input_repeater" />
-        </cell>
-        </panel>
-        <panel id="classispub_input_repeater">
-        <include cacheable="false" uri="jportal_getClassID:hidden_classispub/hidden_classipub:@classid" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub" var="@categid" />
-        </panel>
-        <list id="Cclassipub" width="300" type="dropdown">
-        <item value="">
-        <label xml:lang="de"></label>
-        </item>
-        <include cacheable="false" uri="jportal_getClass:hidden_classispub/hidden_classipub" />
-        </list>
-        classipub ==================================================================
-        <panel id="classipub2_input">
-        <hidden var="metadata/classispub2/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/classispub2/@parasearch" default="true" />
-        <hidden var="metadata/classispub2/@textsearch" default="false" />
-        <hidden var="metadata/classispub2/@notinherit" default="false" />
-        <hidden var="metadata/classispub2/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub2/classipub2">
-        <repeater min="0" max="10" anchor="NORTHWEST" ref="classispub2_input_repeater" />
-        </cell>
-        </panel>
-        <panel id="classispub2_input_repeater">
-        <include cacheable="false" uri="jportal_getClassID:hidden_classispub2/hidden_classipub2:@classid" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub2" var="@categid" />
-        </panel>
-        <list id="Cclassipub2" width="300" type="dropdown">
-        <item value="">
-        <label xml:lang="de"></label>
-        </item>
-        <include cacheable="false" uri="jportal_getClass:hidden_classispub2/hidden_classipub2" />
-        </list>
-        classipub3 ==================================================================
-        <panel id="classipub3_input">
-        <hidden var="metadata/classispub3/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/classispub3/@parasearch" default="true" />
-        <hidden var="metadata/classispub3/@textsearch" default="false" />
-        <hidden var="metadata/classispub3/@notinherit" default="false" />
-        <hidden var="metadata/classispub3/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub3/classipub3">
-        <repeater min="0" max="10" anchor="NORTHWEST" ref="classispub3_input_repeater" />
-        </cell>
-        </panel>
-        <panel id="classispub3_input_repeater">
-        <include cacheable="false" uri="jportal_getClassID:hidden_classispub3/hidden_classipub3:@classid" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub3" var="@categid" />
-        </panel>
-        <list id="Cclassipub3" width="300" type="dropdown">
-        <item value="">
-        <label xml:lang="de"></label>
-        </item>
-        <include cacheable="false" uri="jportal_getClass:hidden_classispub3/hidden_classipub3" />
-        </list>
-        classipub4 ==================================================================
-        <panel id="classipub4_input">
-        <hidden var="metadata/classispub4/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/classispub4/@parasearch" default="true" />
-        <hidden var="metadata/classispub4/@textsearch" default="false" />
-        <hidden var="metadata/classispub4/@notinherit" default="false" />
-        <hidden var="metadata/classispub4/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub4/classipub4">
-        <repeater min="0" max="10" anchor="NORTHWEST" ref="classispub4_input_repeater" />
-        </cell>
-        </panel>
-        <panel id="classispub4_input_repeater">
-        <include cacheable="false" uri="jportal_getClassID:hidden_classispub4/hidden_classipub4:@classid" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub4" var="@categid" />
-        </panel>
-        <list id="Cclassipub4" width="300" type="dropdown">
-        <item value="">
-        <label xml:lang="de"></label>
-        </item>
-        <include cacheable="false" uri="jportal_getClass:hidden_classispub4/hidden_classipub4" />
-        </list>
-    --><!-- size ================================================================== -->
+    <!-- size ================================================================== -->
     <panel id="size_input">
         <hidden var="metadata/sizes/@class" default="MCRMetaLangText" />
         <hidden var="metadata/sizes/@parasearch" default="true" />
