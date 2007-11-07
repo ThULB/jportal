@@ -222,17 +222,17 @@
             </cell>
             <!-- classis if within a journal -->
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-seach" />
+                uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-search" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-seach" />
+                uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-search" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-seach" />
+                uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-search" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-seach" />
+                uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-search" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-seach" />
+                uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-search" />
             <include cacheable="false"
-                uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-seach" />
+                uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-search" />
 
             <!-- fulltext -->
             <cell col="1" row="28">

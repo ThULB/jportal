@@ -1,6 +1,7 @@
 package org.mycore.common.xml;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,18 +21,22 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
 
     private static String URI = "jportal_includeEditorCode";
 
+    private static HashMap CACHE = new HashMap();
+
+    private static final String SEP = "#$#$#$#";
+
     /**
      * 
      * Syntax:
      * <code>jportal_includeEditorCode:XPathWhereToFindClassIDInJournalXML:FileContainingEditorCode:IdOfPieceOfCode
      * 
      *  FileContainingEditorCode: Relativ to $ServletContextPath of Webapplication
-     *  IdOfPieceOfCode: <panel id="include_rubric"> => $IdOfPieceOfCode="include_rubric"
+     *  IdOfPieceOfCode: <includeMyChildren id="include_rubric"> => $IdOfPieceOfCode="include_rubric"
      * 
      * @return 
-     * <panel id="$IdOfPieceOfCode">
-     *       <codeContainedWithInPanel />
-     * </panel>
+     * <includeMyChildren id="$IdOfPieceOfCode">
+     *       <codeContainedWithin-includeMyChildren />
+     * </includeMyChildren>
      *
      */
 
@@ -54,10 +59,18 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
             return getEmptyAnswer();
         }
 
+        // try to get code to be included from cache
+        String cacheKey = getCacheKey(journalID, uri);
+        if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
+            LOGGER.debug("Editor code for journal=" + journalID + " and URI=" + uri + " has been found in cache. So, just return it.");
+            return ((Element) CACHE.get(cacheKey));
+        }
+
         // get class id
         String classID = MCRJPortalURIGetClassID.getClassID(journalID, xPathWhereToFindClassIDInJournalXML);
         if (classID == null || classID.equals("")) {
             LOGGER.debug("BREAK: classid is null or emtpy");
+            CACHE.put(cacheKey, getEmptyAnswer());
             return getEmptyAnswer();
         }
 
@@ -65,6 +78,7 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         String blackList = CONFIG.getString("MCR.Module-JPortal.SearchMask.ClassiBlackList", "");
         if (!blackList.equals("") && blackList.indexOf(classID) != -1) {
             LOGGER.debug("BREAK: classid=" + classID + " ON blacklist");
+            CACHE.put(cacheKey, getEmptyAnswer());
             return getEmptyAnswer();
         }
 
@@ -73,21 +87,26 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         Element sourceCode = MCRURIResolver.instance().resolve(sourceLoc);
         Document doc = new Document(sourceCode);
         try {
-            String xpathEx = "/*/panel[@id='" + idOfPieceOfCode + "']";
+            String xpathEx = "/*/includeMyChildren[@id='" + idOfPieceOfCode + "']";
             XPath xpath = XPath.newInstance(xpathEx);
             Element answer = (Element) xpath.selectSingleNode(doc);
             if (answer == null) {
                 LOGGER.debug("piece of code with xpath=" + xpathEx + " NOT found");
+                CACHE.put(cacheKey, getEmptyAnswer());
                 return getEmptyAnswer();
             }
+            CACHE.put(cacheKey, answer);
             return answer;
         } catch (JDOMException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         LOGGER.debug("piece of code with xpath found BUT nothing given back ?????");
         return getEmptyAnswer();
+    }
+
+    private String getCacheKey(String journalID, String uri) {
+        return journalID + SEP + uri;
     }
 
     private static Element getEmptyAnswer() {

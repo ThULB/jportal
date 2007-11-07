@@ -48,10 +48,9 @@
         <cell row="120" col="2" anchor="NORTHWEST" ref="note_input" />
         <cell row="120" col="3" anchor="WEST" ref="note_help" />
 
-        <cell row="121" col="1" anchor="NORTHWEST" ref="type_label" />
-        <cell row="121" col="2" anchor="NORTHWEST" ref="type_input" />
-
         <!-- dynamic includes, if used within a journal -->
+        <include cacheable="false"
+            uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
         <include cacheable="false"
             uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code_head" />
         <include cacheable="false"
@@ -184,23 +183,10 @@
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" />
     </panel>
-    <!-- end: note -->
-
-    <!-- type ==================================================================  -->
-    <panel id="type_input">
-        <hidden var="metadata/types/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/types/@parasearch" default="true" />
-        <hidden var="metadata/types/@textsearch" default="false" />
-        <hidden var="metadata/types/@notinherit" default="false" />
-        <hidden var="metadata/types/@heritable" default="false" />
-        <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:metadata/types/type/@classid" />
-        <cell col="1" row="1" anchor=" NORTHWEST" ref="Ctype" var="metadata/types/type/@categid" />
-    </panel>
-    <list id="Ctype" width="300" type="dropdown">
-        <include cacheable="false" uri="jportal_getClass:hidden_pubTypesID/hidden_pubTypeID" />
-    </list>
 
     <!-- dynamic includes, if used within a journal -->
+    <include cacheable="false"
+        uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
     <include cacheable="false" uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
     <include cacheable="false"
         uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code" />

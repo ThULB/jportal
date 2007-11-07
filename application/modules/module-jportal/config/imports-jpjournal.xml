@@ -324,7 +324,7 @@
             <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
             <hidden var="metadata/hidden_classispub/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub" >
-		      <textfield width="32" maxlength="32" default="jportal_class_00000011"/>				
+		      <textfield width="32" maxlength="32" />				
 			</cell>
       </panel>		
       <!-- hidden_classispub2 ================================================================== -->
@@ -334,7 +334,7 @@
             <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
             <hidden var="metadata/hidden_classispub2/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2"  >
-		      <textfield width="32" maxlength="32" default="jportal_class_00000012"/>								
+		      <textfield width="32" maxlength="32" />								
 		 	</cell>
       </panel>		
       <!-- hidden_classispub ================================================================== -->
@@ -344,7 +344,7 @@
             <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
             <hidden var="metadata/hidden_classispub3/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3" >
-		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
+		      <textfield width="32" maxlength="32" />								
 		 	</cell>				
       </panel>		
       <!-- hidden_classispub ================================================================== -->
@@ -354,7 +354,7 @@
             <hidden var="metadata/hidden_classispub4/@textsearch" default="true" />
             <hidden var="metadata/hidden_classispub4/@heritable" default="false" />
             <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4" >
-		      <textfield width="32" maxlength="32" default="jportal_class_00000013"/>								
+		      <textfield width="32" maxlength="32" />								
 		 	</cell>				
       </panel>		    
       <!-- websitecontext ================================================================== -->

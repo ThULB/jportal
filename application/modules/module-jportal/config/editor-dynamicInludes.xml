@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <root>
     <!-- pubType classification  -->
-    <panel id="include_pubType-seach">
+    <includeMyChildren id="include_pubType-search">
         <cell row="17" col="1" anchor="WEST" var="conditions/boolean/boolean/condition11" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -19,9 +19,9 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
+    </includeMyChildren>
     <!-- rubric classification  -->
-    <panel id="include_rubric-seach">
+    <includeMyChildren id="include_rubric-search">
         <cell row="18" col="1" anchor="WEST" var="conditions/boolean/boolean/condition12" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -39,9 +39,9 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
+    </includeMyChildren>
     <!-- classipub classification  -->
-    <panel id="include_classipub-seach">
+    <includeMyChildren id="include_classipub-search">
         <cell row="19" col="1" anchor="WEST" var="conditions/boolean/boolean/condition13" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -61,9 +61,9 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
+    </includeMyChildren>
     <!-- classipub2 classification -->
-    <panel id="include_classipub2-seach">
+    <includeMyChildren id="include_classipub2-search">
         <cell row="20" col="1" anchor="WEST" var="conditions/boolean/boolean/condition14" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -83,9 +83,9 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
+    </includeMyChildren>
     <!-- classipub3 classification -->
-    <panel id="include_classipub3-seach">
+    <includeMyChildren id="include_classipub3-search">
         <cell row="21" col="1" anchor="WEST" var="conditions/boolean/boolean/condition15" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -105,9 +105,9 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
+    </includeMyChildren>
     <!-- classipub4 classification -->
-    <panel id="include_classipub4-seach">
+    <includeMyChildren id="include_classipub4-search">
         <cell row="22" col="1" anchor="WEST" var="conditions/boolean/boolean/condition16" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
@@ -127,45 +127,45 @@
                 </panel>
             </repeater>
         </cell>
-    </panel>
-    
+    </includeMyChildren>
+
     <!-- ################################################################################################### -->
     <!-- editable masks -->
     <!-- ################################################################################################### -->
     <!-- head -->
-    <panel id="include_pubType-editable_code_head">
+    <includeMyChildren id="include_pubType-editable_code_head">
         <!-- type -->
         <cell row="130" col="1" anchor="NORTHWEST" ref="type_label" />
         <cell row="130" col="2" anchor="NORTHWEST" ref="type_input" />
-    </panel>
+    </includeMyChildren>
     <!-- rubric -->
-    <panel id="include_rubric-editable_code_head">
+    <includeMyChildren id="include_rubric-editable_code_head">
         <cell row="150" col="1" anchor="NORTHWEST" ref="rubric_label" />
         <cell row="150" col="2" anchor="NORTHWEST" ref="rubric_input" />
-    </panel>
+    </includeMyChildren>
     <!-- classipub -->
-    <panel id="include_classipub-editable_code_head">
+    <includeMyChildren id="include_classipub-editable_code_head">
         <cell row="152" col="1" anchor="NORTHWEST" ref="classipub_label" />
         <cell row="152" col="2" anchor="NORTHWEST" ref="classipub_input" />
-    </panel>
+    </includeMyChildren>
     <!-- classipub2 -->
-    <panel id="include_classipub2-editable_code_head">
+    <includeMyChildren id="include_classipub2-editable_code_head">
         <cell row="153" col="1" anchor="NORTHWEST" ref="classipub2_label" />
         <cell row="153" col="2" anchor="NORTHWEST" ref="classipub2_input" />
-    </panel>
+    </includeMyChildren>
     <!-- classipub3 -->
-    <panel id="include_classipub3-editable_code_head">
+    <includeMyChildren id="include_classipub3-editable_code_head">
         <cell row="154" col="1" anchor="NORTHWEST" ref="classipub3_label" />
         <cell row="154" col="2" anchor="NORTHWEST" ref="classipub3_input" />
-    </panel>
+    </includeMyChildren>
     <!-- classipub4 -->
-    <panel id="include_classipub4-editable_code_head">
+    <includeMyChildren id="include_classipub4-editable_code_head">
         <cell row="156" col="1" anchor="NORTHWEST" ref="classipub4_label" />
         <cell row="156" col="2" anchor="NORTHWEST" ref="classipub4_input" />
-    </panel>
+    </includeMyChildren>
     <!-- ################################################################################################# -->
     <!-- panels to be called by head cells -->
-    <panel id="include_pubType-editable_code">
+    <includeMyChildren id="include_pubType-editable_code">
         <panel id="type_input">
             <hidden var="metadata/types/@class" default="MCRMetaClassification" />
             <hidden var="metadata/types/@parasearch" default="true" />
@@ -178,9 +178,9 @@
         <list id="Ctype" width="300" type="dropdown">
             <include cacheable="false" uri="jportal_getClass:hidden_pubTypesID/hidden_pubTypeID" />
         </list>
-    </panel>
+    </includeMyChildren>
     <!-- rubric ================================================================== -->
-    <panel id="include_rubric-editable_code">
+    <includeMyChildren id="include_rubric-editable_code">
         <panel id="rubric_input">
             <hidden var="metadata/rubrics/@class" default="MCRMetaClassification" />
             <hidden var="metadata/rubrics/@parasearch" default="true" />
@@ -201,9 +201,9 @@
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_rubricsID/hidden_rubricID" />
         </list>
-    </panel>
+    </includeMyChildren>
     <!-- classipub ================================================================== -->
-    <panel id="include_classipub-editable_code">
+    <includeMyChildren id="include_classipub-editable_code">
         <panel id="classipub_input">
             <hidden var="metadata/classispub/@class" default="MCRMetaClassification" />
             <hidden var="metadata/classispub/@parasearch" default="true" />
@@ -224,9 +224,9 @@
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_classispub/hidden_classipub" />
         </list>
-    </panel>
+    </includeMyChildren>
     <!-- classipub ================================================================== -->
-    <panel id="include_classipub2-editable_code">
+    <includeMyChildren id="include_classipub2-editable_code">
         <panel id="classipub2_input">
             <hidden var="metadata/classispub2/@class" default="MCRMetaClassification" />
             <hidden var="metadata/classispub2/@parasearch" default="true" />
@@ -247,9 +247,9 @@
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_classispub2/hidden_classipub2" />
         </list>
-    </panel>
+    </includeMyChildren>
     <!-- classipub3 ================================================================== -->
-    <panel id="include_classipub3-editable_code">
+    <includeMyChildren id="include_classipub3-editable_code">
         <panel id="classipub3_input">
             <hidden var="metadata/classispub3/@class" default="MCRMetaClassification" />
             <hidden var="metadata/classispub3/@parasearch" default="true" />
@@ -270,9 +270,9 @@
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_classispub3/hidden_classipub3" />
         </list>
-    </panel>
+    </includeMyChildren>
     <!-- classipub4 ================================================================== -->
-    <panel id="include_classipub4-editable_code">
+    <includeMyChildren id="include_classipub4-editable_code">
         <panel id="classipub4_input">
             <hidden var="metadata/classispub4/@class" default="MCRMetaClassification" />
             <hidden var="metadata/classispub4/@parasearch" default="true" />
@@ -293,5 +293,5 @@
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_classispub4/hidden_classipub4" />
         </list>
-    </panel>
+    </includeMyChildren>
 </root>
