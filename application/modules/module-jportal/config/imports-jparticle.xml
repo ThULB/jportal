@@ -135,7 +135,7 @@
     </panel>
     <panel id="keyword_input_repeater">
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
-        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
     </panel>
     <!-- end: keyword -->
     <!-- abstract ================================================================== -->
