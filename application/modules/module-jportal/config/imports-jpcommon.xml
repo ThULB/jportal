@@ -1,125 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <imports>
-	<!-- *** Text fields *** -->
-	<textfield id="TFzeile10" width="10" maxlength="10"/>
-	<textfield id="TFzeile32" width="32" maxlength="32"/>
-	<textfield id="TFzeile64" width="48" maxlength="64"/>
-	<textfield id="TFzeile128" width="64" maxlength="128"/>
-	<textfield id="TFzeile1024" width="64" maxlength="1024"/>
-	<!-- *** Text area *** -->
-	<textarea id="TFarea4096" width="62" height="6" maxlength="4096"/>
-	<!-- *** Language List *** -->
-	<list id="Slang" width="60" type="dropdown">
-		<include uri="classification:editor:-1:children:jportal_class_00000002"/>
-	</list>
-	<!-- *** author_input_repeater_type List *** -->
-	<list id="participants_input_repeater_type" type="dropdown">
-		<include uri="classification:editor:-1:children:jportal_class_00000007"/>
-	</list>
-	<list id="subtitle_type" width="120" type="dropdown">
-		<include uri="classification:editor:-1:children:jportal_class_00000006"/>
-	</list>
-	<list id="identi_type" width="120" type="dropdown">
-		<include uri="classification:editor:-1:children:jportal_class_00000010"/>
-	</list>
-	<panel id="righstManag_access_input">
-		<hidden var="service/servflags/servflag/@inherited" default="0"/>
-		<hidden var="service/servflags/servflag" default="Access:public"/>
-	</panel>
-	<panel id="righstManag_state_input">
-		<hidden var="service/servflags/servflag[2]/@inherited" default="0"/>
-		<hidden var="service/servflags/servflag[2]" default="State:commited"/>
-	</panel>
-	<panel id="righstManag_ip_input">
-		<hidden var="service/servflags/servflag[3]/@inherited" default="0"/>
-		<hidden var="service/servflags/servflag[3]" default="IP:"/>
-	</panel>
-	<!-- parent ================================================================== -->
-	<panel id="parent_input_hided">
-		<hidden var="structure/parents/@class" default="MCRMetaLinkID"/>
-		<hidden var="structure/parents/@parasearch" default="true"/>
-		<hidden var="structure/parents/@textsearch" default="true"/>
-		<hidden var="structure/parents/@notinherit" default="false"/>
-		<hidden var="structure/parents/@heritable" default="true"/>
-		<hidden var="structure/parents/parent/@inherited" default="0"/>
-		<hidden var="structure/parents/parent/@type" default="locator"/>
-		<hidden var="structure/parents/parent/@title"/>
-		<cell col="1" row="1" anchor="NORTHWEST" var="structure/parents/parent/@href" ref="TFzeile32"/>
-	</panel>
-	<!-- save ================================================================== -->
-	<panel id="save">
-		<cell row="1" col="1" anchor="WEST">
-			<cancelButton id="BCancel" width="100px" i18n="editormask.common.BCancel"/>
-		</cell>
-		<cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save">
-			<submitButton id="BSubmit" width="100px" i18n="editormask.common.BSubmit"/>
-		</cell>
-	</panel>
-	<!--get person / institution list ======================================================-->
-	<panel id="getPersonAndInst">
-		<cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label"/>
-		<cell row="1" col="2" width="100%">
-			<output var="@label"/>
-			<text label=" ("/>
-			<output var="@href"/>
-			<text label=")"/>
-		</cell>
-		<cell row="2" col="1">
-			<subselect id="sub.select1" type="webpage"
-				href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
-				i18n="editormask.common.sub.select1"/>
-		</cell>
-		<cell row="2" col="2">
-			<subselect id="sub.select2" type="webpage"
-				href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
-				i18n="editormask.common.sub.select2"/>
-		</cell>
-		<cell row="3" col="1" width="100%">
-			<text label="-"/>
-		</cell>
-	</panel>
-	<!--get institution list ======================================================-->
-	<panel id="getInst">
-		<cell row="1" col="1" anchor="NORTHWEST" ref="inst_label"/>
-		<cell row="1" col="2" width="100%">
-			<output var="@label"/>
-			<text label=" ("/>
-			<output var="@href"/>
-			<text label=")"/>
-		</cell>
-		<cell row="2" col="2">
-			<subselect id="sub.select2" type="webpage"
-				href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6"
-				i18n="editormask.common.sub.select2"/>
-		</cell>
-		<cell row="3" col="1" width="100%">
-			<text label="-"/>
-		</cell>
-	</panel>
-	<!-- participants ================================================================== -->
-	<panel id="participants_input">
-		<hidden var="metadata/participants/@class" default="MCRMetaLinkID" sortnr="3"/>
-		<hidden var="metadata/participants/@parasearch" default="true" sortnr="3"/>
-		<hidden var="metadata/participants/@textsearch" default="true" sortnr="3"/>
-		<cell col="1" row="1" anchor="EAST" var="metadata/participants/participant" sortnr="3">
-			<repeater min="1" max="50">
-				<panel lines="off">
-					<hidden var="@inherited" default="0"/>
-					<hidden var="@type" default="locator"/>
-					<hidden var="@label"/>
-					<hidden var="@href"/>
-					<cell col="1" row="1" anchor="NORTHWEST" ref="participants_input_repeater_type" var="@title"/>
-					<cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst"/>
-				</panel>
-			</repeater>
-		</cell>
-	</panel>
-	<!-- jpjournalID_hidden ================================================================== -->
-	<panel id="jpjournalID_input_hidden">
-		<hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText"/>
-		<hidden var="metadata/hidden_jpjournalsID/@parasearch" default="true"/>
-		<hidden var="metadata/hidden_jpjournalsID/@textsearch" default="true"/>
-		<hidden var="metadata/hidden_jpjournalsID/@heritable" default="true"/>
-		<hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID"/>
-	</panel>
+    <!-- *** Text fields *** -->
+    <textfield id="TFzeile10" width="10" maxlength="10" />
+    <textfield id="TFzeile32" width="32" maxlength="32" />
+    <textfield id="TFzeile64" width="48" maxlength="64" />
+    <textfield id="TFzeile128" width="64" maxlength="128" />
+    <textfield id="TFzeile1024" width="64" maxlength="1024" />
+    <!-- *** Text area *** -->
+    <textarea id="TFarea4096" width="62" height="6" maxlength="4096" />
+    <!-- *** Language List *** -->
+    <list id="Slang" width="60" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000002" />
+    </list>
+    <!-- *** author_input_repeater_type List *** -->
+    <list id="participants_input_repeater_type" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000007" />
+    </list>
+    <list id="subtitle_type" width="120" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000006" />
+    </list>
+    <list id="identi_type" width="120" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000010" />
+    </list>
+    <list id="note_type" width="120" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000060" />
+    </list>
+    <panel id="righstManag_access_input">
+        <hidden var="service/servflags/servflag/@inherited" default="0" />
+        <hidden var="service/servflags/servflag" default="Access:public" />
+    </panel>
+    <panel id="righstManag_state_input">
+        <hidden var="service/servflags/servflag[2]/@inherited" default="0" />
+        <hidden var="service/servflags/servflag[2]" default="State:commited" />
+    </panel>
+    <panel id="righstManag_ip_input">
+        <hidden var="service/servflags/servflag[3]/@inherited" default="0" />
+        <hidden var="service/servflags/servflag[3]" default="IP:" />
+    </panel>
+    <!-- parent ================================================================== -->
+    <panel id="parent_input_hided">
+        <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
+        <hidden var="structure/parents/@parasearch" default="true" />
+        <hidden var="structure/parents/@textsearch" default="true" />
+        <hidden var="structure/parents/@notinherit" default="false" />
+        <hidden var="structure/parents/@heritable" default="true" />
+        <hidden var="structure/parents/parent/@inherited" default="0" />
+        <hidden var="structure/parents/parent/@type" default="locator" />
+        <hidden var="structure/parents/parent/@title" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="structure/parents/parent/@href" ref="TFzeile32" />
+    </panel>
+    <!-- save ================================================================== -->
+    <panel id="save">
+        <cell row="1" col="1" anchor="WEST">
+            <cancelButton id="BCancel" width="100px" i18n="editormask.common.BCancel" />
+        </cell>
+        <cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save">
+            <submitButton id="BSubmit" width="100px" i18n="editormask.common.BSubmit" />
+        </cell>
+    </panel>
+    <!--get person / institution list ======================================================-->
+    <panel id="getPersonAndInst">
+        <cell row="1" col="1" anchor="NORTHWEST" ref="personInst_label" />
+        <cell row="1" col="2" width="100%">
+            <output var="@label" />
+            <text label=" (" />
+            <output var="@href" />
+            <text label=")" />
+        </cell>
+        <cell row="2" col="1">
+            <subselect id="sub.select1" type="webpage" href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+                i18n="editormask.common.sub.select1" />
+        </cell>
+        <cell row="2" col="2">
+            <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+                i18n="editormask.common.sub.select2" />
+        </cell>
+        <cell row="3" col="1" width="100%">
+            <text label="-" />
+        </cell>
+    </panel>
+    <!--get institution list ======================================================-->
+    <panel id="getInst">
+        <cell row="1" col="1" anchor="NORTHWEST" ref="inst_label" />
+        <cell row="1" col="2" width="100%">
+            <output var="@label" />
+            <text label=" (" />
+            <output var="@href" />
+            <text label=")" />
+        </cell>
+        <cell row="2" col="2">
+            <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6"
+                i18n="editormask.common.sub.select2" />
+        </cell>
+        <cell row="3" col="1" width="100%">
+            <text label="-" />
+        </cell>
+    </panel>
+    <!-- participants ================================================================== -->
+    <panel id="participants_input">
+        <hidden var="metadata/participants/@class" default="MCRMetaLinkID" sortnr="3" />
+        <hidden var="metadata/participants/@parasearch" default="true" sortnr="3" />
+        <hidden var="metadata/participants/@textsearch" default="true" sortnr="3" />
+        <cell col="1" row="1" anchor="EAST" var="metadata/participants/participant" sortnr="3">
+            <repeater min="1" max="50">
+                <panel lines="off">
+                    <hidden var="@inherited" default="0" />
+                    <hidden var="@type" default="locator" />
+                    <hidden var="@label" />
+                    <hidden var="@href" />
+                    <cell col="1" row="1" anchor="NORTHWEST" ref="participants_input_repeater_type" var="@title" />
+                    <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst" />
+                </panel>
+            </repeater>
+        </cell>
+    </panel>
+    <!-- jpjournalID_hidden ================================================================== -->
+    <panel id="jpjournalID_input_hidden">
+        <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_jpjournalsID/@parasearch" default="true" />
+        <hidden var="metadata/hidden_jpjournalsID/@textsearch" default="true" />
+        <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
+        <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+    </panel>
 </imports>

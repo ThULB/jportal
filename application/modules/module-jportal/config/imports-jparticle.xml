@@ -153,7 +153,6 @@
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
     </panel>
-    <!-- end: abstract -->
     <!-- identi ================================================================== -->
     <panel id="identi_input">
         <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
@@ -168,7 +167,6 @@
         <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
     </panel>
-    <!-- end: identi -->
     <!-- note ================================================================== -->
     <panel id="note_input">
         <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
@@ -180,10 +178,10 @@
         </cell>
     </panel>
     <panel id="note_input_repeater">
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+        <cell col="1" row="1" anchor="NORTHWEST" ref="note_type" var="@type" ordernr="1" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" />
     </panel>
-
+    <!-- ================================================================== -->
     <!-- dynamic includes, if used within a journal -->
     <include cacheable="false"
         uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
