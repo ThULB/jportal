@@ -354,9 +354,6 @@
         <div id="detailed-frame">
             <xsl:variable name="mainTitle">
                 <xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
-                <!--                <xsl:call-template name="printI18N">
-                    <xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()"/>
-                    </xsl:call-template>-->
             </xsl:variable>
             <xsl:variable name="maintitle_shorted">
                 <xsl:call-template name="ShortenText">
@@ -531,7 +528,16 @@
                             </xsl:call-template>
                         </table>
                         <!--8***note*************************************-->
-                        <xsl:if test="$CurrentUser!='gast' and ./metadata/notes/note[@type='internalNote']">
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDate_typeSensitive">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/notes/note[@type='annotation']" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.note')" name="label" />
+                                <xsl:with-param name="typeClassi" select="'jportal_class_00000060'" />
+                                <xsl:with-param name="mode" select="'text'" />
+                            </xsl:call-template>
+                        </table>
+                        <xsl:if test="$CurrentUser!='gast' and ./metadata/notes/note[@type!='annotation']">
                             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                 <xsl:call-template name="printMetaDate_typeSensitive">
                                     <xsl:with-param select="'right'" name="textalign" />
@@ -542,15 +548,6 @@
                                 </xsl:call-template>
                             </table>
                         </xsl:if>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDate_typeSensitive">
-                                <xsl:with-param select="'right'" name="textalign" />
-                                <xsl:with-param select="./metadata/notes/note[@type='annotation']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editormask.labels.note')" name="label" />
-                                <xsl:with-param name="typeClassi" select="'jportal_class_00000060'" />
-                                <xsl:with-param name="mode" select="'text'" />
-                            </xsl:call-template>
-                        </table>
                         <!--9***type*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
