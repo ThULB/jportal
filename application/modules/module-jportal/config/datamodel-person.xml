@@ -15,7 +15,7 @@
 			<mcrmetalangtext name="peerage" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024"/>
 		</element>
 		<!-- 04 - Geschlecht -->
-		<element name="def.gender" minOccurs='1' maxOccurs='1'>
+		<element name="def.gender" minOccurs='0' maxOccurs='1'>
 			<mcrmetaclassification name="gender" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024"/>
 		</element>
 		<!-- Contact -->
