@@ -24,9 +24,13 @@
 package org.mycore.services.fieldquery;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -35,8 +39,11 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMSource;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.frontend.cli.MCRCommand;
@@ -46,7 +53,7 @@ import org.mycore.parsers.bool.MCRCondition;
 /**
  * Provides commands to test the query classes using the command line interface
  * 
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Arne Seifert
  * @author Jens Kupferschmidt
  * @version $Revision: 1.12 $ $Date: 2006/12/08 14:21:37 $
@@ -63,7 +70,53 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
         commands.add(new MCRCommand("run query from file {0}", "org.mycore.services.fieldquery.MCRQueryCommands.runQueryFromFile String", "Runs a query that is specified as XML in the given file"));
         commands.add(new MCRCommand("run local query {0}", "org.mycore.services.fieldquery.MCRQueryCommands.runLocalQueryFromString String", "Runs a query specified as String on the local host"));
         commands.add(new MCRCommand("run distributed query {0}", "org.mycore.services.fieldquery.MCRQueryCommands.runAllQueryFromString String", "Runs a query specified as String on the local host and all remote hosts"));
+        commands.add(new MCRCommand("find duplicates {0}", "org.mycore.services.fieldquery.MCRQueryCommands.findDuplicates String", "Find duplicates, wich are querys in a XMl file."));
         return commands;
+    }
+    
+    public static void findDuplicates(String filename) throws JDOMException, IOException {
+        Document queryXML = loadXMLFile(filename);
+        List<Element> objectList = queryXML.getRootElement().getChildren();
+        
+        
+        Element duplicateListRoot = new Element("duplicateList");
+        Document duplicateListDoc = new Document(duplicateListRoot);
+        
+        Iterator<Element> objectIter = objectList.iterator();
+        while (objectIter.hasNext()) {
+            Element queryObject = (Element) objectIter.next();
+            String objId = queryObject.getAttributeValue("objId");
+            Element resultObject = new Element("hasDuplicate");
+            resultObject.setAttribute("objId", objId);
+            duplicateListRoot.addContent(resultObject);
+            
+            List<Element> queryList = queryObject.getChildren();
+            Iterator<Element> queryIter = queryList.iterator();
+            while (queryIter.hasNext()) {
+                Element query = (Element) queryIter.next();
+                
+                Element queryRoot = new Element("queryRoot");
+                Document queryDoc = new Document(queryRoot);
+                queryRoot.addContent((Element)query.clone());
+                
+                try {
+                    MCRQuery mcrQuery = MCRQuery.parseXML(queryDoc);
+                    MCRResults queryResults = MCRQueryManager.search(mcrQuery);
+                    
+                    if (queryResults.getNumHits() > 0) {
+                        resultObject.addContent(queryResults.buildXML());
+                        break;
+                    }
+                } catch (RuntimeException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                
+            }
+        }
+        
+        String outputFile = "./result.xml";
+        saveXML(duplicateListDoc, outputFile, true);
     }
 
     /**
@@ -75,6 +128,12 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
      *            the name of the XML file with the query condition
      */
     public static void runQueryFromFile(String filename) throws JDOMException, IOException {
+        Document xml = loadXMLFile(filename);
+        MCRQuery query = MCRQuery.parseXML(xml);
+        sendQuery(query);
+    }
+
+    private static Document loadXMLFile(String filename) throws JDOMException, IOException {
         File file = new File(filename);
         if (!file.exists()) {
             String msg = "File containing XML query does not exist: " + filename;
@@ -86,7 +145,10 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
         }
 
         Document xml = new SAXBuilder().build(new File(filename));
-        MCRQuery query = MCRQuery.parseXML(xml);
+        return xml;
+    }
+
+    private static void sendQuery(MCRQuery query) {
         MCRResults results = MCRQueryManager.search(query);
         buildOutput(results);
     }
@@ -101,8 +163,7 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
     public static void runLocalQueryFromString(String querystring) {
         MCRCondition cond = (new MCRQueryParser()).parse(querystring);
         MCRQuery query = new MCRQuery(cond);
-        MCRResults results = MCRQueryManager.search(query);
-        buildOutput(results);
+        sendQuery(query);
     }
 
     /**
@@ -116,8 +177,7 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
         MCRCondition cond = (new MCRQueryParser()).parse(querystring);
         MCRQuery query = new MCRQuery(cond);
         query.setHosts( MCRQueryClient.ALL_HOSTS );
-        MCRResults results = MCRQueryManager.search(query);
-        buildOutput(results);
+        sendQuery(query);
     }
 
     /** Transform the results to an output using stylesheets */
@@ -144,5 +204,20 @@ public class MCRQueryCommands implements MCRExternalCommandInterface {
             LOGGER.info("");
             return;
         }
+    }
+    
+    public static void saveXML(Document doc, String targetFile, boolean log) throws IOException, FileNotFoundException {
+        Format format = Format.getPrettyFormat();
+        // format.setEncoding("ISO-8859-1");
+        format.setEncoding("UTF-8");
+
+        XMLOutputter xmlOut = new XMLOutputter(format);
+
+        FileOutputStream fos = new FileOutputStream(new File(targetFile));
+        xmlOut.output(doc, fos);
+        fos.flush();
+        fos.close();
+        if (log)
+            System.out.println("saved " + targetFile + "... ");
     }
 }
