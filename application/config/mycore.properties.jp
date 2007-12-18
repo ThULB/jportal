@@ -11,6 +11,7 @@ MCR.Access_strategy_class_name=org.mycore.access.strategies.MCRJPortalStrategy
 # dynamic classification in editors for articles
 MCR.UriResolver.externalResolver.class=org.mycore.common.xml.MCRJPortalURIResolver
 
+
 ##############################################################################
 # The data model configuration
 ##############################################################################
@@ -69,6 +70,7 @@ MCR.editor_jpinst_directory=%MCR.basedir%/data/workflow/jpinst
 
 MCR.editor_page_error_formular=editor_error_formular_jp.xml
 
+
 ##############################################################################
 # Index-Browser                                                              #
 ##############################################################################
@@ -89,12 +91,14 @@ MCR.IndexBrowser.jpperson_sub.MaxPerPage=30
 #MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=headingLastName,headingFirstName
 MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
 
+
 ##############################################################################
 # The DOM parser configuration
 ##############################################################################
 
 # The name of the Java class of the XML parser
 MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
+
 
 ##############################################################################
 # Index Browser - Access for robots
@@ -135,3 +139,20 @@ MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
   MCR.IndexBrowser.robotPerson.Style=robots
   MCR.IndexBrowser.robotPerson.MaxPerPage=100
   MCR.IndexBrowser.robotPerson.FilterCondition=MCRID like '%_person_%'
+  
+  
+##############################################################################
+# Dynamic web frontend layout templates
+# NOTE: Sort chronological, definate by numbers
+##############################################################################
+
+# Dependance on date of journal was published 
+  
+  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.1=1700
+  MCR.Module-JPortal.DynamicLayoutTemplates.name.1=template_18thCentury
+  
+#  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.2=1800
+#  MCR.Module-JPortal.DynamicLayoutTemplates.name.2=template_19thCentury
+  
+#  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.3=1900
+#  MCR.Module-JPortal.DynamicLayoutTemplates.name.3=template_20thCentury
