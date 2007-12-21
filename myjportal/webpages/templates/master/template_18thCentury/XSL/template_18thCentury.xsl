@@ -12,6 +12,8 @@
 	<!-- the template                                   -->
 	<!-- ============================================== -->
 	<xsl:template name="template_18thCentury">
+		<xsl:param name="journalsMaintitle"
+			select="'Zeitschriftenname'" />
 		<html>
 			<head>
 				<meta http-equiv="content-type"
@@ -52,8 +54,8 @@
 			</head>
 			<body>
 				<div id="journal-title">
-					<xsl:text>Journal des Luxus und der Moden</xsl:text>
-					<!--<xsl:copy-of select="$journalsMaintitle" />-->
+					<!--<xsl:text>Journal des Luxus und der Moden</xsl:text> --> 
+					<xsl:copy-of select="$journalsMaintitle" />
 				</div>
 				<div
 					style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-logo.png) no-repeat; position:absolute; top:27px; right:30px; width:447px; height:171px;" />
@@ -64,9 +66,17 @@
 						<td width="100%">
 							<div id="whitespace"></div>
 							<span id="headline">
-								<a href="http://www.urmel-dl.de/urmel/content/main/content.xml" target="_blank">UrMEL</a>
+								<a
+									href="http://www.urmel-dl.de/urmel/content/main/content.xml"
+									target="_blank">
+									UrMEL
+								</a>
 								<xsl:copy-of select="'     |     '" />
-								<a href="http://zs.thulb.uni-jena.de/content/below/index.xml" target="_self">Journals@UrMEL</a>
+								<a
+									href="http://zs.thulb.uni-jena.de/content/below/index.xml"
+									target="_self">
+									Journals@UrMEL
+								</a>
 							</span>
 						</td>
 					</tr>
