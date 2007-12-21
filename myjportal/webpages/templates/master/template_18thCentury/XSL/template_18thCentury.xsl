@@ -51,27 +51,23 @@
 
 			</head>
 			<body>
-				<!--<div class="headline">
-					<xsl:copy-of select="$journalsMaintitle" />
-					</div>-->
+				<div id="journal-title">
+					<xsl:text>Journal des Luxus und der Moden</xsl:text>
+					<!--<xsl:copy-of select="$journalsMaintitle" />-->
+				</div>
 				<div
-					style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-logo.png) no-repeat; position:absolute; top:37px; right:30px; width:447px; height:171px;" />
-				<table width="100%" height="16px" border="0"
+					style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-logo.png) no-repeat; position:absolute; top:27px; right:30px; width:447px; height:171px;" />
+				<table width="100%" height="30px" border="0"
 					cellspacing="0" cellpadding="0"
 					style="background-color: #646466;">
 					<tr valign="TOP">
 						<td width="100%">
-							<p>
-								<div id="thulb_logo">
-									<a
-										href="http://www.thulb.uni-jena.de">
-										<img
-											src="{$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/thulb_logo.gif"
-											border="0">
-										</img>
-									</a>
-								</div>
-							</p>
+							<div id="whitespace"></div>
+							<span id="headline">
+								<a href="http://www.urmel-dl.de/urmel/content/main/content.xml" target="_blank">UrMEL</a>
+								<xsl:copy-of select="'     |     '" />
+								<a href="http://zs.thulb.uni-jena.de/content/below/index.xml" target="_self">Journals@UrMEL</a>
+							</span>
 						</td>
 					</tr>
 				</table>
@@ -82,21 +78,18 @@
 						<tr valign="TOP">
 							<td rowspan="2" width="1235"
 								style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-left.png) no-repeat;">
-								<div id="navigation">
-									<div id="navigation_box">
-										<xsl:call-template
-											name="navigation.row">
-											<xsl:with-param
-												name="rootNode"
-												select="document($navigationBase) /navigation/navi-below" />
-											<xsl:with-param
-												name="CSSLayoutClass" select="'navi_below'" />
-											<xsl:with-param
-												name="menuPointHeigth" select="'21'" />
-											<xsl:with-param
-												name="spaceBetweenLinks" select="'12'" />
-										</xsl:call-template>
-									</div>
+								<div id="navigation_box">
+									<xsl:call-template
+										name="navigation.row">
+										<xsl:with-param name="rootNode"
+											select="document($navigationBase) /navigation/navi-below" />
+										<xsl:with-param
+											name="CSSLayoutClass" select="'navi_below'" />
+										<xsl:with-param
+											name="menuPointHeigth" select="'21'" />
+										<xsl:with-param
+											name="spaceBetweenLinks" select="'12'" />
+									</xsl:call-template>
 								</div>
 							</td>
 							<td colspan="2" width="max" height="121"
@@ -130,6 +123,15 @@
 									<xsl:call-template
 										name="Navigation_main" />
 								</div>
+								<div id="thulb_logo">
+									<a
+										href="http://www.thulb.uni-jena.de">
+										<img
+											src="{$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/thulb_logo.png"
+											border="0">
+										</img>
+									</a>
+								</div>
 							</td>
 							<td width="max" valign="top"
 								style="background-color:#c2c6b6;">
@@ -149,25 +151,6 @@
 						</tr>
 					</table>
 				</div>
-
-
-				<!--
-					<div id="navigation">
-					<div id="navigation_box">
-					<xsl:call-template name="navigation.row">
-					<xsl:with-param name="rootNode"
-					select="document($navigationBase) /navigation/navi-below"/>
-					<xsl:with-param name="CSSLayoutClass" select="'navi_below'"/>
-					<xsl:with-param name="menuPointHeigth" select="'21'"/>
-					<xsl:with-param name="spaceBetweenLinks" select="'12'"/>
-					</xsl:call-template>
-					</div>
-					<div id="thulb_logo"> <a href="http://www.thulb.uni-jena.de"><img
-					src="{$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/thulb_logo.gif"
-					border="0"></img></a>
-					</div>
-					</div>
-				-->
 			</body>
 		</html>
 

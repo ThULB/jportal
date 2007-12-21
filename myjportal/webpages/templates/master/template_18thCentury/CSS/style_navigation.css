@@ -116,7 +116,7 @@ td.menus {
 div.main_menu {
     /*background-color: #EADFA5;*/
     background: #AEC6D4 url(../IMAGES/menu_pix.gif);
-    background-repeat: repeat-x repeat-y
+    background-repeat: repeat-x repeat-y;
     vertical-align: top;
     min-width: 222px;
     width: auto;
@@ -179,16 +179,15 @@ div.main_menu {
 /* General Main navigation column                                      */
 /* =================================================================== */
 #navi_history{
-	padding-top: 10px;
-    color: #314759; 
+    color: #000000; 
     font-size: 11px;
     font-weight : bold;
-    border: 0px solid black;
     width: 700px;
     height: 11px;    
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    vertical-align: top;
-	margin-left: 5px;
+	position: absolute;
+	top: 174px;
+	left: 30px;
 }
 
 #navi_history a
@@ -224,7 +223,7 @@ div.main_menu {
 
 .navi_main_content
 {
-vertical-align: top;
+    vertical-align: top;
     min-width: 235px;
     padding-left: 25px;  
     text-align: top;
@@ -257,19 +256,23 @@ td.empty_box {
 }
 /* ============================================= */
 
-.navi_main th 
-	{
-	 width: 100%;
-	 height: 16px;
-	}
+.navi_main tr, .navi_main td{
+font-size: 11px;
+}
+
+.navi_main img{
+	display: block;
+	border-style: none;
+	border-width: 0px;
+}
 
 .navi_main th a
 {	
+	font-weight: bold;
 	padding-top: 3px;
 	padding-left: 3px;
 	display: block;
-	background-color: #c7cabc;
-    font-weight : normal;	
+	background-color: #c7cabc;	
     color:  #000000;
     width: 100%;
     height: 18px;
@@ -286,8 +289,9 @@ td.empty_box {
     background-color: #d4d600;
 }
 
-.navi_main th a .marked 
-{
+.navi_main th a .marked
+{	
+	font-weight: bold;
     text-decoration: none;
 }
 
