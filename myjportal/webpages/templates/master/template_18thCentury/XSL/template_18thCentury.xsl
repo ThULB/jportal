@@ -54,7 +54,6 @@
 			</head>
 			<body>
 				<div id="journal-title">
-					<!--<xsl:text>Journal des Luxus und der Moden</xsl:text> --> 
 					<xsl:copy-of select="$journalsMaintitle" />
 				</div>
 				<div
