@@ -46,12 +46,12 @@ public class MCRJPortalLayoutTemplateDetector {
             xpath = org.jdom.xpath.XPath.newInstance("/mycoreobject/metadata/dates/date[@type='published_from']");
             dateNode = (Element) xpath.selectSingleNode(objXML);
             dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
-        } catch (JDOMException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             LOGGER.debug("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return ''");
+            e.printStackTrace();
             return "";
         }
-
+        
         // get template
         MCRConfiguration mcrConfig = MCRConfiguration.instance();
         String template = "";
