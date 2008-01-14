@@ -19,7 +19,7 @@ html, body {
 	border: 0px solid red;
 	}
 #login_div {
-	padding-top : 15px;  */
+	padding-top : 15px; 
 	padding-left : 10px;
 	min-width: 291px;
 	width:281px; 
@@ -35,7 +35,7 @@ html, body {
 	right: 5px;
 }
 #thulb_logo {
-	padding-left: 65px;  
+	padding-left: 23px;  
 }
 
 #banner {
@@ -100,10 +100,30 @@ footer2_right  {
 	height: 8px;
 }
 
-#journal-title{
+#time{
 	font-size: 14px; 
 	font-weight: bold; 
 	position:absolute; 
 	top:33px; 
 	left:200px;
+	color: black;
+}
+
+#journal-title{
+	font-family: serif;
+	font-size: 34px;  
+	position: absolute; 
+	top: 90px; 
+	left: 190px;
+	color: black;
+	z-index: 10;
+}
+
+#transparent-logo {
+	background:url(../IMAGES/18th-logo.gif) no-repeat; 
+	position:absolute; 
+	top:27px; 
+	right:30px;
+	width:447px; 
+	height:171px;
 }

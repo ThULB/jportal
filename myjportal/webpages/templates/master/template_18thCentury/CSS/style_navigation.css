@@ -116,7 +116,6 @@ td.menus {
 div.main_menu {
     /*background-color: #EADFA5;*/
     background: #AEC6D4 url(../IMAGES/menu_pix.gif);
-    background-repeat: repeat-x repeat-y;
     vertical-align: top;
     min-width: 222px;
     width: auto;
@@ -186,7 +185,7 @@ div.main_menu {
     height: 11px;    
     font-family: Verdana, Arial, Helvetica, sans-serif;
 	position: absolute;
-	top: 174px;
+	top: 178px;
 	left: 30px;
 }
 
@@ -221,12 +220,18 @@ div.main_menu {
     width: 200px;
 }
 
+#navi_main_active
+{
+	background-color: #d4d600;	
+    border: 1px solid #b6b874;
+}
+
+
 .navi_main_content
 {
     vertical-align: top;
     min-width: 235px;
     padding-left: 25px;  
-    text-align: top;
     width: auto;
     border-style: none;
     /* margin-left:20px; */	/* taken out for JLZ */
@@ -274,7 +279,7 @@ font-size: 11px;
 	display: block;
 	background-color: #c7cabc;	
     color:  #000000;
-    width: 100%;
+    width: 180px;
     height: 18px;
     text-decoration: none;
     border: 1px solid #c7cabc;
@@ -302,6 +307,47 @@ font-size: 11px;
     text-decoration: none;
 }
 .navi_main td a:hover
+{	
+    font-weight : normal;	
+    color:  #000000;
+    text-decoration: underline;
+}
+
+
+
+#navi_main_active tr, #navi_main_active td{
+font-size: 11px;
+}
+
+#navi_main_active img{
+	display: block;
+	border-style: none;
+	border-width: 0px;
+}
+
+#navi_main_active th a
+{	
+	font-weight: bold;
+	padding-top: 3px;
+	padding-left: 3px;
+	display: block;
+	background-color: #d4d600;	
+    color:  #000000;
+    width: 100%;
+    height: 18px;
+    text-decoration: none;
+    border: 1px solid #b6b874;
+    /*background:url(../IMAGES/18th-normal-navi-ends.png) no-repeat;
+	*/
+}
+
+#navi_main_active td a
+{	
+    font-weight : normal;	
+    color:  #000000;
+    text-decoration: none;
+}
+#navi_main_active td a:hover
 {	
     font-weight : normal;	
     color:  #000000;

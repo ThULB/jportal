@@ -9,8 +9,8 @@
 #contentArea {
     vertical-align: top;
     padding-top: 1em;
-    padding-left: 2px;
-    padding-right: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
     color:  #000000;
     font-size: 12px;
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -38,7 +38,6 @@
 #contentArea hr{
     height: 2px;
     color: #43351D;
-<!--    background-color: #15516E; -->
     border-style: none;
 }
 #contentArea a { 
@@ -67,14 +66,14 @@
 .site.sitemap tr, .sitemap th, .sitemap td, .sitemap a {
     color: #9A5B11;
     background : #FFFFFF; /* white */
-    font-size: 12;
+    font-size: 12px;
     font-family: Verdana, Arial, Helvetica, sans-serif; 
     font-weight : normal;           
     text-decoration: none;  
 }
 .sitemap a {
     color: #9A5B11;
-    font-size: 12;
+    font-size: 12px;
     text-decoration: none;
     font-weight : normal;   
 }
@@ -176,7 +175,7 @@ div.submitButton{
     height: 20px;
 }
 #resortForm td.resort, #resortForm td.resultCount{
-    vertical-align: center;
+    vertical-align: middle;
 }
 #resortForm td.resultCount{
     text-align: right;
@@ -208,7 +207,7 @@ div.submitButton{
 /* =================================================================== */
 
 #metaHeading, #metaData, #files {
-<!--    width: 100%; -->
+
 }
 #metaHeading a img, #metaData a img, #files a img {
     border: none;

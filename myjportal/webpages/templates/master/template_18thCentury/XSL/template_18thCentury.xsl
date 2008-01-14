@@ -14,6 +14,8 @@
 	<xsl:template name="template_18thCentury">
 		<xsl:param name="journalsMaintitle"
 			select="'Zeitschriftenname'" />
+			<xsl:param name="periodetitle"
+			select="'Erscheinungszeitraum'" />
 		<html>
 			<head>
 				<meta http-equiv="content-type"
@@ -50,14 +52,19 @@
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript" />
+				<script language="JavaScript"
+					src="{$WebApplicationBaseURL}templates/master/template_18thCentury/JS/activelink.js"
+					type="text/javascript" />	
 
 			</head>
 			<body>
+				<div id="time">
+					<xsl:copy-of select="$periodetitle" />
+				</div>
 				<div id="journal-title">
 					<xsl:copy-of select="$journalsMaintitle" />
 				</div>
-				<div
-					style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-logo.png) no-repeat; position:absolute; top:27px; right:30px; width:447px; height:171px;" />
+				<div id="transparent-logo"/>
 				<table width="100%" height="30px" border="0"
 					cellspacing="0" cellpadding="0"
 					style="background-color: #646466;">
@@ -83,7 +90,7 @@
 				<div
 					style="min-height: 800px; width: max; margin-left: 10px; margin-right: 10px; margin-bottom: 10px; background-color:#d5d7cc;">
 					<table width="100%" height="156" border="0"
-						cellspacing="0" cellpadding="0" style="background-color: none;">
+						cellspacing="0" cellpadding="0" style="background-color:transparent;">
 						<tr valign="TOP">
 							<td rowspan="2" width="1235"
 								style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-left.png) no-repeat;">
@@ -127,7 +134,7 @@
 						cellspacing="0" cellpadding="0"
 						style="padding-right: 10px; padding-bottom: 10px;">
 						<tr>
-							<td width="200px" valign="top">
+							<td width="200px" valign="top"  rowspan="2">
 								<div id="div_navi_main">
 									<xsl:call-template
 										name="Navigation_main" />
@@ -143,20 +150,29 @@
 								</div>
 							</td>
 							<td width="max" valign="top"
-								style="background-color:#c2c6b6;">
-								<div id="navi_history">
-									<xsl:call-template
-										name="navigation.history" />
-								</div>
-								<div id="contentArea">
-									<div id="contentWrapper">
-										<xsl:call-template
-											name="getFastWCMS" />
-										<xsl:call-template
-											name="template_18thCentury.write.content" />
-									</div>
-								</div>
+								style="height: 16px; padding-right: 5px;">
+								<xsl:text> </xsl:text>
 							</td>
+							<td width="5" rowspan="2" style="height: 500px;">
+								<xsl:text> </xsl:text>
+							</td>
+						</tr>
+						<tr>
+							<td width="max" valign="top"
+									style="background-color:#c2c6b6;">
+									<div id="navi_history">
+										<xsl:call-template
+											name="navigation.history" />
+									</div>
+									<div id="contentArea">
+										<div id="contentWrapper">
+											<xsl:call-template
+												name="getFastWCMS" />
+											<xsl:call-template
+												name="template_18thCentury.write.content" />
+										</div>
+									</div>
+								</td>
 						</tr>
 					</table>
 				</div>
