@@ -49,10 +49,12 @@
 
 #leaf-front{
 	width: 15px;
+	vertical-align: top;
 	text-align: center;
 	font-size: 12px;
 	font-weight: bold;
 	padding: 3px;
+	padding-top: 5px;
 	border: none;
 }
 
@@ -77,6 +79,18 @@
     padding-bottom:0px;
     margin:0px;
 }
+#leaf-linkarea span{
+	text-indent: 0px;
+	display:block;
+	line-height:16px;
+	width: 100%;
+    text-decoration:none;
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+    padding-bottom:0px;
+    padding-left: 10px;
+    margin:0px;
+}
 
 #leaf-linkarea2{
 	text-indent: 10px;
@@ -91,7 +105,20 @@
     font-family: verdana, sans-serif;
     padding-bottom:0px;
     margin:0px;
-} 
+}
+
+#leaf-linkarea2 span{
+	text-indent: 0px;
+	display:block;
+	line-height:16px;
+	width: 100%;
+    text-decoration:none;
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+    padding-bottom:0px;
+    padding-left: 10px;
+    margin:0px;
+}
 
 #leaf-whitespaces{
 	height: 20px;
@@ -138,7 +165,6 @@
 }
 
 #detailed-headline-frame {
-	width:max;
 	color: #000000;
 }
 
