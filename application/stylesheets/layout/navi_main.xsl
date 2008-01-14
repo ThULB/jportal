@@ -21,7 +21,7 @@
         <!-- use percent values -->
     </xsl:call-template>
     <br/>
-	<center><a href="http://www.mycore.de" target="_blank"><img style="border:none; padding-right: 50px; padding-bottom: 20px;" src="{$WebApplicationBaseURL}images/poweredby.gif"/></a></center>
+	<center><a href="http://www.mycore.de" target="_blank"><img style="border:none; padding-right: 50px;" src="{$WebApplicationBaseURL}images/poweredby.gif"/></a></center>
 	<br/>
 </xsl:template>
 <!-- ================================================================================= -->
