@@ -6,14 +6,14 @@
     <xsl:param name="toc.pageSize" select="10" />
     <xsl:param name="toc.pos" select="1" />
     <xsl:param name="template" select="'template_DublicateFinder'" />
-    
+
     <xsl:variable name="PageTitle" select="'Dublettenfinder'" />
     <xsl:variable name="ServletName" select="'MCRDublicateFinderServlet'" />
     <!-- ===================================================================================== -->
 
     <xsl:template match="redundancyMap">
         <xsl:choose>
-            <xsl:when test="$CurrentUser='gast'">Nicht erlaubt! Bitte melden sie sich an.</xsl:when>
+            <xsl:when test="$CurrentUser='gast'">Zugriff verweigert! Bitte melden sie sich an.</xsl:when>
             <xsl:otherwise>
                 <table>
                     <xsl:call-template name="redundancy.head" />
@@ -52,15 +52,13 @@
                     <xsl:choose>
                         <xsl:when test="$redunMode='closed'">
                             <xsl:copy-of select="' Bereits bearbeitete Dubletten '" />
-                            <a
-                                href="{$WebApplicationBaseURL}{$RedunMap}?XSL.redunMode.SESSION=open&amp;XSL.toc.pos.SESSION=1">
+                            <a href="{$WebApplicationBaseURL}{$RedunMap}?XSL.redunMode.SESSION=open&amp;XSL.toc.pos.SESSION=1">
                                 <xsl:copy-of select="' (Wechsel zur Ansicht -Offene Dubletten-)'" />
                             </a>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:copy-of select="' Offene Dubletten '" />
-                            <a
-                                href="{$WebApplicationBaseURL}{$RedunMap}?XSL.redunMode.SESSION=closed&amp;XSL.toc.pos.SESSION=1">
+                            <a href="{$WebApplicationBaseURL}{$RedunMap}?XSL.redunMode.SESSION=closed&amp;XSL.toc.pos.SESSION=1">
                                 <xsl:copy-of select="' (Wechsel zur Ansicht -Bereits bearbeitete Dubletten-) '" />
                             </a>
                         </xsl:otherwise>
@@ -123,8 +121,7 @@
                         <xsl:value-of select="concat(' [',position(),'] ')" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <a
-                            href="{$WebApplicationBaseURL}{$HttpSession}redundancy.xml?XSL.toc.pos.SESSION={$jumpToPos+1}">
+                        <a href="{$WebApplicationBaseURL}{$HttpSession}redundancy.xml?XSL.toc.pos.SESSION={$jumpToPos+1}">
                             <xsl:value-of select="concat(' ',position(),' ')" />
                         </a>
                     </xsl:otherwise>
@@ -149,80 +146,117 @@
             </xsl:choose>
         </xsl:variable>
 
-        <xsl:for-each select="xalan:nodeset($filteredRedunMap)/redundancyID[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
-            <tr valign="top">
-                <td width="49%" valign="top">
-                    <b>
-                        <xsl:choose>
-                            <xsl:when test="$redunMode='open'">
-                                <form id="{$ServletName}.{position()}" action="{$ServletsBaseURL}{$ServletName}" method="get">
-                                    <xsl:copy-of select="concat('Dublette ',$toc.pos.verif + position() - 1)" />
-                                    <br />
-                                    <xsl:copy-of select="'Bewertung:  '" />
-                                    <input name="dublicate-id" type="hidden" value="{./text()}" />
-                                    <input name="status" type="radio" value="accepted" onclick="document.getElementById('{$ServletName}.{position()}').submit()" />
-                                    <xsl:call-template name="redun.getStatusText">
-                                        <xsl:with-param name="statusID" select="'accepted'" />
-                                    </xsl:call-template>
-                                    <input name="status" type="radio" value="denied" onclick="document.getElementById('{$ServletName}.{position()}').submit()" />
-                                    <xsl:call-template name="redun.getStatusText">
-                                        <xsl:with-param name="statusID" select="'denied'" />
-                                    </xsl:call-template>
-                                </form>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <b>
-                                    <xsl:variable name="statusText">
-                                        <xsl:call-template name="redun.getStatusText">
-                                            <xsl:with-param name="statusID" select="@status" />
-                                        </xsl:call-template>
-                                    </xsl:variable>
-                                    <xsl:copy-of select="concat('Bewertung: ',$statusText)" />
-                                    <br />
-                                    <xsl:choose>
-                                        <xsl:when test="$CurrentUser='root'">
-                                            <a href="#" title="{@user}" alt="{@user}">
-                                                <xsl:copy-of select="concat('Nutzer: ',@userRealName)" />
-                                            </a>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:copy-of select="concat('Nutzer: ',@userRealName)" />
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                    <br />
-                                    <xsl:copy-of select="concat('Zeit: ',@timePretty)" />
-                                    <xsl:if test="$CurrentUser='root'">
-                                        <br />
-                                        <form id="{$ServletName}.reopen.{position()}" action="{$ServletsBaseURL}{$ServletName}" method="get">
-                                            <input name="dublicate-id" type="hidden" value="{./text()}" />
-                                            <input name="status" type="radio" value="open" onclick="document.getElementById('{$ServletName}.reopen.{position()}').submit()" />
-                                            Dublette wieder zur Bearbeitung freigeben!
-                                        </form>
-                                    </xsl:if>
-                                </b>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </b>
-                    <br />
-                    <xsl:variable name="mcrobj" select="document(concat('mcrobject:',./text()))" />
-                    <i>
-                        <xsl:apply-templates select="$mcrobj" mode="present" />
-                    </i>
-                </td>
-                <td width="2%"></td>
-                <td width="49%" valign="top">
-                    <br />
-                    <b>
-                        <form>Davon ist die Dublette:</form>
-                    </b>
-                    <br />
-                    <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@notRedundancyID))" />
-                    <xsl:apply-templates select="$mcrobj" mode="present" />
-                </td>
-                <xsl:call-template name="lineBreak" />
-            </tr>
-        </xsl:for-each>
+        <xsl:choose>
+            <xsl:when test="$redunMode='open'">
+                <xsl:for-each
+                    select="xalan:nodeset($filteredRedunMap)/redundancyID[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+                    <xsl:call-template name="printDublicates.entry">
+                        <xsl:with-param name="toc.Pos.verif" select="$toc.pos.verif" />
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each
+                    select="xalan:nodeset($filteredRedunMap)/redundancyID[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+                    <xsl:sort select="@time" order="ascending"/>
+                    <xsl:call-template name="printDublicates.entry">
+                        <xsl:with-param name="toc.Pos.verif" select="$toc.pos.verif" />
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
 
+    </xsl:template>
+
+    <!-- ===================================================================================== -->
+
+    <xsl:template name="printDublicates.entry">
+        <xsl:param name="toc.Pos.verif" />
+        
+        <tr valign="top">
+            <td width="49%" valign="top">
+                <xsl:variable name="posOfDoublet">
+                    <xsl:value-of select="$toc.Pos.verif + position() - 1" />
+                </xsl:variable>
+                <b>
+                    <xsl:choose>
+                        <xsl:when test="$redunMode='open'">
+                            <form id="{$ServletName}.{position()}" action="{$ServletsBaseURL}{$ServletName}" method="get">
+                                <input name="dublicate-id" type="hidden" value="{./text()}" />
+                                <input name="redunMap" type="hidden" value="{$RedunMap}" />
+                                <input name="ankerPosition" type="hidden" value="{$posOfDoublet}" />
+                                <a name="{$posOfDoublet}" />
+                                <xsl:copy-of select="concat('Dublette ',$posOfDoublet)" />
+                                <br />
+                                <xsl:copy-of select="'Bewertung:  '" />
+                                <input name="status" type="radio" value="accepted" onclick="document.getElementById('{$ServletName}.{position()}').submit()" />
+                                <xsl:call-template name="redun.getStatusText">
+                                    <xsl:with-param name="statusID" select="'accepted'" />
+                                </xsl:call-template>
+                                <input name="status" type="radio" value="denied" onclick="document.getElementById('{$ServletName}.{position()}').submit()" />
+                                <xsl:call-template name="redun.getStatusText">
+                                    <xsl:with-param name="statusID" select="'denied'" />
+                                </xsl:call-template>
+                            </form>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <b>
+                                <a name="{$posOfDoublet}" />
+                                <xsl:copy-of select="concat('Dublette ',$posOfDoublet)" />
+                                <br />
+                                <xsl:variable name="statusText">
+                                    <xsl:call-template name="redun.getStatusText">
+                                        <xsl:with-param name="statusID" select="@status" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:copy-of select="concat('Bewertung: ',$statusText)" />
+                                <br />
+                                <xsl:choose>
+                                    <xsl:when test="$CurrentUser='root'">
+                                        <a href="#" title="{@user}" alt="{@user}">
+                                            <xsl:copy-of select="concat('Nutzer: ',@userRealName)" />
+                                        </a>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:copy-of select="concat('Nutzer: ',@userRealName)" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                                <br />
+                                <xsl:copy-of select="concat('Zeit: ',@timePretty)" />
+                                <xsl:if test="$CurrentUser='root'">
+                                    <br />
+                                    <form id="{$ServletName}.reopen.{position()}" action="{$ServletsBaseURL}{$ServletName}" method="get">
+                                        <input name="dublicate-id" type="hidden" value="{./text()}" />
+                                        <input name="redunMap" type="hidden" value="{$RedunMap}" />
+                                        <input name="ankerPosition" type="hidden" value="{$posOfDoublet}" />
+                                        <input name="status" type="radio" value="open"
+                                            onclick="document.getElementById('{$ServletName}.reopen.{position()}').submit()" />
+                                        Dublette wieder zur Bearbeitung freigeben!
+                                    </form>
+                                </xsl:if>
+                            </b>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </b>
+                <br />
+                <xsl:variable name="mcrobj" select="document(concat('mcrobject:',./text()))" />
+                <i>
+                    <xsl:apply-templates select="$mcrobj" mode="present" />
+                </i>
+            </td>
+            <td width="2%"></td>
+            <td width="49%" valign="top">
+                <br />
+                <b>
+                    <form>Davon ist die Dublette:</form>
+                </b>
+                <br />
+                <br />
+                <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@notRedundancyID))" />
+                <xsl:apply-templates select="$mcrobj" mode="present" />
+            </td>
+            <xsl:call-template name="lineBreak" />
+        </tr>
     </xsl:template>
 
     <!-- ===================================================================================== -->
@@ -279,15 +313,9 @@
                         <td class="metavalue">
                             <xsl:if test="acl:checkPermission($id,'writedb')">
                                 <a
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj"
+                                    target="_blank">
                                     <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif" title="{i18n:translate('swf.object.editObject')}" />
-                                </a>
-                            </xsl:if>
-                            <xsl:if test="acl:checkPermission($id,'deletedb')">
-
-                                <a id="obj_del"
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
-                                    <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif" title="{i18n:translate('swf.object.delObject')}" />
                                 </a>
                             </xsl:if>
                         </td>

@@ -3,8 +3,6 @@
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcr="http://www.mycore.org/"
     xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
     <xsl:include href="redundancyMap-coreFunctions.xsl" />
-    <!-- show doubles: mode = open | closed -->
-
     <xsl:param select="'local'" name="objectHost" />
     <!--Template for result list hit: see results.xsl-->
     <xsl:template match="mcr:hit[contains(@id,'_person_')]">
@@ -291,30 +289,7 @@
                             </xsl:call-template>
                             <xsl:call-template name="emptyRow" />
                             <!--*** Editor Buttons ************************************* -->
-                            <xsl:if test="$CurrentUser!='gast'">
-                                <!--  is not a doublet ? -->
-                                <xsl:variable name="isDoublet">
-                                    <xsl:call-template name="get.isDoublet">
-                                        <xsl:with-param name="id" select="./@ID" />
-                                    </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:choose>
-                                    <xsl:when test="$isDoublet='true'">
-                                        <tr>
-                                            <td class="metaname" style="text-align:right;  padding-right: 5px;">
-                                                <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
-                                            </td>
-                                            <td class="metavalue">Das ist eine Dublette! Kein Bearbeiten möglich.</td>
-                                        </tr>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:call-template name="editobject">
-                                            <xsl:with-param select="./@ID" name="id" />
-                                        </xsl:call-template>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:if>
-                            <!-- END: *** Editor Buttons ************************************* -->
+                            <xsl:call-template name="get.redun.editObj" />
                         </table>
                     </td>
                 </tr>
