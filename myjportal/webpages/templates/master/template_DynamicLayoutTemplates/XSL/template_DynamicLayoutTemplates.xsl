@@ -12,20 +12,27 @@
                 <xsl:call-template name="template_master" />
             </xsl:when>
             <xsl:otherwise>
+                <xsl:variable name="journalsID">
+                    <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
+                </xsl:variable>
+                <xsl:variable name="journalXML">
+                    <xsl:copy-of select="document(concat('mcrobject:',$journalsID))" />
+                </xsl:variable>
                 <!-- get name of journal -->
                 <xsl:variable name="journalMaintitle">
-                    <xsl:variable name="journalsID">
-                        <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
-                    </xsl:variable>
-                    <xsl:value-of select="document(concat('mcrobject:',$journalsID))/mycoreobject/metadata/maintitles/maintitle/text()" />
+                    <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
                 </xsl:variable>
-
+                <!-- get time window -->
+                <xsl:variable name="timeWindow">
+                    <xsl:copy-of
+                        select="concat(xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_from']/text(),' - ',xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_until']/text())" />
+                </xsl:variable>
                 <!-- TODO: generate this by ant -->
-
                 <xsl:choose>
                     <xsl:when test="$template_DynamicLayoutTemplates = 'template_18thCentury'">
                         <xsl:call-template name="template_18thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
+                            <xsl:with-param name="periodetitle" select="$timeWindow" />
                         </xsl:call-template>
                     </xsl:when>
                 </xsl:choose>
