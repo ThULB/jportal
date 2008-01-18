@@ -67,7 +67,7 @@
 				<table width="100%" height="30px" border="0"
 					cellspacing="0" cellpadding="0"
 					style="background-color: #646466;">
-					<tr valign="TOP">
+					<tr valign="top">
 						<td width="100%">
 							<div id="whitespace"></div>
 							<span id="headline">
@@ -82,7 +82,7 @@
 					style="min-height: 800px; width: max; margin-left: 10px; margin-right: 10px; margin-bottom: 10px; background-color:#e6dece;">
 					<table width="100%" height="156" border="0"
 						cellspacing="0" cellpadding="0" style="background-color:transparent;">
-						<tr valign="TOP">
+						<tr valign="top">
 							<td rowspan="2" width="1235"
 								style="background:url({$WebApplicationBaseURL}templates/master/template_19thCentury/IMAGES/19th-header-left.png) no-repeat;">
 								<div id="navigation_box">
@@ -123,8 +123,8 @@
 					</table>
 					<table width="100%" height="max" border="0"
 						cellspacing="0" cellpadding="0"
-						style="padding-right: 10px; padding-bottom: 10px;">
-						<tr>
+						style="padding-right: 10px; padding-bottom: 10px;" valign="top">
+						<tr valign="top">
 							<td width="200px" valign="top"  rowspan="2">
 								<div id="div_navi_main">
 									<xsl:call-template
@@ -144,13 +144,13 @@
 								style="height: 16px; padding-right: 5px;">
 								<xsl:text> </xsl:text>
 							</td>
-							<td width="5" rowspan="2" style="height: 500px;">
+							<td width="5" rowspan="2" valign="top" style="height: 500px;">
 								<xsl:text> </xsl:text>
 							</td>
 						</tr>
-						<tr>
+						<tr valign="top">
 							<td width="max" valign="top"
-									style="background-color:#d4c9b0;">
+									style="background-color:#d4c9b0; height: 500px;">
 									<div id="navi_history">
 										<xsl:call-template
 											name="navigation.history" />

@@ -133,7 +133,7 @@
 					<table width="100%" height="max" border="0"
 						cellspacing="0" cellpadding="0"
 						style="padding-right: 10px; padding-bottom: 10px;">
-						<tr>
+						<tr valign="top">
 							<td width="200px" valign="top"  rowspan="2">
 								<div id="div_navi_main">
 									<xsl:call-template
@@ -153,13 +153,13 @@
 								style="height: 16px; padding-right: 5px;">
 								<xsl:text> </xsl:text>
 							</td>
-							<td width="5" rowspan="2" style="height: 500px;">
+							<td width="5" rowspan="2" valign="top" style="height: 500px;">
 								<xsl:text> </xsl:text>
 							</td>
 						</tr>
-						<tr>
+						<tr valign="top">
 							<td width="max" valign="top"
-									style="background-color:#c2c6b6;">
+									style="background-color:#c2c6b6; height: 500px;">
 									<div id="navi_history">
 										<xsl:call-template
 											name="navigation.history" />
