@@ -1,0 +1,30 @@
+/************************************/
+/*									*/
+/*	  styles for the sponsorlogos	*/
+/*									*/
+/************************************/
+
+#sponsoredlogo-dividing-line {
+	height: 2px; 
+	border-bottom: solid 2px #B2B2B2; 
+	width: 150px; 
+	margin: 0px auto;
+}
+#sponsoredlogo-box {
+	margin-left: 20px; 
+	width: 100px; 
+	height: 45px; 
+	background-color: #d4c9b0; 
+	border: 1px solid #c7cabc;
+	margin-bottom: 5px;
+}	
+	
+#sponsoredlogo-styles {
+	line-height: 0px;
+
+}
+
+#sponsoredlogo-styles img {
+	vertical-align: middle;
+	border:none; 
+}
