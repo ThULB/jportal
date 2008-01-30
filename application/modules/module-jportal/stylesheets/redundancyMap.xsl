@@ -16,8 +16,9 @@
             <xsl:when test="$CurrentUser='gast'">Zugriff verweigert! Bitte melden sie sich an.</xsl:when>
             <xsl:otherwise>
                 <table>
-                    <xsl:call-template name="redundancy.head" />
                     <xsl:call-template name="redundancy.filter" />
+                    <xsl:call-template name="redundancy.head" />
+                    <xsl:call-template name="redundancy.progressStatus" />
                     <xsl:call-template name="lineBreak" />
                     <xsl:call-template name="printDublicates" />
                     <xsl:call-template name="redundancy.head" />
@@ -63,6 +64,36 @@
                             </a>
                         </xsl:otherwise>
                     </xsl:choose>
+                </b>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <!-- ===================================================================================== -->
+
+    <xsl:template name="redundancy.progressStatus">
+        <xsl:variable name="numTotal">
+            <xsl:value-of select="count(redundancyID)" />
+        </xsl:variable>
+        <xsl:variable name="numDenied">
+            <xsl:value-of select="count(redundancyID[@status='denied'])" />
+        </xsl:variable>
+        <xsl:variable name="numAccepted">
+            <xsl:value-of select="count(redundancyID[@status='accepted'])" />
+        </xsl:variable>
+        <xsl:variable name="progressTotal">
+            <xsl:value-of select="format-number(((($numAccepted+$numDenied) div $numTotal) * 100),'#.##' )" />
+        </xsl:variable>
+        <xsl:variable name="progressAccepted">
+            <xsl:value-of select="format-number(($numAccepted div ($numAccepted+$numDenied)) * 100,'#.##')" />
+        </xsl:variable>
+        <xsl:variable name="progressDenied">
+            <xsl:value-of select="format-number(($numDenied div ($numAccepted+$numDenied)) * 100,'#.##')" />
+        </xsl:variable>
+        <tr>
+            <td colspan="3">
+                <b>
+                    <xsl:copy-of select="concat(' Bearbeitungsstatus: ',$progressTotal,'% (',$numAccepted+$numDenied,'/',$numTotal,'), davon ',$progressAccepted,'% reelle Dubletten und ',$progressDenied,'% falsch erkannte Dubletten')" />
                 </b>
             </td>
         </tr>
