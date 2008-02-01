@@ -47,6 +47,11 @@
     text-decoration: none;
 }
 
+#leaf-additional{
+	padding-left: 10px;
+	line-height: 10px;
+}
+
 #leaf-front{
 	width: 15px;
 	vertical-align: top;

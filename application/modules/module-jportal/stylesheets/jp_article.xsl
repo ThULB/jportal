@@ -152,7 +152,7 @@
             <!-- date -->
             <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']">
                 <tr>
-                    <td>
+                    <td id="leaf-additional">
                         <xsl:call-template name="lineSpace" />
                         <xsl:value-of select="concat(i18n:translate('editormask.labels.date_label'),': ')" />
                         <xsl:variable name="format">
@@ -183,7 +183,7 @@
             </xsl:if>
             <!-- authors -->
             <tr>
-                <td>
+                <td id="leaf-additional">
                     <xsl:call-template name="getAuthorList">
                         <xsl:with-param name="objectXML" select="xalan:nodeset($cXML)" />
                         <xsl:with-param name="listLength" select="5" />
@@ -194,7 +194,7 @@
             <!-- page area -->
             <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size">
                 <tr>
-                    <td>
+                    <td id="leaf-additional">
                         <xsl:call-template name="lineSpace" />
                         <xsl:value-of select="concat(i18n:translate('editormask.labels.size'),': ')" />
                         <xsl:copy-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size/text()" />
@@ -203,13 +203,13 @@
             </xsl:if>
 
             <!-- derivates -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
+            <!--<xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
                 <tr>
                     <td>
                         <xsl:call-template name="lineSpace" />
                     </td>
                 </tr>
-            </xsl:if>
+            </xsl:if> -->
             <xsl:call-template name="printDerivates">
                 <xsl:with-param name="obj_id" select="@id" />
                 <xsl:with-param name="knoten" select="$cXML" />

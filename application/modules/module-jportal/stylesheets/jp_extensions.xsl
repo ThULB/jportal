@@ -4,8 +4,6 @@
     xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan">
 
     <xsl:include href="mcr-module-startIview.xsl" />
-    <xsl:include href="mcr-module-broadcasting.xsl" />
-
     <xsl:param name="view.objectmetadata" select="'false'" />
 
     <xsl:param name="toc.pageSize" select="100" />
@@ -815,7 +813,7 @@
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
                                         <tr>
-                                            <td colspan="3" style="padding-left: 10px;">
+                                            <td colspan="3" style="padding-left: 10px;">          
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
                                             </td>
@@ -934,19 +932,17 @@
             <xsl:otherwise>
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
                     <tr>
-                        <td>
+                        <td id="leaf-additional">
+                        <xsl:call-template name="lineSpace" />
                             <xsl:if test="$objectHost = 'local'">
                                 <table cellpadding="0" cellspacing="0">
                                     <xsl:for-each select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
                                         <xsl:variable name="deriv" select="@xlink:href" />
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
-                                        <tr>
-                                            <td style="padding-left: 10px;">
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
-                                            </td>
-                                        </tr>
+                                     <xsl:text>; </xsl:text>
                                     </xsl:for-each>
                                 </table>
                             </xsl:if>
