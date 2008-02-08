@@ -31,7 +31,7 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
      * Returns a label of a classification.
      * 
      * Syntax:
-     * <code>jportal_getClassLabel:getFromJournal:getFromJournal:XPathWhereToFindClassIDInJournalXML
+     * <code>jportal_getClassLabel:getFromJournal:XPathWhereToFindClassIDInJournalXML
      *  OR:
      * <code>jportal_getClassLabel:getDirectely:classiID
      * 
@@ -70,12 +70,12 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         String classID = null;
         // get from class
         if (journalID != null && !journalID.equals(""))
-            classID = MCRJPortalURIGetClassID.getClassID(journalID, params[1]);
+            classID = MCRJPortalURIGetClassID.getClassID(journalID, params[2]);
         if (classID != null)
             label = getClassLabel(classID);
         // use default i18n one's
         else
-            label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX + params[1]);
+            label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX + params[2]);
 
         // answer xml
         Element returnXML;
