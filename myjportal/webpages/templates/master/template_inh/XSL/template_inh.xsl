@@ -37,7 +37,7 @@
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
-				<xsl:call-template name="module-broadcasting.getHeader"/>				
+				<!--<xsl:call-template name="module-broadcasting.getHeader"/>-->				
 			</head>
 			<body>
 				
