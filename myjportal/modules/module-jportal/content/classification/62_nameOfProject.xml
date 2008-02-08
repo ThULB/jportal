@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000062">
+    <label xml:lang="de" text="Projektbezeichnung" description="Projektbezeichnung" />
+    <label xml:lang="en" text="Name of project" description="Name of project" />
+    <categories>
+        <category ID="eventWeimarJena">
+            <label xml:lang="de" text="Ereignis Weimar-Jena" />
+        </category>
+        <category ID="religionEducation">
+            <label xml:lang="de" text="Religionspädagogik"></label>
+        </category>
+        <category ID="thulb">
+            <label xml:lang="de" text="Projekte ThULB"></label>
+            <label xml:lang="en" text="Projects ThULB"></label>
+        </category>
+        <category ID="historicalCommittee">
+            <label xml:lang="de" text="Projekte historische Kommission"></label>
+        </category>
+        <category ID="virtuellLibrary18thCentury">
+            <label xml:lang="de" text="Virtuelle Bibliothek des 18. Jh."></label>
+        </category>
+    </categories>
+</mycoreclass>

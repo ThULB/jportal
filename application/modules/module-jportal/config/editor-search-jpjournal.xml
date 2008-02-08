@@ -1,230 +1,233 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor id="searchmask">
-	<source token="[ID]" url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]"/>
-	<target format="xml" method="post" name="MCRSearchServlet" type="servlet"/>
-	<components var="/query" root="root">
+    <source token="[ID]" url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]" />
+    <target format="xml" method="post" name="MCRSearchServlet" type="servlet" />
+    <components var="/query" root="root">
 
-		<panel lines="off" id="root">
-			<hidden default="editor_form_search-jpjournal.xml" var="@mask"/>
-			<hidden default="xml" var="conditions/@format"/>
-			<!-- Search for fields of type name -->
-			<cell var="conditions/boolean/condition1/@field" anchor="EAST" col="1" row="1">
-				<list type="dropdown">
-					<item i18n="editor.search.document.maintitle" value="maintitles"/>
-					<item i18n="editor.search.document.subtitle" value="subtitles"/>
-					<item i18n="editor.search.document.contribu" value="contribus"/>
-				</list>
-			</cell>
-			<cell anchor="WEST" col="2" row="1">
-				<panel lines="off">
-					<cell ref="operators.name" var="conditions/boolean/condition1/@operator" anchor="WEST" col="1" row="1"/>
-					<cell ref="input.name" var="conditions/boolean/condition1/@value" anchor="WEST" col="2" row="1"/>
-				</panel>
-			</cell>
-			<!-- Search for fields of type identifier -->
-			<cell var="conditions/boolean/condition2/@field" anchor="EAST" col="1" row="2">
-				<list type="dropdown">
-					<item i18n="editor.search.document.mainedi" value="mainedis"/>
-					<item i18n="editor.search.document.subedi" value="subedis"/>
-					<item i18n="editor.search.document.author" value="authors"/>
-					<item i18n="editor.search.document.classi" value="classis"/>
-					<item i18n="editor.search.document.language" value="languages"/>
-					<item i18n="editor.search.document.type" value="types"/>
-				</list>
-			</cell>
-			<cell anchor="WEST" col="2" row="2">
-				<panel lines="off">
-					<cell ref="operators.identifier" var="conditions/boolean/condition2/@operator" anchor="WEST" col="1"
-						row="1"/>
-					<cell ref="input.identifier" var="conditions/boolean/condition2/@value" anchor="WEST" col="2" row="1"/>
-				</panel>
-			</cell>
-			<!-- Search for fields of type date -->
-			<hidden default="dates" var="conditions/boolean/condition3/@field"/>
-			<cell var="conditions/boolean/condition3/@field" anchor="EAST" col="1" row="3">
-				<text i18n="editor.search.document.date"/>
-			</cell>
-			<cell anchor="WEST" col="2" row="3">
-				<panel lines="off">
-					<cell ref="operators.date" var="conditions/boolean/condition3/@operator" anchor="WEST" col="1" row="1"/>
-					<cell ref="input.date" var="conditions/boolean/condition3/@value" anchor="WEST" col="2" row="1"/>
-				</panel>
-			</cell>
-			<!-- Search for fields of type text -->
-			<cell var="conditions/boolean/condition4/@field" anchor="EAST" col="1" row="4">
-				<list type="dropdown">
-					<item i18n="editor.search.document.keyword" value="keywords"/>
-					<item i18n="editor.search.document.abstract" value="abstracts"/>
-					<item i18n="editor.search.document.identi" value="identis"/>
-					<item i18n="editor.search.document.right" value="rightsjournal"/>
-					<item i18n="editor.search.document.note" value="notes"/>
-					<item i18n="editor.search.document.predece" value="predeces"/>
-					<item i18n="editor.search.document.predecelink" value="predeceslink"/>
-					<item i18n="editor.search.document.successor" value="successors"/>
-					<item i18n="editor.search.document.succeslink" value="successorslink"/>
-				</list>
-			</cell>
-			<cell anchor="WEST" col="2" row="4">
-				<panel lines="off">
-					<cell ref="operators.text" var="conditions/boolean/condition4/@operator" anchor="WEST" col="1" row="1"/>
-					<cell ref="input.text" var="conditions/boolean/condition4/@value" anchor="WEST" col="2" row="1"/>
-				</panel>
-			</cell>
-			<cell height="20px" anchor="WEST" colspan="2" col="1" row="92">
-				<text>
-					<label/>
-				</text>
-			</cell>
-			<cell anchor="EAST" col="1" row="93">
-				<text i18n="editor.search.connect"/>
-			</cell>
-			<cell var="conditions/boolean/@operator" anchor="WEST" col="2" row="93">
-				<list default="and" type="dropdown">
-					<item i18n="editor.search.and" value="and"/>
-					<item i18n="editor.search.or" value="or"/>
-				</list>
-			</cell>
-			<!-- Search only for objectType = jpjournal -->
-			<hidden default="objectType" var="conditions/boolean/condition94/@field"/>
-			<hidden default="=" var="conditions/boolean/condition94/@operator"/>
-			<hidden default="jpjournal" var="conditions/boolean/condition94/@value"/>
-			<!-- Select hosts to query -->
-			<hidden var="hosts/@target" default="local"/>
-			<!-- Select sort order of results -->
-			<cell anchor="NORTHEAST" col="1" row="97">
-				<text i18n="editor.search.sortby"/>
-			</cell>
-			<cell var="sortBy/field" anchor="NORTHWEST" col="2" row="97">
-				<repeater max="3" min="1">
-					<panel lines="off">
-						<cell var="@name" anchor="WEST" col="1" row="1">
-							<list type="dropdown">
-								<item i18n="editor.search.choose" value=""/>
-								<item i18n="editor.search.document.maintitle" value="maintitles"/>
-								<item i18n="editor.search.document.date" value="dates"/>
-							</list>
-						</cell>
-						<cell var="@order" anchor="WEST" col="2" row="1">
-							<list default="ascending" type="dropdown">
-								<item i18n="editor.search.ascending" value="ascending"/>
-								<item i18n="editor.search.descending" value="descending"/>
-							</list>
-						</cell>
-					</panel>
-				</repeater>
-			</cell>
-			<!-- Select maximum number of results and num per page -->
-			<cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="98">
-				<panel lines="off">
-					<cell anchor="WEST" col="1" row="1">
-						<text i18n="editor.search.max"/>
-					</cell>
-					<cell var="@maxResults" anchor="WEST" col="2" row="1">
-						<list default="100" type="dropdown">
-							<item label="20" value="20"/>
-							<item label="100" value="100"/>
-							<item label="500" value="500"/>
-							<item i18n="editor.search.all" value="0"/>
-						</list>
-					</cell>
-					<cell anchor="WEST" col="3" row="1">
-						<text i18n="editor.search.label"/>
-					</cell>
-					<cell var="@numPerPage" anchor="WEST" col="4" row="1">
-						<list default="10" type="dropdown">
-							<item label="10" value="10"/>
-							<item label="20" value="20"/>
-							<item label="50" value="50"/>
-							<item i18n="editor.search.all" value="0"/>
-						</list>
-					</cell>
-					<cell anchor="WEST" col="5" row="1">
-						<text i18n="editor.search.perpage"/>
-					</cell>
-				</panel>
-			</cell>
-			<cell anchor="EAST" colspan="2" col="1" row="99">
-				<submitButton width="150px" i18n="editor.search.search"/>
-			</cell>
-		</panel>
-		<!-- Input elements included depending on field type -->
-		<textfield id="input.text" width="40"/>
-		<textfield id="input.name" width="30"/>
-		<textfield id="input.identifier" width="20"/>
-		<textfield id="input.date" width="10"/>
-		<textfield id="input.time" width="8"/>
-		<textfield id="input.timestamp" width="18"/>
-		<list id="input.boolean" default="" rows="1" type="checkbox">
-			<item value="" i18n="editor.search.choose"/>
-			<item value="true" i18n="editor.search.true"/>
-			<item value="false" i18n="editor.search.false"/>
-		</list>
-		<textfield id="input.decimal" width="10"/>
-		<textfield id="input.integer" width="10"/>
-		<list id="operators.identifier" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-			<item value="like" i18n="editor.search.like"/>
-		</list>
-		<list id="operators.name" default="contains" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-			<item value="like" i18n="editor.search.like"/>
-			<item value="contains" i18n="editor.search.contains"/>
-		</list>
-		<list id="operators.text" default="contains" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-			<item value="like" i18n="editor.search.like"/>
-			<item value="contains" i18n="editor.search.contains"/>
-			<item value="phrase" i18n="editor.search.phrase"/>
-		</list>
-		<list id="operators.date" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-		</list>
-		<list id="operators.time" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-		</list>
-		<list id="operators.timestamp" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-		</list>
-		<list id="operators.boolean" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-		</list>
-		<list id="operators.decimal" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-		</list>
-		<list id="operators.integer" default="=" rows="1" type="dropdown">
-			<item value="=" label="="/>
-			<item value="&gt;" label="&gt;"/>
-			<item value="&lt;" label="&lt;"/>
-			<item value="&gt;=" label="&gt;="/>
-			<item value="&lt;=" label="&lt;="/>
-		</list>
-	</components>
+        <panel lines="off" id="root">
+            <hidden default="editor_form_search-jpjournal.xml" var="@mask" />
+            <hidden default="xml" var="conditions/@format" />
+            <!-- Search for fields of type name -->
+            <cell var="conditions/boolean/condition1/@field" anchor="EAST" col="1" row="1">
+                <list type="dropdown">
+                    <item i18n="editor.search.document.maintitle" value="maintitles" />
+                    <item i18n="editor.search.document.subtitle" value="subtitles" />
+                    <item i18n="editor.search.document.contribu" value="contribus" />
+                </list>
+            </cell>
+            <cell anchor="WEST" col="2" row="1">
+                <panel lines="off">
+                    <cell ref="operators.name" var="conditions/boolean/condition1/@operator" anchor="WEST" col="1" row="1" />
+                    <cell ref="input.name" var="conditions/boolean/condition1/@value" anchor="WEST" col="2" row="1" />
+                </panel>
+            </cell>
+            <!-- Search for fields of type identifier -->
+            <cell var="conditions/boolean/condition2/@field" anchor="EAST" col="1" row="2">
+                <list type="dropdown">
+                    <item i18n="editor.search.document.mainedi" value="mainedis" />
+                    <item i18n="editor.search.document.subedi" value="subedis" />
+                    <item i18n="editor.search.document.author" value="authors" />
+                    <item i18n="editor.search.document.classi" value="classis" />
+                    <item i18n="editor.search.document.language" value="languages" />
+                    <item i18n="editor.search.document.type" value="types" />
+                </list>
+            </cell>
+            <cell anchor="WEST" col="2" row="2">
+                <panel lines="off">
+                    <cell ref="operators.identifier" var="conditions/boolean/condition2/@operator" anchor="WEST" col="1" row="1" />
+                    <cell ref="input.identifier" var="conditions/boolean/condition2/@value" anchor="WEST" col="2" row="1" />
+                </panel>
+            </cell>
+            <!-- Search for fields of type date -->
+            <hidden default="dates" var="conditions/boolean/condition3/@field" />
+            <cell var="conditions/boolean/condition3/@field" anchor="EAST" col="1" row="3">
+                <text i18n="editor.search.document.date" />
+            </cell>
+            <cell anchor="WEST" col="2" row="3">
+                <panel lines="off">
+                    <cell ref="operators.date" var="conditions/boolean/condition3/@operator" anchor="WEST" col="1" row="1" />
+                    <cell ref="input.date" var="conditions/boolean/condition3/@value" anchor="WEST" col="2" row="1" />
+                </panel>
+            </cell>
+            <!-- Search for fields of type text -->
+            <cell var="conditions/boolean/condition4/@field" anchor="EAST" col="1" row="4">
+                <list type="dropdown">
+                    <item i18n="editor.search.document.keyword" value="keywords" />
+                    <item i18n="editor.search.document.abstract" value="abstracts" />
+                    <item i18n="editor.search.document.identi" value="identis" />
+                    <item i18n="editor.search.document.right" value="rightsjournal" />
+                    <item i18n="editor.search.document.note" value="notes" />
+                    <item i18n="editor.search.document.predece" value="predeces" />
+                    <item i18n="editor.search.document.predecelink" value="predeceslink" />
+                    <item i18n="editor.search.document.successor" value="successors" />
+                    <item i18n="editor.search.document.succeslink" value="successorslink" />
+                </list>
+            </cell>
+            <cell anchor="WEST" col="2" row="4">
+                <panel lines="off">
+                    <cell ref="operators.text" var="conditions/boolean/condition4/@operator" anchor="WEST" col="1" row="1" />
+                    <cell ref="input.text" var="conditions/boolean/condition4/@value" anchor="WEST" col="2" row="1" />
+                </panel>
+            </cell>
+            <!-- Content classis -->
+            <include cacheable="false"
+                uri="jportal_includeEditorCode:jpjournal:editor/editor-dynamicInludes_journalClassis.xml:include_dynamicClassiForJournal_search" />
+
+            <cell height="20px" anchor="WEST" colspan="2" col="1" row="92">
+                <text>
+                    <label />
+                </text>
+            </cell>
+            <cell anchor="EAST" col="1" row="93">
+                <text i18n="editor.search.connect" />
+            </cell>
+            <cell var="conditions/boolean/@operator" anchor="WEST" col="2" row="93">
+                <list default="and" type="dropdown">
+                    <item i18n="editor.search.and" value="and" />
+                    <item i18n="editor.search.or" value="or" />
+                </list>
+            </cell>
+            <!-- Search only for objectType = jpjournal -->
+            <hidden default="objectType" var="conditions/boolean/condition94/@field" />
+            <hidden default="=" var="conditions/boolean/condition94/@operator" />
+            <hidden default="jpjournal" var="conditions/boolean/condition94/@value" />
+            <!-- Select hosts to query -->
+            <hidden var="hosts/@target" default="local" />
+            <!-- Select sort order of results -->
+            <cell anchor="NORTHEAST" col="1" row="97">
+                <text i18n="editor.search.sortby" />
+            </cell>
+            <cell var="sortBy/field" anchor="NORTHWEST" col="2" row="97">
+                <repeater max="3" min="1">
+                    <panel lines="off">
+                        <cell var="@name" anchor="WEST" col="1" row="1">
+                            <list type="dropdown">
+                                <item i18n="editor.search.choose" value="" />
+                                <item i18n="editor.search.document.maintitle" value="maintitles" />
+                                <item i18n="editor.search.document.date" value="dates" />
+                            </list>
+                        </cell>
+                        <cell var="@order" anchor="WEST" col="2" row="1">
+                            <list default="ascending" type="dropdown">
+                                <item i18n="editor.search.ascending" value="ascending" />
+                                <item i18n="editor.search.descending" value="descending" />
+                            </list>
+                        </cell>
+                    </panel>
+                </repeater>
+            </cell>
+            <!-- Select maximum number of results and num per page -->
+            <cell height="50px" anchor="SOUTHEAST" colspan="2" col="1" row="98">
+                <panel lines="off">
+                    <cell anchor="WEST" col="1" row="1">
+                        <text i18n="editor.search.max" />
+                    </cell>
+                    <cell var="@maxResults" anchor="WEST" col="2" row="1">
+                        <list default="100" type="dropdown">
+                            <item label="20" value="20" />
+                            <item label="100" value="100" />
+                            <item label="500" value="500" />
+                            <item i18n="editor.search.all" value="0" />
+                        </list>
+                    </cell>
+                    <cell anchor="WEST" col="3" row="1">
+                        <text i18n="editor.search.label" />
+                    </cell>
+                    <cell var="@numPerPage" anchor="WEST" col="4" row="1">
+                        <list default="10" type="dropdown">
+                            <item label="10" value="10" />
+                            <item label="20" value="20" />
+                            <item label="50" value="50" />
+                            <item i18n="editor.search.all" value="0" />
+                        </list>
+                    </cell>
+                    <cell anchor="WEST" col="5" row="1">
+                        <text i18n="editor.search.perpage" />
+                    </cell>
+                </panel>
+            </cell>
+            <cell anchor="EAST" colspan="2" col="1" row="99">
+                <submitButton width="150px" i18n="editor.search.search" />
+            </cell>
+        </panel>
+        <!-- Input elements included depending on field type -->
+        <textfield id="input.text" width="40" />
+        <textfield id="input.name" width="30" />
+        <textfield id="input.identifier" width="20" />
+        <textfield id="input.date" width="10" />
+        <textfield id="input.time" width="8" />
+        <textfield id="input.timestamp" width="18" />
+        <list id="input.boolean" default="" rows="1" type="checkbox">
+            <item value="" i18n="editor.search.choose" />
+            <item value="true" i18n="editor.search.true" />
+            <item value="false" i18n="editor.search.false" />
+        </list>
+        <textfield id="input.decimal" width="10" />
+        <textfield id="input.integer" width="10" />
+        <list id="operators.identifier" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+            <item value="like" i18n="editor.search.like" />
+        </list>
+        <list id="operators.name" default="contains" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+            <item value="like" i18n="editor.search.like" />
+            <item value="contains" i18n="editor.search.contains" />
+        </list>
+        <list id="operators.text" default="contains" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+            <item value="like" i18n="editor.search.like" />
+            <item value="contains" i18n="editor.search.contains" />
+            <item value="phrase" i18n="editor.search.phrase" />
+        </list>
+        <list id="operators.date" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+        </list>
+        <list id="operators.time" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+        </list>
+        <list id="operators.timestamp" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+        </list>
+        <list id="operators.boolean" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+        </list>
+        <list id="operators.decimal" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+        </list>
+        <list id="operators.integer" default="=" rows="1" type="dropdown">
+            <item value="=" label="=" />
+            <item value="&gt;" label="&gt;" />
+            <item value="&lt;" label="&lt;" />
+            <item value="&gt;=" label="&gt;=" />
+            <item value="&lt;=" label="&lt;=" />
+        </list>
+    </components>
 </editor>

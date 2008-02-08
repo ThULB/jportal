@@ -31,10 +31,6 @@
         <cell row="50" col="1" anchor="NORTHWEST" ref="keyword_label" />
         <cell row="50" col="2" anchor="NORTHWEST" ref="keyword_input" />
         <cell row="50" col="3" anchor="WEST" ref="keyword_help" />
-        <!-- classi -->
-        <!--                  <cell row="60" col="1" anchor="NORTHWEST" ref="classi_label" />
-            <cell row="60" col="2" anchor="NORTHWEST" ref="classi_input" />
-            <cell row="60" col="3" anchor="WEST" ref="classi_help" />-->
         <!-- abstract -->
         <cell row="70" col="1" anchor="NORTHWEST" ref="abstract_label" />
         <cell row="70" col="2" anchor="NORTHWEST" ref="abstract_input" />
@@ -50,17 +46,17 @@
 
         <!-- dynamic includes, if used within a journal -->
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code_head" />
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code_head" />
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-editable_code_head" />
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code_head" />
         <include cacheable="false"
-            uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code_head" />
+            uri="jportal_includeEditorCode:jparticle:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code_head" />
 
         <!-- size -->
         <cell row="160" col="1" anchor="NORTHWEST" ref="size_label" />
@@ -184,16 +180,16 @@
     <!-- ================================================================== -->
     <!-- dynamic includes, if used within a journal -->
     <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
-    <include cacheable="false" uri="jportal_includeEditorCode:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
+    <include cacheable="false" uri="jportal_includeEditorCode:jparticle:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
     <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code" />
     <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_classispub2/hidden_classipub2:editor/editor-dynamicInludes.xml:include_classipub2-editable_code" />
     <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code" />
     <include cacheable="false"
-        uri="jportal_includeEditorCode:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code" />
 
     <!-- size ================================================================== -->
     <panel id="size_input">

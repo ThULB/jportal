@@ -156,3 +156,11 @@ MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
   
 #  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.3=1900
 #  MCR.Module-JPortal.DynamicLayoutTemplates.name.3=template_20thCentury
+
+
+##############################################################################
+# Dynamic classifications for journals
+# max: 10  
+##############################################################################
+
+  MCR.Module-JPortal.DynamicClassification.journal=jportal_class_00000061,jportal_class_00000062,jportal_class_00000063,jportal_class_00000003,jportal_class_00000064

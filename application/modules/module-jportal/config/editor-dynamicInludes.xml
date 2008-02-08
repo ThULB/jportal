@@ -47,7 +47,7 @@
                 <panel lines="off">
                     <cell width="230" anchor="EAST" col="1" row="1">
                         <text>
-                            <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub/hidden_classipub" />
+                            <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub" />
                         </text>
                     </cell>
                     <hidden var="@field" default="classispub" />
@@ -69,7 +69,7 @@
                 <panel lines="off">
                     <cell width="230" anchor="EAST" col="1" row="1">
                         <text>
-                            <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub2/hidden_classipub2" />
+                            <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2" />
                         </text>
                     </cell>
                     <hidden var="@field" default="classispub2" />
@@ -91,7 +91,7 @@
                 <panel lines="off">
                     <cell width="230" anchor="EAST" col="1" row="1">
                         <text>
-                            <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub3/hidden_classipub3" />
+                            <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3" />
                         </text>
                     </cell>
                     <hidden var="@field" default="classispub3" />
@@ -113,7 +113,7 @@
                 <panel lines="off">
                     <cell width="230" anchor="EAST" col="1" row="1">
                         <text>
-                            <include cacheable="false" uri="jportal_getClassLabel:hidden_classispub4/hidden_classipub4" />
+                            <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4" />
                         </text>
                     </cell>
                     <hidden var="@field" default="classispub4" />

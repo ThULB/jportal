@@ -17,34 +17,23 @@ import org.mycore.services.i18n.MCRTranslation;
 
 public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
 
- 	
-	private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClassLabel.class);
-    /*private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
-    private static final String CONFIG_PREFIX = "MCR.UriResolver.";
-    private static MCRCache CLASS_CACHE;
-    private static long CACHE_INIT_TIME;
-    */
+    private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClassLabel.class);
+
     private static String URI = "jportal_getClassLabel";
+
     private static String I18NDEFAULTLABELPREFIX = "editormask.labels.";
+
+    private final String GET_FROM_JOURNAL = "getFromJournal";
+
+    private final String DIRECTELY_GIVEN = "getDirectely";    
     
-    public MCRJPortalURIGetClassLabel(){
-        //initCache();
-    }
-
-    /*
-    private void initCache() {
-        int cacheSize = MCRConfiguration.instance().getInt(CONFIG_PREFIX + "classification.CacheSize", 1000);
-        CLASS_CACHE = new MCRCache(cacheSize);
-        CACHE_INIT_TIME=System.currentTimeMillis();
-    }
-    */
-
     /**
-     * Returns a jportal classification in format for editors from a given alias.
-     * The alias is resolved by getting classification ID as value from MCRSession for key=alias 
+     * Returns a label of a classification.
      * 
      * Syntax:
-     * <code>jportal_getClassLabel:XPathWhereToFindClassIDInJournalXML
+     * <code>jportal_getClassLabel:getFromJournal:getFromJournal:XPathWhereToFindClassIDInJournalXML
+     *  OR:
+     * <code>jportal_getClassLabel:getDirectely:classiID
      * 
      * @return 
      * <dummyRoot>
@@ -52,45 +41,104 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
      * </dummyRoot>
      */
     public Element resolveElement(String uri) {
-        LOGGER.debug("start resolving "+uri);
-        
-        if (!wellURI(uri)) 
-        	throw new IllegalArgumentException("Invalid format of uri given to resolve "+URI+"="+uri);
+        LOGGER.debug("start resolving " + uri);
 
+        if (!wellURI(uri))
+            throw new IllegalArgumentException("Invalid format of uri given to resolve " + URI + "=" + uri);
+
+        // get params
+        String[] pars = uri.split(":");
+        String requestedResolver = pars[1];
+
+        if (requestedResolver.equals(this.DIRECTELY_GIVEN))
+            return resolveDirectely(uri); 
+        else
+            return resolveFromJournal(uri);        
+    }
+
+    /**
+     * @param uri
+     * @return
+     */
+    private Element resolveFromJournal(String uri) {
         // get journal id
         String journalID = MCRJPortalURIGetJournalID.getID();
-        
+
         // get label
         String label = "";
         String[] params = uri.split(":");
-        String classID=null;
+        String classID = null;
         // get from class
-        if (journalID!=null && !journalID.equals("")) 
+        if (journalID != null && !journalID.equals(""))
             classID = MCRJPortalURIGetClassID.getClassID(journalID, params[1]);
-        if (classID!=null)
+        if (classID != null)
             label = getClassLabel(classID);
-        	// use default i18n one's 
-        else 
-        	label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX+params[1]);
+        // use default i18n one's
+        else
+            label = MCRTranslation.translate(I18NDEFAULTLABELPREFIX + params[1]);
+
+        // answer xml
+        Element returnXML;
+        returnXML = new Element("dummyRoot");
+        returnXML.addContent(new Element("label").setText(label));
+        return returnXML;
+    }
+    
+    
+    /**
+     * @param uri
+     * @return
+     */
+    private Element resolveDirectely(String uri) {
+        String[] params = uri.split(":");
+        String label = getClassLabel(params[2]);
         
-        // answer xml 
+        // answer xml
         Element returnXML;
         returnXML = new Element("dummyRoot");
         returnXML.addContent(new Element("label").setText(label));
         return returnXML;
     }
 
-	private String getClassLabel(String classID) {
-		// TODO: use cache
-		String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-		String label = MCRClassificationItem.getClassificationItem(classID).getText(currentLang);
-		return label;
-	}
-    
-	private boolean wellURI(String uri) {
-		String[] parameters = uri.split(":");
-        if ( parameters.length==2 && parameters[0].equals(URI) && !parameters[1].equals("") )
-            return true;
-        return false;
-	}	
+    private String getClassLabel(String classID) {
+        // TODO: use cache
+        String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
+        String label = MCRClassificationItem.getClassificationItem(classID).getText(currentLang);
+        return label;
+    }
+
+    private boolean wellURI(String uri) {
+        String[] pars = uri.split(":");
+        int numOfArgs = pars.length;
+        // number of given arguments correct ?
+        if (numOfArgs != 3)
+            return false;
+        // right uri ?
+        if (!pars[0].equals(URI))
+            return false;
+        // params are not empty ?
+        if (pars[0].equals("") || pars[1].equals("") || pars[2].equals(""))
+            return false;
+        // uri is well
+        LOGGER.debug("URI is ok");
+        return true;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000064">
+    <label xml:lang="de" text="Bearbeitungsstatus" description="Bearbeitungsstatus" />
+    <label xml:lang="en" text="State of working progress" description="State of working progress" />
+    <categories>
+        <category ID="a1">
+            <label xml:lang="de" text="A1 - Digitalisate noch gar nicht hochgeladen" />
+        </category>
+        <category ID="a2">
+            <label xml:lang="de" text="A2 - Digitalisate zum Teil hochgeladen" />
+        </category>
+        <category ID="a3">
+            <label xml:lang="de" text="A3 - Digitalisate vollständig hochgeladen" />
+        </category>
+        <category ID="a4">
+            <label xml:lang="de" text="A4 - Digitalisate noch gar nicht auf Fehler überprüft" />
+        </category>
+        <category ID="a5">
+            <label xml:lang="de" text="A5 - Digitalisate zum Teil auf Fehler überprüft" />
+        </category>
+        <category ID="a6">
+            <label xml:lang="de" text="A6 - Digitalisate vollständig auf Fehler überprüft" />
+        </category>
+
+        <category ID="b1">
+            <label xml:lang="de" text="B1 - Metadaten zum Teil erfasst" />
+        </category>
+        <category ID="b2">
+            <label xml:lang="de" text="B2 - Metadaten vollstandig erfasst" />
+        </category>
+        <category ID="b3">
+            <label xml:lang="de" text="B3 - Metadaten noch gar nicht auf Fehler überprüft" />
+        </category>
+        <category ID="b4">
+            <label xml:lang="de" text="B4 - Metadaten zum Teil auf Fehler überprüft" />
+        </category>
+        <category ID="b5">
+            <label xml:lang="de" text="B5 - Metadaten vollständig auf Fehler überprüft" />
+        </category>
+
+        <category ID="z">
+            <label xml:lang="de" text="Z  - Zeitschrift vollständig fertig" />
+        </category>
+    </categories>
+</mycoreclass>

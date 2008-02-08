@@ -567,7 +567,7 @@
                         <!--10***classipub*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub">
-                                <xsl:value-of select="document('jportal_getClassLabel:hidden_classispub/hidden_classipub')//label/text()" />
+                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub')//label/text()" />
                             </xsl:variable>
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -578,7 +578,7 @@
                         <!--10***classipub2*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub2">
-                                <xsl:value-of select="document('jportal_getClassLabel:hidden_classispub2/hidden_classipub2')//label/text()" />
+                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2')//label/text()" />
                             </xsl:variable>
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -589,7 +589,7 @@
                         <!--10***classipub3*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub3">
-                                <xsl:value-of select="document('jportal_getClassLabel:hidden_classispub3/hidden_classipub3')//label/text()" />
+                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3')//label/text()" />
                             </xsl:variable>
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -600,7 +600,7 @@
                         <!--10***classipub4*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub4">
-                                <xsl:value-of select="document('jportal_getClassLabel:hidden_classispub4/hidden_classipub4')//label/text()" />
+                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4')//label/text()" />
                             </xsl:variable>
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
