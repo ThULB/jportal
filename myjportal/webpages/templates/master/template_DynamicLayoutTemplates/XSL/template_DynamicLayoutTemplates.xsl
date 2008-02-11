@@ -33,14 +33,14 @@
                         <xsl:call-template name="template_18thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
                             <xsl:with-param name="periodetitle" select="$timeFrame" />
-                            <xsl:param name="journalID" select="$journalsID" />
+                            <xsl:with-param name="journalID" select="$journalsID" />
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="$template_DynamicLayoutTemplates = 'template_19thCentury'">
                         <xsl:call-template name="template_19thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
                             <xsl:with-param name="periodetitle" select="$timeFrame" />
-                            <xsl:param name="journalID" select="$journalsID" />
+                            <xsl:with-param name="journalID" select="$journalsID" />
                         </xsl:call-template>
                     </xsl:when>                    
                 </xsl:choose>
