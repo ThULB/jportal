@@ -4,6 +4,7 @@
     xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan">
 
     <xsl:include href="mcr-module-startIview.xsl" />
+    <xsl:include href="mcr-module-broadcasting.xsl" />
     <xsl:param name="view.objectmetadata" select="'false'" />
 
     <xsl:param name="toc.pageSize" select="100" />
