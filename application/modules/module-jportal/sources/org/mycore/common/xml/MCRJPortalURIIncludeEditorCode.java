@@ -80,8 +80,8 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
      * <code>jportal_includeEditorCode:jpjournal:FileContainingEditorCode:IdOfPieceOfCode
      * 
      * document = FileContainingEditorCode->IdOfPieceOfCode can contain and will be replaced before delivery 
-     *   - #REPLACE_WITH_RUNNING_NUMBER# replacedBy-> an increasing number starting with 0 
-     *     dependent on how much classifications are in the list of porperty
+     *   - #REPLACE_WITH_RUNNING_NUMBER# replacedBy-> an increasing number starting with 1 
+     *     dependent on how much classifications are in the list of property
      *   - #REPLACE_WITH_CLASSIFICATION-ID# replacedBy-> classification id
      * @throws IOException 
      * @throws JDOMException 
@@ -115,11 +115,11 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
 
         // replace dynamic values and dublicate pieceOfCode as described in head
         // // get classi-id's
-        StringTokenizer st = new StringTokenizer((String) props.get(propKey), ",");
+        StringTokenizer classiList = new StringTokenizer((String) props.get(propKey), ",");
         Document editor = new Document(new Element("root"));
-        // // iterate over it
-        for (int runningNumber = 0; st.hasMoreElements(); runningNumber++) {
-            String classiID = (String) st.nextElement();
+        // // iterate over classiList
+        for (int runningNumber = 0; classiList.hasMoreElements(); runningNumber++) {
+            String classiID = (String) classiList.nextElement();
             // // get pieceOfCode to $poc
             XMLOutputter xout = new XMLOutputter();
             String poc = xout.outputString(pieceOfCode);
@@ -133,8 +133,11 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
             Element pieceOfEditor = sb.build(new StringReader(pocNew2)).detachRootElement();
             editor.getRootElement().addContent(pieceOfEditor.cloneContent());
         }
-        XMLOutputter xo = new XMLOutputter();
-        LOGGER.debug(xo.outputString(editor));
+        LOGGER.debug((new XMLOutputter()).outputString(editor));
+
+        // cache
+        CACHE.put(cacheKey, editor.getRootElement());
+        LOGGER.debug("Editor code for jpjournal with URI=" + uri + " put to cache.");
 
         // return editor code
         return editor.getRootElement();
@@ -227,8 +230,8 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         return null;
     }
 
-    private String getCacheKey(String journalID, String uri) {
-        return journalID + SEP + uri;
+    private String getCacheKey(String prefix, String uri) {
+        return prefix + SEP + uri;
     }
 
     private static Element getEmptyAnswer() {
