@@ -60,8 +60,8 @@
 		</antcall>
 		<!-- copy templates  -->
 		<!-- copy to application/webpages/... to ensure registering in chooseTemplate.xsl -->
-		<copy todir="${basedir}/webpages/templates/master" failonerror="false">
-			<fileset dir="${env.MYJPORTAL_HOME}/webpages/templates/master/" />
+		<copy todir="${basedir}/webpages/templates" failonerror="false">
+			<fileset dir="${env.MYJPORTAL_HOME}/webpages/templates/" />
 		</copy>
 		<!-- copy to deployed folder -->
 		<antcall target="jp.webapps.copyXSL">
