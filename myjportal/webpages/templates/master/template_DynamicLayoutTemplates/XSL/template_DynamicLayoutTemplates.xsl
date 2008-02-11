@@ -23,7 +23,7 @@
                     <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
                 </xsl:variable>
                 <!-- get time window -->
-                <xsl:variable name="timeWindow">
+                <xsl:variable name="timeFrame">
                     <xsl:copy-of
                         select="concat(xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_from']/text(),' - ',xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_until']/text())" />
                 </xsl:variable>
@@ -32,13 +32,13 @@
                     <xsl:when test="$template_DynamicLayoutTemplates = 'template_18thCentury'">
                         <xsl:call-template name="template_18thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
-                            <xsl:with-param name="periodetitle" select="$timeWindow" />
+                            <xsl:with-param name="periodetitle" select="$timeFrame" />
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="$template_DynamicLayoutTemplates = 'template_19thCentury'">
                         <xsl:call-template name="template_19thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
-                            <xsl:with-param name="periodetitle" select="$timeWindow" />
+                            <xsl:with-param name="periodetitle" select="$timeFrame" />
                         </xsl:call-template>
                     </xsl:when>                    
                 </xsl:choose>
