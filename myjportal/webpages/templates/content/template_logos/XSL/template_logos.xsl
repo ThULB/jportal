@@ -5,7 +5,7 @@
     <!-- ======================================================================================== -->
 
     <xsl:template name="template_logos.getLogos">
-        <xsl:variable name="journalsID" />
+        <xsl:param name="journalsID" />
         <xsl:apply-templates
             select="document('webapp:/templates/content/template_logos/CONFIG/template_logos.xml')/templates/template[journalID[@value=$journalsID]]/*" />
     </xsl:template>
