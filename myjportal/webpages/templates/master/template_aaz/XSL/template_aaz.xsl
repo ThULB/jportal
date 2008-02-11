@@ -34,7 +34,7 @@
                 <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
                 <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
                 <xsl:copy-of select="$head.additional" />
-                <!--<xsl:call-template name="module-broadcasting.getHeader"/>-->
+                <xsl:call-template name="module-broadcasting.getHeader"/>
             </head>
 
             <body>
