@@ -38,7 +38,7 @@
             </head>
 
             <body>
-                <div id="img_head" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/2.png) no-repeat;">
+                <div id="img_head" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/2.jpg) no-repeat;">
                     <div id="navi_top">
                         <xsl:call-template name="navigation.row">
                             <xsl:with-param name="rootNode" select="$loaded_navigation_xml/navi-below" />

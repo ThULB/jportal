@@ -44,7 +44,7 @@
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
 				<xsl:copy-of select="$head.additional"/>
-				<xsl:call-template name="module-broadcasting.getHeader"/>				
+                <xsl:call-template name="module-broadcasting.getHeader"/>	
 			</head>
 			
 			<body>
@@ -58,7 +58,7 @@
 										select="concat($WebApplicationBaseURL,'content/below/index.xml')"/>
 								</xsl:call-template>
 							</xsl:attribute> <img
-								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/logo1.gif"
+								src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/logo1.jpg"
 								alt="Logo" id="logo"/></a>
 							<table id="navi_table" cellspacing="0" cellpadding="0">
     							<tr>
@@ -93,7 +93,7 @@
 						
 						<!-- BEGIN: general column right -->
 						<td class="max autowidth">
-							<table class="max" cellspacing="0" cellpadding="0" style="background: url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/logo2.gif) no-repeat;">
+							<table class="max" cellspacing="0" cellpadding="0" style="background: url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/logo2.jpg) no-repeat;">
 								
 								<!-- BEGIN: menu above -->
 								<tr class="menueheight">

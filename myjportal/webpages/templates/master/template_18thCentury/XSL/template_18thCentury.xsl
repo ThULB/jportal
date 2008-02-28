@@ -58,7 +58,7 @@
                     <table width="100%" height="156" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;">
                         <tr valign="TOP">
                             <td rowspan="2" width="1235"
-                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-left.png) no-repeat;">
+                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-left.jpg) no-repeat;">
                                 <div id="navigation_box">
                                     <xsl:call-template name="navigation.row">
                                         <xsl:with-param name="rootNode" select="document($navigationBase) /navigation/navi-below" />
@@ -69,7 +69,7 @@
                                 </div>
                             </td>
                             <td colspan="2" width="max" height="121"
-                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right.png) no-repeat;">
+                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right.jpg) no-repeat;">
                                 <p>
                                     <br />
                                 </p>
@@ -77,13 +77,13 @@
                         </tr>
                         <tr>
                             <td width="max" height="35"
-                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right2.png) no-repeat;">
+                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right2.jpg) no-repeat;">
                                 <p>
                                     <br />
                                 </p>
                             </td>
                             <td width="11" height="35"
-                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right3.png) no-repeat;">
+                                style="background:url({$WebApplicationBaseURL}templates/master/template_18thCentury/IMAGES/18th-header-right3.jpg) no-repeat;">
                                 <p>
                                     <br />
                                 </p>

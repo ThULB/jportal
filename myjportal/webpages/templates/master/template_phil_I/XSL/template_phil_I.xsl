@@ -39,7 +39,7 @@
 		<script language="JavaScript"
 			src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 			type="text/javascript"/>
-		<xsl:call-template name="module-broadcasting.getHeader"/>		
+        <xsl:call-template name="module-broadcasting.getHeader"/>
 	</head>
 	<body>
 	
@@ -64,7 +64,7 @@
 						</xsl:call-template>
 			</div>		
 		    </div>
-			<div id="banner" style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top.gif) no-repeat;">
+			<div id="banner" style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top.jpg) no-repeat;">
 		    <div id="navi_history">
 		        <xsl:call-template name="navigation.history" />
 	            </div>

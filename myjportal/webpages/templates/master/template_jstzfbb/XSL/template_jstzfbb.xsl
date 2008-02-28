@@ -30,7 +30,7 @@
 				<script language="JavaScript"
 					src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js"
 					type="text/javascript"/>
-				<xsl:call-template name="module-broadcasting.getHeader"/>
+                <xsl:call-template name="module-broadcasting.getHeader"/>
 			</head>
 			<body>
 				<table cellspacing="0" cellpadding="0"
@@ -130,39 +130,6 @@
 								alt="placeholder" border="0"/>
 						</td>
 					</tr>
-					<!-- <tr>
-					<td width="20px" bgcolor="#DBDFE7" 
-					style="border-top:1px solid; border-top-color:#2D4F97; padding:0px; margin:0px">
-					<img 
-					src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/placeholder.gif" 
-					border="0"/>
-					</td>
-					<td height="20" width="100%" colspan="3" 
-					style="border-top:1px solid; border-top-color:#2D4F97; padding:0px; margin:0px">
-					<img 
-					src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/placeholder.gif" 
-					border="0"/>
-					</td>-->
-					<!--<td>
-					<table width="100%" style="padding:0px; border:0px; margin:0px; border-collapse:collapse">
-					<tr>
-					<td style="border:none; padding:0px; margin:0px">
-					<img width="24px" src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/table_schraeg2.jpg" style="border:none; float:left" />
-					</td>
-					<td align="left" width="100%" style="border-bottom-color:#2D4F97; border-bottom:1px solid; padding:0px; margin:0px">
-					<img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/placeholder.gif" border="0"/>
-					</td>
-					</tr>
-					</table>
-					</td>
-					</tr>-->
-					<!--<tr>
-					<td width="20" bgcolor="#DBDFE7"></td>
-					<td height="25" bgcolor="#2F4E9E" width="217"></td>
-					<td>&#160;</td>
-					<td>&#160;</td>
-					<td>&#160;</td>
-					</tr>-->
 					<tr>
 						<td width="20" bgcolor="#DBDFE7">&#160;
 						</td>
