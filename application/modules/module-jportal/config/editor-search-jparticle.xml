@@ -339,8 +339,8 @@
         </panel>
 
         <!-- Input elements included depending on field type -->
-        <textfield id="input.text" width="35" />
-        <textfield id="input.name" width="30" />
+        <textfield id="input.text" width="40" />
+        <textfield id="input.name" width="40" />
         <textfield id="input.identifier" width="20" />
         <textfield id="input.date" width="10" />
         <textfield id="input.time" width="8" />

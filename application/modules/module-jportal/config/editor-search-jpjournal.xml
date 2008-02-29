@@ -7,81 +7,229 @@
         <panel lines="off" id="root">
             <hidden default="editor_form_search-jpjournal.xml" var="@mask" />
             <hidden default="xml" var="conditions/@format" />
-            <!-- Search for fields of type name -->
-            <cell var="conditions/boolean/condition1/@field" anchor="EAST" col="1" row="1">
-                <list type="dropdown">
-                    <item i18n="editor.search.document.maintitle" value="maintitles" />
-                    <item i18n="editor.search.document.subtitle" value="subtitles" />
-                    <item i18n="editor.search.document.contribu" value="contribus" />
-                </list>
+
+            <!-- search in formal description -->
+            <cell anchor="WEST" colspan="4" col="1" row="1">
+                <text>
+                    <label css-style="editorHeadlines" i18n="metaData.headlines.formaldiscr" />
+                </text>
             </cell>
-            <cell anchor="WEST" col="2" row="1">
+
+            <hidden var="conditions/boolean/@operator" default="and" />
+            
+            <!-- Search for fields of type bibdescript -->
+            <cell var="conditions/boolean/boolean/condition1" col="1" row="2" colspan="2">
                 <panel lines="off">
-                    <cell ref="operators.name" var="conditions/boolean/condition1/@operator" anchor="WEST" col="1" row="1" />
-                    <cell ref="input.name" var="conditions/boolean/condition1/@value" anchor="WEST" col="2" row="1" />
+                    <cell width="230" anchor="EAST" col="1" row="1">
+                        <text i18n="editormask.labels.bibdescript" />
+                    </cell>
+                    <hidden default="maintitles" var="@field" />
+                    <cell anchor="WEST" col="2" row="1">
+                        <panel lines="off">
+                            <cell ref="operators.name" var="@operator" anchor="WEST" col="1" row="1" />
+                            <cell ref="input.name" var="@value" anchor="WEST" col="2" row="1" />
+                        </panel>
+                    </cell>
                 </panel>
+            </cell>      
+                  
+            <!-- Search for fields of type subtitle -->
+            <cell var="conditions/boolean/boolean/condition2" col="1" row="3" colspan="2">
+                <repeater min="0" max="10">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editormask.labels.subtitle" />
+                        </cell>
+                        <hidden default="subtitles" var="@field" />
+                        <cell anchor="WEST" col="2" row="1">
+                            <panel lines="off">
+                                <cell ref="operators.name" var="@operator" anchor="WEST" col="1" row="1" />
+                                <cell ref="input.name" var="@value" anchor="WEST" col="2" row="1" />
+                            </panel>
+                        </cell>
+                    </panel>
+                </repeater>
+                <br />
             </cell>
-            <!-- Search for fields of type identifier -->
-            <cell var="conditions/boolean/condition2/@field" anchor="EAST" col="1" row="2">
-                <list type="dropdown">
-                    <item i18n="editor.search.document.mainedi" value="mainedis" />
-                    <item i18n="editor.search.document.subedi" value="subedis" />
-                    <item i18n="editor.search.document.author" value="authors" />
-                    <item i18n="editor.search.document.classi" value="classis" />
-                    <item i18n="editor.search.document.language" value="languages" />
-                    <item i18n="editor.search.document.type" value="types" />
-                </list>
+
+            <!-- Search for fields of type contributor -->
+            <cell var="conditions/boolean/boolean/condition3" col="1" row="4" colspan="2">
+
+                <repeater min="0" max="6">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editormask.labels.participants_label" />
+                        </cell>
+                        <cell col="2" row="1">
+                            <panel>
+                                <hidden var="@field" default="participants" />
+                                <hidden var="@operator" default="=" />
+                                <hidden var="@value" />
+                                <hidden var="@label" />
+                                <cell row="1" col="1">
+                                    <output var="@label" />
+                                </cell>
+                                <cell row="2" col="1">
+                                    <subselect id="sub.select_search1" type="webpage"
+                                        href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+                                        i18n="editormask.common.sub.select1" />
+                                </cell>
+                                <cell row="2" col="2">
+                                    <subselect id="sub.select2" type="webpage"
+                                        href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6"
+                                        i18n="editormask.common.sub.select2" />
+                                </cell>
+
+                            </panel>
+                        </cell>
+                    </panel>
+                </repeater>
             </cell>
-            <cell anchor="WEST" col="2" row="2">
-                <panel lines="off">
-                    <cell ref="operators.identifier" var="conditions/boolean/condition2/@operator" anchor="WEST" col="1" row="1" />
-                    <cell ref="input.identifier" var="conditions/boolean/condition2/@value" anchor="WEST" col="2" row="1" />
-                </panel>
+
+            <cell col="1" row="6">
+                <br />
             </cell>
+
             <!-- Search for fields of type date -->
-            <hidden default="dates" var="conditions/boolean/condition3/@field" />
-            <cell var="conditions/boolean/condition3/@field" anchor="EAST" col="1" row="3">
-                <text i18n="editor.search.document.date" />
-            </cell>
-            <cell anchor="WEST" col="2" row="3">
+            <cell var="conditions/boolean/boolean/condition4" col="1" row="7" colspan="2">
                 <panel lines="off">
-                    <cell ref="operators.date" var="conditions/boolean/condition3/@operator" anchor="WEST" col="1" row="1" />
-                    <cell ref="input.date" var="conditions/boolean/condition3/@value" anchor="WEST" col="2" row="1" />
+                    <cell anchor="EAST" width="230" col="1" row="1">
+                        <text i18n="editormask.labels.date_label" />
+                        <text i18n="editormask.labels.dateform" />
+                    </cell>
+                    <cell col="2" row="1">
+                        <panel lines="off">
+                            <hidden default="dates" var="@field" />
+                            <cell anchor="WEST" col="1" row="1">
+                                <panel lines="off">
+                                    <cell ref="operators.date" var="@operator" anchor="WEST" col="1" row="1" />
+                                    <cell ref="input.date" var="@value" anchor="WEST" col="2" row="1" />
+                                </panel>
+                            </cell>
+                        </panel>
+                    </cell>
                 </panel>
             </cell>
-            <!-- Search for fields of type text -->
-            <cell var="conditions/boolean/condition4/@field" anchor="EAST" col="1" row="4">
-                <list type="dropdown">
-                    <item i18n="editor.search.document.keyword" value="keywords" />
-                    <item i18n="editor.search.document.abstract" value="abstracts" />
-                    <item i18n="editor.search.document.identi" value="identis" />
-                    <item i18n="editor.search.document.right" value="rightsjournal" />
-                    <item i18n="editor.search.document.note" value="notes" />
-                    <item i18n="editor.search.document.predece" value="predeces" />
-                    <item i18n="editor.search.document.predecelink" value="predeceslink" />
-                    <item i18n="editor.search.document.successor" value="successors" />
-                    <item i18n="editor.search.document.succeslink" value="successorslink" />
-                </list>
+
+            <!-- Search for fields of type ID -->
+            <cell var="conditions/boolean/boolean/condition5" col="1" row="8" colspan="2">
+                <repeater min="1" max="5">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editormask.labels.identi" />
+                        </cell>
+                        <hidden default="identis" var="@field" />
+                        <cell anchor="WEST" col="2" row="1">
+                            <panel lines="off">
+                                <cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1" />
+                                <cell ref="input.text" var="@value" anchor="WEST" col="2" row="1" />
+                            </panel>
+                        </cell>
+                    </panel>
+                </repeater>
             </cell>
-            <cell anchor="WEST" col="2" row="4">
+
+            <!-- Search for fields of type language -->
+            <cell var="conditions/boolean/boolean/condition6" col="1" row="9" colspan="2">
+                <repeater min="1" max="3">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editor.search.document.language" />
+                        </cell>
+                        <hidden default="languages" var="@field" />
+                        <hidden default="=" var="@operator" />
+                        <cell var="@value" anchor="WEST" col="2" row="1">
+                            <list default="" type="dropdown">
+                                <item value="">
+                                    <label xml:lang="de"></label>
+                                </item>
+                                <include uri="classification:editor:-1:children:jportal_class_00000004" />
+                            </list>
+                        </cell>
+                    </panel>
+                </repeater>
+            </cell>
+
+            <!-- Search for fields of type rights -->
+            <cell var="conditions/boolean/boolean/condition7" col="1" row="10" colspan="2">
                 <panel lines="off">
-                    <cell ref="operators.text" var="conditions/boolean/condition4/@operator" anchor="WEST" col="1" row="1" />
-                    <cell ref="input.text" var="conditions/boolean/condition4/@value" anchor="WEST" col="2" row="1" />
+                    <cell width="230" anchor="EAST" col="1" row="1">
+                        <text i18n="editor.search.document.right" />
+                    </cell>
+                    <hidden default="rightsjournal" var="@field" />
+                    <cell anchor="WEST" col="2" row="1">
+                        <panel lines="off">
+                            <cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1" />
+                            <cell ref="input.text" var="@value" anchor="WEST" col="2" row="1" />
+                        </panel>
+                    </cell>
                 </panel>
+            </cell>
+
+            <!-- Search for fields of type predecessor -->
+            <cell var="conditions/boolean/boolean/condition8" col="1" row="11" colspan="2">
+                <repeater min="1" max="5">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editor.search.document.predece" />
+                        </cell>
+                        <hidden default="predeces" var="@field" />
+                        <cell anchor="WEST" col="2" row="1">
+                            <panel lines="off">
+                                <cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1" />
+                                <cell ref="input.text" var="@value" anchor="WEST" col="2" row="1" />
+                            </panel>
+                        </cell>
+                    </panel>
+                </repeater>
+            </cell>
+
+            <!-- Search for fields of type successor -->
+            <cell var="conditions/boolean/boolean/condition9" col="1" row="12" colspan="2">
+                <repeater min="1" max="5">
+                    <panel lines="off">
+                        <cell width="230" anchor="EAST" col="1" row="1">
+                            <text i18n="editor.search.document.successor" />
+                        </cell>
+                        <hidden default="successors" var="@field" />
+                        <cell anchor="WEST" col="2" row="1">
+                            <panel lines="off">
+                                <cell ref="operators.text" var="@operator" anchor="WEST" col="1" row="1" />
+                                <cell ref="input.text" var="@value" anchor="WEST" col="2" row="1" />
+                            </panel>
+                        </cell>
+                    </panel>
+                </repeater>
+            </cell>
+            <cell col="1" row="13">
+                <br />
+                <br />
+            </cell>
+
+            <!-- search in content descriptions-->
+            <cell anchor="WEST" colspan="4" col="1" row="14">
+                <text>
+                    <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
+                </text>
             </cell>
             <!-- Content classis -->
             <include cacheable="false"
                 uri="jportal_includeEditorCode:jpjournal:editor/editor-dynamicInludes_journalClassis.xml:include_dynamicClassiForJournal_search" />
-
-            <cell height="20px" anchor="WEST" colspan="2" col="1" row="92">
+            
+            <cell col="1" row="89">
+                <br />
+                <br />
+            </cell>
+            
+            <cell anchor="WEST" colspan="3" col="1" row="90">
                 <text>
-                    <label />
+                    <label css-style="editorHeadlines" i18n="metaData.headlines.specials" />
                 </text>
             </cell>
-            <cell anchor="EAST" col="1" row="93">
+            <cell anchor="EAST" col="1" row="92">
                 <text i18n="editor.search.connect" />
             </cell>
-            <cell var="conditions/boolean/@operator" anchor="WEST" col="2" row="93">
+            <cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="92">
                 <list default="and" type="dropdown">
                     <item i18n="editor.search.and" value="and" />
                     <item i18n="editor.search.or" value="or" />
@@ -152,7 +300,7 @@
         </panel>
         <!-- Input elements included depending on field type -->
         <textfield id="input.text" width="40" />
-        <textfield id="input.name" width="30" />
+        <textfield id="input.name" width="40" />
         <textfield id="input.identifier" width="20" />
         <textfield id="input.date" width="10" />
         <textfield id="input.time" width="8" />
