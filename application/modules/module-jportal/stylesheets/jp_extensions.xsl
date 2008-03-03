@@ -814,7 +814,7 @@
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
                                         <tr>
-                                            <td colspan="3" style="padding-left: 10px;">          
+                                            <td colspan="3" style="padding-left: 10px;">
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
                                                 <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
                                             </td>
@@ -934,16 +934,16 @@
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
                     <tr>
                         <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
+                            <xsl:call-template name="lineSpace" />
                             <xsl:if test="$objectHost = 'local'">
                                 <table cellpadding="0" cellspacing="0">
                                     <xsl:for-each select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
                                         <xsl:variable name="deriv" select="@xlink:href" />
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
-                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
-                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
-                                     <xsl:text>; </xsl:text>
+                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
+                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
+                                        <xsl:text>; </xsl:text>
                                     </xsl:for-each>
                                 </table>
                             </xsl:if>
@@ -1330,80 +1330,83 @@
         <xsl:param name="label" select="local-name($nodes[1])" />
         <xsl:if test="$nodes">
             <xsl:if test="$volume-node='true'">
-                <tr id="detailed-dividingline">
-                    <td colspan="2">
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                            <tr>
-                                <td colspan="2" id="detailed-innerdivlines">
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td id="detailed-headlines">
-                        <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <tr>
-                <td valign="top" id="detailed-labels">
-                    <xsl:value-of select="$label" />
-                </td>
-                <td class="metavalue">
-                    <xsl:for-each select="$nodes">
-                        <xsl:choose>
-                            <xsl:when test="../@class='MCRMetaClassification'">
-                                <xsl:call-template name="printClass">
-                                    <xsl:with-param name="nodes" select="." />
-                                    <xsl:with-param name="host" select="$objectHost" />
-                                </xsl:call-template>
-                                <xsl:call-template name="printClassInfo">
-                                    <xsl:with-param name="nodes" select="." />
-                                    <xsl:with-param name="host" select="$objectHost" />
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:when test="../@class='MCRMetaISO8601Date'">
-                                <xsl:variable name="format">
-                                    <xsl:choose>
-                                        <xsl:when test="string-length(normalize-space(.))=4">
-                                            <xsl:value-of select="i18n:translate('metaData.dateYear')" />
-                                        </xsl:when>
-                                        <xsl:when test="string-length(normalize-space(.))=7">
-                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
-                                        </xsl:when>
-                                        <xsl:when test="string-length(normalize-space(.))=10">
-                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:value-of select="i18n:translate('metaData.dateTime')" />
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                </xsl:variable>
-                                <xsl:call-template name="formatISODate">
-                                    <xsl:with-param name="date" select="." />
-                                    <xsl:with-param name="format" select="$format" />
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:when test="../@class='MCRMetaLinkID'">
-                                <xsl:call-template name="objectLink">
-                                    <xsl:with-param name="obj_id" select="@xlink:href" />
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:call-template name="printI18N">
-                                    <xsl:with-param name="nodes" select="." />
-                                    <xsl:with-param name="host" select="$objectHost" />
-                                </xsl:call-template>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                        <xsl:if test="position()!=last()">
+                <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                    <tr>
+                        <td colspan="2" id="detailed-innerdivlines">
                             <br />
-                        </xsl:if>
-                    </xsl:for-each>
-                </td>
-            </tr>
+                        </td>
+                    </tr>
+                </table>
+                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                    <tr>
+                        <td id="detailed-headlines">
+                            <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
+                        </td>
+                        <td>
+                            <br />
+                        </td>
+                    </tr>
+                </table>
+            </xsl:if>
+            <table>
+                <tr>
+                    <td valign="top" id="detailed-labels">
+                        <xsl:value-of select="$label" />
+                    </td>
+                    <td class="metavalue">
+                        <xsl:for-each select="$nodes">
+                            <xsl:choose>
+                                <xsl:when test="../@class='MCRMetaClassification'">
+                                    <xsl:call-template name="printClass">
+                                        <xsl:with-param name="nodes" select="." />
+                                        <xsl:with-param name="host" select="$objectHost" />
+                                    </xsl:call-template>
+                                    <xsl:call-template name="printClassInfo">
+                                        <xsl:with-param name="nodes" select="." />
+                                        <xsl:with-param name="host" select="$objectHost" />
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:when test="../@class='MCRMetaISO8601Date'">
+                                    <xsl:variable name="format">
+                                        <xsl:choose>
+                                            <xsl:when test="string-length(normalize-space(.))=4">
+                                                <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                                            </xsl:when>
+                                            <xsl:when test="string-length(normalize-space(.))=7">
+                                                <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                                            </xsl:when>
+                                            <xsl:when test="string-length(normalize-space(.))=10">
+                                                <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:variable>
+                                    <xsl:call-template name="formatISODate">
+                                        <xsl:with-param name="date" select="." />
+                                        <xsl:with-param name="format" select="$format" />
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:when test="../@class='MCRMetaLinkID'">
+                                    <xsl:call-template name="objectLink">
+                                        <xsl:with-param name="obj_id" select="@xlink:href" />
+                                    </xsl:call-template>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:call-template name="printI18N">
+                                        <xsl:with-param name="nodes" select="." />
+                                        <xsl:with-param name="host" select="$objectHost" />
+                                    </xsl:call-template>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="position()!=last()">
+                                <br />
+                            </xsl:if>
+                        </xsl:for-each>
+                    </td>
+                </tr>
+            </table>
         </xsl:if>
     </xsl:template>
     <!-- ===================================================================================================== -->
