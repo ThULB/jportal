@@ -49,7 +49,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		 for(int i = 0;i < maxArtID; i++)
 			{
 			 MCRObject article = getActualObject("jparticle_",i);
-			 if(i % 10000 == 0)
+			 if(i % 1000 == 0)
 			 	{
 				 System.out.print("Progress: " + ((float)i/(float)maxArtID*100) +"%... ");
 			 	}
@@ -64,31 +64,41 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 					 MCRObjectID artParentID = artStruct.getParentID(); 
 					 MCRObjectID artParentIDtemp = artStruct.getParentID(); 
 					 MCRObject artParent = new MCRObject();
+					 boolean checker = true;
 					 
 					 while(artParentID!=null)
 					 	{
 						 artParentIDtemp = artParentID;
-						 artParent.receiveFromDatastore(artParentID);
+						 try{artParent.receiveFromDatastore(artParentID);}
+						 	catch(Exception e)
+						 	{
+						 	 logger.info("Error, parent is null!");	
+						 	 logger.info(article.getId());
+						 	 logger.info(artParentID);
+						 	 checker = false;
+						 	}
 						 artParentID = artParent.getStructure().getParentID(); 
 					 	}//while
-
-					 //new journal stats object if needed
-					 if(!journals.containsKey(artParentIDtemp))
-					 	{
-						 System.out.println("new Journal found, with ID " + artParentIDtemp);
-						 journals.put(artParentIDtemp, new MCRJournalStats(artParentIDtemp, "article"));
-					 	}
 					 
-					 //check for completeness					 
-					 if(artStruct.getDerivateSize()==0)
-					 	{
-						 journals.get(artParentIDtemp).incompleteArt(article.getId());
-					 	}
-					 else
-					 	{
-						 journals.get(artParentIDtemp).completeArt(article.getId());
-					 	}
-					 
+					 if(checker)
+						 {
+						  //new journal stats object if needed
+						  if(!journals.containsKey(artParentIDtemp))
+						  	 {
+							  logger.info("new Journal found, with ID " + artParentIDtemp);
+							  journals.put(artParentIDtemp, new MCRJournalStats(artParentIDtemp, "article"));
+						 	 }
+						 
+						  //check for completeness					 
+						  if(artStruct.getDerivateSize()==0)
+						 	 {
+							  journals.get(artParentIDtemp).incompleteArt(article.getId());
+						 	 }
+						  else
+						 	 {
+							  journals.get(artParentIDtemp).completeArt(article.getId());
+						 	 }
+						 }
 				 	}
 				 
 			 	}
@@ -103,9 +113,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		{
 		 MCRObject volume = getActualObject("jpvolume_",i);
 		 
-		 if(i % 10000 == 0)
+		 if(i % 1000 == 0)
 		 	{
-			 System.out.print("Progress: " + ((float)i/(float)maxArtID*100) +"%... ");
+			 System.out.print("Progress: " + ((float)i/(float)maxVolID*100) +"%... ");
 		 	}
 		 
 		 if(volume!=null)
@@ -118,30 +128,41 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 				 MCRObjectID volParentID = volStruct.getParentID(); 
 				 MCRObjectID volParentIDtemp = volStruct.getParentID(); 
 				 MCRObject volParent = new MCRObject();
+				 boolean checker = true;
 				 
 				 while(volParentID!=null)
 				 	{
-					 volParentIDtemp = volParentID;
-					 volParent.receiveFromDatastore(volParentID);
-					 volParentID = volParent.getStructure().getParentID(); 
+					 volParentIDtemp = volParentID;			 
+					 try{volParent.receiveFromDatastore(volParentID);}
+					 	catch(Exception e)
+					 	{
+					 	 logger.info("Error, parent is null!");	
+					 	 logger.info(volume.getId());
+					 	 logger.info(volParentID);
+					 	 checker = false;
+					 	}
+					 volParentID = volParent.getStructure().getParentID();
 				 	}//while
 				 
-				 //new journal stats object if needed
-				 if(!journals.containsKey(volParentID))
-				 	{	 
-					 System.out.println("new Journal found, with ID " + volParentID);
-					 journals.put(volParentID, new MCRJournalStats(volParentID, "volume"));
-				 	}
-				 
-				 //check for completeness					 
-				 if(volStruct.getDerivateSize()==0)
-				 	{
-					 journals.get(volParentID).incompleteArt(volume.getId());
-				 	}
-				 else
-				 	{
-					 journals.get(volParentID).completeArt(volume.getId());
-				 	}				 
+				 if(checker)
+					 {
+					 //new journal stats object if needed
+					 if(!journals.containsKey(volParentIDtemp))
+					 	{	 
+						 logger.info("new Journal found, with ID " + volParentIDtemp);
+						 journals.put(volParentIDtemp, new MCRJournalStats(volParentIDtemp, "volume"));
+					 	}
+					 
+					 //check for completeness					 
+					 if(volStruct.getDerivateSize()==0)
+					 	{
+						 journals.get(volParentIDtemp).incompleteArt(volume.getId());
+					 	}
+					 else
+					 	{
+						 journals.get(volParentIDtemp).completeArt(volume.getId());
+					 	}
+					 }
 			 	}		 
 		 	}		 
 		}
@@ -150,7 +171,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 	//Print all stats on the screen
 	private static void PrintStats()
 		{
-		 System.out.println("/*******************Journal Status Report*******************/");
+		 logger.info("/*******************Journal Status Report*******************/");
  		 //go through all journal objects in the hash map
 		 for(int k=0; k<=maxJouID; k++)
 		 	{
@@ -158,23 +179,23 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 			 if(journals.containsKey(JournalID))
 				 {
 				  MCRJournalStats journal = journals.get(JournalID);
-				  System.out.println();
-				  System.out.println("actual Journal: " + journal.getJournalName() + " with ID " + journal.getJournalID());
-				  System.out.println();
-				  System.out.println("the important Objects are " + journal.getType());
-				  System.out.println();
-				  System.out.println();
-				  System.out.println("++++++++++++++++++Details+++++++++++++++++++");
-				  System.out.println("Number of " + journal.getType()+"s: " + journal.getAllCounter());
-				  System.out.println("Complete: " + journal.getGoodCounter() + " / " + ((float)journal.getGoodCounter()/(float)journal.getAllCounter()*100) +"%");
-				  System.out.println("Incomplete: " + journal.getBadCounter() + " / " + ((float)journal.getBadCounter()/(float)journal.getAllCounter()*100) +"%");
-				  System.out.println();
-				  System.out.println("List of incomplete files is saved in ...");
-				  System.out.println();
+				  logger.info("");
+				  logger.info("actual Journal: " + journal.getJournalName() + " with ID " + journal.getJournalID());
+				  logger.info("");
+				  logger.info("the important Objects are " + journal.getType());
+				  logger.info("");
+				  logger.info("");
+				  logger.info("++++++++++++++++++Details+++++++++++++++++++");
+				  logger.info("Number of " + journal.getType()+"s: " + journal.getAllCounter());
+				  logger.info("Complete: " + journal.getGoodCounter() + " / " + ((float)journal.getGoodCounter()/(float)journal.getAllCounter()*100) +"%");
+				  logger.info("Incomplete: " + journal.getBadCounter() + " / " + ((float)journal.getBadCounter()/(float)journal.getAllCounter()*100) +"%");
+				  logger.info("");
+				  logger.info("List of incomplete files is saved in ...");
+				  logger.info("");
 				 }
 		 	}
 		
-		 System.out.println("/*******************Journal Status Report*******************/");
+		 logger.info("/*******************Journal Status Report*******************/");
 		}
 	
 	
@@ -183,7 +204,6 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		 logger.info("Go Go Go!");
 	     logger.info("====================");
 
-	     logger.info("Working...");
 	     logger.info("Article...");
 		 DoArticle();
 		 logger.info("Volumes...");
@@ -196,6 +216,3 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		}
 	
 	}
-	
-
-
