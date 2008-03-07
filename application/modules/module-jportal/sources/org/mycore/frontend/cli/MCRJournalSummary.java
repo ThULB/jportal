@@ -49,9 +49,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		 for(int i = 0;i < maxArtID; i++)
 			{
 			 MCRObject article = getActualObject("jparticle_",i);
-			 if(i % 1 == 0)
+			 if(i % 10000 == 0)
 			 	{
-				 System.out.println("Progress: " + ((float)i/(float)maxArtID*100) +"%");
+				 System.out.print("Progress: " + ((float)i/(float)maxArtID*100) +"%... ");
 			 	}
 			 
 			 if(article!=null)
@@ -103,9 +103,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		{
 		 MCRObject volume = getActualObject("jpvolume_",i);
 		 
-		 if(i % 1 == 0)
+		 if(i % 10000 == 0)
 		 	{
-			 System.out.println("Progress: " + ((float)i/(float)maxArtID*100) +"%");
+			 System.out.print("Progress: " + ((float)i/(float)maxArtID*100) +"%... ");
 		 	}
 		 
 		 if(volume!=null)
