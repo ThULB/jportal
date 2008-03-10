@@ -1,0 +1,108 @@
+/*
+ * $RCSfile$
+ * $Revision$ $Date$
+ *
+ * This file is part of ***  M y C o R e  ***
+ * See http://www.mycore.de/ for details.
+ *
+ * This program is free software; you can use it, redistribute it
+ * and / or modify it under the terms of the GNU General Public License
+ * (GPL) as published by the Free Software Foundation; either version 2
+ * of the License or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program, in a file called gpl.txt or license.txt.
+ * If not, write to the Free Software Foundation Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
+ */
+
+package org.mycore.frontend.servlets;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.frontend.MCRJPortalWebsiteContext;
+import org.mycore.user2.MCRUserMgr;
+
+public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
+
+    private static final long serialVersionUID = 1L;
+
+    // private static final String JOURNAL_ID =
+    // "XSL.MCR.JPortal.Create-JournalContext.ID";
+    private static final String JOURNAL_ID = "jportal_jpjournal_00000002";
+
+    private static Logger LOGGER = Logger.getLogger(MCRJPortalCreateJournalContextServlet.class);;
+
+    public void init() throws ServletException {
+        super.init();
+    }
+
+    public void doGetPost(MCRServletJob job) throws JDOMException, IOException {
+
+        // get requested mode
+        String mode = null;
+        if (job.getRequest().getParameter("mode") != null && !job.getRequest().getParameter("mode").equals(""))
+            mode = job.getRequest().getParameter("mode");
+        else
+            return;
+
+        // dispatch mode
+        if (mode.equals("createContext"))
+            createContext(job);
+        else if (mode.equals("getUsers"))
+            getLayoutService().sendXML(job.getRequest(), job.getResponse(), new Document(getUsers()));
+
+    }
+
+    public void createContext(MCRServletJob job) {
+        LOGGER.debug("start to create journal context");
+        HttpServletRequest req = job.getRequest();
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+
+        // create website
+        LOGGER.debug("start to create website");
+        // String jid = (String) session.get(JOURNAL_ID);
+        String jid = JOURNAL_ID;
+        LOGGER.debug("calculated journalID=" + jid);
+        String precHref = req.getParameter("jp.cjc.preceedingItemHref");
+        String shortCut = req.getParameter("jp.cjc.shortCut");
+        String layoutTemplate;
+        if (req.getParameter("jp.cjc.layoutTemplate").equals("default"))
+            layoutTemplate = "template_" + shortCut;
+        else
+            layoutTemplate = req.getParameter("jp.cjc.layoutTemplate");
+        MCRJPortalWebsiteContext wc = new MCRJPortalWebsiteContext(jid, precHref, layoutTemplate, shortCut);
+        wc.create();
+
+    }
+
+    public Element getUsers() {
+        Element users = new Element("users");
+        MCRUserMgr um = MCRUserMgr.instance();
+        ArrayList<String> ul = um.getAllUserIDs();
+        Iterator<String> ulIt = ul.iterator();
+        while (ulIt.hasNext()) {
+            String userID = (String) ulIt.next();
+            String userName = um.retrieveUser(userID).getUserContact().getFirstName() + " " + um.retrieveUser(userID).getUserContact().getLastName();
+            Element userElem = new Element("user").setAttribute("id", userID).setText(userName);
+            users.addContent(userElem);
+        }
+        return users;
+    }
+}

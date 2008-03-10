@@ -13,4 +13,27 @@
             <url-pattern>/cli</url-pattern>
       </servlet-mapping>
       
+
+      <servlet id="MCRDublicateFinderServlet">
+            <servlet-name>MCRDublicateFinderServlet</servlet-name>
+            <servlet-class>org.mycore.frontend.servlets.MCRDublicateFinderServlet</servlet-class>
+      </servlet>
+
+      <servlet-mapping>
+            <servlet-name>MCRDublicateFinderServlet</servlet-name>
+            <url-pattern>/servlets/MCRDublicateFinderServlet/*</url-pattern>
+      </servlet-mapping>
+
+
+      <servlet id="MCRJPortalCreateContext">
+            <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
+            <servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet</servlet-class>
+      </servlet>
+
+      <servlet-mapping>
+            <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
+            <url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*</url-pattern>
+      </servlet-mapping>
+
+
 </web-app>

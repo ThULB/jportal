@@ -1,0 +1,8 @@
+<root>
+    <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+        <hidden_jpjournalID xml:lang="de" inherited="0" form="plain">JOURNAL_ID</hidden_jpjournalID>
+    </hidden_jpjournalsID>
+    <hidden_websitecontexts class="MCRMetaLangText" heritable="false" notinherit="false">
+        <hidden_websitecontext xml:lang="de" inherited="0" form="plain">JOURNAL_PATHTOSHORTCUT.xml</hidden_websitecontext>
+    </hidden_websitecontexts>
+</root>

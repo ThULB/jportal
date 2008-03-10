@@ -53,6 +53,9 @@
         <cell row="190" col="1" anchor="NORTHWEST" ref="successor_label" />
         <cell row="190" col="2" anchor="NORTHWEST" ref="successor_input" />
         <cell row="190" col="3" anchor="WEST" ref="successor_help" />
+        <!-- datamodel coverage -->
+        <cell row="195" col="1" anchor="NORTHWEST" ref="datamodelCoverage_label" />
+        <cell row="195" col="2" anchor="NORTHWEST" ref="datamodelCoverage_input" />
 
         <!-- content classis -->
         <include cacheable="false"
@@ -61,9 +64,6 @@
         <!-- ================================================================================================= -->
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
         <cell row="295" col="2" anchor="NORTHWEST" ref="Admin_label" />
-        <!-- .. -->
-        <cell row="300" col="1" anchor="NORTHWEST" ref="jpjournalID_label" />
-        <cell row="300" col="2" anchor="NORTHWEST" ref="jpjournalID_input" />
         <!-- ... -->
         <cell row="310" col="1" anchor="NORTHWEST" ref="rubricID_label" />
         <cell row="310" col="2" anchor="NORTHWEST" ref="rubricID_input" />
@@ -83,9 +83,6 @@
         <cell row="355" col="1" anchor="NORTHWEST" ref="classipub4_label" />
         <cell row="355" col="2" anchor="NORTHWEST" ref="classipub4_input" />
 
-        <cell row="360" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
-        <cell row="360" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
-
         <cell row="370" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label" />
         <cell row="370" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input" />
 
@@ -94,10 +91,18 @@
 
         <cell row="390" col="1" anchor="NORTHWEST" ref="genhiddenfield3_label" />
         <cell row="390" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input" />
+
+        <cell row="400" col="1" anchor="NORTHWEST" ref="jpjournalID_label" />
+        <cell row="400" col="2" anchor="NORTHWEST" ref="jpjournalID_input" />
+
+        <cell row="410" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
+        <cell row="410" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
+        
+        
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
-        <cell row="400" col="1" anchor="EAST" />
-        <cell row="400" col="2" anchor="EAST" ref="save" />
+        <cell row="500" col="1" anchor="EAST" />
+        <cell row="500" col="2" anchor="EAST" ref="save" />
     </panel>
     <!-- panel definitions -->
     <!-- MainTitle ================================================================== -->
@@ -268,10 +273,36 @@
             <textfield id="successor_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
         </cell>
     </panel>
+    <!-- ================================================================== -->
+
+    <panel id="datamodelCoverage_input">
+        <hidden var="metadata/dataModelCoverages/@class" default="MCRMetaClassification" />
+        <hidden var="metadata/dataModelCoverages/@parasearch" default="true" />
+        <hidden var="metadata/dataModelCoverages/@textsearch" default="false" />
+        <hidden var="metadata/dataModelCoverages/@notinherit" default="false" />
+        <hidden var="metadata/dataModelCoverages/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dataModelCoverages/dataModelCoverage">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="datamodelCoverage_input_repeater" />
+        </cell>
+    </panel>
+    <!-- repeater -->
+    <panel id="datamodelCoverage_input_repeater">
+        <hidden var="@classid" default="jportal_class_00000067" />
+        <cell col="1" row="2" anchor=" NORTHWEST" ref="datamodelCoverage_input_repeater_list" var="@categid" />
+    </panel>
+    <!-- category list -->
+    <list id="datamodelCoverage_input_repeater_list" width="300" type="dropdown">
+        <item value="">
+            <label xml:lang="de">bitte wählen</label>
+        </item>
+        <include uri="classification:editor:-1:children:jportal_class_00000067" />
+    </list>
     
+    <!-- ================================================================== -->
+
     <!-- content classis -->
     <include cacheable="false" uri="jportal_includeEditorCode:jpjournal:editor/editor-dynamicInludes_journalClassis.xml:include_dynamicClassiForJournal-code" />
-    
+
     <!--date types =======================================================================-->
     <list id="date_type" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000009" />

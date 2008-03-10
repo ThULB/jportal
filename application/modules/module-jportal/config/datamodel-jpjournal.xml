@@ -57,6 +57,10 @@
         <element name="successors" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
             <mcrmetalink name="successor" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
         </element>
+        <!-- data model coverage -->
+        <element name="dataModelCoverages" minOccurs='1' maxOccurs='1' parasearch="true" textsearch="false">
+            <mcrmetaclassification name="dataModelCoverage" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+        </element>
         <!-- content classifications -->
         <element name="contentClassis1" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="false">
             <mcrmetaclassification name="contentClassi1" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
@@ -91,10 +95,6 @@
         <!-- ================================================================================================= -->
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
         <!-- id's of rubrics classi in articles -->
-        <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-            <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
-        </element>
-        <!-- id's of rubrics classi in articles -->
         <element name="hidden_rubricsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
             <mcrmetalangtext name="hidden_rubricID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>
@@ -118,10 +118,6 @@
         <element name="hidden_classispub4" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
             <mcrmetalangtext name="hidden_classipub4" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>
-        <!-- optional value for websitecontext -->
-        <element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
-            <mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
-        </element>
         <!-- 1. optional generic value -->
         <element name="hidden_genhiddenfields1" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
             <mcrmetalangtext name="hidden_genhiddenfield1" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
@@ -133,6 +129,14 @@
         <!-- 3. optional generic value -->
         <element name="hidden_genhiddenfields3" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
             <mcrmetalangtext name="hidden_genhiddenfield3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- id's of rubrics classi in articles -->
+        <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+            <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional value for websitecontext -->
+        <element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1' parasearch="true" textsearch="true">
+            <mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>
         <!-- ================================================================================================= -->
     </metadata>
