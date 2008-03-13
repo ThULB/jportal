@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink xalan">
+    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink xalan">
 
     <xsl:include href="MyCoReLayout.xsl" />
 
     <xsl:param name="MCR.users_superuser_username" />
-    
+    <xsl:param name="MCR.JPortal.Create-JournalContext.ID" select="'null'" />
+
     <xsl:variable name="userList">
         <xsl:copy-of select="document('request:servlets/MCRJPortalCreateJournalContextServlet?mode=getUsers')" />
     </xsl:variable>
@@ -13,15 +14,8 @@
     <!-- =================================================================================================== -->
 
     <xsl:template match="/create-journalContext">
-
         <xsl:choose>
-            <xsl:when test="$CurrentUser = $MCR.users_superuser_username">
-                #
-                <xsl:copy-of select="$CurrentUser" />
-                # #
-                <xsl:copy-of select="$MCR.users_superuser_username" />
-                # Zugriff untersagt. Bitte melden sie sich an!
-            </xsl:when>
+            <xsl:when test="not(acl:checkPermission($MCR.JPortal.Create-JournalContext.ID, 'writedb'))">Zugriff untersagt. Bitte melden sie sich an!</xsl:when>
             <xsl:otherwise>
                 <form action="{$ServletsBaseURL}MCRJPortalCreateJournalContextServlet" method="post">
                     <input type="hidden" name="mode" value="createContext" />
@@ -29,9 +23,8 @@
                         <tr>
                             <td style="padding:4px;font-weight:bold;">Kürzel für die Zeitschrift:</td>
                             <td style="padding:4px;">
-                                <input name="jp.cjc.shortCut" type="text" size="10" />
+                                <input name="jp.cjc.shortCut" type="text" size="14" maxlength="14" />
                             </td>
-
                         </tr>
                         <xsl:call-template name="jp.cjc.emptyRow" />
                         <tr>

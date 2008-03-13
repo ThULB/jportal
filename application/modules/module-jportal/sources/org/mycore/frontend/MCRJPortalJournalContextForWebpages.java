@@ -15,9 +15,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.metadata.MCRActiveLinkException;
@@ -28,7 +30,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRXMLTableManager;
 import org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet;
 
-public class MCRJPortalWebsiteContext {
+public class MCRJPortalJournalContextForWebpages {
 
     private String preceedingItemHref;
 
@@ -46,7 +48,7 @@ public class MCRJPortalWebsiteContext {
 
     private static final MCRConfiguration PROPS = MCRConfiguration.instance();
 
-    private static Logger LOGGER = Logger.getLogger(MCRJPortalWebsiteContext.class);;
+    private static Logger LOGGER = Logger.getLogger(MCRJPortalJournalContextForWebpages.class);;
 
     private static String homeDir = PROPS.getString("MCR.basedir");
 
@@ -54,7 +56,7 @@ public class MCRJPortalWebsiteContext {
 
     private static String deployedDir = homeDir + "/build/webapps";
 
-    public MCRJPortalWebsiteContext(String journalId, String preceedingItemHref, String layoutTemplate, String shortCut) {
+    public MCRJPortalJournalContextForWebpages(String journalId, String preceedingItemHref, String layoutTemplate, String shortCut) {
         this.journalID = journalId;
         this.journalObjectXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(this.journalID)).getRootElement();
         this.dataModelCoverage = journalObjectXML.getChild("metadata").getChild("dataModelCoverages").getChild("dataModelCoverage")
@@ -65,15 +67,18 @@ public class MCRJPortalWebsiteContext {
         this.shortCut = shortCut;
     }
 
-    public void create() {
+    public void create() throws MCRException {
         copyWebpages();
         updateNavigation();
         updateJournalObject();
+        // TODO: remove cached template id for journal id
+        // ...
     }
 
     private void updateJournalObject() {
         LOGGER.debug("update journal object");
         XMLOutputter xo = new XMLOutputter();
+        xo.setFormat(Format.getPrettyFormat());
         try {
             LOGGER.debug("journal object before updating");
             xo.output(journalObjectXML, System.out);
@@ -134,6 +139,7 @@ public class MCRJPortalWebsiteContext {
         // replace static values by real ones
         SAXBuilder sb = new SAXBuilder();
         XMLOutputter xo = new XMLOutputter();
+        xo.setFormat(Format.getPrettyFormat());
         try {
             String codeOfNavi = xo.outputString(sb.build(naviSrcLoc));
             String codeOfNaviNew1 = codeOfNavi.replaceAll("JOURNAL_PATHTOSHORTCUT", getDestDirRelative() + this.shortCut);
@@ -174,7 +180,7 @@ public class MCRJPortalWebsiteContext {
         LOGGER.info("updated navigation");
     }
 
-    private void copyWebpages() {
+    private void copyWebpages() throws MCRException {
         LOGGER.debug("copy webpages");
         // init
         String srcDirPrefix = SRC_DIR + this.dataModelCoverage + "/content";
@@ -182,6 +188,11 @@ public class MCRJPortalWebsiteContext {
         String destDir = deployedDir + getDestDirRelative() + shortCut;
         String srcFile = homeDir + srcDirPrefix + "/JOURNAL_SHORTCUT.xml";
         String destFile = destDir + ".xml";
+
+        // test if short cut is already in use
+        if (new File(destFile).exists())
+            throw new MCRException("This journal context shortcut=" + this.shortCut + " is already in use. Please, Choose another one");
+
         // copy
         try {
             org.apache.commons.io.FileUtils fu = new org.apache.commons.io.FileUtils();
@@ -199,6 +210,7 @@ public class MCRJPortalWebsiteContext {
             SAXBuilder sb = new SAXBuilder();
             Document homePage = sb.build(destFile);
             XMLOutputter xo = new XMLOutputter();
+            xo.setFormat(Format.getPrettyFormat());
             String codeOfHomePage = xo.outputString(homePage);
             String pattern = "JOURNAL_NAME";
             String codeOfHomePageNew = codeOfHomePage.replaceAll(pattern, this.journalTitle);

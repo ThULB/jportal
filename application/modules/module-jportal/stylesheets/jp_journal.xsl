@@ -5,7 +5,10 @@
     xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl aclObjID aclObjType"
     version="1.0">
     <xsl:param select="'local'" name="objectHost" />
-    <!--	<xsl:include href="mcr-module-startIview.xsl"/>-->
+    <!--    <xsl:include href="mcr-module-startIview.xsl"/>-->
+
+    <!-- ============================================================================================================== -->
+
     <!--Template for result list hit: see results.xsl-->
     <xsl:template match="mcr:hit[contains(@id,'_jpjournal_')]">
         <xsl:param name="mcrobj" />
@@ -68,6 +71,8 @@
         </table>
     </xsl:template>
 
+    <!-- ============================================================================================================== -->
+
     <!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
     <xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <xsl:choose>
@@ -105,6 +110,9 @@
         </xsl:choose>
 
     </xsl:template>
+
+    <!-- ============================================================================================================== -->
+
     <!--Template for metadata view: see mycoreobject.xsl-->
     <xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <xsl:param select="$objectHost" name="obj_host" />
@@ -113,7 +121,6 @@
         <xsl:variable name="objectBaseURL">
             <xsl:if test="$objectHost != 'local'">
                 <xsl:value-of select="document('webapp:hosts.xml')/mcr:hosts/mcr:host[@alias=$objectHost]/mcr:url[@type='object']/@href" />
-
             </xsl:if>
             <xsl:if test="$objectHost = 'local'">
                 <xsl:value-of select="concat($WebApplicationBaseURL,'receive/')" />
@@ -406,61 +413,6 @@
                                 </td>
                             </tr>
                         </table>
-                        <!--<!-#-*** List children per object type ************************************* -#->
-                            <!-#-
-                            1.) get a list of objectTypes of all child elements
-                            2.) remove duplicates from this list
-                            3.) for-each objectTyp id list child elements
-                            -#->
-                            <xsl:variable name="objectTypes">
-                            <xsl:for-each
-                            select="./structure/children/child/@xlink:href">
-                            <id>
-                            <xsl:copy-of
-                            select="substring-before(substring-after(.,'_'),'_')"/>
-                            
-                            </id>
-                            </xsl:for-each>
-                            </xsl:variable>
-                            <xsl:variable
-                            select="xalan:nodeset($objectTypes)/id[not(.=following::id)]"
-                            name="unique-ids"/>
-                            <!-#-
-                            the for-each would iterate over <id> with root not beeing /mycoreobject
-                            so we save the current node in variable context to access needed nodes
-                            -#->
-                            <xsl:variable select="." name="context"/>
-                            <xsl:for-each select="$unique-ids">
-                            <xsl:variable select="." name="thisObjectType"/>
-                            <xsl:variable name="label">
-                            
-                            <xsl:choose>
-                            <xsl:when
-                            test="count($context/structure/children/child[contains(@xlink:href,$thisObjectType)])=1">
-                            <xsl:value-of
-                            select="i18n:translate(concat('metaData.',$thisObjectType,'.[singular]'))"/>
-                            </xsl:when>
-                            <xsl:otherwise>
-                            <xsl:value-of
-                            select="i18n:translate(concat('metaData.',$thisObjectType,'.[plural]'))"/>
-                            </xsl:otherwise>
-                            </xsl:choose>
-                            </xsl:variable>
-                            
-                            <xsl:call-template name="printMetaDates">
-                            <xsl:with-param select="'right'" name="textalign"/>
-                            <xsl:with-param
-                            select="$context/structure/children/child[contains(@xlink:href, concat('_',$thisObjectType,'_'))]"
-                            name="nodes"/>
-                            <xsl:with-param select="$label" name="label"/>
-                            </xsl:call-template>
-                            </xsl:for-each>
-                            <xsl:call-template name="Derobjects">
-                            <xsl:with-param select="$staticURL"
-                            name="staticURL"/>
-                            <xsl:with-param select="$obj_host"
-                            name="obj_host"/>
-                            </xsl:call-template>-->
                         <!--*** Created ************************************* -->
                         <table cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
@@ -504,11 +456,35 @@
                                 <xsl:with-param name="types" select="'jpvolume'" />
                             </xsl:call-template>
                         </table>
+                        <!-- Create Website-Context -->
+                        <xsl:if test="not(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext) and acl:checkPermission(./@ID,'writedb')">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <tr>
+                                    <td valign="top" id="detailed-labels" style="text-align:right;  padding-right: 5px;color:#FF0000;">
+                                        Zeitschriften-Kontext:
+                                    </td>
+                                    <td valign="top" class="metavalue" style="color:#FF0000;">
+                                        Sie haben noch keinen Zeitschriften-Kontext (Webseiten, Rechteverwaltung) eingerichtet.
+                                        <br />
+                                        Möchten sie dies jetzt tun?
+                                        <br />
+                                        <br />
+                                        <a
+                                            href="{$WebApplicationBaseURL}create-journalContext.xml{$HttpSession}?XSL.MCR.JPortal.Create-JournalContext.ID.SESSION={./@ID}">
+                                            Ja, Zeitschriften-Kontext jetzt einrichten!
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </xsl:if>
                     </td>
                 </tr>
             </table>
         </div>
     </xsl:template>
+
+    <!-- ============================================================================================================== -->
+
     <xsl:template name="addChild">
         <xsl:param name="id" />
         <xsl:param name="layout" />
@@ -550,6 +526,9 @@
 
         </xsl:if>
     </xsl:template>
+
+    <!-- ============================================================================================================== -->
+
     <xsl:template name="Derobjects">
         <xsl:param name="obj_host" />
         <xsl:param name="staticURL" />
@@ -595,11 +574,6 @@
                                                 href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;re_mcrid={../../../@ID}&amp;se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;todo=saddfile{$suffix}{$xmltempl}">
                                                 <img title="Datei hinzufügen" src="{$WebApplicationBaseURL}images/workflow_deradd.gif" />
                                             </a>
-                                            <!--<a
-                                                href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;re_mcrid={../../../@ID}&amp;se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;todo=seditder{$suffix}{$xmltempl}">
-                                                <img title="Derivat bearbeiten"
-                                                src="{$WebApplicationBaseURL}images/workflow_deredit.gif"/>
-                                                </a>-->
                                             <a
                                                 href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;re_mcrid={../../../@ID}&amp;se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;todo=sdelder{$suffix}{$xmltempl}">
 
@@ -614,48 +588,9 @@
                 </td>
 
             </tr>
-            <!-- MCR-IView ..start -->
-            <!-- example implementation -->
-            <!--			<xsl:if test="$objectHost = 'local'">
-                <xsl:for-each select="./structure/derobjects/derobject">
-                <xsl:variable select="@xlink:href" name="deriv"/>
-                <xsl:variable name="firstSupportedFile">
-                <xsl:call-template name="iview.getSupport">
-                <xsl:with-param select="$deriv" name="derivID"/>
-                
-                </xsl:call-template>
-                </xsl:variable>
-                <xsl:choose>
-                <xsl:when test="$firstSupportedFile != ''">
-                <tr>
-                <td colspan="2" class="metanone">
-                <br/>
-                <xsl:call-template name="iview">
-                <xsl:with-param select="$deriv"
-                name="derivID"/>
-                
-                <xsl:with-param
-                select="$firstSupportedFile"
-                name="pathOfImage"/>
-                <xsl:with-param select="'500'"
-                name="height"/>
-                <xsl:with-param select="'750'"
-                name="width"/>
-                <xsl:with-param select="'fitToWidth'"
-                name="scaleFactor"/>
-                <xsl:with-param select="'normal'"
-                name="display"/>
-                <xsl:with-param select="'image'"
-                name="style"/>
-                </xsl:call-template>
-                </td>
-                </tr>
-                
-                </xsl:when>
-                </xsl:choose>
-                </xsl:for-each>
-                </xsl:if>-->
-            <!-- MCR - IView ..end -->
         </xsl:if>
     </xsl:template>
+
+    <!-- ============================================================================================================== -->
+
 </xsl:stylesheet>

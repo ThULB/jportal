@@ -97,8 +97,8 @@
 
         <cell row="410" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
         <cell row="410" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
-        
-        
+
+
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
         <cell row="500" col="1" anchor="EAST" />
@@ -297,7 +297,7 @@
         </item>
         <include uri="classification:editor:-1:children:jportal_class_00000067" />
     </list>
-    
+
     <!-- ================================================================== -->
 
     <!-- content classis -->
@@ -322,7 +322,8 @@
         <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
         <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
         <hidden var="metadata/hidden_rubricsID/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_rubricsID/hidden_rubricID" />
+        <!-- <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_rubricsID/hidden_rubricID" /> -->
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_rubricsID/hidden_rubricID" ref="classiIDs" />
     </panel>
     <!-- pubTypeID ================================================================== -->
     <panel id="pubTypeID_input">
@@ -330,7 +331,7 @@
         <hidden var="metadata/hidden_pubTypesID/@parasearch" default="true" />
         <hidden var="metadata/hidden_pubTypesID/@textsearch" default="true" />
         <hidden var="metadata/hidden_pubTypesID/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
+        <cell col="1" row="2" anchor="NORTHWEST" ref="classiIDs" var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub_input">
@@ -338,9 +339,7 @@
         <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
         <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub">
-            <textfield width="32" maxlength="32" />
-        </cell>
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub" ref="classiIDs" />
     </panel>
     <!-- hidden_classispub2 ================================================================== -->
     <panel id="classipub2_input">
@@ -348,9 +347,7 @@
         <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
         <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub2/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2">
-            <textfield width="32" maxlength="32" />
-        </cell>
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2" ref="classiIDs"></cell>
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub3_input">
@@ -358,9 +355,7 @@
         <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
         <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub3/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3">
-            <textfield width="32" maxlength="32" />
-        </cell>
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3" ref="classiIDs"></cell>
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub4_input">
@@ -368,9 +363,7 @@
         <hidden var="metadata/hidden_classispub4/@parasearch" default="true" />
         <hidden var="metadata/hidden_classispub4/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub4/@heritable" default="false" />
-        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4">
-            <textfield width="32" maxlength="32" />
-        </cell>
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4" ref="classiIDs"></cell>
     </panel>
     <!-- websitecontext ================================================================== -->
     <panel id="websitecontext_input">
@@ -404,4 +397,12 @@
         <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="true" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
     </panel>
+    <!--  =================================================================================================== -->
+    <list type="dropdown" id="classiIDs">
+        <item value="">
+            <label xml:lang="de">bitte wählen</label>
+        </item>
+        <include cacheable="false" uri="jportal_getALLClassIDs:" />
+    </list>
+    <!--  =================================================================================================== -->
 </imports>

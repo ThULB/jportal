@@ -26,6 +26,7 @@ package org.mycore.frontend.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,18 +35,22 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.frontend.MCRJPortalWebsiteContext;
+import org.mycore.common.MCRUsageException;
+import org.mycore.datamodel.metadata.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRJPortalJournalContextForUserManagement;
+import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
 import org.mycore.user2.MCRUserMgr;
 
 public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // private static final String JOURNAL_ID =
-    // "XSL.MCR.JPortal.Create-JournalContext.ID";
-    private static final String JOURNAL_ID = "jportal_jpjournal_00000002";
+    private static final String JOURNAL_ID = "XSL.MCR.JPortal.Create-JournalContext.ID";
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCreateJournalContextServlet.class);;
 
@@ -55,12 +60,15 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws JDOMException, IOException {
 
+        if (!access())
+            throw new MCRException("Access denied. Please authorise yourself.");
+
         // get requested mode
         String mode = null;
         if (job.getRequest().getParameter("mode") != null && !job.getRequest().getParameter("mode").equals(""))
             mode = job.getRequest().getParameter("mode");
         else
-            return;
+            throw new MCRException("Request can't be processed, because no 'mode' parameter given.");
 
         // dispatch mode
         if (mode.equals("createContext"))
@@ -71,15 +79,12 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
     }
 
     public void createContext(MCRServletJob job) {
-        LOGGER.debug("start to create journal context");
+        LOGGER.info("create journal context");
         HttpServletRequest req = job.getRequest();
-        MCRSession session = MCRSessionMgr.getCurrentSession();
 
-        // create website
-        LOGGER.debug("start to create website");
-        // String jid = (String) session.get(JOURNAL_ID);
-        String jid = JOURNAL_ID;
-        LOGGER.debug("calculated journalID=" + jid);
+        // create webpages
+        LOGGER.debug("start creating webpages");
+        String jid = getJournalID();
         String precHref = req.getParameter("jp.cjc.preceedingItemHref");
         String shortCut = req.getParameter("jp.cjc.shortCut");
         String layoutTemplate;
@@ -87,9 +92,59 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
             layoutTemplate = "template_" + shortCut;
         else
             layoutTemplate = req.getParameter("jp.cjc.layoutTemplate");
-        MCRJPortalWebsiteContext wc = new MCRJPortalWebsiteContext(jid, precHref, layoutTemplate, shortCut);
-        wc.create();
+        MCRJPortalJournalContextForWebpages wc = new MCRJPortalJournalContextForWebpages(jid, precHref, layoutTemplate, shortCut);
+        try {
+            wc.create();
+        } catch (MCRException exception) {
+            try {
+                generateErrorPage(job.getRequest(), job.getResponse(), 500, exception.getMessage(), exception, true);
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
 
+        // setup user, groups and assign acl's
+        LOGGER.debug("start setting up user management");
+        MCRJPortalJournalContextForUserManagement uc = new MCRJPortalJournalContextForUserManagement(jid, shortCut);
+        String reqKeyUsersTOC = "jp.cjc.usersTOC";
+        String reqKeyUsersArt = "jp.cjc.usersART";
+        String reqKeyusersALL = "jp.cjc.usersALL";
+        if (req.getParameter(reqKeyUsersTOC) != null && req.getParameterValues(reqKeyUsersTOC).length > 0)
+            uc.setUserListTOC(req.getParameterValues(reqKeyUsersTOC));
+        if (req.getParameter(reqKeyUsersArt) != null && req.getParameterValues(reqKeyUsersArt).length > 0)
+            uc.setUserListArt(req.getParameterValues(reqKeyUsersArt));
+        if (req.getParameter(reqKeyusersALL) != null && req.getParameterValues(reqKeyusersALL).length > 0) {
+            uc.setUserListTOCArt(req.getParameterValues(reqKeyusersALL));
+        }
+        uc.setup();
+
+        // forward to journal page
+        try {
+            String forwardURL = super.getBaseURL() + "receive/" + getJournalID();
+            job.getResponse().sendRedirect(forwardURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param session
+     * @return
+     */
+    private String getJournalID() {
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        String jid = (String) session.get(JOURNAL_ID);
+        return jid;
+    }
+
+    private boolean access() {
+        String jid = getJournalID();
+        if (jid != null && MCRAccessManager.checkPermission(jid, "writedb"))
+            return true;
+        else
+            return false;
     }
 
     public Element getUsers() {

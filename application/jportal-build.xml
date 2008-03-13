@@ -123,7 +123,7 @@
 			update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml
 			
 			update permission deletedb for id default_jpjournal with rulefile grant-rootgroup.xml			
-			update permission deletedb for id default_jpvolume with rulefile grant-volumegroup.xml
+			update permission deletedb for id default_jpvolume with rulefile grant-rootgroup.xml
 			update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml
 			update permission deletedb for id default_person with rulefile grant-editorsgroup.xml
 			update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml			
