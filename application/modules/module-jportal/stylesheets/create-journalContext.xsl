@@ -140,6 +140,7 @@
                 <xsl:copy-of select="'bitte wählen'" />
             </option>
             <xsl:for-each select="xalan:nodeset($userList)/users/user">
+                <xsl:sort select="text()" />
                 <option value="{@id}">
                     <xsl:copy-of select="concat(text(),' (',@id,')')" />
                 </option>
