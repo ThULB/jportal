@@ -205,11 +205,11 @@
             <!-- derivates -->
             <!--<xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
                 <tr>
-                    <td>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
+                <td>
+                <xsl:call-template name="lineSpace" />
+                </td>
                 </tr>
-            </xsl:if> -->
+                </xsl:if> -->
             <xsl:call-template name="printDerivates">
                 <xsl:with-param name="obj_id" select="@id" />
                 <xsl:with-param name="knoten" select="$cXML" />
@@ -462,7 +462,7 @@
                                 <xsl:with-param name="mode" select="'date'" />
                             </xsl:call-template>
                         </table>
-                        <!--11***size*************************************-->
+                        <!--5***size*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -470,7 +470,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.size')" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--7***identi*************************************-->
+                        <!--6***identi*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDate_typeSensitive">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -511,7 +511,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <!--5***keyword*************************************-->
+                        <!--7***keyword*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -519,7 +519,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.keyword')" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--6***abstract*************************************-->
+                        <!--8***abstract*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -527,7 +527,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.abstract')" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--8***note*************************************-->
+                        <!--9***note*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDate_typeSensitive">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -548,7 +548,7 @@
                                 </xsl:call-template>
                             </table>
                         </xsl:if>
-                        <!--9***type*************************************-->
+                        <!--10***type*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -556,7 +556,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.type')" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--10***rubric*************************************-->
+                        <!--11***rubric*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />
@@ -564,7 +564,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.rubric')" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--10***classipub*************************************-->
+                        <!--12***classipub*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub">
                                 <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub')//label/text()" />
@@ -575,7 +575,7 @@
                                 <xsl:with-param select="$label_classipub" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--10***classipub2*************************************-->
+                        <!--13***classipub2*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub2">
                                 <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2')//label/text()" />
@@ -586,7 +586,7 @@
                                 <xsl:with-param select="$label_classipub2" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--10***classipub3*************************************-->
+                        <!--14***classipub3*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub3">
                                 <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3')//label/text()" />
@@ -597,7 +597,7 @@
                                 <xsl:with-param select="$label_classipub3" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--10***classipub4*************************************-->
+                        <!--15***classipub4*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="label_classipub4">
                                 <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4')//label/text()" />
@@ -608,7 +608,7 @@
                                 <xsl:with-param select="$label_classipub4" name="label" />
                             </xsl:call-template>
                         </table>
-                        <!--12***ref*************************************-->
+                        <!--16***ref*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="'right'" name="textalign" />

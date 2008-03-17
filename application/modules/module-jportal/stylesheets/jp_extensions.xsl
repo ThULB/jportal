@@ -1348,7 +1348,6 @@
                     </tr>
                 </table>
             </xsl:if>
-            <table>
                 <tr>
                     <td valign="top" id="detailed-labels">
                         <xsl:value-of select="$label" />
@@ -1406,7 +1405,6 @@
                         </xsl:for-each>
                     </td>
                 </tr>
-            </table>
         </xsl:if>
     </xsl:template>
     <!-- ===================================================================================================== -->
@@ -1417,7 +1415,6 @@
         <xsl:param name="mode" />
 
         <xsl:if test="$nodes">
-
             <xsl:variable name="classXML">
                 <xsl:copy-of select="xalan:nodeset(document(concat('classification:metadata:all:children:',$typeClassi)))" />
             </xsl:variable>

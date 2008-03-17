@@ -141,61 +141,71 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-
-                            <!--1***name*************************************-->
-
+                        <!--1***name*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/names/name/fullname" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AINameName')" name="label" />
                             </xsl:call-template>
-
-                            <!--1***nickname*************************************-->
-
+                        </table>
+                        <!--2***nickname*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/names/name/nickname" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AINameNick')" name="label" />
                             </xsl:call-template>
-
-                            <!--1***property*************************************-->
-
+                        </table>
+                        <!--3***property*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/names/name/property" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AINameProp')" name="label" />
                             </xsl:call-template>
-
-                            <!--2***address*************************************-->
+                        </table>
+                        <!--4***address*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/addresses/address/street" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AAddressStreet')" name="label" />
                             </xsl:call-template>
-                            <!--2***address*************************************-->
+                        </table>
+                        <!--5a***address*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/addresses/address/number" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AAddressNumber')" name="label" />
                             </xsl:call-template>
-                            <!--2***address*************************************-->
+                        </table>
+                        <!--5b***address*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/addresses/address/zipcode" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AAddressZIP')" name="label" />
                             </xsl:call-template>
-                            <!--2***address*************************************-->
+                        </table>
+                        <!--5c***address*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/addresses/address/city" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AAddressCity')" name="label" />
                             </xsl:call-template>
-                            <!--2***address*************************************-->
+                        </table>
+                        <!--5d***address*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/addresses/address/country" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.AAddressCountry')" name="label" />
                             </xsl:call-template>
-
-                            <!--3***phone*************************************-->
+                        </table>
+                        <!--6***phone*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/phones/phone[@type='Telefon']" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.LPhone')" name="label" />
                             </xsl:call-template>
-                            <!--4***url*************************************-->
+                        </table>
+                        <!--7***url*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:if test="./metadata/urls/url/@xlink:href">
                                 <tr>
                                     <td valign="top" id="detailed-labels">
@@ -208,78 +218,88 @@
                                     </td>
                                 </tr>
                             </xsl:if>
-                            <!--5***email*************************************-->
+                        </table>
+                        <!--8***email*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/emails/email" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.LEmail')" name="label" />
                             </xsl:call-template>
-                            <!--6***note*************************************-->
+                        </table>
+                        <!--9***note*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./metadata/notes/note" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editormask.labels.LNote')" name="label" />
                             </xsl:call-template>
-
-                            <!-- linked articles-->
+                        </table>
+                        <!-- linked articles-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="listLinkedArts" />
-
+                        </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
-                                <td colspan="2">
-                                    <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                                        <tr>
-                                            <td colspan="2" id="detailed-innerdivlines">
-                                                <br />
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td colspan="2" id="detailed-innerdivlines">
+                                    <br />
                                 </td>
                             </tr>
+                        </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <tr>
                                 <td id="detailed-headlines">
                                     <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
                                 </td>
                             </tr>
-
-                            <!--*** Created ************************************* -->
+                        </table>
+                        <!--10*** Created ************************************* -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
                             </xsl:call-template>
-
-                            <!--*** Last Modified ************************************* -->
+                        </table>
+                        <!--11*** Last Modified ************************************* -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
                                 <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
                                 <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
 
                             </xsl:call-template>
-
-                            <!--*** MyCoRe-ID ************************************* -->
+                        </table>
+                        <!--12*** MyCoRe-ID ************************************* -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <tr>
-                                <td class="metaname" style="text-align:right; padding-right: 5px;">
+                                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
                                     <xsl:value-of select="concat(i18n:translate('metaData.ID'),':')" />
                                 </td>
                                 <td class="metavalue">
                                     <xsl:value-of select="./@ID" />
                                 </td>
                             </tr>
-                            <!-- Static URL ************************************************** -->
+                        </table>
+                        <!--13*** Static URL ************************************************** -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">
                                 <xsl:with-param name="stURL" select="$staticURL" />
                             </xsl:call-template>
                             <xsl:call-template name="emptyRow" />
-                            <!--*** Editor Buttons ************************************* -->
+                        </table>
+                        <!--14*** Editor Buttons ************************************* -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.redun.editObj" />
-                            <!-- 
-                                <xsl:call-template name="editobject">
-                                <xsl:with-param select="$accessedit" name="accessedit"/>
-                                <xsl:with-param select="./@ID" name="id"/>
-                                </xsl:call-template>  -->
-                            <!--*** List children per object type ************************************* -->
-                            <!--
-                                1.) get a list of objectTypes of all child elements
-                                2.) remove duplicates from this list
-                                3.) for-each objectTyp id list child elements
-                            -->
-
+                        </table>
+                        <!-- 
+                            <xsl:call-template name="editobject">
+                            <xsl:with-param select="$accessedit" name="accessedit"/>
+                            <xsl:with-param select="./@ID" name="id"/>
+                            </xsl:call-template>  -->
+                        <!--*** List children per object type ************************************* -->
+                        <!--
+                            1.) get a list of objectTypes of all child elements
+                            2.) remove duplicates from this list
+                            3.) for-each objectTyp id list child elements
+                        -->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="objectTypes">
                                 <xsl:for-each select="./structure/children/child/@xlink:href">
                                     <id>
