@@ -11,8 +11,9 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	private MCRObjectID ID;
 	private String name;
 	private String JournalType; 
+	private String ObjectFocus;
 	
-	private HashMap<Integer, MCRObjectID> incompleteArticle = new HashMap<Integer, MCRObjectID> ();
+	private HashMap<Integer, MCRObjectID> incompleteObjects = new HashMap<Integer, MCRObjectID> ();
 	
 	private int GoodObjectCounter = 0;
 	private int BadObjectCounter = 0;
@@ -23,19 +24,20 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		 MCRObject Journal = new MCRObject();
 		 Journal.receiveFromDatastore(ID);
 		 this.ID = ID;
-		 this.name = Journal.getLabel();
+		 this.name = Journal.getMetadata().createXML().getChild("maintitles").getChild("maintitle").getText();
+		 this.ObjectFocus = Journal.getMetadata().createXML().getChild("dataModelCoverages").getChild("dataModelCoverage").getAttributeValue("categid");
 		 this.JournalType = JournalType;
 		}
 	
-	public void incompleteArt(MCRObjectID ID)
+	public void incompleteObj(MCRObjectID ID)
 		{
-		 incompleteArticle.put(BadObjectCounter, ID);
+		 incompleteObjects.put(BadObjectCounter, ID);
 		 
 		 this.BadObjectCounter++;
 		 this.OverallCounter++;		
 		}
 	
-	public void completeArt(MCRObjectID ID)
+	public void completeObj(MCRObjectID ID)
 		{
 		 this.GoodObjectCounter++;
 		 this.OverallCounter++;
@@ -70,4 +72,14 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		{
 		 return this.JournalType;
 		}
+	
+	public String getObjectFocus()
+		{
+		 return this.ObjectFocus;
+		}
+	
+	public HashMap<Integer, MCRObjectID> getIncompleteObjects()
+	{
+	 return this.incompleteObjects;
+	}
 }
