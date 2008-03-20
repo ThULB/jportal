@@ -14,10 +14,12 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	private String ObjectFocus;
 	
 	private HashMap<Integer, MCRObjectID> incompleteObjects = new HashMap<Integer, MCRObjectID> ();
+	private HashMap<Integer, MCRObjectID> MissingChildObj = new HashMap<Integer, MCRObjectID> ();
 	
 	private int GoodObjectCounter = 0;
 	private int BadObjectCounter = 0;
 	private int OverallCounter = 0;
+	private int MissingChildrenCounter = 0;
 	
 	MCRJournalStats(MCRObjectID ID, String JournalType)
 		{
@@ -43,6 +45,14 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		 this.OverallCounter++;
 		}
 	
+	public void MissingChildObj(MCRObjectID ID)
+		{
+		 MissingChildObj.put(MissingChildrenCounter, ID);
+		 
+		 this.MissingChildrenCounter++;
+		 this.OverallCounter++;		
+		}
+	
 	public int getGoodCounter()
 		{
 		 return this.GoodObjectCounter;
@@ -56,6 +66,11 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	public int getAllCounter()
 		{
 		 return this.OverallCounter;
+		}
+	
+	public int getMissingChildrenCounter()
+		{
+		 return this.MissingChildrenCounter;
 		}
 	
 	public MCRObjectID getJournalID()
@@ -79,7 +94,12 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		}
 	
 	public HashMap<Integer, MCRObjectID> getIncompleteObjects()
-	{
-	 return this.incompleteObjects;
-	}
+		{
+		 return this.incompleteObjects;
+		}
+	
+	public HashMap<Integer, MCRObjectID> getMissingChildren()
+		{
+		 return this.MissingChildObj;
+		}
 }

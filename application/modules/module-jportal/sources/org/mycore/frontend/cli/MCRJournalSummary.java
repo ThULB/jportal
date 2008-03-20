@@ -37,7 +37,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
         MCRCommand com = null;
 
-        com = new MCRCommand("check journal {0} for incomplete objects, with important volume {1}", "org.mycore.frontend.cli.MCRJournalSummary.DoIt String String", "");
+        com = new MCRCommand("check journal {0} for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt String", "");
         command.add(com);
     }
 	
@@ -54,15 +54,19 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		}
 	
 	
-	private static void ParseObjects(String type, String ObjType, int maxID, String JID, String volumeLevel)
-		{ 
+	private static void ParseObjects(String type, String ObjType, int maxID, String JID)
+		{
+		 //type tells if either articles are need to be checked or volumes
+		 //ObjType is the corresponding tag of the object id
+		 //maxID of the objects in the database according to the type
+		 //if JID is all the programm scans all journals, else only a specific 
+		
 		 for(int i = 0;i < maxID; i++)
 			{
 			 MCRObject object = getActualObject(ObjType,i);
 			 if(((float)i*100/(float)maxID) % 20 == 0)
 			 	{
-				 //System.out.print((char)27 + "[D");
-				 System.out.print("Progress: " + ((float)i*100/(float)maxID) +"%... ");
+				 logger.info("Progress: " + ((float)i*100/(float)maxID) +"%... ");
 			 	}
 			 
 			 if(object!=null)
@@ -77,9 +81,11 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 					 MCRObject objParent = new MCRObject();
 					 boolean checker = true;
 					 
+					 //get upstairs through the xml-tree until the root is reached
 					 while(objParentID!=null)
 					 	{
 						 objParentIDtemp = objParentID;
+						 //error if the founded ID has no Object in the database
 						 try{objParent.receiveFromDatastore(objParentID);}
 						 	catch(Exception e)
 						 	{
@@ -91,35 +97,36 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 						 objParentID = objParent.getStructure().getParentID(); 
 					 	}//while
 					 
-					 if(JID.equals("all") || JID.equals(objParentIDtemp.toString()))
-					 	{
-						 if(checker)
-							 {
-							  //new journal stats object if needed
-							  if(!journals.containsKey(objParentIDtemp))
-							  	 {
-								  logger.info("new Journal found, with ID " + objParentIDtemp);
-								  journals.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, "article"));
+					 //if all every object is checked, else only if the journal ID is right
+					//checker is true if there was no exception when getting the journal object
+					 if((JID.equals("all") || JID.equals(objParentIDtemp.toString()))&&checker)
+					 	 {				 
+						  //create new journal stats object if needed
+						  if(!journals.containsKey(objParentIDtemp))
+						  	 {
+							  logger.info("new Journal found, with ID " + objParentIDtemp);
+							  journals.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, "article"));
+						  	 }
+						  
+						  if((journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("articles"))||(journals.get(objParentIDtemp).getObjectFocus().equals("browse") && type.equals("volumes")))
+						  	 {
+							  //check for completeness					 
+							  if(objStruct.getDerivateSize()==0)
+							 	 {
+								  journals.get(objParentIDtemp).incompleteObj(object.getId());
 							 	 }
-							  
-							  if(!(journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("volume")))
-							  	 {
-								  //check for completeness					 
-								  if(objStruct.getDerivateSize()==0)
-								 	 {
-									  journals.get(objParentIDtemp).incompleteObj(object.getId());
-								 	 }
-								  else
-								 	 {
-									  journals.get(objParentIDtemp).completeObj(object.getId());
-								 	 }
-							  	 }
+							  else
+							 	 {
+								  journals.get(objParentIDtemp).completeObj(object.getId());
+							 	 }
+						  	 }
+						  if(journals.get(objParentIDtemp).getObjectFocus().equals("fully")&& type.equals("volumes"))
+							 {
+							  journals.get(objParentIDtemp).MissingChildObj(object.getId());
 							 }
-					 	}
-				 	}
-				 
-			 	}
-			 
+					 	 }
+				 	}		 
+			 	}		 
 			}
 		}//DoArticle
 
@@ -127,7 +134,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 	private static void PrintStats() throws IOException
 		{
 		 Document doc = new Document();
-		 Element root = new Element("incompleteObjects");
+		 Element root = new Element("journalStatistic");
 		 doc.setRootElement(root);
 		
 		 logger.info("/************************Journal Status Report*************************/");
@@ -138,14 +145,20 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 			 if(journals.containsKey(JournalID))
 				 {
 				  MCRJournalStats journal = journals.get(JournalID);
-				  Element XMLjournal = new Element("Journal").setAttribute("type", journal.getType()).setAttribute("ID", JournalID.toString());
+				  Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type", journal.getObjectFocus()).setAttribute("id", journal.getJournalID().toString());
+				  Element XMLobjectsInc = new Element("objectList").setAttribute("type","incomplete");
+				  Element XMLobjectsMis = new Element("objectList").setAttribute("type","missing");
 				  
-				  for(int h = 0; h < journal.getBadCounter(); h++)
+				  for(int i = 0; i < journal.getBadCounter(); i++)
 				  	{
-					 Element XMLobject = new Element("Object").setAttribute("ID", journal.getIncompleteObjects().get(h).toString());
-					 XMLjournal.addContent(XMLobject);  
+					 Element XMLobject = new Element("object").setAttribute("id", journal.getIncompleteObjects().get(i).toString());
+					 XMLobjectsInc.addContent(XMLobject);  
 				  	}
-				  root.addContent(XMLjournal);
+				  for(int j = 0; j < journal.getMissingChildrenCounter(); j++)
+				  	{
+					 Element XMLobject = new Element("object").setAttribute("id", journal.getMissingChildren().get(j).toString());
+					 XMLobjectsMis.addContent(XMLobject);  
+				  	}
 				  
 				  logger.info("=================================================================");
 				  logger.info("=                                                               =");
@@ -156,24 +169,48 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 				  logger.info("");
 				  logger.info("");
 				  logger.info(" ++++++++++++++++++Details+++++++++++++++++++");
-				  logger.info("  Number of " + journal.getType()+"s: " + journal.getAllCounter());
-				  logger.info("  Complete: " + journal.getGoodCounter() + " / " + ((float)journal.getGoodCounter()/(float)journal.getAllCounter()*100) +"%");
-				  logger.info("  Incomplete: " + journal.getBadCounter() + " / " + ((float)journal.getBadCounter()/(float)journal.getAllCounter()*100) +"%");
+				  logger.info("  Number of " + journal.getType()+"s          : " + journal.getAllCounter());
+				  
+				  Element NumberOfObjects = new Element("numberOfObjects");
+				  
+				  Element Total = new Element("total").setText(Integer.toString(journal.getAllCounter()));
+				  
+				  String complete = journal.getGoodCounter() + " / " + ((float)journal.getGoodCounter()/(float)journal.getAllCounter()*100) +"%";
+				  logger.info("  Complete                    : " + complete); 
+				  Element Complete = new Element("complete").setAttribute("percent",Float.toString((float)journal.getGoodCounter()/(float)journal.getAllCounter()*100)).setText(Integer.toString(journal.getGoodCounter()));
+				  
+				  String incomplete = journal.getBadCounter() + " / " + ((float)journal.getBadCounter()/(float)journal.getAllCounter()*100) +"%";
+				  logger.info("  Incomplete                  : " + incomplete);
+				  Element Incomplete = new Element("incomplete").setAttribute("percent",Float.toString((float)journal.getBadCounter()/(float)journal.getAllCounter()*100)).setText(Integer.toString(journal.getBadCounter()));
+				  
+				  logger.info("  Volume with Missing Articles: " + journal.getMissingChildrenCounter() + " / " + ((float)journal.getMissingChildrenCounter()/(float)journal.getAllCounter()*100) + "%");
+				  Element Missing = new Element("missing").setAttribute("percent",Float.toString((float)journal.getMissingChildrenCounter()/(float)journal.getAllCounter()*100)).setText(Integer.toString(journal.getMissingChildrenCounter()));
+				  
 				  logger.info("");
 				  logger.info("");
 				  logger.info("=================================================================");
 				  logger.info("");
 				  logger.info("");
+				  
+				  NumberOfObjects.addContent(Total);
+				  NumberOfObjects.addContent(Complete);
+				  NumberOfObjects.addContent(Incomplete);
+				  NumberOfObjects.addContent(Missing);
+				  XMLjournal.addContent(NumberOfObjects);
+				  XMLjournal.addContent(XMLobjectsInc);
+				  XMLjournal.addContent(XMLobjectsMis);
+				  root.addContent(XMLjournal);
 				 }
 		 	}
 		
 		 logger.info("/************************Journal Status Report*************************/");
-		 saveXML(doc, "", "incObjects.xml", true);
+		 saveXML(doc, "build/webapps", "build/webapps/summary.xml", true);
 		}
 	
 	private static void saveXML (Document doc, String dir, String targetFile, boolean log) throws IOException, FileNotFoundException 
 		{
 		 XMLOutputter xmlOut = new XMLOutputter();
+		 xmlOut.getFormat().getPrettyFormat();
 		 File directory = new File(dir);
 		 directory.mkdirs();
 		 FileOutputStream fos = new FileOutputStream(new File(targetFile));
@@ -184,18 +221,18 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		 if (log) logger.info("saved "+targetFile+"... ");
 		}
 	
-	public static void DoIt(String JID, String volumeLevel) throws IOException
+	public static void DoIt(String JID) throws IOException
 		{
 		 logger.info("Go Go Go!");
 	     logger.info("====================");
 
 	     logger.info("Article...");
 		 
-	     ParseObjects("articles", "jparticle_", maxArtID, JID, volumeLevel);
+	     ParseObjects("articles", "jparticle_", maxArtID, JID);
 		 
 	     logger.info("Volumes...");
 		 
-	     ParseObjects("volumes", "jpvolume_", maxVolID, JID, volumeLevel);
+	     ParseObjects("volumes", "jpvolume_", maxVolID, JID);
 		 
 	     logger.info("Status...");
 		 
