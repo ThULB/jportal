@@ -2,11 +2,18 @@
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="MyCoReLayout.xsl" />
-    <xsl:variable name="PageTitle" value="journalStatistic" />
+    <xsl:variable name="PageTitle" />
+
+    <xsl:template match="journalStatistic">
+        <xsl:apply-templates select="journal">
+            <xsl:sort select="@name" />
+        </xsl:apply-templates>
+    </xsl:template>
+
     <xsl:template match="journal">
         <table cellspacing="0" cellpadding="0" style="border-bottom: 1px solid black;">
             <tr>
-                <td width="200">
+                <td width="200" style="font-weight: bold;">
                     Name:
                     <xsl:value-of select="@name" />
                 </td>
@@ -20,7 +27,7 @@
                 </td>
             </tr>
         </table>
-        <br/>
+        <br />
         <table style="border: 1px solid black;" cellspacing="0" cellpadding="0">
             <tr>
                 <td width="300">-</td>
@@ -32,6 +39,8 @@
             <xsl:apply-templates select="numberOfObjects/incomplete" />
             <xsl:apply-templates select="numberOfObjects/missing" />
         </table>
+        <br />
+        <br />
     </xsl:template>
 
     <xsl:template match="total | complete | incomplete | missing">
