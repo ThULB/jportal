@@ -68,7 +68,7 @@ public class MCRJPortalJournalContextForUserManagement {
             e.printStackTrace();
         }
 
-        // safe
+        // save
         MCRAccessManager.addRule(new MCRObjectID(this.journalID), "writedb", rule, "Write permission for " + this.journalID);
         MCRAccessManager.addRule(new MCRObjectID(this.journalID), "deletedb", rule, "Delete permission for " + this.journalID);
 
