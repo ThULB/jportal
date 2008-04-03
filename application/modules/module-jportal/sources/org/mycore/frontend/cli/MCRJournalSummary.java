@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -164,8 +166,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		java.util.Date heute = new java.util.Date();
 		Timestamp time = new Timestamp(heute.getTime());
 		Long actualTime = time.getTime();
-		
-		Element date = new Element("statistic").setAttribute("date", actualTime.toString());
+
+		Element date = new Element("statistic").setAttribute("date", actualTime
+				.toString());
 
 		logger
 				.info("/************************Journal Status Report*************************/");
@@ -175,25 +178,16 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 					+ Integer.toString(k));
 			if (journals.containsKey(JournalID)) {
 				MCRJournalStats journal = journals.get(JournalID);
-				Element XMLjournal = new Element("journal").setAttribute(
-						"name", journal.getJournalName()).setAttribute("type",
-						journal.getObjectFocus()).setAttribute("id",
-						journal.getJournalID().toString());
-				Element XMLobjectsInc = new Element("objectList").setAttribute(
-						"type", "incomplete");
-				Element XMLobjectsMis = new Element("objectList").setAttribute(
-						"type", "missing");
+				Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type", journal.getObjectFocus()).setAttribute("id", journal.getJournalID().toString());
+				Element XMLobjectsInc = new Element("objectList").setAttribute("type", "incomplete");
+				Element XMLobjectsMis = new Element("objectList").setAttribute("type", "missing");
 
 				for (int i = 0; i < journal.getBadCounter(); i++) {
-					Element XMLobject = new Element("object").setAttribute(
-							"id", journal.getIncompleteObjects().get(i)
-									.toString());
+					Element XMLobject = new Element("object").setAttribute("id", journal.getIncompleteObjects().get(i).toString());
 					XMLobjectsInc.addContent(XMLobject);
 				}
 				for (int j = 0; j < journal.getMissingChildrenCounter(); j++) {
-					Element XMLobject = new Element("object").setAttribute(
-							"id", journal.getMissingChildren().get(j)
-									.toString());
+					Element XMLobject = new Element("object").setAttribute("id", journal.getMissingChildren().get(j).toString());
 					XMLobjectsMis.addContent(XMLobject);
 				}
 
@@ -216,44 +210,18 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
 				Element NumberOfObjects = new Element("numberOfObjects");
 
-				Element Total = new Element("total").setText(Integer
-						.toString(journal.getAllCounter()));
+				Element Total = new Element("total").setAttribute("scale", Double.toString(scale(journal.getAllCounter()))).setText(Integer.toString(journal.getAllCounter()));
 
-				String complete = journal.getGoodCounter()
-						+ " / "
-						+ ((float) journal.getGoodCounter()
-								/ (float) journal.getAllCounter() * 100) + "%";
+				String complete = journal.getGoodCounter() + " / " + ((float) journal.getGoodCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Complete                    : " + complete);
-				Element Complete = new Element("complete").setAttribute(
-						"percent",
-						Float.toString((float) journal.getGoodCounter()
-								/ (float) journal.getAllCounter() * 100))
-						.setText(Integer.toString(journal.getGoodCounter()));
+				Element Complete = new Element("complete").setAttribute("percent", Double.toString(round(((double)journal.getGoodCounter()/(double)journal.getAllCounter()*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getGoodCounter()));
 
-				String incomplete = journal.getBadCounter()
-						+ " / "
-						+ ((float) journal.getBadCounter()
-								/ (float) journal.getAllCounter() * 100) + "%";
+				String incomplete = journal.getBadCounter()	+ " / "	+ ((float) journal.getBadCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Incomplete                  : " + incomplete);
-				Element Incomplete = new Element("incomplete").setAttribute(
-						"percent",
-						Float.toString((float) journal.getBadCounter()
-								/ (float) journal.getAllCounter() * 100))
-						.setText(Integer.toString(journal.getBadCounter()));
+				Element Incomplete = new Element("incomplete").setAttribute("percent",Double.toString(round(((double) journal.getBadCounter()/ (double) journal.getAllCounter() * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getBadCounter()));
 
-				logger.info("  Volume with Missing Articles: "
-						+ journal.getMissingChildrenCounter()
-						+ " / "
-						+ ((float) journal.getMissingChildrenCounter()
-								/ (float) journal.getAllCounter() * 100) + "%");
-				Element Missing = new Element("missing").setAttribute(
-						"percent",
-						Float.toString((float) journal
-								.getMissingChildrenCounter()
-								/ (float) journal.getAllCounter() * 100))
-						.setText(
-								Integer.toString(journal
-										.getMissingChildrenCounter()));
+				logger.info("  Volume with Missing Articles: " + journal.getMissingChildrenCounter() + " / " + ((float) journal.getMissingChildrenCounter()	/ (float) journal.getAllCounter() * 100) + "%");
+				Element Missing = new Element("missing").setAttribute("percent", Double.toString(round(((double)journal.getMissingChildrenCounter()	/ (double) journal.getAllCounter() * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getMissingChildrenCounter()));
 
 				logger.info("");
 				logger.info("");
@@ -284,7 +252,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		boolean empty = true;
 		Document doc = new Document();
 		List<Element> AllStats = null;
-		
+
 		try {
 			SAXBuilder sxbuild = new SAXBuilder();
 			InputSource is = new InputSource(targetFile);
@@ -301,11 +269,11 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 			Element root = doc.getRootElement();
 
 			AllStats = root.removeContent();
-			
+
 			int ListSize = AllStats.size();
-			
-			Element LastStats = AllStats.get(ListSize-1);
-			
+
+			Element LastStats = AllStats.get(ListSize - 1);
+
 			List<Element> AllPapers = LastStats.getChildren();
 
 			Iterator<Element> papers = AllPapers.iterator();
@@ -314,48 +282,83 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 				Element journal = (Element) papers.next();
 
 				journal.removeChildren("objectList");
-				
+
 			}
 		}
-		
+
 		return AllStats;
 	}
 
-	private static void saveXML(Element newStats, String dir, String targetFile,
-			boolean log) throws IOException, FileNotFoundException,
-			JDOMException {
+	private static void saveXML(Element newStats, String dir,
+			String targetFile, boolean log) throws IOException,
+			FileNotFoundException, JDOMException {
 		Document Addition = new Document();
 		Element root = new Element("journalStatistic");
 		Addition.setRootElement(root);
 		List<Element> oldContent = manipulateXML(targetFile);
-		
-		
+
 		XMLOutputter xmlOut = new XMLOutputter();
-		xmlOut.getFormat().getPrettyFormat();
+		//xmlOut.getFormat().getPrettyFormat();
 		File directory = new File(dir);
 		directory.mkdirs();
 		FileOutputStream fos = new FileOutputStream(new File(targetFile));
-				
+
 		root.removeContent();
-		
-		if(oldContent!=null)
-			{
-	
-			 Iterator<Element> oldContIt = oldContent.iterator();
-			
-			 while (oldContIt.hasNext()) 
-				{
-				 Element oldContEl = (Element) oldContIt.next();
-			     root.addContent(oldContEl);
-				}
-			}		
-		
+
+		if (oldContent != null) {
+
+			Iterator<Element> oldContIt = oldContent.iterator();
+
+			while (oldContIt.hasNext()) {
+				Element oldContEl = (Element) oldContIt.next();
+				root.addContent(oldContEl);
+			}
+		}
+
 		root.addContent(newStats);
 		xmlOut.output(Addition, fos);
 		fos.flush();
 		fos.close();
 		if (log)
 			logger.info("saved " + targetFile + "... ");
+	}
+
+	/**
+	 * @param d
+	 *            der zu rundende Gleitkommawert.
+	 * @param scale
+	 *            die Anzahl der Nachkommastellen, falls type = fix, die Anzahl
+	 *            der tragenden Stellen - 1, falls type = exp. scale sollte >= 0
+	 *            sein (negative Werte werden auf 0 gesetzt).
+	 * @param mode
+	 *            die Rundungsart: einer der Rundungsarten von BigDecimal, seit
+	 *            1.5 in java.math.RoundingMode.
+	 * @param type
+	 *            ein Element von "enum FormatType {fix, exp}" gibt an, auf
+	 *            welche Stellen sich die Rundung beziehen soll. FormatType.exp
+	 *            ('Exponential') steht für tragende Stellen, FormatType.fix
+	 *            ('Fixkomma') steht für Nachkommastellen.
+	 * @return der gerundete Gleitkommawert. Anmerkung: Für die Werte double NaN
+	 *         und ±Infinity liefert round den Eingabewert unverändert zurück.
+	 */
+
+	enum FormatType {
+		fix, exp
+	};
+
+	public static double round(double d, int scale, RoundingMode mode,
+			FormatType type) {
+		if (Double.isNaN(d) || Double.isInfinite(d))
+			return d;
+		scale = Math.max(scale, 0); // Verhindert negative scale-Werte
+		BigDecimal bd = BigDecimal.valueOf(d);
+		if (type == FormatType.exp) {
+			BigDecimal bc = new BigDecimal(bd.unscaledValue(),
+					bd.precision() - 1);
+			return ((bc.setScale(scale, mode)).scaleByPowerOfTen(bc.scale()
+					- bd.scale())).doubleValue();
+		}
+		return (bd.setScale(scale, mode)).doubleValue();
 	}
 
 	public static void DoIt(String JID) throws IOException, JDOMException {
@@ -381,6 +384,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		logger.info("Ready.");
 		logger.info("");
 	}
+
 	public static void DoIt() throws IOException, JDOMException {
 		logger.info("Go Go Go!");
 		logger.info("====================");
@@ -400,5 +404,20 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 		logger.info("Ready.");
 		logger.info("");
 	}
+	
+	public static double scale(int number)
+		{
+		 double scalevalue = java.lang.Math.sqrt((double)((number*(6000/997))+(9250000/997)));
+		 
+		 if(scalevalue < 100)
+		 	{
+			 scalevalue = 100;
+		 	}
+		 else if(scalevalue > 40000)
+		 	{
+			 scalevalue = 500;
+		 	}
+		 return scalevalue;
+		}
 
 }
