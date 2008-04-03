@@ -1,50 +1,112 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:include href="MyCoReLayout.xsl" />
-    <xsl:variable name="PageTitle" />
+    <xsl:param name="journalStatistic.dateReceived" />
+
+    <xsl:variable name="journalStatistic.date">
+        <xsl:call-template name="get.journalStatistic.date" />
+    </xsl:variable>
+    <xsl:variable name="PageTitle" select="'Statistik aller Zeitschriften'" />
     <xsl:variable name="chartBaseUrl" select="'http://chart.apis.google.com/chart?'" />
+    <xsl:variable name="journalStatistic.sourceUrl" select="concat($WebApplicationBaseURL,'journalStatistic.xml')" />
 
     <!-- ======================================================================================================================== -->
 
     <xsl:template match="journalStatistic">
-        <xsl:apply-templates select="statistic">
+
+        <xsl:call-template name="journalStatistic.selectDate" />
+
+        <xsl:call-template name="journalStatistic.total" />
+
+        <xsl:call-template name="journalStatistic.toc" />
+        <br />
+        <br />
+        <xsl:apply-templates select="statistic[@date=$journalStatistic.date]">
             <xsl:sort select="@date" />
         </xsl:apply-templates>
     </xsl:template>
 
-    <xsl:template match="statistic">
-        <div style="font-size: 16px; text-decoration:underline;">
-            <xsl:value-of select="concat(' - ','Date: ',@date)" />
-        </div>
+    <!-- ======================================================================================================================== -->
 
-        <xsl:variable name="chartLabelstemp">
-            <xsl:for-each select="journal">
-                <xsl:sort select="./numberOfObjects/total/text()" />
-                <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(), ')')" />
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="chartLabelsAll">
-            <xsl:value-of select="concat('&amp;chl=',substring($chartLabelstemp,2))" />
-        </xsl:variable>
-        <xsl:variable name="chartValuestemp">
-            <xsl:for-each select="journal">
-                <xsl:sort select="./numberOfObjects/total/text()" />
-                <xsl:value-of select="concat(',', numberOfObjects/total/text())" />
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="chartValuesAll">
-            <xsl:value-of select="concat('&amp;chd=t:',substring($chartValuestemp,2))" />
-        </xsl:variable>
-
-        <xsl:variable name="chartParamsAll" select="'chs=600x300&amp;cht=p'" />
-        <xsl:variable name="CompletePieChartURLAll" select="concat($chartBaseUrl, $chartParamsAll, $chartLabelsAll, $chartValuesAll)" />
-        <p style="text-align: center;">
-            <img src="{$CompletePieChartURLAll}" />
+    <xsl:template name="journalStatistic.selectDate">
+        <p>
+            <form method="get" action="{$journalStatistic.sourceUrl}" target="_self" id="sortByDate">
+                Datum wählen:
+                <select size="1" name="XSL.journalStatistic.dateReceived" onChange="document.getElementById('sortByDate').submit()">
+                    <xsl:for-each select="statistic">
+                        <xsl:sort select="@date" order="descending" />
+                        <option value="{@date}">
+                            <xsl:if test="@date=$journalStatistic.date">
+                                <xsl:attribute name="selected"><xsl:value-of select="'selected'" />
+                            </xsl:attribute>
+                            </xsl:if>
+                            <xsl:value-of select="@date" />
+                        </option>
+                    </xsl:for-each>
+                </select>
+            </form>
         </p>
 
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template name="journalStatistic.toc">
+        <p>
+            <b>Detailierte Statistik für Zeitschrift:</b>
+            <ul>
+                <xsl:for-each select="statistic[@date=$journalStatistic.date]/journal">
+                    <xsl:sort select="@name" />
+                    <li>
+                        <a href="#{@id}">
+                            <xsl:value-of select="@name" />
+                        </a>
+                    </li>
+                </xsl:for-each>
+            </ul>
+        </p>
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template match="statistic">
         <xsl:apply-templates select="journal">
             <xsl:sort select="@name" />
         </xsl:apply-templates>
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template name="journalStatistic.total">
+        <p>
+            <b>Gesamtübersicht:</b>
+        </p>
+        <xsl:for-each select="statistic[@date=$journalStatistic.date]">
+            <xsl:variable name="chartLabelstemp">
+                <xsl:for-each select="journal">
+                    <xsl:sort select="./numberOfObjects/total/text()" />
+                    <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(), ')')" />
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:variable name="chartLabelsAll">
+                <xsl:value-of select="concat('&amp;chl=',substring($chartLabelstemp,2))" />
+            </xsl:variable>
+            <xsl:variable name="chartValuestemp">
+                <xsl:for-each select="journal">
+                    <xsl:sort select="./numberOfObjects/total/text()" />
+                    <xsl:value-of select="concat(',', numberOfObjects/total/text())" />
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:variable name="chartValuesAll">
+                <xsl:value-of select="concat('&amp;chd=t:',substring($chartValuestemp,2))" />
+            </xsl:variable>
+
+            <xsl:variable name="chartParamsAll" select="'chs=600x300&amp;cht=p'" />
+            <xsl:variable name="CompletePieChartURLAll" select="concat($chartBaseUrl, $chartParamsAll, $chartLabelsAll, $chartValuesAll)" />
+            <p style="text-align: center;">
+                <img src="{$CompletePieChartURLAll}" />
+            </p>
+        </xsl:for-each>
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
@@ -64,10 +126,12 @@
             </xsl:choose>
         </xsl:variable>
         <div style="width: 700px; border: 1px solid black;">
+            <a name="{@id}" />
             <table cellspacing="0" cellpadding="0" style="border-bottom: 1px solid black; padding: 5px;">
                 <tr>
                     <td width="500" style="font-weight: bold;">
-                        <xsl:text>Zeitschrift: </xsl:text>
+                        <xsl:text>Zeitschrift: 
+                        </xsl:text>
                         <a href="{$WebApplicationBaseURL}receive/{$journal-id}">
                             <xsl:value-of select="concat(@name, $journal-type)" />
                         </a>
@@ -143,4 +207,25 @@
         <br />
 
     </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template name="get.journalStatistic.date">
+        <xsl:choose>
+            <xsl:when test="$journalStatistic.dateReceived=''">
+                <xsl:for-each select="/journalStatistic/statistic">
+                    <xsl:sort select="@date" order="descending" />
+                    <xsl:if test="position()=1">
+                        <xsl:value-of select="@date" />
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$journalStatistic.dateReceived" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
 </xsl:stylesheet>
