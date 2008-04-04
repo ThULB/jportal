@@ -209,16 +209,16 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 						+ "s          : " + journal.getAllCounter());
 
 				Element NumberOfObjects = new Element("numberOfObjects");
-
-				Element Total = new Element("total").setAttribute("scale", Double.toString(scale(journal.getAllCounter()))).setText(Integer.toString(journal.getAllCounter()));
+				
+				Element Total = new Element("total").setAttribute("scale", Double.toString(scale(journal.getAllCounter()))).setAttribute("percent", Double.toString(round((((double)journal.getAllCounter()/ (double)MCRJournalStats.getAllObjectsCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getAllCounter()));
 
 				String complete = journal.getGoodCounter() + " / " + ((float) journal.getGoodCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Complete                    : " + complete);
-				Element Complete = new Element("complete").setAttribute("percent", Double.toString(round(((double)journal.getGoodCounter()/(double)journal.getAllCounter()*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getGoodCounter()));
+				Element Complete = new Element("complete").setAttribute("percent", Double.toString(round((((double)journal.getGoodCounter()/(double)journal.getAllCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getGoodCounter()));
 
 				String incomplete = journal.getBadCounter()	+ " / "	+ ((float) journal.getBadCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Incomplete                  : " + incomplete);
-				Element Incomplete = new Element("incomplete").setAttribute("percent",Double.toString(round(((double) journal.getBadCounter()/ (double) journal.getAllCounter() * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getBadCounter()));
+				Element Incomplete = new Element("incomplete").setAttribute("percent",Double.toString(round((((double) journal.getBadCounter()/ (double) journal.getAllCounter()) * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getBadCounter()));
 
 				logger.info("  Volume with Missing Articles: " + journal.getMissingChildrenCounter() + " / " + ((float) journal.getMissingChildrenCounter()	/ (float) journal.getAllCounter() * 100) + "%");
 				Element Missing = new Element("missing").setAttribute("percent", Double.toString(round(((double)journal.getMissingChildrenCounter()	/ (double) journal.getAllCounter() * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getMissingChildrenCounter()));

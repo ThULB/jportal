@@ -21,6 +21,8 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	private int OverallCounter = 0;
 	private int MissingChildrenCounter = 0;
 	
+	private static int AllObjectsCounter = 0;
+	
 	MCRJournalStats(MCRObjectID ID, String JournalType)
 		{
 		 MCRObject Journal = new MCRObject();
@@ -37,12 +39,14 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		 
 		 this.BadObjectCounter++;
 		 this.OverallCounter++;		
+		 AllObjectsCounter++;
 		}
 	
 	public void completeObj(MCRObjectID ID)
 		{
 		 this.GoodObjectCounter++;
 		 this.OverallCounter++;
+		 AllObjectsCounter++;
 		}
 	
 	public void MissingChildObj(MCRObjectID ID)
@@ -51,6 +55,7 @@ public class MCRJournalStats extends MCRAbstractCommands {
 		 
 		 this.MissingChildrenCounter++;
 		 this.OverallCounter++;		
+		 AllObjectsCounter++;
 		}
 	
 	public int getGoodCounter()
@@ -71,6 +76,11 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	public int getMissingChildrenCounter()
 		{
 		 return this.MissingChildrenCounter;
+		}
+	
+	public static int getAllObjectsCounter()	
+		{
+		 return AllObjectsCounter;
 		}
 	
 	public MCRObjectID getJournalID()

@@ -85,7 +85,14 @@
             <xsl:variable name="chartLabelstemp">
                 <xsl:for-each select="journal">
                     <xsl:sort select="./numberOfObjects/total/text()" />
-                    <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(), ')')" />
+                    <xsl:choose>
+                        <xsl:when test="string-length(@name)>30">
+                            <xsl:value-of select="concat('|', substring(@name,1,30),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </xsl:variable>
             <xsl:variable name="chartLabelsAll">
@@ -94,14 +101,14 @@
             <xsl:variable name="chartValuestemp">
                 <xsl:for-each select="journal">
                     <xsl:sort select="./numberOfObjects/total/text()" />
-                    <xsl:value-of select="concat(',', numberOfObjects/total/text())" />
+                    <xsl:value-of select="concat(',', numberOfObjects/total/@percent)" />
                 </xsl:for-each>
             </xsl:variable>
             <xsl:variable name="chartValuesAll">
                 <xsl:value-of select="concat('&amp;chd=t:',substring($chartValuestemp,2))" />
             </xsl:variable>
 
-            <xsl:variable name="chartParamsAll" select="'chs=600x300&amp;cht=p'" />
+            <xsl:variable name="chartParamsAll" select="'chs=810x300&amp;cht=p'" />
             <xsl:variable name="CompletePieChartURLAll" select="concat($chartBaseUrl, $chartParamsAll, $chartLabelsAll, $chartValuesAll)" />
             <p style="text-align: center;">
                 <img src="{$CompletePieChartURLAll}" />
