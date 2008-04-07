@@ -10,9 +10,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,137 +41,121 @@ import org.xml.sax.SAXException;
 
 public class MCRJournalSummary extends MCRAbstractCommands {
 
-	static MCRXMLTableManager xmltable = MCRXMLTableManager.instance();
+    static MCRXMLTableManager xmltable = MCRXMLTableManager.instance();
 
-	private static int maxArtID = xmltable.getNextFreeIdInt("jportal",
-			"jparticle");
-	private static int maxVolID = xmltable.getNextFreeIdInt("jportal",
-			"jpvolume");
-	private static int maxJouID = xmltable.getNextFreeIdInt("jportal",
-			"jpjournal");
+    private static int maxArtID = xmltable.getNextFreeIdInt("jportal", "jparticle");
 
-	private static HashMap<MCRObjectID, MCRJournalStats> journals = new HashMap<MCRObjectID, MCRJournalStats>();
+    private static int maxVolID = xmltable.getNextFreeIdInt("jportal", "jpvolume");
 
-	private static Logger logger = Logger.getLogger(MCRJournalSummary.class
-			.getName());
+    private static int maxJouID = xmltable.getNextFreeIdInt("jportal", "jpjournal");
 
-	public MCRJournalSummary() {
-		super();
+    private static HashMap<MCRObjectID, MCRJournalStats> journals = new HashMap<MCRObjectID, MCRJournalStats>();
 
-		MCRCommand com = null;
+    private static Logger logger = Logger.getLogger(MCRJournalSummary.class.getName());
 
-		com = new MCRCommand("check journal {0} for incomplete objects",
-				"org.mycore.frontend.cli.MCRJournalSummary.DoIt String", "");
-		command.add(com);
-		com = new MCRCommand("check all journals for incomplete objects",
-				"org.mycore.frontend.cli.MCRJournalSummary.DoIt", "");
-		command.add(com);
-	}
+    public MCRJournalSummary() {
+        super();
 
-	private static MCRObject getActualObject(String type, int ID) {
-		MCRObjectID MOID = new MCRObjectID("jportal_" + type
-				+ Integer.toString(ID));
-		MCRObject actObj = new MCRObject();
-		try {
-			actObj.receiveFromDatastore(MOID);
-		} catch (Exception e) {
-			actObj = null;
-		}
+        MCRCommand com = null;
 
-		return actObj;
-	}
+        com = new MCRCommand("check journal {0} for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt String", "");
+        command.add(com);
+        com = new MCRCommand("check all journals for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt", "");
+        command.add(com);
+    }
 
-	private static void ParseObjects(String type, String ObjType, int maxID,
-			String JID) {
-		// type tells if either articles are need to be checked or volumes
-		// ObjType is the corresponding tag of the object id
-		// maxID of the objects in the database according to the type
-		// if JID is all the programm scans all journals, else only a specific
+    private static MCRObject getActualObject(String type, int ID) {
+        MCRObjectID MOID = new MCRObjectID("jportal_" + type + Integer.toString(ID));
+        MCRObject actObj = new MCRObject();
+        try {
+            actObj.receiveFromDatastore(MOID);
+        } catch (Exception e) {
+            actObj = null;
+        }
 
-		for (int i = 0; i < maxID; i++) {
-			MCRObject object = getActualObject(ObjType, i);
-			if (((float) i * 100 / (float) maxID) % 20 == 0) {
-				logger.info("Progress: " + ((float) i * 100 / (float) maxID)
-						+ "%... ");
-			}
+        return actObj;
+    }
 
-			if (object != null) {
-				MCRObjectStructure objStruct = object.getStructure();
+    private static void ParseObjects(String type, String ObjType, int maxID, String JID) {
+        // type tells if either articles are need to be checked or volumes
+        // ObjType is the corresponding tag of the object id
+        // maxID of the objects in the database according to the type
+        // if JID is all the programm scans all journals, else only a specific
 
-				if (objStruct.getChildSize() == 0) {
-					// check for journal belonging to the object
-					MCRObjectID objParentID = objStruct.getParentID();
-					MCRObjectID objParentIDtemp = objStruct.getParentID();
-					MCRObject objParent = new MCRObject();
-					boolean checker = true;
+        for (int i = 0; i < maxID; i++) {
+            MCRObject object = getActualObject(ObjType, i);
+            if (((float) i * 100 / (float) maxID) % 20 == 0) {
+                logger.info("Progress: " + ((float) i * 100 / (float) maxID) + "%... ");
+            }
 
-					// get upstairs through the xml-tree until the root is
-					// reached
-					while (objParentID != null) {
-						objParentIDtemp = objParentID;
-						// error if the founded ID has no Object in the database
-						try {
-							objParent.receiveFromDatastore(objParentID);
-						} catch (Exception e) {
-							logger.info("Error, parent is null!");
-							logger.info(object.getId());
-							logger.info(objParentID);
-							checker = false;
-						}
-						objParentID = objParent.getStructure().getParentID();
-					}// while
+            if (object != null) {
+                MCRObjectStructure objStruct = object.getStructure();
 
-					// if all every object is checked, else only if the journal
-					// ID is right
-					// checker is true if there was no exception when getting
-					// the journal object
-					if ((JID.equals("all") || JID.equals(objParentIDtemp
-							.toString()))
-							&& checker) {
-						// create new journal stats object if needed
-						if (!journals.containsKey(objParentIDtemp)) {
-							logger.info("new Journal found, with ID "
-									+ objParentIDtemp);
-							journals.put(objParentIDtemp, new MCRJournalStats(
-									objParentIDtemp, "article"));
-						}
+                if (objStruct.getChildSize() == 0) {
+                    // check for journal belonging to the object
+                    MCRObjectID objParentID = objStruct.getParentID();
+                    MCRObjectID objParentIDtemp = objStruct.getParentID();
+                    MCRObject objParent = new MCRObject();
+                    boolean checker = true;
 
-						if ((journals.get(objParentIDtemp).getObjectFocus()
-								.equals("fully") && type.equals("articles"))
-								|| (journals.get(objParentIDtemp)
-										.getObjectFocus().equals("browse") && type
-										.equals("volumes"))) {
-							// check for completeness
-							if (objStruct.getDerivateSize() == 0) {
-								journals.get(objParentIDtemp).incompleteObj(
-										object.getId());
-							} else {
-								journals.get(objParentIDtemp).completeObj(
-										object.getId());
-							}
-						}
-						if (journals.get(objParentIDtemp).getObjectFocus()
-								.equals("fully")
-								&& type.equals("volumes")) {
-							journals.get(objParentIDtemp).MissingChildObj(
-									object.getId());
-						}
-					}
-				}
-			}
-		}
-	}// DoArticle
+                    // get upstairs through the xml-tree until the root is
+                    // reached
+                    while (objParentID != null) {
+                        objParentIDtemp = objParentID;
+                        // error if the founded ID has no Object in the database
+                        try {
+                            objParent.receiveFromDatastore(objParentID);
+                        } catch (Exception e) {
+                            logger.info("Error, parent is null!");
+                            logger.info(object.getId());
+                            logger.info(objParentID);
+                            checker = false;
+                        }
+                        objParentID = objParent.getStructure().getParentID();
+                    }// while
 
-	// Print all stats on the screen
-	private static void PrintStats() throws IOException, JDOMException {
+                    // if all every object is checked, else only if the journal
+                    // ID is right
+                    // checker is true if there was no exception when getting
+                    // the journal object
+                    if ((JID.equals("all") || JID.equals(objParentIDtemp.toString())) && checker) {
+                        // create new journal stats object if needed
+                        if (!journals.containsKey(objParentIDtemp)) {
+                            logger.info("new Journal found, with ID " + objParentIDtemp);
+                            journals.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, "article"));
+                        }
+
+                        if ((journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("articles"))
+                                        || (journals.get(objParentIDtemp).getObjectFocus().equals("browse") && type.equals("volumes"))) {
+                            // check for completeness
+                            if (objStruct.getDerivateSize() == 0) {
+                                journals.get(objParentIDtemp).incompleteObj(object.getId());
+                            } else {
+                                journals.get(objParentIDtemp).completeObj(object.getId());
+                            }
+                        }
+                        if (journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("volumes")) {
+                            journals.get(objParentIDtemp).MissingChildObj(object.getId());
+                        }
+                    }
+                }
+            }
+        }
+    }// DoArticle
+
+    // Print all stats on the screen
+    private static void PrintStats() throws IOException, JDOMException {
 
 		java.util.Date heute = new java.util.Date();
 		Timestamp time = new Timestamp(heute.getTime());
 		Long actualTime = time.getTime();
-
-		Element date = new Element("statistic").setAttribute("date", actualTime
-				.toString());
-
+		// pretty date
+		SimpleDateFormat formater = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.GERMANY);
+		String datePretty = formater.format(actualTime); 
+		Element date = new Element("statistic");
+		date.setAttribute("date", actualTime.toString());
+		date.setAttribute("datePretty", datePretty);
+		
 		logger
 				.info("/************************Journal Status Report*************************/");
 		// go through all journal objects in the hash map
@@ -247,177 +233,167 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 				true);
 	}
 
-	private static List<Element> manipulateXML(String targetFile)
-			throws JDOMException, IOException {
-		boolean empty = true;
-		Document doc = new Document();
-		List<Element> AllStats = null;
+    private static List<Element> manipulateXML(String targetFile) throws JDOMException, IOException {
+        boolean empty = true;
+        Document doc = new Document();
+        List<Element> AllStats = null;
 
-		try {
-			SAXBuilder sxbuild = new SAXBuilder();
-			InputSource is = new InputSource(targetFile);
-			doc = sxbuild.build(is);
-		}
+        try {
+            SAXBuilder sxbuild = new SAXBuilder();
+            InputSource is = new InputSource(targetFile);
+            doc = sxbuild.build(is);
+        }
 
-		catch (Exception e) {
-			logger.info("Article...");
-			empty = false;
-		}
+        catch (Exception e) {
+            logger.info("Article...");
+            empty = false;
+        }
 
-		if (empty) {
-			// Lesen des Wurzelelements des JDOM-Dokuments doc
-			Element root = doc.getRootElement();
+        if (empty) {
+            // Lesen des Wurzelelements des JDOM-Dokuments doc
+            Element root = doc.getRootElement();
 
-			AllStats = root.removeContent();
+            AllStats = root.removeContent();
 
-			int ListSize = AllStats.size();
+            int ListSize = AllStats.size();
 
-			Element LastStats = AllStats.get(ListSize - 1);
+            Element LastStats = AllStats.get(ListSize - 1);
 
-			List<Element> AllPapers = LastStats.getChildren();
+            List<Element> AllPapers = LastStats.getChildren();
 
-			Iterator<Element> papers = AllPapers.iterator();
+            Iterator<Element> papers = AllPapers.iterator();
 
-			while (papers.hasNext()) {
-				Element journal = (Element) papers.next();
+            while (papers.hasNext()) {
+                Element journal = (Element) papers.next();
 
-				journal.removeChildren("objectList");
+                journal.removeChildren("objectList");
 
-			}
-		}
+            }
+        }
 
-		return AllStats;
-	}
+        return AllStats;
+    }
 
-	private static void saveXML(Element newStats, String dir,
-			String targetFile, boolean log) throws IOException,
-			FileNotFoundException, JDOMException {
-		Document Addition = new Document();
-		Element root = new Element("journalStatistic");
-		Addition.setRootElement(root);
-		List<Element> oldContent = manipulateXML(targetFile);
+    private static void saveXML(Element newStats, String dir, String targetFile, boolean log) throws IOException, FileNotFoundException, JDOMException {
+        Document Addition = new Document();
+        Element root = new Element("journalStatistic");
+        Addition.setRootElement(root);
+        List<Element> oldContent = manipulateXML(targetFile);
 
-		XMLOutputter xmlOut = new XMLOutputter();
-		//xmlOut.getFormat().getPrettyFormat();
-		File directory = new File(dir);
-		directory.mkdirs();
-		FileOutputStream fos = new FileOutputStream(new File(targetFile));
+        XMLOutputter xmlOut = new XMLOutputter();
+        // xmlOut.getFormat().getPrettyFormat();
+        File directory = new File(dir);
+        directory.mkdirs();
+        FileOutputStream fos = new FileOutputStream(new File(targetFile));
 
-		root.removeContent();
+        root.removeContent();
 
-		if (oldContent != null) {
+        if (oldContent != null) {
 
-			Iterator<Element> oldContIt = oldContent.iterator();
+            Iterator<Element> oldContIt = oldContent.iterator();
 
-			while (oldContIt.hasNext()) {
-				Element oldContEl = (Element) oldContIt.next();
-				root.addContent(oldContEl);
-			}
-		}
+            while (oldContIt.hasNext()) {
+                Element oldContEl = (Element) oldContIt.next();
+                root.addContent(oldContEl);
+            }
+        }
 
-		root.addContent(newStats);
-		xmlOut.output(Addition, fos);
-		fos.flush();
-		fos.close();
-		if (log)
-			logger.info("saved " + targetFile + "... ");
-	}
+        root.addContent(newStats);
+        xmlOut.output(Addition, fos);
+        fos.flush();
+        fos.close();
+        if (log)
+            logger.info("saved " + targetFile + "... ");
+    }
 
-	/**
-	 * @param d
-	 *            der zu rundende Gleitkommawert.
-	 * @param scale
-	 *            die Anzahl der Nachkommastellen, falls type = fix, die Anzahl
-	 *            der tragenden Stellen - 1, falls type = exp. scale sollte >= 0
-	 *            sein (negative Werte werden auf 0 gesetzt).
-	 * @param mode
-	 *            die Rundungsart: einer der Rundungsarten von BigDecimal, seit
-	 *            1.5 in java.math.RoundingMode.
-	 * @param type
-	 *            ein Element von "enum FormatType {fix, exp}" gibt an, auf
-	 *            welche Stellen sich die Rundung beziehen soll. FormatType.exp
-	 *            ('Exponential') steht für tragende Stellen, FormatType.fix
-	 *            ('Fixkomma') steht für Nachkommastellen.
-	 * @return der gerundete Gleitkommawert. Anmerkung: Für die Werte double NaN
-	 *         und ±Infinity liefert round den Eingabewert unverändert zurück.
-	 */
+    /**
+     * @param d
+     *            der zu rundende Gleitkommawert.
+     * @param scale
+     *            die Anzahl der Nachkommastellen, falls type = fix, die Anzahl
+     *            der tragenden Stellen - 1, falls type = exp. scale sollte >= 0
+     *            sein (negative Werte werden auf 0 gesetzt).
+     * @param mode
+     *            die Rundungsart: einer der Rundungsarten von BigDecimal, seit
+     *            1.5 in java.math.RoundingMode.
+     * @param type
+     *            ein Element von "enum FormatType {fix, exp}" gibt an, auf
+     *            welche Stellen sich die Rundung beziehen soll. FormatType.exp
+     *            ('Exponential') steht für tragende Stellen, FormatType.fix
+     *            ('Fixkomma') steht für Nachkommastellen.
+     * @return der gerundete Gleitkommawert. Anmerkung: Für die Werte double NaN
+     *         und ±Infinity liefert round den Eingabewert unverändert zurück.
+     */
 
-	enum FormatType {
-		fix, exp
-	};
+    enum FormatType {
+        fix, exp
+    };
 
-	public static double round(double d, int scale, RoundingMode mode,
-			FormatType type) {
-		if (Double.isNaN(d) || Double.isInfinite(d))
-			return d;
-		scale = Math.max(scale, 0); // Verhindert negative scale-Werte
-		BigDecimal bd = BigDecimal.valueOf(d);
-		if (type == FormatType.exp) {
-			BigDecimal bc = new BigDecimal(bd.unscaledValue(),
-					bd.precision() - 1);
-			return ((bc.setScale(scale, mode)).scaleByPowerOfTen(bc.scale()
-					- bd.scale())).doubleValue();
-		}
-		return (bd.setScale(scale, mode)).doubleValue();
-	}
+    public static double round(double d, int scale, RoundingMode mode, FormatType type) {
+        if (Double.isNaN(d) || Double.isInfinite(d))
+            return d;
+        scale = Math.max(scale, 0); // Verhindert negative scale-Werte
+        BigDecimal bd = BigDecimal.valueOf(d);
+        if (type == FormatType.exp) {
+            BigDecimal bc = new BigDecimal(bd.unscaledValue(), bd.precision() - 1);
+            return ((bc.setScale(scale, mode)).scaleByPowerOfTen(bc.scale() - bd.scale())).doubleValue();
+        }
+        return (bd.setScale(scale, mode)).doubleValue();
+    }
 
-	public static void DoIt(String JID) throws IOException, JDOMException {
-		logger.info("Go Go Go!");
-		logger.info("====================");
+    public static void DoIt(String JID) throws IOException, JDOMException {
+        logger.info("Go Go Go!");
+        logger.info("====================");
 
-		logger.info("Article...");
+        logger.info("Article...");
 
-		if (JID.equals("")) {
-			JID = "all";
-		}
+        if (JID.equals("")) {
+            JID = "all";
+        }
 
-		ParseObjects("articles", "jparticle_", maxArtID, JID);
+        ParseObjects("articles", "jparticle_", maxArtID, JID);
 
-		logger.info("Volumes...");
+        logger.info("Volumes...");
 
-		ParseObjects("volumes", "jpvolume_", maxVolID, JID);
+        ParseObjects("volumes", "jpvolume_", maxVolID, JID);
 
-		logger.info("Status...");
+        logger.info("Status...");
 
-		PrintStats();
+        PrintStats();
 
-		logger.info("Ready.");
-		logger.info("");
-	}
+        logger.info("Ready.");
+        logger.info("");
+    }
 
-	public static void DoIt() throws IOException, JDOMException {
-		logger.info("Go Go Go!");
-		logger.info("====================");
+    public static void DoIt() throws IOException, JDOMException {
+        logger.info("Go Go Go!");
+        logger.info("====================");
 
-		logger.info("Article...");
+        logger.info("Article...");
 
-		ParseObjects("articles", "jparticle_", maxArtID, "all");
+        ParseObjects("articles", "jparticle_", maxArtID, "all");
 
-		logger.info("Volumes...");
+        logger.info("Volumes...");
 
-		ParseObjects("volumes", "jpvolume_", maxVolID, "all");
+        ParseObjects("volumes", "jpvolume_", maxVolID, "all");
 
-		logger.info("Status...");
+        logger.info("Status...");
 
-		PrintStats();
+        PrintStats();
 
-		logger.info("Ready.");
-		logger.info("");
-	}
-	
-	public static double scale(int number)
-		{
-		 double scalevalue = java.lang.Math.sqrt((double)((number*(6000/997))+(9250000/997)));
-		 
-		 if(scalevalue < 100)
-		 	{
-			 scalevalue = 100;
-		 	}
-		 else if(scalevalue > 40000)
-		 	{
-			 scalevalue = 500;
-		 	}
-		 return scalevalue;
-		}
+        logger.info("Ready.");
+        logger.info("");
+    }
+
+    public static double scale(int number) {
+        double scalevalue = java.lang.Math.sqrt((double) ((number * (6000 / 997)) + (9250000 / 997)));
+
+        if (scalevalue < 100) {
+            scalevalue = 100;
+        } else if (scalevalue > 40000) {
+            scalevalue = 500;
+        }
+        return scalevalue;
+    }
 
 }
