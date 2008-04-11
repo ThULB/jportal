@@ -163,4 +163,4 @@ MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
 # max: 10  
 ##############################################################################
 
-  MCR.Module-JPortal.DynamicClassification.journal=jportal_class_00000061,jportal_class_00000062,jportal_class_00000063,jportal_class_00000003,jportal_class_00000064
+  MCR.Module-JPortal.DynamicClassification.journal=jportal_class_00000061,jportal_class_00000062,jportal_class_00000063,jportal_class_00000068,jportal_class_00000069,jportal_class_00000064
