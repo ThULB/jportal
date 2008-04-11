@@ -145,7 +145,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
     // Print all stats on the screen
     private static void PrintStats() throws IOException, JDOMException {
-
+    	
+    	int scaleValue = 0;
+    	
 		java.util.Date heute = new java.util.Date();
 		Timestamp time = new Timestamp(heute.getTime());
 		Long actualTime = time.getTime();
@@ -196,11 +198,25 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
 				Element NumberOfObjects = new Element("numberOfObjects");
 				
-				Element Total = new Element("total").setAttribute("scale", Double.toString(scale(journal.getAllCounter()))).setAttribute("percent", Double.toString(round((((double)journal.getAllCounter()/ (double)MCRJournalStats.getAllObjectsCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getAllCounter()));
+				if(journal.getType().equals("browse"))
+					{
+					 scaleValue = journal.getAllCounter();
+					}
+				else
+					{
+					 scaleValue = journal.getAllCounter()-journal.getMissingChildrenCounter();
+					}
+				
+				Element Total = new Element("total");
+				Total.setAttribute("scale", Double.toString(scale(scaleValue)));
+				Total.setAttribute("percent", Double.toString(round((((double)(journal.getAllCounter()-journal.getMissingChildrenCounter())/ (double)MCRJournalStats.getAllObjectsCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix)));
+				Total.setText(Integer.toString(journal.getAllCounter()-journal.getMissingChildrenCounter()));
 
 				String complete = journal.getGoodCounter() + " / " + ((float) journal.getGoodCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Complete                    : " + complete);
-				Element Complete = new Element("complete").setAttribute("percent", Double.toString(round((((double)journal.getGoodCounter()/(double)journal.getAllCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getGoodCounter()));
+				Element Complete = new Element("complete");
+				Complete.setAttribute("percent", Double.toString(round((((double)journal.getGoodCounter()/(double)journal.getAllCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix)));
+				Complete.setText(Integer.toString(journal.getGoodCounter()));
 
 				String incomplete = journal.getBadCounter()	+ " / "	+ ((float) journal.getBadCounter() / (float) journal.getAllCounter() * 100) + "%";
 				logger.info("  Incomplete                  : " + incomplete);
