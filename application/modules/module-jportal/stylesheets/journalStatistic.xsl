@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+                   exclude-result-prefixes="xalan">
     <xsl:include href="MyCoReLayout.xsl" />
     <xsl:param name="journalStatistic.dateReceived" />
     <xsl:param name="journalStatistic.view.objectListing" select="'false'" />
@@ -183,6 +184,51 @@
                 <img src="{$CompletePieChartURLAll}" />
             </p>
         </xsl:for-each>
+        
+        <xsl:variable name="allSums">
+            <xsl:for-each select="/journalStatistic/statistic[number(@date) &lt;= number($journalStatistic.date)]">
+                <node>
+                    <xsl:value-of select="sum(journal/numberOfObjects/total/text())"/>
+                </node>
+            </xsl:for-each>
+        </xsl:variable>
+        
+        <xsl:variable name="maxSum">
+            <xsl:for-each select="xalan:nodeset($allSums)/node">
+                <xsl:sort data-type="number" order="descending"/>
+                <xsl:if test="position()=1">
+                    <xsl:value-of select="." />
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        
+        <xsl:variable name="totalSum">
+            <xsl:for-each select="xalan:nodeset($allSums)/node">
+                    <xsl:value-of select="concat(((text()*100)div $maxSum) ,',')" />
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="totalLC.values">
+            <xsl:value-of select="substring($totalSum,1,string-length($totalSum)-1)" />
+        </xsl:variable>
+        <xsl:variable name="chartURL.label.tmp">
+            <xsl:for-each select="/journalStatistic/statistic[number(@date) &lt;= number($journalStatistic.date)]">
+                <xsl:sort select="@date" order="ascending" />
+                <xsl:value-of select="concat(@datePretty,'|')" />
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="chartURL.label">
+            <xsl:value-of select="concat('|',$chartURL.label.tmp,'1:|',0,'|',($maxSum*0.25),'|',($maxSum*0.5),'|',($maxSum*0.75),'|',$maxSum)" />
+        </xsl:variable>
+
+        <!--  do layout -->
+        <b>
+            <xsl:value-of select="'Gesamtanzahl der Artikel über die Zeit:'" />
+        </b>
+        <p style="text-align: center;">
+            <img
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$totalLC.values,'&amp;chs=',$chartSize.objectDev,'&amp;chxt=x,y&amp;chxl=0:',$chartURL.label,'&amp;chco=0000ff','&amp;chg=20,25')}" />
+        </p>
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
