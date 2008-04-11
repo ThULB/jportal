@@ -52,9 +52,9 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	public void MissingChildObj(MCRObjectID ID)
 		{
 		 MissingChildObj.put(MissingChildrenCounter, ID);
+		 this.OverallCounter++;
 		 
 		 this.MissingChildrenCounter++;
-		 AllObjectsCounter++;
 		}
 	
 	public int getGoodCounter()

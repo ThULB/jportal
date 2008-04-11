@@ -194,7 +194,7 @@
             <xsl:choose>
                 <xsl:when test="@type='fully'">
                     <xsl:value-of
-                        select="concat(' (vollständige Erschliessung, mit insgesamt ', number(numberOfObjects/total/text()), ' Artikeln)')" />
+                        select="concat(' (vollständige Erschliessung, mit insgesamt ', numberOfObjects/total/text(), ' Artikeln)')" />
                 </xsl:when>
                 <xsl:when test="@type='browse'">
                     <xsl:value-of select="concat(' (Blätterzeitschrift, mit insgesamt ', numberOfObjects/total/text(), ' Bänden)')" />
@@ -275,7 +275,7 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="chartURL.label">
-            <xsl:value-of select="concat('|',$chartURL.label.tmp,'1:|',0,'|',round($maxTotal*0.25),'|',round($maxTotal*0.5),'|',round($maxTotal*0.75),'|',$maxTotal)" />
+            <xsl:value-of select="concat('|',$chartURL.label.tmp,'1:|',0,'|',($maxTotal*0.25),'|',($maxTotal*0.5),'|',($maxTotal*0.75),'|',$maxTotal)" />
         </xsl:variable>
 
         <!--  do layout -->
