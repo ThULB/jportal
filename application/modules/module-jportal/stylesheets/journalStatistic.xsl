@@ -51,7 +51,7 @@
             <xsl:otherwise>
                 <xsl:call-template name="journalStatistic.selectDate" />
                 <xsl:call-template name="journalStatistic.total" />
-                <div style="border: 1px solid black; width: 800px;">
+                <div style="border: 2px solid black; width: 900px;">
                     <h3>Aktivitätsindex aller Zeitschriften:</h3>
                     <xsl:call-template name="journalStatistic.selectDateSpace" />
                     <xsl:call-template name="journalStatistic.PieChart.ArticleOverTime" />
@@ -859,8 +859,19 @@
         <xsl:variable name="chartColor" select="concat('&amp;chco=', '44ca20', ',', 'ca2020', ',', 'f96820')" />
         <xsl:variable name="CompletePieChartURL" select="concat($chartBaseUrl, $chartParams, $chartValues, $chartLabels)" />
         <p style="text-align: center;">
-            <img src="{$CompletePieChartURL}" />
+            <xsl:choose>
+                <xsl:when test="$chartLabelsTemp=''">
+                    Bitte wählen sie einen sinnvollen Zeitraum.
+                </xsl:when>
+                <xsl:otherwise>
+                    <img src="{$CompletePieChartURL}" />
+                </xsl:otherwise>
+            </xsl:choose>     
         </p>
+        <div style="margin: 5px; padding: 5px; border: 1px solid black; width: 420px;">
+            Legende:<br/>
+            Zeitschriftname(Aktivitäten absolut - prozentualer Anteil an allen Aktivitäten)<br/> 
+        </div>
         <div style="padding: 5px;">
             <h4>Zeitschriften ohne Aktivitäten im ausgewählten Zeitraum:</h4>
             <ul>
