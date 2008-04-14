@@ -1348,63 +1348,63 @@
                     </tr>
                 </table>
             </xsl:if>
-                <tr>
-                    <td valign="top" id="detailed-labels">
-                        <xsl:value-of select="$label" />
-                    </td>
-                    <td class="metavalue">
-                        <xsl:for-each select="$nodes">
-                            <xsl:choose>
-                                <xsl:when test="../@class='MCRMetaClassification'">
-                                    <xsl:call-template name="printClass">
-                                        <xsl:with-param name="nodes" select="." />
-                                        <xsl:with-param name="host" select="$objectHost" />
-                                    </xsl:call-template>
-                                    <xsl:call-template name="printClassInfo">
-                                        <xsl:with-param name="nodes" select="." />
-                                        <xsl:with-param name="host" select="$objectHost" />
-                                    </xsl:call-template>
-                                </xsl:when>
-                                <xsl:when test="../@class='MCRMetaISO8601Date'">
-                                    <xsl:variable name="format">
-                                        <xsl:choose>
-                                            <xsl:when test="string-length(normalize-space(.))=4">
-                                                <xsl:value-of select="i18n:translate('metaData.dateYear')" />
-                                            </xsl:when>
-                                            <xsl:when test="string-length(normalize-space(.))=7">
-                                                <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
-                                            </xsl:when>
-                                            <xsl:when test="string-length(normalize-space(.))=10">
-                                                <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="i18n:translate('metaData.dateTime')" />
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:variable>
-                                    <xsl:call-template name="formatISODate">
-                                        <xsl:with-param name="date" select="." />
-                                        <xsl:with-param name="format" select="$format" />
-                                    </xsl:call-template>
-                                </xsl:when>
-                                <xsl:when test="../@class='MCRMetaLinkID'">
-                                    <xsl:call-template name="objectLink">
-                                        <xsl:with-param name="obj_id" select="@xlink:href" />
-                                    </xsl:call-template>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:call-template name="printI18N">
-                                        <xsl:with-param name="nodes" select="." />
-                                        <xsl:with-param name="host" select="$objectHost" />
-                                    </xsl:call-template>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:if test="position()!=last()">
-                                <br />
-                            </xsl:if>
-                        </xsl:for-each>
-                    </td>
-                </tr>
+            <tr>
+                <td valign="top" id="detailed-labels">
+                    <xsl:value-of select="$label" />
+                </td>
+                <td class="metavalue">
+                    <xsl:for-each select="$nodes">
+                        <xsl:choose>
+                            <xsl:when test="../@class='MCRMetaClassification'">
+                                <xsl:call-template name="printClass">
+                                    <xsl:with-param name="nodes" select="." />
+                                    <xsl:with-param name="host" select="$objectHost" />
+                                </xsl:call-template>
+                                <xsl:call-template name="printClassInfo">
+                                    <xsl:with-param name="nodes" select="." />
+                                    <xsl:with-param name="host" select="$objectHost" />
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:when test="../@class='MCRMetaISO8601Date'">
+                                <xsl:variable name="format">
+                                    <xsl:choose>
+                                        <xsl:when test="string-length(normalize-space(.))=4">
+                                            <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                                        </xsl:when>
+                                        <xsl:when test="string-length(normalize-space(.))=7">
+                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                                        </xsl:when>
+                                        <xsl:when test="string-length(normalize-space(.))=10">
+                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
+                                <xsl:call-template name="formatISODate">
+                                    <xsl:with-param name="date" select="." />
+                                    <xsl:with-param name="format" select="$format" />
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:when test="../@class='MCRMetaLinkID'">
+                                <xsl:call-template name="objectLink">
+                                    <xsl:with-param name="obj_id" select="@xlink:href" />
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:call-template name="printI18N">
+                                    <xsl:with-param name="nodes" select="." />
+                                    <xsl:with-param name="host" select="$objectHost" />
+                                </xsl:call-template>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:if test="position()!=last()">
+                            <br />
+                        </xsl:if>
+                    </xsl:for-each>
+                </td>
+            </tr>
         </xsl:if>
     </xsl:template>
     <!-- ===================================================================================================== -->
@@ -1547,48 +1547,50 @@
             </xsl:call-template>
         </xsl:variable>
         <xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit">
-            <tr>
-                <td valign="top" id="detailed-labels">
-                    <br></br>
-                    <xsl:choose>
-                        <xsl:when test="$OID='person'">
-                            <xsl:value-of select="i18n:translate('metaData.person.linked')" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="i18n:translate('metaData.jpinst.linked')" />
-                        </xsl:otherwise>
-                    </xsl:choose>
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td valign="top" id="detailed-labels">
+                        <br></br>
+                        <xsl:choose>
+                            <xsl:when test="$OID='person'">
+                                <xsl:value-of select="i18n:translate('metaData.person.linked')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="i18n:translate('metaData.jpinst.linked')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
 
-                </td>
-                <td>
-                    <ul>
-                        <xsl:for-each select="xalan:nodeset($linkedArt)/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
-                            <xsl:variable name="art">
-                                <xsl:copy-of select="document(concat('mcrobject:',@id))" />
-                            </xsl:variable>
-                            <li>
-                                <xsl:call-template name="printHistoryRow">
-                                    <xsl:with-param name="sortOrder" select="'ascending'" />
-                                    <xsl:with-param name="printCurrent" select="'true'" />
-                                    <xsl:with-param name="linkCurrent" select="'true'" />
-                                    <xsl:with-param name="layout" select="'false'" />
-                                    <xsl:with-param name="node" select="xalan:nodeset($art)" />
-                                </xsl:call-template>
-                            </li>
-                            <div id="detailed-linkedart"></div>
-                        </xsl:for-each>
-                        <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
-                            <li>
-                                <a xmlns:encoder="xalan://java.net.URLEncoder"
-                                    href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
-                                    <xsl:value-of
-                                        select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')" />
-                                </a>
-                            </li>
-                        </xsl:if>
-                    </ul>
-                </td>
-            </tr>
+                    </td>
+                    <td>
+                        <ul>
+                            <xsl:for-each select="xalan:nodeset($linkedArt)/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
+                                <xsl:variable name="art">
+                                    <xsl:copy-of select="document(concat('mcrobject:',@id))" />
+                                </xsl:variable>
+                                <li>
+                                    <xsl:call-template name="printHistoryRow">
+                                        <xsl:with-param name="sortOrder" select="'ascending'" />
+                                        <xsl:with-param name="printCurrent" select="'true'" />
+                                        <xsl:with-param name="linkCurrent" select="'true'" />
+                                        <xsl:with-param name="layout" select="'false'" />
+                                        <xsl:with-param name="node" select="xalan:nodeset($art)" />
+                                    </xsl:call-template>
+                                </li>
+                                <div id="detailed-linkedart"></div>
+                            </xsl:for-each>
+                            <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
+                                <li>
+                                    <a xmlns:encoder="xalan://java.net.URLEncoder"
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
+                                        <xsl:value-of
+                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')" />
+                                    </a>
+                                </li>
+                            </xsl:if>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
         </xsl:if>
     </xsl:template>
     <!-- ===================================================================================================== -->
