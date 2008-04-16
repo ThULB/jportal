@@ -54,17 +54,65 @@
                 <xsl:call-template name="journalStatistic.objectListing" />
             </xsl:when>
             <xsl:otherwise>
+                <a name="toc" />
                 <xsl:call-template name="journalStatistic.selectDateSpace" />
-                <xsl:call-template name="journalStatistic.total" />
+                <xsl:call-template name="journalStatistic.toc" />
+                <p>
+                    <a name="gesamt" />
+                    <b>Gesamtübersicht:</b>
+                    <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
+                </p>
                 <div style="border: 2px solid black; width: 900px;">
-                    <h3>Aktivitätsindex aller Zeitschriften:</h3>
-
+                    <xsl:call-template name="journalStatistic.total" />
                     <xsl:call-template name="journalStatistic.PieChart.ArticleOverTime" />
                 </div>
-                <xsl:call-template name="journalStatistic.toc" />
+                <p>
+                    <a name="detail" />
+                    <b>Detailansicht:</b>
+                    <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
+                </p>
                 <xsl:call-template name="journalStatistic.statistics" />
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template name="journalStatistic.toc">
+        <p>
+            <h3>Inhaltsverzeichnis</h3>
+        </p>
+        <p>
+            <a href="#gesamt">
+                <b>Gesamtübersicht:</b>
+            </a>
+            <ul>
+                <li>
+                    <a href="#proz">Prozentualer Anteil einzelner Zeitschriften</a>
+                </li>
+                <li>
+                    <a href="#gesamtAnz">Gesamtanzahl der Artikel über die Zeit</a>
+                </li>
+                <li>
+                    <a href="#ai">Aktivitätsindex</a>
+                </li>
+            </ul>
+        </p>
+        <p>
+            <a href="#detail">
+                <b>Detailansicht:</b>
+            </a>
+            <ul>
+                <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]/journal">
+                    <xsl:sort select="@name" />
+                    <li>
+                        <a href="#{@id}">
+                            <xsl:value-of select="@name" />
+                        </a>
+                    </li>
+                </xsl:for-each>
+            </ul>
+        </p>
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
@@ -81,7 +129,7 @@
     <xsl:template name="journalStatistic.objectListing">
         <p>
             <a name="incomplete" />
-            <b>Artikel ohne Digitalisat:</b>
+            <b style="padding:5px;">Artikel ohne Digitalisat:</b>
             <ul>
                 <xsl:for-each
                     select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]/journal[@id=$journalStatistic.view.objectListing.journalID]/objectList[@type='incomplete']/object">
@@ -96,7 +144,7 @@
             <br />
             <br />
             <a name="missing" />
-            <b>Bände ohne Artikel:</b>
+            <b style="padding:5px;">Bände ohne Artikel:</b>
             <ul>
                 <xsl:for-each
                     select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]/journal[@id=$journalStatistic.view.objectListing.journalID]/objectList[@type='missing']/object">
@@ -129,7 +177,7 @@
                 <table>
                     <tr>
                         <td colspan="2">
-                            <strong>Zeitspanne der Erhebung:</strong>
+                            <strong>Zeitspanne der Analyse:</strong>
                         </td>
                     </tr>
                     <tr>
@@ -163,9 +211,10 @@
                                 </xsl:for-each>
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                        <td style="width: 50px;">
+
+                        </td>
+                        <td>
                             <input type="submit" value=" Auswählen " />
                         </td>
                     </tr>
@@ -173,24 +222,6 @@
             </form>
         </p>
 
-    </xsl:template>
-
-    <!-- ======================================================================================================================== -->
-
-    <xsl:template name="journalStatistic.toc">
-        <p>
-            <b>Detailierte Statistik für Zeitschrift:</b>
-            <ul>
-                <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]/journal">
-                    <xsl:sort select="@name" />
-                    <li>
-                        <a href="#{@id}">
-                            <xsl:value-of select="@name" />
-                        </a>
-                    </li>
-                </xsl:for-each>
-            </ul>
-        </p>
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
@@ -204,10 +235,10 @@
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="journalStatistic.total">
-        <p>
-            <b>Gesamtübersicht:</b>
-        </p>
         <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]">
+            <a name="proz" />
+            <b style="padding: 5px;">Prozentualer Anteil einzelner Zeitschriften</b>
+            <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
             <xsl:variable name="chartLabelstemp">
                 <xsl:for-each select="journal">
                     <xsl:sort select="./numberOfObjects/total/@percent" data-type="number" order="descending" />
@@ -312,9 +343,11 @@
         </xsl:variable>
 
         <!--  do layout -->
-        <b>
+        <a name="gesamtAnz" />
+        <b style="padding: 5px;">
             <xsl:value-of select="concat('Gesamtanzahl der Artikel über die Zeit (Differenz = ',$maxMinDistance,'):')" />
         </b>
+        <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
         <p style="text-align: center;">
             <img
                 src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$totalLC.values,'&amp;chs=',$chartSize.objectDev,'&amp;chxt=x,y&amp;chxl=0:',$chartURL.label,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
@@ -348,11 +381,14 @@
             </xsl:call-template>
             <br />
             <br />
-            
+
             <xsl:variable name="activityOfJournal">
                 <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal[@label=$journal-name]/text())" />
             </xsl:variable>
-            <xsl:value-of select="concat('Aktivitätsindex der Zeitung im ausgewählten Zeitraum: ',$activityOfJournal)" />
+
+            <b style="padding: 5px;">
+                <xsl:value-of select="concat('Aktivitätsindex der Zeitung im ausgewählten Zeitraum: ',$activityOfJournal)" />
+            </b>
             <br />
             <br />
             <!-- consistancy development -->
@@ -401,13 +437,34 @@
             <xsl:value-of select="number($maxTotal - $minTotal)" />
         </xsl:variable>
 
+        <xsl:variable name="firstTotal">
+            <xsl:value-of select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.From)]/journal[@id=$jID]/numberOfObjects/total" />
+        </xsl:variable>
+        <xsl:variable name="lastTotal">
+            <xsl:value-of select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.Till)]/journal[@id=$jID]/numberOfObjects/total" />
+        </xsl:variable>
+        <xsl:variable name="lastFirstDistancetemp">
+            <xsl:value-of select="number($lastTotal - $firstTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="lastFirstDistance">
+            <xsl:choose>
+                <xsl:when test="$lastFirstDistancetemp &gt; 0">
+                    <xsl:value-of select="concat('+',$lastFirstDistancetemp)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lastFirstDistancetemp"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <xsl:variable name="headline">
             <xsl:choose>
                 <xsl:when test="@type='fully'">
-                    <xsl:value-of select="concat('Zahl der Artikel im zeitlichen Verlauf (Differenz = ',$maxMinDistance ,') :')" />
+                    <xsl:value-of select="concat('Zahl der Artikel im zeitlichen Verlauf (Differenz = ',$lastFirstDistance ,') :')" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="concat('Zahl der Bände im zeitlichen Verlauf (Differenz = ',$maxMinDistance ,') :')" />
+                    <xsl:value-of select="concat('Zahl der Bände im zeitlichen Verlauf (Differenz = ',$lastFirstDistance ,') :')" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -489,7 +546,7 @@
         </xsl:variable>
 
         <!--  do layout -->
-        <b>
+        <b style="padding:5px;">
             <xsl:value-of select="$headline" />
         </b>
         <p style="text-align: center;">
@@ -504,26 +561,57 @@
     <xsl:template name="journalStatistic.consistancyDev">
         <xsl:param name="jID" />
 
-        <xsl:variable name="CompleteDiff">
+        <xsl:variable name="CompleteDiffTemp">
             <xsl:call-template name="chartURL.get.ComplDiff">
                 <xsl:with-param name="jID" select="$jID" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="IncompleteDiff">
+        <xsl:variable name="IncompleteDiffTemp">
             <xsl:call-template name="chartURL.get.IncomplDiff">
                 <xsl:with-param name="jID" select="$jID" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="MissingDiff">
+        <xsl:variable name="MissingDiffTemp">
             <xsl:call-template name="chartURL.get.MissingDiff">
                 <xsl:with-param name="jID" select="$jID" />
             </xsl:call-template>
         </xsl:variable>
-
+        
+        <xsl:variable name="CompleteDiff">
+            <xsl:choose>
+                <xsl:when test="$CompleteDiffTemp &gt; 0">
+                    <xsl:value-of select="concat('+',$CompleteDiffTemp)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$CompleteDiffTemp"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="IncompleteDiff">
+            <xsl:choose>
+                <xsl:when test="$IncompleteDiffTemp &gt; 0">
+                    <xsl:value-of select="concat('+',$IncompleteDiffTemp)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$IncompleteDiffTemp"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="MissingDiff">
+            <xsl:choose>
+                <xsl:when test="$MissingDiffTemp &gt; 0">
+                    <xsl:value-of select="concat('+',$MissingDiffTemp)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$MissingDiffTemp"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        
 
         <xsl:variable name="headline">
             <xsl:value-of
-                select="concat('Konsistenzanalyse im zeitlichen Verlauf (Vollständige = ',$CompleteDiff,', kein Digitalisat = ',$IncompleteDiff,', Band ohne Artikel = ',$MissingDiff,') :')" />
+                select="concat('Vollständigkeitsprüfung im zeitlichen Verlauf (Vollständige = ',$CompleteDiff,', kein Digitalisat = ',$IncompleteDiff,', Band ohne Artikel = ',$MissingDiff,') :')" />
         </xsl:variable>
 
         <xsl:variable name="chartURL.values">
@@ -542,7 +630,7 @@
         </xsl:variable>
 
         <!--  do layout -->
-        <b>
+        <b style="padding:5px;">
             <xsl:copy-of select="$headline" />
         </b>
         <p style="text-align: center;">
@@ -752,12 +840,13 @@
                     <a href="{$WebApplicationBaseURL}receive/{@id}">
                         <xsl:value-of select="concat(@name, $journalType)" />
                     </a>
+                    <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
                 </td>
             </tr>
         </table>
         <br />
-        <b>
-            <xsl:value-of select="'  Konsistenzanalyse für gewähltes Datum:'" />
+        <b style="padding:5px;">
+            <xsl:value-of select="'  Vollständigkeitsprüfung für gewähltes Datum:'" />
         </b>
         <xsl:variable name="pervalue1" select="numberOfObjects/complete/@percent" />
         <xsl:variable name="pervalue2" select="numberOfObjects/incomplete/@percent" />
@@ -881,7 +970,9 @@
 
     <!-- ======================================================================================================================== -->
     <xsl:template name="journalStatistic.PieChart.ArticleOverTime">
-
+        <a name="ai" />
+        <b style="padding: 5px;">Aktivitätsindex aller Zeitschriften:</b>
+        <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
         <xsl:variable name="activitySum">
             <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal/text())" />
         </xsl:variable>
@@ -944,13 +1035,17 @@
         </div>
         <div style="padding: 5px;">
             <h4>Zeitschriften ohne Aktivitäten im ausgewählten Zeitraum:</h4>
-            <ul>
-                <xsl:for-each select="xalan:nodeset($ZeroLabels)/name">
-                    <li>
+            <xsl:for-each select="xalan:nodeset($ZeroLabels)/name">
+                <xsl:choose>
+                    <xsl:when test="position()=last()">
                         <xsl:value-of select="." />
-                    </li>
-                </xsl:for-each>
-            </ul>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat(.,', ')" />
+                    </xsl:otherwise>
+                </xsl:choose>
+
+            </xsl:for-each>
         </div>
     </xsl:template>
 
@@ -1068,7 +1163,14 @@
                         <xsl:variable name="missing" select="missing/text()" />
                         <xsl:variable name="sum" select="($complete+$incomplete+$missing)" />
                         <value>
-                            <xsl:value-of select="((($sum - $total) div 2) + $total)" />
+                            <xsl:choose>
+                                <xsl:when test="($complete = 0) and ($incomplete = 0)">
+                                    <xsl:value-of select="$missing" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="((($sum - $total) div 2) + $total)" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </value>
                     </xsl:for-each>
                 </journal>
