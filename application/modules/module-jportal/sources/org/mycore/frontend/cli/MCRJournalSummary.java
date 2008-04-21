@@ -28,6 +28,7 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -145,109 +146,109 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
     // Print all stats on the screen
     private static void PrintStats() throws IOException, JDOMException {
-    	
-    	int scaleValue = 0;
-    	
-		java.util.Date heute = new java.util.Date();
-		Timestamp time = new Timestamp(heute.getTime());
-		Long actualTime = time.getTime();
-		// pretty date
-		SimpleDateFormat formater = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.GERMANY);
-		String datePretty = formater.format(actualTime); 
-		Element date = new Element("statistic");
-		date.setAttribute("date", actualTime.toString());
-		date.setAttribute("datePretty", datePretty);
-		
-		logger
-				.info("/************************Journal Status Report*************************/");
-		// go through all journal objects in the hash map
-		for (int k = 0; k <= maxJouID; k++) {
-			MCRObjectID JournalID = new MCRObjectID("jportal_jpjournal_"
-					+ Integer.toString(k));
-			if (journals.containsKey(JournalID)) {
-				MCRJournalStats journal = journals.get(JournalID);
-				Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type", journal.getObjectFocus()).setAttribute("id", journal.getJournalID().toString());
-				Element XMLobjectsInc = new Element("objectList").setAttribute("type", "incomplete");
-				Element XMLobjectsMis = new Element("objectList").setAttribute("type", "missing");
 
-				for (int i = 0; i < journal.getBadCounter(); i++) {
-					Element XMLobject = new Element("object").setAttribute("id", journal.getIncompleteObjects().get(i).toString());
-					XMLobjectsInc.addContent(XMLobject);
-				}
-				for (int j = 0; j < journal.getMissingChildrenCounter(); j++) {
-					Element XMLobject = new Element("object").setAttribute("id", journal.getMissingChildren().get(j).toString());
-					XMLobjectsMis.addContent(XMLobject);
-				}
+        int scaleValue = 0;
 
-				logger
-						.info("=================================================================");
-				logger
-						.info("=                                                               =");
-				logger.info("= actual Journal: " + journal.getJournalName()
-						+ " with ID " + journal.getJournalID() + " =");
-				logger
-						.info("=                                                               =");
-				logger
-						.info("=================================================================");
-				logger.info("  the important Objects are " + journal.getType());
-				logger.info("");
-				logger.info("");
-				logger.info(" ++++++++++++++++++Details+++++++++++++++++++");
-				logger.info("  Number of " + journal.getType()
-						+ "s          : " + journal.getAllCounter());
+        java.util.Date heute = new java.util.Date();
+        Timestamp time = new Timestamp(heute.getTime());
+        Long actualTime = time.getTime();
+        // pretty date
+        SimpleDateFormat formater = new SimpleDateFormat("EEE, MMM d, ''yy", Locale.GERMANY);
+        String datePretty = formater.format(actualTime);
+        Element date = new Element("statistic");
+        date.setAttribute("date", actualTime.toString());
+        date.setAttribute("datePretty", datePretty);
 
-				Element NumberOfObjects = new Element("numberOfObjects");
-				
-				if(journal.getType().equals("browse"))
-					{
-					 scaleValue = journal.getAllCounter();
-					}
-				else
-					{
-					 scaleValue = journal.getAllCounter()-journal.getMissingChildrenCounter();
-					}
-				
-				Element Total = new Element("total");
-				Total.setAttribute("scale", Double.toString(scale(scaleValue)));
-				Total.setAttribute("percent", Double.toString(round((((double)(journal.getAllCounter()-journal.getMissingChildrenCounter())/ (double)MCRJournalStats.getAllObjectsCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix)));
-				Total.setText(Integer.toString(journal.getAllCounter()-journal.getMissingChildrenCounter()));
+        logger.info("/************************Journal Status Report*************************/");
+        // go through all journal objects in the hash map
+        for (int k = 0; k <= maxJouID; k++) {
+            MCRObjectID JournalID = new MCRObjectID("jportal_jpjournal_" + Integer.toString(k));
+            if (journals.containsKey(JournalID)) {
+                MCRJournalStats journal = journals.get(JournalID);
+                Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type", journal.getObjectFocus())
+                                .setAttribute("id", journal.getJournalID().toString());
+                Element XMLobjectsInc = new Element("objectList").setAttribute("type", "incomplete");
+                Element XMLobjectsMis = new Element("objectList").setAttribute("type", "missing");
 
-				String complete = journal.getGoodCounter() + " / " + ((float) journal.getGoodCounter() / (float) journal.getAllCounter() * 100) + "%";
-				logger.info("  Complete                    : " + complete);
-				Element Complete = new Element("complete");
-				Complete.setAttribute("percent", Double.toString(round((((double)journal.getGoodCounter()/(double)journal.getAllCounter())*100),2,RoundingMode.HALF_EVEN,FormatType.fix)));
-				Complete.setText(Integer.toString(journal.getGoodCounter()));
+                for (int i = 0; i < journal.getBadCounter(); i++) {
+                    Element XMLobject = new Element("object").setAttribute("id", journal.getIncompleteObjects().get(i).toString());
+                    XMLobjectsInc.addContent(XMLobject);
+                }
+                for (int j = 0; j < journal.getMissingChildrenCounter(); j++) {
+                    Element XMLobject = new Element("object").setAttribute("id", journal.getMissingChildren().get(j).toString());
+                    XMLobjectsMis.addContent(XMLobject);
+                }
 
-				String incomplete = journal.getBadCounter()	+ " / "	+ ((float) journal.getBadCounter() / (float) journal.getAllCounter() * 100) + "%";
-				logger.info("  Incomplete                  : " + incomplete);
-				Element Incomplete = new Element("incomplete").setAttribute("percent",Double.toString(round((((double) journal.getBadCounter()/ (double) journal.getAllCounter()) * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getBadCounter()));
+                logger.info("=================================================================");
+                logger.info("=                                                               =");
+                logger.info("= actual Journal: " + journal.getJournalName() + " with ID " + journal.getJournalID() + " =");
+                logger.info("=                                                               =");
+                logger.info("=================================================================");
+                logger.info("  the important Objects are " + journal.getType());
+                logger.info("");
+                logger.info("");
+                logger.info(" ++++++++++++++++++Details+++++++++++++++++++");
+                logger.info("  Number of " + journal.getType() + "s          : " + journal.getAllCounter());
 
-				logger.info("  Volume with Missing Articles: " + journal.getMissingChildrenCounter() + " / " + ((float) journal.getMissingChildrenCounter()	/ (float) journal.getAllCounter() * 100) + "%");
-				Element Missing = new Element("missing").setAttribute("percent", Double.toString(round(((double)journal.getMissingChildrenCounter()	/ (double) journal.getAllCounter() * 100),2,RoundingMode.HALF_EVEN,FormatType.fix))).setText(Integer.toString(journal.getMissingChildrenCounter()));
+                Element NumberOfObjects = new Element("numberOfObjects");
 
-				logger.info("");
-				logger.info("");
-				logger
-						.info("=================================================================");
-				logger.info("");
-				logger.info("");
+                if (journal.getType().equals("browse")) {
+                    scaleValue = journal.getAllCounter();
+                } else {
+                    scaleValue = journal.getAllCounter() - journal.getMissingChildrenCounter();
+                }
 
-				NumberOfObjects.addContent(Total);
-				NumberOfObjects.addContent(Complete);
-				NumberOfObjects.addContent(Incomplete);
-				NumberOfObjects.addContent(Missing);
-				XMLjournal.addContent(NumberOfObjects);
-				XMLjournal.addContent(XMLobjectsInc);
-				XMLjournal.addContent(XMLobjectsMis);
-				date.addContent(XMLjournal);
-			}
-		}
+                Element Total = new Element("total");
+                Total.setAttribute("scale", Double.toString(scale(scaleValue)));
+                Total.setAttribute("percent", Double
+                                .toString(round((((double) (journal.getAllCounter() - journal.getMissingChildrenCounter()) / (double) MCRJournalStats
+                                                .getAllObjectsCounter()) * 100), 2, RoundingMode.HALF_EVEN, FormatType.fix)));
+                Total.setText(Integer.toString(journal.getAllCounter() - journal.getMissingChildrenCounter()));
 
-		logger
-				.info("/************************Journal Status Report*************************/");
-		saveXML(date, "build/webapps", "build/webapps/journalStatistic.xml",
-				true);
-	}
+                String complete = journal.getGoodCounter() + " / " + ((float) journal.getGoodCounter() / (float) journal.getAllCounter() * 100) + "%";
+                logger.info("  Complete                    : " + complete);
+                Element Complete = new Element("complete");
+                Complete.setAttribute("percent", Double.toString(round((((double) journal.getGoodCounter() / (double) journal.getAllCounter()) * 100), 2,
+                                RoundingMode.HALF_EVEN, FormatType.fix)));
+                Complete.setText(Integer.toString(journal.getGoodCounter()));
+
+                String incomplete = journal.getBadCounter() + " / " + ((float) journal.getBadCounter() / (float) journal.getAllCounter() * 100) + "%";
+                logger.info("  Incomplete                  : " + incomplete);
+                Element Incomplete = new Element("incomplete").setAttribute(
+                                "percent",
+                                Double.toString(round((((double) journal.getBadCounter() / (double) journal.getAllCounter()) * 100), 2, RoundingMode.HALF_EVEN,
+                                                FormatType.fix))).setText(Integer.toString(journal.getBadCounter()));
+
+                logger.info("  Volume with Missing Articles: " + journal.getMissingChildrenCounter() + " / "
+                                + ((float) journal.getMissingChildrenCounter() / (float) journal.getAllCounter() * 100) + "%");
+                Element Missing = new Element("missing").setAttribute(
+                                "percent",
+                                Double.toString(round(((double) journal.getMissingChildrenCounter() / (double) journal.getAllCounter() * 100), 2,
+                                                RoundingMode.HALF_EVEN, FormatType.fix))).setText(Integer.toString(journal.getMissingChildrenCounter()));
+
+                logger.info("");
+                logger.info("");
+                logger.info("=================================================================");
+                logger.info("");
+                logger.info("");
+
+                NumberOfObjects.addContent(Total);
+                NumberOfObjects.addContent(Complete);
+                NumberOfObjects.addContent(Incomplete);
+                NumberOfObjects.addContent(Missing);
+                XMLjournal.addContent(NumberOfObjects);
+                XMLjournal.addContent(XMLobjectsInc);
+                XMLjournal.addContent(XMLobjectsMis);
+                date.addContent(XMLjournal);
+            }
+        }
+
+        // save
+        logger.info("/************************Journal Status Report*************************/");
+        String saveFolder = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps";
+        String saveFile = saveFolder + "/journalStatistic.xml";
+        saveXML(date, saveFolder, saveFile, true);
+    }
 
     private static List<Element> manipulateXML(String targetFile) throws JDOMException, IOException {
         boolean empty = true;
