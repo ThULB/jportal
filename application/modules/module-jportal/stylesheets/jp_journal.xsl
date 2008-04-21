@@ -296,106 +296,136 @@
                             </xsl:call-template>
                         </table>
                         <!--14***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis1/contentClassi1/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis1/contentClassi1" name="nodes" />
-                                <xsl:with-param select="$label_classi" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis1/contentClassi1/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis1/contentClassi1/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis1/contentClassi1" name="nodes" />
+                                    <xsl:with-param select="$label_classi" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--15***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi2">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis2/contentClassi2/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis2/contentClassi2" name="nodes" />
-                                <xsl:with-param select="$label_classi2" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis2/contentClassi2/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi2">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis2/contentClassi2/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis2/contentClassi2" name="nodes" />
+                                    <xsl:with-param select="$label_classi2" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--16***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi3">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis3/contentClassi3/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis3/contentClassi3" name="nodes" />
-                                <xsl:with-param select="$label_classi3" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis3/contentClassi3/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi3">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis3/contentClassi3/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis3/contentClassi3" name="nodes" />
+                                    <xsl:with-param select="$label_classi3" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--17***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi4">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis4/contentClassi4/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis4/contentClassi4" name="nodes" />
-                                <xsl:with-param select="$label_classi4" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis4/contentClassi4/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi4">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis4/contentClassi4/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis4/contentClassi4" name="nodes" />
+                                    <xsl:with-param select="$label_classi4" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--18***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi5">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis5/contentClassi5/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis5/contentClassi5" name="nodes" />
-                                <xsl:with-param select="$label_classi5" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis5/contentClassi5/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi5">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis5/contentClassi5/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis5/contentClassi5" name="nodes" />
+                                    <xsl:with-param select="$label_classi5" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--19***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi6">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis6/contentClassi6/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis6/contentClassi6" name="nodes" />
-                                <xsl:with-param select="$label_classi6" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis6/contentClassi6/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi6">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis6/contentClassi6/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis6/contentClassi6" name="nodes" />
+                                    <xsl:with-param select="$label_classi6" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--20***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi7">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis7/contentClassi7/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis7/contentClassi7" name="nodes" />
-                                <xsl:with-param select="$label_classi7" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis7/contentClassi7/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi7">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis7/contentClassi7/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis7/contentClassi7" name="nodes" />
+                                    <xsl:with-param select="$label_classi7" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--21***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi8">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis8/contentClassi8/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis8/contentClassi8" name="nodes" />
-                                <xsl:with-param select="$label_classi8" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis8/contentClassi8/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi8">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis8/contentClassi8/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis8/contentClassi8" name="nodes" />
+                                    <xsl:with-param select="$label_classi8" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--22***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi9">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis9/contentClassi9/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis9/contentClassi9" name="nodes" />
-                                <xsl:with-param select="$label_classi9" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        <xsl:if test="metadata/contentClassis9/contentClassi9/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi9">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis9/contentClassi9/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis9/contentClassi9" name="nodes" />
+                                    <xsl:with-param select="$label_classi9" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
                         <!--23***classi*************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:variable name="label_classi10">
-                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:contentClassis10/contentClassi10/@classid')//label/text()" />
-                            </xsl:variable>
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./metadata/contentClassis10/contentClassi10" name="nodes" />
-                                <xsl:with-param select="$label_classi10" name="label" />
-                            </xsl:call-template>
-                        </table>
-
+                        <xsl:if test="metadata/contentClassis10/contentClassi10/@classid">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <xsl:variable name="label_classi10">
+                                    <xsl:value-of
+                                        select="document(concat('jportal_getClassLabel:getDirectely:',metadata/contentClassis10/contentClassi10/@classid))//label/text()" />
+                                </xsl:variable>
+                                <xsl:call-template name="printMetaDates">
+                                    <xsl:with-param select="./metadata/contentClassis10/contentClassi10" name="nodes" />
+                                    <xsl:with-param select="$label_classi10" name="label" />
+                                </xsl:call-template>
+                            </table>
+                        </xsl:if>
+                        
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
