@@ -450,10 +450,10 @@
         <xsl:variable name="lastFirstDistance">
             <xsl:choose>
                 <xsl:when test="$lastFirstDistancetemp &gt; 0">
-                    <xsl:value-of select="concat('+',$lastFirstDistancetemp)"/>
+                    <xsl:value-of select="concat('+',$lastFirstDistancetemp)" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$lastFirstDistancetemp"/>
+                    <xsl:value-of select="$lastFirstDistancetemp" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -576,38 +576,38 @@
                 <xsl:with-param name="jID" select="$jID" />
             </xsl:call-template>
         </xsl:variable>
-        
+
         <xsl:variable name="CompleteDiff">
             <xsl:choose>
                 <xsl:when test="$CompleteDiffTemp &gt; 0">
-                    <xsl:value-of select="concat('+',$CompleteDiffTemp)"/>
+                    <xsl:value-of select="concat('+',$CompleteDiffTemp)" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$CompleteDiffTemp"/>
+                    <xsl:value-of select="$CompleteDiffTemp" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="IncompleteDiff">
             <xsl:choose>
                 <xsl:when test="$IncompleteDiffTemp &gt; 0">
-                    <xsl:value-of select="concat('+',$IncompleteDiffTemp)"/>
+                    <xsl:value-of select="concat('+',$IncompleteDiffTemp)" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$IncompleteDiffTemp"/>
+                    <xsl:value-of select="$IncompleteDiffTemp" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="MissingDiff">
             <xsl:choose>
                 <xsl:when test="$MissingDiffTemp &gt; 0">
-                    <xsl:value-of select="concat('+',$MissingDiffTemp)"/>
+                    <xsl:value-of select="concat('+',$MissingDiffTemp)" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:value-of select="$MissingDiffTemp"/>
+                    <xsl:value-of select="$MissingDiffTemp" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
+
 
         <xsl:variable name="headline">
             <xsl:value-of
@@ -846,7 +846,7 @@
         </table>
         <br />
         <b style="padding:5px;">
-            <xsl:value-of select="'  Vollständigkeitsprüfung für gewähltes Datum:'" />
+            <xsl:value-of select="concat('  Vollständigkeitsprüfung für ',/journalStatistic/statistic[@date=number($journalStatistic.date.Till)]/@datePretty,' :')" />
         </b>
         <xsl:variable name="pervalue1" select="numberOfObjects/complete/@percent" />
         <xsl:variable name="pervalue2" select="numberOfObjects/incomplete/@percent" />
