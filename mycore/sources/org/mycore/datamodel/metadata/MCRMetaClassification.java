@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRMetaClassification.java,v $
- * $Revision: 1.26 $ $Date: 2006/12/05 12:35:06 $
+ * 
+ * $Revision: 13491 $ $Date: 2008-05-07 14:44:55 +0200 (Mi, 07 Mai 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,8 +24,6 @@
 package org.mycore.datamodel.metadata;
 
 import org.mycore.common.MCRException;
-import org.mycore.datamodel.classifications.MCRCategoryItem;
-import org.mycore.datamodel.classifications.MCRClassificationItem;
 
 /**
  * This class implements all method for handling with the MCRMetaClassification
@@ -37,7 +35,8 @@ import org.mycore.datamodel.classifications.MCRClassificationItem;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.26 $ $Date: 2006/12/05 12:35:06 $
+ * @version $Revision: 13491 $ $Date: 2008-03-18 22:53:44 +0000 (Di, 18 Mrz
+ *          2008) $
  */
 public class MCRMetaClassification extends MCRMetaDefault {
     /** The length of the classification ID * */
@@ -80,7 +79,8 @@ public class MCRMetaClassification extends MCRMetaDefault {
      * @exception MCRException if the set_subtag value, the set_classid value or
      * the set_categid are null, empty, too long or not a MCRObjectID
      */
-    public MCRMetaClassification(String set_datapart, String set_subtag, int set_inherted, String set_type, String set_classid, String set_categid) throws MCRException {
+    public MCRMetaClassification(String set_datapart, String set_subtag, int set_inherted, String set_type, String set_classid, String set_categid)
+            throws MCRException {
         super(set_datapart, set_subtag, "en", set_type, set_inherted);
         setValue(set_classid, set_categid);
     }
@@ -199,24 +199,7 @@ public class MCRMetaClassification extends MCRMetaDefault {
         if (!super.isValid()) {
             return false;
         }
-
-        try {
-            MCRClassificationItem cl = MCRClassificationItem.getClassificationItem(classid);
-
-            if (cl == null) {
-                return false;
-            }
-
-            MCRCategoryItem ci = cl.getCategoryItem(categid);
-
-            if (ci == null) {
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-
-        return true;
+        return classid != null && classid.length() > 0 && categid != null && categid.length() > 0;
     }
 
     /**

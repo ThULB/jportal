@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRInputValidator.java,v $
- * $Revision: 1.14 $ $Date: 2006/11/20 07:16:26 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -79,7 +79,7 @@ public class MCRInputValidator {
     }
 
     /** Cache of reusable stylesheets for checking XSL conditions * */
-    private MCRCache xslcondCache = new MCRCache(20);
+    private MCRCache xslcondCache = new MCRCache(20, "InputValidator XSL conditions");
 
     /**
      * Checks the input string against an XSL condition. The syntax of the
@@ -174,7 +174,7 @@ public class MCRInputValidator {
     }
 
     /** Cache of reusable compiled regular expressions * */
-    private MCRCache regexpCache = new MCRCache(20);
+    private MCRCache regexpCache = new MCRCache(20, "InputValidator compiled reqular expressions");
 
     /**
      * Checks the input string against a regular expression.
@@ -232,7 +232,7 @@ public class MCRInputValidator {
     }
 
     /** Cache of reusable DateFormat objects * */
-    private MCRCache formatCache = new MCRCache(20);
+    private MCRCache formatCache = new MCRCache(20, "InputValidator DateFormat objects");
 
     /**
      * Returns a reusable DateFormat object for the given format string. That
@@ -607,10 +607,9 @@ public class MCRInputValidator {
      * @return true, if the XML element validates
      */
     public boolean validateExternally(String clazz, String method, Element elem) {
-        Class[] argTypes = new Class[2];
-        argTypes[0] = String.class;
-        argTypes[1] = String.class;
-        Object[] args = new Object[2];
+        Class[] argTypes = new Class[1];
+        argTypes[0] = Element.class;
+        Object[] args = new Object[1];
         args[0] = elem;
         Object result = new Boolean(false);
         try {

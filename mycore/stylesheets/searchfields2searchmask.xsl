@@ -127,7 +127,9 @@
 <xsl:template match="mcr:searchfields">
   <editor id="searchmask">
 
-    <source url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]" token="[ID]" />
+    <source>
+      <xsl:attribute name="uri">request:servlets/MCRSearchServlet?mode=load&amp;id={id}</xsl:attribute>
+    </source>
     <target type="servlet" name="MCRSearchServlet" method="post" format="xml" />
 
     <components root="root" var="/query">
@@ -135,7 +137,7 @@
         <text i18n="{$headline.i18n}"/>
       </headline>
 
-      <panel id="root" lines="off">
+      <panel id="root">
       
         <hidden var="@mask" default="{$filename.webpage}" />
         <hidden var="conditions/@format" default="xml" />
@@ -250,9 +252,9 @@
       <hidden var="conditions/boolean/boolean/condition{$pos}/@field" default="{normalize-space($fields.for.type)}" /> 
     </xsl:if>
     
-    <cell row="{$pos}" col="1" colspan="2" anchor="NORTHWEST" var="conditions/boolean/boolean/condition{$pos}">
+    <cell row="{number($pos)*2}" col="1" colspan="2" anchor="NORTHWEST" var="conditions/boolean/boolean/condition{$pos}">
       <repeater min="1" max="10">
-        <panel lines="off">
+        <panel>
         
           <cell row="1" col="1" anchor="EAST" width="200px" var="@field">
             <xsl:choose>
@@ -267,13 +269,14 @@
                 <text i18n="{mcr:index/mcr:field[@name=normalize-space($fields.for.type)]/@i18n}" />
               </xsl:otherwise>
             </xsl:choose>
+            <space width="200px" height="0px" />
           </cell>    
           <xsl:choose>
             <xsl:when test="starts-with($type,'@')">
               <cell row="1" col="2" anchor="WEST" var="@value"> 
                 <list type="dropdown">
                   <item value="" i18n="editor.search.choose" />
-                  <include uri="classification:editor[textcounter]:2:children:{substring-after($type,'@')}" />
+                  <include uri="classification:editor[TextCounter]:2:children:{substring-after($type,'@')}" cacheable="false" />
                 </list>
               </cell>
             </xsl:when>
@@ -450,7 +453,7 @@
   </cell>
   <cell row="97" col="2" anchor="NORTHWEST" var="sortBy/field">
     <repeater min="1" max="3">
-      <panel lines="off">
+      <panel>
         <cell row="1" col="1" anchor="WEST" var="@name">
           <list type="dropdown">
             <item value="" i18n="editor.search.choose" />
@@ -478,7 +481,7 @@
   <xsl:comment> Select maximum number of results and num per page </xsl:comment>
 
   <cell row="98" col="1" colspan="2" anchor="SOUTHEAST" height="50px">
-    <panel lines="off">
+    <panel>
       <cell row="1" col="1" anchor="WEST">
         <text  i18n="editor.search.max" />
       </cell>
@@ -513,8 +516,8 @@
 <!-- ==================================================== -->
 
 <xsl:template name="spacer">
-  <cell row="92" col="1" colspan="2" anchor="WEST" height="20px">
-    <text><label> </label></text>
+  <cell row="92" col="1" colspan="2" anchor="WEST">
+    <space height="20px" />
   </cell>
 </xsl:template>
 
@@ -561,15 +564,15 @@
 
   <hidden var="conditions/boolean/condition{$pos}/@field" default="{@name}" />
   <hidden var="conditions/boolean/condition{$pos}/@operator" default="{$fieldtypes/mcr:type[@name=current()/@type]/@default}" />
-  <cell row="{$pos}" col="1" anchor="EAST">
+  <cell row="{number($pos)*2}" col="1" anchor="EAST">
     <text i18n="{@i18n}" />
   </cell>
-  <cell row="{$pos}" col="2" anchor="WEST" var="conditions/boolean/condition{$pos}/@value">
+  <cell row="{number($pos)*2}" col="2" anchor="WEST" var="conditions/boolean/condition{$pos}/@value">
     <xsl:choose>
       <xsl:when test="@classification and @source='objectCategory'">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[textcounter]:2:children:{@classification}" />
+          <include uri="classification:editor[TextCounter]:2:children:{@classification}" cacheable="false" />
         </list>
       </xsl:when>
       <xsl:otherwise>

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRMetaAccessRule.java,v $
- * $Revision: 1.11 $ $Date: 2006/12/05 12:35:06 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * which hold an ACL condition for a defined permission.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.11 $ $Date: 2006/12/05 12:35:06 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRMetaAccessRule extends MCRMetaDefault {
     // MCRMetaAccessRule data
@@ -83,7 +83,8 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
         if ((set_condition == null) || (!set_condition.getName().equals("condition"))) {
             throw new MCRException("The condition Element of MCRMetaAccessRule is null.");
         }
-        condition = set_condition;
+        condition = (org.jdom.Element)set_condition.clone();
+        condition.detach();
     }
 
     /**
@@ -108,6 +109,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
             throw new MCRException("The condition Element of MCRMetaAccessRule is null.");
         }
         condition = set_condition;
+        condition.detach();
     }
 
     /**
@@ -123,6 +125,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
             throw new MCRException("The condition Element of MCRMetaAccessRule is null.");
         }
         condition = (org.jdom.Element)set_condition.clone();
+        condition.detach();
     }
 
     /**
@@ -173,6 +176,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
             throw new MCRException("The condition Element of MCRMetaAccessRule is null.");
         }
         condition = (org.jdom.Element)temp_condition.clone();
+        condition.detach();
 
         String temp_permission = element.getAttributeValue("permission");
         if (temp_permission == null) {
@@ -203,6 +207,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
         if ((type != null) && ((type = type.trim()).length() != 0)) {
             elm.setAttribute("type", type);
         }
+        condition.detach();
         elm.addContent(condition);
         return elm;
     }

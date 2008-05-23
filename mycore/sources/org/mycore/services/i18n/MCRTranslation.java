@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRTranslation.java,v $
- * $Revision: 1.3 $ $Date: 2006/06/22 09:04:16 $
+ * 
+ * $Revision: 13276 $ $Date: 2008-03-13 10:15:16 +0100 (Do, 13 Mär 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -62,7 +62,7 @@ public class MCRTranslation {
     	String result;
         Locale currentLocale = getCurrentLocale();
         LOGGER.debug("Translation for current locale: " + currentLocale.getLanguage());
-        ResourceBundle message = ResourceBundle.getBundle("/messages", currentLocale);
+        ResourceBundle message = ResourceBundle.getBundle("messages", currentLocale);
         
         try { 
         	result = message.getString(label);
@@ -119,7 +119,7 @@ public class MCRTranslation {
     }
 
     static String[] getStringArray(String masked) {
-        List a = new LinkedList();
+        List<String> a = new LinkedList<String>();
         boolean mask = false;
         StringBuffer buf = new StringBuffer();
         if (masked == null) {

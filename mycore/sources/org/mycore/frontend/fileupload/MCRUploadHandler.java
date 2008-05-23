@@ -1,6 +1,5 @@
 /*
- * $RCSfile: MCRUploadHandler.java,v $
- * $Revision: 1.2 $ $Date: 2005/09/28 07:45:46 $
+ * $Revision: 12994 $ $Date: 2008-01-25 11:38:13 +0100 (Fr, 25 Jan 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,6 +25,8 @@ package org.mycore.frontend.fileupload;
 import java.io.InputStream;
 
 import org.apache.log4j.Logger;
+import org.mycore.common.MCRException;
+import org.mycore.frontend.MCRWebsiteWriteProtection;
 
 /**
  * This class does the server-side of uploading files from a client browser,
@@ -37,7 +38,7 @@ import org.apache.log4j.Logger;
  * @author Harald Richter
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.2 $ $Date: 2005/09/28 07:45:46 $
+ * @version $Revision: 12994 $ $Date: 2008-01-25 11:38:13 +0100 (Fr, 25 Jan 2008) $
  * 
  * @see MCRUploadHandlerManager
  */
@@ -53,6 +54,9 @@ public abstract class MCRUploadHandler {
 
     /** Creates a new upload handler and registers it at the handler manager * */
     protected MCRUploadHandler() {
+        if(MCRWebsiteWriteProtection.isActive())
+            throw new MCRException("System is currently in read-only mode");
+
         this.uploadID = Long.toString(System.currentTimeMillis(), 36);
         MCRUploadHandlerManager.register(this);
     }
@@ -88,25 +92,41 @@ public abstract class MCRUploadHandler {
      *            the path and filename of the file
      * @param checksum
      *            the MD5 checksum computed at the client applet side
+     * @param length 
+     *            the length of the file in bytes (file size)
      * @return true, if the file should be uploaded, false if the file should be
      *         skipped
      * @throws Exception
      */
-    public boolean acceptFile(String path, String checksum) throws Exception {
+    public boolean acceptFile(String path, String checksum, long length) throws Exception {
         return true;
     }
 
     /**
      * When the applet uploads a file, this method is called so that the
      * UploadHandler subclass can store the file on the server side.
+     * When the UploadHandler could read less than length bytes from the
+     * InputStream at the time the InputStream has no data any more, the user
+     * at the remote side canceled upload during file transfer. The UploadHandler
+     * then can decide to delete the file, but must return the number of 
+     * bytes stored. The UploadHandler can also compare the MD5 checksum calculated
+     * at the client side with its own checksum, to detect magical transfer errors.
      * 
      * @param path
      *            the path and filename of the file
      * @param in
      *            the inputstream to read the content of the file from
+     * @param length
+     *            the total file size as number of bytes. This may be 0,
+     *            meaning that the file is empty or the file size is not known.
+     * @param md5
+     *            the md5 checksum calculated at the client applet side. This
+     *            may be null, meaning that the md5 checksum is not known.
+     * @return 
+     *            the number of bytes that have been stored.
      * @throws Exception
      */
-    public abstract void receiveFile(String path, InputStream in) throws Exception;
+    public abstract long receiveFile(String path, InputStream in, long length, String md5) throws Exception;
 
     /**
      * When the applet finished uploading all files, this method is called so
@@ -116,6 +136,19 @@ public abstract class MCRUploadHandler {
      * @throws Exception
      */
     public abstract void finishUpload() throws Exception;
+
+    /**
+     * After the remote user canceled the upload process in the applet, 
+     * this method is called so that the UploadHandler subclass can finish 
+     * or cancel work. The implementation is optional, by default finishUpload()
+     * is called 
+     * 
+     * @throws Exception
+     */
+    public void cancelUpload() throws Exception
+    {
+      finishUpload();
+    }
 
     /**
      * When the applet is closed after uploading all files, the servlet calls

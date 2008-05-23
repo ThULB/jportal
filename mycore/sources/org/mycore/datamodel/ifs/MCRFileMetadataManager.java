@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRFileMetadataManager.java,v $
- * $Revision: 1.15 $ $Date: 2006/11/23 13:18:51 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.MCRPersistenceException;
  * <li><b>MCR.IFS.FileMetadataStore.Class: </b> The class that implements the
  * MCRFileMetadataStore interface and that should be used to store the
  * persistent metadata.</li>
- * <li><b>MCR.IFS.FileMetadataStore.CacheSize: </b> The size of the cache
+ * <li><b>MCR.Persistence.IFS.FileMetadataStore.CacheSize: </b> The size of the cache
  * holding the most recently used MCRFilesystemNodes expressed as maximum number
  * of node objects in the cache.</li>
  * </ul>
@@ -52,7 +52,7 @@ import org.mycore.common.MCRPersistenceException;
  * @see MCRFileMetadataStore
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.15 $ $Date: 2006/11/23 13:18:51 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRFileMetadataManager {
 
@@ -79,12 +79,12 @@ public class MCRFileMetadataManager {
         MCRConfiguration config = MCRConfiguration.instance();
 
         // The FileMetadataStore to use
-        Object object = config.getInstanceOf("MCR.IFS.FileMetadataStore.Class");
+        Object object = config.getInstanceOf("MCR.Persistence.IFS.FileMetadataStore.Class");
         store = (MCRFileMetadataStore) object;
 
         // The cache size for the MCRFilesystemNode cache
         int size = config.getInt("MCR.IFS.FileMetadataStore.CacheSize", 500);
-        cache = new MCRCache(size);
+        cache = new MCRCache(size,"IFS FileSystemNodes");
     }
 
     /**

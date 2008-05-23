@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREditorServlet.java,v $
- * $Revision: 1.27 $ $Date: 2006/11/29 10:28:49 $
+ * 
+ * $Revision: 13413 $ $Date: 2008-04-18 14:45:09 +0200 (Fr, 18 Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,9 +23,12 @@
 
 package org.mycore.frontend.editor;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -46,7 +49,13 @@ import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
 import org.mycore.common.MCRCache;
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.events.MCRSessionEvent;
+import org.mycore.common.events.MCRSessionListener;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -56,19 +65,60 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * converts the submitted data into a JDOM XML document for further processing.
  * It can also handle file uploads.
  * 
- * @author Frank Lützenkirchen
- * @version $Revision: 1.27 $ $Date: 2006/11/29 10:28:49 $
+ * @author Frank Lï¿½tzenkirchen
+ * @version $Revision: 13413 $ $Date: 2008-04-18 14:45:09 +0200 (Fr, 18 Apr 2008) $
  */
-public class MCREditorServlet extends MCRServlet {
+public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
+    private static final long serialVersionUID = 1L;
+
     protected final static Logger logger = Logger.getLogger(MCREditorServlet.class);
 
-    protected final static MCRCache sessions = new MCRCache(200);
+    private final static String EDITOR_SESSIONS_KEY = "editorSessions";
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        MCRSessionMgr.addSessionListener(this);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        MCRSessionMgr.removeSessionListener(this);
+    }
+
+    /**
+     * For each user session, the state of all editor forms most recently used
+     * is kept in a cache. The number of editor form data that is kept is controlled
+     * by the property MCR.EditorFramework.MaxEditorsInSession.
+     */
+    static MCRCache getEditorSessionCache() {
+        
+        MCRSession current = MCRSessionMgr.getCurrentSession();
+        MCRCache editorsInSession = (MCRCache) (current.get(EDITOR_SESSIONS_KEY));
+        if (editorsInSession == null) {
+            int maxEditors = MCRConfiguration.instance().getInt("MCR.EditorFramework.MaxEditorsInSession",10);
+            editorsInSession = new MCRCache(maxEditors, "Editor data in MCRSessions, MCRSession=" + current.getID());
+            current.put(EDITOR_SESSIONS_KEY, editorsInSession);
+        }
+        return editorsInSession;
+    }
+    
+    public void sessionEvent(MCRSessionEvent event) {
+        if (event.getType() == MCRSessionEvent.Type.destroyed) {
+            // close MCRCache instance cleanly
+            MCRSession current = event.getSession();
+            MCRCache editorsInSession = (MCRCache) current.get(EDITOR_SESSIONS_KEY);
+            if (editorsInSession != null) {
+                logger.debug(EDITOR_SESSIONS_KEY + " is NOT null");
+                editorsInSession.close();
+            }
+        }
+    }
 
     public void doGetPost(MCRServletJob job) throws ServletException, java.io.IOException {
         HttpServletRequest req = job.getRequest();
         HttpServletResponse res = job.getResponse();
-
-        logger.debug("doGetPost in EditorServlet");
 
         MCRRequestParameters parms = new MCRRequestParameters(req);
 
@@ -80,9 +130,29 @@ public class MCREditorServlet extends MCRServlet {
             processSubmit(req, res, parms);
         } else if ("end.subselect".equals(action)) {
             processEndSubSelect(req, res, parms);
+        } else if ("include".equals(action)) {
+            includeEditorFromXSL(req, res);
         } else {
             res.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
+    }
+
+    private void includeEditorFromXSL(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        String sessionID = req.getParameter("XSL.editor.session.id");
+        Element editorResolved = null;
+
+        if (sessionID != null)
+            editorResolved = (Element)(getEditorSessionCache().get(sessionID));
+
+        if ((editorResolved == null) || (sessionID == null)) {
+            Map parameters = req.getParameterMap();
+            String ref = req.getParameter("_ref");
+            String uri = req.getParameter("_uri");
+            boolean validate = "true".equals(req.getParameter("_validate"));
+            editorResolved = startSession(parameters, ref, uri, validate);
+        }
+
+        getLayoutService().sendXML(req, res, new Document((Element) (editorResolved.clone())));
     }
 
     /**
@@ -92,9 +162,9 @@ public class MCREditorServlet extends MCRServlet {
         String sessionID = req.getParameter("_session");
         String ref = req.getParameter("_ref");
 
-        logger.info("Editor session " + sessionID + " show popup " + ref);
+        logger.debug("Editor session " + sessionID + " show popup " + ref);
 
-        Element editor = (Element) (sessions.get(sessionID));
+        Element editor = (Element)(getEditorSessionCache().get(sessionID));
         Element popup = MCREditorDefReader.findElementByID(ref, editor);
         Element clone = (Element) (popup.clone());
 
@@ -105,29 +175,33 @@ public class MCREditorServlet extends MCRServlet {
      * Replaces editor elements in static webpage with complete editor
      * definition.
      * 
-     * @param job
+     * @param request
      *            the current MCRServletJob
      * @param uri
      *            the uri of the static XML file containing the editor
      * @param xml
      *            the complete XML document of the static webpage
      */
-    public static void replaceEditorElements(MCRServletJob job, String uri, Document xml) {
-        String sessionID = job.getRequest().getParameter("XSL.editor.session.id");
+    public static void replaceEditorElements(HttpServletRequest request, String uri, Document xml) {
+        String sessionID = request.getParameter("XSL.editor.session.id");
 
-        List editors = new ArrayList();
+        List<Element> editors = new ArrayList<Element>();
         Iterator it = xml.getDescendants(new ElementFilter("editor"));
         while (it.hasNext())
-            editors.add(it.next());
+            editors.add((Element)(it.next()));
 
-        for (int i = 0; i < editors.size(); i++) {
-
-            Element editor = (Element) (editors.get(i));
+        for (Element editor: editors ) {
             Element editorResolved = null;
-            if ((sessionID == null) || (sessions.get(sessionID) == null))
-                editorResolved = startSession(job.getRequest(), editor, uri);
-            else
-                editorResolved = (Element) (sessions.get(sessionID));
+            if( sessionID != null ) 
+                editorResolved = (Element)(getEditorSessionCache().get(sessionID));
+            
+            if ((sessionID == null) || (editorResolved == null))
+            {
+                Map parameters = request.getParameterMap();
+                boolean validate = "true".equals(editor.getAttributeValue("validate", "false"));
+                String ref = editor.getAttributeValue("id");
+                editorResolved = startSession(parameters, ref, uri, validate);
+            }
 
             editor.removeContent();
             editor.addContent(editorResolved.cloneContent());
@@ -138,17 +212,12 @@ public class MCREditorServlet extends MCRServlet {
     /**
      * Starts a new editor session in webpage
      */
-    private static Element startSession(HttpServletRequest req, Element editor, String uri) {
+    private static Element startSession(Map parameters, String ref, String uri, boolean validate) {
+        logger.debug("Editor start editor session from " + ref + "@" + uri);
 
-        String ref = editor.getAttributeValue("id");
-        logger.info("Editor start editor session from " + ref + "@" + uri);
-
-        Map parameters = req.getParameterMap();
         Element param = getTargetParameters(parameters);
-        boolean validate = "true".equals(editor.getAttributeValue("validate", "false"));
-        editor = MCREditorDefReader.readDef(uri, ref, validate);
+        Element editor = MCREditorDefReader.readDef(uri, ref, validate);
 
-        setDefault(editor, "panel", "lines", "off");
         setDefault(editor, "cell", "row", "1");
         setDefault(editor, "cell", "col", "1");
 
@@ -156,23 +225,85 @@ public class MCREditorServlet extends MCRServlet {
             editor.addContent(param);
         }
 
-        buildCancelURL(editor, parameters);
+        String sourceURI = replaceParameters(editor, "source", "uri", parameters);
 
-        MCREditorSubmission sub = MCREditorSourceReader.readSource(editor, parameters);
-
-        if (sub != null) {
+        if (sourceURI != null) {
+            logger.info("Editor reading XML input from " + sourceURI);
+            Element input = MCRURIResolver.instance().resolve(sourceURI);
+            MCREditorSubmission sub = new MCREditorSubmission(input, editor);
             editor.addContent(sub.buildInputElements());
             editor.addContent(sub.buildRepeatElements());
         }
+        else
+            logger.debug("Editor is started empty without XML input");
+        
+        String cancelURL = replaceParameters(editor, "cancel", "url", parameters);
+        logger.debug("Editor cancel url is " + cancelURL );
+        editor.removeChildren("cancel");
+        if( cancelURL != null)
+            editor.addContent(new Element("cancel").setAttribute("url", cancelURL));
 
         String sessionID = buildSessionID();
         editor.setAttribute("session", sessionID);
-        sessions.put(sessionID, editor);
-        logger.debug("Storing editor sessions under id " + sessionID);
+        getEditorSessionCache().put(sessionID, editor);
+        logger.debug("Storing editor under session id " + sessionID);
 
         return editor;
     }
 
+    /**
+     * Replaces parameter names with their values for a list of element
+     * attributes. For example, in &lt;source
+     * uri="request:servlets/SomeServlet?id={id}" /&gt;, replaces the {id} with
+     * the actual value, if present.
+     * 
+     * @param parent
+     *            parent Element, e.g. the editor element
+     * @param elementName
+     *            name of the child element(s), e.g. the "source" element
+     * @param attributeName
+     *            name of the attribute, e.g. the "uri" attribute
+     * @param parameters
+     *            the request parameter map
+     * @return the value of the first attribute in the element list where all
+     *         parameters could be replaced successfully
+     */
+    private static String replaceParameters(Element parent, String elementName, String attributeName, Map<String,String[]> parameters) {
+        // Get all elements of a given name, e.g. "source"
+        List<Element> l = parent.getChildren(elementName);
+        for (Element e : l) {
+            // Get attribute of that element, e.g. "uri"
+            String value = e.getAttributeValue(attributeName);
+
+            StringTokenizer st = new java.util.StringTokenizer(value, "{}", true);
+            // The attribute value with all {...} replaced with actual request
+            // param values
+            StringBuffer replaced = new StringBuffer();
+            boolean withinParameter = false;
+
+            while (st.hasMoreTokens()) {
+                String token = st.nextToken();
+                if (token.equals("{"))
+                    withinParameter = true; // Begin of request parameter name
+                else if (token.equals("}"))
+                    withinParameter = false; // End of request parameter name
+                else if (withinParameter) {
+                    // If request parameter not given, skip complete value
+                    if (!parameters.containsKey(token))
+                        break;
+                    else
+                        // Replace parameter with value from request
+                        replaced.append(parameters.get(token)[0]);
+                } else
+                    replaced.append(token);
+            }
+            // If all parameters have been replaced, return this value
+            if (!withinParameter)
+                return replaced.toString();
+        }
+        return null; // Fall back, no matches at all 
+    }
+    
     private static void setDefault(Element editor, String filter, String attrib, String value) {
         Iterator it = editor.getDescendants(new ElementFilter(filter));
         while (it.hasNext()) {
@@ -224,76 +355,6 @@ public class MCREditorServlet extends MCRServlet {
         return tps;
     }
 
-    private static void buildCancelURL(Element editor, Map parameters) {
-        if (parameters == null) {
-            logger.debug("CancelURL: no request parameters, cancel element unchanged");
-
-            return;
-        }
-
-        // Option 1: Cancel URL comes from http request parameter
-        String[] values = (String[]) (parameters.get("XSL.editor.cancel.url"));
-
-        if ((values != null) && (values.length > 0) && (values[0] != null) && (values[0].trim().length() > 0)) {
-            editor.removeChild("cancel");
-
-            Element cancel = new Element("cancel");
-            editor.addContent(cancel);
-            cancel.setAttribute("url", values[0].trim());
-            logger.debug("CancelURL set from request: " + values[0]);
-
-            return;
-        }
-
-        // Otherwise, use cancel element from editor definition
-        Element cancel = editor.getChild("cancel");
-
-        if (cancel == null) {
-            logger.debug("CancelURL element in editor definition is null");
-
-            return;
-        }
-
-        String urlFromElement = cancel.getAttributeValue("url", (String) null);
-
-        if (urlFromElement == null) {
-            logger.debug("CancelURL attribute in editor definition is null");
-
-            return;
-        }
-
-        // Option 2: Cancel URL comes from element in editor definition
-        values = (String[]) (parameters.get("XSL.editor.cancel.id"));
-
-        if ((values == null) || (values.length == 0) || (values[0] == null) || (values[0].trim().length() == 0)) {
-            if (cancel.getAttribute("token") != null) {
-                cancel.removeAttribute("token");
-            }
-
-            logger.debug("CancelURL set from editor definition: " + urlFromElement);
-
-            return;
-        }
-
-        // Option 3: Cancel URL is combined of request param token with url from
-        // editor def
-        String tokenFromElement = cancel.getAttributeValue("token", (String) null);
-
-        if ((tokenFromElement == null) || (tokenFromElement.trim().length() == 0) || (urlFromElement.indexOf(tokenFromElement) < 0)) {
-            logger.debug("CancelURL token in editor definition is null or illegal");
-
-            return;
-        }
-
-        int pos = urlFromElement.indexOf(tokenFromElement);
-        String prefix = urlFromElement.substring(0, pos);
-        String suffix = urlFromElement.substring(pos + tokenFromElement.length());
-        String url = prefix + values[0].trim() + suffix;
-        cancel.setAttribute("url", url);
-        cancel.removeAttribute("token");
-        logger.debug("CancelURL built from request token: " + url);
-    }
-
     private static Random random = new Random();
 
     private static synchronized String buildSessionID() {
@@ -326,6 +387,12 @@ public class MCREditorServlet extends MCRServlet {
 
             variables.add(new MCREditorVariable(name, value));
         }
+        
+        // Remove subselect parameters from current session
+        MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+        mcrSession.deleteObject("XSL.subselect.session");
+        mcrSession.deleteObject("XSL.subselect.varpath");
+        mcrSession.deleteObject("XSL.subselect.webpage");
 
         sendToSubSelect(res, parms, variables, root);
     }
@@ -334,7 +401,7 @@ public class MCREditorServlet extends MCRServlet {
         logger.debug("Editor: process submit");
 
         String sessionID = parms.getParameter("_session");
-        Element editor = (Element) (sessions.get(sessionID));
+        Element editor = (Element)(getEditorSessionCache().get(sessionID));
 
         if (editor == null) {
             logger.error("No editor for session <" + sessionID + ">");
@@ -367,32 +434,37 @@ public class MCREditorServlet extends MCRServlet {
             StringTokenizer sst = new StringTokenizer(button.substring(3), "-");
             String id = sst.nextToken();
             String var = sst.nextToken();
-            logger.info("Editor start subselect " + id + " at position " + var);
+            logger.debug("Editor start subselect " + id + " at position " + var);
 
             Element subselect = MCREditorDefReader.findElementByID(id, editor);
             StringBuffer sb = new StringBuffer(getBaseURL());
 
+            String webpage = URLEncoder.encode(parms.getParameter("_webpage"),"UTF-8");
             if ("editor".equals(subselect.getAttributeValue("type"))) {
                 sb.append(subselect.getAttributeValue("href"));
                 sb.append("?subselect.session=").append(sessionID);
                 sb.append("&subselect.varpath=").append(var);
-                sb.append("&subselect.webpage=").append(parms.getParameter("_webpage"));
-                sb.append("&XSL.editor.cancel.url=").append(getBaseURL());
-                sb.append(parms.getParameter("_webpage"));
-                sb.append("?XSL.editor.session.id=").append(sessionID);
+                sb.append("&subselect.webpage=").append(webpage);
+                
+                String wp = getBaseURL() + parms.getParameter("_webpage");
+                if(! wp.contains("XSL.editor.session.id")) {
+                    wp += "XSL.editor.session.id=" + sessionID;    
+                }
+                String cancelURL = URLEncoder.encode(wp,"UTF-8"); 
+                sb.append("&cancelURL=").append(cancelURL);
             } else if ("webpage".equals(subselect.getAttributeValue("type"))) {
                 sb.append(subselect.getAttributeValue("href"));
                 if (subselect.getAttributeValue("href").indexOf("?") > 0)
-                    sb.append("&XSL.subselect.session=").append(sessionID);
+                    sb.append("&XSL.subselect.session.SESSION=").append(sessionID);
                 else
-                    sb.append("?XSL.subselect.session=").append(sessionID);
-                sb.append("&XSL.subselect.varpath=").append(var);
-                sb.append("&XSL.subselect.webpage=").append(parms.getParameter("_webpage"));
+                    sb.append("?XSL.subselect.session.SESSION=").append(sessionID);
+                sb.append("&XSL.subselect.varpath.SESSION=").append(var);
+                sb.append("&XSL.subselect.webpage.SESSION=").append(webpage);
             } else if ("servlet".equals(subselect.getAttributeValue("type"))) {
                 sb.append(subselect.getAttributeValue("href"));
                 sb.append("?subselect.session=").append(sessionID);
                 sb.append("&subselect.varpath=").append(var);
-                sb.append("&subselect.webpage=").append(parms.getParameter("_webpage"));
+                sb.append("&subselect.webpage=").append(webpage);
             }
 
             String url = sb.toString();
@@ -404,7 +476,7 @@ public class MCREditorServlet extends MCRServlet {
             editor.addContent(sub.buildInputElements());
             editor.addContent(sub.buildRepeatElements());
 
-            logger.info("Editor goto subselect at " + url);
+            logger.debug("Editor goto subselect at " + url);
             res.sendRedirect(res.encodeRedirectURL(url));
         } else {
             int pos = button.lastIndexOf("-");
@@ -436,9 +508,15 @@ public class MCREditorServlet extends MCRServlet {
 
             // Redirect to webpage to reload editor form
             StringBuffer sb = new StringBuffer(getBaseURL());
-            sb.append(parms.getParameter("_webpage"));
-            sb.append("?XSL.editor.session.id=");
-            sb.append(sessionID);
+            String wp = parms.getParameter("_webpage");
+            sb.append(wp);
+            if(! wp.contains("XSL.editor.session.id=")) {
+              sb.append("XSL.editor.session.id=");
+              sb.append(sessionID);
+            }
+            
+            path = path.replace('/','_').replace('@','_').replace('[','_').replace(']','_');
+            sb.append("#rep").append(path);
 
             logger.debug("Editor redirect to " + sb.toString());
             res.sendRedirect(res.encodeRedirectURL(sb.toString()));
@@ -465,10 +543,12 @@ public class MCREditorServlet extends MCRServlet {
 
             // Redirect to webpage to reload editor form
             StringBuffer sb = new StringBuffer(getBaseURL());
-            sb.append(parms.getParameter("_webpage"));
-            sb.append("?XSL.editor.session.id=");
-            sb.append(sessionID);
-
+            String wp = parms.getParameter("_webpage");
+            sb.append(wp);
+            if(! wp.contains("XSL.editor.session.id=")) {
+                sb.append("XSL.editor.session.id=");
+                sb.append(sessionID);
+            }
             logger.debug("Editor redirect to " + sb.toString());
             res.sendRedirect(res.encodeRedirectURL(sb.toString()));
 
@@ -482,6 +562,8 @@ public class MCREditorServlet extends MCRServlet {
             sendToServlet(req, res, sub);
         } else if (targetType.equals("url")) {
             sendToURL(req, res);
+        } else if (targetType.equals("webapp")) {
+          sendToWebAppFile(req, res, sub, editor);
         } else if (targetType.equals("debug")) {
             sendToDebug(res, sub);
         } else if (targetType.equals("display")) {
@@ -525,24 +607,53 @@ public class MCREditorServlet extends MCRServlet {
         res.sendRedirect(res.encodeRedirectURL(url.toString()));
     }
 
+    /**
+     * Writes the output of editor to a local file in the web application directory.
+     * Usage: &lt;target type="webapp" name="{relative_path_to_file}" url="{redirect url after file is written}" /&gt;
+     * If cancel url is given, user is redirected to that page, otherwise target url is used.
+     * 
+     * @throws IOException
+     */
+    private void sendToWebAppFile(HttpServletRequest req, HttpServletResponse res, MCREditorSubmission sub, Element editor) throws IOException {
+      String path = sub.getParameters().getParameter("_target-name");
+
+      logger.debug("Writing editor output to webapp file " + path);
+      
+      File f = new File(getServletContext().getRealPath(path));
+      FileOutputStream fout = new FileOutputStream(f);
+      XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat().setEncoding( "UTF-8"  ));
+      outputter.output(sub.getXML(), fout);
+      fout.close();
+      
+      String url = sub.getParameters().getParameter("_target-url");
+      Element cancel = editor.getChild("cancel");
+      if( ((url ==null) || (url.length() == 0)) && ( cancel != null ) && ( cancel.getAttributeValue( "url" ) != null ) )
+        url = cancel.getAttributeValue( "url" );
+        
+      logger.debug("EditorServlet redirecting to " + url);
+      res.sendRedirect(res.encodeRedirectURL(url.toString()));
+    }
+ 
     private void sendToSubSelect(HttpServletResponse res, MCRRequestParameters parms, List variables, String root) throws IOException {
         String webpage = parms.getParameter("subselect.webpage");
-        String varpath = parms.getParameter("subselect.varpath");
         String sessionID = parms.getParameter("subselect.session");
 
-        Element editor = (Element) (sessions.get(sessionID));
-        MCREditorSubmission subnew = new MCREditorSubmission(editor, variables, root, varpath);
+        Element editor = (Element)(getEditorSessionCache().get(sessionID));
+        MCREditorSubmission subnew = new MCREditorSubmission(editor, variables, root, parms);
 
         editor.removeChild("input");
         editor.removeChild("repeats");
+        editor.removeChild("failed");
         editor.addContent(subnew.buildInputElements());
         editor.addContent(subnew.buildRepeatElements());
 
         // Redirect to webpage to reload editor form
         StringBuffer sb = new StringBuffer(getBaseURL());
         sb.append(webpage);
-        sb.append("?XSL.editor.session.id=");
-        sb.append(sessionID);
+        if(! webpage.contains( "XSL.editor.session.id=" )) {
+            sb.append("XSL.editor.session.id=");
+            sb.append(sessionID);
+        }
 
         logger.debug("Editor redirect to " + sb.toString());
         res.sendRedirect(res.encodeRedirectURL(sb.toString()));

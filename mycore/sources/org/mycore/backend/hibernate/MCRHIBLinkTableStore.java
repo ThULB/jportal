@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRHIBLinkTableStore.java,v $
- * $Revision: 1.26 $ $Date: 2006/11/27 15:18:51 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,12 +31,11 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import org.mycore.backend.hibernate.tables.MCRLINKHREF;
-import org.mycore.common.MCRException;
+import org.mycore.backend.hibernate.tables.MCRLINKHREFPK;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.metadata.MCRLinkTableInterface;
+import org.mycore.datamodel.common.MCRLinkTableInterface;
 
 /**
  * This class implements the MCRLinkTableInterface.
@@ -76,32 +75,29 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         if ((from == null) || ((from = from.trim()).length() == 0)) {
             throw new MCRPersistenceException("The from value is null or empty.");
         }
-
         if ((to == null) || ((to = to.trim()).length() == 0)) {
             throw new MCRPersistenceException("The to value is null or empty.");
         }
-
         if ((type == null) || ((type = type.trim()).length() == 0)) {
             throw new MCRPersistenceException("The type value is null or empty.");
         }
-
         if ((attr == null) || ((attr = attr.trim()).length() == 0)) {
             attr = "";
         }
 
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            MCRLINKHREF l = new MCRLINKHREF(from, to, type, attr);
-            session.saveOrUpdate(l);
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            logger.error(e);
-        } finally {
-             if ( session != null ) session.close();
+        MCRLINKHREFPK pk = new MCRLINKHREFPK();
+        pk.setMcrfrom(from);
+        pk.setMcrto(to);
+        pk.setMcrtype(type);
+        MCRLINKHREF l = (MCRLINKHREF) session.get(MCRLINKHREF.class, pk);
+        if (l == null) {
+            l = new MCRLINKHREF();
+            l.setKey(pk);
         }
+        l.setMcrattr(attr);
+        logger.debug("Inserting " + from + "/" + to + "/" + type + " into database MCRLINKHREF");
+        session.saveOrUpdate(l);
     }
 
     /**
@@ -120,28 +116,16 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         }
         StringBuffer sb = new StringBuffer();
         sb.append("delete from ").append(classname).append(" where MCRFROM = '").append(from).append("'");
-
         if ((to != null) && ((to = to.trim()).length() > 0)) {
             sb.append(" and MCRTO = '").append(to).append("'");
         }
-
         if ((type != null) && ((type = type.trim()).length() > 0)) {
             sb.append(" and MCRTYPE = '").append(type).append("'");
         }
-
+        logger.debug("Deleting " + from + " from database MCRLINKHREF");
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            int deleted=session.createQuery(sb.toString()).executeUpdate();
-            logger.debug(deleted+" references deleted.");
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            logger.error(e);
-        } finally {
-             if ( session != null ) session.close();
-        }
+        int deleted = session.createQuery(sb.toString()).executeUpdate();
+        logger.debug((new Integer(deleted)).toString() + " items deleted.");
     }
 
     /**
@@ -160,30 +144,22 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
      */
     public final int countTo(String fromtype, String to, String type, String restriction) {
         Session session = getSession();
-        Integer returns;
+        Number returns;
         StringBuffer qBf = new StringBuffer(1024);
-        qBf.append("select count(key.mcrfrom) from ").append(classname).append(" where MCRTO like ")
-        .append('\'').append(to).append('\'');
+        qBf.append("select count(key.mcrfrom) from ").append(classname).append(" where MCRTO like ").append('\'').append(to).append('\'');
 
         if ((type != null) && (type.length() != 0)) {
-          qBf.append(" and MCRTYPE = \'").append(type).append('\'');
+            qBf.append(" and MCRTYPE = \'").append(type).append('\'');
         }
         if ((restriction != null) && (restriction.length() != 0)) {
-          qBf.append(" and MCRTO like \'").append(restriction).append('\'');
+            qBf.append(" and MCRTO like \'").append(restriction).append('\'');
         }
         if ((fromtype != null) && (fromtype.length() != 0)) {
-          qBf.append(" and MCRFROM like \'%_").append(fromtype).append("_%\'");
+            qBf.append(" and MCRFROM like \'%_").append(fromtype).append("_%\'");
         }
 
-        try {
-            Query q = session.createQuery(qBf.toString());
-            returns=(Integer)q.uniqueResult();
-        } catch (Exception e) {
-            logger.error(e);
-            throw new MCRException("Error during countTo(" + fromtype + "," + to + "," + type + "," + restriction + ")", e);
-        } finally {
-             if ( session != null ) session.close();
-        }
+        Query q = session.createQuery(qBf.toString());
+        returns = (Number) q.uniqueResult();
 
         return returns.intValue();
     }
@@ -205,16 +181,10 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         Session session = getSession();
         String query = "select count(key.mcrfrom), key.mcrto from " + classname + " where MCRTO like '" + mcrtoPrefix + "%' group by key.mcrto";
         logger.debug("HQL-Statement: " + query);
-        try {
-            Iterator results = session.createQuery(query).list().iterator();
-            while (results.hasNext()) {
-                Object[] row = (Object[]) results.next();
-                map.put(row[1], row[0]);
-            }
-        } catch (Exception e) {
-            throw new MCRException("Error during getCountedMapOfMCRTO", e);
-        } finally {
-             if ( session != null ) session.close();
+        Iterator results = session.createQuery(query).list().iterator();
+        while (results.hasNext()) {
+            Object[] row = (Object[]) results.next();
+            map.put(row[1], row[0]);
         }
         return map;
     }
@@ -226,7 +196,8 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
      * @param to
      *            Destination-ID
      * @param type
-     *            link reference type, this can be null
+     *            Link reference type, this can be null. Current types are
+     *            child, classid, parent, reference and derivate.
      * @return List of Strings (Source-IDs)
      */
     public List getSourcesOf(String to, String type) {
@@ -238,13 +209,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         String query = querySB.toString();
         logger.debug("HQL-Statement: " + query);
         List returns;
-        try {
-            returns = session.createQuery(query).list();
-        } catch (Exception e) {
-            throw new MCRException("Error during getSourceOf", e);
-        } finally {
-             if ( session != null ) session.close();
-        }
+        returns = session.createQuery(query).list();
         return returns;
     }
 
@@ -254,7 +219,8 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
      * @param source
      *            source-ID
      * @param type
-     *            reference type of the link
+     *            Link reference type, this can be null. Current types are
+     *            child, classid, parent, reference and derivate.
      * @return List of Strings (Destination-IDs)
      */
     public List getDestinationsOf(String source, String type) {
@@ -266,13 +232,7 @@ public class MCRHIBLinkTableStore implements MCRLinkTableInterface {
         String query = querySB.toString();
         logger.debug("HQL-Statement: " + query);
         List returns;
-        try {
-            returns = session.createQuery(query).list();
-        } catch (Exception e) {
-            throw new MCRException("Error during getDestinationOf", e);
-        } finally {
-             if ( session != null ) session.close();
-        }
+        returns = session.createQuery(query).list();
         return returns;
     }
 

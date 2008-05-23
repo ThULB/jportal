@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRLINKHREF.java,v $
- * $Revision: 1.11 $ $Date: 2006/02/27 20:55:22 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,7 +28,7 @@ package org.mycore.backend.hibernate.tables;
  * 
  * @author Heiko Helmbrecht
  * @author Jens Kupferschmidt
- * @version $Revision: 1.11 $ $Date: 2006/02/27 20:55:22 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRLINKHREF {
     private MCRLINKHREFPK key;

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRMailer.java,v $
- * $Revision: 1.17 $ $Date: 2006/04/13 13:49:44 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,28 +51,32 @@ import org.jdom.Element;
  * @author Frank Lützenkirchen
  * @author Werner Greßhoff
  * 
- * @version $Revision: 1.17 $ $Date: 2006/04/13 13:49:44 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRMailer {
     /** Logger */
     static Logger logger = Logger.getLogger(MCRMailer.class);
 
     protected static Session mailSession;
-    
+
     protected static String encoding;
+    
+    /** How often should MCRMailer try to send mail? */
+    protected static int numTries;
 
     /** Initializes the class */
     static {
         MCRConfiguration config = MCRConfiguration.instance();
-        encoding = config.getString( "MCR.mail.encoding", "ISO-8859-1" );
-        
+        encoding = config.getString("MCR.Mail.Encoding", "ISO-8859-1");
+
         Properties mailProperties = new Properties();
 
         try {
-            mailProperties.setProperty("mail.smtp.host", config.getString("MCR.mail.server"));
-            mailProperties.setProperty("mail.transport.protocol", config.getString("MCR.mail.protocol", "smtp"));
+            numTries = config.getInt( "MCR.Mail.NumTries", 1 );
+            mailProperties.setProperty("mail.smtp.host", config.getString("MCR.Mail.Server"));
+            mailProperties.setProperty("mail.transport.protocol", config.getString("MCR.Mail.Protocol", "smtp"));
             mailSession = Session.getDefaultInstance(mailProperties, null);
-            mailSession.setDebug(config.getBoolean("MCR.mail.debug", false));
+            mailSession.setDebug(config.getBoolean("MCR.Mail.Debug", false));
         } catch (MCRConfigurationException mcrx) {
             String msg = "Missing email configuration data.";
             logger.fatal(msg, mcrx);
@@ -226,7 +230,10 @@ public class MCRMailer {
     }
 
     /**
-     * Sends email.
+     * Sends email. When sending email fails (for example, outgoing mail server
+     * is not responding), sending will be retried after five minutes. This is
+     * done up to 10 times.
+     * 
      * 
      * @param from
      *            the sender of the email
@@ -245,66 +252,105 @@ public class MCRMailer {
      *            a List of URL strings which should be added as parts, may be
      *            null
      */
-    public static void send(String from, List replyTo, List to, List bcc, String subject, String body, List parts) {
+    public static void send(final String from, final List replyTo, final List to, final List bcc, final String subject, final String body, final List parts) {
         try {
-            MimeMessage msg = new MimeMessage(mailSession);
-            msg.setFrom(buildAddress(from));
+            if( numTries > 0 ) trySending(from, replyTo, to, bcc, subject, body, parts);
+        } catch (Exception ex){
+            logger.info("Sending email failed: " + ex.getClass().getName() + " " + ex.getMessage());
+            if( numTries < 2 ) return;
+            
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    for (int i = numTries - 1; i > 0; i--) {
+                        logger.info("Retrying in 5 minutes...");
+                        Object obj = new Object();
+                        try {
+                            synchronized (obj) {
+                                obj.wait(300000);
+                            }
+                        } // wait 5 minutes
+                        catch (InterruptedException ignored) {
+                        }
 
-            if (replyTo != null) {
-                InternetAddress[] adrs = new InternetAddress[replyTo.size()];
-
-                for (int i = 0; i < replyTo.size(); i++)
-                    adrs[i] = buildAddress((String) (replyTo.get(i)));
-
-                msg.setReplyTo(adrs);
-            }
-
-            for (int i = 0; i < to.size(); i++)
-                msg.addRecipient(Message.RecipientType.TO, buildAddress((String) to.get(i)));
-
-            if (bcc != null) {
-                for (int i = 0; i < bcc.size(); i++)
-                    msg.addRecipient(Message.RecipientType.BCC, buildAddress((String) bcc.get(i)));
-            }
-
-            msg.setSentDate(new Date());
-            msg.setSubject( subject, encoding );
-
-            if ((parts == null) || (parts.size() == 0)) {
-                msg.setText( body, encoding );
-            } else {
-                // Create the message part
-                MimeBodyPart messagePart = new MimeBodyPart();
-
-                // Fill the message
-                messagePart.setText( body, encoding );
-
-                Multipart multipart = new MimeMultipart();
-                multipart.addBodyPart(messagePart);
-
-                for (int i = 0; i < parts.size(); i++) {
-                    messagePart = new MimeBodyPart();
-
-                    DataSource source = new URLDataSource(new URL((String) parts.get(i)));
-                    messagePart.setDataHandler(new DataHandler(source));
-                    multipart.addBodyPart(messagePart);
+                        try {
+                            trySending(from, replyTo, to, bcc, subject, body, parts);
+                            logger.info("Successfully resended email.");
+                            break;
+                        } catch (Exception ex) {
+                            logger.info("Sending email failed: " + ex.getClass().getName() + " " + ex.getMessage());
+                        }
+                    }
                 }
+            });
+            t.start(); // Try to resend mail in separate thread
+        }
+    }
 
-                // Put parts in message
-                msg.setContent(multipart);
+    private static void trySending(String from, List replyTo, List to, List bcc, String subject, String body, List parts) throws Exception {
+        MimeMessage msg = new MimeMessage(mailSession);
+        msg.setFrom(buildAddress(from));
+
+        if (replyTo != null) {
+            InternetAddress[] adrs = new InternetAddress[replyTo.size()];
+
+            for (int i = 0; i < replyTo.size(); i++)
+                adrs[i] = buildAddress((String) (replyTo.get(i)));
+
+            msg.setReplyTo(adrs);
+        }
+
+        for (int i = 0; i < to.size(); i++)
+            msg.addRecipient(Message.RecipientType.TO, buildAddress((String) to.get(i)));
+
+        if (bcc != null) {
+            for (int i = 0; i < bcc.size(); i++)
+                msg.addRecipient(Message.RecipientType.BCC, buildAddress((String) bcc.get(i)));
+        }
+
+        msg.setSentDate(new Date());
+        msg.setSubject(subject, encoding);
+
+        if ((parts == null) || (parts.size() == 0)) {
+            msg.setText(body, encoding);
+        } else {
+            // Create the message part
+            MimeBodyPart messagePart = new MimeBodyPart();
+
+            // Fill the message
+            messagePart.setText(body, encoding);
+
+            Multipart multipart = new MimeMultipart();
+            multipart.addBodyPart(messagePart);
+
+            for (int i = 0; i < parts.size(); i++) {
+                messagePart = new MimeBodyPart();
+
+                URL url = new URL((String) parts.get(i));
+                DataSource source = new URLDataSource(url);
+                messagePart.setDataHandler(new DataHandler(source));
+                
+                String fileName = url.getPath();
+                if (fileName.contains("\\")) 
+                    fileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
+                else if (fileName.contains("/")) 
+                    fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
+                messagePart.setFileName(fileName);
+                
+                multipart.addBodyPart(messagePart);
             }
 
-            Transport.send(msg);
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            throw new MCRException("Email could not be sent.", ex);
+            // Put parts in message
+            msg.setContent(multipart);
         }
+
+        logger.info("Sending email to " + to.get(0));
+        Transport.send(msg);
     }
 
     /**
      * Builds email address from a string. The string may be a single email
-     * address or a combination of a personal name and address, like 
-     * "John Doe" <john@doe.com>
+     * address or a combination of a personal name and address, like "John Doe"
+     * <john@doe.com>
      */
     private static InternetAddress buildAddress(String s) throws Exception {
         if (!s.endsWith(">")) {
@@ -313,10 +359,12 @@ public class MCRMailer {
 
         String name = s.substring(0, s.lastIndexOf("<")).trim();
         String addr = s.substring(s.lastIndexOf("<") + 1, s.length() - 1).trim();
-        
+
         // Name must be quoted if it contains umlauts or special characters
-        if( ! name.startsWith( "\"" ) ) name = "\"" + name;
-        if( ! name.endsWith( "\"" ) ) name = name + "\"";
+        if (!name.startsWith("\""))
+            name = "\"" + name;
+        if (!name.endsWith("\""))
+            name = name + "\"";
 
         return new InternetAddress(addr, name);
     }

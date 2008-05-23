@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRJDOMSearcher.java,v $
- * $Revision: 1.24 $ $Date: 2006/12/08 14:44:34 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.frontend.editor.MCRInputValidator;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
@@ -94,7 +94,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
         MCRXMLTableManager mcr_xml = MCRXMLTableManager.instance();
 
         // Find all types of MCRObject data:
-        String cfgPrefix = "MCR.persistence_config_";
+        String cfgPrefix = "MCR.Metadata.Config.";
         Properties props = MCRConfiguration.instance().getProperties(cfgPrefix);
         for (Enumeration keys = props.keys(); keys.hasMoreElements();) {
             String key = (String) (keys.nextElement());
@@ -112,7 +112,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
                     MCRObject obj = new MCRObject();
                     MCRObjectID oid = new MCRObjectID(sid);
                     obj.setId(oid);
-                    obj.setFromXML(mcr_xml.retrieve(oid), false);
+                    obj.setFromXML(mcr_xml.retrieveAsXML(oid), false);
                     List fields = MCRData2Fields.buildFields(obj, index);
                     addToIndex(sid, sid, fields);
                 }
@@ -122,7 +122,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
         }
     }
 
-    protected void addToIndex(String entryID, String returnID, List fields) {
+    public void addToIndex(String entryID, String returnID, List fields) {
         if ((fields == null) || (fields.size() == 0)) {
             return;
         }
@@ -148,7 +148,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
         map.put(entryID, new Document(data));
     }
 
-    protected void removeFromIndex(String entryID) {
+    public void removeFromIndex(String entryID) {
         LOGGER.info("MCRJDOMSearcher removing indexed data of " + entryID);
         map.remove(entryID);
     }

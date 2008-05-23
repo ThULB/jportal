@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRHttpSessionListener.java,v $
- * $Revision: 1.1 $ $Date: 2006/11/21 12:21:55 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -60,7 +60,7 @@ public class MCRHttpSessionListener implements HttpSessionListener, HttpSessionB
      */
     public void sessionDestroyed(HttpSessionEvent hse) {
         // clear MCRSessions
-        LOGGER.info("HttpSession will be destroyed, clearing up.");
+        LOGGER.debug("HttpSession will be destroyed, clearing up.");
         HttpSession httpSession = hse.getSession();
         LOGGER.debug("Removing any MCRSessions from HttpSession");
         for (Enumeration e = httpSession.getAttributeNames(); e.hasMoreElements();) {
@@ -72,7 +72,7 @@ public class MCRHttpSessionListener implements HttpSessionListener, HttpSessionB
                 httpSession.removeAttribute(key);
             }
         }
-        LOGGER.info("Clearing up done");
+        LOGGER.debug("Clearing up done");
     }
 
     public void valueBound(HttpSessionBindingEvent hsbe) {

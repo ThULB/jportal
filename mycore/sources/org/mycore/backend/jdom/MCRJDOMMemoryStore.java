@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRJDOMMemoryStore.java,v $
- * $Revision: 1.24 $ $Date: 2006/11/25 23:32:52 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,30 +23,26 @@
 
 package org.mycore.backend.jdom;
 
-import static org.mycore.common.MCRConstants.XSL_NAMESPACE;
-
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
+
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRConfigurationException;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.metadata.MCRNormalizeText;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 
 /**
  * This class implements the memory store based on JDOM documents.
  * 
  * @author Jens Kupferschmidt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * 
- * @version $Revision: 1.24 $ $Date: 2006/11/25 23:32:52 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRJDOMMemoryStore {
     /** The connection pool singleton */
@@ -57,8 +53,6 @@ public class MCRJDOMMemoryStore {
 
     /** A hashtable of the JDOM trees */
     private Hashtable trees = new Hashtable();
-
-    private org.jdom.Document xslorig = null;
 
     /** Timestamp of the last SQL read and the default reload time in seconds */
     private long tslast = 0;
@@ -84,41 +78,10 @@ public class MCRJDOMMemoryStore {
      * Creates a new JDOM memory store
      */
     private MCRJDOMMemoryStore() {
-        // Read stylesheet
-        InputStream searchxsl = MCRJDOMMemoryStore.class.getResourceAsStream("/MCRJDOMSearch.xsl");
-
-        if (searchxsl == null) {
-            throw new MCRConfigurationException("Can't find stylesheet file MCRJDOMSearch.xsl");
-        }
-
-        try {
-            xslorig = (new org.jdom.input.SAXBuilder()).build(searchxsl);
-        } catch (Exception e) {
-            throw new MCRException("Error while parsing file MCRJDOMSearch.xsl.");
-        }
-
         // set the start time and the diff from the config
         MCRConfiguration config = MCRConfiguration.instance();
         tslast = System.currentTimeMillis();
         tsdiff = (config.getLong("MCR.persistence_jdom_reload", tsdiffdefault)) * 1000;
-    }
-
-    /**
-     * Returns a stylesheet that will execute a query on the JDOM store.
-     * 
-     * @param query
-     *            the XSLT String that represents the search condition
-     * @return a org.jdom.Document of the stylesheet
-     */
-    org.jdom.Document getStylesheet(String query) {
-        org.jdom.Document xslfile = (org.jdom.Document) (xslorig.clone());
-        xslfile.getRootElement().getChild("template", XSL_NAMESPACE).getChild("result").getChild("choose", XSL_NAMESPACE).getChild("when", XSL_NAMESPACE).setAttribute("test", query);
-
-        // debug
-        // org.jdom.output.XMLOutputter outputter = new
-        // org.jdom.output.XMLOutputter(org.jdom.output.Format.getPrettyFormat());
-        // outputter.output(xslfile, System.out);
-        return xslfile;
     }
 
     /**
@@ -156,7 +119,7 @@ public class MCRJDOMMemoryStore {
     private Hashtable readObjectsFromPersistentStore(String type) {
         long startdate = System.currentTimeMillis();
         MCRXMLTableManager mcr_xml = MCRXMLTableManager.instance();
-        ArrayList ar = mcr_xml.retrieveAllIDs(type);
+        List<String> ar = mcr_xml.retrieveAllIDs(type);
         Hashtable objects = new Hashtable();
         int size = ar.size();
         

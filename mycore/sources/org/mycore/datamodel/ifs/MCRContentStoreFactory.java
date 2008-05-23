@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRContentStoreFactory.java,v $
- * $Revision: 1.17 $ $Date: 2006/11/21 12:21:59 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.17 $ $Date: 2006/11/21 12:21:59 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRContentStoreFactory {
     /** Hashtable StoreID to MCRContentStore instance */

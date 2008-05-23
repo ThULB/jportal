@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRObjectID.java,v $
- * $Revision: 1.32 $ $Date: 2006/08/08 08:48:16 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,6 +31,7 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 
 /**
  * This class holds all informations and methods to handle the MyCoRe Object ID.
@@ -40,7 +41,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.32 $ $Date: 2006/08/08 08:48:16 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public final class MCRObjectID {
     /**
@@ -54,7 +55,7 @@ public final class MCRObjectID {
     private static final Logger LOGGER = Logger.getLogger(MCRObjectID.class);
 
     // counter for the next IDs per project base ID
-    private static HashMap lastnumber = new HashMap();
+    private static HashMap<String, Integer> lastnumber = new HashMap<String, Integer>();
 
     // data of the ID
     private String mcr_project_id = null;
@@ -78,8 +79,8 @@ public final class MCRObjectID {
      */
     static {
         CONFIG = MCRConfiguration.instance();
-        number_distance = CONFIG.getInt("MCR.metadata_objectid_number_distance", 1);
-        number_pattern = CONFIG.getString("MCR.metadata_objectid_number_pattern", "0000000000");
+        number_distance = CONFIG.getInt("MCR.Metadata.ObjectID.NumberDistance", 1);
+        number_pattern = CONFIG.getString("MCR.Metadata.ObjectID.NumberPattern", "0000000000");
         number_format = new DecimalFormat(number_pattern);
     }
 
@@ -103,6 +104,20 @@ public final class MCRObjectID {
         }
 
         mcr_valid_id = true;
+    }
+
+    /**
+     * The method set the MCRObjectID from a given base ID string. The number
+     * was computed from this methode. It is the next free number of an item in
+     * the database for the given project ID and type ID.
+     * 
+     * @exception MCRException
+     *                if the given string is not valid or can't connect to the
+     *                MCRXMLTableManager.
+     */
+    public void setNextFreeId() throws MCRException {
+        String base_id = getBase();
+        manageFreeId(base_id, 1);
     }
 
     /**
@@ -221,7 +236,7 @@ public final class MCRObjectID {
 
         String test = type.toLowerCase().intern();
 
-        if (!CONFIG.getBoolean("MCR.type_" + test, false)) {
+        if (!CONFIG.getBoolean("MCR.Metadata.Type." + test, false)) {
             return false;
         }
 
@@ -388,9 +403,9 @@ public final class MCRObjectID {
         String mcr_id;
 
         try {
-            mcr_id = URLEncoder.encode(id, CONFIG.getString("MCR.request_charencoding", "UTF-8"));
+            mcr_id = URLEncoder.encode(id, CONFIG.getString("MCR.Request.CharEncoding", "UTF-8"));
         } catch (UnsupportedEncodingException e1) {
-            LOGGER.error("MCR.request_charencoding property does not contain a valid encoding:", e1);
+            LOGGER.error("MCR.Request.CharEncoding property does not contain a valid encoding:", e1);
 
             return false;
         }
@@ -416,7 +431,7 @@ public final class MCRObjectID {
 
         mcr_type_id = mcr_id.substring(i + 1, j).toLowerCase().intern();
 
-        if (!CONFIG.getBoolean("MCR.type_" + mcr_type_id.toLowerCase(), false)) {
+        if (!CONFIG.getBoolean("MCR.Metadata.Type." + mcr_type_id.toLowerCase(), false)) {
             return false;
         }
 

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRFile.java,v $
- * $Revision: 1.37 $ $Date: 2006/07/31 12:48:22 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
  * Represents a stored file with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.37 $ $Date: 2006/07/31 12:48:22 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
     /** The ID of the store that holds this file's content */
@@ -206,16 +206,6 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
     }
 
     /**
-     * The methodset the storage ID that identifies the place where the
-     * MCRContentStore has stored the content of this file
-     */
-    public void setStorageID(String storageID) {
-        if (storageID == null)
-            return;
-        this.storageID = storageID;
-    }
-
-    /**
      * Returns the MCRContentStore instance that holds the content of this file
      * 
      * @return the MCRContentStore instance that holds the content of this file,
@@ -325,7 +315,6 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
      */
     public void setContentFrom(InputStream source) throws MCRPersistenceException {
         ensureNotDeleted();
-        MCRArgumentChecker.ensureNotNull(source, "source input stream");
 
         String old_md5 = this.md5;
         long old_size = this.size;
@@ -343,9 +332,8 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
         {
             MCRContentStore store = MCRContentStoreFactory.selectStore(this);
 
-            storeID = store.getID();
             storageID = store.storeContent(this, cis);
-            // storeID = store.getID();
+            storeID = store.getID();
         }
 
         size = cis.getLength();

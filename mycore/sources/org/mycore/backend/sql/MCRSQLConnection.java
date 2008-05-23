@@ -1,6 +1,5 @@
 /*
- * $RCSfile: MCRSQLConnection.java,v $
- * $Revision: 1.35 $ $Date: 2006/02/10 23:33:48 $
+ * $Revision: 13240 $ $Date: 2008-03-05 13:57:04 +0100 (Mi, 05 MÃ¤r 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +30,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.log4j.Logger;
-import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
 
 /**
@@ -53,40 +51,20 @@ import org.mycore.common.MCRPersistenceException;
  * @see #doQuery( String)
  * @see java.sql.Connection
  * @see MCRSQLConnectionPool
- * @author Frank Lützenkirchen
+ * @author Frank L\u00fctzenkirchen
  * @author Johannes Buehler
- * @version $Revision: 1.35 $ $Date: 2006/02/10 23:33:48 $
  */
 public class MCRSQLConnection {
     /** The wrapped JDBC connection */
     protected Connection connection;
 
-    protected static Logger logger = Logger.getLogger(MCRSQLConnection.class.getName());
+    protected static Logger LOGGER = Logger.getLogger(MCRSQLConnection.class);
 
     /** The number of usages of this connection so far * */
     private int numUsages = 0;
 
+    /** The time this connections was last used **/
     private long lastUse;
-
-    /** The maximum number of usages of this connection * */
-    private static int maxUsages = Integer.MAX_VALUE;
-
-    /** The maximum age a connection can be before it is reconnected */
-    private static long maxAge = 3600 * 1000; // 1 hour
-
-    private static String url;
-
-    private static String userID;
-
-    private static String password;
-
-    static {
-        MCRConfiguration config = MCRConfiguration.instance();
-        url = config.getString("MCR.persistence_sql_database_url");
-        userID = config.getString("MCR.persistence_sql_database_userid", "");
-        password = config.getString("MCR.persistence_sql_database_passwd", "");
-        maxUsages = config.getInt("MCR.persistence_sql_database_connection_max_usages", Integer.MAX_VALUE);
-    }
 
     /**
      * Creates a new connection. This constructor is used by the connection pool
@@ -101,7 +79,7 @@ public class MCRSQLConnection {
 
     void use() {
         long age = System.currentTimeMillis() - lastUse;
-        if ((numUsages > maxUsages) || (age > maxAge)) {
+        if ((numUsages > MCRSQLConnectionPool.maxUsages) || (age > MCRSQLConnectionPool.maxAge)) {
             closeJDBCConnection();
             buildJDBCConnection();
             numUsages = 0;
@@ -111,18 +89,16 @@ public class MCRSQLConnection {
     }
 
     private void buildJDBCConnection() throws MCRPersistenceException {
-        Logger logger = MCRSQLConnectionPool.getLogger();
-
-        logger.debug("MCRSQLConnection: Building connection to JDBC datastore using URL " + url);
+        LOGGER.debug("MCRSQLConnection: Building connection to JDBC datastore " + MCRSQLConnectionPool.url);
 
         try {
-            if (!userID.equals("")) {
-                connection = DriverManager.getConnection(url, userID, password);
+            if ((MCRSQLConnectionPool.userID != null) && (MCRSQLConnectionPool.userID.trim().length() > 0)) {
+                connection = DriverManager.getConnection(MCRSQLConnectionPool.url, MCRSQLConnectionPool.userID, MCRSQLConnectionPool.password);
             } else {
-                connection = DriverManager.getConnection(url);
+                connection = DriverManager.getConnection(MCRSQLConnectionPool.url);
             }
         } catch (Exception exc) {
-            throw new MCRPersistenceException("Could not build JDBC connection using URL " + url, exc);
+            throw new MCRPersistenceException("Could not build JDBC connection to " + MCRSQLConnectionPool.url, exc);
         }
     }
 
@@ -148,10 +124,10 @@ public class MCRSQLConnection {
 
     void closeJDBCConnection() throws MCRPersistenceException {
         try {
-            logger.debug("MCRSQLConnection: Closing connection to JDBC datastore");
+            LOGGER.debug("MCRSQLConnection: Closing connection to JDBC datastore");
             connection.close();
         } catch (Exception exc) {
-            MCRSQLConnectionPool.getLogger().warn("Exception while closing JDBC connection", exc);
+            LOGGER.warn("Exception while closing JDBC connection", exc);
         }
     }
 
@@ -177,7 +153,7 @@ public class MCRSQLConnection {
      * @return the MCRSQLRowReader that can be used for reading the result rows
      */
     public MCRSQLRowReader doQuery(String query) throws MCRPersistenceException {
-        logger.debug(query);
+        LOGGER.debug(query);
 
         try {
             ResultSet rs = connection.createStatement().executeQuery(query);
@@ -195,16 +171,15 @@ public class MCRSQLConnection {
      *            the SQL create, insert or delete statement to be executed
      */
     public void doUpdate(String statement) throws MCRPersistenceException {
-        logger.debug(statement);
+        LOGGER.debug(statement);
 
         try {
             Statement stmt = connection.createStatement();
             stmt.executeUpdate(statement);
             stmt.close();
         } catch (SQLException ex) {
-            Logger logger = MCRSQLConnectionPool.getLogger();
-            logger.debug("MCRSQLConnection doUpdate: " + statement);
-            logger.debug(ex.getMessage());
+            LOGGER.debug("MCRSQLConnection doUpdate: " + statement);
+            LOGGER.debug(ex.getMessage());
             throw new MCRPersistenceException("Error while executing SQL update statement: " + statement, ex);
         }
     }

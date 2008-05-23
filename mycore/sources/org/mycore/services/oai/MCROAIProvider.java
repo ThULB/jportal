@@ -24,6 +24,7 @@
 
 package org.mycore.services.oai;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -53,12 +54,17 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
+import org.jdom.ProcessingInstruction;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXSLTransformation;
-import org.mycore.datamodel.classifications.MCRCategoryItem;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.metadata.MCRMetaClassification;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -104,37 +110,38 @@ public class MCROAIProvider extends MCRServlet {
     private static String baseurl;
 
     static {
-        Properties props = CONFIG.getProperties("MCR.oai.repositoryidentifier.");
+        Properties props = CONFIG.getProperties("MCR.OAI.Repository.Identifier.");
         oaiConfig = new HashMap();
         for (Enumeration en = props.propertyNames(); en.hasMoreElements();) {
             String propName = (String) en.nextElement();
-            String instance = propName.substring("MCR.oai.repositoryidentifier.".length());
+            String instance = propName.substring("MCR.OAI.Repository.Identifier.".length());
             oaiConfig.put(instance, new MCROAIConfigBean(instance));
         }
-        oaiAdminEmail = CONFIG.getString("MCR.oai.adminemail");
-        oaiProviderFriends = CONFIG.getString("MCR.oai.friends", "");
-        oaiResumptionTokenTimeOut = CONFIG.getInt("MCR.oai.resumptiontoken.timeout", 72);
-        maxReturns = CONFIG.getInt("MCR.oai.maxreturns", 10);
-        resStore = (MCROAIResumptionTokenStore) CONFIG.getInstanceOf("MCR.oai.resumptiontoken.store", "org.mycore.backend.hibernate.MCRHIBResumptionTokenStore");
+        oaiAdminEmail = CONFIG.getString("MCR.OAI.AdmineMail");
+        oaiProviderFriends = CONFIG.getString("MCR.OAI.Friends", "");
+        oaiResumptionTokenTimeOut = CONFIG.getInt("MCR.OAI.Resumptiontoken.Timeout", 72);
+        maxReturns = CONFIG.getInt("MCR.OAI.MaxReturns", 10);
+        resStore = (MCROAIResumptionTokenStore) CONFIG
+                .getInstanceOf("MCR.OAI.Resumptiontoken.Store", "org.mycore.backend.hibernate.MCRHIBResumptionTokenStore");
         baseurl = CONFIG.getString("MCR.baseurl", "");
     }
 
     // property name for the implementing class of MCROAIQuery
-    private static final String STR_OAI_QUERYSERVICE = "MCR.oai.queryservice";
+    private static final String STR_OAI_QUERYSERVICE = "MCR.OAI.QueryService";
 
-    private static final String STR_OAI_METADATA_TRANSFORMER = "MCR.oai.metadata.transformer";
+    private static final String STR_OAI_METADATA_TRANSFORMER = "MCR.OAI.Metadata.Transformer";
 
     // If there are other metadata formats than the standard format oai_dc
     // available,
     // all need a namespace and schema entry
     // of it's own, e.g.
-    // MCR.oai.metadata.namespace.olac=http://www.language-archives.org/OLAC/0.2/
-    // MCR.oai.metadata.schema.olac=http://www.language-archives.org/OLAC/olac-0.2.xsd
-    private static final String STR_OAI_METADATA_NAMESPACE = "MCR.oai.metadata.namespace";
+    // MCR.OAI.Metadata.Namespace.olac=http://www.language-archives.org/OLAC/0.2/
+    // MCR.OAI.Metadata.Schema.olac=http://www.language-archives.org/OLAC/olac-0.2.xsd
+    private static final String STR_OAI_METADATA_NAMESPACE = "MCR.OAI.Metadata.Namespace";
 
-    private static final String STR_OAI_METADATA_ELEMENT = "MCR.oai.metadata.element";
+    private static final String STR_OAI_METADATA_ELEMENT = "MCR.OAI.Metadata.Element";
 
-    private static final String STR_OAI_METADATA_SCHEMA = "MCR.oai.metadata.schema";
+    private static final String STR_OAI_METADATA_SCHEMA = "MCR.OAI.Metadata.Schema";
 
     // Following the DINI recommendation for OAI repositories
     // (http://www.dini.de/documents/OAI-Empfehlungen-Okt2003-de.pdf) there
@@ -167,7 +174,9 @@ public class MCROAIProvider extends MCRServlet {
 
     private static final String STR_SCHEMA_INSTANCE = "http://www.w3.org/2001/XMLSchema-instance";
 
-    private static final String STR_GRANULARITY = "yyyy-MM-dd'T'HH:mm:dd'Z'";
+    private static final String STR_GRANULARITY = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+    private static final String STR_GRANULARITY_SHORT = "yyyy-MM-dd";
 
     private static final String STR_FIRST_DATE = "2000-01-01";
 
@@ -275,6 +284,28 @@ public class MCROAIProvider extends MCRServlet {
                     document = addError(header, "badVerb", ERR_ILLEGAL_VERB);
                 }
             }
+            // <?xml-stylesheet type='text/xsl' href='/content/oai/oai2.xsl' ?>
+            File f = new File(getServletContext().getRealPath("content/oai/oai2.xsl"));
+            if (f.exists()) {
+                String myURL = new String(baseurl);
+                if (myURL.length() == 0) {
+                    String contextPath = request.getContextPath();
+                    if (contextPath == null) {
+                        contextPath = "";
+                    }
+                    contextPath += "/";
+                    int pos = url.indexOf(contextPath, 9);
+                    myURL = url.substring(0, pos) + contextPath;
+                }
+
+                Map<String, String> pairs = new HashMap<String, String>();
+                pairs.put("type", "text/xsl");
+
+                pairs.put("href", myURL + "content/oai/oai2.xsl");
+                ProcessingInstruction pi = new ProcessingInstruction("xml-stylesheet", pairs);
+                document.addContent(0, pi);
+            }
+
             outputter.output(document, out);
             return;
         } catch (MCRException mcrx) {
@@ -436,7 +467,8 @@ public class MCROAIProvider extends MCRServlet {
                         Namespace xsi = Namespace.getNamespace("xsi", STR_SCHEMA_INSTANCE);
                         eDC.addNamespaceDeclaration(dc);
                         eDC.addNamespaceDeclaration(xsi);
-                        eDC.setAttribute("schemaLocation", STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc/ " + STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc.xsd", xsi);
+                        eDC.setAttribute("schemaLocation", STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc/ " + STR_OAI_NAMESPACE + STR_OAI_VERSION
+                                + "/oai_dc.xsd", xsi);
                         Element eDescription = new Element("description", dc);
                         eDescription.addContent(setArray[5]);
                         eDC.addContent(eDescription);
@@ -513,6 +545,12 @@ public class MCROAIProvider extends MCRServlet {
         }
         ParsePosition pos = new ParsePosition(0);
         Date currentDate = dateFormat.parse(date, pos);
+        if (currentDate == null) {
+            // try to match the simpler dateformat
+            dateFormat = new SimpleDateFormat(STR_GRANULARITY_SHORT);
+            pos = new ParsePosition(0);
+            currentDate = dateFormat.parse(date, pos);
+        }
 
         return currentDate;
     }
@@ -580,7 +618,7 @@ public class MCROAIProvider extends MCRServlet {
         Element eIdentify = new Element("Identify", ns);
         eIdentify.addContent(newElementWithContent("repositoryName", ns, repositoryName));
         if (baseurl.length() != 0) {
-            eIdentify.addContent(newElementWithContent("baseURL", ns, baseurl+"servlets/MCROAIProvider"));
+            eIdentify.addContent(newElementWithContent("baseURL", ns, baseurl + "servlets/MCROAIProvider"));
         } else {
             eIdentify.addContent(newElementWithContent("baseURL", ns, request.getRequestURL().toString().split(";")[0]));
         }
@@ -826,7 +864,8 @@ public class MCROAIProvider extends MCRServlet {
                     Namespace xsi = Namespace.getNamespace("xsi", STR_SCHEMA_INSTANCE);
                     eDC.addNamespaceDeclaration(dc);
                     eDC.addNamespaceDeclaration(xsi);
-                    eDC.setAttribute("schemaLocation", STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc/ " + STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc.xsd", xsi);
+                    eDC.setAttribute("schemaLocation", STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc/ " + STR_OAI_NAMESPACE + STR_OAI_VERSION + "/oai_dc.xsd",
+                            xsi);
                     Element eDescription = new Element("description", dc);
                     eDescription.addContent(set[2]);
                     eDC.addContent(eDescription);
@@ -1531,16 +1570,18 @@ public class MCROAIProvider extends MCRServlet {
                     String classificationId = classification.getClassId();
                     if (classifications.contains(classificationId)) {
                         String categoryId = classification.getCategId();
-                        MCRCategoryItem category = MCRCategoryItem.getCategoryItem(classificationId, categoryId);
-                        if (category.getLangArray().contains("x-dini")) {
-                            setSpec.append(" ").append(category.getText("x-dini"));
-                        } else {
-                            MCRCategoryItem parent;
-                            while ((parent = category.getParent()) != null) {
-                                categoryId = parent.getID() + ":" + categoryId;
-                                category = parent;
+                        MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID(classificationId, categoryId), -1);
+                        Collection<org.mycore.datamodel.classifications2.MCRLabel> labels = category.getLabels().values();
+                        boolean found = false;
+                        for (MCRLabel label : labels) {
+                            if (label.getLang().equals("x-dini")) {
+                                setSpec.append(" ").append(label.getText());
+                                found = true;
+                                break;
                             }
-
+                        }
+                        if (!found) {
+                            categoryId = category.getParent().getId().getID() + ":" + categoryId;
                             setSpec.append(" ").append(categoryId);
                         }
                     }

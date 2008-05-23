@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRObject.java,v $
- * $Revision: 1.106 $ $Date: 2006/11/25 23:32:50 $
+ * 
+ * $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,12 +30,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jdom.Document;
+import org.jdom.Element;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
 import org.mycore.common.xml.MCRXMLHelper;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 
 /**
  * This class implements all methode for handling one metadata object. Methodes
@@ -47,7 +51,7 @@ import org.mycore.common.xml.MCRXMLHelper;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 1.106 $ $Date: 2006/11/25 23:32:50 $
+ * @version $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
  */
 final public class MCRObject extends MCRBase {
     // the object content
@@ -56,11 +60,11 @@ final public class MCRObject extends MCRBase {
     private MCRObjectMetadata mcr_metadata = null;
 
     /**
-     * This is the constructor of the MCRObject class. It make an instance of
+     * This is the constructor of the MCRObject class. It creates an instance of
      * the parser class and the metadata class. <br>
-     * The constructor reads the following informations from the property file:
+     * The constructor reads the following information from the property file:
      * <ul>
-     * <li>MCR.parser_class_name</li>
+     * <li>MCR.XMLParser.Class</li>
      * </ul>
      * 
      * @exception MCRException
@@ -286,19 +290,6 @@ final public class MCRObject extends MCRBase {
             throw new MCRPersistenceException("The object " + mcr_id.getId() + " allready exists, nothing done.");
         }
 
-        // check if document allready refer to this id
-        List sources = MCRLinkTableManager.instance().getSourceOf(mcr_id);
-        if (sources.size() > 0) {
-            MCRActiveLinkException activeLinks = new MCRActiveLinkException(new StringBuffer("Error while adding object ").append(mcr_id.toString()).append(". The ID of this object is already referenced by other objects so this object can not be added until all links are corrected.").toString());
-            String curSource;
-            Iterator it = sources.iterator();
-            while (it.hasNext()) {
-                curSource = (String) it.next();
-                activeLinks.addLink(curSource, mcr_id.toString());
-            }
-            throw activeLinks;
-        }
-
         // create this object in datastore
         if (mcr_service.getDate("createdate") == null) {
             mcr_service.setDate("createdate");
@@ -460,10 +451,10 @@ final public class MCRObject extends MCRBase {
 
             try {
                 der.deleteFromDatastore(getStructure().getDerivate(i).getXLinkHref());
-            } catch (MCRException e) {
+            } catch (Exception e) {
                 logger.debug(MCRException.getStackTraceAsString(e));
                 logger.error(e.getMessage());
-                logger.error("Error while deleting derivate.");
+                logger.error("Error while deleting derivate "+getStructure().getDerivate(i).getXLinkHref()+".");
             }
         }
 
@@ -529,16 +520,7 @@ final public class MCRObject extends MCRBase {
      *                if a persistence problem is occured
      */
     public final static boolean existInDatastore(MCRObjectID id) throws MCRPersistenceException {
-        // handle events
-        MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.EXIST_EVENT);
-        evt.put("objectID", id);
-        MCREventManager.instance().handleEvent(evt);
-        boolean ret = false;
-        try {
-            ret = Boolean.valueOf((String) evt.get("exist")).booleanValue();
-        } catch (RuntimeException e) {
-        }
-        return ret;
+        return MCRXMLTableManager.instance().exist(id);
     }
 
     /**
@@ -564,17 +546,7 @@ final public class MCRObject extends MCRBase {
      *                if a persistence problem is occured
      */
     public final void receiveFromDatastore(MCRObjectID id) throws MCRPersistenceException {
-        // handle events
-        MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.RECEIVE_EVENT);
-        evt.put("objectID", id);
-        MCREventManager.instance().handleEvent(evt);
-        byte[] xml = null;
-        try {
-            xml = (byte[]) evt.get("xml");
-            setFromXML(xml, false);
-        } catch (RuntimeException e) {
-            throw new MCRPersistenceException("The XML file for ID " + mcr_id.getId() + " was not retrieved.", e);
-        }
+        setFromXML(receiveXMLFromDatastore(id), false);
     }
 
     /**
@@ -587,7 +559,7 @@ final public class MCRObject extends MCRBase {
      * @exception MCRPersistenceException
      *                if a persistence problem is occured
      */
-    public final byte[] receiveXMLFromDatastore(String id) throws MCRPersistenceException {
+    public static final byte[] receiveXMLFromDatastore(String id) throws MCRPersistenceException {
         return receiveXMLFromDatastore(new MCRObjectID(id));
     }
 
@@ -601,18 +573,8 @@ final public class MCRObject extends MCRBase {
      * @exception MCRPersistenceException
      *                if a persistence problem is occured
      */
-    public final byte[] receiveXMLFromDatastore(MCRObjectID id) throws MCRPersistenceException {
-        // handle events
-        MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.RECEIVE_EVENT);
-        evt.put("objectID", id);
-        MCREventManager.instance().handleEvent(evt);
-        byte[] xml = null;
-        try {
-            xml = (byte[]) evt.get("xml");
-        } catch (RuntimeException e) {
-            throw new MCRPersistenceException("The XML file for ID " + mcr_id.getId() + " was not retrieved.");
-        }
-        return xml;
+    public static final byte[] receiveXMLFromDatastore(MCRObjectID id) throws MCRPersistenceException {
+        return MCRXMLTableManager.instance().retrieveAsXML(id);
     }
 
     /**
@@ -659,9 +621,8 @@ final public class MCRObject extends MCRBase {
 
         try {
             old.receiveFromDatastore(mcr_id);
-        } catch (MCRPersistenceException pe) {
+        } catch (Exception pe) {
             createInDatastore();
-
             return;
         }
 
@@ -775,9 +736,28 @@ final public class MCRObject extends MCRBase {
         }
 
         // update all children
-        for (int i = 0; i < mcr_struct.getChildSize(); i++) {
-            MCRObject child = new MCRObject();
-            child.updateMetadataInDatastore(mcr_struct.getChild(i).getXLinkHrefID());
+        boolean updatechildren = false;
+        MCRObjectMetadata md = getMetadata();
+        MCRObjectMetadata mdold = old.getMetadata();
+        for (int i = 0; i < md.size(); i++) {
+            MCRMetaElement melm = md.getMetadataElement(i);
+            if (melm.getHeritable()) {
+                try {
+                    MCRMetaElement melmold = mdold.getMetadataElement(melm.getTag());
+                    Element jelm = melm.createXML(false);
+                    Element jelmold = melmold.createXML(false);
+                    if (!MCRXMLHelper.deepEqual(new Document(jelmold), new Document(jelm)))
+                    	updatechildren = true;
+                } catch (RuntimeException e) {
+                    updatechildren = true;
+                }
+            }
+        }
+        if (updatechildren) {
+            for (int i = 0; i < mcr_struct.getChildSize(); i++) {
+                MCRObject child = new MCRObject();
+                child.updateMetadataInDatastore(mcr_struct.getChild(i).getXLinkHrefID());
+            }
         }
     }
 
@@ -787,6 +767,11 @@ final public class MCRObject extends MCRBase {
     private final void updateThisInDatastore() throws MCRPersistenceException {
         if (!importMode || mcr_service.getDate("modifydate") == null) {
             mcr_service.setDate("modifydate");
+        }
+        // remove ACL if it is set from data source
+        for (int i=0;i < mcr_service.getRulesSize();i++) {
+            mcr_service.removeRule(i);
+            i--;
         }
         // handle events
         MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.UPDATE_EVENT);
@@ -846,8 +831,8 @@ final public class MCRObject extends MCRBase {
     }
 
     /**
-     * The method updates the search index with the data from the XLM
-     * store. Also it check the derivate links of itself.
+     * The method updates the search index with the data from the XLM store.
+     * Also it check the derivate links of itself.
      * 
      * @param id
      *            the MCRObjectID as string
@@ -857,8 +842,8 @@ final public class MCRObject extends MCRBase {
     }
 
     /**
-     * The method updates the search index with the data from the XLM
-     * store. Also it check the derivate links of itself.
+     * The method updates the search index with the data from the XLM store.
+     * Also it check the derivate links of itself.
      * 
      * @param id
      *            the MCRObjectID
@@ -871,7 +856,7 @@ final public class MCRObject extends MCRBase {
         for (int i = 0; i < mcr_struct.getDerivateSize(); i++) {
             link = mcr_struct.getDerivate(i);
             if (!MCRDerivate.existInDatastore(link.getXLinkHref())) {
-                logger.error("Can't find MCRDerivate "+link.getXLinkHref());
+                logger.error("Can't find MCRDerivate " + link.getXLinkHref());
             }
         }
         // handle events

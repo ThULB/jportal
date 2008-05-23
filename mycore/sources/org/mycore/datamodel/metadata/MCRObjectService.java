@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRObjectService.java,v $
- * $Revision: 1.43 $ $Date: 2006/11/24 11:20:10 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,7 @@ import org.mycore.common.MCRConfiguration;
  * </ul>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.43 $ $Date: 2006/11/24 11:20:10 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRObjectService {
     // service data
@@ -73,7 +73,7 @@ public class MCRObjectService {
      * to null.
      */
     public MCRObjectService() {
-        lang = MCRConfiguration.instance().getString("MCR.metadata_default_lang", "en");
+        lang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "en");
         dates = new ArrayList<MCRMetaISO8601Date>();
         
         Date curTime=new Date();

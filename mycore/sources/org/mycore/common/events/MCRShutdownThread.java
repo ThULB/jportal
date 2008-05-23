@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRShutdownThread.java,v $
- * $Revision: 1.4 $ $Date: 2006/10/04 14:11:31 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

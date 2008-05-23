@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUploadCommunicator.java,v $
- * $Revision: 1.13 $ $Date: 2006/06/08 14:46:32 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -60,7 +60,7 @@ import java.util.zip.ZipOutputStream;
  * @author Harald Richter
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.13 $ $Date: 2006/06/08 14:46:32 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  * @see org.mycore.frontend.fileupload.MCRUploadServlet
  */
 public class MCRUploadCommunicator {
@@ -71,6 +71,8 @@ public class MCRUploadCommunicator {
     protected MCRUploadProgressMonitor upm;
 
     protected MCRUploadApplet applet;
+
+    protected final static int bufferSize = 65536; // 64 KByte
 
     public MCRUploadCommunicator(String url, String uploadId, MCRUploadApplet applet) {
         this.url = url;
@@ -84,8 +86,13 @@ public class MCRUploadCommunicator {
             upm = new MCRUploadProgressMonitor(list[0].size(), countTotalBytes(list[0]), applet);
             startUploadSession(list[0].size());
             loadFiles(list);
-            endUploadSession();
-            upm.finish();
+            if (upm.isCanceled()) {
+                System.out.println("Upload is canceled by user.");
+                cancelUploadSession();
+            } else {
+                endUploadSession();
+                upm.finish();
+            }
         } catch (Exception ex) {
             String msg = ex.getClass().getName() + ": " + ex.getLocalizedMessage();
 
@@ -120,12 +127,17 @@ public class MCRUploadCommunicator {
         }
 
         for (int i = 0; i < list[0].size(); i++) {
+            if (upm.isCanceled())
+                return;
+
             File file = (File) (list[0].get(i));
             String path = (String) (list[1].get(i));
-
             upm.startFile(file.getName(), file.length());
+
             uploadFile(path, file);
-            upm.endFile();
+
+            if (!upm.isCanceled())
+                upm.endFile();
         }
     }
 
@@ -135,12 +147,16 @@ public class MCRUploadCommunicator {
         String md5 = buildMD5String(file);
         System.out.println("MD5 checksum is " + md5);
 
+        if (upm.isCanceled())
+            return;
+
         // TODO: Refactor method names in communication
         Hashtable request = new Hashtable();
         request.put("md5", md5);
-        request.put("method", "createFile String");
+        request.put("method", "uploadFile");
         request.put("path", path);
-
+        request.put("length", String.valueOf(file.length()) );
+        
         System.out.println("Sending filename to server: " + path);
 
         String reply = (String) (send(request));
@@ -148,7 +164,6 @@ public class MCRUploadCommunicator {
 
         if ("skip file".equals(reply)) {
             System.out.println("File skipped.");
-
             return;
         }
 
@@ -159,39 +174,70 @@ public class MCRUploadCommunicator {
 
         System.out.println("Trying to create client socket...");
 
+        if (upm.isCanceled())
+            return;
+
         Socket socket = new Socket(host, port);
+        socket.setReceiveBufferSize(Math.max(socket.getReceiveBufferSize(),bufferSize));
+        socket.setSendBufferSize(Math.max(socket.getSendBufferSize(),bufferSize));
+        
         System.out.println("Socket created, connected to server.");
+        System.out.println("Socket send buffer size is " + socket.getSendBufferSize() );
 
         ZipOutputStream zos = new ZipOutputStream(socket.getOutputStream());
         DataInputStream din = new DataInputStream(socket.getInputStream());
 
-        zos.setLevel(Deflater.NO_COMPRESSION);
+        // Large files like video already are compressed somehow
+        zos.setLevel(Deflater.NO_COMPRESSION); 
 
         ZipEntry ze = new ZipEntry(java.net.URLEncoder.encode(path, "UTF-8"));
-        ze.setExtra(uid.getBytes("UTF-8"));
+        StringBuffer extra = new StringBuffer();
+        extra.append(md5).append(" ").append(file.length()).append(" ").append(uid);
+        ze.setExtra(extra.toString().getBytes("UTF-8"));
         zos.putNextEntry(ze);
 
         int num = 0;
-        byte[] buffer = new byte[65536];
+        long sended = 0;
+        byte[] buffer = new byte[bufferSize];
 
         System.out.println("Starting to send file content...");
 
-        InputStream source = new BufferedInputStream(new FileInputStream(file));
+        InputStream source = new BufferedInputStream(new FileInputStream(file),buffer.length);
 
+        long lastPing = System.currentTimeMillis();
         while ((num = source.read(buffer)) != -1) {
+            if (upm.isCanceled())
+                break;
             zos.write(buffer, 0, num);
-            System.out.println("Sended " + num + " of " + file.length() + " bytes.");
+            sended += num;
             upm.progressFile(num);
+            
+            // Send a "ping" to MCRUploadServlet so that server keeps HTTP Session alive
+            if( ( System.currentTimeMillis() - lastPing ) > 10000 )
+            {
+              lastPing = System.currentTimeMillis();
+              Hashtable ping = new Hashtable();
+              ping.put("method", "ping");
+              System.out.println( "Sending ping to servlet..." );
+              String pong = (String)( send(ping) );
+              System.out.println( "Server responded with " + pong );
+            }
         }
 
         zos.closeEntry();
         zos.flush();
+        System.out.println("Releasing file: "+file);
+        source.close();
         System.out.println("Finished sending file content.");
-        
-        String ok = din.readUTF();
-        System.out.println("Server finished storing file content: " + ok );
-        
+
+        long numBytesStored = din.readLong();
+        System.out.println("Server reports that " + numBytesStored + " bytes have been stored." );
+
         socket.close();
+
+        if (upm.isCanceled())
+            return;
+
         System.out.println("Socket closed, file transfer successfully completed.");
     }
 
@@ -257,22 +303,26 @@ public class MCRUploadCommunicator {
 
     protected void startUploadSession(int numFiles) throws IOException, MCRUploadException {
         Hashtable request = new Hashtable();
-        request.put("method", "startDerivateSession String int");
+        request.put("method", "startUploadSession");
         request.put("numFiles", String.valueOf(numFiles));
         send(request);
     }
 
     protected void endUploadSession() throws IOException, MCRUploadException {
         Hashtable request = new Hashtable();
-        request.put("method", "endDerivateSession String");
+        request.put("method", "endUploadSession");
+        send(request);
+    }
+
+    protected void cancelUploadSession() throws IOException, MCRUploadException {
+        Hashtable request = new Hashtable();
+        request.put("method", "cancelUploadSession");
         send(request);
     }
 
     protected Object send(Hashtable parameters) throws IOException, MCRUploadException {
         parameters.put("uploadId", uid);
-
         Hashtable response = getResponse(doPost(parameters));
-
         return response.get("return");
     }
 
@@ -362,10 +412,10 @@ public class MCRUploadCommunicator {
         MessageDigest digest = MessageDigest.getInstance("MD5");
 
         InputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis, 65536);
+        BufferedInputStream bis = new BufferedInputStream(fis, bufferSize);
         DigestInputStream in = new DigestInputStream(bis, digest);
 
-        byte[] buffer = new byte[65536];
+        byte[] buffer = new byte[bufferSize];
 
         while (in.read(buffer, 0, buffer.length) != -1)
             ;

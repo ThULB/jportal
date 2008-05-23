@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRDataExtractorMP3.java,v $
- * $Revision: 1.4 $ $Date: 2006/11/24 12:19:16 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.MCRUtils;
  * http://sourceforge.net/projects/javamusictag/ for details.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.4 $ $Date: 2006/11/24 12:19:16 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRDataExtractorMP3 extends MCRDataExtractor {
 

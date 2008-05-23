@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRBase.java,v $
- * $Revision: 1.27 $ $Date: 2006/11/25 23:32:50 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,13 +30,14 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 
 /**
  * This class is a abstract basic class for objects in the MyCoRe Project. It is
  * the frame to produce a full functionality object.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.27 $ $Date: 2006/11/25 23:32:50 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public abstract class MCRBase {
     /**
@@ -45,13 +46,9 @@ public abstract class MCRBase {
     public final static int MAX_LABEL_LENGTH = 256;
 
     // from configuration
-    protected static MCRConfiguration mcr_conf = null;
+    protected static final MCRConfiguration mcr_conf;
 
-    protected static String mcr_encoding = null;
-
-    protected static String persist_name;
-
-    protected static String persist_type;
+    protected static final String mcr_encoding;
 
     // the DOM document
     protected org.jdom.Document jdom_document = null;
@@ -68,9 +65,9 @@ public abstract class MCRBase {
     protected MCRObjectService mcr_service = null;
 
     // other
-    protected static String NL;
+    protected static final String NL;
 
-    protected static String SLASH;
+    protected static final String SLASH;
 
     protected boolean importMode = false;
 
@@ -83,18 +80,12 @@ public abstract class MCRBase {
     static {
         NL = System.getProperty("line.separator");
         SLASH = System.getProperty("file.separator");
+        // Load the configuration
+        mcr_conf = MCRConfiguration.instance();
 
-        try {
-            // Load the configuration
-            mcr_conf = MCRConfiguration.instance();
-
-            // Default Encoding
-            mcr_encoding = mcr_conf.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
-            logger.debug("Encoding = " + mcr_encoding);
-        } catch (Exception e) {
-            logger.error("error occured: ", e);
-            throw new MCRException(e.getMessage(), e);
-        }
+        // Default Encoding
+        mcr_encoding = mcr_conf.getString("MCR.Metadata.DefaultEncoding", DEFAULT_ENCODING);
+        logger.debug("Encoding = " + mcr_encoding);
     }
 
     /**
@@ -108,9 +99,9 @@ public abstract class MCRBase {
      */
     public MCRBase() throws MCRException, MCRConfigurationException {
         mcr_id = new MCRObjectID();
-        mcr_label = new String("");
-        mcr_version = new String("1.3");
-        mcr_schema = new String("");
+        mcr_label = "";
+        mcr_version = "1.3";
+        mcr_schema = "";
 
         // Service class
         mcr_service = new MCRObjectService();
@@ -286,18 +277,6 @@ public abstract class MCRBase {
      *                if a persistence problem is occured
      */
     public abstract void receiveFromDatastore(String id) throws MCRPersistenceException;
-
-    /**
-     * The methode receive the object for the given MCRObjectID and returned it
-     * as XML stream.
-     * 
-     * @param id
-     *            the object ID
-     * @return the XML stream of the object as string
-     * @exception MCRPersistenceException
-     *                if a persistence problem is occured
-     */
-    public abstract byte[] receiveXMLFromDatastore(String id) throws MCRPersistenceException;
 
     /**
      * The methode update the object in the data store.

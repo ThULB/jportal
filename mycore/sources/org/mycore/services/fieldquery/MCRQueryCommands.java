@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRQueryCommands.java,v $
- * $Revision: 1.12 $ $Date: 2006/12/08 14:21:37 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,7 @@ import org.mycore.parsers.bool.MCRCondition;
  * @author Frank L�tzenkirchen
  * @author Arne Seifert
  * @author Jens Kupferschmidt
- * @version $Revision: 1.12 $ $Date: 2006/12/08 14:21:37 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRQueryCommands implements MCRExternalCommandInterface {
 

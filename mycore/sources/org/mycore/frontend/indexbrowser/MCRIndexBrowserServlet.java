@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRIndexBrowserServlet.java,v $
- * $Revision: 1.4 $ $Date: 2006/11/27 12:32:33 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,36 +25,44 @@ package org.mycore.frontend.indexbrowser;
 
 import java.util.Enumeration;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
 /**
- * @author Anja Schaar
+ * @author Anja Schaar, Andreas Trappe
  * 
  * 
  */
 public class MCRIndexBrowserServlet extends MCRServlet {
-	
+
     protected void doGetPost(MCRServletJob job) throws Exception {
-    	Enumeration ee = job.getRequest().getParameterNames();
-        while ( ee.hasMoreElements() ) {
-             String param = (String) ee.nextElement();
-        	 System.out.println("PARAM: " + param + " VALUE: "  + 	job.getRequest().getParameter(param) );
+        Enumeration ee = job.getRequest().getParameterNames();
+        while (ee.hasMoreElements()) {
+            String param = (String) ee.nextElement();
+            System.out.println("PARAM: " + param + " VALUE: " + job.getRequest().getParameter(param));
         }
-         
+
         String search = job.getRequest().getParameter("search");
-        String mode = job.getRequest().getParameter("mode");		
-        String searchclass = job.getRequest().getParameter("searchclass");		  	
-        String fromTo = job.getRequest().getParameter("fromTo");		  	     
-        String path = job.getRequest().getParameter("path");		  	     
-        
+        String mode = getMode(job);
+        String searchclass = job.getRequest().getParameter("searchclass");
+        String fromTo = job.getRequest().getParameter("fromTo");
+        String path = job.getRequest().getParameter("path");
+
         MCRIndexBrowserData indexbrowser = new MCRIndexBrowserData(search, mode, searchclass, fromTo, path);
         indexbrowser.getQuery();
-        indexbrowser.getResultList();        
-        Document pageContent = indexbrowser.getXMLContent();   
-        
+        indexbrowser.getResultList();
+        Document pageContent = indexbrowser.getXMLContent();
+
         job.getRequest().setAttribute("XSL.Style", searchclass);
-        getLayoutService().doLayout(job.getRequest(),job.getResponse(),pageContent);
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), pageContent);
+    }
+
+    private String getMode(MCRServletJob job) {
+        if (job.getRequest().getParameter("mode")!=null && !job.getRequest().getParameter("mode").trim().equals("")) {
+            return job.getRequest().getParameter("mode").toLowerCase().trim();
+        } else 
+            return "prefix";
     }
 }

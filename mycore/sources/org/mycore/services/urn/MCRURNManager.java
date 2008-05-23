@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRURNManager.java,v $
- * $Revision: 1.3 $ $Date: 2006/06/27 06:45:36 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -108,7 +108,7 @@ public class MCRURNManager {
         codes.put("-", "39");
         codes.put(":", "17");
 
-        Object obj = MCRConfiguration.instance().getSingleInstanceOf("MCR.URN.Store");
+        Object obj = MCRConfiguration.instance().getSingleInstanceOf("MCR.Persistence.URN.Store.Class");
         store = (MCRURNStore) obj;
     }
 
@@ -118,7 +118,7 @@ public class MCRURNManager {
      * 
      * @return the checksum for the given urn:nbn:de
      */
-    private static String buildChecksum(String urn) {
+    public static String buildChecksum(String urn) {
         StringBuffer buffer = new StringBuffer();
 
         for (int i = 0; i < urn.length(); i++) {
@@ -235,5 +235,23 @@ public class MCRURNManager {
      */
     public static void removeURN(String urn) {
         store.removeURN(urn);
+    }
+    
+    /**
+     * Create and Assign a new URN to the given Document
+     * Ensure that new created URNs do not allready exist in URN store
+     * @param documentID a MCRID
+     * @param configID - the configurationID of the URN Builder 
+     * @return the URN
+     */
+    public static synchronized String buildAndAssignURN(String documentID, String configID){
+        String urn=null;
+        do{
+        	urn = buildURN(configID);
+        }
+        while(isAssigned(urn));	
+        
+    	assignURN(urn, documentID);
+        return urn;
     }
 }

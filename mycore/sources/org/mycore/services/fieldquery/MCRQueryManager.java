@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRQueryManager.java,v $
- * $Revision: 1.21 $ $Date: 2006/12/08 14:40:01 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,10 +30,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.log4j.Logger;
+import org.mycore.common.MCRUsageException;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
+import org.mycore.parsers.bool.MCRFalseCondition;
 import org.mycore.parsers.bool.MCRNotCondition;
 import org.mycore.parsers.bool.MCROrCondition;
+import org.mycore.parsers.bool.MCRTrueCondition;
 
 /**
  * Executes queries on all configured searchers and returns query results.
@@ -42,6 +46,8 @@ import org.mycore.parsers.bool.MCROrCondition;
  */
 public class MCRQueryManager {
 
+    protected static final Logger LOGGER = Logger.getLogger(MCRQueryManager.class);
+  
     /**
      * Executes a query and returns the query results. If the query contains
      * fields from different indexes or should span across multiple hosts, the
@@ -70,6 +76,8 @@ public class MCRQueryManager {
      * @return the query results
      */
     public static MCRResults search(MCRQuery query, boolean comesFromRemoteHost) {
+        long start = System.currentTimeMillis();
+
         int maxResults = query.getMaxResults();
 
         // Build results of local query
@@ -84,6 +92,9 @@ public class MCRQueryManager {
         // After sorting, cut result list to maxResults if needed
         results.cutResults(maxResults);
 
+        long qtime = System.currentTimeMillis() - start;
+        LOGGER.debug("total query time: " + qtime);
+        
         return results;
     }
 
@@ -167,6 +178,10 @@ public class MCRQueryManager {
 
     /** Executes query, if necessary splits into subqueries for each index */
     private static MCRResults buildResults(MCRCondition cond, int maxResults, List<MCRSortBy> sortBy, boolean addSortData) {
+        if (cond instanceof MCRTrueCondition || cond instanceof MCRFalseCondition){
+            String msg = "Your query makes no sense. What do you mean when you search for '" + cond.toString() + "'?";
+            throw new MCRUsageException(msg);
+        }
         String index = getIndex(cond);
         if (index != mixed) {
             // All fields are from same index, just one searcher

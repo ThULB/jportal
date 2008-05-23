@@ -1,5 +1,5 @@
 /*
- * $RCSfile$
+ * 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
@@ -24,10 +24,11 @@
 package org.mycore.frontend.cli;
 
 import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,11 +37,11 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 /**
  * This class provides a set of commands for the org.mycore.access management
@@ -61,31 +62,71 @@ public class MCRAccessCommands extends MCRAbstractCommands {
 
         MCRCommand com = null;
 
-        com = new MCRCommand("load permissions data from file {0}", "org.mycore.frontend.cli.MCRAccessCommands.loadPermissionsFromFile String", "The command loads the permissions data of the access control system with data from the file {0}.");
+        com = new MCRCommand("load permissions data from file {0}", "org.mycore.frontend.cli.MCRAccessCommands.loadPermissionsFromFile String",
+                "The command loads the permissions data of the access control system with data from the file {0}.");
         command.add(com);
 
-        com = new MCRCommand("update permissions data from file {0}", "org.mycore.frontend.cli.MCRAccessCommands.updatePermissionsFromFile String", "The command update the permissions data of the access control system with data from the file {0}.");
+        com = new MCRCommand("list all permissions", "org.mycore.frontend.cli.MCRAccessCommands.listAllPermissions", "List all permission entries.");
         command.add(com);
 
-        com = new MCRCommand("list all permissions", "org.mycore.frontend.cli.MCRAccessCommands.listAllPermissions", "");
+        com = new MCRCommand("delete all permissions", "org.mycore.frontend.cli.MCRAccessCommands.deleteAllPermissions",
+                "Remove all permission entries from the Access Control System.");
         command.add(com);
 
-        com = new MCRCommand("delete all permissions", "org.mycore.frontend.cli.MCRAccessCommands.deleteAllPermissions", "");
+        com = new MCRCommand("export all permissions to file {0}", "org.mycore.frontend.cli.MCRAccessCommands.exportAllPermissionsToFile String",
+                "Export all permissions from the Access Control System to the file {0}.");
         command.add(com);
 
-        com = new MCRCommand("save all permissions to file {0}", "org.mycore.frontend.cli.MCRAccessCommands.saveAllPermissionsToFile String", "");
+        com = new MCRCommand("update permission {0} for id {1} with rulefile {2} described by {3}",
+                "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForID String String String String",
+                "The command updates access rule for a given id of a given permission with a given special rule");
         command.add(com);
 
-        com = new MCRCommand("update permission {0} for id {1} with rulefile {2} described by {3}", "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForID String String String String", "The command updates access rule for a given id of a given permission with a given special rule");
+        com = new MCRCommand("update permission {0} for id {1} with rulefile {2}",
+                "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForID String String String",
+                "The command updates access rule for a given id of a given permission with a given special rule");
         command.add(com);
 
-        com = new MCRCommand("update permission {0} for id {1} with rulefile {2}", "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForID String String String", "The command updates access rule for a given id of a given permission with a given special rule");
+        com = new MCRCommand("update permission {0} for selected with rulefile {2} described by {3}",
+                "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForSelected String String String",
+                "The command updates access rule for a given permission and all ids of a given MCRObject-Type with a given special rule");
         command.add(com);
 
-        com = new MCRCommand("update permission {0} for documentType {1} with rulefile {2} described by {3}", "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForDocumentType String String String String", "The command updates access rule for a given permission and all ids of a given MCRObject-Type with a given special rule");
+        com = new MCRCommand("update permission {0} for selected with rulefile {2}",
+                "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForSelected String String",
+                "The command updates access rule for a given permission and all ids of a given MCRObject-Type with a given special rule");
         command.add(com);
 
-        com = new MCRCommand("update permission {0} for documentType {1} with rulefile {2}", "org.mycore.frontend.cli.MCRAccessCommands.permissionUpdateForDocumentType String String String", "The command updates access rule for a given permission and all ids of a given MCRObject-Type with a given special rule");
+        com = new MCRCommand("delete permission {0} for id {1}", "org.mycore.frontend.cli.MCRAccessCommands.permissionDeleteForID String String",
+                "The command delete access rule for a given id of a given permission");
+        command.add(com);
+
+        com = new MCRCommand("delete all permissions for id {1}", "org.mycore.frontend.cli.MCRAccessCommands.permissionDeleteAllForID String",
+                "The command delete all access rules for a given id");
+        command.add(com);
+
+        com = new MCRCommand("delete permission {0} for selected", "org.mycore.frontend.cli.MCRAccessCommands.permissionDeleteForSelected String",
+                "The command delete access rule for a query selected set of object ids of a given permission");
+        command.add(com);
+
+        com = new MCRCommand("delete all permissions for selected", "org.mycore.frontend.cli.MCRAccessCommands.permissionDeleteAllForSelected",
+                "The command delete all access rules for a query selected set of object ids");
+        command.add(com);
+
+        com = new MCRCommand(
+                "set website read only {0}",
+                "org.mycore.frontend.MCRWebsiteWriteProtection.activate String",
+                "Usage: <command> <message>, This command set the whole website into read only mode and provides the given message to users. Nobody, except super user can write on system, using web frontend");
+        command.add(com);
+
+        com = new MCRCommand(
+                "set website read only",
+                "org.mycore.frontend.MCRWebsiteWriteProtection.activate",
+                "This command set the whole website into read only mode. An already configurated message will be displayed to users. Nobody, except super user can write on system, using web frontend");
+        command.add(com);
+
+        com = new MCRCommand("unset website read only", "org.mycore.frontend.MCRWebsiteWriteProtection.deactivate",
+                "This command removes the write protection (read only) from website. After unsetting anybody can write as usual, using web frontend");
         command.add(com);
     }
 
@@ -127,27 +168,23 @@ public class MCRAccessCommands extends MCRAbstractCommands {
 
         LOGGER.info("Reading file " + filename + " ...");
 
-        try {
-            org.jdom.Document doc = MCRXMLHelper.parseURI(filename, true);
-            org.jdom.Element rootelm = doc.getRootElement();
+        org.jdom.Document doc = MCRXMLHelper.parseURI(filename, true);
+        org.jdom.Element rootelm = doc.getRootElement();
 
-            if (!rootelm.getName().equals("mcrpermissions")) {
-                throw new MCRException("The data are not for mcrpermissions.");
-            }
+        if (!rootelm.getName().equals("mcrpermissions")) {
+            throw new MCRException("The data are not for mcrpermissions.");
+        }
 
-            List listelm = rootelm.getChildren("mcrpermission");
+        List listelm = rootelm.getChildren("mcrpermission");
 
-            for (Iterator it = listelm.iterator(); it.hasNext();) {
-                Element mcrpermission = (Element) it.next();
-                String permissionName = mcrpermission.getAttributeValue("name").trim().toLowerCase();
-                String ruleDescription = mcrpermission.getAttributeValue("ruledescription");
-                if (ruleDescription == null)
-                    ruleDescription = "";
-                Element rule = (Element) mcrpermission.getChild("condition").clone();
-                AI.addRule(permissionName, rule, ruleDescription);
-            }
-        } catch (Exception e) {
-            throw new MCRException("Error while loading permissions data.", e);
+        for (Iterator it = listelm.iterator(); it.hasNext();) {
+            Element mcrpermission = (Element) it.next();
+            String permissionName = mcrpermission.getAttributeValue("name").trim().toLowerCase();
+            String ruleDescription = mcrpermission.getAttributeValue("ruledescription");
+            if (ruleDescription == null)
+                ruleDescription = "";
+            Element rule = (Element) mcrpermission.getChild("condition").clone();
+            AI.addRule(permissionName, rule, ruleDescription);
         }
     }
 
@@ -160,28 +197,16 @@ public class MCRAccessCommands extends MCRAbstractCommands {
      * @see #updatePermissionsFromFile(String)
      */
     public static void loadPermissionsFromFile(String filename) throws Exception {
-        updatePermissionsFromFile(filename);
-    }
-
-    /**
-     * This method deletes the old permissions (if given any) and sets the new
-     * permissions given in a certain file
-     * 
-     * @param filename
-     *            the filename of the file that contains the mcrpermissions
-     */
-    public static void updatePermissionsFromFile(String filename) throws Exception {
-        deleteAllPermissions();
         createPermissionsFromFile(filename);
     }
 
     /**
      * deletes all permissions
      */
+    @SuppressWarnings("unchecked")
     public static void deleteAllPermissions() throws Exception {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-        for (Iterator it = AI.getPermissions().iterator(); it.hasNext();) {
-            String permission = (String) it.next();
+        for (String permission : (List<String>) AI.getPermissions()) {
             AI.removeRule(permission);
         }
     }
@@ -190,70 +215,65 @@ public class MCRAccessCommands extends MCRAbstractCommands {
      * This method invokes MCRUserMgr.getAllPrivileges() and retrieves a
      * ArrayList of all privileges stored in the persistent datastore.
      */
+    @SuppressWarnings("unchecked")
     public static void listAllPermissions() throws MCRException {
-        try {
-            MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-            List permissions = AI.getPermissions();
-            boolean noPermissionsDefined = true;
-            for (Iterator it = permissions.iterator(); it.hasNext();) {
-                noPermissionsDefined = false;
-                String permission = (String) it.next();
-                String description = AI.getRuleDescription(permission);
-                if (description.equals(""))
-                    description = "No description";
-                org.jdom.Element rule = AI.getRule(permission);
-                System.out.println("       " + permission);
-                System.out.println("           " + description);
-                if (rule != null) {
-                    org.jdom.output.XMLOutputter o = new org.jdom.output.XMLOutputter();
-                    System.out.println("           " + o.outputString(rule));
-                }
+        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+        List<String> permissions = AI.getPermissions();
+        boolean noPermissionsDefined = true;
+        for (String permission : permissions) {
+            noPermissionsDefined = false;
+            String description = AI.getRuleDescription(permission);
+            if (description.equals(""))
+                description = "No description";
+            org.jdom.Element rule = AI.getRule(permission);
+            System.out.println("       " + permission);
+            System.out.println("           " + description);
+            if (rule != null) {
+                org.jdom.output.XMLOutputter o = new org.jdom.output.XMLOutputter();
+                System.out.println("           " + o.outputString(rule));
             }
-            if (noPermissionsDefined)
-                System.out.println("No permissions defined");
-            System.out.println();
-        } catch (Exception e) {
-            throw new MCRException("Error while command saveAllGroupsToFile()", e);
         }
+        if (noPermissionsDefined)
+            System.out.println("No permissions defined");
+        System.out.println();
     }
 
     /**
-     * This method just saves the permissions to a file
+     * This method just export the permissions to a file
      * 
      * @param filename
      *            the file written to
      */
-    public static final void saveAllPermissionsToFile(String filename) throws MCRException {
+    @SuppressWarnings("unchecked")
+    public static final void exportAllPermissionsToFile(String filename) throws Exception {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
-        try {
-            Document doc = new Document(new Element("mcrpermissions"));
-            List permissions = AI.getPermissions();
-            for (Iterator it = permissions.iterator(); it.hasNext();) {
-                String permission = (String) it.next();
-                Element mcrpermission = new Element("mcrpermission");
-                mcrpermission.setAttribute("name", permission);
-                String ruleDescription = AI.getRuleDescription(permission);
-                if (!ruleDescription.equals("")) {
-                    mcrpermission.setAttribute("ruledescription", ruleDescription);
-                }
-                Element rule = AI.getRule(permission);
-                mcrpermission.addContent(rule);
-                doc.addContent(mcrpermission);
+        Element mcrpermissions = new Element("mcrpermissions");
+        mcrpermissions.addNamespaceDeclaration(XSI_NAMESPACE);
+        mcrpermissions.addNamespaceDeclaration(XLINK_NAMESPACE);
+        mcrpermissions.setAttribute("noNamespaceSchemaLocation", "MCRPermissions.xsd", XSI_NAMESPACE);
+        Document doc = new Document(mcrpermissions);
+        List<String> permissions = AI.getPermissions();
+        for (String permission : permissions) {
+            Element mcrpermission = new Element("mcrpermission");
+            mcrpermission.setAttribute("name", permission);
+            String ruleDescription = AI.getRuleDescription(permission);
+            if (!ruleDescription.equals("")) {
+                mcrpermission.setAttribute("ruledescription", ruleDescription);
             }
-            File file = new File(filename);
-            if (file.exists()) {
-                System.out.println("File yet exists");
-                return;
-            }
-            FileOutputStream fos = new FileOutputStream(file);
-            LOGGER.info("Writing to file " + filename + " ...");
-            String mcr_encoding = CONFIG.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
-            XMLOutputter out = new XMLOutputter(Format.getPrettyFormat().setEncoding(mcr_encoding));
-            out.output(doc, fos);
-        } catch (Exception e) {
-            throw new MCRException("Error while loading permissions data.", e);
+            Element rule = AI.getRule(permission);
+            mcrpermission.addContent(rule);
+            mcrpermissions.addContent(mcrpermission);
         }
+        File file = new File(filename);
+        if (file.exists()) {
+            LOGGER.warn("File " + filename + " yet exists, overwrite.");
+        }
+        FileOutputStream fos = new FileOutputStream(file);
+        LOGGER.info("Writing to file " + filename + " ...");
+        String mcr_encoding = CONFIG.getString("MCR.Metadata.DefaultEncoding", DEFAULT_ENCODING);
+        XMLOutputter out = new XMLOutputter(Format.getPrettyFormat().setEncoding(mcr_encoding));
+        out.output(doc, fos);
     }
 
     private static Element getRuleFromFile(String strFileRule) {
@@ -321,8 +341,8 @@ public class MCRAccessCommands extends MCRAbstractCommands {
      * @param strFileRule
      *            String the path to the xml file, that contains the rule
      */
-    public static void permissionUpdateForDocumentType(String permission, String documentType, String strFileRule) {
-        permissionUpdateForDocumentType(permission, documentType, strFileRule, "");
+    public static void permissionUpdateForSelected(String permission, String strFileRule) {
+        permissionUpdateForSelected(permission, strFileRule, "");
     }
 
     /**
@@ -339,15 +359,66 @@ public class MCRAccessCommands extends MCRAbstractCommands {
      *            String give a special description, if the semantics of your
      *            rule is multiple used
      */
-    public static void permissionUpdateForDocumentType(String permission, String documentType, String strFileRule, String description) {
+    public static void permissionUpdateForSelected(String permission, String strFileRule, String description) {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
         Element rule = getRuleFromFile(strFileRule);
         if (rule == null)
             return;
-        ArrayList list = MCRXMLTableManager.instance().retrieveAllIDs(documentType);
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            String id = (String) it.next();
+        for (String id : MCRObjectCommands.getSelectedObjectIDs()) {
             AI.addRule(id, permission, rule, description);
+        }
+    }
+
+    /**
+     * delete a given permission for a given id
+     * 
+     * @param permission
+     *            String type of permission like read, writedb, etc.
+     * @param id
+     *            String the id of the object the rule is assigned to
+     */
+    public static void permissionDeleteForID(String permission, String id) {
+        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+        AI.removeRule(id, permission);
+        return;
+    }
+
+    /**
+     * delete all permissions for a given id
+     * 
+     * @param id
+     *            String the id of the object the rule is assigned to
+     */
+    public static void permissionDeleteAllForID(String id) {
+        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+        AI.removeAllRules(id);
+        return;
+    }
+
+    /**
+     * delete all permissions for all selected objects
+     * 
+     * @param permission
+     *            String type of permission like read, writedb, etc.
+     * @see MCRObjectCommands#getSelectedObjectIDs()
+     */
+    public static void permissionDeleteForSelected(String permission) {
+        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+        for (String id : MCRObjectCommands.getSelectedObjectIDs()) {
+            AI.removeRule(id, permission);
+        }
+        return;
+    }
+
+    /**
+     * delete all permissions for all selected objects
+     * 
+     * @see MCRObjectCommands#getSelectedObjectIDs()
+     */
+    public static void permissionDeleteAllForSelected() {
+        MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+        for (String id : MCRObjectCommands.getSelectedObjectIDs()) {
+            AI.removeAllRules(id);
         }
         return;
     }

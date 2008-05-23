@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUploadServlet.java,v $
- * $Revision: 1.21 $ $Date: 2006/11/30 13:32:37 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
@@ -46,12 +47,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.log4j.Logger;
+import org.hibernate.Transaction;
 import org.jdom.Element;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.frontend.MCRWebsiteWriteProtection;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -65,7 +69,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * @author Frank Lützenkirchen
  * @author Harald Richter
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.21 $ $Date: 2006/11/30 13:32:37 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  * @see org.mycore.frontend.fileupload.MCRUploadHandler
  */
 public final class MCRUploadServlet extends MCRServlet implements Runnable {
@@ -77,7 +81,9 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
     static Logger LOGGER = Logger.getLogger(MCRUploadServlet.class);
 
-    static MCRCache sessionIDs = new MCRCache(100);
+    static MCRCache sessionIDs = new MCRCache(100, "UploadServlet Upload sessions");
+    
+    final static int bufferSize = 65536; // 64 KByte
 
     public synchronized void init() throws ServletException {
         super.init();
@@ -93,8 +99,11 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             serverPort = CONFIG.getInt("MCR.FileUpload.Port", defPort);
 
             LOGGER.info("Opening server socket: ip=" + serverIP + " port=" + serverPort);
-            server = new ServerSocket(serverPort, 1, InetAddress.getByName(serverIP));
+            server = new ServerSocket();
+            server.setReceiveBufferSize(Math.max(server.getReceiveBufferSize(), bufferSize));
+            server.bind(new InetSocketAddress(serverIP,serverPort));
             LOGGER.debug("Server socket successfully created.");
+            LOGGER.debug("Server receive buffer size is " + server.getReceiveBufferSize() );
 
             // Starts separate thread that will receive and store file content
             new Thread(this).start();
@@ -122,6 +131,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
     public void handleUpload(Socket socket) {
         LOGGER.info("Client applet connected to socket now.");
 
+        Transaction tx = MCRHIBConnection.instance().getSession().beginTransaction();
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             ZipInputStream zis = new ZipInputStream(socket.getInputStream());
@@ -130,28 +140,36 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             ZipEntry ze = zis.getNextEntry();
             String path = URLDecoder.decode(ze.getName(), "UTF-8");
-            String uploadId = new String(ze.getExtra(), "UTF-8");
-
-            LOGGER.debug("Received path = " + path);
+            String extra = new String(ze.getExtra(), "UTF-8");
+            String[] parts = extra.split("\\s");
+            String md5 = parts[0];
+            long length = Long.parseLong(parts[1]);
+            String uploadId = parts[2];
+            
             LOGGER.debug("Received uploadID = " + uploadId);
+            LOGGER.debug("Received path     = " + path);
+            LOGGER.debug("Received length   = " + length);
+            LOGGER.debug("Received md5      = " + md5);
 
             // Remember current MCRSession for upload
             String sessionID = (String) (sessionIDs.get(uploadId));
             if (sessionID != null) {
-                MCRSession session = MCRSession.getSession(sessionID);
+                MCRSession session = MCRSessionMgr.getSession(sessionID);
                 if (session != null)
                     MCRSessionMgr.setCurrentSession(session);
             }
-            MCRUploadHandlerManager.getHandler(uploadId).receiveFile(path, zis);
+            long numBytesStored = MCRUploadHandlerManager.getHandler(uploadId).receiveFile(path, zis, length, md5);
 
             LOGGER.debug("Stored incoming file content");
 
-            dos.writeUTF("OK");
+            dos.writeLong(numBytesStored);
             dos.flush();
 
             LOGGER.info("File transfer completed successfully.");
+            tx.commit();
         } catch (Exception ex) {
             LOGGER.error("Exception while receiving and storing file content from applet:", ex);
+            tx.rollback();
         } finally {
             try {
                 if (socket != null) {
@@ -172,6 +190,10 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             try {
                 final Socket socket = server.accept();
+                socket.setReceiveBufferSize(bufferSize);
+                socket.setSendBufferSize(bufferSize);
+                LOGGER.debug("Socket receive buffer size is " + socket.getReceiveBufferSize());
+                
                 Thread handlerThread = new Thread(new Runnable() {
                     public void run() {
                         handleUpload(socket);
@@ -212,7 +234,15 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             handler.unregister();
 
             return;
-        } else if (method.equals("startDerivateSession String int")) {
+        }
+        
+        if(MCRWebsiteWriteProtection.isActive())
+        {
+          sendException( res, new MCRException("System is currently in read-only mode") );
+          return;
+        }
+        
+        if (method.equals("startUploadSession")) {
             String uploadId = req.getParameter("uploadId");
             int numFiles = Integer.parseInt(req.getParameter("numFiles"));
             MCRUploadHandlerManager.getHandler(uploadId).startUpload(numFiles);
@@ -223,17 +253,19 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             LOGGER.info("UploadServlet start session " + uploadId);
             sendResponse(res, "OK");
-        } else if (method.equals("createFile String")) {
+        } else if (method.equals("uploadFile")) {
             final String path = req.getParameter("path");
 
             LOGGER.info("UploadServlet uploading " + path);
 
-            final String uploadId = req.getParameter("uploadId");
-            final String md5 = req.getParameter("md5");
-            LOGGER.debug("UploadServlet receives file " + path + " with md5 " + md5);
+            String uploadId = req.getParameter("uploadId");
+            String md5 = req.getParameter("md5");
+            long length = Long.parseLong(req.getParameter("length"));
+            
+            LOGGER.debug("UploadServlet receives file " + path + " (" + length + " bytes)" +" with md5 " + md5);
 
-            if (!MCRUploadHandlerManager.getHandler(uploadId).acceptFile(path, md5)) {
-                LOGGER.debug("Skip file " + path);
+            if (!MCRUploadHandlerManager.getHandler(uploadId).acceptFile(path, md5, length)) {
+                LOGGER.debug("Skipping file " + path);
                 sendResponse(res, "skip file");
 
                 return;
@@ -241,10 +273,17 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             LOGGER.debug("Applet wants to send content of file " + path);
             sendResponse(res, serverIP + ":" + serverPort);
-        } else if (method.equals("endDerivateSession String")) {
+        } else if (method.equals("ping")) {
+            sendResponse(res, "pong");
+        } else if (method.equals("endUploadSession")) {
             String uploadId = req.getParameter("uploadId");
             MCRUploadHandler uploadHandler = MCRUploadHandlerManager.getHandler(uploadId);
             uploadHandler.finishUpload();
+            sendResponse(res, "OK");
+        } else if (method.equals("cancelUploadSession")) {
+            String uploadId = req.getParameter("uploadId");
+            MCRUploadHandler uploadHandler = MCRUploadHandlerManager.getHandler(uploadId);
+            uploadHandler.cancelUpload();
             sendResponse(res, "OK");
         } else if (method.equals("formBasedUpload")) {
             String uploadId = parms.getParameter("uploadId");
@@ -262,6 +301,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
                 for (int i = 0; i < numFiles; i++) {
                     FileItem item = sub.getFile(paths.get(i));
+                    
                     InputStream in = item.getInputStream();
                     String path = ((Element) (paths.get(i))).getTextTrim();
                     path = getFileName(path);
@@ -270,7 +310,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
                     if (path.toLowerCase().endsWith(".zip")) {
                         uploadZipFile(handler, in);
                     } else
-                        handler.receiveFile(path, in);
+                        handler.receiveFile(path, in, 0, null);
                 }
 
                 handler.finishUpload();
@@ -304,7 +344,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             }
 
             LOGGER.info("UploadServlet unpacking ZIP entry " + path);
-            handler.receiveFile(path, zis);
+            handler.receiveFile(path, zis, 0, null);
         }
     }
 

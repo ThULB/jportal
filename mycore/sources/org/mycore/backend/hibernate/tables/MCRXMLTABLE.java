@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRXMLTABLE.java,v $
- * $Revision: 1.9 $ $Date: 2005/09/28 07:29:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,6 +27,8 @@ import java.sql.Blob;
 
 public class MCRXMLTABLE {
     private MCRXMLTABLEPK key;
+    
+    private String type;
 
     private Blob xml;
 
@@ -35,7 +37,8 @@ public class MCRXMLTABLE {
     }
 
     public MCRXMLTABLE(String id, int version, String type, Blob xml) {
-        this.key = new MCRXMLTABLEPK(id, version, type);
+        this.key = new MCRXMLTABLEPK(id, version);
+        this.type = type;
         this.xml = xml;
     }
 
@@ -64,11 +67,11 @@ public class MCRXMLTABLE {
     }
 
     public String getType() {
-        return this.key.getType();
+        return type;
     }
 
     public void setType(String type) {
-        this.key.setType(type);
+        this.type = type;
     }
 
     public byte[] getXmlByteArray() {

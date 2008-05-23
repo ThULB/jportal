@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREditorDefReader.java,v $
- * $Revision: 1.11 $ $Date: 2006/11/23 21:34:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -164,7 +164,7 @@ public class MCREditorDefReader {
      * A cache of reusable resolved includes. Key is URI and IDREF, cached value
      * is a container element that holds the resolved includes.
      */
-    protected static MCRCache includesCache = new MCRCache(100);
+    protected static MCRCache includesCache = new MCRCache(100, "EditorDefReader Includes");
 
     /**
      * Resolves the uri and idref to a list of elements to include. If idref is

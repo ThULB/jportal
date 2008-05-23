@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUploadProgressMonitor.java,v $
- * $Revision: 1.8 $ $Date: 2006/02/10 23:33:51 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -58,12 +58,14 @@ import javax.swing.WindowConstants;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.8 $ $Date: 2006/02/10 23:33:51 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRUploadProgressMonitor extends JDialog {
     protected MCRUploadApplet applet;
 
     protected boolean canceled; // if true, upload is canceled
+
+    protected boolean finished; // if true, upload process is finished
 
     protected String filename;
 
@@ -97,6 +99,10 @@ public class MCRUploadProgressMonitor extends JDialog {
 
     protected long startTime; // Time the upload startet
 
+    protected long endTime; // Time the upload finished
+
+    protected long lastUpdate; // Time the last data update was drawn
+
     protected JLabel lbThroughput; // Average number of bytes per second
 
     protected JLabel lbTime; // Time elapsed / estimated time remaining
@@ -121,6 +127,7 @@ public class MCRUploadProgressMonitor extends JDialog {
 
         this.applet = applet;
         this.canceled = false;
+        this.finished = false;
         this.filename = "";
         this.lbFilename = new JLabel(" ");
         this.sizeFile = 0;
@@ -139,11 +146,13 @@ public class MCRUploadProgressMonitor extends JDialog {
         this.lbTime = new JLabel(" ");
         this.button = new JButton("Abbrechen");
 
-        // TODO: Implement cancel function
-        button.setEnabled(false);
+        button.setEnabled(true);
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                MCRUploadProgressMonitor.this.buttonPressed();
+                if (finished)
+                    MCRUploadProgressMonitor.this.close();
+                else
+                    MCRUploadProgressMonitor.this.cancel();
             }
         });
 
@@ -229,24 +238,57 @@ public class MCRUploadProgressMonitor extends JDialog {
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        Runnable updater = new Runnable() {
+        Runnable starter = new Runnable() {
             public void run() {
                 MCRUploadProgressMonitor.this.setVisible(true);
                 MCRUploadProgressMonitor.this.requestFocus();
             }
         };
 
-        SwingUtilities.invokeLater(updater);
+        // This thread will update display even if upload gets very slow
+        Thread updater = new Thread(new Runnable() {
+            public void run() {
+
+                while (MCRUploadProgressMonitor.this.lastUpdate == 0) {
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+
+                while (!(MCRUploadProgressMonitor.this.finished || MCRUploadProgressMonitor.this.canceled)) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                    }
+
+                    if (MCRUploadProgressMonitor.this.finished || MCRUploadProgressMonitor.this.canceled)
+                        return;
+
+                    long now = System.currentTimeMillis();
+                    if (now - MCRUploadProgressMonitor.this.lastUpdate > 900)
+                        MCRUploadProgressMonitor.this.update();
+                }
+            }
+        });
+
+        SwingUtilities.invokeLater(starter);
+        updater.start();
     }
 
-    protected void buttonPressed() {
+    protected void cancel() {
+        canceled = true;
+        endTime = System.currentTimeMillis();
+        end();
+    }
+
+    protected void close() {
         button.setEnabled(false);
         setVisible(false);
         dispose();
 
-        if (applet != null) {
+        if (applet != null)
             applet.returnToURL();
-        }
     }
 
     protected DecimalFormat df = new DecimalFormat("00");
@@ -309,10 +351,15 @@ public class MCRUploadProgressMonitor extends JDialog {
 
         final String sFile = formatSize(bytesFile) + " von " + formatSize(sizeFile) + " übertragen";
 
-        long now = System.currentTimeMillis();
+        lastUpdate = System.currentTimeMillis();
+        long now = (endTime > 0 ? endTime : lastUpdate);
         final int sec = Math.max((int) (now - startTime) / 1000, 1);
-        double secPerPM = ((double) sec / (double) permilleTotal);
-        final int rest = (int) (secPerPM * (1000 - permilleTotal));
+
+        long bytesPerMilli = 1;
+        if (now > startTime)
+            bytesPerMilli = Math.max(1, bytesTotal / (now - startTime));
+        int rest = (int) ((sizeTotal - bytesTotal) / bytesPerMilli / 1000);
+
         int throughput = Math.round(bytesTotal / sec);
 
         final String sTotal = formatSize(bytesTotal) + " von " + formatSize(sizeTotal) + " insgesamt übertragen";
@@ -320,7 +367,7 @@ public class MCRUploadProgressMonitor extends JDialog {
         final String sName;
 
         if (canceled) {
-            sName = "Abgebrochen: Datei " + filename;
+            sName = "ABGEBROCHEN: Datei " + filename;
         } else {
             sName = "Datei " + filename;
         }
@@ -329,7 +376,7 @@ public class MCRUploadProgressMonitor extends JDialog {
         final String sTime;
 
         if (canceled) {
-            sCounter = "Abgebrochen: " + numFiles + " Dateien übertragen";
+            sCounter = "ABGEBROCHEN: " + fileCount + " von " + numFiles + " Dateien übertragen";
             sTime = "Übertragung abgebrochen, Gesamtdauer " + formatTime(sec);
         } else if (bytesTotal < sizeTotal) {
             sCounter = "Übertrage Datei " + fileCount + " von " + numFiles;
@@ -402,6 +449,8 @@ public class MCRUploadProgressMonitor extends JDialog {
         bytesFile = sizeFile;
         bytesTotal = sizeTotal;
         fileCount = numFiles;
+        finished = true;
+        endTime = System.currentTimeMillis();
         end();
     }
 
@@ -411,6 +460,8 @@ public class MCRUploadProgressMonitor extends JDialog {
      */
     public void cancel(Exception ex) {
         canceled = true;
+        finished = true;
+        endTime = System.currentTimeMillis();
         MCRUploadProgressMonitor.reportException(ex);
         end();
     }
@@ -440,14 +491,20 @@ public class MCRUploadProgressMonitor extends JDialog {
     }
 
     protected void end() {
+        finished = true;
         button.setText("Schliessen");
         button.setEnabled(true);
+
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                MCRUploadProgressMonitor.this.buttonPressed();
+                MCRUploadProgressMonitor.this.close();
             }
         });
         update();
+    }
+
+    public boolean isCanceled() {
+        return canceled;
     }
 
     /**
@@ -471,25 +528,33 @@ public class MCRUploadProgressMonitor extends JDialog {
         MCRUploadProgressMonitor upm = new MCRUploadProgressMonitor(numFiles, sizeTotal, null);
 
         for (int i = 0; i < numFiles; i++) {
+            if (upm.isCanceled())
+                break;
             upm.startFile(files[i].getName(), files[i].length());
 
             FileInputStream fin = new FileInputStream(files[i]);
             byte[] buffer = new byte[65536];
             long num = 0;
 
+            if (upm.isCanceled())
+                break;
             while ((num = fin.read(buffer, 0, buffer.length)) != -1) {
-                /*
-                 * Simulate a read error and the following cancel() invocation
-                 * if( i == 2 ) { upm.cancel( new IOException( "Simulierter
-                 * Lesefehler" ) ); return; }
-                 */
+                // Simulate a read error and the following cancel() invocation
+                // if( i == 2 ) { upm.cancel( new java.io.IOException( "Simulierter Lesefehler" ) ); return; }
+
+                if (upm.isCanceled())
+                    break;
                 upm.progressFile(num);
-                Thread.sleep(300);
+                Thread.sleep(300); // Simulate network transfer time
+                if (upm.isCanceled())
+                    break;
             }
 
-            upm.endFile();
+            if (!upm.isCanceled())
+                upm.endFile();
         }
 
-        upm.finish();
+        if (!upm.isCanceled())
+            upm.finish();
     }
 }

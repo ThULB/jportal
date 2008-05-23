@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRDirectoryXML.java,v $
- * $Revision: 1.4 $ $Date: 2006/11/21 12:21:59 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.common.MCRConfiguration;
  * @author Thomas Scheffler (yagee)
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.4 $ $Date: 2006/11/21 12:21:59 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRDirectoryXML {
 

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRContentStore.java,v $
- * $Revision: 1.20 $ $Date: 2006/07/05 14:32:19 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.MCRUtils;
  * the content of a file is stored.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.20 $ $Date: 2006/07/05 14:32:19 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public abstract class MCRContentStore {
     /** The unique store ID for this MCRContentStore implementation */

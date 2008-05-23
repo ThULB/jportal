@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRAccessManager.java,v $
- * $Revision: 1.35 $ $Date: 2006/10/12 14:10:05 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,7 +31,7 @@ import org.mycore.access.strategies.MCRAccessCheckStrategy;
 import org.mycore.access.strategies.MCRObjectIDStrategy;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
-import org.mycore.datamodel.metadata.MCRLinkTableManager;
+import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 
@@ -39,15 +39,15 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler
  * 
- * @version $Revision: 1.35 $ $Date: 2006/10/12 14:10:05 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRAccessManager {
 
-    private static final MCRAccessInterface ACCESS_IMPL = (MCRAccessInterface) MCRConfiguration.instance().getInstanceOf("MCR.Access_class_name",
+    private static final MCRAccessInterface ACCESS_IMPL = (MCRAccessInterface) MCRConfiguration.instance().getSingleInstanceOf("MCR.Access.Class",
             MCRAccessBaseImpl.class.getName());
 
     private static final MCRAccessCheckStrategy ACCESS_STRATEGY = (MCRAccessCheckStrategy) MCRConfiguration.instance().getInstanceOf(
-            "MCR.Access_strategy_class_name", MCRObjectIDStrategy.class.getName());
+            "MCR.Access.Strategy.Class", MCRObjectIDStrategy.class.getName());
 
     public static final Logger LOGGER = Logger.getLogger(MCRAccessManager.class);
 
@@ -75,6 +75,25 @@ public class MCRAccessManager {
     }
 
     /**
+     * adds an access rule for an ID to an access system.
+     * 
+     * @param id
+     *            the ID of the object as String
+     * @param permission
+     *            the access permission for the rule
+     * @param rule
+     *            the access rule
+     * @param description
+     *            description for the given access rule, e.g. "allows public access"
+     * @throws MCRException
+     *             if an errow was occured
+     * @see MCRAccessInterface#addRule(String, String, org.jdom.Element, String)
+     */
+    public static void addRule(String id, String permission, org.jdom.Element rule, String description) throws MCRException {
+        getAccessImpl().addRule(id, permission, rule, description);
+    }
+
+    /**
      * removes the <code>permission</code> rule for the MCRObjectID.
      * 
      * @param id
@@ -87,6 +106,21 @@ public class MCRAccessManager {
      */
     public static void removeRule(MCRObjectID id, String permission) throws MCRException {
         getAccessImpl().removeRule(id.getId(), permission);
+    }
+
+    /**
+     * removes the <code>permission</code> rule for the ID.
+     * 
+     * @param id
+     *            the ID of an object as String
+     * @param permission
+     *            the access permission for the rule
+     * @throws MCRException
+     *             if an errow was occured
+     * @see MCRAccessInterface#removeRule(String, String)
+     */
+    public static void removeRule(String id, String permission) throws MCRException {
+        getAccessImpl().removeRule(id, permission);
     }
 
     /**
@@ -122,6 +156,25 @@ public class MCRAccessManager {
     }
 
     /**
+     * updates an access rule for an ID.
+     * 
+     * @param id
+     *            the ID of the object
+     * @param permission
+     *            the access permission for the rule
+     * @param rule
+     *            the access rule
+     * @param description
+     *            description for the given access rule, e.g. "allows public access"
+     * @throws MCRException
+     *             if an errow was occured
+     * @see MCRAccessInterface#updateRule(String, String, Element, String)
+     */
+    public static void updateRule(String id, String permission, org.jdom.Element rule, String description) throws MCRException {
+        getAccessImpl().updateRule(id, permission, rule, description);
+    }
+
+    /**
      * determines whether the current user has the permission to perform a
      * certain action.
      * 
@@ -145,8 +198,19 @@ public class MCRAccessManager {
      * @return
      */
     public static boolean checkPermission(String id, String permission) {
-        return ACCESS_STRATEGY.checkPermission(id, permission);   
-    }
+      return ACCESS_STRATEGY.checkPermission(id, permission);   
+  }
+
+    /**
+     * determines whether the current user has the permission to perform a
+     * certain action.
+     * 
+     * @param permission
+     * @return
+     */
+    public static boolean checkPermission(String permission) {
+      return getAccessImpl().checkPermission(permission);   
+  }
 
     /**
      * checks whether the current user has the permission to read/see a derivate
@@ -169,6 +233,18 @@ public class MCRAccessManager {
 		}
 		return accessAllowed;
     }
+    
+    /**
+     * lists all permissions defined for the <code>id</code>.
+     * 
+     * @param id
+     *           the ID of the object as String
+     * @return a <code>List</code> of all for <code>id</code> defined
+     *         permissions
+     */ 
+    public static List getPermissionsForID(String id) {
+        return getAccessImpl().getPermissionsForID(id);
+    } 
     
     /**
      * lists all permissions defined for the <code>id</code>.

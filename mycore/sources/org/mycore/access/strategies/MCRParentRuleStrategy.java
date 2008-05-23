@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRParentRuleStrategy.java,v $
- * $Revision: 1.2 $ $Date: 2006/11/25 23:32:52 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 
 /**
  * Use this class if you want to have a fallback to ancestor access rules.
@@ -41,7 +41,7 @@ import org.mycore.datamodel.metadata.MCRXMLTableManager;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.2 $ $Date: 2006/11/25 23:32:52 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRParentRuleStrategy implements MCRAccessCheckStrategy {
 
@@ -64,9 +64,9 @@ public class MCRParentRuleStrategy implements MCRAccessCheckStrategy {
 
     private static String getParentID(String objectID) {
         Document parentDoc = MCRXMLTableManager.instance().readDocument(new MCRObjectID(objectID));
-        final Element parentElement = parentDoc.getRootElement().getChild("structure").getChild("parent");
+        final Element parentElement = parentDoc.getRootElement().getChild("structure").getChild("parents");
         if (parentElement != null) {
-            return parentElement.getAttributeValue("href", XLINK_NAMESPACE);
+            return parentElement.getChild("parent").getAttributeValue("href", XLINK_NAMESPACE);
         }
         return null;
     }

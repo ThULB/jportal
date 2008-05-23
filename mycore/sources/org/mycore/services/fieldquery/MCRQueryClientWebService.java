@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRQueryClientWebService.java,v $
- * $Revision: 1.4 $ $Date: 2006/09/20 11:31:24 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,19 +40,19 @@ import org.jdom.input.DOMBuilder;
 /*
  * This class is the implementation for remote access via Webservices
  * 
- * @author Jens Kupferschmidt @author Frank Lützenkirchen
+ * @author Jens Kupferschmidt @author Frank Lï¿½tzenkirchen
  */
 
 public class MCRQueryClientWebService extends MCRQueryClientBase {
 
     /** The AXIS service object */
-    private static Service service = new Service();
+    protected static Service service = new Service();
 
     /** The description of the doQuery service operation */
-    private static OperationDesc operation;
+    protected static OperationDesc operation;
 
     /** The complete WebService URL * */
-    private String endpoint = "";
+    protected String endpoint = "";
 
     static {
         String xmlsoap = "http://xml.apache.org/xml-soap";
@@ -179,7 +179,8 @@ public class MCRQueryClientWebService extends MCRQueryClientBase {
      * @param categID
      *            the category ID of the classification to retrieve
      * @param format
-     *             of retrieved classification, valid values are: editor['['formatAlias']']|metadata
+     *            of retrieved classification, valid values are:
+     *            editor['['formatAlias']']|metadata
      * @return the classification document
      */
     public org.w3c.dom.Document doRetrieveClassification(String level, String type, String classID, String categID, String format) {
@@ -200,6 +201,45 @@ public class MCRQueryClientWebService extends MCRQueryClientBase {
             call.setReturnType(new QName("http://xml.apache.org/xml-soap", "Document"));
             // Call webservice
             org.w3c.dom.Document outDoc = (org.w3c.dom.Document) (call.invoke(new Object[] { level, type, classID, categID, format }));
+            LOGGER.info("Received remote Object: " + ID.toString());
+
+            return outDoc;
+        } catch (Exception ex) {
+            String msg = "Exception while retrieving Object '" + ID.toString() + "' from remote host " + alias;
+            LOGGER.error(msg, ex);
+        }
+        return null;
+    }
+
+    /**
+     * Retrieves an link from remote host using the WebService.
+     * 
+     * @param hostAlias
+     *            the alias of the remote host as defined in hosts.xml
+     * @param from
+     *            the source of the link
+     * @param to
+     *            the target of the link
+     * @param type
+     *            the type of the link
+     * @return the mcr:result document
+     */
+    public org.w3c.dom.Document doRetrieveLinks(String from, String to, String type) {
+        StringBuffer ID = new StringBuffer(256);
+        ID.append("from=").append(from).append(":to=").append(to).append(":type=").append(type);
+        try {
+            // Build webservice call
+            Call call = (Call) (service.createCall());
+            call.setTargetEndpointAddress(new URL(endpoint));
+            call.setOperation(operation);
+            call.setOperationName("MCRDoRetrieveLinks");
+            call.removeAllParameters();
+            call.addParameter("from", org.apache.axis.Constants.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+            call.addParameter("to", org.apache.axis.Constants.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+            call.addParameter("type", org.apache.axis.Constants.XSD_STRING, javax.xml.rpc.ParameterMode.IN);
+            call.setReturnType(new QName("http://xml.apache.org/xml-soap", "Document"));
+            // Call webservice
+            org.w3c.dom.Document outDoc = (org.w3c.dom.Document) (call.invoke(new Object[] { from, to, type }));
             LOGGER.info("Received remote Object: " + ID.toString());
 
             return outDoc;

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRACCESS.java,v $
- * $Revision: 1.3 $ $Date: 2005/09/28 07:29:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,6 +28,8 @@ import java.sql.Timestamp;
 public class MCRACCESS {
     private MCRACCESSPK key;
 
+    private MCRACCESSRULE rule;
+    
     private String creator;
 
     private Timestamp creationdate;
@@ -36,11 +38,12 @@ public class MCRACCESS {
     }
 
     public MCRACCESS(MCRACCESSPK key) {
-        this.key = new MCRACCESSPK(key.getRid(), key.getAcpool(), key.getObjid());
+        this.key = new MCRACCESSPK(key.getAcpool(), key.getObjid());
     }
 
-    public MCRACCESS(String rid, String acpool, String objid, String creator, Timestamp creationdate) {
-        this.key = new MCRACCESSPK(rid, acpool, objid);
+    public MCRACCESS(MCRACCESSRULE rule, String acpool, String objid, String creator, Timestamp creationdate) {
+        this.key = new MCRACCESSPK(acpool, objid);
+        this.rule = rule;
         this.creator = creator;
         this.creationdate = creationdate;
     }
@@ -67,5 +70,13 @@ public class MCRACCESS {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public MCRACCESSRULE getRule() {
+        return rule;
+    }
+
+    public void setRule(MCRACCESSRULE rule) {
+        this.rule = rule;
     }
 }

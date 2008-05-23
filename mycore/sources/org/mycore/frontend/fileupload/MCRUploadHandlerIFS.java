@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUploadHandlerIFS.java,v $
- * $Revision: 1.4 $ $Date: 2006/06/09 08:22:55 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,11 +24,13 @@
 package org.mycore.frontend.fileupload;
 
 import java.io.InputStream;
-import java.util.Iterator;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
@@ -46,21 +48,21 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.4 $ $Date: 2006/06/09 08:22:55 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  * 
  * @see MCRUploadHandler
  */
 public class MCRUploadHandlerIFS extends MCRUploadHandler {
 
-    MCRDerivate derivate;
+    protected MCRDerivate derivate;
 
-    MCRDirectory rootDir;
+    protected MCRDirectory rootDir;
 
-    boolean newDerivate;
+    protected boolean newDerivate = true;
 
     private static final String ID_TYPE = "derivate";
 
-    private static final String PROJECT = MCRConfiguration.instance().getString("MCR.default_project_id", "MCR");
+    private static final String PROJECT = MCRConfiguration.instance().getString("MCR.SWF.Project.ID", "MCR");
 
     private static final Logger LOGGER = Logger.getLogger(MCRUploadHandlerIFS.class);
 
@@ -69,17 +71,23 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
     public MCRUploadHandlerIFS(String docId, String derId, String url) {
         super();
         this.url = url;
+        init(docId, derId);
+    }
 
+    protected void init(String docId, String derId) {
         if (derId == null) {
             // create new derivate
+            LOGGER.debug("derId=null create derivate with next free ID");
             createNewDerivate(docId, getFreeDerivateID());
         } else {
             if (MCRDerivate.existInDatastore(derId)) {
+                LOGGER.debug("Derivate allready exists: " + derId);
                 newDerivate = false;
                 derivate = new MCRDerivate();
                 derivate.receiveFromDatastore(derId);
             } else {
                 // create new derivate with given ID
+                LOGGER.debug("derId='" + derId + "' create derivate with that ID");
                 createNewDerivate(docId, new MCRObjectID(derId));
             }
         }
@@ -104,11 +112,13 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
      *            file name
      * @param checksum
      *            md5 checksum of of file
+     * @param length
+     *            the length of the file in bytes (file size)
      * 
      * @return true transfer file false don't send file
      * 
      */
-    public boolean acceptFile(String path, String checksum) throws Exception {
+    public boolean acceptFile(String path, String checksum, long length) throws Exception {
         MCRFilesystemNode child = rootDir.getChildByPath(path);
         if (!(child instanceof MCRFile)) {
             return true;
@@ -117,19 +127,18 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
         return !checksum.equals(file.getMD5());
     }
 
-    /**
-     * Store file in data store
-     * 
-     * @param path
-     *            file name
-     * @param in
-     *            InputStream belongs to socket, do not close!
-     * 
-     */
-    public synchronized void receiveFile(String path, InputStream in) throws Exception {
+    public synchronized long receiveFile(String path, InputStream in, long length, String md5) throws Exception {
         LOGGER.debug("adding file: " + path);
         MCRFile file = getNewFile(path);
         file.setContentFrom(in);
+
+        long myLength = file.getSize();
+        if (myLength >= length)
+            return myLength;
+        else {
+            file.delete(); // Incomplete file transfer, user canceled upload
+            return 0;
+        }
     }
 
     /**
@@ -139,10 +148,8 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
     public void finishUpload() throws Exception {
         String mainfile = getMainFilePath(rootDir);
         if (newDerivate) {
-            MCRDerivate derivate = new MCRDerivate();
-            derivate.receiveFromDatastore(this.derivate.getId());
             derivate.getDerivate().getInternals().setMainDoc(mainfile);
-            derivate.updateInDatastore();
+            derivate.updateXMLInDatastore();
             setDefaultPermissions(derivate.getId());
         } else {
             String mf = derivate.getDerivate().getInternals().getMainDoc();
@@ -159,16 +166,16 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
         return derivateID;
     }
 
-    private void createNewDerivate(String docId, MCRObjectID newDerID) {
+    protected void createNewDerivate(String docId, MCRObjectID newDerID) {
         newDerivate = true;
         derivate = new MCRDerivate();
         derivate.setId(newDerID);
-        String schema = CONFIG.getString("MCR.persistence_config_derivate", "datamodel-derivate.xml").replaceAll(".xml", ".xsd");
+        String schema = CONFIG.getString("MCR.Metadata.Config.derivate", "datamodel-derivate.xml").replaceAll(".xml", ".xsd");
         derivate.setSchema(schema);
         derivate.setLabel("data object from " + docId);
         // set link to Object
         MCRMetaLinkID linkId = new MCRMetaLinkID();
-        linkId.setSubTag("linkmetas");
+        linkId.setSubTag("linkmeta");
         linkId.setReference(docId, null, null);
         MCRMetaIFS ifs = new MCRMetaIFS();
         ifs.setSubTag("internal");
@@ -217,10 +224,10 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
         return rootDir;
     }
 
-    private static String getMainFilePath(MCRDirectory root) {
+    protected static String getMainFilePath(MCRDirectory root) {
         MCRDirectory parent = root;
         while (parent.hasChildren()) {
-            MCRFilesystemNode[] children = parent.getChildren();
+            MCRFilesystemNode[] children = parent.getChildren(MCRDirectory.SORT_BY_NAME);
             if (children[0] instanceof MCRDirectory) {
                 parent = (MCRDirectory) children[0];
             }
@@ -232,11 +239,11 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
         return "";
     }
 
-    private static void setDefaultPermissions(MCRObjectID derID) {
+    @SuppressWarnings("unchecked")
+    protected static void setDefaultPermissions(MCRObjectID derID) {
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-        List configuredPermissions = AI.getAccessPermissionsFromConfiguration();
-        for (Iterator it = configuredPermissions.iterator(); it.hasNext();) {
-            String permission = (String) it.next();
+        List<String> configuredPermissions = AI.getAccessPermissionsFromConfiguration();
+        for (String permission : configuredPermissions) {
             MCRAccessManager.addRule(derID, permission, MCRAccessManager.getTrueRule(), "default derivate rule");
         }
     }

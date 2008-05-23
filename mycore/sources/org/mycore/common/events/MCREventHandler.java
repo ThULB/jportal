@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREventHandler.java,v $
- * $Revision: 1.8 $ $Date: 2005/09/28 07:39:07 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,13 +30,13 @@ import org.mycore.common.MCRException;
  * event happens in MyCoRe. Implementing classes are registered using the
  * configuration property
  * 
- * MCR.EventHandler.[objType].X.class=[package and class name]
+ * MCR.EventHandler.[objType].X.Class=[package and class name]
  * 
  * where [objType] is the object type like "MCRObject" or "MCRFile" and X is a
  * number starting from 1. For event handlers that are indexers of the searcher
  * package, there is a special syntax
  * 
- * MCR.EventHandler.[objType].X.indexer=[searcherID]
+ * MCR.EventHandler.[objType].X.Indexer=[searcherID]
  * 
  * where [searcherID] is the ID of the searcher that also is an indexer. Event
  * handlers are called in the same order as they are registered in the

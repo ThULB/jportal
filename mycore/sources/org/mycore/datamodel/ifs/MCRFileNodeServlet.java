@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRFileNodeServlet.java,v $
- * $Revision: 1.43 $ $Date: 2006/11/27 12:33:29 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,8 +32,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Transaction;
 import org.jdom.Document;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -46,11 +48,12 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * the node is a MCRDirectory, the contents of that directory will be forwareded
  * to MCRLayoutService as XML data to display a detailed directory listing.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank LÃ¼tzenkirchen
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.43 $ $Date: 2006/11/27 12:33:29 $
+ * @version $Revision: 13085 $ $Date: 2008-01-14 11:02:17 +0000 (Mo, 14 Jan
+ *          2008) $
  */
 public class MCRFileNodeServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
@@ -62,7 +65,33 @@ public class MCRFileNodeServlet extends MCRServlet {
     // because in a case of MCRConfigurationException,
     // no Servlet will be instantiated, and thats more bad then a missing
     // property!
-    private static String accessErrorPage = CONFIG.getString("MCR.access_page_error", "");
+    private static String accessErrorPage = CONFIG.getString("MCR.Access.Page.Error", "");
+
+    @Override
+    protected long getLastModified(HttpServletRequest request) {
+        Transaction tx = null;
+        try {
+            String ownerID = getOwnerID(request);
+            tx = MCRHIBConnection.instance().getSession().beginTransaction();
+            MCRFilesystemNode root = MCRFilesystemNode.getRootNode(ownerID);
+            int pos = ownerID.length() + 1;
+            StringBuffer path = new StringBuffer(request.getPathInfo().substring(pos));
+            if ((path.charAt(path.length() - 1) == '/') && path.length() > 1) {
+                path.deleteCharAt(path.length() - 1);
+            }
+            MCRFilesystemNode node = ((MCRDirectory) root).getChildByPath(path.toString());
+            final long lastModified = node.getLastModified().getTimeInMillis();
+            tx.commit();
+            LOGGER.debug("getLastModified returned: " + lastModified);
+            return lastModified;
+        } catch (RuntimeException e) {
+            if (tx != null && tx.isActive())
+                tx.rollback();
+            // any error would let us return -1 here
+            LOGGER.info("Error while getting last modified date.", e);
+            return -1;
+        }
+    }
 
     /**
      * Handles the HTTP request
@@ -73,7 +102,7 @@ public class MCRFileNodeServlet extends MCRServlet {
         if (!isParametersValid(request, response)) {
             return;
         }
-        handleLocalRequest(request, response);
+        handleLocalRequest(job);
     }
 
     private boolean isParametersValid(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -96,7 +125,9 @@ public class MCRFileNodeServlet extends MCRServlet {
      * @throws IOException
      * @throws ServletException
      */
-    private void handleLocalRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void handleLocalRequest(MCRServletJob job) throws IOException {
+        HttpServletRequest request = job.getRequest();
+        HttpServletResponse response = job.getResponse();
         String ownerID = getOwnerID(request);
         // local node to be retrieved
         MCRFilesystemNode root;
@@ -125,7 +156,7 @@ public class MCRFileNodeServlet extends MCRServlet {
                 errorPage(request, response, HttpServletResponse.SC_NOT_FOUND, msg, new MCRException(msg), false);
                 return;
             }
-            sendFile(request, response, (MCRFile) root);
+            sendFile(job, (MCRFile) root);
             return;
         }
 
@@ -144,7 +175,7 @@ public class MCRFileNodeServlet extends MCRServlet {
             errorPage(request, response, HttpServletResponse.SC_NOT_FOUND, msg, new MCRException(msg), false);
             return;
         } else if (node instanceof MCRFile) {
-            sendFile(request, response, (MCRFile) node);
+            sendFile(job, (MCRFile) node);
             return;
         } else {
             sendDirectory(request, response, (MCRDirectory) node);
@@ -177,7 +208,9 @@ public class MCRFileNodeServlet extends MCRServlet {
      * parameters that contain the timecodes where to start and/or stop
      * streaming.
      */
-    private void sendFile(HttpServletRequest req, HttpServletResponse res, MCRFile file) throws IOException {
+    private void sendFile(MCRServletJob job, MCRFile file) throws IOException {
+        HttpServletRequest req = job.getRequest();
+        HttpServletResponse res = job.getResponse();
         if (!MCRAccessManager.checkPermissionForReadingDerivate(file.getOwnerID())) {
             LOGGER.info("MCRFileNodeServlet: AccessForbidden to " + file.getName());
             res.sendRedirect(res.encodeRedirectURL(getBaseURL() + accessErrorPage));
@@ -199,7 +232,8 @@ public class MCRFileNodeServlet extends MCRServlet {
         {
             res.setContentType(file.getContentType().getMimeType());
             res.setContentLength((int) (file.getSize()));
-
+            // no transaction needed to copy long streams over slow connections
+            job.commitTransaction();
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             file.getContentTo(out);
             out.close();
@@ -212,16 +246,34 @@ public class MCRFileNodeServlet extends MCRServlet {
     private void sendDirectory(HttpServletRequest req, HttpServletResponse res, MCRDirectory dir) throws IOException {
         LOGGER.info("MCRFileNodeServlet: Sending listing of directory " + dir.getName());
         Document jdom = MCRDirectoryXML.getInstance().getDirectoryXML(dir);
+        layoutDirectory(req, res, jdom);
+
+    }
+
+    /**
+     * Called to layout the directory structure
+     * 
+     * @author Robert Stephan
+     * @param req
+     *            the html request
+     * @param res
+     *            the html response
+     * @param jdom
+     *            the jdom document
+     * @throws IOException
+     * @see overwritten in JSPDocportal
+     */
+    protected void layoutDirectory(HttpServletRequest req, HttpServletResponse res, Document jdom) throws IOException {
         getLayoutService().doLayout(req, res, jdom);
     }
 
-    
-    /** 
-     *  Forwards the error to generate the output
-     *  @author A.Schaar
-     *  @see its overwritten in jspdocportal 
+    /**
+     * Forwards the error to generate the output
+     * 
+     * @author A.Schaar
+     * @see its overwritten in jspdocportal
      */
-    protected void errorPage ( HttpServletRequest req, HttpServletResponse res, int error, String msg, Exception ex, boolean xmlstyle)  throws IOException {
-        generateErrorPage(req, res, error,msg, ex, xmlstyle);    	    
+    protected void errorPage(HttpServletRequest req, HttpServletResponse res, int error, String msg, Exception ex, boolean xmlstyle) throws IOException {
+        generateErrorPage(req, res, error, msg, ex, xmlstyle);
     }
 }

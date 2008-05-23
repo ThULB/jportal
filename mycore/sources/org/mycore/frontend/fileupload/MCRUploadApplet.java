@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUploadApplet.java,v $
- * $Revision: 1.14 $ $Date: 2006/09/22 14:45:42 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,6 +23,7 @@
 
 package org.mycore.frontend.fileupload;
 
+import java.applet.AppletContext;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -32,10 +33,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JApplet;
@@ -44,7 +47,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
 
 /**
  * This applet displays a GUI to upload files and directories to the server.
@@ -54,9 +57,11 @@ import javax.swing.UIManager;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.14 $ $Date: 2006/09/22 14:45:42 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRUploadApplet extends JApplet {
+    private static final long serialVersionUID = -118475099247635561L;
+
     protected String uploadId;
 
     protected String peerURL;
@@ -71,33 +76,30 @@ public class MCRUploadApplet extends JApplet {
 
     protected JFileChooser locationChooser;
 
+    protected static File lastDirectory;
+
+    private static final File DRIVE_C = new File("C:\\");
+
     public void init() {
         uploadId = getParameter("uploadId");
         targetURL = getParameter("url");
         String httpSession = getParameter("httpSession");
-        peerURL = addSessionInfo(getParameter("ServletsBase") + "MCRUploadServlet",httpSession);
-        System.out.println("Will connect with: "+peerURL);
-        Color bg = getColorParameter("background-color");
-        System.out.println(bg.toString());
-        setBackground(bg);
+        peerURL = addSessionInfo(getParameter("ServletsBase") + "MCRUploadServlet", httpSession);
 
-        // TODO: Refactor parameters from web page
-        // TODO: Refactor thread handling
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            /*
-             * Comment cause it is a known bug with color under GTKLookAndFeel.
-             * This bug was found under Firefox 7.0.8 with JDK 1.4. The global
-             * color was not set in content too. 
-             */
-             /*
-             * if (System.getProperty("os.name","unknown").indexOf("Windows")>=0){
-             * UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); }
-             * else {
-             * UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel"); }
-             */
-        } catch (Exception ignored) {
-        }
+        // If true, applet allows to select multiple files and directories.
+        // If false, only a single file can be selected. Default is true.
+        boolean selectMultiple = !"false".equals(getParameter("selectMultiple"));
+
+        // List of file extensions to accept separated by comma or spaces,
+        // default is to accept all files
+        final String acceptFileTypes = getParameter("acceptFileTypes");
+
+        System.out.println("Will connect with: " + peerURL);
+        Color bg = getColorParameter("background-color");
+        System.out.println("Background color: " + bg.toString());
+        setBackground(bg);
+        setLocale();
+        System.out.println("Last working directory: " + ((lastDirectory == null) ? null : lastDirectory.getAbsolutePath()));
 
         chooserButton = new JButton(translateI18N("MCRUploadApplet.select"));
         chooserButton.addActionListener(new ActionListener() {
@@ -122,13 +124,35 @@ public class MCRUploadApplet extends JApplet {
         });
 
         locationChooser = new JFileChooser();
-        locationChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        locationChooser.setMultiSelectionEnabled(true);
+        locationChooser.setFileSelectionMode(selectMultiple ? JFileChooser.FILES_AND_DIRECTORIES : JFileChooser.FILES_ONLY);
+        locationChooser.setMultiSelectionEnabled(selectMultiple);
 
-        File c = new File("C:\\");
+        // Add a file filter to accept only files with certain extensions
+        if ((acceptFileTypes != null) && (acceptFileTypes.trim().length() > 0) && (!"*".equals(acceptFileTypes.trim()))) {
+            locationChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            locationChooser.setFileFilter(new FileFilter() {
+                Set accepted = new HashSet();
 
-        if (c.exists()) {
-            locationChooser.setCurrentDirectory(c);
+                public boolean accept(File f) {
+                    if (accepted.isEmpty()) {
+                        StringTokenizer st = new StringTokenizer(acceptFileTypes, " ,;");
+                        while (st.hasMoreTokens())
+                            accepted.add(st.nextToken());
+                    }
+                    String[] ext = f.getName().split("\\.");
+                    return accepted.contains(ext[ext.length - 1]);
+                }
+
+                public String getDescription() {
+                    return acceptFileTypes;
+                }
+            });
+        }
+
+        if (lastDirectory != null) {
+            locationChooser.setCurrentDirectory(lastDirectory);
+        } else if (DRIVE_C.exists()) {
+            locationChooser.setCurrentDirectory(DRIVE_C);
         }
 
         JPanel content = new JPanel();
@@ -183,6 +207,8 @@ public class MCRUploadApplet extends JApplet {
         int result = locationChooser.showDialog(this, translateI18N("MCRUploadApplet.choose"));
 
         if (result == JFileChooser.APPROVE_OPTION) {
+            System.out.println("Saving current working directory: " + locationChooser.getCurrentDirectory().getAbsolutePath());
+            lastDirectory = locationChooser.getCurrentDirectory();
             doUpload(locationChooser.getSelectedFiles());
         }
     }
@@ -198,15 +224,18 @@ public class MCRUploadApplet extends JApplet {
                 comm.uploadFiles(selectedFiles);
             }
         };
-
         th.start();
     }
 
     void returnToURL() {
         try {
-            getAppletContext().showDocument(new URL(targetURL));
-        } catch (MalformedURLException exc) {
-            System.out.println("MALFORMED URL: " + targetURL);
+            URL url = new URL(targetURL);
+            AppletContext context = this.getAppletContext();
+            context.showDocument(url);
+        } catch (Exception exc) {
+            System.out.println("Unable to return to URL " + targetURL);
+            System.out.println(exc.getMessage());
+            exc.printStackTrace();
         }
     }
 
@@ -221,9 +250,8 @@ public class MCRUploadApplet extends JApplet {
     private final String translateI18N(String label) {
         String result;
         Locale currentLocale = getLocale();
-        ResourceBundle message = ResourceBundle.getBundle("messages", new Locale(currentLocale.getLanguage()));
-
         try {
+            ResourceBundle message = ResourceBundle.getBundle("messages", currentLocale);
             result = message.getString(label);
         } catch (java.util.MissingResourceException mre) {
             result = "???" + label + "???";
@@ -236,12 +264,14 @@ public class MCRUploadApplet extends JApplet {
     private final Color getColorParameter(String name) {
         String value = getParameter(name);
         if (value == null) {
-            return null;
+            System.err.println("Did not find color parameter: " + name);
+            return Color.WHITE; // as a default if parameter is missing
         }
         int rgbValue;
         try {
             rgbValue = Integer.parseInt(value.substring(1), 16);
         } catch (NumberFormatException e) {
+            System.err.println("Color parameter " + name + " has no valid value: " + value);
             // in this case return red
             return new Color((float) 1.0, (float) 0.0, (float) 0.0);
         }
@@ -249,7 +279,7 @@ public class MCRUploadApplet extends JApplet {
     }
 
     private String addSessionInfo(String url, String sessionId) {
-    
+
         if ((url == null) || (sessionId == null)) {
             return url;
         }
@@ -265,6 +295,13 @@ public class MCRUploadApplet extends JApplet {
         sb.append(sessionId);
         sb.append(query);
         return sb.toString();
+    }
+
+    private void setLocale() {
+        String value = getParameter("locale");
+        if (value != null) {
+            setLocale(new Locale(value));
+        }
     }
 
 }

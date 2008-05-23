@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRZipServlet.java,v $
- * $Revision: 1.15 $ $Date: 2006/11/27 12:32:06 $
+ * 
+ * $Revision: 13320 $ $Date: 2008-03-25 14:45:08 +0100 (Di, 25 MÃ¤r 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -55,7 +55,7 @@ import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
@@ -73,13 +73,13 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * 
  * @author Heiko Helmbrecht
  * 
- * @version $Revision: 1.15 $ $Date: 2006/11/27 12:32:06 $
+ * @version $Revision: 13320 $ $Date: 2008-03-25 14:45:08 +0100 (Di, 25 MÃ¤r 2008) $
  */
 public class MCRZipServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
     // The Log4J logger
     private static Logger LOGGER = Logger.getLogger(MCRZipServlet.class.getName());
-    private static String accessErrorPage = CONFIG.getString("MCR.access_page_error");
+    private static String accessErrorPage = CONFIG.getString("MCR.Access.Page.Error");
 
     protected MCRXMLTableManager xmltable = null;
 
@@ -159,7 +159,7 @@ public class MCRZipServlet extends MCRServlet {
                 out.close();
             }
         } catch (Exception e) {
-            String msg = "Das Zip-File konnte nicht ordnungsgemäss erstellt werden, " + "Bitte überprüfen Sie die eingegebenen Parameter";
+            String msg = "Das Zip-File konnte nicht ordnungsgemï¿½ss erstellt werden, " + "Bitte ï¿½berprï¿½fen Sie die eingegebenen Parameter";
             res.reset();
             generateErrorPage(req, res, HttpServletResponse.SC_BAD_REQUEST, msg, new MCRException("zip-Error!",e), false);
         }

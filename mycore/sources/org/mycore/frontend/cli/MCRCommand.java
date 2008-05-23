@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCommand.java,v $
- * $Revision: 1.10 $ $Date: 2005/09/30 11:43:20 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,6 +29,8 @@ import java.text.Format;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.mycore.common.MCRConfigurationException;
@@ -42,7 +44,7 @@ import org.mycore.common.MCRConfigurationException;
  * 
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.10 $ $Date: 2005/09/30 11:43:20 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRCommand {
     /** The input format used for invoking this command */
@@ -99,12 +101,13 @@ public class MCRCommand {
 
             if (token.equals("int")) {
                 parameterTypes[i] = Integer.TYPE;
-                f = NumberFormat.getNumberInstance();
+                f = NumberFormat.getIntegerInstance();
             } else if (token.equals("String")) {
                 parameterTypes[i] = String.class;
                 f = null;
             } else {
-                throw new MCRConfigurationException("Error while parsing command definitions for command line interface:\n" + "Unsupported argument type '" + token + "' in command " + methodSignature);
+                throw new MCRConfigurationException("Error while parsing command definitions for command line interface:\n" + "Unsupported argument type '"
+                        + token + "' in command " + methodSignature);
             }
 
             messageFormat.setFormat(i, f);
@@ -129,9 +132,9 @@ public class MCRCommand {
      * @throws NoSuchMethodException
      *             When the method specified in the constructor was not found
      */
-    protected Method getMethod() throws ClassNotFoundException, NoSuchMethodException {
+    protected Method getMethod(ClassLoader classLoader) throws ClassNotFoundException, NoSuchMethodException {
         if (method == null) {
-            method = Class.forName(className).getMethod(methodName, parameterTypes);
+            method = Class.forName(className, true, classLoader).getMethod(methodName, parameterTypes);
         }
 
         return method;
@@ -178,9 +181,8 @@ public class MCRCommand {
 
         for (int i = 0; i < numParameters; i++) {
             if (parameterTypes[i] == Integer.TYPE) {
-                parameters[i] = new Integer(((Number) commandParameters[j]).intValue());
+                parameters[i] = ((Number) commandParameters[j]).intValue();
                 j++;
-
                 continue;
             }
 
@@ -200,8 +202,10 @@ public class MCRCommand {
      * given the user input from the command line. This is only done when the
      * command line syntax matches the syntax used by this command.
      * 
-     * @return true, if the command syntax matched and the command was invoked,
-     *         false otherwise
+     * @return null, if the command syntax did not match and the command was not
+     *         invoked, otherwise a List of commands is returned which may be
+     *         empty or otherwise contains commands that should be processed
+     *         next
      * @param input
      *            The command entered by the user at the command prompt
      * @throws IllegalAccessException
@@ -213,20 +217,28 @@ public class MCRCommand {
      * @throws NoSuchMethodException
      *             when the method specified does not exist
      */
-    public boolean invoke(String input) throws IllegalAccessException, InvocationTargetException, ClassNotFoundException, NoSuchMethodException {
+    public List<String> invoke(String input) throws IllegalAccessException, InvocationTargetException, ClassNotFoundException, NoSuchMethodException {
+        return invoke(input, MCRCommand.class.getClassLoader());
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<String> invoke(String input, ClassLoader classLoader) throws IllegalAccessException, InvocationTargetException, ClassNotFoundException,
+            NoSuchMethodException {
         if (!input.startsWith(suffix)) {
-            return false;
+            return null;
         }
 
         Object[] commandParameters = parseCommandLine(input);
 
         if (commandParameters == null) {
-            return false;
+            return null;
         }
 
-        getMethod().invoke(null, buildInvocationParameters(commandParameters));
-
-        return true;
+        Object result = getMethod(classLoader).invoke(null, buildInvocationParameters(commandParameters));
+        if ((result instanceof List) && (!((List) result).isEmpty()) && (((List) result).get(0) instanceof String))
+            return (List<String>) result;
+        else
+            return new ArrayList<String>();
     }
 
     /**

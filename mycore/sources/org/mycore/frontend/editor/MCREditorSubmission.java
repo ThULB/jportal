@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREditorSubmission.java,v $
- * $Revision: 1.17 $ $Date: 2006/11/20 15:38:13 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.jdom.xpath.XPath;
  * HTML page that contains a MyCoRe XML editor form.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.17 $ $Date: 2006/11/20 15:38:13 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCREditorSubmission {
     private final static Logger LOGGER = Logger.getLogger(MCREditorSubmission.class);
@@ -66,7 +66,13 @@ public class MCREditorSubmission {
     private MCRRequestParameters parms;
 
     private Document xml;
+    
+    private String rootName;
 
+    private final static String ATTR_SEP = "__";
+    private final static String BLANK = " ";
+    private final static String BLANK_ESCAPED = "_-_";
+    
     /**
      * Set variables from source xml file that should be edited
      * 
@@ -77,30 +83,41 @@ public class MCREditorSubmission {
      */
     MCREditorSubmission(Element input, Element editor) {
         buildAttribTable(editor);
+        rootName = input.getName();
         setVariablesFromXML("", input, new Hashtable());
         setRepeatsFromVariables();
     }
 
     MCREditorSubmission(MCRRequestParameters parms, Element editor, boolean validate) {
         this.parms = parms;
-        setVariablesFromSubmission(parms, editor, validate);
+        rootName = parms.getParameter( "_root" );
+        setVariablesFromSubmission(parms, editor);
         Collections.sort(variables);
         setRepeatsFromSubmission();
+        if (validate) 
+            validate(parms, editor);
     }
 
-    MCREditorSubmission(Element saved, List submitted, String root, String varpath) {
+    MCREditorSubmission(Element saved, List submitted, String root, MCRRequestParameters parms) {
         Element input = saved.getChild("input");
         List children = input.getChildren();
+        
+        String varpath = parms.getParameter("subselect.varpath");
+        boolean merge = "true".equals( parms.getParameter("subselect.merge") );
 
+        Hashtable<String,String> table = new Hashtable<String,String>(); 
+        
         for (int i = 0; i < children.size(); i++) {
             Element var = (Element) (children.get(i));
             String path = var.getAttributeValue("name");
             String value = var.getAttributeValue("value");
-
-            if (path.equals(varpath) || path.startsWith(varpath + "/")) {
-                continue;
-            }
-            addVariable(path, value);
+            
+            if( merge )
+              table.put( path, value );
+            else if (path.equals(varpath) || path.startsWith(varpath + "/"))
+              continue;
+            else
+              table.put( path, value );
         }
 
         for (int i = 0; i < submitted.size(); i++) {
@@ -108,13 +125,37 @@ public class MCREditorSubmission {
             String path = var.getPath();
             String value = var.getValue();
             path = varpath + path.substring(root.length());
-            addVariable(path, value);
+            table.put( path, value );
+        }
+        
+        for( Iterator<String> it = table.keySet().iterator(); it.hasNext(); )
+        {
+          String path = it.next();
+          String value = table.get( path );
+          addVariable(path, value);
         }
 
         Collections.sort(variables);
         setRepeatsFromVariables();
     }
 
+    MCREditorSubmission( Element editor )
+    {
+      Element input = editor.getChild( "input" );
+      List children = input.getChildren();
+
+      for( int i = 0; i < children.size(); i++ )
+      {
+        Element var = (Element)( children.get( i ) );
+        String path = var.getAttributeValue( "name" );
+        String value = var.getAttributeValue( "value" );
+        addVariable( path, value );
+      }
+
+      Collections.sort( variables );
+      setRepeatsFromVariables();
+    }
+    
     private void setVariablesFromXML(String prefix, Element element, Hashtable predecessors) {
         String key = element.getName();
         setVariablesFromXML(prefix, key, element, predecessors);
@@ -123,10 +164,10 @@ public class MCREditorSubmission {
         for (int i = 0; i < attributes.size(); i++) {
             Attribute attribute = (Attribute) (attributes.get(i));
             String name = attribute.getName();
-            String value = attribute.getValue();
+            String value = attribute.getValue().replace(BLANK,BLANK_ESCAPED);
             if ((value == null) || (value.length() == 0))
                 continue;
-            key = element.getName() + "__" + name + "__" + value;
+            key = element.getName() + ATTR_SEP + name + ATTR_SEP + value;
             if (constraints.containsKey(key))
                 setVariablesFromXML(prefix, key, element, predecessors);
         }
@@ -179,16 +220,16 @@ public class MCREditorSubmission {
                 int pos3 = var.indexOf("]", pos2);
                 String name = var.substring(0, pos1).trim();
                 String attr = var.substring(pos1 + 2, pos2).trim();
-                String value = var.substring(pos2 + 2, pos3 - 1).trim();
+                String value = var.substring(pos2 + 2, pos3 - 1).trim().replace(BLANK,BLANK_ESCAPED);
                 if (name.indexOf("/") >= 0)
                     name = name.substring(name.lastIndexOf("/") + 1).trim();
-                String key = name + "__" + attr + "__" + value;
+                String key = name + ATTR_SEP + attr + ATTR_SEP + value;
                 constraints.put(key, value);
             }
         }
     }
 
-    private void setVariablesFromSubmission(MCRRequestParameters parms, Element editor, boolean validate) {
+    private void setVariablesFromSubmission(MCRRequestParameters parms, Element editor) {
         for (Enumeration e = parms.getParameterNames(); e.hasMoreElements();) {
             String name = (String) (e.nextElement());
 
@@ -259,10 +300,6 @@ public class MCREditorSubmission {
                     files.add(file);
                 }
             }
-        }
-
-        if (validate) {
-            validate(parms, editor);
         }
     }
 
@@ -391,7 +428,7 @@ public class MCREditorSubmission {
                             LOGGER.debug(pathA + " " + oper + " " + pathB);
                             LOGGER.debug(cond);
                         }
-                    } else {
+                    } else if (condition.getAttribute("field1") == null) {
                         Element current = null;
 
                         try {
@@ -574,8 +611,11 @@ public class MCREditorSubmission {
     }
 
     private void buildTargetXML() {
-        MCREditorVariable first = (MCREditorVariable) (variables.get(0));
-        Element root = new Element(first.getPathElements()[0]);
+        Element root;
+        if( variables.size() > 0 )
+          root = new Element(((MCREditorVariable)(variables.get(0))).getPathElements()[0]);
+        else
+          root = new Element(rootName.replace("/",""));
 
         for (int i = 0; i < variables.size(); i++) {
             MCREditorVariable var = (MCREditorVariable) (variables.get(i));
@@ -607,11 +647,12 @@ public class MCREditorSubmission {
                 parent.addContent(var.getValue());
                 node = parent;
             } else {
+                LOGGER.debug( "Setting attribute " + var.getPath() + " = " + var.getValue() );
                 parent.setAttribute(var.getAttributeName(), var.getValue());
                 node = parent.getAttribute(var.getAttributeName());
             }
 
-            FileItem file = parms.getFileItem(var.getPath());
+            FileItem file = ( parms == null ? null : parms.getFileItem(var.getPath()) );
 
             if (file != null) {
                 file2node.put(file, node);
@@ -632,12 +673,12 @@ public class MCREditorSubmission {
             element.setName(name);
         }
 
-        pos = name.indexOf("__");
+        pos = name.indexOf(ATTR_SEP);
         if (pos > 0) {
             element.setName(name.substring(0, pos));
-            int pos2 = name.indexOf("__", pos + 2);
+            int pos2 = name.indexOf(ATTR_SEP, pos + 2);
             String attr = name.substring(pos + 2, pos2);
-            String val = name.substring(pos2 + 2);
+            String val = name.substring(pos2 + 2).replace(BLANK_ESCAPED,BLANK);
             element.setAttribute(attr, val);
         }
 

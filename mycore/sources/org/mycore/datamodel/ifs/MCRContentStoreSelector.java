@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRContentStoreSelector.java,v $
- * $Revision: 1.6 $ $Date: 2005/09/28 07:40:24 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.6 $ $Date: 2005/09/28 07:40:24 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public interface MCRContentStoreSelector {
     /**

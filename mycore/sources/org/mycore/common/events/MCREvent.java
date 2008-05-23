@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREvent.java,v $
- * $Revision: 1.10 $ $Date: 2006/02/03 12:43:29 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,9 +30,14 @@ package org.mycore.common.events;
  * Events are automatically created by some MyCoRe components and are forwarded
  * to the handlers by MCREventManager.
  * 
- * @author Frank L�tzenkirchen
+ * @author Frank Luetzenkirchen
  */
 public class MCREvent extends java.util.Hashtable {
+    /**
+     * Default version ID
+     */
+    private static final long serialVersionUID = 1L;
+
     /** Pre-defined event types * */
     final static public String CREATE_EVENT = "create";
 
@@ -42,17 +47,13 @@ public class MCREvent extends java.util.Hashtable {
 
     final static public String REPAIR_EVENT = "repair";
 
-    final static public String RECEIVE_EVENT = "receive";
-
-    final static public String EXIST_EVENT = "exist";
-
-    final static public String LISTIDS_EVENT = "listids";
-
     final static public String OBJECT_TYPE = "MCRObject";
 
     final static public String DERIVATE_TYPE = "MCRDerivate";
 
     final static public String FILE_TYPE = "MCRFile";
+
+    final static public String CLASS_TYPE = "MCRClassification";
 
     /** The object type like object or file * */
     private String objType;

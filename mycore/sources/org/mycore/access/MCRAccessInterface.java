@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRAccessInterface.java,v $
- * $Revision: 1.15 $ $Date: 2006/02/16 13:43:23 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,18 +27,48 @@ import java.util.List;
 import org.jdom.Element;
 
 import org.mycore.common.MCRException;
-import org.mycore.user2.MCRUser;
+import org.mycore.user.MCRUser;
 
 /**
  * This serves as an interface to an underlying access controll system.
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.15 $ $Date: 2006/02/16 13:43:23 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  * @since 1.3
  */
 public interface MCRAccessInterface {
-
+    
+    /**
+     * create an access rule in the rulestore using an rule string in plain text
+     * 
+     * @param rule
+     *              the rule string in plain text
+     * @param creator
+     * @param description
+     *              a String description of the rule in prosa 
+     */
+    public void createRule(String rule, String creator, String description);
+    
+    /**
+     * create an access rule in the rulestore using an rule string in plain text
+     * 
+     * @param rule
+     *              the rule string as xml
+     * @param creator
+     * @param description
+     *              a String description of the rule in prosa 
+     */
+    public void createRule(Element rule, String creator, String description);
+    
+    /**
+     * generate rule string from xml
+     * 
+     * @param rule
+     * @return
+     */
+    public String getNormalizedRuleString(Element rule);
+    
     /**
      * adds an access rule for an ID to an access system. The parameter
      * <code>id</code> serves as an identifier for the concrete underlying

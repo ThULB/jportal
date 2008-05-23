@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRAVExtVideoCharger.java,v $
- * $Revision: 1.10 $ $Date: 2006/09/25 16:14:01 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,7 +51,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * This class also provides a method to list all assets in a VideoCharger store.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.10 $ $Date: 2006/09/25 16:14:01 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRAVExtVideoCharger extends MCRAudioVideoExtender {
     /** The logger */
@@ -64,7 +64,7 @@ public class MCRAVExtVideoCharger extends MCRAudioVideoExtender {
         String prefix = "MCR.IFS.AVExtender." + storeID + ".";
 
         MCRConfiguration CONFIG = MCRConfiguration.instance();
-        encoding = CONFIG.getString("MCR.request_charencoding", "UTF-8"); 
+        encoding = CONFIG.getString("MCR.Request.CharEncoding", "UTF-8"); 
         baseMetadata = CONFIG.getString(prefix + "VSListURL");
         playerDownloadURL = CONFIG.getString(prefix + "PlayerURL");
         basePlayerStarter = CONFIG.getString(prefix + "ISCPFSelURL");
@@ -84,7 +84,7 @@ public class MCRAVExtVideoCharger extends MCRAudioVideoExtender {
         try {
             assetID = URLEncoder.encode(file.getStorageID(), encoding);
         } catch (UnsupportedEncodingException e) {
-            throw new MCRPersistenceException("MCR.request_charencoding property does not contain a valid encoding:", e);
+            throw new MCRPersistenceException("MCR.Request.CharEncoding property does not contain a valid encoding:", e);
         }
 
         try {

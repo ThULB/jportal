@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRDerivate.java,v $
- * $Revision: 1.51 $ $Date: 2006/11/25 23:32:50 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,6 +35,8 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
 import org.mycore.common.xml.MCRXMLHelper;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFileImportExport;
 
@@ -45,7 +47,7 @@ import org.mycore.datamodel.ifs.MCRFileImportExport;
  * user application.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.51 $ $Date: 2006/11/25 23:32:50 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 final public class MCRDerivate extends MCRBase {
     /**
@@ -214,6 +216,10 @@ final public class MCRDerivate extends MCRBase {
         if (!isValid()) {
             throw new MCRPersistenceException("The derivate " + mcr_id.getId() + " is not valid.");
         }
+        String objid = mcr_derivate.getMetaLink().getXLinkHref();
+        if (!MCRXMLTableManager.instance().exist(new MCRObjectID(objid))) {
+            throw new MCRPersistenceException("The derivate " + mcr_id.getId() + " can't find metadata object " + objid + ", nothing done.");
+        }
 
         // prepare the derivate metadata and store under the XML table
         if (mcr_service.getDate("createdate") == null || !importMode) {
@@ -234,7 +240,7 @@ final public class MCRDerivate extends MCRBase {
         MCRMetaLinkID der = new MCRMetaLinkID();
         der.setReference(mcr_id.getId(), mcr_label, "");
         der.setSubTag("derobject");
-        byte[] backup = MCRXMLTableManager.instance().retrieve(meta.getXLinkHrefID());
+        byte[] backup = MCRXMLTableManager.instance().retrieveAsXML(meta.getXLinkHrefID());
 
         try {
             MCRObject obj = new MCRObject();
@@ -332,8 +338,8 @@ final public class MCRDerivate extends MCRBase {
                 MCRObject obj = new MCRObject();
                 obj.removeDerivateInDatastore(meta, mcr_id.getId());
                 LOGGER.info("Link in MCRObject " + meta + " to MCRDerivate " + mcr_id.getId() + " is deleted.");
-            } catch (MCRException e) {
-                LOGGER.warn("Error while delete link for MCRDerivate " + mcr_id.getId() + "from MCRObject " + meta + ".");
+            } catch (Exception e) {
+                LOGGER.warn("Can't delete link for MCRDerivate " + mcr_id.getId() + " from MCRObject " + meta + ". Error ignored.");
             }
         }
 
@@ -379,16 +385,7 @@ final public class MCRDerivate extends MCRBase {
      *                if a persistence problem is occured
      */
     public final static boolean existInDatastore(MCRObjectID id) throws MCRPersistenceException {
-        // handle events
-        MCREvent evt = new MCREvent(MCREvent.DERIVATE_TYPE, MCREvent.EXIST_EVENT);
-        evt.put("objectID", id);
-        MCREventManager.instance().handleEvent(evt);
-        boolean ret = false;
-        try {
-            ret = Boolean.valueOf((String) evt.get("exist")).booleanValue();
-        } catch (RuntimeException e) {
-        }
-        return ret;
+        return MCRXMLTableManager.instance().exist(id);
     }
 
     /**
@@ -428,7 +425,7 @@ final public class MCRDerivate extends MCRBase {
      * @exception MCRPersistenceException
      *                if a persistence problem is occured
      */
-    public final byte[] receiveXMLFromDatastore(String id) throws MCRPersistenceException {
+    public static final byte[] receiveXMLFromDatastore(String id) throws MCRPersistenceException {
         return receiveXMLFromDatastore(new MCRObjectID(id));
     }
 
@@ -442,18 +439,8 @@ final public class MCRDerivate extends MCRBase {
      * @exception MCRPersistenceException
      *                if a persistence problem is occured
      */
-    public final byte[] receiveXMLFromDatastore(MCRObjectID id) throws MCRPersistenceException {
-        // handle events
-        MCREvent evt = new MCREvent(MCREvent.DERIVATE_TYPE, MCREvent.RECEIVE_EVENT);
-        evt.put("objectID", id);
-        MCREventManager.instance().handleEvent(evt);
-        byte[] xml = null;
-        try {
-            xml = (byte[]) evt.get("xml");
-        } catch (RuntimeException e) {
-            throw new MCRPersistenceException("The XML file for ID " + mcr_id.getId() + " was not retrieved.", e);
-        }
-        return xml;
+    public static final byte[] receiveXMLFromDatastore(MCRObjectID id) throws MCRPersistenceException {
+        return MCRXMLTableManager.instance().retrieveAsXML(id);
     }
 
     /**
@@ -492,7 +479,7 @@ final public class MCRDerivate extends MCRBase {
 
         try {
             old.receiveFromDatastore(mcr_id.getId());
-        } catch (MCRException e) {
+        } catch (Exception e) {
             createInDatastore();
             return;
         }

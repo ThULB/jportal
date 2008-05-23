@@ -25,6 +25,7 @@
 package org.mycore.services.oai;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,11 +34,16 @@ import org.jdom.Attribute;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+
+import org.mycore.access.MCRAccessInterface;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
-import org.mycore.datamodel.classifications.MCRCategoryItem;
-import org.mycore.datamodel.classifications.MCRClassificationItem;
-import org.mycore.datamodel.metadata.MCRLinkTableManager;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.classifications2.utils.MCRCategoryTransformer;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCROrCondition;
@@ -74,7 +80,7 @@ public class MCROAIQueryImpl implements MCROAIQuery {
 
     private String lastQuery = "";
 
-    private Object[] resultArray;
+    private List resultArray;
 
     /**
      * Method MCROAIQueryService.
@@ -100,83 +106,38 @@ public class MCROAIQueryImpl implements MCROAIQuery {
      * @param classificationId
      * @param instance
      *            the Servletinstance
-     * @return List A list that contains an array of three Strings: the category
+     * @return List a list that contains an array of three Strings: the category
      *         id, the label and a description
      */
-    public List listSets(String instance) {
-        String[] classification = MCROAIProvider.getConfigBean(instance).getClassificationIDs();
-        List list = new ArrayList();
-        for (int i = 0; i < classification.length; i++) {
-            MCRClassificationItem repository = MCRClassificationItem.getClassificationItem(classification[i]);
-            MCRCategoryItem[] children = repository.getChildren();
-            logger.debug("ClassificationItem " + repository.getClassificationID() + " hat " + children.length + " Kinder.");
-            if ((repository != null) && (repository.hasChildren())) {
-                logger.debug("ClassificationItem hat " + repository.getNumChildren() + " Kinder.");
-                List newSets =getSets(repository.getChildren(), "", instance);
-                if (newSets.size()>0){
-                	list.addAll(newSets);
-                	if(repository.getLangArray().contains("x-dini")){
-                    	String[] set = new String[3];
-                    	set[0]= repository.getText("x-dini");
-                    	set[1]=repository.getText("x-dini");
-                    	set[2]=repository.getDescription("x-dini");
-                    	list.add(set);
-                    }
-                }	
-            }
+    public List<String[]> listSets(String instance) {
+        String[] classifications = MCROAIProvider.getConfigBean(instance).getClassificationIDs();
+        List<String[]> list = new ArrayList<String[]>();
+        for (int i = 0; i < classifications.length; i++) {
+            MCRCategory cl = MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.rootID(classifications[i]), -1);
+            list.addAll(addXDINI(cl.getChildren()));
         }
-
         return list;
     }
 
-    /**
-     * Method getSets. Creates a <i>list </i> from an Array of Sets
-     * 
-     * @param categories
-     *            The categories to extract the information from.
-     * @param parentSpec
-     *            The setSpec of the parent set.
-     * @param instance
-     *            the Servletinstance
-     * @return List A list that contains an array of three Strings: the category
-     *         id, the label and a description
-     */
-    private List getSets(MCRCategoryItem[] categories, String parentSpec, String instance) {
-        
-    	List newList = new ArrayList();
-
-        for (int i = 0; i < categories.length; i++) {
-            String[] set = new String[3];
-//          added DINI (OAI) Support
-            if(categories[i].getLangArray().contains("x-dini")){
-               	//ignore parentSpec, since it is specified in the label
-            	set[0] = new String(categories[i].getText("x-dini"));
-            	
+    private List<String[]> addXDINI(List<MCRCategory> categories) {
+        ArrayList<String[]> ar = new ArrayList<String[]>();
+        if (categories == null)
+            return ar;
+        for (int i = 0; i < categories.size(); i++) {
+            MCRCategory category = (MCRCategory) categories.get(i);
+            Collection<org.mycore.datamodel.classifications2.MCRLabel> labels = category.getLabels().values();
+            for (MCRLabel label : labels) {
+                if ("x-dini".equals(label.getLang())) {
+                    String[] set = new String[3];
+                    set[0] = label.getText();
+                    set[1] = label.getText();
+                    set[2] = label.getDescription();
+                    ar.add(set);
+                }
             }
-            else{
-            	set[0] = new String(parentSpec + categories[i].getID());	
-            }            
-            set[1] = new String(categories[i].getText("en"));
-            set[2] = new String(categories[i].getDescription("en"));
-
-            if (categories[i].hasChildren()) {
-            	logger.debug("Kategorie " + categories[i].getID() + " hat " + categories[i].getNumChildren() + " Kinder.");
-                newList.addAll(getSets(categories[i].getChildren(), set[0] + ":", instance));
-            }
-
-            // We should better have a look if the set is empty...
-            MCRLinkTableManager ltm = MCRLinkTableManager.instance();
-            int numberOfLinks = ltm.countReferenceCategory(categories[i].getClassificationID(), categories[i].getID());
-
-            if (numberOfLinks > 0) {
-            	if(!set[0].equals("")){ //emtpy - dini - attributes shall be ignored
-            		newList.add(set);
-            		logger.debug("Der Gruppenliste wurde der Datensatz " + set[0] + " hinzugefügt.");
-            	}
-            }
+            ar.addAll(addXDINI(category.getChildren()));
         }
-
-        return newList;
+        return ar;
     }
 
     /**
@@ -230,12 +191,12 @@ public class MCROAIQueryImpl implements MCROAIQuery {
 
         String[] identifier = MCROAIProvider.getHeader(object, id, repositoryId, instance);
         list.add(identifier);
-        logger.debug("Identifier hinzugefügt");
+        logger.debug("Identifier hinzugefuegt");
 
         Element eMetadata = (Element) object.createXML().getRootElement().clone();
 
         list.add(eMetadata);
-        logger.debug("Metadaten hinzugefügt");
+        logger.debug("Metadaten hinzugefuegt");
 
         return list;
     }
@@ -266,7 +227,7 @@ public class MCROAIQueryImpl implements MCROAIQuery {
 
         if (hasMore() && ((listRecords == lastQuery.equals("listRecords")) || (!listRecords == lastQuery.equals("listIdentifiers")))) {
             for (int i = deliveredResults; i < Math.min(maxReturns + deliveredResults, numResults); i++) {
-                list.add(resultArray[i]);
+                list.add(resultArray.get(i));
             }
             deliveredResults = Math.min(maxReturns + deliveredResults, numResults);
             return list;
@@ -291,12 +252,14 @@ public class MCROAIQueryImpl implements MCROAIQuery {
         for (Iterator it = searchFields.iterator(); it.hasNext();) {
             String searchField = (String) it.next();
             MCRFieldDef field = MCRFieldDef.getDef(searchField);
-            if (set == null) {
-                cOr.addChild(new MCRQueryCondition(field, "like", ""));
-            } else {
-                String categoryId = set[0].substring(set[0].lastIndexOf(':') + 1);
-                cOr.addChild(new MCRQueryCondition(field, "like", categoryId));
-                generateQueryForDiniLabels(cOr, searchField, set[0], instance);
+            if (field != null) {
+                if (set == null) {
+                    cOr.addChild(new MCRQueryCondition(field, "like", ""));
+                } else {
+                    String categoryId = set[0].substring(set[0].lastIndexOf(':') + 1);
+                    cOr.addChild(new MCRQueryCondition(field, "like", categoryId));
+                    generateQueryForDiniLabels(cOr, searchField, set[0], instance);
+                }
             }
         }
         if ((cOr.getChildren() != null) && (cOr.getChildren().size() > 0)) {
@@ -320,16 +283,24 @@ public class MCROAIQueryImpl implements MCROAIQuery {
         logger.debug("OAI-QUERY:" + cAnd);
         MCRResults results = MCRQueryManager.search(query);
 
-        numResults = results.getNumHits();
-        resultArray = new Object[numResults];
-        logger.debug("OAIQuery found:" + numResults + " hits");
+        int resultCount = results.getNumHits();
+        resultArray = new ArrayList();
+        MCRAccessInterface access = MCRAccessManager.getAccessImpl();
+        for (int i = 0; i < resultCount; i++) {
+            String objectID = results.getHit(i).getID();
+            if (access.checkPermission(objectID, "read")) {
+                resultArray.add(objectID);
+            }
+        }
+        numResults = resultArray.size();
+
+        logger.debug("OAIQuery found:" + resultCount + " hits");
+        logger.debug(numResults + " hits are publically accessable");
         deliveredResults = Math.min(maxReturns, numResults);
         logger.debug("deliveredResults:" + deliveredResults);
-        for (int i = 0; i < numResults; i++) {
-            resultArray[i] = results.getHit(i).getID();
-        }
+
         for (int i = 0; i < deliveredResults; i++) {
-            list.add(resultArray[i]);
+            list.add(resultArray.get(i));
         }
 
         return list;
@@ -361,32 +332,32 @@ public class MCROAIQueryImpl implements MCROAIQuery {
         resultArray = null;
         lastQuery = query;
     }
-    
-    private void generateQueryForDiniLabels(MCROrCondition cOr,
-			String searchField, String set, String instance) {
-		//expected searchfields:  "format",  "type",      "subject"
-		//mapping to DINI sets:   "doc-type", "pub-type", "ddc"
-		MCRFieldDef field = MCRFieldDef.getDef(searchField);
 
-		String[] classification = MCROAIProvider.getConfigBean(instance)
-				.getClassificationIDsForSearchField(searchField);
+    private void generateQueryForDiniLabels(MCROrCondition cOr, String searchField, String set, String instance) {
+        // expected searchfields: "format", "type", "subject"
+        // mapping to DINI sets: "doc-type", "pub-type", "ddc"
+        MCRFieldDef field = MCRFieldDef.getDef(searchField);
 
-		for (int i = 0; i < classification.length; i++) {
-			MCRClassificationItem repository = MCRClassificationItem.getClassificationItem(classification[i]);
-			org.jdom.Document jDomDoc = repository.receiveClassificationAsJDOM();
-			try {
-				//could be improved: return only <label> under a <categegory> but //category/label[..] does not work here
-				XPath xpathExpr = XPath.newInstance("//label[@xml:lang='x-dini' and @text='"+ set + "']/..//@ID");
-				List resultList = xpathExpr.selectNodes(jDomDoc);
-				for (int j = 0; j < resultList.size(); j++) {
-					if (resultList.get(j) instanceof Attribute) {
-						cOr.addChild(new MCRQueryCondition(field, "like", ((Attribute) resultList.get(j)).getValue()));
-					}
-				}
-			} catch (JDOMException e) {
-				logger.error(e);
-			}
+        String[] classification = MCROAIProvider.getConfigBean(instance).getClassificationIDsForSearchField(searchField);
 
-		}
-	}
+        for (int i = 0; i < classification.length; i++) {
+            //TODO: maybe query this directly from backend
+            MCRCategory cl=MCRCategoryDAOFactory.getInstance().getCategory(MCRCategoryID.rootID(classification[i]), -1);
+            org.jdom.Document jDomDoc = MCRCategoryTransformer.getMetaDataDocument(cl, false);
+            try {
+                // could be improved: return only <label> under a <categegory>
+                // but //category/label[..] does not work here
+                XPath xpathExpr = XPath.newInstance("//label[@xml:lang='x-dini' and @text='" + set + "']/..//@ID");
+                List resultList = xpathExpr.selectNodes(jDomDoc);
+                for (int j = 0; j < resultList.size(); j++) {
+                    if (resultList.get(j) instanceof Attribute) {
+                        cOr.addChild(new MCRQueryCondition(field, "like", ((Attribute) resultList.get(j)).getValue()));
+                    }
+                }
+            } catch (JDOMException e) {
+                logger.error(e);
+            }
+
+        }
+    }
 }

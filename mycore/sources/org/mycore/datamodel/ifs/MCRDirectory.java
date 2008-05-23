@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRDirectory.java,v $
- * $Revision: 1.16 $ $Date: 2006/06/09 08:21:43 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.common.MCRUsageException;
  * Represents a directory node with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.16 $ $Date: 2006/06/09 08:21:43 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRDirectory extends MCRFilesystemNode {
     /** The IDs of all child nodes in this directory * */

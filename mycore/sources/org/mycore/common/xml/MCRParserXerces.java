@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRParserXerces.java,v $
- * $Revision: 1.23 $ $Date: 2006/11/23 13:56:30 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,16 +24,20 @@
 package org.mycore.common.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.StringReader;
 
 import org.apache.log4j.Logger;
+import org.apache.xerces.parsers.SAXParser;
 import org.jdom.Document;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  * Implements the MCRParserInterface using the Xerces XML to parse XML streams
@@ -43,7 +47,7 @@ import org.xml.sax.SAXParseException;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.23 $ $Date: 2006/11/23 13:56:30 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
 
@@ -67,13 +71,16 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
 
     /**
      * Constructor for the Xerces parser. Sets default validation flag as
-     * specified by the property MCR.parser_schema_validation in
+     * specified by the property MCR.XMLParser.ValidateSchema in
      * mycore.properties
      */
     public MCRParserXerces() {
-        FLAG_VALIDATION = MCRConfiguration.instance().getBoolean("MCR.parser_schema_validation", FLAG_VALIDATION);
-
-        builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
+        FLAG_VALIDATION = MCRConfiguration.instance().getBoolean("MCR.XMLParser.ValidateSchema", FLAG_VALIDATION);
+        builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true){
+            protected XMLReader createParser() throws JDOMException {
+                return new SAXParser();
+            }
+        };
         builderValid.setFeature(FEATURE_NAMESPACES, true);
         builderValid.setFeature(FEATURE_SCHEMA_SUPPORT, true);
         builderValid.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
@@ -81,7 +88,11 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
         builderValid.setErrorHandler(this);
         builderValid.setEntityResolver(MCRURIResolver.instance());
 
-        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
+        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false){
+            protected XMLReader createParser() throws JDOMException {
+                return new SAXParser();
+            }
+        };
         builder.setFeature(FEATURE_NAMESPACES, true);
         builder.setFeature(FEATURE_SCHEMA_SUPPORT, false);
         builder.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
@@ -180,6 +191,15 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      */
     public Document parseXML(byte[] xml, boolean validate) {
         InputSource source = new InputSource(new ByteArrayInputStream(xml));
+        return parse(source, validate);
+    }
+
+    public Document parseXML(InputStream input) throws MCRException {
+        return parseXML(input, FLAG_VALIDATION);
+    }
+
+    public Document parseXML(InputStream input, boolean validate) throws MCRException {
+        InputSource source = new InputSource(input);
         return parse(source, validate);
     }
 

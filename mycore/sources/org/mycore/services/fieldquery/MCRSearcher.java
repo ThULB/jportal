@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRSearcher.java,v $
- * $Revision: 1.21 $ $Date: 2006/12/08 14:40:01 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandler;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.ifs.MCRFile;
-import org.mycore.datamodel.metadata.MCRLinkTableManager;
+import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.parsers.bool.MCRCondition;
 
@@ -44,7 +44,7 @@ import org.mycore.parsers.bool.MCRCondition;
  * overwriting the method search. Searchers that do not need indexing or do this
  * on their own can simply ignore the add/remove methods.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  */
 public abstract class MCRSearcher extends MCREventHandlerBase implements MCREventHandler {
     /** The logger */
@@ -88,12 +88,18 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
     }
 
     private String getReturnID(MCRFile file) {
+        // Maybe fieldquery is used in application without link table manager
+        if( MCRConfiguration.instance().getString( "MCR.Persistence.LinkTable.Store.Class", null ) == null ) 
+          return file.getID();
+            
         String ownerID = file.getOwnerID();
+        
         List list = MCRLinkTableManager.instance().getSourceOf(ownerID, MCRLinkTableManager.ENTRY_TYPE_DERIVATE);
         if ((list == null) || (list.size() == 0))
             return file.getID();
-        String objectID = (String) (list.get(0));
-        return objectID;
+        
+        // Return ID of MCRObject this MCRFile belongs to
+        return (String) (list.get(0)); 
     }
 
     protected void handleFileCreated(MCREvent evt, MCRFile file) {
@@ -139,7 +145,15 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
     }
 
     protected void handleObjectRepaired(MCREvent evt, MCRObject obj) {
-        handleObjectUpdated(evt, obj);
+      handleObjectCreated(evt, obj);
+    }
+    
+    protected void undoObjectCreated(MCREvent evt, MCRObject obj) {
+      handleObjectDeleted(evt, obj);
+    }
+
+    protected void undoObjectDeleted(MCREvent evt, MCRObject obj) {
+      handleObjectCreated(evt, obj);
     }
 
     /**
@@ -156,7 +170,7 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      * @param fields
      *            a List of MCRFieldValue objects
      */
-    protected void addToIndex(String entryID, String returnID, List fields) {
+    public void addToIndex(String entryID, String returnID, List fields) {
     }
 
     /**
@@ -168,7 +182,7 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      * @param entryID
      *            the unique ID of this entry in the index
      */
-    protected void removeFromIndex(String entryID) {
+    public void removeFromIndex(String entryID) {
     }
 
     /**
@@ -205,4 +219,28 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      */
     public void addSortData(Iterator hits, List<MCRSortBy> sortBy) {
     }
+
+    /**
+     * Removes all entries from index.
+     */
+    public void clearIndex() {
+    }
+    
+    /**
+     * Removes all entries of a field with a given value from index.
+     */
+    public void clearIndex(String fieldname, String value) {
+    }
+    
+    /**
+     * Inform Searcher what is going on.
+     * Searcher can use this to speed up indexing. MCRLuceneSearcher for example uses a Ramdirectory
+     *  rebuild
+     *  insert
+     *  ...
+     *  finish
+     */
+    public void notifySearcher(String mode) {
+    }
+    
 }

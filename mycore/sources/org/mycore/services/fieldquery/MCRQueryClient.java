@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRQueryClient.java,v $
- * $Revision: 1.14 $ $Date: 2006/12/08 14:21:37 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.common.xml.MCRURIResolver;
 /**
  * Executes a query on remote hosts using a webservice
  * 
- * @author Frank Lützenkirchen 
+ * @author Frank Lï¿½tzenkirchen 
  * @author Jens Kupferschmidt
  */
 public class MCRQueryClient {
@@ -152,6 +152,7 @@ public class MCRQueryClient {
     /**
      * Retrieves an classification part from remote host using the WebService.
      * 
+     * @param hostAlias the alias of the remote host as defined in hosts.xml
      * @param level   the level of the classification to retrieve
      * @param type   the type of the classification to retrieve
      * @param classID   the class ID of the classification to retrieve
@@ -169,4 +170,28 @@ public class MCRQueryClient {
         MCRQueryClientInterface qi = (MCRQueryClientInterface) accessclass.get(hostAlias);
         return qi.doRetrieveClassification(level,type,classID,categID,format);
     }
+    
+    /**
+     * Retrieves an link from remote host using the WebService.
+     * 
+     * @param hostAlias
+     *            the alias of the remote host as defined in hosts.xml
+     * @param from
+     *            the source of the link
+     * @param to
+     *            the target of the link
+     * @param type
+     *            the type of the link
+     * @return the mcr:result document
+     */
+    public static org.w3c.dom.Document doRetrieveLinks(String hostAlias, String from, String to, String type) {
+        if (!accessclass.containsKey(hostAlias)) {
+            String msg = "No configuration for host " + hostAlias;
+            throw new MCRConfigurationException(msg);
+        }
+        LOGGER.info("Starting remote retrieval at host " + hostAlias);
+        MCRQueryClientInterface qi = (MCRQueryClientInterface) accessclass.get(hostAlias);
+        return qi.doRetrieveLinks(from,to,type);
+    }
+    
 }

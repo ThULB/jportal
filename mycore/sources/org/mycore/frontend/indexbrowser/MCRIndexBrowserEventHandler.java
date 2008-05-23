@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRIndexBrowserEventHandler.java,v $
- * $Revision: 1.1 $ $Date: 2006/12/01 09:06:44 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
@@ -34,16 +34,16 @@ import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
 
 /**
- * This class implements an event handler that reacts on object modify / create / delete events.
- * It basically clears the different classification caches to make sure the number of documents
- *  for each classification item is displayed correctly. This has also an impact to the question
- * if a classification item can be expanded to display subitems.
+ * This class implements an event handler that reacts on object modify / create /
+ * delete events. It basically clears the different classification caches to
+ * make sure the number of documents for each classification item is displayed
+ * correctly. This has also an impact to the question if a classification item
+ * can be expanded to display subitems.
  * 
  * @author Robert Stephan
  */
 public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
 
-        
     /**
      * 
      * @param evt
@@ -52,11 +52,12 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectCreated(MCREvent evt, MCRObject obj) {
-    	List iL = getIndexList(obj);
-    	for (int i=0; i< iL.size(); i++) {
-    		String key = (String) iL.get(i);
-    		MCRIndexBrowserData.removeAllCachesStartsWithKey(key);
-    	}
+        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
+    }
+
+    private String getObjectType(MCRObject obj) {
+        String typeID = obj.getId().getTypeId();
+        return typeID;
     }
 
     /**
@@ -69,13 +70,9 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-    	List iL = getIndexList(obj);
-    	for (int i=0; i< iL.size(); i++) {
-    		String key = (String) iL.get(i);
-    		MCRIndexBrowserData.removeAllCachesStartsWithKey(key);
-    	}
+        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
     }
-    
+
     /**
      * This method delete the XML data from SQL table data via
      * MCRXMLTableManager.
@@ -86,26 +83,7 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectDeleted(MCREvent evt, MCRObject obj) {
-    	List iL = getIndexList(obj);
-    	for (int i=0; i< iL.size(); i++) {
-    		String key = (String) iL.get(i);
-    		MCRIndexBrowserData.removeAllCachesStartsWithKey(key);
-    	}
-    	
+        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
     }
 
-    private List getIndexList(MCRObject obj){
-        String typeID = obj.getId().getTypeId();
-        ArrayList<String> indexList = new ArrayList<String>();
-        Properties pList = MCRConfiguration.instance().getProperties("MCR.IndexBrowser.");
-        Enumeration keys = pList.keys(); 
-        while ( keys.hasMoreElements() ) {
-        	String key = (String) keys.nextElement();
-        	if ( key.endsWith("Table") && pList.getProperty(key).contains(typeID) ) {
-        		String indexID = key.split("\\.")[2];
-        		indexList.add(indexID);
-        	}        	    	
-        }
-        return indexList;        
-    }
 }

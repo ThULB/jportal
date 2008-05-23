@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRConstants.java,v $
- * $Revision: 1.2 $ $Date: 2006/11/29 07:07:23 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.jdom.Namespace;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.2 $ $Date: 2006/11/29 07:07:23 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public final class MCRConstants {
     /** The URL of the XLink */
@@ -52,37 +52,11 @@ public final class MCRConstants {
     /** The default encoding */
     public final static String DEFAULT_ENCODING = "UTF-8";
 
-    /** The supported language codes (like xml:lang definition) * */
-    public static String[] SUPPORTED_LANG = {
-
-    // ISO-639 with ISO-3166 extendions
-            "ar", "de", "de-DE", "en", "en-UK", "en-US",
-            // extendion for historical languages
-            "x-egy", // egypt
-            "x-ara", // arabic
-            "x-grc", // old greek
-            "x-lat", // latin
-            "x-cop", // coptic
-
-            // extension for DINI Specification Labels (OAI-Interface)
-            "x-dini" };
-
     /** The date format for the supported languages * */
     public static DateFormat[] DATE_FORMAT = {
-
-    // ISO-639 with ISO-3166 extendions
-            DateFormat.getDateInstance(DateFormat.SHORT, Locale.UK), // ar
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMAN), // de
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY), // de-DE
-            DateFormat.getDateInstance(DateFormat.SHORT, Locale.UK), // en
-            DateFormat.getDateInstance(DateFormat.SHORT, Locale.UK), // en-UK
-            DateFormat.getDateInstance(DateFormat.SHORT, Locale.US), // en-US
-
-            // extendion for historical languages (all use the default)
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()), // x-egy
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()), // x-ara
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()), // x-grc
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()), // x-lat
-            DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()) // x-cop
+        DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault()), // x-...
+        DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMAN), // de,ch,au
+        DateFormat.getDateInstance(DateFormat.SHORT, Locale.UK), // ar,en-UK
+        DateFormat.getDateInstance(DateFormat.SHORT, Locale.US), // en-US
     };
 }

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRSession.java,v $
- * $Revision: 1.32 $ $Date: 2006/11/21 12:24:14 $
+ * 
+ * $Revision: 13437 $ $Date: 2008-04-24 14:55:14 +0200 (Do, 24 Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,12 +23,20 @@
 
 package org.mycore.common;
 
+import static org.mycore.common.events.MCRSessionEvent.Type.activated;
+import static org.mycore.common.events.MCRSessionEvent.Type.passivated;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
+
+import org.mycore.common.events.MCRSessionEvent;
+import org.mycore.common.events.MCRSessionListener;
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
 
 /**
@@ -39,14 +47,25 @@ import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
  * @author Jens Kupferschmidt
  * @author Frank L�tzenkirchen
  * 
- * @version $Revision: 1.32 $ $Date: 2006/11/21 12:24:14 $
+ * @version $Revision: 13437 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mrz
+ *          2008) $
  */
 public class MCRSession implements Cloneable {
     /** A map storing arbitrary session data * */
     private Map map = new HashMap();
 
+    AtomicInteger accessCount;
+
+    AtomicInteger concurrentAccess;
+
+    ThreadLocal<AtomicInteger> currentThreadCount = new ThreadLocal<AtomicInteger>() {
+        public AtomicInteger initialValue() {
+            return new AtomicInteger();
+        }
+    };
+
     /** the logger */
-    static Logger logger = Logger.getLogger(MCRSession.class.getName());
+    static Logger LOGGER = Logger.getLogger(MCRSession.class.getName());
 
     /** The user ID of the session */
     private String userID = null;
@@ -57,9 +76,6 @@ public class MCRSession implements Cloneable {
     /** The unique ID of this session */
     private String sessionID = null;
 
-    /** A cache of MCRSession objects, used for method getSession( String ) */
-    private static MCRCache sessions = new MCRCache(1000);
-
     /** -ASC- f�r MCRClassificationBrowser Class session daten */
     public MCRClassificationBrowserData BData = null;
 
@@ -68,41 +84,34 @@ public class MCRSession implements Cloneable {
     private String CurrentDocumentID = null;
 
     private String ip = null;
-    
-    private long loginTime;
+
+    private long loginTime, lastAccessTime, thisAccessTime, createTime;
 
     /**
      * The constructor of a MCRSession. As default the user ID is set to the
-     * value of the property variable named 'MCR.users_guestuser_username'.
+     * value of the property variable named 'MCR.Users.Guestuser.UserName'.
      */
-    public MCRSession() {
+    MCRSession() {
         MCRConfiguration config = MCRConfiguration.instance();
-        userID = config.getString("MCR.users_guestuser_username", "gast");
-        language = config.getString("MCR.metadata_default_lang", "de");
+        userID = config.getString("MCR.Users.Guestuser.UserName", "gast");
+        language = config.getString("MCR.Metadata.DefaultLang", "de");
+        accessCount = new AtomicInteger();
+        concurrentAccess = new AtomicInteger();
 
         ip = "";
         sessionID = buildSessionID();
-        sessions.put(sessionID, this);
+        MCRSessionMgr.addSession(this);
 
-        logger.debug("MCRSession created " + sessionID);
+        LOGGER.debug("MCRSession created " + sessionID);
         setLoginTime();
-    }
-    
-    public final void setLoginTime(){
-        loginTime=System.currentTimeMillis();
+        createTime = loginTime;
+
     }
 
-    /**
-     * Returns the MCRSession for the given sessionID.
-     */
-    public static MCRSession getSession(String sessionID) {
-        MCRSession s = (MCRSession) (sessions.get(sessionID));
-
-        if (s == null) {
-            logger.warn("MCRSession with ID " + sessionID + " not cached any more");
-        }
-
-        return s;
+    public final void setLoginTime() {
+        loginTime = System.currentTimeMillis();
+        lastAccessTime = loginTime;
+        thisAccessTime = loginTime;
     }
 
     /**
@@ -138,15 +147,16 @@ public class MCRSession implements Cloneable {
     }
 
     /**
-     * @return Returns a list of all stored object keys within MCRSession as java.util.Ierator 
+     * @return Returns a list of all stored object keys within MCRSession as
+     *         java.util.Ierator
      */
     public Iterator getObjectsKeyList() {
-    	return Collections.unmodifiableSet(map.keySet()).iterator();
+        return Collections.unmodifiableSet(map.keySet()).iterator();
     }
-    
+
     /** returns the current user ID */
     public final String getCurrentUserID() {
-        return userID.trim();
+        return userID;
     }
 
     /** sets the current user ID */
@@ -156,7 +166,7 @@ public class MCRSession implements Cloneable {
 
     /** returns the current language */
     public final String getCurrentLanguage() {
-        return language.trim();
+        return language;
     }
 
     /** sets the current language */
@@ -186,10 +196,10 @@ public class MCRSession implements Cloneable {
 
     /** Write data to the logger for debugging purposes */
     public final void debug() {
-        logger.debug("SessionID = " + sessionID);
-        logger.debug("UserID    = " + userID);
-        logger.debug("IP        = " + ip);
-        logger.debug("language  = " + language);
+        LOGGER.debug("SessionID = " + sessionID);
+        LOGGER.debug("UserID    = " + userID);
+        LOGGER.debug("IP        = " + ip);
+        LOGGER.debug("language  = " + language);
     }
 
     /** Stores an object under the given key within the session * */
@@ -201,8 +211,8 @@ public class MCRSession implements Cloneable {
     public Object get(Object key) {
         return map.get(key);
     }
-    
-    public void deleteObject(Object key){
+
+    public void deleteObject(Object key) {
         map.remove(key);
     }
 
@@ -223,33 +233,119 @@ public class MCRSession implements Cloneable {
     /** Set the ip to the given IP */
     public final void setCurrentIP(String newip) {
         java.util.StringTokenizer st = new java.util.StringTokenizer(newip, ".");
-        if (st.countTokens() != 4) return;
+        if (st.countTokens() != 4)
+            return;
         try {
-        while (st.hasMoreTokens()) {
+            while (st.hasMoreTokens()) {
                 int i = Integer.parseInt(st.nextToken());
-                if ((i<0)||(i>255)){
+                if ((i < 0) || (i > 255)) {
                     return;
                 }
-        }
-        } catch ( Exception e) {
-            logger.debug("Exception while parsing new ip "+newip+" using old value.",e);
+            }
+        } catch (Exception e) {
+            LOGGER.debug("Exception while parsing new ip " + newip + " using old value.", e);
             return;
         }
         this.ip = newip;
     }
-    
-    public final long getLoginTime(){
+
+    public final long getLoginTime() {
         return loginTime;
     }
 
     public void close() {
-        // clear bound objects
-        logger.debug("Clearing local map.");
-        map.clear();
         // remove from session list
-        logger.debug("Remove myself from MCRSession list");
-        sessions.remove(getID());
-        this.sessionID=null;
+        LOGGER.debug("Remove myself from MCRSession list");
+        MCRSessionMgr.removeSession(this);
+        // clear bound objects
+        LOGGER.debug("Clearing local map.");
+        map.clear();
+        this.sessionID = null;
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("MCRSession[");
+        sb.append(getID());
+        sb.append(",user:'");
+        sb.append(getCurrentUserID());
+        sb.append("',ip:");
+        sb.append(getCurrentIP());
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public long getLastAccessedTime() {
+        return lastAccessTime;
+    }
+
+    /**
+     * Activate this session. For internal use mainly by MCRSessionMgr.
+     * 
+     * @see MCRSessionMgr#setCurrentSession(MCRSession)
+     */
+    void activate() {
+        lastAccessTime = thisAccessTime;
+        thisAccessTime = System.currentTimeMillis();
+        accessCount.incrementAndGet();
+        if (currentThreadCount.get().getAndIncrement() == 0) {
+            fireSessionEvent(activated, concurrentAccess.incrementAndGet());
+        } else {
+            try {
+                throw new MCRException("Cannot activate a Session more than once per thread: " + currentThreadCount.get().get());
+            } catch (Exception e) {
+                LOGGER.debug("Too many activate() calls stacktrace:", e);
+            }
+        }
+    }
+
+    /**
+     * Passivate this session. For internal use mainly by MCRSessionMgr.
+     * 
+     * @see MCRSessionMgr#releaseCurrentSession()
+     */
+    void passivate() {
+        if (currentThreadCount.get().getAndDecrement() == 1) {
+            fireSessionEvent(passivated, concurrentAccess.decrementAndGet());
+        } else {
+            LOGGER.debug("deactivate currentThreadCount: " + currentThreadCount.get().get());
+        }
+    }
+
+    /**
+     * Fire MCRSessionEvents.
+     * 
+     * This is a common method that fires all types of MCRSessionEvent.
+     * 
+     * Mainly for internal use of MCRSession and MCRSessionMgr.
+     * 
+     * @param type
+     *            type of event
+     * @param concurrentAccessors
+     *            number of concurrentThreads (passivateEvent gets 0 for
+     *            singleThread)
+     */
+    void fireSessionEvent(MCRSessionEvent.Type type, int concurrentAccessors) {
+        List<MCRSessionListener> listeners = MCRSessionMgr.getListeners();
+        if (listeners.size() == 0) {
+            return;
+        }
+        MCRSessionEvent event = new MCRSessionEvent(this, type, concurrentAccessors);
+        LOGGER.debug(event);
+        MCRSessionMgr.getListenersLock().readLock().lock();
+        MCRSessionListener[] list = listeners.toArray(new MCRSessionListener[listeners.size()]);
+        MCRSessionMgr.getListenersLock().readLock().unlock();
+        for (MCRSessionListener listener : list) {
+            listener.sessionEvent(event);
+        }
+    }
+
+    public long getThisAccessTime() {
+        return thisAccessTime;
+    }
+
+    public long getCreateTime() {
+        return createTime;
     }
 
 }

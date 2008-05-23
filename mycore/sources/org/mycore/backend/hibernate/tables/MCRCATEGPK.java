@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCATEGPK.java,v $
- * $Revision: 1.6 $ $Date: 2005/09/28 07:29:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,6 +29,9 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class MCRCATEGPK implements Serializable {
+
+    private static final long serialVersionUID = -2883097610006670647L;
+
     public String id;
 
     public String clid;

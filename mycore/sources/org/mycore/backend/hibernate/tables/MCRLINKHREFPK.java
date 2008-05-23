@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRLINKHREFPK.java,v $
- * $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,14 +33,37 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * 
  * @author Heiko Helmbrecht
  * @author Jens Kupferschmidt
- * @version $Revision: 1.5 $ $Date: 2006/02/27 20:55:22 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRLINKHREFPK implements Serializable {
+
+    private static final long serialVersionUID = -5838803852559721772L;
+
     private String mcrfrom;
 
     private String mcrto;
 
     private String mcrtype;
+
+    /**
+     * @param from
+     *            the source ID of the link
+     * @param to
+     *            the target ID of the link
+     * @param type
+     *            the type of the link
+     */
+    public MCRLINKHREFPK(String from, String to, String type) {
+        this.mcrfrom = from;
+        this.mcrto = to;
+        this.mcrtype = type;
+    }
+
+    /**
+     * The constructor
+     */
+    public MCRLINKHREFPK() {
+    }
 
     /**
      * Get the data field from.
@@ -112,7 +135,8 @@ public class MCRLINKHREFPK implements Serializable {
 
         MCRLINKHREFPK castother = (MCRLINKHREFPK) other;
 
-        return new EqualsBuilder().append(this.getMcrfrom(), castother.getMcrfrom()).append(this.getMcrto(), castother.getMcrto()).append(this.getMcrtype(), castother.getMcrtype()).isEquals();
+        return new EqualsBuilder().append(this.getMcrfrom(), castother.getMcrfrom()).append(this.getMcrto(), castother.getMcrto()).append(this.getMcrtype(),
+                castother.getMcrtype()).isEquals();
     }
 
     /**

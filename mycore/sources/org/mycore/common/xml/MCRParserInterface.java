@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRParserInterface.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:39:07 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,6 +23,8 @@
 
 package org.mycore.common.xml;
 
+import java.io.InputStream;
+
 import org.jdom.Document;
 import org.mycore.common.MCRException;
 
@@ -32,7 +34,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 1.7 $ $Date: 2005/09/28 07:39:07 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public interface MCRParserInterface {
     /**
@@ -112,4 +114,30 @@ public interface MCRParserInterface {
      * @return the XML file as a DOM object
      */
     public Document parseXML(byte[] xml, boolean valid) throws MCRException;
+
+    /**
+     * Parses an Byte Array and returns it as DOM. Use the validation value from
+     * mycore.properties.
+     * 
+     * @param input
+     *            the InputStream to be parsed
+     * @throws MCRException
+     *             if XML could not be parsed
+     * @return the XML file as a DOM object
+     */
+    public Document parseXML(InputStream input) throws MCRException;
+
+    /**
+     * Parses an Byte Array and returns it as DOM. Use the given validation
+     * flag.
+     * 
+     * @param input
+     *            the InputStream to be parsed
+     * @param validate
+     *            the validation flag
+     * @throws MCRException
+     *             if XML could not be parsed
+     * @return the XML file as a DOM object
+     */
+    public Document parseXML(InputStream input, boolean validate) throws MCRException;
 }

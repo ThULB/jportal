@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRACCESSPK.java,v $
- * $Revision: 1.2 $ $Date: 2005/09/28 07:29:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,7 +26,8 @@ package org.mycore.backend.hibernate.tables;
 import java.io.Serializable;
 
 public class MCRACCESSPK implements Serializable {
-    private String rid;
+
+    private static final long serialVersionUID = 1177905976922683366L;
 
     private String acpool;
 
@@ -35,8 +36,7 @@ public class MCRACCESSPK implements Serializable {
     public MCRACCESSPK() {
     }
 
-    public MCRACCESSPK(String rid, String acpool, String objid) {
-        this.rid = rid;
+    public MCRACCESSPK(String acpool, String objid) {
         this.acpool = acpool;
         this.objid = objid;
     }
@@ -57,11 +57,41 @@ public class MCRACCESSPK implements Serializable {
         this.objid = objid;
     }
 
-    public String getRid() {
-        return rid;
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int PRIME = 31;
+        int result = 1;
+        result = PRIME * result + ((acpool == null) ? 0 : acpool.hashCode());
+        result = PRIME * result + ((objid == null) ? 0 : objid.hashCode());
+        return result;
     }
 
-    public void setRid(String rid) {
-        this.rid = rid;
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final MCRACCESSPK other = (MCRACCESSPK) obj;
+        if (acpool == null) {
+            if (other.acpool != null)
+                return false;
+        } else if (!acpool.equals(other.acpool))
+            return false;
+        if (objid == null) {
+            if (other.objid != null)
+                return false;
+        } else if (!objid.equals(other.objid))
+            return false;
+        return true;
     }
+
 }

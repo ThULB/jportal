@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRAudioVideoExtender.java,v $
- * $Revision: 1.13 $ $Date: 2006/11/27 12:34:17 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.MCRUtils;
  * size etc. and to start a player to stream the asset to a browser.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.13 $ $Date: 2006/11/27 12:34:17 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public abstract class MCRAudioVideoExtender {
     /** Constant for media type = video */

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRData2Fields.java,v $
- * $Revision: 1.28 $ $Date: 2006/12/08 14:21:37 $
+ * 
+ * $Revision: 13350 $ $Date: 2008-04-07 15:34:12 +0200 (Mo, 07 Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,8 +26,11 @@ package org.mycore.services.fieldquery;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXTransformerFactory;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -36,6 +39,7 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
 import org.mycore.common.MCRCache;
+import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -55,14 +59,27 @@ import org.mycore.datamodel.metadata.MCRObject;
  * @author Frank Lützenkirchen
  */
 public class MCRData2Fields {
+
     /** The logger */
     private static final Logger LOGGER = Logger.getLogger(MCRData2Fields.class);
 
+    /** The XSL transformer factory to use */
+    private static SAXTransformerFactory factory;
+    
     /** A template element to be used for building individual stylesheet */
     private static Element xslTemplate;
 
-    /** Builds a template element to be used for building individual stylesheet */
-    private static void buildXSLTemplate() {
+    private static MCRCache stylesheets = new MCRCache(20, "data2searchfields stylesheets");
+
+    static {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        if (!tf.getFeature(SAXTransformerFactory.FEATURE)) {
+            throw new MCRConfigurationException("Could not load a SAXTransformerFactory for use with XSLT");
+        }
+
+        factory = (SAXTransformerFactory) (tf);
+        factory.setURIResolver(MCRURIResolver.instance());
+
         xslTemplate = new Element("stylesheet");
         xslTemplate.setAttribute("version", "1.0");
         xslTemplate.setNamespace(MCRFieldDef.xslns);
@@ -84,15 +101,11 @@ public class MCRData2Fields {
         template.addContent(fieldValues);
     }
 
-    private static MCRCache stylesheets = new MCRCache(10);
-
-    private static Document buildStylesheet(String index, String source) {
+    private static Templates buildStylesheet(String index, String source) {
         String key = index + "//" + source;
-        Document xsl = (Document) (stylesheets.get(key));
+        Templates stylesheet = (Templates) (stylesheets.get(key));
 
-        if (xsl == null) {
-            if (xslTemplate == null)
-                buildXSLTemplate();
+        if (stylesheet == null) {
             Element root = (Element) (xslTemplate.clone());
             Element fv = root.getChild("template", MCRFieldDef.xslns).getChild("fieldValues", MCRFieldDef.mcrns);
 
@@ -112,11 +125,16 @@ public class MCRData2Fields {
                 LOGGER.debug("\n" + out.outputString(root));
             }
 
-            xsl = new Document(root);
-            stylesheets.put(key, xsl);
+            try {
+                stylesheet = factory.newTemplates( new JDOMSource( new Document( root ) ) );
+            } catch (TransformerConfigurationException exc) {
+                String msg = "Error while compiling XSL stylesheet: " + exc.getMessageAndLocation();
+                throw new MCRConfigurationException(msg, exc);
+            }
+            stylesheets.put(key, stylesheet);
         }
 
-        return xsl;
+        return stylesheet;
     }
 
     /**
@@ -130,9 +148,9 @@ public class MCRData2Fields {
      */
     public static List<MCRFieldValue> buildFields(MCRObject obj, String index) {
         String source = MCRFieldDef.OBJECT_METADATA + " " + MCRFieldDef.OBJECT_CATEGORY;
-        Document xsl = buildStylesheet(index, source);
+        Templates stylesheet = buildStylesheet(index, source);
         Document xml = obj.createXML();
-        return buildValues(xsl, xml, obj.getId().getTypeId());
+        return buildValues(stylesheet, xml, obj.getId().getTypeId());
     }
 
     /**
@@ -172,7 +190,7 @@ public class MCRData2Fields {
 
         // Handle source FILE_XML_CONTENT
         if (foundSourceXMLContent) {
-            Document xsl = buildStylesheet(index, MCRFieldDef.FILE_XML_CONTENT);
+            Templates stylesheet = buildStylesheet(index, MCRFieldDef.FILE_XML_CONTENT);
             Document xml = null;
             try {
                 xml = file.getContentAsJDOM();
@@ -181,19 +199,19 @@ public class MCRData2Fields {
                 LOGGER.error(msg, ex);
             }
             if (xml != null)
-                values.addAll(buildValues(xsl, xml, file.getContentTypeID()));
+                values.addAll(buildValues(stylesheet, xml, file.getContentTypeID()));
         }
 
         // Handle source FILE_METADATA
         if (foundSourceFileMetadata) {
-            Document xsl = buildStylesheet(index, MCRFieldDef.FILE_METADATA);
+            Templates stylesheet = buildStylesheet(index, MCRFieldDef.FILE_METADATA);
             Document xml = file.createXML();
-            values.addAll(buildValues(xsl, xml, file.getContentTypeID()));
+            values.addAll(buildValues(stylesheet, xml, file.getContentTypeID()));
         }
 
         // Handle source FILE_ADDITIONAL_DATA
         if (foundSourceFileAdditional) {
-            Document xsl = buildStylesheet(index, MCRFieldDef.FILE_ADDITIONAL_DATA);
+            Templates stylesheet = buildStylesheet(index, MCRFieldDef.FILE_ADDITIONAL_DATA);
             Document xml = null;
             try {
                 xml = file.getAllAdditionalData();
@@ -202,7 +220,7 @@ public class MCRData2Fields {
                 LOGGER.error(msg, ex);
             }
             if (xml != null)
-                values.addAll(buildValues(xsl, xml, file.getContentTypeID()));
+                values.addAll(buildValues(stylesheet, xml, file.getContentTypeID()));
         }
 
         return values;
@@ -218,20 +236,18 @@ public class MCRData2Fields {
      * @return a List of MCRFieldValue objects that contain name, type and value
      */
     public static List<MCRFieldValue> buildFields(Document doc, String index) {
-        Document xsl = buildStylesheet(index, MCRFieldDef.XML);
-        return buildValues(xsl, doc, doc.getRootElement().getName());
+        Templates stylesheet = buildStylesheet(index, MCRFieldDef.XML);
+        return buildValues(stylesheet, doc, doc.getRootElement().getName());
     }
 
     /** Transforms xml input to search field values using XSL * */
-    private static List<MCRFieldValue> buildValues(Document xsl, Document xml, String objectType) {
+    private static List<MCRFieldValue> buildValues(Templates stylesheet, Document xml, String objectType) {
         List<MCRFieldValue> values = new ArrayList<MCRFieldValue>();
 
         List fieldValues = null;
         try {
             JDOMResult xmlres = new JDOMResult();
-            TransformerFactory factory = TransformerFactory.newInstance();
-            factory.setURIResolver(MCRURIResolver.instance());
-            Transformer transformer = factory.newTransformer(new JDOMSource(xsl));
+            Transformer transformer = factory.newTransformerHandler(stylesheet).getTransformer();
             transformer.setParameter("objectType", objectType);
             transformer.transform(new JDOMSource(xml), xmlres);
 

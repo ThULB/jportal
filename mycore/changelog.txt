@@ -1,5 +1,6 @@
-Version 1.3.1
+Version 2.0 (Head)
 =============
+- Editor Framework: Added xsl template to dynamically include editor from any xsl stylesheet
 - Editor Framework: Added input validation using XSL condition for a complete panel
 - Added stylesheet to generate search masks from searchfields.xml
 - removed MCRCStoreLocalFileSystem and MCRCStoreRemoteFTP
@@ -13,7 +14,19 @@ Version 1.3.1
 - marked MCRDefaults as deprecated
 - removed MCRUploadServlet2
 - LayoutServlet removed, replaced by MCRLayoutService
-
+- Use the IBM ICU library to handle calendars in MCRMetaHistoryDate. Now the searchable integer
+  of this metadata element is the Julian Day number. 
+- move the classes of org.mycore.user2 to org.mycore.user
+- add a WebService and URIResolver access to the MCRLinkTable
+- removed support for MCRSessionID request parameter:
+   use HttpSession to access MCRSession
+- MCRMailer: retry sending mails if first attempt fails
+- new Classification editor with less database commits
+- Upgrade to FCK-Editor 2.4
+- compiles on Java 6
+- The file deprecated.properties contains a list of properties that should (but must not) be renamed
+- Add a titel field based on MCRMetaLangText in the data model of derivates.
+ 
 Version 1.3
 ===========
  - Removed the old persistence layer

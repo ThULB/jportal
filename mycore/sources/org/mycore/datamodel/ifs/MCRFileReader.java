@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRFileReader.java,v $
- * $Revision: 1.11 $ $Date: 2006/03/16 14:45:49 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ package org.mycore.datamodel.ifs;
  * class MCROldFile. The interface will be obsolete in the future.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.11 $ $Date: 2006/03/16 14:45:49 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public interface MCRFileReader {
     /**
@@ -68,12 +68,6 @@ public interface MCRFileReader {
      */
     public String getStorageID();
 
-    /**
-     * The methodset the storage ID that identifies the place where the
-     * MCRContentStore has stored the content of this file
-     */
-    public void setStorageID(String storageID);
-    
     /**
      * Returns the content type of the content of this file
      */

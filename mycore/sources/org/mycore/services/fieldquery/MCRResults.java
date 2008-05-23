@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRResults.java,v $
- * $Revision: 1.27 $ $Date: 2006/12/08 14:21:36 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -48,9 +48,9 @@ import org.jdom.Element;
  * @author Arne Seifert
  * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 1.27 $ $Date: 2006/12/08 14:21:36 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
-public class MCRResults {
+public class MCRResults implements Iterable<MCRHit> {
     /** The list of MCRHit objects */
     private ArrayList<MCRHit> hits = new ArrayList<MCRHit>();
 
@@ -313,5 +313,9 @@ public class MCRResults {
         int numHits = other.getNumHits();
         for (int i = 0; i < numHits; i++)
             this.addHit(other.getHit(i));
+    }
+
+    public Iterator<MCRHit> iterator() {
+        return hits.iterator();
     }
 }

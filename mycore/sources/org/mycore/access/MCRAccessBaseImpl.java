@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRAccessBaseImpl.java,v $
- * $Revision: 1.14 $ $Date: 2006/05/26 12:15:00 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.jdom.Element;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
-import org.mycore.user2.MCRUser;
+import org.mycore.user.MCRUser;
 
 /**
  * This class is a base implementation of the <code>MCRAccessInterface</code>.
@@ -48,7 +48,7 @@ public class MCRAccessBaseImpl implements MCRAccessInterface {
 
     private static MCRAccessInterface SINGLETON;
 
-    final protected static String AccessPermissions = MCRConfiguration.instance().getString("MCR.AccessPermissions", "read,write,delete");
+    final protected static String AccessPermissions = MCRConfiguration.instance().getString("MCR.Access.AccessPermissions", "read,write,delete");
 
     /** the logger */
     protected static Logger LOGGER = Logger.getLogger(MCRAccessBaseImpl.class.getName());
@@ -292,4 +292,18 @@ public class MCRAccessBaseImpl implements MCRAccessInterface {
         return null;
     }
 
+    public void createRule(String rule, String creator, String description) {
+        LOGGER.debug("Execute MCRAccessBaseImpl createRule with rule " + rule + " \n and description " + description);
+        
+    }
+
+    public void createRule(Element rule, String creator, String description) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public String getNormalizedRuleString(Element rule) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

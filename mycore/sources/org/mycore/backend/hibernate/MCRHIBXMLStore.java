@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRHIBXMLStore.java,v $
- * $Revision: 1.21 $ $Date: 2006/11/27 15:18:51 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,20 +23,23 @@
 
 package org.mycore.backend.hibernate;
 
+import java.io.InputStream;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+
 import org.mycore.backend.hibernate.tables.MCRXMLTABLE;
 import org.mycore.backend.hibernate.tables.MCRXMLTABLEPK;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.datamodel.common.MCRXMLTableInterface;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableInterface;
 
 /**
  * This class implements the MCRXMLInterface.
@@ -76,7 +79,7 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
             throw new MCRPersistenceException("The type of the constructor" + " is null or empty.");
         }
 
-        boolean test = config.getBoolean("MCR.type_" + type, false);
+        boolean test = config.getBoolean("MCR.Metadata.Type." + type, false);
 
         if (!test) {
             throw new MCRPersistenceException("The type " + type + " of the constructor" + " is false.");
@@ -95,13 +98,9 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @param version
      *            the version of the XML Blob as integer
      * @exception MCRPersistenceException
-
-     *                
-     *                
-     *                
      *                the method arguments are not correct
      */
-    public synchronized final void create(MCRObjectID mcrid, byte[] xml, int version) throws MCRPersistenceException {
+    public synchronized final void create(String mcrid, byte[] xml, int version) throws MCRPersistenceException {
         if (mcrid == null) {
             throw new MCRPersistenceException("The MCRObjectID is null.");
         }
@@ -110,27 +109,17 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
         }
 
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            MCRXMLTABLE tab = new MCRXMLTABLE();
-            tab.setId(mcrid.getId());
-            tab.setVersion(version);
+        MCRXMLTABLEPK pk = new MCRXMLTABLEPK(mcrid, version);
+        MCRXMLTABLE tab = (MCRXMLTABLE) session.get(MCRXMLTABLE.class, pk);
+        if (tab == null) {
+            tab = new MCRXMLTABLE();
+            tab.setKey(pk);
             tab.setType(this.type);
-            tab.setXmlByteArray(xml);
-
-            logger.debug("Inserting " + mcrid.getId() + "/" + version + "/" + this.type + " into database");
-
-            session.saveOrUpdate(tab);
-
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            logger.error(e);
-        } finally {
-             if ( session != null ) session.close();
         }
-   }
+        tab.setXmlByteArray(xml);
+        logger.debug("Inserting " + mcrid + "/" + version + "/" + this.type + " into database MCRXMLTABLE");
+        session.save(tab);
+    }
 
     /**
      * The method remove a item for the MCRObjectID from the datastore.
@@ -142,22 +131,10 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @exception MCRPersistenceException
      *                the method argument is not correct
      */
-    public synchronized final void delete(MCRObjectID mcrid, int version) throws MCRPersistenceException {
+    public synchronized final void delete(String mcrid, int version) throws MCRPersistenceException {
         Session session = getSession();
-        Transaction tx = session.beginTransaction();
-
-        try {
-            MCRXMLTABLE tab = new MCRXMLTABLE(mcrid.getId(), version, this.type, null);
-            session.delete(tab); 	// "from MCRXMLTABLE where id='"+mcrid+"'
-                                    // and version='"+version+"' and
-                                    // type='"+type+"'");
-            tx.commit();
-        } catch (Exception e) {
-            tx.rollback();
-            logger.error("delete: catched Error", e);
-        } finally {
-             if ( session != null ) session.close();
-        }
+        logger.debug("Deleting " + mcrid + "/" + version + " from database MCRXMLTABLE");
+        session.delete(session.get(MCRXMLTABLE.class, new MCRXMLTABLEPK(mcrid, version)));
     }
 
     /**
@@ -172,8 +149,14 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @exception MCRPersistenceException
      *                the method arguments are not correct
      */
-    public synchronized final void update(MCRObjectID mcrid, byte[] xml, int version) throws MCRPersistenceException {
-        create(mcrid, xml, version);
+    public synchronized final void update(String mcrid, byte[] xml, int version) throws MCRPersistenceException {
+        Session session = getSession();
+        MCRXMLTABLE xmlEntry = (MCRXMLTABLE) session.load(MCRXMLTABLE.class, new MCRXMLTABLEPK(mcrid, version));
+        xmlEntry.setVersion(version);
+        xmlEntry.setType(this.type);
+        xmlEntry.setXmlByteArray(xml);
+        logger.debug("Updateing " + mcrid + "/" + version + "/" + this.type + " in database");
+        session.update(xmlEntry);
     }
 
     /**
@@ -188,26 +171,15 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @exception MCRPersistenceException
      *                the method arguments are not correct
      */
-    public final byte[] retrieve(MCRObjectID mcrid, int version) throws MCRPersistenceException {
+    public final InputStream retrieve(String mcrid, int version) throws MCRPersistenceException {
         Session session = getSession();
-        List<?> l = new ArrayList<Object>();
-
-        byte[] blob = null;
-
+        MCRXMLTABLEPK pk = new MCRXMLTABLEPK(mcrid, version);
+        Blob blob = (Blob) session.createCriteria(MCRXMLTABLE.class).setProjection(Projections.property("xml")).add(Restrictions.eq("key", pk)).uniqueResult();
         try {
-            MCRXMLTABLEPK pk = new MCRXMLTABLEPK(mcrid.getId(), version, this.type);
-            l = session.createCriteria(MCRXMLTABLE.class).add(Restrictions.eq("key", pk)).list();
-            if (l.size() > 0) {
-            	blob = ((MCRXMLTABLE) l.get(0)).getXmlByteArray();
-            }            
-        } catch (Exception e) {
-            logger.error("error in retrieving the blob ",e);
-            return null;
-        } finally {
-             if ( session != null ) session.close();
+            return blob.getBinaryStream();
+        } catch (SQLException e) {
+            throw new MCRPersistenceException("Cannot get Blob for " + mcrid, e);
         }
-
-        return blob;
     }
 
     /**
@@ -227,17 +199,17 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @return the next free ID number as a String
      */
     public final synchronized int getNextFreeIdInt(String project, String type) throws MCRPersistenceException {
-    	
-          Session session = getSession(); 
-          List<?> l = session.createQuery("select max(key.id) from "+classname+" where MCRID like '"+project+"_"+type+"%'").list();
-          session.close();
-          
-          if (l.size() > 0 && l.get(0) != null) {
-          	String max = (String) l.get(0);
-          	if (max == null) return 1;
-          	return new  MCRObjectID(max).getNumberAsInteger() + 1;
-          }
-          return 1;
+
+        Session session = getSession();
+        //TODO: SQL -> Criteria
+        List<?> l = session.createQuery("select max(key.id) from " + classname + " where MCRID like '" + project + "_" + type + "%'").list();
+        if (l.size() > 0 && l.get(0) != null) {
+            String max = (String) l.get(0);
+            if (max == null)
+                return 1;
+            return new MCRObjectID(max).getNumberAsInteger() + 1;
+        }
+        return 1;
     }
 
     /**
@@ -249,17 +221,20 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      *            the version of the XML Blob as integer
      * @return true if the MCRObjectID exist, else return false
      */
-    public final boolean exist(MCRObjectID mcrid, int version) {
-    	boolean exists = false;
-    	
-        Session session = getSession(); 
-        StringBuffer query = new StringBuffer("select key.id from MCRXMLTABLE where MCRID = '")
-        	.append(mcrid.getId()).append("' and MCRVERSION = ").append(version);
+    public final boolean exist(String mcrid, int version) {
+        boolean exists = false;
+
+        Session session = getSession();
+        MCRXMLTABLEPK pk = new MCRXMLTABLEPK(mcrid, version);
+        if (session.get(MCRXMLTABLE.class, pk) != null) {
+            return true;
+        }
+        StringBuffer query = new StringBuffer("select key.id from MCRXMLTABLE where MCRID = '").append(mcrid).append("' and MCRVERSION = ").append(
+                version);
         List<?> l = session.createQuery(query.toString()).list();
         if (l.size() > 0) {
-        	exists = true;
+            exists = true;
         }
-        session.close();        
         return exists;
     }
 
@@ -271,49 +246,36 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      *            a MCRObjectID type string
      * @return a ArrayList of MCRObjectID's
      */
-    public ArrayList<String> retrieveAllIDs(String type) {
+    public List<String> retrieveAllIDs(String type) {
         Session session = getSession();
         List<?> l;
         ArrayList<String> a = new ArrayList<String>();
 
-        try {
-            l = session.createQuery("select distinct(key.id) from MCRXMLTABLE where MCRTYPE = '" + type + "'").list();
-            for (int t = 0; t < l.size(); t++) {
-                a.add((String) l.get(t));
-            }
-        } catch (Exception e) {
-            throw new MCRException("Error during retrieveAllIDs(" + type + ")", e);
-        } finally {
-             if ( session != null ) session.close();
+        l = session.createQuery("select distinct(key.id) from MCRXMLTABLE where MCRTYPE = '" + type + "'").list();
+        for (int t = 0; t < l.size(); t++) {
+            a.add((String) l.get(t));
         }
 
         return a;
     }
-    
+
     /**
      * The method return a Array list with all stored MCRObjectID's of the XML
-     * table. 
+     * table.
      * 
      * @return a ArrayList of MCRObjectID's
      */
-    public ArrayList<String> retrieveAllIDs() {
+    public List<String> retrieveAllIDs() {
         Session session = getSession();
         List<?> l;
         ArrayList<String> a = new ArrayList<String>();
-
-        try {
-            l = session.createQuery("select distinct(key.id) from MCRXMLTABLE").list();
-            for (int t = 0; t < l.size(); t++) {
-                a.add((String) l.get(t));
-            }
-        } catch (Exception e) {
-            throw new MCRException("Error during retrieveAllIDs(" + type + ")", e);
-        } finally {
-             if ( session != null ) session.close();
+        l = session.createQuery("select distinct(key.id) from MCRXMLTABLE").list();
+        for (int t = 0; t < l.size(); t++) {
+            a.add((String) l.get(t));
         }
 
         return a;
-    }    
+    }
 
     public static void test() {
         MCRHIBXMLStore store = new MCRHIBXMLStore();
@@ -321,7 +283,7 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
         int t;
 
         for (t = 0; t < l.size(); t++) {
-            logger.debug(l.get(0).toString());
+            logger.debug(l.get(0));
         }
     }
 }

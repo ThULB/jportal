@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCREventManager.java,v $
- * $Revision: 1.8 $ $Date: 2006/01/18 12:07:28 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -95,7 +95,7 @@ public class MCREventManager {
 
             String type = st.nextToken();
             int nr = Integer.parseInt(st.nextToken());
-            String mode = st.nextToken(); // "class" or "indexer"
+            String mode = st.nextToken(); // "Class" or "Indexer"
 
             if (nr == 1) {
                 instances = new ArrayList();
@@ -106,9 +106,14 @@ public class MCREventManager {
 
             Object handler = null;
 
-            if ("class".equals(mode)) {
+            if ("Class".equals(mode)) {
+                if (config.getString(name).length()==0){
+                    //if property from mycore.properties is overwritten with empty value
+                    //by mycore.properties.private
+                    continue;
+                }
                 handler = config.getSingleInstanceOf(name);
-            } else { // "indexer"
+            } else { // "Indexer"
                 handler = MCRSearcherFactory.getSearcher(config.getString(name));
             }
 

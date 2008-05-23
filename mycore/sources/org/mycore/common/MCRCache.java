@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCache.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:36:44 $
+ * 
+ * $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,7 +23,13 @@
 
 package org.mycore.common;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
+
+import org.mycore.services.mbeans.MCRJMXBridge;
 
 /**
  * Instances of this class can be used as object cache. Each MCRCache has a
@@ -39,7 +45,7 @@ import java.util.Hashtable;
  * @see java.util.Hashtable
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 1.7 $ $Date: 2005/09/28 07:36:44 $
+ * @version $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07 Feb 2008) $
  */
 public class MCRCache {
     /**
@@ -71,7 +77,7 @@ public class MCRCache {
     protected MCRCacheEntry lru;
 
     /** A hashtable for looking up a cached object by a given key */
-    protected Hashtable index = new Hashtable();
+    protected Hashtable<Object,MCRCacheEntry> index = new Hashtable<Object,MCRCacheEntry>();
 
     /** The number of requests to get an object from this cache */
     protected long gets = 0;
@@ -84,15 +90,25 @@ public class MCRCache {
 
     /** The maximum number of objects that the cache can hold */
     protected int capacity;
+    
+    /** Tch type string for the MCRCacheJMXBridge */
+    protected String type;
+    
+    /** The constructor */
+    private MCRCache(){};
 
     /**
      * Creates a new cache with a given capacity.
      * 
      * @param capacity
      *            the maximum number of objects this cache will hold
+     * @param type the type string for MCRCacheJMXBridge
      */
-    public MCRCache(int capacity) {
+    public MCRCache(int capacity, String type) {
         setCapacity(capacity);
+        this.type=type;
+        Object mbean = new MCRCacheManager(this);
+        MCRJMXBridge.register(mbean, "MCRCache", type);
     }
 
     /**
@@ -107,8 +123,12 @@ public class MCRCache {
      *            the non-null object to be put into the cache
      */
     public synchronized void put(Object key, Object obj) {
-        MCRArgumentChecker.ensureNotNull(key, "key");
-        MCRArgumentChecker.ensureNotNull(obj, "obj");
+        if (key == null) {
+            throw new MCRUsageException("The value of the argument key is null.");
+        }
+        if (obj == null) {
+            throw new MCRUsageException("The value of the argument obj is null.");
+        }
 
         if (capacity == 0) {
             return;
@@ -146,7 +166,9 @@ public class MCRCache {
      *            the key for the object you want to remove from this cache
      */
     public synchronized void remove(Object key) {
-        MCRArgumentChecker.ensureNotNull(key, "key");
+        if (key == null) {
+            throw new MCRUsageException("The value of the argument key is null.");
+        }
 
         if (!index.containsKey(key)) {
             return;
@@ -184,7 +206,9 @@ public class MCRCache {
      * @return the cached object, or null
      */
     public synchronized Object get(Object key) {
-        MCRArgumentChecker.ensureNotNull(key, "key");
+        if (key == null) {
+            throw new MCRUsageException("The value of the argument key is null.");
+        }
 
         gets++;
 
@@ -274,7 +298,9 @@ public class MCRCache {
      *            the maximum number of objects this cache will hold
      */
     public synchronized void setCapacity(int capacity) {
-        MCRArgumentChecker.ensureIsTrue(capacity >= 0, "cache capacity must be >= 0");
+        if (capacity < 0) {
+            throw new MCRUsageException("The cache capacity must be >= 0.");
+        }
 
         while (size > capacity)
             remove(lru.key);
@@ -325,7 +351,7 @@ public class MCRCache {
      * Clears the cache by removing all entries from the cache
      */
     public synchronized void clear() {
-        index = new Hashtable();
+        index = new Hashtable<Object,MCRCacheEntry>();
         size = 0;
         mru = lru = null;
     }
@@ -348,7 +374,7 @@ public class MCRCache {
      * A small sample program for testing this class.
      */
     public static void main(String[] args) {
-        MCRCache cache = new MCRCache(4);
+        MCRCache cache = new MCRCache(4, "Small Sample Program");
         System.out.println(cache);
         cache.put("a", "Anton");
         cache.put("b", "Bohnen");
@@ -361,5 +387,18 @@ public class MCRCache {
         cache.put("f", "Frank");
         cache.get("c");
         System.out.println(cache);
+    }
+    
+    public void close() {
+        MCRJMXBridge.unregister("MCRCache", this.type);
+        clear();
+    }
+    
+    
+    /**
+     * Returns an iterable list of keys to the cached objects. 
+     */
+    public List<Object> keys(){
+    	return Collections.list(index.keys());
     }
 }

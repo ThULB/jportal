@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRAccessEventHandler.java,v $
- * $Revision: 1.16 $ $Date: 2006/07/21 10:11:13 $
+ * 
+ * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,11 +28,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-
 import org.jdom.Element;
+import org.jdom.input.SAXBuilder;
+
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.common.xml.MCRXMLHelper;
+import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -42,7 +44,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * simple workflow.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 1.16 $ $Date: 2006/07/21 10:11:13 $
+ * @version $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
  */
 public class MCRAccessEventHandler extends MCREventHandlerBase {
 
@@ -51,10 +53,18 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
 
     private static MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
-    private static String storedrules = CONFIG.getString("MCR.StorePermissions", "read,write,delete");
-    // get the standard read rule from config or it's the false rule
-    private static String  strRule = CONFIG.getString("MCR.AccessRule.STANDARD-READ-RULE", "<condition format=\"xml\"><boolean operator=\"false\" /></condition>");
-    private static Element readrule = (Element)MCRXMLHelper.parseXML(strRule,false).getRootElement().detach();
+    private static String storedrules = CONFIG.getString("MCR.Access.StorePermissions", "read,write,delete");
+
+    // get the standard read rule from config or it's the true rule
+    private static String strReadRule = CONFIG.getString("MCR.Access.Rule.STANDARD-READ-RULE", "<condition format=\"xml\"><boolean operator=\"true\" /></condition>");
+
+    private static Element readrule = (Element) MCRXMLHelper.parseXML(strReadRule, false).getRootElement().detach();
+
+    // get the standard edit rule from config or it's the true rule
+    private static String strEditRule = CONFIG.getString("MCR.Access.Rule.STANDARD-EDIT-RULE", "<condition format=\"xml\"><boolean operator=\"true\" /></condition>");
+
+    private static Element editrule = (Element) MCRXMLHelper.parseXML(strEditRule, false).getRootElement().detach();
+
     /**
      * This method will be used to create the access rules for SWF for a
      * MCRObject.
@@ -171,14 +181,14 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
         }
         int rulesize = base.getService().getRulesSize();
         if ((rulesize == 0) && (aclsize == 0)) {
-            setDefaultPermissions(base, true);
+            setDefaultPermissions(base.getId().getId(), true);
             LOGGER.warn("The ACL conditions for this object are empty!");
         }
         while (0 < rulesize) {
             org.jdom.Element conditions = base.getService().getRule(0).getCondition();
-            String pool = base.getService().getRule(0).getPermission();
-            if (storedrules.indexOf(pool) != -1) {
-                MCRAccessManager.addRule(base.getId(), pool, conditions, "");
+            String permission = base.getService().getRule(0).getPermission();
+            if (storedrules.indexOf(permission) != -1) {
+                MCRAccessManager.addRule(base.getId(), permission, conditions, "");
             }
             base.getService().removeRule(0);
             rulesize--;
@@ -202,17 +212,19 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
         }
         int rulesize = base.getService().getRulesSize();
         if ((rulesize == 0) && (aclsize == 0)) {
-            setDefaultPermissions(base, false);
-            LOGGER.warn("The ACL conditions for this object are empty!");
+            setDefaultPermissions(base.getId().getId(), false);
+            LOGGER.warn("The ACL conditions for this object was empty!");
         }
-        while (0 < rulesize) {
-            org.jdom.Element conditions = base.getService().getRule(0).getCondition();
-            String pool = base.getService().getRule(0).getPermission();
-            if (storedrules.indexOf(pool) != -1) {
-                MCRAccessManager.updateRule(base.getId(), pool, conditions, "");
+        if (aclsize == 0) {
+            while (0 < rulesize) {
+                org.jdom.Element conditions = base.getService().getRule(0).getCondition();
+                String permission = base.getService().getRule(0).getPermission();
+                if (storedrules.indexOf(permission) != -1) {
+                    MCRAccessManager.updateRule(base.getId(), permission, conditions, "");
+                }
+                base.getService().removeRule(0);
+                rulesize--;
             }
-            base.getService().removeRule(0);
-            rulesize--;
         }
 
         // save the stop time
@@ -242,24 +254,26 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
      * @param obj
      * @param overwrite
      */
-    private void setDefaultPermissions(MCRBase base, boolean overwrite) {
-        List savedPermissions = MCRAccessManager.getPermissionsForID(base.getId());
+    private void setDefaultPermissions(String id, boolean overwrite) {
+        List savedPermissions = MCRAccessManager.getPermissionsForID(id);
         List configuredPermissions = AI.getAccessPermissionsFromConfiguration();
         for (Iterator it = configuredPermissions.iterator(); it.hasNext();) {
             String permission = (String) it.next();
-            if (savedPermissions != null && savedPermissions.contains(permission)) {
-                if (overwrite) {
-                    MCRAccessManager.removeRule(base.getId(), permission);
-                	if ("read".equals(permission))                		
-                        MCRAccessManager.addRule(base.getId(), permission, readrule, "");
-                	else
-                		MCRAccessManager.addRule(base.getId(), permission, MCRAccessManager.getFalseRule(), "");
+            if (storedrules.indexOf(permission) != -1) {
+                if (savedPermissions != null && savedPermissions.contains(permission)) {
+                    if (overwrite) {
+                        MCRAccessManager.removeRule(id, permission);
+                        if (permission.startsWith("read"))
+                            MCRAccessManager.addRule(id, permission, readrule, "");
+                        else
+                            MCRAccessManager.addRule(id, permission, editrule, "");
+                    }
+                } else {
+                    if (permission.startsWith("read"))
+                        MCRAccessManager.addRule(id, permission, readrule, "");
+                    else
+                        MCRAccessManager.addRule(id, permission, editrule, "");
                 }
-            } else {
-            	if ("read".equals(permission))
-                    MCRAccessManager.addRule(base.getId(), permission, readrule, "");
-            	else 
-            		MCRAccessManager.addRule(base.getId(), permission, MCRAccessManager.getFalseRule(), "");
             }
         }
     }

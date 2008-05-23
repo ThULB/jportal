@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRUtils.java,v $
- * $Revision: 1.50 $ $Date: 2006/11/27 12:34:48 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,7 +24,7 @@
 package org.mycore.common;
 
 import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
-import static org.mycore.common.MCRConstants.SUPPORTED_LANG;
+import static org.mycore.common.MCRConstants.DATE_FORMAT;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -51,6 +51,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.xml.sax.Attributes;
@@ -62,10 +63,10 @@ import org.xml.sax.helpers.DefaultHandler;
  * programming API.
  * 
  * @author Jens Kupferschmidt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.50 $ $Date: 2006/11/27 12:34:48 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  */
 public class MCRUtils {
     // The file slash
@@ -80,6 +81,23 @@ public class MCRUtils {
     // public constant data
     private static final Logger LOGGER = Logger.getLogger(MCRUtils.class);
 
+    // Language lists
+    private static ArrayList<String> langlist = new ArrayList<String>();
+    private static ArrayList<String> countrylist = new ArrayList<String>();
+    
+    /**
+     * Load two static arrays for fast search of ISO-639/ISO-3166 strings.
+     */
+    static {
+        StringBuffer sb;
+        for ( Locale l : Locale.getAvailableLocales()) {
+            sb = new StringBuffer(l.getLanguage());
+            langlist.add(sb.toString());
+            sb.append('-').append(l.getCountry());
+            countrylist.add(sb.toString());
+        }
+    }
+    
     /**
      * This method check the language string base on RFC 1766 to the supported
      * languages in mycore.
@@ -92,140 +110,10 @@ public class MCRUtils {
         if ((lang == null) || ((lang = lang.trim()).length() == 0)) {
             return false;
         }
-
-        for (int i = 0; i < SUPPORTED_LANG.length; i++) {
-            if (lang.equals(SUPPORTED_LANG[i])) {
-                return true;
-            }
-        }
-
+        if (lang.startsWith("x-")) { return true; }
+        if (langlist.contains(lang)) { return true; }
+        if (countrylist.contains(lang)) { return true; }
         return false;
-    }
-
-    /**
-     * The method return the index of a language string in the statich field
-     * MCRDefault.SUPPORTED_LANG. If the lang is not supported -1 was returned.
-     * 
-     * @param lang
-     *            the language string
-     * @return the index if the language was supported, otherwise -1
-     */
-    public static final int getPositionLang(String lang) {
-        if ((lang == null) || ((lang = lang.trim()).length() == 0)) {
-            return -1;
-        }
-
-        for (int i = 0; i < SUPPORTED_LANG.length; i++) {
-            if (lang.equals(SUPPORTED_LANG[i])) {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    /**
-     * The method return the instance of DateFormat for the given language.
-     * 
-     * @param lang
-     *            the language string
-     * @return the instance of DateFormat or null
-     */
-    public static final DateFormat getDateFormat(String lang) {
-        int i = getPositionLang(lang);
-
-        if (i == -1) {
-            return DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-        }
-
-        return MCRConstants.DATE_FORMAT[i];
-    }
-
-    /**
-     * The method check a date string for the pattern <em>tt.mm.jjjj</em>.
-     * 
-     * @param date
-     *            the date string
-     * @return true if the pattern is correct, otherwise false
-     */
-    public static final boolean isDateInDe(String date) {
-        if ((date == null) || ((date = date.trim()).length() == 0)) {
-            return false;
-        }
-
-        date = date.trim().toUpperCase();
-
-        if (date.length() != 10) {
-            return false;
-        }
-
-        try {
-            DateFormat df = getDateFormat("de");
-            GregorianCalendar newdate = new GregorianCalendar();
-            newdate.setTime(df.parse(date));
-        } catch (ParseException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * The method check a date string for the pattern <em>yyyy-dd-mm</em>.
-     * 
-     * @param date
-     *            the date string
-     * @return true if the pattern is correct, otherwise false
-     */
-    public static final boolean isDateInEn_UK(String date) {
-        if ((date == null) || ((date = date.trim()).length() == 0)) {
-            return false;
-        }
-
-        date = date.trim().toUpperCase();
-
-        if (date.length() != 10) {
-            return false;
-        }
-
-        try {
-            DateFormat df = getDateFormat("en-UK");
-            GregorianCalendar newdate = new GregorianCalendar();
-            newdate.setTime(df.parse(date));
-        } catch (ParseException e) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * The method check a date string for the pattern <em>yyyy/dd/mm</em>.
-     * 
-     * @param date
-     *            the date string
-     * @return true if the pattern is correct, otherwise false
-     */
-    public static final boolean isDateInEn_US(String date) {
-        if ((date == null) || ((date = date.trim()).length() == 0)) {
-            return false;
-        }
-
-        date = date.trim().toUpperCase();
-
-        if (date.length() != 10) {
-            return false;
-        }
-
-        try {
-            DateFormat df = getDateFormat("en-US");
-            GregorianCalendar newdate = new GregorianCalendar();
-            newdate.setTime(df.parse(date));
-        } catch (ParseException e) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -253,8 +141,8 @@ public class MCRUtils {
         }
 
         if (!test) {
-            for (int i = 0; i < SUPPORTED_LANG.length; i++) {
-                DateFormat df = getDateFormat(SUPPORTED_LANG[i]);
+            for (int i = 0; i < DATE_FORMAT.length; i++) {
+                DateFormat df = DATE_FORMAT[i];
                 df.setLenient(false);
 
                 try {
@@ -320,8 +208,8 @@ public class MCRUtils {
         }
 
         if (!test) {
-            for (int i = 0; i < SUPPORTED_LANG.length; i++) {
-                DateFormat df = getDateFormat(SUPPORTED_LANG[i]);
+            for (int i = 0; i < DATE_FORMAT.length; i++) {
+                DateFormat df = DATE_FORMAT[i];
 
                 try {
                     calendar.setTime(df.parse(indate.substring(start, indate.length())));
@@ -415,7 +303,7 @@ public class MCRUtils {
      */
     public static final byte[] getByteArray(org.jdom.Document jdom) throws MCRPersistenceException {
         MCRConfiguration conf = MCRConfiguration.instance();
-        String mcr_encoding = conf.getString("MCR.metadata_default_encoding", DEFAULT_ENCODING);
+        String mcr_encoding = conf.getString("MCR.Metadata.DefaultEncoding", DEFAULT_ENCODING);
         ByteArrayOutputStream outb = new ByteArrayOutputStream();
 
         try {
@@ -476,8 +364,10 @@ public class MCRUtils {
      * @return true if Inputstream copied successfully to OutputStream
      */
     public static boolean copyStream(InputStream source, OutputStream target) {
-        MCRArgumentChecker.ensureNotNull(source, "InputStream source");
-
+        if (source == null) {
+            throw new MCRException("InputStream source is null.");
+        }
+        
         try {
             // R E A D / W R I T E by chunks
             int chunkSize = 63 * 1024;
@@ -532,8 +422,10 @@ public class MCRUtils {
      * @return true if Inputstream copied successfully to OutputStream
      */
     public static boolean copyReader(Reader source, Writer target) {
-        MCRArgumentChecker.ensureNotNull(source, "Reader source");
-
+        if (source == null) {
+            throw new MCRException("Reader source is null.");
+        }
+        
         try {
             // R E A D / W R I T E by chunks
             int chunkSize = 63 * 1024;
@@ -645,7 +537,9 @@ public class MCRUtils {
      * @return the cutted HashSet
      */
     public static final HashSet cutHashSet(HashSet hashin, int maxitems) {
-        MCRArgumentChecker.ensureNotNull(hashin, "Input HashSet");
+        if (hashin == null) {
+            throw new MCRException("Input HashSet is null.");
+        }
 
         if (maxitems < 1) {
             LOGGER.warn("The maximum items are lower then 1.");
@@ -669,7 +563,9 @@ public class MCRUtils {
      * @return the cutted ArrayList
      */
     public static final ArrayList cutArrayList(ArrayList arrayin, int maxitems) {
-        MCRArgumentChecker.ensureNotNull(arrayin, "Input ArrayList");
+        if (arrayin == null) {
+            throw new MCRException("Input ArrayList is null.");
+        }
 
         if (maxitems < 1) {
             LOGGER.warn("The maximum items are lower then 1.");
@@ -801,33 +697,71 @@ public class MCRUtils {
     }
 
     /**
+     * The method wrap the org.jdom.Element in a org.jdom.Document and write it
+     * to a file.
+     * 
+     * @param elm
+     *            the JDOM Document
+     * @param xml
+     *            the File instance
+     */
+    public static final void writeElementToFile(Element elm, File xml) {
+        writeJDOMToFile((new Document()).addContent(elm), xml);
+    }
+
+    /**
      * The method write a given JDOM Document to a file.
      * 
      * @param jdom
      *            the JDOM Document
      * @param xml
      *            the File instance
-     * @throws IOException
      */
-    public static final void writeJDOMToFile(Document jdom, File xml) throws IOException {
-        XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(xml));
-        xout.output(jdom, out);
-        out.close();
+    public static final void writeJDOMToFile(Document jdom, File xml) {
+        try {
+            XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(xml));
+            xout.output(jdom, out);
+            out.close();
+        } catch (IOException ioe) {
+            if (LOGGER.isDebugEnabled()) {
+                ioe.printStackTrace();
+            } else {
+                LOGGER.error("Can't write org.jdom.Document to file "+xml.getName()+".");
+            }
+        }
     }
-    
+
+    /**
+     * The method wrap the org.jdom.Element in a org.jdom.Document and write it
+     * to Sysout.
+     * 
+     * @param elm
+     *            the JDOM Document
+     */
+    public static final void writeElementToSysout(Element elm) {
+        writeJDOMToSysout((new Document()).addContent(elm));
+    }
+
     /**
      * The method write a given JDOM Document to the system output.
      * 
      * @param jdom
      *            the JDOM Document
-     * @throws IOException
      */
-    public static final void writeJDOMToSysout(Document jdom) throws IOException {
-        XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
-        BufferedOutputStream out = new BufferedOutputStream(System.out);
-        xout.output(jdom, out);
-        out.flush();
+    public static final void writeJDOMToSysout(Document jdom) {
+        try {
+            XMLOutputter xout = new XMLOutputter(Format.getPrettyFormat());
+            BufferedOutputStream out = new BufferedOutputStream(System.out);
+            xout.output(jdom, out);
+            out.flush();
+        } catch (IOException ioe) {
+            if (LOGGER.isDebugEnabled()) {
+                ioe.printStackTrace();
+            } else {
+                LOGGER.error("Can't write org.jdom.Document to Sysout.");
+            }
+        }
     }
 
     /**

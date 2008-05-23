@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRSearchServlet.java,v $
- * $Revision: 1.20 $ $Date: 2006/12/08 14:21:37 $
+ * 
+ * $Revision: 13456 $ $Date: 2008-04-25 16:58:08 +0200 (Fr, 25 Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,8 @@
 package org.mycore.services.fieldquery;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -38,9 +40,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.XMLOutputter;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRException;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -57,33 +58,14 @@ public class MCRSearchServlet extends MCRServlet {
 
     protected static final Logger LOGGER = Logger.getLogger(MCRSearchServlet.class);
 
-    /** Cached query results */
-    private static final String RESULTS_KEY = "MCRSearchServlet.results";
-
-    /** Cached queries as XML, for re-use in editor form */
-    private static final String QUERIES_KEY = "MCRSearchServlet.queries";
-
-    /** Cached queries as XML, for re-use in editor form */
-    private static final String RESORT_KEY = "MCRSearchServlet.resort";
-
-    /** Cached queries as parsed MCRCondition, for output with results */
-    private static final String CONDIDTIONS_KEY = "MCRSearchServlet.conditions";
-
-    /** search parameters * */
-    private static final String PARAMS_KEY = "MCRSearchServlet.parameters";
-
     /** Default search field */
     private String defaultSearchField;
-
-    /** Default search operator */
-    private String defaultSearchOperator;
 
     public void init() throws ServletException {
         super.init();
         MCRConfiguration config = MCRConfiguration.instance();
         String prefix = "MCR.SearchServlet.";
         defaultSearchField = config.getString(prefix + "DefaultSearchField", "allMeta");
-        defaultSearchOperator = config.getString(prefix + "DefaultSearchOperator", "contains");
     }
 
     public void doGetPost(MCRServletJob job) throws IOException {
@@ -98,17 +80,24 @@ public class MCRSearchServlet extends MCRServlet {
         else
             doQuery(request, response);
     }
+    
+    protected MCRCachedQueryData getQueryData( HttpServletRequest request )
+    {
+      String id = request.getParameter( "id" );
+      MCRCachedQueryData qd = MCRCachedQueryData.getData( id );
+      if( qd == null )
+      {
+        throw new MCRException( "Result list is not in cache any more, please re-run query" );
+      }
+      return qd;
+    }
 
     /**
      * Returns a query that was previously submitted, to reload it into the
      * editor search mask. Usage: MCRSearchServlet?mode=load&id=XXXXX
      */
     protected void loadQuery(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
-        Document query = (Document) (getCache(QUERIES_KEY).get(id));
-
-        // Send query XML to editor
-        getLayoutService().sendXML(request, response, query);   
+        getLayoutService().sendXML(request, response, getQueryData(request).getQuery() );   
     }
 
     /**
@@ -116,22 +105,20 @@ public class MCRSearchServlet extends MCRServlet {
      * MCRSearchServlet?mode=results&numPerPage=10&page=1
      */
     protected void showResults(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         // Get cached results
-        String id = request.getParameter("id");
-        MCRResults result = (MCRResults) (getCache(RESULTS_KEY).get(id));
-        Document query = (Document) (getCache(QUERIES_KEY).get(id));
+        MCRCachedQueryData qd = getQueryData(request);
+        MCRResults results = qd.getResults();
 
         // Effective number of hits per page
         String snpp = request.getParameter("numPerPage");
         if (snpp == null)
             snpp = "0";
         int npp = Integer.parseInt(snpp);
-        if (npp > result.getNumHits())
+        if (npp > results.getNumHits())
             npp = 0;
 
         // Total number of pages
-        int numHits = Math.max(1, result.getNumHits());
+        int numHits = Math.max(1, results.getNumHits());
         int numPages = 1;
         if (npp > 0)
             numPages = (int) (Math.ceil((double) numHits / (double) npp));
@@ -140,38 +127,44 @@ public class MCRSearchServlet extends MCRServlet {
         String spage = request.getParameter("page");
         if (spage == null)
             spage = "1";
-        int page = Integer.parseInt(spage);
+        int page = 0;
+        try
+        {
+          page = Integer.parseInt(spage);
+        } catch (NumberFormatException e)
+        {
+        }
         if (npp == 0)
             page = 1;
         else if (page > numPages)
-            page = numPages;
+          page = numPages;
+        else if (page < 1)
+          page = 1;
 
         // Number of first and last hit to be shown
         int first = (page - 1) * npp;
-        int last = result.getNumHits() - 1;
+        int last = results.getNumHits() - 1;
         if (npp > 0)
-            last = Math.min(result.getNumHits(), first + npp) - 1;
+            last = Math.min(results.getNumHits(), first + npp) - 1;
 
         // Build result hits as XML document
-        Element xml = result.buildXML(first, last);
+        Element xml = results.buildXML(first, last);
 
         // Add additional data for output
         xml.setAttribute("numPerPage", String.valueOf(npp));
         xml.setAttribute("numPages", String.valueOf(numPages));
         xml.setAttribute("page", String.valueOf(page));
         // save some parameters
-        SearchParameters sp = new SearchParameters();
-        sp.page = page;
-        sp.numPerPage = npp;
-        getCache(PARAMS_KEY).put(id, sp);
+        qd.setPage( page );
+        qd.setNumPerPage( npp );
 
         // The URL of the search mask that was used
-        xml.setAttribute("mask", query.getRootElement().getAttributeValue("mask"));
+        xml.setAttribute("mask", qd.getQuery().getRootElement().getAttributeValue("mask"));
 
         // The query condition, to show together with the results
-        MCRCondition cond = (MCRCondition) (getCache(CONDIDTIONS_KEY).get(id));
-        xml.addContent(new Element("condition").setAttribute("format", "text").setText(cond.toString()));
-        xml.addContent(new Element("condition").setAttribute("format", "xml").addContent(cond.toXML()));
+        MCRCondition condition = qd.getCondition();
+        xml.addContent(new Element("condition").setAttribute("format", "text").setText(condition.toString()));
+        xml.addContent(new Element("condition").setAttribute("format", "xml").addContent(condition.toXML()));
 
         // Send output to LayoutServlet
         sendToLayout(request, response, new Document(xml));        
@@ -204,15 +197,41 @@ public class MCRSearchServlet extends MCRServlet {
             query.setAttribute("numPerPage", getReqParameter(request, "numPerPage", "0"));
             input = new Document(query);
 
+            
+            Element sortBy = new Element("sortBy");
+            query.addContent(sortBy);
+            
+            Enumeration sortNames = request.getParameterNames();
+            Vector<String> sf = new Vector<String>();
+            while (sortNames.hasMoreElements()) {
+                String name = (String) (sortNames.nextElement());
+                if (name.contains(".sortField"))
+                {
+                  sf.add(name);
+                }
+            }
+            
+            Collections.sort(sf, new MCRSortfieldComparator());
+            for (int i=0;i<sf.size();i++)
+            {
+              String name = (String)sf.elementAt(i);
+              name = name.substring(0, name.indexOf(".sortField"));
+              Element field = new Element("field");
+              field.setAttribute("name", name);
+              field.setAttribute("order", getReqParameter(request, name, "ascending"));
+              sortBy.addContent(field);
+            }
+            
             Element conditions = new Element("conditions");
             query.addContent(conditions);
 
             if (request.getParameter("search") != null) {
                 // Search in default field with default operator
 
+                String defaultOperator = MCRFieldType.getDefaultOperator(MCRFieldDef.getDef(defaultSearchField).getDataType()); 
                 Element cond = new Element("condition");
                 cond.setAttribute("field", defaultSearchField);
-                cond.setAttribute("operator", defaultSearchOperator);
+                cond.setAttribute("operator", defaultOperator );
                 cond.setAttribute("value", getReqParameter(request, "search", null));
 
                 Element b = new Element("boolean");
@@ -238,14 +257,14 @@ public class MCRSearchServlet extends MCRServlet {
                 Enumeration names = request.getParameterNames();
                 while (names.hasMoreElements()) {
                     String name = (String) (names.nextElement());
-                    if (name.endsWith(".operator"))
+                    if (name.endsWith(".operator") || name.endsWith(".sortField"))
                         continue;
                     if (" maxResults numPerPage mask ".indexOf(" " + name + " ") >= 0)
                         continue;
 
                     String operator = request.getParameter(name + ".operator");
                     if (operator == null)
-                        operator = defaultSearchOperator;
+                        operator = MCRFieldType.getDefaultOperator(MCRFieldDef.getDef(name).getDataType()); 
 
                     Element parent = b;
 
@@ -268,7 +287,7 @@ public class MCRSearchServlet extends MCRServlet {
             }
         }
 
-        Object clonedQuery = input.clone(); // Keep for later re-use
+        Document clonedQuery = (Document)(input.clone()); // Keep for later re-use
 
         // Show incoming query document
         if (LOGGER.isDebugEnabled()) {
@@ -277,18 +296,54 @@ public class MCRSearchServlet extends MCRServlet {
         }
 
         org.jdom.Element root = input.getRootElement();
-        MCRCondition cond = null;
+        MCRCondition cond =  cleanupQuery(input);
+
+        // Execute query
+        MCRResults result = MCRQueryManager.search(MCRQuery.parseXML(input));
+
+        String npp = root.getAttributeValue("numPerPage", "0");
+
+        // Store query and results in cache
+        new MCRCachedQueryData( result, clonedQuery, cond );
+
+        // Redirect browser to first results page
+        sendRedirect(request, response, result.getID(), npp);
+    }
+    
+    /**
+     * cleans the query
+     * e.g. renames condition elements and removes empty condition elements
+     * @param input - the jdom-Document containing the query, which has to be modified
+     * @returns the cleaned condition
+     * 
+     */
+    protected MCRCondition cleanupQuery(Document input){
+    	org.jdom.Element root = input.getRootElement();
+    	MCRCondition cond = null;
 
         if (root.getChild("conditions").getAttributeValue("format", "xml").equals("xml")) {
             // Query is in XML format
 
-            // Rename condition elements from search mask:
-            // condition1 -> condition
+            // Rename condition elements from search mask: condition1 -> condition
+            // Transform condition with multiple values into OR condition
             Iterator it = root.getDescendants(new ElementFilter());
             while (it.hasNext()) {
                 Element elem = (Element) it.next();
                 if ((!elem.getName().equals("conditions")) && elem.getName().startsWith("condition"))
                     elem.setName("condition");
+                else if (elem.getName().equals("value"))
+                {
+                  Element parent = elem.getParentElement();
+                  parent.removeAttribute("value");
+                  parent.setAttribute("children","true");
+
+                  elem.setName("condition");
+                  elem.setAttribute("field",parent.getAttributeValue("field"));
+                  elem.setAttribute("operator",parent.getAttributeValue("operator"));
+                  elem.setAttribute("value",elem.getText());
+                  elem.removeContent();
+                  
+                }
             }
 
             // Find condition fields without values
@@ -296,7 +351,13 @@ public class MCRSearchServlet extends MCRServlet {
             Vector<Element> help = new Vector<Element>();
             while (it.hasNext()) {
                 Element condition = (Element) it.next();
-                if (condition.getAttribute("value") == null) {
+                if (condition.getAttribute("children") != null) {
+                    // Transform into OR condition
+                    condition.setName("boolean");
+                    condition.setAttribute("operator","or");
+                    condition.removeAttribute("children");
+                }
+                else if (condition.getAttribute("value") == null) {
                     help.add(condition);
                 }
             }
@@ -329,58 +390,11 @@ public class MCRSearchServlet extends MCRServlet {
             if (sortBy.getChildren().size() == 0)
                 sortBy.detach();
         }
-
-        // Execute query
-        long start = System.currentTimeMillis();
-        MCRResults result = MCRQueryManager.search(MCRQuery.parseXML(input));
-        long qtime = System.currentTimeMillis() - start;
-        LOGGER.debug("MCRSearchServlet total query time: " + qtime);
-
-        String npp = root.getAttributeValue("numPerPage", "0");
-
-        // Store query and results in cache
-        getCache(RESULTS_KEY).put(result.getID(), result);
-        getCache(QUERIES_KEY).put(result.getID(), clonedQuery);
-        getCache(RESORT_KEY).put(result.getID(), input);
-        getCache(CONDIDTIONS_KEY).put(result.getID(), cond);
-
-        // Redirect browser to first results page
-        sendRedirect(request, response, result.getID(), npp);
-    }
-
-    public static String getConditionsKey() {
-        return CONDIDTIONS_KEY;
-    }
-
-    public static String getQueriesKey() {
-        return QUERIES_KEY;
-    }
-
-    public static String getResultsKey() {
-        return RESULTS_KEY;
-    }
-
-    public static String getParametersKey() {
-        return PARAMS_KEY;
-    }
-
-    public static String getResortKey() {
-        return RESORT_KEY;
-    }
-
-    public static MCRCache getCache(String key) {
-        MCRCache c = (MCRCache) MCRSessionMgr.getCurrentSession().get(key);
-        if (c == null) {
-            c = new MCRCache(5);
-            MCRSessionMgr.getCurrentSession().put(key, c);
-        }
-        return c;
-    }
-
-    public static class SearchParameters {
-        public int numPerPage;
-
-        public int page;
+        return cond;
+    	
+    	
+    	
+    	
     }
 
    /**
@@ -401,8 +415,24 @@ public class MCRSearchServlet extends MCRServlet {
      */
     protected void sendRedirect(HttpServletRequest req, HttpServletResponse res, String id, String numPerPage) throws IOException {
         // Redirect browser to first results page
-        String url = "MCRSearchServlet?mode=results&id=" + id + "&numPerPage=" + numPerPage;
-        res.sendRedirect(res.encodeRedirectURL(url));
+        StringBuffer sb = new StringBuffer();
+        sb.append("MCRSearchServlet?mode=results&id=").append(id).append("&numPerPage=").append(numPerPage);
+        String style = req.getParameter("XSL.Style");
+        if ((style != null) && (style.trim().length() != 0)){
+            sb.append("&XSL.Style=").append(style);
+        }
+        res.sendRedirect(res.encodeRedirectURL(sb.toString()));
     }
-
+    
+    private class MCRSortfieldComparator implements Comparator {
+      
+      public int compare(Object arg0, Object arg1) {
+        String s0 = (String)arg0;
+        s0 = s0.substring(s0.indexOf(".sortField"));
+        String s1 = (String)arg1; 
+        s1 = s1.substring(s1.indexOf(".sortField"));
+        return s0.compareTo(s1);
+      }
+    };
 }
+

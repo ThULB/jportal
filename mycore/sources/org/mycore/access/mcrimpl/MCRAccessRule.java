@@ -1,5 +1,5 @@
 /*
- * $RCSfile$
+ * 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
@@ -27,8 +27,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.jdom.Element;
-import org.mycore.user2.MCRUser;
+import org.mycore.user.MCRUser;
 
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.parsers.bool.MCRParseException;
@@ -61,15 +62,21 @@ public class MCRAccessRule {
     }
 
     public boolean checkAccess(MCRUser user, Date date, MCRIPAddress ip) {
-    	if(user.getID().equals(MCRAccessControlSystem.superuserID))
-    		return true;
         if (this.parsedRule == null) {
+            if (user.getID().equals(MCRAccessControlSystem.superuserID)) {
+                Logger.getLogger(MCRAccessRule.class).debug("No rule defined, grant access to super user.");
+                return true;
+            }
             return false;
         }
-
+        Logger.getLogger(this.getClass()).debug("new MCRAccessData");
         MCRAccessData data = new MCRAccessData(user, date, ip);
+        Logger.getLogger(this.getClass()).debug("new MCRAccessData done.");
 
-        return this.parsedRule.evaluate(data);
+        Logger.getLogger(this.getClass()).debug("evaluate MCRAccessData");
+        boolean returns = this.parsedRule.evaluate(data);
+        Logger.getLogger(this.getClass()).debug("evaluate MCRAccessData done.");
+        return returns;
     }
 
     public MCRCondition getRule() {
@@ -85,10 +92,8 @@ public class MCRAccessRule {
         this.rule = rule;
     }
 
-    
-    public String getRuleString()
-    {
-        if (rule==null){
+    public String getRuleString() {
+        if (rule == null) {
             return "";
         }
         return rule;
@@ -125,15 +130,15 @@ public class MCRAccessRule {
     public void setId(String id) {
         this.id = id;
     }
-    
-    public Element getRuleElement(){
+
+    public Element getRuleElement() {
         Element el = new Element("mcraccessrule");
         el.addContent(new Element("id").setText(this.id));
         el.addContent(new Element("creator").setText(this.id));
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         el.addContent(new Element("creationdate").setText(df.format(this.creationTime)));
         el.addContent(new Element("rule").setText(this.rule));
-        el.addContent(new Element("description").setText(""+this.description));
+        el.addContent(new Element("description").setText("" + this.description));
         return el;
     }
 }

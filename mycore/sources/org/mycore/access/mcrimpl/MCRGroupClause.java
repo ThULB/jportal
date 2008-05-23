@@ -1,5 +1,5 @@
 /*
- * $RCSfile$
+ * 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
@@ -27,7 +27,7 @@ import org.jdom.Attribute;
 import org.jdom.Element;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.parsers.bool.MCRConditionVisitor;
-import org.mycore.user2.MCRGroup;
+import org.mycore.user.MCRGroup;
 
 /**
  * Implementation of a (group xy) clause

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRQuery.java,v $
- * $Revision: 1.6 $ $Date: 2006/12/08 14:21:37 $
+ * 
+ * $Revision: 13306 $ $Date: 2008-03-19 17:54:03 +0100 (Mi, 19 Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -55,7 +55,7 @@ public class MCRQuery {
      *            the query conditions
      */
     public MCRQuery(MCRCondition cond) {
-        this.cond = cond;
+        this.cond = MCRQueryParser.normalizeCondition(cond);
     }
 
     /**
@@ -70,7 +70,7 @@ public class MCRQuery {
      *            the maximum number of results to return
      */
     public MCRQuery(MCRCondition cond, List<MCRSortBy> sortBy, int maxResults) {
-        this.cond = cond;
+        this.cond = MCRQueryParser.normalizeCondition(cond);
         this.setSortBy(sortBy);
         this.setMaxResults(maxResults);
     }

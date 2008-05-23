@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRGROUPADMINS.java,v $
- * $Revision: 1.7 $ $Date: 2005/09/28 07:29:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,7 +30,7 @@ public class MCRGROUPADMINS {
         this.key = new MCRGROUPADMINSPK();
     }
 
-    public MCRGROUPADMINS(String gid, String userid, String groupid) {
+    public MCRGROUPADMINS(MCRGROUPS gid, MCRUSERS userid, MCRGROUPS groupid) {
         this.key = new MCRGROUPADMINSPK(gid, userid, groupid);
     }
 
@@ -48,33 +48,33 @@ public class MCRGROUPADMINS {
     /**
      * @hibernate.property column="GID" not-null="true" update="true"
      */
-    public String getGid() {
+    public MCRGROUPS getGid() {
         return key.getGid();
     }
 
-    public void setGid(String gid) {
+    public void setGid(MCRGROUPS gid) {
         key.setGid(gid);
     }
 
     /**
      * @hibernate.property column="USERID" not-null="true" update="true"
      */
-    public String getUserid() {
+    public MCRUSERS getUserid() {
         return key.getUserid();
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(MCRUSERS userid) {
         key.setUserid(userid);
     }
 
     /**
      * @hibernate.property column="GROUPID" not-null="true" update="true"
      */
-    public String getGroupid() {
+    public MCRGROUPS getGroupid() {
         return key.getGroupid();
     }
 
-    public void setGroupid(String groupid) {
+    public void setGroupid(MCRGROUPS groupid) {
         key.setGroupid(groupid);
     }
 }

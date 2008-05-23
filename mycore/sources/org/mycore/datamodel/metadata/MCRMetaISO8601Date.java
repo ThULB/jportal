@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRMetaISO8601Date.java,v $
- * $Revision: 1.14 $ $Date: 2006/12/05 12:35:07 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -57,7 +57,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 1.14 $ $Date: 2006/12/05 12:35:07 $
+ * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  * @since 1.3
  */
 public final class MCRMetaISO8601Date extends MCRMetaDefault {
@@ -213,7 +213,7 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
         try {
             dt = getDateTime(FormatChooser.cropSecondFractions(isoString));
         } catch (RuntimeException e) {
-            boolean strictParsingEnabled=CONFIG.getBoolean("MCR.SimpleDateFormat.strictParsing",true);
+            boolean strictParsingEnabled=CONFIG.getBoolean("MCR.Metadata.SimpleDateFormat.StrictParsing",true);
             if (!strictParsingEnabled){
                 /*
                  * Last line of defence against the worst dates of the universe ;o)
@@ -229,7 +229,7 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
     }
     
     private DateTime guessDateTime(String date){
-        String locales=CONFIG.getString("MCR.SimpleDateFormat.locales","de_DE");
+        String locales=CONFIG.getString("MCR.Metadata.SimpleDateFormat.Locales","de_DE");
         StringTokenizer tok=new StringTokenizer(locales,",");
         while (tok.hasMoreTokens()){
             Locale locale= getLocale(tok.nextToken());
@@ -268,7 +268,7 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
      * @return a new Date instance of the time set in this element
      */
     public final Date getDate() {
-        return (dt == null) ? null : new Date(dt.getMillis());
+        return (dt == null) ? null : (Date)dt.toDate().clone();
     }
 
     /**
@@ -414,7 +414,7 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
      * 
      * @author Thomas Scheffler (yagee)
      *
-     * @version $Revision: 1.14 $ $Date: 2006/12/05 12:35:07 $
+     * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
      * @since 1.3
      */
     protected static final class FormatChooser {
@@ -468,7 +468,8 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
             if (isoFormat != null) {
                 df = getFormatterForFormat(isoFormat);
             } else if ((isoString != null) && (isoString.length() != 0)) {
-                df = getFormatterForDuration(isoString);
+                String normalized = (isoString.charAt(0) == '-') ? isoString.substring(1) : isoString;
+                df = getFormatterForDuration(normalized);
             } else {
                 df = COMPLETE_HH_MM_SS_SSS_FORMAT;
             }
@@ -500,8 +501,15 @@ public final class MCRMetaISO8601Date extends MCRMetaDefault {
         private static DateTimeFormatter getFormatterForDuration(String isoString) {
             boolean test = false;
             switch (isoString.length()) {
-            case 4:
+            case 1:
+            case 2:
+            case 3:
                 return USE_UTC ? UTC_YEAR_FORMAT : YEAR_FORMAT;
+            case 4:
+                if (isoString.indexOf('-') == -1)
+                    return USE_UTC ? UTC_YEAR_FORMAT : YEAR_FORMAT;
+            case 5:
+            case 6:
             case 7:
                 return USE_UTC ? UTC_YEAR_MONTH_FORMAT : YEAR_MONTH_FORMAT;
             case 10:

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRGROUPMEMBERSPK.java,v $
- * $Revision: 1.4 $ $Date: 2006/03/03 22:35:46 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,16 +29,18 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 public class MCRGROUPMEMBERSPK implements Serializable {
+    private static final long serialVersionUID = 4308033318842963890L;
+
     public long id;
 
-    private String gid;
+    private MCRGROUPS gid;
 
-    private String userid;
+    private MCRUSERS userid;
 
     public MCRGROUPMEMBERSPK() {
     }
 
-    public MCRGROUPMEMBERSPK(String gid, String userid) {
+    public MCRGROUPMEMBERSPK(MCRGROUPS gid, MCRUSERS userid) {
         this.gid = gid;
         this.userid = userid;
     }
@@ -50,7 +52,7 @@ public class MCRGROUPMEMBERSPK implements Serializable {
     /**
      * @return Returns the gid.
      */
-    public String getGid() {
+    public MCRGROUPS getGid() {
         return gid;
     }
 
@@ -58,14 +60,14 @@ public class MCRGROUPMEMBERSPK implements Serializable {
      * @param gid
      *            The gid to set.
      */
-    public void setGid(String gid) {
+    public void setGid(MCRGROUPS gid) {
         this.gid = gid;
     }
 
     /**
      * @return Returns the userid.
      */
-    public String getUserid() {
+    public MCRUSERS getUserid() {
         return userid;
     }
 
@@ -73,7 +75,7 @@ public class MCRGROUPMEMBERSPK implements Serializable {
      * @param userid
      *            The userid to set.
      */
-    public void setUserid(String userid) {
+    public void setUserid(MCRUSERS userid) {
         this.userid = userid;
     }
 

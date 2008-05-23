@@ -1,6 +1,6 @@
 /**
- * $RCSfile: MCRURNStore.java,v $
- * $Revision: 1.1 $ $Date: 2006/06/23 09:14:38 $
+ * 
+ * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRObjectStructure.java,v $
- * $Revision: 1.33 $ $Date: 2006/11/24 11:20:10 $
+ * 
+ * $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,15 +53,16 @@ import org.mycore.common.MCRException;
  * 
  * @author Mathias Hegner
  * @author Jens Kupferschmidt
- * @version $Revision: 1.33 $ $Date: 2006/11/24 11:20:10 $
+ * @version $Revision: 13227 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb
+ *          2008) $
  */
 public class MCRObjectStructure {
 
     private MCRMetaLinkID parent = null;
 
-    private ArrayList children = null;
+    private ArrayList<MCRMetaLinkID> children = null;
 
-    private ArrayList derivates = null;
+    private ArrayList<MCRMetaLinkID> derivates = null;
 
     private Logger logger = null;
 
@@ -71,8 +72,8 @@ public class MCRObjectStructure {
      * are MCRMetaLink's.
      */
     public MCRObjectStructure(Logger log) {
-        children = new ArrayList();
-        derivates = new ArrayList();
+        children = new ArrayList<MCRMetaLinkID>();
+        derivates = new ArrayList<MCRMetaLinkID>();
         logger = log;
     }
 
@@ -170,7 +171,7 @@ public class MCRObjectStructure {
      */
     public final boolean addChild(MCRObjectID href, String label, String title) {
         MCRConfiguration mcr_conf = MCRConfiguration.instance();
-        String lang = mcr_conf.getString("MCR.metadata_default_lang");
+        String lang = mcr_conf.getString("MCR.Metadata.DefaultLang");
         MCRMetaLinkID link = new MCRMetaLinkID("structure", "child", lang, 0);
         link.setReference(href, label, title);
 
@@ -252,7 +253,12 @@ public class MCRObjectStructure {
      *            the link to be added as MCRMetaLinkID
      */
     public final void addDerivate(MCRMetaLinkID add_derivate) {
-        derivates.add(add_derivate);
+        MCRObjectID href = add_derivate.getXLinkHrefID();
+        if (MCRDerivate.existInDatastore(href)) {
+            derivates.add(add_derivate);
+        } else {
+            logger.warn("Can't find derivate "+href.getId()+" ,ignored.");
+        }
     }
 
     /**
