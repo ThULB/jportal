@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Editieren eines Benutzers" xml:lang="de">
+  <editor id="modifyuser"><include uri="webapp:editor/editor-modifyuser.xml" /></editor>
+</section>
+
+<section title="Modify an existing user account" xml:lang="en">
+  <editor id="modifyuser"><include uri="webapp:editor/editor-modifyuser.xml" /></editor>
+</section>
+
+</MyCoReWebPage>

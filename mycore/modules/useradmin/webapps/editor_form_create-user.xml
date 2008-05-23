@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Neuanlegen eines Benutzers" xml:lang="de">
+  <editor id="createuser"><include uri="webapp:editor/editor-createuser.xml" /></editor>
+</section>
+
+<section title="Create a new user account" xml:lang="en">
+  <editor id="createuser"><include uri="webapp:editor/editor-createuser.xml" /></editor>
+</section>
+
+</MyCoReWebPage>

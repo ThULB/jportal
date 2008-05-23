@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+  <section title="Bearbeitung erfolgreich durchgeführt" xml:lang="de">
+    <table class="frame">
+      <tr>
+        <td>
+          <p></p>
+          <br />
+          <p></p>
+          <center>
+            <table width="80%">
+              <tr align="center">
+                <td align="center">
+                  Die Aktion war erfolgreich. 
+                </td>
+              </tr>
+            </table>
+          </center>
+          <p></p>
+          <br />
+          <p></p>
+        </td> 
+      </tr>
+    </table>
+  </section>
+
+  <section title="Action successful" xml:lang="en">
+    <table class="frame">
+      <tr>
+        <td>
+          <p></p>
+          <br />
+          <p></p>
+          <center>
+            <table width="80%">
+              <tr align="center">
+                <td align="center">
+                  The action was successful.
+                </td>
+              </tr>
+            </table> 
+          </center>
+          <p></p>
+          <br />
+          <p></p>
+        </td>
+      </tr>
+    </table>
+  </section>
+
+</MyCoReWebPage>
+
+
