@@ -1,6 +1,6 @@
 /*
- * $RCSfile: MCRCStoreVFS.java,v $
- * $Revision: 1.4 $ $Date: 2006/07/05 09:09:35 $
+ * 
+ * $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28 Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * @author Werner Greßhoff
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 1.4 $ $Date: 2006/07/05 09:09:35 $
+ * @version $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28 Feb 2008) $
  */
 public class MCRCStoreVFS extends MCRContentStore {
 
@@ -99,20 +99,7 @@ public class MCRCStoreVFS extends MCRContentStore {
 
     protected void doDeleteContent(String storageId) throws Exception {
         FileObject targetObject = fsManager.resolveFile(getBase(), storageId);
-        FileObject parent = targetObject.getParent();
         targetObject.delete();
-
-        // Delete parent slot directories, if empty
-        String baseDirPath = getBase().getName().getPathDecoded();
-        while (!parent.getName().getPathDecoded().equals(baseDirPath)) {
-            if (parent.getChildren().length > 0)
-                break;
-
-            targetObject = parent;
-            parent = targetObject.getParent();
-            if (!targetObject.delete())
-                break;
-        }
     }
 
     protected void doRetrieveContent(MCRFileReader file, OutputStream target) throws Exception {
