@@ -13,6 +13,10 @@
     <element name="internals" minOccurs='0' maxOccurs='1'>
       <mcrmetaifs name="internal" class="MCRMetaIFS" minOccurs='1' maxOccurs='1' />
     </element>
+    <!-- multilanguage label -->
+    <element name="titles" minOccurs='0' maxOccurs='1'>
+      <mcrmetalangtext name="title" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="1024" />
+    </element>
   </derivate>
   <service>
     <!-- Service Dates -->

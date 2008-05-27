@@ -1,47 +1,85 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <imports>
 
   <headline anchor="CENTER">
-   <text>
-    <label xml:lang="de">Bearbeite eines Derivate-Labels.<p/></label>
-    <label xml:lang="en">Edit a derivate label.<p/></label>
-   </text>
+   <text i18n="common.headMessage" />
   </headline>
 
-  <panel id="import-derivate">
-    <cell col="1" row="1" anchor="NORTHWEST" ref="LLabel" />
-    <cell col="2" row="1" anchor="NORTHWEST" ref="DLabel" />
-    <cell col="3" row="1" anchor="NORTHWEST" >
-      <space width="20" height="0" />
-    </cell>
-    <cell col="4" row="1" anchor="NORTHWEST" ref="HLabel" />
+  <panel id="editor-derivate">
+    <hidden var="@ID"/>
+    <hidden var="@version"/>
 
-    <cell col="1" row="3" />
-    <cell col="2" row="3" anchor="EAST" ref="TwoButtons"  />
+    <hidden var="derivate/linkmetas" descendants="true"/>
+	  
+    <hidden var="derivate/externals" descendants="true"/>
+
+    <hidden var="derivate/internals" descendants="true"/>
+
+    <hidden var="service/servdates" descendants="true"/>
+
+    <hidden var="service/servacls" descendants="true"/>
+
+    <hidden var="service/servflags" descendants="true"/>
+
+    <cell col="1" row="1" anchor="NORTHWEST" ref="LlaP" />
+    <cell col="2" row="1" anchor="NORTHWEST" ref="RlaP"/>
+    <cell col="3" row="1" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="1" anchor="NORTHWEST" ref="HlaP" />
+	  
+	<cell col="1" row="2" anchor="NORTHWEST" ref="LDERtitle"/>
+    <cell col="2" row="2" anchor="NORTHWEST" ref="DDERtitle"/>
+    <cell col="3" row="2" anchor="NORTHWEST">
+      <space width="20" height="0"/>
+    </cell>
+    <cell col="4" row="2" anchor="NORTHWEST" ref="HDERtitle"/>
+	
+    <cell col="1" row="3" anchor="NORTHWEST">
+      <space width="0px" height="20px"/>
+    </cell>
+    
+    <cell col="1" row="4"/>
+    <cell col="2" row="4" anchor="WEST" ref="TwoButtons"/>
+
+    <cell col="1" row="5" anchor="NORTHWEST">
+      <space width="0px" height="20px"/>
+    </cell>
+	  
+  </panel>
+	
+  <panel id="RlaP">
+    <cell col="1" row="1" anchor="NORTHWEST" var="@label" sortnr="1">
+      <textfield id="Zla" width="48" maxlength="64">
+        <condition id="Cola" required="true" i18n="editor.common.la.cond" />
+      </textfield>
+    </cell>
   </panel>
 
-<!-- *** LABEL *** -->
+  <text id="LlaP" i18n="editor.common.la.labelp" />
 
-  <text id="LLabel">
-    <label xml:lang="de">
-      <span class="editorlabel">&#160;&#160;&#160;Label&#160;&#160;&#160;</span>
-    </label>
-    <label xml:lang="en">
-      <span class="editorlabel">&#160;&#160;&#160;Label&#160;&#160;&#160;</span>
-    </label>
-  </text>
+  <helpPopup id="HlaP" width="400" height="250" i18n="editor.common.la.helpp" />
 
-  <helpPopup id="HLabel" width="400px" height="250px">
-   <label xml:lang="de">
-Hier kann der Label des Derivates geändert werden.
-   </label>
-   <label xml:lang="en">
-You can change the label of the derivate here.
-   </label>
-  </helpPopup>
+  <text id="LDERtitle" i18n="editor.derivate.title.label" />
 
-<!-- *** End *** -->
+  <panel id="DDERtitle">
+    <hidden var="derivate/titles/@class" default="MCRMetaLangText"/>
+    <hidden var="derivate/titles/@notinherit" default="false"/>
+    <hidden var="derivate/titles/@heritable" default="true"/>
+    <cell col="1" row="1" anchor="NORTHWEST" var="derivate/titles/title">
+      <repeater min="1" max="10" ref="DDERtitleRep" pos="right"/>
+    </cell>
+  </panel>
+    
+  <panel id="DDERtitleRep">
+    <cell col="1" row="1" anchor="WEST" ref="Slang" var="@lang" sortnr="2"/>
+    <cell col="1" row="2" anchor="NORTHWEST" sortnr="2" >
+      <textfield id="ZtitleRep" width="52" maxlength="1024"/>
+    </cell>
+  </panel>
 
+  <helpPopup id="HDERtitle" width="400" height="250" i18n="editor.derivate.title.help" />
+	
 </imports>
 

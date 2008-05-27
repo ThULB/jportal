@@ -5,5 +5,7 @@
   xsi:noNamespaceSchemaLocation="MCRCondition.xsd">
   <boolean operator="or">
     <condition value="admingroup" operator="=" field="group" />
+    <condition value="editorgroup1" operator="=" field="group" />
+    <condition value="editorgroup2" operator="=" field="group" />
   </boolean>
 </condition>

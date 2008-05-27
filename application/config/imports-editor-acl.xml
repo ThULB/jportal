@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.7 $ $Date: 2006/11/28 13:03:59 $ -->
+<!-- $Revision: 1.11 $ $Date: 2007-06-05 09:36:01 $ -->
 <!-- ============================================== -->
 
 <imports>
@@ -33,49 +33,21 @@
    <hidden var="@inherited" default="0"/>
    <hidden var="@lang" default="de"/>
    <cell col="1" row="1" anchor="NORTHWEST" >
-    <text id="TPermission">
-     <label xml:lang="de">
-      <span class="editorlabel"><b>Zugriff</b></span>
-     </label>
-     <label xml:lang="en">
-     <span class="editorlabel">Permission</span>
-     </label>
-    </text>
+    <text id="TPermission" i18n="editor.common.acl.access" />
    </cell>
    <cell col="2" row="1" anchor="NORTHWEST" ref="ListPermission" var="@permission" sortnr="1"/>
    <hidden var="condition/@format" default="xml"/>
    <hidden var="condition/boolean/@operator" default="and" />
    <cell col="1" row="2" anchor="NORTHWEST" >
-    <text id="TUserGroup">
-     <label xml:lang="de">
-      <span class="editorlabel">Nutzer / Gruppe</span>
-     </label>
-     <label xml:lang="en">
-     <span class="editorlabel">User or group</span>
-     </label>
-    </text>
+    <text id="TUserGroup" i18n="editor.common.acl.uog" />
    </cell>
    <cell col="2" row="2" anchor="NORTHWEST" ref="AllUser" />
    <cell col="1" row="3" anchor="NORTHWEST" >
-    <text id="TUserGroup">
-     <label xml:lang="de">
-      <span class="editorlabel">Datum</span>
-     </label>
-     <label xml:lang="en">
-     <span class="editorlabel">Date</span>
-     </label>
-    </text>
+    <text id="TUserGroup" i18n="editor.common.acl.date" />
    </cell>
    <cell col="2" row="3" anchor="NORTHWEST" ref="AllDate" />
    <cell col="1" row="4" anchor="NORTHWEST" >
-    <text id="TUserGroup">
-     <label xml:lang="de">
-      <span class="editorlabel">IP</span>
-     </label>
-     <label xml:lang="en">
-     <span class="editorlabel">IP</span>
-     </label>
-    </text>
+    <text id="TUserGroup" i18n="editor.common.acl.ip"/>
    </cell>
    <cell col="2" row="4" anchor="NORTHWEST" ref="AllIP" />
    <cell col="1" row="5" anchor="NORTHWEST">
@@ -126,14 +98,8 @@
 	
   <!-- *** Data for the buttons ** -->
 
-  <submitButton id="BSubmit" width="100px">
-    <label xml:lang="de">[Speichern]</label>
-    <label xml:lang="en">[Save]</label>
-  </submitButton>
-  <cancelButton id="BCancel" width="100px">
-    <label xml:lang="de">[Abbrechen]</label>
-    <label xml:lang="en">[Cancel]</label>
-  </cancelButton>
+  <submitButton id="BSubmit" width="100px" i18n="editor.common.button.save" />
+  <cancelButton id="BCancel" width="100px" i18n="editor.common.button.cancel" />
 
   <panel id="TwoButtons">
     <cell col="1" row="1" anchor="WEST" ref="BCancel"/>
@@ -144,22 +110,14 @@
 	
   <textfield id="TFzeile128" width="32" maxlength="32"/>
 	
-  <list id="ListPermission" width="160" type="dropdown">
-    <item value="read"><label xml:lang="de">read</label></item>
-    <item value="writewf"><label xml:lang="de">writewf</label></item>
-    <item value="deletewf"><label xml:lang="de">deletewf</label></item>
-    <item value="writedb"><label xml:lang="de">writedb</label></item>
-    <item value="deletedb"><label xml:lang="de">deletedb</label></item>
+  <list id="ListAndOr" width="160" type="dropdown" default="or">
+    <item value="and" i18n="editor.common.acl.and" />
+    <item value="or" i18n="editor.common.acl.or" />
   </list>
 
-  <list id="ListAndOr" width="160" type="dropdown">
-    <item value="and"><label xml:lang="de">und</label><label xml:lang="en">and</label></item>
-    <item value="or"><label xml:lang="de">oder</label><label xml:lang="en">or</label></item>
-  </list>
-
-  <list id="ListUser" width="160" type="dropdown">
-    <item value="user"><label xml:lang="de">Nutzer</label><label xml:lang="en">User</label></item>
-    <item value="group"><label xml:lang="de">Gruppe</label><label xml:lang="en">Group</label></item>
+  <list id="ListUser" width="160" type="dropdown" default="group">
+    <item value="user" i18n="editor.common.acl.user" />
+    <item value="group" i18n="editor.common.acl.group" />
   </list>
 
   <list id="OperUser" width="160" type="dropdown">
@@ -168,18 +126,18 @@
   </list>
 
   <list id="ListDate" width="160" type="dropdown">
-    <item value="date"><label xml:lang="de">Datum</label><label xml:lang="de">Date</label></item>
+    <item value="date" i18n="editor.common.acl.date" />
   </list>
 
   <list id="OperDate" width="160" type="dropdown">
-    <item value="!="><label xml:lang="de">&gt;</label><label xml:lang="en">&gt;</label></item>
-    <item value="!="><label xml:lang="de">&lt;</label><label xml:lang="en">&lt;</label></item>
-    <item value="!="><label xml:lang="de">&gt;=</label><label xml:lang="en">&gt;=</label></item>
-    <item value="!="><label xml:lang="de">&lt;=</label><label xml:lang="en">&lt;=</label></item>
+    <item value="&gt;"><label xml:lang="de">&gt;</label><label xml:lang="en">&gt;</label></item>
+    <item value="&lt;"><label xml:lang="de">&lt;</label><label xml:lang="en">&lt;</label></item>
+    <item value="&gt;="><label xml:lang="de">&gt;=</label><label xml:lang="en">&gt;=</label></item>
+    <item value="&lt;="><label xml:lang="de">&lt;=</label><label xml:lang="en">&lt;=</label></item>
   </list>
 
   <list id="ListIP" width="160" type="dropdown">
-    <item value="ip"><label xml:lang="de">IP</label><label xml:lang="en">IP</label></item>
+    <item value="ip" i18n="editor.common.acl.ip" />
   </list>
 
   <list id="OperIP" width="160" type="dropdown">

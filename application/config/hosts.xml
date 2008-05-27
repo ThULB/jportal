@@ -23,14 +23,4 @@
     <label xml:lang="de">DocPortal Sample Server</label>
     <label xml:lang="en">DocPortal Sample Server</label>
   </host>
-  <host 
-	  alias="leipzig" 
-	  url="http://dol.dl.uni-leipzig.de/"
-	  class="org.mycore.services.fieldquery.MCRQueryClientWebService"
-	  access="webservice"
-	  servicepath="services/MCRWebService"
-	  staticpath="receive/">
-    <label xml:lang="de">DOL der Universität Leipzig</label>
-    <label xml:lang="en">DOL of the University of Leipzig</label>
-  </host>
 </hosts>

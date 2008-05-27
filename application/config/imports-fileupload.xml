@@ -1,0 +1,123 @@
+<imports>
+	<panel id="fileupload">
+		<cell col="1" row="1" anchor="NORTHWEST">
+			<text id="LFileP">
+				<label xml:lang="de">
+					<span class="editorlabel">
+						   Digitale Objekte (*)   
+					</span>
+				</label>
+				<label xml:lang="en">
+					<span class="editorlabel">
+						   Digital objects (*)   
+					</span>
+				</label>
+			</text>
+		</cell>
+		<cell col="2" row="1" anchor="NORTHWEST" var="path">
+			<repeater min="3" max="3" pos="hidden">
+				<file width="60" maxlength="5000000" />
+			</repeater>
+		</cell>
+		<cell col="3" row="1" anchor="NORTHWEST">
+			<space width="20" height="0" />
+		</cell>
+		<cell col="4" row="1" anchor="WEST">
+			<helpPopup id="HFile" width="400px" height="250px">
+				<label xml:lang="de">
+					Hier wird der Dateiname des digitalen Objektes
+					ausgewählt, welches eingestellt werden soll.
+					<p>
+						Die erste angegebene Datei wird für die
+						Präsentation die Primärdatei.
+					</p>
+					<p>
+						Die Datei muss auf einem Laufwerk liegen, das
+						<b>
+							von Ihrem Rechner aus direkt erreichbar ist.
+						</b>
+					</p>
+					<p>
+						Bitte geben Sie den
+						<b>vollständigen Pfad</b>
+						an oder verwenden Sie den
+						<b>Durchsuchen-Knopf</b>
+						.
+					</p>
+					<p>
+						Ihre Datei sollte
+						<b>maximal 5 MB gross</b>
+						sein, da ansonsten der Download für die
+						Studenten sehr lange dauern kann. Bitte
+						<b>haben Sie etwas Geduld</b>
+						: Nach dem Abschicken des Formulars wird die
+						gewählte Datei automatisch zum DocPortal System
+						hochgeladen, was je nach Dateigrösse und
+						Übertragungsgeschwindigkeit Ihres
+						Netzanschlusses durchaus längere Zeit
+						beanspruchen kann. Brechen Sie die Übertragung
+						möglichst nicht ab!
+					</p>
+				</label>
+				<label xml:lang="en">
+					Select the filename of the digital object to be
+					added to the system.
+					<p>
+						The first filename is the primary file for the
+						presentation.
+					</p>
+					<p>
+						This file must reside on a system drive with
+						<b>direct access to your computer.</b>
+					</p>
+					<p>
+						Either enter the
+						<b>complete path</b>
+						or use the
+						<b>browse button</b>
+						.
+					</p>
+					<p>
+						Maximum file size should not exceed
+						<b>5 MB</b>
+						to minimise download times for students. Please
+						<b>wait</b>
+						: after submission of the form the selected file
+						is automatically loaded into the DocPortal
+						system. With large files upload will take
+						longer. Do not interrupt or cancel the
+						transmission!
+					</p>
+				</label>
+			</helpPopup>
+		</cell>
+		<cell col="2" row="2" anchor="NORTHWEST">
+			<text id="DFileUploadHint">
+				<label xml:lang="de">
+					<span class="editorhints">
+						Achtung! Beim Ansenden größerer Datendateien
+						kann die Übertragung dieser ggf. einige Sekunden
+						länger dauern. Die Dateigröße darf 5MB nicht
+						überschreiten!
+					</span>
+				</label>
+				<label xml:lang="en">
+					Attention! With large files upload time will take
+					longer. Do not interrupt or cancel the transmission!
+					Do not send files larger than 5 MB.
+				</label>
+			</text>
+		</cell>
+		<cell col="1" row="3" anchor="EAST">
+
+			<panel id="TwoButtons">
+				<cell col="1" row="1" anchor="WEST">
+					<cancelButton width="100px" i18n="buttons.cancel" />
+				</cell>
+				<cell col="2" row="1" anchor="WEST" var="save">
+					<submitButton width="100px" i18n="buttons.save" />
+				</cell>
+			</panel>
+		</cell>
+	</panel>
+</imports>
