@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.mycore.datamodel.classifications2.impl">
+  <class name="MCRCategoryLink">
+    <cache usage="nonstrict-read-write" />
+    <id name="id" access="field">
+      <generator class="native" />
+    </id>
+    <natural-id mutable="true">
+      <many-to-one name="category" class="MCRCategoryImpl" cascade="none" />
+      <component name="objectReference">
+        <property name="objectID" access="field" />
+        <property name="type" column="objectType" access="field" length="70"/>
+      </component>
+    </natural-id>
+    <query name="NumberPerCategID">
+      <![CDATA[
+SELECT cat.rootID, cat.categID, count(*), cat.internalID
+  FROM MCRCategoryImpl cat, MCRCategoryLink link WHERE
+    cat.rootID=:classID AND
+    cat.categID IN (:categIDs) AND
+    link.category IN (
+      SELECT internalID FROM MCRCategoryImpl c2 WHERE
+        c2.rootID = cat.rootID AND
+        c2.left BETWEEN cat.left AND cat.right
+    )
+  GROUP BY cat.internalID, cat.rootID, cat.categID
+      ]]>
+    </query>
+    <query name="NumberByTypePerCategID">
+      <![CDATA[
+SELECT cat.rootID, cat.categID, count(*), cat.internalID
+  FROM MCRCategoryImpl cat, MCRCategoryLink link WHERE
+    cat.rootID=:classID AND
+    cat.categID IN (:categIDs) AND
+    link.objectReference.type=:type AND
+    link.category IN (
+      SELECT internalID FROM MCRCategoryImpl c2 WHERE
+        c2.rootID = cat.rootID AND
+        c2.left BETWEEN cat.left AND cat.right
+    )
+  GROUP BY cat.internalID, cat.rootID, cat.categID
+      ]]>
+    </query>
+    <query name="deleteByObjectID">
+      <![CDATA[
+DELETE FROM MCRCategoryLink WHERE objectReference.objectID=:id
+      ]]>
+    </query>
+    <query name="deleteByObjectCollection">
+      <![CDATA[
+DELETE FROM MCRCategoryLink WHERE objectReference.objectID IN (:ids)
+      ]]>
+    </query>
+    <query name="ObjectIDByCategory">
+      <![CDATA[
+SELECT objectReference.objectID FROM MCRCategoryLink WHERE category.id=:category
+      ]]>
+    </query>
+    <query name="ObjectIDByCategoryAndType">
+      <![CDATA[
+SELECT objectReference.objectID FROM MCRCategoryLink WHERE category.id=:category and objectReference.type=:type
+      ]]>
+    </query>
+    <query name="categoriesByObjectID">
+      <![CDATA[
+SELECT category.rootID, category.categID FROM MCRCategoryLink WHERE objectReference.objectID=:id
+      ]]>
+    </query>
+    <!--  -->
+  </class>
+</hibernate-mapping>
