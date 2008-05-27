@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.19 $ $Date: 2006/11/29 10:49:32 $ -->
+<!-- $Revision: 1.20 $ $Date: 2007-04-04 13:23:09 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -31,14 +31,14 @@
       <tr>
         <td class="resort">
           <a
-            href="{$WebApplicationBaseURL}{@mask}?XSL.editor.source.id={@id}"
+            href="{$WebApplicationBaseURL}{@mask}?id={@id}"
             title="{condition[@format='text']/text()}">
             <xsl:value-of
               select="i18n:translate('results.detailedSearch')" />
           </a>
           |
           <a
-            href="{$WebApplicationBaseURL}{@mask}?XSL.editor.source.new=true">
+            href="{$WebApplicationBaseURL}{@mask}">
             <xsl:value-of select="i18n:translate('results.newSearch')" />
           </a>
         </td>

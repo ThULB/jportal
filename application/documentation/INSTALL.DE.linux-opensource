@@ -1,0 +1,85 @@
+﻿ Installationsanweisungen für DocPortal auf Linux mit HSQLDB
+
+1. Softwarevoraussetzung
+========================
+
+- Mindestens Java 1.5
+  getestet JDK 1.5
+
+- Jakarta-ant mindestens Version 1.7
+  Download: http://www.artfiles.org/apache.org/ant/binaries
+  getestet: apache-ant-1.7.0-bin.tar.gz
+  Es ist ratsam ältere ant RPM Packages zu deinstallieren
+
+Für eine erste Testinstallation wird HSQLDB (http://www.hsqldb.org/) als
+relationales Datenbanksystem und Jetty als Webaanwendungs-Server mitgeliefert.
+Fuer die Suche wird Lucene verwendet.
+Weitere Informationen zu Alternativen finden Sie im User Guide.
+
+
+2. Konfiguration und Installation
+=================================
+
+- Legen Sie einen Nutzer <nutzer> mit folgenden Zeilen der Datei profile an
+  export MYCORE_HOME=/Path_to_MyCoRe
+  export DOCPORTAL_HOME=/Path_to_DocPortal
+
+- mycore kompilieren
+  + cd $MYCORE_HOME
+  + cp config/build.properties.template config/build.properties; ant jar
+
+- docportal
+  + cd $DOCPORTAL_HOME
+  + cp config/mycore.properties.private.template config/mycore.properties.private; cp config/hibernate/hibernate.cfg.xml.template config/hibernate/hibernate.cfg.xml
+
+- anpassen von config/mycore.properties.private
+  MCR.basedir=/Path_to_DocPortal
+
+- config/hibernate/hibernate.cfg.xml pruefen
+  Die Datei ist bereits fuer HSQLDB konfiguriert. Bei einer Default-Installation
+  ist somit an dieser Stelle nichts weiter zu tun.
+
+- Konfiguration pruefen und kompilieren
+  + ant info
+  + ant create.schema jar
+
+2.1. Installation optionaler Komponenten
+========================================
+
+- DocPortal enthält ein Erweiterungsmodul (Bildbetrachter - "IView"), das aus 
+  lizensrechtlichen Gründen nicht vorinstalliert ausgeliefert werden kann.
+  Das Modul befinden sich unter $DOCPORTAL_HOME/modules/iview und 
+  enthält eine eigene INSTALL.txt. Installieren sie entsprechend dieser Anleitung.
+
+3. Datenstrukturen anlegen
+==========================
+
+  + ant create.scripts create.directories
+  + nohup build/bin/hsqldbstart.sh &		# HSQLDB als Hintergrundprozess starten
+  + ant create.metastore
+
+
+4. Laden der Beispieldaten
+==========================
+
+  + ant create.users create.default-rules create.class
+
+
+5. Webanwendung erstellen
+=========================
+
+  + cd $DOCPORTAL_HOME
+  + ant create.genkeys webapps
+  + nohup build/bin/jettystart.sh &		# Jetty als Hintergrundprozess starten
+
+Die Anwendung ist nun über folgende URL zu erreichen:
+  + http://localhost:8291/
+
+
+6. Stoppen der Prozesse
+=======================
+
+ + cd $DOCPORTAL_HOME
+ + build/bin/jettystop.sh			# Jetty stoppen
+ + build/bin/hsqldbstop.sh			# HSQLDB stoppen
+

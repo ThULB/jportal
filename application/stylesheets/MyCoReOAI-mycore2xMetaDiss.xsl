@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 1.1 $ $Date: 2006/09/20 12:37:05 $ -->
+<!-- $Revision: 1.2 $ $Date: 2007-02-02 21:45:50 $ -->
 <!-- ============================================== -->
 <xsl:stylesheet
      version="1.0"
@@ -61,7 +61,7 @@
     </xsl:template>
 
     <xsl:template name="linkQueryURL">
-        <xsl:param name="type" select="'alldocs'"/>
+        <xsl:param name="type" select="'document'"/>
         <xsl:param name="host" select="'local'"/>
         <xsl:param name="id"/>
         <!-- <xsl:value-of select="concat($ServletsBaseURL,'MCRQueryServlet',$JSessionID,'?XSL.Style=xml&amp;type=',$type,'&amp;hosts=',$host,'&amp;query=%2Fmycoreobject%5B%40ID%3D%27',$id,'%27%5D')" /> -->

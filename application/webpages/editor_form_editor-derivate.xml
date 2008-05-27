@@ -1,32 +1,27 @@
-<?xml version="1.0" encoding="ISO_8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 
 <MyCoReWebPage>
 
 <section title="Bearbeiten eines Derivates" xml:lang="de">
-<table id="contentArea" width="100%" cellspacing="20" cellpadding="0">
-<tr>
-<td>
-<center>
-<editor id="editor-derivate"><include uri="webapp:editor/editor-editor-derivate.xml" /></editor>
-</center>
-</td>
-</tr>
-</table>
+  <p>Bearbeiten eines Derivates:</p>
 </section>
 
 <section title="Edit an object (derivate)" xml:lang="en">
-<table id="contentArea" width="100%" cellspacing="20" cellpadding="0">
-<tr>
-<td>
-<center>
-<editor id="editor-derivate"><include uri="webapp:editor/editor-editor-derivate.xml" /></editor>
-</center>
-</td>
-</tr>
-</table>
+  <p>Edit derivate data:</p>
+</section>
+
+<section xml:lang="all">
+  <editor id="editor-editor-derivate">
+     <source uri="{sourceUri}" />
+     <target type="servlet" name="MCRCheckEditDerivateServlet" method="post" format="xml"/>
+     <cancel url="{cancelUrl}" />
+
+     <components root="editor-derivate" var="/mycorederivate">
+      <include uri="webapp:editor/imports-common.xml"/>
+      <include uri="webapp:editor/imports-editor-derivate.xml"/>
+     </components>
+  </editor>
 </section>
 
 </MyCoReWebPage>
-
-

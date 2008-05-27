@@ -1,0 +1,97 @@
+﻿ Installationsanweisungen für DocPortal auf Windows mit HSQLDB
+
+1. Softwarevoraussetzung
+========================
+
+- Mindestens Java 1.5
+  getestet JDK 1.5.0_10 (SUN)
+
+- Jakarta-ant mindestens Version 1.7
+  Download: http://www.artfiles.org/apache.org/ant/binaries
+  getestet: apache-ant-1.7.0-bin.zip
+  Es ist ratsam ältere ant-Versionen zu deinstallieren
+
+Für eine erste Testinstallation wird HSQLDB (http://www.hsqldb.org/) als
+relationales Datenbanksystem und Jetty als Webanwendungs-Server mitgeliefert.
+Für die Suche wird Lucene verwendet, das ebenfalls im MyCoRe-Kern enthalten
+ist. Weitere Informationen zu Alternativen finden Sie im User Guide.
+
+
+2. Konfiguration und Installation
+=================================
+
+- setzen Sie folgende Umgebungsvariablen
+  MYCORE_HOME=\Path_to_MyCoRe		# z.B. c:\Programme\mycore
+  DOCPORTAL_HOME=\Path_to_DocPortal	# z.B. c:\Programme\docportal
+
+- mycore kompilieren unter Verwendung der Windows Kommandozeile (cmd)
+  + cd %MYCORE_HOME%
+  + copy config\build.properties.template config\build.properties
+  + ant jar
+
+- docportal
+  + cd %DOCPORTAL_HOME%
+  + copy config\mycore.properties.private.template config\mycore.properties.private
+  + copy config\hibernate\hibernate.cfg.xml.template config\hibernate\hibernate.cfg.xml
+
+- anpassen von config\mycore.properties.private
+  MCR.basedir=\Path_to_DocPortal	# z.B. c:/Programme/docportal, Hinweis: Die
+					# '/' müssen hier in dieser Form verwendet
+					# werden. '\' oder '\\' führt zu Fehlern!
+
+- config\hibernate\hibernate.cfg.xml pruefen
+  Die Datei ist bereits fuer HSQLDB konfiguriert. Bei einer Default-Installation
+  ist somit an dieser Stelle nichts weiter zu tun.
+
+- Konfiguration pruefen und kompilieren
+  + ant info
+  + ant create.schema
+  + ant jar
+
+
+2.1. Installation optionaler Komponenten
+========================================
+
+- DocPortal enthält ein Erweiterungsmodul (Bildbetrachter - "IView"), das aus 
+  lizensrechtlichen Gründen nicht vorinstalliert ausgeliefert werden kann.
+  Das Modul befinden sich unter $DOCPORTAL_HOME/modules/iview und 
+  enthält eine eigene INSTALL.txt. Installieren sie entsprechend dieser Anleitung.
+ 
+
+3. Datenstrukturen anlegen
+==========================
+
+  + ant create.scripts
+  + ant create.directories
+  + Ausführen (z.B. durch Doppelklick) von build\bin\hsqldbstart.cmd	# HSQLDB starten
+  + ant create.metastore
+
+
+4. Laden der Beispieldaten
+==========================
+
+  + ant create.users
+  + ant create.default-rules
+  + ant create.class
+
+
+5. Webanwendung erstellen
+=========================
+
+  + cd %DOCPORTAL_HOME%\modules\module-wcms\aif\config
+  + cd %DOCPORTAL_HOME%
+  + ant create.genkeys
+  + ant webapps
+  + Ausführen (z.B. durch Doppelklick) von build\bin\jettystart.cmd	# Jetty starten
+
+Die Anwendung ist nun über folgende URL zu erreichen:
+  + http://localhost:8291/
+
+
+6. Stoppen der Prozesse
+=======================
+
+ + cd %DOCPORTAL_HOME%\build\bin
+ + Ausführen (z.B. durch Doppelklick) von jettystop.cmd			# Jetty stoppen
+ + Ausführen (z.B. durch Doppelklick) von hsqldbstop.cmd		# HSQLDB stoppen
+

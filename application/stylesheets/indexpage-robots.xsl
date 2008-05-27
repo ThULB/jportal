@@ -1,24 +1,26 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!-- ============================================== -->
-<!-- $Revision: 1.4 $ $Date: 2006/07/05 11:04:27 $ -->
+<!-- $Revision: 1.7 $ $Date: 2007-12-13 09:00:58 $ -->
 <!-- ============================================== -->
+
 <xsl:stylesheet version="1.0" 
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"   
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink" >
+  xmlns:xlink="http://www.w3.org/1999/xlink" 
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  exclude-result-prefixes="xlink" >
 
 <xsl:include href="MyCoReLayout.xsl" />
 
-<xsl:variable name="PageTitle">Index aller Dokumente - Zugang für Suchmaschinen</xsl:variable>
+<xsl:variable name="PageTitle" select="i18n:translate('titles.pageTitle.robots')" />
 <xsl:variable name="Servlet" select="'undefined'"/>
 
 <!-- ======== page start ======== -->
 <xsl:template match="/indexpage">
-      <h1>Index aller Dokumente - Zugang für Suchmaschinen</h1>
+      <h1><xsl:value-of select="i18n:translate('titles.pageTitle.robots')"/></h1>
       <p>
-        Dies ist ein automatisch generierter Index aller Dokumente, geordnet
-        nach der MCRObjectID. Dieser Zugang dient der
-        Indizierung durch Suchmaschinen (robots).
-        <br/><br/><a href="{$WebApplicationBaseURL}">Zurück zur Startseite...</a>
+        <xsl:value-of select="i18n:translate('indexpage.robots.text')"/>
+        <br/><br/><a href="{$WebApplicationBaseURL}"><xsl:value-of select="i18n:translate('indexpage.robots.back')"/></a>
       </p>
       <p>
         <ul>
@@ -40,9 +42,9 @@
 <xsl:template match="range">
   <li>
     <a href="{$WebApplicationBaseURL}{/indexpage/@path}{from/@pos}-{to/@pos}/index.html">
-      <xsl:text>Dokumente von </xsl:text>
+      <xsl:value-of select="i18n:translate('indexpage.robots.from')"/>
       <xsl:value-of select="from/@short"/>
-      <xsl:text> bis </xsl:text>
+      <xsl:value-of select="i18n:translate('indexpage.robots.to')"/>
       <xsl:value-of select="to/@short" />
     </a>
   </li>

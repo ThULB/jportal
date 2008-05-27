@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- ============================================== -->
-<!-- $Revision: 1.2 $ $Date: 2007-02-21 12:14:30 $ -->
+<!-- $Revision: 1.1 $ $Date: 2007-11-26 10:07:30 $ -->
 <!-- ============================================== -->
 
 <xsl:stylesheet version="1.0"
@@ -13,19 +12,18 @@
 
 <xsl:output method="xml" encoding="UTF-8"/>
 
-<xsl:template match="/mycoreobject">
-  <mycoreobject>
+<xsl:template match="/mycorederivate">
+  <mycorederivate>
     <xsl:copy-of select="@ID"/>
     <xsl:copy-of select="@label"/>
     <xsl:copy-of select="@version"/>
     <xsl:copy-of select="@xsi:noNamespaceSchemaLocation"/>
-	<!-- check the READ permission -->
-	<xsl:if test="acl:checkPermission(@ID,'read')">
-      <xsl:copy-of select="structure"/>
-      <xsl:copy-of select="metadata"/>
+	<!-- check the WRITEDB permission -->
+	<xsl:if test="acl:checkPermission(@ID,'writedb')">
+      <xsl:copy-of select="derivate"/>
       <xsl:copy-of select="service"/>
     </xsl:if>
-  </mycoreobject>
+  </mycorederivate>
 </xsl:template>
 
 </xsl:stylesheet>

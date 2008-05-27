@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.6 $ $Date: 2006/09/22 14:45:41 $ -->
+<!-- $Revision: 1.9 $ $Date: 2007-10-15 09:58:16 $ -->
 <!-- ============================================== --> 
 
 <xsl:stylesheet 
@@ -11,6 +11,8 @@
 
 <xsl:param name="UploadID"/>
 <xsl:param name="MCR.UploadApplet.BackgroundColor" select="'#CAD9E0'"/>
+<xsl:param name="selectMultiple" select="'true'" />
+<xsl:param name="acceptFileTypes" select="'*'" />
 
 <!-- - - - - variables for starting applet - - - - -->
 
@@ -53,31 +55,36 @@
     <param name="progressbar"      value="{$applet.progressbar}" />
     <param name="progresscolor"    value="{$applet.progresscolor}" />
     <param name="background-color" value="{$applet.background-color}" />
-    <param name="url" value="{$url}" />
-    <param name="httpSession" value="{$httpSession}" />
-    <param name="ServletsBase" value="{$ServletsBaseURL}" />
+    <param name="url"              value="{$url}" />
+    <param name="httpSession"      value="{$httpSession}" />
+    <param name="ServletsBase"     value="{$ServletsBaseURL}" />
+    <param name="selectMultiple"   value="{$selectMultiple}" />
+    <param name="acceptFileTypes"  value="{$acceptFileTypes}" />
+    <param name="locale"           value="{$CurrentLang}" />
         
     <noembed> <xsl:value-of select="$applet.nojava" /> </noembed>
 
     <comment> <!-- for netscape -->
       <xsl:element name="embed">
-        <xsl:attribute name="type">          <xsl:value-of select="$applet.mime"/>            </xsl:attribute> 
-        <xsl:attribute name="codebase">      <xsl:value-of select="$applet.codebase"/>        </xsl:attribute> 
-        <xsl:attribute name="code">          <xsl:value-of select="$applet.class"/>           </xsl:attribute> 
-        <xsl:attribute name="archive">       <xsl:value-of select="$applet.archives"/>        </xsl:attribute> 
-        <xsl:attribute name="cache_option">  <xsl:value-of select="$applet.cache"/>           </xsl:attribute> 
-        <xsl:attribute name="cache_archive"> <xsl:value-of select="$applet.archives"/>        </xsl:attribute> 
-        <xsl:attribute name="width">         <xsl:value-of select="$applet.width"/>           </xsl:attribute> 
-        <xsl:attribute name="height">        <xsl:value-of select="$applet.height"/>          </xsl:attribute> 
-        <xsl:attribute name="pluginspage">   <xsl:value-of select="$applet.netscape.plugin"/> </xsl:attribute> 
-        <xsl:attribute name="progressbar">   <xsl:value-of select="$applet.progressbar"/>     </xsl:attribute>
-        <xsl:attribute name="progresscolor"> <xsl:value-of select="$applet.progresscolor"/>   </xsl:attribute>
-        <xsl:attribute name="background-color"> <xsl:value-of select="$applet.background-color"/>   </xsl:attribute>
-        <xsl:attribute name="uploadId">      <xsl:value-of select="$UploadID"/>             </xsl:attribute> 
-
-        <xsl:attribute name="url"> <xsl:value-of select="$url"/> </xsl:attribute>
-        <xsl:attribute name="httpSession"> <xsl:value-of select="$httpSession"/> </xsl:attribute>
-        <xsl:attribute name="ServletsBase"> <xsl:value-of select="$ServletsBaseURL"/> </xsl:attribute>
+        <xsl:attribute name="type">             <xsl:value-of select="$applet.mime"/>            </xsl:attribute> 
+        <xsl:attribute name="codebase">         <xsl:value-of select="$applet.codebase"/>        </xsl:attribute> 
+        <xsl:attribute name="code">             <xsl:value-of select="$applet.class"/>           </xsl:attribute> 
+        <xsl:attribute name="archive">          <xsl:value-of select="$applet.archives"/>        </xsl:attribute> 
+        <xsl:attribute name="cache_option">     <xsl:value-of select="$applet.cache"/>           </xsl:attribute> 
+        <xsl:attribute name="cache_archive">    <xsl:value-of select="$applet.archives"/>        </xsl:attribute> 
+        <xsl:attribute name="width">            <xsl:value-of select="$applet.width"/>           </xsl:attribute> 
+        <xsl:attribute name="height">           <xsl:value-of select="$applet.height"/>          </xsl:attribute> 
+        <xsl:attribute name="pluginspage">      <xsl:value-of select="$applet.netscape.plugin"/> </xsl:attribute> 
+        <xsl:attribute name="progressbar">      <xsl:value-of select="$applet.progressbar"/>     </xsl:attribute>
+        <xsl:attribute name="progresscolor">    <xsl:value-of select="$applet.progresscolor"/>   </xsl:attribute>
+        <xsl:attribute name="background-color"> <xsl:value-of select="$applet.background-color"/></xsl:attribute>
+        <xsl:attribute name="uploadId">         <xsl:value-of select="$UploadID"/>               </xsl:attribute> 
+        <xsl:attribute name="url">              <xsl:value-of select="$url"/>                    </xsl:attribute>
+        <xsl:attribute name="httpSession">      <xsl:value-of select="$httpSession"/>            </xsl:attribute>
+        <xsl:attribute name="ServletsBase">     <xsl:value-of select="$ServletsBaseURL"/>        </xsl:attribute>
+        <xsl:attribute name="selectMultiple">   <xsl:value-of select="$selectMultiple"/>         </xsl:attribute>
+        <xsl:attribute name="acceptFileTypes">  <xsl:value-of select="$acceptFileTypes"/>        </xsl:attribute>
+        <xsl:attribute name="locale">           <xsl:value-of select="$CurrentLang"/>            </xsl:attribute>
         
         <noembed> <xsl:value-of select="$applet.nojava" /> </noembed>
        </xsl:element>

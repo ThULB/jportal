@@ -40,6 +40,36 @@ href="http://java.sun.com/j2se/1.3/jre/install-linux.html">Installationsanleitun
 Noch ein <b>wichtiger Hinweis:</b> Leider müssen wir aus unserer Erfahrung feststellen, dass viele Java-Versionen in diesem Punkt fehlerhaft sind und selbstsignierte Applets nicht korrekt erkennen. Sollte das o. g. Hinweisfenster ausbleiben, ist das ein Indiz dafür, dass Ihre Java-Version die Signatur unseres Applets ignoriert. Abhilfe schafft hier, die oben empfohlenen Versionen zu verwenden, andere (auch neuere) Java-Versionen zeigen leider teilweise den beschriebenen Fehler.  Diese drei vorbereitenden Schritte sind nur beim ersten Mal notwendig.  Wenn Sie keinen anderen Rechner benutzen und sich nicht als anderer User in Ihrem Betriebssystem anmelden, brauchen Sie nur noch die weiter unten angegebenen Schritte zu beachten.<br/></p>
 
 </section>
- 
+
+<section title="Install Java Plug-In for Browser" xml:lang="en">
+
+<p>Your browser has to work with <b>Java</b>, that means the "Java Runtime Environment" has to be installed as plug-in. The java applet is necessary for uploading data from your computer to the system. Please check your browser settings for the java plug-in (e.g in Netscape: Menue Help/About Plug-In...).  <a name="java"></a>If the java plug-in is not installed, please choose the appropriate link below depending on your operating system and start downloading the installation file. After download has finished you have to restart your browser to activate the plugin. Please read the installation guidelines.</p>
+
+<ul>
+<li>
+<a href="/plugins/download/j2re-1_4_0_01-windows-i586-i.exe">Java 2 Runtime Environment for Windows (Version 1.4.0_01)</a>
+[<a href="http://java.sun.com/j2se/1.4/install-windows.html">Installation guideline</a>]</li>
+<li>
+<a href="http://java.sun.com/j2se/1.3/jre/download-solaris.html">Java 2 Runtime Environment for Solaris SPARC and x86 (Version 1.3.1_02)</a>
+[<a href="http://java.sun.com/j2se/1.3/install-solaris-re.html">Installation guideline</a>]</li>
+<li>
+<a href="/plugins/download/j2re-1_4_0-rc-linux-i386.bin">Java 2 Runtime Environment for Linux (Version 1.4 RC) as tar.gz</a> [<a href="http://java.sun.com/j2se/1.3/jre/install-linux.html">Installation guideline</a>]</li>
+<li>
+<a href="/plugins/download/j2re-1_4_0-rc-linux-i386-rpm.bin">Java 2 Runtime Environment für Linux (Version 1.4 RC) als RPM</a> [<a
+href="http://java.sun.com/j2se/1.3/jre/install-linux.html">Installation guideline</a>]</li>
+<li>
+<a href="http://www.sgi.com/developers/devtools/languages/javaplugin131.html">Java Plug-in for SGI IRIX (Version 1.3.1)</a></li>
+<li>
+<a href="http://www.hp.com/products1/unix/java/java2/jpi/index.html">Java Plug-in for HP-UX (Version 1.3.1_02)</a></li>
+<li>
+<a href="http://www.compaq.com/java/download/jdk_du/1.3.1/index.html">Java 2 SDK with Plug-in for Compaq Tru64(tm) Unix(r) (Version 1.3.1-2)</a></li>
+</ul>
+
+<p>For the first time you load the applet you have to accept the security certificate. Read the advice and accept it.</p>
+
+<p>
+Finaly we want to give an <b>important information:</b> Unfortunately there are java versions that do not accept self signed applets. This may happen with newer versions of java plugins. If so, please change to one of the versions above. These steps are only necessary for the first upload.<br/></p>
+
+</section>
 </MyCoReWebPage>
 

@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- ============================================== -->
-<!-- $Revision$ $Date$ -->
-<!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-   <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" 
-     doctype-public="-//W3C//DTD HTML 4.01//EN"
-     doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
-      
-	<!-- ================== get some wcms required global variables ===================================== -->      
-      <!-- location of navigation base -->
-      <xsl:param name="navi"/>	
-      <xsl:variable name="navigationBase" >
-		  <xsl:call-template name="get.naviBase"/>
-	  </xsl:variable>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+    xmlns:layoutUtils="xalan:///org.mycore.frontend.MCRLayoutUtilities" exclude-result-prefixes="xalan">
+    <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" xalan:indent-amount="2" doctype-public="-//W3C//DTD HTML 4.01//EN"
+        doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
+
+    <!-- ================== get some wcms required global variables ===================================== -->
+    <!-- location of navigation base -->
+    <xsl:param name="navi" />
+    <xsl:variable name="navigationBase">
+        <xsl:call-template name="get.naviBase" />
+    </xsl:variable>
     <!-- load navigation.xml -->
     <xsl:variable name="loaded_navigation_xml" select="document($navigationBase)/navigation" />
             
       <!-- base image path -->
       <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
-	<!-- main title configured in mycore.properties -->
-      <xsl:param name="MCR.nameOfProject"/>
+    <!-- main title configured in mycore.properties -->
+      <xsl:param name="MCR.NameOfProject"/>
       <xsl:variable name="MainTitle">
-            <xsl:value-of select="$MCR.nameOfProject"/>
+            <xsl:value-of select="$MCR.NameOfProject"/>
       </xsl:variable>
-	
-	  <xsl:param name="href"/>
+    
+      <xsl:param name="href"/>
       <xsl:variable name="browserAddress_tmp">
             <xsl:call-template name="getBrowserAddress" />
       </xsl:variable>
-	
-	  <!-- assign right browser address -->	
-	  <xsl:param name="browserAddress">
-		<xsl:call-template name="getBrowserAddressFromTmp">
-			<xsl:with-param name="bat" select="$browserAddress_tmp"/>
-		</xsl:call-template>		  
-	  </xsl:param>
-		
+    
+      <!-- assign right browser address --> 
+      <xsl:param name="browserAddress">
+        <xsl:call-template name="getBrowserAddressFromTmp">
+            <xsl:with-param name="bat" select="$browserAddress_tmp"/>
+        </xsl:call-template>          
+      </xsl:param>
+        
       <!-- look for appropriate template entry and assign -> $template -->
       <xsl:param name="template" >
             <xsl:call-template name="getTemplate" >
@@ -48,64 +45,75 @@
         the browser to open new windows when clicking on certain links.
         To keep standard compliance it's default turned of, as it may annoy some
         people, too.
-      -->
-      <xsl:variable name="wcms.useTargets" select="'yes'" />
+    -->
+    <xsl:variable name="wcms.useTargets" select="'yes'" />
+
+    <xsl:variable name="whiteList">
+        <xsl:call-template name="get.whiteList" />
+    </xsl:variable>
+    <xsl:variable name="readAccess">
+        <xsl:choose>
+            <xsl:when test="starts-with($RequestURL, $whiteList)">
+                <xsl:value-of select="'true'" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:copy-of select="layoutUtils:readAccess($browserAddress)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
 
     <xsl:include href="chooseTemplate.xsl" />
-	<xsl:include href="pagetitle.xsl" />
-	<xsl:include href="navi_main.xsl" />
-	<xsl:include href="footer.xsl" />
-	<xsl:include href="navigation.xsl" /> 
-	<xsl:include href="wcms_common.xsl" />     
-	<xsl:include href="jp_extensions.xsl" />	
+    <xsl:include href="pagetitle.xsl" />
+    <xsl:include href="navi_main.xsl" />
+    <xsl:include href="footer.xsl" />
+    <xsl:include href="navigation.xsl" /> 
+    <xsl:include href="wcms_common.xsl" />     
+    <xsl:include href="modules-includes.xsl" />
+    <xsl:include href="jp_extensions.xsl" />    
 
       <!-- =================================================================================================== -->
-		<xsl:template name="generatePage">
-			<!-- dummy call to store last page in session if web context has been reset -->
-			<xsl:call-template name="saveLastPage">
-				<xsl:with-param name="detectionString" select="$browserAddress_tmp"/>
-			</xsl:call-template>
-			<!-- call the appropriate template -->
-			<xsl:call-template name="chooseTemplate"/>
-		</xsl:template>
+        <xsl:template name="generatePage">
+            <!-- call the appropriate template -->
+            <xsl:call-template name="chooseTemplate"/>
+        </xsl:template>
       <!-- ================================================================================= -->
-	  <xsl:template name="get.naviBase">
-		<xsl:choose>
-			<xsl:when test="$navi=''">
-				<xsl:value-of select="'webapp:config/navigation.xml'" />				
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="concat('File:',$navi)" />
-			</xsl:otherwise>								
-		</xsl:choose>
-	</xsl:template>
+      <xsl:template name="get.naviBase">
+        <xsl:choose>
+            <xsl:when test="$navi=''">
+                <xsl:value-of select="'webapp:config/navigation.xml'" />                
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="concat('File:',$navi)" />
+            </xsl:otherwise>                                
+        </xsl:choose>
+    </xsl:template>
       <!-- ================================================================================= -->
-	<xsl:template name="getBrowserAddressFromTmp">
-		<xsl:param name="bat" />
-		<xsl:choose>
-			<xsl:when test="contains($bat,'wcReset')">
-				<xsl:value-of select="substring-after($bat,'wcReset')"/>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$bat"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>	
-      <!-- =================================================================================================== -->		
-	<xsl:template name="saveLastPage">
-		<xsl:param name="detectionString"/>
-		<xsl:if test="contains($detectionString,'wcReset')">
-			<!-- send last page to server to be stored in session -->
-			<xsl:variable name="lastPageStoreURL">
-				<xsl:value-of select="substring-after($detectionString,'wcReset')"/>
-			</xsl:variable>
-			<xsl:variable name="callURL">
-				<xsl:value-of select="concat('request:iframeDummy.xml?XSL.lastPage.SESSION=',$lastPageStoreURL)"/>
-			</xsl:variable>
-			<xsl:variable name="dummy">
-				<xsl:copy-of select="document($callURL)"/>
-			</xsl:variable>
-		</xsl:if>
-	</xsl:template>
-      <!-- =================================================================================================== -->		
+    <xsl:template name="getBrowserAddressFromTmp">
+        <xsl:param name="bat" />
+        <xsl:choose>
+            <xsl:when test="contains($bat,'wcReset')">
+                <xsl:value-of select="substring-after($bat,'wcReset')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$bat"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template> 
+      <!-- =================================================================================================== -->      
+    <xsl:template name="saveLastPage">
+        <xsl:param name="detectionString"/>
+        <xsl:if test="contains($detectionString,'wcReset')">
+            <!-- send last page to server to be stored in session -->
+            <xsl:variable name="lastPageStoreURL">
+                <xsl:value-of select="substring-after($detectionString,'wcReset')"/>
+            </xsl:variable>
+            <xsl:variable name="callURL">
+                <xsl:value-of select="concat('request:iframeDummy.xml?XSL.lastPage.SESSION=',$lastPageStoreURL)"/>
+            </xsl:variable>
+            <xsl:variable name="dummy">
+                <xsl:copy-of select="document($callURL)"/>
+            </xsl:variable>
+        </xsl:if>
+    </xsl:template>
+      <!-- =================================================================================================== -->      
 </xsl:stylesheet>

@@ -11,9 +11,6 @@
 </head>
 
 <section title="Keine Zugriffsberechtigung" xml:lang="de">
-<p></p>
-<br />
-<p></p>
 <center>
 <table width="80%">
  <tr align="center">
@@ -25,15 +22,9 @@ Sie sind nicht befugt, die angeforderten Inhalte einzusehen!
  </tr>
 </table>
 </center>
-<p></p>
-<br />
-<p></p>
 </section>
 
 <section title="No Access Rights" xml:lang="en">
-<p></p>
-<br />
-<p></p>
 <center>
 <table width="80%">
  <tr align="center">
@@ -45,9 +36,6 @@ You aren't allowed to see the required data!
  </tr>
 </table>
 </center>
-<p></p>
-<br />
-<p></p>
 </section>
 
 </MyCoReWebPage>

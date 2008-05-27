@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ============================================== -->
-<!-- $Revision: 1.48 $ $Date: 2006/11/16 13:25:48 $ -->
+<!-- $Revision: 1.61 $ $Date: 2007-12-05 16:11:02 $ -->
 <!-- ============================================== -->
 
-<xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xlink="http://www.w3.org/1999/xlink" 
-    xmlns:mcr="http://www.mycore.org/" 
-    xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-    xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-    exclude-result-prefixes="xlink mcr acl i18n">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
+  exclude-result-prefixes="xlink mcr acl i18n">
 
   <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="generatePage.xsl" />
-	
+
   <xsl:param name="DocumentBaseURL" />
   <xsl:param name="ServletsBaseURL" />
   <xsl:param name="RequestURL" />
@@ -30,11 +29,20 @@
   <xsl:param name="CurrentLang" />
   <xsl:param name="Referer" />
   <xsl:param name="TypeMapping" />
-  <xsl:param name="lastPage" />
-  <xsl:param name="objectHost" select="'local'"/>
+  <xsl:param name="objectHost" select="'local'" />
+  <xsl:variable name="hostfile" select="document('webapp:hosts.xml')" />
 
-  <xsl:variable name="hostfile" select="document('webapp:hosts.xml')"/>
-	
+  <!-- website write protected ? -->
+  <xsl:variable name="writeProtectedWebsite">
+    <xsl:call-template name="get.writeProtectedWebsite" />
+  </xsl:variable>
+  <!-- get message, if write protected -->
+  <xsl:variable name="writeProtectionMessage">
+    <xsl:call-template name="get.writeProtectionMessage" />
+  </xsl:variable>
+
+  <!-- ============================================================================================================= -->
+
   <xsl:template match="/">
     <xsl:call-template name="generatePage" />
   </xsl:template>
@@ -82,7 +90,7 @@
   </xsl:template>
 
   <xsl:template name="printMetaDate">
-  <!-- prints a table row for a given nodeset -->
+    <!-- prints a table row for a given nodeset -->
     <xsl:param name="nodes" />
     <xsl:param name="label" select="local-name($nodes[1])" />
     <xsl:if test="$nodes">
@@ -91,16 +99,23 @@
           <xsl:value-of select="concat($label,':')" />
         </td>
         <td class="metavalue">
+          <xsl:variable name="selectPresentLang">
+            <xsl:call-template name="selectPresentLang">
+              <xsl:with-param name="nodes" select="$nodes" />
+            </xsl:call-template>
+          </xsl:variable>
           <xsl:for-each select="$nodes">
             <xsl:choose>
               <xsl:when test="../@class='MCRMetaClassification'">
                 <xsl:call-template name="printClass">
                   <xsl:with-param name="nodes" select="." />
                   <xsl:with-param name="host" select="$objectHost" />
+                  <xsl:with-param name="next" select="'&lt;br /&gt;'" />
                 </xsl:call-template>
                 <xsl:call-template name="printClassInfo">
                   <xsl:with-param name="nodes" select="." />
                   <xsl:with-param name="host" select="$objectHost" />
+                  <xsl:with-param name="next" select="'&lt;br /&gt;'" />
                 </xsl:call-template>
               </xsl:when>
               <xsl:when test="../@class='MCRMetaISO8601Date'">
@@ -125,19 +140,36 @@
                   <xsl:with-param name="format" select="$format" />
                 </xsl:call-template>
               </xsl:when>
+              <xsl:when test="../@class='MCRMetaHistoryDate'">
+                <xsl:call-template name="printHistoryDate">
+                  <xsl:with-param name="nodes" select="$nodes" />
+                  <xsl:with-param name="next" select="', '" />
+                </xsl:call-template>
+              </xsl:when>
               <xsl:when test="../@class='MCRMetaLinkID'">
                 <xsl:call-template name="objectLink">
                   <xsl:with-param name="obj_id" select="@xlink:href" />
                 </xsl:call-template>
               </xsl:when>
-              <xsl:otherwise>
-                <xsl:call-template name="printI18N">
-                  <xsl:with-param name="nodes" select="." />
-                  <xsl:with-param name="host" select="$objectHost" />
+              <xsl:when test="../@class='MCRMetaLink'">
+                <xsl:call-template name="webLink">
+                  <xsl:with-param name="nodes" select="$nodes" />
+                  <xsl:with-param name="next" select="'&lt;br /&gt;'" />
                 </xsl:call-template>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:if test="not(@xml:lang) or @xml:lang=$selectPresentLang">
+                  <xsl:call-template name="printI18N">
+                    <xsl:with-param name="nodes" select="." />
+                    <xsl:with-param name="host" select="$objectHost" />
+                    <xsl:with-param name="next" select="'&lt;br /&gt;'" />
+                  </xsl:call-template>
+                </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="position()!=last()"><br/></xsl:if>
+            <xsl:if test="position()!=last()">
+              <br />
+            </xsl:if>
           </xsl:for-each>
         </td>
       </tr>
@@ -146,10 +178,11 @@
 
   <xsl:template name="printClass">
     <xsl:param name="nodes" />
-    <xsl:param name="host" />
+    <xsl:param name="host" select="$objectHost" />
+    <xsl:param name="next" select="''" />
     <xsl:for-each select="$nodes">
       <xsl:if test="position() != 1">
-        <br />
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
       </xsl:if>
       <xsl:variable name="classlink">
         <xsl:call-template name="ClassCategLink">
@@ -199,9 +232,10 @@
   <xsl:template name="printClassInfo">
     <xsl:param name="nodes" />
     <xsl:param name="host" />
+    <xsl:param name="next" />
     <xsl:for-each select="$nodes">
       <xsl:if test="position() != 1">
-        <br />
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
       </xsl:if>
       <xsl:variable name="classlink">
         <xsl:call-template name="ClassCategLink">
@@ -250,13 +284,16 @@
 
   <xsl:template name="printI18N">
     <xsl:param name="nodes" />
+    <xsl:param name="next" />
     <xsl:variable name="selectPresentLang">
       <xsl:call-template name="selectPresentLang">
         <xsl:with-param name="nodes" select="$nodes" />
       </xsl:call-template>
     </xsl:variable>
     <xsl:for-each select="$nodes[lang($selectPresentLang)]">
-      <xsl:if test="position() != 1">,</xsl:if>
+      <xsl:if test="position() != 1">
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
+      </xsl:if>
       <xsl:call-template name="lf2br">
         <xsl:with-param name="string" select="." />
       </xsl:call-template>
@@ -282,9 +319,10 @@
 
   <xsl:template name="webLink">
     <xsl:param name="nodes" />
+    <xsl:param name="next" />
     <xsl:for-each select="$nodes">
       <xsl:if test="position() != 1">
-        <br />
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
       </xsl:if>
       <xsl:variable name="href" select="@xlink:href" />
       <xsl:variable name="title">
@@ -308,6 +346,7 @@
 
   <xsl:template name="mailLink">
     <xsl:param name="nodes" />
+    <xsl:param name="next" />
     <xsl:variable name="selectLang">
       <xsl:call-template name="selectLang">
         <xsl:with-param name="nodes" select="$nodes" />
@@ -315,12 +354,33 @@
     </xsl:variable>
     <xsl:for-each select="$nodes[lang($selectLang)]">
       <xsl:if test="position() != 1">
-        <br />
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
       </xsl:if>
       <xsl:variable name="email" select="." />
       <a href="mailto:{$email}">
         <xsl:value-of select="$email" />
       </a>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="printHistoryDate">
+    <xsl:param name="nodes" />
+    <xsl:param name="next" />
+    <xsl:variable name="selectLang">
+      <xsl:call-template name="selectLang">
+        <xsl:with-param name="nodes" select="$nodes" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:for-each select="$nodes[lang($selectLang)]">
+      <xsl:if test="position() != 1">
+        <xsl:value-of select="$next" disable-output-escaping="yes" />
+      </xsl:if>
+      <xsl:value-of select="text" />
+      <xsl:text> (</xsl:text>
+      <xsl:value-of select="von" />
+      <xsl:text> - </xsl:text>
+      <xsl:value-of select="bis" />
+      <xsl:text> )</xsl:text>
     </xsl:for-each>
   </xsl:template>
 
@@ -344,5 +404,144 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
+  <!-- ============================================================================================================= -->
+  <xsl:template match="printlatestobjects">
+    <xsl:call-template name="printLatestObjects">
+      <xsl:with-param name="objectType" select="@objecttype" />
+      <xsl:with-param name="sortField" select="@sortfield" />
+      <xsl:with-param name="mCRQLConditions" select="@mcrqlcond" />
+      <xsl:with-param name="maxResults" select="@maxresults" />
+      <xsl:with-param name="overwriteLayout" select="@overwritelayout" />
+    </xsl:call-template>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="printLatestObjects">
+    <xsl:param name="objectType" />
+    <xsl:param name="sortField" />
+    <xsl:param name="mCRQLConditions" />
+    <xsl:param name="maxResults" />
+    <xsl:param name="overwriteLayout" />
+    <!-- build query term -->
+    <xsl:variable name="objType" xmlns:encoder="xalan://java.net.URLEncoder">
+      <xsl:value-of select="encoder:encode(concat('(objectType = ',$objectType,')') )" />
+    </xsl:variable>
+    <xsl:variable name="mCRQLConditions_encoded" xmlns:encoder="xalan://java.net.URLEncoder">
+      <xsl:choose>
+        <xsl:when test="$mCRQLConditions!=''">
+          <xsl:value-of select="encoder:encode( concat(' and (',$mCRQLConditions,')') ) " />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="''" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="term">
+      <xsl:value-of select="concat($objType,$mCRQLConditions_encoded)" />
+    </xsl:variable>
+    <xsl:variable name="queryURI">
+      <xsl:value-of
+        select="concat('query:term=',$term,'&amp;sortby=',$sortField,
+            '&amp;order=descending&amp;maxResults=',$maxResults)" />
+    </xsl:variable>
+    <!-- do layout -->
+    <xsl:choose>
+      <xsl:when test="$overwriteLayout='true'">
+        <xsl:for-each select="xalan:nodeset(document($queryURI))/mcr:results/mcr:hit">
+          <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
+          <xsl:apply-templates select="." mode="latestObjects">
+            <xsl:with-param name="mcrobj" select="$mcrobj" />
+            <xsl:with-param name="mcrobjlink">
+              <xsl:call-template name="objectLink">
+                <xsl:with-param name="obj_id" select="@id" />
+              </xsl:call-template>
+            </xsl:with-param>
+          </xsl:apply-templates>
+        </xsl:for-each>
+        <xsl:call-template name="printLatestObjects.all">
+          <xsl:with-param name="query2" select="$term" />
+          <xsl:with-param name="sortBy" select="$sortField" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <table id="resultList" cellpadding="0" cellspacing="0" xmlns:mcr="http://www.mycore.org/">
+          <xsl:for-each select="xalan:nodeset(document($queryURI))/mcr:results/mcr:hit">
+            <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
+            <xsl:apply-templates select=".">
+              <xsl:with-param name="mcrobj" select="$mcrobj" />
+              <xsl:with-param name="mcrobjlink">
+                <xsl:call-template name="objectLink">
+                  <xsl:with-param name="obj_id" select="@id" />
+                </xsl:call-template>
+              </xsl:with-param>
+            </xsl:apply-templates>
+          </xsl:for-each>
+          <tr>
+            <td colspan="3" align="right">
+              <xsl:call-template name="printLatestObjects.all">
+                <xsl:with-param name="query2" select="$term" />
+                <xsl:with-param name="sortBy" select="$sortField" />
+              </xsl:call-template>
+            </td>
+          </tr>
+        </table>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="printLatestObjects.all">
+    <xsl:param name="query2" />
+    <xsl:param name="sortBy" />
+    <a
+      href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$query2}&amp;{$sortBy}.sortField=descending&amp;numPerPage=10&amp;maxResults=0">
+      <xsl:value-of select="i18n:translate('latestObjects.more')" />
+    </a>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="printNotLoggedIn">
+    <xsl:value-of select="i18n:translate('webpage.notLoggedIn')" />
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="userInfo">
+    <xsl:value-of select="concat(i18n:translate('users.user'),': ')" />
+    <xsl:choose>
+      <xsl:when test="$CurrentUser='gast'">
+        <xsl:value-of select="i18n:translate('users.error.notLoggedIn')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="URL"
+          select="concat( $ServletsBaseURL, 'MCRUserServlet',$HttpSession,'?mode=Select&amp;url=', encoder:encode( string( $RequestURL ) ) )" />
+        <a href="{$URL}">
+          <xsl:value-of select="$CurrentUser" />
+        </a>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="get.writeProtectionMessage">
+    <xsl:if test="$writeProtectedWebsite='true'">
+      <xsl:copy-of select="websiteWriteProtection:getMessage()" />
+    </xsl:if>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="print.writeProtectionMessage">
+    <xsl:if test="$writeProtectedWebsite='true' and not(/website-ReadOnly)">
+      <p style="color:#FF0000;">
+        <b>
+          <xsl:copy-of select="$writeProtectionMessage" />
+        </b>
+      </p>
+    </xsl:if>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
+  <xsl:template name="get.writeProtectedWebsite">
+    <xsl:choose>
+      <xsl:when test="$CurrentUser!='gast'">
+        <xsl:value-of select="websiteWriteProtection:isActive()" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="false()" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  <!-- ============================================================================================================= -->
 </xsl:stylesheet>

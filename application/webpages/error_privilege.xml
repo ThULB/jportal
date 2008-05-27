@@ -11,9 +11,6 @@
 </head>
 
 <section title="Privileg Fehler" xml:lang="de">
-<p></p>
-<br />
-<p></p>
 <center>
 <table width="80%">
  <tr align="center">
@@ -25,15 +22,9 @@ Dieser Nutzer ist für die Arbeit mit dem Objekt nicht berechtigt!
  </tr>
 </table>
 </center>
-<p></p>
-<br />
-<p></p>
 </section>
 
 <section title="Privileg error " xml:lang="en">
-<p></p>
-<br />
-<p></p>
 <center>
 <table width="80%">
  <tr align="center">
@@ -45,9 +36,6 @@ This login is not authorized for the work with this object!
  </tr>
 </table>
 </center>
-<p></p>
-<br />
-<p></p>
 </section>
 
 </MyCoReWebPage>

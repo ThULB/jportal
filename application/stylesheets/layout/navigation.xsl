@@ -1,49 +1,59 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
     <xsl:param name="MCR.baseurl" />
 
     <!-- ================================================================================= -->
     <xsl:template match="TOC | toc">
-        <xsl:for-each select="$loaded_navigation_xml//item[@href=$browserAddress]">
-            <xsl:for-each select="child::item">
-                <img src="{$WebApplicationBaseURL}images/naviMenu/greenArrow.gif" />
-                <xsl:call-template name="addLink" />
-                <br />
+        <xsl:if test="$readAccess='true'">
+            <xsl:for-each select="$loaded_navigation_xml//item[@href=$browserAddress]/item">
+                <xsl:variable name="readAccess">
+                    <xsl:call-template name="get.readAccess">
+                        <xsl:with-param name="webpage" select="@href" />
+                        <xsl:with-param name="blockerWebpage" select="$browserAddress" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:if test="$readAccess='true'">
+                    <img src="{$WebApplicationBaseURL}images/naviMenu/greenArrow.gif" />
+                    <xsl:call-template name="addLink" />
+                    <br />
+                </xsl:if>
             </xsl:for-each>
-        </xsl:for-each>
+        </xsl:if>
     </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="navigation.history">
-        <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
-            <!-- start page -->
-            <xsl:copy-of select="'Navigation: '" />
-            <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
-            <a href="{concat($MCR.baseurl,'?XSL.lastPage.SESSION=',$hrefStartingPage)}">
-                <xsl:copy-of select="$MainTitle" />
-            </a>
-            <!-- ancestors -->
-            <xsl:for-each select="ancestor-or-self::item">
-                <xsl:if test="@href!=$hrefStartingPage">
-                    <xsl:choose>
-                        <xsl:when test="position()!=last()">
-                            <xsl:value-of select="' > '" />
-                            <xsl:call-template name="addLink" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:copy-of select="' > '" />
-                            <xsl:choose>
-                                <xsl:when test="./label[lang($CurrentLang)] != ''">
-                                    <xsl:value-of select="./label[lang($CurrentLang)]" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="./label[lang($DefaultLang)]" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:if>
+        <xsl:if test="$readAccess='true'">
+            <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
+                <!-- start page -->
+                <xsl:copy-of select="'Navigation: '" />
+                <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
+                <a href="{$MCR.baseurl}">
+                    <xsl:copy-of select="$MainTitle" />
+                </a>
+                <!-- ancestors -->
+                <xsl:for-each select="ancestor-or-self::item">
+                    <xsl:if test="@href!=$hrefStartingPage">
+                        <xsl:choose>
+                            <xsl:when test="position()!=last()">
+                                <xsl:value-of select="' > '" />
+                                <xsl:call-template name="addLink" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:copy-of select="' > '" />
+                                <xsl:choose>
+                                    <xsl:when test="./label[lang($CurrentLang)] != ''">
+                                        <xsl:value-of select="./label[lang($CurrentLang)]" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="./label[lang($DefaultLang)]" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                </xsl:for-each>
             </xsl:for-each>
-        </xsl:for-each>
+        </xsl:if>
     </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="navigation.row">
@@ -53,55 +63,78 @@
         <xsl:param name="spaceBetweenLinks" /><!-- use pixel values -->
         <xsl:param name="seperatorChar" /><!-- use pixel values -->
 
-        <!-- table navigation row -->
-        <table class="{$CSSLayoutClass}" cellspacing="0" cellpadding="0">
-            <tr>
-                <!-- read xml item entries and create the link bar -->
-                <xsl:for-each select="$rootNode/item">
-                    <td>
-                        <xsl:choose>
-                            <xsl:when test="current()[@href = $browserAddress ]">
-                                <span class="marked">
-                                    <xsl:call-template name="addLink" />
-                                </span>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:call-template name="addLink" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </td>
-                    <!-- paceholder -->
-                    <xsl:if test="position() != last()">
-                        <td style="width:{number($spaceBetweenLinks) div 2}px;">
-                            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
-                        </td>
-                        <xsl:if test="$seperatorChar != ''">
+        <xsl:variable name="readAccess">
+            <xsl:call-template name="get.readAccess">
+                <xsl:with-param name="webpage" select="$rootNode" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="$readAccess='true'">
+            <table class="{$CSSLayoutClass}" cellspacing="0" cellpadding="0">
+                <tr>
+                    <xsl:for-each select="$loaded_navigation_xml//*[@href=$rootNode]/item">
+                        <xsl:variable name="access">
+                            <xsl:call-template name="get.readAccess">
+                                <xsl:with-param name="webpage" select="@href" />
+                                <xsl:with-param name="blockerWebpage" select="$rootNode" />
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:if test="$access='true'">
                             <td>
-                                <xsl:value-of select="$seperatorChar" />
+                                <xsl:choose>
+                                    <xsl:when test="@href = $browserAddress">
+                                        <span class="marked">
+                                            <xsl:call-template name="addLink" />
+                                        </span>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:call-template name="addLink" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </td>
+                            <xsl:call-template name="get.placeHolder">
+                                <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
+                                <xsl:with-param name="seperatorChar" select="$seperatorChar" />
+                            </xsl:call-template>
                         </xsl:if>
-                        <td style="width:{number($spaceBetweenLinks) div 2}px;">
-                            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
-                        </td>
-                    </xsl:if>
-                </xsl:for-each>
-                <!-- END OF: read xml item entries and create the link bar -->
-                <td>
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
-                </td>
-                <td>|</td>
-                <td>
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
-                </td>
-                <td>
-                    <xsl:call-template name="navigation.flags" />
-                </td>
-                <td style="width:10px;"></td>
-            </tr>
-        </table>
-        <!-- END OF: table navigation row -->
+                    </xsl:for-each>
+                    <!-- login links -->
+                    <xsl:call-template name="get.loginLinks">
+                        <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
+                        <xsl:with-param name="seperatorChar" select="$seperatorChar" />
+                    </xsl:call-template>
+
+                    <td>
+                        <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
+                    </td>
+                    <td>|</td>
+                    <td>
+                        <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
+                    </td>
+                    <td>
+                        <xsl:call-template name="navigation.flags" />
+                    </td>
+                    <td style="width:10px;"></td>
+                </tr>
+            </table>
+        </xsl:if>
     </xsl:template>
     <!-- ================================================================================= -->
+    <xsl:template name="get.placeHolder">
+        <xsl:param name="spaceBetweenLinks" />
+        <xsl:param name="seperatorChar" />
+        <td style="width:{number($spaceBetweenLinks) div 2}px;">
+            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
+        </td>
+        <xsl:if test="$seperatorChar != ''">
+            <td>
+                <xsl:value-of select="$seperatorChar" />
+            </td>
+        </xsl:if>
+        <td style="width:{number($spaceBetweenLinks) div 2}px;">
+            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
+        </td>
+
+    </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="navigation.flags">
         <xsl:variable name="englishFlag">
@@ -112,11 +145,6 @@
             <img src="{$WebApplicationBaseURL}images/naviMenu/lang-de.gif" alt="new language: German" title="Deutsch"
                 style="width:24px; height:12px; vertical-align:bottom; border-style:none;" />
         </xsl:variable>
-        <!--<xsl:variable name="polishFlag">
-            <img src="{$WebApplicationBaseURL}images/naviMenu/lang-pl.gif" 
-            alt="new language: Polish" title="Polish" 
-            style="width:24px; height:12px; vertical-align:bottom; border-style:none;" />
-            </xsl:variable>-->
         <xsl:choose>
             <xsl:when test="$CurrentLang = 'en'">
                 <xsl:call-template name="FlagPrinter">
@@ -169,270 +197,269 @@
         <xsl:param name="borderWidthTopDown" /><!-- use pixel values -->
         <xsl:param name="borderWidthSides" /><!-- use percent values -->
 
-        <!-- get maximal depth -> $depth -->
-        <xsl:variable name="depth">
-            <xsl:for-each select="$rootNode//item">
-                <xsl:sort select="count(ancestor-or-self::item)" data-type="number" />
-                <xsl:if test="position()=last()">
-                    <xsl:value-of select="count(ancestor-or-self::item)" />
-                </xsl:if>
-            </xsl:for-each>
-        </xsl:variable>
-        <!-- END OF: get maximal depth -> $depth -->
-        <!-- look for appropriate replaceMenu entry and assign to subRootNode if found one-->
         <xsl:variable name="subRootNode">
-            <xsl:for-each select="$rootNode//item[@href = $browserAddress]">
-                <!-- collect @href's with replaceMenu="true" entries along an axis -->
-                <xsl:for-each select="ancestor-or-self::item[  @replaceMenu = 'true' ]">
-                    <xsl:if test="position()=last()">
-                        <xsl:value-of select="@href" />
-                    </xsl:if>
-                </xsl:for-each>
-                <!-- END OF: collect @href's with replaceMenu="true" entries along an axis -->
-            </xsl:for-each>
+            <xsl:call-template name="get.subRootNode">
+                <xsl:with-param name="rootNode" select="$rootNode" />
+            </xsl:call-template>
         </xsl:variable>
-        <!-- end: look for appropriate replaceMenu entry and assign to subRootNode if found one-->
-        <!-- general table -->
-        <table cellspacing="0" cellpadding="0" class="{$CSSLayoutClass}">
-            <!-- initialise columns -->
-            <tr>
-                <!-- border left -->
-                <td style="height:1px; width:{$borderWidthSides}%;">
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                </td>
-                <!-- END OF: border left -->
-                <!-- create columns to give space for the icons -->
-                <xsl:call-template name="forLoop.createColumns">
-                    <xsl:with-param name="i" select="1" />
-                    <xsl:with-param name="count" select="$depth - 1" />
-                    <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                </xsl:call-template>
-                <!-- END OF: create columns to give space for the icons -->
-                <!-- fill rest -->
-                <td style="width:{ 100 - (2*$borderWidthSides) - ($columnWidthIcon*($depth - 1)) }%px;">
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                </td>
-                <!-- END OF: fill rest -->
-                <!-- border right -->
-                <td style="width:{$borderWidthSides}%;">
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                </td>
-                <!-- END OF: border right -->
-            </tr>
-            <!-- END OF: initialise columns -->
-            <!-- borderWidthTop -->
-            <tr>
-                <td style="height:{$borderWidthTopDown}px;" colspan="{$depth + 2}">
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                </td>
-            </tr>
-            <!-- END OF: borderWidthTop -->
-            <!-- navigation tree -->
-            <xsl:choose>
-                <xsl:when test=" $subRootNode != '' ">
-                    <!-- point to subRootNode -->
-                    <xsl:for-each select="$rootNode//item[@href = $subRootNode]">
-                        <!-- main link -->
-                        <xsl:for-each select="item[@href]">
-                            <tr>
-                                <td style="height:{$menuPointHeigth}px;">
-                                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                                </td>
-                                <th colspan="{$depth + 1}" style="text-align:left">
-                                    <xsl:call-template name="addLink" />
-                                </th>
-                            </tr>
-                            <!--'true', if an ancestor node is @constrainPopUp='true'-->
-                            <xsl:variable name="constrainPopUp">
-                                <!--has an ascentant @constrainPopUp='true' ?-->
-                                <xsl:for-each select="ancestor-or-self::node()">
-                                    <xsl:if test="current()[@constrainPopUp='true']">
-                                        <xsl:value-of select="'true'" />
-                                    </xsl:if>
-                                </xsl:for-each>
-                                <!--has an ascentant @constrainPopUp='true' ?-->
-                            </xsl:variable>
-                            <!-- sub links -->
-                            <!-- test if below this MAIN menu point the searched link is located -->
-                            <xsl:if test="current()[@href = $browserAddress ] or descendant::item[@href = $browserAddress ] or $constrainPopUp='true'  ">
+        <xsl:variable name="access">
+            <xsl:call-template name="get.readAccess">
+                <xsl:with-param name="webpage" select="$subRootNode" />
+            </xsl:call-template>
+        </xsl:variable>
 
-                                <xsl:call-template name="createTree">
-                                    <xsl:with-param name="depth" select="$depth" />
-                                    <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                                    <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                                    <xsl:with-param name="subRootNode" select="$subRootNode" />
-                                    <xsl:with-param name="rootNode" select="$rootNode" />
+        <xsl:choose>
+            <xsl:when test="$access='true'">
+                <!-- get maximal depth -> $depth -->
+                <xsl:variable name="depth">
+                    <xsl:for-each select="$loaded_navigation_xml//item">
+                        <xsl:sort select="count(ancestor-or-self::item)" data-type="number" />
+                        <xsl:if test="position()=last()">
+                            <xsl:value-of select="count(ancestor-or-self::item)" />
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:variable>
+                <!-- general table -->
+                <table cellspacing="0" cellpadding="0" class="{$CSSLayoutClass}" border="0">
+                    <!-- head -->
+                    <xsl:call-template name="navigation.tree.head">
+                        <xsl:with-param name="depth" select="$depth" />
+                        <xsl:with-param name="CSSLayoutClass" select="$CSSLayoutClass" />
+                        <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                        <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                        <xsl:with-param name="spaceBetweenMainLinks" select="$spaceBetweenMainLinks" />
+                        <xsl:with-param name="borderWidthTopDown" select="$borderWidthTopDown" />
+                        <xsl:with-param name="borderWidthSides" select="$borderWidthSides" />
+                    </xsl:call-template>
+                    <!-- navigation tree -->
+                    <!-- point to subRootNode -->
+                    <xsl:for-each select="$loaded_navigation_xml//*[@href=$subRootNode]">
+                        <xsl:for-each select="item">
+                            <xsl:variable name="access">
+                                <xsl:call-template name="get.readAccess">
+                                    <xsl:with-param name="webpage" select="@href" />
+                                    <xsl:with-param name="blockerWebpage" select="$subRootNode" />
                                 </xsl:call-template>
-                            </xsl:if>
-                            <!-- END OF: test if below this main menu point the searched link is located -->
-                            <!-- END OF: sub links -->
-                            <!-- place holder between main links -->
-                            <xsl:if test="count(following-sibling::item) &gt; 0">
+                            </xsl:variable>
+                            <xsl:if test="$access='true'">
                                 <tr>
-                                    <td style="height:{$spaceBetweenMainLinks}px;" colspan="{$depth + 2}">
+                                    <td style="height:{$menuPointHeigth}px;">
                                         <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
                                     </td>
+                                    <th colspan="{$depth + 1}" style="text-align:left">
+                                        <xsl:call-template name="addLink" />
+                                    </th>
                                 </tr>
-                            </xsl:if>
-                            <!-- END OF: place holder between main links -->
-                        </xsl:for-each>
-                        <!-- END OF: main link -->
-                    </xsl:for-each>
-                    <!-- END OF: point to subRootNode -->
-                </xsl:when>
-                <!-- no replaceMenu entry found-->
-                <xsl:otherwise>
-                    <!-- main link -->
-                    <xsl:for-each select="$rootNode/item">
-                        <!--					<xsl:for-each select="$rootNode//item[@href = $subRootNode]" >-->
-                        <tr>
-                            <td style="height:{$menuPointHeigth}px;">
-                                <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                            </td>
-                            <th colspan="{$depth + 1}" align="left">
-                                <xsl:call-template name="addLink" />
-                            </th>
-                        </tr>
-                        <!--'true', if an ancestor node is @constrainPopUp='true'-->
-                        <xsl:variable name="constrainPopUp">
-                            <!--has an ascentant @constrainPopUp='true' ?-->
-                            <xsl:for-each select="ancestor-or-self::node()">
-                                <xsl:if test="current()[@constrainPopUp='true']">
-                                    <xsl:value-of select="'true'" />
+                                <xsl:variable name="constrainPopUp">
+                                    <xsl:for-each select="ancestor-or-self::node()">
+                                        <xsl:if test="current()[@constrainPopUp='true']">
+                                            <xsl:value-of select="'true'" />
+                                        </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:variable>
+                                <!-- sub links, if below this MAIN menu point the searched link is located -->
+                                <xsl:if test="current()[@href = $browserAddress ] or descendant::item[@href = $browserAddress ] or $constrainPopUp='true'  ">
+                                    <xsl:call-template name="createTree">
+                                        <xsl:with-param name="depth" select="$depth" />
+                                        <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                                        <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                                        <xsl:with-param name="subRootNode" select="$subRootNode" />
+                                        <xsl:with-param name="blockerWebpage" select="@href" />
+                                    </xsl:call-template>
                                 </xsl:if>
-                            </xsl:for-each>
-                            <!--has an ascentant @constrainPopUp='true' ?-->
-                        </xsl:variable>
-                        <!-- sub links -->
-                        <!-- test if below this MAIN menu point the searched link is located -->
-                        <xsl:if test="current()[@href = $browserAddress ] or descendant::item[@href = $browserAddress ] or $constrainPopUp='true' ">
-                            <xsl:call-template name="createTree">
-                                <xsl:with-param name="depth" select="$depth" />
-                                <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                                <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                                <xsl:with-param name="subRootNode" select="$subRootNode" />
-                                <xsl:with-param name="rootNode" select="$rootNode" />
-                            </xsl:call-template>
-                        </xsl:if>
-                        <!-- END OF: test if below this main menu point the searched link is located -->
-                        <!-- END OF: sub links -->
-                        <!-- place holder between main links -->
-                        <xsl:if test="count(following-sibling::item) &gt; 0">
-                            <tr>
-                                <td style="height:{$spaceBetweenMainLinks}px;" colspan="{$depth + 2}">
-                                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                                </td>
-                            </tr>
-                        </xsl:if>
-                        <!-- END OF: place holder between main links -->
+                                <!-- place holder between main links -->
+                                <xsl:if test="count(following-sibling::item) &gt; 0">
+                                    <tr>
+                                        <td style="height:{$spaceBetweenMainLinks}px;" colspan="{$depth + 2}">
+                                            <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+                                        </td>
+                                    </tr>
+                                </xsl:if>
+                            </xsl:if>
+                        </xsl:for-each>
                     </xsl:for-each>
-                    <!-- END OF: main link -->
+                    <!-- borderWidthDown -->
+                    <tr>
+                        <td style="height:{$borderWidthTopDown}px;" colspan="{$depth + 2}">
+                            <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+                        </td>
+                    </tr>
+                </table>
+            </xsl:when>
+        </xsl:choose>
+        <div id="mycoreVersionInfo">
+            <xsl:value-of select="i18n:translate('mycore.version')"/>
+            <br/>
+            Update: <xsl:value-of select="i18n:translate('common.today')"/>
+        </div>
+        <div id="poweredByMycore">
+            <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="{i18n:translate('mycore.version')}" />  
+        </div>
+    </xsl:template>
+
+    <!-- ================================================================================= -->
+
+    <xsl:template name="get.subRootNode">
+        <xsl:param name="rootNode" />
+        <!-- look for appropriate replaceMenu entry and assign to subRootNode if found one-->
+        <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
+            <xsl:choose>
+                <xsl:when test="ancestor-or-self::item[  @replaceMenu = 'true' ]">
+                    <!-- collect @href's with replaceMenu="true" entries along an axis -->
+                    <xsl:for-each select="ancestor-or-self::item[  @replaceMenu = 'true' ]">
+                        <xsl:if test="position()=last()">
+                            <xsl:value-of select="@href" />
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$rootNode" />
                 </xsl:otherwise>
             </xsl:choose>
-            <!-- END OF: navigation tree -->
-            <!-- borderWidthDown -->
-            <tr>
-                <td style="height:{$borderWidthTopDown}px;" colspan="{$depth + 2}">
-                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
-                </td>
-            </tr>
-            <!-- END OF: borderWidthDown -->
-        </table>
-        <!-- end of general table -->
+        </xsl:for-each>
     </xsl:template>
+
     <!-- ================================================================================= -->
+
+    <xsl:template name="navigation.tree.head">
+        <xsl:param name="depth" />
+        <xsl:param name="CSSLayoutClass" />
+        <xsl:param name="menuPointHeigth" /><!-- use pixel values -->
+        <xsl:param name="columnWidthIcon" /><!-- use percent values -->
+        <xsl:param name="spaceBetweenMainLinks" /><!-- use pixel values -->
+        <xsl:param name="borderWidthTopDown" /><!-- use pixel values -->
+        <xsl:param name="borderWidthSides" /><!-- use percent values -->
+
+        <!-- initialise columns -->
+        <tr>
+            <!-- border left -->
+            <td style="height:1px; width:{$borderWidthSides}%;">
+                <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+            </td>
+            <!-- END OF: border left -->
+            <!-- create columns to give space for the icons -->
+            <xsl:call-template name="forLoop.createColumns">
+                <xsl:with-param name="i" select="1" />
+                <xsl:with-param name="count" select="$depth - 1" />
+                <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+            </xsl:call-template>
+            <!-- END OF: create columns to give space for the icons -->
+            <!-- fill rest -->
+            <td style="width:{ 100 - (2*$borderWidthSides) - ($columnWidthIcon*($depth - 1)) }%px;">
+                <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+            </td>
+            <!-- END OF: fill rest -->
+            <!-- border right -->
+            <td style="width:{$borderWidthSides}%;">
+                <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+            </td>
+            <!-- END OF: border right -->
+        </tr>
+        <!-- END OF: initialise columns -->
+        <!-- borderWidthTop -->
+        <tr>
+            <td style="height:{$borderWidthTopDown}px;" colspan="{$depth + 2}">
+                <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <!-- ================================================================================= -->
+
     <xsl:template name="createTree">
         <xsl:param name="depth" />
         <xsl:param name="menuPointHeigth" />
         <xsl:param name="columnWidthIcon" />
         <xsl:param name="subRootNode" />
-        <xsl:param name="rootNode" />
+        <xsl:param name="blockerWebpage" />
 
         <!-- all items -->
+        <!-- TODO: Replace this for-each call by a recursive call, to avoid multiple access control verificatiion -->
         <xsl:for-each select="descendant::item">
 
-            <!--'true', if an ancestor node is @constrainPopUp='true'-->
-            <xsl:variable name="constrainPopUp">
-                <!--has an ascentant @constrainPopUp='true' ?-->
-                <xsl:for-each select="ancestor-or-self::node()">
-                    <xsl:if test="current()[@constrainPopUp='true']">
-                        <xsl:value-of select="'true'" />
-                    </xsl:if>
-                </xsl:for-each>
-                <!--has an ascentant @constrainPopUp='true' ?-->
+            <xsl:variable name="access">
+                <xsl:call-template name="get.readAccess">
+                    <xsl:with-param name="webpage" select="@href" />
+                    <xsl:with-param name="blockerWebpage" select="$blockerWebpage" />
+                </xsl:call-template>
             </xsl:variable>
 
-            <!-- calculate kind of link to display the right icon -> $linkKind -->
-            <xsl:variable name="linkKind">
-                <xsl:choose>
+            <xsl:if test="$access='true'">
+                <!--'true', if an ancestor node is @constrainPopUp='true'-->
+                <xsl:variable name="constrainPopUp">
+                    <!--has an ascentant @constrainPopUp='true' ?-->
+                    <xsl:for-each select="ancestor-or-self::node()">
+                        <xsl:if test="current()[@constrainPopUp='true']">
+                            <xsl:value-of select="'true'" />
+                        </xsl:if>
+                    </xsl:for-each>
+                    <!--has an ascentant @constrainPopUp='true' ?-->
+                </xsl:variable>
 
-                    <!-- if this item is the browser address -->
-                    <xsl:when test="current()[@href = $browserAddress ]">
-                        <xsl:choose>
-                            <!-- children -->
-                            <xsl:when test="descendant::item[@href]">
-                                <xsl:value-of select="'current_popedUp'" />
-                            </xsl:when>
-                            <!-- no children -->
-                            <xsl:otherwise>
-                                <xsl:value-of select="'current'" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <!-- END OF: if this item is the browser address -->
+                <!-- calculate kind of link to display the right icon -> $linkKind -->
+                <xsl:variable name="linkKind">
+                    <xsl:choose>
+                        <!-- if this item is the browser address -->
+                        <xsl:when test="current()[@href = $browserAddress ]">
+                            <xsl:choose>
+                                <!-- children -->
+                                <xsl:when test="descendant::item[@href]">
+                                    <xsl:value-of select="'current_popedUp'" />
+                                </xsl:when>
+                                <!-- no children -->
+                                <xsl:otherwise>
+                                    <xsl:value-of select="'current'" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <!-- if searched link is a descentant of the current one -->
+                        <xsl:when test="descendant::item[@href = $browserAddress ] ">
+                            <xsl:value-of select="'popedUp'" />
+                        </xsl:when>
+                        <!-- END OF: if searched link is a descentant of the current one -->
+                        <!--    parent::item[@href = $browserAddress ] -> if the searched link is the parent  
+                            or   preceding-sibling::item[@href = $browserAddress ] -> if the searched link is a sibling 
+                            or following-sibling::item[@href = $browserAddress ]           
+                            or   preceding-sibling::item/descendant::item[@href = $browserAddress ] -> if the searched link is a decentant of a sibling  
+                            or following-sibling::item/descendant::item[@href = $browserAddress ]"> -->
+                        <xsl:when
+                            test="(     parent::item[@href = $browserAddress ] 
+                                or  preceding-sibling::item[@href = $browserAddress ] 
+                                    or  following-sibling::item[@href = $browserAddress ]          
+                                or  preceding-sibling::item/descendant::item[@href = $browserAddress ] 
+                        or  following-sibling::item/descendant::item[@href = $browserAddress ])">
+                            <xsl:choose>
+                                <!-- children -->
+                                <xsl:when test="descendant::item[@href]">
+                                    <xsl:value-of select="'notPopedUp'" />
+                                </xsl:when>
+                                <!-- no children -->
+                                <xsl:otherwise>
+                                    <xsl:value-of select="'normal'" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <!--menu must be poped up ========================= -->
+                        <xsl:when test="($constrainPopUp = 'true') ">
+                            <xsl:value-of select="'normal'" />
+                        </xsl:when>
+                        <!--end: menu must be poped up ========================= -->
+                        <xsl:otherwise>
+                            <xsl:value-of select="'hide'" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- END OF: calculate kind of link to display the right icon -> $linkKind -->
+                <xsl:call-template name="addMenuRow">
+                    <xsl:with-param name="linkKind" select="$linkKind" />
+                    <xsl:with-param name="depth" select="$depth" />
+                    <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                    <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                    <xsl:with-param name="subRootNode" select="$subRootNode" />
+                </xsl:call-template>
+            </xsl:if>
 
-                    <!-- if searched link is a descentant of the current one -->
-                    <xsl:when test="descendant::item[@href = $browserAddress ] ">
-                        <xsl:value-of select="'popedUp'" />
-                    </xsl:when>
-                    <!-- END OF: if searched link is a descentant of the current one -->
-                    <!--	parent::item[@href = $browserAddress ] -> if the searched link is the parent  
-                        or   preceding-sibling::item[@href = $browserAddress ] -> if the searched link is a sibling 
-                        or following-sibling::item[@href = $browserAddress ]		   
-                        or   preceding-sibling::item/descendant::item[@href = $browserAddress ] -> if the searched link is a decentant of a sibling  
-                        or following-sibling::item/descendant::item[@href = $browserAddress ]"> -->
-                    <xsl:when
-                        test="
-                                    (
-				parent::item[@href = $browserAddress ] 
-		   or   preceding-sibling::item[@href = $browserAddress ] 
-				or following-sibling::item[@href = $browserAddress ]		   
-		   or   preceding-sibling::item/descendant::item[@href = $browserAddress ] 
-	            or following-sibling::item/descendant::item[@href = $browserAddress ]
-                  )
-				">
-                        <xsl:choose>
-                            <!-- children -->
-                            <xsl:when test="descendant::item[@href]">
-                                <xsl:value-of select="'notPopedUp'" />
-                            </xsl:when>
-                            <!-- no children -->
-                            <xsl:otherwise>
-                                <xsl:value-of select="'normal'" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:when>
-                    <!--menu must be poped up ========================= -->
-                    <xsl:when test="($constrainPopUp = 'true') ">
-                        <xsl:value-of select="'normal'" />
-                    </xsl:when>
-                    <!--end: menu must be poped up ========================= -->
-                    <xsl:otherwise>
-                        <xsl:value-of select="'hide'" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <!-- END OF: calculate kind of link to display the right icon -> $linkKind -->
-            <xsl:call-template name="addMenuRow">
-                <xsl:with-param name="linkKind" select="$linkKind" />
-                <xsl:with-param name="depth" select="$depth" />
-                <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                <xsl:with-param name="subRootNode" select="$subRootNode" />
-                <xsl:with-param name="rootNode" select="$rootNode" />
-            </xsl:call-template>
         </xsl:for-each>
-        <!-- END OF: all items  -->
     </xsl:template>
     <!-- ================================================================================= -->
     <!-- ================================================================================= -->
@@ -442,103 +469,51 @@
         <xsl:param name="menuPointHeigth" />
         <xsl:param name="columnWidthIcon" />
         <xsl:param name="subRootNode" />
-        <xsl:param name="rootNode" />
         <xsl:param name="createSiteMap" />
-        <!-- get depth of subRootNode -> $depthSubRootNode -->
-        <xsl:variable name="depthSubRootNode">
-            <xsl:choose>
-                <xsl:when test="$subRootNode != ''">
-                    <xsl:for-each select="$rootNode//item[@href = $subRootNode]">
-                        <xsl:value-of select="count(ancestor-or-self::item)" />
-                    </xsl:for-each>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:variable>
-        <!-- END OF: get depth of subRootNode -> $depthSubRootNode -->
-        <!-- display complete link row when $linkKind != 'hide' -->
-        <xsl:choose>
-            <xsl:when test="$linkKind != 'hide'">
-                <tr>
-                    <td style="height:{$menuPointHeigth}px;">
-                        <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:{$menuPointHeigth}px;" alt="" title=""></img>
-                    </td>
-                    <!-- draw lines before icon and link -->
-                    <xsl:for-each select="ancestor::item">
-                        <xsl:choose>
-                            <xsl:when test="$subRootNode = ''">
-                                <xsl:if test="position() &gt; 1 ">
-                                    <td align="center">
-                                        <xsl:call-template name="addIcon">
-                                            <xsl:with-param name="linkKind" select="'line'" />
-                                            <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                                            <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                                        </xsl:call-template>
-                                    </td>
-                                </xsl:if>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:if test="position() &gt; 1 and position() &gt; $depthSubRootNode+1 	 ">
-                                    <td align="center">
-                                        <xsl:call-template name="addIcon">
-                                            <xsl:with-param name="linkKind" select="'line'" />
-                                            <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                                            <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                                        </xsl:call-template>
-                                    </td>
-                                </xsl:if>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:for-each>
-                    <!-- END OF: draw lines before icon and link -->
-                    <!-- draw icon before the link -->
-                    <td align="center">
-                        <xsl:call-template name="addIcon">
-                            <xsl:with-param name="linkKind" select="$linkKind" />
-                            <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                            <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                        </xsl:call-template>
-                    </td>
-                    <!-- END OF: draw icon before the link -->
-                    <!-- display link -->
+
+        <xsl:if test="$linkKind != 'hide'">
+            <!-- display complete link row when $linkKind != 'hide' -->
+            <tr>
+                <td style="height:{$menuPointHeigth}px;">
+                    <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:{$menuPointHeigth}px;" alt="" title=""></img>
+                </td>
+                <!-- draw lines before icon and link -->
+                <xsl:for-each select="ancestor::item">
+                    <xsl:if test="position() &gt; 1 and position() &gt; $depth+1     ">
+                        <td align="center">
+                            <xsl:call-template name="addIcon">
+                                <xsl:with-param name="linkKind" select="'line'" />
+                                <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                                <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                            </xsl:call-template>
+                        </td>
+                    </xsl:if>
+                </xsl:for-each>
+                <!-- draw icon before the link -->
+                <td align="center">
+                    <xsl:call-template name="addIcon">
+                        <xsl:with-param name="linkKind" select="$linkKind" />
+                        <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                        <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                    </xsl:call-template>
+                </td>
+                <!-- display link -->
+                <td colspan="{ ($depth - count(ancestor::item)) + $depth + 1 }">
                     <xsl:choose>
-                        <xsl:when test="$subRootNode = ''">
-                            <td colspan="{ ($depth - count(ancestor::item)) + 1 }">
-                                <xsl:choose>
-                                    <xsl:when test="$linkKind = 'current' or $linkKind = 'current_popedUp'">
-                                        <span class="marked">
-                                            <xsl:call-template name="addLink">
-                                                <xsl:with-param name="linkKind" select="$linkKind" />
-                                            </xsl:call-template>
-                                        </span>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:call-template name="addLink"></xsl:call-template>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </td>
+                        <xsl:when test="$linkKind = 'current' or $linkKind = 'current_popedUp'">
+                            <span class="marked">
+                                <xsl:call-template name="addLink">
+                                    <xsl:with-param name="linkKind" select="$linkKind" />
+                                </xsl:call-template>
+                            </span>
                         </xsl:when>
                         <xsl:otherwise>
-                            <td colspan="{ ($depth - count(ancestor::item)) + $depthSubRootNode + 1 }">
-                                <xsl:choose>
-                                    <xsl:when test="$linkKind = 'current' or $linkKind = 'current_popedUp'">
-                                        <span class="marked">
-                                            <xsl:call-template name="addLink">
-                                                <xsl:with-param name="linkKind" select="$linkKind" />
-                                            </xsl:call-template>
-                                        </span>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:call-template name="addLink"></xsl:call-template>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </td>
+                            <xsl:call-template name="addLink"></xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
-                    <!-- END OF: display link -->
-                </tr>
-            </xsl:when>
-        </xsl:choose>
-        <!-- END OF: display complete link row when $linkKind != 'hide' -->
+                </td>
+            </tr>
+        </xsl:if>
     </xsl:template>
     <!-- ================================================================================= -->
     <!-- ================================================================================= -->
@@ -568,7 +543,8 @@
                     <xsl:when test="$linkKind = 'current_popedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after((parent::node()/@href),'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/minus-selected_end.gif"
@@ -579,7 +555,8 @@
                     <xsl:when test="$linkKind = 'popedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after((parent::node()/@href),'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/minus_end.gif" style="width:{$columnWidthIcon}px; height:{$menuPointHeigth}px;"
@@ -590,7 +567,8 @@
                     <xsl:when test="$linkKind = 'notPopedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after(@href,'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/plus_end.gif" style="width:{$columnWidthIcon}px; height:{$menuPointHeigth}px;"
@@ -621,7 +599,8 @@
                     <xsl:when test="$linkKind = 'current_popedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after((parent::node()/@href),'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/minus-selected.gif"
@@ -632,7 +611,8 @@
                     <xsl:when test="$linkKind = 'popedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after((parent::node()/@href),'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/minus.gif" style="width:{$columnWidthIcon}px; height:{$menuPointHeigth}px;" alt=""
@@ -643,7 +623,8 @@
                     <xsl:when test="$linkKind = 'notPopedUp'">
                         <a href="{concat($WebApplicationBaseURL,substring-after(@href,'/'))}">
                             <xsl:if test="$wcms.useTargets = 'yes'">
-                                <xsl:attribute name="target"><xsl:value-of select="@target" />
+                                <xsl:attribute name="target">
+                                    <xsl:value-of select="@target" />
                                 </xsl:attribute>
                             </xsl:if>
                             <img src="{$WebApplicationBaseURL}images/naviMenu/plus.gif" style="width:{$columnWidthIcon}px; height:{$menuPointHeigth}px;" alt=""
@@ -655,32 +636,28 @@
             <!-- END OF: not list end -->
         </xsl:choose>
     </xsl:template>
+
     <!-- ================================================================================= -->
-    <!-- ================================================================================= -->
+
     <xsl:template name="addLink">
         <xsl:param name="createSiteMap" />
+
         <xsl:choose>
             <!-- item @type is "intern" -> add the web application path before the link -->
             <xsl:when test="@type = 'intern'">
                 <a>
                     <!--target-->
                     <xsl:if test="$wcms.useTargets = 'yes'">
-                        <xsl:attribute name="target"><xsl:value-of select="@target" />
+                        <xsl:attribute name="target">
+                            <xsl:value-of select="@target" />
                         </xsl:attribute>
                     </xsl:if>
-                    <!--add lastPage=@href to URL-->
-                    <xsl:variable name="href_intern_tmp">
-                        <xsl:call-template name="UrlSetParam">
-                            <xsl:with-param name="url" select="concat($WebApplicationBaseURL,substring-after(@href,'/'))" />
-                            <xsl:with-param name="par" select="'XSL.lastPage.SESSION'" />
-                            <xsl:with-param name="value" select="@href" />
-                        </xsl:call-template>
-                    </xsl:variable>
                     <xsl:attribute name="href">
-		                        <xsl:call-template name="UrlAddSession">
-		                            <xsl:with-param name="url" select="$href_intern_tmp" />
-		                        </xsl:call-template>
-					</xsl:attribute>
+                         <xsl:call-template name="UrlAddSession">
+                            <xsl:with-param name="url" select="concat($WebApplicationBaseURL,substring-after(@href,'/'))" />
+                            </xsl:call-template>
+                    </xsl:attribute>
+                    <!-- label -->
                     <xsl:choose>
                         <xsl:when test="@style = 'bold'">
                             <span style="font-weight:bold;">
@@ -711,10 +688,10 @@
             <xsl:otherwise>
                 <a>
                     <xsl:if test="$wcms.useTargets = 'yes'">
-                        <xsl:attribute name="target"><xsl:value-of select="@target" />
+                        <xsl:attribute name="target">
+                            <xsl:value-of select="@target" />
                         </xsl:attribute>
                     </xsl:if>
-
                     <!-- set attribute @href -->
                     <xsl:variable name="href_temp">
                         <xsl:choose>
@@ -724,11 +701,7 @@
                             </xsl:when>
                             <!-- link is relative and not starting with http ... -->
                             <xsl:otherwise>
-                                <xsl:call-template name="UrlSetParam">
-                                    <xsl:with-param name="url" select="concat($WebApplicationBaseURL,substring-after(@href,'/'))" />
-                                    <xsl:with-param name="par" select="'XSL.lastPage.SESSION'" />
-                                    <xsl:with-param xmlns:encoder="xalan://java.net.URLEncoder" name="value" select="encoder:encode(@href,'UTF-8')" />
-                                </xsl:call-template>
+                                <xsl:value-of select="concat($WebApplicationBaseURL,substring-after(@href,'/'))" />
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
@@ -739,21 +712,21 @@
                         </xsl:call-template>
                     </xsl:variable>
                     <xsl:attribute name="href">
-                     <xsl:choose>
-                        <!-- in case of $href_temp contains 'servlet' append 'lang=$currentlang' -->
-                        <xsl:when test=" contains($href_temp,'/servlets/') ">
-                                     <xsl:call-template name="UrlSetParam">
-                                          <xsl:with-param name="url" select="$href_temp2" />
-                                          <xsl:with-param name="par" select="'lang'" />
-                                          <xsl:with-param name="value" select="$CurrentLang" />
-	                              </xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-		                           <xsl:value-of select="$href_temp2" />
-                        </xsl:otherwise>
-                     </xsl:choose>                  	
-               </xsl:attribute>
-                    <!-- end: set attribute @href -->
+                        <xsl:choose>
+                            <!-- in case of $href_temp contains 'servlet' append 'lang=$currentlang' -->
+                            <xsl:when test=" contains($href_temp,'/servlets/') ">
+                                <xsl:call-template name="UrlSetParam">
+                                    <xsl:with-param name="url" select="$href_temp2" />
+                                    <xsl:with-param name="par" select="'lang'" />
+                                    <xsl:with-param name="value" select="$CurrentLang" />
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$href_temp2" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <!-- label -->
                     <xsl:choose>
                         <xsl:when test="@style = 'bold'">
                             <span style="font-weight:bold;">
@@ -781,6 +754,7 @@
                 </a>
             </xsl:otherwise>
         </xsl:choose>
+
     </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="FlagPrinter">
@@ -790,29 +764,70 @@
         <xsl:param name="alternative" />
         <a>
             <xsl:attribute name="href">
-				<xsl:variable name="newurl">
-					<xsl:call-template name="UrlSetParam">
-						<xsl:with-param name="url" select="$url" />
-						<xsl:with-param name="par" select="'lang'" />
-						<xsl:with-param name="value" select="$lang" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:choose>
-					<xsl:when test="contains($newurl,'MCR:ERROR')">
+                <xsl:variable name="newurl">
+                    <xsl:call-template name="UrlSetParam">
+                        <xsl:with-param name="url" select="$url" />
+                        <xsl:with-param name="par" select="'lang'" />
+                        <xsl:with-param name="value" select="$lang" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="contains($newurl,'MCR:ERROR')">
                         <xsl:call-template name="UrlAddSession">
                             <xsl:with-param name="url" select="$alternative" />
                         </xsl:call-template>
-					</xsl:when>
-					<xsl:otherwise>
+                    </xsl:when>
+                    <xsl:otherwise>
                         <xsl:call-template name="UrlAddSession">
                             <xsl:with-param name="url" select="$newurl" />
                         </xsl:call-template>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
             <xsl:copy-of select="$flag" />
         </a>
     </xsl:template>
 
     <!-- ================================================================================= -->
+
+    <xsl:template name="get.loginLinks">
+        <xsl:param name="spaceBetweenLinks" />
+        <xsl:param name="seperatorChar" />
+        <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="loginURL"
+            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;amp;url=', encoder:encode( string( $RequestURL ) ) )" />
+        <xsl:choose>
+            <xsl:when test="$CurrentUser='gast'">
+                <td>
+                    <a href="{$loginURL}">
+                        <b>
+                            <xsl:value-of select="i18n:translate('buttons.login')" />
+                        </b>
+                    </a>
+                </td>
+            </xsl:when>
+            <xsl:otherwise>
+                <td>
+                    <a href="{$loginURL}&amp;uid=gast&amp;pwd=gast">
+                        <b>
+                            <xsl:value-of select="i18n:translate('buttons.logout')" />
+                        </b>
+                    </a>
+                </td>
+                <xsl:call-template name="get.placeHolder">
+                    <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
+                    <xsl:with-param name="seperatorChar" select="$seperatorChar" />
+                </xsl:call-template>
+                <td>
+                    <a href="{$loginURL}">
+                        <b>
+                            <xsl:value-of select="i18n:translate('titles.pageTitle.login')" />
+                        </b>
+                    </a>
+                </td>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- ================================================================================= -->
+
 </xsl:stylesheet>
