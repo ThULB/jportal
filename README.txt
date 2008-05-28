@@ -1,180 +1,148 @@
-1. GETTING SOURCES
+TOC
+===========================================================================================================================
+1. LICENSE
+2. REQUIREMENTS
+3. GETTING SOURCES
+4. PREPERATION 
+5. CONFIGURATION
+6. INSTALLATION
+    6.1 NEW INSTALLATION
+    6.2 REINSTALLATION
+7. RUNNING    
+8. DEFAULT USERS
+9. RIGHTS MANAGEMENT
+10. CREATE NEW JOURNAL
+===========================================================================================================================
+
+1. LICENSE
 ======================================
 ======================================
+Watch and agree license agreement specified in LICENSE.txt
 
-cvs -d :pserver:anoncvs@ulbaix03.thulb.uni-jena.de:/content/cvsroot co jportal
 
-
-2. PREPERATION OF SYSTEM
+2. REQUIREMENTS
 ======================================
 ======================================
+- CVS-Client
+- JAVA 5 JDK
+- ANT
 
-- according to a common "DocPortal" installation, prepare the system for MyCoRE
--- e.g. setting $MYCORE_HOME, $DOCPORTAL_HOME
-
-
-3. CONFIGURATION AND INSTALLATION
+3. GETTING SOURCES
 ======================================
 ======================================
+cvs -d :pserver:anoncvs@cvs.thulb.uni-jena.de:/content/cvsroot co -P jportal
 
-3.1 Installation of a completely new application:
-=================================================
+
+4. PREPERATION 
+======================================
+======================================
+- Setting system environment variables
+-- $MYCORE_HOME to <Installation-Directory>/jportal/mycore
+-- $DOCPORTAL_HOME to <Installation-Directory>/jportal/application
+
+- Create JPortal properties 
+-- cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
+-- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
+
+
+5. CONFIGURATION
+======================================
+======================================
+- Customize jportal system 
+-- vi $DOCPORTAL_HOME/config/mycore.properties.private
+--- set $MCR.basedir to your <$DOCPORTAL_HOME>
+--- set $MCR.FileUpload.IP to your local running server's IP address
+
+
+6. INSTALLATION
+======================================
+======================================
+6.1 NEW INSTALLATION
+==================================================
    1. Mycore:
-         1. cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
+         1. cd $MYCORE_HOME
          2. ant jar
    2. Application
-		 1. cp -r $MYCORE_HOME/stylesheets/* $DOCPORTAL_HOME/build/stylesheets
-         2. cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
-         3. vi $DOCPORTAL_HOME/config/mycore.properties.private
-         4. vi $DOCPORTAL_HOME/config/mycore.properties.jp
-         5. ant -f jportal-build.xml jp.create.schema jar jp.create.scripts
-         6. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         7. ant -f jportal-build.xml create.metastore jp.create.usermanagjp. create.default-rules jp.create.class create.genkeys webapps
-         8. $DOCPORTAL_HOME/build/bin/jettystart.sh 
+         1. cd $DOCPORTAL_HOME
+         2. mkdir -p $DOCPORTAL_HOME/build/stylesheets;cp -r $MYCORE_HOME/stylesheets/* $DOCPORTAL_HOME/build/stylesheets
+         3. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt)
+         4. ant -f jportal-build.xml jp.create.schema jar jp.create.scripts
+         5. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
+         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps webapps
          
-3.2 Installation of a once already installed application:
-=========================================================
-    1. Mycore
-         1. ant clean jar
-    2. Application
-		 1. cp -r $MYCORE_HOME/stylesheets/* $DOCPORTAL_HOME/build/stylesheets
-         2. ant -f jportal-build.xml jp.create.schema jar jp.create.scripts create.genkeys webapps
+6.2 REINSTALLATION - already installed application 
+==================================================
+cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar jp.create.scripts webapps webapps
 
 
-4. HACKS IN DOCPORTAL *
-======================================
-======================================         
-* these are files, that have been modified, replaced or what ever OUTSIDE $DOCPORTAL_HOME/modules/module-jportal/
-
-Nutzerverwaltung:
-
-    * config/user/permission.xml gehackt um eigene Objekttypen --> Modularisieren
-
-Properties:
-
-    * mycore.properties.jp in mycore.properties eingefügt
-    * mycore.properties.jp in $DOCPORTAL_HOME/config eingefügt
-    * mocules/module-iview/config/mycore.properties.iview in $DOCPORTAL_HOME/config eingefügt
-
-XSL:
-
-    * generatePage --> xsl:include "jp_extensions.xsl"
-    * objecttypes.xsl --> xsL:include "jp_objecttypes.xsl"
-    * mycoreobject.xsl
-
-JAVA:
-
-    * MCRObject sollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen 
-    * BUGFIX MCRParentRuleStrategy sollte (MYCORE_HEAD) mit nächstem Snapshot mit rein kommen
-    * session problem:
-          o MCRStartEditorServlet (MYCORE_HEAD) 
-          o MCRUriResolver (MYCORE_HEAD) 
-          o MCREditorSourcecReader (MYCORE_HEAD) 
-          o MCRServlet (MYCORE_HEAD) 
-
-    * MCRLoginServlet (MYCORE_HEAD) 
-    
-    
-5. CLASSIFICATIONS
-======================================
-====================================== 
-
-ID  					Macht was?  							Bemerkung
------------------------+---------------------------------------+------------------------------------
-jportal_class_00000001 	Länderliste 							wird nirgends benutzt
-jportal_class_00000002 	Sprachliste für die Metadatenfelder 	alle nicht genutzten ausgeblendet
-jportal_class_00000003 	DDC 									wird nirgends benutzt
-jportal_class_00000004 	Sprache des Journals 	
-jportal_class_00000006 	Typen für "Weitere Titel"
-jportal_class_00000007 	Rollen für "Beteiligte" 	
-urmel_class_001 		Geschlecht von Personen 				wird mit Archiv gemeinsam genutzt
-jportal_class_00000008 	Datums-Typen bei Artikeln 	
-jportal_class_00000009 	Datums-Typen bei Journalen 	
-jportal_class_00000010 	ID-Typen bei Journalen und Artikeln 	
-jportal_class_00000011  Classipub  								optionale Klassifikation für Artikel
-																optionale Klassifikation für Artikel per Standard diese nehmen
-																ist leer
-jportal_class_00000012 	Classipub 2								optionale 2. Klassifikation für Artikel
-																optionale Klassifikation für Artikel per Standard diese nehmen
-																ist leer
-	
-jportal_class_00000013 	Classipub 3								optionale 3. Klassifikation für Artikel
-																optionale Klassifikation für Artikel per Standard diese nehmen
-																ist leer
-         
-         
-6. Rechteverwaltung
+7. RUNNING
 ======================================
 ======================================          
-
-Folgende Gruppen werden standardmäßig eingerichtet :
-
-"journalgroup"
-
-   1.* darf JPJournal
-                o anlegen
-                o editieren
-                o Derivat anhängen
-
-"volumegroup"
-
-   1. * darf JPVolume
-         1. anlegen
-         2. editieren
-         3. löschen
-         4. Derivat anhängen
+Once you have followed all steps from chapter 5 you can run a server and watch JPortal in action
+All you have to do is 
+- make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
+- $DOCPORTAL_HOME/build/bin/jettystart.sh
+- Go to web browser and visit http://localhost:8291
 
 
-"editorsgroup"
-
-   1.
-          * darf JPArticle
-          *
-               1. anlegen
-               2. editieren
-               3. löschen
-               4. Derivat anhängen
-          * darf Person
-          *
-               1. anlegen
-               2. editieren
-               3. löschen
-          * darf JPInst
-         1. anlegen
-         2. editieren
-         3. löschen
-
-
-"rootgroup"
-
-    * darf alles inklusive komplettem Usermanagement
-
-         
-         
-7. Neue ZS anlegen
+8. DEFAULT USERS
 ======================================
 ======================================
+By default the installation creates a super user called "root" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
+see what this user is allowed to do. 
 
-   1.  Webseite anlegen
-         1. template zuweisen
-         1. addresse der root webseite merken
-   3. jpjournal über web anlegen
-         1. gemerkten web context eintragen
-         2. jpjournal id eintragen
-   5. suchmasken mit eigenem dummy parameter eintragen
-   6. Schreibrechte vergeben
-         1. spez. volume-goup_abc und editorsgroup_abc über web anlegen
-         1. nutzer darin aufnehmen und immer zusätzl. in volumegroup oder editorsgroup aufnehmen
-         1. build/bin/mycore.sh update permission writedb for id jportal_jpjournal_0000000x with rulefile* 'volumegoup_abc & editorsgroup_abc' 
-         1. build/bin/mycore.sh update permission deletedb for id jportal_jpjournal_0000000x with rulefile* 'volumegoup_abc & editorsgroup_abc' 
-   8. webseite anlegen
+If you want to use WCMS (Web Content Management System) of JPortal:
+- go to your web browser and click menu point "Tools" > "WCMS" 
+- log in with login name "admin" and password "wcms" 
 
-   * sieht bspw. so aus: 
-   <?xml version="1.0" encoding="utf-8"?>
-	<condition format="xml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRCondition.xsd">
-	  <boolean operator="or">
-	    <condition value="editorsgroup_abc" operator="=" field="group" />	  
-	    <condition value="volumegoup_abc" operator="=" field="group" />	  	    
-	  </boolean>
-	</condition>
-   
+         
+9. RIGHTS MANAGEMENT
+======================================
+======================================          
+Following groups will created by default:
+
+    1 ."journalgroup"
+    - Allowed to ... JPJournal 
+    -- create
+    -- edit
+    -- append derivate on
+    
+    2. "volumegroup"
+    - Allowed to ... JPVolume
+    -- create
+    -- edit
+    -- append derivate on
+    
+    3. "editorsgroup"
+    - Allowed to ... JPArticle
+    -- create
+    -- edit
+    -- delete
+    -- append derivate on 
+    
+    - Allowed to ... Person
+    -- create
+    -- edit
+    -- delete
+    
+    - Allowed to ... JPInst
+    -- create
+    -- edit
+    -- delete
+
+    4. "rootgroup"
+    - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
+    - add, edit, delete users and groups
+
+         
+10. CREATE NEW JOURNAL
+======================================
+======================================
+   1. Go to JPortal web application in your browser
+   2. Log in as "root"
+   3. Click on "Editors" in menu left
+   4. Create a new journal
+   5. Create a new Journal-Context, by 
+      - go to created journals metadata page
+      - click on "Ja, Zeitschriften-Kontext jetzt einrichten!"
+      - follow form and submit
