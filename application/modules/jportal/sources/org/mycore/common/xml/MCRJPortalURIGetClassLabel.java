@@ -1,18 +1,11 @@
 package org.mycore.common.xml;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
 import org.jdom.Element;
-import org.mycore.backend.hibernate.MCRTableGenerator;
-import org.mycore.common.MCRCache;
-import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.datamodel.classifications.MCRClassification;
-import org.mycore.datamodel.classifications.MCRClassificationItem;
-import org.mycore.datamodel.classifications.MCRClassificationObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.services.i18n.MCRTranslation;
 
 public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
@@ -103,7 +96,8 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
     private String getClassLabel(String classID) {
         // TODO: use cache
         String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-        String label = MCRClassificationItem.getClassificationItem(classID).getText(currentLang);
+        //String label = MCRCatelassificationItem.getClassificationItem(classID).getText(currentLang);
+        String label = "ich muss noch ermittelt werden ;-)";
         return label;
     }
 
