@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000067">
+    <label xml:lang="de" text="Erschließungstiefe" description="Erschließungstiefe" />
+    <label xml:lang="en" text="Data model coverage" description="Data model coverage" />
+    <categories>
+        <category ID="browse">
+            <label xml:lang="de" text="Blätterzeitschrift" />
+        </category>
+        <category ID="fully">
+            <label xml:lang="de" text="Vollständige Erschließung (inkl. Artikel)" />
+        </category>
+    </categories>
+</mycoreclass>

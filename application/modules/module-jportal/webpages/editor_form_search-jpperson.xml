@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Suche nach Personen">
+    <editor id="searchmask-de">
+      <include uri="webapp:editor/editor-search-jpperson.xml"/>
+    </editor>
+  </section>
+  <section xml:lang="en" title="Search for persons">
+    <editor id="searchmask-en">
+      <include uri="webapp:editor/editor-search-jpperson.xml"/>
+    </editor>
+  </section>
+</MyCoReWebPage>

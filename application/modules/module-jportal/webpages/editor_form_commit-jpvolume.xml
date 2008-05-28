@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+      <section title="Bearbeiten eines JSTchild" xml:lang="de">
+            <p></p>
+            <br />
+            <p></p>
+            <editor id="commit-jpvolume">
+                  <include uri="webapp:editor/editor-commit-jpvolume.xml" />
+            </editor>
+            <p></p>
+            <br />
+            <p></p>
+      </section>
+</MyCoReWebPage>
