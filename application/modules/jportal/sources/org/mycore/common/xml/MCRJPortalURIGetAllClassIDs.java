@@ -2,18 +2,13 @@ package org.mycore.common.xml;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.mycore.common.MCRException;
-import org.mycore.datamodel.classifications.MCRClassification;
-import org.mycore.datamodel.classifications.MCRClassificationObject;
-import org.mycore.datamodel.classifications.query.MCRClassificationQuery;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
-import org.mycore.frontend.servlets.MCRClassificationBrowser;
 
 public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
@@ -38,7 +33,7 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
         Element returnXML = new Element("dummyRoot");
         MCRXMLTableManager objectDB = MCRXMLTableManager.instance();
-        ArrayList<String> ci = objectDB.retrieveAllIDs("class");
+        List<String> ci = objectDB.retrieveAllIDs("class");
         Iterator<String> ciIt = ci.iterator();
         while (ciIt.hasNext()) {
             String classID = (String) ciIt.next();
