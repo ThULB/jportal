@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE webpage>
+
+<editor id="search-all">
+    
+    <target type="servlet" name="MCRSearchServlet" method="post" format="xml"/>
+    
+    <validationMessage>
+        <label xml:lang="de">Bitte Suchbegriff eingeben!</label>
+        <label xml:lang="en">Please, enter a search subject! </label>
+    </validationMessage>
+    
+    <components root="root" var="/query">
+        <panel id="root" lines="off">
+            <hidden var="@mask" default="content/main/search.xml"/>
+            <hidden var="@maxResults" default="0"/>
+            <hidden var="@numPerPage" default="10"/>
+            
+            <hidden var="conditions/@format" default="xml"/>
+            <hidden var="conditions/boolean/@operator" default="and"/>
+            
+            <!-- Only in one specified journal -->
+            <hidden var="conditions/boolean/boolean/@operator" default="or"/>
+            <!-- volumes -->
+            <hidden var="conditions/boolean/boolean/condition80/@field" default="journalID_vol"/>
+            <hidden var="conditions/boolean/boolean/condition80/@operator" default="="/>
+            <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition80/@value"/>
+            <!-- articles -->
+            <hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art"/>
+            <hidden var="conditions/boolean/boolean/condition90/@operator" default="="/>
+            <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value"/>
+            
+            <!-- Search in field "name" with operator "contains" -->
+            <hidden var="conditions/boolean/condition2/@field" default="allMeta,content"/>
+            <hidden var="conditions/boolean/condition2/@operator" default="contains"/>
+            <cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition2/@value">
+                <textfield id="input" width="25">
+                    <condition id="cond" required="true">
+                        <label xml:lang="de">Bitte geben Sie einen Suchbegriff ein </label>
+                        <label xml:lang="en">Please, enter a search subject! </label>
+                    </condition>
+                </textfield>
+            </cell>
+            <cell row="1" col="2" anchor="EAST">
+                <submitButton i18n="editor.search.all.startSearch" width="18px"/>
+            </cell>
+        </panel>
+    </components>
+    
+</editor>

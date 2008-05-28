@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ?xml version="1.0" encoding="ISO-8859-1"?-->
+<!DOCTYPE editor>
+<editor>
+<!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
+	<target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />            
+      <components root="author-jparticle" var="/mycoreobject">
+            <include uri="webapp:editor/imports-jparticle.xml" />                          
+            <panel id="author-jparticle" lines="on">
+                  <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jparticle" />
+            </panel>
+      </components>
+</editor>

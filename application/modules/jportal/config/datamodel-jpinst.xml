@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="jpinst">
+	<structure/>
+	<metadata>
+		<!-- 01 - Institution Name -->
+		<element name="names" minOccurs='1' maxOccurs='1' parasearch="true"
+			textsearch="true">
+			<mcrmetainstitutionname name="name" class="MCRMetaInstitutionName"
+				minOccurs='1' maxOccurs='unbounded' length="128"/>
+		</element>
+		<!-- 02 - Address -->
+		<element name="addresses" minOccurs='0' maxOccurs='1' parasearch="false"
+			textsearch="false">
+			<mcrmetaaddress name="address" class="MCRMetaAddress" minOccurs='1'
+				maxOccurs='unbounded' length="64"/>
+		</element>
+		<!-- 03 - Phones -->
+		<element name="phones" minOccurs='0' maxOccurs='1' parasearch="false"
+			textsearch="false">
+			<mcrmetalangtext name="phone" class="MCRMetaLangText" minOccurs='1'
+				maxOccurs='unbounded' length="32"/>
+		</element>
+		<!-- 04 - URL -->
+		<element name="urls" minOccurs='0' maxOccurs='1' parasearch="false"
+			textsearch="false">
+			<mcrmetalink name="url" class="MCRMetaLink" minOccurs='1'
+				maxOccurs='unbounded'/>
+		</element>
+		<!-- 05 - eMail -->
+		<element name="emails" minOccurs='0' maxOccurs='1' parasearch="false"
+			textsearch="false">
+			<mcrmetalangtext name="email" class="MCRMetaLangText" minOccurs='1'
+				maxOccurs='unbounded' length="128"/>
+		</element>
+		<!-- 06 - Note -->
+		<element name="notes" minOccurs='0' maxOccurs='1' parasearch="false"
+			textsearch="false">
+			<mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='1'
+				maxOccurs='unbounded' length="4096"/>
+		</element>
+	</metadata>
+	<service>
+		<!-- Service Dates -->
+		<element name="servdates" minOccurs='0' maxOccurs='1' parasearch="true"
+			textsearch="false">
+			<mcrmetaiso8601date name="servdate" class="MCRMetaISO8601Date"
+				minOccurs='1' maxOccurs='unbounded'/>
+		</element>
+		<!-- Service Flags -->
+		<element name="servflags" minOccurs='0' maxOccurs='1' parasearch="true"
+			textsearch="false">
+			<mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1'
+				maxOccurs='unbounded' length="256"/>
+		</element>
+		<!-- Service ACLs -->
+		<element name="servacls" minOccurs='0' maxOccurs='1' parasearch="true"
+			textsearch="false">
+			<mcrmetaaccessrule name="servacl" class="MCRMetaAccessRule"
+				minOccurs='1' maxOccurs='unbounded' length="512"/>
+		</element>
+	</service>
+</configuration>
