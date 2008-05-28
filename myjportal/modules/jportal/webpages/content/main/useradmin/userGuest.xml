@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Benutzer Gast">
+        <p style="text-align: justify">Der Dokumenten-Server bietet Ihnen
+        die Möglichkeit Dokumente und multimediale Objekte in digitaler
+        Form in eine Datenbank einzustellen und zu suchen. Es ist eine
+        Volltextsuche und eine Metadatensuche (in beschreibenden und
+        klassifizierenden Daten) möglich.
+        <br />
+        <br />Beim Start des Systems sind sie als Benutzer <b>Gast</b> 
+        angemeldet und können über alle öffentlich zugänglichen Dokumente
+        und Objekte recherchieren und diese ansehen. Zum Betrachten
+        geschützter Dokumente benötigen Sie ein gesondertes Login. Wenden
+        Sie sich hierfür an die verantwortliche Person Ihrer Einrichtung.
+        <br />
+        <br />Über die Dokumentenverwaltung können Dokumente und Objekte
+        eingestellt und bearbeitet werden. Dieser Zugang ist nur über eine
+        entsprechend autorisierte Nutzerkennung (login) möglich. Die
+        erforderlichen Login-Daten erhalten Sie von der verantwortlichen
+        Person Ihrer Einrichtung.</p>
+	</section>
+    <section xml:lang="en" title="Guest user">
+        <p style="text-align: justify">This digital library is a repository
+        for multimedia objects. You can store and retrieve objects, as well
+        as search for objects of your interest. The retrieval is based
+        on a full-text search and a search in the meta data of the object.
+        <br />
+        <br />When first visiting the repository website you will be logged
+        in as the user <b>guest</b>. This user has access to all publicly
+        available objects. If you want to access protected documents you
+        will have to login as a different user. This is also the case if
+        if want to store objects and documents as an author. 
+        <br />
+        <br />For getting an account and a password please
+        contact your local administrator. You will find information about your
+        contact persons in the menu item <b>contact</b>.
+        </p>
+    </section>
+    <meta>
+        <log date="2005-05-10" time="09:05" labelPath="Hauptmenü links &gt; Nutzerverwaltung/Nutzer Gast" lastEditor="Administrator" />
+    </meta>
+</MyCoReWebPage>

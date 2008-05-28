@@ -1,5 +1,0 @@
-##############################################################################
-# Black list. Which classis should be hided in journals search masks 
-##############################################################################
-
-MCR.Module-JPortal.SearchMask.ClassiBlackList=
