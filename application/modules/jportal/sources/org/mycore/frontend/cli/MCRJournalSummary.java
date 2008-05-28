@@ -1,14 +1,11 @@
 package org.mycore.frontend.cli;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -16,41 +13,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.apache.log4j.Logger;
-import org.apache.xerces.parsers.XMLDocumentParser;
-import org.apache.xerces.xni.parser.XMLDocumentSource;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLink;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
-import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 public class MCRJournalSummary extends MCRAbstractCommands {
 
-    static MCRXMLTableManager xmltable = MCRXMLTableManager.instance();
+    static MCRXMLTableManager XMLTABLE = MCRXMLTableManager.instance();
 
-    private static int maxArtID = xmltable.getNextFreeIdInt("jportal", "jparticle");
-
-    private static int maxVolID = xmltable.getNextFreeIdInt("jportal", "jpvolume");
-
-    private static int maxJouID = xmltable.getNextFreeIdInt("jportal", "jpjournal");
-
-    private static HashMap<MCRObjectID, MCRJournalStats> journals = new HashMap<MCRObjectID, MCRJournalStats>();
+    private static HashMap<MCRObjectID, MCRJournalStats> JOURNALS = new HashMap<MCRObjectID, MCRJournalStats>();
 
     private static Logger logger = Logger.getLogger(MCRJournalSummary.class.getName());
 
@@ -121,22 +101,22 @@ public class MCRJournalSummary extends MCRAbstractCommands {
                     // the journal object
                     if ((JID.equals("all") || JID.equals(objParentIDtemp.toString())) && checker) {
                         // create new journal stats object if needed
-                        if (!journals.containsKey(objParentIDtemp)) {
+                        if (!JOURNALS.containsKey(objParentIDtemp)) {
                             logger.info("new Journal found, with ID " + objParentIDtemp);
-                            journals.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, "article"));
+                            JOURNALS.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, "article"));
                         }
 
-                        if ((journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("articles"))
-                                        || (journals.get(objParentIDtemp).getObjectFocus().equals("browse") && type.equals("volumes"))) {
+                        if ((JOURNALS.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("articles"))
+                                        || (JOURNALS.get(objParentIDtemp).getObjectFocus().equals("browse") && type.equals("volumes"))) {
                             // check for completeness
                             if (objStruct.getDerivateSize() == 0) {
-                                journals.get(objParentIDtemp).incompleteObj(object.getId());
+                                JOURNALS.get(objParentIDtemp).incompleteObj(object.getId());
                             } else {
-                                journals.get(objParentIDtemp).completeObj(object.getId());
+                                JOURNALS.get(objParentIDtemp).completeObj(object.getId());
                             }
                         }
-                        if (journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("volumes")) {
-                            journals.get(objParentIDtemp).MissingChildObj(object.getId());
+                        if (JOURNALS.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("volumes")) {
+                            JOURNALS.get(objParentIDtemp).MissingChildObj(object.getId());
                         }
                     }
                 }
@@ -161,10 +141,10 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
         logger.info("/************************Journal Status Report*************************/");
         // go through all journal objects in the hash map
-        for (int k = 0; k <= maxJouID; k++) {
+        for (int k = 0; k <= maxJouID(); k++) {
             MCRObjectID JournalID = new MCRObjectID("jportal_jpjournal_" + Integer.toString(k));
-            if (journals.containsKey(JournalID)) {
-                MCRJournalStats journal = journals.get(JournalID);
+            if (JOURNALS.containsKey(JournalID)) {
+                MCRJournalStats journal = JOURNALS.get(JournalID);
                 Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type", journal.getObjectFocus())
                                 .setAttribute("id", journal.getJournalID().toString());
                 Element XMLobjectsInc = new Element("objectList").setAttribute("type", "incomplete");
@@ -368,11 +348,12 @@ public class MCRJournalSummary extends MCRAbstractCommands {
             JID = "all";
         }
 
-        ParseObjects("articles", "jparticle_", maxArtID, JID);
+        ParseObjects("articles", "jparticle_", getMaxArtID(), JID);
+        //ParseObjects("articles", "jparticle_", maxArtID, JID);
 
         logger.info("Volumes...");
 
-        ParseObjects("volumes", "jpvolume_", maxVolID, JID);
+        ParseObjects("volumes", "jpvolume_", getMaxVolID(), JID);
 
         logger.info("Status...");
 
@@ -388,11 +369,11 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
         logger.info("Article...");
 
-        ParseObjects("articles", "jparticle_", maxArtID, "all");
+        ParseObjects("articles", "jparticle_", getMaxArtID(), "all");
 
         logger.info("Volumes...");
 
-        ParseObjects("volumes", "jpvolume_", maxVolID, "all");
+        ParseObjects("volumes", "jpvolume_", getMaxVolID(), "all");
 
         logger.info("Status...");
 
@@ -413,4 +394,25 @@ public class MCRJournalSummary extends MCRAbstractCommands {
         return scalevalue;
     }
 
+    private static int getMaxArtID() {
+        return XMLTABLE.getNextFreeIdInt("jportal", "jparticle");
+        
+    }
+
+    /**
+     * @return the maxVolID
+     */
+    private static int getMaxVolID() {
+        return XMLTABLE.getNextFreeIdInt("jportal", "jpvolume");
+    }    
+    
+    /**
+     * @return the maxVolID
+     */
+    private static int maxJouID() {
+        return XMLTABLE.getNextFreeIdInt("jportal", "jpjournal");
+    }    
+    
+    
+    
 }

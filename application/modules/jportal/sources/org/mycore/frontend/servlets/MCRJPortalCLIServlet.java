@@ -24,24 +24,15 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
-import org.mycore.frontend.cli.MCRCommand;
-import org.mycore.frontend.cli.MCRCommandLineInterface;
 import org.mycore.frontend.cli.MCRDerivateCommands;
-import org.mycore.frontend.cli.MCRObjectCommands;
-import org.mycore.services.imaging.MCRImgCacheCommands;
 
 public class MCRJPortalCLIServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;

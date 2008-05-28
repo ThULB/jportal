@@ -3,14 +3,10 @@ package org.mycore.frontend;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringReader;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -21,14 +17,10 @@ import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.xml.MCRLayoutService;
-import org.mycore.datamodel.metadata.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
-import org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet;
 
 public class MCRJPortalJournalContextForWebpages {
 
@@ -52,7 +44,7 @@ public class MCRJPortalJournalContextForWebpages {
 
     private static String homeDir = PROPS.getString("MCR.basedir");
 
-    private final static String SRC_DIR = "/modules/module-jportal/webpages/create-journalContext/";
+    private final static String SRC_DIR = "/modules/jportal/webpages/create-journalContext/";
 
     private static String deployedDir = homeDir + "/build/webapps";
 

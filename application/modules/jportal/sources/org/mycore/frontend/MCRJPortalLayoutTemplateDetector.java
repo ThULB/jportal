@@ -5,11 +5,10 @@ import java.util.HashMap;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRJPortalURIGetJournalID;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 public class MCRJPortalLayoutTemplateDetector {
 

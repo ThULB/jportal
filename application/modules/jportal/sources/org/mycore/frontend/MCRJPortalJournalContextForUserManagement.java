@@ -1,11 +1,6 @@
 package org.mycore.frontend;
 
 import java.io.IOException;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
@@ -14,8 +9,8 @@ import org.jdom.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.user2.MCRGroup;
-import org.mycore.user2.MCRUserMgr;
+import org.mycore.user.MCRGroup;
+import org.mycore.user.MCRUserMgr;
 
 public class MCRJPortalJournalContextForUserManagement {
 

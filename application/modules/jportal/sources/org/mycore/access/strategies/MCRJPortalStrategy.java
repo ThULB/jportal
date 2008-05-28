@@ -7,9 +7,8 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
 

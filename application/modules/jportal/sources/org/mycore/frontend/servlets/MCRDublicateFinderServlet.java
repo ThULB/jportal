@@ -40,7 +40,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.user2.MCRUserMgr;
+import org.mycore.user.MCRUserMgr;
 
 public class MCRDublicateFinderServlet extends MCRServlet {
 

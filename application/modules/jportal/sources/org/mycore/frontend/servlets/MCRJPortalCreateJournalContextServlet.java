@@ -26,7 +26,7 @@ package org.mycore.frontend.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,12 +39,9 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRUsageException;
-import org.mycore.datamodel.metadata.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForUserManagement;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
-import org.mycore.user2.MCRUserMgr;
+import org.mycore.user.MCRUserMgr;
 
 public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
 
@@ -150,7 +147,7 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
     public Element getUsers() {
         Element users = new Element("users");
         MCRUserMgr um = MCRUserMgr.instance();
-        ArrayList<String> ul = um.getAllUserIDs();
+        List<String> ul = um.getAllUserIDs();
         Iterator<String> ulIt = ul.iterator();
         while (ulIt.hasNext()) {
             String userID = (String) ulIt.next();
@@ -161,3 +158,21 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
         return users;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
