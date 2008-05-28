@@ -26,7 +26,7 @@ public class MCRJPortalURIGetClass implements MCRResolver {
 
     private void initCache() {
         int cacheSize = MCRConfiguration.instance().getInt(CONFIG_PREFIX + "classification.CacheSize", 1000);
-        CLASS_CACHE = new MCRCache(cacheSize);
+        CLASS_CACHE = new MCRCache(cacheSize, "MCRJPortalURIGetClass");
         CACHE_INIT_TIME=System.currentTimeMillis();
     }
 
