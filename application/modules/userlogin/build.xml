@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- UserAdmin module build file for use with Apache Ant                 -->
+<!-- $Revision: 1.1 $ $Date: 2008/04/11 09:12:10 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - UserLogin" default="usage" basedir="../..">
+
+    <property name="build.sysclasspath" value="last" />
+    <import file="${basedir}/common-modules.xml" />
+	<property name="module.base" value="userlogin" />
+	<property name="module.dir" value="${basedir}/modules/${module.base}" />
+	
+	<!-- =================================================================== -->
+	<!-- Help on usage                                                       -->
+	<!-- =================================================================== -->
+
+	<target name="usage">
+		<echo>
+
+      Available targets are:
+        webapps              --> Build the web application
+        webapps.i18n         --> Build the messages_[lang].properties
+
+      Please do not use any of the other targets, they are internal.
+		</echo>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Build the web application directory and copy webpages               -->
+	<!-- =================================================================== -->
+	
+	<target name="webapps">
+		<echo>
+			building ${ant.project.name} webapps
+		</echo>
+		<!-- Copy the workflow stylesheet to the application --> 
+		<copy todir="${build.webapps}/WEB-INF/stylesheets">
+			<fileset file="${mycore.modules}/userlogin/xsl/*.xsl"/>
+		</copy>
+		<!-- merge the web.xml of the module to the application -->
+		<available property="web.xml.present" file="${mycore.modules}/userlogin/config/web.xml" />
+		<antcall target="do.merge" >
+			<param name="web.xml.file"   value="${mycore.modules}/userlogin/config/web.xml" />
+		</antcall>
+    </target>
+    	
+    <target name="webapps.i18n" >
+        <echo level="info">
+			building ${ant.project.name} webapp.i18n
+	    </echo>
+    	
+		<!-- merge I18N files -->
+		<antcall target="properties.merge">
+			<param name="module" value="${mycore}/modules/userlogin/config/messages_userlogin_de.properties"/>
+			<param name="locale_param" value="de"/>
+		</antcall>			
+		<antcall target="properties.merge">
+			<param name="module" value="${mycore}/modules/userlogin/config/messages_userlogin_en.properties"/>
+			<param name="locale_param" value="en"/>
+		</antcall>
+	</target>
+
+	<!-- =================================================================== -->
+	
+</project>

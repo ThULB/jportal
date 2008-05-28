@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+  <section title="Neueingabe eines Objektes" xml:lang="de">
+    <p>Hier können Sie die beschreibenden Daten ändern:</p>
+  </section>
+  <section title="Create a new object" xml:lang="en">
+    <p>Here you can edit the descriptive data:</p>
+  </section>
+  <section xml:lang="all">
+    <p class="editorform">
+      <editor id="author-foobar">
+        <source uri="{sourceUri}" />
+        <cancel url="{cancelURL}" />
+        <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />
+        <validationMessage i18n="editor.common.validationMessage" />
+        <components root="edit-file" var="/mycoreobject">
+          <include uri="webapp:editor/imports-common.xml" />
+          <include uri="webapp:editor/editor-foobar.xml" />
+        </components>
+      </editor>
+    </p>
+  </section>
+</MyCoReWebPage>

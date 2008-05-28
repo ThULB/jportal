@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="DocPortal_class_00000005">
+	<label xml:lang="de" text="DocPortal Type" description="DocPortal Klassifikation der Typen"/>
+	<label xml:lang="x-dini" text="pub-type" description="DINI formal publication type" />
+	<categories>
+		<category ID="TYPE0000">
+			<label xml:lang="de" text="unbekannt"/>
+			<label xml:lang="en" text="unknown"/>
+		</category>
+		<category ID="TYPE0001">
+			<label xml:lang="de" text="Abstrakt"/>
+			<label xml:lang="en" text="Abstract"/>
+		</category>
+		<category ID="TYPE0002">
+			<label xml:lang="de" text="Anleitung"/>
+			<label xml:lang="en" text="Manual"/>
+		</category>
+		<category ID="TYPE0003">
+			<label xml:lang="de" text="Artikel"/>
+			<label xml:lang="en" text="Article"/>
+			<label xml:lang="x-dini" text="pub-type:article" />
+		</category>
+		<category ID="TYPE0004">
+			<label xml:lang="de" text="Bild"/>
+			<label xml:lang="en" text="Picture"/>
+			<label xml:lang="x-dini" text="pub-type:picture" />
+		</category>
+		<category ID="TYPE0005">
+			<label xml:lang="de" text="Buch"/>
+			<label xml:lang="en" text="Book"/>
+			<label xml:lang="x-dini" text="pub-type:monograph" />
+		</category>
+		<category ID="TYPE0006">
+			<label xml:lang="de" text="Datensatz, Programm"/>
+			<label xml:lang="en" text="Dataset, program"/>
+			<label xml:lang="x-dini" text="pub-type:program" />
+		</category>
+		<category ID="TYPE0007">
+			<label xml:lang="de" text="Diplomarbeit, Magisterarbeit"/>
+			<label xml:lang="en" text="Diploma thesis"/>
+			<label xml:lang="x-dini" text="pub-type:masterthesis" />
+		</category>
+		<category ID="TYPE0008">
+			<label xml:lang="de" text="Dissertation"/>
+			<label xml:lang="en" text="Dissertation"/>
+			<label xml:lang="x-dini" text="pub-type:dissertation" />
+		</category>
+		<category ID="TYPE0009">
+			<label xml:lang="de" text="Habilitation"/>
+			<label xml:lang="en" text="Habilitation"/>
+			<label xml:lang="x-dini" text="pub-type:dissertation" />
+		</category>
+		<category ID="TYPE0010">
+			<label xml:lang="de" text="Journal"/>
+			<label xml:lang="en" text="Journal"/>
+		</category>
+		<category ID="TYPE0011">
+			<label xml:lang="de" text="Lehrmaterial"/>
+			<label xml:lang="en" text="Learning material"/>
+		</category>
+		<category ID="TYPE0012">
+			<label xml:lang="de" text="Musik (Audio)"/>
+			<label xml:lang="en" text="Music (Audio)"/>
+			<label xml:lang="x-dini" text="pub-type:music" />
+		</category>
+		<category ID="TYPE0013">
+			<label xml:lang="de" text="Musiknoten"/>
+			<label xml:lang="en" text="Notes"/>
+			<label xml:lang="x-dini" text="pub-type:music" />
+		</category>
+		<category ID="TYPE0014">
+			<label xml:lang="de" text="Organisationsinformationen"/>
+			<label xml:lang="en" text="Organisation informations"/>
+		</category>
+		<category ID="TYPE0015">
+			<label xml:lang="de" text="Personen-Informationen"/>
+			<label xml:lang="en" text="Person information"/>
+		</category>
+		<category ID="TYPE0016">
+			<label xml:lang="de" text="Preprint"/>
+			<label xml:lang="en" text="Preprint"/>
+			<label xml:lang="x-dini" text="pub-type:article" />
+		</category>
+		<category ID="TYPE0017">
+			<label xml:lang="de" text="Proceedings"/>
+			<label xml:lang="en" text="Proceedings"/>
+			<label xml:lang="x-dini" text="pub-type:conf-proceedings" />
+		</category>
+		<category ID="TYPE0018">
+			<label xml:lang="de" text="Rede, Vortrag"/>
+			<label xml:lang="en" text="Presentation"/>
+			<label xml:lang="x-dini" text="pub-type:lecture" />
+		</category>
+		<category ID="TYPE0019">
+			<label xml:lang="de" text="Report"/>
+			<label xml:lang="en" text="Report"/>
+			<label xml:lang="x-dini" text="pub-type:report" />
+		</category>
+		<category ID="TYPE0020">
+			<label xml:lang="de" text="Forschungsarbeit"/>
+			<label xml:lang="en" text="Research paper"/>
+			<label xml:lang="x-dini" text="pub-type:paper" />
+		</category>
+		<category ID="TYPE0021">
+			<label xml:lang="de" text="Service"/>
+			<label xml:lang="en" text="Service"/>
+		</category>
+		<category ID="TYPE0022">
+			<label xml:lang="de" text="Sonstiges"/>
+			<label xml:lang="en" text="Other"/>
+		</category>
+		<category ID="TYPE0023">
+			<label xml:lang="de" text="Statistische Daten"/>
+			<label xml:lang="en" text="Statistic data"/>
+			<label xml:lang="x-dini" text="pub-type:reports" />
+		</category>
+		<category ID="TYPE0024">
+			<label xml:lang="de" text="Video"/>
+			<label xml:lang="en" text="Video"/>
+		</category>
+		<category ID="TYPE0025">
+			<label xml:lang="de" text="Bibliographie"/>
+			<label xml:lang="en" text="Bibliographie"/>
+			<label xml:lang="x-dini" text="pub-type:monograph" />
+		</category>
+		<category ID="TYPE0026">
+			<label xml:lang="de" text="Examensarbeit"/>
+			<label xml:lang="en" text="Examination"/>
+			<label xml:lang="x-dini" text="pub-type:masterthesis" />
+		</category>
+		<category ID="TYPE0027">
+			<label xml:lang="de" text="Studienapparate"/>
+			<label xml:lang="en" text="Study collections"/>
+			<label xml:lang="x-dini" text="pub-type:lectures" />
+		</category>
+		<category ID="TYPE0028">
+			<label xml:lang="de" text="Universitäre Veröffentlichungen"/>
+			<label xml:lang="en" text="University publishing"/>
+			<label xml:lang="x-dini" text="pub-type:news" />
+		</category>
+	</categories>
+</mycoreclass>

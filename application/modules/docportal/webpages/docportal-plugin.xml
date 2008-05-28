@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+  <section title="Erweitern Sie Ihren Browser um die DocPortal-Suchmaschine" xml:lang="de">
+    <script type="text/javascript">
+      function addEngine()
+      {
+        if((typeof window.sidebar == "object") &amp;&amp; (typeof window.sidebar.addSearchEngine == "function"))
+        {
+          window.sidebar.addSearchEngine(
+          "%MCR.baseurl%docportal-plugin.src",
+          "%MCR.baseurl%docportal-plugin.png",
+          "DocPortal", "web" );
+        }
+        else
+        {
+          alert("Netscape 6, Seamonkey, Firefox oder Mozilla ist für dieses Plug-in erforderlich!");
+        }
+      }
+    </script>
+    
+    <p><b>DocPortal-Suchmaschine zum Browser hinzufügen</b></p>
+    <p>Moderne Browser, die den OpenSearch-Standard unterstützen, können um die DocPortal-Suchmaschine erweitert werden. 
+       Neben der Suche mit google steht Ihnen dann auch die DocPortal-Suche zur Verfügung. 
+       Der <a href="http://www.opensearch.org">OpenSearch-Standard</a> wurde von A9, einer Tochtergesellschaft von Amazon entwickelt. 
+       Firefox ab der Version 2 und Internet Explorer ab der Version 7 unterstützen den Standard.<br/><br/>
+       <a href="javascript:window.external.AddSearchProvider('http://localhost:8291/docportal_opensearch_desc.xml')">Browser um DocPortal-Suchmaschine erweitern.</a>
+       <br/><br/>
+       ACHTUNG: sollte der Link nicht funktionieren, bitten Sie ihren Systemverwalter, die Dateien docportal-plugin.xml und docportal_opensearch_desc.xml zu ändern.
+    </p>
+    
+    <br/><br/>
+    <p>
+    <b>Wenn Sie einen älteren Browser bevorzugen, folgen Sie diesen Schritten, um die DocPortal-Suchmaschine in ihren Browser einzufügen oder zu entfernen:</b><br/><br/> 
+    Wenn Sie einen <b>Firefox, Mozilla, Netscape 6 oder Seamonkey</b> Browser verwenden, 
+    können Sie hier ein kleines Plug-in installieren, mit dem Sie die Suche in diesem
+    Dokumentenserver direkt in die Suchleiste Ihres Browsers integrieren.
+    </p>
+    <p>
+      <a href="javascript:addEngine()">Klicken Sie hier, um das Such-Plug-in im Browser zu installieren!</a>
+    </p>
+    <p>
+    <b>Deinstallation aus Firefox:</b><br/> 
+    Im Profiles-Verzeichnis von Firefox gibt es ein Unterverzeichnis "searchplugins" (Unter Windows XP:<br/> 
+    <i>C:\Dokumente und Einstellungen\[Benutzername]\Anwendungsdaten\Mozilla\Firefox\Profiles\[Profilname]\searchplugins\</i>). 
+    Wenn Sie die beiden Dateien docportal-plugin.* aus diesem Verzeichnis löschen
+    und den Browser neu starten, ist das Plug-in wieder deinstalliert.
+    </p>
+  </section>
+  <section title="Extend your browser with DocPortal-Searchengine" xml:lang="en">
+    <script type="text/javascript">
+      function addEngine()
+      {
+        if((typeof window.sidebar == "object") &amp;&amp; (typeof window.sidebar.addSearchEngine == "function"))
+        {
+          window.sidebar.addSearchEngine(
+          "%MCR.baseurl%docportal-plugin.src",
+          "%MCR.baseurl%docportal-plugin.png",
+          "DocPortal", "web" );
+        }
+        else
+        {
+          alert("Netscape 6, Seamonkey, Firefox or Mozilla browser is needed to use this plug-in!");
+        }
+      }
+    </script>
+    
+    <p><b>Add DocPortal-searchengine to browser</b></p>
+    <p>The DocPortal-Searchengine can be added to modern browsers. This is done the same way as google or amazon search are added to your browser.
+       By the way, <a href="http://www.opensearch.org">OpenSearch</a> was developed by Amazon.com subsidiary A9.   
+       Firefox version 2 or higher and Internet Explorer version 7 or higher support Opensearch-standard.<br/><br/>
+       <a href="javascript:window.external.AddSearchProvider('http://localhost:8291/docportal_opensearch_desc.xml')">Add DocPortal-Searchengine to your browser.</a>
+       <br/><br/>
+       ATTENTION: if this link should not work, please ask your systemadministrator to change docportal-plugin.xml and docportal_opensearch_desc.xml.
+    </p>
+    
+    <br/><br/>
+    <p>
+    <b>If you prefer an older browser, please follow these steps to add or remove DocPortal search capabilities to or from your browser:</b><br/><br/> 
+    If you use a <b>Firefox, Mozilla, Netscape 6 or Seamonkey</b> browser, 
+    you can add a plug-in here that allows you to directly search this document server
+    from the search menu of the web browser.
+    </p>
+    <p>
+      <a href="javascript:addEngine()">Click here to install the search plug-in in the browser!</a>
+    </p>
+    <p>
+    <b>Deinstallation for Firefox users:</b><br/> 
+    There is a subdirectory "searchplugins" in the profiles directory of Firefox. (Under Windows XP:<br/> 
+    <i>C:\documents and settings\[username]\application data\mozilla\firefox\profiles\[profile-name]\searchplugins\</i>). 
+    After deleting the two files docportal-plugin.* in this directory 
+    and restarting the browser, the plug-in is deinstalled.
+    </p>
+  </section>
+</MyCoReWebPage>
+
+

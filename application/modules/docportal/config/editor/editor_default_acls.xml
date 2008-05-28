@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mcrdefaultacls>
+ <servacls class="MCRMetaAccessRule">
+  <!-- Variables they will substitute by create process of dataset -->
+  <!-- $CurrentUser - the current user of the editor process -->
+  <!-- $CurrentGroup - the current user group of the editor process -->
+  <!-- $CurrentIP - the current IP of the interactive editor client -->
+  <servacl permission="read">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or" />
+	 <!-- DATE -->
+     <boolean operator="and" />
+	 <!-- IP -->
+     <boolean operator="or" />
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="writewf">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="$CurrentGroup" operator="=" field="group"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" />
+	 <!-- IP -->
+     <boolean operator="or" />
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="deletewf">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="$CurrentUser" operator="=" field="user"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" />
+	 <!-- IP -->
+     <boolean operator="or" />
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="writedb">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="$CurrentGroup" operator="=" field="group"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" />
+	 <!-- IP -->
+     <boolean operator="or">
+      <condition value="$CurrentIP/0.0.0.0" operator="=" field="ip"/>
+     </boolean>
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="deletedb">
+   <condition format="xml">
+    <boolean operator="and">
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" />
+	 <!-- IP -->
+     <boolean operator="or" />
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+ </servacls>
+</mcrdefaultacls>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- WebServices module build file for use with Apache Ant               -->
+<!-- $Revision: 1.13 $ $Date: 2007-12-20 10:14:30 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - WebService" default="usage" basedir="../..">
+
+    <property name="build.sysclasspath" value="last" />
+	<import file="${basedir}/common-modules.xml" />
+	<property name="module.base" value="webservices" />
+	<property name="module.dir" value="${application}/modules/${module.base}" />
+
+	<property name="wsadminurl" value="${MCR.baseurl}services/AdminService" />
+	<property name="wsurl" value="${MCR.baseurl}services/MCRWebService" />
+	<path id="webservices.classpath">
+		<fileset dir="${mycore}/lib" includes="*.jar" />
+		<fileset dir="${mycore}/modules/webservices/lib" includes="*.jar" />
+		<pathelement location="${build.classes}" />
+	</path>
+
+  <!-- =================================================================== -->
+  <!-- Help on usage                                                       -->
+  <!-- =================================================================== -->
+
+  <target name="usage">
+    <echo level="info">
+
+      Available targets are:
+        compile              --> Compiles all sources of this module
+        create.scripts       --> Create the commandline scripts
+        deploy               --> Deploy WebServices
+        undeploy             --> Undeploy WebServices
+        webapps              --> Build the complete sample web application directory
+
+      Please do not use any of the other targets, they are internal.
+    </echo>
+  </target>
+
+  <!--
+      Available targets for MyCoRe-WebService are:
+        compile.ws         compile WebServices interface (MCRWS.java)
+        java2wsdl          build MCRWebService.wsdl from MCRWS.class
+        wsdl2java          generate stubs from MCRWebService.wsdl
+        compile.client     compile webservice client and stubs
+        wsclient.cmd       build wsclient command (Windows)
+        wsclient.sh        build wsclient command (Linux/Unix)
+-->
+
+	<!-- =================================================================== -->
+	<!-- Info                                                                -->
+	<!-- =================================================================== -->
+
+	<target name="info">
+		<echo>${ant.project.name} will include programs to add WebServices.</echo>
+	</target>
+
+  <!-- =================================================================== -->
+  <!-- Copy all related file th the application                            -->
+  <!-- =================================================================== -->
+
+  <target name="copy" description="Copy the data of the WebService module">
+    <!-- copy configuration -->
+    <copy todir="${build.config}" file="${mycore}/modules/webservices/config/client_deploy.wsdd" overwrite="true" />
+    <copy todir="${build.config}" file="${mycore}/modules/webservices/config/deploy.wsdd" overwrite="true" />
+    <copy todir="${build.config}" file="${mycore}/modules/webservices/config/undeploy.wsdd" overwrite="true" />
+    <!-- copy libraries -->
+    <copy todir="${build.lib}">
+      <fileset dir="${mycore}/modules/webservices/lib" includes="*.jar" />
+    </copy>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Build and compiles all application classes                          -->
+  <!-- =================================================================== -->
+
+  <target name="compile" description="Build and compiles all webservice classes">
+    <echo level="info">
+			building ${ant.project.name} compile
+    </echo>
+	<antcall target="copy"/>
+	<antcall target="wsdl2java"/>
+    <javac destdir="${build.classes}" classpathref="webservices.classpath" encoding="ISO-8859-1">
+      <src path="${build.sources}/org/mycore/services/wsclient" />
+    </javac>
+  </target>
+
+  <target name="wsdl2java" depends="init,java2wsdl">
+    <echo level="info">
+      Building stubs from MCRWebService.wsdl
+    </echo>
+     <taskdef name="axis-wsdl2java"
+             classname="org.apache.axis.tools.ant.wsdl.Wsdl2javaAntTask"
+             classpathref="webservices.classpath" />
+    <delete dir="${build.sources}/org/mycore/services/wsclient" quiet="true"/>
+    <mkdir dir="${build.sources}" />
+    <mkdir dir="${build.sources}/org" />
+    <mkdir dir="${build.sources}/org/mycore" />
+    <mkdir dir="${build.sources}/org/mycore/services" />
+    <mkdir dir="${build.sources}/org/mycore/services/wsclient" />
+    <!-- copy source code -->
+    <copy todir="${build.sources}/org/mycore/services/wsclient">
+      <fileset dir="${mycore}/modules/webservices/sources/org/mycore/services/wsclient" includes="*.java" />
+    </copy>
+    <!-- build java code -->
+    <axis-wsdl2java all="true"
+                    output="${build.sources}"
+                    testcase="false"
+                    verbose="true"
+                    serverside="true"
+                    url="${build.config}/MCRWebService.wsdl">
+      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" />
+    </axis-wsdl2java>
+  </target>
+
+  <target name="java2wsdl" depends="compile.ws">
+    <echo level="info">
+      Building wsdl from MCRWS.class
+    </echo>
+    <delete file="${build.config}/MCRWebService.wsdl" />
+    <taskdef name="axis-java2wsdl"
+             classname="org.apache.axis.tools.ant.wsdl.Java2WsdlAntTask"
+             classpathref="webservices.classpath" />
+    <axis-java2wsdl classname="org.mycore.services.webservices.MCRWS"
+                    namespace="wsclient.services.mycore.org"
+                    location="${wsurl}"
+                    output="${build.config}/MCRWebService.wsdl"
+                    style="RPC">
+      <classpath refid="webservices.classpath" />
+      <mapping namespace="${wsurl}" package="org.mycore.services.wsclient" />
+    </axis-java2wsdl>
+  </target>
+
+  <target name="compile.ws">
+    <echo level="info">
+      Compiling WebServices interface
+    </echo>
+    <javac destdir="${build.classes}" encoding="ISO-8859-1">
+      <src path="${mycore}/modules/webservices/sources/org/mycore/services/webservices" />
+      <include name="**/MCRWS.java" />
+    </javac>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Build the web application directory and copy webpages               -->
+  <!-- =================================================================== -->
+
+  <target name="webapps" depends="copy">
+    <echo level="info">
+			building ${ant.project.name} webapp
+    </echo>
+    <!-- Copy files  -->
+    <copy todir="${build.webapps}/WEB-INF" file="${application.config}/server-config.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/client_deploy.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/deploy.wsdd" />
+    <copy todir="${build.webapps}/WEB-INF/classes" file="${build.config}/undeploy.wsdd" />
+
+    <!-- Registers the MyCoRe WSDD provider for Axis -->
+    <mkdir dir="${build.webapps}/WEB-INF/classes/META-INF/services" />
+    <echo file="${build.webapps}/WEB-INF/classes/META-INF/services/org.apache.axis.deployment.wsdd.Provider"
+          append="false">org.mycore.services.webservices.MCRWSDDProvider</echo>
+
+    <!-- merge the web.xml of the module to the application -->
+    <available property="web.xml.present" file="${mycore.modules}/webservices/config/web.xml" />
+    <antcall target="do.merge">
+      <param name="web.xml.file" value="${mycore.modules}/webservices/config/web.xml" />
+    </antcall>
+    <echo level="info">
+       Generate file with user for axis, only this user is allowd to deploy/undeploy webservices
+     </echo>
+    <echo file="${build.webapps}/WEB-INF/users.lst">${MCR.WebService.Admin} ${MCR.WebService.AdminPasswd}</echo>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Deploy the WebServices                                              -->
+  <!-- =================================================================== -->
+
+  <target name="deploy" description="deploys all webservices to a running axis admin servlet">
+    <echo level="info">
+			building ${ant.project.name} deploy
+    </echo>
+    <antcall target="axis.admin">
+      <param name="wsdd" value="deploy" />
+    </antcall>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Undeploy the WebServices                                            -->
+  <!-- =================================================================== -->
+
+  <target name="undeploy" description="undeploys all webservices from a running axis admin servlet">
+    <echo level="info">
+			building ${ant.project.name} undeploy
+    </echo>
+    <antcall target="axis.admin">
+      <param name="wsdd" value="undeploy" />
+    </antcall>
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- The WebServices admin tool                                          -->
+  <!-- =================================================================== -->
+
+  <target name="axis.admin">
+    <path id="deploy.classpath">
+      <fileset dir="lib" includes="*.jar" />
+      <fileset dir="${mycore}/lib" includes="*.jar" />
+      <fileset dir="${mycore}/modules/webservices/lib" includes="*.jar" />
+    </path>
+    <fail unless="MCR.WebService.Admin" message="user for Axis admin is not set with property MCR.WebService.Admin" />
+    <!--
+    <fail message="length of property MCR.WebService.Admin is zero">
+      <condition>
+        <length string="${MCR.WebService.Admin}" when="equal" length="0" />
+      </condition>
+    </fail>
+			-->
+    <fail unless="MCR.WebService.AdminPasswd"
+          message="password for user Axis admin is not set with property MCR.WebService.AdminPasswd" />
+    <!--
+    <fail message="length of property MCR.WebService.AdminPasswd is zero">
+      <condition>
+        <length string="${MCR.WebService.AdminPasswd}" when="equal" length="0" />
+      </condition>
+    </fail>    
+			-->
+    <taskdef resource="axis-tasks.properties" classpathref="deploy.classpath" />
+    <axis-admin url="${wsadminurl}"
+                failonerror="true"
+                debug="true"
+                xmlfile="${build.config}/${wsdd}.wsdd"
+                username="${MCR.WebService.Admin}"
+                password="${MCR.WebService.AdminPasswd}" />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Create scripts in bin like mycore.cmd/.sh a.s.o.                    -->
+  <!-- =================================================================== -->
+
+  <target name="create.scripts" depends="init,script.windows, script.unix" description="Create commandline scripts" />
+
+  <target name="script.windows"
+          if="os.is.windows"
+          depends="init"
+          description="Generates wsclient.cmd for starting wsclient from Command Line">
+    <echo level="info">
+      Generating wsclient.cmd for starting wsclient from Command Line
+    </echo>
+
+    <echo file="${build.bin}/wsclient.cmd">@echo off 
+SET AXISCLASSPATH=${application.classpath.translated};%CLASSPATH% 
+java -Xms128m -Xmx512m -classpath "%AXISCLASSPATH%" org.mycore.services.wsclient.MCRWebServiceClient %1 %2 %3 %4 %5 %6 %7 %8 %9
+    </echo>
+  </target>
+
+  <target name="script.unix"
+          if="os.is.unix"
+          depends="init"
+          description="Generates wsclient.sh for starting wsclient from Command Line">
+    <echo level="info">
+      Generating wsclient.sh for starting wsclient from Command Line
+    </echo>
+
+    <echo file="${build.bin}/wsclient.sh">#!/bin/sh
+export AXISCLASSPATH=${application.classpath.translated}:$CLASSPATH
+java -Xms128m -Xmx512m -classpath "${AXISCLASSPATH}" org.mycore.services.wsclient.MCRWebServiceClient $@
+    </echo>
+    <chmod file="${build.bin}/wsclient.sh" perm="755" />
+  </target>
+
+  <!-- =================================================================== -->
+  <!-- Remove the user created directories and files                       -->
+  <!-- =================================================================== -->
+
+  <target name="clean" depends="init">
+    <echo level="info">
+      Delete generated sources
+    </echo>
+
+    <delete dir="${build.sources}/org/mycore/services/wsclient" quiet="true" />
+  </target>
+
+  <!-- =================================================================== -->
+
+</project>

@@ -1,0 +1,22 @@
+<titles>
+  <title step="author" type="document" xml:lang="de">Dokument erstellen</title>
+  <title step="author" type="document" xml:lang="en">create document</title>
+  <title step="commit" type="document" xml:lang="de">Dokument bearbeiten</title>
+  <title step="commit" type="document" xml:lang="en">edit document</title>
+  <title step="editor" type="document" xml:lang="de">Dokument bearbeiten</title>
+  <title step="editor" type="document" xml:lang="en">edit document</title>
+
+  <title step="author" type="author" xml:lang="de">Autor anlegen</title>
+  <title step="author" type="author" xml:lang="en">create author</title>
+  <title step="commit" type="author" xml:lang="de">Autor bearbeiten</title>
+  <title step="commit" type="author" xml:lang="en">edit author</title>
+  <title step="editor" type="author" xml:lang="de">Autor bearbeiten</title>
+  <title step="editor" type="author" xml:lang="en">edit author</title>
+
+  <title step="author" type="institution" xml:lang="de">Institution anlegen</title>
+  <title step="author" type="institution" xml:lang="en">create institution</title>
+  <title step="commit" type="institution" xml:lang="de">Institution bearbeiten</title>
+  <title step="commit" type="institution" xml:lang="en">edit institution</title>
+  <title step="editor" type="institution" xml:lang="de">Institution bearbeiten</title>
+  <title step="editor" type="institution" xml:lang="en">edit institution</title>
+</titles>

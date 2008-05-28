@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- MyCoRe-WCMS module build file for use with Apache Ant               -->
+<!-- $Revision: 1.1 $ $Date: 2008/04/11 09:12:10 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - WCMS" default="usage" basedir="../..">
+
+	<property name="build.sysclasspath" value="last" />
+	<import file="${basedir}/common-modules.xml" />
+	<property name="module.base" value="wcms" />
+	<property name="module.dir" value="${basedir}/modules/${module.base}" />
+	
+	<!-- =================================================================== -->
+	<!-- Help on usage                                                       -->
+	<!-- =================================================================== -->
+
+	<target name="usage">
+		<echo>
+
+      Available targets are:
+        webapps              --> Build the web application
+
+      Please do not use any of the other targets, they are internal.
+		</echo>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Info                                                                -->
+	<!-- =================================================================== -->
+
+	<target name="info">
+		<echo>${ant.project.name} will include programs for a web content management system of the application.</echo>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Copy libraries                                                      -->
+	<!-- =================================================================== -->
+
+	<target name="jar">
+		<copy todir="${build.lib}">
+			<fileset dir="${mycore.modules}/wcms/aif/lib" includes="*.jar" />
+		</copy>
+	</target>
+
+	<!-- =================================================================== -->
+
+	<target name="create.default-rules" description="Load default ACL rules for Module-WCMS">
+        <echo level="info">
+			building ${ant.project.name} create.default-rules
+	    </echo>
+
+		<property name="commands.file" value="${basedir}/commands.txt" />
+		<echo file="${commands.file}" append="false">
+	    	load permissions data from file permissions.xml
+	    	update permission write for id webpage:navigation with rulefile grant-admingroup.xml described by ${acl-description.admins}
+	    	update permission write for id webpage:/content/below/index.xml with rulefile grant-group_editor1_editor2.xml described by editors  	
+	    	update permission write for id webpage:/content/main/search.xml with rulefile grant-group_editor1_editor2.xml described by editors
+	    	update permission write for id webpage:/content/main/docu/general.xml with rulefile grant-group_editor1_editor2.xml	described by editors
+	    	update permission read for id webpage:/servlets/MCRWCMSLoginServlet with rulefile grant-group_admin_editor1_editor2.xml described by ${acl-description.admins}
+	    </echo>
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${basedir}/modules/wcms/aif/config/access" />
+			<param name="cli.command" value="process ${commands.file}" />
+		</antcall>
+		<delete file="${commands.file}" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Create scripts in bin like mycore.cmd/.sh a.s.o.                    -->
+	<!-- =================================================================== -->
+
+	<target name="create.scripts" description="Install scripts for Module-WCMS">
+        <echo level="info">
+			building ${ant.project.name} create.scripts
+	    </echo>
+
+		<!-- copy mycore.properties.wcms.template if not done already -->
+		<copy file="${module.dir}/aif/config/mycore.properties.wcms.template"
+			tofile="${module.dir}/aif/config/mycore.properties.wcms"
+			overwrite="false" />
+		<!-- copy mycore.properties.wcms.template if not done already -->
+		<mcr-config propertyfile="${build.config}/mycore.properties"
+            mergeFile="${module.dir}/aif/config/mycore.properties.wcms" />
+		<mcr-config action="addInclude"
+            propertyfile="${build.config}/mycore.properties"
+            key="MCR.CLI.Classes.Internal"
+            value="org.mycore.frontend.wcms.MCRWCMSMigrationCommands" />
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- Build the web application directory and copy webpages               -->
+	<!-- =================================================================== -->
+
+	<target name="webapps">
+		<echo level="info">
+		      Running MyCoRe-WCMS installation script...
+	    </echo>
+
+		<!-- copy mycore.properties.wcms.template if not done already -->
+		<copy file="${module.dir}/aif/config/mycore.properties.wcms.template"
+			tofile="${module.dir}/aif/config/mycore.properties.wcms"
+			overwrite="false" />
+
+		<!-- create log directory -->
+		<mkdir dir="${module.dir}/aif/archive/logs" />
+
+    <!-- copy libs from MYCORE_HOME -->
+    <copy todir="${build.webapps}/WEB-INF/lib">
+      <fileset dir="${env.MYCORE_HOME}/modules/wcms/aif/lib">
+        <include name="*.jar" />
+      </fileset>
+    </copy>
+
+    <!-- copy stylesheets from MYCORE_HOME -->
+    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true">
+      <fileset dir="${env.MYCORE_HOME}/modules/wcms/aif/xsl">
+        <include name="**/*.xsl" />
+      </fileset>
+    </copy>
+
+    <!-- copy web stuff  -->
+    <copy todir="${build.webapps}/modules/wcms/aif/web" preservelastmodified="yes">
+      <fileset dir="${env.MYCORE_HOME}/modules/wcms/aif/web" />
+    </copy>
+
+    <!-- ============ web stuff ================== -->
+    <!-- noSession info file -->
+    <copy todir="${build.webapps}/modules/wcms/aif/web/error/">
+      <fileset dir="${module.dir}/aif/web/error/">
+        <include name="noSession.xml" />
+      </fileset>
+    </copy>
+
+    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true">
+      <!-- templates -->
+      <fileset dir="${module.dir}/templates/master">
+        <include name="**/*.xsl" />
+      </fileset>
+    </copy>
+
+    <copy todir="${build.webapps}/templates/master/" flatten="false">
+      <!-- template wcms -->
+      <fileset dir="${module.dir}/templates/master/">
+        <exclude name="**/*.xsl" />
+      </fileset>
+    </copy>
+
+    <!-- create WCMS working directories ant set permissions -->
+    <loadproperties srcFile="${application.config}/mycore.properties.private">
+      <filterchain>
+        <linecontains>
+          <contains value="MCR.basedir=" />
+        </linecontains>
+      </filterchain>
+    </loadproperties>
+    <loadproperties srcFile="${module.dir}/aif/config/mycore.properties.wcms">
+      <filterchain>
+        <linecontains>
+          <contains value="MCR.WebApplication.basedir=" />
+        </linecontains>
+        <tokenfilter>
+          <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
+        </tokenfilter>
+      </filterchain>
+    </loadproperties>
+    <loadproperties srcFile="${module.dir}/aif/config/mycore.properties.wcms">
+      <filterchain>
+        <linecontains>
+          <contains value="MCR.WCMS." />
+        </linecontains>
+        <tokenfilter>
+          <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
+          <replacestring from="%MCR.WebApplication.basedir%" to="${MCR.WebApplication.basedir}" />
+        </tokenfilter>
+      </filterchain>
+    </loadproperties>
+
+    <chmod file="${MCR.navigationFile}" perm="644" />
+    <mkdir dir="${MCR.WCMS.backupPath}" />
+    <chmod dir="${MCR.WCMS.backupPath}" perm="755" />
+    <chmod file="${MCR.WCMS.logFile}" perm="644" />
+    <chmod file="${MCR.WCMS.footer}" perm="644" />
+    <mkdir dir="${MCR.WCMS.documentPath}" />
+    <chmod dir="${MCR.WCMS.documentPath}" perm="755" />
+    <mkdir dir="${MCR.WCMS.imagePath}" />
+    <chmod dir="${MCR.WCMS.imagePath}" perm="755" />
+
+    <available property="web.xml.present" file="${mycore.modules}/wcms/config/web.xml" />
+    <antcall target="do.merge">
+      <param name="web.xml.file" value="${mycore.modules}/wcms/config/web.xml" />
+    </antcall>
+
+    <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties"
+                mergeFile="${module.dir}/aif/config/mycore.properties.wcms" />
+
+    </target>
+    	
+    <target name="webapps.i18n" >
+        <echo level="info">
+			building ${ant.project.name} webapp.i18n
+	    </echo>
+    	
+		<antcall target="properties.merge">
+			<param name="module" value="${mycore.modules}/wcms/config/messages_de.properties" />
+			<param name="locale_param" value="de" />
+		</antcall>
+		<antcall target="properties.merge">
+			<param name="module" value="${mycore.modules}/wcms/config/messages_en.properties" />
+			<param name="locale_param" value="en" />
+		</antcall>
+	</target>
+
+	<!-- =================================================================== -->
+
+</project>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- =================================================================== -->
+<!-- UserAdmin module build file for use with Apache Ant                 -->
+<!-- $Revision: 1.4 $ $Date: 2006-11-22 12:34:27 $                      -->
+<!-- =================================================================== -->
+
+<project name="MyCoReModule - z3950" default="webapps" basedir="../..">
+
+	<import file="${basedir}/common-modules.xml" />
+	<property name="module.base" value="webcli" />
+	<property name="module.base" value="z3950" />
+	<property name="module.dir" value="${basedir}/modules/${module.base}" />
+	
+	<!-- =================================================================== -->
+	<!-- Help on usage                                                       -->
+	<!-- =================================================================== -->
+
+	<target name="usage">
+		<echo level="info">
+
+      Available targets are:
+        webapps              --> Build the complete sample web application directory
+
+      Please do not use any of the other targets, they are internal.
+		</echo>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Info                                                                -->
+	<!-- =================================================================== -->
+
+	<target name="info">
+		<echo>${ant.project.name} will include programs to use Z3950.</echo>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Build the web application directory and copy webpages               -->
+	<!-- =================================================================== -->
+	
+	<target name="webapps">
+		<echo level="info">
+			building ${ant.project.name} webapp
+		</echo>
+		<available property="web.xml.present" file="${mycore.modules}/z3950/config/web.xml" />
+		<antcall target="do.merge" >
+			<param name="web.xml.file"   value="${mycore.modules}/z3950/config/web.xml" />
+		</antcall>
+	</target>
+	
+	<!-- =================================================================== -->
+	
+</project>

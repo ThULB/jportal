@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyCoReModule - webcli" basedir="../..">
+
+    <property name="build.sysclasspath" value="last" />
+    <import file="${basedir}/common-modules.xml" />
+	<property name="module.name" value="webcli" />
+	<property name="module.dir" value="${application.modules}/${module.name}" />
+
+    <target name="webapps">
+        <echo level="info">
+			including webapp module ${module.name}
+	    </echo>
+
+        <available property="web.xml.present" file="${module.dir}/config/web.xml" />
+        <antcall target="do.merge">
+            <param name="web.xml.file" value="${module.dir}/config/web.xml" />
+        </antcall>
+      <!-- copy web stuff -->
+      <mkdir dir="${build.webapps}/modules/${module.name}" />
+      <copy todir="${build.webapps}/modules/${module.name}/" flatten="false">
+          <fileset dir="${module.dir}/web/" />
+      </copy>
+      <!-- copy Stylesheets  -->
+      <copy todir="${build.webapps}/WEB-INF/stylesheets/" preservelastmodified="yes" flatten="true">
+          <fileset dir="${module.dir}/xsl/">
+              <include name="**/*.xsl" />
+          </fileset>
+      </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Compiles the sources from directory sources to directory classes    -->
+    <!-- =================================================================== -->
+
+    <target name="compile">
+        <echo level="info">Compiling ${module.name} classes...</echo>
+        <antcall target="javac">
+            <param name="packages" value="**" />
+        </antcall>
+    </target>
+
+    <target name="javac" depends="init">
+        <echo level="info">Compiling ${packages}</echo>
+        <javac 
+			srcdir="${module.dir}/sources" 
+			destdir="${build.classes}" includes="${packages}" 
+			classpathref="application.classpath" 
+			debug="${debug}" 
+			optimize="${optimize}" 
+			target="${javatarget}" 
+			source="${sourcerelease}" 
+			encoding="${sourceencoding}" 
+			deprecation="${deprecation}">
+        </javac>
+    </target>
+  
+  <!-- ================================= 
+          target: create.default-rules              
+         ================================= -->
+    <target name="create.default-rules" description="--> restricts access to webcli">
+      <property name="commands.file" value="${basedir}/commands.txt"/>
+      <echo file="${commands.file}" append="false">
+      	update permission read for id webpage:/modules/webcli/launchpad.xml with rulefile grant-local-admins.xml described by adminstrators on localhost
+        load permissions data from file permissions.xml
+      </echo>  	
+      <antcall target="invoke.cli">
+        <param name="cli.directory" value="${module.dir}/config"  />
+        <param name="cli.command"   value="process ${commands.file}" />
+      </antcall>
+      <delete file="${commands.file}" />
+    </target>
+
+
+</project>
