@@ -35,7 +35,7 @@ public class MCRJPortalURIGetJournalID implements MCRURIResolver.MCRResolver {
     }
 
     private void initCache() {
-        WEBCONTEXTtwoJID_CACHE = new MCRCache(1000);
+        WEBCONTEXTtwoJID_CACHE = new MCRCache(1000, "MCRJPortalURIGetJournalID");
     }
     
     /**
