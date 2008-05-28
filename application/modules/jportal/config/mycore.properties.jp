@@ -1,0 +1,183 @@
+##############################################################################
+# Overwrite ACL behaviour of DocPortal                                       #
+##############################################################################
+
+MCR.EventHandler.MCRObject.1.Class=org.mycore.access.MCRRemoveAclEventHandler
+MCR.EventHandler.MCRDerivate.1.Class=org.mycore.access.MCRRemoveAclEventHandler
+
+# rights strategy 
+MCR.Access.Strategy.Class=org.mycore.access.strategies.MCRJPortalStrategy
+
+# dynamic classification in editors for articles
+MCR.URIResolver.ExternalResolver.Class=org.mycore.common.xml.MCRJPortalURIResolver
+
+
+##############################################################################
+# The data model configuration
+##############################################################################
+
+# Add the data model for documents
+  MCR.Metadata.Type.jpjournal=true
+  MCR.Metadata.Type.jpvolume=true
+  MCR.Metadata.Type.jparticle=true
+  MCR.Metadata.Type.jpinst=true
+  MCR.Metadata.Type.person=true
+
+### Journal 
+#MCR.type_jpjournal=true
+#MCR.type_jpjournal_in=alljpjournals
+#MCR.type_alljpjournal=jpjournal
+MCR.persistence_config_jpjournal=datamodel-jpjournal.xml
+
+### Volume
+#MCR.type_jpvolume=true
+#MCR.type_jpvolume_in=alljpvolumes
+#MCR.type_alljpvolume=jpvolume
+MCR.persistence_config_jpvolume=datamodel-jpvolume.xml
+
+### article
+#MCR.type_jparticle=true
+#MCR.type_jparticle_in=alljparticles
+#MCR.type_alljparticle=jparticle
+MCR.persistence_config_jparticle=datamodel-jparticle.xml
+
+### person
+#MCR.type_person=true
+#MCR.type_person_in=allpersons
+#MCR.type_allperson=person
+MCR.persistence_config_person=datamodel-person.xml
+
+### jpinst
+#MCR.type_jpinst=true
+#MCR.type_jpinst_in=alljpinsts
+#MCR.type_alljpinst=jpinst
+MCR.persistence_config_jpinst=datamodel-jpinst.xml
+
+
+##############################################################################
+# Workflow                                                                   #
+##############################################################################
+
+# The project ID
+MCR.SWF.Project.ID=jportal
+MCR.SWF.Project.TYPE=jparticle
+
+MCR.SWF.Project.ID.jpjournal=jportal
+MCR.SWF.Project.ID.jpvolume=jportal
+MCR.SWF.Project.ID.jparticle=jportal
+MCR.SWF.Project.ID.jpinst=jportal
+MCR.SWF.Project.ID.person=jportal
+
+# Editor path
+MCR.SWF.Directory.base=%MCR.datadir%/workflow
+MCR.SWF.Directory.jpjournal=%MCR.datadir%/workflow/jpjournal
+MCR.SWF.Directory.jpvolume=%MCR.datadir%/workflow/jpvolume
+MCR.SWF.Directory.jparticle=%MCR.datadir%/workflow/jparticle
+MCR.SWF.Directory.person=%MCR.datadir%/workflow/person
+MCR.SWF.Directory.jpinst=%MCR.datadir%/workflow/jpinst
+
+MCR.editor_page_error_formular=editor_error_formular_jp.xml
+
+
+##############################################################################
+# Index-Browser                                                              #
+##############################################################################
+
+MCR.IndexBrowser.jpinst_sub.Table=jpinst
+MCR.IndexBrowser.jpinst_sub.Searchfield=instname
+MCR.IndexBrowser.jpinst_sub.FieldsToSort=instname
+MCR.IndexBrowser.jpinst_sub.Style=jpinst_sub
+MCR.IndexBrowser.jpinst_sub.MaxPerPage=30
+MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=fullname
+MCR.IndexBrowser.jpinst_sub.ExtraOutputFields=id
+
+MCR.IndexBrowser.jpperson_sub.Table=person
+MCR.IndexBrowser.jpperson_sub.Searchfield=headingLastName
+MCR.IndexBrowser.jpperson_sub.FieldsToSort=headingLastName,headingFirstName
+MCR.IndexBrowser.jpperson_sub.Style=jpperson_sub
+MCR.IndexBrowser.jpperson_sub.MaxPerPage=30
+#MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=headingLastName,headingFirstName
+MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
+
+
+##############################################################################
+# The DOM parser configuration
+##############################################################################
+
+# The name of the Java class of the XML parser
+#MCR.parser_class_name=org.mycore.common.xml.MCRParserXerces_Fault_Tolerant
+
+
+##############################################################################
+# Index Browser - Access for robots
+##############################################################################
+
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPJournal.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPJournal.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPJournal.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPJournal.Order=desc
+  MCR.IndexBrowser.robotJPJournal.Style=robots
+  MCR.IndexBrowser.robotJPJournal.MaxPerPage=100
+  MCR.IndexBrowser.robotJPJournal.FilterCondition=MCRID like '%_jpjournal_%'
+  
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPArticle.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPArticle.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPArticle.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPArticle.Order=desc
+  MCR.IndexBrowser.robotJPArticle.Style=robots
+  MCR.IndexBrowser.robotJPArticle.MaxPerPage=100
+  MCR.IndexBrowser.robotJPArticle.FilterCondition=MCRID like '%_jparticle_%'
+  
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotJPInst.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotJPInst.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotJPInst.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotJPInst.Order=desc
+  MCR.IndexBrowser.robotJPInst.Style=robots
+  MCR.IndexBrowser.robotJPInst.MaxPerPage=100
+  MCR.IndexBrowser.robotJPInst.FilterCondition=MCRID like '%_jpinst_%'
+
+# Objects for MCRObjectID
+  MCR.IndexBrowser.robotPerson.Table=MCRXMLTABLE
+  MCR.IndexBrowser.robotPerson.FieldToBrowse=MCRID
+  MCR.IndexBrowser.robotPerson.ExtraOutputFields=MCRTYPE
+  MCR.IndexBrowser.robotPerson.Order=desc
+  MCR.IndexBrowser.robotPerson.Style=robots
+  MCR.IndexBrowser.robotPerson.MaxPerPage=100
+  MCR.IndexBrowser.robotPerson.FilterCondition=MCRID like '%_person_%'
+  
+  
+##############################################################################
+# Dynamic web frontend layout templates
+# NOTE: Sort chronological, definate by numbers
+##############################################################################
+
+# Dependance on date of journal was published 
+  
+  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.1=1700
+  MCR.Module-JPortal.DynamicLayoutTemplates.name.1=template_18thCentury
+  
+  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.2=1800
+  MCR.Module-JPortal.DynamicLayoutTemplates.name.2=template_19thCentury
+  
+#  MCR.Module-JPortal.DynamicLayoutTemplates.yearFrom.3=1900
+#  MCR.Module-JPortal.DynamicLayoutTemplates.name.3=template_20thCentury
+
+
+##############################################################################
+# journalStatistic parameters
+# 
+##############################################################################
+
+  # maximal number of dates shown on the x-axis,
+  # 20 is a optimal value for the picture width of 850 
+  journalStatistic.view.objectListing.numberOfLabels = 20
+  
+  # maximal number of values used in the line charts,
+  # if more values available a java class will decrease them
+  # limit the value according to the maximum allowed GET 
+  # parameter length given by browsers and applications
+  # (200 is a good value, if 1024 characters are allowed)  
+  journalStatistic.view.objectListing.numberOfValues = 200

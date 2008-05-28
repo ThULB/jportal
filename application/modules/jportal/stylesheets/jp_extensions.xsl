@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcr="http://www.mycore.org/"
     xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-    xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan">
+    xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan"
+    xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
 
-    <xsl:include href="mcr-module-startIview.xsl" />
-    <xsl:include href="mcr-module-broadcasting.xsl" />
     <xsl:param name="view.objectmetadata" select="'false'" />
 
     <xsl:param name="toc.pageSize" select="100" />
@@ -34,8 +33,8 @@
     <!-- ===================================================================================================== -->
     <xsl:template
         match="/mycoreobject[contains(@ID,'_jpjournal_')] 
-		| /mycoreobject[contains(@ID,'_jpvolume_')] 
-		| /mycoreobject[contains(@ID,'_jparticle_')]"
+        | /mycoreobject[contains(@ID,'_jpvolume_')] 
+        | /mycoreobject[contains(@ID,'_jparticle_')]"
         priority="2">
         <!--        view.objectmetadata=<xsl:copy-of select="$view.objectmetadata"/>...-->
 
@@ -64,7 +63,7 @@
 
     <!-- ===================================================================================================== -->
     <xsl:template match="/mycoreobject[contains(@ID,'_person_')] 
-		| /mycoreobject[contains(@ID,'_jpinst_')]" priority="2">
+        | /mycoreobject[contains(@ID,'_jpinst_')]" priority="2">
 
         <xsl:choose>
             <xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
@@ -194,9 +193,9 @@
 
         <xsl:value-of
             select="concat('&amp;',$param_types,'&amp;',$param_types_editor,'&amp;',$param_rubrics,'&amp;',$param_rubrics_editor
-			,'&amp;',$param_classipub,'&amp;',$param_classipub_editor
-			,'&amp;',$param_classipub2,'&amp;',$param_classipub2_editor
-			,'&amp;',$param_classipub3,'&amp;',$param_classipub3_editor)" />
+            ,'&amp;',$param_classipub,'&amp;',$param_classipub_editor
+            ,'&amp;',$param_classipub2,'&amp;',$param_classipub2_editor
+            ,'&amp;',$param_classipub3,'&amp;',$param_classipub3_editor)" />
 
     </xsl:template>
 
@@ -258,8 +257,8 @@
                 <span id="leaf-headline2">
                     <xsl:if
                         test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-								or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
-								">
+                                or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
+                                ">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
                                 <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
@@ -296,7 +295,7 @@
                 <span id="leaf-headline2">
                     <xsl:if
                         test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-					         or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')">
+                             or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
                                 <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
@@ -709,7 +708,7 @@
                             <xsl:otherwise>
                                 <xsl:choose>
                                     <xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
-										or  $children='false'">
+                                        or  $children='false'">
                                         <div id="switch-notcurrent">
                                             <xsl:variable name="URLDetails">
                                                 <xsl:call-template name="UrlSetParam">
@@ -1315,7 +1314,7 @@
         </xsl:if>
     </xsl:template>
     <!-- ===================================================================================================== -->
-    <!--	<xsl:template name="get.toc.pos">
+    <!--    <xsl:template name="get.toc.pos">
         <xsl:value-of select="'hallo'"/>
         <!-#-
         <xsl:if test="number($toc.pageSize)=1000000">
@@ -1496,13 +1495,18 @@
                 </xsl:call-template>
             </xsl:if>
         </xsl:variable>
+        <xsl:variable name="lastPage">
+            <!-- get from session -->
+            <xsl:variable name="lastPageID" select="layoutUtils:getLastValidPageID()" />
+            <xsl:value-of xmlns:decoder="xalan://java.net.URLDecoder" select="decoder:decode($lastPageID,'UTF-8')" />
+        </xsl:variable>
 
         <xsl:choose>
             <!-- jpjournal or jpvolume or jparticle with own webcontext called -->
             <!-- webcontext is not empty AND $navigation.xml contains webcontext -->
             <xsl:when
                 test="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()
-				and ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
+                and ($loaded_navigation_xml//item[@href=xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()])">
                 <xsl:variable name="object_webContext">
                     <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
                 </xsl:variable>

@@ -5,6 +5,13 @@
     <xsl:param name="journalStatistic.dateReceived.Till" />
     <xsl:param name="journalStatistic.view.objectListing" select="'false'" />
     <xsl:param name="journalStatistic.view.objectListing.journalID" />
+    <xsl:param name="journalStatistic.view.objectListing.numberOfLabels" select="20" />
+    <xsl:param name="journalStatistic.view.objectListing.numberOfValues" select="200" />
+
+    <xsl:variable name="dateRange">
+        <xsl:value-of
+            select="count(/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))])-1" />
+    </xsl:variable>
 
     <xsl:variable name="journalStatistic.date.From">
         <xsl:call-template name="get.journalStatistic.date.From" />
@@ -28,6 +35,23 @@
     <xsl:variable name="color.zero" select="'eeeeee'" />
     <xsl:variable name="chartSize.objectDev" select="'850x150'" />
     <xsl:variable name="chartSize.consistancyDev" select="'850x250'" />
+    <!-- 
+        maximal number of dates shown on the x-axis,
+        20 is a optimal value for the picture width of 850 
+    -->
+    <xsl:variable name="numberOfLabels">
+        <xsl:value-of select="$journalStatistic.view.objectListing.numberOfLabels" />
+    </xsl:variable>
+    <!-- 
+        maximal number of values used in the line charts,
+        if more values available a java class will decrease them
+        limit the value according to the maximum allowed GET 
+        parameter length given by browsers and applications
+        (200 is a good value, if 1024 characters are allowed)
+    -->
+    <xsl:variable name="numberOfValues">
+        <xsl:value-of select="$journalStatistic.view.objectListing.numberOfValues" />
+    </xsl:variable>
 
     <xsl:variable name="xgrid">
         <xsl:call-template name="journalStatistic.get.gridcount" />
@@ -119,8 +143,15 @@
 
     <xsl:template name="journalStatistic.get.gridcount">
 
-        <xsl:value-of
-            select="(100 div (count(/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))])-1))" />
+        <xsl:choose>
+            <xsl:when test="$dateRange &lt;= $numberOfLabels">
+                <xsl:value-of select="(100 div $dateRange)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="(100 div ($numberOfLabels - 1))" />
+            </xsl:otherwise>
+        </xsl:choose>
+
 
     </xsl:template>
 
@@ -235,6 +266,7 @@
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="journalStatistic.total">
+
         <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]">
             <a name="proz" />
             <b style="padding: 5px;">Prozentualer Anteil einzelner Zeitschriften</b>
@@ -277,7 +309,7 @@
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
                 <node>
-                    <xsl:value-of select="sum(journal/numberOfObjects/total/text())" />
+                    <xsl:value-of select="sum(journal[@type='fully']/numberOfObjects/total/text())" />
                 </node>
             </xsl:for-each>
         </xsl:variable>
@@ -313,11 +345,14 @@
                 <xsl:value-of select="concat( (((text() - $theoreticMinimum)*100) div ($maxSum - $theoreticMinimum)) ,',')" />
             </xsl:for-each>
         </xsl:variable>
+        <xsl:variable name="totalLC.valueCounter">
+            <xsl:value-of select="count(xalan:nodeset($allSums)/node)" />
+        </xsl:variable>
 
         <xsl:variable name="totalLC.values">
             <xsl:value-of select="substring($totalSum,1,string-length($totalSum)-1)" />
         </xsl:variable>
-        <xsl:variable name="chartURL.label.tmp">
+        <xsl:variable name="chartURL.xlabel">
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
                 <xsl:sort select="@date" order="ascending" />
@@ -338,8 +373,13 @@
             <xsl:value-of select="round($maxSum)" />
         </xsl:variable>
 
-        <xsl:variable name="chartURL.label">
-            <xsl:value-of select="concat('|',$chartURL.label.tmp,'1:|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)" />
+        <xsl:variable name="chartURL.ylabel">
+            <xsl:value-of select="concat('|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)" />
+        </xsl:variable>
+
+        <xsl:variable name="totalLC.labels.decreased">
+            <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                select="mcrxml:decreaseLabels( string(substring($chartURL.xlabel,0,(string-length($chartURL.xlabel)-1))), string($chartURL.ylabel), string($numberOfLabels) )" />
         </xsl:variable>
 
         <!--  do layout -->
@@ -348,9 +388,22 @@
             <xsl:value-of select="concat('Gesamtanzahl der Artikel über die Zeit (Differenz = ',$maxMinDistance,'):')" />
         </b>
         <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
+
+        <xsl:variable name="totalLC.values.decreased">
+            <xsl:choose>
+                <xsl:when test="$totalLC.valueCounter>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( $totalLC.values ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$totalLC.values" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <p style="text-align: center;">
             <img
-                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$totalLC.values,'&amp;chs=',$chartSize.objectDev,'&amp;chxt=x,y&amp;chxl=0:',$chartURL.label,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$totalLC.values.decreased,'&amp;chs=',$chartSize.objectDev,$totalLC.labels.decreased,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
         </p>
     </xsl:template>
 
@@ -487,7 +540,7 @@
                     select="concat(',', (((number(journal[@id=$jID]/numberOfObjects/total/text()) - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="lineChartValues" select="concat('&amp;chd=t:', substring($lineVal,2))" />
+        <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
 
         <xsl:variable name="chartURL.values.tmp">
             <xsl:for-each
@@ -541,8 +594,20 @@
             <xsl:value-of select="round($maxTotal)" />
         </xsl:variable>
 
-        <xsl:variable name="chartURL.label">
-            <xsl:value-of select="concat('|',$chartURL.label.tmp,'1:|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)" />
+        <xsl:variable name="ObjectDevChart.labels.decreased">
+            <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                select="mcrxml:decreaseLabels( string(substring($chartURL.label.tmp,0,(string-length($chartURL.label.tmp)-1))), string(concat('|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)), string($numberOfLabels) )" />
+        </xsl:variable>
+        <xsl:variable name="ObjectDevChart.values.decreased">
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( $lineChartValues ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lineChartValues" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
 
         <!--  do layout -->
@@ -551,7 +616,7 @@
         </b>
         <p style="text-align: center;">
             <img
-                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$lineChartValues,'&amp;chs=',$chartSize.objectDev,'&amp;chxt=x,y&amp;chxl=0:',$chartURL.label,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$ObjectDevChart.values.decreased,'&amp;chs=',$chartSize.objectDev,$ObjectDevChart.labels.decreased,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
         </p>
 
     </xsl:template>
@@ -629,13 +694,19 @@
             <xsl:call-template name="chartURL.fillColors" />
         </xsl:variable>
 
+        <xsl:variable name="ConstChart.labels.decreased">
+            <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                select="mcrxml:decreaseLabels( string(substring($chartURL.label,0,(string-length($chartURL.label)-1))), string('|0%|25%|50%|75%|100%'), string($numberOfLabels) )" />
+        </xsl:variable>
+
+
         <!--  do layout -->
         <b style="padding:5px;">
             <xsl:copy-of select="$headline" />
         </b>
         <p style="text-align: center;">
             <img
-                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$chartURL.values,'&amp;chs=',$chartSize.consistancyDev,'&amp;chxt=x,y&amp;chxl=0:',$chartURL.label,'&amp;chco=',$chartURL.colors,'&amp;chm=',$fillColors,'&amp;chg=',$xgrid,',25')}" />
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$chartURL.values,'&amp;chs=',$chartSize.consistancyDev,$ConstChart.labels.decreased,'&amp;chco=',$chartURL.colors,'&amp;chm=',$fillColors,'&amp;chg=',$xgrid,',25')}" />
         </p>
 
     </xsl:template>
@@ -749,7 +820,7 @@
                 <xsl:value-of select="concat(@datePretty,'|')" />
             </xsl:for-each>
         </xsl:variable>
-        <xsl:value-of select="concat('|',substring($chartURL.label.tmp,1,string-length($chartURL.label.tmp)),'1:|0%|25%|50%|75%|100%')" />
+        <xsl:value-of select="substring($chartURL.label.tmp,1,string-length($chartURL.label.tmp))" />
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
@@ -765,7 +836,15 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.zero">
-            <xsl:value-of select="substring($values.zero.tmp,1,string-length($values.zero.tmp)-1)" />
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( substring($values.zero.tmp,1,string-length($values.zero.tmp)-1)) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($values.zero.tmp,1,string-length($values.zero.tmp)-1)" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- missings -->
         <xsl:variable name="values.missing.tmp">
@@ -776,7 +855,15 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.missing">
-            <xsl:value-of select="substring($values.missing.tmp,1,string-length($values.missing.tmp)-1)" />
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( substring($values.missing.tmp,1,string-length($values.missing.tmp)-1) ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($values.missing.tmp,1,string-length($values.missing.tmp)-1)" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- incompletes -->
         <xsl:variable name="values.incomplete.tmp">
@@ -787,7 +874,15 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.incomplete">
-            <xsl:value-of select="substring($values.incomplete.tmp,1,string-length($values.incomplete.tmp)-1)" />
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( substring($values.incomplete.tmp,1,string-length($values.incomplete.tmp)-1) ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($values.incomplete.tmp,1,string-length($values.incomplete.tmp)-1)" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- corrupted total -->
         <xsl:variable name="values.corruptedTotal.tmp">
@@ -802,7 +897,15 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.corruptedTotal">
-            <xsl:value-of select="substring($values.corruptedTotal.tmp,1,string-length($values.corruptedTotal.tmp)-1)" />
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( substring($values.corruptedTotal.tmp,1,string-length($values.corruptedTotal.tmp)-1) ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($values.corruptedTotal.tmp,1,string-length($values.corruptedTotal.tmp)-1)" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- fully graph -->
         <xsl:variable name="values.100.tmp">
@@ -813,7 +916,15 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.100">
-            <xsl:value-of select="substring($values.100.tmp,1,string-length($values.100.tmp)-1)" />
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( substring($values.100.tmp,1,string-length($values.100.tmp)-1) ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="substring($values.100.tmp,1,string-length($values.100.tmp)-1)" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <!-- return value -->
         <xsl:choose>
@@ -846,7 +957,8 @@
         </table>
         <br />
         <b style="padding:5px;">
-            <xsl:value-of select="concat('  Vollständigkeitsprüfung für ',/journalStatistic/statistic[@date=number($journalStatistic.date.Till)]/@datePretty,' :')" />
+            <xsl:value-of
+                select="concat('  Vollständigkeitsprüfung für ',/journalStatistic/statistic[@date=number($journalStatistic.date.Till)]/@datePretty,' :')" />
         </b>
         <xsl:variable name="pervalue1" select="numberOfObjects/complete/@percent" />
         <xsl:variable name="pervalue2" select="numberOfObjects/incomplete/@percent" />
