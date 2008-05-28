@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRXMLTableManager;
 
 public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
 
