@@ -52,7 +52,6 @@
 
         <!-- copy mycore.properties.iview.template if it isn't -->
         <copy file="${module.dir}/config/mycore.properties.iview.template" tofile="${module.dir}/config/mycore.properties.iview" overwrite="false" />
-	    <copy file="${module.dir}/config/mycore.properties.iview" tofile="${build.config}/mycore.properties.iview" overwrite="true" />
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${basedir}/modules/iview/config/mycore.properties.iview"/>
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.services.imaging.MCRImgCacheCommands" />    	
     </target>

@@ -4,8 +4,8 @@ MyCoRe is an Open Source project for multimedia digital Libraries and archives.
 (or, more generally, "Content Repositories" >> CoRe). 
 
 The system is based on Java and XML technologies. Various database backends are
-provided. It is possible to use commercial solutions like IBM Content Manager as
-well as Open Source products like MySQL and XML:DB databases. 
+provided. It is possible to use commercial solutions like IBM DB2 as well as Open Source 
+database MySQL.
 
 The distribution consist of two parts
 
@@ -14,6 +14,7 @@ The MyCoRe "core" includes several modules that provide basic functions to build
 up digital archives. The core contains the basic API that can be used by any
 MyCoRe-Application. Different database backends where supported as already
 explained above.
+
 
 -- docportal --
 DocPortal is the sample application for a Dublin-Core document server, on the
@@ -29,10 +30,9 @@ basics of a MyCoRe Sample Application
 
 MyCoRe was tested on several platforms with different environments: 
 
-+ AIX 5.2 and IBM Content Manager 8.2 / 8.3
 + AIX 5.2 with DB2 and Lucene
 + Linux with HSQLDB and Lucene
-+ Windows 2000 with HSQLDB and Lucene
++ Windows XP with HSQLDB and Lucene
 + Linux with MySQL and Lucene
 + Windows 2000 with MySQL and Lucene
 

@@ -1,8 +1,8 @@
 <project name="docportal" basedir=".">
-	
+
   <!-- =================================================================== -->
   <!-- Global properties                                                   -->
-  <!-- $Revision: 1.15 $ $Date: 2006/12/11 14:45:22 $                     -->
+  <!-- $Revision: 1.35 $ $Date: 2007-12-20 10:59:42 $                     -->
   <!-- =================================================================== -->
 
   <!-- Javac properties -->
@@ -23,9 +23,6 @@
   <property name="env.MYCORE_HOME" value="../mycore" />
   <dirname file="${env.MYCORE_HOME}/build.xml" property="mycore" />
 
-  <!-- Read in properties from config/build.properties -->
-  <property file="${env.MYCORE_HOME}/config/build.properties" />
-
   <!-- Provide a default value for DOCPORTAL_HOME if not set in env -->
   <property name="env.DOCPORTAL_HOME" value="${basedir}" />
 
@@ -36,29 +33,26 @@
         <contains value="MCR.basedir=" />
       </linecontains>
     </filterchain>
+    <filterchain>
+      <linecontains>
+        <contains value="MCR.datadir=" />
+      </linecontains>
+    </filterchain>
   </loadproperties>
   <loadproperties srcFile="${basedir}/config/mycore.properties.private">
     <filterchain>
       <tokenfilter>
         <replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
+        <replacestring from="%MCR.datadir%" to="${MCR.datadir}" />
       </tokenfilter>
     </filterchain>
   </loadproperties>
 
   <property file="${basedir}/config/mycore.properties" />
 
-  <!-- Read in properties from ${env.MYCORE_HOME}/config/build.properties -->
-  <property file="${env.MYCORE_HOME}/config/build.properties" />
-  <condition property="MCR.XMLStore.Type" value="OpenSource">
-    <not>
-      <isset property="MCR.XMLStore.Type" />
-    </not>
-  </condition>
-
   <!-- MyCoRe CVS repository root -->
   <property name="CVSRoot" value="/cvs" />
 
-  <property name="mycore" value="${env.MYCORE_HOME}" />
   <property name="mycore.config" value="${mycore}/config" />
   <property name="mycore.doc" value="${mycore}/documentation" />
   <property name="mycore.lib" value="${mycore}/lib" />
@@ -66,20 +60,21 @@
   <property name="mycore.schema" value="${mycore}/schema" />
   <property name="mycore.stylesheets" value="${mycore}/stylesheets" />
 
-  <property name="docportal" value="${env.DOCPORTAL_HOME}" />
-  <property name="docportal.bin" value="${docportal}/bin" />
-  <property name="docportal.changelogs" value="${docportal}/changelogs" />
-  <property name="docportal.config" value="${docportal}/config" />
-  <property name="docportal.content" value="${docportal}/content" />
-  <property name="docportal.doc" value="${docportal}/documentation" />
-  <property name="docportal.lib" value="${docportal}/lib" />
-  <property name="docportal.modules" value="${docportal}/modules" />
-  <property name="docportal.sources" value="${docportal}/sources" />
-  <property name="docportal.stylesheets" value="${docportal}/stylesheets" />
-  <property name="docportal.unixtools" value="${docportal}/unixtools" />
-  <property name="docportal.webpages" value="${docportal}/webpages" />
+  <property name="application" value="${env.DOCPORTAL_HOME}" />
+  <property name="application.bin" value="${application}/bin" />
+  <property name="application.changelogs" value="${application}/changelogs" />
+  <property name="application.config" value="${application}/config" />
+  <property name="application.content" value="${application}/content" />
+  <property name="application.doc" value="${application}/documentation" />
+  <property name="application.dostools" value="${application}/bin/dostools" />
+  <property name="application.lib" value="${application}/lib" />
+  <property name="application.modules" value="${application}/modules" />
+  <property name="application.sources" value="${application}/sources" />
+  <property name="application.stylesheets" value="${application}/stylesheets" />
+  <property name="application.unixtools" value="${application}/bin/unixtools" />
+  <property name="application.webpages" value="${application}/webpages" />
 
-  <property name="build" value="${docportal}/build" />
+  <property name="build" value="${application}/build" />
   <property name="build.bin" value="${build}/bin" />
   <property name="build.classes" value="${build}/classes" />
   <property name="build.javadocs" value="${build}/javadocs-docportal" />
@@ -87,125 +82,212 @@
   <property name="build.lib" value="${build}/lib" />
   <property name="build.modules" value="${build}/modules" />
   <property name="build.schema" value="${build}/schema" />
+  <property name="build.sources" value="${build}/sources" />
   <property name="build.stylesheets" value="${build}/stylesheets" />
   <property name="build.webapps" value="${build}/webapps" />
-	
-  <property name="data" value="${docportal}/data" />
+
+  <property name="data" value="${application}/data" />
   <property name="data.tmp" value="${MCR.oai.resumptiontoken.dir}" />
   <property name="data.save" value="${MCR.Save.FileSystem}" />
   <property name="data.workflow" value="${MCR.editor_base_directory}" />
-	
+
+  <property name="acl-description.all" value="always allowed"/>
+  <property name="acl-description.require-login" value="require login"/>
+  <property name="acl-description.admins" value="administrators"/>
+  <property name="acl-description.editors_admins" value="administrators and editors"/>
+  <property name="acl-description.admins_editors_authors" value="administrators, editors and authors"/>
+  
+  <!-- Read in properties from ${env.MYCORE_HOME}/config/build.properties -->
+  <property file="${mycore.config}/build.properties" />
+
+  <path id="mycore.jars">
+    <fileset dir="${mycore.lib}" includes="*.jar" />
+  </path>
+
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="mycore.jars" />
+  <!-- for task is not included in antcontrib.properties by default -->
+  <taskdef name="for" classname="net.sf.antcontrib.logic.For" classpathref="mycore.jars" />
+  <if>
+    <isset property="MCR.System.SharedJarsDir" />
+    <then>
+      <path id="share.classpath">
+        <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
+      </path>
+    </then>
+    <else>
+      <if>
+        <isset property="MCR.System.Jars" />
+        <then>
+          <path id="share.classpath">
+            <files includes="${MCR.System.Jars}" />
+          </path>
+        </then>
+        <else>
+          <path id="share.classpath" />
+        </else>
+      </if>
+    </else>
+  </if>
+
+  <!-- old init entries -->
+  <path id="application.classpath">
+    <!-- add lib path of application componets -->
+    <pathelement location="${build.classes}" />
+    <pathelement location="${build.config}" />
+    <pathelement location="${build.schema}" />
+    <pathelement location="${build.stylesheets}" />
+    <fileset dir="${build.lib}" includes="*.jar" />
+    <fileset dir="${application.lib}" includes="*.jar" />
+    <fileset dir="${ant.library.dir}" includes="ant.jar" />
+    <!-- add lib path of system componets -->
+    <path refid="share.classpath" />
+  </path>
+  <path id="bootstrap.classpath">
+    <path refid="application.classpath" />
+    <path refid="mycore.jars" />
+  </path>
+
+  <path id="application.libpath">
+    <dirset dir="${java.home}" includes="bin bin/classic" />
+  </path>
+
+  <condition property="detected.os" value="unix">
+    <os family="unix" />
+  </condition>
+  <condition property="detected.os" value="windows">
+    <os family="dos" />
+  </condition>
+  <condition property="os.is.unix">
+    <os family="unix" />
+  </condition>
+  <condition property="os.is.windows">
+    <os family="dos" />
+  </condition>
+  <condition property="os.is.mac">
+    <os name="Mac OS X" />
+  </condition>
+
+  <condition property="db.is.hibernate">
+    <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
+  </condition>
+  <condition property="db.is.sql">
+    <not>
+      <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
+    </not>
+  </condition>
+
+  <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="mycore.jars" />
+  <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="mycore.jars" />
+
+  <!-- =================================================================== -->
+  <!-- Search mask generation macro                                        -->
+  <!-- =================================================================== -->
+
+  <macrodef name="genSearchMask">
+
+    <attribute name="dir.editor" default="${application.config}" />
+    <attribute name="dir.webpage" default="${application.webpages}" />
+
+    <!-- Filename of the editor definition file that defines the search mask form -->
+    <attribute name="filename.editor" />
+
+    <!-- Filename of the webpage that contains the search mask -->
+    <attribute name="filename.webpage" />
+
+    <!-- i18n key of search mask headline -->
+    <attribute name="headline.i18n" />
+
+    <!-- Title of webpage in German -->
+    <attribute name="title.de" />
+
+    <!-- Title of webpage in English -->
+    <attribute name="title.en" />
+
+    <!-- ID of the search index(es) to include, multiple indexes separated by blanks -->
+    <!-- If this property is set, by default all fields in those indexes are included -->
+    <attribute name="search.indexes" default="" />
+
+    <!-- Name(s) of the search fields to skip, separated by blanks. -->
+    <!-- If this property and search.indexes is set, the listed fields are NOT included in search mask -->
+    <attribute name="skip.fields" default="" />
+
+    <!-- Name(s) of the search fields to include, separated by blanks. -->
+    <!-- If this property is set, ONLY these search fields will be included in search mask -->
+    <attribute name="search.fields" default="" />
+
+    <!-- Optional restriction (hidden condition) for search -->
+    <!-- Syntax: "field operator value", separated by blanks -->
+    <!-- Example: "objectType = document" -->
+    <attribute name="restriction" default="" />
+
+    <!-- List of fields to include as sort criteria of results -->
+    <!-- If empty, sort panel is not displayed -->
+    <attribute name="sort.fields" default="" />
+
+    <!-- If true, include a panel to select hosts to query -->
+    <attribute name="include.hostsSelectionPanel" default="false" />
+
+    <!-- Layout of search mask: simple or advanced -->
+    <!-- simple: one line per field, default operator, combine conditions with and -->
+    <!-- advanced: choose fields and operators from drop-down list, choose and/or -->
+    <attribute name="layout" default="simple" />
+
+    <sequential>
+      <echo level="info">Generating search mask from searchfields.xml</echo>
+      <copy file="${mycore.config}/fieldtypes.xml" toDir="${application.config}" />
+      <xslt basedir="${application.config}"
+            classpathref="application.classpath"
+            in="${application.config}/searchfields.xml"
+            style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+            out="@{dir.editor}/@{filename.editor}"
+            force="true">
+        <param name="mode" expression="editor" />
+        <param name="filename.webpage" expression="@{filename.webpage}" />
+        <param name="headline.i18n" expression="@{headline.i18n}" />
+        <param name="search.indexes" expression="@{search.indexes}" />
+        <param name="search.fields" expression="@{search.fields}" />
+        <param name="skip.fields" expression="@{skip.fields}" />
+        <param name="restriction" expression="@{restriction}" />
+        <param name="sort.fields" expression="@{sort.fields}" />
+        <param name="include.hostsSelectionPanel" expression="@{include.hostsSelectionPanel}" />
+        <param name="layout" expression="@{layout}" />
+      </xslt>
+      <echo level="info">Generated editor definition file @{filename.editor}</echo>
+      <xslt basedir="${application.config}"
+            classpathref="application.classpath"
+            in="${application.config}/searchfields.xml"
+            style="${mycore.stylesheets}/searchfields2searchmask.xsl"
+            out="@{dir.webpage}/@{filename.webpage}"
+            force="true">
+        <param name="mode" expression="webpage" />
+        <param name="filename.editor" expression="@{filename.editor}" />
+        <param name="title.de" expression="@{title.de}" />
+        <param name="title.en" expression="@{title.en}" />
+      </xslt>
+      <echo level="info">Generated webpage @{filename.webpage}</echo>
+      <delete file="${application.config}/fieldtypes.xml" />
+    </sequential>
+  </macrodef>
+  <!-- END of old init entries-->
+
   <!-- =================================================================== -->
   <!-- Initalization of directories and CLASSPATH, LIBPATH                 -->
   <!-- =================================================================== -->
 
-  <target name="init" depends="jdbcstore.path.1, jdbcstore.path.2, xmlstore.path.1, xmlstore.path.2, share.path.1, share.path.2">
+  <target name="init">
 
-    <!-- Fail if environment variables are not set -->
-    <fail message="Environment variable JAVA_HOME is not set!" unless="env.JAVA_HOME" />
-
-    <mkdir dir="${build}" />	  
-    <mkdir dir="${build.classes}" />	  
-    <mkdir dir="${build.config}" />	  
+    <mkdir dir="${build}" />
+    <mkdir dir="${build.classes}" />
+    <mkdir dir="${build.config}" />
     <mkdir dir="${build.lib}" />
-    <copy todir="${build.lib}" file="${mycore.lib}/mycore.jar" />
-    <mkdir dir="${build.schema}" />	  
-    <mkdir dir="${build.stylesheets}" />	  
+    <mkdir dir="${build.schema}" />
+    <mkdir dir="${build.stylesheets}" />
 
-    <path id="docportal.classpath">
-      <!-- add lib path of application componets -->
-      <pathelement location="${build.classes}" />
-      <pathelement location="${build.config}" />
-      <pathelement location="${build.schema}" />
-      <pathelement location="${build.stylesheets}" />
-      <fileset dir="${build.lib}" includes="*.jar" />
-      <!-- add lib path of system componets -->
-      <path refid="jdbc.classpath" />
-      <path refid="xml.classpath" />
-      <path refid="share.classpath" />
-    </path>
+    <pathconvert targetos="${detected.os}" property="application.classpath.translated" refid="application.classpath" />
+    <pathconvert targetos="${detected.os}" property="application.libpath.translated" refid="application.libpath" />
 
-    <path id="docportal.libpath">
-      <dirset dir="${env.JAVA_HOME}" includes="bin bin/classic" />
-      <path refid="jdbc.libpath" />
-      <path refid="xml.libpath" />
-    </path>
-
-    <condition property="detected.os" value="unix">
-      <os family="unix" />
-    </condition>
-    <condition property="detected.os" value="windows">
-      <os family="dos" />
-    </condition>
-    <condition property="os.is.unix">
-      <os family="unix" />
-    </condition>
-    <condition property="os.is.windows">
-      <os family="dos" />
-    </condition>
-    <condition property="os.is.mac">
-      <os name="Mac OS X" />
-    </condition>
-
-    <condition property="db.is.hibernate">
-      <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
-    </condition>
-    <condition property="db.is.sql">
-      <not>
-        <equals arg1="${MCR.JDBCStore.Type}" arg2="hibernate" />
-      </not>
-    </condition>
-
-    <condition property="store.is.cm8">
-      <equals arg1="${MCR.XMLStore.Type}" arg2="cm8" />
-    </condition>
-
-    <pathconvert targetos="${detected.os}" property="docportal.classpath.translated" refid="docportal.classpath" />
-    <pathconvert targetos="${detected.os}" property="docportal.libpath.translated" refid="docportal.libpath" />
-
-    <property name="env.LIBPATH" value="${docportal.libpath.translated}" />
-    <property name="env.LD_LIBRARY_PATH" value="${docportal.libpath.translated}" />
-    <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="docportal.classpath" />
-  </target>
-
-  <target name="jdbcstore.path.1" if="MCR.JDBCStore.BaseDir">
-    <path id="jdbc.classpath">
-      <fileset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.Jars}" />
-      <dirset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.ClassesDirs}" />
-    </path>
-    <path id="jdbc.libpath">
-      <dirset dir="${MCR.JDBCStore.BaseDir}" includes="_dummy_ ${MCR.JDBCStore.LibPath}" />
-    </path>
-  </target>
-
-  <target name="jdbcstore.path.2" unless="MCR.JDBCStore.BaseDir">
-    <path id="jdbc.classpath" />
-    <path id="jdbc.libpath" />
-  </target>
-
-  <target name="xmlstore.path.1" if="MCR.XMLStore.BaseDir">
-    <path id="xml.classpath">
-      <fileset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.Jars}" />
-      <dirset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.ClassesDirs}" />
-    </path>
-    <path id="xml.libpath">
-      <dirset dir="${MCR.XMLStore.BaseDir}" includes="_dummy_ ${MCR.XMLStore.LibPath}" />
-    </path>
-  </target>
-
-  <target name="xmlstore.path.2" unless="MCR.XMLStore.BaseDir">
-    <path id="xml.classpath" />
-    <path id="xml.libpath" />
-  </target>
-
-  <target name="share.path.1" if="MCR.System.SharedJarsDir">
-    <path id="share.classpath">
-      <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
-    </path>
-  </target>
-
-  <target name="share.path.2" unless="MCR.System.SharedJarsDir">
-    <path id="share.classpath" />
+    <property name="env.LIBPATH" value="${application.libpath.translated}" />
+    <property name="env.LD_LIBRARY_PATH" value="${application.libpath.translated}" />
   </target>
 
   <!-- System CLASSPATH is completely ignored! -->
@@ -216,48 +298,88 @@
   <!-- =================================================================== -->
 
   <target name="do.merge" if="web.xml.present">
-
-    <copy file="${build.webapps}/WEB-INF/web.xml" tofile="${build.webapps}/WEB-INF/web1.xml" />
-    <copy file="${web.xml.file}" tofile="${build.webapps}/WEB-INF/web2.xml" />
-    <copy file="${mycore}/stylesheets/merge-web-xml.xsl" todir="${build.webapps}/WEB-INF" />
-    <xslt basedir="${docportal.webapps}/WEB-INF" classpathref="docportal.classpath"
-      in="${build.webapps}/WEB-INF/web2.xml" style="${build.webapps}/WEB-INF/merge-web-xml.xsl"
-      out="${build.webapps}/WEB-INF/web.xml" />
-    <delete file="${build.webapps}/WEB-INF/web1.xml" />
-    <delete file="${build.webapps}/WEB-INF/web2.xml" />
-    <delete file="${build.webapps}/WEB-INF/merge-web-xml.xsl" />
+    <xmltask source="${build.webapps}/WEB-INF/web.xml" dest="${build.webapps}/WEB-INF/web.xml">
+      <insert path="/:web-app/:session-config" position="before" file="${web.xml.file}" />
+    </xmltask>
+    <replace file="${build.webapps}/WEB-INF/web.xml" token='xmlns=""' />
   </target>
 
   <!-- =================================================================== -->
   <!-- merge module_messages.properties with the message.properties file   -->
-  <!-- 						in docportal/config							   -->
+  <!-- 						in application/config							   -->
   <!-- =================================================================== -->
-	
+
   <target name="properties.merge">
-  	<echo level="debug">parameter: ${locale_param} </echo>
-  	<condition property="locale_suffix" value="">
-  		<or>
-  	    	<equals arg1="${locale_param}" arg2=""/>
-  			<equals arg1="${locale_param}" arg2="${MCR.metadata_default_lang}"/>
-  		</or>
-  	</condition>
-  	<condition property="locale_suffix" value="_${locale_param}">
-  		<not>
-  		<or>
-  	    	<equals arg1="${locale_param}" arg2=""/>
-  			<equals arg1="${locale_param}" arg2="${MCR.metadata_default_lang}"/>
-  		</or>
-  		</not>
-  	</condition>
-  	
-  	
-  	<echo level="debug">locale (Test 2) ist: ${locale_suffix} </echo>
-  	<echo level="debug">Source path: ${module}</echo>
-  	<echo level="debug">Dest path: ${build.webapps}/WEB-INF/classes/messages${locale_suffix}.properties</echo>
-  	<concat destfile="${build.webapps}/WEB-INF/classes/messages${locale_suffix}.properties" append="true">
-  		<fileset file="${module}"/>  		
+    <echo level="info">parameter: ${locale_param} </echo>
+    <echo level="info">Source path: ${module}</echo>
+    <echo level="info">Dest path: ${build.webapps}/WEB-INF/classes/messages_${locale_param}.properties</echo>
+    <echo file="${build.config}/messages_${locale_param}.properties" append="true"><![CDATA[#Source: ${module}
+]]></echo>
+    <concat destfile="${build.config}/messages_${locale_param}.properties" append="true">
+      <fileset file="${module}" />
     </concat>
   </target>
-	
+
+  <target name="model2schema" depends="init">
+    <basename file="${metadata.schema}" property="baseSchemaName" suffix=".xml" />
+    <condition property="prefixName" value="datamodel-">
+      <not>
+        <contains string="${baseSchemaName}" substring="datamodel-" />
+      </not>
+    </condition>
+    <condition property="prefixName" value="">
+      <contains string="${baseSchemaName}" substring="datamodel-" />
+    </condition>
+    <echo level="info">Transforming ${metadata.schema}...</echo>
+    <xslt basedir="${application.config}"
+          classpathref="application.classpath"
+          in="${metadata.schema}"
+          style="${build.stylesheets}/MCRMetadataSchema.xsl"
+          out="${build.schema}/${prefixName}${baseSchemaName}.xsd" />
+  </target>
+
   <!-- =================================================================== -->
+  <!-- Invokes the MyCoRe Command Line Interface with a given command      -->
+  <!-- =================================================================== -->
+
+  <target name="invoke.cli" depends="init">
+    <java classname="org.mycore.frontend.cli.MCRCommandLineInterface"
+          dir="${cli.directory}"
+          fork="yes"
+          maxmemory="${java.maxmemory}"
+          classpathref="application.classpath"
+          failonerror="true">
+      <arg line="${cli.command}" />
+      <env key="LIBPATH" value="${env.LIBPATH}" />
+      <env key="LD_LIBRARY_PATH" value="${env.LD_LIBRARY_PATH}" />
+    </java>
+  </target>
+
+  <!-- ================================= 
+          target: addObjectType              
+         ================================= -->
+  <target name="addObjectType">
+    <xmltask source="${build.webapps}/WEB-INF/stylesheets/objecttypes.xsl"
+             dest="${build.webapps}/WEB-INF/stylesheets/objecttypes.xsl">
+      <insert path="/*[local-name()='stylesheet']">
+        <![CDATA[
+	<xsl:include href="${objectType}.xsl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>   	  	  	
+]]>
+   	  	  </insert>
+    </xmltask>
+    <if>
+      <not>
+        <available file="${application.modules}/${module}/xsl/${objectType}.xsl" />
+      </not>
+      <then>
+        <echo level="info">Generating ${objectType}.xsl</echo>
+        <xmltask dest="${build.webapps}/WEB-INF/stylesheets/${objectType}.xsl">
+          <insert path="/">
+            <![CDATA[<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>
+]]>
+		   	  	  </insert>
+        </xmltask>
+      </then>
+    </if>
+  </target>
 </project>

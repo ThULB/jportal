@@ -2,14 +2,14 @@
 
 <!-- =================================================================== -->
 <!-- MyCoRe DocPortal application build file for use with IzPack         -->
-<!-- $Revision: 1.10 $ $Date: 2006/07/10 06:03:08 $                      -->
+<!-- $Revision: 1.13 $ $Date: 2007-01-23 11:00:18 $                      -->
 <!-- =================================================================== -->
 
 <installation version="1.0">
 
  <info>
   <appname>docportal</appname>
-  <appversion>1.3.0 - 2006-06-19</appversion>
+  <appversion>SNAPSHOT - 2007-01-16</appversion>
   <url>http://www.mycore.de</url>
   <authors>
    <author name="Harald Richter" email="richter@hrz.uni-essen.de"/>
@@ -21,7 +21,7 @@
    <author name="Thomas Scheffler" email="thomas.scheffler@uni-jena.de"/>
    <author name="Andreas Trappe" email="andreas.trappe@uni-jena.de"/>
   </authors>
-  <javaversion>1.4</javaversion>
+  <javaversion>1.5</javaversion>
  </info>
 
  <guiprefs resizable="no" width="600" height="400">
@@ -60,582 +60,278 @@
 
  <packs>
 
-  <pack name="DocPortal Core Files" required="yes">
+  <pack name="DocPortal Core Files" required="no" preselected="yes">
    <description>The core of the MyCoRe Sample Project DocPortal</description>
    <!-- flat files -->
    <file targetdir="$INSTALL_PATH" src="changelog.txt" />
    <file targetdir="$INSTALL_PATH" src="license.txt" />
-   <file targetdir="$INSTALL_PATH" src="build.xml" />
    <!-- bin files UNIX -->
-   <fileset targetdir="$INSTALL_PATH/bin" dir="bin" os="unix" >
+   <fileset targetdir="$INSTALL_PATH/build/bin" dir="build/bin" os="unix" >
     <include name="**/mycore.sh"/>
-    <include name="**/listPlugins.sh"/>
     <include name="**/hsqldb*.sh"/>
     <include name="**/jetty*.sh"/>
-    <include name="**/sqltool.rc"/>
-    <include name="**/Save*.sh"/>
-    <include name="**/SQLCount*.sh"/>
-    <exclude name="**/SaveCron*.sh"/>
+    <include name="**/wsclient.sh"/>
    </fileset>
-   <parsable targetfile="$INSTALL_PATH/bin/SQLCountDB2.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SQLCountHSQLDB.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SQLCountMySQL.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/Save.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveContent.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveDerivate.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveList.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveUser.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/mycore.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/listPlugins.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbadmin.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbstart.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbstop.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/jettystart.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/bin/jettystop.sh" os="unix" />
-   <executable targetfile="$INSTALL_PATH/bin/SQLCountDB2.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SQLCountHSQLDB.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SQLCountMySQL.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/Save.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SaveContent.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SaveDerivate.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SaveList.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/SaveUser.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/mycore.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/listPlugins.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/hsqldbadmin.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/hsqldbstart.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/hsqldbstop.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/jettystart.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/bin/jettystop.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/mycore.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbadmin.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbstart.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbstop.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/jettystart.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/jettystop.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/wsclient.sh" os="unix" />
+   <executable targetfile="$INSTALL_PATH/build/bin/mycore.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/hsqldbadmin.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/hsqldbstart.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/hsqldbstop.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/jettystart.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/jettystop.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/wsclient.sh" keep="true" stage="never" os="unix" failure="warn" />
    <!-- bin files Windows -->
-   <fileset targetdir="$INSTALL_PATH/bin" dir="bin" os="windows" >
-    <include name="**/mycore*.cmd"/>
+   <fileset targetdir="$INSTALL_PATH/build/bin" dir="build/bin" os="windows" >
+    <include name="**/mycore.cmd"/>
     <include name="**/hsqldb*.cmd"/>
     <include name="**/jetty*.cmd"/>
-    <include name="**/sqltool.rc"/>
-    <include name="**/Save*.cmd"/>
-    <include name="**/SQLCount*.cmd"/>
+    <include name="**/wsclient.cmd"/>
    </fileset>
-   <fileset targetdir="$INSTALL_PATH/dostools/gnutools" dir="dostools/gnutools" os="windows" >
+   <fileset targetdir="$INSTALL_PATH/build/bin/gnutools" dir="build/bin/gnutools" os="windows" >
     <include name="**/*"/>
    </fileset>
-   <parsable targetfile="$INSTALL_PATH/bin/SQLCountHSQLDB.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/Save.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveContent.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveDerivate.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveList.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/SaveUser.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/mycore.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbadmin.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbstart.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/hsqldbstop.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/jettystart.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/bin/jettystop.cmd" os="windows" />
-   <!-- schortcut -->
-   <fileset targetdir="$INSTALL_PATH/dostools" dir="dostools" os="windows" >
+   <fileset targetdir="$INSTALL_PATH/build/bin/Shortcut" dir="build/bin/Shortcut" os="windows" >
+    <include name="**/*"/>
+   </fileset>
+   <fileset targetdir="$INSTALL_PATH/build/bin" dir="dostools" os="windows" >
     <include name="**/mklink_install.cmd"/>
     <include name="**/rmlink_install.cmd"/>
    </fileset>
-   <fileset targetdir="$INSTALL_PATH/dostools/Shortcut" dir="dostools/Shortcut" os="windows" >
-    <include name="**/*"/>
+   <fileset targetdir="$INSTALL_PATH/webpages/images" dir="webpages/images" os="windows" >
+    <include name="**/mycore-logo-start.ico"/>
+    <include name="**/mycore-logo-stop.ico"/>
+    <include name="**/shell32_262.ico"/>
    </fileset>
-   <parsable targetfile="$INSTALL_PATH/dostools/mklink_install.cmd" os="windows" />
-   <parsable targetfile="$INSTALL_PATH/dostools/rmlink_install.cmd" os="windows" />
-   <executable targetfile="$INSTALL_PATH/dostools/mklink_install.cmd" keep="true" stage="postinstall" os="windows" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/dostools/rmlink_install.cmd" keep="true" stage="uninstall" os="windows" failure="warn" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/mycore.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbadmin.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbstart.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/hsqldbstop.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/jettystart.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/jettystop.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/wsclient.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/mklink_install.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/rmlink_install.cmd" os="windows" />
+   <executable targetfile="$INSTALL_PATH//build/bin/mklink_install.cmd" keep="true" stage="postinstall" os="windows" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/rmlink_install.cmd" keep="true" stage="uninstall" os="windows" failure="warn" />
    <!-- config files -->
-   <fileset targetdir="$INSTALL_PATH/config" dir="config" >
-    <include name="**/ContentStoreSelectionRules.xml"/>
-    <include name="**/FileContentTypes.xml"/>
-    <include name="**/MCRRESUMPTIONTOKEN.hbm.xml"/>
-    <include name="**/datamodel*"/>
-    <include name="**/editor*"/>
-    <include name="**/imports*"/>
-    <include name="**/mycore*"/>
-    <include name="**/message*"/>
-    <include name="**/Search*"/>
-    <include name="**/searchfields.xml"/>
-    <include name="**/reservation.xml"/>
-    <include name="**/user/group_*"/>
-    <include name="**/permissions.xml"/>
-    <include name="**/user_*"/>
+   <fileset targetdir="$INSTALL_PATH/build/config" dir="build/config" >
+    <include name="**/*"/>
     <exclude name="**/mycore.properties.private*"/>
    </fileset>
-   <singlefile target="$INSTALL_PATH/config/mycore.properties.private" src="config/mycore.properties.private.izpack" />
-   <singlefile target="$INSTALL_PATH/webapps/WEB-INF/classes/mycore.properties.private" src="config/mycore.properties.private.izpack" />
-   <singlefile target="$INSTALL_PATH/config/build.properties" src="config/build.properties" />
-   <parsable targetfile="$INSTALL_PATH/config/mycore.properties.private" type="javaprop" />
+   <singlefile target="$INSTALL_PATH/build/config/mycore.properties.private" src="config/mycore.properties.private.izpack" />
+   <parsable targetfile="$INSTALL_PATH/build/config/mycore.properties.private" type="javaprop" />
    <!-- lib files -->
-   <fileset targetdir="$INSTALL_PATH/lib" dir="lib" >
-    <include name="**/*" />
-   </fileset>
-   <!-- classes files -->
-   <fileset targetdir="$INSTALL_PATH/classes" dir="classes" >
+   <fileset targetdir="$INSTALL_PATH/build/lib" dir="build/lib" >
     <include name="**/*" />
    </fileset>
    <!-- stylesheets files -->
-   <fileset targetdir="$INSTALL_PATH/stylesheets" dir="stylesheets" >
+   <fileset targetdir="$INSTALL_PATH/build/stylesheets" dir="build/stylesheets" >
     <include name="**/*" />
    </fileset>
    <!-- schema files -->
-   <fileset targetdir="$INSTALL_PATH/schema" dir="schema" >
-    <include name="**/*" />
-   </fileset>
-   <!-- webpages files -->
-   <fileset targetdir="$INSTALL_PATH/webpages" dir="webpages" >
+   <fileset targetdir="$INSTALL_PATH/build/schema" dir="build/schema" >
     <include name="**/*" />
    </fileset>
   </pack>
 
-  <pack name="Web Application" required="yes" preselected="yes">
+  <pack name="Web Application" required="no" preselected="yes">
    <depends packname="DocPortal Core Files" />
    <description>The WEB application of the MyCoRe Sample Project DocPortal</description>
-   <!-- the modules -->
-   <fileset targetdir="$INSTALL_PATH/modules" dir="modules" >
+   <!-- keystore -->
+   <fileset targetdir="$INSTALL_PATH/build/keystore" dir="build/keystore" >
     <include name="**/*" />
    </fileset>
    <!-- the webapps data -->
-   <fileset targetdir="$INSTALL_PATH/webapps" dir="webapps" >
+   <fileset targetdir="$INSTALL_PATH/build/webapps" dir="build/webapps" >
     <include name="**/*" />
     <exclude name="**/WEB-INF/classes/mycore.properties.private*"/>
     <exclude name="**/WEB-INF/classes/mycore.properties.wcms*"/>
     <exclude name="**/WEB-INF/server-config.wsdd*"/>
    </fileset>
-   <singlefile target="$INSTALL_PATH/webapps/WEB-INF/classes/mycore.properties.private" src="config/mycore.properties.private.izpack" />
-   <parsable targetfile="$INSTALL_PATH/webapps/WEB-INF/classes/mycore.properties.private" type="javaprop"/>
-   <singlefile target="$INSTALL_PATH/webapps/WEB-INF/classes/mycore.properties.wcms" src="modules/module-wcms/aif/config/mycore.properties.wcms.template" />
-   <parsable targetfile="$INSTALL_PATH/webapps/WEB-INF/classes/mycore.properties.wcms" type="javaprop"/>
-   <singlefile target="$INSTALL_PATH/webapps/WEB-INF/server-config.wsdd" src="config/server-config.wsdd.izpack" />
-   <parsable targetfile="$INSTALL_PATH/webapps/WEB-INF/server-config.wsdd" type="javaprop"/>
+   <singlefile target="$INSTALL_PATH/build/webapps/WEB-INF/classes/mycore.properties.private" src="config/mycore.properties.private.izpack" />
+   <parsable targetfile="$INSTALL_PATH/build/webapps/WEB-INF/classes/mycore.properties.private" type="javaprop"/>
+   <singlefile target="$INSTALL_PATH/build/webapps/WEB-INF/classes/mycore.properties.wcms" src="modules/wcms/aif/config/mycore.properties.wcms.template" />
+   <parsable targetfile="$INSTALL_PATH/build/webapps/WEB-INF/classes/mycore.properties.wcms" type="javaprop"/>
+   <singlefile target="$INSTALL_PATH/build/webapps/WEB-INF/server-config.wsdd" src="config/server-config.wsdd.izpack" />
+   <parsable targetfile="$INSTALL_PATH/build/webapps/WEB-INF/server-config.wsdd" type="javaprop"/>
   </pack>
 
   <pack name="Preloaded Database" required="no" preselected="no">
    <depends packname="DocPortal Core Files" />
    <description>The preloaded data of the MyCoRe Sample Project DocPortal</description>
-   <!-- the filestore data -->
-   <fileset targetdir="$INSTALL_PATH/filestore" dir="filestore" >
+   <!-- the data directories -->
+   <fileset targetdir="$INSTALL_PATH/data" dir="data" >
     <include name="**/*" />
    </fileset>
-   <!-- the HSQLDB data -->
-   <fileset targetdir="$INSTALL_PATH/hsqldb-data" dir="hsqldb-data" >
-    <include name="**/*" />
-   </fileset>
-   <!-- the Lucene data -->
-   <fileset targetdir="$INSTALL_PATH/lucene-index4content" dir="lucene-index4content" >
-    <include name="**/*" />
-   </fileset>
-   <fileset targetdir="$INSTALL_PATH/lucene-index4metadata" dir="lucene-index4metadata" >
-    <include name="**/*" />
-   </fileset>
-   <fileset targetdir="$INSTALL_PATH/lucene-locks" dir="lucene-locks" >
-    <include name="**/*" />
-   </fileset>
-   <!-- the Workflow data -->
-   <fileset targetdir="$INSTALL_PATH/workflow" dir="workflow" >
-    <include name="**/*" />
-   </fileset>
-   <!-- the application data -->
+   <!-- the application default data -->
    <fileset targetdir="$INSTALL_PATH/content" dir="content" >
     <include name="**/*" />
    </fileset>
   </pack>
 
-  <pack name="UNIX-Tools" required="no" preselected="yes">
+  <pack name="UNIX-Tools" required="no" preselected="no">
    <description>Optional Unix command tools of the MyCoRe Sample Project DocPortal</description>
-   <!-- unixtools files -->
-   <fileset targetdir="$INSTALL_PATH/unixtools" dir="unixtools" os="unix" >
-    <include name="**/*.sh"/>
+   <fileset targetdir="$INSTALL_PATH/build/bin" dir="build/bin" os="unix" >
+    <include name="**/Repair*.sh"/>
+    <include name="**/SQL*.sh"/>
+    <include name="**/Save*.sh"/>
+    <include name="**/sqltool.rc"/>
+    <include name="**/Class*.sh"/>
+    <include name="**/Author*.sh"/>
+    <include name="**/Derivate*.sh"/>
+    <include name="**/Document*.sh"/>
+    <include name="**/Inst*.sh"/>
    </fileset>
-   <parsable targetfile="$INSTALL_PATH/unixtools/ClassCheck.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/ClassDelete.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/ClassLoad.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/ClassUpdate.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/QueryDoc.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/QueryInst.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/QueryPers.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SAuthCheck.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SAuthDelete.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SAuthLoad.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SAuthUpdate.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDerDelete.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocCheck.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocDelete.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocDerLoad.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocDerUpdate.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocLoad.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SDocUpdate.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SInstCheck.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SInstDelete.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SInstLoad.sh" os="unix" />
-   <parsable targetfile="$INSTALL_PATH/unixtools/SInstUpdate.sh" os="unix" />
-   <executable targetfile="$INSTALL_PATH/unixtools/ClassCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/ClassDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/ClassLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/ClassUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/QueryDoc.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/QueryInst.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/QueryPers.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SAuthCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SAuthDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SAuthLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SAuthUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDerDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocDerLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocDerUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SDocUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SInstCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SInstDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SInstLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
-   <executable targetfile="$INSTALL_PATH/unixtools/SInstUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/RepairFromXMLStore.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SQLCountDB2.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SQLCountHSQLDB.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SQLCountMySQL.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/Save.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveContent.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveDerivate.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveList.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveUser.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/ClassCheck.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/ClassDelete.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/ClassLoad.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/ClassUpdate.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/AuthorCheck.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/AuthorDelete.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/AuthorQuery.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/AuthorLoad.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/AuthorUpdate.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DerivateDelete.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DerivateLoad.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DerivateUpdate.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DocumentCheck.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DocumentDelete.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DocumentLoad.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DocumentQuery.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/DocumentUpdate.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/InstCheck.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/InstDelete.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/InstLoad.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/InstQuery.sh" os="unix" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/InstUpdate.sh" os="unix" />
+   <executable targetfile="$INSTALL_PATH/build/bin/RepairFromXMLStore.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SQLCountDB2.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SQLCountHSQLDB.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SQLCountMySQL.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/Save.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SaveContent.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SaveDerivate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SaveList.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/SaveUser.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/ClassCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/ClassDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/ClassLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/ClassUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/AuthorCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/AuthorDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/AuthorLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/AuthorQuery.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/AuthorUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DerivateDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DerivateLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DerivateUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DocumentCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DocumentDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DocumentLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DocumentQuery.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/DocumentUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/InstCheck.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/InstDelete.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/InstLoad.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/InstQuery.sh" keep="true" stage="never" os="unix" failure="warn" />
+   <executable targetfile="$INSTALL_PATH/build/bin/InstUpdate.sh" keep="true" stage="never" os="unix" failure="warn" />
+  </pack>
+
+  <pack name="Windows-Tools" required="no" preselected="no">
+   <description>Optional Windows command tools of the MyCoRe Sample Project DocPortal</description>
+   <fileset targetdir="$INSTALL_PATH/build/bin" dir="build/bin" os="windows" >
+    <include name="**/Repair*.cmd"/>
+    <include name="**/SQL*.cmd"/>
+    <include name="**/Save*.cmd"/>
+    <include name="**/sqltool.rc"/>
+   </fileset>
+   <parsable targetfile="$INSTALL_PATH/build/bin/RepairFromXMLStore.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SQLCountHSQLDB.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/Save.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveContent.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveDerivate.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveList.cmd" os="windows" />
+   <parsable targetfile="$INSTALL_PATH/build/bin/SaveUser.cmd" os="windows" />
   </pack>
 
   <pack name="Documentation" required="no" preselected="yes">
    <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
+   <fileset targetdir="$INSTALL_PATH/documentation" dir="build" >
     <include name="**/QuickInstallationGuide.pdf" />
     <include name="**/Overview.pdf" />
     <include name="**/UserGuide.pdf" />
     <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+    <include name="**/javadocs-docportal" />
+    <include name="**/javadocs-mycore" />
+    <exclude name="webapps/*" />
    </fileset>
   </pack>
 
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+  <pack name="Sources" required="no" preselected="no">
+   <description>The sources of the MyCoRe Sample Project DocPortal</description>
+   <!-- flat files -->
+   <file targetdir="$INSTALL_PATH" src="build.xml" />
+   <file targetdir="$INSTALL_PATH" src="common-modules.xml" />
+   <file targetdir="$INSTALL_PATH" src="docportal-izpack.xml" />
+   <file targetdir="$INSTALL_PATH" src="INSTALL.DE.linux-opensource" />
+   <file targetdir="$INSTALL_PATH" src="INSTALL.DE.windows-opensource" />
+   <file targetdir="$INSTALL_PATH" src="INSTALL.EN.linux-opensource" />
+   <file targetdir="$INSTALL_PATH" src="INSTALL.EN.windows-opensource" />
+   <file targetdir="$INSTALL_PATH" src="README.DE" />
+   <file targetdir="$INSTALL_PATH" src="README.EN" />
+   <file targetdir="$INSTALL_PATH" src="readme-izpack-de.txt" />
+   <file targetdir="$INSTALL_PATH" src="readme-izpack-en.txt" />
+   <!-- directories -->
+   <fileset targetdir="$INSTALL_PATH/bin" dir="bin" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/config" dir="config" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/dostools" dir="dostools" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/lib" dir="lib" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/modules" dir="modules" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/sources" dir="sources" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/stylesheets" dir="stylesheets" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/unixtools" dir="unixtools" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
-   </fileset>
-  </pack>
-
- </packs>
-
-</installation>
-  </pack>
-
-  <pack name="Documentation" required="no" preselected="yes">
-   <description>The documentation of the MyCoRe Sample Project DocPortal</description>
-   <fileset targetdir="$INSTALL_PATH/documentation" dir="documentation" >
-    <include name="**/QuickInstallationGuide.pdf" />
-    <include name="**/Overview.pdf" />
-    <include name="**/UserGuide.pdf" />
-    <include name="**/ProgrammerGuide.pdf" />
-    <include name="**/html" />
+   <fileset targetdir="$INSTALL_PATH/webpages" dir="webpages" >
+    <include name="**/*" />
+    <exclude name="**/CVS" />
    </fileset>
   </pack>
 

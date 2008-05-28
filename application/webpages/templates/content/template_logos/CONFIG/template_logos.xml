@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<templates>
+	<template>
+		<journalID value="jportal_jpjournal_00000024" />
+		<xhtml>
+			<div id="sponsoredlogo-box">
+				<a href="http://www.dfg.de" id="sponsoredlogo-styles">
+					<img
+						src="templates/content/template_logos/IMAGES/dfg.png" alt="dfg" />
+				</a>
+			</div>
+			<div id="sponsoredlogo-box">
+				<a href="http://www.thulb.uni-jena.de"
+					id="sponsoredlogo-styles">
+					<img
+						src="templates/content/template_logos/IMAGES/thulb.png"
+						alt="thulb" />
+				</a>
+			</div>
+			<div id="sponsoredlogo-box">
+				<a href="http://www2.uni-jena.de/biologie/ehh/"
+					id="sponsoredlogo-styles">
+					<img
+						src="templates/content/template_logos/IMAGES/ernsthaeckelhaus.png"
+						alt="Ernst-Haeckel-Haus" />
+				</a>
+			</div>
+		</xhtml>
+	</template>
+</templates>

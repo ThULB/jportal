@@ -33,7 +33,7 @@
 	<xsl:template name="template_wcms.header">
 		<head>
 			<title>
-				<xsl:call-template name="PageTitle"/>
+				<xsl:call-template name="HTMLPageTitle"/>
 			</title>
 
 			<xsl:variable 

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+dir=$1
+
+for conflict in $(find $dir -name "*.merge-right.r*"); do
+	mv "$conflict" "${conflict%.merge-right.r*}"
+	svn resolved "${conflict%.merge-right.r*}"
+done
+for conflict in $(find $dir -name "*.merge-rechts.r*"); do
+	mv "$conflict" "${conflict%.merge-rechts.r*}"
+	svn resolved "${conflict%.merge-rechts.r*}"
+done
