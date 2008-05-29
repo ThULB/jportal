@@ -11,25 +11,7 @@
     <xsl:template name="template_jer">
         <html>
             <head>
-                <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-                <title>
-                    <xsl:call-template name="HTMLPageTitle" />
-                </title>
-                <meta content="Zeitschriften-Portal" lang="de" name="description" />
-                <meta content="Journal-Portal" lang="en" name="description" />
-                <meta content="Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung,Andreas Trappe" lang="de"
-                    name="keywords" />
-                <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation,Andreas Trappe" lang="en"
-                    name="keywords" />
-                <meta content="MyCoRe" lang="de" name="generator" />
-                <link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
-                <xsl:call-template name="module-broadcasting.getHeader" />
+                <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
                 <table cellspacing="0" cellpadding="0" id="footer">
@@ -137,10 +119,7 @@
 
     <!-- Template for Content ================================================================================== -->
     <xsl:template name="template_jer.write.content">
-        <div class="headline">
-            <xsl:copy-of select="$PageTitle" />
-        </div>
-        <xsl:apply-templates />
+        <xsl:call-template name="jp.layout.getHTMLContent" />
     </xsl:template>
 
     <!-- Template for User info ================================================================================ -->

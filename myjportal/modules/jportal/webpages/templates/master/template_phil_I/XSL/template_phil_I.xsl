@@ -10,19 +10,7 @@
     <xsl:template name="template_phil_I">
         <html>
             <head>
-                <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-                <title>
-
-                    <xsl:call-template name="HTMLPageTitle" />
-                </title>
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
-                <xsl:call-template name="module-broadcasting.getHeader" />
+                <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
 
@@ -76,10 +64,7 @@
 
     <!-- Template for Content ================================================================================== -->
     <xsl:template name="template_phil_I.write.content">
-        <div class="headline">
-            <xsl:copy-of select="$PageTitle" />
-        </div>
-        <xsl:apply-templates />
+        <xsl:call-template name="jp.layout.getHTMLContent" />
     </xsl:template>
 
     <!-- Template for User info ================================================================================ -->

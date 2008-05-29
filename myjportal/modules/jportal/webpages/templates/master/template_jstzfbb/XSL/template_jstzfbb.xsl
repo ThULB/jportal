@@ -7,24 +7,7 @@
     <xsl:template name="template_jstzfbb">
         <html>
             <head>
-                <title>
-                    <xsl:call-template name="HTMLPageTitle" />
-                </title>
-                <meta content="Zeitschriften-Portal" lang="de" name="description" />
-                <meta content="Journal-Portal" lang="en" name="description" />
-                <meta content="Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung,Andreas Trappe" lang="de"
-                    name="keywords" />
-                <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation,Andreas Trappe" lang="en"
-                    name="keywords" />
-                <meta content="MyCoRe" lang="de" name="generator" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}/common.css" rel="stylesheet" type="text/css" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
-                <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
-                <xsl:call-template name="module-broadcasting.getHeader" />
+                <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
                 <table cellspacing="0" cellpadding="0"
@@ -131,29 +114,36 @@
     </xsl:template>
     <!-- ======================================================================================================== -->
     <xsl:template name="template_jstzfbb.write.content">
-
+        <xsl:call-template name="print.writeProtectionMessage" />
         <xsl:choose>
-            <xsl:when test=" $PageTitle = 'Inhaltsverzeichnis - ' ">
-                <xsl:variable name="issue">
-                    <xsl:call-template name="printClass">
-                        <xsl:with-param name="recursive" select="'true'" />
-                        <xsl:with-param name="nodes" select="/mcr_results/mcr_result[1]/mycoreobject/metadata/timebehaviours/timebehaviour" />
-                        <xsl:with-param name="host" select="'local'" />
-                    </xsl:call-template>
-                </xsl:variable>
+            <xsl:when test="$readAccess='true'">
+                <xsl:choose>
+                    <xsl:when test=" $PageTitle = 'Inhaltsverzeichnis - ' ">
+                        <xsl:variable name="issue">
+                            <xsl:call-template name="printClass">
+                                <xsl:with-param name="recursive" select="'true'" />
+                                <xsl:with-param name="nodes" select="/mcr_results/mcr_result[1]/mycoreobject/metadata/timebehaviours/timebehaviour" />
+                                <xsl:with-param name="host" select="'local'" />
+                            </xsl:call-template>
+                        </xsl:variable>
 
-                <div class="headline">
-                    <xsl:value-of select="concat($PageTitle,$issue)" />
-                </div>
+                        <div class="headline">
+                            <xsl:value-of select="concat($PageTitle,$issue)" />
+                        </div>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <div class="headline">
+                            <xsl:copy-of select="$PageTitle" />
+                        </div>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:call-template name="getFastWCMS" />
+                <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise>
-                <div class="headline">
-                    <xsl:copy-of select="$PageTitle" />
-                </div>
+                <xsl:call-template name="printNotLoggedIn" />
             </xsl:otherwise>
         </xsl:choose>
-
-        <xsl:apply-templates />
 
     </xsl:template>
     <!-- ======================================================================================================== -->

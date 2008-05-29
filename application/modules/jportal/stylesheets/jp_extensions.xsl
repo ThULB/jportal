@@ -3,7 +3,7 @@
     xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan"
     xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
-
+    <xsl:include href="jp_layout-commons.xsl" />
     <xsl:param name="view.objectmetadata" select="'false'" />
 
     <xsl:param name="toc.pageSize" select="100" />
