@@ -43,6 +43,7 @@ cvs -d :pserver:anoncvs@cvs.thulb.uni-jena.de:/content/cvsroot co -P jportal
 - Create JPortal properties 
 -- cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
 -- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
+-- cp $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml.template $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml
 
 
 5. CONFIGURATION
@@ -64,11 +65,10 @@ cvs -d :pserver:anoncvs@cvs.thulb.uni-jena.de:/content/cvsroot co -P jportal
          2. ant jar
    2. Application
          1. cd $DOCPORTAL_HOME
-         2. mkdir -p $DOCPORTAL_HOME/build/stylesheets;cp -r $MYCORE_HOME/stylesheets/* $DOCPORTAL_HOME/build/stylesheets
          3. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt)
-         4. ant -f jportal-build.xml jp.create.schema jar jp.create.scripts
+         4. ant -f jportal-build.xml jp.create.schema jar create.scripts
          5. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps webapps
+         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps 
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
