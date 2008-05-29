@@ -1,6 +1,3 @@
-#-- MyCoRe sample application private properties template file       
-#-- $Revision$ $Date$                  
-#-- ===================================================================
 #
 # The MyCoRe properties PRIVATE sample file for the Dublin Core Demo
 #
@@ -25,9 +22,8 @@
 # WEB browser base URL
 #############################################################################
 
-# The base URL of the web application, e.g. for tomcat <a href="http://localhost:8080/docportal/">http://localhost:8080/docportal/</a>
-
-  MCR.baseurl=<a href="http://localhost:8291/">http://localhost:8291/</a>
+# The base URL of the web application, e.g. for tomcat http://localhost:8080/docportal/
+  MCR.baseurl=http://localhost:8291/
   
 # If MyCoRe runs behind a proxy, e.g. Apache mod_proxy, you should set
 # this property to the IP of the proxy, so that IP based access control will 
@@ -173,22 +169,22 @@
 # MCR.IFS.AVExtender.HELIX.Class=org.mycore.backend.realhelix.MCRAVExtRealHelix
 
 # URL where clients can download the Real Player:
-# MCR.IFS.AVExtender.HELIX.RealPlayerURL=<a href="http://www.real.com/player/index.html">http://www.real.com/player/index.html</a>
+# MCR.IFS.AVExtender.HELIX.RealPlayerURL=http://www.real.com/player/index.html
 
 # URL where clients can download Windows Media Player:
-# MCR.IFS.AVExtender.HELIX.MediaPlayerURL=<a href="http://www.microsoft.com/windows/windowsmedia/download/">http://www.microsoft.com/windows/windowsmedia/download/</a>
+# MCR.IFS.AVExtender.HELIX.MediaPlayerURL=http://www.microsoft.com/windows/windowsmedia/download/
 
 # Base URL of Real Server RAM generator mount point,
 # MUST end with a slash (/)
-# MCR.IFS.AVExtender.HELIX.RamGenBaseURL=<a href="http://realhelix.uni-essen.de:4887/ramgen/content/">http://realhelix.uni-essen.de:4887/ramgen/content/</a>
+# MCR.IFS.AVExtender.HELIX.RamGenBaseURL=http://realhelix.uni-essen.de:4887/ramgen/content/
 
 # Base URL of Helix Server ASX generator mount point,
 # MUST end with a slash (/)
-# MCR.IFS.AVExtender.HELIX.AsxGenBaseURL=<a href="http://realhelix.uni-essen.de:4887/asxgen/content/">http://realhelix.uni-essen.de:4887/asxgen/content/</a>
+# MCR.IFS.AVExtender.HELIX.AsxGenBaseURL=http://realhelix.uni-essen.de:4887/asxgen/content/
 
 # Base URL of Real Server View Source script,
 # MUST end with a slash (/)
-# MCR.IFS.AVExtender.HELIX.ViewSourceBaseURL=<a href="http://realhelix.uni-essen.de:4887/viewsource/template.html">http://realhelix.uni-essen.de:4887/viewsource/template.html</a>?src=/content/
+# MCR.IFS.AVExtender.HELIX.ViewSourceBaseURL=http://realhelix.uni-essen.de:4887/viewsource/template.html?src=/content/
 
 ##############################################################################
 # IBM VideoCharger Server 8.1 File Content Store                             #
@@ -212,13 +208,13 @@
 # MCR.IFS.AVExtender.VC.Class=org.mycore.backend.videocharger.MCRAVExtVideoCharger
 
 # URL where clients can download the IBM VideoCharger Player:
-# MCR.IFS.AVExtender.VC.PlayerURL=<a href="http://videocharger.uni-essen.de/vs_public/download/en_US/player.html">http://videocharger.uni-essen.de/vs_public/download/en_US/player.html</a>
+# MCR.IFS.AVExtender.VC.PlayerURL=http://videocharger.uni-essen.de/vs_public/download/en_US/player.html
 
 # URLs of VideoCharger vslist and iscpfsel CGI scripts:
 # This is used to start VideoCharger player and to get metadata:
 
-# MCR.IFS.AVExtender.VC.VSListURL=<a href="http://videocharger.uni-essen.de/vs_public/cgi-bin/vslist">http://videocharger.uni-essen.de/vs_public/cgi-bin/vslist</a>
-# MCR.IFS.AVExtender.VC.ISCPFSelURL=<a href="http://videocharger.uni-essen.de/vs_public/cgi-bin/iscpfsel">http://videocharger.uni-essen.de/vs_public/cgi-bin/iscpfsel</a>
+# MCR.IFS.AVExtender.VC.VSListURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/vslist
+# MCR.IFS.AVExtender.VC.ISCPFSelURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/iscpfsel
 
 ##############################################################################
 # OAI Clients                                                                #
@@ -252,20 +248,20 @@
 
 # qualified Dublin Core
   MCR.OAI.Metadata.Transformer.oai_qdc=MyCoReOAI-mycore2dcqualified.xsl
-  MCR.OAI.Metadata.Namespace.oai_qdc=<a href="http://www.mycore.de/xmlns/qdc">http://www.mycore.de/xmlns/qdc</a>
-  MCR.OAI.Metadata.Schema.oai_qdc=<a href="http://www.mycore.de/schema/qdc.xsd">http://www.mycore.de/schema/qdc.xsd</a>
+  MCR.OAI.Metadata.Namespace.oai_qdc=http://www.mycore.de/xmlns/qdc
+  MCR.OAI.Metadata.Schema.oai_qdc=http://www.mycore.de/schema/qdc.xsd
 # MCR.OAI.Metadata.Element.oai_qdc=
 
 # xMetaDiss
 # MCR.OAI.Metadata.Transformer.xmetadiss=MyCoReOAI-mycore2xMetaDiss.xsl
-# MCR.OAI.Metadata.Namespace.xmetadiss=<a href="http://www.ddb.de/standards/xMetaDiss/">http://www.ddb.de/standards/xMetaDiss/</a>
-# MCR.OAI.metadata.schema.xmetadiss=<a href="http://www.ddb.de/standards/xmetadiss/xmetadiss.xsd">http://www.ddb.de/standards/xmetadiss/xmetadiss.xsd</a>
+# MCR.OAI.Metadata.Namespace.xmetadiss=http://www.ddb.de/standards/xMetaDiss/
+# MCR.OAI.metadata.schema.xmetadiss=http://www.ddb.de/standards/xmetadiss/xmetadiss.xsd
 # MCR.OAI.Metadata.Element.xmetadiss=
 
 # xEpicur
 # MCR.OAI.Metadata.Transformer.epicur=MyCoReOAI-mycore2xepicur.xsl
 # MCR.OAI.Metadata.Namespace.epicur=urn:nbn:dC:1111-2004033116
-# MCR.OAI.metadata.schema.epicur=urn:nbn:dC:1111-2004033116 <a href="http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:dC:1111-2004033116">http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:dC:1111-2004033116</a>
+# MCR.OAI.metadata.schema.epicur=urn:nbn:dC:1111-2004033116 http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:dC:1111-2004033116
 # MCR.OAI.Metadata.Element.epicur=
 
 ## instance dependent settings for instance OAIProvider
@@ -274,7 +270,7 @@
 
 # a mycore-query condition that is joined with "AND" with the other query (from,until,set)
 # you can restrict an instance here to a special document-type or something else
-  MCR.OAI.QueryRestriction.OAIProvider=&lt;condition field="objecttype" value="document" operator="=" /&gt;
+  MCR.OAI.QueryRestriction.OAIProvider=<condition field="objecttype" value="document" operator="=" />
 
 # DINIspec - searchField mapping: ddc = subject, pub-type = type, doc-type=format;
 # MCR.OAI.Dini-mapping=
@@ -297,7 +293,7 @@
   MCR.URN.SubNamespace.UBL.NISSPattern=yyyyMMdd-HHmmss-
 
 # URL of the master resolver at Deutsche Bibliothek
-  MCR.URN.Resolver.MasterURL=<a href="http://nbn-resolving.de/urn/resolver.pl">http://nbn-resolving.de/urn/resolver.pl</a>?urn=
+  MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
 
 # URL for local redirects to registered documents
   MCR.URN.Resolver.DocumentURL=receive/
@@ -366,7 +362,7 @@
 ## "true": each displayed webpage and menu item will be checked if 
 ## allowed to watch
 ## "false": no check will be done. every page can be watched by everyone
-## -&gt; use "false" if you don't have restrictions, 'cause loading times are shorter
+## -> use "false" if you don't have restrictions, 'cause loading times are shorter
 MCR.Website.ReadAccessVerification=true
 
 ##############################################################################
