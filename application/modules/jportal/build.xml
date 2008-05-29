@@ -4,8 +4,7 @@
 
 	<property name="build.sysclasspath" value="last" />
 	<import file="${basedir}/common-modules.xml" />
-
-	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal" />
+	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal/modules/jportal" />
 	<property name="env.JPORTAL_HOME" value="${basedir}/modules/jportal" />
 	<property name="module.base" value="jportal" />
 	<property name="module.dir" value="${basedir}/modules/${module.base}" />
@@ -24,7 +23,7 @@
 
 	<target name="create.scripts">
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties.jp" />
-		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/modules/jportal/config/mycore.properties.myjp" />
+		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties.myjp" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
 	</target>
@@ -33,70 +32,81 @@
 
 	<target name="webapps">
 		<echo>
-            building JPortal-Module webapp
+            Start building JPortal webapp
         </echo>
 
-        <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties.jp" />
-        <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/modules/jportal/config/mycore.properties.myjp" />
-		
-		<!-- merge the web.xml of the module to the application -->
-		<available property="web.xml.present" file="${env.JPORTAL_HOME}/config/web.xml" />
+		<!-- properties merging -->
+		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties.jp" />
+		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties.myjp" />
+
+		<!-- jportal -->
+		<echo>
+	         building JPortal webapp
+	    </echo>
+		<antcall target="jp.webapps.inside">
+			<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
+		</antcall>
+
+		<!-- MyJPortal -->
+		<echo>
+	         building MyJPortal webapp
+	    </echo>
+		<antcall target="jp.webapps.inside">
+			<param name="JPortal.HomeURL" value="${env.MYJPORTAL_HOME}" />
+		</antcall>
+
+		<!-- Registering templates -->
+        <echo>
+             building JPortal webapp - Registering templates
+        </echo>
+		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
+		<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/stylesheets/chooseTemplate.xsl" />
+
+	</target>
+
+	<!-- ============================================== -->
+
+	<target name="jp.webapps.inside">
+		<!-- web.xml -->
+		<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
 		<antcall target="do.merge">
-			<param name="web.xml.file" value="${env.JPORTAL_HOME}/config/web.xml" />
+			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
 		</antcall>
 
-		<!-- get JPORTAL sources -->
-		<!-- ############################# -->
-		<!-- get editors -->
+		<!-- editors -->
 		<copy todir="${build.webapps}/editor/">
-			<fileset dir="${env.JPORTAL_HOME}/config" includes="editor-*.xml" />
-			<fileset dir="${env.JPORTAL_HOME}/config" includes="imports-*.xml" />
+			<fileset dir="${JPortal.HomeURL}/config" includes="editor-*.xml" />
+			<fileset dir="${JPortal.HomeURL}/config" includes="imports-*.xml" />
 		</copy>
+
+		<!-- webpages stuff -->
 		<antcall target="jp.webapps.copyWebPages">
-			<param name="sourcedir.webpages" value="${env.JPORTAL_HOME}/webpages" />
-		</antcall>
-		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${env.JPORTAL_HOME}/stylesheets" />
+			<param name="sourcedir.webpages" value="${JPortal.HomeURL}/webpages" />
 		</antcall>
 
-		<!-- get MYJPORTAL sources -->
-		<!-- ############################# -->
-		<!-- webpages stuff to "webapps" -->
-		<antcall target="jp.webapps.copyWebPages">
-			<param name="sourcedir.webpages" value="${env.MYJPORTAL_HOME}/webpages" />
-		</antcall>
+		<!-- xsl -->
 		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/stylesheets" />
+			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/stylesheets" />
 		</antcall>
-		<!-- copy templates  -->
-		<!-- copy to application/webpages/... to ensure registering in chooseTemplate.xsl -->
-		<copy todir="${basedir}/webpages/templates" failonerror="false">
-			<fileset dir="${env.MYJPORTAL_HOME}/webpages/templates/" />
+
+		<!-- templates  -->
+		<copy todir="${build.webapps}/webpages/templates" failonerror="false">
+			<fileset dir="${JPortal.HomeURL}/webpages/templates/" />
 		</copy>
-		<!-- copy to deployed folder -->
 		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${env.MYJPORTAL_HOME}/webpages/templates" />
+			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/webpages/templates/" />
 		</antcall>
-		<!-- register dynamic layout templates in 'template_DynamicLayoutTemplates.xsl' 
-        <antcall target="jp.webapps.dynamicLayoutTemplates" />
-        -->
-
-
-		<!-- config file -->
-		<copy todir="${build.webapps}/WEB-INF/classes/">
-			<fileset dir="${env.MYJPORTAL_HOME}/modules/jportal/config/" includes="mycore.properties.myjp" />
-		</copy>
 
 		<!-- i18n -->
 		<antcall target="properties.merge">
-			<param name="module" value="${env.JPORTAL_HOME}/config/messages_de.properties" />
+			<param name="module" value="${JPortal.HomeURL}/config/messages_de.properties" />
 			<param name="locale_param" value="de" />
 		</antcall>
-
 		<antcall target="properties.merge">
-			<param name="module" value="${env.JPORTAL_HOME}/config/messages_en.properties" />
+			<param name="module" value="${JPortal.HomeURL}/config/messages_en.properties" />
 			<param name="locale_param" value="en" />
 		</antcall>
+
 	</target>
 
 	<!-- =================================================================== -->
@@ -111,7 +121,7 @@
 
 	<target name="jp.webapps.copyWebPages">
 		<!-- webpages stuff to "webapps" -->
-		<copy todir="${build.webapps}" failonerror="false">
+		<copy todir="${build.webapps}" failonerror="false" overwrite="true">
 			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
 		</copy>
 	</target>

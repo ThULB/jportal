@@ -3,7 +3,7 @@
 <project name="jportal" default="usage" basedir=".">
 	<import file="${basedir}/build.xml" />
 
-	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal" />
+	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal/modules/jportal" />
 	<property name="env.JPORTAL_HOME" value="${basedir}/modules/jportal" />
 
 	<!-- Read in properties from config/mycore.properties.jp -->
@@ -77,7 +77,7 @@
 		<delete file="${commands.file}" />
 		<echo file="${commands.file}" append="false">
     	update all classifications from directory ${env.JPORTAL_HOME}/content/classification
-	    update all classifications from directory ${env.MYJPORTAL_HOME}/modules/jportal/content/classification
+	    update all classifications from directory ${env.MYJPORTAL_HOME}/content/classification
     </echo>
 		<antcall target="invoke.cli">
 			<param name="cli.directory" value="${basedir}" />
@@ -111,8 +111,8 @@
 			update permission writedb for id default_person with rulefile grant-editorsgroup.xml
 			update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml
 			
-			update permission deletedb for id default_jpjournal with rulefile grant-rootgroup.xml			
-			update permission deletedb for id default_jpvolume with rulefile grant-rootgroup.xml
+			update permission deletedb for id default_jpjournal with rulefile grant-admingroup.xml			
+			update permission deletedb for id default_jpvolume with rulefile grant-admingroup.xml
 			update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml
 			update permission deletedb for id default_person with rulefile grant-editorsgroup.xml
 			update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml			
@@ -134,7 +134,7 @@
 		<echo file="${commands.file}" append="false">
 
       init superuser
-      change to user root with alleswirdgut
+      change to user ${MCR.Users.Superuser.UserName} with alleswirdgut
 
       create group data from file journalgroup.xml
       create group data from file volumegroup.xml

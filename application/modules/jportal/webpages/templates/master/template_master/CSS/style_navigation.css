@@ -1,0 +1,219 @@
+/* =================================================================== */
+/* .mainSite_MenuArea class is responsible for the red grey column on  */
+/* the left	   													   */
+/* =================================================================== */
+.mainSite_MenuArea{
+    margin-left: 19px;
+    float: left;
+    clear: left;
+}
+
+* html .mainSite_MenuArea{
+    margin-left: 10px;
+}
+
+/* =================================================================== */
+/* Navigation below                                                    */
+/* =================================================================== */
+/* =================================================================== */
+
+.navigationBelow{
+ 	height: 77px;
+}
+
+.navigationBelow .top{
+	padding-top: 153px;
+	padding-right: 250px;
+	float: right;
+}
+
+.navigationBelow .history{
+	padding-left: 250px;
+	padding-top: 20px;
+	float: left;
+	clear:both;
+    	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #253767;	
+}
+
+* html .navigationBelow .history{
+	padding-left: 250px;
+	padding-top: 185px;
+	width: 700px;
+}
+
+.navigationBelow .history a{
+	color: #253767;	
+	text-decoration: none;
+}
+
+
+.navigationBelow .history a:hover{
+	text-decoration: underline;
+}
+.mainMenu{
+	width: 208px;
+	float: left;
+}
+
+#navi_below_cell {
+    padding: 3px;
+    text-align: right;
+}
+
+#navi_below_cell table{
+    margin-right: 0px;
+    margin-left: auto;
+    margin-bottom: 3px;
+}
+
+.navi_below th, .navi_below td, .navi_below a
+{
+	color: #ffffff;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+.navi_below a
+{
+	color: #ffffff;
+	text-decoration: none;
+} 
+.navi_below a:hover
+{
+	text-decoration: underline;
+}		
+.navi_below .marked a
+{
+	text-decoration: underline;
+}	
+
+/* =================================================================== */
+/* General Main navigation column                                      */
+/* =================================================================== */
+.navi_column
+{
+	background : #CAD9E0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-style: none solid solid solid;
+	border-width: 1px;
+	border-color: #0C374C;
+}
+
+/* =================================================================== */
+/* General Main navigation column                                      */
+/* =================================================================== */
+table.navi_history
+{
+    color: #031822; 
+    background : transparent;
+    font-size: 11px;
+    font-weight : bold;
+    width: 50%;
+	margin-left: 10px;
+	padding-left: 100px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.navi_history a
+{
+        color: #444444;
+		font-weight : normal;
+		text-decoration: none;
+}
+.navi_history a:hover
+{
+        color: #253767;
+		text-decoration: underline;
+}
+/* td.navi_history{/*
+/*     text-align:left;/*
+/*     padding-left: 3%;/*
+/*     padding-bottom: 5px;/*
+/* }/*
+/* /*
+/* td.navi_history_user{/*
+/*     text-align:right;/*
+/*     padding-right: 3%;/*
+/*     padding-bottom: 5px;/*
+/* }/*
+
+/* =================================================================== */
+/* Main navigation menu                                                */
+/* =================================================================== */
+.navi_main
+{
+	font-size: 11px;
+	font-weight : bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	border-style: none;
+	border-width: 0px;
+    min-width: 200px; 
+    width: 200px; 
+}
+div.navi_main{
+    background-color:#DBDFE7;
+    vertical-align: top;
+    min-width: 200px; 
+    width: auto;
+    border-style: none;
+    margin-left:20px;
+}
+.navi_main img{
+    display:block;
+	border-style: none;
+    border-width: 0px;
+}
+.navi_main tr, .navi_main td
+{
+	font-size: 11px;
+}
+.navi_main th a:hover
+{
+	text-decoration: underline;
+}
+.navi_main th a
+{
+	color: #253767;	
+	font-weight : bold;	
+}
+.navi_main a
+{
+    color: #444444;
+    font-weight : normal;
+    text-decoration: none;
+}
+.navi_main a:hover
+{
+    text-decoration: underline;
+}
+.navi_main .marked a
+{
+    text-decoration: none;
+}
+
+/* =================================================================== */
+/* special navi bar
+/* =================================================================== */
+.p2 a {
+	text-decoration: none;
+	font-size: 13px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color : #ffffff;
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	background-attachment: fixed;
+	background: url(../IMAGES/viereck_link.gif) no-repeat;
+	padding-left : 15px;
+	}
+
+.p2 a:hover {
+	text-decoration: underline;
+	background: url(../IMAGES/viereck_hover.gif) no-repeat;
+}
+
+.p2 .marked a
+{
+	text-decoration: underline;
+	background: url(../IMAGES/viereck_hover.gif) no-repeat;
+}
+

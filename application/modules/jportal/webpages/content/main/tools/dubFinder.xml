@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Dublettenfinder">
+  <span style="color: rgb(255, 0, 0);">Beachten Sie, dass der
+  "Dublettenfinder" nur funktioniert, wenn vorher per
+  "Mycore-Command-Line-Interface" eine entsprechende
+  Analyse-Datei erzeugt wurde.</span>
+  <br style="color: rgb(255, 0, 0);" />
+  <span style="color: rgb(255, 0, 0);">Die Analyse-Datei erzeugen
+  sie mit dem CLI-Befehl: find duplicates {0}</span>
+  <br />
+  <br />
+  <br />
+  <div style="text-align: justify;">
+  <span style="font-weight: bold;">Index wählen:</span>
+  <br />
+  <br />
+  <toc style="font-weight: bold;" />
+  <br />
+  <span style="font-weight: bold;">
+  <br />
+  1. Wie funktioniert der Dublettenfinder?</span>
+  <br />
+  Der Dublettenfinder analysiert einen bestimmten Index
+  (Personenindex oder Insititutionsindex) und findet Aufnahmen, die
+  gleich sind. Diese Analyse des Index wird nur 1 mal gemacht. Als
+  Ergebnis ensteht eine Liste, in der alle Dubletten und ihre
+  Aufnahmen, von denen sie doppelt sind, aufgelistet sind. 
+  <br />
+  Der Bearbeiter hat daraufhin die Möglichkeit, jede erkannte
+  Dublette zu bewerten. Es besteht die Möglichkeit die Dublette zu
+  bestätigen (Aufnahme ist wirklich doppelt) oder die Dublette
+  abzulehnen (Aufnahme ist nicht doppelt). 
+  <br />
+  Die bewerteten Dubletten werden in eine 2. Liste verschoben und
+  können jederzeit eingesehen werden. 
+  <br />
+  Wenn alle Dubletten bewertet wurden, das heißt die Liste offener
+  Dubletten leer ist, werden alle mit "JA" bewerteten
+  Dubletten aus dem jeweiligen Index entfernt und die verknüpften
+  Dokumente automatisch umgehangen. 
+  <br />
+  In der Folge entsteht ein bereinigter Index. 
+  <br />
+  <br />
+  <span style="font-weight: bold;">2. 
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">Was wird als Dublette
+    erkannt?</span>
+  </span></span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Personenindex: Eine Person, die den selben
+  "Vorname" und "Nachname" hat, wie eine andere
+  Person. 
+  <br />
+  Institutionsindex: Eine Institution, die den selben "vollen
+  Namen" hat, wie eine andere Institution. 
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">3. Wann und wie oft wird die
+    Dublettenliste aktualisiert?</span>
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Nie. Die Liste wird nur 1 Mal erstellt und danach nicht
+  mehr aktualisiert. Die aktuelle Dublettenliste wurde am 16.
+  Januar 2008, 18:30 Uhr erstellt. (siehe auch Frage 1) 
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">4. Werden die Metadaten
+    automatisch von den Dubletten übernommen? 
+    <br />
+    </span>
+  </span>Nein. Die Metadaten der Dubletten müssen BEVOR sie
+  bewertet werden, mit den zugehörigen Original-Aufnahmen
+  abgeglichen werden. Das muss manuell in der bekannten
+  Aufnahmemaske geändert werden. Nachdem eine Bewertung vorgenommen
+  wurde, können die Metadaten nicht mehr geändert werden. 
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">
+    <br />
+    5. Was passiert mit dem bearbeiteten Dubletten?</span>
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Wenn alle Dubletten bewertet worden sind, das heißt keine
+  offenen Exemplare mehr existieren, werden alle bestätigten
+  Dubletten (mit "JA" bewerteten) aus dem Index gelöscht
+  und die verknüpften Dokumente automatisch umgehangen. Es ist
+  sicher zu stellen, dass die Metadaten aller bewerteteter
+  Dubletten vorher manuell übernommen worden. 
+  <span style="font-weight: bold;" />
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">
+    <br />
+    6. Wann werden die bearbeiteten Dubletten im System
+    gelöscht?</span>
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Nachdem die 
+  <span style="font-style: italic;">-Liste offener
+  Dubletten-</span>vollständig abgearbeitet wurde. (siehe auch
+  Frage 4) 
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">7. Was passiert mit den an
+    Dubletten verknüpften Dokumenten?</span>
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Diese werden automatisch umgehangen und müssen nicht
+  manuell korrigiert werden. (siehe auch Frage 4) 
+  <span style="font-weight: bold;" />
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;">8. Kann eine bereits bewertete
+    Dublette nochmals bewertet werden?</span>
+  </span>
+  <br />
+  <span style="font-weight: bold;">
+    <span style="font-weight: bold;" />
+  </span>Nein. Grundsätzlich gilt: eine bereits bewertete Dublette
+  wird in die 
+  <span style="font-style: italic;">-Liste bearbeiteter
+  Dubletten-</span>verschoben und kann nicht weiter bearbeitet
+  werden. 
+  <br />
+  In Außnahmefällen kann eine falsch bewertete Aufnahme wieder in
+  den Bearbeitungsmudus zurück gestellt werden. Das muss der
+  Journals@UrMEL-Administrator dann persönlich machen. 
+  <span style="font-weight: bold;" />
+  <br />
+  <span style="font-weight: bold;" /></div>
+</section>
+<meta><log date="2008-05-22" time="15:00" labelPath=" » Tools » Dublettenfinder" lastEditor="Administrator" /></meta></MyCoReWebPage>
