@@ -29,16 +29,17 @@
             <item href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
                 constrainPopUp="false">
                 <label xml:lang="de">nach Personen</label>
-
             </item>
             <item href="/editor_form_search-expert.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false">
                 <label xml:lang="de">Expertensuche</label>
                 <label xml:lang="en">expert search</label>
             </item>
+            <item href="/content/main/search/searchWebsite.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">in den Webseiten</label>
+            </item>            
             <item href="/docportal-plugin.xml" type="extern" target="_self" style="normal" replaceMenu="false">
                 <label xml:lang="de">Plug-in für Browser</label>
                 <label xml:lang="en">Plug-in for browser</label>
-
             </item>
         </item>
 
@@ -91,25 +92,18 @@
                 replaceMenu="false">
                 <label xml:lang="de">Nutzerdaten anzeigen</label>
                 <label xml:lang="en">Show user data</label>
-
-            </item>
-            <item href="/servlets/MCRLoginServlet?url=/content/below/index.xml&amp;uid=gast&amp;pwd=gast" type="intern" target="_self" style="normal"
-                replaceMenu="false">
-                <label xml:lang="de">Nutzer Gast</label>
-                <label xml:lang="en">Guest user</label>
             </item>
             <item href="/servlets/MCRUserAdminServlet?mode=newuser" type="extern" target="_self" style="normal" replaceMenu="false">
-                <label xml:lang="de">Neuen Account anlegen</label>
-
-                <label xml:lang="en">Create a new user</label>
+                <label xml:lang="de">Nutzer anlegen</label>
+                <label xml:lang="en">Create new user</label>
             </item>
             <item href="/servlets/MCRUserAdminServlet?mode=newgroup" type="extern" target="_self" style="normal" replaceMenu="false">
-                <label xml:lang="de">Neue Gruppe anlegen</label>
-                <label xml:lang="en">Create a new group</label>
+                <label xml:lang="de">Gruppe anlegen</label>
+                <label xml:lang="en">Create a group</label>
             </item>
             <item href="/servlets/MCRUserAjaxServlet" type="extern" target="_self" style="normal" replaceMenu="false">
-                <label xml:lang="de">Gruppen administrieren</label>
-                <label xml:lang="en">Manage groups</label>
+                <label xml:lang="de">Nutzer- Gruppenverwaltung</label>
+                <label xml:lang="en">Manage groups- users</label>
             </item>
         </item>
 
