@@ -13,7 +13,7 @@ public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
 
     private static String URI = "jportal_getClassID";
 
-    private static final String INCLUDE_TAG_RETURN_VALUE = "classification:editor[textcounter]:2:children:";
+    private static final String INCLUDE_TAG_RETURN_VALUE = "classification:editor[TextCounter]:2:children:";
 
     /**
      * 
@@ -25,7 +25,7 @@ public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
      * @return 
      * if $ReturnIncludeTag="getInclude"
      *  <dummyRoot>
-     *       <include cacheable="false" uri="classification:editor[textcounter]:2:children:$classID" />
+     *       <include cacheable="false" uri="classification:editor[TextCounter]:2:children:$classID" />
      *  </dummyRoot>
      * else 
      * <dummyRoot>

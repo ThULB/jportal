@@ -18,8 +18,8 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
 
     private final String GET_FROM_JOURNAL = "getFromJournal";
 
-    private final String DIRECTELY_GIVEN = "getDirectely";    
-    
+    private final String DIRECTELY_GIVEN = "getDirectely";
+
     /**
      * Returns a label of a classification.
      * 
@@ -44,9 +44,9 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         String requestedResolver = pars[1];
 
         if (requestedResolver.equals(this.DIRECTELY_GIVEN))
-            return resolveDirectely(uri); 
+            return resolveDirectely(uri);
         else
-            return resolveFromJournal(uri);        
+            return resolveFromJournal(uri);
     }
 
     /**
@@ -76,8 +76,7 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         returnXML.addContent(new Element("label").setText(label));
         return returnXML;
     }
-    
-    
+
     /**
      * @param uri
      * @return
@@ -85,7 +84,7 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
     private Element resolveDirectely(String uri) {
         String[] params = uri.split(":");
         String label = getClassLabel(params[2]);
-        
+
         // answer xml
         Element returnXML;
         returnXML = new Element("dummyRoot");
@@ -96,8 +95,9 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
     private String getClassLabel(String classID) {
         // TODO: use cache
         String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-        //String label = MCRCatelassificationItem.getClassificationItem(classID).getText(currentLang);
-        String label = "ich muss noch ermittelt werden ;-)";
+        // MCRCatelassificationItem.getClassificationItem(classID).getText(currentLang);
+        // String label = "ich muss noch ermittelt werden ;-)";
+        String label = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0).getLabels().get(currentLang).getText();
         return label;
     }
 
@@ -118,21 +118,3 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

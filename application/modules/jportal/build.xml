@@ -97,18 +97,27 @@
 			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/webpages/templates/" />
 		</antcall>
 
-		<!-- i18n -->
-		<antcall target="properties.merge">
-			<param name="module" value="${JPortal.HomeURL}/config/messages_de.properties" />
-			<param name="locale_param" value="de" />
-		</antcall>
-		<antcall target="properties.merge">
-			<param name="module" value="${JPortal.HomeURL}/config/messages_en.properties" />
-			<param name="locale_param" value="en" />
-		</antcall>
-
 	</target>
 
+	<!-- =================================================================== -->
+	
+    <target name="webapps.i18n" >
+        <echo level="info">
+            building ${ant.project.name} webapp.i18n
+        </echo>
+        
+        <!-- i18n -->
+        <antcall target="properties.merge">
+            <param name="module" value="${module.dir}/config/messages_de.properties" />
+            <param name="locale_param" value="de" />
+        </antcall>
+        <antcall target="properties.merge">
+            <param name="module" value="${module.dir}/config/messages_en.properties" />
+            <param name="locale_param" value="en" />
+        </antcall>    	
+    	
+    </target>
+	
 	<!-- =================================================================== -->
 
 	<!-- create a new template_DynamicLayoutTemplates.xsl -->

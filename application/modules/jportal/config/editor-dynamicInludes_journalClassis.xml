@@ -50,7 +50,7 @@
                     <cell row="1" col="2" anchor="WEST" var="@value">
                         <list type="dropdown">
                             <item value="" i18n="editor.search.choose" />
-                            <include cacheable="false" uri="classification:editor[textcounter]:-1:children:#REPLACE_WITH_CLASSIFICATION-ID#" />
+                            <include cacheable="false" uri="classification:editor[TextCounter]:-1:children:#REPLACE_WITH_CLASSIFICATION-ID#" />
                         </list>
                     </cell>
                 </panel>

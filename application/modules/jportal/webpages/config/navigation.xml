@@ -36,7 +36,7 @@
             </item>
             <item href="/content/main/search/searchWebsite.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">in den Webseiten</label>
-            </item>            
+            </item>
             <item href="/docportal-plugin.xml" type="extern" target="_self" style="normal" replaceMenu="false">
                 <label xml:lang="de">Plug-in für Browser</label>
                 <label xml:lang="en">Plug-in for browser</label>
@@ -50,18 +50,6 @@
                 replaceMenu="false">
                 <label xml:lang="de">neue Zeitschrift</label>
                 <label xml:lang="en">new journal</label>
-
-            </item>
-            <item href="/servlets/MCRStartEditorServlet?type=jpvolume&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
-                replaceMenu="false">
-                <label xml:lang="de">neues Band</label>
-                <label xml:lang="en">new volume</label>
-            </item>
-            <item href="/servlets/MCRStartEditorServlet?type=jparticle&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
-                replaceMenu="false">
-                <label xml:lang="de">neuer Artikel</label>
-
-                <label xml:lang="en">new article</label>
             </item>
             <item href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
                 replaceMenu="false">

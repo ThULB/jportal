@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor id="searchmask">
 	
-  <source url="request:servlets/MCRSearchServlet?mode=load&amp;id=[ID]" token="[ID]" />
   <target type="servlet" name="MCRSearchServlet" method="post" format="xml" />
 
   <components root="root" var="/query">
