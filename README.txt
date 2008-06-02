@@ -30,8 +30,7 @@ Watch and agree license agreement specified in LICENSE.txt
 3. GETTING SOURCES
 ======================================
 ======================================
-cvs -d :pserver:anoncvs@cvs.thulb.uni-jena.de:/content/cvsroot co -P jportal
-
+svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 
 4. PREPERATION 
 ======================================
@@ -68,17 +67,17 @@ cvs -d :pserver:anoncvs@cvs.thulb.uni-jena.de:/content/cvsroot co -P jportal
          3. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt)
          4. ant -f jportal-build.xml jp.create.schema jar create.scripts
          5. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps 
+         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys 
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
-cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar jp.create.scripts webapps webapps
+cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar jp.create.scripts webapps 
 
 
 7. RUNNING
 ======================================
 ======================================          
-Once you have followed all steps from chapter 5 you can run a server and watch JPortal in action
+Once you have followed all steps from chapter 6 you can run a server and watch JPortal in action
 All you have to do is 
 - make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
 - $DOCPORTAL_HOME/build/bin/jettystart.sh
@@ -130,7 +129,7 @@ Following groups will created by default:
     -- edit
     -- delete
 
-    4. "rootgroup"
+    4. "admingroup"
     - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
     - add, edit, delete users and groups
 
@@ -139,7 +138,7 @@ Following groups will created by default:
 ======================================
 ======================================
    1. Go to JPortal web application in your browser
-   2. Log in as "root"
+   2. Log in as "administrator"
    3. Click on "Editors" in menu left
    4. Create a new journal
    5. Create a new Journal-Context, by 
