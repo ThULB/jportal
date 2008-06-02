@@ -24,7 +24,7 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 ======================================
 - CVS-Client
-- JAVA 5 JDK
+- JAVA 6 JDK
 - ANT
 
 3. GETTING SOURCES
