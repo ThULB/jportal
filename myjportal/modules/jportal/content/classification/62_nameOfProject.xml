@@ -3,27 +3,27 @@
     <label xml:lang="de" text="Projektbezeichnung" description="Projektbezeichnung" />
     <label xml:lang="en" text="Name of project" description="Name of project" />
     <categories>
-        <category ID="eventWeimarJena" counter="1">
+        <category ID="eventWeimarJena" >
             <label xml:lang="de" text="DFG-Projekte Ereignis Weimar-Jena" />
         </category>
-        <category ID="religionEducation" counter="0">
+        <category ID="religionEducation">
             <label xml:lang="de" text="Religionspädagogik" />
         </category>
-        <category ID="thulb" counter="2">
+        <category ID="thulb" >
             <label xml:lang="de" text="Einzelprojekte" />
             <label xml:lang="en" text="Single projects" />
         </category>
-        <category ID="historicalCommittee" counter="0">
+        <category ID="historicalCommittee">
             <label xml:lang="de" text="Projekte historische Kommission" />
         </category>
-        <category ID="virtuellLibrary18thCentury" counter="0">
+        <category ID="virtuellLibrary18thCentury">
             <label xml:lang="de" text="Virtuelle Bibliothek des 18. Jh." />
         </category>
-        <category ID="regionalJournals" counter="0">
+        <category ID="regionalJournals">
             <label xml:lang="de" text="Regionalzeitschriften" />
             <label xml:lang="en" text="Regional journals" />
         </category>
-        <category ID="sfb-482" counter="0">
+        <category ID="sfb-482">
             <label xml:lang="de" text="SFB-482" />
             <label xml:lang="en" text="SFB-482" />
         </category>
