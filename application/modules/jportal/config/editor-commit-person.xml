@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE editor>
 <editor>
-<!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
-	<target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />            	
-      <components root="editor-person" var="/mycoreobject">
-            <include uri="webapp:editor/imports-person.xml" />
-            <panel id="editor-person">
-                  <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.person" />
-            </panel>
-      </components>
+    <!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />-->
+    <source uri="{sourceUri}" />
+    <target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />
+    <components root="editor-person" var="/mycoreobject">
+        <include uri="webapp:editor/imports-person.xml" />
+        <panel id="editor-person">
+            <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.person" />
+        </panel>
+    </components>
 </editor>

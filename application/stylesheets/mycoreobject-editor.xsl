@@ -26,7 +26,7 @@
     <xsl:apply-templates />
   </xsl:template>
 
-  <xsl:template match="/mycoreobject">
+  <xsl:template match="/mycoreobject" priority="10">
     <xsl:copy>
       <xsl:for-each select="@*">
         <xsl:copy />

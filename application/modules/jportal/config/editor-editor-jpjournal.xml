@@ -2,18 +2,25 @@
 <!-- ?xml version="1.0" encoding="ISO-8859-1"?-->
 <!DOCTYPE editor>
 <editor>
-	<target type="servlet" name="MCRCheckEditDataServlet" method="post" format="xml" />      
-      <components root="editor-jpjournal" var="/mycoreobject">
-            <include uri="webapp:editor/imports-jpjournal.xml" />                        
-            <headline anchor="LEFT">
-                  <text>
-                        <label xml:lang="de"><b>Plichtfelder:</b></label>
-					  <label xml:lang="ru"><b>Поля для обязательного заплнения:</b></label>
-					  <label xml:lang="pl"><b>pola obowiązkowe:</b></label>
-                  </text>
-            </headline>
-            <panel id="editor-jpjournal" lines="on">
-                  <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jpjournal" />
-            </panel>
-      </components>
+    <target type="servlet" name="MCRCheckEditDataServlet" method="post" format="xml" />
+    <source uri="{sourceUri}" />
+    <components root="editor-jpjournal" var="/mycoreobject">
+        <include uri="webapp:editor/imports-jpjournal.xml" />
+        <headline anchor="LEFT">
+            <text>
+                <label xml:lang="de">
+                    <b>Plichtfelder:</b>
+                </label>
+                <label xml:lang="ru">
+                    <b>Поля для обязательного заплнения:</b>
+                </label>
+                <label xml:lang="pl">
+                    <b>pola obowiązkowe:</b>
+                </label>
+            </text>
+        </headline>
+        <panel id="editor-jpjournal" lines="on">
+            <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jpjournal" />
+        </panel>
+    </components>
 </editor>
