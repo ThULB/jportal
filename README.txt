@@ -52,6 +52,8 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 -- vi $DOCPORTAL_HOME/config/mycore.properties.private
 --- set $MCR.basedir to your <$DOCPORTAL_HOME>
 --- set $MCR.FileUpload.IP to your local running server's IP address
+--- add module "JPortal" to system, by appending on property "MCR.Modules.Application" the value "jportal"
+--- remove default module "DocPortal" from system, by removing value "docportal" from property "MCR.Modules.Application" 
 
 
 6. INSTALLATION
@@ -64,14 +66,14 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          2. ant jar
    2. Application
          1. cd $DOCPORTAL_HOME
-         3. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt)
-         4. ant -f jportal-build.xml jp.create.schema jar create.scripts
-         5. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         6. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys 
+         3. ant -f jportal-build.xml jp.create.schema jar create.scripts
+         4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
+         5. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps
+         6. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt) 
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
-cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar jp.create.scripts webapps 
+cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar create.scripts webapps 
 
 
 7. RUNNING
@@ -87,7 +89,7 @@ All you have to do is
 8. DEFAULT USERS
 ======================================
 ======================================
-By default the installation creates a super user called "root" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
+By default the installation creates a super user called "administrator" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
 see what this user is allowed to do. 
 
 If you want to use WCMS (Web Content Management System) of JPortal:
