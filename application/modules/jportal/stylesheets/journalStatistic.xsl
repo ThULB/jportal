@@ -19,6 +19,7 @@
     <xsl:variable name="journalStatistic.date.Till">
         <xsl:call-template name="get.journalStatistic.date.Till" />
     </xsl:variable>
+
     <xsl:variable name="completeSumValues">
         <xsl:call-template name="journalStatistic.get.ActivityIndex">
             <xsl:with-param name="quantifier" select="'2'" />
@@ -73,6 +74,11 @@
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="journalStatistic.main">
+        <!--
+            xml max=
+            <xsl:copy-of select="$differenceValues"></xsl:copy-of>
+            ...
+        -->
         <xsl:choose>
             <xsl:when test="$journalStatistic.view.objectListing='true'">
                 <xsl:call-template name="journalStatistic.objectListing" />
@@ -490,8 +496,18 @@
             <xsl:value-of select="number($maxTotal - $minTotal)" />
         </xsl:variable>
 
-        <xsl:variable name="firstTotal">
+        <xsl:variable name="firstTotaltemp">
             <xsl:value-of select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.From)]/journal[@id=$jID]/numberOfObjects/total" />
+        </xsl:variable>
+        <xsl:variable name="firstTotal">
+            <xsl:choose>
+                <xsl:when test="number($firstTotaltemp)">
+                    <xsl:value-of select="$firstTotaltemp" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
         <xsl:variable name="lastTotal">
             <xsl:value-of select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.Till)]/journal[@id=$jID]/numberOfObjects/total" />
@@ -536,22 +552,32 @@
         <xsl:variable name="lineVal">
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
-                <xsl:value-of
-                    select="concat(',', (((number(journal[@id=$jID]/numberOfObjects/total/text()) - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
+                <xsl:variable name="tempValues">
+                    <xsl:choose>
+                        <xsl:when test="number(journal[@id=$jID]/numberOfObjects/total/text())">
+                            <xsl:value-of select="number(journal[@id=$jID]/numberOfObjects/total/text())" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="0" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="concat(',', (($tempValues - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
 
-        <xsl:variable name="chartURL.values.tmp">
+        <!--<xsl:variable name="chartURL.values.tmp">
             <xsl:for-each
-                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
-                <xsl:sort select="@date" order="ascending" />
-                <xsl:value-of select="concat(number(journal[@id=$jID]/numberOfObjects/total/text()),',')" />
+            select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+            <xsl:sort select="@date" order="ascending" />
+            <xsl:value-of select="concat(number(journal[@id=$jID]/numberOfObjects/total/text()),',')" />
             </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="chartURL.values">
+            </xsl:variable>
+            <xsl:variable name="chartURL.values">
             <xsl:value-of select="substring($chartURL.values.tmp,1,string-length($chartURL.values.tmp)-1)" />
-        </xsl:variable>
+            </xsl:variable>
+        -->
         <xsl:variable name="chartURL.label.tmp">
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
@@ -851,7 +877,17 @@
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
                 <xsl:sort select="@date" order="ascending" />
-                <xsl:value-of select="concat(./journal[@id=$journalID]/numberOfObjects/missing/@percent,',')" />
+                <xsl:variable name="missing.value">
+                    <xsl:choose>
+                        <xsl:when test="number(./journal[@id=$journalID]/numberOfObjects/missing/@percent)">
+                            <xsl:value-of select="number(./journal[@id=$journalID]/numberOfObjects/missing/@percent)" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="0" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="concat($missing.value,',')" />
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.missing">
@@ -870,7 +906,17 @@
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
                 <xsl:sort select="@date" order="ascending" />
-                <xsl:value-of select="concat(./journal[@id=$journalID]/numberOfObjects/incomplete/@percent,',')" />
+                <xsl:variable name="inc.value">
+                    <xsl:choose>
+                        <xsl:when test="number(./journal[@id=$journalID]/numberOfObjects/incomplete/@percent)">
+                            <xsl:value-of select="number(./journal[@id=$journalID]/numberOfObjects/incomplete/@percent)" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="0" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="concat($inc.value,',')" />
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.incomplete">
@@ -893,7 +939,17 @@
                     <xsl:value-of
                         select="number(./journal[@id=$journalID]/numberOfObjects/incomplete/@percent) + number(./journal[@id=$journalID]/numberOfObjects/missing/@percent)" />
                 </xsl:variable>
-                <xsl:value-of select="concat($totalValue,',')" />
+                <xsl:variable name="cor.value">
+                    <xsl:choose>
+                        <xsl:when test="number($totalValue)">
+                            <xsl:value-of select="number($totalValue)" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="0" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:value-of select="concat($cor.value,',')" />
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.corruptedTotal">
@@ -1085,10 +1141,10 @@
         <a name="ai" />
         <b style="padding: 5px;">Aktivitätsindex aller Zeitschriften:</b>
         <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
+
         <xsl:variable name="activitySum">
             <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal/text())" />
         </xsl:variable>
-
         <xsl:variable name="chartLabelsTemp">
             <xsl:for-each select="xalan:nodeset($completeSumValues)/journal">
                 <xsl:sort data-type="number" order="descending" />
@@ -1209,41 +1265,69 @@
                         <diffs>
                             <total>
                                 <xsl:choose>
-                                    <xsl:when test="(number($total)-number($totalBefore)) &lt; 0">
-                                        <xsl:value-of select="(number($total)-number($totalBefore))*(-1)" />
+                                    <xsl:when test="number(number($total)-number($totalBefore))">
+                                        <xsl:choose>
+                                            <xsl:when test="(number($total)-number($totalBefore)) &lt; 0">
+                                                <xsl:value-of select="(number($total)-number($totalBefore))*(-1)" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="(number($total)-number($totalBefore))" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="(number($total)-number($totalBefore))" />
+                                        <xsl:value-of select="0" />
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </total>
                             <complete>
                                 <xsl:choose>
-                                    <xsl:when test="(number($complete)-number($completeBefore)) &lt; 0">
-                                        <xsl:value-of select="(number($complete)-number($completeBefore))*(-1)" />
+                                    <xsl:when test="number(number($complete)-number($completeBefore))">
+                                        <xsl:choose>
+                                            <xsl:when test="(number($complete)-number($completeBefore)) &lt; 0">
+                                                <xsl:value-of select="(number($complete)-number($completeBefore))*(-1)" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="(number($complete)-number($completeBefore))" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="(number($complete)-number($completeBefore))" />
+                                        <xsl:value-of select="0" />
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </complete>
                             <incomplete>
                                 <xsl:choose>
-                                    <xsl:when test="(number($incomplete)-number($incompleteBefore)) &lt; 0">
-                                        <xsl:value-of select="(number($incomplete)-number($incompleteBefore))*(-1)" />
+                                    <xsl:when test="number(number($incomplete)-number($incompleteBefore))">
+                                        <xsl:choose>
+                                            <xsl:when test="(number($incomplete)-number($incompleteBefore)) &lt; 0">
+                                                <xsl:value-of select="(number($incomplete)-number($incompleteBefore))*(-1)" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="(number($incomplete)-number($incompleteBefore))" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="(number($incomplete)-number($incompleteBefore))" />
+                                        <xsl:value-of select="0" />
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </incomplete>
                             <missing>
                                 <xsl:choose>
-                                    <xsl:when test="(number($missing)-number($missingBefore)) &lt; 0">
-                                        <xsl:value-of select="(number($missing)-number($missingBefore))*(-1)" />
+                                    <xsl:when test="number(number($missing)-number($missingBefore))">
+                                        <xsl:choose>
+                                            <xsl:when test="(number($missing)-number($missingBefore)) &lt; 0">
+                                                <xsl:value-of select="(number($missing)-number($missingBefore))*(-1)" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="(number($missing)-number($missingBefore))" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:value-of select="(number($missing)-number($missingBefore))" />
+                                        <xsl:value-of select="0" />
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </missing>
@@ -1253,11 +1337,6 @@
             </xsl:for-each>
         </xsl:variable>
 
-        <!--
-            xml max=
-            <xsl:copy-of select="$differenceValues"></xsl:copy-of>
-            ...
-        -->
         <xsl:variable name="datecount">
             <xsl:value-of select="count(xalan:nodeset($ListOfDates)/dates)" />
         </xsl:variable>
