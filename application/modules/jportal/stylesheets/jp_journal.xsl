@@ -487,7 +487,7 @@
                             </xsl:call-template>
                         </table>
                         <!-- Create Website-Context -->
-                        <xsl:if test="not(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext) and acl:checkPermission(./@ID,'writedb')">
+                        <xsl:if test="not(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext) and acl:checkPermission('create-jpjournal')">
                             <table cellspacing="0" cellpadding="0" id="detailed-view">
                                 <tr>
                                     <td valign="top" id="detailed-labels" style="text-align:right;  padding-right: 5px;color:#FF0000;">
