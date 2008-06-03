@@ -562,7 +562,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="concat(',', (($tempValues - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
+                <xsl:value-of select="concat(',', ((($tempValues - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
@@ -1241,27 +1241,27 @@
                     <xsl:attribute name="label">
                         <xsl:value-of select="@name" />
                     </xsl:attribute>
-                    <xsl:variable name="jname" select="@name" />
+                    <xsl:variable name="jname" select="@id" />
                     <xsl:for-each select="xalan:nodeset($ListOfDates)/dates[position() &gt; 1]">
                         <xsl:variable name="dateposition" select="position()" />
                         <xsl:variable name="jdate" select="." />
                         <xsl:variable name="jdateBefore" select="xalan:nodeset($ListOfDates)/dates[position()=$dateposition]" />
                         <xsl:variable name="total"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@name=$jname]/numberOfObjects/total/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/total/text()" />
                         <xsl:variable name="totalBefore"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@name=$jname]/numberOfObjects/total/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/total/text()" />
                         <xsl:variable name="complete"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@name=$jname]/numberOfObjects/complete/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/complete/text()" />
                         <xsl:variable name="completeBefore"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@name=$jname]/numberOfObjects/complete/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/complete/text()" />
                         <xsl:variable name="incomplete"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@name=$jname]/numberOfObjects/incomplete/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/incomplete/text()" />
                         <xsl:variable name="incompleteBefore"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@name=$jname]/numberOfObjects/incomplete/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/incomplete/text()" />
                         <xsl:variable name="missing"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@name=$jname]/numberOfObjects/missing/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/missing/text()" />
                         <xsl:variable name="missingBefore"
-                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@name=$jname]/numberOfObjects/missing/text()" />
+                            select="xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/missing/text()" />
                         <diffs>
                             <total>
                                 <xsl:choose>
