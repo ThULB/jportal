@@ -130,7 +130,7 @@
 
 	<target name="jp.webapps.copyWebPages">
 		<!-- webpages stuff to "webapps" -->
-		<copy todir="${build.webapps}" failonerror="false" overwrite="true">
+		<copy todir="${build.webapps}" failonerror="false" >
 			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
 		</copy>
 	</target>
