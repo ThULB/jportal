@@ -135,70 +135,70 @@
     </xsl:template>
 
     <!-- ============================================================================================================================ -->
-
-    <xsl:template name="get.params_dynamicClassis">
-
+    <!-- 
+        <xsl:template name="get.params_dynamicClassis">
+        
         <xsl:variable name="journalXML">
-            <xsl:call-template name="getJournalXML">
-                <xsl:with-param name="id" select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
-            </xsl:call-template>
+        <xsl:call-template name="getJournalXML">
+        <xsl:with-param name="id" select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
+        </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="IDTypes">
-            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()" />
+        <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_pubTypesID/hidden_pubTypeID/text()" />
         </xsl:variable>
         <xsl:variable name="param_types">
-            <xsl:value-of select="concat('XSL.jportalClassification.types.SESSION=',$IDTypes)" />
+        <xsl:value-of select="concat('XSL.jportalClassification.types.SESSION=',$IDTypes)" />
         </xsl:variable>
         <xsl:variable name="param_types_editor">
-            <xsl:value-of select="concat('_xml_metadata/types/type/@classid=',$IDTypes)" />
+        <xsl:value-of select="concat('_xml_metadata/types/type/@classid=',$IDTypes)" />
         </xsl:variable>
         <xsl:variable name="IDRubrics">
-            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID/text()" />
+        <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_rubricsID/hidden_rubricID/text()" />
         </xsl:variable>
         <xsl:variable name="param_rubrics">
-            <xsl:value-of select="concat('XSL.jportalClassification.rubrics.SESSION=',$IDRubrics)" />
+        <xsl:value-of select="concat('XSL.jportalClassification.rubrics.SESSION=',$IDRubrics)" />
         </xsl:variable>
         <xsl:variable name="param_rubrics_editor">
-            <xsl:value-of select="concat('_xml_metadata/rubrics/rubric/@classid=',$IDRubrics)" />
+        <xsl:value-of select="concat('_xml_metadata/rubrics/rubric/@classid=',$IDRubrics)" />
         </xsl:variable>
         <xsl:variable name="IDclassipub">
-            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub/hidden_classipub/text()" />
+        <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub/hidden_classipub/text()" />
         </xsl:variable>
         <xsl:variable name="param_classipub">
-            <xsl:value-of select="concat('XSL.jportalClassification.classipub.SESSION=',$IDclassipub)" />
+        <xsl:value-of select="concat('XSL.jportalClassification.classipub.SESSION=',$IDclassipub)" />
         </xsl:variable>
         <xsl:variable name="param_classipub_editor">
-            <xsl:value-of select="concat('_xml_metadata/classispub/classipub/@classid=',$IDclassipub)" />
+        <xsl:value-of select="concat('_xml_metadata/classispub/classipub/@classid=',$IDclassipub)" />
         </xsl:variable>
-
+        
         <xsl:variable name="IDclassipub2">
-            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub2/hidden_classipub2/text()" />
+        <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub2/hidden_classipub2/text()" />
         </xsl:variable>
         <xsl:variable name="param_classipub2">
-            <xsl:value-of select="concat('XSL.jportalClassification.classipub2.SESSION=',$IDclassipub2)" />
+        <xsl:value-of select="concat('XSL.jportalClassification.classipub2.SESSION=',$IDclassipub2)" />
         </xsl:variable>
         <xsl:variable name="param_classipub2_editor">
-            <xsl:value-of select="concat('_xml_metadata/classispub2/classipub2/@classid=',$IDclassipub2)" />
+        <xsl:value-of select="concat('_xml_metadata/classispub2/classipub2/@classid=',$IDclassipub2)" />
         </xsl:variable>
-
+        
         <xsl:variable name="IDclassipub3">
-            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub3/hidden_classipub3/text()" />
+        <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_classispub3/hidden_classipub3/text()" />
         </xsl:variable>
         <xsl:variable name="param_classipub3">
-            <xsl:value-of select="concat('XSL.jportalClassification.classipub3.SESSION=',$IDclassipub3)" />
+        <xsl:value-of select="concat('XSL.jportalClassification.classipub3.SESSION=',$IDclassipub3)" />
         </xsl:variable>
         <xsl:variable name="param_classipub3_editor">
-            <xsl:value-of select="concat('_xml_metadata/classispub3/classipub3/@classid=',$IDclassipub3)" />
+        <xsl:value-of select="concat('_xml_metadata/classispub3/classipub3/@classid=',$IDclassipub3)" />
         </xsl:variable>
-
+        
         <xsl:value-of
-            select="concat('&amp;',$param_types,'&amp;',$param_types_editor,'&amp;',$param_rubrics,'&amp;',$param_rubrics_editor
-            ,'&amp;',$param_classipub,'&amp;',$param_classipub_editor
-            ,'&amp;',$param_classipub2,'&amp;',$param_classipub2_editor
-            ,'&amp;',$param_classipub3,'&amp;',$param_classipub3_editor)" />
-
-    </xsl:template>
-
+        select="concat('&amp;',$param_types,'&amp;',$param_types_editor,'&amp;',$param_rubrics,'&amp;',$param_rubrics_editor
+        ,'&amp;',$param_classipub,'&amp;',$param_classipub_editor
+        ,'&amp;',$param_classipub2,'&amp;',$param_classipub2_editor
+        ,'&amp;',$param_classipub3,'&amp;',$param_classipub3_editor)" />
+        
+        </xsl:template>
+    -->
     <!-- ============================================================================================================================ -->
 
     <xsl:template name="get.staticURL">

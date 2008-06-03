@@ -417,9 +417,6 @@
                                     <xsl:with-param name="types" select="'jpvolume'" />
                                 </xsl:call-template>
                             </xsl:if>
-                            <xsl:variable name="params_dynamicClassis">
-                                <xsl:call-template name="get.params_dynamicClassis" />
-                            </xsl:variable>
                             <xsl:variable name="journalID">
                                 <xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
                             </xsl:variable>
@@ -428,7 +425,6 @@
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jparticle'" />
-                                    <xsl:with-param select="$params_dynamicClassis" name="layout" />
                                 </xsl:call-template>
                             </xsl:if>
                         </table>

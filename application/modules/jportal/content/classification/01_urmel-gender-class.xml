@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
-  ID="urmel_class_001">
+  ID="urmel_class_00000001">
   <label xml:lang="de" text="Geschlecht" />
   <label xml:lang="en" text="Gender" />
   <categories>

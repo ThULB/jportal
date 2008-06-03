@@ -679,14 +679,9 @@
                             </xsl:call-template>-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
 
-                            <xsl:variable name="params_dynamicClassis">
-                                <xsl:call-template name="get.params_dynamicClassis" />
-                            </xsl:variable>
-
                             <xsl:call-template name="editobject_with_der">
                                 <xsl:with-param select="$accessedit" name="accessedit" />
                                 <xsl:with-param select="./@ID" name="id" />
-                                <xsl:with-param select="$params_dynamicClassis" name="layout" />
                             </xsl:call-template>
 
                         </table>
