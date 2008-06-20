@@ -3,7 +3,7 @@
       ID="jportal_class_00000004" >
       <label xml:lang="de" text="Sprachen" description="Sprachen nach ISO 639-1" />
       <categories>
-<!--            <category ID="aa">
+            <category ID="aa">
                   <label xml:lang="de" text="Afar" />
             </category>
             <category ID="ab">
@@ -62,20 +62,20 @@
             </category>
             <category ID="da">
                   <label xml:lang="de" text="Daenisch" />
-            </category>-->
+            </category>
             <category ID="de">
                   <label xml:lang="de" text="Deutsch" />
             </category>
-  <!--          <category ID="dz">
+            <category ID="dz">
                   <label xml:lang="de" text="Dzongkha, Bhutani" />
             </category>
             <category ID="el">
                   <label xml:lang="de" text="Griechisch" />
-            </category>-->
+            </category>
             <category ID="en">
                   <label xml:lang="de" text="Englisch" />
             </category>
-  <!--          <category ID="eo">
+            <category ID="eo">
                   <label xml:lang="de" text="Esperanto" />
             </category>
             <category ID="es">
@@ -260,11 +260,10 @@
             </category>
             <category ID="pa">
                   <label xml:lang="de" text="Pundjabisch" />
-            </category>-->
+            </category>
             <category ID="pl">
                   <label xml:lang="de" text="Polnisch" />
             </category>
-		  <!--
             <category ID="ps">
                   <label xml:lang="de" text="Paschtu" />
             </category>
@@ -417,6 +416,6 @@
             </category>
             <category ID="zu">
                   <label xml:lang="de" text="Zulu" />
-            </category>-->
+            </category>
       </categories>
 </mycoreclass>
