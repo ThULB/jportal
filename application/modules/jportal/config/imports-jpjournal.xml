@@ -322,7 +322,6 @@
         <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
         <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
         <hidden var="metadata/hidden_rubricsID/@heritable" default="false" />
-        <!-- <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_rubricsID/hidden_rubricID" /> -->
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_rubricsID/hidden_rubricID" ref="classiIDs" />
     </panel>
     <!-- pubTypeID ================================================================== -->
