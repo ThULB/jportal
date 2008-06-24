@@ -147,7 +147,19 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
   MCR.IndexBrowser.robotPerson.Style=robots
   MCR.IndexBrowser.robotPerson.MaxPerPage=100
   MCR.IndexBrowser.robotPerson.FilterCondition=MCRID like '%_person_%'
+
+
+##############################################################################
+# Classification browser
+##############################################################################
   
+  MCR.ClassificationBrowser.default.EmbeddingPage=mcr_doc_browse.xml
+  MCR.ClassificationBrowser.default.Style=search
+  MCR.ClassificationBrowser.default.EmptyLeafs=yes
+  MCR.ClassificationBrowser.default.View=tree
+  MCR.ClassificationBrowser.default.Comments=true
+  MCR.ClassificationBrowser.default.searchField=allMeta
+  MCR.ClassificationBrowser.default.Doctype=document
   
 ##############################################################################
 # Dynamic web frontend layout templates

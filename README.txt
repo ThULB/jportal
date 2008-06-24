@@ -79,7 +79,7 @@ cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar
 7. RUNNING
 ======================================
 ======================================          
-Once you have followed all steps from chapter 6 you can run a server and watch JPortal in action
+Once you have followed all steps from chapter 6 you can run the server and watch JPortal in action
 All you have to do is 
 - make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
 - $DOCPORTAL_HOME/build/bin/jettystart.sh
@@ -134,6 +134,7 @@ Following groups will created by default:
     4. "admingroup"
     - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
     - add, edit, delete users and groups
+    - 
 
          
 10. CREATE NEW JOURNAL

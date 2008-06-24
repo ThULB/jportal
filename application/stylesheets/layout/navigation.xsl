@@ -288,12 +288,15 @@
             </xsl:when>
         </xsl:choose>
         <div id="mycoreVersionInfo">
-            <xsl:value-of select="i18n:translate('mycore.version')"/>
-            <br/>
-            Update: <xsl:value-of select="i18n:translate('common.today')"/>
+            <xsl:value-of select="i18n:translate('mycore.version')" />
+            <br />
+            Update:
+            <xsl:value-of select="i18n:translate('common.today')" />
         </div>
         <div id="poweredByMycore">
-            <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="{i18n:translate('mycore.version')}" />  
+            <a href="http://www.mycore.de">
+                <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="{i18n:translate('mycore.version')}" />
+            </a>
         </div>
     </xsl:template>
 
