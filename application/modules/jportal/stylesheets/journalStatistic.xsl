@@ -5,8 +5,11 @@
     <xsl:param name="journalStatistic.dateReceived.Till" />
     <xsl:param name="journalStatistic.view.objectListing" select="'false'" />
     <xsl:param name="journalStatistic.view.objectListing.journalID" />
+    <xsl:param name="journalStatistic.showJournalwithoutActivity" select="'false'" />
     <xsl:param name="journalStatistic.view.objectListing.numberOfLabels" select="20" />
-    <xsl:param name="journalStatistic.view.objectListing.numberOfValues" select="200" />
+    <xsl:param name="journalStatistic.view.objectListing.numberOfValues" select="50" />
+    <xsl:param name="journalStatistic.percentageOfVisibilty" select="'1'" />
+    <xsl:param name="journalStatistic.dateDerivateCount" select="'1213113971040'" />
 
     <xsl:variable name="dateRange">
         <xsl:value-of
@@ -21,9 +24,7 @@
     </xsl:variable>
 
     <xsl:variable name="completeSumValues">
-        <xsl:call-template name="journalStatistic.get.ActivityIndex">
-            <xsl:with-param name="quantifier" select="'2'" />
-        </xsl:call-template>
+        <xsl:call-template name="journalStatistic.get.ActivityIndex" />
     </xsl:variable>
     <xsl:variable name="PageTitle" select="'Zeitschriftenstatistik'" />
     <xsl:variable name="chartBaseUrl" select="'http://chart.apis.google.com/chart?'" />
@@ -48,7 +49,7 @@
         if more values available a java class will decrease them
         limit the value according to the maximum allowed GET 
         parameter length given by browsers and applications
-        (200 is a good value, if 1024 characters are allowed)
+        (50 is a good value, if 1024 characters are allowed)
     -->
     <xsl:variable name="numberOfValues">
         <xsl:value-of select="$journalStatistic.view.objectListing.numberOfValues" />
@@ -74,11 +75,7 @@
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="journalStatistic.main">
-        <!--
-            xml max=
-            <xsl:copy-of select="$differenceValues"></xsl:copy-of>
-            ...
-        -->
+
         <xsl:choose>
             <xsl:when test="$journalStatistic.view.objectListing='true'">
                 <xsl:call-template name="journalStatistic.objectListing" />
@@ -86,6 +83,7 @@
             <xsl:otherwise>
                 <a name="toc" />
                 <xsl:call-template name="journalStatistic.selectDateSpace" />
+                <xsl:call-template name="journalStatistic.selectActivitySwitch" />
                 <xsl:call-template name="journalStatistic.toc" />
                 <p>
                     <a name="gesamt" />
@@ -95,6 +93,7 @@
                 <div style="border: 2px solid black; width: 900px;">
                     <xsl:call-template name="journalStatistic.total" />
                     <xsl:call-template name="journalStatistic.PieChart.ArticleOverTime" />
+                    <xsl:call-template name="journalStatistic.get.DerivateOverallStats" />
                 </div>
                 <p>
                     <a name="detail" />
@@ -124,7 +123,10 @@
                     <a href="#gesamtAnz">Gesamtanzahl der Artikel über die Zeit</a>
                 </li>
                 <li>
-                    <a href="#ai">Aktivitätsindex</a>
+                    <a href="#ai">Aktivitätsindex aller Zeitschriften</a>
+                </li>
+                <li>
+                    <a href="#derivates">Anzahl der Digitalisate auf dem Zeitschriftenserver</a>
                 </li>
             </ul>
         </p>
@@ -135,13 +137,25 @@
             <ul>
                 <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]/journal">
                     <xsl:sort select="@name" />
-                    <li>
-                        <a href="#{@id}">
-                            <xsl:value-of select="@name" />
-                        </a>
-                    </li>
+                    <xsl:variable name="jID">
+                        <xsl:value-of select="@id" />
+                    </xsl:variable>
+                    <xsl:variable name="activityOfJournal">
+                        <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal[@id=$jID]/text())" />
+                    </xsl:variable>
+                    <xsl:choose>
+                        <xsl:when test="($journalStatistic.showJournalwithoutActivity='false') and ($activityOfJournal &lt;= 0)"></xsl:when>
+                        <xsl:otherwise>
+                            <li>
+                                <a href="#{$jID}">
+                                    <xsl:value-of select="@name" />
+                                </a>
+                            </li>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:for-each>
             </ul>
+
         </p>
     </xsl:template>
 
@@ -263,6 +277,44 @@
 
     <!-- ======================================================================================================================== -->
 
+    <xsl:template name="journalStatistic.selectActivitySwitch">
+        <p>
+            <form method="post" action="{$journalStatistic.sourceUrl}" target="_self" id="activtySwitch">
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <strong>Zeitung ohne Aktivität anzeigen:</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" name="XSL.journalStatistic.showJournalwithoutActivity.SESSION" value="true"
+                                onChange="document.getElementById('activtySwitch').submit()">
+                                <xsl:if test="$journalStatistic.showJournalwithoutActivity='true'">
+                                    <xsl:attribute name="checked"><xsl:value-of select="checked" />
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </input>
+                            ja
+                            <br />
+                            <input type="radio" name="XSL.journalStatistic.showJournalwithoutActivity.SESSION" value="false"
+                                onChange="document.getElementById('activtySwitch').submit()">
+                                <xsl:if test="$journalStatistic.showJournalwithoutActivity='false'">
+                                    <xsl:attribute name="checked"><xsl:value-of select="checked" />
+                                    </xsl:attribute>
+                                </xsl:if>
+                            </input>
+                            nein
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </p>
+
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
     <xsl:template match="statistic">
         <xsl:apply-templates select="journal">
             <xsl:sort select="@name" />
@@ -274,21 +326,26 @@
     <xsl:template name="journalStatistic.total">
 
         <xsl:for-each select="statistic[number(@date) = number($journalStatistic.date.Till)]">
+            <br />
             <a name="proz" />
-            <b style="padding: 5px;">Prozentualer Anteil einzelner Zeitschriften</b>
+            <b style="padding: 5px;">
+                <u>Prozentualer Anteil einzelner Zeitschriften:</u>
+            </b>
             <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
             <xsl:variable name="chartLabelstemp">
                 <xsl:for-each select="journal">
                     <xsl:sort select="./numberOfObjects/total/@percent" data-type="number" order="descending" />
-                    <xsl:choose>
-                        <xsl:when test="string-length(@name)>30">
-                            <xsl:value-of
-                                select="concat('|', substring(@name,1,30),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:if test="numberOfObjects/total/@percent &gt;= $journalStatistic.percentageOfVisibilty">
+                        <xsl:choose>
+                            <xsl:when test="string-length(@name)>20">
+                                <xsl:value-of
+                                    select="concat('|', substring(@name,1,20),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat('|', @name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
                 </xsl:for-each>
             </xsl:variable>
             <xsl:variable name="chartLabelsAll">
@@ -297,11 +354,30 @@
             <xsl:variable name="chartValuestemp">
                 <xsl:for-each select="journal">
                     <xsl:sort select="./numberOfObjects/total/@percent" data-type="number" order="descending" />
-                    <xsl:value-of select="concat(',', numberOfObjects/total/@percent)" />
+                    <xsl:if test="numberOfObjects/total/@percent &gt;= $journalStatistic.percentageOfVisibilty">
+                        <xsl:value-of select="concat(',', numberOfObjects/total/@percent)" />
+                    </xsl:if>
                 </xsl:for-each>
             </xsl:variable>
             <xsl:variable name="chartValuesAll">
                 <xsl:value-of select="concat('&amp;chd=t:',substring($chartValuestemp,2))" />
+            </xsl:variable>
+
+            <xsl:variable name="labelsNotInChart">
+                <xsl:for-each select="journal">
+                    <xsl:sort select="./numberOfObjects/total/@percent" data-type="number" order="descending" />
+                    <xsl:if test="numberOfObjects/total/@percent &lt; $journalStatistic.percentageOfVisibilty">
+                        <xsl:choose>
+                            <xsl:when test="string-length(@name)>30">
+                                <xsl:value-of
+                                    select="concat(', ', substring(@name,1,30),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat(', ', @name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                </xsl:for-each>
             </xsl:variable>
 
             <xsl:variable name="chartParamsAll" select="'chs=810x300&amp;cht=p'" />
@@ -309,6 +385,16 @@
             <p style="text-align: center;">
                 <img src="{$CompletePieChartURLAll}" />
             </p>
+            <div style="padding: 5px;">
+                <h4>
+                    Zeitschriften mit prozentualem Anteil unter
+                    <xsl:value-of select="$journalStatistic.percentageOfVisibilty" />
+                    % im ausgewählten Zeitraum:
+                </h4>
+                <xsl:value-of select="$labelsNotInChart" />
+                <br />
+                <br />
+            </div>
         </xsl:for-each>
 
         <xsl:variable name="allSums">
@@ -391,7 +477,9 @@
         <!--  do layout -->
         <a name="gesamtAnz" />
         <b style="padding: 5px;">
-            <xsl:value-of select="concat('Gesamtanzahl der Artikel über die Zeit (Differenz = ',$maxMinDistance,'):')" />
+            <u>
+                <xsl:value-of select="concat('Gesamtanzahl der Artikel über die Zeit (Differenz = ',$maxMinDistance,'):')" />
+            </u>
         </b>
         <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
 
@@ -424,50 +512,96 @@
             <xsl:value-of select="@label" />
         </xsl:variable>
 
-        <!-- headline -->
-        <xsl:variable name="journal-type">
-            <xsl:choose>
-                <xsl:when test="@type='fully'">
-                    <xsl:value-of select="concat(' (vollständige Erschliessung, mit insgesamt ', numberOfObjects/total/text(), ' Artikeln)')" />
-                </xsl:when>
-                <xsl:when test="@type='browse'">
-                    <xsl:value-of select="concat(' (Blätterzeitschrift, mit insgesamt ', numberOfObjects/total/text(), ' Bänden)')" />
-                </xsl:when>
-            </xsl:choose>
+        <xsl:variable name="activityOfJournal">
+            <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal[@id=$journal-id]/text())" />
         </xsl:variable>
 
-        <div style="width: 900px; border: 2px solid black;">
-            <!-- Pie chart of currently state -->
-            <xsl:call-template name="journalStatistic.currentlyState">
-                <xsl:with-param name="journalType" select="$journal-type" />
-            </xsl:call-template>
-            <br />
-            <br />
+        <xsl:choose>
+            <xsl:when test="($journalStatistic.showJournalwithoutActivity='false') and ($activityOfJournal &lt;= 0)"></xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="derNumber">
+                    <xsl:value-of select="sum(derivates/derivate/@number)" />
+                </xsl:variable>
+                <xsl:variable name="derSizeTemp">
+                    <xsl:value-of select="sum(derivates/derivate/@size)" />
+                </xsl:variable>
 
-            <xsl:variable name="activityOfJournal">
-                <xsl:value-of select="sum(xalan:nodeset($completeSumValues)/journal[@id=$journal-id]/text())" />
-            </xsl:variable>
+                <xsl:variable name="derSize">
+                    <xsl:choose>
+                        <xsl:when test="string-length($derSizeTemp) &lt; 4">
+                            <xsl:value-of select="concat($derSizeTemp , ' Byte')" />
+                        </xsl:when>
+                        <xsl:when test="string-length($derSizeTemp) &lt; 7">
+                            <xsl:variable name="sizeTemp">
+                                <xsl:value-of select="$derSizeTemp div 1000" />
+                            </xsl:variable>
+                            <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' KiloByte')" />
+                        </xsl:when>
+                        <xsl:when test="string-length($derSizeTemp) &lt; 10">
+                            <xsl:variable name="sizeTemp">
+                                <xsl:value-of select="$derSizeTemp div 1000000" />
+                            </xsl:variable>
+                            <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' MegaByte')" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:variable name="sizeTemp">
+                                <xsl:value-of select="$derSizeTemp div 1000000000" />
+                            </xsl:variable>
+                            <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' GigaByte')" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
 
-            <b style="padding: 5px;">
-                <xsl:value-of select="concat('Aktivitätsindex der Zeitung im ausgewählten Zeitraum: ',$activityOfJournal)" />
-            </b>
-            <br />
-            <br />
-            <!-- consistancy development -->
-            <xsl:call-template name="journalStatistic.consistancyDev">
-                <xsl:with-param name="jID" select="@id"></xsl:with-param>
-            </xsl:call-template>
-            <br />
-            <br />
-            <!-- Object development -->
-            <xsl:call-template name="journalStatistic.objectDev">
-                <xsl:with-param name="jID" select="@id"></xsl:with-param>
-            </xsl:call-template>
+                <!-- headline -->
+                <xsl:variable name="journal-type">
+                    <xsl:choose>
+                        <xsl:when test="@type='fully'">
+                            <xsl:value-of
+                                select="concat(' (vollständige Erschliessung, mit insgesamt ', numberOfObjects/total/text(), ' Artikeln, ',$derNumber,' Dateien mit insges. ',$derSize,')')" />
+                        </xsl:when>
+                        <xsl:when test="@type='browse'">
+                            <xsl:value-of
+                                select="concat(' (Blätterzeitschrift, mit insgesamt ', numberOfObjects/total/text(), ' Bänden, ',$derNumber,' Dateien mit insges. ',$derSize,')')" />
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+
+                <div style="width: 900px; border: 2px solid black;">
+                    <!-- Pie chart of currently state -->
+                    <xsl:call-template name="journalStatistic.currentlyState">
+                        <xsl:with-param name="journalType" select="$journal-type" />
+                    </xsl:call-template>
+                    <br />
+                    <br />
+
+                    <b style="padding: 5px;">
+                        <xsl:value-of select="concat('Aktivitätsindex der Zeitung im ausgewählten Zeitraum: ',$activityOfJournal)" />
+                    </b>
+                    <br />
+                    <br />
+                    <!-- consistancy development -->
+                    <xsl:call-template name="journalStatistic.consistancyDev">
+                        <xsl:with-param name="jID" select="@id"></xsl:with-param>
+                    </xsl:call-template>
+                    <br />
+                    <br />
+                    <!-- Object development -->
+                    <xsl:call-template name="journalStatistic.objectDev">
+                        <xsl:with-param name="jID" select="@id"></xsl:with-param>
+                    </xsl:call-template>
+                    <br />
+                    <br />
+                    <!-- Derivate development -->
+                    <xsl:call-template name="journalStatistic.derivateDev">
+                        <xsl:with-param name="jID" select="@id"></xsl:with-param>
+                    </xsl:call-template>
+                </div>
+                <br />
+                <br />
+            </xsl:otherwise>
+        </xsl:choose>
 
 
-        </div>
-        <br />
-        <br />
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
@@ -552,64 +686,38 @@
             </xsl:choose>
         </xsl:variable>
 
-        <!--<xsl:variable name="lineVal">
+        <xsl:variable name="lineVal">
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
                 <xsl:variable name="tempValues">
                     <xsl:choose>
-                        <xsl:when test="number(journal[@id=$jID]/numberOfObjects/total/text())">
-                            <xsl:value-of select="number(journal[@id=$jID]/numberOfObjects/total/text())" />
+                        <xsl:when
+                            test="(number(journal[@id=$jID]/numberOfObjects/total/text())) and (number(journal[@id=$jID]/numberOfObjects/total/text())=$maxTotal)">
+                            <xsl:value-of select="100" />
+                        </xsl:when>
+                        <xsl:when test="(number(journal[@id=$jID]/numberOfObjects/total/text())) and (journal[@id=$jID]/numberOfObjects/total/text() = '0')">
+                            <xsl:value-of select="0" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="0" />
+                            <xsl:choose>
+                                <xsl:when
+                                    test="number(journal[@id=$jID]/numberOfObjects/total/text()) and (number(journal[@id=$jID]/numberOfObjects/total/text()) &gt; 0)">
+                                    <xsl:value-of select="(((number(journal[@id=$jID]/numberOfObjects/total/text())-$minTotal) div $maxMinDistance*75)+25)" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="0" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:otherwise>
                     </xsl:choose>
-                </xsl:variable>
-                <xsl:value-of select="concat(',', ((($tempValues - $theoreticMinimum)*100) div ($maxTotal - $theoreticMinimum)) )" />
-            </xsl:for-each>
-        </xsl:variable>
-        
-        --><xsl:variable name="lineVal">
-            <xsl:for-each
-                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
-                <xsl:variable name="tempValues">
-                <xsl:choose>
-                    <xsl:when test="(number(journal[@id=$jID]/numberOfObjects/total/text())) and (number(journal[@id=$jID]/numberOfObjects/total/text())=$maxTotal)">
-                        <xsl:value-of select="100" />
-                    </xsl:when>
-                    <xsl:when test="(number(journal[@id=$jID]/numberOfObjects/total/text())) and (journal[@id=$jID]/numberOfObjects/total/text() = '0')">
-                        <xsl:value-of select="0" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:choose>
-                        <xsl:when test="number(journal[@id=$jID]/numberOfObjects/total/text()) and (number(journal[@id=$jID]/numberOfObjects/total/text()) &gt; 0)">
-                            <xsl:value-of select="(((number(journal[@id=$jID]/numberOfObjects/total/text())-$minTotal) div $maxMinDistance*75)+25)" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="0" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    </xsl:otherwise>
-                </xsl:choose>
-                    
+
                 </xsl:variable>
                 <xsl:value-of select="concat(',', $tempValues)" />
             </xsl:for-each>
         </xsl:variable>
-        
+
         <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
 
-        <!--<xsl:variable name="chartURL.values.tmp">
-            <xsl:for-each
-            select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
-            <xsl:sort select="@date" order="ascending" />
-            <xsl:value-of select="concat(number(journal[@id=$jID]/numberOfObjects/total/text()),',')" />
-            </xsl:for-each>
-            </xsl:variable>
-            <xsl:variable name="chartURL.values">
-            <xsl:value-of select="substring($chartURL.values.tmp,1,string-length($chartURL.values.tmp)-1)" />
-            </xsl:variable>
-        -->
         <xsl:variable name="chartURL.label.tmp">
             <xsl:for-each
                 select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
@@ -731,10 +839,17 @@
             </xsl:choose>
         </xsl:variable>
 
-
         <xsl:variable name="headline">
-            <xsl:value-of
-                select="concat('Vollständigkeitsprüfung im zeitlichen Verlauf (Vollständige = ',$CompleteDiff,', kein Digitalisat = ',$IncompleteDiff,', Band ohne Artikel = ',$MissingDiff,') :')" />
+            <xsl:choose>
+                <xsl:when test="/journalStatistic/statistic[(number(@date) = number($journalStatistic.date.Till))]/journal[@id=$jID]/@type='fully'">
+                    <xsl:value-of
+                        select="concat('Vollständigkeitsprüfung im zeitlichen Verlauf (Vollständige = ',$CompleteDiff,', kein Digitalisat = ',$IncompleteDiff,', Band ohne Artikel = ',$MissingDiff,') :')" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of
+                        select="concat('Vollständigkeitsprüfung im zeitlichen Verlauf (Vollständige = ',$CompleteDiff,', kein Digitalisat = ',$IncompleteDiff,') :')" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:variable>
 
         <xsl:variable name="chartURL.values">
@@ -768,7 +883,280 @@
         </p>
 
     </xsl:template>
+    <!-- ======================================================================================================================== -->
 
+    <xsl:template name="journalStatistic.derivateDev">
+        <xsl:param name="jID" />
+
+        <xsl:variable name="actualSizes">
+            <values>
+                <xsl:for-each
+                    select="/journalStatistic/statistic[(number(@date) &lt;= number($journalStatistic.date.Till))]/journal[@id=$jID]/derivates/derivate">
+                    <size>
+                        <xsl:attribute name="type">
+                            <xsl:value-of select="@type" />
+                        </xsl:attribute>
+                        <xsl:value-of select="@size" />
+                    </size>
+                </xsl:for-each>
+            </values>
+        </xsl:variable>
+
+
+
+        <xsl:variable name="headline">
+            <xsl:value-of select="'Übersicht über die Derivate der Zeitschrift:'" />
+        </xsl:variable>
+
+        <xsl:if test="count(/journalStatistic/statistic[(number(@date) = number($journalStatistic.date.Till))]/journal[@id=$jID]/derivates/derivate) &gt; 0">
+
+            <b style="padding:5px;">
+                <xsl:value-of select="$headline" />
+            </b>
+
+            <xsl:variable name="actualSizes">
+                <values>
+                    <xsl:for-each
+                        select="/journalStatistic/statistic[(number(@date) = number($journalStatistic.date.Till))]/journal[@id=$jID]/derivates/derivate">
+                        <size>
+                            <xsl:attribute name="type">
+                            <xsl:value-of select="@type" />
+                        </xsl:attribute>
+                            <xsl:value-of select="@size" />
+                        </size>
+                    </xsl:for-each>
+                </values>
+            </xsl:variable>
+
+            <xsl:for-each select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.Till)]/journal[@id=$jID]/derivates/derivate">
+                <xsl:call-template name="journalStatistic.singleDerivateDev">
+                    <xsl:with-param name="jID" select="$jID" />
+                    <xsl:with-param name="type" select="@type" />
+                    <xsl:with-param name="actualSizes" select="$actualSizes" />
+                </xsl:call-template>
+            </xsl:for-each>
+        </xsl:if>
+
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
+    <xsl:template name="journalStatistic.singleDerivateDev">
+        <xsl:param name="jID" />
+        <xsl:param name="type" />
+        <xsl:param name="actualSizes" />
+
+        <xsl:variable name="maxTotal">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]/journal[@id=$jID]/derivates/derivate[@type=$type]/@number">
+                <xsl:sort data-type="number" order="descending" />
+                <xsl:if test="position()=1">
+                    <xsl:value-of select="." />
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="minTotal">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]/journal[@id=$jID]/derivates/derivate[@type=$type]/@number">
+                <xsl:sort data-type="number" order="ascending" />
+                <xsl:if test="position()=1">
+                    <xsl:value-of select="." />
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="maxMinDistance">
+            <xsl:value-of select="number($maxTotal - $minTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="firstTotaltemp">
+            <xsl:value-of
+                select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.From)]/journal[@id=$jID]/derivates/derivate[@type=$type]/@number" />
+        </xsl:variable>
+        <xsl:variable name="firstTotal">
+            <xsl:choose>
+                <xsl:when test="number($firstTotaltemp)">
+                    <xsl:value-of select="$firstTotaltemp" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="lastTotal">
+            <xsl:value-of
+                select="/journalStatistic/statistic[number(@date) = number($journalStatistic.date.Till)]/journal[@id=$jID]/derivates/derivate[@type=$type]/@number" />
+        </xsl:variable>
+        <xsl:variable name="lastFirstDistancetemp">
+            <xsl:value-of select="number($lastTotal - $firstTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="lastFirstDistance">
+            <xsl:choose>
+                <xsl:when test="$lastFirstDistancetemp &gt; 0">
+                    <xsl:value-of select="concat('+',$lastFirstDistancetemp)" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lastFirstDistancetemp" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="theoreticMinimum">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="($minTotal - (($maxMinDistance div 75)*25))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="lineVal">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+                <xsl:variable name="tempValues">
+                    <xsl:choose>
+                        <xsl:when
+                            test="(number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number)) and (journal[@id=$jID]/derivates/derivate[@type=$type]/@number=$maxTotal)">
+                            <xsl:value-of select="100" />
+                        </xsl:when>
+                        <xsl:when
+                            test="(number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number)) and (number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number) = 0)">
+                            <xsl:value-of select="0" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when
+                                    test="(number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number)) and (number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number) &gt; 0)">
+                                    <xsl:value-of
+                                        select="(((number(journal[@id=$jID]/derivates/derivate[@type=$type]/@number)-$minTotal) div $maxMinDistance*75)+25)" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="0" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+
+                </xsl:variable>
+                <xsl:value-of select="concat(',', $tempValues)" />
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="derSizeTemp">
+            <xsl:value-of select="xalan:nodeset($actualSizes)/values/size[@type=$type]/text()" />
+        </xsl:variable>
+
+        <xsl:variable name="derSize">
+            <xsl:choose>
+                <xsl:when test="string-length($derSizeTemp) &lt; 4">
+                    <xsl:value-of select="concat($derSizeTemp , 'Byte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 7">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), 'KiloByte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 10">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), 'MegaByte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 13">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), 'GigaByte')" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), 'TeraByte')" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="headline">
+            <xsl:value-of select="concat('Typ: ', $type, '; Größe: ',$derSize,'; Differenz=',$lastFirstDistance,';')" />
+        </xsl:variable>
+
+        <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
+
+        <xsl:variable name="chartURL.label.tmp">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+                <xsl:sort select="@date" order="ascending" />
+                <xsl:value-of select="concat(@datePretty,'|')" />
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="label1">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal)" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label2">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal+($maxMinDistance*0.33))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label3">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal+($maxMinDistance*0.66))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label4">
+            <xsl:value-of select="round($maxTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="ObjectDevChart.labels.decreased">
+            <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                select="mcrxml:decreaseLabels( string(substring($chartURL.label.tmp,0,(string-length($chartURL.label.tmp)-1))), string(concat('|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)), string($numberOfLabels) )" />
+        </xsl:variable>
+        <xsl:variable name="ObjectDevChart.values.decreased">
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( $lineChartValues ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lineChartValues" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <!--  do layout -->
+        <br />
+        <div style="padding-left:10px;">
+            <xsl:value-of select="$headline" />
+        </div>
+        <p style="text-align: center;">
+            <img
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$ObjectDevChart.values.decreased,'&amp;chs=',$chartSize.objectDev,$ObjectDevChart.labels.decreased,'&amp;chco=aa00ff','&amp;chg=',$xgrid,',25')}" />
+        </p>
+
+    </xsl:template>
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="chartURL.get.ComplDiff">
@@ -940,7 +1328,14 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="concat($missing.value,',')" />
+                <xsl:choose>
+                    <xsl:when test="contains($missing.value,'.')">
+                        <xsl:value-of select="concat(substring-before($missing.value,'.'),',')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat($missing.value,',')" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.missing">
@@ -969,7 +1364,14 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="concat($inc.value,',')" />
+                <xsl:choose>
+                    <xsl:when test="contains($inc.value,'.')">
+                        <xsl:value-of select="concat(substring-before($inc.value,'.'),',')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat($inc.value,',')" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="values.incomplete">
@@ -1002,7 +1404,14 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:value-of select="concat($cor.value,',')" />
+                <xsl:choose>
+                    <xsl:when test="contains($cor.value,'.')">
+                        <xsl:value-of select="concat(substring-before($cor.value,'.'),',')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat($cor.value,',')" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:for-each>
         </xsl:variable>
 
@@ -1262,7 +1671,9 @@
     <!-- ======================================================================================================================== -->
     <xsl:template name="journalStatistic.PieChart.ArticleOverTime">
         <a name="ai" />
-        <b style="padding: 5px;">Aktivitätsindex aller Zeitschriften:</b>
+        <b style="padding: 5px;">
+            <u>Aktivitätsindex aller Zeitschriften:</u>
+        </b>
         <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
 
         <xsl:variable name="activitySum">
@@ -1271,16 +1682,37 @@
         <xsl:variable name="chartLabelsTemp">
             <xsl:for-each select="xalan:nodeset($completeSumValues)/journal">
                 <xsl:sort data-type="number" order="descending" />
-                <xsl:if test="number(text()) &gt; 0">
-                    <xsl:choose>
-                        <xsl:when test="string-length(@label) &gt; 28">
-                            <xsl:value-of
-                                select="concat('|',substring(@label,1,28),'...','(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,4),'%)')" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="concat('|',@label,'(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,5),'%)')" />
-                        </xsl:otherwise>
-                    </xsl:choose>
+                <xsl:if test="((text()*100) div $activitySum) &gt;= $journalStatistic.percentageOfVisibilty">
+                    <xsl:if test="number(text()) &gt; 0">
+                        <xsl:choose>
+                            <xsl:when test="string-length(@label) &gt; 20">
+                                <xsl:value-of
+                                    select="concat('|',substring(@label,1,20),'...','(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,4),'%)')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat('|',@label,'(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,5),'%)')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="chartLabelsNotVisible">
+            <xsl:for-each select="xalan:nodeset($completeSumValues)/journal">
+                <xsl:sort data-type="number" order="descending" />
+                <xsl:if test="((text()*100) div $activitySum) &lt; $journalStatistic.percentageOfVisibilty">
+                    <xsl:if test="number(text()) &gt; 0">
+                        <xsl:choose>
+                            <xsl:when test="string-length(@label) &gt; 30">
+                                <xsl:value-of
+                                    select="concat(', ',substring(@label,1,30),'...','(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,4),'%)')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat(', ',@label,'(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,5),'%)')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
                 </xsl:if>
             </xsl:for-each>
         </xsl:variable>
@@ -1299,7 +1731,9 @@
         <xsl:variable name="chartValuesTemp">
             <xsl:for-each select="xalan:nodeset($completeSumValues)/journal">
                 <xsl:sort data-type="number" order="descending" />
-                <xsl:value-of select="concat(',',(text()*100) div $activitySum)" />
+                <xsl:if test="((text()*100) div $activitySum) &gt;= $journalStatistic.percentageOfVisibilty">
+                    <xsl:value-of select="concat(',',(text()*100) div $activitySum)" />
+                </xsl:if>
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="chartLabels" select="concat('&amp;chl=',substring($chartLabelsTemp,2))" />
@@ -1324,7 +1758,15 @@
             Als Aktivität zählt das Neuanlegen eines Objektes, genauso wie deren Zustandsänderung. Zustandsänderung bedeutet z.B. einem Objekt ein Digitalisat
             hinzufügen. Da sich hierbei aber 2 Werte verändern, wird diese Teilsumme halbiert.
         </div>
-        <div style="padding: 5px;">
+        <div style="padding-left: 5px; padding-right: 5px;">
+            <h4>
+                Zeitschriften mit Aktivitäten unter
+                <xsl:value-of select="$journalStatistic.percentageOfVisibilty" />
+                % im ausgewählten Zeitraum:
+            </h4>
+            <xsl:copy-of select="substring($chartLabelsNotVisible,2)" />
+        </div>
+        <div style="padding-left: 5px; padding-right: 5px;">
             <h4>Zeitschriften ohne Aktivitäten im ausgewählten Zeitraum:</h4>
             <xsl:for-each select="xalan:nodeset($ZeroLabels)/name">
                 <xsl:choose>
@@ -1343,7 +1785,6 @@
     <!-- ======================================================================================================================== -->
 
     <xsl:template name="journalStatistic.get.ActivityIndex">
-        <xsl:param name="quantifier" />
 
         <xsl:variable name="ListOfDates">
             <xsl:for-each
@@ -1372,48 +1813,32 @@
                         <xsl:variable name="dateposition" select="position()" />
                         <xsl:variable name="jdate" select="." />
                         <xsl:variable name="jdateBefore" select="xalan:nodeset($ListOfDates)/dates[position()=$dateposition]" />
-                        <xsl:variable name="total">
+                        <xsl:variable name="derivate">
                             <xsl:choose>
-                                <xsl:when
-                                    test="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/total/text())">
+                                <xsl:when test="$jdate &lt; $journalStatistic.dateDerivateCount">
                                     <xsl:value-of
-                                        select="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/total/text())" />
+                                        select="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=$journalStatistic.dateDerivateCount]/journal[@id=$jname]/derivates/derivate/@number))" />
+                                </xsl:when>
+                                <xsl:when
+                                    test="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/derivates/derivate/@number))">
+                                    <xsl:value-of
+                                        select="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/derivates/derivate/@number))" />
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:value-of select="0" />
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
-                        <xsl:variable name="totalBefore">
+                        <xsl:variable name="derivateBefore">
                             <xsl:choose>
-                                <xsl:when
-                                    test="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/total/text())">
+                                <xsl:when test="$jdateBefore &lt; $journalStatistic.dateDerivateCount">
                                     <xsl:value-of
-                                        select="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/total/text())" />
+                                        select="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=$journalStatistic.dateDerivateCount]/journal[@id=$jname]/derivates/derivate/@number))" />
                                 </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="0" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:variable name="complete">
-                            <xsl:choose>
                                 <xsl:when
-                                    test="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/complete/text())">
+                                    test="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/derivates/derivate/@number))">
                                     <xsl:value-of
-                                        select="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdate)]/journal[@id=$jname]/numberOfObjects/complete/text())" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="0" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:variable name="completeBefore">
-                            <xsl:choose>
-                                <xsl:when
-                                    test="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/complete/text())">
-                                    <xsl:value-of
-                                        select="number(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/numberOfObjects/complete/text())" />
+                                        select="number(sum(xalan:nodeset($XMLContainer)/statistic[number(@date)=number($jdateBefore)]/journal[@id=$jname]/derivates/derivate/@number))" />
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:value-of select="0" />
@@ -1469,15 +1894,15 @@
                             </xsl:choose>
                         </xsl:variable>
                         <diffs>
-                            <total>
+                            <derivate>
                                 <xsl:choose>
-                                    <xsl:when test="number(number($total)-number($totalBefore))">
+                                    <xsl:when test="number(number($derivate)-number($derivateBefore))">
                                         <xsl:choose>
-                                            <xsl:when test="(number($total)-number($totalBefore)) &lt; 0">
-                                                <xsl:value-of select="(number($total)-number($totalBefore))*(-1)" />
+                                            <xsl:when test="(number($derivate)-number($derivateBefore)) &lt; 0">
+                                                <xsl:value-of select="(number($derivate)-number($derivateBefore))*(-1)" />
                                             </xsl:when>
                                             <xsl:otherwise>
-                                                <xsl:value-of select="(number($total)-number($totalBefore))" />
+                                                <xsl:value-of select="(number($derivate)-number($derivateBefore))" />
                                             </xsl:otherwise>
                                         </xsl:choose>
                                     </xsl:when>
@@ -1485,30 +1910,13 @@
                                         <xsl:value-of select="0" />
                                     </xsl:otherwise>
                                 </xsl:choose>
-                            </total>
-                            <complete>
-                                <xsl:choose>
-                                    <xsl:when test="number(number($complete)-number($completeBefore))">
-                                        <xsl:choose>
-                                            <xsl:when test="(number($complete)-number($completeBefore)) &lt; 0">
-                                                <xsl:value-of select="(number($complete)-number($completeBefore))*(-1)" />
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:value-of select="(number($complete)-number($completeBefore))" />
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="0" />
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </complete>
+                            </derivate>
                             <incomplete>
                                 <xsl:choose>
                                     <xsl:when test="number(number($incomplete)-number($incompleteBefore))">
                                         <xsl:choose>
                                             <xsl:when test="(number($incomplete)-number($incompleteBefore)) &lt; 0">
-                                                <xsl:value-of select="(number($incomplete)-number($incompleteBefore))*(-1)" />
+                                                <xsl:value-of select="'0'" />
                                             </xsl:when>
                                             <xsl:otherwise>
                                                 <xsl:value-of select="(number($incomplete)-number($incompleteBefore))" />
@@ -1557,20 +1965,12 @@
                         <xsl:value-of select="@id" />
                     </xsl:attribute>
                     <xsl:for-each select="diffs">
-                        <xsl:variable name="total" select="total/text()" />
-                        <xsl:variable name="complete" select="complete/text()" />
+                        <xsl:variable name="derivate" select="derivate/text()" />
                         <xsl:variable name="incomplete" select="incomplete/text()" />
                         <xsl:variable name="missing" select="missing/text()" />
-                        <xsl:variable name="sum" select="($complete+$incomplete+$missing)" />
+                        <xsl:variable name="sum" select="($derivate+$incomplete+$missing)" />
                         <value>
-                            <xsl:choose>
-                                <xsl:when test="($complete = 0) and ($incomplete = 0)">
-                                    <xsl:value-of select="$missing" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="((($sum - $total) div 2) + $total)" />
-                                </xsl:otherwise>
-                            </xsl:choose>
+                            <xsl:value-of select="$sum" />
                         </value>
                     </xsl:for-each>
                 </journal>
@@ -1597,4 +1997,277 @@
     </xsl:template>
 
     <!-- ======================================================================================================================== -->
+
+    <xsl:template name="journalStatistic.get.DerivateOverallStats">
+        <!-- get derivate values from the xml container -->
+
+        <xsl:variable name="derivates">
+            <derivates>
+                <xsl:for-each
+                    select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+                    <date>
+                        <xsl:attribute name="timestamp">
+                            <xsl:value-of select="@date" />
+                        </xsl:attribute>
+                        <xsl:for-each select="journal">
+                            <journal>
+                                <number>
+                                    <xsl:value-of select="sum(derivates/derivate/@number)" />
+                                </number>
+                                <size>
+                                    <xsl:value-of select="sum(derivates/derivate/@size)" />
+                                </size>
+                                <test>
+                                    <xsl:value-of select="number(derivates/derivate[position() = 1]/@size)" />
+                                </test>
+                            </journal>
+                        </xsl:for-each>
+                    </date>
+                </xsl:for-each>
+            </derivates>
+        </xsl:variable>
+
+        <!-- overall sums -->
+
+        <xsl:variable name="derSizeTemp">
+            <xsl:value-of select="sum(xalan:nodeset($derivates)/derivates/date[position()=last()]/journal/size/text())" />
+        </xsl:variable>
+
+        <xsl:variable name="overallDerSize">
+            <xsl:choose>
+                <xsl:when test="string-length($derSizeTemp) &lt; 4">
+                    <xsl:value-of select="concat($derSizeTemp , ' Byte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 7">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' KiloByte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 10">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' MegaByte')" />
+                </xsl:when>
+                <xsl:when test="string-length($derSizeTemp) &lt; 13">
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' GigaByte')" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="sizeTemp">
+                        <xsl:value-of select="$derSizeTemp div 1000000000000" />
+                    </xsl:variable>
+                    <xsl:value-of select="concat(substring-before($sizeTemp,'.'),'.',substring(substring-after($sizeTemp,'.'),1,2), ' TeraByte')" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+
+        <xsl:variable name="overallDerNumber">
+            <xsl:value-of select="sum(xalan:nodeset($derivates)/derivates/date[position()=last()]/journal/number/text())" />
+        </xsl:variable>
+
+
+        <!-- values for graph -->
+
+        <xsl:variable name="derNumberPerDate">
+            <xsl:for-each select="xalan:nodeset($derivates)/derivates/date">
+                <date>
+                    <xsl:attribute name="number">
+                        <xsl:choose>
+                            <xsl:when test="number(journal/test/text())">
+                                <xsl:value-of select="'true'" /> 
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="'false'" />
+                            </xsl:otherwise>
+                        </xsl:choose>            
+                    </xsl:attribute>
+                    <xsl:value-of select="sum(journal/number/text())" />
+                </date>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="maxTotal">
+            <xsl:for-each select="xalan:nodeset($derNumberPerDate)/date/text()">
+                <xsl:sort data-type="number" order="descending" />
+                <xsl:if test="position()=1">
+                    <xsl:value-of select="." />
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="minTotal">
+            <xsl:for-each select="xalan:nodeset($derNumberPerDate)/date[@number='true']/text()">
+                <xsl:sort data-type="number" order="ascending" />
+                <xsl:if test="position()=1">
+                    <xsl:value-of select="." />
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="maxMinDistance">
+            <xsl:value-of select="number($maxTotal - $minTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="firstTotaltemp">
+            <xsl:value-of select="xalan:nodeset($derNumberPerDate)/date[position()=1]/text()" />
+        </xsl:variable>
+        <xsl:variable name="firstTotal">
+            <xsl:choose>
+                <xsl:when test="number($firstTotaltemp)">
+                    <xsl:value-of select="$firstTotaltemp" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="lastTotal">
+            <xsl:value-of select="xalan:nodeset($derNumberPerDate)/date[position()=last()]/text()" />
+        </xsl:variable>
+
+        <xsl:variable name="lastFirstDistancetemp">
+            <xsl:value-of select="number($lastTotal - $firstTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="lastFirstDistance">
+            <xsl:choose>
+                <xsl:when test="$lastFirstDistancetemp &gt; 0">
+                    <xsl:value-of select="concat('+',$lastFirstDistancetemp)" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lastFirstDistancetemp" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="theoreticMinimum">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="($minTotal - (($maxMinDistance div 75)*25))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <xsl:variable name="lineVal">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+                <xsl:variable name="position">
+                    <xsl:value-of select="position()" />
+                </xsl:variable>
+                <xsl:variable name="tempValues">
+                    <xsl:choose>
+                        <xsl:when
+                            test="(number(xalan:nodeset($derNumberPerDate)/date[position()=$position]/text())) and (xalan:nodeset($derNumberPerDate)/date[position()=$position]/text()=$maxTotal)">
+                            <xsl:value-of select="100" />
+                        </xsl:when>
+                        <xsl:when
+                            test="(number(xalan:nodeset($derNumberPerDate)/date[position()=$position]/text())) and (xalan:nodeset($derNumberPerDate)/date[position()=$position]/text() = '0')">
+                            <xsl:value-of select="0" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:choose>
+                                <xsl:when
+                                    test="number(xalan:nodeset($derNumberPerDate)/date[position()=$position]/text()) and (xalan:nodeset($derNumberPerDate)/date[position()=$position]/text() &gt; 0)">
+                                    <xsl:value-of
+                                        select="(((number(xalan:nodeset($derNumberPerDate)/date[position()=$position]/text())-$minTotal) div $maxMinDistance*75)+25)" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="0" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:otherwise>
+                    </xsl:choose>
+
+                </xsl:variable>
+                <xsl:value-of select="concat(',', $tempValues)" />
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="lineChartValues" select="substring($lineVal,2)" />
+
+        <xsl:variable name="chartURL.label.tmp">
+            <xsl:for-each
+                select="/journalStatistic/statistic[(number(@date) &gt;= number($journalStatistic.date.From)) and (number(@date) &lt;= number($journalStatistic.date.Till))]">
+                <xsl:sort select="@date" order="ascending" />
+                <xsl:value-of select="concat(@datePretty,'|')" />
+            </xsl:for-each>
+        </xsl:variable>
+
+        <xsl:variable name="label1">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal)" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label2">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal+($maxMinDistance*0.33))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label3">
+            <xsl:choose>
+                <xsl:when test="$maxMinDistance!='0'">
+                    <xsl:value-of select="round($minTotal+($maxMinDistance*0.66))" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="''" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="label4">
+            <xsl:value-of select="round($maxTotal)" />
+        </xsl:variable>
+
+        <xsl:variable name="ObjectDevChart.labels.decreased">
+            <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                select="mcrxml:decreaseLabels( string(substring($chartURL.label.tmp,0,(string-length($chartURL.label.tmp)-1))), string(concat('|',0,'|',$label1,'|',$label2,'|',$label3,'|',$label4)), string($numberOfLabels) )" />
+        </xsl:variable>
+        <xsl:variable name="ObjectDevChart.values.decreased">
+            <xsl:choose>
+                <xsl:when test="$dateRange>$numberOfValues">
+                    <xsl:value-of xmlns:mcrxml="xalan://org.mycore.frontend.cli.MCRJournalStatsUtilities"
+                        select="mcrxml:decreaseValues( string( $lineChartValues ) , string($numberOfValues) )" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$lineChartValues" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <br />
+        <br />
+        <a name="derivates" />
+        <b style="padding: 5px;">
+            <u>
+                <xsl:copy-of
+                    select="concat('Anzahl der Digitalisate auf dem Zeitschriftenserver (Differenz=',$lastFirstDistance,' Grösse= ',$overallDerSize,'):')" />
+            </u>
+        </b>
+        <a style="margin-left: 20px; border:1px solid black;" href="#toc">^^ zurück ^^</a>
+
+        <p style="text-align: center;">
+            <img
+                src="{concat($chartBaseUrl,'cht=lc&amp;chd=t:',$ObjectDevChart.values.decreased,'&amp;chs=',$chartSize.objectDev,$ObjectDevChart.labels.decreased,'&amp;chco=0000ff','&amp;chg=',$xgrid,',25')}" />
+        </p>
+
+    </xsl:template>
+
+    <!-- ======================================================================================================================== -->
+
 </xsl:stylesheet>

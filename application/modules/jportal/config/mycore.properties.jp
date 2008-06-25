@@ -192,4 +192,17 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
   # limit the value according to the maximum allowed GET 
   # parameter length given by browsers and applications
   # (200 is a good value, if 1024 characters are allowed)  
-  journalStatistic.view.objectListing.numberOfValues = 200
+  journalStatistic.view.objectListing.numberOfValues = 50
+  
+  # only journals with a percentage of or over this value on the hole amount
+  # are shown in the overall piecharts
+  journalStatistic.percentageOfVisibilty = 1.0
+  
+  # due to derivate stats are only registered since a special date
+  # (timestamp 1213113971040) the activity index is only paying attention
+  # on changes from this specified value
+  journalStatistic.dateDerivateCount = 1213113971040
+  
+  # default value either the journals without activities are
+  # shown at the beginning or not
+  journalStatistic.showJournalwithoutActivity = false
