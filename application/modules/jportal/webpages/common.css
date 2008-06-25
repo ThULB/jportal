@@ -8,6 +8,11 @@
 }
 
 #poweredByMycore a{
+    border-style:none; 
+	padding-left: 15px; 
+}
+
+#poweredByMycore img{
     border-style:none;  
 }
 

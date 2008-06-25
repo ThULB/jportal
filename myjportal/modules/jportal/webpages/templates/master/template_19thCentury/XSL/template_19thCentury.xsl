@@ -37,7 +37,7 @@
                     </tr>
                 </table>
                 <div style="min-height: 800px; width: max; margin-left: 10px; margin-right: 10px; margin-bottom: 10px; background-color:#e6dece;">
-                    <table width="100%" height="156" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;">
+                    <table width="100%" height="162" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;">
                         <tr valign="top">
                             <td rowspan="2" width="1235"
                                 style="background:url({$WebApplicationBaseURL}templates/master/template_19thCentury/IMAGES/19th-header-left.jpg) no-repeat;">
@@ -50,7 +50,7 @@
                                     </xsl:call-template>
                                 </div>
                             </td>
-                            <td colspan="2" width="max" height="121"
+                            <td colspan="2" width="max" height="127"
                                 style="background:url({$WebApplicationBaseURL}templates/master/template_19thCentury/IMAGES/19th-header-right.jpg) no-repeat;">
                                 <p>
                                     <br />
