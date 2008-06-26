@@ -993,6 +993,11 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
+            <xsl:variable name="fileLabel">
+                <xsl:call-template name="getFileLabel">
+                    <xsl:with-param name="typeOfFile" select="$fileType" />
+                </xsl:call-template>
+            </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$thumbnail='true'">
                     <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
@@ -1015,7 +1020,7 @@
                         <tr id="detailed-contents">
                             <td>
                                 <a href="{$href}">
-                                    <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$fileType,')')" />
+                                    <xsl:value-of select="$fileLabel" />
                                 </a>
                                 <xsl:text>
                                 </xsl:text>
@@ -1030,7 +1035,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <a href="{$href}">
-                        <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$fileType,')')" />
+                        <xsl:value-of select="$fileLabel" />
                     </a>
                     <xsl:if test="$CurrentUser!='gast'">
                         <a href="{$derivbase}">
@@ -1040,6 +1045,28 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
+    </xsl:template>
+    <!-- ===================================================================================================== -->
+    <xsl:template name="getFileLabel">
+        <xsl:param name="typeOfFile" />
+        <xsl:variable name="label">
+            <xsl:value-of select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[rules/extension/text()=$typeOfFile]/label/text()" />
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$label = ''">
+                <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$typeOfFile,')')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test="$CurrentLang='de'">
+                        <xsl:value-of select="concat($label,' ',i18n:translate('metaData.digitalisat.show'))" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="concat(i18n:translate('metaData.digitalisat.show'),' ',$label)" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     <!-- ===================================================================================================== -->
     <xsl:template name="iview.getSupport.hack">
