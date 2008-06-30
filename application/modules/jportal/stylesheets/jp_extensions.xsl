@@ -1026,7 +1026,7 @@
                                 </xsl:text>
                                 <xsl:if test="$CurrentUser!='gast'">
                                     <a href="{$derivbase}">
-                                        <xsl:value-of select="', Details &gt;&gt;'" />
+                                        <xsl:value-of select="', Details &gt;&gt; '" />
                                     </a>
                                 </xsl:if>
                             </td>
@@ -1039,7 +1039,7 @@
                     </a>
                     <xsl:if test="$CurrentUser!='gast'">
                         <a href="{$derivbase}">
-                            <xsl:value-of select="', Details &gt;&gt;'" />
+                            <xsl:value-of select="', Details &gt;&gt; '" />
                         </a>
                     </xsl:if>
                 </xsl:otherwise>
@@ -1054,15 +1054,15 @@
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="$label = ''">
-                <xsl:value-of select="concat(i18n:translate('metaData.digitalisat'),' (',$typeOfFile,')')" />
+                <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat'),' (',$typeOfFile,') ')" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:choose>
                     <xsl:when test="$CurrentLang='de'">
-                        <xsl:value-of select="concat($label,' ',i18n:translate('metaData.digitalisat.show'))" />
+                        <xsl:value-of select="concat(' ',$label,' ',i18n:translate('metaData.digitalisat.show'),' ')" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="concat(i18n:translate('metaData.digitalisat.show'),' ',$label)" />
+                        <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat.show'),' ',$label,' ')" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>
@@ -1715,12 +1715,13 @@
     </xsl:template>
 
     <!-- ================================================================================================================= -->
+
     <xsl:template name="lineSpace">
         <div style="height:0.7em;" />
     </xsl:template>
-    <!-- ===================================================================================================== -->
 
     <!-- ================================================================================================================= -->
+
     <xsl:template name="SwitchToXMLview">
         <xsl:if test="$view.objectmetadata='false'">
             <xsl:variable name="newurl">
@@ -1737,6 +1738,26 @@
             </td>
         </xsl:if>
     </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="mcr_directory.saveDerivate">
+        <xsl:if test="$CurrentUser!='gast'">
+            <xsl:variable name="saveAddress">
+                <xsl:value-of select="concat($ServletsBaseURL,'MCRZipServlet?id=',./path/text())" />
+            </xsl:variable>
+            <table id="metaData" cellpadding="0" cellspacing="0" border="0" width="100%">
+                <tr align="right">
+                    <td align="right">
+                        <a href="{$saveAddress}">
+                            <img src="{$WebApplicationBaseURL}images/save.gif" />
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </xsl:if>
+    </xsl:template>
+
     <!-- ===================================================================================================== -->
 
 </xsl:stylesheet>

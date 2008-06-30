@@ -29,6 +29,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    
+    <xsl:call-template name="mcr_directory.saveDerivate" />
 
     <!-- check the access rights -->
     <table id="metaData" cellpadding="0" cellspacing="0">
