@@ -1,10 +1,14 @@
 package org.mycore.common.xml;
 
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.services.i18n.MCRTranslation;
 
@@ -95,9 +99,14 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
     private String getClassLabel(String classID) {
         // TODO: use cache
         String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-        // MCRCatelassificationItem.getClassificationItem(classID).getText(currentLang);
-        // String label = "ich muss noch ermittelt werden ;-)";
-        String label = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0).getLabels().get(currentLang).getText();
+        Map<String, MCRLabel> labels = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0).getLabels();
+        String label = "";
+        if (labels.get(currentLang) != null) 
+            label = labels.get(currentLang).getText();
+        else {
+            String defaultLang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "de");
+            label = labels.get(defaultLang).getText();
+        }
         return label;
     }
 
@@ -118,3 +127,16 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         return true;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
