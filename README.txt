@@ -23,7 +23,7 @@ Watch and agree license agreement specified in LICENSE.txt
 2. REQUIREMENTS
 ======================================
 ======================================
-- CVS-Client
+- Subversion-Client
 - JAVA 6 JDK
 - ANT
 
@@ -53,7 +53,7 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 --- set $MCR.basedir to your <$DOCPORTAL_HOME>
 --- set $MCR.FileUpload.IP to your local running server's IP address
 --- add module "JPortal" to system, by appending on property "MCR.Modules.Application" the value "jportal"
---- remove default module "DocPortal" from system, by removing value "docportal" from property "MCR.Modules.Application" 
+--- remove default module "docportal" and "iview" from system, by removing value "docportal" resp. "iview" from property "MCR.Modules.Application" 
 
 
 6. INSTALLATION
