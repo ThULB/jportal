@@ -71,6 +71,10 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         // migrate object links
         List<String> objectTypes = MCRXMLTableManager.instance().getAllAllowedMCRObjectIDTypes();
         for (String objectType : objectTypes) {
+            if (objectType.equals("derivate")) {
+                LOGGER.debug("Skipping objectType derivate...");
+                continue;
+            }
             List<String> objID = MCRXMLTableManager.instance().retrieveAllIDs(objectType);
             LOGGER.info("Processing object type " + objectType + " with " + objID.size() + " objects.");
             // for
