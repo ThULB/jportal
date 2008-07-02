@@ -36,6 +36,7 @@ import org.hibernate.Session;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.classifications2.MCRCategLinkService;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRObjectReference;
@@ -55,7 +56,7 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
     private static Class<MCRCategoryLink> LINK_CLASS = MCRCategoryLink.class;
 
     private static MCRCache categCache = new MCRCache(MCRConfiguration.instance().getInt("MCR.Classifications.LinkServiceImpl.CategCache.Size", 1000),
-            "MCRCategLinkService category cache");
+                    "MCRCategLinkService category cache");
 
     private static MCRCategoryDAOImpl DAO = new MCRCategoryDAOImpl();
 
@@ -170,6 +171,9 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
         if (categ != null)
             return categ;
         categ = MCRCategoryDAOImpl.getByNaturalID(session, categID);
+        if (categ == null) {
+            throw new MCRException("Category " + categID + " does not exists");
+        }
         categCache.put(categID, categ);
         return categ;
     }

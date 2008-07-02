@@ -3,6 +3,7 @@ package org.mycore.services.migration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -36,22 +37,23 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         MCRCommand com = null;
 
         com = new MCRCommand("migrate user", "org.mycore.services.migration.MCRMigrationCommands.migrateUser",
-                "The command migrates the user management to MyCoRe 2.0.");
+                        "The command migrates the user management to MyCoRe 2.0.");
         command.add(com);
         com = new MCRCommand("internal usermigration step {0}", "org.mycore.services.migration.MCRMigrationCommands.migrateUser int",
-                "Internal commands for user migration");
+                        "Internal commands for user migration");
         command.add(com);
         com = new MCRCommand("migrate mcraccess", "org.mycore.services.migration.MCRMigrationCommands.migrateAccess",
-                "The command migrates the access system to MyCoRe 2.0.");
+                        "The command migrates the access system to MyCoRe 2.0.");
         command.add(com);
         com = new MCRCommand("internal accessmigration step {0}", "org.mycore.services.migration.MCRMigrationCommands.migrateAccess int",
-                "Internal commands for access system migration");
+                        "Internal commands for access system migration");
         command.add(com);
         com = new MCRCommand("migrate classifications", "org.mycore.services.migration.MCRMigrationCommands.migrateClassifications",
-                "Internal commands for classification migration");
+                        "Internal commands for classification migration");
         command.add(com);
     }
 
+    @SuppressWarnings("unchecked")
     public static void migrateClassifications() throws JDOMException {
         List<String> classIds = MCRXMLTableManager.instance().retrieveAllIDs("class");
         MCRCategoryDAO dao = MCRCategoryDAOFactory.getInstance();
@@ -70,9 +72,11 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         List<String> objectTypes = MCRXMLTableManager.instance().getAllAllowedMCRObjectIDTypes();
         for (String objectType : objectTypes) {
             List<String> objID = MCRXMLTableManager.instance().retrieveAllIDs(objectType);
+            LOGGER.info("Processing object type " + objectType + " with " + objID.size() + " objects.");
             // for
             for (String id : objID) {
-                Collection<MCRCategoryID> categories = new ArrayList<MCRCategoryID>();
+                LOGGER.debug("Processing object " + id);
+                Collection<MCRCategoryID> categories = new HashSet<MCRCategoryID>();
 
                 Document obj = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
                 List<Element> classElements = classSelector.selectNodes(obj);
@@ -83,8 +87,11 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
                 }
                 if (categories.size() > 0) {
                     MCRObjectReference objectReference = new MCRObjectReference(id, objectType);
-                    MCRCategLinkServiceFactory.getInstance().setLinks(objectReference, categories);
-
+                    try {
+                        MCRCategLinkServiceFactory.getInstance().setLinks(objectReference, categories);
+                    } catch (Exception e) {
+                        LOGGER.error("Error occured while creating category links for object " + id, e);
+                    }
                 }
             }
 
