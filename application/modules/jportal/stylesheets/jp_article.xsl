@@ -196,20 +196,29 @@
                 <tr>
                     <td id="leaf-additional">
                         <xsl:call-template name="lineSpace" />
-                        <xsl:value-of select="concat(i18n:translate('editormask.labels.size'),': ')" />
+                        <i>
+                            <xsl:value-of select="concat(i18n:translate('editormask.labels.size'),': ')" />
+                        </i>
                         <xsl:copy-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size/text()" />
                     </td>
                 </tr>
             </xsl:if>
 
-            <!-- derivates -->
-            <!--<xsl:if test="xalan:nodeset($cXML)/mycoreobject/structure/derobjects/derobject">
-                <tr>
-                <td>
-                <xsl:call-template name="lineSpace" />
+            <!-- rubric -->
+            <tr>
+                <td id="leaf-additional">
+                    <xsl:call-template name="lineSpace" />
+                    <i>
+                        <xsl:value-of select="i18n:translate('editormask.labels.rubric')" />:
+                    </i>
+                    <xsl:call-template name="printClass">
+                        <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/rubrics/rubric" />
+                        <xsl:with-param name="host" select="'local'" />
+                    </xsl:call-template>
                 </td>
-                </tr>
-                </xsl:if> -->
+            </tr>
+
+            <!-- derivates -->
             <xsl:call-template name="printDerivates">
                 <xsl:with-param name="obj_id" select="@id" />
                 <xsl:with-param name="knoten" select="$cXML" />

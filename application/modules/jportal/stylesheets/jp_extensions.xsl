@@ -940,6 +940,7 @@
                                         <xsl:variable name="deriv" select="@xlink:href" />
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
+                                        <xsl:call-template name="get.labelOfDigitalMedias" />
                                         <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
                                         <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
                                         <xsl:text>; </xsl:text>
@@ -955,6 +956,13 @@
 
     </xsl:template>
     <!-- ===================================================================================================== -->
+
+    <xsl:template name="get.labelOfDigitalMedias">
+        <i>Digitalisat(e):</i>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
     <xsl:template match="internals" priority="2">
         <xsl:param name="detailed-view" />
         <xsl:if test="$objectHost = 'local'">
@@ -1697,9 +1705,14 @@
     <xsl:template name="getAuthorList">
         <xsl:param name="objectXML" />
         <xsl:param name="listLength" />
+
         <xsl:for-each select="xalan:nodeset($objectXML)/mycoreobject/metadata/participants/participant[number($listLength)+1>position()]">
             <xsl:if test="position()=1">
                 <xsl:call-template name="lineSpace" />
+                <i>
+                    <xsl:value-of select="i18n:translate('editormask.labels.participants_label')" />
+                </i>
+                :
             </xsl:if>
             <xsl:if test="position()>1">
                 <xsl:copy-of select="';  '" />
