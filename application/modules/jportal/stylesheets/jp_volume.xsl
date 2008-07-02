@@ -142,13 +142,16 @@
                     </xsl:variable>
                     <xsl:choose>
                         <xsl:when test="(contains(@id,'_jparticle_')) 
-              or ($children='false') ">
+              or ($children='false' and $CurrentUser!='gast') ">
                             <xsl:call-template name="objectLinking">
                                 <xsl:with-param name="obj_id" select="@id" />
                                 <xsl:with-param name="obj_name" select="$shortlabel" />
                                 <xsl:with-param name="hoverText" select="$name" />
                                 <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
                             </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="($children='false' and $CurrentUser='gast')">
+                            <xsl:value-of select="$shortlabel" />
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:call-template name="objectLinking">
