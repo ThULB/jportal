@@ -79,7 +79,7 @@
                     </div>
                     <div id="contentArea">
                         <div id="contentWrapper">
-                            <xsl:call-template name="getFastWCMS" />
+                            
                             <xsl:call-template name="template_enb.write.content" />
                         </div>
                     </div>

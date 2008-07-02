@@ -71,7 +71,7 @@
                     </div>
                     <div id="contentArea">
                         <div id="contentWrapper">
-                            <xsl:call-template name="getFastWCMS" />
+                            
                             <xsl:call-template name="template_dkp.write.content" />
                         </div>
                     </div>

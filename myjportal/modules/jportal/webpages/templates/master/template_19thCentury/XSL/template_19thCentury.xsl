@@ -98,7 +98,7 @@
                                 </div>
                                 <div id="contentArea">
                                     <div id="contentWrapper">
-                                        <xsl:call-template name="getFastWCMS" />
+                                        
                                         <xsl:call-template name="template_19thCentury.write.content" />
                                     </div>
                                 </div>

@@ -95,7 +95,7 @@
                         </td>
                         <td valign="top" halign="left" id="footer2-right">
                             <div id="contentArea">
-                                <xsl:call-template name="getFastWCMS" />
+                                
                                 <xsl:call-template name="template_hbz.write.content" />
                             </div>
                         </td>

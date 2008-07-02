@@ -115,7 +115,7 @@
                         <td style="vertical-align: top; text-align: left;">
                             <div id="contentArea">
                                 <div id="contentWrapper">
-                                    <xsl:call-template name="getFastWCMS" />
+                                    
                                     <xsl:call-template name="template_akruetzel.write.content" />
                                 </div>
                             </div>

@@ -62,7 +62,7 @@
                                 <br />
                                 <div id="contentArea">
                                     <div id="contentWrapper">
-                                        <xsl:call-template name="getFastWCMS" />
+                                        
                                         <xsl:call-template name="template_suz.write.content" />
                                     </div>
                                 </div>

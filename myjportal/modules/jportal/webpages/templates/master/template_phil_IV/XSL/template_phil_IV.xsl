@@ -53,7 +53,7 @@
                     </div>
                     <br />
                     <div id="contentArea">
-                        <xsl:call-template name="getFastWCMS" />
+                        
                         <xsl:call-template name="template_phil_IV.write.content" />
                     </div>
                 </div>

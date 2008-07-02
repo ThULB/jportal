@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink">
-    
+
     <!-- ============================================== -->
     <!-- the template                                   -->
     <!-- ============================================== -->
@@ -48,9 +48,7 @@
                     <!-- mainSite_MenuArea -->
 
                     <div class="mainSite_ContentArea">
-                        <xsl:call-template name="getFastWCMS" />
                         <div id="contentArea">
-
                             <xsl:call-template name="template_master.write.content" />
                         </div>
                     </div>

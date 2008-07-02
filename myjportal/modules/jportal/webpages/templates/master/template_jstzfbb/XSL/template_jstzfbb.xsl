@@ -100,7 +100,7 @@
                         <td colspan="2" valign="top" id="contentArea">
                             <!-- IE Fix: contentWrapper needed :o( -->
                             <div id="contentWrapper">
-                                <xsl:call-template name="getFastWCMS" />
+                                
                                 <xsl:call-template name="template_jstzfbb.write.content" />
                             </div>
                         </td>
@@ -137,7 +137,7 @@
                         </div>
                     </xsl:otherwise>
                 </xsl:choose>
-                <xsl:call-template name="getFastWCMS" />
+                
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise>

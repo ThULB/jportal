@@ -154,7 +154,7 @@
                         <!-- Begin: Content Area  ============================================================== -->
                         <td id="contentArea">
                             <div id="contentWrapper">
-                                <xsl:call-template name="getFastWCMS" />
+                                
                                 <xsl:call-template name="template_jlz.write.content" />
                             </div>
                         </td>

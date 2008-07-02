@@ -69,7 +69,7 @@
                                 </div>
                                 <br />
                                 <div id="contentArea">
-                                    <xsl:call-template name="getFastWCMS" />
+                                    
                                     <xsl:call-template name="template_ihb.write.content" />
                                 </div>
                             </td>

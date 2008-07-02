@@ -100,7 +100,7 @@
 
                                         <!-- IE Fix: contentWrapper needed :o( -->
                                         <div id="contentWrapper">
-                                            <xsl:call-template name="getFastWCMS" />
+                                            
                                             <xsl:call-template name="template_pamietnik.write.content" />
                                         </div>
                                     </td>

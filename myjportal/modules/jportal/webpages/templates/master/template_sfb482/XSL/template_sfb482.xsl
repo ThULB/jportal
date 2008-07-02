@@ -99,7 +99,7 @@
                         <td width="max" valign="top">
                             <div id="contentArea">
                                 <div id="contentWrapper">
-                                    <xsl:call-template name="getFastWCMS" />
+                                    
                                     <xsl:call-template name="template_sfb482.write.content" />
                                 </div>
                             </div>
