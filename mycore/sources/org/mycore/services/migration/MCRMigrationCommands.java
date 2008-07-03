@@ -3,14 +3,19 @@ package org.mycore.services.migration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.impl.CriteriaImpl;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -18,6 +23,7 @@ import org.jdom.xpath.XPath;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRLINKHREF;
 import org.mycore.common.MCRException;
+import org.mycore.datamodel.classifications2.MCRCategLinkService;
 import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -57,7 +63,8 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
     public static void migrateClassifications() throws JDOMException {
         List<String> classIds = MCRXMLTableManager.instance().retrieveAllIDs("class");
         MCRCategoryDAO dao = MCRCategoryDAOFactory.getInstance();
-        XPath classSelector = XPath.newInstance("/mycoreobject/metadata/*[@class='MCRMetaClassification']/*");
+        String xpathExpr = "/mycoreobject/metadata/*[@class='MCRMetaClassification']/*";
+        XPath classSelector = XPath.newInstance(xpathExpr);
         LOGGER.info("Migrating classifications and categories...");
         for (String classID : classIds) {
             MCRObjectID objID = new MCRObjectID(classID);
@@ -68,44 +75,71 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         }
 
         LOGGER.info("Migrating object links....");
-        // migrate object links
-        List<String> objectTypes = MCRXMLTableManager.instance().getAllAllowedMCRObjectIDTypes();
-        for (String objectType : objectTypes) {
-            if (objectType.equals("derivate")) {
-                LOGGER.debug("Skipping objectType derivate...");
-                continue;
-            }
-            List<String> objID = MCRXMLTableManager.instance().retrieveAllIDs(objectType);
-            LOGGER.info("Processing object type " + objectType + " with " + objID.size() + " objects.");
-            // for
-            for (String id : objID) {
-                LOGGER.debug("Processing object " + id);
-                Collection<MCRCategoryID> categories = new HashSet<MCRCategoryID>();
+        // init
+        LOGGER.debug("retrieving all relevant objects id's");
+        List<String> objIDs = getAllObjIDs();
+        int lengthAbs = objIDs.size();
+        MCRXMLTableManager xmlTable = MCRXMLTableManager.instance();
+        MCRCategLinkService clsf = MCRCategLinkServiceFactory.getInstance();
+        LOGGER.debug(lengthAbs + "object id's retrieved");
 
-                Document obj = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
-                List<Element> classElements = classSelector.selectNodes(obj);
-                for (Element el : classElements) {
-                    String clid = el.getAttributeValue("classid");
-                    String catid = el.getAttributeValue("categid");
-                    categories.add(new MCRCategoryID(clid, catid));
-                }
-                if (categories.size() > 0) {
-                    MCRObjectReference objectReference = new MCRObjectReference(id, objectType);
-                    try {
-                        MCRCategLinkServiceFactory.getInstance().setLinks(objectReference, categories);
-                    } catch (Exception e) {
-                        LOGGER.error("Error occured while creating category links for object " + id, e);
-                    }
+        // pass through found objects
+        int pos = 0;
+        long startTime = System.currentTimeMillis();
+        for (String id : objIDs) {
+            pos++;
+            LOGGER.debug("Processing object " + id);
+            Collection<MCRCategoryID> categories = new HashSet<MCRCategoryID>();
+
+            LOGGER.debug("parsing " + id);
+            Document obj = xmlTable.readDocument(new MCRObjectID(id));
+            LOGGER.debug("executing XPATH " + xpathExpr);
+            List<Element> classElements = classSelector.selectNodes(obj);
+            int length = classElements.size();
+            LOGGER.debug("passing through " + length + " found category ids");
+            for (Element el : classElements) {
+                String clid = el.getAttributeValue("classid");
+                String catid = el.getAttributeValue("categid");
+                categories.add(new MCRCategoryID(clid, catid));
+            }
+            if (categories.size() > 0) {
+                LOGGER.debug("updating references");
+                String type = id.substring(id.indexOf("_") + 1, id.lastIndexOf("_") - 1);
+                MCRObjectReference objectReference = new MCRObjectReference(id, type);
+                try {
+                    clsf.setLinks(objectReference, categories);
+                } catch (Exception e) {
+                    LOGGER.error("Error occured while creating category links for object " + id, e);
                 }
             }
-
+            if (pos % 100 == 0 || pos == lengthAbs) {
+                long currTime = System.currentTimeMillis();
+                long finishTime = currTime + ((currTime - startTime) * (lengthAbs - pos) / pos);
+                LOGGER.info(((float) (pos / lengthAbs) * 100) + " %, estimated finish time is " + new Date(finishTime));
+            }
         }
+
+        // }
         LOGGER.info("Deleting old object links...");
         final Session session = MCRHIBConnection.instance().getSession();
         Criteria c = session.createCriteria(MCRLINKHREF.class).add(Restrictions.eq("key.mcrtype", "classid"));
         for (Object classLink : c.list()) {
             session.delete(classLink);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<String> getAllObjIDs() {
+        Session session = MCRHIBConnection.instance().getSession();
+        Criteria c = session.createCriteria(MCRLINKHREF.class);
+        c.setProjection(Projections.distinct(Projections.property("key.mcrfrom")));
+        c.add(Restrictions.eq("key.mcrtype", "classid"));
+        // String query = "select DISTINCT MCRFROM from MCRLINKHREF where
+        // MCRTYPE = 'classid'";
+        // String query = "select key.mcrfrom from MCRLINKHREF where key.mcrtype
+        // = 'classid'";
+        // List<String> l = session.createQuery(query).list();
+        return c.list();
     }
 
     public static List<String> migrateUser() {
