@@ -291,7 +291,7 @@
         <div id="mycoreVersionInfo">
             <xsl:value-of select="i18n:translate('mycore.version')" />
             <br />
-            Update:
+            Last update:
             <xsl:value-of select="i18n:translate('common.today')" />
         </div>
         <div id="poweredByMycore">
