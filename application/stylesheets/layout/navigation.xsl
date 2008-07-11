@@ -263,6 +263,7 @@
                                         <xsl:with-param name="depth" select="$depth" />
                                         <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
                                         <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                                        <xsl:with-param name="rootNode" select="$rootNode" />
                                         <xsl:with-param name="subRootNode" select="$subRootNode" />
                                         <xsl:with-param name="blockerWebpage" select="@href" />
                                     </xsl:call-template>
@@ -373,6 +374,7 @@
         <xsl:param name="depth" />
         <xsl:param name="menuPointHeigth" />
         <xsl:param name="columnWidthIcon" />
+        <xsl:param name="rootNode" />
         <xsl:param name="subRootNode" />
         <xsl:param name="blockerWebpage" />
 
@@ -458,6 +460,7 @@
                     <xsl:with-param name="depth" select="$depth" />
                     <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
                     <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                    <xsl:with-param name="rootNode" select="$rootNode" />
                     <xsl:with-param name="subRootNode" select="$subRootNode" />
                 </xsl:call-template>
             </xsl:if>
@@ -471,8 +474,25 @@
         <xsl:param name="depth" />
         <xsl:param name="menuPointHeigth" />
         <xsl:param name="columnWidthIcon" />
+        <xsl:param name="rootNode" />
         <xsl:param name="subRootNode" />
         <xsl:param name="createSiteMap" />
+
+        <xsl:variable name="depthSubRootNode">
+            <xsl:variable name="subRootNodeDepthTemp">
+                <xsl:for-each select="//item[@href = $subRootNode]">
+                    <xsl:value-of select="count(ancestor-or-self::item)" />
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$subRootNodeDepthTemp != ''">
+                    <xsl:value-of select="$subRootNodeDepthTemp"></xsl:value-of>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="0" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 
         <xsl:if test="$linkKind != 'hide'">
             <!-- display complete link row when $linkKind != 'hide' -->
@@ -482,15 +502,26 @@
                 </td>
                 <!-- draw lines before icon and link -->
                 <xsl:for-each select="ancestor::item">
-                    <xsl:if test="position() &gt; 1 and position() &gt; $depth+1     ">
-                        <td align="center">
-                            <xsl:call-template name="addIcon">
-                                <xsl:with-param name="linkKind" select="'line'" />
-                                <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
-                                <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
-                            </xsl:call-template>
-                        </td>
-                    </xsl:if>
+                    <xsl:choose>
+                        <xsl:when test="($depthSubRootNode = 0) and (position() &gt; 1)">
+                            <td align="center">
+                                <xsl:call-template name="addIcon">
+                                    <xsl:with-param name="linkKind" select="'line'" />
+                                    <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                                    <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                                </xsl:call-template>
+                            </td>
+                        </xsl:when>
+                        <xsl:when test="($depthSubRootNode &gt; 0 and position() &gt; $depthSubRootNode+1))">
+                            <td align="center">
+                                <xsl:call-template name="addIcon">
+                                    <xsl:with-param name="linkKind" select="'line'" />
+                                    <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
+                                    <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
+                                </xsl:call-template>
+                            </td>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:for-each>
                 <!-- draw icon before the link -->
                 <td align="center">
@@ -501,7 +532,17 @@
                     </xsl:call-template>
                 </td>
                 <!-- display link -->
-                <td colspan="{ ($depth - count(ancestor::item)) + $depth + 1 }">
+                <xsl:variable name="colSpanValue">
+                    <xsl:choose>
+                        <xsl:when test="$depthSubRootNode = 0">
+                            <xsl:value-of select="$depth - count(ancestor::item)) + 1" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="($depth - count(ancestor::item)) + $depthSubRootNode + 1 " />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <td colspan="{$colSpanValue}">
                     <xsl:choose>
                         <xsl:when test="$linkKind = 'current' or $linkKind = 'current_popedUp'">
                             <span class="marked">
