@@ -25,10 +25,10 @@
 
 	<property name="acl-description.jp.all" value="always allowed" />
 	<property name="acl-description.jp.require-login" value="require login" />
-	<property name="acl-description.jp.admins" value="journal admins" />
+	<property name="acl-description.jp.admins" value="admins" />
 	<property name="acl-description.jp.journalAdmins" value="journal admins" />
 	<property name="acl-description.jp.editorsTOC" value="journal editors for TOC" />
-	<property name="acl-description.jp.editors" value="journal editors" />	
+	<property name="acl-description.jp.editors" value="journal editors" />
 
 	<!-- =================================================================== -->
 	<!-- Create schemas					                                   -->
@@ -99,11 +99,14 @@
 	<!-- =================================================================== -->
 
 	<target name="jp.create.default-rules" depends="init" description="Load JPortal default ACL rules">
+		<modulePreHook target="create.default-rules" />
 		<property name="commands.file" value="${basedir}/commands.txt" />
 		<echo file="${commands.file}" append="false">
 			load permissions data from file system_permissions.xml
 
 	    	update permission read for id default with rulefile grant-all.xml described by ${acl-description.jp.all}
+		    update permission writedb for id default with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
+			update permission deletedb for id default with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 			
 			update permission read for id default_jpjournal with rulefile grant-all.xml described by ${acl-description.jp.all}
 			update permission read for id default_jpvolume with rulefile grant-all.xml described by ${acl-description.jp.all}
@@ -118,8 +121,8 @@
 			update permission writedb for id default_person with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 			update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 			
-			update permission deletedb for id default_jpjournal with rulefile grant-admingroup.xml described by ${acl-description.jp.editors}
-			update permission deletedb for id default_jpvolume with rulefile grant-admingroup.xml described by ${acl-description.jp.editors}
+			update permission deletedb for id default_jpjournal with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
+			update permission deletedb for id default_jpvolume with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 			update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 			update permission deletedb for id default_person with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 			update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}			
@@ -138,6 +141,7 @@
 			<param name="cli.command" value="process ${commands.file}" />
 		</antcall>
 		<delete file="${commands.file}" />
+		<moduleHook target="create.default-rules" />
 	</target>
 
 	<!-- =================================================================== -->
