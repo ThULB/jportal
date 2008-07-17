@@ -10,6 +10,7 @@
     <xsl:include href="objecttypes.xsl"/>
     <xsl:include href="sitemap.xsl"/>
     <xsl:include href="search-website.xsl" />
+    <xsl:include href="journalList.xsl" />
     <xsl:variable name="PageTitle">
         <xsl:choose>
             <xsl:when test="/MyCoReWebPage/section[ lang($CurrentLang)]/@title != '' ">

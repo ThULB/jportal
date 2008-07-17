@@ -1447,17 +1447,31 @@
         <xsl:param name="label" />
         <xsl:param name="typeClassi" />
         <xsl:param name="mode" />
+        <xsl:param name="layout" select="'structure'" />
 
         <xsl:if test="$nodes">
             <xsl:variable name="classXML">
                 <xsl:copy-of select="xalan:nodeset(document(concat('classification:metadata:all:children:',$typeClassi)))" />
             </xsl:variable>
             <tr>
-                <td valign="top" id="detailed-labels">
-                    <xsl:value-of select="$label" />
-                </td>
-                <td class="metavalue">
-                    <!-- run per default throug all categories, sorted by labels in $currentlang -->
+                <xsl:if test="$layout = 'structure'">
+                    <td valign="top" id="detailed-labels">
+                        <xsl:value-of select="$label" />
+                    </td>
+                </xsl:if>
+                <td>
+                    <xsl:choose>
+                        <xsl:when test="$layout='structure'">
+                            <xsl:attribute name="class"><xsl:value-of select="'leaf-additional'" />
+                            </xsl:attribute>
+                        </xsl:when>
+                        <xsl:when test="$layout='flat'">
+                            <xsl:attribute name="id"> <xsl:value-of select="'leaf-additional'" />
+                            </xsl:attribute>
+                        </xsl:when>
+                    </xsl:choose>
+
+                    <!-- pass all categories, sorted by labels in $currentlang -->
                     <xsl:for-each select="xalan:nodeset($classXML)/mycoreclass/categories/category">
                         <xsl:sort select="./label[@xml:lang=$CurrentLang]/@text" order="ascending" />
                         <xsl:variable name="categID">
@@ -1471,56 +1485,81 @@
                                     select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
                                 :
                             </i>
-                            <br />
-                            <ul>
-                                <!-- all entries from mcrobject-->
-                                <xsl:for-each select="$nodes[@type=$categID] | $nodes[@xlink:title=$categID]">
-                                    <xsl:sort order="ascending" select="./text()" />
-                                    <li>
-                                        <xsl:choose>
-                                            <xsl:when test="$mode='xlink'">
-                                                <xsl:call-template name="objectLink">
-                                                    <xsl:with-param name="obj_id" select="@xlink:href" />
+                            <xsl:choose>
+                                <xsl:when test="$layout='structure'">
+                                    <br />
+                                    <ul>
+                                        <xsl:for-each select="$nodes[@type=$categID] | $nodes[@xlink:title=$categID]">
+                                            <xsl:sort order="ascending" select="./text()" />
+                                            <li>
+                                                <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
+                                                    <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
                                                 </xsl:call-template>
-                                            </xsl:when>
-                                            <xsl:when test="$mode='date'">
-                                                <xsl:variable name="format">
-                                                    <xsl:choose>
-                                                        <xsl:when test="string-length(normalize-space(.))=4">
-                                                            <xsl:value-of select="i18n:translate('metaData.dateYear')" />
-                                                        </xsl:when>
-                                                        <xsl:when test="string-length(normalize-space(.))=7">
-                                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
-                                                        </xsl:when>
-                                                        <xsl:when test="string-length(normalize-space(.))=10">
-                                                            <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
-                                                        </xsl:when>
-                                                        <xsl:otherwise>
-                                                            <xsl:value-of select="i18n:translate('metaData.dateTime')" />
-                                                        </xsl:otherwise>
-                                                    </xsl:choose>
-                                                </xsl:variable>
-                                                <xsl:call-template name="formatISODate">
-                                                    <xsl:with-param name="date" select="." />
-                                                    <xsl:with-param name="format" select="$format" />
-                                                </xsl:call-template>
-                                            </xsl:when>
-                                            <xsl:otherwise>
-                                                <xsl:call-template name="printI18N">
-                                                    <xsl:with-param name="nodes" select="./text()" />
-                                                </xsl:call-template>
-                                            </xsl:otherwise>
-                                        </xsl:choose>
-                                    </li>
-                                </xsl:for-each>
-                            </ul>
+                                            </li>
+                                        </xsl:for-each>
+                                    </ul>
+                                </xsl:when>
+                                <xsl:when test="$layout='flat'">
+                                    <xsl:for-each select="$nodes[@type=$categID] | $nodes[@xlink:title=$categID]">
+                                        <xsl:sort order="ascending" select="./text()" />
+                                        <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
+                                            <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
+                                        </xsl:call-template>
+                                    </xsl:for-each>
+                                </xsl:when>
+                            </xsl:choose>
                         </xsl:if>
                     </xsl:for-each>
+                    <xsl:if test="$layout='flat'">
+                        <br /><br />
+                    </xsl:if>
                 </td>
             </tr>
         </xsl:if>
     </xsl:template>
+
     <!-- ===================================================================================================== -->
+
+    <xsl:template name="printMetaDate_typeSensitive.printEntry">
+        <xsl:param name="modeIF" />
+        <xsl:choose>
+            <xsl:when test="$modeIF='xlink'">
+                <xsl:call-template name="objectLink">
+                    <xsl:with-param name="obj_id" select="@xlink:href" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="$modeIF='date'">
+                <xsl:variable name="format">
+                    <xsl:choose>
+                        <xsl:when test="string-length(normalize-space(.))=4">
+                            <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                        </xsl:when>
+                        <xsl:when test="string-length(normalize-space(.))=7">
+                            <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                        </xsl:when>
+                        <xsl:when test="string-length(normalize-space(.))=10">
+                            <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:call-template name="formatISODate">
+                    <xsl:with-param name="date" select="." />
+                    <xsl:with-param name="format" select="$format" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="printI18N">
+                    <xsl:with-param name="nodes" select="./text()" />
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
     <xsl:template name="get.rightPage">
 
         <xsl:variable name="journalXML">

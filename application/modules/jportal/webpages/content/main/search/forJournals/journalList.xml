@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Blättern A - Z">
+  <p>Wählen sie ein Zeitschrift aus der folgenden Liste:</p>
+  <p> </p>
+  <p>
+    <journallist />
+  </p>
+</section>
+<meta><log date="2008-07-16" time="13:02" labelPath=" » Suche » nach Zeitschriften » az" lastEditor="administrator" /></meta></MyCoReWebPage>

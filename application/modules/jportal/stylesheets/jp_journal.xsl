@@ -24,45 +24,131 @@
         </xsl:variable>
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
-                <td id="leaf-front" colspan="1" rowspan="2">
+                <td id="leaf-front" colspan="1" rowspan="6">
                     <img src="{$WebApplicationBaseURL}images/zeitung2.gif" />
                 </td>
                 <td id="leaf-linkarea2">
-                    <xsl:variable name="name">
-                        <xsl:call-template name="ShortenText">
-                            <xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-                            <xsl:with-param name="length" select="75" />
-                        </xsl:call-template>
+                    <xsl:variable name="webAddress">
+                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
                     </xsl:variable>
-                    <xsl:variable name="date">
-                        <xsl:choose>
-                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-                                <xsl:variable name="date">
-                                    <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()" />
-                                </xsl:variable>
-                                <xsl:value-of select="concat(' (',$date,')')" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="''" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:variable name="label">
-                        <xsl:value-of select="concat($name,$date)" />
-                    </xsl:variable>
-                    <xsl:call-template name="objectLinking">
-                        <xsl:with-param name="obj_id" select="@id" />
-                        <xsl:with-param name="obj_name" select="$label" />
-                        <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
-                    </xsl:call-template>
+                    <a href="{$WebApplicationBaseURL}{$webAddress}{$HttpSession}">
+                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                    </a>
+                    <br />
                 </td>
             </tr>
-            <tr>
-                <xsl:call-template name="printDerivates">
-                    <xsl:with-param name="obj_id" select="@id" />
-                    <xsl:with-param name="knoten" select="$cXML" />
+            <!-- additional -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/subtitles/subtitle">
+                <tr>
+                    <td id="leaf-additional">
+                        <i>
+                            <xsl:copy-of select="xalan:nodeset($cXML)/mycoreobject/metadata/subtitles/subtitle/text()" />
+                        </i>
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+            </xsl:if>
+            <!-- date -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and (@type='published_from' or @type='published_until')]">
+                <tr>
+                    <td id="leaf-additional">
+                        <i>Erscheinungsverlauf:&#160;&#160;</i>
+                        <xsl:variable name="format_from">
+                            <xsl:choose>
+                                <xsl:when
+                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=4">
+                                    <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                                </xsl:when>
+                                <xsl:when
+                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=7">
+                                    <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                                </xsl:when>
+                                <xsl:when
+                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=10">
+                                    <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:variable>
+                        <xsl:call-template name="formatISODate">
+                            <xsl:with-param name="date"
+                                select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']/text()" />
+                            <xsl:with-param name="format" select="$format_from" />
+                        </xsl:call-template>
+                        <xsl:value-of select="'&#160;-&#160;'"></xsl:value-of>
+                        <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@type='published_until']">
+                            <xsl:variable name="format_until">
+                                <xsl:choose>
+                                    <xsl:when
+                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=4">
+                                        <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+                                    </xsl:when>
+                                    <xsl:when
+                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=7">
+                                        <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+                                    </xsl:when>
+                                    <xsl:when
+                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=10">
+                                        <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
+                            <xsl:call-template name="formatISODate">
+                                <xsl:with-param name="date"
+                                    select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']/text()" />
+                                <xsl:with-param name="format" select="$format_until" />
+                            </xsl:call-template>
+                        </xsl:if>
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+            </xsl:if>
+            <!-- authors -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant">
+                <xsl:call-template name="printMetaDate_typeSensitive">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editormask.labels.participants_label')" name="label" />
+                    <xsl:with-param name="typeClassi" select="'jportal_class_00000007'" />
+                    <xsl:with-param name="mode" select="'xlink'" />
+                    <xsl:with-param name="layout" select="'flat'" />
                 </xsl:call-template>
-            </tr>
+            </xsl:if>
+            <!-- id's -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/identis/identi">
+                <xsl:call-template name="printMetaDate_typeSensitive">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="xalan:nodeset($cXML)/mycoreobject/metadata/identis/identi" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editormask.labels.identi')" name="label" />
+                    <xsl:with-param name="typeClassi" select="'jportal_class_00000010'" />
+                    <xsl:with-param name="mode" select="'text'" />
+                    <xsl:with-param name="layout" select="'flat'" />
+                </xsl:call-template>
+            </xsl:if>
+            <!-- lang -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/languages/language">
+                <tr>
+                    <td id="leaf-additional">
+                        <i>
+                            <xsl:value-of select="i18n:translate('editormask.labels.pub_lang')" />
+                            :
+                        </i>
+                        <xsl:call-template name="printClass">
+                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/languages/language" />
+                            <xsl:with-param name="host" select="'local'" />
+                        </xsl:call-template>
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+            </xsl:if>
         </table>
         <table cellspacing="0" cellpadding="0">
             <tr id="leaf-whitespaces">
@@ -425,7 +511,7 @@
                                 </xsl:call-template>
                             </table>
                         </xsl:if>
-                        
+
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
