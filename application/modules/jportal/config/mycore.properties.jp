@@ -99,14 +99,6 @@ MCR.IndexBrowser.jpperson_sub.MaxPerPage=30
 #MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=headingLastName,headingFirstName
 MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
 
-MCR.IndexBrowser.journalsA-Z.Table=jpjournal
-MCR.IndexBrowser.journalsA-Z.Searchfield=maintitles
-MCR.IndexBrowser.journalsA-Z.FieldsToSort=maintitles
-MCR.IndexBrowser.journalsA-Z.Style=journalsA-Z
-MCR.IndexBrowser.journalsA-Z.MaxPerPage=300
-#MCR.IndexBrowser.journalsA-Z.ExtraOutputFields=maintitles,subtitles
-MCR.IndexBrowser.journalsA-Z.ExtraOutputFields=id
-
 
 ##############################################################################
 # The DOM parser configuration
