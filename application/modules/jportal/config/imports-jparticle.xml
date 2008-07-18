@@ -95,7 +95,7 @@
         <hidden var="metadata/subtitles/@textsearch" default="true" />
         <hidden var="metadata/subtitles/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle" ordernr="1">
-            <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
+            <repeater min="0" max="50" anchor="NORTHWEST" ref="subtitle_input_repeater" />
         </cell>
     </panel>
     <panel id="subtitle_input_repeater">
