@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyCoReWebPage>
-  <section xml:lang="de" title="Suche nach Institutionen">
-    <editor id="searchmask-de">
-      <include uri="webapp:editor/editor-search-jpinst.xml"/>
-    </editor>
-  </section>
-  <section xml:lang="en" title="Search for institutions">
-    <editor id="searchmask-en">
-      <include uri="webapp:editor/editor-search-jpinst.xml"/>
-    </editor>
-  </section>
+    <section xml:lang="de" title="Suche nach Institutionen">
+        <p>
+            Bitte beachten sie, dass sich die Suche auf alle Institutionen in Journals@UrMEL bezieht.
+            <br />
+        </p>
+        <editor id="searchmask-de">
+            <include uri="webapp:editor/editor-search-jpinst.xml" />
+        </editor>
+    </section>
+    <section xml:lang="en" title="Search for institutions">
+        <p>
+            Please consider, that the search is related to all institutions of Journals@UrMEL.
+            <br />
+        </p>
+        <editor id="searchmask-en">
+            <include uri="webapp:editor/editor-search-jpinst.xml" />
+        </editor>
+    </section>
 </MyCoReWebPage>
