@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-    <section xml:lang="de" title="Blättern A - Z">
-        <p>Wählen sie ein Zeitschrift aus der folgenden Liste:</p>
+    <section xml:lang="de" title="Blättern im Zeitstrahl">
+        <p>Wählen sie ein Zeitschrift aus dem Zeitstrahl:</p>
         <p></p>
         <p>
-            <journallist mode="alphabetical" />
+            <journallist mode="chronological" />
         </p>
     </section>
     <meta>
