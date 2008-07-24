@@ -72,81 +72,13 @@
                 <div style="position:absolute;top:{$top}px;left:{$start}px;width:{$width}px;height:20px;border:2px solid #FF0000;" />
                 <div style="position:absolute;top:{$top+3}px;left:{$start+3}px;width:100%;">
                     <!-- label -->
-                    <xsl:value-of
-                        select="concat(substring(metadata/maintitles/maintitle/text(),1,30),'... (',metadata/dates/date[@type = 'published_from']/text(),' - ',metadata/dates/date[@type = 'published_until']/text(),')'))" />
+                    <a style="color:#DDDDDD;" href="{$WebApplicationBaseURL}{metadata/hidden_websitecontexts/hidden_websitecontext/text()}">
+                        <xsl:value-of
+                            select="concat(substring(metadata/maintitles/maintitle/text(),1,30),'... (',metadata/dates/date[@type = 'published_from']/text(),' - ',metadata/dates/date[@type = 'published_until']/text(),')'))" />
+                    </a>
                 </div>
             </xsl:for-each>
         </div>
-    </xsl:template>
-
-    <!-- =================================================================================================== -->
-
-    <xsl:template name="journalList.chooseZoom">
-        <form id="journalList.zoom" action="{$RequestURL}" method="post">
-            Wählen sie die Vergrößerungsfaktor :
-            <select name="XSL.spreading.SESSION" size="1" onChange="document.getElementById('journalList.zoom').submit()">
-                <option value="1">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="1" />
-                    </xsl:call-template>
-                    nicht vergrößern
-                </option>
-                <option value="2">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="2" />
-                    </xsl:call-template>
-                    2 fach
-                </option>
-                <option value="3">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="3" />
-                    </xsl:call-template>
-                    3 fach
-                </option>
-                <option value="4">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="4" />
-                    </xsl:call-template>
-                    4 fach
-                </option>
-                <option value="5">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="5" />
-                    </xsl:call-template>
-                    5 fach
-                </option>
-                <option value="6">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="6" />
-                    </xsl:call-template>
-                    6 fach
-                </option>
-                <option value="7">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="7" />
-                    </xsl:call-template>
-                    7 fach
-                </option>
-                <option value="8">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="8" />
-                    </xsl:call-template>
-                    8 fach
-                </option>
-                <option value="9">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="9" />
-                    </xsl:call-template>
-                    9 fach
-                </option>
-                <option value="10">
-                    <xsl:call-template name="journalList.preselect">
-                        <xsl:with-param name="value" select="10" />
-                    </xsl:call-template>
-                    10 fach
-                </option>
-            </select>
-        </form>
     </xsl:template>
 
     <!-- =================================================================================================== -->
@@ -221,6 +153,76 @@
                 <xsl:copy-of select="metadata/dates/date[@type = 'published_from']/text()" />
             </xsl:if>
         </xsl:for-each>
+    </xsl:template>
+
+    <!-- =================================================================================================== -->
+
+    <xsl:template name="journalList.chooseZoom">
+        <form id="journalList.zoom" action="{$RequestURL}" method="post">
+            Wählen sie die Vergrößerungsfaktor :
+            <select name="XSL.spreading.SESSION" size="1" onChange="document.getElementById('journalList.zoom').submit()">
+                <option value="1">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="1" />
+                    </xsl:call-template>
+                    nicht vergrößern
+                </option>
+                <option value="2">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="2" />
+                    </xsl:call-template>
+                    2 fach
+                </option>
+                <option value="3">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="3" />
+                    </xsl:call-template>
+                    3 fach
+                </option>
+                <option value="4">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="4" />
+                    </xsl:call-template>
+                    4 fach
+                </option>
+                <option value="5">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="5" />
+                    </xsl:call-template>
+                    5 fach
+                </option>
+                <option value="6">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="6" />
+                    </xsl:call-template>
+                    6 fach
+                </option>
+                <option value="7">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="7" />
+                    </xsl:call-template>
+                    7 fach
+                </option>
+                <option value="8">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="8" />
+                    </xsl:call-template>
+                    8 fach
+                </option>
+                <option value="9">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="9" />
+                    </xsl:call-template>
+                    9 fach
+                </option>
+                <option value="10">
+                    <xsl:call-template name="journalList.preselect">
+                        <xsl:with-param name="value" select="10" />
+                    </xsl:call-template>
+                    10 fach
+                </option>
+            </select>
+        </form>
     </xsl:template>
 
     <!-- =================================================================================================== -->
