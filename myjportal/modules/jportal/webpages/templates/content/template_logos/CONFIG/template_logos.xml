@@ -3,34 +3,54 @@
     <template>
         <journalID value="jportal_jpjournal_00000024" />
         <xhtml>
-            <div id="sponsoredlogo-box">
+            <div style="position:relative;left:20px;">
                 <a href="http://www.dfg.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/dfg.png" alt="dfg" />
+                    <img
+                        src="templates/content/template_logos/IMAGES/DFG_zweizeilig_sw.png"  />
                 </a>
             </div>
             <div id="sponsoredlogo-box">
-                <a href="http://www.thulb.uni-jena.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/thulb.png" alt="thulb" />
+                <a href="http://www.thulb.uni-jena.de"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/thulb.png"
+                        alt="thulb" />
                 </a>
             </div>
             <div id="sponsoredlogo-box">
-                <a href="http://www2.uni-jena.de/biologie/ehh/" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/ernsthaeckelhaus.png" alt="Ernst-Haeckel-Haus" />
+                <a href="http://www2.uni-jena.de/biologie/ehh/"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/ernsthaeckelhaus.png"
+                        alt="Ernst-Haeckel-Haus" />
                 </a>
             </div>
         </xhtml>
     </template>
     <template>
+        <!-- jlm -->
         <journalID value="jportal_jpjournal_00000029" />
         <xhtml>
-            <div id="sponsoredlogo-box">
+            <div style="position:relative;left:20px;">
                 <a href="http://www.dfg.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/dfg.png" alt="dfg" />
+                    <img
+                        src="templates/content/template_logos/IMAGES/DFG_zweizeilig_sw.png"  />
                 </a>
             </div>
-            <div id="sponsoredlogo-box">
-                <a href="http://www.thulb.uni-jena.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/thulb.png" alt="thulb" />
+            <div id="sponsoredlogo-box" style="position:relative;top:20px;">
+                <a href="http://www.thulb.uni-jena.de"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/thulb.png"
+                         />
+                </a>
+            </div>
+            <div style="position:relative;left:20px;top:40px;">
+                <a href="http://www.klassik-stiftung.de/"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/KlassikStiftungW-2.png"
+                         />
                 </a>
             </div>
         </xhtml>
@@ -41,13 +61,19 @@
         <journalID value="jportal_jpjournal_00000052" />
         <xhtml>
             <div id="sponsoredlogo-box">
-                <a href="http://www.thulb.uni-jena.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/thulb.png" alt="thulb" />
+                <a href="http://www.thulb.uni-jena.de"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/thulb.png"
+                        alt="thulb" />
                 </a>
             </div>
             <div>
-                <a href="http://www.bibliothek.uni-erfurt.de" id="sponsoredlogo-styles">
-                    <img src="templates/content/template_logos/IMAGES/UFBE.png" alt="thulb" />
+                <a href="http://www.bibliothek.uni-erfurt.de"
+                    id="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/UFBE.png"
+                        alt="thulb" />
                 </a>
             </div>
         </xhtml>
