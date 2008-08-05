@@ -18,7 +18,7 @@
         </xsl:variable>
         <!-- all journals with begin date -->
         <xsl:variable name="journalXMLs">
-            <xsl:call-template name="get.journalXMLs">
+            <xsl:call-template name="get.journalXMLs.timeBar">
                 <xsl:with-param name="journalIDsIF" select="$journalIDs" />
             </xsl:call-template>
         </xsl:variable>
@@ -129,7 +129,7 @@
 
     <!-- =================================================================================================== -->
 
-    <xsl:template name="get.journalXMLs">
+    <xsl:template name="get.journalXMLs.timeBar">
         <xsl:param name="journalIDsIF" />
         <journalXMLs>
             <xsl:for-each select="xalan:nodeset($journalIDsIF)/mcr:results/mcr:hit">

@@ -15,6 +15,9 @@
         <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
         <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
         <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
+        <!-- maintitle for sorting -->
+        <cell row="13" col="1" anchor="NORTHWEST" ref="maintitleForSorting_label" />
+        <cell row="13" col="2" anchor="NORTHWEST" ref="maintitleForSorting_input" />
         <!-- subtitle -->
         <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
         <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
@@ -110,13 +113,20 @@
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
         <hidden var="metadata/maintitles/@parasearch" default="true" />
         <hidden var="metadata/maintitles/@textsearch" default="true" />
-        <!--            <hidden var="metadata/maintitles/@notinherit" default="false" />-->
         <hidden var="metadata/maintitles/@heritable" default="true" />
         <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" default="de" />
         <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
     </panel>
-    <!-- end: MainTitle -->
+    <!-- MainTitle for sorting ================================================================== -->
+    <panel id="maintitleForSorting_input">
+        <hidden var="metadata/maintitlesForSorting/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/maintitlesForSorting/@parasearch" default="true" />
+        <hidden var="metadata/maintitlesForSorting/@textsearch" default="true" />
+        <hidden var="metadata/maintitlesForSorting/@heritable" default="true" />
+        <hidden var="metadata/maintitlesForSorting/maintitleForSorting/@inherited" default="0" />
+        <cell col="1" row="1" anchor="WEST" ref="TFarea4096" var="metadata/maintitlesForSorting/maintitleForSorting" />
+    </panel>
     <!-- SubTitle ================================================================== -->
     <panel id="subtitle_input">
         <hidden var="metadata/subtitles/@class" default="MCRMetaLangText" />

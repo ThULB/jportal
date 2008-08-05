@@ -28,10 +28,21 @@
                     <img src="{$WebApplicationBaseURL}images/zeitung2.gif" />
                 </td>
                 <td id="leaf-linkarea2">
-                    <xsl:variable name="webAddress">
-                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
+                    <xsl:variable name="journalAddress">
+                        <xsl:variable name="webAddress">
+                            <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
+                        </xsl:variable>
+                        <xsl:choose>
+                            <xsl:when
+                                test="(substring($WebApplicationBaseURL,string-length($WebApplicationBaseURL)) = '/') and (substring($webAddress,1,1) = '/')">
+                                <xsl:value-of select="concat($WebApplicationBaseURL,substring($webAddress,2))" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat($WebApplicationBaseURL,$webAddress)" />
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:variable>
-                    <a href="{$WebApplicationBaseURL}{$webAddress}{$HttpSession}">
+                    <a href="{$journalAddress}{$HttpSession}">
                         <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
                     </a>
                     <br />

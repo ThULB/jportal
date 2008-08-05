@@ -7,6 +7,8 @@
     <!-- *** Data for the MainTITLE *** -->
 
     <text id="maintitle_label" i18n="editormask.labels.bibdescript" />
+    
+    <text id="maintitleForSorting_label" i18n="editormask.labels.bibdescriptForSorting" />
 
     <text id="maintitle_label_contchild" i18n="editormask.labels.contchild" />
 
