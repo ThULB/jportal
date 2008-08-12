@@ -31,10 +31,6 @@
             </item>
             <item href="/content/main/search/inJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
                 <label xml:lang="de">in Zeitschriften</label>
-                <item href="/editor_form_search-jpvolume.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
-                    constrainPopUp="false">
-                    <label xml:lang="de">nach Bänden</label>
-                </item>
                 <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
                     <label xml:lang="de">nach Artikeln</label>
