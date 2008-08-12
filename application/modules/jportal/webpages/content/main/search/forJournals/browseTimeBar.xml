@@ -2,8 +2,6 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
     <section xml:lang="de" title="Blättern im Zeitstrahl">
-        <p>Wählen sie ein Zeitschrift aus dem Zeitstrahl:</p>
-        <p></p>
         <p>
             <journallist mode="chronological" />
         </p>

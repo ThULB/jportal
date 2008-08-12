@@ -9,14 +9,18 @@
             <label xml:lang="de">Suche</label>
             <label xml:lang="en">Search</label>
             <item href="/content/main/search/forJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
-                <label xml:lang="de">nach Zeitschriften</label>
+                <label xml:lang="de">nach Zeitschriften suchen</label>
                 <item href="/content/main/search/forJournals/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
-                    <label xml:lang="de">Blättern A - Z</label>
+                    <label xml:lang="de">A - Z</label>
+                </item>
+                <item href="/content/main/search/forJournals/browseTimeBar.xml" type="intern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">chronologische Sicht</label>
                 </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
-                    <label xml:lang="de">Blättern in Fächerlisten</label>
+                    <label xml:lang="de">anhand von Fächerlisten</label>
                     <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">EZB</label>
                     </item>
@@ -30,7 +34,7 @@
                 </item>
             </item>
             <item href="/content/main/search/inJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
-                <label xml:lang="de">in Zeitschriften</label>
+                <label xml:lang="de">in Zeitschriften suchen</label>
                 <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
                     <label xml:lang="de">nach Artikeln</label>
@@ -48,9 +52,98 @@
                     <label xml:lang="en">expert search</label>
                 </item>
             </item>
-
             <item href="/content/main/search/searchWebsite.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
-                <label xml:lang="de">in den Webseiten</label>
+                <label xml:lang="de">in Webseiten suchen</label>
+            </item>
+        </item>
+        <item href="/content/main/dzs1.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false" template="template_dkp">
+            <label xml:lang="de">Die Zeitschrift 1</label>
+            <item href="/content/main/dzs1/search.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Suche</label>
+                <label xml:lang="en">Retrieval</label>
+                <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000009" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Artikeln (Experten)</label>
+                    <label xml:lang="en">for articles (experts)</label>
+                </item>
+                <item href="/editor_form_search-jpinst.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000009" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Institutionen</label>
+                    <label xml:lang="en">for institutions</label>
+                </item>
+                <item href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000009" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Personen</label>
+                    <label xml:lang="en">for persons</label>
+                </item>
+            </item>
+            <item href="/receive/jportal_jpjournal_00000009?XSL.toc.pos.SESSION=1&amp;XSL.view.objectmetadata.SESSION=true" type="extern" target="_self"
+                style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Blättern</label>
+                <label xml:lang="en">Browse</label>
+            </item>
+            <item href="/content/main/dzs1/internal.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Intern</label>
+                <label xml:lang="en">Internal</label>
+                <item href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj&amp;dummy=jportal_jpjournal_00000009" type="extern"
+                    target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">Institution anlegen</label>
+                    <label xml:lang="en">create institution</label>
+                </item>
+                <item href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj&amp;dummy=jportal_jpjournal_00000009" type="extern"
+                    target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">Person anlegen</label>
+                    <label xml:lang="en">create person</label>
+                </item>
+            </item>
+            <item href="/content/main/dzs1/masthead.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Impressum</label>
+                <label xml:lang="de">Imprint</label>
+            </item>
+        </item>
+        <item href="/content/main/dzs2.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false" template="template_inh">
+            <label xml:lang="de">Die Zeitschrift 2</label>
+            <item href="/content/main/dzs2/search.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Suche</label>
+                <label xml:lang="en">Retrieval</label>
+                <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000010" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Artikeln (Experten)</label>
+                    <label xml:lang="en">for articles (experts)</label>
+                </item>
+                <item href="/editor_form_search-jpinst.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000010" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Institutionen</label>
+                    <label xml:lang="en">for institutions</label>
+                </item>
+                <item href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true&amp;dummy=jportal_jpjournal_00000010" type="extern" target="_self"
+                    style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">nach Personen</label>
+                    <label xml:lang="en">for persons</label>
+                </item>
+            </item>
+            <item href="/receive/jportal_jpjournal_00000010?XSL.toc.pos.SESSION=1&amp;XSL.view.objectmetadata.SESSION=true" type="extern" target="_self"
+                style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Blättern</label>
+                <label xml:lang="en">Browse</label>
+            </item>
+            <item href="/content/main/dzs2/internal.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Intern</label>
+                <label xml:lang="en">Internal</label>
+                <item href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj&amp;dummy=jportal_jpjournal_00000010" type="extern"
+                    target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">Institution anlegen</label>
+                    <label xml:lang="en">create institution</label>
+                </item>
+                <item href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj&amp;dummy=jportal_jpjournal_00000010" type="extern"
+                    target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">Person anlegen</label>
+                    <label xml:lang="en">create person</label>
+                </item>
+            </item>
+            <item href="/content/main/dzs2/masthead.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Impressum</label>
+                <label xml:lang="de">Imprint</label>
             </item>
         </item>
         <item href="/content/main/jpEditors.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
@@ -68,7 +161,6 @@
             </item>
             <item href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
                 replaceMenu="false">
-
                 <label xml:lang="de">neue Institution</label>
                 <label xml:lang="en">new institution</label>
             </item>
@@ -80,7 +172,6 @@
         <item href="/content/main/useradmin.xml" type="intern" target="_self" style="normal" replaceMenu="false">
             <label xml:lang="de">Nutzerverwaltung</label>
             <label xml:lang="en">User administration</label>
-
             <item href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=CreatePwdDialog" type="extern" target="_self" style="normal"
                 replaceMenu="false">
                 <label xml:lang="de">Passwort ändern</label>
@@ -104,7 +195,6 @@
                 <label xml:lang="en">Manage groups- users</label>
             </item>
         </item>
-
         <item href="/content/main/tools.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Tools</label>
             <item href="/content/main/tools/dubFinder.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
@@ -151,7 +241,6 @@
     </navi-main>
     <!-- main menu  -->
     <!-- navi bar below -->
-
     <navi-below dir="/below/" href="navi-below">
         <label xml:lang="de">Menü oben</label>
         <label xml:lang="en">Menu above</label>
@@ -159,7 +248,6 @@
             <label xml:lang="de">Start</label>
             <label xml:lang="en">Home</label>
         </item>
-
         <item href="/content/below/sitemap.xml" type="extern" target="_self" style="normal">
             <label xml:lang="de">Sitemap</label>
             <label xml:lang="en">Site map</label>
