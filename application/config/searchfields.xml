@@ -17,7 +17,7 @@
     <field name="allMeta"       type="text"       source="objectMetadata" xpath="/mycoreobject/metadata/*/*" value="text()" i18n="editor.search.metadata" />
 
     <!-- Search in journals metadata -->
-    <field name="maintitles"        type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
+    <field name="maintitles"        type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
     <field name="subtitles"         type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
     <field name="subtitles_type"    type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />
     <field name="participants"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
