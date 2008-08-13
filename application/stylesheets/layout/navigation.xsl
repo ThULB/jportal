@@ -25,7 +25,9 @@
         <xsl:if test="$readAccess='true'">
             <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
                 <!-- start page -->
+                <span id="navi-history-back">
                 <xsl:copy-of select="'Navigation: '" />
+                </span>
                 <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
                 <a href="{$MCR.baseurl}">
                     <xsl:copy-of select="$MainTitle" />
