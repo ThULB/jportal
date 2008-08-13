@@ -1,75 +1,183 @@
-html, body {
-    margin: 0px;
-    font-family: Verdana, Helvetica, sans-serif;
-    font-size: 12px;
-    width: 100%;
-}
-#second-line {
-	width: 100%; 
-	height:100%;  
-}	
-#div_navi_main {
-	float: left; 
-	width: 230px;
-}
-
-#navi_box {
-	float: right;
-	text-align: right; 
-	height: 210px;
-	padding-top: 15px;
-	padding-right: 60px;
-	vertical-align: top;
-}
-
-#navi_history {
-	text-align: left;
-	height: 14px;
-	vertical-align: top;
-	padding-top: 5px;
-	margin-left: 250px;
-}
-
-#navi_history a{
-	color: #5E5946;
-	text-decoration: none;
-}
-
-#navi_history a:hover{
-	color: #5E5946;
-	text-decoration: underline;
-}
-
-#navi_history_inside {
-	margin-left:2px;
-	width: auto;
-	margin-right:0px;
-}
-
-#contentArea {
-	width: max;
-	margin-left: 240px;
-}
-
-#footer {
-	width: max; 
-	height:162px; 
+html,body {
 	margin: 0px;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+#border {
+	border-top: 0px solid #BAB6A9;
+	border-left: 0px solid #BAB6A9;
+	border-right: 0px solid #BAB6A9;
+	width: 100%;
+}
+
+#footer1 {
+	width: 100%;
+	height: 39px;
+	background: #4064AB;
+	margin: 0px;
+	border: 0px solid red;
 }
 
 #login_div {
-	width: 273px;
-	height: 25px; 
-	padding-left: 31px;
-	padding-top: 7px;
+	padding-top: 15px;
+	padding-left: 10px;
+	min-width: 291px;
+	width: 281px;
+	height: 24px;
+	float: left;
+	border: 0px solid green;
 }
 
-#login{
-	vertical-align: top;
+#navigation_box {
+	height: 20px;
+	position: absolute;
+	top: 10px;
+	right: 5px;
 }
 
 #thulb_logo {
+	padding-left: 23px;
+}
+
+#banner {
+	width: 100%;
+	height: 110px;
+}
+
+#footer2 {
+	width: 100%;
+	height: 100%;
+	text-align: left;
 	vertical-align: top;
-	padding-left: 15px;
-	padding-top: 8px;
+	border: 0px;
+	margin: 0px;
+	padding: 0px;
+}
+
+#footer2_left {
+	text-align: left;
+	vertical-align: top;
+	border: 0px;
+	width: 290px;
+}
+
+#footer2_right {
+	text-align: left;
+	vertical-align: top;
+	width: 100%;
+}
+
+#footer_bottom {
+	border: 0px solid black;
+	/*	background : #d5d5d5; */
+	width: 49px;
+	height: 17px;
+	margin-top: 2px;
+}
+
+#div_navi_main {
+	width: 220px;
+	min-height: 150px;
+	height: auto;
+	padding-left: 0px;
+	padding-top: 70px;
+}
+
+#headline {
+	padding-left: 10px;
+	color: white;
+	font-size: 12px;
+	text-decoration: none;
+}
+
+#headline a {
+	font-weight: bold;
+	color: white;
+	font-size: 12px;
+	text-decoration: none;
+}
+
+#headline a:hover {
+	text-decoration: underline;
+}
+
+#whitespace {
+	height: 8px;
+}
+
+#time {
+	font-size: 14px;
+	font-weight: bold;
+	position: absolute;
+	top: 34px;
+	left: 244px;
+	color: black;
+}
+
+#journal-title {
+	font-family: serif;
+	font-size: 34px;
+	position: absolute;
+	top: 90px;
+	left: 237px;
+	color: black;
+	z-index: 10;
+}
+
+#transparent-logo[id] {
+	background: url(../IMAGES/master_new-logo.png) no-repeat;
+	position: absolute;
+	top: 37px;
+	right: 180px;
+	width: 445px;
+	height: 68px;
+}
+
+#transparent-logo {
+	background: url(../IMAGES/master_new-logo.gif) no-repeat;
+	position: absolute;
+	top: 100px;
+	right: 180px;
+	width: 445px;
+	height: 68px;
+}
+#whatsnew-logo {
+	background: url(../IMAGES/master_new-button.png) no-repeat;
+	position: absolute;
+	bottom: 5%;
+	left: 139px;
+	width: 99px;
+	height: 103px;
+}
+
+#topleft-logo {
+	background: url(../IMAGES/master_new-topleft-logo.png) no-repeat;
+	position: absolute;
+	top: 30px;
+	left: 0px;
+	width: 314px;
+	height: 99px;
+}
+#topright-logo {
+	background: url(../IMAGES/master_new-topright-logo.png) no-repeat;
+	position: absolute;
+	top: 30px;
+	right: 0px;
+	width: 210px;
+	height: 115px;
+}
+
+#content-whitespace {
+	width: max;
+	height: 100%;
+	margin: 40px;
+	background-color: white;
+}
+
+#navi-history-back {
+	padding: 3px;
+	margin-right: 5px;
+	background-color: #BBBBBB;
+	color: #FFFFFF;
 }
