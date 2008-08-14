@@ -14,19 +14,29 @@
                     constrainPopUp="false">
                     <label xml:lang="de">A - Z</label>
                 </item>
-                <item href="/content/main/search/forJournals/browseTimeBar.xml" type="intern" target="_self" style="normal" replaceMenu="false"
-                    constrainPopUp="false">
-                    <label xml:lang="de">chronologische Sicht</label>
-                </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
-                    <label xml:lang="de">anhand von Fächerlisten</label>
+                    <label xml:lang="de">Blättern in...</label>
                     <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
-                        <label xml:lang="de">EZB</label>
+                        <label xml:lang="de">EZB-Fächerliste</label>
                     </item>
                     <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
-                        <label xml:lang="de">ZDB</label>
+                        <label xml:lang="de">ZDB-Fächerliste</label>
                     </item>
+
+                    <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Zeitschriftentypen</label>
+                    </item>
+                    <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Projekten</label>
+                    </item>
+                    <item href="http://" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Bestandsnachweisen</label>
+                    </item>
+                </item>
+                <item href="/content/main/search/forJournals/browseTimeBar.xml" type="intern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Chronologische Sicht</label>
                 </item>
                 <item href="/editor_form_search-jpjournal.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
