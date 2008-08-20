@@ -84,13 +84,22 @@
 }
 
 #leaf-linkarea{
-    text-indent: 10px;
-}
-
-#leaf-linkarea, #leaf-linkarea a:link , #leaf-linkarea a:visited, #leaf-linkarea a:hover, #leaf-linkarea a:active{
     display:block;
     line-height:26px;
     width: 100%;
+    text-decoration:none;
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+    padding-bottom:0px;
+    margin:0px;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited, #leaf-linkarea a:hover, #leaf-linkarea a:active{
+    padding-left: 10px;
+    padding-right: 10px;
+    display:block;
+    line-height:26px;
+    width: max;
     text-decoration:none;
     font-size: 12px;
     font-family: verdana, sans-serif;
@@ -111,13 +120,22 @@
 }
 
 #leaf-linkarea2{
-    text-indent: 10px;
-}
-
-#leaf-linkarea2, #leaf-linkarea2 a:link , #leaf-linkarea2 a:visited, #leaf-linkarea2 a:hover, #leaf-linkarea2 a:active{
-    display:block;
+	display:block;
     line-height:26px;
     width: 100%;
+    text-decoration:none;
+    font-size: 12px;
+    font-family: verdana, sans-serif;
+    padding-bottom:0px;
+    margin:0px;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited, #leaf-linkarea2 a:hover, #leaf-linkarea2 a:active{
+    padding-left: 10px;
+    padding-right: 10px;
+    display:block;
+    line-height:26px;
+    width: max;
     text-decoration:none;
     font-size: 12px;
     font-family: verdana, sans-serif;
