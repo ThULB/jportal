@@ -161,61 +161,6 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
   MCR.ClassificationBrowser.default.searchField=allMeta
   MCR.ClassificationBrowser.default.Doctype=document
   
-  
-  MCR.ClassificationBrowser.journaltype.Classification = jportal_class_00000061
-  MCR.ClassificationBrowser.journaltype.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.journaltype.Style=search
-  MCR.ClassificationBrowser.journaltype.EmptyLeafs=yes
-  MCR.ClassificationBrowser.journaltype.View=tree
-  MCR.ClassificationBrowser.journaltype.Comments=true
-  MCR.ClassificationBrowser.journaltype.searchField=allMeta
-  MCR.ClassificationBrowser.journaltype.Doctype=document
-  
-  MCR.ClassificationBrowser.projectname.Classification = jportal_class_00000062
-  MCR.ClassificationBrowser.projectname.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.projectname.Style=search
-  MCR.ClassificationBrowser.projectname.EmptyLeafs=yes
-  MCR.ClassificationBrowser.projectname.View=tree
-  MCR.ClassificationBrowser.projectname.Comments=true
-  MCR.ClassificationBrowser.projectname.searchField=allMeta
-  MCR.ClassificationBrowser.projectname.Doctype=document
-  
-  MCR.ClassificationBrowser.inventoryevidence.Classification = jportal_class_00000063
-  MCR.ClassificationBrowser.inventoryevidence.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.inventoryevidence.Style=search
-  MCR.ClassificationBrowser.inventoryevidence.EmptyLeafs=yes
-  MCR.ClassificationBrowser.inventoryevidence.View=tree
-  MCR.ClassificationBrowser.inventoryevidence.Comments=true
-  MCR.ClassificationBrowser.inventoryevidence.searchField=allMeta
-  MCR.ClassificationBrowser.inventoryevidence.Doctype=document
-  
-  MCR.ClassificationBrowser.categoriesEZB.Classification = jportal_class_00000068
-  MCR.ClassificationBrowser.categoriesEZB.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.categoriesEZB.Style=search
-  MCR.ClassificationBrowser.categoriesEZB.EmptyLeafs=yes
-  MCR.ClassificationBrowser.categoriesEZB.View=tree
-  MCR.ClassificationBrowser.categoriesEZB.Comments=true
-  MCR.ClassificationBrowser.categoriesEZB.searchField=allMeta
-  MCR.ClassificationBrowser.categoriesEZB.Doctype=document
-  
-  MCR.ClassificationBrowser.categoriesZDB.Classification = jportal_class_00000069
-  MCR.ClassificationBrowser.categoriesZDB.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.categoriesZDB.Style=search
-  MCR.ClassificationBrowser.categoriesZDB.EmptyLeafs=yes
-  MCR.ClassificationBrowser.categoriesZDB.View=tree
-  MCR.ClassificationBrowser.categoriesZDB.Comments=true
-  MCR.ClassificationBrowser.categoriesZDB.searchField=allMeta
-  MCR.ClassificationBrowser.categoriesZDB.Doctype=document
-  
-  MCR.ClassificationBrowser.editdate.Classification = jportal_class_00000064
-  MCR.ClassificationBrowser.editdate.EmbeddingPage=mcr_doc_browse.xml
-  MCR.ClassificationBrowser.editdate.Style=search
-  MCR.ClassificationBrowser.editdate.EmptyLeafs=yes
-  MCR.ClassificationBrowser.editdate.View=tree
-  MCR.ClassificationBrowser.editdate.Comments=true
-  MCR.ClassificationBrowser.editdate.searchField=allMeta
-  MCR.ClassificationBrowser.editdate.Doctype=document
-  
 ##############################################################################
 # Dynamic web frontend layout templates
 # NOTE: Sort chronological, definate by numbers
@@ -260,4 +205,4 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
   
   # default value either the journals without activities are
   # shown at the beginning or not
-  journalStatistic.showJournalwithoutActivity = false
+  journalStatistic.showJournalwithoutActivity = true
