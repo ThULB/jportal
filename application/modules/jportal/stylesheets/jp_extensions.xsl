@@ -332,47 +332,39 @@
         <xsl:param name="linkCurrent" />
         <xsl:choose>
             <xsl:when test="@inherited='0' ">
-                <xsl:choose>
-                    <xsl:when test="$printCurrent2='true' ">
-                        <span>
-                            <xsl:variable name="date">
-                                <xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
-                                    <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')" />
-                                </xsl:if>
-                            </xsl:variable>
-                            <xsl:variable name="text">
-                                <xsl:call-template name="ShortenText">
-                                    <xsl:with-param name="text" select="text()" />
-                                    <xsl:with-param name="length" select="25" />
-                                </xsl:call-template>
-                            </xsl:variable>
-                            <xsl:variable name="label">
-                                <xsl:value-of select="concat($text,$date)" />
-                            </xsl:variable>
-                            <xsl:choose>
-                                <xsl:when test="$linkCurrent='true'">
-                                    <a href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.view.objectmetadata.SESSION=false" alt="{text()}"
-                                        title="{text()}">
-                                        <b>
-                                            <xsl:value-of select="$label" />
-                                        </b>
-                                    </a>
-                                </xsl:when>
-                                <xsl:otherwise>
+                <xsl:if test="$printCurrent2='true' ">
+                    <span>
+                        <xsl:variable name="date">
+                            <xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
+                                <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')" />
+                            </xsl:if>
+                        </xsl:variable>
+                        <xsl:variable name="text">
+                            <xsl:call-template name="ShortenText">
+                                <xsl:with-param name="text" select="text()" />
+                                <xsl:with-param name="length" select="25" />
+                            </xsl:call-template>
+                        </xsl:variable>
+                        <xsl:variable name="label">
+                            <xsl:value-of select="concat($text,$date)" />
+                        </xsl:variable>
+                        <xsl:choose>
+                            <xsl:when test="$linkCurrent='true'">
+                                <a href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.view.objectmetadata.SESSION=false" alt="{text()}"
+                                    title="{text()}">
                                     <b>
                                         <xsl:value-of select="$label" />
                                     </b>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </span>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <b>
-                            <xsl:value-of select="' ...'" />
-                        </b>
-                    </xsl:otherwise>
-                </xsl:choose>
-
+                                </a>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <b>
+                                    <xsl:value-of select="$label" />
+                                </b>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </span>
+                </xsl:if>
             </xsl:when>
             <xsl:when test="@inherited='1' ">
                 <xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
@@ -943,7 +935,9 @@
                                         <xsl:call-template name="get.labelOfDigitalMedias" />
                                         <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
                                         <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
-                                        <xsl:text>; </xsl:text>
+                                        <xsl:if test="position()!=last()">
+                                            <xsl:text>; </xsl:text>
+                                        </xsl:if>
                                     </xsl:for-each>
                                 </table>
                             </xsl:if>
@@ -1505,14 +1499,17 @@
                                         <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
                                             <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
                                         </xsl:call-template>
-                                        <xsl:text>; </xsl:text>
+                                        <xsl:if test="position()!=last()">
+                                            <xsl:text>; </xsl:text>
+                                        </xsl:if>
                                     </xsl:for-each>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:if>
                     </xsl:for-each>
                     <xsl:if test="$layout='flat'">
-                        <br /><br />
+                        <br />
+                        <br />
                     </xsl:if>
                 </td>
             </tr>
