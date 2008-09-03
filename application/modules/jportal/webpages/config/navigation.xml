@@ -10,8 +10,7 @@
             <label xml:lang="en">Search</label>
             <item href="/content/main/search/forJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
                 <label xml:lang="de">nach Zeitschriften suchen</label>
-                <item href="/content/main/search/forJournals/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="false"
-                    constrainPopUp="false">
+                <item href="/content/main/journalList.xml?dummy=value" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                     <label xml:lang="de">A - Z</label>
                 </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
@@ -23,7 +22,6 @@
                     <item href="/browse/categoriesZDB" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">ZDB-Fächerliste</label>
                     </item>
-
                     <item href="/browse/journaltype" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">Zeitschriftentypen</label>
                     </item>
@@ -64,6 +62,12 @@
             </item>
             <item href="/content/main/search/searchWebsite.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">in Webseiten suchen</label>
+            </item>
+        </item>
+        <item href="/content/main/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
+            <label xml:lang="de">A - Z</label>
+            <item href="/content/main/journalList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Platzhalter</label>
             </item>
         </item>
         <item href="/content/main/jpEditors.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
@@ -175,3 +179,4 @@
     </navi-below>
     <!-- END OF: navi bar below -->
 </navigation>
+

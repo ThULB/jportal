@@ -62,14 +62,16 @@
                     <tr valign="top">
                         <td width="200px" height="100%">
                             <table height="100%" cellspacing="0" cellpadding="0">
-                                <tr valign="top">
-                                    <td width="200px" valign="top"
-                                        style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-top.png) no-repeat;">
-                                        <div id="div_navi_main">
-                                            <xsl:call-template name="Navigation_main" />
-                                        </div>
-                                    </td>
-                                </tr>
+                                <xsl:if test="$browserAddress != '/content/main/journalList.xml'">
+                                    <tr valign="top">
+                                        <td width="200px" valign="top"
+                                            style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-top.png) no-repeat;">
+                                            <div id="div_navi_main">
+                                                <xsl:call-template name="Navigation_main" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </xsl:if>
                                 <tr valign="top" style="height: max;">
                                     <td width="200px" valign="top"
                                         style="height: 100%; background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-below.jpg) no-repeat;">
