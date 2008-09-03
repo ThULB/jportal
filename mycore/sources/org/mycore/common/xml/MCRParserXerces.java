@@ -28,23 +28,20 @@ import java.io.InputStream;
 import java.io.StringReader;
 
 import org.apache.log4j.Logger;
-import org.apache.xerces.parsers.SAXParser;
 import org.jdom.Document;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 
 /**
  * Implements the MCRParserInterface using the Xerces XML to parse XML streams
  * to a DOM document.
  * 
  * @author Jens Kupferschmidt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
  * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
@@ -76,23 +73,16 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      */
     public MCRParserXerces() {
         FLAG_VALIDATION = MCRConfiguration.instance().getBoolean("MCR.XMLParser.ValidateSchema", FLAG_VALIDATION);
-        builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true){
-            protected XMLReader createParser() throws JDOMException {
-                return new SAXParser();
-            }
-        };
+        builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
+        
         builderValid.setFeature(FEATURE_NAMESPACES, true);
         builderValid.setFeature(FEATURE_SCHEMA_SUPPORT, true);
         builderValid.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
         builderValid.setReuseParser(false);
         builderValid.setErrorHandler(this);
         builderValid.setEntityResolver(MCRURIResolver.instance());
-
-        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false){
-            protected XMLReader createParser() throws JDOMException {
-                return new SAXParser();
-            }
-        };
+        builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
+        
         builder.setFeature(FEATURE_NAMESPACES, true);
         builder.setFeature(FEATURE_SCHEMA_SUPPORT, false);
         builder.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
