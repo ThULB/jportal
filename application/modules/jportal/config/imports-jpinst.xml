@@ -56,8 +56,6 @@
 	<!-- ========================================================================================================================= -->
 	<panel id="DIName">
 		<hidden var="metadata/names/@class" default="MCRMetaInstitutionName"/>
-		<hidden var="metadata/names/@parasearch" default="true"/>
-		<hidden var="metadata/names/@textsearch" default="true"/>
 		<hidden var="metadata/names/@notinherit" default="false"/>
 		<hidden var="metadata/names/@heritable" default="true"/>
 		<hidden var="metadata/names/name/@inherited" default="0"/>
@@ -71,8 +69,6 @@
 	<!-- ========================================================================================================================= -->	
 	<panel id="DAddress">
 		<hidden var="metadata/addresses/@class" default="MCRMetaAddress"/>
-		<hidden var="metadata/addresses/@parasearch" default="false"/>
-		<hidden var="metadata/addresses/@textsearch" default="false"/>
 <!--		<hidden var="metadata/addresses/@notinherit" default="false"/>
 		<hidden var="metadata/addresses/@heritable" default="true"/>
 		<hidden var="metadata/addresses/address/@inherited" default="0"/> -->
@@ -90,8 +86,6 @@
 	<!-- ========================================================================================================================= -->	
 	<panel id="DPhone">
 		<hidden var="metadata/phones/@class" default="MCRMetaLangText"/>
-		<hidden var="metadata/phones/@parasearch" default="false"/>
-		<hidden var="metadata/phones/@textsearch" default="false"/>
 		<hidden var="metadata/phones/@notinherit" default="false"/>
 		<hidden var="metadata/phones/@heritable" default="true"/>
 		<cell col="1" row="1" anchor="NORTHWEST" var="metadata/phones/phone">
@@ -108,8 +102,6 @@
 	<!-- ========================================================================================================================= -->	
 	<panel id="DURL">
 		<hidden var="metadata/urls/@class" default="MCRMetaLink"/>
-		<hidden var="metadata/urls/@parasearch" default="false"/>
-		<hidden var="metadata/urls/@textsearch" default="false"/>
 		<hidden var="metadata/urls/@notinherit" default="false"/>
 		<hidden var="metadata/urls/@heritable" default="true"/>
 		<hidden var="metadata/urls/url/@inherited" default="0"/>
@@ -127,8 +119,6 @@
 	<!-- ========================================================================================================================= -->	
 	<panel id="DEmail">
 		<hidden var="metadata/emails/@class" default="MCRMetaLangText"/>
-		<hidden var="metadata/emails/@parasearch" default="false"/>
-		<hidden var="metadata/emails/@textsearch" default="false"/>
 		<hidden var="metadata/emails/@notinherit" default="false"/>
 		<hidden var="metadata/emails/@heritable" default="true"/>
 		<hidden var="metadata/emails/email/@inherited" default="0"/>
@@ -138,8 +128,6 @@
 	<!-- ========================================================================================================================= -->	
 	<panel id="DNote">
 		<hidden var="metadata/notes/@class" default="MCRMetaLangText"/>
-		<hidden var="metadata/notes/@parasearch" default="false"/>
-		<hidden var="metadata/notes/@textsearch" default="false"/>
 		<hidden var="metadata/notes/@notinherit" default="false"/>
 		<hidden var="metadata/notes/@heritable" default="true"/>
 		<hidden var="metadata/notes/note/@inherited" default="0"/>

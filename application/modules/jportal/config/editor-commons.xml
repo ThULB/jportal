@@ -53,8 +53,6 @@
   <!-- *** Parents *** -->
   <panel id="Dparent">
     <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
-    <hidden var="structure/parents/@parasearch" default="true" />
-    <hidden var="structure/parents/@textsearch" default="false" />
     <hidden var="structure/parents/@notinherit" default="false" />
     <hidden var="structure/parents/@heritable" default="false" />
     <hidden var="structure/parents/parent/@inherited" default="0" />

@@ -168,8 +168,6 @@
     <includeMyChildren id="include_pubType-editable_code">
         <panel id="type_input">
             <hidden var="metadata/types/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/types/@parasearch" default="true" />
-            <hidden var="metadata/types/@textsearch" default="false" />
             <hidden var="metadata/types/@notinherit" default="false" />
             <hidden var="metadata/types/@heritable" default="false" />
             <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:metadata/types/type/@classid" />
@@ -183,8 +181,6 @@
     <includeMyChildren id="include_rubric-editable_code">
         <panel id="rubric_input">
             <hidden var="metadata/rubrics/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/rubrics/@parasearch" default="true" />
-            <hidden var="metadata/rubrics/@textsearch" default="false" />
             <hidden var="metadata/rubrics/@notinherit" default="false" />
             <hidden var="metadata/rubrics/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/rubrics/rubric">
@@ -206,8 +202,6 @@
     <includeMyChildren id="include_classipub-editable_code">
         <panel id="classipub_input">
             <hidden var="metadata/classispub/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/classispub/@parasearch" default="true" />
-            <hidden var="metadata/classispub/@textsearch" default="false" />
             <hidden var="metadata/classispub/@notinherit" default="false" />
             <hidden var="metadata/classispub/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub/classipub">
@@ -229,8 +223,6 @@
     <includeMyChildren id="include_classipub2-editable_code">
         <panel id="classipub2_input">
             <hidden var="metadata/classispub2/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/classispub2/@parasearch" default="true" />
-            <hidden var="metadata/classispub2/@textsearch" default="false" />
             <hidden var="metadata/classispub2/@notinherit" default="false" />
             <hidden var="metadata/classispub2/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub2/classipub2">
@@ -252,8 +244,6 @@
     <includeMyChildren id="include_classipub3-editable_code">
         <panel id="classipub3_input">
             <hidden var="metadata/classispub3/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/classispub3/@parasearch" default="true" />
-            <hidden var="metadata/classispub3/@textsearch" default="false" />
             <hidden var="metadata/classispub3/@notinherit" default="false" />
             <hidden var="metadata/classispub3/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub3/classipub3">
@@ -275,8 +265,6 @@
     <includeMyChildren id="include_classipub4-editable_code">
         <panel id="classipub4_input">
             <hidden var="metadata/classispub4/@class" default="MCRMetaClassification" />
-            <hidden var="metadata/classispub4/@parasearch" default="true" />
-            <hidden var="metadata/classispub4/@textsearch" default="false" />
             <hidden var="metadata/classispub4/@notinherit" default="false" />
             <hidden var="metadata/classispub4/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/classispub4/classipub4">

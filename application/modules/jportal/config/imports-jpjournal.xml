@@ -111,8 +111,6 @@
     <!-- MainTitle ================================================================== -->
     <panel id="maintitle_input">
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/maintitles/@parasearch" default="true" />
-        <hidden var="metadata/maintitles/@textsearch" default="true" />
         <hidden var="metadata/maintitles/@heritable" default="true" />
         <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" default="de" />
@@ -121,8 +119,6 @@
     <!-- MainTitle for sorting ================================================================== -->
     <panel id="maintitleForSorting_input">
         <hidden var="metadata/maintitlesForSorting/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/maintitlesForSorting/@parasearch" default="true" />
-        <hidden var="metadata/maintitlesForSorting/@textsearch" default="true" />
         <hidden var="metadata/maintitlesForSorting/@heritable" default="true" />
         <hidden var="metadata/maintitlesForSorting/maintitleForSorting/@inherited" default="0" />
         <cell col="1" row="1" anchor="WEST" ref="TFarea4096" var="metadata/maintitlesForSorting/maintitleForSorting" />
@@ -130,8 +126,6 @@
     <!-- SubTitle ================================================================== -->
     <panel id="subtitle_input">
         <hidden var="metadata/subtitles/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/subtitles/@parasearch" default="true" />
-        <hidden var="metadata/subtitles/@textsearch" default="true" />
         <hidden var="metadata/subtitles/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle">
             <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
@@ -146,8 +140,6 @@
     <!-- abstract ================================================================== -->
     <panel id="abstract_input">
         <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/abstracts/@parasearch" default="true" />
-        <hidden var="metadata/abstracts/@textsearch" default="true" />
         <hidden var="metadata/abstracts/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/abstracts/abstract" ordernr="1">
             <repeater min="0" max="3" anchor="NORTHWEST" ref="abstract_input_repeater" />
@@ -162,8 +154,6 @@
     <!-- date ================================================================== -->
     <panel id="date_input">
         <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
-        <hidden var="metadata/dates/@parasearch" default="true" />
-        <hidden var="metadata/dates/@textsearch" default="true" />
         <hidden var="metadata/dates/@heritable" default="true" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1">
             <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
@@ -178,8 +168,6 @@
     <!-- identi ================================================================== -->
     <panel id="identi_input">
         <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/identis/@parasearch" default="true" />
-        <hidden var="metadata/identis/@textsearch" default="true" />
         <hidden var="metadata/identis/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identis/identi" ordernr="1">
             <repeater min="0" max="10" anchor="NORTHWEST" ref="identi_input_repeater" />
@@ -193,8 +181,6 @@
     <!-- Lang ================================================================== -->
     <panel id="cont_lang_input">
         <hidden var="metadata/languages/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/languages/@parasearch" default="true" />
-        <hidden var="metadata/languages/@textsearch" default="false" />
         <hidden var="metadata/languages/@notinherit" default="false" />
         <hidden var="metadata/languages/@heritable" default="false" />
         <hidden var="metadata/languages/language/@inherited" default="0" />
@@ -211,8 +197,6 @@
     <!-- right ================================================================== -->
     <panel id="right_input">
         <hidden var="metadata/rights/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/rights/@parasearch" default="true" />
-        <hidden var="metadata/rights/@textsearch" default="true" />
         <hidden var="metadata/rights/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/rights/right/@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/rights/right" ordernr="1" />
@@ -221,8 +205,6 @@
     <!-- note ================================================================== -->
     <panel id="note_input">
         <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/notes/@parasearch" default="true" />
-        <hidden var="metadata/notes/@textsearch" default="true" />
         <hidden var="metadata/notes/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
@@ -231,8 +213,6 @@
     <!-- predece ================================================================== -->
     <panel id="predece_input">
         <hidden var="metadata/predeces/@class" default="MCRMetaLink" />
-        <hidden var="metadata/predeces/@parasearch" default="true" />
-        <hidden var="metadata/predeces/@textsearch" default="true" />
         <hidden var="metadata/predeces/@notinherit" default="false" />
         <hidden var="metadata/predeces/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/predeces/predece">
@@ -259,8 +239,6 @@
     <!-- successor ================================================================== -->
     <panel id="successor_input">
         <hidden var="metadata/successors/@class" default="MCRMetaLink" />
-        <hidden var="metadata/successors/@parasearch" default="true" />
-        <hidden var="metadata/successors/@textsearch" default="true" />
         <hidden var="metadata/successors/@notinherit" default="false" />
         <hidden var="metadata/successors/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" ordernr="3" var="metadata/successors/successor">
@@ -287,8 +265,6 @@
 
     <panel id="datamodelCoverage_input">
         <hidden var="metadata/dataModelCoverages/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/dataModelCoverages/@parasearch" default="true" />
-        <hidden var="metadata/dataModelCoverages/@textsearch" default="false" />
         <hidden var="metadata/dataModelCoverages/@notinherit" default="false" />
         <hidden var="metadata/dataModelCoverages/@heritable" default="false" />
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dataModelCoverages/dataModelCoverage">
@@ -321,88 +297,66 @@
     <!-- jpjournalID ================================================================== -->
     <panel id="jpjournalID_input">
         <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_jpjournalsID/@parasearch" default="true" />
-        <hidden var="metadata/hidden_jpjournalsID/@textsearch" default="true" />
         <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     </panel>
     <!-- rubricsID ================================================================== -->
     <panel id="rubricID_input">
         <hidden var="metadata/hidden_rubricsID/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_rubricsID/@parasearch" default="true" />
-        <hidden var="metadata/hidden_rubricsID/@textsearch" default="true" />
         <hidden var="metadata/hidden_rubricsID/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_rubricsID/hidden_rubricID" ref="classiIDs" />
     </panel>
     <!-- pubTypeID ================================================================== -->
     <panel id="pubTypeID_input">
         <hidden var="metadata/hidden_pubTypesID/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_pubTypesID/@parasearch" default="true" />
-        <hidden var="metadata/hidden_pubTypesID/@textsearch" default="true" />
         <hidden var="metadata/hidden_pubTypesID/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="classiIDs" var="metadata/hidden_pubTypesID/hidden_pubTypeID" />
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub_input">
         <hidden var="metadata/hidden_classispub/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_classispub/@parasearch" default="true" />
-        <hidden var="metadata/hidden_classispub/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub/hidden_classipub" ref="classiIDs" />
     </panel>
     <!-- hidden_classispub2 ================================================================== -->
     <panel id="classipub2_input">
         <hidden var="metadata/hidden_classispub2/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_classispub2/@parasearch" default="true" />
-        <hidden var="metadata/hidden_classispub2/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub2/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub2/hidden_classipub2" ref="classiIDs"></cell>
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub3_input">
         <hidden var="metadata/hidden_classispub3/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_classispub3/@parasearch" default="true" />
-        <hidden var="metadata/hidden_classispub3/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub3/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub3/hidden_classipub3" ref="classiIDs"></cell>
     </panel>
     <!-- hidden_classispub ================================================================== -->
     <panel id="classipub4_input">
         <hidden var="metadata/hidden_classispub4/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_classispub4/@parasearch" default="true" />
-        <hidden var="metadata/hidden_classispub4/@textsearch" default="true" />
         <hidden var="metadata/hidden_classispub4/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4" ref="classiIDs"></cell>
     </panel>
     <!-- websitecontext ================================================================== -->
     <panel id="websitecontext_input">
         <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_websitecontexts/@parasearch" default="true" />
-        <hidden var="metadata/hidden_websitecontexts/@textsearch" default="true" />
         <hidden var="metadata/hidden_websitecontexts/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
     </panel>
     <!-- gehiddenfield1 ================================================================== -->
     <panel id="genhiddenfield1_input">
         <hidden var="metadata/hidden_genhiddenfields1/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields1/@parasearch" default="true" />
-        <hidden var="metadata/hidden_genhiddenfields1/@textsearch" default="true" />
         <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="true" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />
     </panel>
     <!-- genhiddenfield2 ================================================================== -->
     <panel id="genhiddenfield2_input">
         <hidden var="metadata/hidden_genhiddenfields2/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields2/@parasearch" default="true" />
-        <hidden var="metadata/hidden_genhiddenfields2/@textsearch" default="true" />
         <hidden var="metadata/hidden_genhiddenfields2/@heritable" default="true" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields2/hidden_genhiddenfield2" />
     </panel>
     <!-- genhiddenfield3 ================================================================== -->
     <panel id="genhiddenfield3_input">
         <hidden var="metadata/hidden_genhiddenfields3/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields3/@parasearch" default="true" />
-        <hidden var="metadata/hidden_genhiddenfields3/@textsearch" default="true" />
         <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="true" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
     </panel>

@@ -52,8 +52,6 @@
       <!-- MainTitle ================================================================== -->
       <panel id="maintitle_input">
             <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/maintitles/@parasearch" default="true" />
-            <hidden var="metadata/maintitles/@textsearch" default="true" />
 <!--            <hidden var="metadata/maintitles/@notinherit" default="false" />-->
             <hidden var="metadata/maintitles/@heritable" default="true" />
             <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
@@ -65,8 +63,6 @@
       <!-- SubTitle ================================================================== -->
       <panel id="subtitle_input">
             <hidden var="metadata/subtitles/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/subtitles/@parasearch" default="true" />
-            <hidden var="metadata/subtitles/@textsearch" default="true" />
             <hidden var="metadata/subtitles/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle" >
                   <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
@@ -81,8 +77,6 @@
       <!-- date ================================================================== -->
       <panel id="date_input">
             <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
-            <hidden var="metadata/dates/@parasearch" default="true" />
-            <hidden var="metadata/dates/@textsearch" default="true" />
             <hidden var="metadata/dates/@heritable" default="true" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1" >
                   <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
@@ -98,8 +92,6 @@
       <!-- note ================================================================== -->
       <panel id="note_input">
             <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/notes/@parasearch" default="true" />
-            <hidden var="metadata/notes/@textsearch" default="true" />
             <hidden var="metadata/notes/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="1" default="de" />
             <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
@@ -108,8 +100,6 @@
       <!-- hidden_position ================================================================== -->
       <panel id="position_input">
             <hidden var="metadata/hidden_positions/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/hidden_positions/@parasearch" default="true" />
-            <hidden var="metadata/hidden_positions/@textsearch" default="true" />
             <hidden var="metadata/hidden_positions/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile10" var="metadata/hidden_positions/hidden_position"  />
       </panel>

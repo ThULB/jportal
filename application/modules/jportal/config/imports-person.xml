@@ -151,8 +151,6 @@
 <!-- *** Contact ** -->
   <panel id="Dcontact">
     <hidden var="@class" default="MCRMetaLangText"/>
-    <hidden var="@parasearch" default="true"/>
-    <hidden var="@textsearch" default="true"/>
     <hidden var="@heritable" default="false"/>
     <cell col="1" row="1" anchor="NORTHWEST" var="contact" ordernr="1">
       <repeater min="0" max="9" anchor="NORTHWEST">
