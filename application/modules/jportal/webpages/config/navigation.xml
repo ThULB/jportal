@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<navigation dir="/content" template="template_master" hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal"
+<navigation dir="/content" template="template_master2" hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal"
     href="navigation">
     <!-- main menu  -->
     <navi-main dir="/main/" href="navi-main">
