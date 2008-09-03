@@ -131,13 +131,6 @@
             <item href="/content/main/tools/statistic.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">Statistik</label>
             </item>
-            <item href="/servlets/MCRWCMSLoginServlet" type="extern" target="_self" style="normal" template="template_wcms">
-                <label xml:lang="de">WCMS</label>
-                <label xml:lang="en">WCMS</label>
-                <dynamicContentBinding>
-                    <rootTag>cms</rootTag>
-                </dynamicContentBinding>
-            </item>
             <item href="/servlets/MCRSessionListingServlet?sessionListing.mode=listSessions" type="extern" target="_self" style="normal" replaceMenu="false"
                 constrainPopUp="false">
                 <label xml:lang="de">Aktive Sitzungen anzeigen</label>
@@ -167,6 +160,13 @@
         <item href="/content/below/index.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Start</label>
             <label xml:lang="en">Home</label>
+        </item>
+        <item href="/servlets/MCRWCMSLoginServlet" type="extern" target="_self" style="normal" template="template_wcms">
+            <label xml:lang="de">WCMS</label>
+            <label xml:lang="en">WCMS</label>
+            <dynamicContentBinding>
+                <rootTag>cms</rootTag>
+            </dynamicContentBinding>
         </item>
         <item href="/content/below/sitemap.xml" type="extern" target="_self" style="normal">
             <label xml:lang="de">Sitemap</label>
