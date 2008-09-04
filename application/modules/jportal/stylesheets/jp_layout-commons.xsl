@@ -7,6 +7,7 @@
     <!-- ================================================================================== -->
 
     <xsl:template name="jp.layout.getHTMLHeader">
+        <xsl:param name="nameOfTemplate" select="$template" />
         <title>
             <xsl:call-template name="HTMLPageTitle" />
         </title>
@@ -16,9 +17,9 @@
         <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation,Andreas Trappe" lang="en"
             name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
-        <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_general.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/style_content.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_general.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_content.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}common.css" rel="stylesheet" type="text/css" />
