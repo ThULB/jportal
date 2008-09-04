@@ -124,26 +124,19 @@ html,body {
 	z-index: 10;
 }
 
-#transparent-logo[id] {
+#transparent-logo {
 	background: url(../IMAGES/master_new-logo.png) no-repeat;
 	position: absolute;
 	top: 37px;
 	right: 180px;
 	width: 445px;
 	height: 68px;
-}
-
-#transparent-logo {
 	border: 0px;
 }
+
 
 #transparent-logo img{
 	border: 0px;
-	position: absolute;
-	bottom: 5%;
-	left: 139px;
-	width: 91px;
-	height: 91px;
 }
 
 #whatsnew-logo{

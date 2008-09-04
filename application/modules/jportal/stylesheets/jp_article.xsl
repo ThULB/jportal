@@ -311,7 +311,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td id="leaf-additional">
+                                    <td id="leaf-additional2">
                                             <xsl:variable name="size-temp">
                                                 <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size[@inherited='0']/text()" />
                                             </xsl:variable>

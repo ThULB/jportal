@@ -63,6 +63,12 @@
 
 #leaf-additional{
 	font-size:11px;
+    padding-left: 10px;
+    line-height: 10px;
+}
+
+#leaf-additional2{
+	font-size:11px;
     padding: 7px;
     padding-left: 10px;
     line-height: 10px;
