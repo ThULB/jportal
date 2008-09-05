@@ -365,8 +365,11 @@ div.submitButton{
 
 #leaf-additional {
 	color: #4B4B4D;
+}
 
-}	
+#leaf-additional2 {
+	color: #4B4B4D;
+}
 /* =================================================================== */
 /* detailed view                                                       */
 /* =================================================================== */
@@ -505,7 +508,7 @@ div.submitButton{
 	padding-top: 5px;
 	padding-left: 5px;
 	width: 310px;
-	height: 70px;
+	height: 80px;
 	background-color: #0086CB;
 	color: #FFFFFF;
 	font-size: 10px;
