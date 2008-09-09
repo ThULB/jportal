@@ -37,7 +37,7 @@
         <!-- 07 - abstract -->
         <!-- type = short | long -->
         <element name="abstracts" minOccurs='0' maxOccurs='1'>
-            <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
+            <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='30' length="4096" />
         </element>
         <!-- 09 - identis -->
         <!-- type = issn | isbn | nbn | doi | misc. -->
