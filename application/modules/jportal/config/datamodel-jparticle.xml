@@ -25,7 +25,6 @@
         <element name="participants" minOccurs='0' maxOccurs='1'>
             <mcrmetalinkid name="participant" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
         </element>
-        >
         <!-- date -->
         <element name="dates" minOccurs='0' maxOccurs='1'>
             <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2' />
