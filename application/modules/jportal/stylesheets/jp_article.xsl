@@ -17,67 +17,67 @@
         <xsl:variable name="cXML">
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
-        
-                <table cellspacing="0" cellpadding="0" id="leaf-all">
-                    <tr>
-                        <td id="leaf-front" colspan="1" rowspan="3">
-                            <img src="{$WebApplicationBaseURL}images/artikel2.gif" />
-                        </td>
-                        <td id="leaf-linkarea2">
-                            <xsl:variable name="name">
-                                <xsl:call-template name="ShortenText">
-                                    <xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-                                    <xsl:with-param name="length" select="125" />
-                                </xsl:call-template>
-                            </xsl:variable>
 
-                            <xsl:variable name="date">
-                                <xsl:choose>
-                                    <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
-                                        <xsl:variable name="date">
-                                            <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()" />
-                                        </xsl:variable>
-                                        <xsl:value-of select="concat(' (',$date,')')" />
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:value-of select="''" />
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="label">
-                                <xsl:value-of select="concat($name,$date)" />
-                            </xsl:variable>
-                            <xsl:call-template name="objectLinking">
-                                <xsl:with-param name="obj_id" select="@id" />
-                                <xsl:with-param name="obj_name" select="$label" />
-                                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
-                                <xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-                            </xsl:call-template>
-                        </td>
-                    </tr>
-                    <xsl:call-template name="printDerivates">
+        <table cellspacing="0" cellpadding="0" id="leaf-all">
+            <tr>
+                <td id="leaf-front" colspan="1" rowspan="3">
+                    <img src="{$WebApplicationBaseURL}images/artikel2.gif" />
+                </td>
+                <td id="leaf-linkarea2">
+                    <xsl:variable name="name">
+                        <xsl:call-template name="ShortenText">
+                            <xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                            <xsl:with-param name="length" select="125" />
+                        </xsl:call-template>
+                    </xsl:variable>
+
+                    <xsl:variable name="date">
+                        <xsl:choose>
+                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+                                <xsl:variable name="date">
+                                    <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()" />
+                                </xsl:variable>
+                                <xsl:value-of select="concat(' (',$date,')')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="''" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="label">
+                        <xsl:value-of select="concat($name,$date)" />
+                    </xsl:variable>
+                    <xsl:call-template name="objectLinking">
                         <xsl:with-param name="obj_id" select="@id" />
-                        <xsl:with-param name="knoten" select="$cXML" />
+                        <xsl:with-param name="obj_name" select="$label" />
+                        <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
+                        <xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
                     </xsl:call-template>
-                    <tr>
-                        <td>
-                            <span id="leaf-published">
-                                <xsl:value-of select="i18n:translate('metaData.published')" />
-                                <xsl:text>: </xsl:text>
-                                <xsl:call-template name="printHistoryRow">
-                                    <xsl:with-param name="sortOrder" select="'descending'" />
-                                    <xsl:with-param name="printCurrent" select="'false'" />
-                                    <xsl:with-param name="node" select="xalan:nodeset($cXML)" />
-                                </xsl:call-template>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-                <table cellspacing="0" cellpadding="0">
-                    <tr id="leaf-whitespaces">
-                        <td></td>
-                    </tr>
-                </table>
+                </td>
+            </tr>
+            <xsl:call-template name="printDerivates">
+                <xsl:with-param name="obj_id" select="@id" />
+                <xsl:with-param name="knoten" select="$cXML" />
+            </xsl:call-template>
+            <tr>
+                <td>
+                    <span id="leaf-published">
+                        <xsl:value-of select="i18n:translate('metaData.published')" />
+                        <xsl:text>: </xsl:text>
+                        <xsl:call-template name="printHistoryRow">
+                            <xsl:with-param name="sortOrder" select="'descending'" />
+                            <xsl:with-param name="printCurrent" select="'false'" />
+                            <xsl:with-param name="node" select="xalan:nodeset($cXML)" />
+                        </xsl:call-template>
+                    </span>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" cellpadding="0">
+            <tr id="leaf-whitespaces">
+                <td></td>
+            </tr>
+        </table>
 
     </xsl:template>
     <!-- =============================================================================================== -->
@@ -246,138 +246,102 @@
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
         <table id="horizontal">
-                    <tr>
-                        <td>
-                            <table cellspacing="0" cellpadding="0" id="leaf-all">
-                                <tr>
-                                    <td id="leaf-front" colspan="1" rowspan="3">
-                                        <img src="{$WebApplicationBaseURL}images/artikel2.gif" />
-                                    </td>
-                                    <td id="leaf-linkarea2">
-                                        <xsl:variable name="name">
-                                            <xsl:call-template name="ShortenText">
-                                                <xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-                                                <xsl:with-param name="length" select="125" />
+            <tr>
+                <td>
+                    <table cellspacing="0" cellpadding="0" id="leaf-all">
+                        <tr>
+                            <td id="leaf-front" colspan="1" rowspan="3">
+                                <img src="{$WebApplicationBaseURL}images/artikel2.gif" />
+                            </td>
+                            <td id="leaf-linkarea2">
+                                <xsl:variable name="name">
+                                    <xsl:call-template name="ShortenText">
+                                        <xsl:with-param name="text" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                                        <xsl:with-param name="length" select="125" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+
+                                <xsl:variable name="author-temp">
+                                    <authors>
+                                        <xsl:for-each
+                                            select="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant[@inherited='0' and contains(@xlink:href,'person')]">
+                                            <author>
+                                                <xsl:value-of select="./@xlink:href" />
+                                            </author>
+                                        </xsl:for-each>
+                                    </authors>
+                                </xsl:variable>
+
+                                <xsl:variable name="author-count">
+                                    <xsl:value-of select="count(xalan:nodeset($author-temp)/authors/author)" />
+                                </xsl:variable>
+
+                                <xsl:variable name="author-list">
+                                    <xsl:for-each select="xalan:nodeset($author-temp)/authors/author[position() &lt; 4]">
+                                        <xsl:variable name="temp">
+                                            <xsl:call-template name="objectLink">
+                                                <xsl:with-param name="obj_id" select="." />
                                             </xsl:call-template>
                                         </xsl:variable>
+                                        <xsl:value-of select="concat('; ',$temp)" />
+                                    </xsl:for-each>
+                                    <xsl:if test='$author-count &gt; 3'>
+                                        <xsl:value-of select="' et al.'" />
+                                    </xsl:if>
+                                </xsl:variable>
+                                <xsl:variable name="author">
+                                    <xsl:choose>
+                                        <xsl:when test="$author-list!=''">
+                                            <xsl:value-of select="concat(substring($author-list,3),': ')" />
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:value-of select="''" />
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                </xsl:variable>
+                                <xsl:variable name="label">
+                                    <xsl:value-of select="concat($author,$name)" />
+                                </xsl:variable>
+                                <xsl:call-template name="objectLinking">
+                                    <xsl:with-param name="obj_id" select="@id" />
+                                    <xsl:with-param name="obj_name" select="$label" />
+                                    <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
+                                    <xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                                </xsl:call-template>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="leaf-additional2">
+                                <xsl:variable name="size-temp">
+                                    <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size[@inherited='0']/text()" />
+                                </xsl:variable>
+                                <xsl:variable name="size">
+                                    <xsl:if test="$size-temp!=''">
+                                        <xsl:value-of select="concat(', ',i18n:translate('editormask.labels.size'),': ',$size-temp)" />
+                                    </xsl:if>
+                                </xsl:variable>
 
-                                        <xsl:variable name="author-temp">
-                                            <authors>
-                                                <xsl:for-each
-                                                    select="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant[@inherited='0' and contains(@xlink:href,'person')]">
-                                                    <author>
-                                                        <xsl:value-of select="./@xlink:href" />
-                                                    </author>
-                                                </xsl:for-each>
-                                            </authors>
-                                        </xsl:variable>
-
-                                        <xsl:variable name="author-count">
-                                            <xsl:value-of select="count(xalan:nodeset($author-temp)/authors/author)" />
-                                        </xsl:variable>
-
-                                        <xsl:variable name="author-list">
-                                            <xsl:for-each select="xalan:nodeset($author-temp)/authors/author[position() &lt; 4]">
-                                                <xsl:variable name="temp">
-                                                    <xsl:call-template name="objectLink">
-                                                        <xsl:with-param name="obj_id" select="." />
-                                                    </xsl:call-template>
-                                                </xsl:variable>
-                                                <xsl:value-of select="concat('; ',$temp)" />
-                                            </xsl:for-each>
-                                            <xsl:if test='$author-count &gt; 3'>
-                                                <xsl:value-of select="' et al.'" />
-                                            </xsl:if>
-                                        </xsl:variable>
-                                        <xsl:variable name="author">
-                                            <xsl:choose>
-                                                <xsl:when test="$author-list!=''">
-                                                    <xsl:value-of select="concat(substring($author-list,3),': ')" />
-                                                </xsl:when>
-                                                <xsl:otherwise>
-                                                    <xsl:value-of select="''" />
-                                                </xsl:otherwise>
-                                            </xsl:choose>
-                                        </xsl:variable>
-                                        <xsl:variable name="label">
-                                            <xsl:value-of select="concat($author,$name)" />
-                                        </xsl:variable>
-                                        <xsl:call-template name="objectLinking">
-                                            <xsl:with-param name="obj_id" select="@id" />
-                                            <xsl:with-param name="obj_name" select="$label" />
-                                            <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
-                                            <xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-                                        </xsl:call-template>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td id="leaf-additional2">
-                                            <xsl:variable name="size-temp">
-                                                <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/sizes/size[@inherited='0']/text()" />
-                                            </xsl:variable>
-                                            <xsl:variable name="size">
-                                                <xsl:if test="$size-temp!=''">
-                                                    <xsl:value-of select="concat(', ',i18n:translate('editormask.labels.size'),': ',$size-temp)" />
-                                                </xsl:if>
-                                            </xsl:variable>
-
-                                            <xsl:variable name="journal-info">
-                                                <xsl:call-template name="printHistoryRow">
-                                                    <xsl:with-param name="sortOrder" select="'descending'" />
-                                                    <xsl:with-param name="printCurrent" select="'false'" />
-                                                    <xsl:with-param name="node" select="xalan:nodeset($cXML)" />
-                                                </xsl:call-template>
-                                            </xsl:variable>
-                                            <xsl:variable name="label2">
-                                                <xsl:value-of select="concat('in: ',substring($journal-info,1,string-length($journal-info)-2),$size)" />
-                                            </xsl:variable>
-                                            <xsl:copy-of select="$label2" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
+                                <xsl:variable name="journal-info">
+                                    <xsl:call-template name="printHistoryRow">
+                                        <xsl:with-param name="sortOrder" select="'descending'" />
+                                        <xsl:with-param name="printCurrent" select="'false'" />
+                                        <xsl:with-param name="node" select="xalan:nodeset($cXML)" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:variable name="label2">
+                                    <xsl:value-of select="concat('in: ',substring($journal-info,1,string-length($journal-info)-2),$size)" />
+                                </xsl:variable>
+                                <xsl:copy-of select="$label2" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </xsl:template>
+    
     <!-- =============================================================================================== -->
-    <!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
-    <xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jparticle_')]">
-        <xsl:choose>
-            <!--
-                you could insert any title-like metadata here, e.g.
-                replace "your-tags/here" by something of your metadata
-            -->
-            <xsl:when test="./metadata/your-tags">
-                <xsl:call-template name="printI18N">
-                    <xsl:with-param select="./metadata/your-tags/here" name="nodes" />
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-
-                <xsl:value-of select="@label" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    <!-- =============================================================================================== -->
-    <!--Template for title in metadata view: see mycoreobject.xsl-->
-    <xsl:template priority="1" mode="title" match="/mycoreobject[contains(@ID,'_jparticle_')]">
-        <xsl:choose>
-            <!--
-                you could insert any title-like metadata here, e.g.
-                replace "your-tags/here" by something of your metadata
-            -->
-            <xsl:when test="./metadata/your-tags">
-
-                <xsl:call-template name="printI18N">
-                    <xsl:with-param select="./metadata/your-tags/here" name="nodes" />
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="@ID" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    <!-- =============================================================================================== -->
+    
     <!--Template for metadata view: see mycoreobject.xsl-->
     <xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jparticle_')]">
         <xsl:param select="$objectHost" name="obj_host" />
@@ -396,7 +360,14 @@
         </xsl:variable>
         <div id="detailed-frame">
             <xsl:variable name="mainTitle">
-                <xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+                <xsl:choose>
+                    <xsl:when test="$allowHTMLInArticles = 'true'">
+                        <xsl:value-of disable-output-escaping="yes" select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:variable>
             <xsl:variable name="maintitle_shorted">
                 <xsl:call-template name="ShortenText">
@@ -411,7 +382,14 @@
                     </td>
                     <td id="detailed-mainheadline">
                         <div id="detailed-headline-frame">
-                            <xsl:copy-of select="$maintitle_shorted" />
+                            <xsl:choose>
+                                <xsl:when test="$allowHTMLInArticles = 'true'">
+                                    <xsl:value-of disable-output-escaping="yes" select="$maintitle_shorted" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$maintitle_shorted" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </div>
                     </td>
                 </tr>
@@ -468,9 +446,18 @@
                                         <xsl:value-of select="i18n:translate('editormask.labels.bibdescript')" />
                                     </td>
                                     <td class="metavalue">
-                                        <xsl:call-template name="printI18N">
-                                            <xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
-                                        </xsl:call-template>
+                                        <xsl:choose>
+                                            <xsl:when test="$allowHTMLInArticles = 'true'">
+                                                <xsl:call-template name="printI18N-allowHTML">
+                                                    <xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+                                                </xsl:call-template>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:call-template name="printI18N">
+                                                    <xsl:with-param name="nodes" select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+                                                </xsl:call-template>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
                                     </td>
                                 </tr>
                             </table>

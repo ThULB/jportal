@@ -29,14 +29,18 @@
     <xsl:variable name="JPID_zfbbHack">
         <xsl:call-template name="get.zfbbSupport" />
     </xsl:variable>
-
+    <xsl:variable name="journalXML">
+        <xsl:call-template name="get.journalXML" />
+    </xsl:variable>
+    <xsl:variable name="allowHTMLInArticles">
+        <xsl:call-template name="get.allowHTMLInArticles" />
+    </xsl:variable>
     <!-- ===================================================================================================== -->
     <xsl:template
         match="/mycoreobject[contains(@ID,'_jpjournal_')] 
         | /mycoreobject[contains(@ID,'_jpvolume_')] 
         | /mycoreobject[contains(@ID,'_jparticle_')]"
         priority="2">
-        <!--        view.objectmetadata=<xsl:copy-of select="$view.objectmetadata"/>...-->
 
         <xsl:call-template name="printSwitchViewBar" />
 
@@ -447,7 +451,14 @@
                 <xsl:when test="acl:checkPermission($obj_id,'read')">
 
                     <a href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}?{$requestParam}" alt="{$hoverText}" title="{$hoverText}">
-                        <xsl:value-of select="$obj_name" />
+                        <xsl:choose>
+                            <xsl:when test="$allowHTMLInArticles = 'true'">
+                                <xsl:value-of disable-output-escaping="yes" select="$obj_name" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="$obj_name" />
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </a>
 
                 </xsl:when>
@@ -1421,10 +1432,20 @@
                                 </xsl:call-template>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:call-template name="printI18N">
-                                    <xsl:with-param name="nodes" select="." />
-                                    <xsl:with-param name="host" select="$objectHost" />
-                                </xsl:call-template>
+                                <xsl:choose>
+                                    <xsl:when test="$allowHTMLInArticles = 'true'">
+                                        <xsl:call-template name="printI18N-allowHTML">
+                                            <xsl:with-param name="nodes" select="." />
+                                            <xsl:with-param name="host" select="$objectHost" />
+                                        </xsl:call-template>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:call-template name="printI18N">
+                                            <xsl:with-param name="nodes" select="." />
+                                            <xsl:with-param name="host" select="$objectHost" />
+                                        </xsl:call-template>
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:otherwise>
                         </xsl:choose>
                         <xsl:if test="position()!=last()">
@@ -1549,9 +1570,18 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:call-template name="printI18N">
-                    <xsl:with-param name="nodes" select="./text()" />
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="$allowHTMLInArticles = 'true'">
+                        <xsl:call-template name="printI18N-allowHTML">
+                            <xsl:with-param name="nodes" select="./text()" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="printI18N">
+                            <xsl:with-param name="nodes" select="./text()" />
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -1806,6 +1836,68 @@
                 </tr>
             </table>
         </xsl:if>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="get.journalXML">
+        <xsl:if test="/mycoreobject[contains(@ID,'_jparticle_')] | /mycoreobject[contains(@ID,'_jpvolume_')]">
+            <xsl:copy-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()))/mycoreobject" />
+        </xsl:if>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="get.allowHTMLInArticles">
+        <xsl:choose>
+            <xsl:when
+                test="xalan:nodeset($journalXML)/mycoreobject/metadata and xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_genhiddenfields1/hidden_genhiddenfield1/text() = 'allowHTML'">
+                <xsl:value-of select="'true'" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="'false'" />
+            </xsl:otherwise>
+        </xsl:choose>
+
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="printI18N-allowHTML">
+        <xsl:param name="nodes" />
+        <xsl:param name="next" />
+        <xsl:variable name="selectPresentLang">
+            <xsl:call-template name="selectPresentLang">
+                <xsl:with-param name="nodes" select="$nodes" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:for-each select="$nodes[lang($selectPresentLang)]">
+            <xsl:if test="position() != 1">
+                <xsl:value-of select="$next" disable-output-escaping="yes" />
+            </xsl:if>
+            <xsl:call-template name="lf2br-allowHTML">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="lf2br-allowHTML">
+        <xsl:param name="string" />
+        <xsl:choose>
+            <xsl:when test="contains($string,'&#xA;')">
+                <xsl:value-of select="substring-before($string,'&#xA;')" />
+                <!-- replace line break character by xhtml tag -->
+                <br />
+                <xsl:call-template name="lf2br">
+                    <xsl:with-param name="string" select="substring-after($string,'&#xA;')" />
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of disable-output-escaping="yes" select="$string" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- ===================================================================================================== -->

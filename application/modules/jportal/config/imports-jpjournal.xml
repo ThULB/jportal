@@ -345,19 +345,19 @@
     <!-- gehiddenfield1 ================================================================== -->
     <panel id="genhiddenfield1_input">
         <hidden var="metadata/hidden_genhiddenfields1/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="true" />
+        <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />
     </panel>
     <!-- genhiddenfield2 ================================================================== -->
     <panel id="genhiddenfield2_input">
         <hidden var="metadata/hidden_genhiddenfields2/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields2/@heritable" default="true" />
+        <hidden var="metadata/hidden_genhiddenfields2/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields2/hidden_genhiddenfield2" />
     </panel>
     <!-- genhiddenfield3 ================================================================== -->
     <panel id="genhiddenfield3_input">
         <hidden var="metadata/hidden_genhiddenfields3/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="true" />
+        <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
     </panel>
     <!--  =================================================================================================== -->
