@@ -42,11 +42,6 @@
         | /mycoreobject[contains(@ID,'_jparticle_')]"
         priority="2">
 
-        <xsl:message>
-            allowHTML=
-            <xsl:copy-of select="$allowHTMLInArticles" />
-            ...
-        </xsl:message>
         <xsl:call-template name="printSwitchViewBar" />
 
         <xsl:choose>
