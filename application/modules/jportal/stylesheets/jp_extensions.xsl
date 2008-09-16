@@ -415,7 +415,7 @@
                     <xsl:value-of select="@inherited" />
                 </xsl:variable>
                 <xsl:variable name="date">
-                    <xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel] and position()!=1">
+                    <xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel] and position()!=1 and /mycoreobject/metadata/dates/date[@inherited=position()]!=/mycoreobject/metadata/maintitles/maintitle[@inherited=position()]">
                         <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]/text(),')')" />
                     </xsl:if>
                 </xsl:variable>
