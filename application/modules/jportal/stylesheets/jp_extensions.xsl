@@ -42,6 +42,11 @@
         | /mycoreobject[contains(@ID,'_jparticle_')]"
         priority="2">
 
+        <xsl:message>
+            allowHTML=
+            <xsl:copy-of select="$allowHTMLInArticles" />
+            ...
+        </xsl:message>
         <xsl:call-template name="printSwitchViewBar" />
 
         <xsl:choose>
@@ -438,6 +443,9 @@
         <xsl:param name="obj_name" />
         <xsl:param name="hoverText" />
         <xsl:param name="requestParam" />
+        <xsl:param name="requestParam" />
+        <xsl:param name="allowHTMLInResultLists" select="'false'" />
+
         <!-- 
             LOCAL REQUEST
         -->
@@ -452,7 +460,7 @@
 
                     <a href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}?{$requestParam}" alt="{$hoverText}" title="{$hoverText}">
                         <xsl:choose>
-                            <xsl:when test="$allowHTMLInArticles = 'true'">
+                            <xsl:when test="$allowHTMLInArticles = 'true' or $allowHTMLInResultLists = 'true'">
                                 <xsl:value-of disable-output-escaping="yes" select="$obj_name" />
                             </xsl:when>
                             <xsl:otherwise>

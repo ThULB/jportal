@@ -18,6 +18,18 @@
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
 
+        <xsl:variable name="allowHTMLInResultLists-IF">
+            <xsl:choose>
+                <xsl:when
+                    test="document(concat('mcrobject:',xalan:nodeset($cXML)/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()))/mycoreobject/metadata/hidden_genhiddenfields1/hidden_genhiddenfield1/text() = 'allowHTML'">
+                    <xsl:value-of select="'true'" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="'false'" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
                 <td id="leaf-front" colspan="1" rowspan="3">
@@ -52,6 +64,7 @@
                         <xsl:with-param name="obj_name" select="$label" />
                         <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false&amp;XSL.toc.pos.SESSION=0'" />
                         <xsl:with-param name="hoverText" select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                        <xsl:with-param name="allowHTMLInResultLists" select="$allowHTMLInResultLists-IF" />
                     </xsl:call-template>
                 </td>
             </tr>
@@ -339,9 +352,9 @@
             </tr>
         </table>
     </xsl:template>
-    
+
     <!-- =============================================================================================== -->
-    
+
     <!--Template for metadata view: see mycoreobject.xsl-->
     <xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jparticle_')]">
         <xsl:param select="$objectHost" name="obj_host" />
