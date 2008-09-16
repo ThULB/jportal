@@ -339,7 +339,8 @@
                 <xsl:if test="$printCurrent2='true' ">
                     <span>
                         <xsl:variable name="date">
-                            <xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!=''">
+                            <xsl:if
+                                test="/mycoreobject/metadata/dates/date[@inherited='0']/text()!='' and /mycoreobject/metadata/dates/date[@inherited='0']/text()!=/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()">
                                 <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='0']/text(),')')" />
                             </xsl:if>
                         </xsl:variable>
@@ -373,7 +374,8 @@
             <xsl:when test="@inherited='1' ">
                 <xsl:if test="/mycoreobject/structure/parents/parent[@xlink:href!='']">
                     <xsl:variable name="date">
-                        <xsl:if test="/mycoreobject/metadata/dates/date[@inherited='1']">
+                        <xsl:if
+                            test="/mycoreobject/metadata/dates/date[@inherited='1'] and /mycoreobject/metadata/dates/date[@inherited='1']!=/mycoreobject/metadata/maintitles/maintitle[@inherited='1'] and position()!=1">
                             <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited='1']/text(),')')" />
                         </xsl:if>
                     </xsl:variable>
@@ -386,7 +388,14 @@
                     <xsl:variable name="label">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
-                                <xsl:value-of select="concat($text,$date, ' \ ')" />
+                                <xsl:choose>
+                                    <xsl:when test="position()!=last() and $view.objectmetadata='true'">
+                                        <xsl:value-of select="concat($text,$date, ' \ ')" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="concat($text,$date)" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="concat(' - ',$text,$date)" />
@@ -406,7 +415,7 @@
                     <xsl:value-of select="@inherited" />
                 </xsl:variable>
                 <xsl:variable name="date">
-                    <xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]">
+                    <xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel] and position()!=1">
                         <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]/text(),')')" />
                     </xsl:if>
                 </xsl:variable>
@@ -419,7 +428,14 @@
                 <xsl:variable name="label">
                     <xsl:choose>
                         <xsl:when test="$sortOrder='descending'">
-                            <xsl:value-of select="concat($text,$date, ' \ ')" />
+                            <xsl:choose>
+                                <xsl:when test="position()!=last()-1">
+                                    <xsl:value-of select="concat($text,$date, ' \ ')" />
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="concat($text,$date)" />
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:value-of select="concat(' - ',$text,$date)" />
