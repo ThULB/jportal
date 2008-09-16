@@ -110,7 +110,7 @@
                     </xsl:variable>
                     <xsl:variable name="date">
                         <xsl:choose>
-                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0']">
+                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] and xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] != $name">
                                 <xsl:variable name="date">
                                     <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()" />
                                 </xsl:variable>
