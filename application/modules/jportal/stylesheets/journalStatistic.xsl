@@ -450,7 +450,10 @@
 				<br />
 				<a name="proz" />
 				<b style="padding: 5px;">
-					<u>Prozentualer Anteil einzelner Zeitschriften (Artikel oder Bände):</u>
+					<u>
+						Prozentualer Anteil einzelner Zeitschriften
+						(Artikel oder Bände):
+					</u>
 				</b>
 				<a style="margin-left: 20px; border:1px solid black;"
 					href="#toc">
@@ -505,17 +508,19 @@
 							order="descending" />
 						<xsl:if
 							test="numberOfObjects/total/@percent &lt; $journalStatistic.percentageOfVisibilty">
-							<xsl:choose>
-								<xsl:when
-									test="string-length(@name)>30">
-									<xsl:value-of
-										select="concat(', ', substring(@name,1,30),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:value-of
-										select="concat(', ', @name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
-								</xsl:otherwise>
-							</xsl:choose>
+							<label>
+								<xsl:choose>
+									<xsl:when
+										test="string-length(@name)>30">
+										<xsl:value-of
+											select="concat(substring(@name,1,30),'... (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of
+											select="concat(@name,' (', numberOfObjects/total/text(),' - ', numberOfObjects/total/@percent,'%)')" />
+									</xsl:otherwise>
+								</xsl:choose>
+							</label>
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:variable>
@@ -534,7 +539,10 @@
 							select="$journalStatistic.percentageOfVisibilty" />
 						% im ausgewählten Zeitraum:
 					</h4>
-					<xsl:value-of select="$labelsNotInChart" />
+					<xsl:for-each
+						select="xalan:nodeset($labelsNotInChart)/label">
+						<xsl:value-of select="concat('- ',text())" /><br/>
+					</xsl:for-each>
 					<br />
 					<br />
 				</div>
@@ -2024,17 +2032,19 @@
 				<xsl:if
 					test="((text()*100) div $activitySum) &lt; $journalStatistic.percentageOfVisibilty">
 					<xsl:if test="number(text()) &gt; 0">
-						<xsl:choose>
-							<xsl:when
-								test="string-length(@label) &gt; 30">
-								<xsl:value-of
-									select="concat(', ',substring(@label,1,30),'...','(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,4),'%)')" />
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of
-									select="concat(', ',@label,'(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,5),'%)')" />
-							</xsl:otherwise>
-						</xsl:choose>
+						<label>
+							<xsl:choose>
+								<xsl:when
+									test="string-length(@label) &gt; 30">
+									<xsl:value-of
+										select="concat(substring(@label,1,30),'...','(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,4),'%)')" />
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of
+										select="concat(@label,'(',round(text()),' - ',substring(string(((text()*100) div $activitySum)),1,5),'%)')" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</label>
 					</xsl:if>
 				</xsl:if>
 			</xsl:for-each>
@@ -2104,22 +2114,19 @@
 					select="$journalStatistic.percentageOfVisibilty" />
 				% im ausgewählten Zeitraum:
 			</h4>
-			<xsl:copy-of select="substring($chartLabelsNotVisible,2)" />
+			<xsl:for-each
+				select="xalan:nodeset($chartLabelsNotVisible)/label">
+				<xsl:copy-of select="concat('- ',text())" />
+				<br />
+			</xsl:for-each>
 		</div>
 		<div style="padding-left: 5px; padding-right: 5px;">
 			<h4>
 				Zeitschriften ohne Aktivitäten im ausgewählten Zeitraum:
 			</h4>
 			<xsl:for-each select="xalan:nodeset($ZeroLabels)/name">
-				<xsl:choose>
-					<xsl:when test="position()=last()">
-						<xsl:value-of select="." />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat(.,', ')" />
-					</xsl:otherwise>
-				</xsl:choose>
-
+				<xsl:copy-of select="concat('- ',text())" />
+				<br />
 			</xsl:for-each>
 		</div>
 	</xsl:template>
