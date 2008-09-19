@@ -528,6 +528,7 @@
             </xsl:when>
             <xsl:when test=" $browserAddress_lastPage != '' ">
                 <xsl:value-of select="$browserAddress_lastPage" />
+                <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_lastPage)" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$loaded_navigation_xml/@hrefStartingPage" />
@@ -631,10 +632,6 @@
     <xsl:template name="Tokenizer">
         <xsl:param name="string" />
         <xsl:param name="delimiter" select="' '" />
-        <xsl:message>
-            called Tokenizer with string=
-            <xsl:value-of select="$string" />
-        </xsl:message>
         <xsl:choose>
             <xsl:when test="$delimiter and contains($string, $delimiter)">
                 <token>

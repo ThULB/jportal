@@ -29,11 +29,19 @@
     <xsl:variable name="JPID_zfbbHack">
         <xsl:call-template name="get.zfbbSupport" />
     </xsl:variable>
+    <xsl:variable name="journalID">
+        <xsl:call-template name="get.journalID" />
+    </xsl:variable>
     <xsl:variable name="journalXML">
         <xsl:call-template name="get.journalXML" />
     </xsl:variable>
     <xsl:variable name="allowHTMLInArticles">
         <xsl:call-template name="get.allowHTMLInArticles" />
+    </xsl:variable>
+    <xsl:variable name="readAccessForDerivates">
+        <xsl:call-template name="get.readAccessForDerivates">
+            <xsl:with-param name="jID" select="$journalID" />
+        </xsl:call-template>
     </xsl:variable>
     <!-- ===================================================================================================== -->
     <xsl:template
@@ -415,7 +423,8 @@
                     <xsl:value-of select="@inherited" />
                 </xsl:variable>
                 <xsl:variable name="date">
-                    <xsl:if test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel] and position()!=1 and /mycoreobject/metadata/dates/date[@inherited=position()]!=/mycoreobject/metadata/maintitles/maintitle[@inherited=position()]">
+                    <xsl:if
+                        test="/mycoreobject/metadata/dates/date[@inherited=$heritedLevel] and position()!=1 and /mycoreobject/metadata/dates/date[@inherited=position()]!=/mycoreobject/metadata/maintitles/maintitle[@inherited=position()]">
                         <xsl:value-of select="concat(' (',/mycoreobject/metadata/dates/date[@inherited=$heritedLevel]/text(),')')" />
                     </xsl:if>
                 </xsl:variable>
@@ -836,8 +845,12 @@
                                         <xsl:variable name="derivate" select="document($derivlink)" />
                                         <tr>
                                             <td colspan="3" style="padding-left: 10px;">
-                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
-                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
+                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
+                                                    <xsl:with-param name="objID" select="$obj_id" />
+                                                </xsl:apply-templates>
+                                                <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
+                                                    <xsl:with-param name="objID" select="$obj_id" />
+                                                </xsl:apply-templates>
                                             </td>
                                         </tr>
                                         <tr>
@@ -952,6 +965,7 @@
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
+
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
                     <tr>
                         <td id="leaf-additional">
@@ -963,8 +977,14 @@
                                         <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                                         <xsl:variable name="derivate" select="document($derivlink)" />
                                         <xsl:call-template name="get.labelOfDigitalMedias" />
-                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals" />
-                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
+                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
+                                            <xsl:with-param name="objID" select="$obj_id" />
+                                            <xsl:with-param name="objectXML" select="$knoten" />
+                                        </xsl:apply-templates>
+                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
+                                            <xsl:with-param name="objID" select="$obj_id" />
+                                            <xsl:with-param name="objectXML" select="$knoten" />
+                                        </xsl:apply-templates>
                                         <xsl:if test="position()!=last()">
                                             <xsl:text>; </xsl:text>
                                         </xsl:if>
@@ -988,6 +1008,8 @@
     <!-- ===================================================================================================== -->
 
     <xsl:template match="internals" priority="2">
+        <xsl:param name="objID" />
+        <xsl:param name="objectXML" />
         <xsl:param name="detailed-view" />
         <xsl:if test="$objectHost = 'local'">
             <xsl:variable name="derivid" select="../../@ID" />
@@ -1014,7 +1036,6 @@
                     <xsl:with-param name="mainFile" select="$derivmain" />
                 </xsl:call-template>
             </xsl:variable>
-
             <xsl:variable name="href">
                 <xsl:choose>
                     <xsl:when test="$supportedMainFile != ''">
@@ -1030,6 +1051,38 @@
                     <xsl:with-param name="typeOfFile" select="$fileType" />
                 </xsl:call-template>
             </xsl:variable>
+            <!-- access to edit ? -->
+            <xsl:variable name="editAccess">
+                <xsl:choose>
+                    <xsl:when test="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')">
+                        <xsl:value-of select="'true'"></xsl:value-of>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="'false'"></xsl:value-of>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
+            <!-- read access ? -->
+            <xsl:variable name="readAccess4Derivates">
+                <xsl:choose>
+                    <xsl:when test="$readAccessForDerivates = ''">
+                        <xsl:variable name="jourID">
+                            <xsl:value-of select="xalan:nodeset($objectXML)/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
+                        </xsl:variable>
+                        <xsl:call-template name="get.readAccessForDerivates">
+                            <xsl:with-param name="jID" select="$jourID" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:when test="$readAccessForDerivates = 'true' or $editAccess = 'true'">
+                        <xsl:value-of select="'true'"></xsl:value-of>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="'false'"></xsl:value-of>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+
             <xsl:choose>
                 <xsl:when test="$thumbnail='true'">
                     <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
@@ -1051,12 +1104,17 @@
                         </tr>
                         <tr id="detailed-contents">
                             <td>
-                                <a href="{$href}">
-                                    <xsl:value-of select="$fileLabel" />
-                                </a>
+                                <xsl:choose>
+                                    <xsl:when test="$readAccess4Derivates = 'true'">
+                                        <a href="{$href}">
+                                            <xsl:value-of select="$fileLabel" />
+                                        </a>
+                                    </xsl:when>
+                                    <xsl:otherwise>Zugriff gesperrt!</xsl:otherwise>
+                                </xsl:choose>
                                 <xsl:text>
                                 </xsl:text>
-                                <xsl:if test="$CurrentUser!='gast'">
+                                <xsl:if test="$editAccess = 'true'">
                                     <a href="{$derivbase}">
                                         <xsl:value-of select="', Details &gt;&gt; '" />
                                     </a>
@@ -1066,10 +1124,16 @@
                     </table>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a href="{$href}">
-                        <xsl:value-of select="$fileLabel" />
-                    </a>
-                    <xsl:if test="$CurrentUser!='gast'">
+                    <xsl:choose>
+                        <xsl:when test="$readAccess4Derivates = 'true'">
+                            <a href="{$href}">
+                                <xsl:value-of select="$fileLabel" />
+                            </a>
+                        </xsl:when>
+                        <xsl:otherwise>Zugriff gesperrt!</xsl:otherwise>
+                    </xsl:choose>
+
+                    <xsl:if test="$editAccess = 'true'">
                         <a href="{$derivbase}">
                             <xsl:value-of select="', Details &gt;&gt; '" />
                         </a>
@@ -1642,14 +1706,13 @@
                                 </xsl:when>
                                 <!-- $webcontext NOT within ancestor axis ? -> choose $webcontext -->
                                 <xsl:otherwise>
-                                    <xsl:value-of select="concat('wcReset',$object_webContext)" />
+                                    <xsl:value-of select="$object_webContext" />
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:for-each>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of
-                            select="concat('wcReset',xalan:nodeset($journalXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text())" />
+                        <xsl:value-of select="$object_webContext" />
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
@@ -1860,9 +1923,19 @@
     <!-- ===================================================================================================== -->
 
     <xsl:template name="get.journalXML">
-        <xsl:if test="/mycoreobject[contains(@ID,'_jparticle_')] | /mycoreobject[contains(@ID,'_jpvolume_')]">
-            <xsl:copy-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()))/mycoreobject" />
+        <xsl:if test="$journalID != ''">
+            <xsl:copy-of select="document(concat('mcrobject:',$journalID))" />
         </xsl:if>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="get.journalID">
+        <!-- 
+            <xsl:if test="xalan:nodeset($journalXML)/mycoreobject">
+            <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/@ID" />
+            </xsl:if> -->
+        <xsl:value-of select="document('jportal_getJournalID:noXPath')/dummyRoot/hidden/@default" />
     </xsl:template>
 
     <!-- ===================================================================================================== -->
@@ -1917,6 +1990,15 @@
                 <xsl:value-of disable-output-escaping="yes" select="$string" />
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="get.readAccessForDerivates">
+        <xsl:param name="jID" />
+        <xsl:if test="$jID != ''">
+            <xsl:value-of select="acl:checkPermission($jID,'read-derivates')" />
+        </xsl:if>
     </xsl:template>
 
     <!-- ===================================================================================================== -->

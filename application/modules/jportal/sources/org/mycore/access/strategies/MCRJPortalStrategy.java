@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -19,7 +20,13 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
 
     public boolean checkPermission(String id, String permission) {
-        if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
+        if (permission.equals("read-derivates")) {
+            if (MCRAccessManager.getAccessImpl().hasRule(id, permission)) {
+                return ID_STRATEGY.checkPermission(id, permission);
+            } else {
+                return true;
+            }
+        } else if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
             return checkPermissionOfType(id, permission);
         } else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
             return true;

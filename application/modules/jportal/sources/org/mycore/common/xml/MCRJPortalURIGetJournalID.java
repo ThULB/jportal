@@ -44,7 +44,7 @@ public class MCRJPortalURIGetJournalID implements MCRURIResolver.MCRResolver {
     }
 
     /**
-     * Syntax: <code>jportal_getJournalID:XPath2BeFilled
+     * Syntax: jportal_getJournalID:XPath2BeFilled
      * 
      * -> Use, if you want to know the Journal-ID that has an own layout template
      * 
