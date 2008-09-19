@@ -220,19 +220,21 @@
             </xsl:if>
 
             <!-- rubric -->
-            <tr>
-                <td id="leaf-additional">
-                    <xsl:call-template name="lineSpace" />
-                    <i>
-                        <xsl:value-of select="i18n:translate('editormask.labels.rubric')" />
-                        :
-                    </i>
-                    <xsl:call-template name="printClass">
-                        <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/rubrics/rubric" />
-                        <xsl:with-param name="host" select="'local'" />
-                    </xsl:call-template>
-                </td>
-            </tr>
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/rubrics/rubric">
+                <tr>
+                    <td id="leaf-additional">
+                        <xsl:call-template name="lineSpace" />
+                        <i>
+                            <xsl:value-of select="i18n:translate('editormask.labels.rubric')" />
+                            :
+                        </i>
+                        <xsl:call-template name="printClass">
+                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/rubrics/rubric" />
+                            <xsl:with-param name="host" select="'local'" />
+                        </xsl:call-template>
+                    </td>
+                </tr>
+            </xsl:if>
 
             <!-- derivates -->
             <xsl:call-template name="printDerivates">
