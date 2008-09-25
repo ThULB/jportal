@@ -1,3 +1,7 @@
+#-- ===================================================================
+#-- MyCoRe sample application private properties template file       
+#-- $Revision: 13743 $ $Date: 2008-07-14 14:09:07 +0200 (Mo, 14 Jul 2008) $                  
+#-- ===================================================================
 #
 # The MyCoRe properties PRIVATE sample file for the Dublin Core Demo
 #
@@ -12,11 +16,12 @@
   MCR.CommandLineInterface.SystemName=%MCR.NameOfProject%
 
 ##############################################################################
-# Module Includes
+# Module includes, component excludes
 ##############################################################################
-# Uncomment the second line if you use the IView module.
-  MCR.Modules.Application=acl-editor,broadcasting,classhandler,docportal,indexing,swf,useradmin,userlogin,wcms,webcli,webservices,z3950
-# MCR.Modules.Application=acl-editor,broadcasting,classhandler,docportal,indexing,iview,swf,useradmin,userlogin,wcms,webcli,webservices,z3950
+  MCR.Modules.Application=docportal
+
+#exclude these mycore components
+ MCR.Components.Exclude=migration13-20
 
 #############################################################################
 # WEB browser base URL
