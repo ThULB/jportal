@@ -31,7 +31,7 @@
    <data>
    <xsl:for-each select="service/servdates/servdate">
     <xsl:if test="@type = 'modifydate'">
-     <xsl:value-of select="i18n:translate('swf.converter.modifydate')" /> <xsl:value-of select="text()|*" />
+     <xsl:value-of select="i18n:translate('component.swf.converter.modifydate')" /> <xsl:value-of select="text()|*" />
     </xsl:if>
    </xsl:for-each>
    </data>

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13462 $ $Date: 2008-04-28 15:52:24 +0200 (Mo, 28 Apr 2008) $
+ * $Revision: 13911 $ $Date: 2008-08-27 15:51:57 +0200 (Mi, 27 Aug 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,6 +35,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jdom.Document;
@@ -49,7 +50,7 @@ import org.mycore.datamodel.classifications2.MCRLabel;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13462 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision: 13911 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRCategoryTransformer {
@@ -203,14 +204,26 @@ public class MCRCategoryTransformer {
 
         private static final Pattern DESCR_PATTERN = Pattern.compile("\\{description\\}");
 
-        private static final Pattern COUNT_PATTERN = Pattern.compile("\\{count\\}");
+        private static final Pattern COUNT_PATTERN = Pattern.compile("\\{count(:([^\\)]+))?\\}");
 
         @SuppressWarnings("unchecked")
         static Document getDocument(MCRCategory cl, String labelFormat, boolean sort) {
             Document cd = new Document(new Element("items"));
             Map<MCRCategoryID, Number> countMap = null;
-            if (COUNT_PATTERN.matcher(labelFormat).find()) {
-                countMap = MCRCategLinkServiceFactory.getInstance().countLinks(getAllCategIDs(cl));
+            final Matcher countMatcher = COUNT_PATTERN.matcher(labelFormat);
+            /*
+             * countMatcher.group(0) is the whole expression string like {count:document}
+             * countMatcher.group(1) is first inner expression string like :document
+             * countMatcher.group(2) is most inner expression string like document
+             */
+            if (countMatcher.find()) {
+                if (countMatcher.group(1) == null)
+                    countMap = MCRCategLinkServiceFactory.getInstance().countLinks(getAllCategIDs(cl));
+                else {
+                    //group(2) contains objectType
+                    String objectType = countMatcher.group(2);
+                    countMap = MCRCategLinkServiceFactory.getInstance().countLinksForType(getAllCategIDs(cl), objectType);
+                }
             }
             for (MCRCategory category : cl.getChildren()) {
                 cd.getRootElement().addContent(getElement(category, labelFormat, countMap));

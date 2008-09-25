@@ -4,7 +4,18 @@
   <defaultCache maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120"
     overflowToDisk="true" diskPersistent="true" diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
   <cache name="org.mycore.datamodel.classifications2.impl.MCRCategoryImpl" maxElementsInMemory="2000" eternal="true"
-    overflowToDisk="false" />
+    timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false" diskPersistent="true"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
   <cache name="org.mycore.datamodel.classifications2.impl.MCRCategoryLink" maxElementsInMemory="2000" eternal="true"
-    overflowToDisk="false" />
+    timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="false" diskPersistent="true"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+  <cache name="org.mycore.datamodel.classifications2.impl.MCRCategoryImpl.labels" maxElementsInMemory="10000"
+    eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true" diskPersistent="true"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+  <cache name="org.hibernate.cache.UpdateTimestampsCache" maxElementsInMemory="10000" eternal="false"
+    timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true" diskPersistent="true"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
+  <cache name="org.hibernate.cache.StandardQueryCache" maxElementsInMemory="10000" eternal="false"
+    timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true" diskPersistent="true"
+    diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU" />
 </ehcache>

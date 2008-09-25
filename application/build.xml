@@ -8,6 +8,19 @@
 <project name="DocPortal" default="usage" basedir=".">
 
   <import file="${basedir}/common-modules.xml" />
+  <!-- support some deprecated targets-->
+  <target name="webapps" depends="create.webapp" />
+  <target name="jar" depends="create.jar" />
+  <target name="war" depends="create.war" />
+  <target name="create.genkeys">
+    <echo level="warning">create.genkeys is deprecated and replaced by target create.webapp</echo>
+  </target>
+  <target name="create.metastore" depends="init">
+    <modulePreHook target="create.metastore" />
+    <echo level="warning">create.metastore is deprecated and will be removed</echo>
+    <moduleHook target="create.metastore" />
+  </target>
+  <!-- end of deprecated targets -->
 
   <condition property="ant1.7">
     <available classname="org.apache.tools.ant.taskdefs.condition.AntVersion" />
@@ -69,12 +82,11 @@
       </for>
     </sequential>
   </macrodef>
-
   <!-- =================================================================== -->
   <!-- Help on usage                                                       -->
   <!-- =================================================================== -->
 
-  <target name="usage" description="Display main targets by running 'ant -projecthelp'">
+  <target name="usage" description="Displays this help page">
     <java classname="org.apache.tools.ant.Main" fork="false">
       <arg value="-projecthelp" />
     </java>
@@ -98,6 +110,36 @@
     <echo level="info">Active CLASSPATH   : ${application.classpath.translated}</echo>
     <echo level="info">Active LIBPATH     : ${application.libpath.translated}</echo>
     <moduleHook target="info" />
+  </target>
+
+  <target name="config" depends="init">
+    <delete file="${build.config}/mycore.properties" />
+    <modulePreHook target="config" />
+    <!-- copy hibernate.cfg.xml.template if it isn't -->
+    <copy file="${application.config}/hibernate/hibernate.cfg.xml.template"
+          tofile="${application.config}/hibernate/hibernate.cfg.xml"
+          overwrite="false" />
+    <!-- copy DTD -->
+    <copy todir="${MCR.Hibernate.DTD.Directory}">
+      <fileset dir="${mycore.schema}" includes="hibernate-*.dtd" />
+    </copy>
+    <copy todir="${build.config}" overwrite="true">
+      <fileset dir="${mycore.config}" includes="fieldtypes.xml" />
+      <fileset dir="${application.config}" includes="ContentStoreSelectionRules.xml" />
+      <fileset dir="${application.config}" includes="FileContentTypes.xml" />
+      <fileset dir="${application.config}" includes="searchfields.xml" />
+      <fileset dir="${application.config}" includes="hosts.xml" />
+      <fileset dir="${application.config}" includes="MCRRESUMPTIONTOKEN.hbm.xml" />
+      <fileset dir="${application.config}" includes="editor_default_acls_classification.xml" />
+      <fileset dir="${application.config}/hibernate" includes="**" />
+    </copy>
+    <xmltask source="${build.config}/ehcache.xml" dest="${build.config}/ehcache.xml">
+      <replace path="/ehcache/diskStore/@path" withText="${MCR.EHCache.diskStore.path}" />
+    </xmltask>
+    <mcr-integrate target="config" classpathref="mycore.jars" />
+    <mcr-config propertyfile="${build.config}/mycore.properties"
+                mergeFile="${application.config}/mycore.properties.private" />
+    <moduleHook target="config" />
   </target>
 
   <!-- =================================================================== -->
@@ -139,11 +181,12 @@
   <target name="create.schema" depends="init" description="Generates all schema files from the configuration files">
     <modulePreHook target="create.schema" />
     <!-- copy the stylesheets from MyCoRe -->
-    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataCoreTemplates.xsl" />
-    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataCoreTypes.xsl" />
-    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataSchema.xsl" />
-    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataTemplates.xsl" />
-    <copy todir="${build.stylesheets}" file="${mycore.stylesheets}/MCRMetadataTypes.xsl" />
+    <unjar dest="${build.stylesheets}" src="${mycore.jar}">
+      <patternset>
+        <include name="xsl/MCRMetadata*.xsl" />
+      </patternset>
+      <mapper type="flatten" />
+    </unjar>
     <antcall target="model2schema">
       <param name="metadata.schema" value="${basedir}/config/datamodel-derivate.xml" />
     </antcall>
@@ -157,43 +200,18 @@
   <!-- =================================================================== -->
 
   <target name="create.scripts"
-          depends="init, script.copy, script.windows, script.unix"
+          depends="init, config, script.copy, script.windows, script.unix"
           description="Create commandline scripts">
     <modulePreHook target="create.scripts" />
     <chmod perm="755">
       <fileset dir="${build.bin}" includes="*.sh" />
     </chmod>
-    <delete file="${build.config}/mycore.properties" />
-    <mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${application.config}/mycore.properties" />
-    <mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${mycore.config}/build.properties" />
+    <mcr-integrate target="create.scripts" classpathref="mycore.jars" />
     <moduleHook target="create.scripts" />
-    <mcr-config propertyfile="${build.config}/mycore.properties"
-                mergeFile="${application.config}/mycore.properties.private" />
   </target>
 
   <target name="script.copy">
     <mkdir dir="${build.bin}" />
-    <!-- copy hibernate.cfg.xml.template if it isn't -->
-    <copy file="${application.config}/hibernate/hibernate.cfg.xml.template"
-          tofile="${application.config}/hibernate/hibernate.cfg.xml"
-          overwrite="false" />
-    <!-- copy DTD -->
-    <copy todir="${MCR.Hibernate.DTD.Directory}">
-      <fileset dir="${mycore.schema}" includes="hibernate-*.dtd" />
-    </copy>
-    <copy todir="${build.config}" overwrite="true">
-      <fileset dir="${mycore.config}" includes="fieldtypes.xml" />
-      <fileset dir="${application.config}" includes="ContentStoreSelectionRules.xml" />
-      <fileset dir="${application.config}" includes="FileContentTypes.xml" />
-      <fileset dir="${application.config}" includes="searchfields.xml" />
-      <fileset dir="${application.config}" includes="hosts.xml" />
-      <fileset dir="${application.config}" includes="MCRRESUMPTIONTOKEN.hbm.xml" />
-      <fileset dir="${application.config}" includes="editor_default_acls_classification.xml" />
-      <fileset dir="${application.config}/hibernate" includes="**" />
-    </copy>
-    <xmltask source="${build.config}/ehcache.xml" dest="${build.config}/ehcache.xml">
-      <replace path="/ehcache/diskStore/@path" withText="${MCR.EHCache.diskStore.path}"/>
-    </xmltask>
     <mkdir dir="${build.lib}/jetty" />
     <mkdir dir="${application.lib}/jetty/logs" />
     <copy todir="${build.lib}/jetty">
@@ -239,10 +257,6 @@
       <fileset dir="${application.dostools}" includes="Repair*.cmd" />
       <fileset dir="${application.dostools}" includes="Save*.cmd" />
       <fileset dir="${application.dostools}" includes="SQL*.cmd" />
-    </copy>
-    <mkdir dir="${build.bin}/gnutools" />
-    <copy todir="${build.bin}/gnutools">
-      <fileset dir="${application.dostools}/gnutools" includes="**/*" />
     </copy>
     <!-- build HSQLDB scripts (if it is configured) -->
     <pathconvert targetos="windows" property="hsqldb.datadir">
@@ -379,7 +393,7 @@ rem ${mycore.cmd.class}
 rem Generated by ant using the target "scripts".
 rem
 
-set CLASSPATH=${application.classpath.translated}
+set CLASSPATH=${script.classpath.translated}
 
 java -Xmx${java.maxmemory} ${mycore.cmd.class}
     </echo>
@@ -396,7 +410,7 @@ java -Xmx${java.maxmemory} ${mycore.cmd.class}
 # Generated by ant using the target "scripts".
 #
 
-CLASSPATH=${application.classpath.translated}
+CLASSPATH=${script.classpath.translated}
 export CLASSPATH
 
 ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
@@ -505,51 +519,15 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Build a jar file with all third party classes                       -->
   <!-- =================================================================== -->
 
-  <target name="third-party" unless="third-party.notRequired">
-    <echo level="info">Build third-party.jar</echo>
-    <mkdir dir="${build.lib}/third-party" />
-    <!-- unpack jar and zip -->
-    <unjar dest="${build.lib}/third-party">
-      <fileset dir="${mycore.lib}" includes="c3p0*.jar" />
-      <fileset dir="${mycore.lib}" includes="cglib*.jar" />
-      <fileset dir="${mycore.lib}" includes="commons*.jar" />
-      <fileset dir="${mycore.lib}" includes="ehcache*.jar" />
-      <fileset dir="${mycore.lib}" includes="hibernate*.jar" />
-      <fileset dir="${mycore.lib}" includes="hsqldb*.jar" />
-      <fileset dir="${mycore.lib}" includes="jdom*.jar" />
-      <fileset dir="${mycore.lib}" includes="joda*.jar" />
-      <fileset dir="${mycore.lib}" includes="jtidy*.jar" />
-      <fileset dir="${mycore.lib}" includes="junit*.jar" />
-      <fileset dir="${mycore.lib}" includes="log4j*.jar" />
-      <fileset dir="${mycore.lib}" includes="lucene*.jar" />
-      <fileset dir="${mycore.lib}" includes="icu4j*.jar" />
-    </unjar>
-    <!--
-    <unzip dest="${build.lib}/third-party" >
-      <fileset dir="${mycore.lib}" includes="*.zip" />
-	</unzip>
-    <unjar dest="${build.lib}/third-party" >
-      <fileset dir="${mycore.modules}" includes="*/lib/*.jar" />
-	</unjar>
-		  -->
-    <!-- pack to one jar -->
-    <jar destfile="${build.lib}/third-party.jar">
-      <fileset dir="${build.lib}/third-party" includes="**/*" />
-    </jar>
+  <target name="getJars">
+    <echo level="info">Get jars from core</echo>
     <copy todir="${build.lib}">
-      <fileset dir="${mycore.lib}"
-               includes="*.jar"
-               excludes="c3p0*.jar,cglib*.jar,commons*.jar,ehcache*.jar,hibernate*.jar,hsqldb*.jar,jdom*.jar,joda*.jar,jtidy*.jar,junit*.jar,log4j*,lucene*.jar,icu4j*.jar" />
-      <fileset dir="${mycore.lib}" includes="*.zip" />
+      <fileset dir="${mycore.lib}" includes="*.jar" />
     </copy>
-    <!-- remove unpacked jar and zip files -->
-    <delete dir="${build.lib}/third-party" />
-    <!-- copy license files -->
     <mkdir dir="${build.lib}/licenses" />
     <copy todir="${build.lib}/licenses">
       <fileset dir="${mycore.lib}" includes="*.txt" />
     </copy>
-    <echo level="info">---------------------------------------------------------</echo>
   </target>
 
   <!-- =================================================================== -->
@@ -572,13 +550,9 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <echo level="info">---------------------------------------------------------</echo>
   </target>
 
-  <target name="compile" description="Compiles all sources under the sample directory">
+  <target name="compile" depends="getJars">
     <modulePreHook target="compile" />
-    <copy file="${mycore.lib}/mycore.jar" preservelastmodified="yes" todir="${build.lib}" failonerror="true" />
-    <uptodate property="third-party.notRequired" targetfile="${build.lib}/third-party.jar">
-      <srcfiles dir="${mycore.lib}" includes="**/*.jar" excludes="mycore.jar" />
-    </uptodate>
-    <antcall target="third-party" />
+    <mcr-integrate target="compile" classpathref="mycore.jars" />
     <echo level="info">Compiling a DocPortal classes...</echo>
     <antcall target="javac">
       <param name="packages" value="org/mycore/**" />
@@ -590,12 +564,21 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Creates a docportal.jar file containing all compiled classes        -->
   <!-- =================================================================== -->
 
-  <target name="jar" depends="compile" description="creates lib/docportal.jar">
+  <target name="create.jar" depends="compile" description="creates lib/docportal.jar">
     <modulePreHook target="jar" />
     <echo level="info">Creating docportal.jar containing all compiled classes.</echo>
+    <pathconvert property="mf.classpath" pathsep=" ">
+      <path refid="application.classpath" />
+      <flattenmapper />
+    </pathconvert>
     <jar destfile="${build.lib}/docportal.jar">
       <fileset dir="${build.classes}" includes="**/*.class" />
       <fileset dir="${build.schema}" includes="*.xsd *.dtd" />
+      <fileset dir="${build.config}" />
+      <manifest>
+        <attribute name="Main-Class" value="org.mycore.frontend.cli.MCRCommandLineInterface" />
+        <attribute name="Class-Path" value="${mf.classpath}" />
+      </manifest>
     </jar>
     <echo level="info">---------------------------------------------------------</echo>
     <moduleHook target="jar" />
@@ -607,27 +590,14 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
   <target name="webservice.deploy" description="Call the deploy target for the WebServices">
     <modulePreHook target="webservice.deploy" />
-    <subant target="deploy" inheritall="true" inheritrefs="true">
-      <fileset dir="${application}/modules/webservices" includes="build.xml" />
-    </subant>
+    <mcr-integrate target="webservice.deploy" classpathref="mycore.jars" />
     <moduleHook target="webservice.deploy" />
   </target>
 
   <target name="webservice.undeploy" description="Call the undeploy target for the WebServices">
     <modulePreHook target="webservice.undeploy" />
-    <subant target="undeploy" inheritall="true" inheritrefs="true">
-      <fileset dir="${application}/modules/webservices" includes="build.xml" />
-    </subant>
+    <mcr-integrate target="webservice.undeploy" classpathref="mycore.jars" />
     <moduleHook target="webservice.undeploy" />
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Create all metadata stores for XML mapped stores                    -->
-  <!-- =================================================================== -->
-
-  <target name="create.metastore" depends="init" description="Create all metadata stores for XML mapped stores">
-    <modulePreHook target="create.metastore" />
-    <moduleHook target="create.metastore" />
   </target>
 
   <!-- =================================================================== -->
@@ -643,41 +613,47 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- Generates the keys to sign the applets                              -->
   <!-- =================================================================== -->
 
-  <target name="create.genkeys" depends="init" description="Generates the keys to sign the applets">
-    <modulePreHook target="create.genkeys" />
-    <loadproperties srcFile="${application.config}/mycore.properties.private">
-      <filterchain>
-        <linecontains>
-          <contains value="SIGN." />
-        </linecontains>
-      </filterchain>
-    </loadproperties>
-    <echo level="info">
-
-      Generating a key pair for signing applets ...
-    </echo>
-    <mkdir dir="${SIGN.KeyStore}" />
-    <genkey alias="${SIGN.Alias}"
-            keystore="${SIGN.KeyStore}/keys"
-            storepass="${SIGN.Password}"
-            keypass="${SIGN.Password}"
-            validity="${SIGN.Validity}">
-      <dname>
-        <param name="CN" value="${SIGN.Name}" />
-        <param name="OU" value="${SIGN.OrgUnit}" />
-        <param name="O" value="${SIGN.Organization}" />
-        <param name="C" value="${SIGN.Country}" />
-      </dname>
-    </genkey>
-    <moduleHook target="create.genkeys" />
+  <target name="genkey" depends="init">
+    <if>
+      <and>
+      	<available file="${SIGN.KeyStore}/${SIGN.Alias}" />
+      	<isfileselected file="${SIGN.KeyStore}/${SIGN.Alias}">
+   	    	<and>
+   				<contains text="${SIGN.Alias}"/>
+	      		<contains text="${SIGN.Name}"/>
+    	    </and>
+      	</isfileselected>
+      </and>
+      <then>
+      	<echo level="info">private key for &#187;${SIGN.Alias}&#171; already exists</echo>
+      </then>
+      <else>
+        <echo level="info">
+          Generating a key pair for signing applets ...
+        </echo>
+        <mkdir dir="${SIGN.KeyStore}" />
+        <genkey alias="${SIGN.Alias}"
+                keystore="${SIGN.KeyStore}/${SIGN.Alias}"
+                storepass="${SIGN.Password}"
+                keypass="${SIGN.Password}"
+                validity="${SIGN.Validity}">
+          <dname>
+            <param name="CN" value="${SIGN.Name}" />
+            <param name="OU" value="${SIGN.OrgUnit}" />
+            <param name="O" value="${SIGN.Organization}" />
+            <param name="C" value="${SIGN.Country}" />
+          </dname>
+        </genkey>
+      </else>
+    </if>
   </target>
 
   <!-- =================================================================== -->
   <!-- Build the web application directory and copy webpages               -->
   <!-- =================================================================== -->
 
-  <target name="webapps" depends="init" description="Build the complete sample web application directory">
-    <modulePreHook target="webapps" />
+  <target name="create.webapp" depends="init, config, i18n" description="Build the complete sample web application directory">
+    <modulePreHook target="create.webapp" />
     <echo level="info">Creating web application in directory ${build.webapps}</echo>
     <!-- Create necessary directories  -->
     <mkdir dir="${build.webapps}" />
@@ -686,92 +662,25 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mkdir dir="${build.webapps}/WEB-INF" />
     <mkdir dir="${build.webapps}/WEB-INF/classes" />
     <mkdir dir="${build.webapps}/WEB-INF/lib" />
-    <mkdir dir="${build.webapps}/WEB-INF/stylesheets" />
+    <mkdir dir="${build.webapps}/WEB-INF/classes/xsl" />
+    <mcr-integrate target="webapp" classpathref="mycore.jars" />
     <antcall target="webapps.base" />
-    <antcall target="webapps.i18n" />
     <antcall target="safeWebContent" />
     <antcall target="webapps.templates" />
-    <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties"
-                mergeFile="${application.config}/mycore.properties" />
-    <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties"
-                mergeFile="${mycore.config}/build.properties" />
-    <moduleHook target="webapps" />
-    <mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties"
-                mergeFile="${application.config}/mycore.properties.private" />
+    <copy tofile="${build.webapps}/WEB-INF/classes/mycore.properties"
+          file="${build.config}/mycore.properties"
+          overwrite="true" />
+    <moduleHook target="create.webapp" />
     <!-- Create empty mycoreobject.dtd -->
-    <echo file="${build.webapps}/WEB-INF/classes/mycoreobject.dtd"><![CDATA[<!ELEMENT mycoreobject ANY>
-]]></echo>
   </target>
 
-  <target name="webapps.i18n">
-    <modulePreHook target="webapps.i18n" />
-    <!-- build date string -->
-    <tstamp>
-      <format property="TODAY_DE" pattern="dd.MM.yyyy" locale="de,DE" />
-    </tstamp>
-    <tstamp>
-      <format property="TODAY_EN" pattern="yyyy-MM-dd" locale="en,UK" />
-    </tstamp>
-    <echo file="${build.config}/messages_today_de.properties" append="false">
-<![CDATA[
-#generated by build.xml target webapps.i18n      
-common.today=${TODAY_DE}
-]]>
-</echo>
-    <echo file="${build.config}/messages_today_en.properties" append="false">
-<![CDATA[
-#generated by build.xml target webapps.i18n      
-common.today=${TODAY_EN}
-]]>
-</echo>
-    <!-- build one file per language - de -->
-    <echo file="${build.config}/messages_de.properties" append="false"><![CDATA[#generated by build.xml target webapps.i18n
-#if you want to modify an property, please use the "Source" hint and modify the given file.
-#this file will be overwritten by every call of "ant webapps"
-]]></echo>
-    <copyfile dest="${build.config}/messages_en.properties" src="${build.config}/messages_de.properties" />
-    <antcall target="properties.merge">
-		<param name="module" value="${application.config}/messages_common_de.properties" />
-		<param name="locale_param" value="de" />
-	</antcall>
-	<antcall target="properties.merge">
-		<param name="module" value="${application.config}/messages_today_de.properties" />
-		<param name="locale_param" value="de" />
-	</antcall>
-    <!-- build one file per language - en -->
-	<antcall target="properties.merge">
-		<param name="module" value="${application.config}/messages_common_en.properties" />
-		<param name="locale_param" value="en" />
-	</antcall>
-	<antcall target="properties.merge">
-		<param name="module" value="${application.config}/messages_today_en.properties" />
-		<param name="locale_param" value="en" />
-	</antcall>
-    <moduleHook target="webapps.i18n" />
-    <!-- copy to webapps -->
-    <copy todir="${build.webapps}/WEB-INF/classes/" file="${build.config}/messages_de.properties" overwrite="true" />
-    <copy todir="${build.webapps}/WEB-INF/classes/" file="${build.config}/messages_en.properties" overwrite="true" />
-    <move file="${build.webapps}/WEB-INF/classes/messages_${MCR.Metadata.DefaultLang}.properties"
-          tofile="${build.webapps}/WEB-INF/classes/messages.properties" overwrite="true" />
-    <echo file="${build.webapps}/WEB-INF/classes/messages_${MCR.Metadata.DefaultLang}.properties" append="false">#look for properties in messages.properties</echo>
+  <target name="i18n">
+    <modulePreHook target="i18n" />
+    <mcr-integrate target="i18n" classpathref="mycore.jars" />
+    <moduleHook target="i18n" />
   </target>
 
   <target name="webapps.base">
-    <!-- Copy editor stylesheets from MyCoRe and the DocPortal Application -->
-    <copy file="${mycore}/stylesheets/editor/editor.xsl"
-          todir="${build.webapps}/WEB-INF/stylesheets"
-          preservelastmodified="true" />
-    <copy file="${mycore}/stylesheets/editor/editor-common.xsl"
-          todir="${build.webapps}/WEB-INF/stylesheets"
-          preservelastmodified="true" />
-    <copy file="${mycore}/stylesheets/editor/helpPopup.xsl"
-          todir="${build.webapps}/WEB-INF/stylesheets"
-          preservelastmodified="true" />
-    <copy file="${mycore}/stylesheets/editor/imports-help-popup.xsl"
-          todir="${build.webapps}/WEB-INF/stylesheets"
-          preservelastmodified="true" />
-    <mkdir dir="${build.webapps}/content/oai" />
-    <copy file="${mycore}/stylesheets/oai2.xsl" todir="${build.webapps}/content/oai" preservelastmodified="true" />
     <!-- Copy the files from various directories to build the webapps -->
     <copy todir="${build.webapps}" preservelastmodified="true">
       <fileset dir="${application.webpages}">
@@ -787,105 +696,41 @@ common.today=${TODAY_EN}
       <fileset dir="${mycore}/documentation/UserGuide" includes="UserGuide.pdf" />
       <fileset dir="${mycore}/documentation/ProgGuide" includes="ProgrammerGuide.pdf" />
     </copy>
-
+    <!-- copy i18n files -->
+    <copy todir="${build.webapps}/WEB-INF/classes/">
+      <fileset dir="${build.classes}" />
+      <fileset dir="${build.schema}" />
+      <fileset dir="${build.config}" includes="**" excludes="messages_*.properties" />
+    </copy>
+    <copy todir="${build.webapps}/WEB-INF/classes/" file="${build.config}/messages_de.properties" overwrite="true" />
+    <copy todir="${build.webapps}/WEB-INF/classes/" file="${build.config}/messages_en.properties" overwrite="true" />
+    <move file="${build.webapps}/WEB-INF/classes/messages_${MCR.Metadata.DefaultLang}.properties"
+          tofile="${build.webapps}/WEB-INF/classes/messages.properties"
+          overwrite="true" />
+    <echo file="${build.webapps}/WEB-INF/classes/messages_${MCR.Metadata.DefaultLang}.properties" append="false">#look for properties in messages.properties</echo>
     <copy todir="${build.webapps}/editor" preservelastmodified="true">
       <fileset dir="${application.config}" includes="editor-*.xml" />
       <fileset dir="${application.config}" includes="imports-*.xml" />
     </copy>
-    <copy todir="${build.webapps}/WEB-INF" preservelastmodified="true">
-      <fileset dir="${application.config}" includes="web.xml ibm*.xmi" />
-      <fileset dir="${mycore}/schema" includes="web-app_2_4.xsd" />
+    <!-- copy WSDD deployment descriptors (for Apache Axis) -->
+    <copy todir="${build.webapps}/WEB-INF">
+      <fileset file="${application.config}/server-config.wsdd"/>
     </copy>
     <copy todir="${build.webapps}/WEB-INF/lib" preservelastmodified="true">
       <fileset dir="${build}/lib" includes="*.jar" excludes="servlet-api*" />
     </copy>
-    <copy todir="${build.webapps}/WEB-INF/classes" preservelastmodified="true">
-      <fileset dir="${build.classes}" />
-      <fileset dir="${mycore.config}" includes="fieldtypes.xml" />
-      <fileset dir="${application.config}" excludes="messages_common_*.properties **/acl/** **/user/** **/hibernate/** mycore.*" />
-      <fileset dir="${build.schema}" />
-      <fileset dir="${application.config}/hibernate" />
-    </copy>
-    <xmltask source="${build.webapps}/WEB-INF/classes/ehcache.xml" dest="${build.webapps}/WEB-INF/classes/ehcache.xml">
-      <replace path="/ehcache/diskStore/@path" withText="${MCR.EHCache.diskStore.path}"/>
-    </xmltask>
-    <copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true" preservelastmodified="true">
+    <copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true">
       <fileset dir="${application.stylesheets}" includes="**/*.xsl" />
-      <fileset dir="${mycore}/stylesheets" includes="**/*.xsl" />
       <!-- templates -->
       <fileset dir="${basedir}/webpages/templates">
         <include name="**/*.xsl" />
       </fileset>
     </copy>
-    <copy todir="${build.webapps}/WEB-INF/stylesheets"
+    <copy todir="${build.webapps}/WEB-INF/classes/xsl"
           overwrite="true"
           file="${application.stylesheets}/objecttypes.xsl" />
 
-    <echo level="info">
-
-      Building the upload applet used for file uploads...
-    </echo>
-    <!-- Compile applet to JDK 1.4 -->
-    <mkdir dir="${build.webapps}/applet/sources" />
-    <mkdir dir="${build.webapps}/applet/classes" />
-    <copy todir="${build.webapps}/applet/sources" preservelastmodified="true">
-      <fileset dir="${mycore}/sources">
-        <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.java" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.java" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadExce*.java" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadProg*.java" />
-      </fileset>
-    </copy>
-    <javac srcdir="${build.webapps}/applet/sources"
-           destdir="${build.webapps}/applet/classes"
-           includes="org/mycore/**"
-           classpathref="application.classpath"
-           debug="${debug}"
-           optimize="${optimize}"
-           target="1.4"
-           source="1.4"
-           encoding="${sourceencoding}"
-           deprecation="${deprecation}">
-    </javac>
-    <!-- build applet jar -->
-    <copy file="${mycore.config}/messages_de.MCRUploadApplet"
-          tofile="${build.webapps}/applet/messages_de.properties"
-          preservelastmodified="true" />
-    <copy file="${mycore.config}/messages_en.MCRUploadApplet"
-          tofile="${build.webapps}/applet/messages_en.properties"
-          preservelastmodified="true" />
-    <jar jarfile="${build.webapps}/applet/unsigned.jar">
-      <fileset dir="${build.webapps}/applet/classes">
-        <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.class" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.class" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadExce*.class" />
-        <include name="org/mycore/frontend/fileupload/MCRUploadProg*.class" />
-      </fileset>
-      <fileset dir="${build.webapps}/applet">
-        <include name="messages*" />
-        <include name="mycore.properties*" />
-      </fileset>
-    </jar>
-    <loadproperties srcFile="${application.config}/mycore.properties.private">
-      <filterchain>
-        <linecontains>
-          <contains value="SIGN." />
-        </linecontains>
-      </filterchain>
-    </loadproperties>
-    <signjar jar="${build.webapps}/applet/unsigned.jar"
-             signedjar="${build.webapps}/applet/upload.jar"
-             alias="${SIGN.Alias}"
-             keystore="${SIGN.KeyStore}/keys"
-             storepass="${SIGN.Password}"
-             keypass="${SIGN.Password}" />
-    <delete file="${build.webapps}/applet/unsigned.jar" />
-    <chmod dir="${build.webapps}/applet" perm="ugo+r" />
-
-    <!-- Copy the web.xml of the core to the webapps -->
-    <delete file="${build.webapps}/WEB-INF/web.xml" />
-    <copy file="${mycore.config}/web.xml" todir="${build.webapps}/WEB-INF" />
-
+    <antcall target="webapp.applet" />
     <antcall target="copy.webapp.shared.jars" />
     <antcall target="webapp.info.shared.jars" />
     <antcall target="webapp.info.unix" />
@@ -896,7 +741,7 @@ common.today=${TODAY_EN}
 
     <!-- Replace URL in browser search plug-in -->
     <copy todir="${build.webapps}" overwrite="yes">
-      <fileset dir="${application.webpages}" includes="docportal-plugin.xml docportal-plugin.src" />
+      <fileset dir="${application.webpages}" includes="docportal_opensearch_desc.xml docportal-plugin.xml" />
       <filterchain>
         <tokenfilter>
           <replacestring from="%MCR.baseurl%" to="${MCR.baseurl}" />
@@ -904,12 +749,78 @@ common.today=${TODAY_EN}
       </filterchain>
     </copy>
   </target>
+  
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: webapp.applet                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="webapp.applet">
+      <antcall target="genkey" />
+      <if>
+        <uptodate targetfile="${build.webapps}/applet/upload.jar">
+          <srcfiles dir="${mycore}/sources" includes="org/mycore/frontend/fileupload/**/*.java" />
+          <srcfiles dir="${SIGN.KeyStore}" includes="${SIGN.Alias}" />
+        </uptodate>
+        <then>
+          <echo level="info">MCRUploadApplet is up to date</echo>
+        </then>
+        <else>
+          <echo level="info">
+            Building the upload applet used for file uploads...
+          </echo>
+          <!-- Compile applet to JDK 1.4 -->
+          <mkdir dir="${build.webapps}/applet/sources" />
+          <mkdir dir="${build.webapps}/applet/classes" />
+          <copy todir="${build.webapps}/applet/sources" preservelastmodified="true">
+            <fileset dir="${mycore}/sources">
+              <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.java" />
+              <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.java" />
+              <include name="org/mycore/frontend/fileupload/MCRUploadExce*.java" />
+              <include name="org/mycore/frontend/fileupload/MCRUploadProg*.java" />
+            </fileset>
+          </copy>
+          <javac srcdir="${build.webapps}/applet/sources"
+                 destdir="${build.webapps}/applet/classes"
+                 includes="org/mycore/**"
+                 classpathref="application.classpath"
+                 debug="${debug}"
+                 optimize="${optimize}"
+                 target="1.4"
+                 source="1.4"
+                 encoding="${sourceencoding}"
+                 deprecation="${deprecation}">
+          </javac>
+          <!-- build applet jar -->
+          <copy file="${mycore.config}/messages_de.MCRUploadApplet"
+                tofile="${build.webapps}/applet/messages_de.properties"
+                preservelastmodified="true" />
+          <copy file="${mycore.config}/messages_en.MCRUploadApplet"
+                tofile="${build.webapps}/applet/messages_en.properties"
+                preservelastmodified="true" />
+          <jar jarfile="${build.webapps}/applet/unsigned.jar">
+            <fileset dir="${build.webapps}/applet/classes" />
+            <fileset dir="${build.webapps}/applet">
+              <include name="messages*" />
+              <include name="mycore.properties*" />
+            </fileset>
+          </jar>
+          <signjar jar="${build.webapps}/applet/unsigned.jar"
+                   signedjar="${build.webapps}/applet/upload.jar"
+                   alias="${SIGN.Alias}"
+                   keystore="${SIGN.KeyStore}/${SIGN.Alias}"
+                   storepass="${SIGN.Password}"
+                   keypass="${SIGN.Password}" />
+          <delete file="${build.webapps}/applet/unsigned.jar" />
+          <chmod dir="${build.webapps}/applet" perm="ugo+r" />
+        </else>
+      </if>
+    </target>
+
 
   <!-- create a new chooseTemplate.xsl -->
   <target name="webapps.templates">
     <taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
     <templatecheck templatepath="${env.DOCPORTAL_HOME}/webpages/templates/master/"
-                   choosepath="${build.webapps}/WEB-INF/stylesheets/chooseTemplate.xsl" />
+                   choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
   </target>
 
   <!-- save modified static web content -->
@@ -979,17 +890,17 @@ common.today=${TODAY_EN}
       <arg line="/c dir *.*" />
     </exec>
   </target>
-  
+
   <condition property="copySharedJars">
     <or>
-      <isset property="MCR.System.SharedJarsDir"/>
-      <isset property="MCR.System.Jars"/>
+      <isset property="MCR.System.SharedJarsDir" />
+      <isset property="MCR.System.Jars" />
     </or>
   </condition>
 
   <target name="copy.webapp.system" if="copySharedJars">
     <if>
-      <isset property="MCR.System.SharedJarsDir"/>
+      <isset property="MCR.System.SharedJarsDir" />
       <then>
         <copy todir="${build.webapps}/WEB-INF/lib/tmp" flatten="true">
           <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
@@ -1007,7 +918,7 @@ common.today=${TODAY_EN}
   <!-- Build a web application archive                                     -->
   <!-- =================================================================== -->
 
-  <target name="war" depends="webapps" description="Build web application archive (war)">
+  <target name="create.war" depends="create.webapp" description="Build web application archive (war)">
     <modulePreHook target="war" />
     <jar jarfile="${build}/docportal.war" basedir="${build.webapps}" />
     <moduleHook target="war" />
@@ -1154,11 +1065,11 @@ common.today=${TODAY_EN}
              windowtitle="DocPortal JavaDoc Documentation"
              doctitle="DocPortal Source Code JavaDoc Documentation">
       <link href="http://www.mycore.de/javadocs/mycore/" />
-      <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+      <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
       <link href="http://tomcat.apache.org/tomcat-5.5-doc/servletapi/" />
-      <link href="http://java.sun.com/xml/jaxp/dist/1.1/docs/api/"/>
-      <link href="http://www.jdom.org/docs/apidocs"/>
-      <link href="http://logging.apache.org/log4j/docs/api/"/>
+      <link href="http://java.sun.com/xml/jaxp/dist/1.1/docs/api/" />
+      <link href="http://www.jdom.org/docs/apidocs" />
+      <link href="http://logging.apache.org/log4j/docs/api/" />
       <link href="http://jakarta.apache.org/lucene/docs/api/" />
     </javadoc>
     <echo level="info">---------------------------------------------------------</echo>
@@ -1183,6 +1094,7 @@ common.today=${TODAY_EN}
       <param name="cli.command" value="process ${commands.file}" />
     </antcall>
     <delete file="${commands.file}" />
+    <mcr-integrate target="create.user" classpathref="mycore.jars" />
     <moduleHook target="create.users" />
   </target>
 
@@ -1215,13 +1127,14 @@ common.today=${TODAY_EN}
     	update permission read for id webpage:/servlets/MCRUserAdminServlet?mode=newgroup with rulefile grant-admins.xml described by ${acl-description.admins}
     	
     	update permission read for id webpage:/content/main/admin.xml with rulefile require-login.xml described by ${acl-description.require-login}
-    	update permission read for id webpage:/servlets/MCRSessionListingServlet?sessionListing.mode=listSessions with rulefile grant-admins.xml described by ${acl-description.admins}
+    	update permission read for id webpage:/servlets/MCRSessionListingServlet with rulefile grant-admins.xml described by ${acl-description.admins}
     </echo>
     <antcall target="invoke.cli">
       <param name="cli.directory" value="${basedir}/config/acl" />
       <param name="cli.command" value="process ${commands.file}" />
     </antcall>
     <delete file="${commands.file}" />
+    <mcr-integrate target="create.default-rules" classpathref="mycore.jars" />
     <moduleHook target="create.default-rules" />
   </target>
 

@@ -84,7 +84,19 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <hidden var="@classid" default="DocPortal_class_00000002"/>
-              <cell col="1" row="1" anchor="WEST" ref="COriginPers" var="@categid" />
+              <cell col="1" row="1" anchor="WEST" var="@categid">
+                <list id="COriginPers" width="300" type="dropdown">
+                  <item value="">
+                    <label xml:lang="de">(bitte wählen)</label>
+                    <label xml:lang="en">(select please)</label>
+                  </item>
+                  <include uri="classification:editor:-1:children:DocPortal_class_00000002" cacheable="false"/>
+                  <condition id="CoOriginPers" required="true" >
+                    <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+                    <label xml:lang="en">Please select one entry!</label>
+                  </condition>
+                </list>
+              </cell>
             </panel>
           </repeater>
         </cell>
@@ -181,7 +193,15 @@
         <include ref="MCRMetaClassification.inherit.heritable" />
         <hidden var="national/@inherited" default="0"/>
         <hidden var="national/@classid" default="DocPortal_class_00000001"/>
-        <cell col="1" row="1" anchor="WEST" ref="CNational" var="national/@categid" />
+        <cell col="1" row="1" anchor="WEST" var="national/@categid">
+          <list id="CNational" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(please select)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000001" cacheable="false"/>
+          </list>
+        </cell>
       </panel>
     </cell>
 

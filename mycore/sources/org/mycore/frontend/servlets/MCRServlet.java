@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13298 $ $Date: 2008-03-19 14:27:51 +0100 (Mi, 19 Mär 2008) $
+ * $Revision: 13732 $ $Date: 2008-07-10 15:03:51 +0200 (Do, 10 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -68,7 +68,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13298 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision: 13732 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRServlet extends HttpServlet {
@@ -104,10 +104,8 @@ public class MCRServlet extends HttpServlet {
 
     public void init() throws ServletException {
         super.init();
-        String dir = getServletContext().getRealPath("WEB-INF/stylesheets");
         if (LAYOUT_SERVICE == null) {
         	LAYOUT_SERVICE = MCRLayoutService.instance();
-            LAYOUT_SERVICE.setStylesheetsDir(dir);
         }
     }
 

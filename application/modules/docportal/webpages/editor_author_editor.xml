@@ -3,29 +3,51 @@
 
 <MyCoReWebPage>
 
-<section title="Bearbeiten von Objekten aus dem Workflow" xml:lang="de">
+<section title="Bearbeiten von Personen aus dem Workflow" xml:lang="de">
 <table class="frame">
 <tr>
 <td>
 <center>
 <span class="textboldnormal"><u>Bearbeiten und Verwalten von Personen für Dokumente<br />(nur für berechtigte Editoren)</u></span>
-<p></p>
-<workflow type="author" step="editor" />
 </center>
+</td>
+</tr>
+<tr>
+<td>
+<p>Jetzt sind Ihre Personendaten im Arbeitsbereich <strong>zwischengespeichert</strong>. <br />
+   Hier können Sie den Eintrag ggf. noch einmal nachbearbeiten, in das Sytem laden oder löschen.<br /> 
+   Sobald ein Datensatz in den Server geladen ist, wird er aus dem Arbeitsbereich gelöscht.
+</p>
+</td>
+</tr>
+<tr>
+<td>
+<workflow type="author" step="editor" />
 </td>
 </tr>
 </table>
 </section>
 
-<section title="Edit an object from the workflow" xml:lang="en">
+<section title="Edit a person from the workflow" xml:lang="en">
 <table class="frame">
 <tr>
 <td>
 <center>
 <span class="textboldnormal"><u>Edit and manage of persons of documents<br />(only for authorized editors)</u></span>
-<p></p>
-<workflow type="author" step="editor" />
 </center>
+</td>
+</tr>
+<tr>
+<td>
+<p>Now your personal data are <strong>interstored</strong> in the workflow area. <br />
+   Here you can rework them if necessary, delete the entry or save it to the server.<br />    
+   As soon as an entry is loaded in the server, it is deleted in the workflow area.</p>
+</td>
+</tr>
+<tr>
+<td>
+<workflow type="author" step="editor" />
+
 </td>
 </tr>
 </table>

@@ -100,9 +100,9 @@
     
     <!-- Search in technical metadata of files -->
     <field name="fileID"            type="identifier" source="fileMetadata" xpath="file/@id" value="." />
-    <field name="DerivateID"        type="identifier" source="fileMetadata" xpath="file/@owner" value="." />
-    <field name="fileName"          type="identifier" source="fileMetadata" xpath="file/@name" value="." />
-    <field name="filePath"          type="identifier" source="fileMetadata" xpath="file/@path" value="." />
+    <field name="DerivateID"        type="identifier" source="fileMetadata" xpath="file/@owner" value="." addable="true" />
+    <field name="fileName"          type="identifier" source="fileMetadata" xpath="file/@name" value="." addable="true" />
+    <field name="filePath"          type="identifier" source="fileMetadata" xpath="file/@path" value="." addable="true" />
     <field name="fileSize"          type="integer"    source="fileMetadata" xpath="file/@size" value="." />
     <field name="fileExtension"     type="identifier" source="fileMetadata" xpath="file/@extension" value="." />
     <field name="fileContentTypeID" type="identifier" source="fileMetadata" xpath="file/contentTypeID" value="." />

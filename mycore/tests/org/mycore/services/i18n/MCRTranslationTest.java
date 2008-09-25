@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13580 $ $Date: 2008-06-05 17:30:00 +0200 (Do, 05 Jun 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -23,9 +23,9 @@
  **/
 package org.mycore.services.i18n;
 
-import junit.framework.TestCase;
+import org.mycore.common.MCRTestCase;
 
-public class MCRTranslationTest extends TestCase {
+public class MCRTranslationTest extends MCRTestCase {
 
     /*
      * Test method for 'org.mycore.services.i18n.MCRTranslation.getStringArray(String)'
@@ -38,6 +38,10 @@ public class MCRTranslationTest extends TestCase {
         assertEquals(2,MCRTranslation.getStringArray("string1\\;;string2").length);
         assertEquals("string1;",MCRTranslation.getStringArray("string1\\;;string2")[0]);
         assertEquals("string1\\",MCRTranslation.getStringArray("string1\\\\;string2")[0]);
+    }
+
+    public void testGetDeprecatedMessageKeys(){
+        assertEquals("Depreacted I18N keys do not work", "This is a JUnit Test.", MCRTranslation.translate("oldLabel"));
     }
 
 }

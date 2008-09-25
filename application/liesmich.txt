@@ -32,7 +32,7 @@ Anwendung.
 Einfache Installation
 =====================
 
-Sind Java 1.5, Ant 1.7 und ein cvs-Client auf Ihrem Rechner installiert, können
+Sind Java 1.5, Ant 1.7 und ein svn-Client auf Ihrem Rechner installiert, können
 Sie mit wenigen Schritten ein MyCoRe/DocPortal installieren. Die Installation holt 
 alle erforderlichen Daten und Programme für eine Beispielanwendung von www.mycore.de. 
 Zur Speicherung der Metadaten wird HSQLDB, für die Inhalte (Bilder, Texte, ) das lokale 
@@ -41,9 +41,9 @@ Dateisystem verwendet. Und hier sind die durchzuführenden Schritte:
 0. Legen Sie ein Verzeichnis mit dem absoluten Pfad <pfad> an und führen Sie in dem Verzeichnis die folgenden
    Kommandos aus:
 
-1. cvs -d :pserver:anoncvs@server.mycore.de:/cvs checkout -P mycore/install.xml
+1. svn export http://server.mycore.de/svn/mycore/trunk/install.xml
 
-2. ant -Ddestdir=<pfad> -Drevision=HEAD -f mycore/install.xml
+2. ant -Ddestdir=<pfad> -Drevision=HEAD -f install.xml
 
 Das zweite Kommando dauert etwa 10 Minuten. Die Installation ist erfolgreich, wenn sich im Verzeichnis
 <pfad> die Datei homepage.html befindet.

@@ -61,8 +61,8 @@
 
 <!-- *** Data for the buttons ** -->
 
-  <submitButton id="BSubmit" width="100px" i18n="buttons.save" />
-  <cancelButton id="BCancel" width="100px" i18n="buttons.cancel" />
+  <submitButton id="BSubmit" width="100px" i18n="common.button.save" />
+  <cancelButton id="BCancel" width="100px" i18n="common.button.cancel" />
 
   <panel id="TwoButtons">
     <cell col="1" row="1" anchor="WEST" ref="BCancel"/>
@@ -183,44 +183,6 @@ Input can be word segments with an '*' extension. A minimum of 3 characters is r
     </label>
   </helpPopup>
 
-<!-- *** Data for the Subject ** -->
-
-  <text id="LSubjectP">
-    <label xml:lang="de">&#160;&#160;&#160;Subjekt&#160;(*)&#160;&#160;&#160;</label>
-    <label xml:lang="en">&#160;&#160;&#160;Subject&#160;(*)&#160;&#160;&#160;</label>
-  </text>
-
-  <text id="LSubject">
-    <label xml:lang="de">&#160;&#160;&#160;Subjekt&#160;&#160;&#160;</label>
-    <label xml:lang="en">&#160;&#160;&#160;Subject&#160;&#160;&#160;</label>
-  </text>
-
-  <helpPopup id="HSubject" width="400px" height="250px">
-    <label xml:lang="de">
-Wählen Sie aus der Liste der Sachgruppen der Deutschen Nationalbibliographie ein Fachgebiet aus.
-    </label>
-    <label xml:lang="en">
-Select a subject group from  the German National Bibliogrphy.
-    </label>
-  </helpPopup>
-
-  <helpPopup id="SMSubject" width="400px" height="250px">
-    <label xml:lang="de">
-Wählen Sie aus der Liste einen Begriff aus.
-    </label>
-    <label xml:lang="en">
-Select a term from the list.
-    </label>
-  </helpPopup>
-
-  <list id="CSubject" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(please select)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000007" cacheable="false"/>
-  </list>
-
 <!-- *** Data for the Origin ** -->
 
   <text id="LOriginP">
@@ -245,30 +207,6 @@ Wählen Sie aus der Liste die Herkunft aus.
 Select the origin from the list.
     </label>
   </helpPopup>
-
-  <list id="COriginPers" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(select please)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000002" cacheable="false"/>
-    <condition id="CoOriginPers" required="true" >
-      <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
-      <label xml:lang="en">Please select one entry!</label>
-    </condition>
-  </list>
-
-  <list id="COriginDoc" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(select please)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000003" cacheable="false"/>
-    <condition id="CoOriginDoc" required="true" >
-      <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
-      <label xml:lang="en">Please select one entry!</label>
-    </condition>
-  </list>
 
 <!-- *** Data for the Description ** -->
 
@@ -539,18 +477,6 @@ Select a document type from the list.
     </label>
   </helpPopup>
 
-  <list id="CType" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(select please)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000005" cacheable="false"/>
-    <condition id="CoTypeDoc" required="true" >
-      <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
-      <label xml:lang="en">Please select one entry!</label>
-    </condition>
-  </list>
-
 <!-- *** Data for the Format ** -->
 
   <text id="LFormatP">
@@ -579,18 +505,6 @@ Wählen Sie aus der Liste einen Format-Begriff aus.
 Select one of the format types from the list.
     </label>
   </helpPopup>
-
-  <list id="CFormat" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(select please)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000006" cacheable="false"/>
-    <condition id="CoFormatDoc" required="true" >
-      <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
-      <label xml:lang="en">Please select one entry!</label>
-    </condition>
-  </list>
 
 <!-- *** Data for the Identifier ** -->
 
@@ -696,18 +610,6 @@ Wählen Sie aus der Liste eine Sprache aus, in der das Objekt erstellt wurde.
 Select a language key from the list.
     </label>
   </helpPopup>
-
-  <list id="CLanguage" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(select please)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000004" cacheable="false"/>
-    <condition id="CoLanguageDoc" required="true" >
-      <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
-      <label xml:lang="en">Please select one entry!</label>
-    </condition>
-  </list>
 
 <!-- *** Data for the Keywords ** -->
 
@@ -1065,30 +967,6 @@ You can add information regarding profession or the occupation.
     </item>
   </list>
 
-<!-- *** Data for the ProfClass *** -->
-
-  <text id="LProfClass">
-    <label xml:lang="de">&#160;&#160;&#160;Beruf/Tätigkeit&#160;&#160;&#160;</label>
-    <label xml:lang="en">&#160;&#160;&#160;Profession/Job&#160;&#160;&#160;</label>
-  </text>
-
-  <helpPopup id="HProfClass" width="400px" height="250px">
-    <label xml:lang="de">
-Wählen Sie hier bitte den Beruf aus der SWB Klassifikation aus.
-    </label>
-    <label xml:lang="en">
-Select a term from the SWB classification.
-    </label>
-  </helpPopup>
-
-  <list id="CProfClass" width="300" type="dropdown">
-    <item value="">
-     <label xml:lang="de">(bitte wählen)</label>
-     <label xml:lang="en">(choose)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000008" cacheable="false"/>
-  </list>
-
 <!-- *** Data for the National ** -->
 
   <text id="LNational">
@@ -1104,14 +982,6 @@ Bitte wählen Sie die Nationalität der Person aus.
 Select a term regarding a person's nationality.
     </label>
   </helpPopup>
-
-  <list id="CNational" width="300" type="dropdown">
-    <item value="">
-      <label xml:lang="de">(bitte wählen)</label>
-      <label xml:lang="en">(please select)</label>
-    </item>
-    <include uri="classification:editor:-1:children:DocPortal_class_00000001" cacheable="false"/>
-  </list>
 
 <!-- *** Data for the Reference *** -->
 

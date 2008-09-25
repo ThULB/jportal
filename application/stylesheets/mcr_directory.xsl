@@ -9,6 +9,8 @@
 
   <xsl:variable name="PageTitle" select="'Die Detailliste des Objektes'" />
   <xsl:include href="MyCoReLayout.xsl" />
+  <!-- include custom templates for supported objecttypes -->
+  <xsl:include href="objecttypes.xsl" />
 
   <xsl:template match="/mcr_directory">
     <xsl:variable name="obj_host" select="'local'" />
@@ -97,27 +99,9 @@
           <xsl:value-of select="concat(i18n:translate('IFS.docTitle'),' :')" />
         </td>
         <td class="metavalue">
-          <xsl:variable name="titles" select="$sourcedoc/mycoreobject/metadata/titles" />
-          <a href="{$WebApplicationBaseURL}receive/{$sourcedoc/mycoreobject/@ID}{$HttpSession}">
-            <xsl:choose>
-              <xsl:when test="$titles/title[lang($CurrentLang) and @inherited = '0']">
-                <xsl:for-each select="$titles/title[lang($CurrentLang) and @inherited = '0']">
-                  <xsl:if test="position() != 1">
-                    <br />
-                  </xsl:if>
-                  <xsl:value-of select="." />
-                </xsl:for-each>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:for-each select="$titles/title[lang($DefaultLang) and @inherited = '0']">
-                  <xsl:if test="position() != 1">
-                    <br />
-                  </xsl:if>
-                  <xsl:value-of select="." />
-                </xsl:for-each>
-              </xsl:otherwise>
-            </xsl:choose>
-          </a>
+          <xsl:call-template name="objectLink">
+            <xsl:with-param name="obj_id" select="$sourcedoc/mycoreobject/@ID" />
+          </xsl:call-template>
         </td>
       </tr>
     </table>

@@ -1,2 +1,0 @@
-- highlight area gets right and below out if real image will be draged right or below out
-- in embedded mode move by highlight area draging does not work right if zoom equals "fitToWidth"

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,6 +33,7 @@ import org.jdom.input.SAXBuilder;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
+
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 
@@ -44,7 +45,7 @@ import org.mycore.common.MCRException;
  * @author Frank L�tzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision$ $Date$
  */
 public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
 
@@ -74,7 +75,6 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
     public MCRParserXerces() {
         FLAG_VALIDATION = MCRConfiguration.instance().getBoolean("MCR.XMLParser.ValidateSchema", FLAG_VALIDATION);
         builderValid = new SAXBuilder("org.apache.xerces.parsers.SAXParser", true);
-        
         builderValid.setFeature(FEATURE_NAMESPACES, true);
         builderValid.setFeature(FEATURE_SCHEMA_SUPPORT, true);
         builderValid.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);
@@ -82,7 +82,6 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
         builderValid.setErrorHandler(this);
         builderValid.setEntityResolver(MCRURIResolver.instance());
         builder = new SAXBuilder("org.apache.xerces.parsers.SAXParser", false);
-        
         builder.setFeature(FEATURE_NAMESPACES, true);
         builder.setFeature(FEATURE_SCHEMA_SUPPORT, false);
         builder.setFeature(FEATURE_FULL_SCHEMA_SUPPORT, false);

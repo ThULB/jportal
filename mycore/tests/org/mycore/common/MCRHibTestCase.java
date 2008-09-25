@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13780 $ $Date: 2008-07-30 09:46:52 +0200 (Mi, 30 Jul 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -46,10 +46,10 @@ public abstract class MCRHibTestCase extends MCRTestCase {
     protected void setUp() throws Exception {
         // Configure logging etc.
         super.setUp();
-        boolean setPropertie = false;
-        setPropertie = setProperty("log4j.logger.org.hibernate", "WARN", false) ? true : setPropertie;
-        setPropertie = setProperty("log4j.logger.org.hsqldb", "WARN", false) ? true : setPropertie;
-        if (setPropertie) {
+        boolean setProperty = false;
+        setProperty = setProperty("log4j.logger.org.hibernate", "WARN", false) ? true : setProperty;
+        setProperty = setProperty("log4j.logger.org.hsqldb", "WARN", false) ? true : setProperty;
+        if (setProperty) {
             CONFIG.configureLogging();
         }
         System.setProperty("MCR.Hibernate.Configuration", "org/mycore/hibernate.cfg.xml");

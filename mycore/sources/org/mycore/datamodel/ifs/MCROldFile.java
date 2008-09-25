@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07 Aug 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,16 +34,19 @@ import java.util.GregorianCalendar;
 
 import org.mycore.common.MCRArgumentChecker;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventManager;
 
 /**
  * Represents a stored file with its metadata and content. USED BY MILESS 1.3
  * ONLY!
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07 Aug 2008) $
  * @deprecated use MCRFile
  */
 public class MCROldFile implements MCRFileReader {
+    
     /** The ID of the store that holds this file's content */
     protected String storeID;
 
@@ -71,6 +74,8 @@ public class MCROldFile implements MCRFileReader {
     /** The optional extender for streaming audio/video files */
     protected MCRAudioVideoExtender avExtender;
 
+    public final static String oldFileEvent = "MCROldFile";
+    
     /**
      * Creates a new empty, unstored MCROldFile instance.
      */
@@ -83,6 +88,8 @@ public class MCROldFile implements MCRFileReader {
         contentTypeID = "unknown";
         md5 = "d41d8cd98f00b204e9800998ecf8427e";
         lastModified = new GregorianCalendar();
+
+        fireEvent( MCREvent.CREATE_EVENT );
     }
 
     /**
@@ -288,7 +295,7 @@ public class MCROldFile implements MCRFileReader {
      * stores it in the ContentStore given
      */
     public void setContentFrom(MCRContentInputStream source, MCRContentStore store) throws MCRPersistenceException {
-        if (source.getHeader().length == 0) {
+    	if (source.getHeader().length == 0) {
             storageID = "";
             storeID = "";
         } else {
@@ -296,8 +303,11 @@ public class MCROldFile implements MCRFileReader {
             storeID = store.getID();
         }
 
+        
         size = source.getLength();
         md5 = source.getMD5String();
+        
+        fireEvent( MCREvent.UPDATE_EVENT );
     }
 
     /**
@@ -307,6 +317,8 @@ public class MCROldFile implements MCRFileReader {
         if (storageID.length() != 0) {
             getContentStore().deleteContent(storageID);
         }
+        
+        fireEvent( MCREvent.DELETE_EVENT );
 
         storageID = "";
         storeID = "";
@@ -314,6 +326,13 @@ public class MCROldFile implements MCRFileReader {
         md5 = "d41d8cd98f00b204e9800998ecf8427e";
         size = 0;
         lastModified = new GregorianCalendar();
+    }
+    
+    private void fireEvent( String type )
+    {
+      MCREvent event = new MCREvent(oldFileEvent, type);
+      event.put("file", this);
+      MCREventManager.instance().handleEvent(event);
     }
 
     /**
@@ -424,5 +443,6 @@ public class MCROldFile implements MCRFileReader {
       return new org.jdom.input.SAXBuilder().build(getContentAsInputStream());
   }
 
-
+  public void repairSearch()
+  { fireEvent( MCREvent.UPDATE_EVENT ); }
 }

@@ -1,5 +1,5 @@
 /*
- * $Revision: 12992 $ $Date: 2008-01-24 13:32:26 +0100 (Do, 24 Jan 2008) $
+ * $Revision: 13907 $ $Date: 2008-08-27 14:17:41 +0200 (Mi, 27 Aug 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -110,6 +110,11 @@ public class MCRFieldDef {
     private String source;
 
     /**
+     * If true, the content of this field will be added by searcher as metadata in hit
+     */
+    private boolean addable = false;
+
+    /**
      * @return the searchfields-configuration file as jdom-element
      */
     public static Element getConfigFile() {
@@ -124,6 +129,7 @@ public class MCRFieldDef {
         this.sortable = "true".equals(def.getAttributeValue("sortable"));
         this.objects = def.getAttributeValue("objects", (String) null);
         this.source = def.getAttributeValue("source");
+        this.addable = "true".equals(def.getAttributeValue("addable"));
 
         fieldTable.put(name, this);
         buildForEachXSL(def);
@@ -195,6 +201,15 @@ public class MCRFieldDef {
     }
 
     /**
+     * Returns true if this field should be added by searcher to hit
+     * 
+     * @return true, if this field should be added by searcher to hit
+     */
+    public boolean isAddable() {
+        return addable;
+    }
+
+    /**
      * Returns true if this field is used for this type of object. For
      * MCRObject, the type is the same as in MCRObject.getId().getTypeId(). For
      * MCRFile, the type is the same as in MCRFile.getContentTypeID(). For plain
@@ -203,7 +218,7 @@ public class MCRFieldDef {
      * @param objectType
      *            the type of object
      */
-    boolean isUsedForObjectType(String objectType) {
+    public boolean isUsedForObjectType(String objectType) {
         if (objects == null)
             return true;
 
@@ -325,6 +340,17 @@ public class MCRFieldDef {
         else
             xsl.addContent(forEach1);
 
+        Element current = fieldDef;
+        while (true) {
+            List<Namespace> namespaces = current.getAdditionalNamespaces();
+            for (Namespace ns : namespaces)
+                xsl.addNamespaceDeclaration(ns);
+            if (current.isRootElement())
+                break;
+            else
+                current = current.getParentElement();
+        }
+        
         if (MCRFieldDef.OBJECT_CATEGORY.equals(fieldDef.getAttributeValue("source"))) {
             // current(): <format classid="DocPortal_class_00000006"
             // categid="FORMAT0002"/>

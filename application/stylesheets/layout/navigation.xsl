@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
-    <xsl:param name="MCR.baseurl" />
 
     <!-- ================================================================================= -->
     <xsl:template match="TOC | toc">
@@ -25,11 +24,9 @@
         <xsl:if test="$readAccess='true'">
             <xsl:for-each select="$loaded_navigation_xml//item[@href = $browserAddress]">
                 <!-- start page -->
-                <span id="navi-history-back">
                 <xsl:copy-of select="'Navigation: '" />
-                </span>
                 <xsl:variable name="hrefStartingPage" select="$loaded_navigation_xml/@hrefStartingPage" />
-                <a href="{$MCR.baseurl}">
+                <a href="{$WebApplicationBaseURL}">
                     <xsl:copy-of select="$MainTitle" />
                 </a>
                 <!-- ancestors -->
@@ -253,11 +250,9 @@
                                     </th>
                                 </tr>
                                 <xsl:variable name="constrainPopUp">
-                                    <xsl:for-each select="ancestor-or-self::node()">
-                                        <xsl:if test="current()[@constrainPopUp='true']">
-                                            <xsl:value-of select="'true'" />
-                                        </xsl:if>
-                                    </xsl:for-each>
+                                    <xsl:if test="ancestor-or-self::*[@constrainPopUp='true']">
+                                        <xsl:value-of select="'true'" />
+                                    </xsl:if>
                                 </xsl:variable>
                                 <!-- sub links, if below this MAIN menu point the searched link is located -->
                                 <xsl:if test="current()[@href = $browserAddress ] or descendant::item[@href = $browserAddress ] or $constrainPopUp='true'  ">
@@ -290,15 +285,9 @@
                 </table>
             </xsl:when>
         </xsl:choose>
-        <div id="mycoreVersionInfo">
-            <xsl:value-of select="i18n:translate('mycore.version')" />
-            <br />
-            Last update:
-            <xsl:value-of select="i18n:translate('common.today')" />
-        </div>
-        <div id="poweredByMycore">
+        <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.MCRCoreVersion">
             <a href="http://www.mycore.de">
-                <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="{i18n:translate('mycore.version')}" />
+                <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="powered by &lt;MyCoRe&gt;" title="{i18n:translate('mycore.version', mcrver:getCompleteVersion())}" />
             </a>
         </div>
     </xsl:template>
@@ -381,8 +370,29 @@
         <xsl:param name="blockerWebpage" />
 
         <!-- all items -->
-        <!-- TODO: Replace this for-each call by a recursive call, to avoid multiple access control verificatiion -->
-        <xsl:for-each select="descendant::item">
+        <!-- TODO: REALLY should replace this for-each call by a recursive call, to avoid multiple access control verification and make it simpler -->
+        <xsl:variable name="oneLevelDeepContrainPopup" select="descendant::item[ancestor-or-self::item[@constrainPopUp='true' and parent::item[@href = $browserAddress]] or parent::item[@href = $browserAddress] or @href = $browserAddress]"/>
+        <xsl:variable name="oneLevelDeepContrainPopupSiblings" select="$oneLevelDeepContrainPopup/../item"/>
+        <xsl:variable name="ancestorOfBrowserAddressComplete" select="descendant::item[@href = $browserAddress]/ancestor-or-self::item"/>
+        <xsl:variable name="stopPosition">
+          <xsl:choose>
+            <xsl:when test="$ancestorOfBrowserAddressComplete[@href= $subRootNode]">
+              <xsl:for-each select="$ancestorOfBrowserAddressComplete">
+                <xsl:if test="@href= $subRootNode">
+                  <xsl:value-of select="position()+1" />
+                </xsl:if>
+              </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="1"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="ancestorOfBrowserAddress" select="$ancestorOfBrowserAddressComplete[position() &gt; $stopPosition]"/>
+        <xsl:variable name="ancestorOfBrowserAddressSiblings" select="$ancestorOfBrowserAddress/../item"/>
+        <xsl:variable name="siblingConstrainPopup" select="$ancestorOfBrowserAddressSiblings/../descendant-or-self::item[@constrainPopUp='true']/descendant::item" />
+        <xsl:variable name="constrainPopup" select="self::node()[@constrainPopUp='true']/item/descendant::item | //item[@constrainPopUp='true']//item[@href=current()/@href]/descendant::item" />
+        <xsl:for-each select="item | $oneLevelDeepContrainPopup | $oneLevelDeepContrainPopupSiblings | $ancestorOfBrowserAddress | $ancestorOfBrowserAddressSiblings | $siblingConstrainPopup | $constrainPopup">
 
             <xsl:variable name="access">
                 <xsl:call-template name="get.readAccess">
@@ -410,7 +420,7 @@
                         <xsl:when test="current()[@href = $browserAddress ]">
                             <xsl:choose>
                                 <!-- children -->
-                                <xsl:when test="descendant::item[@href]">
+                                <xsl:when test="descendant::item[@href and not(ancestor-or-self::item[@constrainPopUp='true'])]">
                                     <xsl:value-of select="'current_popedUp'" />
                                 </xsl:when>
                                 <!-- no children -->
@@ -420,7 +430,7 @@
                             </xsl:choose>
                         </xsl:when>
                         <!-- if searched link is a descentant of the current one -->
-                        <xsl:when test="descendant::item[@href = $browserAddress ] ">
+                        <xsl:when test="descendant::item[@href = $browserAddress and not(ancestor-or-self::item[@constrainPopUp='true'])] ">
                             <xsl:value-of select="'popedUp'" />
                         </xsl:when>
                         <!-- END OF: if searched link is a descentant of the current one -->
@@ -437,7 +447,7 @@
                         or  following-sibling::item/descendant::item[@href = $browserAddress ])">
                             <xsl:choose>
                                 <!-- children -->
-                                <xsl:when test="descendant::item[@href]">
+                                <xsl:when test="descendant::item[@href and not(ancestor-or-self::item[@constrainPopUp='true'])]">
                                     <xsl:value-of select="'notPopedUp'" />
                                 </xsl:when>
                                 <!-- no children -->
@@ -452,7 +462,7 @@
                         </xsl:when>
                         <!--end: menu must be poped up ========================= -->
                         <xsl:otherwise>
-                            <xsl:value-of select="'hide'" />
+                            <xsl:value-of select="'normal'" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
@@ -514,7 +524,7 @@
                                 </xsl:call-template>
                             </td>
                         </xsl:when>
-                        <xsl:when test="($depthSubRootNode &gt; 0 and position() &gt; $depthSubRootNode+1))">
+                        <xsl:when test="($depthSubRootNode &gt; 0 and position() &gt; $depthSubRootNode+1)">
                             <td align="center">
                                 <xsl:call-template name="addIcon">
                                     <xsl:with-param name="linkKind" select="'line'" />
@@ -537,10 +547,10 @@
                 <xsl:variable name="colSpanValue">
                     <xsl:choose>
                         <xsl:when test="$depthSubRootNode = 0">
-                            <xsl:value-of select="$depth - count(ancestor::item)) + 1" />
+                            <xsl:value-of select="$depth - count(ancestor::item) + 1" />
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:value-of select="($depth - count(ancestor::item)) + $depthSubRootNode + 1 " />
+                            <xsl:value-of select="$depth - count(ancestor::item) + $depthSubRootNode + 1 " />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
@@ -751,26 +761,11 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-                    <!--add session-->
-                    <xsl:variable name="href_temp2">
+                    <xsl:attribute name="href">
+                        <!--add session-->
                         <xsl:call-template name="UrlAddSession">
                             <xsl:with-param name="url" select="$href_temp" />
                         </xsl:call-template>
-                    </xsl:variable>
-                    <xsl:attribute name="href">
-                        <xsl:choose>
-                            <!-- in case of $href_temp contains 'servlet' append 'lang=$currentlang' -->
-                            <xsl:when test=" contains($href_temp,'/servlets/') ">
-                                <xsl:call-template name="UrlSetParam">
-                                    <xsl:with-param name="url" select="$href_temp2" />
-                                    <xsl:with-param name="par" select="'lang'" />
-                                    <xsl:with-param name="value" select="$CurrentLang" />
-                                </xsl:call-template>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="$href_temp2" />
-                            </xsl:otherwise>
-                        </xsl:choose>
                     </xsl:attribute>
                     <!-- label -->
                     <xsl:choose>
@@ -840,13 +835,13 @@
         <xsl:param name="spaceBetweenLinks" />
         <xsl:param name="seperatorChar" />
         <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="loginURL"
-            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;amp;url=', encoder:encode( string( $RequestURL ) ) )" />
+            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;url=', encoder:encode( string( $RequestURL ) ) )" />
         <xsl:choose>
             <xsl:when test="$CurrentUser='gast'">
                 <td>
                     <a href="{$loginURL}">
                         <b>
-                            <xsl:value-of select="i18n:translate('buttons.login')" />
+                            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
                         </b>
                     </a>
                 </td>
@@ -855,7 +850,7 @@
                 <td>
                     <a href="{$loginURL}&amp;uid=gast&amp;pwd=gast">
                         <b>
-                            <xsl:value-of select="i18n:translate('buttons.logout')" />
+                            <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
                         </b>
                     </a>
                 </td>
@@ -866,7 +861,7 @@
                 <td>
                     <a href="{$loginURL}">
                         <b>
-                            <xsl:value-of select="i18n:translate('titles.pageTitle.login')" />
+                            <xsl:value-of select="i18n:translate('component.userlogin.titles.pageTitle.login')" />
                         </b>
                     </a>
                 </td>

@@ -439,7 +439,7 @@
                                     </tr>
                                 </table>
                             </xsl:when>
-                            <xsl:when test="string-length($mainTitle)>150)">
+                            <xsl:when test="string-length($mainTitle)>150">
                                 <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                     <tr>
                                         <td id="detailed-headlines">
@@ -454,7 +454,7 @@
                         </xsl:choose>
                         <!--1***maintitle*************************************-->
                         <!-- only if headline cut -->
-                        <xsl:if test="string-length($mainTitle)>150)">
+                        <xsl:if test="string-length($mainTitle)>150">
                             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                 <tr>
                                     <td valign="top" id="detailed-labels">
@@ -537,7 +537,7 @@
                                         </td>
                                     </tr>
                                 </xsl:when>
-                                <xsl:when test="string-length($mainTitle)>150)">
+                                <xsl:when test="string-length($mainTitle)>150">
                                     <tr>
                                         <td colspan="2" id="detailed-innerdivlines">
                                             <br />

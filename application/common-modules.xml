@@ -14,7 +14,7 @@
   <property name="sourceencoding" value="ISO-8859-15" />
 
   <!-- Maximum amount of memory to allocate to java VM when loading -->
-  <property name="java.maxmemory" value="256m" />
+  <property name="java.maxmemory" value="512m" />
 
   <!-- Read in environment variables -->
   <property environment="env" />
@@ -48,17 +48,15 @@
     </filterchain>
   </loadproperties>
 
-  <property file="${basedir}/config/mycore.properties" />
-
   <!-- MyCoRe CVS repository root -->
   <property name="CVSRoot" value="/cvs" />
 
   <property name="mycore.config" value="${mycore}/config" />
   <property name="mycore.doc" value="${mycore}/documentation" />
-  <property name="mycore.lib" value="${mycore}/lib" />
-  <property name="mycore.modules" value="${mycore}/modules" />
+  <property name="mycore.lib" value="${mycore}/build/lib" />
+  <property name="mycore.modules" value="${mycore}/components" />
   <property name="mycore.schema" value="${mycore}/schema" />
-  <property name="mycore.stylesheets" value="${mycore}/stylesheets" />
+  <property name="mycore.stylesheets" value="${mycore}/xsl" />
 
   <property name="application" value="${env.DOCPORTAL_HOME}" />
   <property name="application.bin" value="${application}/bin" />
@@ -103,6 +101,7 @@
   <path id="mycore.jars">
     <fileset dir="${mycore.lib}" includes="*.jar" />
   </path>
+  <property resource="config/mycore.properties" classpathref="mycore.jars"/>
 
   <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="mycore.jars" />
   <!-- for task is not included in antcontrib.properties by default -->
@@ -146,6 +145,11 @@
     <path refid="application.classpath" />
     <path refid="mycore.jars" />
   </path>
+  <path id="script.classpath">
+    <pathelement location="${build.classes}" />
+    <pathelement location="${build.config}" />
+    <pathelement location="${build.lib}/docportal.jar" />
+  </path>
 
   <path id="application.libpath">
     <dirset dir="${java.home}" includes="bin bin/classic" />
@@ -177,6 +181,8 @@
   </condition>
 
   <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="mycore.jars" />
+  <taskdef classname="org.mycore.buildtools.anttasks.MCRIntegrateTask" name="mcr-integrate" classpathref="mycore.jars" />
+  <taskdef classname="org.mycore.buildtools.anttasks.MCRGetMyCoReJarTask" classpathref="mycore.jars" name="getMyCoReJar"/>
   <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="mycore.jars" />
 
   <!-- =================================================================== -->
@@ -234,8 +240,12 @@
 
     <sequential>
       <echo level="info">Generating search mask from searchfields.xml</echo>
-      <copy file="${mycore.config}/fieldtypes.xml" toDir="${application.config}" />
-      <xslt basedir="${application.config}"
+      <unjar src="${mycore.jar}" dest="${application.config}" >
+        <patternset>
+          <include name="fieldtypes.xml"/>
+        </patternset>
+      </unjar>
+      <xslt basedir="${application}.config}"
             classpathref="application.classpath"
             in="${application.config}/searchfields.xml"
             style="${mycore.stylesheets}/searchfields2searchmask.xsl"
@@ -283,11 +293,13 @@
     <mkdir dir="${build.schema}" />
     <mkdir dir="${build.stylesheets}" />
 
+    <pathconvert targetos="${detected.os}" property="script.classpath.translated" refid="script.classpath" />
     <pathconvert targetos="${detected.os}" property="application.classpath.translated" refid="application.classpath" />
     <pathconvert targetos="${detected.os}" property="application.libpath.translated" refid="application.libpath" />
 
     <property name="env.LIBPATH" value="${application.libpath.translated}" />
     <property name="env.LD_LIBRARY_PATH" value="${application.libpath.translated}" />
+    <getMyCoReJar classpathref="mycore.jars" property="mycore.jar"/>
   </target>
 
   <!-- System CLASSPATH is completely ignored! -->
@@ -359,8 +371,8 @@
           target: addObjectType              
          ================================= -->
   <target name="addObjectType">
-    <xmltask source="${build.webapps}/WEB-INF/stylesheets/objecttypes.xsl"
-             dest="${build.webapps}/WEB-INF/stylesheets/objecttypes.xsl">
+    <xmltask source="${build.webapps}/WEB-INF/classes/xsl/objecttypes.xsl"
+             dest="${build.webapps}/WEB-INF/classes/xsl/objecttypes.xsl">
       <insert path="/*[local-name()='stylesheet']">
         <![CDATA[
 	<xsl:include href="${objectType}.xsl" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>   	  	  	
@@ -373,7 +385,7 @@
       </not>
       <then>
         <echo level="info">Generating ${objectType}.xsl</echo>
-        <xmltask dest="${build.webapps}/WEB-INF/stylesheets/${objectType}.xsl">
+        <xmltask dest="${build.webapps}/WEB-INF/classes/xsl/${objectType}.xsl">
           <insert path="/">
             <![CDATA[<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"/>
 ]]>

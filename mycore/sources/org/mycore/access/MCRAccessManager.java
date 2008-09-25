@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13959 $ $Date: 2008-09-05 15:18:18 +0200 (Fr, 05 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,7 +39,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 13959 $ $Date: 2008-09-05 15:18:18 +0200 (Fr, 05 Sep 2008) $
  */
 public class MCRAccessManager {
 
@@ -282,6 +282,10 @@ public class MCRAccessManager {
     	booleanOp.setAttribute("operator", "false");
     	condition.addContent(booleanOp);
     	return condition;
-    }    
+    }
+    
+    public static boolean hasRule(String id, String permission){
+        return getPermissionsForID(id).contains(permission);
+    }
 
 }

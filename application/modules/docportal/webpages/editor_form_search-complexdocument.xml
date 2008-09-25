@@ -87,30 +87,13 @@
       <cell row="4" col="2" anchor="WEST" var="conditions/boolean/condition5/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000003" cacheable="false" />
+          <include uri="classification:editor[CountDocument]:2:children:DocPortal_class_00000002" cacheable="false" />
         </list>
       </cell>
       <cell row="4" col="3" anchor="WEST">
         <space width="20" height="0"/>
       </cell>
       <cell row="4" col="4" anchor="WEST" ref="SMOrigin" />
-
-      <!-- Search in field "subject" with operator "=" -->
-      <hidden var="conditions/boolean/condition6/@field" default="subject" />
-      <hidden var="conditions/boolean/condition6/@operator" default="=" />
-      <cell row="5" col="1" anchor="EAST">
-        <text i18n="editor.search.document.subject"/>
-      </cell>
-      <cell row="5" col="2" anchor="WEST" var="conditions/boolean/condition6/@value">
-        <list type="dropdown">
-          <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000007" cacheable="false" />
-        </list>
-      </cell>
-      <cell row="5" col="3" anchor="WEST">
-        <space width="20" height="0"/>
-      </cell>
-      <cell row="5" col="4" anchor="WEST" ref="SMSubject" />
 
       <!-- Search in field "format" with operator "=" -->
       <hidden var="conditions/boolean/condition7/@field" default="format" />

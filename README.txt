@@ -40,7 +40,7 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 -- $DOCPORTAL_HOME to <Installation-Directory>/jportal/application
 
 - Create JPortal properties 
--- cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
+// -- cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
 -- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
 -- cp $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml.template $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml
 
@@ -53,7 +53,8 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 --- set $MCR.basedir to your <$DOCPORTAL_HOME>
 --- set $MCR.FileUpload.IP to your local running server's IP address
 --- add module "JPortal" to system, by appending on property "MCR.Modules.Application" the value "jportal"
---- remove default module "docportal" and "iview" from system, by removing value "docportal" resp. "iview" from property "MCR.Modules.Application" 
+--- exclude module "DocPortal" from system, by appending on property "MCR.Components.Exclude" the value "docportal"
+// --- remove default module "docportal" and "iview" from system, by removing value "docportal" resp. "iview" from property "MCR.Modules.Application" 
 
 
 6. INSTALLATION

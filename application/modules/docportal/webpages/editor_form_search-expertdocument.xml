@@ -109,20 +109,7 @@
       <cell row="5" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition5/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000003" />
-        </list>
-      </cell>
-
-      <!-- Search in field "subject" with operator "=" -->
-      <hidden var="conditions/boolean/boolean/condition6/@field" default="subject" />
-      <hidden var="conditions/boolean/boolean/condition6/@operator" default="=" />
-      <cell row="6" col="1" anchor="EAST">
-        <text i18n="editor.search.document.subject"/>
-      </cell>
-      <cell row="6" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition6/@value">
-        <list type="dropdown">
-          <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000007" />
+          <include cacheable="false" uri="classification:editor[CountDocument]:2:children:DocPortal_class_00000002" />
         </list>
       </cell>
 

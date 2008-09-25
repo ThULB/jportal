@@ -74,7 +74,7 @@
                     <!-- label -->
                     <a style="color:#DDDDDD;" href="{$WebApplicationBaseURL}{metadata/hidden_websitecontexts/hidden_websitecontext/text()}">
                         <xsl:value-of
-                            select="concat(substring(metadata/maintitles/maintitle/text(),1,30),'... (',metadata/dates/date[@type = 'published_from']/text(),' - ',metadata/dates/date[@type = 'published_until']/text(),')'))" />
+                            select="concat(substring(metadata/maintitles/maintitle/text(),1,30),'... (',metadata/dates/date[@type = 'published_from']/text(),' - ',metadata/dates/date[@type = 'published_until']/text(),')')" />
                     </a>
                 </div>
             </xsl:for-each>
@@ -86,7 +86,8 @@
     <xsl:template name="journalList.preselect">
         <xsl:param name="value" />
         <xsl:if test="$value = $spreading">
-            <xsl:attribute name="selected" select="selected" />
+            <xsl:attribute name="selected"><xsl:value-of select="selected" />
+            </xsl:attribute>
         </xsl:if>
     </xsl:template>
 

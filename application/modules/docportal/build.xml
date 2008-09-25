@@ -12,7 +12,7 @@
 	<property name="module.name" value="${module.base}" />
 	<property name="module.dir" value="${env.DOCPORTAL_HOME}/modules/${module.name}" />
 	<property name="objectTypes" value="document,author,institution" />
-	<loadproperties srcFile="${module.dir}/config/mycore.${module.base}.properties">
+	<loadproperties srcFile="${module.dir}/config/mycore.properties">
 		<filterchain>
 			<tokenfilter>
 				<replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
@@ -21,25 +21,6 @@
 		</filterchain>
 	</loadproperties>
 
-	<!-- =================================================================== -->
-	<!-- Help on usage                                                       -->
-	<!-- =================================================================== -->
-
-	<target name="usage">
-		<echo level="info">
-
-      Available targets are:
-        create.directories   --> Create all necessary directories
-        create.schema        --> Build all XML-Schema files
-		create.users         --> Add the module dependence user
-		create.scripts       --> Build all commandline scripts
-        webapps              --> Build the web application directory
-        webapps.i18n         --> Build the messages_[lang].properties
-
-      Please do not use any of the other targets, they are internal.
-		</echo>
-	</target>
-	
 	<!-- =================================================================== -->
 	<!-- Info                                                                -->
 	<!-- =================================================================== -->
@@ -124,15 +105,21 @@
 
 
 	<!-- ================================= 
-          target: create.scripts              
-         ================================= -->
+        target: config              
+       ================================= -->
+	<target name="config" description="--> Merges docportal properties to mycore.properties">
+		<!-- Merge properties -->
+		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${module.dir}/config/mycore.properties" />
+	</target>
+
+  <!-- ================================= 
+        target: create.scripts              
+       ================================= -->
 	<target name="create.scripts" description="--> Adds support for the docportal datamodel to the CLI (and webapp)">
 		<echo level="info">
 			building ${ant.project.name} create.scripts
 	    </echo>
 
-		<!-- Merge properties -->
-		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${module.dir}/config/mycore.docportal.properties" />
 		<!-- Copy scripts -->
 		<copy todir="${build.bin}" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.dir}/bin/unixtools" includes="**/*.sh" />
@@ -142,25 +129,22 @@
 		</chmod>
 	</target>
 
-	<target name="webapps">
+	<target name="create.webapp">
 		<echo level="info">
 			building ${ant.project.name} webapp
 	    </echo>
-
-		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${module.dir}/config/mycore.docportal.properties" />
 		<!-- copy editors -->
 		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.dir}/config/editor" includes="**/*.xml" excludes="**/editor_default_acls*.xml" />
 		</copy>
 
 		<!-- copy stylesheets -->
-		<copy todir="${build.webapps}/WEB-INF/stylesheets" flatten="true" preservelastmodified="true" overwrite="true">
+		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" overwrite="true">
 			<fileset dir="${module.dir}/xsl" includes="**/*.xsl" />
 		</copy>
 
 		<copy todir="${build.webapps}/WEB-INF/classes" flatten="true" preservelastmodified="true" failonerror="false">
 			<fileset file="${module.dir}/config/editor/editor_default_acls_*.xml" />
-			<fileset file="${module.dir}/config/mycore.docportal.properties" />
 		</copy>
 
 		<!-- copy webpages -->
@@ -175,9 +159,9 @@
 		</antcall>
 	</target>
 
-    <target name="webapps.i18n" >
+    <target name="i18n" >
         <echo level="info">
-			building ${ant.project.name} webapp.i18n
+			building ${ant.project.name} i18n
 	    </echo>
     	
 		<!-- i18n -->

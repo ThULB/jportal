@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
+ * $Revision: 13967 $ $Date: 2008-09-08 11:07:57 +0200 (Mo, 08 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,7 +51,7 @@ import org.mycore.datamodel.common.MCRXMLTableManager;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
+ * @version $Revision: 13967 $ $Date: 2008-09-08 11:07:57 +0200 (Mo, 08 Sep 2008) $
  */
 final public class MCRObject extends MCRBase {
     // the object content
@@ -739,19 +739,35 @@ final public class MCRObject extends MCRBase {
         boolean updatechildren = false;
         MCRObjectMetadata md = getMetadata();
         MCRObjectMetadata mdold = old.getMetadata();
+        int numheritablemd = 0;
+        int numheritablemdold = 0;
         for (int i = 0; i < md.size(); i++) {
             MCRMetaElement melm = md.getMetadataElement(i);
             if (melm.getHeritable()) {
+                numheritablemd++;
                 try {
                     MCRMetaElement melmold = mdold.getMetadataElement(melm.getTag());
                     Element jelm = melm.createXML(false);
                     Element jelmold = melmold.createXML(false);
-                    if (!MCRXMLHelper.deepEqual(new Document(jelmold), new Document(jelm)))
-                    	updatechildren = true;
+                    if (!MCRXMLHelper.deepEqual(new Document(jelmold), new Document(jelm))) {
+                        updatechildren = true;
+                        break;
+                    }
                 } catch (RuntimeException e) {
                     updatechildren = true;
                 }
             }
+        }
+        if (!updatechildren) {
+            for (int i = 0; i < mdold.size(); i++) {
+                MCRMetaElement melmold = mdold.getMetadataElement(i);
+                if (melmold.getHeritable()) {
+                    numheritablemdold++;
+                }
+            }
+        }
+        if (numheritablemd != numheritablemdold) {
+            updatechildren = true;
         }
         if (updatechildren) {
             for (int i = 0; i < mcr_struct.getChildSize(); i++) {

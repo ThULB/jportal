@@ -93,6 +93,7 @@
           </xsl:variable>
           <xsl:value-of select="i18n:translate('results.lastChanged',$date)" />
         </span>
+        <xsl:apply-templates select="." mode="hitInFiles" />
       </td>
     </tr>
   </xsl:template>
@@ -427,7 +428,7 @@
                         <input name="type" type="hidden" value="{$type}" />
                         <input name="todo" type="hidden" value="saddfile" />
                         <input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
-                          title="{i18n:translate('swf.derivate.addFile')}" />
+                          title="{i18n:translate('component.swf.derivate.addFile')}" />
                       </form>
                     </td>
                     <td width="30" valign="top" align="center">
@@ -436,7 +437,7 @@
                       </xsl:variable>
                 	  <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={@xlink:href}&amp;re_mcrid={$obj_id}&amp;se_mcrid={@xlink:href}&amp;type={$type}&amp;todo=seditder">
                         <img src="{$WebApplicationBaseURL}images/workflow_deredit.gif"
-						  title="{i18n:translate('swf.derivate.editDerivate')}"/>
+						  title="{i18n:translate('component.swf.derivate.editDerivate')}"/>
                 	  </a>
                     </td>
                     <td width="30" valign="top" align="center">
@@ -444,7 +445,7 @@
                       <a
                         href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                         <img src="{$WebApplicationBaseURL}images/workflow_acleditder.gif"
-                          title="{i18n:translate('swf.object.editACL')}" />
+                          title="{i18n:translate('component.swf.object.editACL')}" />
                       </a>
                     </td>
                     <td width="30" valign="top" align="center">
@@ -455,7 +456,7 @@
                         <a
                           href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={@xlink:href}&amp;re_mcrid={$obj_id}&amp;se_mcrid={@xlink:href}&amp;type={$type}&amp;todo=sdelder">
                           <img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif"
-                            title="{i18n:translate('swf.derivate.delDerivate')}" />
+                            title="{i18n:translate('component.swf.derivate.delDerivate')}" />
                         </a>
                       </xsl:if>
                     </td>

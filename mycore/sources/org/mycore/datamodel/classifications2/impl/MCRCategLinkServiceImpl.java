@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13501 $ $Date: 2008-05-09 14:27:55 +0200 (Fr, 09 Mai 2008) $
+ * $Revision: 13828 $ $Date: 2008-08-07 10:36:00 +0200 (Do, 07 Aug 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -38,6 +38,7 @@ import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.classifications2.MCRCategLinkService;
+import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRObjectReference;
 
@@ -45,7 +46,7 @@ import org.mycore.datamodel.classifications2.MCRObjectReference;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13501 $ $Date: 2008-04-15 14:06:12 +0000 (Di, 15 Apr
+ * @version $Revision: 13828 $ $Date: 2008-06-30 10:08:19 +0200 (Mo, 30. Jun
  *          2008) $
  * @since 2.0
  */
@@ -60,7 +61,6 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
 
     private static MCRCategoryDAOImpl DAO = new MCRCategoryDAOImpl();
 
-    @SuppressWarnings("unchecked")
     public Map<MCRCategoryID, Number> countLinks(Collection<MCRCategoryID> categIDs) {
         return countLinksForType(categIDs, null);
     }
@@ -91,15 +91,26 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
             // query can take long time, please cache result
             q.setCacheable(true);
             q.setParameter("classID", classID);
-            q.setParameterList("categIDs", entry.getValue());
             if (restrictedByType) {
                 q.setParameter("type", type);
             }
+            // get object count for every category (not accumulated)
             List<Object[]> result = q.list();
             for (Object[] sr : result) {
                 MCRCategoryID key = new MCRCategoryID(sr[0].toString(), sr[1].toString());
                 Number value = (Number) sr[2];
                 countLinks.put(key, value);
+                // accumulate manually due to performance problems in MySQL
+                List<MCRCategory> parents = DAO.getParents(key);
+                for (MCRCategory parent : parents) {
+                    MCRCategoryID parentID = parent.getId();
+                    Number counter = countLinks.get(parentID);
+                    if (counter != null) {
+                        countLinks.put(parentID, new Integer(counter.intValue() + value.intValue()));
+                    } else {
+                        countLinks.put(parentID, value);
+                    }
+                }
             }
         }
         // overwrites zero count where database returned a value
@@ -128,7 +139,8 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
         Session session = MCRHIBConnection.instance().getSession();
         Query q = session.getNamedQuery(LINK_CLASS.getName() + ".ObjectIDByCategory");
         q.setCacheable(true);
-        q.setParameter("category", id);
+        q.setParameter("rootID", id.getRootID());
+        q.setParameter("categID", id.getID());
         return q.list();
     }
 
@@ -137,8 +149,9 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
         Session session = MCRHIBConnection.instance().getSession();
         Query q = session.getNamedQuery(LINK_CLASS.getName() + ".ObjectIDByCategoryAndType");
         q.setCacheable(true);
-        q.setParameter("category", id);
-        q.setParameter("type", id);
+        q.setParameter("rootID", id.getRootID());
+        q.setParameter("categID", id.getID());
+        q.setParameter("type", type);
         return q.list();
     }
 

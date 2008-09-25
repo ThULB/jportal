@@ -17,9 +17,21 @@
   <property name="deprecation" value="off" />
   <property name="javatarget" value="1.5" />
   <property name="sourcerelease" value="1.5" />
-  <!--property name="build.compiler"     value="jikes"/-->
   <property name="sourceencoding" value="ISO-8859-15" />
   <property name="env.MYCORE_HOME" value="." />
+  <!-- System CLASSPATH is concatenated to any specified classpaths at the end! -->
+  <property name="build.sysclasspath" value="last" />
+  <!-- Path definitions -->
+  <property name="target.dir" location="${basedir}/build" />
+  <property name="target.sources" location="${target.dir}/sources" />
+  <property name="target.classes" location="${target.dir}/classes" />
+  <property name="target.config" location="${target.dir}/config" />
+  <property name="target.javadocs" location="${target.dir}/javadocs" />
+  <property name="target.docs" location="${target.dir}/docs" />
+  <property name="target.libs" location="${target.dir}/lib" />
+  <property name="target.jarbase" location="${target.dir}/jarbase" />
+  <property name="components.dir" location="${basedir}/components" />
+  <property name="target.version" value="2.0 beta" />
 
   <condition property="ant1.7">
     <available classname="org.apache.tools.ant.taskdefs.condition.AntVersion" />
@@ -35,7 +47,11 @@
 
   <path id="mycore.jars">
     <fileset dir="${basedir}/lib" includes="*.jar" />
+    <fileset dir="${components.dir}" includes="*/lib/*.jar" />
   </path>
+  <fileset id="components.resources" dir="${components.dir}">
+    <include name="*/resources/**" />
+  </fileset>
 
   <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="mycore.jars" />
   <!-- for task is not included in antcontrib.properties by default -->
@@ -59,21 +75,21 @@
     <isset property="MCR.System.SharedJarsDir" />
     <then>
       <path id="share.classpath">
-        <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
+        <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" id="shared.jars" />
       </path>
     </then>
     <else>
       <path id="share.classpath" />
+      <fileset id="shared.jars" dir="${basedir}" excludes="**" />
     </else>
   </if>
   <path id="mycore.classpath">
-    <pathelement location="${basedir}/classes" />
-    <fileset dir="${basedir}/lib" includes="*.jar" />
-    <!--
-    <fileset dir="${ant.library.dir}" includes="*junit*.jar"/>
-			-->
+    <pathelement location="${target.classes}" />
+    <path refid="mycore.jars" />
     <fileset dir="${ant.library.dir}" includes="ant.jar" />
     <path refid="share.classpath" />
+    <pathelement location="${basedir}/resources" />
+    <dirset dir="${components.dir}" includes="*/resources" />
   </path>
 
   <macrodef name="modulePreHook">
@@ -83,13 +99,13 @@
         <sequential>
           <if>
             <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@module/build.xml">
+              <fileset dir="." includes="components/@module/build.xml">
                 <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
               </fileset>
             </resourcecount>
             <then>
               <subant target="pre.@{target}" inheritall="true" inheritrefs="true">
-                <fileset dir="." includes="modules/@module/build.xml">
+                <fileset dir="." includes="components/@module/build.xml">
                   <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
                 </fileset>
               </subant>
@@ -109,13 +125,13 @@
         <sequential>
           <if>
             <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@{module}/build.xml">
+              <fileset dir="." includes="components/@{module}/build.xml">
                 <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
               </fileset>
             </resourcecount>
             <then>
               <subant target="@{target}" inheritall="true" inheritrefs="true">
-                <fileset dir="." includes="modules/@{module}/build.xml">
+                <fileset dir="." includes="components/@{module}/build.xml">
                   <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
                 </fileset>
               </subant>
@@ -165,14 +181,30 @@
   <!-- =================================================================== -->
 
   <target name="init">
-    <echo level="info">Initializing directories...</echo>
+    <!-- find out revision number of HEAD, need svn installed -->
+    <exec executable="svn" outputproperty="svnlog.out">
+      <arg line="info ${basedir}" />
+    </exec>
+    <echo level="debug">${svnlog.out}</echo>
+    <propertyregex property="revision.number" input="${svnlog.out}" select="\1">
+      <regexp pattern="evision: ([0-9]*)" />
+    </propertyregex>
+    <echo level="info">MyCoRe Revision found: ${revision.number}</echo>
+    <property name="mycore.version" value="${target.version} r${revision.number}" />
+    <!-- include imaging component only if JAI is available -->
+    <condition property="jai.available">
+      <available classname="javax.media.jai.JAI" classpathref="mycore.classpath" />
+    </condition>
 
-    <mkdir dir="${basedir}/classes" />
-
+    <path id="sources.path">
+      <dirset dir="${basedir}" includes="sources" />
+      <dirset dir="${basedir}" includes="build/sources" />
+      <dirset dir="${components.dir}" includes="*/sources">
+        <exclude name="imaging/sources" unless="jai.available" />
+        <exclude name="iview/sources" unless="jai.available" />
+      </dirset>
+    </path>
   </target>
-
-  <!-- System CLASSPATH is completely ignored! -->
-  <property name="build.sysclasspath" value="ignore" />
 
   <!-- =================================================================== -->
   <!-- Runs JUnit test cases                                               -->
@@ -186,7 +218,7 @@
       </classpath>
       <formatter type="brief" usefile="false" />
       <batchtest>
-        <fileset dir="${basedir}/classes/">
+        <fileset dir="${target.classes}">
           <include name="**/*Test*.class" />
           <exclude name="**/FulltextTester.class" />
           <exclude name="**/MCRTestCase.class" />
@@ -211,14 +243,114 @@
     <modulePreHook target="jar" />
     <property name="jarfile" value="mycore.jar" />
     <echo level="info">Creating ${jarfile} containing all compiled classes...</echo>
-    <jar destfile="${basedir}/lib/${jarfile}">
-      <fileset dir="${basedir}/classes" includes="**/*.class" />
-      <fileset dir="${basedir}/classes" includes="META-INF/services/*" />
-      <fileset dir="${basedir}/schema" includes="*.xsd *.dtd" />
-      <fileset dir="${basedir}/config" includes="build.properties" />
-      <fileset dir="${basedir}/config" includes="deprecated.properties" />
+    <mkdir dir="${target.libs}" />
+    <antcall target="jar.copy-xsl" />
+    <antcall target="jar.copy-config" />
+    <antcall target="jar.copy-schema" />
+    <antcall target="jar.copy-resources" />
+    <antcall target="jar.copy-components" />
+    <jar destfile="${target.libs}/${jarfile}">
+      <fileset dir="${target.classes}" includes="**/*.class" />
+      <fileset dir="${target.classes}" includes="META-INF/services/*" />
+      <fileset dir="${target.jarbase}" />
+      <fileset dir="${basedir}" includes="integrate.xml" />
+      <manifest>
+        <attribute name="MCR-Version" value="${target.version} r${revision.number}" />
+      </manifest>
     </jar>
+    <copy todir="${target.libs}">
+      <mapper type="flatten" />
+      <fileset dir="${basedir}/lib" includes="*.jar" />
+      <fileset dir="${components.dir}" includes="*/lib/*.jar" />
+      <fileset refid="shared.jars" />
+    </copy>
     <moduleHook target="jar" />
+  </target>
+
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-xsl                      
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-xsl">
+    <mkdir dir="${target.jarbase}/xsl" />
+    <copy todir="${target.jarbase}/xsl" flatten="true">
+      <fileset dir="${basedir}/xsl" includes="**/*.xsl" />
+      <fileset dir="${components.dir}">
+        <include name="*/xsl/*.xsl" />
+      </fileset>
+    </copy>
+  </target>
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-config                      
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-config">
+    <mkdir dir="${target.jarbase}/config" />
+    <copy todir="${target.jarbase}/config">
+      <fileset dir="${basedir}/config">
+        <exclude name="*.template" />
+        <exclude name="deprecated*" />
+      </fileset>
+    </copy>
+    <copy todir="${target.jarbase}">
+      <fileset dir="${basedir}/config" includes="deprecated*" />
+    </copy>
+  </target>
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-schema                      
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-schema">
+    <copy todir="${target.jarbase}" flatten="true">
+      <fileset dir="${basedir}/schema" includes="*.dtd *.xsd" />
+      <fileset dir="${components.dir}">
+        <include name="*/schema/*.dtd" />
+        <include name="*/schema/*.xsd" />
+      </fileset>
+    </copy>
+  </target>
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-resources                      
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-resources">
+    <copy todir="${target.jarbase}" failonerror="false">
+      <fileset dir="${basedir}/resources" />
+    </copy>
+    <copy todir="${target.jarbase}">
+      <!-- removes <modulename>/resources from filename -->
+      <mapper type="regexp" from="^[^/\\]+[/\\]resources[/\\](.*)$$" to="\1" />
+      <fileset refid="components.resources" />
+    </copy>
+    <if>
+      <not>
+        <available file="${target.jarbase}/mycoreobject.dtd" />
+      </not>
+      <then>
+        <echo file="${target.jarbase}/mycoreobject.dtd">
+          <![CDATA[<!ELEMENT mycoreobject ANY>
+    ]]></echo>
+      </then>
+    </if>
+  </target>
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-components                   
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-components">
+    <mkdir dir="${target.jarbase}/components" />
+    <for param="component">
+      <dirset dir="${components.dir}">
+        <include name="*" />
+      </dirset>
+      <sequential>
+        <basename file="@{component}" property="component.name.@{component}" />
+        <echo level="debug">Copying files of component ${component.name.@{component}}</echo>
+        <mkdir dir="${target.jarbase}/components/${component.name.@{component}}" />
+        <copy todir="${target.jarbase}/components/${component.name.@{component}}">
+          <fileset dir="${components.dir}/${component.name.@{component}}">
+            <include name="config/**" />
+            <include name="web/**" />
+            <include name="integrate.xml" />
+          </fileset>
+        </copy>
+      </sequential>
+    </for>
   </target>
 
   <!-- =================================================================== -->
@@ -232,8 +364,8 @@
         <isset property="altdir" />
       </not>
     </condition>
-    <javac srcdir="${basedir}/sources:${altdir}"
-           destdir="${basedir}/classes"
+    <mkdir dir="${target.classes}" />
+    <javac destdir="${target.classes}"
            includes="${packages}"
            excludes="${excludes}"
            classpathref="mycore.classpath"
@@ -244,13 +376,33 @@
            encoding="${sourceencoding}"
            fork="yes"
            deprecation="${deprecation}">
+      <src>
+        <path>
+          <path refid="sources.path" />
+          <path path="${altdir}" />
+        </path>
+      </src>
     </javac>
-    <echo level="info">---------------------------------------------------------</echo>
   </target>
 
-  <target name="compile" description="compiles all sources to classes directory">
+  <target name="compile" depends="init" description="compiles all sources to classes directory">
     <modulePreHook target="compile" />
-    <echo level="info">Compiling MyCoRe non-module classes...</echo>
+    <echo level="info">Compiling MyCoRe classes...</echo>
+    <mkdir dir="${target.sources}/org/mycore" />
+    <echo file="${target.sources}/org/mycore/MCRCoreVersion.java">
+      <![CDATA[
+package org.mycore;
+/** Generated in ANT */
+public class MCRCoreVersion{
+  public static final String VERSION  = "${target.version}";
+  public static final int    REVISION = ${revision.number};
+  public static final String COMPLETE = "${target.version} r${revision.number}";
+  public static String getVersion(){return VERSION;}
+  public static int getRevision(){return REVISION;}
+  public static String getCompleteVersion(){return COMPLETE;}
+}
+]]>
+    </echo>
     <antcall target="javac">
       <param name="packages" value="org/mycore/**" />
       <param name="excludes" value="${mcr.exclude}" />
@@ -268,8 +420,8 @@
 
     <path id="sourcepath">
       <dirset dir="${basedir}" includes="sources" />
-      <dirset dir="${basedir}" includes="modules/*/**/src" />
-      <dirset dir="${basedir}" includes="modules/*/sources" />
+      <dirset dir="${basedir}" includes="components/*/**/src" />
+      <dirset dir="${basedir}" includes="components/*/sources" />
     </path>
 
     <condition property="javadocs.outdated">
@@ -305,11 +457,11 @@
     <modulePreHook target="javadocs" />
     <echo level="info">Building the MyCoRe JavaDoc API documentation...</echo>
 
-    <mkdir dir="${basedir}/documentation/html" />
+    <mkdir dir="${target.javadocs}" />
     <javadoc packagenames="*"
              encoding="${sourceencoding}"
              sourcepathref="sourcepath"
-             destdir="${basedir}/documentation/html"
+             destdir="${target.javadocs}"
              classpathref="javadocs.classpath"
              author="true"
              version="true"
@@ -344,7 +496,7 @@
   <target name="java2pdf" depends="init,up2date" if="pdf.outdated">
     <echo level="info"> Building the MyCoRe JavaDoc API documentation as PDF...</echo>
 
-    <mkdir dir="${basedir}/documentation/pdf" />
+    <mkdir dir="${target.docs}" />
     <javadoc packagenames="*"
              sourcepathref="sourcepath"
              classpathref="javadocs.classpath"
@@ -352,7 +504,7 @@
              version="true"
              access="package">
       <doclet name="com.tarsec.javadoc.pdfdoclet.PDFDoclet" path="${doclets}/itext-0.92.jar:${doclets}/pdfdoclet.jar">
-        <param name="-pdf" value="${basedir}/documentation/pdf/javadocs.pdf" />
+        <param name="-pdf" value="${target.docs}/javadocs.pdf" />
         <param name="-config" value="${doclets}/pdfdoclet-mycore.properties" />
       </doclet>
 
@@ -366,12 +518,7 @@
   <target name="clean" description="Removes all files generated by this build file">
     <modulePreHook target="clean" />
     <echo level="info">Cleaning up...</echo>
-    <delete dir="${basedir}/classes" />
-    <delete dir="${basedir}/documentation/html" />
-    <delete dir="${basedir}/documentation/pdf" />
-    <delete includeEmptyDirs="true">
-      <fileset dir="${basedir}/lib" includes="mycore*.jar" />
-    </delete>
+    <delete dir="${target.dir}" />
     <moduleHook target="clean" />
   </target>
 

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13740 $ $Date: 2008-07-11 19:07:43 +0200 (Fr, 11 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -222,20 +222,11 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
      * @return true if the MCRObjectID exist, else return false
      */
     public final boolean exist(String mcrid, int version) {
-        boolean exists = false;
-
-        Session session = getSession();
         MCRXMLTABLEPK pk = new MCRXMLTABLEPK(mcrid, version);
-        if (session.get(MCRXMLTABLE.class, pk) != null) {
+        if (getSession().get(MCRXMLTABLE.class, pk) != null) {
             return true;
         }
-        StringBuffer query = new StringBuffer("select key.id from MCRXMLTABLE where MCRID = '").append(mcrid).append("' and MCRVERSION = ").append(
-                version);
-        List<?> l = session.createQuery(query.toString()).list();
-        if (l.size() > 0) {
-            exists = true;
-        }
-        return exists;
+        return false;
     }
 
     /**

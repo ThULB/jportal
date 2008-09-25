@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13374 $ $Date: 2008-04-10 07:37:37 +0200 (Do, 10 Apr 2008) $
+ * $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.common.MCRSessionMgr;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @version $Revision: 13374 $ $Date: 2008-04-10 07:37:37 +0200 (Do, 10 Apr 2008) $
+ * @version $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
  */
 public class MCRUserMgr {
     /** The LOGGER and the configuration */
@@ -382,12 +382,12 @@ public class MCRUserMgr {
 
             // now update the other groups
             for (int i = 0; i < groupIDs.size(); i++) {
-            	if(!primGroup.getID().equals(groupIDs.get(i))){
-            		MCRGroup otherGroup = retrieveGroup((String) groupIDs.get(i), true);
-            		otherGroup.addMemberUserID(user.getID());
-            		groupCache.remove(otherGroup.getID());
-            		mcrUserStore.updateGroup(otherGroup);
-            	}
+                if (!primGroup.getID().equals(groupIDs.get(i))) {
+                    MCRGroup otherGroup = retrieveGroup((String) groupIDs.get(i), true);
+                    otherGroup.addMemberUserID(user.getID());
+                    groupCache.remove(otherGroup.getID());
+                    mcrUserStore.updateGroup(otherGroup);
+                }
             }
         } catch (MCRException ex) {
             // Since something went wrong we delete the previously created user.
@@ -923,6 +923,10 @@ public class MCRUserMgr {
      */
     public synchronized boolean login(String userID, String passwd) throws MCRException {
         MCRUser loginUser = retrieveUser(userID, false);
+
+        if (loginUser == null) {
+            throw new MCRException("Login denied. User does not exist: " + userID);
+        }
 
         if (loginUser.isEnabled()) {
             if (useEncryption) {

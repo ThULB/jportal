@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13497 $ $Date: 2008-05-07 21:52:39 +0200 (Mi, 07 Mai 2008) $
+ * $Revision: 13980 $ $Date: 2008-09-11 14:42:26 +0200 (Do, 11 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -68,17 +68,19 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUsageException;
 import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.utils.MCRCategoryTransformer;
 import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.ifs.MCRDirectoryXML;
+import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorDataResolver;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -159,6 +161,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
         supportedSchemes.put("webapp", new MCRWebAppResolver());
         supportedSchemes.put("file", new MCRFileResolver());
         supportedSchemes.put("ifs", new MCRIFSResolver());
+        supportedSchemes.put("mcrfile", new MCRMCRFileResolver());
         supportedSchemes.put("mcrobject", new MCRObjectResolver());
         supportedSchemes.put("mcrws", new MCRWSResolver());
         supportedSchemes.put("http", new MCRHttpResolver());
@@ -214,7 +217,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
             }
         }
         if (href.indexOf(":") == -1) {
-            return null;
+            return tryResolveXSL(href);
         }
 
         String scheme = getScheme(href);
@@ -223,7 +226,21 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
             try {
                 return new JDOMSource(resolveURI(href));
             } catch (Exception e) {
+                LOGGER.error("Error while resolving: " + href, e);
                 throw new TransformerException("Error while resolving: " + href, e);
+            }
+        }
+        return null;
+    }
+
+    private Source tryResolveXSL(String href) {
+        if (href.endsWith(".xsl")) {
+            final String resourceName = "xsl/" + href;
+            try {
+                LOGGER.debug("Trying to resolve " + href + " from resource " + resourceName);
+                return new JDOMSource(SUPPORTED_SCHEMES.get("resource").resolveElement(resourceName));
+            } catch (Exception e) {
+                LOGGER.error("could not find Stylesheet " + href + " in resource " + resourceName);
             }
         }
         return null;
@@ -397,8 +414,8 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
         /**
          * provides a Map of Resolver mappings.
          * 
-         * Key is the scheme, e.g. <code>http</code>, where value is an
-         * instance of MCRResolver.
+         * Key is the scheme, e.g. <code>http</code>, where value is an instance
+         * of MCRResolver.
          * 
          * @see MCRResolver
          * @return a Map of Resolver mappings
@@ -672,12 +689,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
 
     private static class MCRResourceResolver implements MCRResolver {
 
-        private InputStream getResourceStream(String uri) {
-            String path = uri.substring(uri.indexOf(":") + 1);
-            LOGGER.debug("Reading xml from classpath resource " + path);
-
-            return this.getClass().getResourceAsStream("/" + path);
-        }
+        static MCRXMLResource CACHE = MCRXMLResource.instance();
 
         /**
          * Reads XML from the CLASSPATH of the application.
@@ -690,7 +702,8 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
          * @throws JDOMException
          */
         public Element resolveElement(String uri) throws JDOMException, IOException {
-            Element parsed = MCRURIResolver.instance().parseStream(getResourceStream(uri));
+            String path = uri.substring(uri.indexOf(":") + 1);
+            Element parsed = CACHE.getResource(path).getRootElement();
             return parsed;
         }
 
@@ -727,7 +740,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
          * Reads XML from URIs of type session:key. The method MCRSession.get(
          * key ) is called and must return a JDOM element.
          * 
-         * @see org.mycore.common.MCRSession#get( java.lang.String )
+         * @see org.mycore.common.MCRSession#get(java.lang.String )
          * 
          * @param uri
          *            the URI in the format session:key
@@ -766,6 +779,25 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
                 path = path.substring(0, i);
             }
             return MCRDirectoryXML.getInstance().getDirectory(path, hosts).getRootElement();
+        }
+
+    }
+
+    private static class MCRMCRFileResolver implements MCRResolver {
+        public Element resolveElement(String uri)  throws IOException, JDOMException {
+            LOGGER.debug("Reading xml from MCRFile " + uri);
+
+            String id = uri.substring(uri.indexOf(":") + 1);
+            
+            Element ele = null;
+
+            try {
+				ele = MCRFile.getFile(id).getContentAsJDOM().detachRootElement();
+			} catch (MCRPersistenceException e) {
+				LOGGER.error("Cannot resolve MCRFile with id " + id);
+			}
+            
+            return ele;
         }
 
     }
@@ -856,9 +888,10 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
          * 
          * @param uri
          *            URI in the syntax above
-         *            
+         * 
          * @return the root element of the XML document
-         * @see ClassificationTransformer#getEditorDocument(Classification, String)
+         * @see ClassificationTransformer#getEditorDocument(Classification,
+         *      String)
          */
         public Element resolveElement(String uri) {
             LOGGER.debug("start resolving " + uri);
@@ -1101,7 +1134,8 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
     /**
      * Transform result of other resolver with stylesheet.
      * 
-     * Usage: xslStyle:<stylesheet><?param1=value1<&param2=value2>>:<anyMyCoReURI>
+     * Usage:
+     * xslStyle:<stylesheet><?param1=value1<&param2=value2>>:<anyMyCoReURI>
      * 
      * To <stylesheet> is extension .xsl added. File is searched in classpath.
      * 
@@ -1131,7 +1165,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
                     Document doc = result.getDocument();
                     if (doc == null)
                         doc = new Document(result);
-                    Document xx = MCRLayoutService.instance().doLayout(doc, stylesheet + ".xsl", params);
+                    Document xx = MCRLayoutService.instance().doLayout(doc, "xsl/" + stylesheet + ".xsl", params);
                     if (!xx.hasRootElement()) {
                         LOGGER.info("MCRXslStyleResolver no root element after transformation ");
                         return new Element("null");
@@ -1157,12 +1191,13 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
      * 
      * Example:
      * 
-     * buildxml:_rootName_=mycoreobject&metadata/parents/parent/@href='FooBar_Document_4711'
+     * buildxml:_rootName_=mycoreobject&metadata/parents/parent/@href=
+     * 'FooBar_Document_4711'
      * 
      * This will return:
      * 
-     * <mycoreobject> <metadata> <parents> <parent href="'FooBar_Document_4711'" />
-     * </parents> </metadata> </mycoreobject>
+     * <mycoreobject> <metadata> <parents> <parent href="'FooBar_Document_4711'"
+     * /> </parents> </metadata> </mycoreobject>
      */
     private static class MCRBuildXMLResolver implements MCRResolver {
 

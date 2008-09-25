@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13276 $ $Date: 2008-03-13 10:15:16 +0100 (Do, 13 Mär 2008) $
+ * $Revision: 13770 $ $Date: 2008-07-28 13:11:00 +0200 (Mo, 28 Jul 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -23,10 +23,13 @@
  **/
 package org.mycore.services.i18n;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,8 +49,15 @@ import org.mycore.common.MCRSessionMgr;
  */
 public class MCRTranslation {
 
+    private static final String DEPRECATED_MESSAGES_PROPERTIES = "/deprecated-messages.properties";
+
     private static final Logger LOGGER = Logger.getLogger(MCRTranslation.class);
+
     private static final Pattern ARRAY_DETECTOR = Pattern.compile(";");
+
+    private static boolean DEPRECATED_MESSAGES_PRESENT = false;
+
+    private static Properties DEPRECATED_MAPPING = loadProperties();
 
     /**
      * provides translation for the given label (property key).
@@ -59,19 +69,33 @@ public class MCRTranslation {
      * @return translated String
      */
     public static String translate(String label) {
-    	String result;
+        String result = null;
         Locale currentLocale = getCurrentLocale();
         LOGGER.debug("Translation for current locale: " + currentLocale.getLanguage());
         ResourceBundle message = ResourceBundle.getBundle("messages", currentLocale);
-        
-        try { 
-        	result = message.getString(label);
+
+        try {
+            result = message.getString(label);
             LOGGER.debug("Translation for " + label + "=" + result);
         } catch (java.util.MissingResourceException mre) {
-        	result = "???" + label + "???";
-        	LOGGER.debug(mre.getMessage());	
+            // try to get new key if 'label' is deprecated
+            if (!DEPRECATED_MESSAGES_PRESENT) {
+                LOGGER.warn("Could not load resource '" + DEPRECATED_MESSAGES_PROPERTIES + "' to check for depreacted I18N keys.");
+            } else if (DEPRECATED_MAPPING.keySet().contains(label)) {
+                String newLabel = DEPRECATED_MAPPING.getProperty(label);
+                try {
+                    result = message.getString(newLabel);
+                } catch (java.util.MissingResourceException e) {
+                }
+                if (result != null) {
+                    LOGGER.warn("Usage of deprected I18N key '" + label + "'. Please use '" + newLabel + "' instead.");
+                    return result;
+                }
+            }
+            result = "???" + label + "???";
+            LOGGER.debug(mre.getMessage());
         }
-         
+
         return result;
     }
 
@@ -99,9 +123,10 @@ public class MCRTranslation {
      * provides translation for the given label (property key).
      * 
      * The current locale that is needed for translation is gathered by the
-     * language of the current MCRSession. Be aware that any occurence of ';' and '\' in <code>argument</code> has to be masked by '\'. You can
-     * use ';' to build an array of arguments: "foo;bar" would result
-     * in {"foo","bar"} (the array)
+     * language of the current MCRSession. Be aware that any occurence of ';'
+     * and '\' in <code>argument</code> has to be masked by '\'. You can use
+     * ';' to build an array of arguments: "foo;bar" would result in
+     * {"foo","bar"} (the array)
      * 
      * @param label
      * @param argument
@@ -158,21 +183,37 @@ public class MCRTranslation {
     }
 
     static boolean isArray(String masked) {
-        Matcher m=ARRAY_DETECTOR.matcher(masked);
-        while (m.find()){
-            int pos=m.start();
-            int count=0;
-            for (int i=pos-1;i>0;i--){
-                if (masked.charAt(i)=='\\')
+        Matcher m = ARRAY_DETECTOR.matcher(masked);
+        while (m.find()) {
+            int pos = m.start();
+            int count = 0;
+            for (int i = pos - 1; i > 0; i--) {
+                if (masked.charAt(i) == '\\')
                     count++;
                 else
                     break;
             }
-            if (count % 2 == 0){
+            if (count % 2 == 0) {
                 return true;
             }
         }
         return false;
+    }
+
+    static Properties loadProperties() {
+        Properties deprecatedMapping = new Properties();
+        try {
+            final InputStream propertiesStream = MCRTranslation.class.getResourceAsStream(DEPRECATED_MESSAGES_PROPERTIES);
+            if (propertiesStream == null) {
+                LOGGER.warn("Could not find resource '" + DEPRECATED_MESSAGES_PROPERTIES + "'.");
+                return deprecatedMapping;
+            }
+            deprecatedMapping.load(propertiesStream);
+            DEPRECATED_MESSAGES_PRESENT = true;
+        } catch (IOException e) {
+            LOGGER.warn("Could not load resource '" + DEPRECATED_MESSAGES_PROPERTIES + "'.", e);
+        }
+        return deprecatedMapping;
     }
 
 }

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13839 $ $Date: 2008-08-07 17:04:12 +0200 (Do, 07 Aug 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -94,9 +94,12 @@ public class MCRObjectServlet extends MCRServlet {
             String editorID = getEditorID(job.getRequest());
             setBrowseParameters(job, id, host, editorID);
 
-            if (host == MCRHit.LOCAL)
-                getLayoutService().doLayout(job.getRequest(), job.getResponse(), requestLocalObject(job));
-            else
+            if (host == MCRHit.LOCAL) {
+                final Document localObject = requestLocalObject(job);
+                if (localObject == null)
+                    return;
+                getLayoutService().doLayout(job.getRequest(), job.getResponse(), localObject);
+            } else
                 getLayoutService().doLayout(job.getRequest(), job.getResponse(), requestRemoteObject(job));
         } catch (MCRException e) {
             generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error while retrieving MCRObject with ID: "

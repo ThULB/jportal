@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13491 $ $Date: 2008-05-07 14:44:55 +0200 (Mi, 07 Mai 2008) $
+ * $Revision: 13794 $ $Date: 2008-07-30 14:20:47 +0200 (Mi, 30 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13491 $ $Date: 2008-03-18 22:53:44 +0000 (Di, 18 Mrz
+ * @version $Revision: 13794 $ $Date: 2008-03-18 22:53:44 +0000 (Di, 18 Mrz
  *          2008) $
  */
 public class MCRMetaClassification extends MCRMetaDefault {
@@ -127,17 +127,11 @@ public class MCRMetaClassification extends MCRMetaDefault {
             throw new MCRException("The classid is too long.");
         }
 
-        try {
-            MCRObjectID mid = new MCRObjectID(set_classid);
-            classid = mid.getId();
-        } catch (Exception e) {
-            throw new MCRException("The classid is not MCRObjectID.");
-        }
-
         if (set_categid.length() > MAX_CATEGID_LENGTH) {
             throw new MCRException("The categid is too long.");
         }
 
+        classid = set_classid;
         categid = set_categid;
     }
 

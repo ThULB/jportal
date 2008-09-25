@@ -98,8 +98,20 @@
           <repeater min="1" max="5" pos="right">
             <panel>
               <hidden var="@inherited" default="0"/>
-              <hidden var="@classid"   default="DocPortal_class_00000003" />
-              <cell col="1" row="1" anchor="WEST" ref="COriginDoc" var="@categid" />
+              <hidden var="@classid"   default="DocPortal_class_00000002" />
+              <cell col="1" row="1" anchor="WEST" var="@categid">
+                <list id="COriginDoc" width="300" type="dropdown">
+                  <item value="">
+                    <label xml:lang="de">(bitte wählen)</label>
+                    <label xml:lang="en">(select please)</label>
+                  </item>
+                  <include uri="classification:editor:-1:children:DocPortal_class_00000002" cacheable="false"/>
+                  <condition id="CoOriginDoc" required="true" >
+                    <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+                    <label xml:lang="en">Please select one entry!</label>
+                  </condition>
+                </list>
+              </cell>
             </panel>
           </repeater>
         </cell>
@@ -196,7 +208,19 @@
         <include ref="inherit.heritable" />
         <hidden var="type/@inherited" default="0" />
         <hidden var="type/@classid"   default="DocPortal_class_00000005" />
-        <cell col="1" row="1" anchor="WEST" ref="CType" var="type/@categid" />
+        <cell col="1" row="1" anchor="WEST" var="type/@categid" >
+          <list id="CType" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000005" cacheable="false"/>
+            <condition id="CoTypeDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
       </panel>
     </cell>
 
@@ -209,7 +233,19 @@
         <include ref="inherit.heritable" />
         <hidden var="format/@inherited" default="0" />
         <hidden var="format/@classid"   default="DocPortal_class_00000006" />
-        <cell col="1" row="1" anchor="WEST" ref="CFormat" var="format/@categid" />
+        <cell col="1" row="1" anchor="WEST" var="format/@categid">
+          <list id="CFormat" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000006" cacheable="false"/>
+            <condition id="CoFormatDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
       </panel>
     </cell>
 
@@ -260,7 +296,19 @@
         <include ref="inherit.heritable" />
         <hidden var="language/@inherited" default="0" />
         <hidden var="language/@classid"   default="DocPortal_class_00000004" />
-        <cell col="1" row="1" anchor="WEST" ref="CLanguage" var="language/@categid" />
+        <cell col="1" row="1" anchor="WEST" var="language/@categid">
+          <list id="CLanguage" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000004" cacheable="false"/>
+            <condition id="CoLanguageDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
       </panel>
     </cell>
 

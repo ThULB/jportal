@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13503 $ $Date: 2008-05-09 14:50:55 +0200 (Fr, 09 Mai 2008) $
+ * $Revision: 13574 $ $Date: 2008-06-05 09:40:51 +0200 (Do, 05 Jun 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,8 +23,8 @@
 
 package org.mycore.datamodel.common;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -71,7 +71,8 @@ public class MCRLinkTableEventHandler extends MCREventHandlerBase {
             // TODO: add undo events
             checkLinkTargets(obj);
         }
-        Collection<MCRCategoryID> categories = new ArrayList<MCRCategoryID>();
+        //use Set for category collection to remove duplicates if there are any
+        Collection<MCRCategoryID> categories = new HashSet<MCRCategoryID>();
         for (int i = 0; i < meta.size(); i++) {
             elm = meta.getMetadataElement(i);
             for (int j = 0; j < elm.size(); j++) {

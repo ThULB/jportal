@@ -12,7 +12,7 @@
     <p class="editorform">
       <editor id="author-foobar">
         <source uri="{sourceUri}" />
-        <cancel url="{cancelURL}" />
+        <cancel url="{cancelUrl}" />
         <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />
         <validationMessage i18n="editor.common.validationMessage" />
         <components root="edit-file" var="/mycoreobject">

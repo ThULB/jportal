@@ -271,7 +271,7 @@
                             </tr>
                         </table>
                         <!--1***maintitle*************************************-->
-                        <xsl:if test="string-length($mainTitle)>150)">
+                        <xsl:if test="string-length($mainTitle)>150">
                             <table cellspacing="0" cellpadding="0" id="detailed-view">
                                 <xsl:call-template name="printMetaDates">
                                     <xsl:with-param select="./metadata/maintitles/maintitle" name="nodes" />

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,6 +25,7 @@ package org.mycore.datamodel.metadata;
 
 import org.apache.log4j.Logger;
 
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 
 /**
@@ -33,7 +34,7 @@ import org.mycore.common.MCRException;
  * createTypedContent() and createTextSearch() are abstract methods.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
  */
 public abstract class MCRMetaDefault implements MCRMetaInterface {
     // public data
@@ -46,7 +47,7 @@ public abstract class MCRMetaDefault implements MCRMetaInterface {
     // common data
     protected static final String NL = System.getProperties().getProperty("line.separator");
 
-    protected static final String DEFAULT_LANGUAGE = "en";
+    protected static final String DEFAULT_LANGUAGE = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang","en");
 
     protected static final String DEFAULT_DATAPART = "metadata";
 

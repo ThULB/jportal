@@ -464,8 +464,8 @@
         <xsl:choose>
             <xsl:when
                 test="contains(/mycoreobject/@ID,'_jpjournal_') 
-				or contains(/mycoreobject/@ID,'_jpvolume_') 
-				or contains(/mycoreobject/@ID,'_jparticle_')  ">
+                or contains(/mycoreobject/@ID,'_jpvolume_') 
+                or contains(/mycoreobject/@ID,'_jparticle_')  ">
 
                 <xsl:choose>
                     <xsl:when test="$view.objectmetadata='false'">
@@ -526,13 +526,13 @@
                   <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
                     title="{i18n:translate('swf.object.editACL')}" />
                 </a>
-				<xsl:if test="$accessnbn = 'true'">
+                <xsl:if test="$accessnbn = 'true'">
                   <a
                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
                     <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif"
                       title="{i18n:translate('swf.object.addNBN')}" />
                   </a>
-				</xsl:if>
+                </xsl:if>
                 <a
                   href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
                   <img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"

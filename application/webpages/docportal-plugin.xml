@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+  <section title="Erweitern Sie Ihren Browser um die DocPortal-Suchmaschine" xml:lang="de">
+    <p>Moderne Browser, die den OpenSearch-Standard unterstützen, können um die DocPortal-Suchmaschine erweitert werden. 
+       Neben der Suche mit google steht Ihnen dann auch die DocPortal-Suche zur Verfügung. 
+       Der <a href="http://www.opensearch.org">OpenSearch-Standard</a> wurde von A9, einer Tochtergesellschaft von Amazon entwickelt. 
+       Firefox ab der Version 2 und Internet Explorer ab der Version 7 unterstützen den Standard.<br/><br/>
+       <a href="javascript:window.external.AddSearchProvider('%MCR.baseurl%docportal_opensearch_desc.xml')">Browser um DocPortal-Suchmaschine erweitern.</a>
+       <br/><br/>
+       ACHTUNG: sollte der Link nicht funktionieren, bitten Sie ihren Systemverwalter, die Dateien docportal-plugin.xml und docportal_opensearch_desc.xml zu ändern.
+    </p>
+  </section>
+  <section title="Extend your browser with DocPortal-Searchengine" xml:lang="en">
+    <p>The DocPortal-Searchengine can be added to modern browsers. This is done the same way as google or amazon search are added to your browser.
+       By the way, <a href="http://www.opensearch.org">OpenSearch</a> was developed by Amazon.com subsidiary A9.   
+       Firefox version 2 or higher and Internet Explorer version 7 or higher support Opensearch-standard.<br/><br/>
+       <a href="javascript:window.external.AddSearchProvider('%MCR.baseurl%docportal_opensearch_desc.xml')">Add DocPortal-Searchengine to your browser.</a>
+       <br/><br/>
+       ATTENTION: if this link should not work, please ask your systemadministrator to change docportal-plugin.xml and docportal_opensearch_desc.xml.
+    </p>
+  </section>
+</MyCoReWebPage>
+
+

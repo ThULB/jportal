@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13682 $ $Date: 2008-07-03 11:52:22 +0200 (Do, 03 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -214,7 +214,8 @@ public class MCRHit {
 
         // Copy other hit meta data
         if (other.metaData.size() > 0) {
-            this.metaData.add(null); // used as a delimiter
+        	if (this.metaData.size() > 0)
+                this.metaData.add(null); // used as a delimiter
             this.metaData.addAll(other.metaData);
         }
     }

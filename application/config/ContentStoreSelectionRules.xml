@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE ContentStoreSelectionRules SYSTEM "ContentStoreSelectionRules.dtd">
+<!-- <!DOCTYPE ContentStoreSelectionRules SYSTEM "ContentStoreSelectionRules.dtd"> -->
 
 <!-- Default file content store, if no other rule applies: -->
 <ContentStoreSelectionRules 

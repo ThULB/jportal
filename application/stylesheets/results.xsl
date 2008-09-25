@@ -141,7 +141,27 @@
     </tr>
   </xsl:template>
 
-  <!-- Bugfix: provide empty template to allow compilation of custom objecttype stylsheets -->
+  <xsl:template
+    match="mcr:hit[mcr:metaData[mcr:field/@name='DerivateID' and mcr:field/@name='filePath' and mcr:field/@name='fileName']]"
+    mode="hitInFiles">
+    <xsl:param name="fileNodeServlet" select="concat($ServletsBaseURL,'MCRFileNodeServlet/')" />
+    <div class="hitInFile">
+      <span class="hitInFileLabel">
+        <xsl:value-of select="concat(i18n:translate('results.file'),' ')" />
+      </span>
+      <xsl:for-each
+        select="mcr:metaData[mcr:field/@name='DerivateID' and mcr:field/@name='filePath' and mcr:field/@name='fileName']">
+        <a
+          href="{concat($fileNodeServlet,mcr:field[@name='DerivateID'],mcr:field[@name='filePath'],$HttpSession)}">
+          <xsl:value-of select="mcr:field[@name='fileName']" />
+        </a>
+        <xsl:if test="position() != last()">
+          <xsl:value-of select="', '" />
+        </xsl:if>
+      </xsl:for-each>
+    </div>
+  </xsl:template>
+    <!-- Bugfix: provide empty template to allow compilation of custom objecttype stylsheets -->
   <xsl:template name="editobject_with_der" />
   <xsl:template name="editobject" />
 </xsl:stylesheet>

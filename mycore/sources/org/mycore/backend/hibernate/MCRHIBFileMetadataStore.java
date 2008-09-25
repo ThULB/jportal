@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -30,8 +30,10 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import org.mycore.backend.hibernate.tables.MCRFSNODES;
 import org.mycore.common.MCRPersistenceException;
@@ -148,9 +150,10 @@ public class MCRHIBFileMetadataStore implements MCRFileMetadataStore {
 
     public MCRFilesystemNode retrieveChild(String parentID, String name) {
         Session session = getSession();
-        Query q = session.createQuery("from MCRFSNODES where PID = :pid and NAME = :name");
-        q.setString("pid", parentID).setString("name", name);
-        MCRFSNODES node = (MCRFSNODES) q.uniqueResult();
+        Criteria c=session.createCriteria(MCRFSNODES.class);
+        c.add(Restrictions.eq("pid", parentID));
+        c.add(Restrictions.eq("name", name));
+        MCRFSNODES node = (MCRFSNODES) c.uniqueResult();
 
         if (node == null) {
             return null;
