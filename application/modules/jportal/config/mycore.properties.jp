@@ -206,3 +206,11 @@ MCR.IndexBrowser.jpperson_sub.ExtraOutputFields=id
   # default value either the journals without activities are
   # shown at the beginning or not
   journalStatistic.showJournalwithoutActivity = true
+  
+  
+##############################################################################
+# Overwrite properties
+# 
+##############################################################################
+  
+  MCR.Module-iview.SupportedContentTypes=jpg,jpeg,gif,tiff,tif,bmp,png,FlashPix,flashpix
