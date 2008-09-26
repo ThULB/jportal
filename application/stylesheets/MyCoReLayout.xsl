@@ -594,4 +594,115 @@
         </xsl:choose>
     </xsl:template>
     <!-- ============================================================================================================= -->
+        <!-- The template write the icon line to edit an object -->
+    <xsl:template name="editobject">
+
+        <xsl:param name="accessedit" />
+        <xsl:param name="accessdelete" />
+        <xsl:param name="id" />
+
+        <xsl:param name="layout" select="'$'" />
+        <xsl:variable name="layoutparam">
+            <xsl:if test="$layout != '$'">
+                <xsl:value-of select="concat('&amp;layout=',$layout)" />
+            </xsl:if>
+        </xsl:variable>
+
+        <xsl:if test="$objectHost = 'local'">
+            <xsl:choose>
+
+                <xsl:when test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
+                    <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+                    <tr>
+                        <td class="metaname">
+                            <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
+                        </td>
+                        <td class="metavalue">
+
+                            <xsl:if test="acl:checkPermission($id,'writedb')">
+
+                                <a
+                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                                    <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif" title="{i18n:translate('swf.object.editObject')}" />
+                                </a>
+                                <!--<a
+                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
+                                    <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
+                                    title="{i18n:translate('swf.object.editACL')}"/>
+                                    </a>-->
+                            </xsl:if>
+                            <xsl:if test="acl:checkPermission($id,'deletedb')">
+
+                                <a id="obj_del"
+                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
+                                    <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif" title="{i18n:translate('swf.object.delObject')}" />
+                                </a>
+                            </xsl:if>
+                        </td>
+                    </tr>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+
+    </xsl:template>
+
+  <!-- The template write the icon line to edit an object with derivate -->
+  <xsl:template name="editobject_with_der">
+    <xsl:param name="accessnbn" />
+    <xsl:param name="accessedit" />
+    <xsl:param name="accessdelete" />
+    <xsl:param name="id" />
+    <xsl:param name="layout" select="'$'"/>
+    <xsl:variable name="layoutparam">
+      <xsl:if test="$layout != '$'">
+        <xsl:value-of select="concat('&amp;layout=',$layout)"/>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:if test="$objectHost = 'local'">
+      <xsl:choose>
+        <xsl:when test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
+          <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+          <tr>
+            <td class="metaname">
+              <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
+            </td>
+            <td class="metavalue">
+              <xsl:if test="acl:checkPermission($id,'writedb')">
+                <a
+                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                  <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
+                    title="{i18n:translate('swf.object.editObject')}" />
+                </a>
+                <a
+                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
+                  <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
+                    title="{i18n:translate('swf.object.editACL')}" />
+                </a>
+                <xsl:if test="$accessnbn = 'true'">
+                  <a
+                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
+                    <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif"
+                      title="{i18n:translate('swf.object.addNBN')}" />
+                  </a>
+                </xsl:if>
+                <a
+                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
+                  <img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
+                    title="{i18n:translate('swf.derivate.addDerivate')}" />
+                </a>
+              </xsl:if>
+              <xsl:if test="acl:checkPermission($id,'deletedb')">
+                <a
+                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
+                  <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
+                    title="{i18n:translate('swf.object.delObject')}" />
+                </a>
+              </xsl:if>
+            </td>
+          </tr>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+ 
 </xsl:stylesheet>

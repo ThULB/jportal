@@ -161,7 +161,4 @@
       </xsl:for-each>
     </div>
   </xsl:template>
-    <!-- Bugfix: provide empty template to allow compilation of custom objecttype stylsheets -->
-  <xsl:template name="editobject_with_der" />
-  <xsl:template name="editobject" />
 </xsl:stylesheet>
