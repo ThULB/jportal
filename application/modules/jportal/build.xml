@@ -115,7 +115,11 @@
             <param name="module" value="${module.dir}/config/messages_en.properties" />
             <param name="locale_param" value="en" />
         </antcall>    	
-    	
+        <antcall target="properties.merge">
+            <param name="module" value="${module.dir}/config/messages_pl.properties" />
+            <param name="locale_param" value="pl" />
+        </antcall>   
+            	
     </target>
 	
 	<!-- =================================================================== -->
