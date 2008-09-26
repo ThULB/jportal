@@ -8,7 +8,7 @@
             <hidden default="xml" var="conditions/@format" />
 
             <!-- search in formal description -->
-            <cell anchor="WEST" colspan="4" col="1" row="1">
+            <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
                 <text>
                     <label css-style="editorHeadlines" i18n="metaData.headlines.formaldiscr" />
                 </text>
@@ -19,7 +19,7 @@
             <!-- Search for fields of type bibdescript -->
             <cell var="conditions/boolean/boolean/condition1" col="1" row="2" colspan="2">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                         <text i18n="editormask.labels.bibdescript" />
                     </cell>
                     <hidden default="maintitles" var="@field" />
@@ -36,7 +36,7 @@
             <cell var="conditions/boolean/boolean/condition2" col="1" row="3" colspan="2">
                 <repeater min="0" max="10">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editormask.labels.subtitle" />
                         </cell>
                         <hidden default="subtitles" var="@field" />
@@ -56,7 +56,7 @@
 
                 <repeater min="0" max="6">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editormask.labels.participants_label" />
                         </cell>
                         <cell col="2" row="1">
@@ -92,7 +92,7 @@
             <!-- Search for fields of type date -->
             <cell var="conditions/boolean/boolean/condition4" col="1" row="7" colspan="2">
                 <panel lines="off">
-                    <cell anchor="EAST" width="230" col="1" row="1">
+                    <cell anchor="EAST" width="230" col="1" row="1" class="editorLabels">
                         <text i18n="editormask.labels.date_label" />
                         <text i18n="editormask.labels.dateform" />
                     </cell>
@@ -114,7 +114,7 @@
             <cell var="conditions/boolean/boolean/condition5" col="1" row="8" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editormask.labels.identi" />
                         </cell>
                         <hidden default="identis" var="@field" />
@@ -132,7 +132,7 @@
             <cell var="conditions/boolean/boolean/condition6" col="1" row="9" colspan="2">
                 <repeater min="1" max="3">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editor.search.document.language" />
                         </cell>
                         <hidden default="languages" var="@field" />
@@ -152,7 +152,7 @@
             <!-- Search for fields of type rights -->
             <cell var="conditions/boolean/boolean/condition7" col="1" row="10" colspan="2">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                         <text i18n="editor.search.document.right" />
                     </cell>
                     <hidden default="rightsjournal" var="@field" />
@@ -169,7 +169,7 @@
             <cell var="conditions/boolean/boolean/condition8" col="1" row="11" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editor.search.document.predece" />
                         </cell>
                         <hidden default="predeces" var="@field" />
@@ -187,7 +187,7 @@
             <cell var="conditions/boolean/boolean/condition9" col="1" row="12" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
                             <text i18n="editor.search.document.successor" />
                         </cell>
                         <hidden default="successors" var="@field" />
@@ -206,9 +206,9 @@
             </cell>
 
             <!-- search in content descriptions-->
-            <cell anchor="WEST" colspan="4" col="1" row="14">
+            <cell anchor="WEST" colspan="4" col="1" row="14" class="editorHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
+                    <label i18n="metaData.headlines.contantdiscr" />
                 </text>
             </cell>
             <!-- Content classis -->
@@ -220,12 +220,12 @@
                 <br />
             </cell>
             
-            <cell anchor="WEST" colspan="3" col="1" row="90">
+            <cell anchor="WEST" colspan="3" col="1" row="90"  class="editorHeadlines">
                 <text>
                     <label css-style="editorHeadlines" i18n="metaData.headlines.specials" />
                 </text>
             </cell>
-            <cell anchor="EAST" col="1" row="92">
+            <cell anchor="EAST" col="1" row="92" >
                 <text i18n="editor.search.connect" />
             </cell>
             <cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="92">

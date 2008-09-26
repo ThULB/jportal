@@ -13,9 +13,9 @@
             <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value" />
 
             <!-- search in formal description -->
-            <cell anchor="WEST" colspan="4" col="1" row="1">
+            <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines" >
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.formaldiscr" />
+                    <label i18n="metaData.headlines.formaldiscr" />
                 </text>
             </cell>
 
@@ -23,7 +23,7 @@
             <!-- Search for fields of type name -->
             <cell var="conditions/boolean/boolean/condition1" col="1" row="2" colspan="2">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                         <text i18n="editormask.labels.bibdescript" />
                     </cell>
                     <hidden default="maintitles_art" var="@field" />
@@ -38,7 +38,7 @@
             <cell var="conditions/boolean/boolean/condition2" col="1" row="3" colspan="2">
                 <repeater min="0" max="10">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.subtitle" />
                         </cell>
                         <hidden default="subtitles_art" var="@field" />
@@ -58,7 +58,7 @@
 
                 <repeater min="0" max="6">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.participants_label" />
                         </cell>
                         <cell col="2" row="1">
@@ -94,7 +94,7 @@
             <!-- Search for fields of type date -->
             <cell var="conditions/boolean/boolean/condition4" col="1" row="7" colspan="2">
                 <panel lines="off">
-                    <cell anchor="EAST" width="230" col="1" row="1">
+                    <cell anchor="EAST" width="230" col="1" row="1" class="editorLabels" >
                         <text i18n="editormask.labels.date_label" />
                         <text i18n="editormask.labels.dateform" />
                     </cell>
@@ -115,7 +115,7 @@
             <!-- Search for fields of type text -->
             <cell var="conditions/boolean/boolean/condition5" col="1" row="8" colspan="2">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                         <text i18n="editormask.labels.size" />
                     </cell>
                     <hidden default="sizes_art" var="@field" />
@@ -130,7 +130,7 @@
             <cell var="conditions/boolean/boolean/condition6" col="1" row="9" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.identi" />
                         </cell>
                         <hidden default="identis_art" var="@field" />
@@ -149,7 +149,7 @@
             </cell>
 
             <!-- search in content descriptions-->
-            <cell anchor="WEST" colspan="4" col="1" row="12">
+            <cell anchor="WEST" colspan="4" col="1" row="12" class="editorHeadlines">
                 <text>
                     <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
                 </text>
@@ -158,7 +158,7 @@
             <cell var="conditions/boolean/boolean/condition7" col="1" row="13" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.keyword" />
                         </cell>
                         <hidden default="keywords_art" var="@field" />
@@ -174,7 +174,7 @@
             <cell var="conditions/boolean/boolean/condition8" col="1" row="14" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.abstract" />
                         </cell>
                         <hidden default="abstracts_art" var="@field" />
@@ -190,7 +190,7 @@
             <cell var="conditions/boolean/boolean/condition9" col="1" row="15" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.note" />
                         </cell>
                         <hidden default="notes_art" var="@field" />
@@ -206,7 +206,7 @@
             <cell var="conditions/boolean/boolean/condition10" col="1" row="16" colspan="2">
                 <repeater min="1" max="5">
                     <panel lines="off">
-                        <cell width="230" anchor="EAST" col="1" row="1">
+                        <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                             <text i18n="editormask.labels.pub_reference" />
                         </cell>
                         <hidden default="refs_art" var="@field" />
@@ -238,14 +238,14 @@
                 <br />
                 <br />
             </cell>
-            <cell anchor="WEST" colspan="4" col="1" row="29">
+            <cell anchor="WEST" colspan="4" col="1" row="29"  class="editorHeadlines">
                 <text>
                     <label css-style="editorHeadlines" i18n="metaData.headlines.digitalMedia" />
                 </text>
             </cell>
             <cell var="conditions/boolean/boolean/condition30" col="1" row="30" colspan="2">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels" >
                         <text i18n="editor.search.fulltext" />
                     </cell>
                     <hidden default="content" var="@field" />
@@ -266,17 +266,17 @@
                 <br />
             </cell>
 
-            <cell anchor="WEST" colspan="4" col="1" row="180">
+            <cell anchor="WEST" colspan="4" col="1" row="180" class="editorHeadlines">
                 <text>
                     <label css-style="editorHeadlines" i18n="metaData.headlines.specials" />
                 </text>
             </cell>
 
             <!-- Operators -->
-            <cell width="230" anchor="EAST" col="1" row="190">
+            <cell width="230" anchor="EAST" col="1" row="190" class="editorLabels" >
                 <text i18n="editor.search.connect" />
             </cell>
-            <cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="190">
+            <cell var="conditions/boolean/boolean/@operator" anchor="WEST" col="2" row="190" >
                 <list default="and" type="dropdown">
                     <item i18n="editor.search.and" value="and" />
                     <item i18n="editor.search.or" value="or" />
@@ -292,7 +292,7 @@
             <hidden var="hosts/@target" default="local" />
 
             <!-- Select sort order of results -->
-            <cell width="230" anchor="NORTHEAST" col="1" row="200">
+            <cell width="230" anchor="NORTHEAST" col="1" row="200" class="editorLabels" >
                 <text i18n="editor.search.sortby" />
             </cell>
             <cell var="sortBy/field" anchor="NORTHWEST" col="2" row="200">
