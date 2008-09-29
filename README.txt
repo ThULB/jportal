@@ -40,7 +40,6 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 -- $DOCPORTAL_HOME to <Installation-Directory>/jportal/application
 
 - Create JPortal properties 
-// -- cp $MYCORE_HOME/config/build.properties.template $MYCORE_HOME/config/build.properties
 -- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
 -- cp $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml.template $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml
 
@@ -54,7 +53,6 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 --- set $MCR.FileUpload.IP to your local running server's IP address
 --- add module "JPortal" to system, by appending on property "MCR.Modules.Application" the value "jportal"
 --- exclude module "DocPortal" from system, by appending on property "MCR.Components.Exclude" the value "docportal"
-// --- remove default module "docportal" and "iview" from system, by removing value "docportal" resp. "iview" from property "MCR.Modules.Application" 
 
 
 6. INSTALLATION
@@ -70,7 +68,7 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          3. ant -f jportal-build.xml jp.create.schema jar create.scripts
          4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
          5. ant -f jportal-build.xml jp.create.metastore jp.create.usermanag jp.create.default-rules jp.create.class create.genkeys webapps
-         6. install Image-Viewer (watch $DOCPORTAL_HOME/modules/UNINSTALLED_module-iview/INSTALL.txt) 
+         6. make sure Image-Viewer is installed 
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
@@ -93,11 +91,7 @@ All you have to do is
 By default the installation creates a super user called "administrator" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
 see what this user is allowed to do. 
 
-If you want to use WCMS (Web Content Management System) of JPortal:
-- go to your web browser and click menu point "Tools" > "WCMS" 
-- log in with login name "admin" and password "wcms" 
 
-         
 9. RIGHTS MANAGEMENT
 ======================================
 ======================================          
