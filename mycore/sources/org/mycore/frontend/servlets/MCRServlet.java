@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13732 $ $Date: 2008-07-10 15:03:51 +0200 (Do, 10 Jul 2008) $
+ * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -68,7 +68,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13732 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision$ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRServlet extends HttpServlet {
@@ -317,6 +317,9 @@ public class MCRServlet extends HttpServlet {
             }
         } finally {
         	MCRSessionMgr.getCurrentSession().deleteObject("MCRServletJob");
+        	job.beginTransaction();
+        	MCRHIBConnection.instance().getSession().clear();
+        	job.commitTransaction();
             // Release current MCRSession from current Thread,
             // in case that Thread pooling will be used by servlet engine
             if (getProperty(req, INITIAL_SERVLET_NAME_KEY).equals(getServletName())) {

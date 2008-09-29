@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
+ * $Revision$ $Date$
  * 
  * This file is part of M y C o R e See http://www.mycore.de/ for details.
  * 
@@ -57,7 +57,7 @@ import org.mycore.user.MCRUserMgr;
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
+ * @version $Revision$ $Date$
  */
 public class MCRCommandLineInterface {
     /** The Logger */
@@ -294,6 +294,10 @@ public class MCRCommandLineInterface {
                 if (!interactiveMode)
                     System.exit(1);
             }
+        } finally {
+            tx = MCRHIBConnection.instance().getSession().beginTransaction();
+            MCRHIBConnection.instance().getSession().clear();
+            tx.commit();
         }
     }
 
