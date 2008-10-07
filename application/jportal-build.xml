@@ -6,7 +6,7 @@
 	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal/modules/jportal" />
 	<property name="env.JPORTAL_HOME" value="${basedir}/modules/jportal" />
 
-	<!-- Read in properties from config/mycore.properties.jp -->
+	<!-- Read in properties from config/mycore.properties -->
 	<loadproperties srcFile="${basedir}/config/mycore.properties.private">
 		<filterchain>
 			<tokenfilter>
@@ -15,7 +15,7 @@
 			</tokenfilter>
 		</filterchain>
 	</loadproperties>
-	<loadproperties srcFile="${env.JPORTAL_HOME}/config/mycore.properties.jp">
+	<loadproperties srcFile="${env.JPORTAL_HOME}/config/mycore.properties">
 		<filterchain>
 			<tokenfilter>
 				<replacestring from="%MCR.datadir%" to="${MCR.datadir}" />

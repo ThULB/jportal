@@ -22,10 +22,20 @@
 	<!-- ============================================== -->
 
 	<target name="create.scripts">
-		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties.jp" />
-		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties.myjp" />
+		<echo level="info">
+	            building ${ant.project.name} create.scripts
+	        </echo>
+		<!-- Copy scripts -->
+		<chmod perm="755">
+			<fileset dir="${build.bin}" includes="*.sh" />
+		</chmod>
+		
+		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
+		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
+		
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
+		
 	</target>
 
 	<!-- ============================================== -->
@@ -36,8 +46,8 @@
         </echo>
 
 		<!-- properties merging -->
-		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties.jp" />
-		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties.myjp" />
+		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
+		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
 
 		<!-- jportal -->
 		<echo>
@@ -56,7 +66,7 @@
 		</antcall>
 
 		<!-- Registering templates -->
-        <echo>
+		<echo>
              building JPortal webapp - Registering templates
         </echo>
 		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
@@ -100,41 +110,42 @@
 	</target>
 
 	<!-- =================================================================== -->
-	
-    <target name="i18n" >
-        <echo level="info">
+
+	<target name="i18n">
+		<echo level="info">
             building ${ant.project.name} webapp.i18n
         </echo>
-        
-        <!-- i18n -->
-        <antcall target="properties.merge">
-            <param name="module" value="${module.dir}/config/messages_de.properties" />
-            <param name="locale_param" value="de" />
-        </antcall>
-        <antcall target="properties.merge">
-            <param name="module" value="${module.dir}/config/messages_en.properties" />
-            <param name="locale_param" value="en" />
-        </antcall>    	
-        <antcall target="properties.merge">
-            <param name="module" value="${module.dir}/config/messages_pl.properties" />
-            <param name="locale_param" value="pl" />
-        </antcall>   
-            	
-    </target>
-	
-	<!-- =================================================================== -->
 
-	<!-- create a new template_DynamicLayoutTemplates.xsl -->
-	<target name="jp.webapps.dynamicLayoutTemplates">
-		<taskdef name="templatecheck" classname="org.mycore.common.MCRDynamicLayoutTemplatesTask" classpathref="application.classpath" />
-		<templatecheck choosepath="${build.webapps}/WEB-INF/classes/xsl/template_DynamicLayoutTemplates.xsl" />
+		<!-- i18n -->
+		<antcall target="properties.merge">
+			<param name="module" value="${module.dir}/config/messages_de.properties" />
+			<param name="locale_param" value="de" />
+		</antcall>
+		<antcall target="properties.merge">
+			<param name="module" value="${module.dir}/config/messages_en.properties" />
+			<param name="locale_param" value="en" />
+		</antcall>
+		<antcall target="properties.merge">
+			<param name="module" value="${module.dir}/config/messages_pl.properties" />
+			<param name="locale_param" value="pl" />
+		</antcall>
+
 	</target>
 
 	<!-- =================================================================== -->
 
+	<!-- create a new template_DynamicLayoutTemplates.xsl 
+	<target name="jp.webapps.dynamicLayoutTemplates">
+		<taskdef name="templatecheck" classname="org.mycore.common.MCRDynamicLayoutTemplatesTask" classpathref="application.classpath" />
+		<templatecheck choosepath="${build.webapps}/WEB-INF/classes/xsl/template_DynamicLayoutTemplates.xsl" />
+	</target>
+    -->
+	
+	<!-- =================================================================== -->
+
 	<target name="jp.webapps.copyWebPages">
 		<!-- webpages stuff to "webapps" -->
-		<copy todir="${build.webapps}" failonerror="false" >
+		<copy todir="${build.webapps}" failonerror="false">
 			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
 		</copy>
 	</target>
@@ -153,13 +164,18 @@
 			<param name="packages" value="org/mycore/**" />
 		</antcall>
 	</target>
+	
 	<!-- =================================================================== -->
+
 	<target name="javac" depends="init">
 		<echo>Compiling ${packages}</echo>
 		<javac srcdir="${env.JPORTAL_HOME}/sources" destdir="${build.classes}" includes="${packages}" classpathref="bootstrap.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
 		</javac>
 	</target>
+	
 	<!-- =================================================================== -->
+	
+	<!--
 	<target name="init">
 		<mkdir dir="${basedir}/classes" />
 		<path id="mycore.classpath">
@@ -167,7 +183,8 @@
 			<fileset dir="${env.MYCORE_HOME}/lib" includes="*.jar" />
 		</path>
 	</target>
-
+    -->
+	
 	<!-- =================================================================== -->
 
 </project>
