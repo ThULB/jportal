@@ -4,9 +4,9 @@
 }
 
 #usersList, #groupsList {
- /* overflow: auto;*/
-  height: 244px;
-  width:150px;
+ overflow: auto;
+height: 444px;
+  width:170px;
 }
 
 #userManagement ul {
