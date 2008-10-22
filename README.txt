@@ -24,7 +24,7 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 ======================================
 - Subversion-Client
-- JAVA 6 JDK
+- JAVA 5 JDK
 - ANT
 
 3. GETTING SOURCES

@@ -32,5 +32,18 @@
             <label xml:lang="de" text="ZDB-ID" />
             <label xml:lang="en" text="ZDB-ID" />
         </category>
+        
+        <category ID="vd-17">
+            <label xml:lang="de" text="VD-17" />
+            <label xml:lang="en" text="VD-17" />
+        </category>
+        <category ID="fingerprint">
+            <label xml:lang="de" text="Fingerprint" />
+            <label xml:lang="en" text="fingerprint" />
+        </category>
+        <category ID="urn">
+            <label xml:lang="de" text="URN" />
+            <label xml:lang="en" text="URN" />
+        </category>
     </categories>
 </mycoreclass>

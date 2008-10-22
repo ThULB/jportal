@@ -317,6 +317,82 @@
                             </xsl:call-template>
                             <xsl:call-template name="emptyRow" />
                         </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                        <!--13***identifier*************************************-->
+      <xsl:if test="./metadata/def.identifier/identifier[@type='pnd']">
+        <tr>
+          <td class="metaname">
+            <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.pnd'),' :')" />
+          </td>
+          <td class="metavalue">
+            <xsl:value-of select="./metadata/def.identifier/identifier[@type='pnd']" />
+
+            <xsl:value-of select="' ('"/>
+            <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
+            </a>
+            <xsl:value-of select="', '"/>
+            <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/SET=6/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
+            </a>
+            <xsl:value-of select="', '"/>
+
+            <a class="external" href="{concat('http://dispatch.opac.ddb.de/REL?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
+            </a>
+            <xsl:value-of select="')'"/>
+          </td>
+        </tr>
+      </xsl:if>
+                        
+                        <!--14***identifier*************************************-->
+      <xsl:if test="./metadata/def.identifier/identifier[@type='ppn']">
+        <tr>
+          <td class="metaname">
+            <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.ppn'),' :')" />
+          </td>
+          <td class="metavalue">
+            <xsl:value-of select="./metadata/def.identifier/identifier[@type='ppn']" />
+            <xsl:value-of select="' ('"/>
+            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
+
+            </a>
+            <xsl:value-of select="', '"/>
+            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
+            </a>
+            <xsl:value-of select="', '"/>
+            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/REL?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+              <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
+            </a>
+
+            <xsl:value-of select="')'"/>
+          </td>
+        </tr>
+      </xsl:if>
+      <!--12***link*************************************-->
+      <xsl:if test="./metadata/def.link/link/@xlink:href">
+        <tr>
+          <td class="metaname">
+            <xsl:value-of select="concat(i18n:translate('metaData.person.link'),' :')" />
+
+          </td>
+          <td class="metavalue">
+            <xsl:for-each select="./metadata/def.link/link/@xlink:href">
+              <a href="." class="external">
+                <xsl:value-of select="." />
+              </a>
+              <xsl:if test="position() != last()">
+                <br />
+              </xsl:if>
+
+            </xsl:for-each>
+          </td>
+        </tr>
+      </xsl:if>
+                        
+                        </table>
                         <!--*** Editor Buttons ************************************* -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.redun.editObj" />

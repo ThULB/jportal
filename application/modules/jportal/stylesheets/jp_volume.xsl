@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-    xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-    xmlns:aclObjID="xalan://org.mycore.access.strategies.MCRObjectIDStrategy" xmlns:aclObjType="xalan://org.mycore.access.strategies.MCRJPortalStrategy"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:aclObjID="xalan://org.mycore.access.strategies.MCRObjectIDStrategy" xmlns:aclObjType="xalan://org.mycore.access.strategies.MCRJPortalStrategy"
     xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
     <xsl:param select="'local'" name="objectHost" />
     <!-- ===================================================================================================== -->
@@ -36,7 +35,6 @@
         <xsl:variable select="100" name="DESCRIPTION_LENGTH" />
         <xsl:variable select="@host" name="host" />
         <xsl:variable name="obj_id">
-
             <xsl:value-of select="@id" />
         </xsl:variable>
         <xsl:variable name="cXML">
@@ -94,14 +92,12 @@
     <xsl:template match="mcr:hit[contains(@id,'_jpvolume_')]" mode="toc">
         <xsl:param name="mcrobj" />
         <xsl:param name="mcrobjlink" />
-
         <xsl:variable name="cXML">
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
-
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
-                <td id="leaf-front" colspan="1" rowspan="2">
+                <td id="leaf-front" colspan="1" rowspan="3">
                     <img src="{$WebApplicationBaseURL}images/band2.gif" />
                 </td>
                 <td id="leaf-linkarea2">
@@ -110,7 +106,8 @@
                     </xsl:variable>
                     <xsl:variable name="date">
                         <xsl:choose>
-                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] and xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] != $name">
+                            <xsl:when
+                                test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] and xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0'] != $name">
                                 <xsl:variable name="date">
                                     <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date/text()" />
                                 </xsl:variable>
@@ -170,9 +167,58 @@
                             </i>
                         </span>
                     </xsl:if>
-
+                    <!-- abstract, if exist  -->
+                    <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/abstracts/abstract/text()">
+                        <xsl:choose>
+                            <xsl:when test="xalan:nodeset($cXML)/mycoreobject/metadata/subtitles/subtitle">
+                                <span style="font-size:90%;">
+                                    <i>
+                                        <xsl:value-of select="concat(i18n:translate('editormask.labels.abstract'),': ')" />
+                                    </i>
+                                    <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/abstracts/abstract/text()" />
+                                </span>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <span style="font-size:90%;">
+                                    <i>
+                                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/abstracts/abstract/text()" />
+                                    </i>
+                                </span>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
                 </td>
             </tr>
+            
+            <!-- keywords, if exist  -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1">
+                <tr>
+                    <td id="leaf-additional">
+                        <xsl:call-template name="lineSpace" />
+                        <i>
+                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text(),': ')" />
+                        </i>
+                        <xsl:call-template name="printClass">
+                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1" />
+                            <xsl:with-param name="host" select="'local'" />
+                            <xsl:with-param name="next" select="', '" />
+                        </xsl:call-template>
+                        <xsl:call-template name="lineSpace" />
+                    </td>
+                </tr>
+            </xsl:if>
+            <!-- note, if exist  -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()">
+                <tr>
+                    <td id="leaf-additional">
+                        <i>
+                            <xsl:value-of select="concat(i18n:translate('editormask.labels.note'),': ')" />
+                        </i>
+                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()" />
+                        <xsl:call-template name="lineSpace" />
+                    </td>
+                </tr>
+            </xsl:if>
             <xsl:call-template name="printDerivates">
                 <xsl:with-param name="obj_id" select="@id" />
                 <xsl:with-param name="knoten" select="$cXML" />
@@ -196,7 +242,6 @@
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
-
                 <xsl:value-of select="@label" />
             </xsl:otherwise>
         </xsl:choose>
@@ -209,7 +254,6 @@
                 replace "your-tags/here" by something of your metadata
             -->
             <xsl:when test="./metadata/your-tags">
-
                 <xsl:call-template name="printI18N">
                     <xsl:with-param select="./metadata/your-tags/here" name="nodes" />
                 </xsl:call-template>
@@ -226,12 +270,10 @@
         <xsl:param select="$objectHost" name="obj_host" />
         <xsl:param name="accessedit" />
         <xsl:param name="accessdelete" />
-
         <xsl:variable name="objectBaseURL">
             <xsl:if test="$objectHost != 'local'">
                 <xsl:value-of select="document('webapp:hosts.xml')/mcr:hosts/mcr:host[@alias=$objectHost]/mcr:url[@type='object']/@href" />
             </xsl:if>
-
             <xsl:if test="$objectHost = 'local'">
                 <xsl:value-of select="concat($WebApplicationBaseURL,'receive/')" />
             </xsl:if>
@@ -303,58 +345,37 @@
                             </xsl:call-template>
                         </table>
                         <!--4***date*************************************-->
-                        <xsl:choose>
-                            <xsl:when test="./metadata/dates/date[@type='published']">
-                                <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                    <xsl:call-template name="printMetaDates">
-                                        <xsl:with-param select="./metadata/dates/date[@type='published' and @inherited='0']" name="nodes" />
-                                        <xsl:with-param select="i18n:translate('editormask.labels.date_label')" name="label" />
-                                    </xsl:call-template>
-                                </table>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                    <xsl:call-template name="printMetaDates">
-                                        <xsl:with-param select="./metadata/dates/date[@type='published_from' and @inherited='0']" name="nodes" />
-                                        <xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_from')" name="label" />
-                                    </xsl:call-template>
-                                </table>
-                                <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                    <xsl:call-template name="printMetaDates">
-                                        <xsl:with-param select="./metadata/dates/date[@type='published_until' and @inherited='0']" name="nodes" />
-                                        <xsl:with-param select="i18n:translate('metaData.jpjournal.date.published_until')" name="label" />
-                                    </xsl:call-template>
-                                </table>
-                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                                    <tr>
-                                        <td colspan="2" id="detailed-innerdivlines">
-                                            <br />
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                    <tr>
-                                        <td id="detailed-headlines">
-                                            <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
-                                        </td>
-                                        <td>
-                                            <br />
-                                        </td>
-                                    </tr>
-                                </table>
-                            </xsl:otherwise>
-                        </xsl:choose>
-
-                        <xsl:if test="./metadata/notes/note">
-                            <!--5***note*************************************-->
-                            <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                <xsl:call-template name="printMetaDates">
-                                    <xsl:with-param select="'true'" name="volume-node" />
-                                    <xsl:with-param select="./metadata/notes/note" name="nodes" />
-                                    <xsl:with-param select="i18n:translate('editormask.labels.note')" name="label" />
-                                </xsl:call-template>
-                            </table>
-                        </xsl:if>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:variable name="nodes" select="./metadata/dates/date[@inherited='0']" />
+                            <xsl:if test="$nodes">
+                                <tr>
+                                    <td valign="top" id="detailed-labels">
+                                        <xsl:value-of select="i18n:translate('editormask.labels.date_label')" />
+                                    </td>
+                                    <td>
+                                        <xsl:attribute name="class">
+                                            <xsl:value-of select="'metavalue'" />
+                                        </xsl:attribute>
+                                        <xsl:choose>
+                                            <xsl:when test="$nodes[@type='published_from']">
+                                                <xsl:value-of select="concat($nodes[@type='published_from'],' - ',$nodes[@type='published_until'])" />
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:value-of select="$nodes[@type='published']" />
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </td>
+                                </tr>
+                            </xsl:if>
+                        </table>
+                        <!--5*** collation note *************************************-->
+                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDates">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/collationNotes/collationNote" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.collation_note')" name="label" />
+                            </xsl:call-template>
+                        </table>
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
@@ -362,48 +383,75 @@
                                 </td>
                             </tr>
                         </table>
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-headlines">
-                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
-                                </td>
-                                <td>
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                        <!--*** Created ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** Last Modified ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** MyCoRe-ID ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-labels" style="text-align:right; padding-right: 5px;">
-                                    <xsl:value-of select="concat(i18n:translate('metaData.ID'),':')" />
-                                </td>
-                                <td class="metavalue">
-                                    <xsl:value-of select="./@ID" />
-                                </td>
-                            </tr>
-                        </table>
+                        <!-- Content Description ################################################### -->
+                        <xsl:variable name="hasContentDescription" select="./metadata/volContentClassis1/volContentClassi1 | ./metadata/notes/note | ./metadata/abstracts/abstract" />
+                        <xsl:if test="$hasContentDescription">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <tr>
+                                    <td id="detailed-headlines">
+                                        <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
+                                    </td>
+                                    <td>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--12***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis2/volContentClassi2">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis2/volContentClassi2" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--12***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis1/volContentClassi1">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis1/volContentClassi1" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--5*** note *************************************-->
+                            <xsl:if test="./metadata/notes/note">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/notes/note" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.note')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--6*** abstract *************************************-->
+                            <xsl:if test="./metadata/abstracts/abstract">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/abstracts/abstract" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.abstract')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                        </xsl:if>
+                        <!-- System data ##################################### -->
+                        <xsl:call-template name="get.systemData"/>
+                        
                         <!-- Static URL ************************************************** -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">
                                 <xsl:with-param name="stURL" select="$staticURL" />
                             </xsl:call-template>
                             <xsl:call-template name="emptyRow" />
                         </table>
+                        
                         <!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                         <table cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="showAdminHead" />
@@ -423,8 +471,7 @@
                             <xsl:variable name="journalID">
                                 <xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
                             </xsl:variable>
-                            <xsl:if
-                                test="aclObjType:checkPermissionOfType('jportal_jparticle_xxxxxxxx','writedb') and aclObjID:checkPermission($journalID,'writedb')">
+                            <xsl:if test="aclObjType:checkPermissionOfType('jportal_jparticle_xxxxxxxx','writedb') and aclObjID:checkPermission($journalID,'writedb')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jparticle'" />
@@ -438,14 +485,12 @@
     </xsl:template>
 
     <!-- =================================================================================================================================== -->
-
     <xsl:template name="addChild2">
         <xsl:param name="id" />
         <xsl:param name="layout" />
         <xsl:param name="types" />
         <xsl:param select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)" name="xmltempl" />
         <xsl:variable name="suffix">
-
             <xsl:if test="string-length($layout)&gt;0">
                 <xsl:value-of select="concat('&amp;layout=',$layout)" />
             </xsl:if>
@@ -465,7 +510,6 @@
                 <ul>
                     <xsl:for-each select="xalan:nodeset($typeToken)/token">
                         <xsl:variable select="." name="type" />
-
                         <li>
                             <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
                                 <xsl:value-of select="i18n:translate(concat('metaData.',$type,'.[singular]'))" />
@@ -480,7 +524,6 @@
     </xsl:template>
 
     <!-- =================================================================================================================================== -->
-
     <xsl:template name="Derobjects2">
         <xsl:param name="obj_host" />
         <xsl:param name="staticURL" />
@@ -488,7 +531,6 @@
         <xsl:param name="xmltempl" />
         <xsl:variable select="substring-before(substring-after(./@ID,'_'),'_')" name="type" />
         <xsl:variable name="suffix">
-
             <xsl:if test="string-length($layout)&gt;0">
                 <xsl:value-of select="concat('&amp;layout=',$layout)" />
             </xsl:if>
@@ -498,7 +540,6 @@
                 <td style="vertical-align:top;" class="metaname">
                     <xsl:value-of select="i18n:translate('metaData.jpvolume.[derivates]')" />
                 </td>
-
                 <td class="metavalue">
                     <xsl:if test="$objectHost != 'local'">
                         <a href="{$staticURL}">
@@ -509,7 +550,6 @@
                         <xsl:for-each select="./structure/derobjects/derobject">
                             <table cellpadding="0" cellspacing="0" border="0" width="100%">
                                 <tr>
-
                                     <td valign="top" align="left">
                                         <div class="derivateBox">
                                             <xsl:variable select="@xlink:href" name="deriv" />
@@ -519,7 +559,6 @@
                                             <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals" />
                                         </div>
                                     </td>
-
                                     <xsl:if test="acl:checkPermission(./@ID,'writedb')">
                                         <td align="right" valign="top">
                                             <a
@@ -537,11 +576,9 @@
                         </xsl:for-each>
                     </xsl:if>
                 </td>
-
             </tr>
         </xsl:if>
     </xsl:template>
 
     <!-- ===================================================================================================== -->
-
 </xsl:stylesheet>

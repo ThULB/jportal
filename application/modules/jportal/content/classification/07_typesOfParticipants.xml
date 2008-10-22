@@ -136,5 +136,22 @@
             <label text="Vermutete erwähnte Person" xml:lang="de" />
             <label text="Assumed mentioned person" xml:lang="en" />
         </category>
+       
+        <category ID="publisherPrinter">
+            <label text="Verleger / Drucker" xml:lang="de" />
+            <label text="Publisher / printer" xml:lang="en" />
+        </category>
+        <category ID="publishingPlace">
+            <label text="Verlagsort / Druckort" xml:lang="de" />
+            <label text="Publishing place / place of printing" xml:lang="en" />
+        </category>
+        <category ID="authorOnTiltePage">
+            <label text="Verfasser laut Titelblatt" xml:lang="de" />
+            <label text="Author on tilte page" xml:lang="en" />
+        </category>
+        <category ID="receiverOfDevotement">
+            <label text="Widmungsempfänger" xml:lang="de" />
+            <label text="Receiver of devotement" xml:lang="en" />
+        </category>
     </categories>
 </mycoreclass>

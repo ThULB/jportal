@@ -220,14 +220,8 @@
 
                 <xsl:value-of select="i18n:translate('metaData.staticURL')" />
             </td>
-            <td>
-                <br />
-            </td>
-        </tr>
-        <tr>
             <td colspan="2" id="detailed-staticurl2">
                 <a>
-
                     <xsl:attribute name="href">
                         
                         <xsl:copy-of select="$stURL" />
@@ -237,9 +231,8 @@
                     <xsl:copy-of select="$stURL" />
                 </a>
             </td>
-        </tr>
-
-    </xsl:template>
+            </tr>
+        </xsl:template>
 
     <!-- ============================================================================================================================ -->
     <xsl:template name="emptyRow">
@@ -1451,25 +1444,6 @@
         <xsl:param name="nodes" />
         <xsl:param name="label" select="local-name($nodes[1])" />
         <xsl:if test="$nodes">
-            <xsl:if test="$volume-node='true'">
-                <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                    <tr>
-                        <td colspan="2" id="detailed-innerdivlines">
-                            <br />
-                        </td>
-                    </tr>
-                </table>
-                <table cellspacing="0" cellpadding="0" id="detailed-view">
-                    <tr>
-                        <td id="detailed-headlines">
-                            <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
-                        </td>
-                        <td>
-                            <br />
-                        </td>
-                    </tr>
-                </table>
-            </xsl:if>
             <tr>
                 <td valign="top" id="detailed-labels">
                     <xsl:value-of select="$label" />
@@ -1578,11 +1552,10 @@
                         <!-- in mcrobject have been current categID found-->
                         <xsl:if test="$nodes[@type=$categID] | $nodes[@xlink:title=$categID]">
                             <!-- label of category -->
-                            <i>
-                                <xsl:value-of
-                                    select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
-                                :
-                            </i>
+                                <i>
+                                    <xsl:value-of select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+                                    :
+                                </i>
                             <xsl:choose>
                                 <xsl:when test="$layout='structure'">
                                     <br />
@@ -1603,13 +1576,15 @@
                                         <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
                                             <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
                                         </xsl:call-template>
-                                        <xsl:if test="position()!=last()">
-                                            <xsl:text>; </xsl:text>
-                                        </xsl:if>
                                     </xsl:for-each>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="$layout='flat' and position()!=1 and position()!=last()">
+                                <xsl:text>; </xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
                     </xsl:for-each>
                     <xsl:if test="$layout='flat'">
                         <br />
@@ -2002,5 +1977,54 @@
     </xsl:template>
 
     <!-- ===================================================================================================== -->
+    
+    <xsl:template name="get.systemData">
+    <xsl:if test="$CurrentUser!='gast'">
+        <!--*** Created ************************************* -->
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                            <tr>
+                                <td colspan="2" id="detailed-innerdivlines">
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <tr>
+                                <td id="detailed-headlines">
+                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
+                                </td>
+                                <td>
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>                    
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+            <xsl:call-template name="printMetaDates">
+                <xsl:with-param select="'right'" name="textalign" />
+                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
+                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
+            </xsl:call-template>
+        </table>
+                            <!--*** Last Modified ************************************* -->
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+            <xsl:call-template name="printMetaDates">
+                <xsl:with-param select="'right'" name="textalign" />
+                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
+                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
+            </xsl:call-template>
+        </table>
+                            <!--*** MyCoRe-ID ************************************* -->
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+            <tr>
+                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
+                    <xsl:value-of select="i18n:translate('metaData.ID')" />
+                </td>
+                <td class="metavalue">
+                    <xsl:value-of select="./@ID" />
+                </td>
+            </tr>
+        </table>
+    </xsl:if>
+</xsl:template>
 
 </xsl:stylesheet>

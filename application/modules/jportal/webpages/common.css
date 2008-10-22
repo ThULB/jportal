@@ -282,6 +282,7 @@
 
 #detailed-staticurl2 {
     text-align:center;
+    padding-left: 15px;
 }
 
 #detailed-linkedart {
@@ -390,6 +391,11 @@ td.editorCellWithCompLinesOff{
     padding: 3px;
     font-size: 13px;
     color: #000000;
+}
+
+.editorMandatory{
+	font-weight: bold;
+	color: #990000;
 }
 
 .editorHeadlines{

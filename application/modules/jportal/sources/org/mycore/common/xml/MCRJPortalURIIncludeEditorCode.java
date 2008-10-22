@@ -43,20 +43,21 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
     /**
      * 
      * Syntax:
+     * <code>jportal_includeEditorCode:jparticle:XPathWhereToFindClassIDInJournalXML:FileContainingEditorCode:IdOfPieceOfCode:cacheAble
+     *  OR
      * <code>jportal_includeEditorCode:jparticle:XPathWhereToFindClassIDInJournalXML:FileContainingEditorCode:IdOfPieceOfCode
      *  OR
      * <code>jportal_includeEditorCode:jpjournal:FileContainingEditorCode:IdOfPieceOfCode
      * 
+     *  The cacheAble attribute is optional, default is true
      *  FileContainingEditorCode: Relativ to $ServletContextPath of Webapplication
      *  IdOfPieceOfCode: <includeMyChildren id="include_rubric"> => $IdOfPieceOfCode="include_rubric"
      * 
-     * @return 
-     * <includeMyChildren id="$IdOfPieceOfCode">
-     *       <codeContainedWithin-includeMyChildren />
-     * </includeMyChildren>
-     * @throws IOException 
-     * @throws JDOMException 
-     *
+     * @return <includeMyChildren id="$IdOfPieceOfCode">
+     *         <codeContainedWithin-includeMyChildren /> </includeMyChildren>
+     * @throws IOException
+     * @throws JDOMException
+     * 
      */
 
     public Element resolveElement(String uri) throws IOException, JDOMException {
@@ -77,15 +78,18 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
     }
 
     /**
-     * <code>jportal_includeEditorCode:jpjournal:FileContainingEditorCode:IdOfPieceOfCode
+     * <code>jportal_includeEditorCode:jpjournal:FileContainingEditorCode:
+     * IdOfPieceOfCode
      * 
-     * document = FileContainingEditorCode->IdOfPieceOfCode can contain and will be replaced before delivery 
-     *   - #REPLACE_WITH_RUNNING_NUMBER# replacedBy-> an increasing number starting with 1 
-     *     dependent on how much classifications are in the list of property
-     *   - #REPLACE_WITH_CLASSIFICATION-ID# replacedBy-> classification id
-     * @throws IOException 
-     * @throws JDOMException 
-     *
+     * document = FileContainingEditorCode->IdOfPieceOfCode can contain and will
+     * be replaced before delivery - #REPLACE_WITH_RUNNING_NUMBER# replacedBy->
+     * an increasing number starting with 1 dependent on how much
+     * classifications are in the list of property -
+     * #REPLACE_WITH_CLASSIFICATION-ID# replacedBy-> classification id
+     * 
+     * @throws IOException
+     * @throws JDOMException
+     * 
      */
     private Element resolve4JPJournal(String uri, String[] pars) throws IOException, JDOMException {
         String fileContainingEditorCode = pars[2];
@@ -153,6 +157,11 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         String fileContainingEditorCode = pars[3];
         String idOfPieceOfCode = pars[4];
 
+        boolean cacheAble = true;
+
+        if (pars.length == 6)
+            cacheAble = Boolean.parseBoolean(pars[5]);
+
         // get journal ID
         String journalID = MCRJPortalURIGetJournalID.getID();
         if (journalID.equals("")) {
@@ -162,9 +171,11 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
 
         // try to get code to be included from cache
         String cacheKey = getCacheKey(journalID, uri);
-        if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
-            LOGGER.debug("Editor code for journal=" + journalID + " and URI=" + uri + " has been found in cache. So, just return it.");
-            return ((Element) CACHE.get(cacheKey));
+        if (cacheAble) {
+            if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
+                LOGGER.debug("Editor code for journal=" + journalID + " and URI=" + uri + " has been found in cache. So, just return it.");
+                return ((Element) CACHE.get(cacheKey));
+            }
         }
 
         // get class id
@@ -238,35 +249,39 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         return (new Element("root"));
     }
 
+    /*
+     * private boolean wellURI(String uri) { String[] pars = uri.split(":"); int
+     * numOfArgs = pars.length; // number of given arguments correct ? if
+     * (numOfArgs < 4 || numOfArgs > 5) return false; // right uri if
+     * (!pars[0].equals(URI)) return false; // verify jpjournal uri if
+     * (numOfArgs == 4) { // params are not empty ? if (pars[0].equals("") ||
+     * pars[1].equals("") || pars[2].equals("") || pars[3].equals("")) return
+     * false; // not called jpvolume resolver ? if
+     * (!pars[1].equals(this.JPJOURNAL)) return false; } // verify jparticle uri
+     * if (numOfArgs == 5) { // params are not empty ? if (pars[0].equals("") ||
+     * pars[1].equals("") || pars[2].equals("") || pars[3].equals("") ||
+     * pars[4].equals("")) return false; // not called jparticle resolver ? if
+     * (!pars[1].equals(this.JPARTICLE)) return false; } // uri is well
+     * LOGGER.debug("URI is ok"); return true; }
+     */
+
     private boolean wellURI(String uri) {
         String[] pars = uri.split(":");
         int numOfArgs = pars.length;
+
         // number of given arguments correct ?
-        if (numOfArgs < 4 || numOfArgs > 5)
+        if (!(numOfArgs >= 4) && !(numOfArgs <= 6))
             return false;
         // right uri
         if (!pars[0].equals(URI))
             return false;
-        // verify jpjournal uri
-        if (numOfArgs == 4) {
-            // params are not empty ?
-            if (pars[0].equals("") || pars[1].equals("") || pars[2].equals("") || pars[3].equals(""))
-                return false;
-            // not called jpvolume resolver ?
-            if (!pars[1].equals(this.JPJOURNAL))
+
+        // there should be no empty String or blanks between two ":"
+        for (int i = 0; i < numOfArgs; i++) {
+            if (pars[i].trim().equals(""))
                 return false;
         }
-        // verify jparticle uri
-        if (numOfArgs == 5) {
-            // params are not empty ?
-            if (pars[0].equals("") || pars[1].equals("") || pars[2].equals("") || pars[3].equals("") || pars[4].equals(""))
-                return false;
-            // not called jparticle resolver ?
-            if (!pars[1].equals(this.JPARTICLE))
-                return false;
-        }
-        // uri is well
-        LOGGER.debug("URI is ok");
+
         return true;
     }
 
