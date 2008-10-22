@@ -34,7 +34,7 @@
         <element name="def.affiliation" minOccurs='0' maxOccurs='1'>
             <mcrmetalinkid name="affiliation" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
         </element>
-        >
+        
         <!-- 07 - Geburtsdatum -->
         <element name="def.dateOfBirth" minOccurs='0' maxOccurs='1'>
             <mcrmetaiso8601date name="dateOfBirth" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='1' />
@@ -54,6 +54,15 @@
         <!-- 11 - Bemerkungen -->
         <element name="def.note" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024" />
+        </element>
+        <element name="def.link" minOccurs='0' maxOccurs='1'>
+            <mcrmetalink name="link" class="MCRMetaLink" type="href" style="small" minOccurs="1" maxOccurs="unbounded" />
+        </element>
+        <element name="def.identifier" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="identifier" class="MCRMetaLangText" type="text" style="big" minOccurs="1" maxOccurs="unbounded">
+                <type name="pnd" />
+                <type name="ppn" />
+            </mcrmetalangtext>
         </element>
     </metadata>
     <service>

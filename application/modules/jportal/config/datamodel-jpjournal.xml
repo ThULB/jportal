@@ -33,6 +33,18 @@
         <element name="dates" minOccurs='0' maxOccurs='1'>
             <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2' />
         </element>
+        
+        <!-- ######################## Calendar ################################### -->
+        <!-- tradition / calendar extension -->
+        <element name="traditions" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="tradition" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <!-- 05 - format / calendar extension -->
+        <element name="formats" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="format" class="MCRMetaClassification" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- ##################################################################### -->
+        
         <!-- type = short | long | toc -->
         <element name="abstracts" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
@@ -141,6 +153,25 @@
         <!-- optional value for websitecontext -->
         <element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- dynamically includes for volumes -->
+        <element name="hidden_classiVol1" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol1" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol2" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol3" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol4" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol4" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol5" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol5" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol6" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol6" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>
         <!-- ================================================================================================= -->
     </metadata>

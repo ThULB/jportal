@@ -25,6 +25,9 @@
     <list id="note_type" width="120" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000060" />
     </list>
+    <list id="tradition_type" width="120" type="dropdown">
+        <include uri="classification:editor:-1:children:jportal_class_00000080" />
+    </list>
     <panel id="righstManag_access_input">
         <hidden var="service/servflags/servflag/@inherited" default="0" />
         <hidden var="service/servflags/servflag" default="Access:public" />

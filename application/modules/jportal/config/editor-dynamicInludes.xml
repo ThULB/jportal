@@ -163,6 +163,36 @@
         <cell row="156" col="1" anchor="NORTHWEST" ref="classipub4_label" />
         <cell row="156" col="2" anchor="NORTHWEST" ref="classipub4_input" />
     </includeMyChildren>
+    <!-- volume 1 -->
+    <includeMyChildren id="include_volContent1-classi_code_head">
+        <cell row="170" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
+        <cell row="170" col="2" anchor="NORTHWEST" ref="volContentClassi1_input" />
+    </includeMyChildren>
+    <!-- volume 2 -->
+    <includeMyChildren id="include_volContent2-classi_code_head">
+        <cell row="171" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
+        <cell row="171" col="2" anchor="NORTHWEST" ref="volContentClassi2_input" />
+    </includeMyChildren>
+    <!-- volume 3 -->
+    <includeMyChildren id="include_volContent3-classi_code_head">
+        <cell row="172" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
+        <cell row="172" col="2" anchor="NORTHWEST" ref="volContentClassi3_input" />
+    </includeMyChildren>
+    <!-- volume 4 -->
+    <includeMyChildren id="include_volContent4-classi_code_head">
+        <cell row="173" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
+        <cell row="173" col="2" anchor="NORTHWEST" ref="volContentClassi4_input" />
+    </includeMyChildren>
+    <!-- volume 5 -->
+    <includeMyChildren id="include_volContent5-classi_code_head">
+        <cell row="174" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
+        <cell row="174" col="2" anchor="NORTHWEST" ref="volContentClassi5_input" />
+    </includeMyChildren>
+    <!-- volume 6 -->
+    <includeMyChildren id="include_volContent6-classi_code_head">
+        <cell row="175" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
+        <cell row="175" col="2" anchor="NORTHWEST" ref="volContentClassi6_input" />
+    </includeMyChildren>
     <!-- ################################################################################################# -->
     <!-- panels to be called by head cells -->
     <includeMyChildren id="include_pubType-editable_code">
@@ -280,6 +310,132 @@
                 <label xml:lang="de"></label>
             </item>
             <include cacheable="false" uri="jportal_getClass:hidden_classispub4/hidden_classipub4" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 1 ================================================================== -->
+    <includeMyChildren id="include_volContent1-classi_code">
+        <panel id="volContentClassi1_input">
+            <hidden var="metadata/volContentClassis1/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis1/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis1/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis1/volContentClassi1">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi1_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi1_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol1/hidden_classiVol1:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol1" var="@categid" />
+        </panel>
+        <list id="CclassiVol1" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol1/hidden_classiVol1" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 2 ================================================================== -->
+    <includeMyChildren id="include_volContent2-classi_code">
+        <panel id="volContentClassi2_input">
+            <hidden var="metadata/volContentClassis2/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis2/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis2/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis2/volContentClassi2">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi2_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi2_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol2/hidden_classiVol2:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol2" var="@categid" />
+        </panel>
+        <list id="CclassiVol2" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol2/hidden_classiVol2" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 3 ================================================================== -->
+    <includeMyChildren id="include_volContent3-classi_code">
+        <panel id="volContentClassi3_input">
+            <hidden var="metadata/volContentClassis3/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis3/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis3/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis3/volContentClassi3">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi3_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi3_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol3/hidden_classiVol3:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol3" var="@categid" />
+        </panel>
+        <list id="CclassiVol2" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol3/hidden_classiVol3" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 4 ================================================================== -->
+    <includeMyChildren id="include_volContent4-classi_code">
+        <panel id="volContentClassi4_input">
+            <hidden var="metadata/volContentClassis4/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis4/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis4/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis4/volContentClassi4">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi4_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi4_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol4/hidden_classiVol4:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol4" var="@categid" />
+        </panel>
+        <list id="CclassiVol4" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol4/hidden_classiVol4" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 5 ================================================================== -->
+    <includeMyChildren id="include_volContent5-classi_code">
+        <panel id="volContentClassi5_input">
+            <hidden var="metadata/volContentClassis5/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis5/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis5/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis5/volContentClassi5">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi5_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi5_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol5/hidden_classiVol5:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol5" var="@categid" />
+        </panel>
+        <list id="CclassiVol5" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol5/hidden_classiVol5" />
+        </list>
+    </includeMyChildren>
+    <!-- volume classi 6 ================================================================== -->
+    <includeMyChildren id="include_volContent6-classi_code">
+        <panel id="volContentClassi6_input">
+            <hidden var="metadata/volContentClassis6/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/volContentClassis6/@notinherit" default="false" />
+            <hidden var="metadata/volContentClassis6/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis6/volContentClassi6">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi6_input_repeater" />
+            </cell>
+        </panel>
+        <panel id="volContentClassi6_input_repeater">
+            <include cacheable="false" uri="jportal_getClassID:hidden_classiVol6/hidden_classiVol6:@classid" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol6" var="@categid" />
+        </panel>
+        <list id="CclassiVol6" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include cacheable="false" uri="jportal_getClass:hidden_classiVol6/hidden_classiVol6" />
         </list>
     </includeMyChildren>
 </root>

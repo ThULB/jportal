@@ -6,7 +6,7 @@
     <hidden var="@label"/>
     <cell col="1" row="1" var="metadata">
       <panel>
-        <cell col="1" row="10" anchor="NORTHWEST" ref="Lheading"/>
+        <cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="Lheading"/>
         <cell col="2" row="10" anchor="NORTHWEST" ref="Dheading" var="def.heading"/>
         <cell col="3" row="10" anchor="WEST" ref="Hheading"/>
 
@@ -53,13 +53,22 @@
         <cell col="1" row="110" anchor="NORTHWEST" ref="Lnote"/>
         <cell col="2" row="110" anchor="NORTHWEST" ref="Dnote" var="def.note"/>
         <cell col="3" row="110" anchor="WEST" ref="Hnote"/>
+        
+        <cell col="1" row="121" anchor="NORTHWEST" ref="Llink" />
+        <cell col="2" row="121" anchor="NORTHWEST" ref="Dlink" var="def.link" />
+        <cell col="3" row="121" anchor="WEST" ref="Hlink" />
+        
+        <cell col="1" row="122" anchor="NORTHWEST" ref="Lidentifier" />
+        <cell col="2" row="122" anchor="NORTHWEST" ref="Didentifier" var="def.identifier" />
+        <cell col="3" row="122" anchor="WEST" ref="Hidentifier" />
+        
 
-        <cell col="1" row="115" anchor="NORTHWEST" >
+        <cell col="1" row="130" anchor="NORTHWEST" >
 		  <text i18n="jportal.editor.required"/>					
 		</cell>
 		  
-        <cell col="1" colspan="2" row="120" anchor="EAST" ref="TwoButtons"/>
-        <cell col="2" row="120"/>
+        <cell col="1" colspan="2" row="140" anchor="EAST" ref="TwoButtons"/>
+        <cell col="2" row="140"/>
       </panel>
     </cell>
   </panel>
@@ -233,4 +242,66 @@
   </panel>
   <text id="LplaceOfDeath" i18n="editormask.person.LplaceOfDeath"/>
   <helpPopup id="HplaceOfDeath" width="400" height="250" i18n="editormask.person.HplaceOfDeath"/>
+  
+    <!-- *** Links ** -->
+  <panel id="Dlink">
+    <cell col="1" row="1" anchor="NORTHWEST" var="link">
+      <repeater min="0" max="10" anchor="NORTHWEST">
+        <panel>
+
+          <hidden var="@inherited" default="0" />
+          <hidden var="@xtype" default="locator" />
+          <cell anchor="WEST" ref="TFzeile128" var="@href" />
+        </panel>
+      </repeater>
+    </cell>
+    <hidden var="@class" default="MCRMetaLink" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+
+  </panel>
+  <text id="Llink">
+    <label xml:lang="de">
+      <xhtml:span class="editorlabel">&#160;Links &#160;</xhtml:span>
+    </label>
+  </text>
+  <helpPopup id="Hlink" width="400" height="250">
+    <label xml:lang="de">Geben sie Links zu externen Webseiten an, die sich dieser Person widmen.</label>
+
+  </helpPopup>
+
+  <!-- *** Identifier ** -->
+  <panel id="Didentifier">
+    <cell col="1" row="1" anchor="NORTHWEST" var="identifier">
+      <repeater min="0" max="10" anchor="NORTHWEST">
+        <panel>
+          <hidden var="@inherited" default="0" />
+          <cell anchor="WEST" col="1" var="@type">
+
+            <list type="dropdown">
+              <item value="pnd" i18n="metaData.person.pnd" />
+              <item value="ppn" i18n="metaData.person.ppn" />
+            </list>
+          </cell>
+          <cell anchor="WEST" col="2">
+            <textfield width="35" maxlength="128" />
+          </cell>
+        </panel>
+
+      </repeater>
+    </cell>
+    <hidden var="@class" default="MCRMetaLangText" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+  </panel>
+  <text id="Lidentifier">
+    <label xml:lang="de">
+      <xhtml:span class="editorlabel">&#160;externe Kennung &#160;</xhtml:span>
+
+    </label>
+  </text>
+  <helpPopup id="Hidentifier" width="400" height="250">
+    <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben sie die dort verwendete ID an.</label>
+  </helpPopup>
+  
 </components>

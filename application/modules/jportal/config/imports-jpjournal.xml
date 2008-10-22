@@ -12,7 +12,7 @@
         <hidden var="service/servflags" descendants="true" />
         <!-- required fields ......................................... -->
         <!-- maintitle -->
-        <cell row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
+        <cell class="editorMandatory" row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
         <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
         <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
         <!-- maintitle for sorting -->
@@ -23,11 +23,22 @@
         <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
         <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
         <!-- partic -->
-        <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label_bold" />
+        <cell class="editorMandatory" row="30" col="1" anchor="NORTHWEST" ref="participants_label_bold" />
         <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
         <!-- date -->
         <cell row="75" col="1" anchor="NORTHWEST" ref="date_label" />
         <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
+        <cell row="75" col="3" anchor="WEST" ref="date_help" />
+        
+        <!-- ############################ calendar extension #################### -->
+        <!-- tradition -->
+        <cell row="80" col="1" anchor="NORTHWEST" ref="tradition_label" />
+        <cell row="80" col="2" anchor="NORTHWEST" ref="tradition_input" />
+        
+        <!-- format -->
+        <cell row="81" col="1" anchor="NORTHWEST" ref="format_label" />
+        <cell row="81" col="2" anchor="NORTHWEST" ref="format_input" />
+        
         <!-- abstract -->
         <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />
         <cell row="100" col="2" anchor="NORTHWEST" ref="abstract_input" />
@@ -37,7 +48,7 @@
         <cell row="130" col="2" anchor="NORTHWEST" ref="identi_input" />
         <cell row="130" col="3" anchor="WEST" ref="identi_help" />
         <!-- lang -->
-        <cell row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
+        <cell class="editorMandatory" row="140" col="1" anchor="NORTHWEST" ref="cont_lang_label_bold" />
         <cell row="140" col="2" anchor="NORTHWEST" ref="cont_lang_input" />
         <cell row="140" col="3" anchor="NORTHWEST" ref="cont_lang_help" />
         <!-- right -->
@@ -100,6 +111,24 @@
 
         <cell row="410" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
         <cell row="410" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
+        
+        <cell row="420" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
+        <cell row="420" col="2" anchor="NORTHWEST" ref="classiVol1_input" />
+        
+        <cell row="430" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
+        <cell row="430" col="2" anchor="NORTHWEST" ref="classiVol2_input" />
+        
+        <cell row="440" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
+        <cell row="440" col="2" anchor="NORTHWEST" ref="classiVol3_input" />
+        
+        <cell row="450" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
+        <cell row="450" col="2" anchor="NORTHWEST" ref="classiVol4_input" />
+        
+        <cell row="460" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
+        <cell row="460" col="2" anchor="NORTHWEST" ref="classiVol5_input" />
+        
+        <cell row="470" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
+        <cell row="470" col="2" anchor="NORTHWEST" ref="classiVol6_input" />
 
 
         <!-- ================================================================================================= -->
@@ -165,6 +194,39 @@
         <cell col="1" row="2" anchor="NORTHWEST" ref="date_howToUse" />
     </panel>
     <!-- end: date -->
+    
+    <!-- ########################## calendar extension ######################### -->
+    <!-- traditions ================================================================== -->
+    <panel id="tradition_input">
+        <hidden var="metadata/traditions/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/traditions/@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/traditions/tradition" ordernr="1">
+            <repeater min="0" max="20" anchor="NORTHWEST" ref="traditions_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="traditions_input_repeater">
+        <cell col="1" row="1" anchor="NORTHWEST" ref="tradition_type" var="@type" ordernr="1" />
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="" ordernr="1" />
+    </panel>
+    <!-- end: traditions -->
+    
+     <!-- format ================================================================== -->
+    <panel id="format_input">
+        <hidden var="metadata/formats/@class" default="MCRMetaClassification" />
+        <hidden var="metadata/formats/@notinherit" default="false" />
+        <hidden var="metadata/formats/@heritable" default="false" />
+        <hidden var="metadata/formats/format/@inherited" default="0" />
+        <hidden var="metadata/formats/format/@classid" default="jportal_class_00000081" />
+        <cell col="1" row="1" anchor=" NORTHWEST" ref="CFormat" var="metadata/formats/format/@categid" />
+    </panel>
+    <list id="CFormat" width="300" type="dropdown">
+        <item value="">
+            <label xml:lang="de"></label>
+        </item>
+        <include uri="classification:editor:-1:children:jportal_class_00000081" />
+    </list>
+    <!-- end: format ================================================================== -->
+    
     <!-- identi ================================================================== -->
     <panel id="identi_input">
         <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
@@ -336,13 +398,49 @@
         <hidden var="metadata/hidden_classispub4/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classispub4/hidden_classipub4" ref="classiIDs"></cell>
     </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol1_input">
+        <hidden var="metadata/hidden_classiVol1/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol1/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol1/hidden_classiVol1" ref="classiIDs"/>
+    </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol2_input">
+        <hidden var="metadata/hidden_classiVol2/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol2/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol2/hidden_classiVol2" ref="classiIDs"/>
+    </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol3_input">
+        <hidden var="metadata/hidden_classiVol3/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol3/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol3/hidden_classiVol3" ref="classiIDs"/>
+    </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol4_input">
+        <hidden var="metadata/hidden_classiVol4/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol4/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol4/hidden_classiVol4" ref="classiIDs"/>
+    </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol5_input">
+        <hidden var="metadata/hidden_classiVol5/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol5/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol5/hidden_classiVol5" ref="classiIDs"/>
+    </panel>
+    <!-- hidden_classiVol ================================================================== -->
+    <panel id="classiVol6_input">
+        <hidden var="metadata/hidden_classiVol6/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_classiVol6/@heritable" default="false" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="metadata/hidden_classiVol6/hidden_classiVol6" ref="classiIDs"/>
+    </panel>
     <!-- websitecontext ================================================================== -->
     <panel id="websitecontext_input">
         <hidden var="metadata/hidden_websitecontexts/@class" default="MCRMetaLangText" />
         <hidden var="metadata/hidden_websitecontexts/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="metadata/hidden_websitecontexts/hidden_websitecontext" />
     </panel>
-    <!-- gehiddenfield1 ================================================================== -->
+    <!-- genhiddenfield1 ================================================================== -->
     <panel id="genhiddenfield1_input">
         <hidden var="metadata/hidden_genhiddenfields1/@class" default="MCRMetaLangText" />
         <hidden var="metadata/hidden_genhiddenfields1/@heritable" default="false" />

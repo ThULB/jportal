@@ -71,6 +71,8 @@
 
     <helpPopup id="right_help" width="400px" height="250px" i18n="editormask.labels.righthelppop" />
 
+    <text id="collation_note_label" i18n="editormask.labels.collation_note" />
+
     <!-- *** Data for the note *** -->
     <text id="note_label" i18n="editormask.labels.note" />
 
@@ -237,6 +239,10 @@
     <text id="date_howToUse" i18n="editormask.labels.date_howToUse" />
 
     <text id="date_label" i18n="editormask.labels.date_label" />
+    
+    <text id="tradition_label" i18n="editormask.labels.tradition_label" />
+    
+    <text id="format_label" i18n="editormask.labels.format_label" />
 
     <text id="jpjournalID_label" i18n="editormask.labels.jpjournalID" />
 
@@ -261,9 +267,33 @@
     <text id="classipub4_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4" />
     </text>
+    
+    <text id="classiVol1_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1" />
+    </text>
+    
+    <text id="classiVol2_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2" />
+    </text>
+    
+    <text id="classiVol3_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3" />
+    </text>
+    
+    <text id="classiVol4_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4" />
+    </text>
+    
+    <text id="classiVol5_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5" />
+    </text>
+    
+    <text id="classiVol6_label">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6" />
+    </text>
 
     <text id="websitecontext_label" i18n="editormask.labels.websitecontext" />
-
+    
     <text id="genhiddenfield1_label" i18n="editormask.labels.genhiddenfield1" />
 
     <text id="genhiddenfield2_label" i18n="editormask.labels.genhiddenfield2" />

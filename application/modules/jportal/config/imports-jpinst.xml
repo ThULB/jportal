@@ -10,7 +10,7 @@
 		<hidden var="service/servacls" descendants="true"/>
 		<hidden var="service/servflags" descendants="true"/>
 		<!--name-->
-		<cell col="1" row="10" anchor="NORTHWEST" ref="LINameP_bold"/>
+		<cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="LINameP_bold"/>
 		<cell col="2" row="10" anchor="NORTHWEST" ref="DIName"/>
 		<cell col="3" row="10" anchor="NORTHWEST"><space width="20" height="0"/></cell>
 		<cell col="4" row="10" anchor="WEST" ref="HIName"/>
