@@ -448,6 +448,16 @@
                                 </td>
                             </tr>
                         </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <tr>
+                                <td id="detailed-headlines">
+                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
+                                </td>
+                                <td>
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>              
                         <!-- System data ##################################### -->
                         <xsl:call-template name="get.systemData"/>
                         

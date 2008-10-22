@@ -540,31 +540,7 @@
                                 </td>
                             </tr>
                         </table>
-                        <!--*** Created ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** Last Modified ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** MyCoRe-ID ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
-                                    <xsl:value-of select="concat(i18n:translate('metaData.ID'),':')" />
-                                </td>
-                                <td class="metavalue">
-                                    <xsl:value-of select="./@ID" />
-                                </td>
-                            </tr>
-                        </table>
+                        <xsl:call-template name="get.systemData"/>
                         <!-- Static URL ************************************************** -->
                         <table cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">
