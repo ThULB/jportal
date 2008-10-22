@@ -662,6 +662,14 @@
                             </xsl:call-template>
                         </table>
                         
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                            <tr>
+                                <td colspan="2" id="detailed-innerdivlines">
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>
+                        
                         <!-- System data ###################################################### -->
                         <xsl:call-template name="get.systemData"/>
 

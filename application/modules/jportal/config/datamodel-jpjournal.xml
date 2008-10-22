@@ -34,15 +34,11 @@
             <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2' />
         </element>
         
-        <!-- ######################## Calendar ################################### -->
         <!-- tradition / calendar extension -->
         <element name="traditions" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="tradition" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' />
         </element>
-        <!-- 05 - format / calendar extension -->
-        <element name="formats" minOccurs='0' maxOccurs='1'>
-            <mcrmetaclassification name="format" class="MCRMetaClassification" minOccurs='0' maxOccurs='1' />
-        </element>
+       
         <!-- ##################################################################### -->
         
         <!-- type = short | long | toc -->

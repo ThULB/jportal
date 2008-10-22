@@ -30,14 +30,9 @@
         <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
         <cell row="75" col="3" anchor="WEST" ref="date_help" />
         
-        <!-- ############################ calendar extension #################### -->
         <!-- tradition -->
         <cell row="80" col="1" anchor="NORTHWEST" ref="tradition_label" />
         <cell row="80" col="2" anchor="NORTHWEST" ref="tradition_input" />
-        
-        <!-- format -->
-        <cell row="81" col="1" anchor="NORTHWEST" ref="format_label" />
-        <cell row="81" col="2" anchor="NORTHWEST" ref="format_input" />
         
         <!-- abstract -->
         <cell row="100" col="1" anchor="NORTHWEST" ref="abstract_label" />

@@ -244,39 +244,9 @@
                                 </td>
                             </tr>
                         </table>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-headlines">
-                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
-                                </td>
-                            </tr>
-                        </table>
-                        <!--10*** Created ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--11*** Last Modified ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
-
-                            </xsl:call-template>
-                        </table>
-                        <!--12*** MyCoRe-ID ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
-                                    <xsl:value-of select="concat(i18n:translate('metaData.ID'),':')" />
-                                </td>
-                                <td class="metavalue">
-                                    <xsl:value-of select="./@ID" />
-                                </td>
-                            </tr>
-                        </table>
+                        <!-- System data ##################################### -->
+                        <xsl:call-template name="get.systemData"/>
+                        
                         <!--13*** Static URL ************************************************** -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">

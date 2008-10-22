@@ -1981,14 +1981,7 @@
     <xsl:template name="get.systemData">
     <xsl:if test="$CurrentUser!='gast'">
         <!--*** Created ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                            <tr>
-                                <td colspan="2" id="detailed-innerdivlines">
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <tr>
                                 <td id="detailed-headlines">
                                     <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />

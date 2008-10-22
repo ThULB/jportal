@@ -112,7 +112,6 @@
       </panel>    
     
       <!-- end: date -->
-      <!-- ############################ calendar extension ############################### -->
     <!-- abstract ================================================================== -->
     <panel id="abstract_input">
         <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
