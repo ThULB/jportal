@@ -1576,15 +1576,13 @@
                                         <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
                                             <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
                                         </xsl:call-template>
+                                        <xsl:if test="position()!=last()">
+                                            <xsl:text>; </xsl:text>
+                                        </xsl:if>
                                     </xsl:for-each>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="$layout='flat' and position()!=1 and position()!=last()">
-                                <xsl:text>; </xsl:text>
-                            </xsl:when>
-                        </xsl:choose>
                     </xsl:for-each>
                     <xsl:if test="$layout='flat'">
                         <br />

@@ -361,7 +361,82 @@
                                 <xsl:with-param select="i18n:translate('editor.search.document.succeslink')" name="label" />
                             </xsl:call-template>
                         </table>
+                        
+                        <xsl:if test="./metadata/abstracts/abstract | ./metadata/notes/note 
+                        |./metadata/contentClassis1/contentClassi1|./metadata/contentClassis1/contentClassi8 
+                        |./metadata/contentClassis2/contentClassi2|./metadata/contentClassis3/contentClassi3
+                        |./metadata/contentClassis2/contentClassi4|./metadata/contentClassis3/contentClassi5
+                        |./metadata/contentClassis2/contentClassi6|./metadata/contentClassis3/contentClassi7
+                        |./metadata/contentClassis4/contentClassi9|./metadata/contentClassis5/contentClassi10">
+                            <xsl:call-template name="getContentDescription" />
+                        </xsl:if>
+
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                            <tr>
+                                <td colspan="2" id="detailed-innerdivlines">
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>
+                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                            <tr>
+                                <td id="detailed-headlines">
+                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
+                                </td>
+                                <td>
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>
+                        <xsl:call-template name="get.systemData"/>
+                        <!-- Static URL ************************************************** -->
+                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="get.staticURL">
+                                <xsl:with-param name="stURL" select="$staticURL" />
+                            </xsl:call-template>
+                            <xsl:call-template name="emptyRow" />
+                        </table>
+                        <!--*** Editor Buttons ************************************* -->
+                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="editobject_with_der">
+                                <xsl:with-param select="$accessedit" name="accessedit" />
+                                <xsl:with-param select="./@ID" name="id" />
+                            </xsl:call-template>
+                            <xsl:call-template name="addChild">
+                                <xsl:with-param name="id" select="./@ID" />
+                                <xsl:with-param name="types" select="'jpvolume'" />
+                            </xsl:call-template>
+                        </table>
+                        <!-- Create Website-Context -->
+                        <xsl:if test="not(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext) and acl:checkPermission('create-jpjournal')">
+                            <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                <tr>
+                                    <td valign="top" id="detailed-labels" style="text-align:right;  padding-right: 5px;color:#FF0000;">
+                                        Zeitschriften-Kontext:
+                                    </td>
+                                    <td valign="top" class="metavalue" style="color:#FF0000;">
+                                        Sie haben noch keinen Zeitschriften-Kontext (Webseiten, Rechteverwaltung) eingerichtet.
+                                        <br />
+                                        Möchten sie dies jetzt tun?
+                                        <br />
+                                        <br />
+                                        <a
+                                            href="{$WebApplicationBaseURL}create-journalContext.xml{$HttpSession}?XSL.MCR.JPortal.Create-JournalContext.ID.SESSION={./@ID}">
+                                            Ja, Zeitschriften-Kontext jetzt einrichten!
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </xsl:if>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </xsl:template>
+
+    <!-- ============================================================================================================== -->
+    <xsl:template name="getContentDescription">
+        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
                                     <br />
@@ -522,72 +597,8 @@
                                 </xsl:call-template>
                             </table>
                         </xsl:if>
-
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                            <tr>
-                                <td colspan="2" id="detailed-innerdivlines">
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-headlines">
-                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
-                                </td>
-                                <td>
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                        <xsl:call-template name="get.systemData"/>
-                        <!-- Static URL ************************************************** -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="get.staticURL">
-                                <xsl:with-param name="stURL" select="$staticURL" />
-                            </xsl:call-template>
-                            <xsl:call-template name="emptyRow" />
-                        </table>
-                        <!--*** Editor Buttons ************************************* -->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="editobject_with_der">
-                                <xsl:with-param select="$accessedit" name="accessedit" />
-                                <xsl:with-param select="./@ID" name="id" />
-                            </xsl:call-template>
-                            <xsl:call-template name="addChild">
-                                <xsl:with-param name="id" select="./@ID" />
-                                <xsl:with-param name="types" select="'jpvolume'" />
-                            </xsl:call-template>
-                        </table>
-                        <!-- Create Website-Context -->
-                        <xsl:if test="not(/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext) and acl:checkPermission('create-jpjournal')">
-                            <table cellspacing="0" cellpadding="0" id="detailed-view">
-                                <tr>
-                                    <td valign="top" id="detailed-labels" style="text-align:right;  padding-right: 5px;color:#FF0000;">
-                                        Zeitschriften-Kontext:
-                                    </td>
-                                    <td valign="top" class="metavalue" style="color:#FF0000;">
-                                        Sie haben noch keinen Zeitschriften-Kontext (Webseiten, Rechteverwaltung) eingerichtet.
-                                        <br />
-                                        Möchten sie dies jetzt tun?
-                                        <br />
-                                        <br />
-                                        <a
-                                            href="{$WebApplicationBaseURL}create-journalContext.xml{$HttpSession}?XSL.MCR.JPortal.Create-JournalContext.ID.SESSION={./@ID}">
-                                            Ja, Zeitschriften-Kontext jetzt einrichten!
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </xsl:if>
-                    </td>
-                </tr>
-            </table>
-        </div>
     </xsl:template>
-
-    <!-- ============================================================================================================== -->
-
+    
     <xsl:template name="addChild">
         <xsl:param name="id" />
         <xsl:param name="layout" />
