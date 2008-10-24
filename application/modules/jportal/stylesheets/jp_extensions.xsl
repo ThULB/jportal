@@ -2119,36 +2119,35 @@
                 </tr>
             </table>
         </xsl:if>
+        <xsl:if test="$CurrentUser!='gast'">
+            <!--*** Created ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** Last Modified ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** MyCoRe-ID ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
+                        <xsl:value-of select="i18n:translate('metaData.ID')" />
+                    </td>
+                    <td class="metavalue">
+                        <xsl:value-of select="./@ID" />
+                    </td>
+                </tr>
+            </table>
+        </xsl:if>
     </xsl:template>
-    <xsl:if test="$CurrentUser!='gast'">
-        <!--*** Created ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <xsl:call-template name="printMetaDates">
-                <xsl:with-param select="'right'" name="textalign" />
-                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
-            </xsl:call-template>
-        </table>
-                            <!--*** Last Modified ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <xsl:call-template name="printMetaDates">
-                <xsl:with-param select="'right'" name="textalign" />
-                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
-            </xsl:call-template>
-        </table>
-                            <!--*** MyCoRe-ID ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <tr>
-                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
-                    <xsl:value-of select="i18n:translate('metaData.ID')" />
-                </td>
-                <td class="metavalue">
-                    <xsl:value-of select="./@ID" />
-                </td>
-            </tr>
-        </table>
-    </xsl:if>
-</xsl:template>
 
 </xsl:stylesheet>

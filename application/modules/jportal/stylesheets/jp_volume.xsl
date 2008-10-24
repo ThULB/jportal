@@ -192,11 +192,11 @@
             </tr>
 
             <!-- keywords, if exist  -->
-            
+
             <xsl:call-template name="getContentClassis">
-                <xsl:with-param name="cXML" select="$cXML"/>
+                <xsl:with-param name="cXML" select="$cXML" />
             </xsl:call-template>
-            
+
             <!-- note, if exist  -->
             <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()">
                 <tr>
@@ -219,42 +219,40 @@
 
     <!-- ================================================================================================================= -->
     <xsl:template name="getContentClassis">
-        <xsl:param name="cXML"/>
+        <xsl:param name="cXML" />
         <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1">
-                <tr>
-                    <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
-                        <i>
-                            <xsl:value-of
-                                select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text(),': ')" />
-                        </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <!-- note, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()">
-                <tr>
-                    <td id="leaf-additional">
-                        <i>
-                            <xsl:value-of select="concat(i18n:translate('editormask.labels.note'),': ')" />
-                        </i>
-                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()" />
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <xsl:call-template name="printDerivates">
-                <xsl:with-param name="obj_id" select="@id" />
-                <xsl:with-param name="knoten" select="$cXML" />
-            </xsl:call-template>
-        </table>
+        <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1">
+            <tr>
+                <td id="leaf-additional">
+                    <xsl:call-template name="lineSpace" />
+                    <i>
+                        <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text(),': ')" />
+                    </i>
+                    <xsl:call-template name="printClass">
+                        <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1" />
+                        <xsl:with-param name="host" select="'local'" />
+                        <xsl:with-param name="next" select="', '" />
+                    </xsl:call-template>
+                    <xsl:call-template name="lineSpace" />
+                </td>
+            </tr>
+        </xsl:if>
+        <!-- note, if exist  -->
+        <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()">
+            <tr>
+                <td id="leaf-additional">
+                    <i>
+                        <xsl:value-of select="concat(i18n:translate('editormask.labels.note'),': ')" />
+                    </i>
+                    <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()" />
+                    <xsl:call-template name="lineSpace" />
+                </td>
+            </tr>
+        </xsl:if>
+        <xsl:call-template name="printDerivates">
+            <xsl:with-param name="obj_id" select="@id" />
+            <xsl:with-param name="knoten" select="$cXML" />
+        </xsl:call-template>
         <br />
     </xsl:template>
 
