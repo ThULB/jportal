@@ -48,8 +48,6 @@ function setupImage(setMetadataURL, imageURL, zoom, origWidth, origHeight) {
       if (req.readyState==4) {
       //alert("req.readyState==4 successfully, started to getImage...");
        if (req.status==200) {
-           //var title = req.responseXML.getElementsByTagName("setMetadata")[0];
-           //document.getElementsByTagName("title").value=title;
            //alert("AJAX transmission of screen resolution successfully, started to getImage...");
            getImage(imageURL, zoom, origWidth,origHeight);
        }
@@ -130,6 +128,29 @@ function switchImage(url) {
     document.getElementById('imageSwitcher').submit();
 }
 
+function iviewStoreImage(transmitURL, imageID) {
+
+    // transmit
+    if (window.XMLHttpRequest) {
+        req = new XMLHttpRequest();
+    }
+        else if (window.ActiveXObject) {
+            req = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        
+    req.open("GET", transmitURL, true);
+    
+    req.onreadystatechange=function() {
+      if (req.readyState==4) {
+       if (req.status==200) {
+           alert("Das Bild " + imageID + " ist vorgemerkt.");
+       }
+      }     
+    }
+    req.send(null);     
+}
+
+
 /************************************************/
 /************************************************/
 /*** internal functions *************************/
@@ -204,36 +225,36 @@ function getImage(imageURL, zoom, origWidth, origHeight) {
     //div.style.background = "url(" + imageURL + ") no-repeat";
     
     if(scrollMode())
-    	{
-    	 if (zoom == 'fitToScreen') {
-			if (origWidth * sf < width){
-				img.style.width = origWidth * sf + "px";
-			}
-			else
-				img.style.width = width + "px";
-				
-			if (origHeight * sf < height){
-				img.style.height = origHeight * sf + "px";
-			}
-			else
-				img.style.height = height + "px";
-		}
-		else if (zoom == 'fitToWidth') {
-			if(origHeight * sf1 > height)
-				{
-				 img.style.width = width - getScrollbarWidth() + "px";
-			     img.style.height = origHeight * ((width - getScrollbarWidth())/(origWidth - getScrollbarWidth())) + "px";
-				}
-			else
-				{
-				 img.style.width = width + "px";
-			     img.style.height = origHeight * sf1 + "px";
-				}			
-		}
-		else{
-			img.style.width = origWidth * parseFloat(zoom) + "px";
-			img.style.height = origHeight * parseFloat(zoom) + "px";
-		}
+        {
+         if (zoom == 'fitToScreen') {
+            if (origWidth * sf < width){
+                img.style.width = origWidth * sf + "px";
+            }
+            else
+                img.style.width = width + "px";
+                
+            if (origHeight * sf < height){
+                img.style.height = origHeight * sf + "px";
+            }
+            else
+                img.style.height = height + "px";
+        }
+        else if (zoom == 'fitToWidth') {
+            if(origHeight * sf1 > height)
+                {
+                 img.style.width = width - getScrollbarWidth() + "px";
+                 img.style.height = origHeight * ((width - getScrollbarWidth())/(origWidth - getScrollbarWidth())) + "px";
+                }
+            else
+                {
+                 img.style.width = width + "px";
+                 img.style.height = origHeight * sf1 + "px";
+                }           
+        }
+        else{
+            img.style.width = origWidth * parseFloat(zoom) + "px";
+            img.style.height = origHeight * parseFloat(zoom) + "px";
+        }
     }
     
     div.appendChild(img);
@@ -243,29 +264,29 @@ function getImage(imageURL, zoom, origWidth, origHeight) {
 
 function scrollMode() { 
     var test = document.getElementById("content-container").getAttribute("style");
-	    
+        
     if(testIE())
-    	{
-    	 if(test["overflow"].match("scroll"))
-    	 	{
-    	 	 return true;
-    	 	}
-    	 else 
-    	 	{
-    	 		return false;
-    	 	}
-    	}
+        {
+         if(test["overflow"].match("scroll"))
+            {
+             return true;
+            }
+         else 
+            {
+                return false;
+            }
+        }
      else
-     	{
-     	 if(test.match("overflow: scroll"))
-    	 	{
-    	 	 return true;
-    	 	}
-    	 else 
-    	 	{
-    	 	return false;
-    	 	}
-     	}	
+        {
+         if(test.match("overflow: scroll"))
+            {
+             return true;
+            }
+         else 
+            {
+            return false;
+            }
+        }   
 }
 
 function appendSizeOfImageAreaOnURL(url) {

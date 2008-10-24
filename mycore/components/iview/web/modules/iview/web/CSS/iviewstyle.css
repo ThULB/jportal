@@ -160,6 +160,20 @@ Colors:
     text-decoration: none; 
     }
   
+a.iview-displayPaperClip { 
+    background-image:url('../images/paperClipIview.jpg');
+    display: block;
+    line-height:21px;
+    width:21px;
+    text-decoration: none;
+    }
+  a:hover.iview-displayPaperClip { 
+    background-image:url('../images/paperClipIview.jpg');
+    text-decoration: none; 
+    }
+    
+  
+  
   a.iview-displayswitchthumbs { 
     background-image:url('../images/display-thumbs.gif');
     display: block;

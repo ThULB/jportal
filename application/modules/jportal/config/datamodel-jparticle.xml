@@ -85,6 +85,14 @@
         <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>
+        <element name="ifsLinks" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="ifsLink" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
+        </element>
+        
+        <collationNotes class="MCRMetaLangText" heritable="false" notinherit="false">
+            <collationNote xml:lang="de" inherited="0" form="plain" type="siteDetails">Kollationsvermerk</collationNote>
+        </collationNotes>
+        
         <!-- ================================================================================================= -->
     </metadata>
     <service>

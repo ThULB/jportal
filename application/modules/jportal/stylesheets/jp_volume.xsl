@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:aclObjID="xalan://org.mycore.access.strategies.MCRObjectIDStrategy" xmlns:aclObjType="xalan://org.mycore.access.strategies.MCRJPortalStrategy"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+    xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+    xmlns:aclObjID="xalan://org.mycore.access.strategies.MCRObjectIDStrategy" xmlns:aclObjType="xalan://org.mycore.access.strategies.MCRJPortalStrategy"
     xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
     <xsl:param select="'local'" name="objectHost" />
     <!-- ===================================================================================================== -->
@@ -189,6 +190,8 @@
                     </xsl:if>
                 </td>
             </tr>
+
+            <!-- keywords, if exist  -->
             
             <xsl:call-template name="getContentClassis">
                 <xsl:with-param name="cXML" select="$cXML"/>
@@ -223,7 +226,8 @@
                     <td id="leaf-additional">
                         <xsl:call-template name="lineSpace" />
                         <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text(),': ')" />
+                            <xsl:value-of
+                                select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text(),': ')" />
                         </i>
                         <xsl:call-template name="printClass">
                             <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis1/volContentClassi1" />
@@ -234,92 +238,27 @@
                     </td>
                 </tr>
             </xsl:if>
-            <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis2/volContentClassi2">
+            <!-- note, if exist  -->
+            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()">
                 <tr>
                     <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
                         <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2')//label/text(),': ')" />
+                            <xsl:value-of select="concat(i18n:translate('editormask.labels.note'),': ')" />
                         </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis2/volContentClassi2" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
+                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/notes/note/text()" />
                         <xsl:call-template name="lineSpace" />
                     </td>
                 </tr>
             </xsl:if>
-            <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis3/volContentClassi3">
-                <tr>
-                    <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
-                        <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3')//label/text(),': ')" />
-                        </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis3/volContentClassi3" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis4/volContentClassi4">
-                <tr>
-                    <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
-                        <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4')//label/text(),': ')" />
-                        </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis4/volContentClassi4" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis5/volContentClassi5">
-                <tr>
-                    <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
-                        <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5')//label/text(),': ')" />
-                        </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis5/volContentClassi5" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
-            <!-- volContentClassis, if exist  -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis6/volContentClassi6">
-                <tr>
-                    <td id="leaf-additional">
-                        <xsl:call-template name="lineSpace" />
-                        <i>
-                            <xsl:value-of select="concat(document('jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6')//label/text(),': ')" />
-                        </i>
-                        <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/volContentClassis6/volContentClassi6" />
-                            <xsl:with-param name="host" select="'local'" />
-                            <xsl:with-param name="next" select="', '" />
-                        </xsl:call-template>
-                        <xsl:call-template name="lineSpace" />
-                    </td>
-                </tr>
-            </xsl:if>
+            <xsl:call-template name="printDerivates">
+                <xsl:with-param name="obj_id" select="@id" />
+                <xsl:with-param name="knoten" select="$cXML" />
+            </xsl:call-template>
+        </table>
+        <br />
     </xsl:template>
+
+    <!-- ================================================================================================================= -->
 
     <!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
     <xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpvolume_')]">
@@ -476,7 +415,8 @@
                             </tr>
                         </table>
                         <!-- Content Description ################################################### -->
-                        <xsl:variable name="hasContentDescription" select="./metadata/volContentClassis1/volContentClassi1 | ./metadata/notes/note | ./metadata/abstracts/abstract" />
+                        <xsl:variable name="hasContentDescription"
+                            select="./metadata/volContentClassis1/volContentClassi1 | ./metadata/notes/note | ./metadata/abstracts/abstract" />
                         <xsl:if test="$hasContentDescription">
                             <table cellspacing="0" cellpadding="0" id="detailed-view">
                                 <tr>
@@ -492,7 +432,8 @@
                             <xsl:if test="./metadata/volContentClassis2/volContentClassi2">
                                 <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:variable name="label_classiVol">
-                                        <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2')//label/text()" />
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2')//label/text()" />
                                     </xsl:variable>
                                     <xsl:call-template name="printMetaDates">
                                         <xsl:with-param select="'right'" name="textalign" />
@@ -505,7 +446,8 @@
                             <xsl:if test="./metadata/volContentClassis1/volContentClassi1">
                                 <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:variable name="label_classiVol">
-                                        <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text()" />
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text()" />
                                     </xsl:variable>
                                     <xsl:call-template name="printMetaDates">
                                         <xsl:with-param select="'right'" name="textalign" />
@@ -533,26 +475,9 @@
                                 </table>
                             </xsl:if>
                         </xsl:if>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                            <tr>
-                                <td colspan="2" id="detailed-innerdivlines">
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-headlines">
-                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
-                                </td>
-                                <td>
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>              
                         <!-- System data ##################################### -->
-                        <xsl:call-template name="get.systemData"/>
-                        
+                        <xsl:call-template name="get.systemData" />
+
                         <!-- Static URL ************************************************** -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">
@@ -560,7 +485,7 @@
                             </xsl:call-template>
                             <xsl:call-template name="emptyRow" />
                         </table>
-                        
+
                         <!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                         <table cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="showAdminHead" />
@@ -580,7 +505,8 @@
                             <xsl:variable name="journalID">
                                 <xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
                             </xsl:variable>
-                            <xsl:if test="aclObjType:checkPermissionOfType('jportal_jparticle_xxxxxxxx','writedb') and aclObjID:checkPermission($journalID,'writedb')">
+                            <xsl:if
+                                test="aclObjType:checkPermissionOfType('jportal_jparticle_xxxxxxxx','writedb') and aclObjID:checkPermission($journalID,'writedb')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jparticle'" />

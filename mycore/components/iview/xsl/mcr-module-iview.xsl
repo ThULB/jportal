@@ -33,6 +33,7 @@
     <xsl:param name="MCR.Module-iview.lastEmbeddedURL" />
     <xsl:param name="MCR.Module-iview.embedded" />
     <xsl:param name="MCR.Module-iview.scrollBars" />
+    <xsl:param name="MCR.Module-iview.markedImageURL" />
 
     <!--params set manually-->
     <xsl:variable name="ownerID" select="/mcr-module/iview/content/ownerID" />
@@ -206,6 +207,19 @@
                                                 <td>
                                                     <table id="iview-displayswitch" cellspacing="0" cellpadding="0">
                                                         <tr>
+                                                            <!-- paper clip -->
+                                                            <xsl:variable name="iviewStoreImageURL">
+                                                                <xsl:value-of
+                                                                    select="concat('iviewStoreImage(&#34;',$WebApplicationBaseURL,'modules/iview/web/paperClip.xml?XSL.MCR.Module-iview.markedImageURL.SESSION=',$nodeToBeDisplayedPath,'&#34;,&#34;',$fileToBeDisplayed,'&#34;)')" />
+                                                            </xsl:variable>
+                                                            <td>
+                                                                <a class="iview-displayPaperClip" title="bild merken" alt="bild merken"
+                                                                    href="javascript:{$iviewStoreImageURL}" align="middle">
+                                                                    <xsl:text disable-output-escaping="yes">
+                                                            &amp;nbsp;</xsl:text>
+                                                                </a>
+                                                            </td>
+                                                            <!-- END: paper clip -->
                                                             <td>
                                                                 <xsl:variable name="iviewDisplayswitchthumbs">
                                                                     <xsl:value-of
@@ -1013,16 +1027,3 @@
     <!--  #####################################################################################################################-->
 
 </xsl:stylesheet>
-
-
-
-
-
-
-
-
-
-
-
-
-

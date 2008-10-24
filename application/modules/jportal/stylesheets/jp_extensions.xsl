@@ -231,8 +231,8 @@
                     <xsl:copy-of select="$stURL" />
                 </a>
             </td>
-            </tr>
-        </xsl:template>
+        </tr>
+    </xsl:template>
 
     <!-- ============================================================================================================================ -->
     <xsl:template name="emptyRow">
@@ -773,6 +773,10 @@
                 <xsl:call-template name="browseCtrlJP" />
                 <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
                 <xsl:call-template name="SwitchToXMLview" />
+                <xsl:if test="/mycoreobject[contains(@ID,'_jpvolume_')] 
+        | /mycoreobject[contains(@ID,'_jparticle_')]">
+                    <xsl:call-template name="linkFile" />
+                </xsl:if>
             </tr>
         </table>
         <br />
@@ -958,7 +962,6 @@
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
                     <tr>
                         <td id="leaf-additional">
@@ -987,11 +990,51 @@
                         </td>
                     </tr>
                 </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
 
+        <!-- links  -->
+        <xsl:choose>
+            <xsl:when test="$knoten != ''">
+                <xsl:if test="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
+                    <tr>
+                        <td id="leaf-additional">
+                            <xsl:call-template name="lineSpace" />
+                            <table cellpadding="0" cellspacing="0">
+                                <xsl:for-each select="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
+                                    <xsl:apply-templates select=".">
+                                        <xsl:with-param name="objID" select="$obj_id" />
+                                    </xsl:apply-templates>
+                                    <xsl:if test="position()!=last()">
+                                        <xsl:copy-of select="', '" />
+                                    </xsl:if>
+                                </xsl:for-each>
+                            </table>
+                        </td>
+                    </tr>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
+                    <tr>
+                        <td align="left" valign="top" id="detailed-links">
+                            <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+                                <tr>
+                                    <td colspan="3" style="padding-left: 10px;">
+                                        <xsl:apply-templates select=".">
+                                            <xsl:with-param name="objID" select="$obj_id" />
+                                        </xsl:apply-templates>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
 
     </xsl:template>
+
     <!-- ===================================================================================================== -->
 
     <xsl:template name="get.labelOfDigitalMedias">
@@ -1000,22 +1043,33 @@
 
     <!-- ===================================================================================================== -->
 
-    <xsl:template match="internals" priority="2">
+    <xsl:template match="internals | ifsLink" priority="2">
         <xsl:param name="objID" />
         <xsl:param name="objectXML" />
         <xsl:param name="detailed-view" />
         <xsl:if test="$objectHost = 'local'">
-            <xsl:variable name="derivid" select="../../@ID" />
-            <xsl:variable name="derivmain" select="internal/@maindoc" />
-            <xsl:variable name="derivbase">
+            <xsl:variable name="derivid">
                 <xsl:choose>
-                    <xsl:when test="$JPID_zfbbHack='true'">
-                        <xsl:value-of select="concat($ServletsBaseURL,'MCRZFBBServlet/',$derivid,'/')" />
+                    <xsl:when test="name() = 'ifsLink'">
+                        <xsl:value-of select="substring-before(./text(),'/')" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')" />
+                        <xsl:value-of select="../../@ID" />
                     </xsl:otherwise>
                 </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="derivmain">
+                <xsl:choose>
+                    <xsl:when test="name() = 'ifsLink'">
+                        <xsl:value-of select="substring-after(./text(),'/')" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="internal/@maindoc" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="derivbase">
+                <xsl:value-of select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')" />
             </xsl:variable>
             <xsl:variable name="fileType">
                 <xsl:call-template name="getFileType">
@@ -1046,6 +1100,7 @@
             </xsl:variable>
             <!-- access to edit ? -->
             <xsl:variable name="editAccess">
+                <!--  <xsl:value-of select="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')" />-->
                 <xsl:choose>
                     <xsl:when test="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')">
                         <xsl:value-of select="'true'"></xsl:value-of>
@@ -1055,7 +1110,6 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-
             <!-- read access ? -->
             <xsl:variable name="readAccess4Derivates">
                 <xsl:choose>
@@ -1099,8 +1153,18 @@
                             <td>
                                 <xsl:choose>
                                     <xsl:when test="$readAccess4Derivates = 'true'">
+                                        <xsl:variable name="label">
+                                            <xsl:choose>
+                                                <xsl:when test="name() = 'ifsLink'">
+                                                    <xsl:value-of select="concat($fileLabel, '(~)')" />
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:value-of select="$fileLabel" />
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                        </xsl:variable>
                                         <a href="{$href}">
-                                            <xsl:value-of select="$fileLabel" />
+                                            <xsl:value-of select="$label" />
                                         </a>
                                     </xsl:when>
                                     <xsl:otherwise>Zugriff gesperrt!</xsl:otherwise>
@@ -1119,8 +1183,18 @@
                 <xsl:otherwise>
                     <xsl:choose>
                         <xsl:when test="$readAccess4Derivates = 'true'">
+                            <xsl:variable name="label">
+                                <xsl:choose>
+                                    <xsl:when test="name()='ifsLink'">
+                                        <xsl:value-of select="concat($fileLabel, '(~)')" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="$fileLabel" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:variable>
                             <a href="{$href}">
-                                <xsl:value-of select="$fileLabel" />
+                                <xsl:value-of select="$label" />
                             </a>
                         </xsl:when>
                         <xsl:otherwise>Zugriff gesperrt!</xsl:otherwise>
@@ -1552,10 +1626,11 @@
                         <!-- in mcrobject have been current categID found-->
                         <xsl:if test="$nodes[@type=$categID] | $nodes[@xlink:title=$categID]">
                             <!-- label of category -->
-                                <i>
-                                    <xsl:value-of select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
-                                    :
-                                </i>
+                            <i>
+                                <xsl:value-of
+                                    select="xalan:nodeset($classXML)/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+                                :
+                            </i>
                             <xsl:choose>
                                 <xsl:when test="$layout='structure'">
                                     <br />
@@ -1576,13 +1651,15 @@
                                         <xsl:call-template name="printMetaDate_typeSensitive.printEntry">
                                             <xsl:with-param name="modeIF" select="$mode"></xsl:with-param>
                                         </xsl:call-template>
-                                        <xsl:if test="position()!=last()">
-                                            <xsl:text>; </xsl:text>
-                                        </xsl:if>
                                     </xsl:for-each>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:if>
+                        <xsl:choose>
+                            <xsl:when test="$layout='flat' and position()!=1 and position()!=last()">
+                                <xsl:text>; </xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
                     </xsl:for-each>
                     <xsl:if test="$layout='flat'">
                         <br />
@@ -1874,6 +1951,25 @@
         </xsl:if>
     </xsl:template>
 
+    <!-- ================================================================================================================= -->
+
+    <xsl:template name="linkFile">
+        <xsl:variable name="linkExist">
+            <xsl:value-of select="/mycoreobject/metadata/ifsLinks/ifsLink[text() = $MCR.Module-iview.markedImageURL]" />
+        </xsl:variable>
+        <xsl:if test="acl:checkPermission(./@ID,'writedb') and $MCR.Module-iview.markedImageURL != '' and not($linkExist)">
+            <xsl:variable name="url">
+                <xsl:value-of select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalObjectToBeLinked=',./@ID)" />
+            </xsl:variable>
+            <td width="30px" />
+            <td id="detailed-xmlbutton">
+                <a href="{$url}" alt="{i18n:translate('metaData.xmlView')}" title="Bild {$MCR.Module-iview.markedImageURL} mit diesem Objekt verlinken">
+                    <img src="{$WebApplicationBaseURL}modules/iview/web/images/paperClip.jpeg" height="20px" />
+                </a>
+            </td>
+        </xsl:if>
+    </xsl:template>
+
     <!-- ===================================================================================================== -->
 
     <xsl:template name="mcr_directory.saveDerivate">
@@ -1975,8 +2071,55 @@
     </xsl:template>
 
     <!-- ===================================================================================================== -->
-    
+
     <xsl:template name="get.systemData">
+        <xsl:if test="$CurrentUser!='gast'">
+            <!--*** Created ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                <tr>
+                    <td colspan="2" id="detailed-innerdivlines">
+                        <br />
+                    </td>
+                </tr>
+            </table>
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td id="detailed-headlines">
+                        <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
+                    </td>
+                    <td>
+                        <br />
+                    </td>
+                </tr>
+            </table>
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** Last Modified ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** MyCoRe-ID ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
+                        <xsl:value-of select="i18n:translate('metaData.ID')" />
+                    </td>
+                    <td class="metavalue">
+                        <xsl:value-of select="./@ID" />
+                    </td>
+                </tr>
+            </table>
+        </xsl:if>
+    </xsl:template>
     <xsl:if test="$CurrentUser!='gast'">
         <!--*** Created ************************************* -->
         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">

@@ -32,7 +32,7 @@
 
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
-                <td id="leaf-front" colspan="1" rowspan="3">
+                <td id="leaf-front" colspan="1" rowspan="4">
                     <img src="{$WebApplicationBaseURL}images/artikel2.gif" />
                 </td>
                 <td id="leaf-linkarea2">
@@ -74,9 +74,12 @@
             </xsl:call-template>
             <tr>
                 <td>
+                    <xsl:call-template name="lineSpace" />
                     <span id="leaf-published">
-                        <xsl:value-of select="i18n:translate('metaData.published')" />
-                        <xsl:text>: </xsl:text>
+                        <i>
+                            <xsl:value-of select="i18n:translate('metaData.published')" />
+                            <xsl:text>: </xsl:text>
+                        </i>
                         <xsl:call-template name="printHistoryRow">
                             <xsl:with-param name="sortOrder" select="'descending'" />
                             <xsl:with-param name="printCurrent" select="'false'" />
@@ -661,6 +664,7 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.pub_reference')" name="label" />
                             </xsl:call-template>
                         </table>
+
                         
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
@@ -680,7 +684,7 @@
                             </tr>
                         </table>              
                         <!-- System data ###################################################### -->
-                        <xsl:call-template name="get.systemData"/>
+                        <xsl:call-template name="get.systemData" />
 
                         <!-- Static URL ************************************************** -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">

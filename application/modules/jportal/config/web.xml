@@ -10,6 +10,10 @@
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalLinkFileServlet">
+    <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRJPortalLinkFileServlet</servlet-class>
+</servlet>
 
 <servlet-mapping>
     <servlet-name>MCRJPortalCLIServlet</servlet-name>
@@ -22,4 +26,8 @@
 <servlet-mapping>
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
     <url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
+    <url-pattern>/servlets/MCRJPortalLinkFileServlet/*</url-pattern>
 </servlet-mapping>
