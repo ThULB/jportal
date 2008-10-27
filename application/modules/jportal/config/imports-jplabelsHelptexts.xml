@@ -7,7 +7,7 @@
     <!-- *** Data for the MainTITLE *** -->
 
     <text id="maintitle_label" i18n="editormask.labels.bibdescript" />
-    
+
     <text id="maintitleForSorting_label" i18n="editormask.labels.bibdescriptForSorting" />
 
     <text id="maintitle_label_contchild" i18n="editormask.labels.contchild" />
@@ -91,9 +91,13 @@
     <helpPopup id="successor_help" width="400px" height="250px" i18n="editormask.labels.successorhelppop" />
 
     <!-- *** Data for the type *** -->
-    <text id="type_label_bold" i18n="editormask.labels.type" />
+    <text id="type_label_bold" i18n="editormask.labels.type">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_pubTypesID/hidden_pubTypeID" />
+    </text>
 
-    <text id="type_label" i18n="editormask.labels.type" />
+    <text id="type_label" i18n="editormask.labels.type">
+        <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_pubTypesID/hidden_pubTypeID" />
+    </text>
 
     <helpPopup id="type_help" width="400px" height="250px" i18n="editormask.labels.typehelppop" />
 
@@ -239,9 +243,9 @@
     <text id="date_howToUse" i18n="editormask.labels.date_howToUse" />
 
     <text id="date_label" i18n="editormask.labels.date_label" />
-    
+
     <text id="tradition_label" i18n="editormask.labels.tradition_label" />
-    
+
     <text id="format_label" i18n="editormask.labels.format_label" />
 
     <text id="jpjournalID_label" i18n="editormask.labels.jpjournalID" />
@@ -267,39 +271,39 @@
     <text id="classipub4_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4" />
     </text>
-    
+
     <text id="classiVol1_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1" />
     </text>
-    
+
     <text id="classiVol2_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2" />
     </text>
-    
+
     <text id="classiVol3_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3" />
     </text>
-    
+
     <text id="classiVol4_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4" />
     </text>
-    
+
     <text id="classiVol5_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5" />
     </text>
-    
+
     <text id="classiVol6_label">
         <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6" />
     </text>
 
     <text id="websitecontext_label" i18n="editormask.labels.websitecontext" />
-    
+
     <text id="genhiddenfield1_label" i18n="editormask.labels.genhiddenfield1" />
 
     <text id="genhiddenfield2_label" i18n="editormask.labels.genhiddenfield2" />
 
     <text id="genhiddenfield3_label" i18n="editormask.labels.genhiddenfield3" />
-    
+
     <text id="datamodelCoverage_label">
         <include cacheable="false" uri="jportal_getClassLabel:getDirectely:jportal_class_00000067" />
     </text>

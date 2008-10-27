@@ -2,7 +2,6 @@
 <imports>
     <include uri="webapp:editor/imports-jpcommon.xml" />
     <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
-
     <panel id="globalImport.jparticle" lines="on">
         <hidden var="ID" />
         <hidden var="label" />
@@ -52,14 +51,10 @@
         <!-- abstract -->
         <cell class="editorLabel" row="70" col="1" anchor="NORTHWEST" ref="abstract_label" />
         <cell row="70" col="2" anchor="NORTHWEST" ref="abstract_input" />
-        
         <!-- note -->
         <cell class="editorLabel" row="120" col="1" anchor="NORTHWEST" ref="note_label" />
         <cell row="120" col="2" anchor="NORTHWEST" ref="note_input" />
-
         <!-- dynamic includes, if used within a journal -->
-        <include cacheable="false"
-            uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
         <include cacheable="false"
             uri="jportal_includeEditorCode:jparticle:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code_head" />
         <include cacheable="false"
@@ -70,24 +65,24 @@
             uri="jportal_includeEditorCode:jparticle:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code_head" />
         <include cacheable="false"
             uri="jportal_includeEditorCode:jparticle:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code_head" />
-
+        <include cacheable="false"
+            uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code_head" />
         <!-- place holder -->
         <cell row="180" col="1" anchor="NORTHWEST">
             <space height="14" />
         </cell>
         <cell col="1" row="190">
             <br />
-        </cell> 
-        <!-- ########################## misc ################################## --> 
+        </cell>
+        <!-- ########################## misc ################################## -->
         <cell anchor="WEST" colspan="4" col="1" row="191" class="editorHeadlines">
             <text>
                 <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
             </text>
-        </cell>  
+        </cell>
         <!-- parent -->
         <cell class="editorMandatory" row="200" col="1" anchor="NORTHWEST" ref="parent_label" />
         <cell row="200" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
-        
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
         <cell row="250" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
         <!-- ================================================================================================= -->
@@ -180,8 +175,7 @@
     <!-- ================================================================== -->
     <!-- dynamic includes, if used within a journal -->
     <include cacheable="false"
-        uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
-    <include cacheable="false" uri="jportal_includeEditorCode:jparticle:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
+        uri="jportal_includeEditorCode:jparticle:hidden_rubricsID/hidden_rubricID:editor/editor-dynamicInludes.xml:include_rubric-editable_code" />
     <include cacheable="false"
         uri="jportal_includeEditorCode:jparticle:hidden_classispub/hidden_classipub:editor/editor-dynamicInludes.xml:include_classipub-editable_code" />
     <include cacheable="false"
@@ -190,7 +184,8 @@
         uri="jportal_includeEditorCode:jparticle:hidden_classispub3/hidden_classipub3:editor/editor-dynamicInludes.xml:include_classipub3-editable_code" />
     <include cacheable="false"
         uri="jportal_includeEditorCode:jparticle:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code" />
-
+    <include cacheable="false"
+        uri="jportal_includeEditorCode:jparticle:hidden_pubTypesID/hidden_pubTypeID:editor/editor-dynamicInludes.xml:include_pubType-editable_code" />
     <!-- size ================================================================== -->
     <panel id="size_input">
         <hidden var="metadata/sizes/@class" default="MCRMetaLangText" />
