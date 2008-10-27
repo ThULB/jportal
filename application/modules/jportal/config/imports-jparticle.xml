@@ -9,6 +9,7 @@
         <hidden var="service/servdates" descendants="true" />
         <hidden var="service/servacls" descendants="true" />
         <hidden var="service/servflags" descendants="true" />
+        <hidden var="metadata/ifsLinks" descendants="true" />
         <!-- ########################## formal description ################################## -->
         <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
             <text>
@@ -145,7 +146,7 @@
         </cell>
     </panel>
     <panel id="abstract_input_repeater">
-        <!--		<cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1"/>-->
+        <!--        <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1"/>-->
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
     </panel>
     <!-- identi ================================================================== -->
