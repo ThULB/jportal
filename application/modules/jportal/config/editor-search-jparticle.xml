@@ -13,7 +13,7 @@
             <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value" />
 
             <!-- search in formal description -->
-            <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines" >
+            <cell anchor="WEST" colspan="4" col="1" row="1" class="searchmaskHeadlines" >
                 <text>
                     <label i18n="metaData.headlines.formaldiscr" />
                 </text>
@@ -149,9 +149,9 @@
             </cell>
 
             <!-- search in content descriptions-->
-            <cell anchor="WEST" colspan="4" col="1" row="12" class="editorHeadlines">
+            <cell anchor="WEST" colspan="4" col="1" row="12" class="searchmaskHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
+                    <label css-style="searchmaskHeadlines" i18n="metaData.headlines.contantdiscr" />
                 </text>
             </cell>
             <!-- Search for fields of type text -->
@@ -238,9 +238,9 @@
                 <br />
                 <br />
             </cell>
-            <cell anchor="WEST" colspan="4" col="1" row="29"  class="editorHeadlines">
+            <cell anchor="WEST" colspan="4" col="1" row="29"  class="searchmaskHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.digitalMedia" />
+                    <label css-style="searchmaskHeadlines" i18n="metaData.headlines.digitalMedia" />
                 </text>
             </cell>
             <cell var="conditions/boolean/boolean/condition30" col="1" row="30" colspan="2">
@@ -266,9 +266,9 @@
                 <br />
             </cell>
 
-            <cell anchor="WEST" colspan="4" col="1" row="180" class="editorHeadlines">
+            <cell anchor="WEST" colspan="4" col="1" row="180" class="searchmaskHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.specials" />
+                    <label css-style="searchmaskHeadlines" i18n="metaData.headlines.specials" />
                 </text>
             </cell>
 

@@ -8,9 +8,9 @@
             <hidden default="xml" var="conditions/@format" />
 
             <!-- search in formal description -->
-            <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
+            <cell anchor="WEST" colspan="4" col="1" row="1" class="searchmaskHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.formaldiscr" />
+                    <label css-style="searchmaskHeadlines" i18n="metaData.headlines.formaldiscr" />
                 </text>
             </cell>
 
@@ -206,7 +206,7 @@
             </cell>
 
             <!-- search in content descriptions-->
-            <cell anchor="WEST" colspan="4" col="1" row="14" class="editorHeadlines">
+            <cell anchor="WEST" colspan="4" col="1" row="14" class="searchmaskHeadlines">
                 <text>
                     <label i18n="metaData.headlines.contantdiscr" />
                 </text>
@@ -220,9 +220,9 @@
                 <br />
             </cell>
             
-            <cell anchor="WEST" colspan="3" col="1" row="90"  class="editorHeadlines">
+            <cell anchor="WEST" colspan="3" col="1" row="90"  class="searchmaskHeadlines">
                 <text>
-                    <label css-style="editorHeadlines" i18n="metaData.headlines.specials" />
+                    <label css-style="searchmaskHeadlines" i18n="metaData.headlines.specials" />
                 </text>
             </cell>
             <cell anchor="EAST" col="1" row="92" >
