@@ -8,59 +8,45 @@
       <panel>
         <cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="Lheading"/>
         <cell col="2" row="10" anchor="NORTHWEST" ref="Dheading" var="def.heading"/>
-        <cell col="3" row="10" anchor="WEST" ref="Hheading"/>
 
         <cell class="editorLabel" col="1" row="20" anchor="NORTHWEST" ref="Lalternative"/>
         <cell col="2" row="20" anchor="NORTHWEST" ref="Dalternative" var="def.alternative"/>
-        <cell col="3" row="20" anchor="WEST" ref="Halternative"/>
 
         <cell class="editorLabel" col="1" row="30" anchor="NORTHWEST" ref="Lpeerage"/>
         <cell col="2" row="30" anchor="NORTHWEST" ref="Dpeerage" var="def.peerage"/>
-        <cell col="3" row="30" anchor="WEST" ref="Hpeerage"/>
 
-        <cell class="editorLabel" col="1" row="40" anchor="NORTHWEST" ref="Lgender"/>
+        <cell col="1" row="40" anchor="NORTHWEST" ref="Lgender" class="editorMandatory"/>
         <cell col="2" row="40" anchor="NORTHWEST" ref="Dgender" var="def.gender"/>
-        <cell col="3" row="40" anchor="WEST" ref="Hgender"/>
 
         <cell class="editorLabel" col="1" row="42" anchor="NORTHWEST" ref="Lcontact"/>
         <cell col="2" row="42" anchor="NORTHWEST" ref="Dcontact" var="def.contact"/>
-        <cell col="3" row="42" anchor="NORTHWEST" ref="Hcontact"/>
 
-        <cell col="1" row="50" anchor="NORTHWEST" ref="Lrole"/>
+        <cell col="1" row="50" anchor="NORTHWEST" ref="Lrole" class="editorLabel"/>
         <cell col="2" row="50" anchor="NORTHWEST" ref="Drole" var="def.role"/>
-        <cell col="3" row="50" anchor="WEST" ref="Hrole"/>
 
         <cell class="editorLabel" col="1" row="60" anchor="NORTHWEST" ref="LplaceOfActivity"/>
         <cell col="2" row="60" anchor="NORTHWEST" ref="DplaceOfActivity" var="def.placeOfActivity"/>
-        <cell col="3" row="60" anchor="WEST" ref="HplaceOfActivity"/>
 
         <cell class="editorLabel" col="1" row="70" anchor="NORTHWEST" ref="LdateOfBirth"/>
         <cell col="2" row="70" anchor="NORTHWEST" ref="DdateOfBirth" var="def.dateOfBirth"/>
-        <cell col="3" row="70" anchor="WEST" ref="HdateOfBirth"/>
 
         <cell class="editorLabel" col="1" row="80" anchor="NORTHWEST" ref="LplaceOfBirth"/>
         <cell col="2" row="80" anchor="NORTHWEST" ref="DplaceOfBirth" var="def.placeOfBirth"/>
-        <cell col="3" row="80" anchor="WEST" ref="HplaceOfBirth"/>
 
         <cell class="editorLabel" col="1" row="90" anchor="NORTHWEST" ref="LdateOfDeath"/>
         <cell col="2" row="90" anchor="NORTHWEST" ref="DdateOfDeath" var="def.dateOfDeath"/>
-        <cell col="3" row="90" anchor="WEST" ref="HdateOfDeath"/>
 
         <cell class="editorLabel" col="1" row="100" anchor="NORTHWEST" ref="LplaceOfDeath"/>
         <cell col="2" row="100" anchor="NORTHWEST" ref="DplaceOfDeath" var="def.placeOfDeath"/>
-        <cell col="3" row="100" anchor="WEST" ref="HplaceOfDeath"/>
 
         <cell class="editorLabel" col="1" row="110" anchor="NORTHWEST" ref="Lnote"/>
         <cell col="2" row="110" anchor="NORTHWEST" ref="Dnote" var="def.note"/>
-        <cell col="3" row="110" anchor="WEST" ref="Hnote"/>
         
         <cell class="editorLabel" col="1" row="121" anchor="NORTHWEST" ref="Llink" />
         <cell col="2" row="121" anchor="NORTHWEST" ref="Dlink" var="def.link" />
-        <cell col="3" row="121" anchor="WEST" ref="Hlink" />
         
         <cell class="editorLabel" col="1" row="122" anchor="NORTHWEST" ref="Lidentifier" />
         <cell col="2" row="122" anchor="NORTHWEST" ref="Didentifier" var="def.identifier" />
-        <cell col="3" row="122" anchor="WEST" ref="Hidentifier" />
         
 
         <cell col="1" row="130" anchor="NORTHWEST" >

@@ -13,42 +13,36 @@
 		<cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="LINameP_bold"/>
 		<cell col="2" row="10" anchor="NORTHWEST" ref="DIName"/>
 		<cell col="3" row="10" anchor="NORTHWEST"><space width="20" height="0"/></cell>
-		<cell col="4" row="10" anchor="WEST" ref="HIName"/>
 		<!-- address -->
-		<cell col="1" row="20" anchor="NORTHWEST" ref="LAddress"/>
+		<cell col="1" row="20" anchor="NORTHWEST" ref="LAddress" class="editorLabel"/>
 		<cell col="2" row="20" anchor="NORTHWEST" ref="DAddress"/>
 		<cell col="3" row="20" anchor="NORTHWEST">
 			<space width="20" height="0"/>
 		</cell>
-		<cell col="4" row="20" anchor="WEST" ref="HAddress"/>
 		<!-- phone -->
-		<cell col="1" row="30" anchor="NORTHWEST" ref="LPhone"/>
+		<cell col="1" row="30" anchor="NORTHWEST" ref="LPhone" class="editorLabel"/>
 		<cell col="2" row="30" anchor="NORTHWEST" ref="DPhone"/>
 		<cell col="3" row="30" anchor="NORTHWEST">
 			<space width="20" height="0"/>
 		</cell>
-		<cell col="4" row="30" anchor="WEST" ref="HPhone"/>
 		<!--URL -->
-		<cell col="1" row="40" anchor="NORTHWEST" ref="LURL"/>
+		<cell col="1" row="40" anchor="NORTHWEST" ref="LURL" class="editorLabel"/>
 		<cell col="2" row="40" anchor="NORTHWEST" ref="DURL"/>
 		<cell col="3" row="40" anchor="NORTHWEST">
 			<space width="20" height="0"/>
 		</cell>
-		<cell col="4" row="40" anchor="WEST" ref="HURL"/>
 		<!--email-->
-		<cell col="1" row="50" anchor="NORTHWEST" ref="LEmail"/>
+		<cell col="1" row="50" anchor="NORTHWEST" ref="LEmail" class="editorLabel"/>
 		<cell col="2" row="50" anchor="NORTHWEST" ref="DEmail"/>
 		<cell col="3" row="50" anchor="NORTHWEST">
 			<space width="20" height="0"/>
 		</cell>
-		<cell col="4" row="50" anchor="WEST" ref="HEmail"/>
 		<!-- note -->
-		<cell col="1" row="60" anchor="NORTHWEST" ref="LNote"/>
+		<cell col="1" row="60" anchor="NORTHWEST" ref="LNote" class="editorLabel"/>
 		<cell col="2" row="60" anchor="NORTHWEST" ref="DNote"/>
 		<cell col="3" row="60" anchor="NORTHWEST">
 			<space width="20" height="0"/>
 		</cell>
-		<cell col="4" row="60" anchor="WEST" ref="HNote"/>
 		<!-- save / cancel button -->
 		<cell row="190" col="1" anchor="EAST"/>
 		<cell row="190" col="2" anchor="EAST" ref="save"/>
