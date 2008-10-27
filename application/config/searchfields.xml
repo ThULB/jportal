@@ -77,6 +77,12 @@
     <field name="sizes_art"             type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />       
     <field name="refs_art"              type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
     <field name="journalID_art"     type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+    <field name="volContentClassi1"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis1/volContentClassi1" value="@ID"/>
+    <field name="volContentClassi2"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis2/volContentClassi2" value="@ID"/>
+    <field name="volContentClassi3"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis3/volContentClassi3" value="@ID"/>
+    <field name="volContentClassi4"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis4/volContentClassi4" value="@ID"/>
+    <field name="volContentClassi5"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis5/volContentClassi5" value="@ID"/>
+    <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
       
     <!-- Search in institutions metadata -->
     <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />

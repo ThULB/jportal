@@ -528,37 +528,33 @@
                                 <xsl:with-param name="mode" select="'text'" />
                             </xsl:call-template>
                         </table>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
-                            <xsl:choose>
-                                <xsl:when
-                                    test="(./metadata/identis/identi | ./metadata/sizes/size 
+                        <xsl:if
+                            test="(./metadata/identis/identi | ./metadata/sizes/size 
                                 | ./metadata/dates/date[@inherited='0']/text()
-                                | ./metadata/participants/participant | ./metadata/subtitles/subtitle)">
-                                    <tr>
-                                        <td colspan="2" id="detailed-innerdivlines">
-                                            <br />
-                                        </td>
-                                    </tr>
-                                </xsl:when>
-                                <xsl:when test="string-length($mainTitle)>150">
-                                    <tr>
-                                        <td colspan="2" id="detailed-innerdivlines">
-                                            <br />
-                                        </td>
-                                    </tr>
-                                </xsl:when>
-                            </xsl:choose>
-                        </table>
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <tr>
-                                <td id="detailed-headlines">
-                                    <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
-                                </td>
-                                <td>
-                                    <br />
-                                </td>
-                            </tr>
-                        </table>
+                                | ./metadata/participants/participant | ./metadata/subtitles/subtitle)|string-length($mainTitle)>150">
+                            <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
+                                <tr>
+                                    <td colspan="2" id="detailed-innerdivlines">
+                                        <br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </xsl:if>
+                        <xsl:if
+                            test="(./metadata/identis/identi | ./metadata/sizes/size 
+                                | ./metadata/dates/date[@inherited='0']/text()
+                                | ./metadata/participants/participant | ./metadata/subtitles/subtitle)|string-length($mainTitle)>150">
+                            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                <tr>
+                                    <td id="detailed-headlines">
+                                        <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
+                                    </td>
+                                    <td>
+                                        <br />
+                                    </td>
+                                </tr>
+                            </table>
+                        </xsl:if>
                         <!--7***keyword*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">

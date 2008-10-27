@@ -228,6 +228,7 @@
                                 </xsl:call-template>
                             </xsl:if>
                         </table>
+                        <xsl:call-template name="getIdentifier"/>
                         <!-- linked articles-->
                         <xsl:call-template name="listLinkedArts" />
 
@@ -285,31 +286,25 @@
                                 </xsl:call-template>
                             </xsl:for-each>
                         </table>
-                        <!--*** Created ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('metaData.createdAt')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** Last Modified ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                                <xsl:with-param select="i18n:translate('metaData.lastChanged')" name="label" />
-                            </xsl:call-template>
-                        </table>
-                        <!--*** MyCoRe-ID ************************************* -->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
-                                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
-                                    <xsl:value-of select="i18n:translate('metaData.ID')" />
-                                </td>
-                                <td class="metavalue">
-                                    <xsl:value-of select="./@ID" />
+                                <td colspan="2" id="detailed-innerdivlines">
+                                    <br />
                                 </td>
                             </tr>
                         </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <tr>
+                                <td id="detailed-headlines">
+                                    <xsl:value-of select="i18n:translate('metaData.headlines.systemdata')" />
+                                </td>
+                                <td>
+                                    <br />
+                                </td>
+                            </tr>
+                        </table>              
+                        <xsl:call-template name="get.systemData"/>
+                        
                         <!-- Static URL ************************************************** -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="get.staticURL">
@@ -319,78 +314,7 @@
                         </table>
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                         <!--13***identifier*************************************-->
-      <xsl:if test="./metadata/def.identifier/identifier[@type='pnd']">
-        <tr>
-          <td class="metaname">
-            <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.pnd'),' :')" />
-          </td>
-          <td class="metavalue">
-            <xsl:value-of select="./metadata/def.identifier/identifier[@type='pnd']" />
-
-            <xsl:value-of select="' ('"/>
-            <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
-            </a>
-            <xsl:value-of select="', '"/>
-            <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/SET=6/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
-            </a>
-            <xsl:value-of select="', '"/>
-
-            <a class="external" href="{concat('http://dispatch.opac.ddb.de/REL?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
-            </a>
-            <xsl:value-of select="')'"/>
-          </td>
-        </tr>
-      </xsl:if>
-                        
-                        <!--14***identifier*************************************-->
-      <xsl:if test="./metadata/def.identifier/identifier[@type='ppn']">
-        <tr>
-          <td class="metaname">
-            <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.ppn'),' :')" />
-          </td>
-          <td class="metavalue">
-            <xsl:value-of select="./metadata/def.identifier/identifier[@type='ppn']" />
-            <xsl:value-of select="' ('"/>
-            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
-
-            </a>
-            <xsl:value-of select="', '"/>
-            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
-            </a>
-            <xsl:value-of select="', '"/>
-            <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/REL?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
-              <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
-            </a>
-
-            <xsl:value-of select="')'"/>
-          </td>
-        </tr>
-      </xsl:if>
-      <!--12***link*************************************-->
-      <xsl:if test="./metadata/def.link/link/@xlink:href">
-        <tr>
-          <td class="metaname">
-            <xsl:value-of select="concat(i18n:translate('metaData.person.link'),' :')" />
-
-          </td>
-          <td class="metavalue">
-            <xsl:for-each select="./metadata/def.link/link/@xlink:href">
-              <a href="." class="external">
-                <xsl:value-of select="." />
-              </a>
-              <xsl:if test="position() != last()">
-                <br />
-              </xsl:if>
-
-            </xsl:for-each>
-          </td>
-        </tr>
-      </xsl:if>
+      
                         
                         </table>
                         <!--*** Editor Buttons ************************************* -->
@@ -401,6 +325,88 @@
                 </tr>
             </table>
         </div>
+    </xsl:template>
+    
+    <xsl:template name="getIdentifier">
+        <xsl:if test="./metadata/def.identifier/identifier[@type='pnd']">
+        <table>
+            <tr>
+                <td id="detailed-labels">
+                    <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.pnd'),' :')" />
+                </td>
+                <td class="metavalue">
+                    <xsl:value-of select="./metadata/def.identifier/identifier[@type='pnd']" />
+
+                    <xsl:value-of select="' ('" />
+                    <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
+                    </a>
+                    <xsl:value-of select="', '" />
+                    <a class="external" href="{concat('http://dispatch.opac.ddb.de/DB=4.1/SET=6/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
+                    </a>
+                    <xsl:value-of select="', '" />
+
+                    <a class="external" href="{concat('http://dispatch.opac.ddb.de/REL?PPN=',./metadata/def.identifier/identifier[@type='pnd'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
+                    </a>
+                    <xsl:value-of select="')'" />
+                </td>
+            </tr>
+        </table>
+        </xsl:if>
+                        
+                        <!--14***identifier*************************************-->
+      <xsl:if test="./metadata/def.identifier/identifier[@type='ppn']">
+        <table>
+            <tr>
+                <td id="detailed-labels">
+                    <xsl:value-of select="concat(i18n:translate('metaData.person.identifier.ppn'),' :')" />
+                </td>
+                <td class="metavalue">
+                    <xsl:value-of select="./metadata/def.identifier/identifier[@type='ppn']" />
+                    <xsl:value-of select="' ('" />
+                    <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp')" />
+
+                    </a>
+                    <xsl:value-of select="', '" />
+                    <a class="external"
+                        href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/PRS=PP%7F/PPN?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp.raw')" />
+                    </a>
+                    <xsl:value-of select="', '" />
+                    <a class="external" href="{concat('https://kataloge.thulb.uni-jena.de/DB=1/SET=2/TTL=1/REL?PPN=',./metadata/def.identifier/identifier[@type='ppn'])}">
+                        <xsl:value-of select="i18n:translate('metaData.person.lookUp.rel')" />
+                    </a>
+
+                    <xsl:value-of select="')'" />
+                </td>
+            </tr>
+        </table>
+      </xsl:if>
+      <!--12***link*************************************-->
+      <xsl:if test="./metadata/def.link/link/@xlink:href">
+        <table>
+            <tr>
+                <td id="detailed-labels">
+                    <xsl:value-of select="concat(i18n:translate('metaData.person.link'),' :')" />
+
+                </td>
+                <td class="metavalue">
+                    <xsl:for-each select="./metadata/def.link/link/@xlink:href">
+                        <a href="." class="external">
+                            <xsl:value-of select="." />
+                        </a>
+                        <xsl:if test="position() != last()">
+                            <br />
+                        </xsl:if>
+
+                    </xsl:for-each>
+                </td>
+            </tr>
+        </table>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template name="printPersonName">
