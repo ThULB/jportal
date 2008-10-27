@@ -68,6 +68,9 @@
         <element name="volContentClassis5" minOccurs='0' maxOccurs='1'>
             <mcrmetaclassification name="volContentClassi5" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
         </element>
+        <element name="volContentClassis6" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="volContentClassi6" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
         <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
         </element>

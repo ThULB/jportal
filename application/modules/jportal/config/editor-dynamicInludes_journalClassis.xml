@@ -3,7 +3,7 @@
     <!-- input editor -->
     <includeMyChildren id="include_dynamicClassiForJournal-head">
         <!-- label -->
-        <cell row="20#REPLACE_WITH_RUNNING_NUMBER#" col="1" anchor="NORTHWEST">
+        <cell class="editorLabel" row="20#REPLACE_WITH_RUNNING_NUMBER#" col="1" anchor="NORTHWEST">
             <text>
                 <include cacheable="false" uri="jportal_getClassLabel:getDirectely:#REPLACE_WITH_CLASSIFICATION-ID#" />
             </text>

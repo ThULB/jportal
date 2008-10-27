@@ -10,39 +10,52 @@
         <hidden var="service/servdates" descendants="true" />
         <hidden var="service/servacls" descendants="true" />
         <hidden var="service/servflags" descendants="true" />
-        <!-- parent -->
-        <cell class="editorMandatory" row="1" col="1" anchor="NORTHWEST" ref="parent_label" />
-        <cell row="1" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
+        <!-- ########################## formal description ################################## -->
+        <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
+            <text>
+                <label i18n="metaData.headlines.formaldiscr" />
+            </text>
+        </cell>
         <!-- maintitle -->
         <cell class="editorMandatory" row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
         <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
-        <cell row="10" col="3" anchor="WEST" ref="maintitle_help" />
         <!-- subtitle -->
-        <cell row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
+        <cell class="editorLabel" row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
         <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
-        <cell row="20" col="3" anchor="NORTHWEST" ref="subtitle_help" />
         <!-- author -->
-        <cell row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
+        <cell class="editorLabel" row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
         <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
         <!-- date -->
-        <cell row="45" col="1" anchor="NORTHWEST" ref="date_label" />
+        <cell class="editorLabel" row="45" col="1" anchor="NORTHWEST" ref="date_label" />
         <cell row="45" col="2" anchor="NORTHWEST" ref="date_input" />
-        <!-- keyword -->
-        <cell row="50" col="1" anchor="NORTHWEST" ref="keyword_label" />
-        <cell row="50" col="2" anchor="NORTHWEST" ref="keyword_input" />
-        <cell row="50" col="3" anchor="WEST" ref="keyword_help" />
-        <!-- abstract -->
-        <cell row="70" col="1" anchor="NORTHWEST" ref="abstract_label" />
-        <cell row="70" col="2" anchor="NORTHWEST" ref="abstract_input" />
-        <cell row="70" col="3" anchor="WEST" ref="abstract_help" />
+        <!-- reference -->
+        <cell class="editorLabel" row="46" col="1" anchor="NORTHWEST" ref="pub_reference_label" />
+        <cell row="46" col="2" anchor="NORTHWEST" ref="ref_input" />
         <!-- identi -->
-        <cell row="90" col="1" anchor="NORTHWEST" ref="identi_label" />
-        <cell row="90" col="2" anchor="NORTHWEST" ref="identi_input" />
-        <cell row="90" col="3" anchor="WEST" ref="identi_help" />
+        <cell class="editorLabel" row="47" col="1" anchor="NORTHWEST" ref="identi_label" />
+        <cell row="47" col="2" anchor="NORTHWEST" ref="identi_input" />
+        <!-- size -->
+        <cell class="editorLabel" row="48" col="1" anchor="NORTHWEST" ref="size_label" />
+        <cell row="48" col="2" anchor="NORTHWEST" ref="size_input" />
+        <cell col="1" row="50">
+            <br />
+        </cell>
+        <!-- ########################## content description ################################## -->
+        <cell anchor="WEST" colspan="4" col="1" row="51" class="editorHeadlines">
+            <text>
+                <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
+            </text>
+        </cell>
+        <!-- keyword -->
+        <cell class="editorLabel" row="60" col="1" anchor="NORTHWEST" ref="keyword_label" />
+        <cell row="60" col="2" anchor="NORTHWEST" ref="keyword_input" />
+        <!-- abstract -->
+        <cell class="editorLabel" row="70" col="1" anchor="NORTHWEST" ref="abstract_label" />
+        <cell row="70" col="2" anchor="NORTHWEST" ref="abstract_input" />
+        
         <!-- note -->
-        <cell row="120" col="1" anchor="NORTHWEST" ref="note_label" />
+        <cell class="editorLabel" row="120" col="1" anchor="NORTHWEST" ref="note_label" />
         <cell row="120" col="2" anchor="NORTHWEST" ref="note_input" />
-        <cell row="120" col="3" anchor="WEST" ref="note_help" />
 
         <!-- dynamic includes, if used within a journal -->
         <include cacheable="false"
@@ -58,31 +71,35 @@
         <include cacheable="false"
             uri="jportal_includeEditorCode:jparticle:hidden_classispub4/hidden_classipub4:editor/editor-dynamicInludes.xml:include_classipub4-editable_code_head" />
 
-        <!-- size -->
-        <cell row="160" col="1" anchor="NORTHWEST" ref="size_label" />
-        <cell row="160" col="2" anchor="NORTHWEST" ref="size_input" />
-        <cell row="160" col="3" anchor="NORTHWEST" ref="size_help" />
-        <!-- reference -->
-        <cell row="165" col="1" anchor="NORTHWEST" ref="pub_reference_label" />
-        <cell row="165" col="2" anchor="NORTHWEST" ref="ref_input" />
-        <cell row="165" col="3" anchor="NORTHWEST" ref="pub_reference_help" />
         <!-- place holder -->
         <cell row="180" col="1" anchor="NORTHWEST">
             <space height="14" />
         </cell>
+        <cell col="1" row="190">
+            <br />
+        </cell> 
+        <!-- ########################## misc ################################## --> 
+        <cell anchor="WEST" colspan="4" col="1" row="191" class="editorHeadlines">
+            <text>
+                <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
+            </text>
+        </cell>  
+        <!-- parent -->
+        <cell class="editorMandatory" row="200" col="1" anchor="NORTHWEST" ref="parent_label" />
+        <cell row="200" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
+        
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
-        <cell row="200" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+        <cell row="250" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
-        <cell row="190" col="1" anchor="EAST" />
-        <cell row="190" col="2" anchor="EAST" ref="save" />
+        <cell row="300" col="1" anchor="EAST" />
+        <cell row="300" col="2" anchor="EAST" ref="save" />
     </panel>
     <!-- panel definitions -->
     <!-- MainTitle ================================================================== -->
     <panel id="maintitle_input">
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
         <hidden var="metadata/maintitles/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
     </panel>
     <!-- end: MainTitle -->
@@ -96,7 +113,6 @@
     </panel>
     <panel id="subtitle_input_repeater">
         <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" ordernr="1" />
-        <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
         <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
     </panel>
     <!-- date ================================================================== -->
@@ -122,7 +138,6 @@
         </cell>
     </panel>
     <panel id="keyword_input_repeater">
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
     </panel>
     <!-- end: keyword -->
@@ -136,7 +151,6 @@
     </panel>
     <panel id="abstract_input_repeater">
         <!--		<cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1"/>-->
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
     </panel>
     <!-- identi ================================================================== -->
@@ -181,7 +195,6 @@
     <panel id="size_input">
         <hidden var="metadata/sizes/@class" default="MCRMetaLangText" />
         <hidden var="metadata/sizes/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/sizes/size/@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/sizes/size" ordernr="1" />
     </panel>
     <!-- ref ================================================================== -->
@@ -193,7 +206,6 @@
         </cell>
     </panel>
     <panel id="ref_input_repeater">
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
     </panel>
     <!--date types =======================================================================-->

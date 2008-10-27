@@ -165,33 +165,33 @@
     </includeMyChildren>
     <!-- volume 1 -->
     <includeMyChildren id="include_volContent1-classi_code_head">
-        <cell row="170" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
-        <cell row="170" col="2" anchor="NORTHWEST" ref="volContentClassi1_input" />
+        <cell class="editorLabel" row="70" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
+        <cell row="70" col="2" anchor="NORTHWEST" ref="volContentClassi1_input" />
     </includeMyChildren>
     <!-- volume 2 -->
     <includeMyChildren id="include_volContent2-classi_code_head">
-        <cell row="171" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
-        <cell row="171" col="2" anchor="NORTHWEST" ref="volContentClassi2_input" />
+        <cell class="editorLabel" row="71" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
+        <cell row="71" col="2" anchor="NORTHWEST" ref="volContentClassi2_input" />
     </includeMyChildren>
     <!-- volume 3 -->
     <includeMyChildren id="include_volContent3-classi_code_head">
-        <cell row="172" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
-        <cell row="172" col="2" anchor="NORTHWEST" ref="volContentClassi3_input" />
+        <cell class="editorLabel" row="72" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
+        <cell row="72" col="2" anchor="NORTHWEST" ref="volContentClassi3_input" />
     </includeMyChildren>
     <!-- volume 4 -->
     <includeMyChildren id="include_volContent4-classi_code_head">
-        <cell row="173" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
-        <cell row="173" col="2" anchor="NORTHWEST" ref="volContentClassi4_input" />
+        <cell row="73" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
+        <cell row="73" col="2" anchor="NORTHWEST" ref="volContentClassi4_input" />
     </includeMyChildren>
     <!-- volume 5 -->
     <includeMyChildren id="include_volContent5-classi_code_head">
-        <cell row="174" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
-        <cell row="174" col="2" anchor="NORTHWEST" ref="volContentClassi5_input" />
+        <cell class="editorLabel" row="74" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
+        <cell row="74" col="2" anchor="NORTHWEST" ref="volContentClassi5_input" />
     </includeMyChildren>
     <!-- volume 6 -->
     <includeMyChildren id="include_volContent6-classi_code_head">
-        <cell row="175" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
-        <cell row="175" col="2" anchor="NORTHWEST" ref="volContentClassi6_input" />
+        <cell class="editorLabel" row="75" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
+        <cell row="75" col="2" anchor="NORTHWEST" ref="volContentClassi6_input" />
     </includeMyChildren>
     <!-- ################################################################################################# -->
     <!-- panels to be called by head cells -->

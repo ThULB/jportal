@@ -394,17 +394,23 @@ td.editorCellWithCompLinesOff{
 }
 
 .editorMandatory{
-	font-weight: bold;
 	color: #990000;
+}
+
+.editorLabel, .editorMandatory{
+	font-weight: bold;
+	background-color: #f5f5f5 ;
+	width: 200px;
 }
 
 .editorHeadlines{
     text-align: center;
-    //display:block;
-    //width: 100%;
+    /*display:block;
+    width: 100%;*/
     font-weight:bold;
-    background-color: #f5f5f5;
-    border-bottom: solid 1px #ddd;
+    color: black;
+    background-color: #BABABA;
+    border-bottom: solid 1px #7D7D7D;
     padding: 2px;
     padding-right: 0px;
     margin: -3px;
@@ -412,6 +418,20 @@ td.editorCellWithCompLinesOff{
     font-size: 13px;
 }
 
+.editorSubHeadlines{
+	border-bottom: solid 1px #7D7D7D;
+	padding: 2px;
+    padding-right: 0px;
+    margin-bottom: 5px;
+}
+
+.editorSubHeadlines label{
+	padding-left: 20px;
+	padding-right: 20px;
+	border: solid 1px #7D7D7D;
+	font-style: italic;
+	font-size: 13px;
+}
 .editorLabels {
        width: 230px;
        font-size: 12px;
@@ -454,6 +474,7 @@ input[type=image]{
 }
 
 select{
+	max-width: 300px;
     border: solid 1px #000000;
 }
 
