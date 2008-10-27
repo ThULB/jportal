@@ -108,49 +108,50 @@
         <cell row="340" col="2" anchor="NORTHWEST" ref="jpjournalID_input" />
         <cell class="editorLabel" row="350" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
         <cell row="350" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
-        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ article stuff ~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <cell col="1" row="351">
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ volume stuff ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+         <cell col="1" row="351">
             <br />
         </cell>
         <cell anchor="WEST" colspan="4" col="1" row="352" class="editorSubHeadlines">
             <text>
-                <label css-style="editorHeadlines" i18n="editormask.labels.AdminArticle" />
-            </text>
-        </cell>
-        <cell class="editorLabel" row="360" col="1" anchor="NORTHWEST" ref="pubTypeID_label" />
-        <cell row="360" col="2" anchor="NORTHWEST" ref="pubTypeID_input" />
-        <cell class="editorLabel" row="370" col="1" anchor="NORTHWEST" ref="classipub_label" />
-        <cell row="370" col="2" anchor="NORTHWEST" ref="classipub_input" />
-        <cell class="editorLabel" row="380" col="1" anchor="NORTHWEST" ref="classipub2_label" />
-        <cell row="380" col="2" anchor="NORTHWEST" ref="classipub2_input" />
-        <cell class="editorLabel" row="390" col="1" anchor="NORTHWEST" ref="classipub3_label" />
-        <cell row="390" col="2" anchor="NORTHWEST" ref="classipub3_input" />
-        <cell class="editorLabel" row="400" col="1" anchor="NORTHWEST" ref="classipub4_label" />
-        <cell row="400" col="2" anchor="NORTHWEST" ref="classipub4_input" />
-        <cell class="editorLabel" row="410" col="1" anchor="NORTHWEST" ref="rubricID_label" />
-        <cell row="410" col="2" anchor="NORTHWEST" ref="rubricID_input" />
-        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ volume stuff ~~~~~~~~~~~~~~~~~~~~~~~~ -->
-        <cell col="1" row="411">
-            <br />
-        </cell>
-        <cell anchor="WEST" colspan="4" col="1" row="412" class="editorSubHeadlines">
-            <text>
                 <label css-style="editorHeadlines" i18n="editormask.labels.AdminVolume" />
             </text>
         </cell>
-        <cell class="editorLabel" row="420" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
-        <cell row="420" col="2" anchor="NORTHWEST" ref="classiVol1_input" />
-        <cell class="editorLabel" row="430" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
-        <cell row="430" col="2" anchor="NORTHWEST" ref="classiVol2_input" />
-        <cell class="editorLabel" row="440" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
-        <cell row="440" col="2" anchor="NORTHWEST" ref="classiVol3_input" />
-        <cell class="editorLabel" row="450" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
-        <cell row="450" col="2" anchor="NORTHWEST" ref="classiVol4_input" />
-        <cell class="editorLabel" row="460" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
-        <cell row="460" col="2" anchor="NORTHWEST" ref="classiVol5_input" />
-        <cell class="editorLabel" row="470" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
-        <cell row="470" col="2" anchor="NORTHWEST" ref="classiVol6_input" />
-
+        <cell class="editorLabel" row="360" col="1" anchor="NORTHWEST" ref="classiVol1_label" />
+        <cell row="360" col="2" anchor="NORTHWEST" ref="classiVol1_input" />
+        <cell class="editorLabel" row="370" col="1" anchor="NORTHWEST" ref="classiVol2_label" />
+        <cell row="370" col="2" anchor="NORTHWEST" ref="classiVol2_input" />
+        <cell class="editorLabel" row="380" col="1" anchor="NORTHWEST" ref="classiVol3_label" />
+        <cell row="380" col="2" anchor="NORTHWEST" ref="classiVol3_input" />
+        <cell class="editorLabel" row="390" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
+        <cell row="390" col="2" anchor="NORTHWEST" ref="classiVol4_input" />
+        <cell class="editorLabel" row="400" col="1" anchor="NORTHWEST" ref="classiVol5_label" />
+        <cell row="400" col="2" anchor="NORTHWEST" ref="classiVol5_input" />
+        <cell class="editorLabel" row="410" col="1" anchor="NORTHWEST" ref="classiVol6_label" />
+        <cell row="410" col="2" anchor="NORTHWEST" ref="classiVol6_input" />
+        
+        <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ article stuff ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+        <cell col="1" row="420">
+            <br />
+        </cell>
+        <cell anchor="WEST" colspan="4" col="1" row="421" class="editorSubHeadlines">
+            <text>
+                <label css-style="editorHeadlines" i18n="editormask.labels.AdminArticle" />
+            </text>
+        </cell>
+        <cell class="editorLabel" row="430" col="1" anchor="NORTHWEST" ref="pubTypeID_label" />
+        <cell row="430" col="2" anchor="NORTHWEST" ref="pubTypeID_input" />
+        <cell class="editorLabel" row="440" col="1" anchor="NORTHWEST" ref="classipub_label" />
+        <cell row="440" col="2" anchor="NORTHWEST" ref="classipub_input" />
+        <cell class="editorLabel" row="450" col="1" anchor="NORTHWEST" ref="classipub2_label" />
+        <cell row="450" col="2" anchor="NORTHWEST" ref="classipub2_input" />
+        <cell class="editorLabel" row="460" col="1" anchor="NORTHWEST" ref="classipub3_label" />
+        <cell row="460" col="2" anchor="NORTHWEST" ref="classipub3_input" />
+        <cell class="editorLabel" row="480" col="1" anchor="NORTHWEST" ref="classipub4_label" />
+        <cell row="480" col="2" anchor="NORTHWEST" ref="classipub4_input" />
+        <cell class="editorLabel" row="490" col="1" anchor="NORTHWEST" ref="rubricID_label" />
+        <cell row="490" col="2" anchor="NORTHWEST" ref="rubricID_input" />
 
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
