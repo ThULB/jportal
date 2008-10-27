@@ -19,7 +19,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalLinkFileServlet extends MCRServlet {
 
-    private static Logger LOGGER = Logger.getLogger(MCRJPortalLinkFileServlet.class);;
+    private static Logger LOGGER = Logger.getLogger(MCRJPortalLinkFileServlet.class);
 
     private static final java.lang.String IMAGE_MARKED_KEY = "XSL.MCR.Module-iview.markedImageURL";
 
