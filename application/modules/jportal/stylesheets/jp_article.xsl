@@ -529,9 +529,17 @@
                             </xsl:call-template>
                         </table>
                         <xsl:if
-                            test="(./metadata/identis/identi | ./metadata/sizes/size 
-                                | ./metadata/dates/date[@inherited='0']/text()
-                                | ./metadata/participants/participant | ./metadata/subtitles/subtitle)|string-length($mainTitle)>150">
+                            test="./metadata/keywords/keyword
+                                | ./metadata/abstracts/abstract 
+                                | ./metadata/notes/note[@type='annotation']
+                                | ./metadata/rubrics/rubric
+                                | ./metadata/classispub/classipub
+                                | ./metadata/classispub2/classipub2
+                                | ./metadata/classispub3/classipub3
+                                | ./metadata/classispub4/classipub4
+                                | ./metadata/types/type
+                                | ./metadata/refs/ref
+                                | ./metadata/subtitles/subtitle ">
                             <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                                 <tr>
                                     <td colspan="2" id="detailed-innerdivlines">
@@ -539,12 +547,7 @@
                                     </td>
                                 </tr>
                             </table>
-                        </xsl:if>
-                        <xsl:if
-                            test="(./metadata/identis/identi | ./metadata/sizes/size 
-                                | ./metadata/dates/date[@inherited='0']/text()
-                                | ./metadata/participants/participant | ./metadata/subtitles/subtitle)|string-length($mainTitle)>150">
-                            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                       <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                 <tr>
                                     <td id="detailed-headlines">
                                         <xsl:value-of select="i18n:translate('metaData.headlines.contantdiscr')" />
@@ -592,14 +595,7 @@
                                 </xsl:call-template>
                             </table>
                         </xsl:if>
-                        <!--10***type*************************************-->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="'right'" name="textalign" />
-                                <xsl:with-param select="./metadata/types/type" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editormask.labels.type')" name="label" />
-                            </xsl:call-template>
-                        </table>
+                        
                         <!--11***rubric*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
@@ -650,6 +646,17 @@
                                 <xsl:with-param select="'right'" name="textalign" />
                                 <xsl:with-param select="./metadata/classispub4/classipub4" name="nodes" />
                                 <xsl:with-param select="$label_classipub4" name="label" />
+                            </xsl:call-template>
+                        </table>
+                        <!--10***type*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:variable name="label_type">
+                                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_pubTypesID/hidden_pubTypeID')//label/text()" />
+                            </xsl:variable>
+                            <xsl:call-template name="printMetaDates">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/types/type" name="nodes" />
+                                <xsl:with-param select="$label_type" name="label" />
                             </xsl:call-template>
                         </table>
                         <!--16***ref*************************************-->

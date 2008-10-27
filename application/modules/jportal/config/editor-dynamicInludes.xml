@@ -5,7 +5,7 @@
         <cell row="17" col="1" anchor="WEST" var="conditions/boolean/boolean/condition11" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text i18n="editormask.labels.type" />
                     </cell>
                     <hidden var="@field" default="types_art" />
@@ -25,7 +25,7 @@
         <cell row="18" col="1" anchor="WEST" var="conditions/boolean/boolean/condition12" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text i18n="editormask.labels.rubric" />
                     </cell>
                     <hidden var="@field" default="rubrics_art" />
@@ -45,7 +45,7 @@
         <cell row="19" col="1" anchor="WEST" var="conditions/boolean/boolean/condition13" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text>
                             <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub" />
                         </text>
@@ -67,7 +67,7 @@
         <cell row="20" col="1" anchor="WEST" var="conditions/boolean/boolean/condition14" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text>
                             <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2" />
                         </text>
@@ -89,7 +89,7 @@
         <cell row="21" col="1" anchor="WEST" var="conditions/boolean/boolean/condition15" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text>
                             <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3" />
                         </text>
@@ -111,7 +111,7 @@
         <cell row="22" col="1" anchor="WEST" var="conditions/boolean/boolean/condition16" colspan="2">
             <repeater min="1" max="10">
                 <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
+                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabel" >
                         <text>
                             <include cacheable="false" uri="jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4" />
                         </text>
@@ -131,35 +131,36 @@
     <!-- ################################################################################################### -->
     <!-- editable masks -->
     <!-- ################################################################################################### -->
+    <!-- head -->
+    <includeMyChildren id="include_pubType-editable_code_head">
+        <!-- type -->
+        <cell row="130" col="1" anchor="NORTHWEST" ref="type_label" class="editorLabel" />
+        <cell row="130" col="2" anchor="NORTHWEST" ref="type_input" />
+    </includeMyChildren>
     <!-- rubric -->
     <includeMyChildren id="include_rubric-editable_code_head">
-        <cell row="130" col="1" anchor="NORTHWEST" ref="rubric_label" />
-        <cell row="130" col="2" anchor="NORTHWEST" ref="rubric_input" />
+        <cell row="150" col="1" anchor="NORTHWEST" ref="rubric_label" class="editorLabel"/>
+        <cell row="150" col="2" anchor="NORTHWEST" ref="rubric_input" />
     </includeMyChildren>
     <!-- classipub -->
     <includeMyChildren id="include_classipub-editable_code_head">
-        <cell row="152" col="1" anchor="NORTHWEST" ref="classipub_label" />
+        <cell row="152" col="1" anchor="NORTHWEST" ref="classipub_label" class="editorLabel"/>
         <cell row="152" col="2" anchor="NORTHWEST" ref="classipub_input" />
     </includeMyChildren>
     <!-- classipub2 -->
     <includeMyChildren id="include_classipub2-editable_code_head">
-        <cell row="153" col="1" anchor="NORTHWEST" ref="classipub2_label" />
+        <cell row="153" col="1" anchor="NORTHWEST" ref="classipub2_label" class="editorLabel"/>
         <cell row="153" col="2" anchor="NORTHWEST" ref="classipub2_input" />
     </includeMyChildren>
     <!-- classipub3 -->
     <includeMyChildren id="include_classipub3-editable_code_head">
-        <cell row="154" col="1" anchor="NORTHWEST" ref="classipub3_label" />
+        <cell row="154" col="1" anchor="NORTHWEST" ref="classipub3_label" class="editorLabel"/>
         <cell row="154" col="2" anchor="NORTHWEST" ref="classipub3_input" />
     </includeMyChildren>
     <!-- classipub4 -->
     <includeMyChildren id="include_classipub4-editable_code_head">
-        <cell row="156" col="1" anchor="NORTHWEST" ref="classipub4_label" />
+        <cell row="156" col="1" anchor="NORTHWEST" ref="classipub4_label" class="editorLabel"/>
         <cell row="156" col="2" anchor="NORTHWEST" ref="classipub4_input" />
-    </includeMyChildren>
-    <!-- type -->
-    <includeMyChildren id="include_pubType-editable_code_head">
-        <cell row="158" col="1" anchor="NORTHWEST" ref="type_label" />
-        <cell row="158" col="2" anchor="NORTHWEST" ref="type_input" />
     </includeMyChildren>
 
     <!-- ################################################################################################### -->
@@ -182,7 +183,7 @@
     </includeMyChildren>
     <!-- volume 4 -->
     <includeMyChildren id="include_volContent4-classi_code_head">
-        <cell row="73" col="1" anchor="NORTHWEST" ref="classiVol4_label" />
+        <cell row="73" col="1" anchor="NORTHWEST" ref="classiVol4_label" class="editorLabel"/>
         <cell row="73" col="2" anchor="NORTHWEST" ref="volContentClassi4_input" />
     </includeMyChildren>
     <!-- volume 5 -->
@@ -373,7 +374,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol3/hidden_classiVol3:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol3" var="@categid" />
         </panel>
-        <list id="CclassiVol2" width="300" type="dropdown">
+        <list id="CclassiVol3" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
