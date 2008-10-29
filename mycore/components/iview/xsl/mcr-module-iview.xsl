@@ -213,7 +213,7 @@
                                                                     select="concat('iviewStoreImage(&#34;',$WebApplicationBaseURL,'modules/iview/web/paperClip.xml?XSL.MCR.Module-iview.markedImageURL.SESSION=',$nodeToBeDisplayedPath,'&#34;,&#34;',$fileToBeDisplayed,'&#34;)')" />
                                                             </xsl:variable>
                                                             <td>
-                                                                <a class="iview-displayPaperClip" title="bild merken" alt="bild merken"
+                                                                <a class="iview-displayPaperClip" title="Dieses Bild zum Verlinken vormerken" alt="Dieses Bild zum Verlinken vormerken"
                                                                     href="javascript:{$iviewStoreImageURL}" align="middle">
                                                                     <xsl:text disable-output-escaping="yes">
                                                             &amp;nbsp;</xsl:text>
