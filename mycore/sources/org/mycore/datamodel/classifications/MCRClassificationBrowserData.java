@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationBrowserData.java,v $
- * $Revision: 13922 $ $Date: 2008-08-28 14:17:40 +0200 (Do, 28 Aug 2008) $
+ * $Revision: 14185 $ $Date: 2008-10-21 17:53:28 +0200 (Di, 21 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,8 +24,6 @@
 package org.mycore.datamodel.classifications;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -214,7 +212,7 @@ public class MCRClassificationBrowserData {
     }
 
     private void setObjectTypes(final String browserClass) {
-        LOGGER.debug("setObjectTypes("+browserClass+")");
+        LOGGER.debug("setObjectTypes(" + browserClass + ")");
         try {
             // NOTE: read *.Doctype for compatiblity reasons
             objectType = config.getString("MCR.ClassificationBrowser." + browserClass + ".Objecttype", config.getString("MCR.ClassificationBrowser."
@@ -266,8 +264,8 @@ public class MCRClassificationBrowserData {
         LOGGER.info(" Found Entry at " + placeholder);
         if (placeholder != null) {
             final List<Element> children = browser.getRootElement().getChildren();
-            for (Element child:children){
-                placeholder.addContent((Element)child.clone());
+            for (Element child : children) {
+                placeholder.addContent((Element) child.clone());
             }
         }
         LOGGER.debug(cover);
@@ -341,8 +339,8 @@ public class MCRClassificationBrowserData {
         }
     }
 
-    private Element setTreeline(MCRCategory categ, Map<MCRCategoryID, Number> countMap) {
-        Element categElement = MCRCategoryElementFactory.getCategoryElement(categ, true, countMap.get(categ.getId()).intValue());
+    private Element setTreeline(MCRCategory categ) {
+        Element categElement = MCRCategoryElementFactory.getCategoryElement(categ, false, 0);
         categElement.setAttribute("level", String.valueOf(categ.getLevel() + 1));
         MCRCategory category = findCategory(classif, categ.getId().getID());
 
@@ -369,32 +367,9 @@ public class MCRClassificationBrowserData {
         for (MCRCategory cat : children) {
             ids.add(cat.getId());
         }
-        Map<MCRCategoryID, Number> countMap=null;
-        if (objectTypeArray.length==0)
-            countMap = MCRCategLinkServiceFactory.getInstance().countLinks(ids);
-        else if (objectTypeArray.length==1){
-            countMap = MCRCategLinkServiceFactory.getInstance().countLinksForType(ids, objectTypeArray[0]);
-        }
-        else {
-            countMap=new HashMap<MCRCategoryID, Number>(ids.size());
-            for (String type:objectTypeArray){
-                for (Map.Entry<MCRCategoryID, Number> entry:MCRCategLinkServiceFactory.getInstance().countLinksForType(ids, type).entrySet()){
-                    Number value=countMap.get(entry.getKey());
-                    if (value==null){
-                        value=entry.getValue();
-                    } else {
-                        value = value.intValue() + entry.getValue().intValue();
-                    }
-                    countMap.put(entry.getKey(), value);
-                }
-            }
-        }
 
         for (MCRCategory cat : children) {
-            lines.add(++i, setTreeline(cat, countMap));
-            if (startpos == -1) {
-                totalNumOfDocs += countMap.get(cat.getId()).intValue();
-            }
+            lines.add(++i, setTreeline(cat));
         }
         LOGGER.debug("End Explore - Arraylist of CategItems ");
     }
@@ -415,7 +390,7 @@ public class MCRClassificationBrowserData {
         xDocument.addContent(xNavtree);
         String browserClass = "";
         String Counter = "";
-        
+
         LOGGER.debug("get all classification IDs");
         final Set<MCRCategoryID> allIDs = getClassificationPool().getAllIDs();
         List<MCRCategoryID> ids = new ArrayList<MCRCategoryID>(allIDs.size());
@@ -423,7 +398,7 @@ public class MCRClassificationBrowserData {
         LOGGER.debug("fetched all classification IDs");
 
         for (MCRCategoryID id : ids) {
-            LOGGER.debug("get classification "+id);
+            LOGGER.debug("get classification " + id);
             MCRCategory classif = getClassificationPool().getClassificationAsPojo(id, false);
             LOGGER.debug("get browse element");
             Element cli = getBrowseElement(classif);
@@ -477,12 +452,12 @@ public class MCRClassificationBrowserData {
             setObjectTypes(browserClass);
             LOGGER.debug("counting linked objects");
             try {
-                Counter = MCRCategLinkServiceFactory.getInstance().countLinks(Collections.nCopies(1, classif.getId())).get(classif.getId()).toString();
+                Counter = String.valueOf(MCRCategLinkServiceFactory.getInstance().hasLinks(classif.getId()));
             } catch (Exception ignore) {
-                Counter = "NaN";
+                Counter = "unknown";
             }
             LOGGER.debug("counting linked objects ... done");
-            cli.setAttribute("counter", Counter);
+            cli.setAttribute("hasLinks", Counter);
             xNavtree.addContent(cli);
         }
         return new Document(xDocument);
@@ -630,10 +605,7 @@ public class MCRClassificationBrowserData {
         while ((line = getTreeline(i++)) != null) {
 
             final String catid = line.getAttributeValue("ID");
-            int numDocs = 0;
-            if (line.getAttributeValue("counter") != null) {
-                numDocs = Integer.parseInt(line.getAttributeValue("counter"));
-            }
+            boolean hasLinks = MCRCategLinkServiceFactory.getInstance().hasLinks(new MCRCategoryID(cl.getId().getRootID(), catid));
             final String status = line.getAttributeValue("hasChildren");
 
             Element label = (Element) XPath.selectSingleNode(line, "label[lang('" + lang + "')]");
@@ -645,17 +617,13 @@ public class MCRClassificationBrowserData {
 
             final int level = Integer.parseInt(line.getAttributeValue("level"));
 
-            // f�r Sortierung schon mal die leveltiefe bestimmen
-            LOGGER.debug(" NumDocs - " + numDocs);
-
-            if (emptyLeafs.endsWith("no") && numDocs == 0) {
+            if (emptyLeafs.endsWith("no") && !hasLinks) {
                 LOGGER.debug(" empty Leaf continue - " + emptyLeafs);
                 continue;
             }
             final Element xRow = new Element("row");
             final Element xCol1 = new Element("col");
             final Element xCol2 = new Element("col");
-            final int numLength = String.valueOf(numDocs).length();
 
             xRow.addContent(xCol1);
             xRow.addContent(xCol2);
@@ -676,7 +644,7 @@ public class MCRClassificationBrowserData {
             }
 
             xCol1.setAttribute("folder1", "folder_plain");
-            xCol1.setAttribute("folder2", numDocs > 0 ? "folder_closed_in_use" : "folder_closed_empty");
+            xCol1.setAttribute("folder2", hasLinks ? "folder_closed_in_use" : "folder_closed_empty");
 
             if (status.equals("T")) {
                 xCol1.setAttribute("plusminusbase", catid);
@@ -684,23 +652,18 @@ public class MCRClassificationBrowserData {
             } else if (status.equals("F")) {
                 xCol1.setAttribute("plusminusbase", catid);
                 xCol1.setAttribute("folder1", "folder_minus");
-                xCol1.setAttribute("folder2", numDocs > 0 ? "folder_open_in_use" : "folder_open_empty");
+                xCol1.setAttribute("folder2", hasLinks ? "folder_open_in_use" : "folder_open_empty");
             }
 
-            xCol2.setAttribute("numDocs", String.valueOf(numDocs));
-            final String fmtnumDocs = fillToConstantLength(String.valueOf(numDocs), " ", 6);
-            xCol2.setAttribute("fmtnumDocs", fmtnumDocs);
+            String search = uri;
+            search += "/" + catid;
 
-            if (numLength > 0) {
-                String search = uri;
-                search += "/" + catid;
+            if (search.indexOf("//") > 0)
+                search = search.substring(0, search.indexOf("//")) + search.substring(search.indexOf("//") + 1);
 
-                if (search.indexOf("//") > 0)
-                    search = search.substring(0, search.indexOf("//")) + search.substring(search.indexOf("//") + 1);
-
-                xCol2.setAttribute("searchbase", search);
-                xCol2.setAttribute("lineID", catid);
-            }
+            xCol2.setAttribute("searchbase", search);
+            xCol2.setAttribute("lineID", catid);
+            xCol2.setAttribute("hasLinks", String.valueOf(hasLinks));
 
             xCol2.addContent(text);
 
@@ -868,18 +831,6 @@ public class MCRClassificationBrowserData {
                 }
             }
         }
-    }
-
-    private static String fillToConstantLength(final String value, final String fillsign, final int length) {
-        final int valueLength = value.length();
-        if (valueLength >= length)
-            return value;
-        final StringBuffer ret = new StringBuffer("");
-        for (int i = 0; i < length - valueLength; i++) {
-            ret.append(fillsign);
-        }
-        ret.append(value);
-        return ret.toString();
     }
 
     /**

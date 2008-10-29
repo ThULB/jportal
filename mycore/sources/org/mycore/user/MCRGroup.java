@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.common.MCRException;
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
  * @author Heiko Helmbrecht
- * @version $Revision: 13085 $ $Date: 2007-05-02 22:23:40 +0200 (Mi, 02 Mai
+ * @version $Revision: 14106 $ $Date: 2007-05-02 22:23:40 +0200 (Mi, 02 Mai
  *          2007) $
  */
 public class MCRGroup extends MCRUserObject implements MCRPrincipal {
@@ -169,8 +169,8 @@ public class MCRGroup extends MCRUserObject implements MCRPrincipal {
 	 * This constructor creates the data of this object from a given JDOM
 	 * Element.
 	 * 
-	 * @param the
-	 *            JDOM Element
+	 * @param elm
+	 *            the JDOM Element
 	 */
 	public MCRGroup(Element elm) {
 		this();

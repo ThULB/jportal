@@ -1,15 +1,18 @@
 Installation instructions for DocPortal under Windows
 
-1. software requirements
+1. Software Requirements
 ========================
 
-- Java 1.5 or higher 
-  tested with JDK 1.5.0_10
+- Java 1.5 or higher
+  tested with JDK 1.6.0_10
 
-- Jakarta-ant version 1.7 or higher 
+- Jakarta-ant version 1.7 or higher
   Download: http://www.artfiles.org/apache.org/ant/binaries
-  tested: apache-ant-1.7.0-bin.zip
+  tested: apache-ant-1.7.1-bin.zip
   It is recommended to deinstall old versions of ant!
+
+- command line Subversion
+  e.g. slik subversion: http://www.sliksvn.com/en/download
 
 To use DocPortal as a test system it is not required to install
 a DBMS or web application server. MyCoRe comes with HSQLDB (a
@@ -18,7 +21,7 @@ Java web server software).
 For informations about alternatives look into the User Guide.
 
 
-2. configuration and installation
+2. Configuration and Installation
 =================================
 
 - set new environment variables
@@ -36,40 +39,39 @@ For informations about alternatives look into the User Guide.
   + copy config\hibernate\hibernate.cfg.xml.template config\hibernate\hibernate.cfg.xml
 
 - edit config\mycore.properties.private
-  MCR.basedir=\Path_to_DocPortal	# e.g. c:/Program Files/docportal, Attention: It
-					# is nessesary to use '/' instead of '\' oder '\\'.
-					# Then a directory named 'Program Filesdocportal'
-					# will be created.
+  MCR.basedir=\Path_to_DocPortal    # e.g. c:/Program Files/docportal, Attention: It
+                                    # is nessesary to use '/' instead of '\' oder '\\'.
+                                    # Then a directory named 'Program Filesdocportal'
+                                    # will be created.
 
 - check config\hibernate\hibernate.cfg.xml
   This file is preconfigured for HSQLDB. If you use the default configuration
   there is nothing to be done.
 
 - check configuration and compile
-  + ant info							# check the output
+  + ant info                        # check the output
   + ant create.schema
-  + ant jar
+  + ant create.jar
 
 
-2.1. Installation optionaler Komponenten
+2.1. Installation of optional components
 ========================================
 
-- DocPortal contains a module (Image-Viewer - "IView"), that are according to
-  license agreements not installed by default. This module is located in
-  $DOCPORTAL_HOME/modules/iview and contains a special INSTALL.txt. 
-  Please, install as explained.
-  
+- MyCoRe contains components for an Image-Viewer (Imaging and IView), that are
+  according to license agreements not installed by default. This components are
+  located in $MYCORE_HOME/components. The directory imaging contains a special
+  install.txt. Please, install as explained there.
 
-3. create data structure
+
+3. Create data structure
 ========================
 
   + ant create.scripts
   + ant create.directories
   + double click on hsqldbstart.cmd in %DOCPORTAL_HOME%\build\bin	# start HSQLDB
-  + ant create.metastore
 
 
-4. load sample data
+4. Load sample data
 ===================
 
   + ant create.users
@@ -77,23 +79,19 @@ For informations about alternatives look into the User Guide.
   + ant create.class
 
 
-5. create webapplication
+5. Create webapplication
 ========================
 
-  + cd %DOCPORTAL_HOME%\modules\module-wcms\aif\config
-  + cd %DOCPORTAL_HOME%
-  + ant create.genkeys
-  + ant webapps
+  + ant create.webapp
   + double click on jettystart.cmd in %DOCPORTAL_HOME%\build\bin	# start Jetty
 
 You can see the application using following URL
   + http://localhost:8291/
 
 
-6. stop all processes
+6. Stop all processes
 =====================
 
  + cd %DOCPORTAL_HOME%\build\bin
  + double click on (or run) jettystop.cmd				# stop Jetty
  + double click on (or run) hsqldbstop.cmd				# stop HSQLDB
-

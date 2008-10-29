@@ -141,6 +141,7 @@
 		<!-- copy stylesheets -->
 		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" overwrite="true">
 			<fileset dir="${module.dir}/xsl" includes="**/*.xsl" />
+		    <fileset dir="${module.dir}/webpages/templates" includes="**/*.xsl" />
 		</copy>
 
 		<copy todir="${build.webapps}/WEB-INF/classes" flatten="true" preservelastmodified="true" failonerror="false">
@@ -148,8 +149,8 @@
 		</copy>
 
 		<!-- copy webpages -->
-		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
-			<fileset dir="${module.dir}/webpages" includes="**/*.xml" />
+		<copy todir="${build.webapps}" preservelastmodified="true" includeemptydirs="false">
+		  <fileset dir="${module.dir}/webpages" includes="**/*" excludes="templates/master/*/XSL/*" />
 		</copy>
 
 		<antcall target="genSWFPage" />

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,9 +34,12 @@ import org.jdom.Namespace;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
  */
 public final class MCRConstants {
+    /** MyCoRe version */
+    public final static String VERSION = "2.0";
+    
     /** The URL of the XLink */
     private final static String XLINK_URL = "http://www.w3.org/1999/xlink";
     public final static Namespace XLINK_NAMESPACE = Namespace.getNamespace("xlink", XLINK_URL);

@@ -1,5 +1,5 @@
 /**
- * $Revision: 13724 $ $Date: 2008-07-08 09:29:22 +0200 (Di, 08 Jul 2008) $ This file is part of ** M y C o R e ** Visit our homepage at http://www.mycore.de/
+ * $Revision: 14251 $ $Date: 2008-10-27 09:58:58 +0100 (Mo, 27 Okt 2008) $ This file is part of ** M y C o R e ** Visit our homepage at http://www.mycore.de/
  * for details. This program is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as
  * published by the Free Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope
  * that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
@@ -58,6 +58,7 @@ public class MCRCategLinkServiceImplTest extends MCRHibTestCase {
         testLinks = new ArrayList<MCRCategoryLink>();
         testLinks.add(new MCRCategoryLink(germany, new MCRObjectReference("Jena", "city")));
         testLinks.add(new MCRCategoryLink(germany, new MCRObjectReference("Thüringen", "state")));
+        testLinks.add(new MCRCategoryLink(germany, new MCRObjectReference("Hessen", "state")));
         testLinks.add(new MCRCategoryLink(germany, new MCRObjectReference("Saale", "river")));
         testLinks.add(new MCRCategoryLink(uk, new MCRObjectReference("London", "city")));
         testLinks.add(new MCRCategoryLink(uk, new MCRObjectReference("England", "state")));
@@ -163,7 +164,7 @@ public class MCRCategLinkServiceImplTest extends MCRHibTestCase {
         LOGGER.debug("****List of returned map");
         LOGGER.debug(map);
         assertEquals("Returned amount of MCRCategoryIDs does not match.", categIDs.size(), map.size());
-        assertEquals("Count of Europe links does not match.", 6, map.get(category.getChildren().get(0).getId()).intValue());
+        assertEquals("Count of Europe links does not match.", 7, map.get(category.getChildren().get(0).getId()).intValue());
     }
 
     /**
@@ -179,6 +180,18 @@ public class MCRCategLinkServiceImplTest extends MCRHibTestCase {
         LOGGER.debug(map);
         assertEquals("Returned amount of MCRCategoryIDs does not match.", categIDs.size(), map.size());
         assertEquals("Count of Europe links does not match.", 2, map.get(category.getChildren().get(0).getId()).intValue());
+    }
+
+    public void testHasLinks() {
+        MCRCategoryImpl germany = (MCRCategoryImpl) category.getChildren().get(0).getChildren().get(0);
+        assertFalse("Classification should not be in use", SERVICE.hasLinks(category.getId()));
+        assertFalse("Category should not be in use", SERVICE.hasLinks(germany.getId()));
+        assertFalse("Category does not exist and should be not in use", SERVICE.hasLinks(MCRCategoryID.rootID("foo")));
+        assertFalse("Category does not exist and should be not in use", SERVICE.hasLinks(new MCRCategoryID("foo", "bar")));
+        addTestLinks();
+        startNewTransaction();
+        assertTrue("Classification should be in use", SERVICE.hasLinks(category.getId()));
+        assertTrue("Category should be in use", SERVICE.hasLinks(germany.getId()));
     }
 
     private void loadWorldClassification() throws URISyntaxException {

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  */
 public class MCRMetaISBN extends MCRMetaDefault {
     // MetaISBN data
@@ -255,7 +255,6 @@ public class MCRMetaISBN extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public final void debug() {
-        LOGGER.debug("Start Class : MCRMetaISBN");
         super.debugDefault();
         LOGGER.debug("ISBN               = " + isbn);
     }

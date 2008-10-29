@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13227 $ $Date: 2008-03-04 10:05:52 +0100 (Di, 04 Mär 2008) $
+ * $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import org.mycore.common.MCRException;
  * 
  * @author Mathias Hegner
  * @author Jens Kupferschmidt
- * @version $Revision: 13227 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb
+ * @version $Revision: 14091 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRObjectStructure {
@@ -379,8 +379,6 @@ public class MCRObjectStructure {
         if (children.size() > 0) {
             org.jdom.Element elmm = new org.jdom.Element("children");
             elmm.setAttribute("class", "MCRMetaLinkID");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
 
             for (i = 0; i < children.size(); ++i) {
                 elmm.addContent(((MCRMetaLink) children.get(i)).createXML());
@@ -392,8 +390,6 @@ public class MCRObjectStructure {
         if (parent != null) {
             org.jdom.Element elmm = new org.jdom.Element("parents");
             elmm.setAttribute("class", "MCRMetaLinkID");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
             elmm.addContent(parent.createXML());
             elm.addContent(elmm);
         }
@@ -401,8 +397,6 @@ public class MCRObjectStructure {
         if (derivates.size() > 0) {
             org.jdom.Element elmm = new org.jdom.Element("derobjects");
             elmm.setAttribute("class", "MCRMetaLinkID");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
 
             for (i = 0; i < derivates.size(); ++i) {
                 elmm.addContent(((MCRMetaLink) derivates.get(i)).createXML());

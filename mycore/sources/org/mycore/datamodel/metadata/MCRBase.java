@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,6 +28,7 @@ import static org.mycore.common.MCRConstants.DEFAULT_ENCODING;
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -37,7 +38,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
  * the frame to produce a full functionality object.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
  */
 public abstract class MCRBase {
     /**
@@ -72,7 +73,7 @@ public abstract class MCRBase {
     protected boolean importMode = false;
 
     // logger
-    static Logger logger = Logger.getLogger(MCRBase.class.getPackage().getName());
+    static Logger LOGGER = Logger.getLogger(MCRBase.class.getPackage().getName());
 
     /**
      * Load static data for all MCRObjects
@@ -85,7 +86,7 @@ public abstract class MCRBase {
 
         // Default Encoding
         mcr_encoding = mcr_conf.getString("MCR.Metadata.DefaultEncoding", DEFAULT_ENCODING);
-        logger.debug("Encoding = " + mcr_encoding);
+        LOGGER.debug("Encoding = " + mcr_encoding);
     }
 
     /**
@@ -95,12 +96,12 @@ public abstract class MCRBase {
      * @exception MCRException
      *                general Exception of MyCoRe
      * @exception MCRConfigurationException
-     *                a special exception for configuartion data
+     *                a special exception for configuration data
      */
     public MCRBase() throws MCRException, MCRConfigurationException {
         mcr_id = new MCRObjectID();
         mcr_label = "";
-        mcr_version = "1.3";
+        mcr_version = MCRConstants.VERSION;
         mcr_schema = "";
 
         // Service class
@@ -207,7 +208,7 @@ public abstract class MCRBase {
      * This methode set the MyCoRe version to the string 'Version 1.3'.
      */
     public final void setVersion() {
-        mcr_version = "Version 1.3";
+        mcr_version = MCRConstants.VERSION;
     }
 
     /**

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,6 +26,7 @@ package org.mycore.datamodel.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jdom.Namespace;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
@@ -39,9 +40,12 @@ import org.mycore.common.MCRUtils;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27 Okt 2008) $
  */
 public class MCRObjectMetadata {
+    // logger
+    static Logger LOGGER = Logger.getLogger(MCRMetaElement.class.getName());
+
     // common data
     private String default_lang = null;
 
@@ -113,7 +117,19 @@ public class MCRObjectMetadata {
 
         return heritMeta;
     }
-
+    
+    /**
+     * <em>removeInheritedMetadata</em> removes all inherited metadata elements  
+     * 
+     */    
+    public final void removeInheritedMetadata() {
+        for (int i = 0; i < size(); ++i) {
+            MCRMetaElement me = meta_list.get(i);
+            if (me.getHeritable())
+                me.removeInheritedObject();
+        }
+    }
+    
     /**
      * This method append MCRMetaElement's from a given MCRObjectMetadata to
      * this data set.
@@ -356,5 +372,14 @@ public class MCRObjectMetadata {
         }
 
         return true;
+    }
+    
+    /**
+     * This method put debug data to the logger (for the debug mode).
+     */
+    public final void debug() {
+        for (int i = 0; i < tag_names.size(); i++) {
+            meta_list.get(i).debug();
+        }
     }
 }

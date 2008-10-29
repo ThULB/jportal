@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -63,10 +63,10 @@ import org.xml.sax.helpers.DefaultHandler;
  * programming API.
  * 
  * @author Jens Kupferschmidt
- * @author Frank L�tzenkirchen
+ * @author Frank L\u00fctzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
 public class MCRUtils {
     // The file slash
@@ -532,8 +532,8 @@ public class MCRUtils {
     /**
      * The method cut a HashSet for a maximum of items.
      * 
-     * @hashin The incoming HashSet
-     * @maxitem The maximum number of items
+     * @param hashin The incoming HashSet
+     * @param maxitem The maximum number of items
      * @return the cutted HashSet
      */
     public static final HashSet cutHashSet(HashSet hashin, int maxitems) {
@@ -558,8 +558,8 @@ public class MCRUtils {
     /**
      * The method cut an ArrayList for a maximum of items.
      * 
-     * @arrayin The incoming ArrayList
-     * @maxitem The maximum number of items
+     * @param arrayin The incoming ArrayList
+     * @param maxitem The maximum number of items
      * @return the cutted ArrayList
      */
     public static final ArrayList cutArrayList(ArrayList arrayin, int maxitems) {

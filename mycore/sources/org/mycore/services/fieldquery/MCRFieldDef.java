@@ -1,5 +1,5 @@
 /*
- * $Revision: 13907 $ $Date: 2008-08-27 14:17:41 +0200 (Mi, 27 Aug 2008) $
+ * $Revision: 14222 $ $Date: 2008-10-23 08:53:29 +0200 (Do, 23 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -362,36 +362,15 @@ public class MCRFieldDef {
             forEach1 = forEach2;
         }
 
-        // <mcr:fieldValue>
-        Element fieldValue = new Element("fieldValue", mcrns);
-        fieldValue.setAttribute("name", getName());
+        // <name>value</name>
+        Element fieldValue = new Element(getName());
         forEach1.addContent(fieldValue);
-
-        // <mcr:value>
-        Element valueElem = new Element("value", mcrns);
-        fieldValue.addContent(valueElem);
 
         // <xsl:value-of select="{@value}" />
         String valueExpr = fieldDef.getAttributeValue("value");
         Element valueOf = new Element("value-of", xslns);
         valueOf.setAttribute("select", valueExpr);
-        valueElem.addContent(valueOf);
-
-        List attributes = fieldDef.getChildren("attribute", mcrns);
-
-        for (int j = 0; j < attributes.size(); j++) {
-            Element attribDef = (Element) (attributes.get(j));
-
-            // <mcr:attribute name="{@name}">
-            Element attribute = new Element("attribute", mcrns);
-            fieldValue.addContent(attribute);
-            attribute.setAttribute("name", attribDef.getAttributeValue("name"));
-
-            // <xsl:value-of select="{@value}" />
-            valueOf = new Element("value-of", xslns);
-            valueOf.setAttribute("select", attribDef.getAttributeValue("value"));
-            attribute.addContent(valueOf);
-        }
+        fieldValue.addContent(valueOf);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("---------- XSL for search field \"" + name + "\" ----------");

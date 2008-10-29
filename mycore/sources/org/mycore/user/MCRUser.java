@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13459 $ $Date: 2008-04-28 12:56:57 +0200 (Mo, 28 Apr 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.common.MCRSessionMgr;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * @author Heiko Helmbrecht
- * @version $Revision: 13459 $ $Date: 2008-04-28 12:56:57 +0200 (Mo, 28 Apr 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
 public class MCRUser extends MCRUserObject implements MCRPrincipal, Principal {
     /** The numerical ID of the MyCoRe user unit (either user ID or group ID) */
@@ -98,7 +98,7 @@ public class MCRUser extends MCRUserObject implements MCRPrincipal, Principal {
      * other attributes the default constructor is invoked. This constructor is
      * used by the access control system.
      * 
-     * @param ID
+     * @param id
      *            the named user ID
      */
     public MCRUser(String id) {
@@ -112,9 +112,6 @@ public class MCRUser extends MCRUserObject implements MCRPrincipal, Principal {
      *            (int) the numerical user ID
      * @param ID
      *            the named user ID
-     * @creator the creator name
-     * @creationDate the timestamp of creation
-     * @modifiedDate the timestamp of modification
      * @param idEnabled
      *            (boolean) specifies whether the account is disabled or enabled
      * @param updateAllowed

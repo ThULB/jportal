@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.mycore.user.MCRUser;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  * @since 1.3
  */
 public interface MCRAccessInterface {
@@ -65,7 +65,7 @@ public interface MCRAccessInterface {
      * generate rule string from xml
      * 
      * @param rule
-     * @return
+     * @return the normalized rule string
      */
     public String getNormalizedRuleString(Element rule);
     
@@ -336,7 +336,7 @@ public interface MCRAccessInterface {
      * list all object-related Access Permissions that are defined 
      * in configuration files
      * 
-     * @return
+     * @return a List of permissiond from the configuration
      */
     public List getAccessPermissionsFromConfiguration();  
     

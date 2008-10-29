@@ -23,6 +23,7 @@
     <hidden var="service/servacls"  descendants="true" />
     <hidden var="service/servflags" descendants="true" />
     <hidden var="metadata/@lang"    default="de"/>
+    <hidden var="metadata/creators" descendants="true" />
 	<hidden var="metadata/subjects" descendants="true" />
 	<hidden var="metadata/descripturls" descendants="true" />
 	<hidden var="metadata/sourcelinks"  descendants="true" />
@@ -62,24 +63,10 @@
       </panel>
     </cell>
 
-    <!-- ========== metadata/creators/creator ========== -->
-
-    <cell col="1" row="2" anchor="NORTHWEST" ref="LCreatorP"/>
-    <cell col="2" row="2" anchor="WEST" ref="HCreator"/>
-    <cell col="3" row="2" anchor="NORTHWEST" var="metadata/creators[@class='MCRMetaLangText']">
-      <panel>
-        <include ref="inherit.heritable" />
-        <hidden var="creator/@inherited" default="0"  />
-        <hidden var="creator/@lang"      default="de" />
-        <cell col="1" row="1" anchor="WEST" var="creator">
-          <textfield id="ZCreatorCond" width="48" maxlength="128" />
-        </cell>
-        <cell col="2" row="1" anchor="WEST" ref="ACreator" />
-      </panel>
-    </cell>
-
     <!-- ========== metadata/creatorlinks/creatorlink -->
 
+    <cell col="1" row="3" anchor="NORTHWEST" ref="LCreatorP"/>   
+    <cell col="2" row="3" anchor="NORTHWEST" ref="HCreator"/>
     <cell col="3" row="3" anchor="NORTHWEST" var="metadata/creatorlinks[@class='MCRMetaLinkID']">
       <panel>
         <include ref="inherit.heritable" />
@@ -181,7 +168,6 @@
 
     <cell col="3" row="9" anchor="NORTHWEST" var="metadata/contriblinks[@class='MCRMetaLinkID']">
       <panel>
-        <include ref="MCRMetaLinkID" />
         <cell row="1" col="1" anchor="NORTHWEST" var="contriblink" ref="PersonLink" />
       </panel>
     </cell>
@@ -381,12 +367,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST">
-                <textfield id="TFCoRights" width="48" maxlength="1024">
-                  <condition id="CoRights" required="true">
-                    <label xml:lang="de">Bitte tragen Sie die Rechte ein!</label>
-                    <label xml:lang="en">Please enter the rights!</label>
-                  </condition>
-                </textfield>
+                <textfield id="TFCoRights" width="48" maxlength="1024" />
               </cell>
               <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
             </panel>
@@ -481,11 +462,6 @@
   </panel>
 
 <!-- ============================================================ -->
-
-  <includes id="inherit.heritable">
-    <hidden var="@notinherit" default="false" />
-    <hidden var="@heritable"  default="true"  />
-  </includes>
 
   <repeater id="PersonLink" min="1" max="5" pos="right">  
     <panel>

@@ -666,12 +666,11 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mcr-integrate target="webapp" classpathref="mycore.jars" />
     <antcall target="webapps.base" />
     <antcall target="safeWebContent" />
-    <antcall target="webapps.templates" />
     <copy tofile="${build.webapps}/WEB-INF/classes/mycore.properties"
           file="${build.config}/mycore.properties"
           overwrite="true" />
     <moduleHook target="create.webapp" />
-    <!-- Create empty mycoreobject.dtd -->
+    <antcall target="webapps.templates" />
   </target>
 
   <target name="i18n">
@@ -683,18 +682,10 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <target name="webapps.base">
     <!-- Copy the files from various directories to build the webapps -->
     <copy todir="${build.webapps}" preservelastmodified="true">
-      <fileset dir="${application.webpages}">
-        <exclude name="**/*.xsl" />
-      </fileset>
+      <fileset dir="${application.webpages}" />
       <fileset dir="${application.config}" includes="FileContentTypes.xml" />
       <fileset dir="${application.config}" includes="searchfields.xml" />
       <fileset dir="${application.config}" includes="hosts.xml" />
-      <fileset dir="${application.doc}" includes="DocPortal.pdf" />
-      <fileset dir="${application.doc}" includes="QuickInstallationGuide.pdf" />
-      <fileset dir="${mycore}/documentation/DeveloperGuide" includes="DeveloperGuide.pdf" />
-      <fileset dir="${mycore}/documentation/Overview" includes="Overview.pdf" />
-      <fileset dir="${mycore}/documentation/UserGuide" includes="UserGuide.pdf" />
-      <fileset dir="${mycore}/documentation/ProgGuide" includes="ProgrammerGuide.pdf" />
     </copy>
     <!-- copy i18n files -->
     <copy todir="${build.webapps}/WEB-INF/classes/">
@@ -722,9 +713,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true">
       <fileset dir="${application.stylesheets}" includes="**/*.xsl" />
       <!-- templates -->
-      <fileset dir="${basedir}/webpages/templates">
-        <include name="**/*.xsl" />
-      </fileset>
+      <fileset dir="${basedir}/webpages" includes="**/*.xsl" />
     </copy>
     <copy todir="${build.webapps}/WEB-INF/classes/xsl"
           overwrite="true"
@@ -819,7 +808,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- create a new chooseTemplate.xsl -->
   <target name="webapps.templates">
     <taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
-    <templatecheck templatepath="${env.DOCPORTAL_HOME}/webpages/templates/master/"
+    <templatecheck templatepath="${build.webapps}/templates/master/"
                    choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
   </target>
 
@@ -836,9 +825,6 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     </copy>
     <copy todir="${MCR.Save.FileSystem}/webpages/images" preservelastmodified="true" failonerror="false">
       <fileset dir="${build.webapps}/images/" />
-    </copy>
-    <copy todir="${MCR.Save.FileSystem}/webpages/documents" preservelastmodified="true" failonerror="false">
-      <fileset dir="${build.webapps}/documents" />
     </copy>
   </target>
 
@@ -950,14 +936,11 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <delete dir="${MCR.Persistence.SQL.Data.Directory}" />
   </target>
 
-  <!-- =================================================================== -->
-  <!-- Update current working directory from SVN repository                -->
-  <!-- =================================================================== -->
-
-  <target name="update">
-    <exec executable="svn" spawn="true">
-      <arg value="update" />
-    </exec>
+  <target name="clean.libs" description="Removes all *.jar files from the build tree">
+    <delete dir="${build.lib}" />
+	<mkdir dir="${build.lib}" />
+    <delete dir="${build.webapps}/WEB-INF/lib" />
+	<mkdir dir="${build.webapps}/WEB-INF/lib" />
   </target>
 
   <!-- =================================================================== -->
@@ -965,7 +948,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- =================================================================== -->
 
   <target name="postcommit">
-    <antcall target="update" />
+    <antcall target="jar" />
     <antcall target="javadocs" />
     <antcall target="changelog" />
   </target>
@@ -983,7 +966,6 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mkdir dir="${basedir}/changelogs" />
     <mkdir dir="${basedir}/changelogs/statsvn" />
 
-    <mkdir dir="build/changelogs/statsvn" />
     <exec executable="svn" output="${basedir}/changelogs/statsvn/svnlog.xml">
       <arg line="log -v --xml" />
     </exec>
@@ -1020,25 +1002,10 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <not>
         <uptodate>
           <srcfiles dir="${basedir}/sources" includes="**/*.java" />
-          <mapper type="merge" to="${basedir}/javadocs/overview-tree.html" />
+          <mapper type="merge" to="${build.javadocs}/overview-tree.html" />
         </uptodate>
       </not>
     </condition>
-  </target>
-
-  <!-- =================================================================== -->
-  <!-- Collect all documentations                                          -->
-  <!-- =================================================================== -->
-
-  <target name="docs" depends="up2date,javadocs">
-    <echo level="info">Collect all DocPortal documentations...</echo>
-    <copy todir="${build}/javadocs-mycore">
-      <fileset dir="${mycore}/documentation/html" />
-    </copy>
-    <copy todir="${build}" file="${mycore}/documentation/Overview/Overview.pdf" />
-    <copy todir="${build}" file="${mycore}/documentation/UserGuide/UserGuide.pdf" />
-    <copy todir="${build}" file="${mycore}/documentation/ProgGuide/ProgrammerGuide.pdf" />
-    <copy todir="${build}" file="${application}/documentation/QuickInstallationGuide.pdf" />
   </target>
 
   <!-- =================================================================== -->

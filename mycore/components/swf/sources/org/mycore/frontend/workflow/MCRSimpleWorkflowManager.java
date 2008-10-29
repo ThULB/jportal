@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,16 +54,9 @@ import org.mycore.frontend.cli.MCRObjectCommands;
  * This class holds methods to manage the workflow file system of MyCoRe.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
-/**
- * @author mcradmin
- *
- */
-/**
- * @author mcradmin
- * 
- */
+
 public class MCRSimpleWorkflowManager {
 
     /** The link table manager singleton */
@@ -542,10 +535,10 @@ public class MCRSimpleWorkflowManager {
      * MCRObjectID with the name of itseslf. Also ti create a ne directory with
      * the same new name. This new derivate ID was returned.
      * 
-     * @param objmcrid
+     * @param ID
      *            the MCRObjectID of the related object
-     * @param server
-     *            the flag to show that the data came from a server
+     * @param DD
+     *            the MCRObjectID of the related derivate
      * @return the MCRObjectID of the derivate
      */
     public final MCRDerivate createDerivate(MCRObjectID ID, MCRObjectID DD) {

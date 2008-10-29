@@ -1,15 +1,17 @@
 Installation instructions for DocPortal under Linux
 
-1. software requirements
+1. Software Requirements
 ========================
 
-- Java 1.5 or higher 
+- Java 1.5 or higher
   tested with JDK 1.5
 
-- Jakarta-ant version 1.7 or higher 
+- Jakarta-ant version 1.7 or higher
   Download: http://www.artfiles.org/apache.org/ant/binaries
   tested: apache-ant-1.7.0-bin.tar.gz
   It is recommended to deinstall old versions of RPM packages!
+
+- command line Subversion
 
 To use DocPortal as a test system it is not required to install
 a DBMS or web application server. MyCoRe comes with HSQLDB (a
@@ -18,7 +20,7 @@ Java web server software).
 For informations about alternatives look into the User Guide.
 
 
-2. configuration and installation
+2. Configuration and Installation
 =================================
 
 - create a new user (mcradmin) with following profile
@@ -45,28 +47,27 @@ For informations about alternatives look into the User Guide.
 - check configuration and compile
   + ant info				# check the output
   + ant create.schema
-  + ant jar
+  + ant create.jar
 
 
 2.1. Installation of optional components
 ========================================
 
-- DocPortal contains a module (Image-Viewer - "IView"), that are according to
-  license agreements not installed by default. This module is located in
-  $DOCPORTAL_HOME/modules/iview and contains a special INSTALL.txt. 
-  Please, install as explained.
-  
-  
-3. create data structure
+- MyCoRe contains components for an Image-Viewer (Imaging and IView), that are
+  according to license agreements not installed by default. This components are
+  located in $MYCORE_HOME/components. The directory imaging contains a special
+  install.txt. Please, install as explained there.
+
+
+3. Create data structure
 ========================
 
   + ant create.scripts
   + ant create.directories
   + nohup build/bin/hsqldbstart.sh &		# start HSQLDB as background process
-  + ant create.metastore
 
 
-4. load sample data
+4. Load sample data
 ===================
 
   + ant create.users
@@ -74,23 +75,19 @@ For informations about alternatives look into the User Guide.
   + ant create.class
 
 
-5. create webapplication
+5. Create webapplication
 ========================
 
-  + cd $DOCPORTAL_HOME/modules/module-wcms/aif/config
-  + cd $DOCPORTAL_HOME
-  + ant create.genkeys
-  + ant webapps
+  + ant create.webapp
   + nohup build/bin/jettystart.sh &		# start Jetty as background process
 
 You can see the application using following URL
   + http://localhost:8291/
 
 
-6. stop all processes
+6. Stop all processes
 =====================
 
  + cd $DOCPORTAL_HOME
  + build/bin/jettystop.sh			# stop Jetty
  + build/bin/hsqldbstop.sh			# stop HSQLDB
-

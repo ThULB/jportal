@@ -8,6 +8,7 @@
 	  url="http://localhost:8291/"
 	  class="org.mycore.services.fieldquery.MCRQueryClientWebService"
 	  access="webservice"
+	  checked="true"
 	  servicepath="services/MCRWebService"
 	  staticpath="receive/">
     <label xml:lang="de">Lokal via WebService</label>

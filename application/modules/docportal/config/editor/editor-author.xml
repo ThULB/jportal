@@ -3,7 +3,6 @@
 <!-- ============================================== -->
 <!-- $Revision: 1.2 $ $Date: 2007-09-28 05:49:31 $ -->
 <!-- ============================================== -->
-
 <imports>
 
   <!-- ========== headline ========== -->
@@ -153,7 +152,7 @@
     <cell col="2" row="6" anchor="NORTHWEST" ref="HDateP"/>
     <cell col="3" row="6" anchor="NORTHWEST" var="metadata/dates[@class='MCRMetaISO8601Date']">
       <panel>
-        <include ref="MCRMetaISO8601Date.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <hidden var="date/@inherited" default="0"/>
         <hidden var="date/@type" default="birth"/>
         <cell col="1" row="1" anchor="WEST" ref="TFzeile10" var="date" />
@@ -166,7 +165,7 @@
     <cell col="2" row="7" anchor="NORTHWEST" ref="HProfession" />
     <cell col="3" row="7" anchor="NORTHWEST" var="metadata/professions[@class='MCRMetaLangText']">
       <panel>
-        <include ref="MCRMetaLangText.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <cell col="1" row="1" anchor="NORTHWEST" var="profession">
           <repeater min="1" max="5" pos="right">
             <panel>
@@ -190,7 +189,7 @@
     <cell col="2" row="8" anchor="NORTHWEST" ref="HNational"/>
     <cell col="3" row="8" anchor="NORTHWEST" var="metadata/nationals[@class='MCRMetaClassification']">
       <panel>
-        <include ref="MCRMetaClassification.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <hidden var="national/@inherited" default="0"/>
         <hidden var="national/@classid" default="DocPortal_class_00000001"/>
         <cell col="1" row="1" anchor="WEST" var="national/@categid">
@@ -211,7 +210,7 @@
     <cell col="2" row="9" anchor="NORTHWEST" ref="HURL"/>
     <cell col="3" row="9" anchor="NORTHWEST" var="metadata/urls[@class='MCRMetaLink']">
       <panel>
-        <include ref="MCRMetaLink.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <hidden var="url/@inherited" default="0"/>
         <hidden var="url/@type" default="locator"/>
         <cell col="1" row="1" anchor="NORTHWEST" ref="AURLTitle"/>
@@ -227,7 +226,7 @@
     <cell col="2" row="10" anchor="NORTHWEST" ref="HEmail"/>
     <cell col="3" row="10" anchor="NORTHWEST" var="metadata/emails[@class='MCRMetaLangText']">
       <panel>
-        <include ref="MCRMetaLangText.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <hidden var="email/@inherited" default="0"/>
         <hidden var="email/@lang" default="de"/>
         <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="email" />
@@ -240,7 +239,7 @@
     <cell col="2" row="11" anchor="NORTHWEST" ref="HNote"/>
     <cell col="3" row="11" anchor="NORTHWEST" var="metadata/notes[@class='MCRMetaLangText']">
       <panel>
-        <include ref="MCRMetaLangText.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <cell col="1" row="1" anchor="NORTHWEST" var="note">
           <repeater min="1" max="5" pos="right">
             <panel>
@@ -259,7 +258,7 @@
     <cell col="2" row="12" anchor="NORTHWEST" ref="HPublication"/>
     <cell col="3" row="12" anchor="NORTHWEST" var="metadata/publications[@class='MCRMetaLangText']">
       <panel>
-        <include ref="MCRMetaLangText.inherit.heritable" />
+        <include ref="inherit.heritable" />
         <cell col="1" row="1" anchor="NORTHWEST" var="publication">
           <repeater min="1" max="5" pos="right">
             <panel>

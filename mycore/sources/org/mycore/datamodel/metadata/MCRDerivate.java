@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -47,7 +47,7 @@ import org.mycore.datamodel.ifs.MCRFileImportExport;
  * user application.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  */
 final public class MCRDerivate extends MCRBase {
     /**
@@ -56,8 +56,6 @@ final public class MCRDerivate extends MCRBase {
 
     // the object content
     private MCRObjectDerivate mcr_derivate = null;
-
-    private static final Logger LOGGER = Logger.getLogger(MCRDerivate.class);
 
     /**
      * This is the constructor of the MCRDerivate class. It make an instance of

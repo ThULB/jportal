@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * has triples of a text and his corresponding language and optional a type.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
 public class MCRMetaLangText extends MCRMetaDefault {
     // MetaLangText data
@@ -68,7 +68,7 @@ public class MCRMetaLangText extends MCRMetaDefault {
      * @param default_lang     the default language
      * @param set_type         the optional type string
      * @param set_inherted     a value >= 0
-     * @param_set_form         the format string, if it is empty 'plain' is set.
+     * @param set_form         the format string, if it is empty 'plain' is set.
      * @param set_text         the text string
      * @exception MCRException if the set_subtag value is null or empty
      */
@@ -251,9 +251,9 @@ public class MCRMetaLangText extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public final void debug() {
-        LOGGER.debug("Start Class : MCRMetaLangText");
         super.debugDefault();
         LOGGER.debug("Format             = " + form);
         LOGGER.debug("Text               = " + text);
+        LOGGER.debug(" ");
     }
 }

@@ -13,6 +13,7 @@
   <items>
     <xsl:for-each select="mcr:host">
       <item value="{@alias}">
+        <xsl:copy-of select="@checked" />
         <xsl:for-each select="mcr:label">
           <label>
             <xsl:copy-of select="@*|text()|*" />

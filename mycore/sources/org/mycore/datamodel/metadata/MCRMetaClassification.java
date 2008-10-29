@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13794 $ $Date: 2008-07-30 14:20:47 +0200 (Mi, 30 Jul 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,7 +35,7 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13794 $ $Date: 2008-03-18 22:53:44 +0000 (Di, 18 Mrz
+ * @version $Revision: 14003 $ $Date: 2008-03-18 22:53:44 +0000 (Di, 18 Mrz
  *          2008) $
  */
 public class MCRMetaClassification extends MCRMetaDefault {
@@ -207,9 +207,9 @@ public class MCRMetaClassification extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public void debug() {
-        LOGGER.debug("Start Class : MCRMetaClassification");
         super.debugDefault();
         LOGGER.debug("ClassID            = " + classid);
         LOGGER.debug("CategID            = " + categid);
+        LOGGER.debug(" ");
     }
 }

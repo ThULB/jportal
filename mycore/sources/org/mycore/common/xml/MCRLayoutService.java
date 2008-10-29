@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13863 $ $Date: 2008-08-12 16:00:05 +0200 (Di, 12 Aug 2008) $
+ * $Revision: 14156 $ $Date: 2008-10-20 13:38:58 +0200 (Mo, 20 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.common.xml;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -92,13 +93,13 @@ import org.mycore.user.MCRUserMgr;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13863 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
+ * @version $Revision: 14156 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
  *          2008) $
  */
 public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
 
     /** A cache of already compiled stylesheets */
-    private static MCRCache STYLESHEETS_CACHE = new MCRCache(100, "XSLT Stylesheets");
+    private static MCRCache STYLESHEETS_CACHE = new MCRCache(MCRConfiguration.instance().getInt("MCR.LayoutService.XSLCacheSize",100), "XSLT Stylesheets");
 
     private static MCRXMLResource XML_RESOURCE = MCRXMLResource.instance();
 
@@ -566,7 +567,7 @@ public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
         response.setCharacterEncoding(enc);
         response.setContentType(ct + "; charset=" + enc);
 
-        OutputStream out = response.getOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         Result result = null;
 
         if ("application/pdf".equals(ct)) {
@@ -589,6 +590,10 @@ public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
         } finally {
             out.close();
         }
+        
+        OutputStream sos = response.getOutputStream(); 
+        sos.write( out.toByteArray() );
+        sos.close();
     }
 
     /**

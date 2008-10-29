@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * specified by a list of names.
  * 
  * @author J. Vogler
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  */
 final public class MCRMetaAddress extends MCRMetaDefault {
     // MetaAddress data
@@ -327,5 +327,19 @@ final public class MCRMetaAddress extends MCRMetaDefault {
      */
     public Object clone() {
         return new MCRMetaAddress(datapart, subtag, DEFAULT_LANGUAGE, type, inherited, country, state, zipcode, city, street, number);
+    }
+    
+    /**
+     * This method put debug data to the logger (for the debug mode).
+     */
+    public final void debug() {
+        super.debugDefault();
+        LOGGER.debug("Country            = " + country);
+        LOGGER.debug("State              = " + state);
+        LOGGER.debug("Zipcode            = " + zipcode);
+        LOGGER.debug("City               = " + city);
+        LOGGER.debug("Street             = " + street);
+        LOGGER.debug("Number             = " + number);
+        LOGGER.debug(" ");
     }
 }

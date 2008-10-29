@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.common.MCRSessionMgr;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @version $Revision: 13772 $ $Date: 2008-07-28 14:05:25 +0200 (Mo, 28 Jul 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
 public class MCRUserMgr {
     /** The LOGGER and the configuration */
@@ -718,7 +718,7 @@ public class MCRUserMgr {
      * the user or group is read from an xml file and was formerly created in a
      * different system.
      * 
-     * @param userObject
+     * @param obj
      *            The user or group object which will be imported
      */
     public final synchronized void importUserObject(MCRUserObject obj) throws MCRException {
@@ -1188,8 +1188,6 @@ public class MCRUserMgr {
     /**
      * This method updates a group in the datastore (and the cache as well).
      * 
-     * @param session
-     *            the MCRSession object
      * @param updGroup
      *            The group object which will be updated
      */
@@ -1292,7 +1290,7 @@ public class MCRUserMgr {
     /**
      * This method updates a user in the datastore (and the cache as well).
      * 
-     * @param user
+     * @param updUser
      *            The user object which will be updated
      */
     public final synchronized void updateUser(MCRUser updUser) throws MCRException {
@@ -1490,7 +1488,7 @@ public class MCRUserMgr {
     /**
      * The method check that an user entry exists.
      * 
-     * @param group
+     * @param user
      *            the user name as String
      * @return true if the user exists, else return false
      */

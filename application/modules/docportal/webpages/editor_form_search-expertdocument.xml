@@ -19,8 +19,6 @@
 
   <components root="root" var="/query">
 	  
-    <include uri="webapp:editor/imports-common.xml"/>
-	  
     <headline anchor="LEFT">
       <text i18n="editor.search.document.labela"/>
     </headline>

@@ -61,17 +61,17 @@
     </panel>
     <!--get person / institution list ======================================================-->
     <panel id="getPersonAndInst">
-        <cell row="1" col="1" colspan="2" anchor="NORTHWEST" ref="personInst_label" />
-        <cell anchor="NORTHWEST" row="2" col="1" colspan="2" width="100%">
+        <!-- <cell row="1" col="1" colspan="2" anchor="NORTHWEST" ref="personInst_label" /> -->
+        <cell anchor="NORTHWEST" row="1" col="1" colspan="2" width="100%">
             <output var="@label" />
             <text label=" (" />
             <output var="@href" />
             <text label=")" />
         </cell>
-        <cell anchor="NORTHWEST" row="3" col="1">
+        <cell anchor="NORTHWEST" row="2" col="1">
             <subselect id="sub.select1" type="webpage" href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select1" />
         </cell>
-        <cell anchor="NORTHWEST" row="3" col="2">
+        <cell anchor="NORTHWEST" row="2" col="2">
             <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select2" />
         </cell>
     </panel>

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
+ * $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.mycore.common.MCRException;
  * createTypedContent() and createTextSearch() are abstract methods.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
+ * @version $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16 Sep 2008) $
  */
 public abstract class MCRMetaDefault implements MCRMetaInterface {
     // public data
@@ -370,6 +370,14 @@ public abstract class MCRMetaDefault implements MCRMetaInterface {
 
     /**
      * This method put debug data to the logger (for the debug mode).
+     */
+    public void debug() {
+        debugDefault();
+        LOGGER.debug(" ");
+    }
+    
+    /**
+     * This method put common debug data to the logger (for the debug mode).
      */
     public final void debugDefault() {
         LOGGER.debug("SubTag             = " + subtag);

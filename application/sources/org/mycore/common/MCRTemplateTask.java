@@ -3,6 +3,8 @@ package org.mycore.common;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -128,6 +130,8 @@ public class MCRTemplateTask extends Task {
         int newpath = templatepath.indexOf("master/");
         String newTemplatePath = templatepath.substring(0, newpath) + "content/";
         File templatedir = new File(newTemplatePath);
+        if (!templatedir.exists() || templatedir.isFile())
+            return new String[0];
 
         String[] contentdir = templatedir.list(new TemplateFilenameFilter());
         for (int i = 0; i < contentdir.length; i++) {

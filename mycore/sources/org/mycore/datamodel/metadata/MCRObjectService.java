@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,7 @@ import org.mycore.common.MCRConfiguration;
  * </ul>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08 Okt 2008) $
  */
 public class MCRObjectService {
     // service data
@@ -476,8 +476,6 @@ public class MCRObjectService {
         if (dates.size() != 0) {
             org.jdom.Element elmm = new org.jdom.Element("servdates");
             elmm.setAttribute("class", "MCRMetaISO8601Date");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
 
             for (int i = 0; i < dates.size(); i++) {
                 elmm.addContent(dates.get(i).createXML());
@@ -489,8 +487,6 @@ public class MCRObjectService {
         if (rules.size() != 0) {
             org.jdom.Element elmm = new org.jdom.Element("servacls");
             elmm.setAttribute("class", "MCRMetaAccessRule");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
 
             for (int i = 0; i < rules.size(); i++) {
                 elmm.addContent(rules.get(i).createXML());
@@ -502,8 +498,6 @@ public class MCRObjectService {
         if (flags.size() != 0) {
             org.jdom.Element elmm = new org.jdom.Element("servflags");
             elmm.setAttribute("class", "MCRMetaLangText");
-            elmm.setAttribute("heritable", "false");
-            elmm.setAttribute("notinherit", "false");
 
             for (int i = 0; i < flags.size(); i++) {
                 elmm.addContent(flags.get(i).createXML());

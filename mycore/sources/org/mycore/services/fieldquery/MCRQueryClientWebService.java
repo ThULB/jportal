@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14016 $ $Date: 2008-09-18 12:07:06 +0200 (Do, 18 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,8 @@ import org.jdom.input.DOMBuilder;
 /*
  * This class is the implementation for remote access via Webservices
  * 
- * @author Jens Kupferschmidt @author Frank L�tzenkirchen
+ * @author Jens Kupferschmidt
+ * @author Frank L\u00fctzenkirchen
  */
 
 public class MCRQueryClientWebService extends MCRQueryClientBase {
@@ -132,10 +133,12 @@ public class MCRQueryClientWebService extends MCRQueryClientBase {
             // Process xml response
             Document response = new DOMBuilder().build(outDoc);
             int numHits = results.merge(response, alias);
+            results.setHostConnection(alias, "");
             LOGGER.debug("Received " + numHits + " hits from host " + alias);
         } catch (Exception ex) {
             String msg = "Exception while querying remote host " + alias;
             LOGGER.error(msg, ex);
+            results.setHostConnection(alias, msg+ " : "+ex.getLocalizedMessage());
         }
     }
 

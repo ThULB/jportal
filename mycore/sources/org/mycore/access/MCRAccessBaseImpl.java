@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -276,7 +276,7 @@ public class MCRAccessBaseImpl implements MCRAccessInterface {
      * just returns the String of Access Permissions configured in
      * property "MCR.AccessPermissions"
      * 
-     * @return
+     * @return the permissions as List
      */
     public List getAccessPermissionsFromConfiguration(){
     	String[] permissions = AccessPermissions.split(",");

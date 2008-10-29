@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13437 $ $Date: 2008-04-24 14:55:14 +0200 (Do, 24 Apr 2008) $
+ * $Revision: 14132 $ $Date: 2008-10-16 10:39:50 +0200 (Do, 16 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,6 +26,7 @@ package org.mycore.common;
 import static org.mycore.common.events.MCRSessionEvent.Type.activated;
 import static org.mycore.common.events.MCRSessionEvent.Type.passivated;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ import org.apache.log4j.Logger;
 import org.mycore.common.events.MCRSessionEvent;
 import org.mycore.common.events.MCRSessionListener;
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
+import org.mycore.frontend.servlets.MCRServletJob;
 
 /**
  * Instances of this class collect information kept during a session like the
@@ -47,7 +49,7 @@ import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
  * @author Jens Kupferschmidt
  * @author Frank L�tzenkirchen
  * 
- * @version $Revision: 13437 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mrz
+ * @version $Revision: 14132 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mrz
  *          2008) $
  */
 public class MCRSession implements Cloneable {
@@ -346,6 +348,23 @@ public class MCRSession implements Cloneable {
 
     public long getCreateTime() {
         return createTime;
+    }
+    
+    public Principal getUserPrincipal(){
+        MCRServletJob job=(MCRServletJob) get("MCRServletJob");
+        if (job==null)
+            return null;
+        return job.getRequest().getUserPrincipal();
+    }
+    
+    public boolean isPrincipalInRole(String role){
+        Principal p=getUserPrincipal();
+        if (p==null)
+            return false;
+        MCRServletJob job=(MCRServletJob) get("MCRServletJob");
+        if (job==null)
+            return false;
+        return job.getRequest().isUserInRole(role);
     }
 
 }

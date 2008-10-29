@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $
+ * $Revision: 14222 $ $Date: 2008-10-23 08:53:29 +0200 (Do, 23 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,14 +23,17 @@
 
 package org.mycore.services.fieldquery;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -56,7 +59,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * using the text filter plug-ins, and any plain XML document.
  * 
  * @see MCRSearcher#addToIndex(String, List)
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  */
 public class MCRData2Fields {
 
@@ -65,7 +68,7 @@ public class MCRData2Fields {
 
     /** The XSL transformer factory to use */
     private static SAXTransformerFactory factory;
-    
+
     /** A template element to be used for building individual stylesheet */
     private static Element xslTemplate;
 
@@ -126,7 +129,7 @@ public class MCRData2Fields {
             }
 
             try {
-                stylesheet = factory.newTemplates( new JDOMSource( new Document( root ) ) );
+                stylesheet = factory.newTemplates(new JDOMSource(new Document(root)));
             } catch (TransformerConfigurationException exc) {
                 String msg = "Error while compiling XSL stylesheet: " + exc.getMessageAndLocation();
                 throw new MCRConfigurationException(msg, exc);
@@ -173,8 +176,7 @@ public class MCRData2Fields {
         // Handle source FILE_TEXT_CONTENT
         LOGGER.debug("Handle source FILE_TEXT_CONTENT");
         List<MCRFieldDef> fieldDefList = MCRFieldDef.getFieldDefs(index);
-        for (int i = 0; i < fieldDefList.size(); i++) {
-            MCRFieldDef fieldDef = fieldDefList.get(i);
+        for (MCRFieldDef fieldDef : fieldDefList) {
             if (!fieldDef.isUsedForObjectType(file.getContentTypeID()))
                 continue;
 
@@ -244,8 +246,32 @@ public class MCRData2Fields {
         return buildValues(stylesheet, doc, doc.getRootElement().getName());
     }
 
+    /**
+     * Extracts field values for indexing from the given JDOM xml document.
+     * 
+     * @param xml
+     *            the xml document thats data should be indexed as byte array
+     * @param index
+     *            the ID of the index as defined in searchfields.xml
+     * @return a List of MCRFieldValue objects that contain name, type and value
+     */
+    public static List<MCRFieldValue> buildFields(byte[] xml, String index, String source, String objectType) {
+        Templates stylesheet = buildStylesheet(index, source);
+        return buildValues(stylesheet, xml, objectType);
+    }
+
     /** Transforms xml input to search field values using XSL * */
     private static List<MCRFieldValue> buildValues(Templates stylesheet, Document xml, String objectType) {
+        return buildValues(stylesheet, new JDOMSource(xml), objectType);
+    }
+
+    /** Transforms xml input to search field values using XSL * */
+    private static List<MCRFieldValue> buildValues(Templates stylesheet, byte[] xml, String objectType) {
+        return buildValues(stylesheet, new StreamSource(new ByteArrayInputStream(xml)), objectType);
+    }
+
+    /** Transforms xml input to search field values using XSL * */
+    private static List<MCRFieldValue> buildValues(Templates stylesheet, Source xml, String objectType) {
         List<MCRFieldValue> values = new ArrayList<MCRFieldValue>();
 
         List fieldValues = null;
@@ -253,7 +279,7 @@ public class MCRData2Fields {
             JDOMResult xmlres = new JDOMResult();
             Transformer transformer = factory.newTransformerHandler(stylesheet).getTransformer();
             transformer.setParameter("objectType", objectType);
-            transformer.transform(new JDOMSource(xml), xmlres);
+            transformer.transform(xml, xmlres);
 
             List resultList = xmlres.getResult();
             Element root = (Element) (resultList.get(0));
@@ -266,8 +292,8 @@ public class MCRData2Fields {
         if (fieldValues != null)
             for (int i = 0; i < fieldValues.size(); i++) {
                 Element fieldValue = (Element) (fieldValues.get(i));
-                String value = fieldValue.getChildTextTrim("value", MCRFieldDef.mcrns);
-                String name = fieldValue.getAttributeValue("name");
+                String value = fieldValue.getTextTrim();
+                String name = fieldValue.getName();
                 MCRFieldDef def = MCRFieldDef.getDef(name);
 
                 if ((value != null) && (value.length() > 0)) {

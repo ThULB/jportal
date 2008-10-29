@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13980 $ $Date: 2008-09-11 14:42:26 +0200 (Do, 11 Sep 2008) $
+ * $Revision: 14143 $ $Date: 2008-10-17 13:11:15 +0200 (Fr, 17 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -82,7 +82,6 @@ import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.ifs.MCRDirectoryXML;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.editor.MCREditorDataResolver;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryClient;
@@ -174,7 +173,6 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
         supportedSchemes.put("query", new MCRQueryResolver());
         supportedSchemes.put("buildxml", new MCRBuildXMLResolver());
         supportedSchemes.put("notnull", new MCRNotNullResolver());
-        supportedSchemes.put("editorData", new MCREditorDataResolver());
         supportedSchemes.put("xslStyle", new MCRXslStyleResolver());
         return supportedSchemes;
     }

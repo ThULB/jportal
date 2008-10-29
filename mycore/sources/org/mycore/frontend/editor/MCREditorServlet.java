@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13413 $ $Date: 2008-04-18 14:45:09 +0200 (Fr, 18 Apr 2008) $
+ * $Revision: 14255 $ $Date: 2008-10-27 11:50:43 +0100 (Mo, 27 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * It can also handle file uploads.
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 13413 $ $Date: 2008-04-18 14:45:09 +0200 (Fr, 18 Apr 2008) $
+ * @version $Revision: 14255 $ $Date: 2008-10-27 11:50:43 +0100 (Mo, 27 Okt 2008) $
  */
 public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
     private static final long serialVersionUID = 1L;
@@ -216,10 +216,7 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
         logger.debug("Editor start editor session from " + ref + "@" + uri);
 
         Element param = getTargetParameters(parameters);
-        Element editor = MCREditorDefReader.readDef(uri, ref, validate);
-
-        setDefault(editor, "cell", "row", "1");
-        setDefault(editor, "cell", "col", "1");
+        Element editor = new MCREditorDefReader(uri, ref, validate).getEditor();
 
         if (param != null) {
             editor.addContent(param);
@@ -231,12 +228,15 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
             logger.info("Editor reading XML input from " + sourceURI);
             Element input = MCRURIResolver.instance().resolve(sourceURI);
             MCREditorSubmission sub = new MCREditorSubmission(input, editor);
+            MCREditorDefReader.fixConditionedVariables( editor );
             editor.addContent(sub.buildInputElements());
             editor.addContent(sub.buildRepeatElements());
         }
-        else
+        else {
+            MCREditorDefReader.fixConditionedVariables( editor );
             logger.debug("Editor is started empty without XML input");
-        
+        }      
+
         String cancelURL = replaceParameters(editor, "cancel", "url", parameters);
         logger.debug("Editor cancel url is " + cancelURL );
         editor.removeChildren("cancel");
@@ -304,15 +304,6 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
         return null; // Fall back, no matches at all 
     }
     
-    private static void setDefault(Element editor, String filter, String attrib, String value) {
-        Iterator it = editor.getDescendants(new ElementFilter(filter));
-        while (it.hasNext()) {
-            Element e = (Element) (it.next());
-            if (e.getAttribute(attrib) == null)
-                e.setAttribute(attrib, value);
-        }
-    }
-
     private static Element getTargetParameters(Map parameters) {
         Element tps = new Element("target-parameters");
         Iterator keys = parameters.keySet().iterator();
@@ -530,8 +521,7 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
 
         MCREditorSubmission sub = new MCREditorSubmission(parms, editor, true);
 
-        if (sub.errors()) // validation failed, go back to editor form in
-        // webpage
+        if (sub.errors()) // validation failed, go back to editor form in webpage
         {
             editor.removeChild("input");
             editor.removeChild("repeats");
@@ -563,7 +553,7 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
         } else if (targetType.equals("url")) {
             sendToURL(req, res);
         } else if (targetType.equals("webapp")) {
-          sendToWebAppFile(req, res, sub, editor);
+            sendToWebAppFile(req, res, sub, editor);
         } else if (targetType.equals("debug")) {
             sendToDebug(res, sub);
         } else if (targetType.equals("display")) {

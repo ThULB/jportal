@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
  */
 public class MCRMetaLink extends MCRMetaDefault {
     /** The length of XLink:type * */
@@ -414,7 +414,6 @@ public class MCRMetaLink extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public final void debug() {
-        LOGGER.debug("Start Class : MCRMetaLink");
         super.debugDefault();
         LOGGER.debug("Link Type          = " + linktype);
         LOGGER.debug("Label              = " + label);
@@ -422,7 +421,6 @@ public class MCRMetaLink extends MCRMetaDefault {
         LOGGER.debug("HREF               = " + href);
         LOGGER.debug("FROM               = " + from);
         LOGGER.debug("TO                 = " + to);
-        LOGGER.debug("Stop");
         LOGGER.debug("");
     }
 }

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,8 +42,8 @@ import org.mycore.common.MCRException;
  * @author Juergen Vogler
  * @author Jens Kupferschmidt
  * @author Thomas Junge
- * @version $Revision: 13939 $ $Date: 2008-09-03 14:41:43 +0200 (Mi, 03 Sep 2008) $
- * @see http://icu.sourceforge.net/
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * @see <a href="http://www.icu-project.org/">http://www.icu-project.org/</a>
  */
 public class MCRMetaHistoryDate extends MCRMetaDefault {
 
@@ -112,7 +112,7 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
      * This method set the text field for the default language. If data exists,
      * it overwrites the value of text.
      * 
-     * @param text
+     * @param set_text
      *            the text string for a date or range
      */
     public final void setText(String set_text) {
@@ -123,9 +123,9 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
      * This method set the text field for the given language. If data exists, it
      * overwrites the value of text.
      * 
-     * @param text
+     * @param set_text
      *            the text string for a date or range
-     * @param lang
+     * @param set_lang
      *            the language of the text in the ISO format
      */
     public final void setText(String set_text, String set_lang) {
@@ -149,9 +149,9 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
      * This method add a MCRMetaHistoryDateTexts instance to the ArrayList of
      * texts.
      * 
-     * @param text
+     * @param set_text
      *            the text- String
-     * @param lang
+     * @param set_lang
      *            the lang- String
      */
 
@@ -177,7 +177,7 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
      * This method return the MCRMetaHistoryDateTexts instance with the
      * corresponding language.
      * 
-     * @param lang
+     * @param set_lang
      *            the language String in ISO format
      * @return an instance of MCRMetaHistoryDateTexts or null
      */
@@ -553,7 +553,6 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public void debug() {
-        LOGGER.debug("Start Class : MCRMetaHistoryDate");
         super.debugDefault();
         for (int i = 0; i < texts.size(); i++) {
             LOGGER.debug("Text / lang         = " + texts.get(i).getText() + " / " + texts.get(i).getLang());
@@ -627,14 +626,14 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
         /**
          * This method set the lang element as language field (String) .
          * 
-         * @param the
-         *            language String of a date value
+         * @param set_lang
+         *            the language String of a date value
          */
-        public void setLang(String lang) {
-            if (lang == null) {
+        public void setLang(String set_lang) {
+            if (set_lang == null) {
                 this.lang = DEFAULT_LANGUAGE;
             } else {
-                this.lang = lang;
+                this.lang = set_lang;
             }
         }
         
@@ -649,5 +648,4 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
         }
 
     }
-
 }

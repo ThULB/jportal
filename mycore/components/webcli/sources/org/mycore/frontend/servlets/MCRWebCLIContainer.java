@@ -1,6 +1,6 @@
 /**
  * $RCSfile$
- * $Revision: 12902 $ $Date: 2007-12-14 15:31:38 +0100 (Fr, 14 Dez 2007) $
+ * $Revision: 14047 $ $Date: 2008-09-24 15:26:49 +0200 (Mi, 24 Sep 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -226,6 +226,10 @@ class MCRWebCLIContainer {
                     saveQueue(command);
                 }
                 return false;
+            } finally {
+                tx = MCRHIBConnection.instance().getSession().beginTransaction();
+                MCRHIBConnection.instance().getSession().clear();
+                tx.commit();
             }
             return true;
         }

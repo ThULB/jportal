@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ import org.mycore.common.MCRException;
  * which hold an ACL condition for a defined permission.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
  */
 public class MCRMetaAccessRule extends MCRMetaDefault {
     // MCRMetaAccessRule data
@@ -68,7 +68,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
      * @param default_lang     the default language
      * @param set_type         the optional type string
      * @param set_inherted     a value >= 0
-     * @param_set_permission         the format string, if it is empty 'READ' will be set.
+     * @param set_permission         the format string, if it is empty 'READ' will be set.
      * @param set_condition    the JDOM Element included the condition tree
      * @exception MCRException if the set_subtag value or set_condition is null or empty
      */
@@ -90,7 +90,7 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
     /**
      * This method set the permission and the condition.
      * 
-     * @param_set_permission the format string, if it is empty 'READ' will be set.
+     * @param set_permission the format string, if it is empty 'READ' will be set.
      * @param set_condition
      *            the JDOM Element included the condition tree
      * @exception MCRException
@@ -199,7 +199,6 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
             throw new MCRException("The content of MCRMetaAccessRule is not valid.");
         }
         org.jdom.Element elm = new org.jdom.Element(subtag);
-        elm.setAttribute("lang", lang, Namespace.XML_NAMESPACE);
         elm.setAttribute("inherited", Integer.toString(inherited));
         if ((permission != null) && ((permission = permission.trim()).length() != 0)) {
             elm.setAttribute("permission", permission);
@@ -247,9 +246,9 @@ public class MCRMetaAccessRule extends MCRMetaDefault {
      * This method put debug data to the logger (for the debug mode).
      */
     public final void debug() {
-        LOGGER.debug("Start Class : MCRMetaAccessRule");
         super.debugDefault();
         LOGGER.debug("Permission         = " + permission);
         LOGGER.debug("Rule               = " + "condition");
+        LOGGER.debug(" ");
     }
 }

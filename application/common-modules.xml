@@ -75,7 +75,7 @@
   <property name="build" value="${application}/build" />
   <property name="build.bin" value="${build}/bin" />
   <property name="build.classes" value="${build}/classes" />
-  <property name="build.javadocs" value="${build}/javadocs-docportal" />
+  <property name="build.javadocs" value="${build}/javadocs" />
   <property name="build.config" value="${build}/config" />
   <property name="build.lib" value="${build}/lib" />
   <property name="build.modules" value="${build}/modules" />

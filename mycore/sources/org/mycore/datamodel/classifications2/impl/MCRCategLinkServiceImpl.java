@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13828 $ $Date: 2008-08-07 10:36:00 +0200 (Do, 07 Aug 2008) $
+ * $Revision: 14251 $ $Date: 2008-10-27 09:58:58 +0100 (Mo, 27 Okt 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -30,8 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRCache;
@@ -46,7 +49,7 @@ import org.mycore.datamodel.classifications2.MCRObjectReference;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13828 $ $Date: 2008-06-30 10:08:19 +0200 (Mo, 30. Jun
+ * @version $Revision: 14251 $ $Date: 2008-06-30 10:08:19 +0200 (Mo, 30. Jun
  *          2008) $
  * @since 2.0
  */
@@ -189,5 +192,31 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
         }
         categCache.put(categID, categ);
         return categ;
+    }
+
+    @SuppressWarnings("unchecked")
+    public boolean hasLinks(MCRCategoryID categID) {
+        Session session = MCRHIBConnection.instance().getSession();
+        LOGGER.debug("first fetch all internalID of all category under " + categID);
+        Criteria classCriteria = session.createCriteria(MCRCategoryImpl.class);
+        classCriteria.setProjection(Projections.property("internalID"));
+        classCriteria.add(Restrictions.eq("rootID", categID.getRootID()));
+        if (!categID.isRootID()) {
+            MCRCategoryImpl category = MCRCategoryDAOImpl.getByNaturalID(session, categID);
+            if (category == null) {
+                LOGGER.warn("Category does not exist: " + categID);
+                return false;
+            }
+            classCriteria.add(Restrictions.between("left", category.getLeft(), category.getRight()));
+        }
+        List<Number> internalIDs = classCriteria.list();
+        if (internalIDs.size() == 0) {
+            LOGGER.warn("Category does not exist: " + categID);
+            return false;
+        }
+        LOGGER.debug("check if a single linked category is part of " + categID);
+        Query linkQuery = session.getNamedQuery(LINK_CLASS.getName() + ".hasLinks");
+        linkQuery.setParameterList("internalIDs", internalIDs);
+        return linkQuery.iterate().hasNext();
     }
 }

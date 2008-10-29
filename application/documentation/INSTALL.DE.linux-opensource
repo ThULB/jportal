@@ -1,4 +1,4 @@
-﻿ Installationsanweisungen für DocPortal auf Linux mit HSQLDB
+Installationsanweisungen für DocPortal auf Linux mit HSQLDB
 
 1. Softwarevoraussetzung
 ========================
@@ -11,10 +11,12 @@
   getestet: apache-ant-1.7.0-bin.tar.gz
   Es ist ratsam ältere ant RPM Packages zu deinstallieren
 
+- svn als Kommandozeilen-Werkzeug
+
 Für eine erste Testinstallation wird HSQLDB (http://www.hsqldb.org/) als
-relationales Datenbanksystem und Jetty als Webaanwendungs-Server mitgeliefert.
-Fuer die Suche wird Lucene verwendet.
-Weitere Informationen zu Alternativen finden Sie im User Guide.
+relationales Datenbanksystem und Jetty als Webanwendungs-Server mitgeliefert.
+Für die Suche wird Lucene verwendet, das ebenfalls im MyCoRe-Kern enthalten
+ist. Weitere Informationen zu Alternativen finden Sie im User Guide.
 
 
 2. Konfiguration und Installation
@@ -26,51 +28,58 @@ Weitere Informationen zu Alternativen finden Sie im User Guide.
 
 - mycore kompilieren
   + cd $MYCORE_HOME
-  + cp config/build.properties.template config/build.properties; ant jar
+  + cp config/build.properties.template config/build.properties
+  + ant jar
 
 - docportal
   + cd $DOCPORTAL_HOME
-  + cp config/mycore.properties.private.template config/mycore.properties.private; cp config/hibernate/hibernate.cfg.xml.template config/hibernate/hibernate.cfg.xml
+  + cp config/mycore.properties.private.template config/mycore.properties.private
+  + cp config/hibernate/hibernate.cfg.xml.template config/hibernate/hibernate.cfg.xml
 
 - anpassen von config/mycore.properties.private
   MCR.basedir=/Path_to_DocPortal
 
-- config/hibernate/hibernate.cfg.xml pruefen
-  Die Datei ist bereits fuer HSQLDB konfiguriert. Bei einer Default-Installation
+- config/hibernate/hibernate.cfg.xml prüfen
+  Die Datei ist bereits für HSQLDB konfiguriert. Bei einer Default-Installation
   ist somit an dieser Stelle nichts weiter zu tun.
 
-- Konfiguration pruefen und kompilieren
+- Konfiguration prüfen und kompilieren
   + ant info
-  + ant create.schema jar
+  + ant create.schema
+  + ant create.jar
+
 
 2.1. Installation optionaler Komponenten
 ========================================
 
-- DocPortal enthält ein Erweiterungsmodul (Bildbetrachter - "IView"), das aus 
-  lizensrechtlichen Gründen nicht vorinstalliert ausgeliefert werden kann.
-  Das Modul befinden sich unter $DOCPORTAL_HOME/modules/iview und 
-  enthält eine eigene INSTALL.txt. Installieren sie entsprechend dieser Anleitung.
+- MyCoRe enthält zwei Bildbetrachter-Komponenten (IView und Imaging), die aus
+  lizensrechtlichen Gründen nicht vorinstalliert ausgeliefert werden können.
+  Das Komponenten befinden sich unter $MYCORE_HOME/components. Im Verzeichnis
+  imaging ist eine install.txt enthalten. Installieren Sie entsprechend dieser
+  Anleitung.
+
 
 3. Datenstrukturen anlegen
 ==========================
 
-  + ant create.scripts create.directories
-  + nohup build/bin/hsqldbstart.sh &		# HSQLDB als Hintergrundprozess starten
-  + ant create.metastore
+  + ant create.scripts
+  + ant create.directories
+  + nohup build/bin/hsqldbstart.sh &    # HSQLDB als Hintergrundprozess starten
 
 
 4. Laden der Beispieldaten
 ==========================
 
-  + ant create.users create.default-rules create.class
+  + ant create.users
+  + ant create.default-rules
+  + ant create.class
 
 
 5. Webanwendung erstellen
 =========================
 
-  + cd $DOCPORTAL_HOME
-  + ant create.genkeys webapps
-  + nohup build/bin/jettystart.sh &		# Jetty als Hintergrundprozess starten
+  + ant create.webapp
+  + nohup build/bin/jettystart.sh &     # Jetty als Hintergrundprozess starten
 
 Die Anwendung ist nun über folgende URL zu erreichen:
   + http://localhost:8291/
@@ -80,6 +89,5 @@ Die Anwendung ist nun über folgende URL zu erreichen:
 =======================
 
  + cd $DOCPORTAL_HOME
- + build/bin/jettystop.sh			# Jetty stoppen
- + build/bin/hsqldbstop.sh			# HSQLDB stoppen
-
+ + build/bin/jettystop.sh               # Jetty stoppen
+ + build/bin/hsqldbstop.sh              # HSQLDB stoppen

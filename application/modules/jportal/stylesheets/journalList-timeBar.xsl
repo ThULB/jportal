@@ -72,7 +72,7 @@
                 <div style="position:absolute;top:{$top}px;left:{$start}px;width:{$width}px;height:20px;border:2px solid #FF0000;" />
                 <div style="position:absolute;top:{$top+3}px;left:{$start+3}px;width:100%;">
                     <!-- label -->
-                    <a style="color:#DDDDDD;" href="{$WebApplicationBaseURL}{metadata/hidden_websitecontexts/hidden_websitecontext/text()}">
+                    <a style="color:#777777;" href="{$WebApplicationBaseURL}{substring-after(metadata/hidden_websitecontexts/hidden_websitecontext/text(),'/')}">
                         <xsl:value-of
                             select="concat(substring(metadata/maintitles/maintitle/text(),1,30),'... (',metadata/dates/date[@type = 'published_from']/text(),' - ',metadata/dates/date[@type = 'published_until']/text(),')')" />
                     </a>

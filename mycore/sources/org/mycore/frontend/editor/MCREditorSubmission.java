@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.jdom.xpath.XPath;
  * HTML page that contains a MyCoRe XML editor form.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25 Okt 2008) $
  */
 public class MCREditorSubmission {
     private final static Logger LOGGER = Logger.getLogger(MCREditorSubmission.class);
@@ -210,10 +210,10 @@ public class MCREditorSubmission {
     /** Fills a table of constraints on attributes, e.g. title[@type='main'] */
     private void buildAttribTable(Element root) {
         constraints = new Hashtable();
-        Iterator iter = root.getDescendants(new ElementFilter("cell"));
+        Iterator iter = root.getDescendants(new ElementFilter());
         while (iter.hasNext()) {
-            Element cell = (Element) (iter.next());
-            String var = cell.getAttributeValue("var");
+            Element elem = (Element) (iter.next());
+            String var = elem.getAttributeValue("var");
             if ((var != null) && (var.indexOf("[@") > 0)) {
                 int pos1 = var.indexOf("[@");
                 int pos2 = var.indexOf("=", pos1);

@@ -7,6 +7,11 @@
 
 <imports>
 
+  <includes id="inherit.heritable">
+    <hidden var="@notinherit" default="false" />
+    <hidden var="@heritable"  default="true"  />
+  </includes>
+
   <list id="SAccess" width="120" type="dropdown">
    <item value="Access:public">
     <label xml:lang="de">Zugriff: öffentlich</label>
@@ -703,10 +708,10 @@ You can add information regarding the relation of your object to other objects.
 
   <text id="LRightsP">
     <label xml:lang="de">
-      <span class="editorlabel">   Rechte (*)   </span>
+      <span class="editorlabel">   Rechte  </span>
     </label>
     <label xml:lang="en">
-      <span class="editorlabel">   Rights (*)   </span>
+      <span class="editorlabel">   Rights  </span>
     </label>
   </text>
 
@@ -721,10 +726,10 @@ You can add information regarding the relation of your object to other objects.
 
   <helpPopup id="HRights" width="400px" height="250px">
     <label xml:lang="de">
-Hier <b>müssen</b> Sie einen Vermerk zu den Urheberrechten des Objektes eintragen.
+Hier <b>können</b> Sie einen Vermerk zu den Urheberrechten des Objektes eintragen.
     </label>
     <label xml:lang="en">
-Enter information regarding the copyright or other pending rights. The entry is <b>mandatory</b>.
+Enter information regarding the copyright or other pending rights.
     </label>
   </helpPopup>
 

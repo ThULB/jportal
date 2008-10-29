@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14158 $ $Date: 2008-10-20 17:57:03 +0200 (Mo, 20 Okt 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -29,10 +29,19 @@ import java.util.Map;
 /**
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14158 $ $Date: 2008-10-20 17:57:03 +0200 (Mo, 20 Okt 2008) $
  * @since 2.0
  */
 public interface MCRCategLinkService {
+
+    /**
+     * Checks if a categories id refered by objects.
+     * 
+     * @param categID
+     *            the id of a category
+     * @return true if the classification is used
+     */
+    public abstract boolean hasLinks(MCRCategoryID categID);
 
     /**
      * Counts links to a collection of categories.

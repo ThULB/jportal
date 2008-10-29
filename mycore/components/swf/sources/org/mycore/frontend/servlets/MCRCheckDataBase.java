@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13968 $ $Date: 2008-09-08 12:39:43 +0200 (Mo, 08 Sep 2008) $
+ * $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13968 $ $Date: 2008-09-08 12:39:43 +0200 (Mo, 08 Sep 2008) $
+ * @version $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02 Okt 2008) $
  */
 abstract public class MCRCheckDataBase extends MCRCheckBase {
     /**
@@ -126,7 +126,8 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
         // call the getNextURL and sendMail methods
         String url = getNextURL(ID, okay);
         sendMail(ID);
-        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + url));
+        if (!job.getResponse().isCommitted())
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + url));
     }
 
     /**
@@ -217,7 +218,8 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
         org.jdom.Document jdom = null;
 
         try {
-            InputStream in = (new URL(getBaseURL() + myfile + "?XSL.Style=xml")).openStream();
+            //TODO: Access File directly
+            InputStream in = new URL(getBaseURL() + myfile + sessionID + "?XSL.Style=xml").openStream();
 
             if (in == null) {
                 throw new MCRConfigurationException("Can't read editor file " + myfile);

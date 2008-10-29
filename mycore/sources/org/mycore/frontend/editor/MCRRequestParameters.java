@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12 Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,11 +42,11 @@ import org.mycore.common.MCRException;
 
 /**
  * Wrapper class around an HTTP request that allows to treat both ordinary form
- * submisstion and multipart/form-data submissions with uploaded files in the
+ * submission and multipart/form-data submissions with uploaded files in the
  * same way.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12 Okt 2008) $
  */
 public class MCRRequestParameters {
     protected final static Logger logger = Logger.getLogger(MCREditorServlet.class);
