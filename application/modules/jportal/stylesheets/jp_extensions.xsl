@@ -1029,6 +1029,19 @@
                             </table>
                         </td>
                     </tr>
+                    <xsl:if test="acl:checkPermission($obj_id,'deletedb')">
+                        <tr>
+                            <td colspan="3" width="30" valign="top" align="center">
+                                <xsl:variable name="url">
+                                    <xsl:value-of
+                                        select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalLinkFileServlet.mode=removeLink&amp;jportalLinkFileServlet.from=',$obj_id,'&amp;jportalLinkFileServlet.to=',text())" />
+                                </xsl:variable>
+                                <a href="{$url}">
+                                    <img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="Diesen Link entfernen" alt="Diesen Link entfernen" />
+                                </a>
+                            </td>
+                        </tr>
+                    </xsl:if>
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
@@ -1957,12 +1970,13 @@
         </xsl:variable>
         <xsl:if test="acl:checkPermission(./@ID,'writedb') and $MCR.Module-iview.markedImageURL != '' and not($linkExist)">
             <xsl:variable name="url">
-                <xsl:value-of select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalObjectToBeLinked=',./@ID)" />
+                <xsl:value-of
+                    select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalLinkFileServlet.mode=setLink&amp;jportalLinkFileServlet.from=',./@ID)" />
             </xsl:variable>
             <td width="30px" />
             <td id="detailed-xmlbutton">
-                <a href="{$url}" alt="{i18n:translate('metaData.xmlView')}" title="Bild {$MCR.Module-iview.markedImageURL} mit diesem Objekt verlinken">
-                    <img src="{$WebApplicationBaseURL}modules/iview/web/images/paperClip.jpeg" height="20px" />
+                <a href="{$url}" alt="{i18n:translate('metaData.xmlView')}" title="Bild {$MCR.Module-iview.markedImageURL} mit diesem Dokument verlinken">
+                    <img src="{$WebApplicationBaseURL}/images/paperClip.jpeg"  />
                 </a>
             </td>
         </xsl:if>
@@ -2071,35 +2085,35 @@
     <!-- ===================================================================================================== -->
 
     <xsl:template name="get.systemData">
-    <xsl:if test="$CurrentUser!='gast'">
-        <!--*** Created ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <xsl:call-template name="printMetaDates">
-                <xsl:with-param select="'right'" name="textalign" />
-                <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
-                <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
-            </xsl:call-template>
-        </table>
-                            <!--*** Last Modified ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <xsl:call-template name="printMetaDates">
-                <xsl:with-param select="'right'" name="textalign" />
-                <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
-                <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
-            </xsl:call-template>
-        </table>
-                            <!--*** MyCoRe-ID ************************************* -->
-        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-            <tr>
-                <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
-                    <xsl:value-of select="i18n:translate('metaData.ID')" />
-                </td>
-                <td class="metavalue">
-                    <xsl:value-of select="./@ID" />
-                </td>
-            </tr>
-        </table>
-    </xsl:if>
-</xsl:template>
+        <xsl:if test="$CurrentUser!='gast'">
+            <!--*** Created ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='createdate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datecr')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** Last Modified ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <xsl:call-template name="printMetaDates">
+                    <xsl:with-param select="'right'" name="textalign" />
+                    <xsl:with-param select="./service/servdates/servdate[@type='modifydate']" name="nodes" />
+                    <xsl:with-param select="i18n:translate('editor.search.document.datemod')" name="label" />
+                </xsl:call-template>
+            </table>
+            <!--*** MyCoRe-ID ************************************* -->
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td id="detailed-labels" style="text-align:right;  padding-right: 5px;">
+                        <xsl:value-of select="i18n:translate('metaData.ID')" />
+                    </td>
+                    <td class="metavalue">
+                        <xsl:value-of select="./@ID" />
+                    </td>
+                </tr>
+            </table>
+        </xsl:if>
+    </xsl:template>
 
 </xsl:stylesheet>

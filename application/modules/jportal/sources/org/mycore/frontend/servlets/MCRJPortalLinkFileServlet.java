@@ -5,57 +5,95 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.output.XMLOutputter;
+import org.jdom.JDOMException;
+import org.mycore.backend.ifs.MCRJPortalLink;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUsageException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLTableManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalLinkFileServlet extends MCRServlet {
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalLinkFileServlet.class);
 
-    private static final java.lang.String IMAGE_MARKED_KEY = "XSL.MCR.Module-iview.markedImageURL";
+    private static final String PARAM_PREFIX = "jportalLinkFileServlet.";
 
-    public void doGetPost(MCRServletJob job) throws IOException, MCRPersistenceException, MCRActiveLinkException {
+    private static final String SET_PARAM = "setLink";
+
+    private static final String REMOVE_PARAM = "removeLink";
+
+    private static final String FROM_PARAM = PARAM_PREFIX + "from";
+
+    private static final String TO_PARAM = PARAM_PREFIX + "to";
+
+    public void doGetPost(MCRServletJob job) throws IOException, MCRPersistenceException, MCRActiveLinkException, JDOMException {
+
+        // init
         HttpServletRequest request = job.getRequest();
-        MCRSession session = MCRSessionMgr.getCurrentSession();
-        java.lang.String objectToBeLinked = (java.lang.String) request.getParameter("jportalObjectToBeLinked");
-        java.lang.String fileToBeLinked = (java.lang.String) session.get(IMAGE_MARKED_KEY);
+        if (!wellRequest(request))
+            throw new MCRUsageException("Bad request, " + PARAM_PREFIX + "mode parameter is empty or not valid !");
 
-        // create xml containing link
-        Element link = new Element("ifsLink");
-        link.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
-        link.setText(fileToBeLinked);
-
-        // update object xml
-        Document objectXML = MCRXMLTableManager.instance().retrieveAsJDOM(new MCRObjectID(objectToBeLinked));
-        boolean alreadyHasLink = false;
-        if (null != objectXML.getRootElement().getChild("metadata").getChild("ifsLinks"))
-            alreadyHasLink = true;
-        if (alreadyHasLink) {
-            objectXML.getRootElement().getChild("metadata").getChild("ifsLinks").addContent(link);
-        } else {
-            Element linkWrappingTag = new Element("ifsLinks");
-            linkWrappingTag.setAttribute("class", "MCRMetaLangText");
-            linkWrappingTag.addContent(link);
-            objectXML.getRootElement().getChild("metadata").addContent(linkWrappingTag);
+        // request dispatcher
+        String mode = getMode(request);
+        if (mode.equals(SET_PARAM)) {
+            setLink(request);
+        } else if (mode.equals(REMOVE_PARAM)) {
+            removeLink(request);
         }
 
-        // save object
-        XMLOutputter xout = new XMLOutputter();
-        xout.output(objectXML, System.out);
-        MCRObject mo = new MCRObject();
-        mo.setFromJDOM(objectXML);
-        mo.updateInDatastore();
-
         // get back to browser
-        job.getResponse().sendRedirect(super.getBaseURL() + "receive/" + objectToBeLinked);
+        job.getResponse().sendRedirect(super.getBaseURL() + "receive/" + getFrom(request));
+    }
+
+    /**
+     * @param request
+     */
+    private String getTo(HttpServletRequest request) {
+        if (null != request.getParameter(TO_PARAM) && !request.getParameter(TO_PARAM).equals("")) {
+            return request.getParameter(TO_PARAM);
+        } else {
+            // use saved image URL from imaga viewer
+            return (String) MCRSessionMgr.getCurrentSession().get("XSL.MCR.Module-iview.markedImageURL");
+        }
+
+    }
+
+    /**
+     * @param request
+     */
+    private String getFrom(HttpServletRequest request) {
+        return request.getParameter(FROM_PARAM);
+    }
+
+    private final boolean wellRequest(HttpServletRequest request) {
+        String mode = getMode(request);
+        if (mode == null || mode.equals("") || !(mode.equals(SET_PARAM) || mode.equals(REMOVE_PARAM)))
+            return false;
+        return true;
+    }
+
+    /**
+     * @param request
+     * @return
+     */
+    private String getMode(HttpServletRequest request) {
+        return request.getParameter(PARAM_PREFIX + "mode");
+    }
+
+    private void setLink(HttpServletRequest request) throws MCRPersistenceException, MCRActiveLinkException, IOException {
+        MCRObjectID from = new MCRObjectID(getFrom(request));
+        String to = getTo(request);
+        LOGGER.debug("set link from " + from.getId() + " to " + to);
+        MCRJPortalLink link = new MCRJPortalLink(from, to);
+        link.set();
+    }
+
+    private void removeLink(HttpServletRequest request) throws MCRActiveLinkException, JDOMException, IOException {
+        MCRObjectID from = new MCRObjectID(getFrom(request));
+        String to = getTo(request);
+        LOGGER.debug("remove link from " + from.getId() + " to " + to);
+        MCRJPortalLink link = new MCRJPortalLink(from, to);
+        link.remove();
     }
 }
