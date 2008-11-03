@@ -48,7 +48,7 @@
             tabindex="99" />
         </xsl:if>
           <!-- ======== start at the root panel ======== -->
-        <xsl:apply-templates select="panel[@id=current()/@root]">
+        <xsl:apply-templates select="panel">
           <xsl:with-param name="var" select="@var" />
         </xsl:apply-templates>
       </td>
