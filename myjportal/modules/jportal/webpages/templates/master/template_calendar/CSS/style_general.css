@@ -2,10 +2,18 @@ html,body {
 	margin: 0px;
 	font-family: Verdana, Helvetica, sans-serif;
 	font-size: 12px;
-	background-color: #7b6567;
 	height: 100%;
 	overflow: auto;
-	/*min-width: 1023px;*/
+	/*background: url(../IMAGES/nav_line.gif) repeat-y;*/
+	min-width: 1024px;
+}
+
+body{
+	background: url(../IMAGES/extention.png) repeat-x;
+}
+
+html{
+	background: url(../IMAGES/nav_line.gif) repeat-y;
 }
 
 .whiteFrame {
@@ -97,8 +105,14 @@ html,body {
 	top: 90px;
 	left: 237px;
 	color: black;
-	z-index: 10;
 }
+
+td.mainBanner {
+	height: 147px;
+	width: 100%;
+	background: url(../IMAGES/hintergrund.png) no-repeat;
+}
+
 .bannerBar {
 	position: absolute;
 	top: 30px;
@@ -116,10 +130,12 @@ html,body {
 
 .bannerBar #bannerExtention {
 	position: absolute;
-	height: 147px;
-	width: 1023px;
+	top: 0px;
+	height: 198px;
+	/*width: 1023px;*/
+	width: 100%;
 	right: 0px;
-    background: url(../IMAGES/extention.png) no-repeat;
+    background: url(../IMAGES/extention.png) repeat;
 }
 
 #transparent-logo[id] {
@@ -131,9 +147,96 @@ html,body {
 }
 
 #transparent-logo {
-	background: url(../IMAGES/Globus_earth.gif) no-repeat;
+	background: url(../IMAGES/Globus_earth1.gif) no-repeat;
 	position: absolute;
 	right: 0px;
 	width: 1023px;
 	height: 147px;
+}
+
+.mainLayer {
+	position: absolute;
+	top: 177px;
+	width: 100%;
+}
+
+table.naviContent * table{
+	border-collapse: collapse;
+}
+
+table.naviContent{
+	width: 100%;
+	min-width: 1024px;
+	border-collapse: collapse;
+}
+
+table.naviContent .decoration, table.naviContent .title{
+	background-color: #D3CDC1;
+}
+
+table.naviContent .decoration{
+	vertical-align: bottom;
+}
+
+table.naviContent .underlineO{
+	border-top: solid 1px white;
+}
+
+table.naviContent .underline{
+	border-bottom: solid 3px white;
+}
+
+.titleString {
+	font-size: medium;
+	background-color: #D3CDC1;
+	font-weight: bold;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #646466;
+	/*padding-left: 250px;*/
+	/*padding-left: 45px;*/
+	/*margin-top: 170px;
+	*/
+	min-width: 1024px;
+	border-bottom: solid 2px white;
+}
+
+.titleString * table{
+	border-collapse: collapse;
+}
+
+.titleString .decoration{
+	width: 186px;
+	vertical-align: bottom;
+}
+
+.titleString .title{
+	padding-left: 40px;	
+}
+
+div.ornamentUp{
+	background: url("../IMAGES/Ornament_up_s.png") no-repeat bottom;
+	width: 37px;
+	height: 9px;
+	margin-left: 69px;
+}
+
+div.ornamentDown{
+	background: url("../IMAGES/Ornament_down_s.png") no-repeat top;
+	width: 37px;
+	height: 9px;
+	margin-left: 72px;
+	/*padding-top: 2px;*/
+}
+
+.sponsorLogo {
+	background: url("../IMAGES/logos.png") no-repeat;
+	width: 112px;
+	height: 125px;
+	margin-left: 16px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.footer {
+	clear: both;
 }

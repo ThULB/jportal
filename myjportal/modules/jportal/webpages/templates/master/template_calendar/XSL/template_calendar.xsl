@@ -25,15 +25,6 @@
                 </xsl:call-template>
             </head>
             <body>
-                <div id="contentArea">
-                    <div id="contentWrapper">
-                        <div class="content">
-                            <xsl:call-template name="template_calendar.write.content" />
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- the most top gray navigation bar -->
                 <div class="navigationBar">
                     <table id="headline">
                         <tr>
@@ -46,7 +37,8 @@
                             </td>
                         </tr>
                     </table>
-                    <!-- rigth menu with Sitemap, Login etc. -->
+                    
+                    <!-- top rigth menu with Sitemap, Login etc. -->
                     <div id="navigation_box">
                         <xsl:call-template name="navigation.row">
                             <xsl:with-param name="rootNode" select="'navi-below'" />
@@ -55,33 +47,55 @@
                             <xsl:with-param name="spaceBetweenLinks" select="'12'" />
                         </xsl:call-template>
                     </div>
+                    <!-- the img is necessary because min-width is not supported by IE6-->
+                    <img src="../../../images/emtyDot1Pix.gif" width="1024px" height="0px" border="0" />
                 </div>
                 
                 <!-- the second bar with image and logo for each journal -->
                 <div class="bannerBar">
                     <!-- the images for logo and banner are defined in style_general.css -->
-                    <div id="bannerExtention" />
                     <div id="mainBanner" />
                     <!-- the right logo -->
                     <div id="transparent-logo" />
+                    <!-- the img is necessary because min-width is not supported by IE6-->
+                    <img src="../../../images/emtyDot1Pix.gif" width="1024px" height="0px" border="0" />
                 </div>
-                
-                <div id="navi_history">
-                    <div class="line">
-                        <xsl:call-template name="navigation.history" />
-                    </div>
-                </div>
-                
-                <!-- right main navigation column -->
-                <div id="div_navi_main">
-                    <div class="calenderTitle">
-                        <div class="titleString">
-                            <xsl:value-of select="$journalMaintitle" />
+                <div class="mainLayer">
+                    <div id="navi_history">
+                        <div class="line">
+                            <xsl:call-template name="navigation.history" />
                         </div>
                     </div>
-                    <xsl:call-template name="Navigation_main" />
+                    <div class="titleString">
+                        <table>
+                            <tr>
+                                <td class="decoration">
+                                    <div class="ornamentUp" />
+                                </td>
+                                <td class="title">
+                                    <xsl:value-of select="$journalMaintitle" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="naviContent">
+                        <div class="naviColumn">
+                            <div class="ornamentDown" />
+                            <div id="div_navi_main">
+                                <xsl:call-template name="Navigation_main" />
+                            </div>
+                            <div class="sponsorLogo" />
+                        </div>
+                        <div id="contentArea">
+                            <div id="contentWrapper">
+                                <xsl:call-template name="template_calendar.write.content" />
+                            </div>
+                        </div>
+                        <div class="footer" />
+                    </div>
                 </div>
-                
+                <!-- the img is necessary because min-width is not supported by IE6-->
+                <img src="../../../images/emtyDot1Pix.gif" width="1024px" height="0px" border="0" />
             </body>
         </html>
     </xsl:template>

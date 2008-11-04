@@ -3,7 +3,7 @@ position:absolute;
 border:1px solid black;
 border-bottom-width: 0;
 font:normal 12px Verdana;
-
+z-index: 100;
 }
 
 #dropmenudiv a{

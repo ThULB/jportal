@@ -25,6 +25,7 @@
         <link href="{$WebApplicationBaseURL}common.css" rel="stylesheet" type="text/css" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
+        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/JS/activelink.js" type="text/javascript" />
         <xsl:call-template name="module-broadcasting.getHeader" />
     </xsl:template>
 
