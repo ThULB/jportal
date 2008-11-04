@@ -473,9 +473,13 @@
                         </table>
                         
                         <!-- Content Description ################################################### -->
-                        <xsl:variable name="hasContentDescription"
-                            select="./metadata/volContentClassis1/volContentClassi1 | ./metadata/notes/note | ./metadata/abstracts/abstract" />
-                        <xsl:if test="$hasContentDescription">
+                        <xsl:if test="./metadata/volContentClassis1/volContentClassi1 | 
+                            ./metadata/volContentClassis2/volContentClassi2 | 
+                            ./metadata/volContentClassis3/volContentClassi3 | 
+                            ./metadata/volContentClassis4/volContentClassi4 | 
+                            ./metadata/volContentClassis5/volContentClassi5 | 
+                            ./metadata/volContentClassis6/volContentClassi6 | 
+                            ./metadata/notes/note | ./metadata/abstracts/abstract">
                             <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                                 <tr>
                                     <td colspan="2" id="detailed-innerdivlines">
@@ -494,6 +498,20 @@
                                 </tr>
                             </table>
                             <!--12***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis1/volContentClassi1">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis1/volContentClassi1" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--12***classiVol*************************************-->
                             <xsl:if test="./metadata/volContentClassis2/volContentClassi2">
                                 <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:variable name="label_classiVol">
@@ -508,19 +526,62 @@
                                 </table>
                             </xsl:if>
                             <!--12***classiVol*************************************-->
-                            <xsl:if test="./metadata/volContentClassis1/volContentClassi1">
+                            <xsl:if test="./metadata/volContentClassis3/volContentClassi3">
                                 <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:variable name="label_classiVol">
                                         <xsl:value-of
-                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol1/hidden_classiVol1')//label/text()" />
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3')//label/text()" />
                                     </xsl:variable>
                                     <xsl:call-template name="printMetaDates">
                                         <xsl:with-param select="'right'" name="textalign" />
-                                        <xsl:with-param select="./metadata/volContentClassis1/volContentClassi1" name="nodes" />
+                                        <xsl:with-param select="./metadata/volContentClassis3/volContentClassi3" name="nodes" />
                                         <xsl:with-param select="$label_classiVol" name="label" />
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
+                            <!--12***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis4/volContentClassi4">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis4/volContentClassi4" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--15***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis5/volContentClassi5">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis5/volContentClassi5" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--16***classiVol*************************************-->
+                            <xsl:if test="./metadata/volContentClassis6/volContentClassi6">
+                                <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:variable name="label_classiVol">
+                                        <xsl:value-of
+                                            select="document('jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6')//label/text()" />
+                                    </xsl:variable>
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="'right'" name="textalign" />
+                                        <xsl:with-param select="./metadata/volContentClassis6/volContentClassi6" name="nodes" />
+                                        <xsl:with-param select="$label_classiVol" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            
                             <!--5*** note *************************************-->
                             <xsl:if test="./metadata/notes/note">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
