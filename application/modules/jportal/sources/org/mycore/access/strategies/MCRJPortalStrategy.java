@@ -8,6 +8,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -19,8 +21,12 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
 
     private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
 
+    private static MCRConfiguration CONFIG = MCRConfiguration.instance();
+
     public boolean checkPermission(String id, String permission) {
-        if (permission.equals("read-derivates")) {
+        if (superUser())
+            return true;
+        else if (permission.equals("read-derivates")) {
             if (MCRAccessManager.getAccessImpl().hasRule(id, permission)) {
                 return ID_STRATEGY.checkPermission(id, permission);
             } else {
@@ -68,5 +74,9 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
                 LOGGER.debug("No journal access rule found for: " + journalID);
         }
         return allowed;
+    }
+
+    private final static boolean superUser() {
+        return MCRSessionMgr.getCurrentSession().getCurrentUserID().equals(CONFIG.getString("MCR.Users.Superuser.UserName"));
     }
 }
