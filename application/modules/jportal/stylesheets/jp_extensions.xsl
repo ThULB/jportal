@@ -829,6 +829,7 @@
         <xsl:param name="knoten" />
 
         <xsl:choose>
+            <!-- metadata view -->
             <xsl:when test="$knoten=''">
                 <xsl:if test="./structure/derobjects">
                     <xsl:if test="$objectHost = 'local'">
@@ -961,41 +962,58 @@
                     </xsl:if>
                 </xsl:if>
             </xsl:when>
+            <!-- search result list -->
             <xsl:otherwise>
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
                     <tr>
                         <td id="leaf-additional">
                             <xsl:call-template name="lineSpace" />
-                            <xsl:if test="$objectHost = 'local'">
-                                <table cellpadding="0" cellspacing="0">
-                                    <xsl:for-each select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
-                                        <xsl:variable name="deriv" select="@xlink:href" />
-                                        <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
-                                        <xsl:variable name="derivate" select="document($derivlink)" />
-                                        <xsl:call-template name="get.labelOfDigitalMedias" />
-                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
-                                            <xsl:with-param name="objID" select="$obj_id" />
-                                            <xsl:with-param name="objectXML" select="$knoten" />
-                                        </xsl:apply-templates>
-                                        <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
-                                            <xsl:with-param name="objID" select="$obj_id" />
-                                            <xsl:with-param name="objectXML" select="$knoten" />
-                                        </xsl:apply-templates>
-                                        <xsl:if test="position()!=last()">
-                                            <xsl:text>; </xsl:text>
-                                        </xsl:if>
-                                    </xsl:for-each>
-                                </table>
-                            </xsl:if>
+                            <table cellpadding="0" cellspacing="0">
+                                <xsl:call-template name="get.labelOfDigitalMedias" />
+                                <xsl:choose>
+                                    <!-- fulltext hit -->
+                                    <xsl:when test="mcr:metaData">
+                                        <xsl:for-each select="mcr:metaData">
+                                            <xsl:apply-templates select=".">
+                                                <xsl:with-param name="objID" select="$obj_id" />
+                                            </xsl:apply-templates>
+                                            <xsl:copy-of select="' (Treffer im Volltext)'" />
+                                            <xsl:if test="position() != last()">
+                                                <xsl:copy-of select="' '" />
+                                                <xsl:call-template name="lineSpace" />
+                                            </xsl:if>
+                                        </xsl:for-each>
+                                    </xsl:when>
+                                    <!-- hit not in fulltext -->
+                                    <xsl:otherwise>
+                                        <xsl:for-each select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
+                                            <xsl:variable name="deriv" select="@xlink:href" />
+                                            <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
+                                            <xsl:variable name="derivate" select="document($derivlink)" />
+                                            <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
+                                                <xsl:with-param name="objID" select="$obj_id" />
+                                                <xsl:with-param name="objectXML" select="$knoten" />
+                                            </xsl:apply-templates>
+                                            <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
+                                                <xsl:with-param name="objID" select="$obj_id" />
+                                                <xsl:with-param name="objectXML" select="$knoten" />
+                                            </xsl:apply-templates>
+                                            <xsl:if test="position()!=last()">
+                                                <xsl:copy-of select="' '"></xsl:copy-of>
+                                                <xsl:call-template name="lineSpace" />
+                                            </xsl:if>
+                                        </xsl:for-each>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </table>
                         </td>
                     </tr>
                 </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
-
         <!-- links  -->
         <xsl:choose>
-            <xsl:when test="$knoten != ''">
+            <xsl:when test="$knoten != '' and not(mcr:metaData)">
                 <xsl:if test="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
                     <tr>
                         <td id="leaf-additional">
@@ -1007,6 +1025,7 @@
                                     </xsl:apply-templates>
                                     <xsl:if test="position()!=last()">
                                         <xsl:copy-of select="', '" />
+                                        <xsl:call-template name="lineSpace" />
                                     </xsl:if>
                                 </xsl:for-each>
                             </table>
@@ -1056,15 +1075,20 @@
 
     <!-- ===================================================================================================== -->
 
-    <xsl:template match="internals | ifsLink" priority="2">
+    <xsl:template match="internals | ifsLink | mcr:metaData" priority="2">
         <xsl:param name="objID" />
         <xsl:param name="objectXML" />
         <xsl:param name="detailed-view" />
         <xsl:if test="$objectHost = 'local'">
             <xsl:variable name="derivid">
                 <xsl:choose>
+                    <!-- links -->
                     <xsl:when test="name() = 'ifsLink'">
                         <xsl:value-of select="substring-before(./text(),'/')" />
+                    </xsl:when>
+                    <!-- full text hit -->
+                    <xsl:when test="name() = 'mcr:metaData'">
+                        <xsl:value-of select="mcr:field[@name='DerivateID']/text()" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="../../@ID" />
@@ -1073,8 +1097,13 @@
             </xsl:variable>
             <xsl:variable name="derivmain">
                 <xsl:choose>
+                    <!-- links -->
                     <xsl:when test="name() = 'ifsLink'">
                         <xsl:value-of select="substring-after(./text(),'/')" />
+                    </xsl:when>
+                    <!-- full text hit -->
+                    <xsl:when test="name() = 'mcr:metaData'">
+                        <xsl:value-of select="mcr:field[@name='filePath']/text()" />
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="internal/@maindoc" />
@@ -1102,7 +1131,15 @@
                         <xsl:value-of select="$supportedMainFile" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="concat($derivbase,$derivmain)" />
+                        <xsl:choose>
+                            <!-- remove double slash if exist -->
+                            <xsl:when test="substring($derivbase,string-length($derivbase),1) = '/' and substring($derivmain,1,1) = '/'">
+                                <xsl:value-of select="concat($derivbase,substring-after($derivmain,'/'))" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="concat($derivbase,$derivmain)" />
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
@@ -1976,7 +2013,7 @@
             <td width="30px" />
             <td id="detailed-xmlbutton">
                 <a href="{$url}" alt="{i18n:translate('metaData.xmlView')}" title="Bild {$MCR.Module-iview.markedImageURL} mit diesem Dokument verlinken">
-                    <img src="{$WebApplicationBaseURL}/images/paperClip.jpeg"  />
+                    <img src="{$WebApplicationBaseURL}/images/paperClip.jpeg" />
                 </a>
             </td>
         </xsl:if>
