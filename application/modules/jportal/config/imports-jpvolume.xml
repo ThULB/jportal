@@ -31,6 +31,9 @@
         <cell class="editorLabel" row="50" col="1" anchor="NORTHWEST" ref="collation_note_label" />
         <cell row="50" col="2" anchor="NORTHWEST" ref="collation_note_input" />
         <cell row="40" col="2" anchor="NORTHWEST" ref="date_input" />
+        <!-- identi -->
+        <cell class="editorLabel" row="45" col="1" anchor="NORTHWEST" ref="identi_label" />
+        <cell row="45" col="2" anchor="NORTHWEST" ref="identi_input" />
         <cell col="1" row="60">
             <br />
         </cell>
@@ -43,9 +46,6 @@
             <!-- abstract -->
         <cell class="editorLabel" row="80" col="1" anchor="NORTHWEST" ref="abstract_label" />
         <cell row="80" col="2" anchor="NORTHWEST" ref="abstract_input" />
-            <!-- identi -->
-        <cell class="editorLabel" row="90" col="1" anchor="NORTHWEST" ref="identi_label" />
-        <cell row="90" col="2" anchor="NORTHWEST" ref="identi_input" />
         
             <!-- note -->
         <cell class="editorLabel" row="160" col="1" anchor="NORTHWEST" ref="note_label" />

@@ -130,6 +130,14 @@
 			<param name="locale_param" value="pl" />
 		</antcall>
 
+		<antcall target="properties.merge">
+			<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_de.properties" />
+			<param name="locale_param" value="de" />
+		</antcall>
+		<antcall target="properties.merge">
+			<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_en.properties" />
+			<param name="locale_param" value="en" />
+		</antcall>
 	</target>
 
 	<!-- =================================================================== -->

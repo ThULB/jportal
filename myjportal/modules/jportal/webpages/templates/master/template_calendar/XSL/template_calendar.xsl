@@ -7,10 +7,10 @@
     <!-- ============================================== -->
     <!-- the template                                   -->
     <!-- ============================================== -->
+    <xsl:variable name="journalsID">
+        <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
+    </xsl:variable>
     <xsl:template name="template_calendar">
-        <xsl:variable name="journalsID">
-            <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
-        </xsl:variable>
         <xsl:variable name="journalXML">
             <xsl:copy-of select="document(concat('mcrobject:',$journalsID))" />
         </xsl:variable>
@@ -84,7 +84,19 @@
                             <div id="div_navi_main">
                                 <xsl:call-template name="Navigation_main" />
                             </div>
-                            <div class="sponsorLogo" />
+                            <div class="sponsorLogo" usemap="#logos">
+                                <img src="../../../images/emtyDot1Pix.gif" width="112px" height="125px" border="0" usemap="#logos">
+                                    <map name="logos">
+                                        <area target="_blank" shape="rect" coords="0,0,112,46" href="http://www.dfg.de/" alt="DFG" title="DFG" />
+                                        <area target="_blank" shape="rect" coords="0,46,112,73" href="http://www.thulb.uni-jena.de/" alt="ThULB" title="ThULB" />
+                                        <area target="_blank" shape="rect" coords="0,73,112,96"
+                                            href="http://www.archive-in-thueringen.de/index.php?major=archiv&amp;action=detail&amp;object=archiv&amp;id=29" alt="Stadtarchiv Altenburg"
+                                            title="Stadtarchiv Altenburg" />
+                                        <area target="_blank" shape="rect" coords="0,96,112,125" href="http://www.presseforschung.uni-bremen.de/" alt="Deutsche Presseforschung Bremen"
+                                            title="Deutsche Presseforschung Bremen" />
+                                    </map>
+                                </img>
+                            </div>
                         </div>
                         <div id="contentArea">
                             <div id="contentWrapper">
