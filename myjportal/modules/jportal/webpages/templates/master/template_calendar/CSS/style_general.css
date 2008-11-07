@@ -240,3 +240,15 @@ div.ornamentDown{
 .footer {
 	clear: both;
 }
+
+.classiBrowseImage {
+	padding-right: 3px;
+}
+
+.classBrowserHeadline {
+	font-size: medium;
+}
+
+.classiSearchOption {
+	margin-left: 10px;
+}
