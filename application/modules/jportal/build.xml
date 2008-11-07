@@ -29,13 +29,13 @@
 		<chmod perm="755">
 			<fileset dir="${build.bin}" includes="*.sh" />
 		</chmod>
-		
+
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
-		
+
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
-		
+
 	</target>
 
 	<!-- ============================================== -->
@@ -77,6 +77,12 @@
 	<!-- ============================================== -->
 
 	<target name="jp.webapps.inside">
+
+		<!-- file mappings config -->
+		<copy todir="${build.webapps}">
+			<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
+		</copy>
+
 		<!-- web.xml -->
 		<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
 		<antcall target="do.merge">
@@ -148,7 +154,7 @@
 		<templatecheck choosepath="${build.webapps}/WEB-INF/classes/xsl/template_DynamicLayoutTemplates.xsl" />
 	</target>
     -->
-	
+
 	<!-- =================================================================== -->
 
 	<target name="jp.webapps.copyWebPages">
@@ -172,7 +178,7 @@
 			<param name="packages" value="org/mycore/**" />
 		</antcall>
 	</target>
-	
+
 	<!-- =================================================================== -->
 
 	<target name="javac" depends="init">
@@ -180,9 +186,9 @@
 		<javac srcdir="${env.JPORTAL_HOME}/sources" destdir="${build.classes}" includes="${packages}" classpathref="bootstrap.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
 		</javac>
 	</target>
-	
+
 	<!-- =================================================================== -->
-	
+
 	<!--
 	<target name="init">
 		<mkdir dir="${basedir}/classes" />
@@ -192,7 +198,7 @@
 		</path>
 	</target>
     -->
-	
+
 	<!-- =================================================================== -->
 
 </project>

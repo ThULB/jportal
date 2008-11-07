@@ -1,89 +1,88 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcr="http://www.mycore.org/"
-    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-    xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan"
-    xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
-    <xsl:include href="jp_layout-commons.xsl" />
-    <xsl:param name="view.objectmetadata" select="'false'" />
+	xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
+	exclude-result-prefixes="xlink mcr i18n acl xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
+	<xsl:include href="jp_layout-commons.xsl" />
+	<xsl:param name="view.objectmetadata" select="'false'" />
 
-    <xsl:param name="toc.pageSize" select="100" />
-    <xsl:param name="toc.pos" />
+	<xsl:param name="toc.pageSize" select="100" />
+	<xsl:param name="toc.pos" />
 
-    <xsl:param name="toc.sortBy.jpvolume" select="'position'" />
-    <xsl:param name="toc.sortBy.jparticle" select="'size'" />
-    <xsl:param select="5" name="maxLinkedArts" />
+	<xsl:param name="toc.sortBy.jpvolume" select="'position'" />
+	<xsl:param name="toc.sortBy.jparticle" select="'size'" />
+	<xsl:param select="5" name="maxLinkedArts" />
 
-    <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
+	<xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
-    <xsl:param name="resultListEditorID" />
-    <xsl:param name="numPerPage" />
-    <xsl:param name="page" />
-    <xsl:param name="previousObject" />
-    <xsl:param name="previousObjectHost" />
-    <xsl:param name="nextObject" />
-    <xsl:param name="nextObjectHost" />
+	<xsl:param name="resultListEditorID" />
+	<xsl:param name="numPerPage" />
+	<xsl:param name="page" />
+	<xsl:param name="previousObject" />
+	<xsl:param name="previousObjectHost" />
+	<xsl:param name="nextObject" />
+	<xsl:param name="nextObjectHost" />
 
-    <xsl:variable name="thumbnail">
-        <xsl:call-template name="get.thumbnailSupport" />
-    </xsl:variable>
-    <xsl:variable name="JPID_zfbbHack">
-        <xsl:call-template name="get.zfbbSupport" />
-    </xsl:variable>
-    <xsl:variable name="journalID">
-        <xsl:call-template name="get.journalID" />
-    </xsl:variable>
-    <xsl:variable name="journalXML">
-        <xsl:call-template name="get.journalXML" />
-    </xsl:variable>
-    <xsl:variable name="allowHTMLInArticles">
-        <xsl:call-template name="get.allowHTMLInArticles" />
-    </xsl:variable>
-    <xsl:variable name="readAccessForDerivates">
-        <xsl:call-template name="get.readAccessForDerivates">
-            <xsl:with-param name="jID" select="$journalID" />
-        </xsl:call-template>
-    </xsl:variable>
-    <!-- ===================================================================================================== -->
-    <xsl:template
-        match="/mycoreobject[contains(@ID,'_jpjournal_')] 
+	<xsl:variable name="thumbnail">
+		<xsl:call-template name="get.thumbnailSupport" />
+	</xsl:variable>
+	<xsl:variable name="JPID_zfbbHack">
+		<xsl:call-template name="get.zfbbSupport" />
+	</xsl:variable>
+	<xsl:variable name="journalID">
+		<xsl:call-template name="get.journalID" />
+	</xsl:variable>
+	<xsl:variable name="journalXML">
+		<xsl:call-template name="get.journalXML" />
+	</xsl:variable>
+	<xsl:variable name="allowHTMLInArticles">
+		<xsl:call-template name="get.allowHTMLInArticles" />
+	</xsl:variable>
+	<xsl:variable name="readAccessForDerivates">
+		<xsl:call-template name="get.readAccessForDerivates">
+			<xsl:with-param name="jID" select="$journalID" />
+		</xsl:call-template>
+	</xsl:variable>
+	<!-- ===================================================================================================== -->
+	<xsl:template
+		match="/mycoreobject[contains(@ID,'_jpjournal_')] 
         | /mycoreobject[contains(@ID,'_jpvolume_')] 
         | /mycoreobject[contains(@ID,'_jparticle_')]"
-        priority="2">
+		priority="2">
 
-        <xsl:call-template name="printSwitchViewBar" />
+		<xsl:call-template name="printSwitchViewBar" />
 
-        <xsl:choose>
-            <!-- metadaten -->
-            <xsl:when test="$view.objectmetadata = 'false'">
-                <xsl:choose>
-                    <xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
-                        <xsl:apply-templates select="." mode="present">
-                            <xsl:with-param name="obj_host" select="$objectHost" />
-                        </xsl:apply-templates>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <!-- inhaltsverzeichnis -->
-            <xsl:otherwise>
-                <xsl:call-template name="printChildren" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
+		<xsl:choose>
+			<!-- metadaten -->
+			<xsl:when test="$view.objectmetadata = 'false'">
+				<xsl:choose>
+					<xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
+						<xsl:apply-templates select="." mode="present">
+							<xsl:with-param name="obj_host" select="$objectHost" />
+						</xsl:apply-templates>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="i18n:translate('metaData.accessDenied')" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<!-- inhaltsverzeichnis -->
+			<xsl:otherwise>
+				<xsl:call-template name="printChildren" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 
-    <!-- ===================================================================================================== -->
-    <xsl:template match="/mycoreobject[contains(@ID,'_person_')] 
+	<!-- ===================================================================================================== -->
+	<xsl:template match="/mycoreobject[contains(@ID,'_person_')] 
         | /mycoreobject[contains(@ID,'_jpinst_')]" priority="2">
 
-        <xsl:choose>
-            <xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
+		<xsl:choose>
+			<xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
 
-                <table>
-                    <tr>
-                        <xsl:call-template name="browseCtrlJP" />
-                        <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
+				<table>
+					<tr>
+						<xsl:call-template name="browseCtrlJP" />
+						<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
                         <xsl:call-template name="SwitchToXMLview" />
                     </tr>
                 </table>
@@ -1095,21 +1094,28 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
+            
             <xsl:variable name="derivmain">
-                <xsl:choose>
-                    <!-- links -->
-                    <xsl:when test="name() = 'ifsLink'">
+               	<xsl:choose>
+                   	<!-- links -->
+                   	<xsl:when test="name() = 'ifsLink'">
                         <xsl:value-of select="substring-after(./text(),'/')" />
-                    </xsl:when>
-                    <!-- full text hit -->
-                    <xsl:when test="name() = 'mcr:metaData'">
-                        <xsl:value-of select="mcr:field[@name='filePath']/text()" />
-                    </xsl:when>
+                   	</xsl:when>
+                   	<!-- full text hit -->
+                   	<xsl:when test="name() = 'mcr:metaData'">
+                        <!-- <xsl:value-of select="mcr:field[@name='filePath']/text()" /> -->
+                        <!-- check if a file mapping has to be done -->
+                        <xsl:call-template name="mappFile">
+           					<xsl:with-param name="derivid-if" select="$derivid"/>
+           					<xsl:with-param name="file" select="mcr:field[@name='filePath']/text()" />
+           				</xsl:call-template>
+                   	</xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="internal/@maindoc" />
-                    </xsl:otherwise>
-                </xsl:choose>
+                       	<xsl:value-of select="internal/@maindoc" />
+                   	</xsl:otherwise>
+               	</xsl:choose>
             </xsl:variable>
+            
             <xsl:variable name="derivbase">
                 <xsl:value-of select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')" />
             </xsl:variable>
@@ -1259,7 +1265,70 @@
             </xsl:choose>
         </xsl:if>
     </xsl:template>
+    
     <!-- ===================================================================================================== -->
+    
+    <xsl:template name="mappFile">
+		<xsl:param name="derivid-if" />
+		<xsl:param name="file" />
+
+		<xsl:variable name="fileMappings">
+			<xsl:copy-of select="document('webapp:fileMappings.xml')" />
+		</xsl:variable>
+		<xsl:choose>
+			<!-- file mapping(s) available ? -->
+			<xsl:when test="xalan:nodeset($fileMappings)/fileMappings/fileMapping" >		
+				<xsl:variable name="fileName">
+					<xsl:value-of select="substring-after(substring-before($file,'.'),'/')" />
+				</xsl:variable>
+				<xsl:variable name="fileExt">
+					<xsl:call-template name="getFileType">
+						<xsl:with-param name="fileName" select="$file" />
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:variable name="fileContentTypes">
+					<xsl:copy-of select="document('webapp:FileContentTypes.xml')" />
+				</xsl:variable>
+				<xsl:variable name="idOfFileType">
+					<xsl:value-of select="xalan:nodeset($fileContentTypes)/FileContentTypes/type/rules/extension[text()=$fileExt]/../../@ID" />
+				</xsl:variable>
+				<xsl:variable name="transFileList">
+					<!-- file type exist AND file type must be mapped -->
+					<xsl:if test="$idOfFileType != '' and xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]">
+						<xsl:variable name="derivXML" select="document(concat('request:servlets/MCRFileNodeServlet/',$derivid-if,'/?XSL.Style=xml'))" />
+						<!-- go throug all mappable file extension id's -->
+						<xsl:for-each select="xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type">
+							<xsl:variable name="mappID" select="@ID" />
+							<!--  go throug all file extensions belonging to extension id's -->
+							<xsl:for-each select="xalan:nodeset($fileContentTypes)/FileContentTypes/type[@ID=$mappID]/rules/extension">
+								<!-- is current extension id in derivate xml ? -->
+								<xsl:variable name="fileNameTmp" select="concat($fileName,'.',text())" />
+								<xsl:variable name="mappableNode" select="xalan:nodeset($derivXML)/mcr_directory/children/child/name[text()=$fileNameTmp]" />
+								<xsl:if test="$mappableNode">
+									<xsl:value-of select="concat($mappableNode,$derivid-if)" />
+								</xsl:if>
+							</xsl:for-each>
+						</xsl:for-each>
+					</xsl:if>
+				</xsl:variable>
+				<!-- return translated file -->
+				<xsl:choose>
+					<xsl:when test="contains($transFileList,$derivid-if)">
+						<xsl:value-of select="substring-before($transFileList,$derivid-if)" />
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$file" />
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$file" />
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<!-- ===================================================================================================== -->
+	
     <xsl:template name="getFileLabel">
         <xsl:param name="typeOfFile" />
         <xsl:variable name="label">
