@@ -80,6 +80,7 @@
 
 		<!-- file mappings config -->
 		<copy todir="${build.webapps}">
+			<fileset dir="${JPortal.HomeURL}/config" includes="FileContentTypes.xml" />
 			<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
 		</copy>
 
