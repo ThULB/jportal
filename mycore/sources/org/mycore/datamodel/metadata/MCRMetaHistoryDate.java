@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.common.MCRException;
  * @author Juergen Vogler
  * @author Jens Kupferschmidt
  * @author Thomas Junge
- * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * @version $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06 Nov 2008) $
  * @see <a href="http://www.icu-project.org/">http://www.icu-project.org/</a>
  */
 public class MCRMetaHistoryDate extends MCRMetaDefault {
@@ -51,7 +51,7 @@ public class MCRMetaHistoryDate extends MCRMetaDefault {
     protected static Logger LOGGER = Logger.getLogger(MCRMetaHistoryDate.class.getName());
 
     /** The maximal length of 'text' */
-    public static final int MCRHISTORYDATE_MAX_TEXT = 128;
+    public static final int MCRHISTORYDATE_MAX_TEXT = 256;
 
     // Data of this class
     private ArrayList<MCRMetaHistoryDateText> texts;

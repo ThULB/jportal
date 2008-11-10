@@ -490,30 +490,36 @@ input.editorRadio, input.editorCheckbox {
 label.editorRadio, label.editorCheckbox {
 	vertical-align:top;
 }
-legend.editorHeadline {
-	border:1px solid black;
+table.editor { 
+	background-color:#CAD9E0; border:1px solid #7791ac; 
+}
+td.editorHeadline { 
+	color:#FFFFFF; background-color:#15516E; padding:3px; 
+}
+td.editorValidationMessage { 
+	color:#FFFFFF; background-color:#FF0000; padding:3px; 
 }
 
 /* Following is a complete list of all default CSS classes used in editors */ 
 
-form.editor 			{}
-fieldset.editor 		{}
-legend.editorHeadline 	{}
-table.editorPanel 		{}
-table.editorRepeater 	{}
-td.editorPMUD 			{}
-a.editorAnchor 			{}
-td.editorCell			{}
-label.editorText		{}
-input.editorTextfield	{}
-input.editorPassword	{}
-textarea.editorTextarea	{}
-input.editorButton 		{}
-input.editorFile 		{}
-.editorOutput 			{}
-table.editorList 		{}
-select.editorList 		{}
-input.editorRadio 		{}
-label.editorRadio 		{}
-input.editorCheckbox 	{}
-label.editorCheckbox 	{}
+form.editor {}
+table.editor {}
+td.editorHeadline {}
+table.editorPanel {}
+table.editorRepeater {}
+td.editorPMUD {}
+a.editorAnchor {}
+td.editorCell {}
+label.editorText {}
+input.editorTextfield {}
+input.editorPassword {}
+textarea.editorTextarea {}
+input.editorButton {}
+input.editorFile {}
+.editorOutput {}
+table.editorList {}
+select.editorList {}
+input.editorRadio {}
+label.editorRadio {}
+input.editorCheckbox {}
+label.editorCheckbox {}

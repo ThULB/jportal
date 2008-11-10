@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.MCRUtils;
  * the content of a file is stored.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07 Nov 2008) $
  */
 public abstract class MCRContentStore {
     /** The unique store ID for this MCRContentStore implementation */
@@ -167,7 +167,18 @@ public abstract class MCRContentStore {
      *        use doRetrieveContent(MCRFileReader file) instead
      */
     public void retrieveContent(MCRFileReader file, OutputStream target) throws MCRException {
-        MCRUtils.copyStream(retrieveContent(file), target);
+        InputStream in = null;
+        try {
+            in = retrieveContent(file);
+            MCRUtils.copyStream(in, target);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception ignored) {
+                }
+            }
+        }
     }
 
     /**
@@ -176,11 +187,11 @@ public abstract class MCRContentStore {
      * this store instance.
      * 
      * @param file
-     *            the MCRFile thats content should be retrieved
+     *          the MCRFile thats content should be retrieved
      * @param target
-     *            the OutputStream to write the file content to
-     * @deprecated
-     *        use doRetrieveContent(MCRFileReader file) instead
+     *          the OutputStream to write the file content to
+     * @deprecated 
+     *          use doRetrieveContent(MCRFileReader file) instead
      */
     protected abstract void doRetrieveContent(MCRFileReader file, OutputStream target) throws Exception;
 

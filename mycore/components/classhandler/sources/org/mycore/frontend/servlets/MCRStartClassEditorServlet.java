@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRStartClassEditorServlet.java,v $
- * $Revision: 13959 $ $Date: 2008-09-05 15:18:18 +0200 (Fr, 05 Sep 2008) $
+ * $Revision: 14305 $ $Date: 2008-11-03 10:43:01 +0100 (Mo, 03 Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -53,7 +53,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Anja Schaar
  * @author Jens Kupferschmidt
- * @version $Revision: 13959 $ $Date: 2008-09-05 15:18:18 +0200 (Fr, 05 Sep 2008) $
+ * @version $Revision: 14305 $ $Date: 2008-11-03 10:43:01 +0100 (Mo, 03 Nov 2008) $
  */
 
 public class MCRStartClassEditorServlet extends MCRServlet {
@@ -103,7 +103,7 @@ public class MCRStartClassEditorServlet extends MCRServlet {
         // get the Classification
         clid = parms.getParameter("clid"); // getProperty(job.getRequest(),
         // "clid");
-        
+
         categid = parms.getParameter("categid"); // getProperty(job.getRequest(),
         // "categid");
 
@@ -127,9 +127,9 @@ public class MCRStartClassEditorServlet extends MCRServlet {
         String imerrorpage = pagedir + CONFIG.getString("MCR.classeditor_page_error_move", "classeditor_error_move.xml");
         String imperrorpage = pagedir + CONFIG.getString("MCR.classeditor_page_error_import", "classeditor_error_import.xml");
 
-        String referrer=job.getRequest().getHeader("Referer");
-        if(referrer==null||referrer.equals("")) {
-            referrer=getBaseURL() + cancelpage;
+        String referrer = job.getRequest().getHeader("Referer");
+        if (referrer == null || referrer.equals("")) {
+            referrer = getBaseURL() + cancelpage;
         }
 
         if (!(AI.checkPermission("create-classification"))) {
@@ -180,7 +180,8 @@ public class MCRStartClassEditorServlet extends MCRServlet {
                     String fname = parms.getParameter("/mycoreclass/pathes/path").trim();
                     fname = clE.setTempFile(fname, (FileItem) sub.getFiles().get(0));
                     String sUpdate = parms.getParameter("/mycoreclass/update");
-                    bret = clE.importClassification(("true".equals(sUpdate)), fname);
+                    boolean update = sUpdate == null ? true : "true".equals(sUpdate);
+                    bret = clE.importClassification(update, fname);
                     clE.deleteTempFile();
                     if (!bret) {
                         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + imperrorpage));
@@ -280,17 +281,16 @@ public class MCRStartClassEditorServlet extends MCRServlet {
             MCRCategory classif = null;
             if (isEdited) {
                 classif = MCRClassificationBrowserData.getClassificationPool().getClassificationAsPojo(MCRCategoryID.rootID(clid), false);
-                LOGGER.info("CLASSIF: "+classif.getId());
+                LOGGER.info("CLASSIF: " + classif.getId());
             }
 
             if ("modify-classification".equals(todo)) {
-                 if (isEdited) {
-                 sb.append("session:").append(sessionObjectID);
-                 MCRSessionMgr.getCurrentSession().put(sessionObjectID,
-                 MCRCategoryTransformer.getMetaDataDocument(classif,true).getRootElement());
-                 } else {
-                 sb.append("classification:metadata:0:children:").append(clid);
-                 }
+                if (isEdited) {
+                    sb.append("session:").append(sessionObjectID);
+                    MCRSessionMgr.getCurrentSession().put(sessionObjectID, MCRCategoryTransformer.getMetaDataDocument(classif, true).getRootElement());
+                } else {
+                    sb.append("classification:metadata:0:children:").append(clid);
+                }
                 params.put("sourceUri", sb.toString());
 
             }
@@ -323,12 +323,12 @@ public class MCRStartClassEditorServlet extends MCRServlet {
                 params.put("categid", categid);
             }
             if ("create-category".equals(todo)) {
-                 if (isEdited) {
-                 sb.append("session:").append(sessionObjectID);
-                 MCRSessionMgr.getCurrentSession().put(sessionObjectID, MCRCategoryTransformer.getMetaDataDocument(classif,true).getRootElement());
-                 } else {
-                 sb.append("classification:metadata:0:children:").append(clid);
-                 }
+                if (isEdited) {
+                    sb.append("session:").append(sessionObjectID);
+                    MCRSessionMgr.getCurrentSession().put(sessionObjectID, MCRCategoryTransformer.getMetaDataDocument(classif, true).getRootElement());
+                } else {
+                    sb.append("classification:metadata:0:children:").append(clid);
+                }
                 params.put("sourceUri", sb.toString());
                 params.put("categid", categid);
             }

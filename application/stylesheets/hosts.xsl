@@ -11,17 +11,21 @@
 
 <xsl:template match="/mcr:hosts">
   <items>
-    <xsl:for-each select="mcr:host">
-      <item value="{@alias}">
-        <xsl:copy-of select="@checked" />
-        <xsl:for-each select="mcr:label">
-          <label>
-            <xsl:copy-of select="@*|text()|*" />
-          </label>
-        </xsl:for-each>
-      </item>
-    </xsl:for-each>
+    <xsl:apply-templates select="*" />
   </items>
+</xsl:template>
+
+<xsl:template match="mcr:host">
+  <item value="{@alias}">
+    <xsl:copy-of select="@checked" />
+    <xsl:apply-templates select="*" />
+  </item>
+</xsl:template>
+
+<xsl:template match="mcr:label">
+  <label>
+    <xsl:copy-of select="@*|text()|*" />
+  </label>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -1,5 +1,5 @@
 /*
- * $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15 Jul 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
+ * $Revision: 14351 $ $Date: 2008-11-07 14:14:12 +0100 (Fr, 07 Nov 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
  * is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as published by the Free
  * Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
@@ -54,7 +54,7 @@ import org.mycore.services.fieldquery.MCRSearcherFactory;
  * 
  * @author Jens Kupferschmidt
  * @author Frank Luetzenkirchen
- * @version $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15 Jul 2008) $
+ * @version $Revision: 14351 $ $Date: 2008-11-07 14:14:12 +0100 (Fr, 07 Nov 2008) $
  */
 public class MCRObjectCommands extends MCRAbstractCommands {
     /** The logger */
@@ -539,7 +539,7 @@ public class MCRObjectCommands extends MCRAbstractCommands {
 
         InputStream in = MCRObjectCommands.class.getResourceAsStream("/" + xslfile);
         if (in == null) {
-            in = MCRObjectCommands.class.getResourceAsStream(DEFAULT_TRANSFORMER);
+            in = MCRObjectCommands.class.getResourceAsStream("/xsl/" + DEFAULT_TRANSFORMER);
         }
         try {
             if (in != null) {

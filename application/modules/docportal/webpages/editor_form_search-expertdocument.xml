@@ -36,7 +36,7 @@
 
       <!-- Search in metadata fields that are text -->
       <cell row="1" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/boolean/condition2">
-        <repeater min="1" max="10">
+        <repeater min="1" max="10" arrows="false">
           <panel>
             <cell row="1" col="1" anchor="WEST" var="@field">
               <list type="dropdown" default="title" width="110px">
@@ -60,7 +60,7 @@
       
       <!-- Search in metadata fields that are names -->
       <cell row="2" col="1" colspan="3" anchor="NORTHWEST" var="conditions/boolean/boolean/condition3">
-        <repeater min="1" max="10">
+        <repeater min="1" max="10" arrows="false">
           <panel>
             <cell row="1" col="1" anchor="WEST" var="@field">
               <list type="dropdown" default="author" width="110px">
@@ -232,7 +232,7 @@
       
       <cell row="18" col="2" colspan="2" anchor="NORTHWEST" var="hosts/host">
         <list type="checkbox" cols="2">
-          <include uri="request:hosts.xml" />
+          <include uri="xslStyle:hosts:webapp:hosts.xml" />
         </list>
       </cell>
       

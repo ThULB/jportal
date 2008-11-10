@@ -69,6 +69,7 @@ public class MCRClassificationMigrationHelper {
         // pass through found objects
         int pos = 0;
         long startTime = System.currentTimeMillis();
+        Session session = MCRHIBConnection.instance().getSession();
         for (String id : objIDs) {
             pos++;
             LOGGER.debug("Processing object " + id);
@@ -98,8 +99,11 @@ public class MCRClassificationMigrationHelper {
                 if (pos % 100 == 0 || pos == objectsTotal) {
                     long currentTime = System.currentTimeMillis();
                     long finishTime = currentTime + ((currentTime - startTime) * (objectsTotal - pos) / pos);
-                    LOGGER.info(((pos / objectsTotal) * 100) + " % (" + pos + "/" + objectsTotal + "), estimated finish time is "
+                    LOGGER.info((100d * (double) pos / (double) objectsTotal) + " % (" + pos + "/" + objectsTotal + "), estimated finish time is "
                             + new Date(finishTime));
+                    //flush a batch of inserts and release memory:
+                    session.flush();
+                    session.clear();
                 }
             } else
                 LOGGER.warn("Object " + id + " linked to category, but it is not in database.");
@@ -109,10 +113,8 @@ public class MCRClassificationMigrationHelper {
     static void deleteOldCategoryLinks() {
         LOGGER.info("Deleting old object links...");
         final Session session = MCRHIBConnection.instance().getSession();
-        Criteria c = session.createCriteria(MCRLINKHREF.class).add(Restrictions.eq("key.mcrtype", "classid"));
-        for (Object classLink : c.list()) {
-            session.delete(classLink);
-        }
+        int deleted = session.createQuery("DELETE FROM MCRLINKHREF WHERE key.mcrtype='classid'").executeUpdate();
+        LOGGER.info(deleted + " object links deleted.");
     }
 
     @SuppressWarnings("unchecked")

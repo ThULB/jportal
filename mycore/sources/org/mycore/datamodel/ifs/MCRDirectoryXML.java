@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30 Okt 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.common.MCRConfiguration;
  * @author Thomas Scheffler (yagee)
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30 Okt 2008) $
  */
 public class MCRDirectoryXML {
 
@@ -89,6 +89,9 @@ public class MCRDirectoryXML {
         addDate(root, "lastModified", dir.getLastModified());
         addString(root, "size", String.valueOf(dir.getSize()));
 
+        String label = dir.getLabel();
+        if( label != null ) addString(root, "label", label );
+
         Element numChildren = new Element("numChildren");
         root.addContent(numChildren);
 
@@ -115,6 +118,10 @@ public class MCRDirectoryXML {
             nodes.addContent(node);
 
             addString(node, "name", children[i].getName());
+            
+            label = children[i].getLabel();
+            if( label != null ) addString(node, "label", label );
+            
             addString(node, "size", String.valueOf(children[i].getSize()));
             addDate(node, "lastModified", children[i].getLastModified());
 
@@ -135,6 +142,12 @@ public class MCRDirectoryXML {
             } else {
                 node.setAttribute("type", "directory");
             }
+            
+            try {
+              Document additional = children[i].getAllAdditionalData();
+              if( additional != null )
+                node.addContent( additional.detachRootElement() );
+            } catch(Exception ignored) {}
         }
 
         return doc;

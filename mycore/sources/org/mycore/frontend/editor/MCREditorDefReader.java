@@ -1,6 +1,6 @@
 /*
- * $Revision: 14245 $ 
- * $Date: 2008-10-25 11:47:29 +0200 (Sa, 25 Okt 2008) $
+ * $Revision: 14327 $ 
+ * $Date: 2008-11-05 11:34:51 +0100 (Mi, 05 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -70,7 +70,7 @@ public class MCREditorDefReader
     editor = new Element( "editor" );
     editor.setAttribute( "id", ref );
     editor.addContent( include );
-    resolveChildren( editor );
+    resolveIncludes( editor );
     resolveReferences();
     if( validate ) validate( uri, ref );
     
@@ -283,7 +283,6 @@ public class MCREditorDefReader
 
     Element components = editor.getChild( "components" );
     String root = components.getAttributeValue( "root" );
-    components.removeAttribute( "root" );
     
     for( int i = 0; i < components.getContentSize(); i++ )
     {

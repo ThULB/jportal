@@ -72,12 +72,11 @@
 
 <!-- ======== handles editor ======== -->
 
-<xsl:template match="editor" xmlns:system="xalan://java.lang.System">
-  <xsl:variable name="time" select="system:nanoTime()" />
+<xsl:template match="editor">
   <form action="{$ServletsBaseURL}XMLEditor{$HttpSession}" accept-charset="UTF-8">
     <xsl:call-template name="editor.set.css" />
     <xsl:call-template name="editor.set.form.attrib" />    
-    <fieldset>
+    <table cellspacing="0">
       <xsl:call-template name="editor.set.css" />
 
       <!-- ======== if exists, output editor headline ======== -->
@@ -92,12 +91,15 @@
       <input style="width:0px; height:0px; border-width:0px; float:left;" value="submit" type="submit" tabindex="99" />
 
       <!-- ======== start at the root panel ======== -->
-      <xsl:apply-templates select="components/panel">
-        <xsl:with-param name="var" select="components/@var" />
-      </xsl:apply-templates>
-    </fieldset>
+      <tr>
+        <td>
+          <xsl:apply-templates select="components/panel">
+            <xsl:with-param name="var" select="components/@var" />
+          </xsl:apply-templates>
+        </td>
+      </tr>
+    </table>
   </form>
-  <xsl:value-of select="round((number(system:nanoTime())-number($time)) div 1000000)" /> ms<xsl:text/>
 </xsl:template>
 
 <!-- ======== set form attributes ======== -->
@@ -191,21 +193,26 @@
 
 <!-- ======== headline ======== -->
 <xsl:template match="headline">
-  <legend>
-    <xsl:call-template name="editor.set.css" />
-    <xsl:apply-templates select="text | output">
-      <xsl:with-param name="var" select="../@var" />
-    </xsl:apply-templates>
-  </legend>
+  <tr> 
+    <td>
+      <xsl:call-template name="editor.set.css" />
+      <xsl:call-template name="editor.set.anchor" />
+      <xsl:apply-templates select="text | output">
+        <xsl:with-param name="var" select="../@var" />
+      </xsl:apply-templates>
+    </td>
+  </tr>
 </xsl:template>
 
 <!-- ======== validation errors exist ======== -->
 <xsl:template match="failed">
-  <div class="editorMessage">
-    <xsl:for-each select="../validationMessage">
-      <xsl:call-template name="output.label" />
-    </xsl:for-each>
-  </div>
+  <tr>
+    <td class="editorValidationMessage">
+      <xsl:for-each select="ancestor::editor/validationMessage">
+        <xsl:call-template name="output.label" />
+      </xsl:for-each>
+    </td>
+  </tr>
 </xsl:template>
 
 <!-- ======== handle repeater ======== -->
@@ -256,8 +263,7 @@
           <xsl:call-template name="repeater.pmud">
             <xsl:with-param name="var" select="$var" />
             <xsl:with-param name="num" select="$num" />
-            <xsl:with-param name="min" select="$rep/@min" />
-            <xsl:with-param name="max" select="$rep/@max" />
+            <xsl:with-param name="rep" select="$rep" />
           </xsl:call-template>
         </xsl:if>
         <xsl:call-template name="repeated.component">
@@ -269,8 +275,7 @@
           <xsl:call-template name="repeater.pmud">
             <xsl:with-param name="var" select="$var" />
             <xsl:with-param name="num" select="$num" />
-            <xsl:with-param name="min" select="$rep/@min" />
-            <xsl:with-param name="max" select="$rep/@max" />
+            <xsl:with-param name="rep" select="$rep" />
           </xsl:call-template>
         </xsl:if>
       </tr>
@@ -319,11 +324,10 @@
 <xsl:template name="repeater.pmud">
   <xsl:param name="var" />
   <xsl:param name="num" />
-  <xsl:param name="min" />
-  <xsl:param name="max" />
+  <xsl:param name="rep" />
 
   <td class="editorPMUD">
-    <xsl:if test="number($num) &lt; number($max)">
+    <xsl:if test="number($num) &lt; number($rep/@max)">
       <input tabindex="999" type="image" name="_p-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-plus.png"/>
     </xsl:if>
   </td>
@@ -332,16 +336,21 @@
       <input tabindex="999" type="image" name="_m-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-minus.png"/>
     </xsl:if>
   </td>
-  <td class="editorPMUD">
-    <xsl:if test="(position() &lt; number($num)) or (position() &lt; number($min))">
-      <input tabindex="999" type="image" name="_d-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-down.png"/>
-    </xsl:if>
-  </td>
-  <td class="editorPMUD">
-    <xsl:if test="position() &gt; 1">
-      <input tabindex="999" type="image" name="_u-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-up.png"/>
-    </xsl:if>
-  </td>
+  <xsl:choose>
+    <xsl:when test="$rep/@arrows='false'" />
+    <xsl:otherwise>
+      <td class="editorPMUD">
+        <xsl:if test="(position() &lt; number($num)) or (position() &lt; number($rep/@min))">
+          <input tabindex="999" type="image" name="_d-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-down.png"/>
+        </xsl:if>
+      </td>
+      <td class="editorPMUD">
+        <xsl:if test="position() &gt; 1">
+          <input tabindex="999" type="image" name="_u-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-up.png"/>
+        </xsl:if>
+      </td>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <!-- ======== handle panel ======== -->

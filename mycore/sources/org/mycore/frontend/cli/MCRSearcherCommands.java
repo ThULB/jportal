@@ -31,7 +31,9 @@ import java.util.Properties;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.hibernate.CacheMode;
 import org.hibernate.Criteria;
+import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -45,10 +47,8 @@ import org.mycore.backend.hibernate.tables.MCRFSNODES;
 import org.mycore.backend.hibernate.tables.MCRXMLTABLE;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRXMLResource;
-import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFileMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.services.fieldquery.MCRData2Fields;
 import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRFieldValue;
@@ -57,6 +57,7 @@ import org.mycore.services.fieldquery.MCRSearcherFactory;
 
 /**
  * provides static methods to manipulate MCRSearcher indexes.
+ * 
  * @author Thomas Scheffler (yagee)
  */
 
@@ -73,10 +74,6 @@ public class MCRSearcherCommands extends MCRAbstractCommands {
 
     private static final String SEARCHER_INDEX_SUFFIX = ".Index";
 
-    private static enum XMLRootNames {
-        mycoreobject, mycorederivate
-    }
-
     private static final Namespace MYCORE_NS = Namespace.getNamespace("mcr", "http://www.mycore.org/");
 
     public MCRSearcherCommands() {
@@ -87,6 +84,7 @@ public class MCRSearcherCommands extends MCRAbstractCommands {
 
     /**
      * repairs all metadata indexes
+     * 
      * @throws IOException
      * @throws JDOMException
      */
@@ -104,12 +102,14 @@ public class MCRSearcherCommands extends MCRAbstractCommands {
             searcher.notifySearcher("insert");
             Session session = MCRHIBConnection.instance().getSession();
             Criteria xmlCriteria = session.createCriteria(MCRXMLTABLE.class);
-            ScrollableResults result = xmlCriteria.scroll();
-            while (result.next()) {
-                MCRXMLTABLE xmlEntry = (MCRXMLTABLE) result.get(0);
+            xmlCriteria.setCacheMode(CacheMode.IGNORE);
+            ScrollableResults results = xmlCriteria.scroll(ScrollMode.FORWARD_ONLY);
+            while (results.next()) {
+                MCRXMLTABLE xmlEntry = (MCRXMLTABLE) results.get(0);
                 if (xmlEntry.getType().equals("derivate"))
                     continue;
                 addMetaToIndex(xmlEntry, false, searcher);
+                session.evict(xmlEntry);
             }
             searcher.notifySearcher("finish");
             LOGGER.info("Done building index " + searcherID);
@@ -118,6 +118,7 @@ public class MCRSearcherCommands extends MCRAbstractCommands {
 
     /**
      * repairs all content indexes
+     * 
      * @throws IOException
      * @throws JDOMException
      */
@@ -136,15 +137,17 @@ public class MCRSearcherCommands extends MCRAbstractCommands {
             Session session = MCRHIBConnection.instance().getSession();
             Criteria fileCriteria = session.createCriteria(MCRFSNODES.class);
             fileCriteria.add(Restrictions.eq("type", "F"));
-            ScrollableResults result = fileCriteria.scroll();
-            while (result.next()) {
-                MCRFSNODES node = (MCRFSNODES) result.get(0);
+            fileCriteria.setCacheMode(CacheMode.IGNORE);
+            ScrollableResults results = fileCriteria.scroll(ScrollMode.FORWARD_ONLY);
+            while (results.next()) {
+                MCRFSNODES node = (MCRFSNODES) results.get(0);
                 GregorianCalendar greg = new GregorianCalendar();
                 greg.setTime(node.getDate());
                 MCRFile file = (MCRFile) MCRFileMetadataManager.instance().buildNode(node.getType(), node.getId(), node.getPid(), node.getOwner(),
                         node.getName(), node.getLabel(), node.getSize(), greg, node.getStoreid(), node.getStorageid(), node.getFctid(), node.getMd5(),
                         node.getNumchdd(), node.getNumchdf(), node.getNumchtd(), node.getNumchtf());
                 addFileToIndex(file, false, searcher);
+                session.evict(node);
             }
             searcher.notifySearcher("finish");
             LOGGER.info("Done building index " + searcherID);

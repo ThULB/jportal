@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13456 $ $Date: 2008-04-25 16:58:08 +0200 (Fr, 25 Apr 2008) $
+ * $Revision: 14346 $ $Date: 2008-11-07 06:56:11 +0100 (Fr, 07 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -215,10 +215,11 @@ public class MCRSearchServlet extends MCRServlet {
             for (int i=0;i<sf.size();i++)
             {
               String name = (String)sf.elementAt(i);
+              String order = getReqParameter(request, name, "ascending");
               name = name.substring(0, name.indexOf(".sortField"));
               Element field = new Element("field");
               field.setAttribute("name", name);
-              field.setAttribute("order", getReqParameter(request, name, "ascending"));
+              field.setAttribute("order", order);
               sortBy.addContent(field);
             }
             

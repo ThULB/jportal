@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14031 $ $Date: 2008-09-23 11:50:55 +0200 (Di, 23 Sep 2008) $
+ * $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -39,6 +39,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -55,6 +58,7 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.jdom.Element;
 
@@ -270,20 +274,24 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         synchronized (CONFIG) {
             long start = System.currentTimeMillis();
             try {
-            	if ( indexReader == null && indexSearcher == null) {
-                    indexReader = IndexReader.open(IndexDir.getAbsolutePath());
+                if (indexReader == null && indexSearcher == null) {
+                    //Lucene 2.4.0 has problems with initializing IndexReader with File|String
+                    //see https://issues.apache.org/jira/browse/LUCENE-1430
+                    FSDirectory indexDir = FSDirectory.getDirectory(IndexDir.getAbsolutePath());
+                    indexReader = IndexReader.open(indexDir);
                     indexSearcher = new IndexSearcher(indexReader);
-            	}
-            	else {
-                IndexReader newReader = indexReader.reopen();
-                if (newReader != indexReader) {
-                    LOGGER.info("new Searcher for index: " + ID);
-                    indexReader.close();
-                    indexSearcher.close();
-                    indexReader = newReader;
-                    indexSearcher = new IndexSearcher(indexReader);
+                } else {
+                    if (!indexReader.isCurrent()) {
+                        IndexReader newReader = indexReader.reopen();
+                        if (newReader != indexReader) {
+                            LOGGER.info("new Searcher for index: " + ID);
+                            indexReader.close();
+                            indexSearcher.close();
+                            indexReader = newReader;
+                            indexSearcher = new IndexSearcher(indexReader);
+                        }
+                    }
                 }
-            	}
 
             } catch (IOException e) {
                 LOGGER.error(e.getClass().getName() + ": " + e.getMessage());
@@ -522,12 +530,10 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 useRamDir = true;
             } catch (Exception e) {
             }
-        } else if ("optimize".equals(mode))
-        {
+        } else if ("optimize".equals(mode)) {
             IndexWriterAction modifyAction = IndexWriterAction.optimizeAction(modifyExecutor);
             modifyIndex(modifyAction);
-        }
-        else if (!"finish".equals(mode))
+        } else if (!"finish".equals(mode))
             LOGGER.error("invalid mode " + mode);
     }
 
@@ -585,6 +591,16 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
 
         private int maxIndexWriteActions;
 
+        private static ReadWriteLock IndexCloserLock = new ReentrantReadWriteLock(true);
+
+        private static ThreadLocal<Lock> writeAccess = new ThreadLocal<Lock>() {
+
+            @Override
+            protected Lock initialValue() {
+                return IndexCloserLock.readLock();
+            }
+        };
+
         public IndexWriteExecutor(BlockingQueue<Runnable> workQueue, File indexDir) {
             // single thread mode
             super(1, 1, 0, TimeUnit.SECONDS, workQueue);
@@ -598,17 +614,24 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         @Override
         protected void afterExecute(Runnable r, Throwable t) {
             super.afterExecute(r, t);
+            //allow to close the IndexWriter
+            writeAccess.get().unlock();
             if (firstJob)
                 firstJob = false;
             if (closeModifierEarly || this.getCompletedTaskCount() % maxIndexWriteActions == 0)
                 closeIndexWriter();
             else {
+                if (delayedFuture != null && !delayedFuture.isDone()) {
+                    cancelDelayedIndexCloser();
+                }
                 delayedFuture = scheduler.schedule(delayedCloser, 2, TimeUnit.SECONDS);
             }
         }
 
         @Override
         protected void beforeExecute(Thread t, Runnable r) {
+            //do not close IndexWriter while IndexWriterActions is processed
+            writeAccess.get().lock();
             cancelDelayedIndexCloser();
             if (modifierClosed)
                 openIndexWriter();
@@ -616,8 +639,9 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         }
 
         private void cancelDelayedIndexCloser() {
-            if (delayedFuture != null && !delayedFuture.isDone())
+            if (delayedFuture != null && !delayedFuture.isDone()) {
                 delayedFuture.cancel(false);
+            }
         }
 
         @Override
@@ -636,24 +660,32 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         private synchronized void openIndexWriter() {
             try {
                 LOGGER.debug("Opening Lucene index for writing.");
-                indexWriter = getLuceneWriter(indexDir, firstJob);
+                if (indexWriter == null)
+                    indexWriter = getLuceneWriter(indexDir, firstJob);
             } catch (Exception e) {
                 LOGGER.warn("Error while reopening IndexWriter.", e);
+            } finally {
+                modifierClosed = false;
             }
-            modifierClosed = false;
         }
 
         private synchronized void closeIndexWriter() {
-            if (indexWriter != null) {
-                try {
+            Lock writerLock = IndexCloserLock.writeLock();
+            try {
+                //do not allow IndexWriterAction being processed while closing IndexWriter
+                writerLock.lock();
+                if (indexWriter != null) {
                     LOGGER.debug("Writing Lucene index changes to disk.");
                     indexWriter.close();
-                } catch (IOException e) {
-                    LOGGER.warn("Error while closing IndexWriter.", e);
-                } catch (IllegalStateException e) {
-                    LOGGER.debug("IndexWriter was allready closed.");
                 }
+            } catch (IOException e) {
+                LOGGER.warn("Error while closing IndexWriter.", e);
+            } catch (IllegalStateException e) {
+                LOGGER.debug("IndexWriter was allready closed.");
+            } finally {
                 modifierClosed = true;
+                indexWriter = null;
+                writerLock.unlock();
             }
         }
 
@@ -674,6 +706,12 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
 
         public IndexWriter getIndexWriter() {
             return indexWriter;
+        }
+
+        @Override
+        protected void finalize() {
+            closeIndexWriter();
+            super.finalize();
         }
 
     }
@@ -736,7 +774,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                     optimizeIndex();
                 } else
                     addDirectory();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 LOGGER.error("Error while writing Lucene Index ", e);
             }
         }
