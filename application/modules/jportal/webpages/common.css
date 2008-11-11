@@ -508,3 +508,7 @@ select{
 #obj_del {
     margin-left: 50px;
 }
+
+h1.section {
+	margin-top: 50px;
+}

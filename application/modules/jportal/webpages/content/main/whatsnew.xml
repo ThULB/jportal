@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <section xml:lang="de" title="News">
+        <h1 class="section">Inhaltsverzeichnis</h1>
+        <a href="#functional">Funktional</a>
+        <ul>
+            <li>
+                <a href="#linkDigi">Verlinkungen von Digitalisaten</a>
+            </li>
+            <li>
+                <a href="#searchJournal">Suche nach Zeitschriften</a>
+                <ul>
+                    <li>
+                        <a href="#searchClassi">Suche mittels inhaltlicher Klassifikationen</a>
+                    </li>
+                    <li>
+                        <a href="#expertSearch">Expertensuche</a>
+                    </li>
+                    <li>
+                        <a href="#chronOverview">Chronologische Gesamtübersicht</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#calendarExt1">Portal-Ausbau für Präsentation von Kalenderreihen</a>
+            </li>
+            <li>
+                <a href="#classiEdit">Klassifikationseditor</a>
+            </li>
+            <li>
+                <a href="#secureWebsite">Webseiten können lesegeschützt werden</a>
+            </li>
+        </ul>
+        
+        <!--  -->
+        <a href="#content">Inhaltlich</a>
+        <ul>
+            <li>
+                <a href="#extendPerson">Erweiterung des Personendatenmodells</a>
+            </li>
+            <li>
+                <a href="#displayImportantMeta">Anzeige wichtiger Metadaten in Ergebnislisten</a>
+            </li>
+            <li>
+                <a href="#calendarExt2">Portal-Ausbau für Präsentation von Kalenderreihen</a>
+            </li>
+            <li>
+                <a href="#displHTMLinMeta">Darstellung von HTML in Metadaten möglich</a>
+            </li>
+        </ul>
+        <!--  -->
+        <a href="#design">Gestalterisch</a>
+        <ul>
+            <li>
+                <a href="#editors">Editoren</a>
+            </li>
+            <li>
+                <a href="#newLayout">Neues Layout für Gesamt-Portal</a>
+            </li>
+            <li>
+                <a href="#newLayout19th">Neues Layout 19. Jahrhundert</a>
+            </li>
+            <li>
+                <a href="#calPortal">Kalender-Portal</a>
+            </li>
+        </ul>
+        <!--  -->
+        <a href="#admin">Administrativ</a>
+        <ul>
+            <li>
+                <a href="#reboot">Server-Neustart seltener erforderlich</a>
+            </li>
+            <li>
+                <a href="#ACLAdmin">Rechteverwaltung</a>
+            </li>
+            <li>
+                <a href="#usersAndGroups">Nutzer- Gruppenverwaltung</a>
+            </li>
+        </ul>
+        <hr style="heigth: 3px; color:black; background-color: gray;"/>
+        <h1 class="section">
+            <a class="an" name="functional">Funktional</a>
+        </h1>
+        <h2>
+            <a class="an" name="linkDigi">Verlinkungen von Digitalisaten</a>
+        </h2>
+        <p> Ab sofort können Digitalisate untereinander verlinkt werden. Das heißt technisch gesehen, redundante Speicherung von Dateien, ist nicht mehr nötig.
+            Artikel erhalten künftig "nur" noch einen Link auf einen Digitalisate-Sammel-Container an der jeweiligen Zeitschrift oder Band.</p>
+        <p> Für den Arbeitsablauf ergeben sich erhebliche Vereinfachungen. Bei einer Tiefenerschließung zu bereits vollständig zugänglichen digitalen
+            Zeitschriften, kann der jeweilige Bearbeiter ohne jeglichen Mehraufwand einen Verweis (Link) in den Metadaten angeben und somit aufwendige Herunter-
+            und Hochladeprozeduren überspringen.</p>
+        <h2>
+            <a class="an" name="searchJournal">Suche nach Zeitschriften</a>
+        </h2>
+        <p>
+            Aufgrund der Vielzahl unterschiedlichster Zeitschriften in Journals@UrMEL, ist eine Suche nach Zeitschriften hilfreich und nowendig. Innerhalb des
+            Portals wurden mehrere Klassifikationen eingeführt, um eine inhaltliche Strukturierung vornehmen zu können.
+            <br />
+            Weiterhin gibt es eine Chronologische- und eine Expertensuche.
+        </p>
+        <h3>
+            <a class="an" name="searchClassi">Suche mittels inhaltlicher Klassifikationen</a>
+        </h3>
+        <p>
+            <span class="wcms">Sie können momentan 5 Klassifikation der inhaltlichen Erschließung nutzen:</span>
+            Fächerliste der
+            <span class="toplogo1">Elektronische Zeitschriftenbibliothek (EZB)</span>
+            , Fächerliste der Zeitschriftendatenbank (ZDB), Zeitschriftentypen, Projekten und Bestandsnachweisen.
+        </p>
+        <h3>
+            <a class="an" name="expertSearch">Expertensuche</a>
+        </h3>
+        <p> Mittels einer komplexen Suchmaske können sie jegliche Kombinationen von Metadatenfeldern, die in Journals@UrMEL Verwendung finden, kombinieren und
+            zu einer Suchanfrage zusammensetzen.</p>
+        <h3>
+            <a class="an" name="chronOverview">Chronologische Gesamtübersicht</a>
+        </h3>
+        <p> Mittels einer chronologischen Auflistung aller im System enthaltenen Zeitschriften, können sie auf einen Blick alle Erscheinungsverläufe einsehen
+            und vergleichen.</p>
+        <p />
+        <img src="content/main/newMaster/images/timeLine.png" />
+        <h2>
+            <a class="an" name="calendarExt1">Portal-Ausbau für Präsentation von Kalenderreihen</a>
+        </h2>
+        <p> Ziel eines laufenden DFG-Projektes ist es, innerhalb von UrMEL ein System zur Speicherung, Päsentation und wissenschaftlichen Erschließung von
+            historischen Kalenderreihen zu entwickeln.</p>
+        <p> Aufgrund der periodischen Erscheinungsweise von Kalenderblättern eignet sich Journals@UrMEL als Softwaregrundlage für eine solche Lösung. Im
+            aktuellen System des Zeitschriftenservers wurde eine neue Komponente integriert, um diese historischen Kalender wissenschaftlich zu erfassen und
+            erschließen zu können.</p>
+        <p> Als ein Ergebnis der Arbeit wird ein Schlagwortregister für historische Kalender entstehen. Dieses Register wird über einen sogenannten
+            "Schlagwort-Browser" dem Nutzer zur Verfügung stehen.</p>
+        <img src="content/main/newMaster/images/calendar.png" />
+        <h2>
+            <a class="an" name="classiEdit">Klassifikationseditor</a>
+        </h2>
+        <p> Alle im System abgelegten Klassifikationen können zukünftig über eine grafische Oberfläche verwaltet werden. Das macht die Pflege von
+            Klassifikationen erheblich einfacher und beschleunigt dadurch notwendige Aktualisierungen, die durch die tägliche Arbeit notwendig werden.</p>
+        <img src="content/main/newMaster/images/classiEditor.png" />
+        <h2>
+            <a class="an" name="secureWebsite">Webseiten können lesegeschützt werden</a>
+        </h2>
+        <p>Webseiten oder ganze Teile der Website, können zukünftig auf bestimmte Nutzer eingeschränkt werden.</p>
+        <p> Dadurch wird dem jeweiligen Nutzer nur der Inhalt präsentiert, der für ihn relevant ist. Eine Orientierung innerhalb des System wird dadurch auch
+            erleichtert.</p>
+        <h1 />
+        <h1 class="section">
+            <a class="an" name="content">Inhaltlich</a>
+        </h1>
+        <h2>
+            <a class="an" name="extendPerson">Erweiterung des Personendatenmodells</a>
+        </h2>
+        <p> Das bisherige Datenmodell für Personen in Journals@UrMEL wurde um die folgenden Felder erweitert, um auf die unterschiedlichen Anforderungen
+            eingehen zu können:</p>
+        <ul>
+            <li>
+                <span style="font-weight: bold;">Web-Links</span>
+                , die zusätzliche Infomationen der Person enthalten
+            </li>
+            <li>
+                <span style="font-weight: bold;">Externe Kennung</span>
+                ,
+                <span style="font-weight: bold;">PND</span>
+                - Kennung aus der Personennormdatei, der deutschen Nationalbibliothek
+            </li>
+            <li>
+                <span style="font-weight: bold;">Externe Kennung</span>
+                ,
+                <span style="font-weight: bold;">PPN</span>
+                - Kennung aus der Personennormdatei, aus dem lokalen Bibliothekskatalog
+            </li>
+        </ul>
+        <h2>
+            <a class="an" name="displayImportantMeta">Anzeige wichtiger Metadaten in Ergebnislisten</a>
+        </h2>
+        <p>Die Einträge in den Inhaltsverzeichnissen wurden um wichtige Metadatenfelder erweitert und erhöhen dadurch die Übersichtlichkeit.</p>
+        <h2>
+            <a class="an" name="calendarExt2">Portal-Ausbau für Präsentation von Kalenderreihen</a>
+        </h2>
+        <p>Um die zusätzliche Erschließung und Präsentation von Kalenderreihen, realisieren zu können, wurden die folgenden Metadatenfelder eingeführt:</p>
+        <ul>
+            <li>
+                <span style="font-weight: bold;">Periodika, Zeitschrift</span>
+                : Überlieferung, Format
+            </li>
+            <li>
+                <span style="font-weight: bold;">Bände:</span>
+                ID (URN, VD17), Schlagwortregister, Fingerprint, Zusammefassung, Kollationsvermerk, Dokumenttyp
+            </li>
+        </ul>
+        <h2>
+            <a class="an" name="displHTMLinMeta">Darstellung von HTML in Metadaten möglich</a>
+        </h2>
+        <p>
+            In Zusammenhang mit der Integration der "
+            <span style="font-weight: bold;">Annalen der Physik</span>
+            " in Journals@UrMEL, wurden die Ansichten für Metadaten von Artikeln so erweitert, dass HTML-Elemente in den Metadaten enthalten sein dürfen. Diese
+            Darstellung kann einzeln für jede Zeitschrift freigeschaltet oder unterdrückt werden und ermöglicht z.B. eine Anzeige von chemischen Elementen, wie
+            H
+            <sub>2</sub>
+            O.
+        </p>
+        <h1 />
+        <h1 class="section">
+            <a class="an" name="design">Gestalterisch</a>
+        </h1>
+        <h2>
+            <a class="an" name="editors">Editoren</a>
+        </h2>
+        <p>Alle Editoren zur Eingabe von Metadaten wurden zum Einen grafisch überarbeitet und zum Anderen inhaltlich neu strukturiert.</p>
+        <p>Die Anordnung der Metadatenfelder im Editor entspricht jetzt 1:1 der Reihenfolge in den Metadatenansichten.</p>
+        <p />
+        <img src="content/main/newMaster/images/editorMask.png" />
+        <p />
+        <h2>
+            <a class="an">Neues Layout für Gesamt-Portal</a>
+        </h2>
+        <p>Wie sie vielleicht bereits durch den Besuch dieser Seite festgestellt haben, hat sich die Erscheinung von Journals@UrMEL insgesamt verändert.</p>
+        <h2>
+            <a class="an" name="newLayout">Neues Layout 19. Jahrhundert</a>
+        </h2>
+        <p />
+        <img src="content/main/newMaster/images/19thCentury.png" />
+        <p />
+        <h2>
+            <a class="an" name="calPortal">Kalender-Portal</a>
+        </h2>
+        <p />
+        <p />
+        <img src="content/main/newMaster/images/calendarLayout.png" />
+        <p />
+        <p />
+        <h1 />
+        <h1 class="section">
+            <a class="an" name="admin">Administrativ</a>
+        </h1>
+        <h2>
+            <a class="an" name="reboot">Server-Neustart seltener erforderlich</a>
+        </h2>
+        <p> Aufgrund zalhreicher neuer Komponenten zur Administration von MyCoRe-Systemen (Web-Kommandozeilenschnittstelle, Read-Only-Mode,
+            Klassifikationseditor usw.) wird zukünftig ein stabileres System zur Verfügung stehen. Ein Neustart, dert mit dem Beenden aller aktuellen
+            Bearbeitungssitzungen verbunden ist, wird seltener nötig sein.</p>
+        <h2>
+            <a class="an" name="ACLAdmin">Rechteverwaltung</a>
+        </h2>
+        <p> Durch den in MyCoRe integrierten ACL-Editor ist es künftig möglich, im laufenden Betrieb und mit Übersicht bestehende Rechtezuordnungen einzusehen
+            und ggf. ändern oder löschen zu können.</p>
+        <h2>
+            <a class="an" name="usersAndGroups">Nutzer- Gruppenverwaltung</a>
+        </h2>
+        <p> Bestehende Nutzer- und Gruppenzugehörigkeiten können mittels einer grafischen Komponente einfach und schnell sichtbar gemacht werden und verändert
+            werden. Dadurch ist es bspw. sehr viel schneller möglich, Nutzerrechte für das Bearbeiten von Zeitschriften zu vergeben.</p>
+    </section>
+    <meta>
+        <log date="2008-11-10" time="18:37" labelPath=" » News" lastEditor="administrator" />
+    </meta>
+</MyCoReWebPage>
