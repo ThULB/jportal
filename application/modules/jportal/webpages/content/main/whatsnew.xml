@@ -119,7 +119,7 @@
         <p> Mittels einer chronologischen Auflistung aller im System enthaltenen Zeitschriften, können sie auf einen Blick alle Erscheinungsverläufe einsehen
             und vergleichen.</p>
         <p />
-        <img src="content/main/newMaster/images/timeLine.png" />
+        <img src="images/timeLine.png" />
         <h2>
             <a class="an" name="calendarExt1">Portal-Ausbau für Präsentation von Kalenderreihen</a>
         </h2>
@@ -130,13 +130,13 @@
             erschließen zu können.</p>
         <p> Als ein Ergebnis der Arbeit wird ein Schlagwortregister für historische Kalender entstehen. Dieses Register wird über einen sogenannten
             "Schlagwort-Browser" dem Nutzer zur Verfügung stehen.</p>
-        <img src="content/main/newMaster/images/calendar.png" />
+        <img src="images/calendar.png" />
         <h2>
             <a class="an" name="classiEdit">Klassifikationseditor</a>
         </h2>
         <p> Alle im System abgelegten Klassifikationen können zukünftig über eine grafische Oberfläche verwaltet werden. Das macht die Pflege von
             Klassifikationen erheblich einfacher und beschleunigt dadurch notwendige Aktualisierungen, die durch die tägliche Arbeit notwendig werden.</p>
-        <img src="content/main/newMaster/images/classiEditor.png" />
+        <img src="images/classiEditor.png" />
         <h2>
             <a class="an" name="secureWebsite">Webseiten können lesegeschützt werden</a>
         </h2>
@@ -210,7 +210,7 @@
         <p>Alle Editoren zur Eingabe von Metadaten wurden zum Einen grafisch überarbeitet und zum Anderen inhaltlich neu strukturiert.</p>
         <p>Die Anordnung der Metadatenfelder im Editor entspricht jetzt 1:1 der Reihenfolge in den Metadatenansichten.</p>
         <p />
-        <img src="content/main/newMaster/images/editorMask.png" />
+        <img src="images/editorMask.png" />
         <p />
         <h2>
             <a class="an">Neues Layout für Gesamt-Portal</a>
@@ -220,14 +220,14 @@
             <a class="an" name="newLayout">Neues Layout 19. Jahrhundert</a>
         </h2>
         <p />
-        <img src="content/main/newMaster/images/19thCentury.png" />
+        <img src="images/19thCentury.png" />
         <p />
         <h2>
             <a class="an" name="calPortal">Kalender-Portal</a>
         </h2>
         <p />
         <p />
-        <img src="content/main/newMaster/images/calendarLayout.png" />
+        <img src="images/calendarLayout.png" />
         <p />
         <p />
         <h1 />
