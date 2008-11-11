@@ -27,7 +27,7 @@
                 <a id="transparent-logo" href="{$WebApplicationBaseURL}">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.gif" />
                 </a>
-                <a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/newMaster/whatsnew.xml">
+                <a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/whatsnew.xml">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-button.png" />
                 </a>
                 <div id="topleft-logo" />
