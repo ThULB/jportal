@@ -62,7 +62,7 @@
                     <tr valign="top">
                         <td width="200px" height="100%">
                             <table height="100%" cellspacing="0" cellpadding="0">
-                                <xsl:if test="$browserAddress != '/content/main/journalList.xml'">
+                                <xsl:if test="$browserAddress != '/content/main/journalList.xml' or $browserAddress != '/content/main/journals.xml'">
                                     <tr valign="top">
                                         <td width="200px" valign="top"
                                             style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-top.png) no-repeat;">
