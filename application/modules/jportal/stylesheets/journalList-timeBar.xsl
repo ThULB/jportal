@@ -2,11 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcr="http://www.mycore.org/">
 
-    <xsl:param name="spreading" select="4" />
+    <xsl:param name="spreading" select="3" />
 
-    <xsl:variable name="today" select="2008" />
+    <xsl:variable name="today" select="2009" />
     <xsl:variable name="barHeight" select="20" />
-    <xsl:variable name="smallLineSpace" select="10" />
+    <xsl:variable name="smallLineSpace" select="20" />
     <xsl:variable name="fatLineSpace" select="100" />
 
     <!-- =================================================================================================== -->
@@ -38,7 +38,7 @@
             <br />
         </p>
 
-        <div style="position:relative;">
+        <div style="position:relative;height:100%;">
             <!-- legend bar -->
             <div
                 style="position:absolute;top:0px;left:0px;width:{$journalList.timeTotal * $spreading}px; height:{$barHeight div 2}px;border:1px solid #000000;background-color:#0F0FFF;" />
