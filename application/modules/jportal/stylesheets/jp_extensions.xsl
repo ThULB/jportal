@@ -1225,7 +1225,7 @@
                                             <xsl:value-of select="$label" />
                                         </a>
                                     </xsl:when>
-                                    <xsl:otherwise>Zugriff gesperrt 1!</xsl:otherwise>
+                                    <xsl:otherwise>Zugriff gesperrt!</xsl:otherwise>
                                 </xsl:choose>
                                 <xsl:text>
                                 </xsl:text>
@@ -1255,7 +1255,7 @@
                                 <xsl:value-of select="$label" />
                             </a>
                         </xsl:when>
-                        <xsl:otherwise>Zugriff gesperrt 2!</xsl:otherwise>
+                        <xsl:otherwise>Zugriff gesperrt !</xsl:otherwise>
                     </xsl:choose>
 
                     <xsl:if test="$editAccess = 'true'">
