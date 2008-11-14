@@ -1175,18 +1175,15 @@
                         <xsl:variable name="jourID">
                             <xsl:value-of select="xalan:nodeset($objectXML)/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
                         </xsl:variable>
-                        <xsl:message>jourID=<xsl:value-of select="$jourID"/></xsl:message>
                         <xsl:call-template name="get.readAccessForDerivates">
                             <xsl:with-param name="jID" select="$jourID" />
-                        </xsl:call-template><xsl:message>eins</xsl:message>
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="$readAccessForDerivates = 'true' or $editAccess = 'true'">
                         <xsl:value-of select="'true'"></xsl:value-of>
-                        <xsl:message>zwei</xsl:message>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="'false'"></xsl:value-of>
-                        <xsl:message>drei</xsl:message>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
@@ -2190,7 +2187,6 @@
         <xsl:param name="jID" />
         <xsl:if test="$jID != ''">
             <xsl:value-of select="acl:checkPermission($jID,'read-derivates')" />
-            <xsl:message>acl-check done</xsl:message>
         </xsl:if>
     </xsl:template>
 
