@@ -31,7 +31,7 @@
       <cell row="1" col="3" anchor="WEST">
         <space width="20" height="0"/>
       </cell>
-      <cell row="1" col="4" anchor="WEST" ref="SMIName" />
+      <!--<cell row="1" col="4" anchor="WEST" ref="SMIName" />-->
 
       <cell row="19" col="1" colspan="2" anchor="SOUTHEAST" height="50px">
         <panel lines="off">
