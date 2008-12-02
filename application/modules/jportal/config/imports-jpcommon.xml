@@ -55,7 +55,7 @@
         <cell row="1" col="1" anchor="WEST">
             <cancelButton id="BCancel" width="100px" i18n="editormask.common.BCancel" />
         </cell>
-        <cell row="1" col="2" anchor="WEST" ref="BSubmit" var="save">
+        <cell row="1" col="2" anchor="WEST" var="save">
             <submitButton id="BSubmit" width="100px" i18n="editormask.common.BSubmit" />
         </cell>
     </panel>
