@@ -309,6 +309,16 @@
                                 <xsl:with-param name="mode" select="'date'" />
                             </xsl:call-template>
                         </table>
+                        <!--4***tradition*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDate_typeSensitive">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/traditions/tradition" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.date_label')" name="label" />
+                                <xsl:with-param name="typeClassi" select="'jportal_class_00000009'" />
+                                <xsl:with-param name="mode" select="'date'" />
+                            </xsl:call-template>
+                        </table>
                         <!--5***identi*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDate_typeSensitive">

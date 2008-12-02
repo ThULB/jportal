@@ -27,6 +27,9 @@
         <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
             <!-- date -->
         <cell class="editorLabel" row="40" col="1" anchor="NORTHWEST" ref="date_label" />
+        <!-- tradition -->
+        <cell class="editorLabel" row="41" col="1" anchor="NORTHWEST" ref="tradition_label" />
+        <cell row="41" col="2" anchor="NORTHWEST" ref="tradition_input" />
         <!-- collation note -->
         <cell class="editorLabel" row="50" col="1" anchor="NORTHWEST" ref="collation_note_label" />
         <cell row="50" col="2" anchor="NORTHWEST" ref="collation_note_input" />
@@ -148,6 +151,18 @@
         <!--        <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1"/>-->
 <!--        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" />-->
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
+    </panel>
+    <!-- traditions ================================================================== -->
+    <panel id="tradition_input">
+        <hidden var="metadata/traditions/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/traditions/@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/traditions/tradition" ordernr="1">
+            <repeater min="0" max="20" anchor="NORTHWEST" ref="traditions_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="traditions_input_repeater">
+        <cell col="1" row="1" anchor="NORTHWEST" ref="tradition_type" var="@type" ordernr="1" />
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="" ordernr="1" />
     </panel>
     <!-- identi ================================================================== -->
     <panel id="identi_input">

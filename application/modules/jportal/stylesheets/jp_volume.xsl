@@ -472,6 +472,25 @@
                                 </tr>
                             </xsl:if>
                         </table>
+                        <!--4***tradition*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDate_typeSensitive">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/traditions/tradition" name="nodes" />
+                                <xsl:with-param name="typeClassi" select="'jportal_class_00000080'" />
+                                <xsl:with-param name="mode" select="'text'" />
+                            </xsl:call-template>
+                        </table>
+                        <!--6***identi*************************************-->
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDate_typeSensitive">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/identis/identi" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.identi')" name="label" />
+                                <xsl:with-param name="typeClassi" select="'jportal_class_00000010'" />
+                                <xsl:with-param name="mode" select="'text'" />
+                            </xsl:call-template>
+                        </table>
                         <!--5*** collation note *************************************-->
                         <table cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:call-template name="printMetaDates">
