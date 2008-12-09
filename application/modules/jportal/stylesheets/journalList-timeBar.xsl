@@ -2,11 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcr="http://www.mycore.org/">
 
-    <xsl:param name="spreading" select="3" />
+    <xsl:param name="spreading" select="2" />
 
     <xsl:variable name="today" select="2009" />
     <xsl:variable name="barHeight" select="20" />
-    <xsl:variable name="smallLineSpace" select="20" />
+    <xsl:variable name="smallLineSpace" select="25" />
     <xsl:variable name="fatLineSpace" select="100" />
 
     <!-- =================================================================================================== -->

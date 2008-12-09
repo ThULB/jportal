@@ -106,8 +106,11 @@ public class MCRACLHIBAccess {
 
         if (deleteList != null) {
             for (Iterator it = deleteList.iterator(); it.hasNext();) {
-                accessStore.deleteAccessDefinition((MCRRuleMapping) it.next());
+                MCRRuleMapping currentPerm = (MCRRuleMapping) it.next();
+                LOGGER.info("Deleting permission: " + currentPerm.getObjId());
+                accessStore.deleteAccessDefinition(currentPerm);
             }
+            LOGGER.info("Deleting permissions finished!");
         }
     }
 

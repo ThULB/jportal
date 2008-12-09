@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14436 $ $Date: 2008-11-18 14:31:54 +0100 (Di, 18 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -37,6 +37,8 @@ import org.jdom.Document;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
@@ -48,11 +50,11 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * the node is a MCRDirectory, the contents of that directory will be forwareded
  * to MCRLayoutService as XML data to display a detailed directory listing.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank LÃŒtzenkirchen
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13085 $ $Date: 2008-01-14 11:02:17 +0000 (Mo, 14 Jan
+ * @version $Revision: 14436 $ $Date: 2008-01-14 11:02:17 +0000 (Mo, 14 Jan
  *          2008) $
  */
 public class MCRFileNodeServlet extends MCRServlet {
@@ -90,6 +92,17 @@ public class MCRFileNodeServlet extends MCRServlet {
             // any error would let us return -1 here
             LOGGER.info("Error while getting last modified date.", e);
             return -1;
+        } finally {
+            /*
+             * A new MCRSession may be created due to MCRHIBConnection implementation.
+             * As the MCRSession is not bound to a HttpSession that is closed automatically,
+             * we close it here, if no IP address is known.
+             */
+            MCRSession session = MCRSessionMgr.getCurrentSession();
+            if (session.getCurrentIP().length() < 7) {
+                //it's a stalled session close it
+                session.close();
+            }
         }
     }
 

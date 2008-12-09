@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14502 $ $Date: 2008-11-28 16:15:54 +0100 (Fr, 28 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -51,6 +51,7 @@ import org.hibernate.Transaction;
 import org.jdom.Element;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRCache;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
@@ -66,13 +67,15 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * applet. The content of the uploaded files are handled by a MCRUploadHandler
  * subclass.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank LÃ¼tzenkirchen
  * @author Harald Richter
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14502 $ $Date: 2008-11-28 16:15:54 +0100 (Fr, 28 Nov 2008) $
  * @see org.mycore.frontend.fileupload.MCRUploadHandler
  */
 public final class MCRUploadServlet extends MCRServlet implements Runnable {
+    private static final long serialVersionUID = -1452027276006825044L;
+
     static String serverIP;
 
     static int serverPort;
@@ -82,7 +85,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
     static Logger LOGGER = Logger.getLogger(MCRUploadServlet.class);
 
     static MCRCache sessionIDs = new MCRCache(100, "UploadServlet Upload sessions");
-    
+
     final static int bufferSize = 65536; // 64 KByte
 
     public synchronized void init() throws ServletException {
@@ -92,7 +95,8 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             return; // already inited?
 
         try {
-            String host = new java.net.URL(getBaseURL()).getHost();
+            //query property directly (not via getBaseURL()), saves a stalled MCRSession
+            String host = new java.net.URL(MCRConfiguration.instance().getString("MCR.baseurl")).getHost();
             String defIP = InetAddress.getByName(host).getHostAddress();
             int defPort = 22471; // my birthday is the default upload port
             serverIP = CONFIG.getString("MCR.FileUpload.IP", defIP);
@@ -101,9 +105,9 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             LOGGER.info("Opening server socket: ip=" + serverIP + " port=" + serverPort);
             server = new ServerSocket();
             server.setReceiveBufferSize(Math.max(server.getReceiveBufferSize(), bufferSize));
-            server.bind(new InetSocketAddress(serverIP,serverPort));
+            server.bind(new InetSocketAddress(serverIP, serverPort));
             LOGGER.debug("Server socket successfully created.");
-            LOGGER.debug("Server receive buffer size is " + server.getReceiveBufferSize() );
+            LOGGER.debug("Server receive buffer size is " + server.getReceiveBufferSize());
 
             // Starts separate thread that will receive and store file content
             new Thread(this).start();
@@ -131,7 +135,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
     public void handleUpload(Socket socket) {
         LOGGER.info("Client applet connected to socket now.");
 
-        Transaction tx = MCRHIBConnection.instance().getSession().beginTransaction();
+        Transaction tx = null;
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             ZipInputStream zis = new ZipInputStream(socket.getInputStream());
@@ -145,7 +149,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             String md5 = parts[0];
             long length = Long.parseLong(parts[1]);
             String uploadId = parts[2];
-            
+
             LOGGER.debug("Received uploadID = " + uploadId);
             LOGGER.debug("Received path     = " + path);
             LOGGER.debug("Received length   = " + length);
@@ -158,6 +162,8 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
                 if (session != null)
                     MCRSessionMgr.setCurrentSession(session);
             }
+            //start transaction after MCRSession is initialized
+            tx = MCRHIBConnection.instance().getSession().beginTransaction();
             long numBytesStored = MCRUploadHandlerManager.getHandler(uploadId).receiveFile(path, zis, length, md5);
 
             LOGGER.debug("Stored incoming file content");
@@ -169,7 +175,8 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             tx.commit();
         } catch (Exception ex) {
             LOGGER.error("Exception while receiving and storing file content from applet:", ex);
-            tx.rollback();
+            if (tx != null)
+                tx.rollback();
         } finally {
             try {
                 if (socket != null) {
@@ -193,7 +200,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
                 socket.setReceiveBufferSize(bufferSize);
                 socket.setSendBufferSize(bufferSize);
                 LOGGER.debug("Socket receive buffer size is " + socket.getReceiveBufferSize());
-                
+
                 Thread handlerThread = new Thread(new Runnable() {
                     public void run() {
                         handleUpload(socket);
@@ -235,13 +242,12 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
             return;
         }
-        
-        if(MCRWebsiteWriteProtection.isActive())
-        {
-          sendException( res, new MCRException("System is currently in read-only mode") );
-          return;
+
+        if (MCRWebsiteWriteProtection.isActive()) {
+            sendException(res, new MCRException("System is currently in read-only mode"));
+            return;
         }
-        
+
         if (method.equals("startUploadSession")) {
             String uploadId = req.getParameter("uploadId");
             int numFiles = Integer.parseInt(req.getParameter("numFiles"));
@@ -261,8 +267,8 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             String uploadId = req.getParameter("uploadId");
             String md5 = req.getParameter("md5");
             long length = Long.parseLong(req.getParameter("length"));
-            
-            LOGGER.debug("UploadServlet receives file " + path + " (" + length + " bytes)" +" with md5 " + md5);
+
+            LOGGER.debug("UploadServlet receives file " + path + " (" + length + " bytes)" + " with md5 " + md5);
 
             if (!MCRUploadHandlerManager.getHandler(uploadId).acceptFile(path, md5, length)) {
                 LOGGER.debug("Skipping file " + path);
@@ -301,7 +307,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
 
                 for (int i = 0; i < numFiles; i++) {
                     FileItem item = sub.getFile(paths.get(i));
-                    
+
                     InputStream in = item.getInputStream();
                     String path = ((Element) (paths.get(i))).getTextTrim();
                     path = getFileName(path);
