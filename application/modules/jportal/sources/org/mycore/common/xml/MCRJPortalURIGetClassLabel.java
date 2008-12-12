@@ -1,15 +1,10 @@
 package org.mycore.common.xml;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.jdom.Element;
-import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.services.i18n.MCRTranslation;
 
 public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
@@ -32,10 +27,7 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
      *  OR:
      * <code>jportal_getClassLabel:getDirectely:classiID
      * 
-     * @return 
-     * <dummyRoot>
-     *    <label>label text...</label>
-     * </dummyRoot>
+     * @return <dummyRoot> <label>label text...</label> </dummyRoot>
      */
     public Element resolveElement(String uri) {
         LOGGER.debug("start resolving " + uri);
@@ -98,16 +90,11 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
 
     private String getClassLabel(String classID) {
         // TODO: use cache
-        String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
-        Map<String, MCRLabel> labels = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0).getLabels();
-        String label = "";
-        if (labels.get(currentLang) != null) 
-            label = labels.get(currentLang).getText();
-        else {
-            String defaultLang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "de");
-            label = labels.get(defaultLang).getText();
+        MCRCategory rootCategory = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0);
+        if (rootCategory.getLabels() != null && rootCategory.getLabels().size() > 0) {
+            return rootCategory.getCurrentLabel().getText();
         }
-        return label;
+        return "";
     }
 
     private boolean wellURI(String uri) {
@@ -127,16 +114,3 @@ public class MCRJPortalURIGetClassLabel implements MCRURIResolver.MCRResolver {
         return true;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
