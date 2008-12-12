@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28 Feb 2008) $
+ * $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28. Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * @author Werner Greßhoff
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28 Feb 2008) $
+ * @version $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28. Feb 2008) $
  */
 public class MCRCStoreVFS extends MCRContentStore {
 

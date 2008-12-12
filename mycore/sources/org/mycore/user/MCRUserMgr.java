@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14361 $ $Date: 2008-11-07 16:07:09 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14553 $ $Date: 2008-12-10 14:34:52 +0100 (Mi, 10. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.common.MCRSessionMgr;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @version $Revision: 14361 $ $Date: 2008-11-07 16:07:09 +0100 (Fr, 07 Nov 2008) $
+ * @version $Revision: 14553 $ $Date: 2008-12-10 14:34:52 +0100 (Mi, 10. Dez 2008) $
  */
 public class MCRUserMgr {
     /** The LOGGER and the configuration */
@@ -557,7 +557,7 @@ public class MCRUserMgr {
      * 
      * @return ArrayList of strings containing the group IDs of the system.
      */
-    public final synchronized List<String> getAllGroupIDs() throws MCRException {
+    public final List<String> getAllGroupIDs() throws MCRException {
         return mcrUserStore.getAllGroupIDs();
     }
 
@@ -566,7 +566,7 @@ public class MCRUserMgr {
      * 
      * @return JDOM document presentation of all groups of the system
      */
-    public final synchronized org.jdom.Document getAllGroups() throws MCRException {
+    public final org.jdom.Document getAllGroups() throws MCRException {
         // Build the DOM
         MCRGroup currentGroup = null;
         org.jdom.Element root = new org.jdom.Element("mycoregroup");
@@ -592,7 +592,7 @@ public class MCRUserMgr {
      * 
      * @return ArrayList of strings containing the user IDs of the system.
      */
-    public final synchronized List<String> getAllUserIDs() throws MCRException {
+    public final List<String> getAllUserIDs() throws MCRException {
         return mcrUserStore.getAllUserIDs();
     }
 
@@ -601,7 +601,7 @@ public class MCRUserMgr {
      * 
      * @return JDOM document presentation of all users of the system
      */
-    public final synchronized org.jdom.Document getAllUsers() throws MCRException {
+    public final org.jdom.Document getAllUsers() throws MCRException {
         // Build the DOM
         MCRUser currentUser;
         org.jdom.Element root = new org.jdom.Element("mycoreuser");
@@ -916,7 +916,7 @@ public class MCRUserMgr {
      *            password for the user
      * @return true if the password matches the password stored, false otherwise
      */
-    public synchronized boolean login(String userID, String passwd) throws MCRException {
+    public boolean login(String userID, String passwd) throws MCRException {
         MCRUser loginUser = retrieveUser(userID, false);
 
         if (loginUser == null) {
@@ -965,7 +965,7 @@ public class MCRUserMgr {
      * @exception MCRException
      *                if group object is not known
      */
-    protected synchronized MCRGroup retrieveGroup(String groupID, boolean bFromDataStore) throws MCRException {
+    protected MCRGroup retrieveGroup(String groupID, boolean bFromDataStore) throws MCRException {
         // In order to compare a modified group object with the persistent one
         // we must
         // be able to force this method to get the group from the store
@@ -1048,7 +1048,7 @@ public class MCRUserMgr {
      * @exception MCRException
      *                if user object is not known
      */
-    protected synchronized MCRUser retrieveUser(String userID, boolean bFromDataStore) throws MCRException {
+    protected MCRUser retrieveUser(String userID, boolean bFromDataStore) throws MCRException {
         // In order to compare a modified user object with the persistent one we
         // must
         // be able to force this method to get the user from the store

@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14251 $ $Date: 2008-10-27 09:58:58 +0100 (Mo, 27 Okt 2008) $
+ * $Revision: 14421 $ $Date: 2008-11-17 06:39:35 +0100 (Mo, 17. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.datamodel.classifications2.MCRObjectReference;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14251 $ $Date: 2008-06-30 10:08:19 +0200 (Mo, 30. Jun
+ * @version $Revision: 14421 $ $Date: 2008-06-30 10:08:19 +0200 (Mo, 30. Jun
  *          2008) $
  * @since 2.0
  */
@@ -90,35 +90,58 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
         // for every classID do:
         for (Map.Entry<String, Collection<String>> entry : perClassID.entrySet()) {
             String classID = entry.getKey();
+            LOGGER.debug("counting links for classification: "+classID);
             Query q = session.getNamedQuery(LINK_CLASS.getName() + queryName);
             // query can take long time, please cache result
             q.setCacheable(true);
             q.setParameter("classID", classID);
+            q.setParameterList("categIDs", entry.getValue());
             if (restrictedByType) {
                 q.setParameter("type", type);
             }
             // get object count for every category (not accumulated)
             List<Object[]> result = q.list();
             for (Object[] sr : result) {
-                MCRCategoryID key = new MCRCategoryID(sr[0].toString(), sr[1].toString());
-                Number value = (Number) sr[2];
+                MCRCategoryID key = new MCRCategoryID(classID, sr[0].toString());
+                Number value = (Number) sr[1];
                 countLinks.put(key, value);
-                // accumulate manually due to performance problems in MySQL
-                List<MCRCategory> parents = DAO.getParents(key);
-                for (MCRCategory parent : parents) {
-                    MCRCategoryID parentID = parent.getId();
-                    Number counter = countLinks.get(parentID);
-                    if (counter != null) {
-                        countLinks.put(parentID, new Integer(counter.intValue() + value.intValue()));
-                    } else {
-                        countLinks.put(parentID, value);
-                    }
-                }
             }
         }
         // overwrites zero count where database returned a value
         returns.putAll(countLinks);
+        LOGGER.debug("returning countMap");
         return returns;
+    }
+
+    public Map<MCRCategoryID, Number> countLinks(MCRCategoryID parentID) {
+        return countLinksForType(parentID, null);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public Map<MCRCategoryID, Number> countLinksForType(MCRCategoryID parentID, String type) {
+        boolean restrictedByType = (type != null);
+        String queryName = restrictedByType ? ".NumberByTypePerChildOfParentID" : ".NumberPerChildOfParentID";
+        // TODO: initialize all categIDs with link count of zero
+        Session session = MCRHIBConnection.instance().getSession();
+        MCRCategoryImpl parent = getMCRCategory(session, parentID);
+        Map<MCRCategoryID, Number> countLinks = new HashMap<MCRCategoryID, Number>();
+        String classID = parentID.getRootID();
+        Query q = session.getNamedQuery(LINK_CLASS.getName() + queryName);
+        // query can take long time, please cache result
+        q.setCacheable(true);
+        q.setParameter("classID", classID);
+        q.setParameter("parentID", parent.getInternalID());
+        if (restrictedByType) {
+            q.setParameter("type", type);
+        }
+        // get object count for every category (not accumulated)
+        List<Object[]> result = q.list();
+        for (Object[] sr : result) {
+            MCRCategoryID key = new MCRCategoryID(classID, sr[0].toString());
+            Number value = (Number) sr[1];
+            countLinks.put(key, value);
+        }
+        return countLinks;
     }
 
     public void deleteLink(String id) {
@@ -195,28 +218,41 @@ public class MCRCategLinkServiceImpl implements MCRCategLinkService {
     }
 
     @SuppressWarnings("unchecked")
-    public boolean hasLinks(MCRCategoryID categID) {
+    public Map<MCRCategoryID, Boolean> hasLinks(Collection<MCRCategoryID> categIDs) {
+        //a rather simple implementation
+        boolean useSingleDBQuery = MCRConfiguration.instance().getBoolean("MCR.Classifications.LinkServiceImpl.HasLinks.SingleQuery", false);
+        Map<MCRCategoryID, Number> countMap = useSingleDBQuery ? countLinks(categIDs) : null;
+        HashMap<MCRCategoryID, Boolean> boolMap = new HashMap<MCRCategoryID, Boolean>(categIDs.size());
         Session session = MCRHIBConnection.instance().getSession();
-        LOGGER.debug("first fetch all internalID of all category under " + categID);
-        Criteria classCriteria = session.createCriteria(MCRCategoryImpl.class);
-        classCriteria.setProjection(Projections.property("internalID"));
-        classCriteria.add(Restrictions.eq("rootID", categID.getRootID()));
-        if (!categID.isRootID()) {
-            MCRCategoryImpl category = MCRCategoryDAOImpl.getByNaturalID(session, categID);
-            if (category == null) {
-                LOGGER.warn("Category does not exist: " + categID);
-                return false;
+        for (MCRCategoryID categID : categIDs) {
+            if (useSingleDBQuery) {
+                boolMap.put(categID, countMap.get(categID).intValue() > 0 ? Boolean.TRUE : Boolean.FALSE);
+            } else {
+                LOGGER.debug("first fetch all internalID of all category under " + categID);
+                Criteria classCriteria = session.createCriteria(MCRCategoryImpl.class);
+                classCriteria.setProjection(Projections.property("internalID"));
+                classCriteria.add(Restrictions.eq("rootID", categID.getRootID()));
+                if (!categID.isRootID()) {
+                    MCRCategoryImpl category = MCRCategoryDAOImpl.getByNaturalID(session, categID);
+                    if (category == null) {
+                        LOGGER.warn("Category does not exist: " + categID);
+                        boolMap.put(categID, false);
+                        continue;
+                    }
+                    classCriteria.add(Restrictions.between("left", category.getLeft(), category.getRight()));
+                }
+                List<Number> internalIDs = classCriteria.list();
+                if (internalIDs.size() == 0) {
+                    LOGGER.warn("Category does not exist: " + categID);
+                    boolMap.put(categID, false);
+                    continue;
+                }
+                LOGGER.debug("check if a single linked category is part of " + categID);
+                Query linkQuery = session.getNamedQuery(LINK_CLASS.getName() + ".hasLinks");
+                linkQuery.setParameterList("internalIDs", internalIDs);
+                boolMap.put(categID, linkQuery.iterate().hasNext());
             }
-            classCriteria.add(Restrictions.between("left", category.getLeft(), category.getRight()));
         }
-        List<Number> internalIDs = classCriteria.list();
-        if (internalIDs.size() == 0) {
-            LOGGER.warn("Category does not exist: " + categID);
-            return false;
-        }
-        LOGGER.debug("check if a single linked category is part of " + categID);
-        Query linkQuery = session.getNamedQuery(LINK_CLASS.getName() + ".hasLinks");
-        linkQuery.setParameterList("internalIDs", internalIDs);
-        return linkQuery.iterate().hasNext();
+        return boolMap;
     }
 }

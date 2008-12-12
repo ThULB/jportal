@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14302 $ $Date: 2008-11-03 09:55:57 +0100 (Mo, 03 Nov 2008) $
+ * $Revision: 14503 $ $Date: 2008-12-01 09:39:50 +0100 (Mo, 01. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -93,7 +93,7 @@ import org.mycore.user.MCRUserMgr;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14302 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
+ * @version $Revision: 14503 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
  *          2008) $
  */
 public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
@@ -398,7 +398,9 @@ public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
         for (Enumeration e = request.getAttributeNames(); e.hasMoreElements();) {
             String name = e.nextElement().toString();
             if (name.startsWith("XSL.") && !name.endsWith(".SESSION")) {
-                props.put(name.substring(4), request.getAttribute(name).toString());
+                final Object attributeValue = request.getAttribute(name);
+                if (attributeValue != null)
+                    props.put(name.substring(4), attributeValue.toString());
             }
         }
         return props;

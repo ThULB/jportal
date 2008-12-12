@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06 Nov 2008) $
+ * $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.common.MCRException;
  * @author Juergen Vogler
  * @author Jens Kupferschmidt
  * @author Thomas Junge
- * @version $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06 Nov 2008) $
+ * @version $Revision: 14335 $ $Date: 2008-11-06 07:40:09 +0100 (Do, 06. Nov 2008) $
  * @see <a href="http://www.icu-project.org/">http://www.icu-project.org/</a>
  */
 public class MCRMetaHistoryDate extends MCRMetaDefault {

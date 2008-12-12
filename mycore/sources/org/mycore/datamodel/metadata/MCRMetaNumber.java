@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
+ * $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16. Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -40,7 +40,7 @@ import org.mycore.common.MCRException;
  * &lt;/tag&gt; <br>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16 Sep 2008) $
+ * @version $Revision: 14003 $ $Date: 2008-09-16 11:45:07 +0200 (Di, 16. Sep 2008) $
  */
 final public class MCRMetaNumber extends MCRMetaDefault {
     /** The length of the attributes * */

@@ -6,7 +6,7 @@
 ## Andreas Trappe 	- idea, concept
 ## Chi Vu Huu		- concept, development
 ##
-## $Revision: 13116 $ $Date: 2008-02-12 11:56:15 +0100 (Di, 12 Feb 2008) $ 
+## $Revision: 13116 $ $Date: 2008-02-12 11:56:15 +0100 (Di, 12. Feb 2008) $ 
 ## ============================================== 
 
 

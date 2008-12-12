@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28 Jul 2008) $
+ * $Revision: 14496 $ $Date: 2008-11-28 10:27:42 +0100 (Fr, 28. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -71,7 +71,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * <b>.../servlets/MCRListWorkflowServlet/XSL.Style=xml&type=...&step=... </b>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28 Jul 2008) $
+ * @version $Revision: 14496 $ $Date: 2008-11-28 10:27:42 +0100 (Fr, 28. Nov 2008) $
  */
 public class MCRListWorkflowServlet extends MCRServlet {
 
@@ -236,18 +236,20 @@ public class MCRListWorkflowServlet extends MCRServlet {
                     if (!AI.checkPermission(writewf)) {
                         continue;
                     }
-                } else {
-                    continue;
                 }
                 j = service.getRuleIndex("deletewf");
                 if (j != -1) {
                     deletewf = service.getRule(j).getCondition();
                     bdeletewf = AI.checkPermission(deletewf);
+                } else {
+                    bdeletewf = true;
                 }
                 j = service.getRuleIndex("writedb");
                 if (j != -1) {
                     writedb = service.getRule(j).getCondition();
                     bwritedb = AI.checkPermission(writedb);
+                } else {
+                    bwritedb = AI.checkPermission(obj.getId().toString(), "writedb");
                 }
             } catch (Exception ex) {
                 if (LOGGER.isDebugEnabled()) {
@@ -268,8 +270,8 @@ public class MCRListWorkflowServlet extends MCRServlet {
             }
 
             String ID = elm.getAttributeValue("ID");
-            elm.setAttribute("deletewf", (new Boolean(bdeletewf)).toString());
-            elm.setAttribute("writedb", (new Boolean(bwritedb)).toString());
+            elm.setAttribute("deletewf", String.valueOf(bdeletewf));
+            elm.setAttribute("writedb", String.valueOf(bwritedb));
 
             // LOGGER.debug("The data ID is "+ID);
             try {
@@ -286,7 +288,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
                         deriv.setAttribute("label", (String) derlabel.get(j));
                         title = (String) dertitle.get(j);
                         if ((title != null) && (title.length() != 0)) {
-                            deriv.setAttribute("title",title);
+                            deriv.setAttribute("title", title);
                         }
 
                         File dir = new File(dirname, derpath);

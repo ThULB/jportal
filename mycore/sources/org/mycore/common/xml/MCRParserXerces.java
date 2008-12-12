@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision$ $Date$
+ * $Revision: 14554 $ $Date: 2008-12-10 15:23:24 +0100 (Mi, 10. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,10 +42,10 @@ import org.mycore.common.MCRException;
  * to a DOM document.
  * 
  * @author Jens Kupferschmidt
- * @author Frank Lï¿½tzenkirchen
+ * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision$ $Date$
+ * @version $Revision: 14554 $ $Date: 2008-12-10 15:23:24 +0100 (Mi, 10. Dez 2008) $
  */
 public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
 
@@ -116,7 +116,7 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      *             if XML could not be parsed
      * @return the parsed XML stream as a DOM document
      */
-    public synchronized Document parseURI(String uri, boolean validate) {
+    public Document parseURI(String uri, boolean validate) {
         return parse(new InputSource(uri), validate);
     }
 
@@ -204,7 +204,7 @@ public class MCRParserXerces implements MCRParserInterface, ErrorHandler {
      *             if XML could not be parsed
      * @return the parsed XML stream as a DOM document
      */
-    private synchronized Document parse(InputSource source, boolean validate) {
+    private Document parse(InputSource source, boolean validate) {
         SAXBuilder builder = (validate ? this.builderValid : this.builder);
 
         try {

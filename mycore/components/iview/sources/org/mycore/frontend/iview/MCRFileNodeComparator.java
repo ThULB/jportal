@@ -1,6 +1,6 @@
 /**
  * $RCSfile$
- * $Revision: 8196 $ $Date: 2006-05-08 17:17:51 +0200 (Mo, 08 Mai 2006) $
+ * $Revision: 8196 $ $Date: 2006-05-08 17:17:51 +0200 (Mo, 08. Mai 2006) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.datamodel.ifs.MCRFilesystemNode;
 /**
  * @author Thomas Scheffler (yagee), Andreas Trappe
  *
- * @version $Revision: 8196 $ $Date: 2006-05-08 17:17:51 +0200 (Mo, 08 Mai 2006) $
+ * @version $Revision: 8196 $ $Date: 2006-05-08 17:17:51 +0200 (Mo, 08. Mai 2006) $
  */
 public class MCRFileNodeComparator implements Comparator {
 	

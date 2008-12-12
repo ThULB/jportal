@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
+ * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17. Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * 
  * @author Thomas Scheffler (yagee)
  * @author Jens Kupferschmidt
- * @version $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
+ * @version $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17. Mär 2008) $
  */
 public class MCRRemoveAclEventHandler extends MCREventHandlerBase {
 

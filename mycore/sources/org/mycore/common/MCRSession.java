@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14132 $ $Date: 2008-10-16 10:39:50 +0200 (Do, 16 Okt 2008) $
+ * $Revision: 14132 $ $Date: 2008-10-16 10:39:50 +0200 (Do, 16. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13279 $ $Date: 2008-03-18 09:13:47 +0100 (Di, 18 Mär 2008) $
+ * $Revision: 13279 $ $Date: 2008-03-18 09:13:47 +0100 (Di, 18. Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,5 +1,5 @@
 /*
- * $Revision: 14222 $ $Date: 2008-10-23 08:53:29 +0200 (Do, 23 Okt 2008) $
+ * $Revision: 14222 $ $Date: 2008-10-23 08:53:29 +0200 (Do, 23. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

@@ -1,5 +1,5 @@
 /*
- * $Revision: 12994 $ $Date: 2008-01-25 11:38:13 +0100 (Fr, 25 Jan 2008) $
+ * $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.frontend.MCRWebsiteWriteProtection;
  * @author Harald Richter
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 12994 $ $Date: 2008-01-25 11:38:13 +0100 (Fr, 25 Jan 2008) $
+ * @version $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
  * 
  * @see MCRUploadHandlerManager
  */
@@ -111,6 +111,9 @@ public abstract class MCRUploadHandler {
      * then can decide to delete the file, but must return the number of 
      * bytes stored. The UploadHandler can also compare the MD5 checksum calculated
      * at the client side with its own checksum, to detect magical transfer errors.
+     * 
+     * This method is not covered by a database transaction.
+     * The implementation has to handle transactions by itself.
      * 
      * @param path
      *            the path and filename of the file

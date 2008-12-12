@@ -1,6 +1,6 @@
 /**
  * $RCSfile$
- * $Revision: 14047 $ $Date: 2008-09-24 15:26:49 +0200 (Mi, 24 Sep 2008) $
+ * $Revision: 14047 $ $Date: 2008-09-24 15:26:49 +0200 (Mi, 24. Sep 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13911 $ $Date: 2008-08-27 15:51:57 +0200 (Mi, 27 Aug 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.datamodel.classifications2.MCRLabel;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13911 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision: 14437 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRCategoryTransformer {
@@ -132,7 +132,7 @@ public class MCRCategoryTransformer {
             cd.getRootElement().setAttribute("noNamespaceSchemaLocation", "MCRClassification.xsd", XSI_NAMESPACE);
             cd.getRootElement().setAttribute("ID", cl.getId().getRootID());
             cd.getRootElement().addNamespaceDeclaration(XLINK_NAMESPACE);
-            for (MCRLabel label : cl.getLabels().values()) {
+            for (MCRLabel label : cl.getLabels()) {
                 cd.getRootElement().addContent(getElement(label));
             }
             Element categories = new Element("categories");
@@ -168,7 +168,7 @@ public class MCRCategoryTransformer {
             if (number != null) {
                 ce.setAttribute("counter", Integer.toString(number.intValue()));
             }
-            for (MCRLabel label : category.getLabels().values()) {
+            for (MCRLabel label : category.getLabels()) {
                 ce.addContent(getElement(label));
             }
             if (category.getURI() != null) {
@@ -283,7 +283,7 @@ public class MCRCategoryTransformer {
         static Element getElement(MCRCategory category, String labelFormat, Map<MCRCategoryID, Number> countMap) {
             Element ce = new Element("item");
             ce.setAttribute("value", category.getId().getID());
-            for (MCRLabel label : category.getLabels().values()) {
+            for (MCRLabel label : category.getLabels()) {
                 ce.addContent(getElement(label, category, labelFormat, countMap));
             }
             for (MCRCategory cat : category.getChildren()) {

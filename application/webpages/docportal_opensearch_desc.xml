@@ -10,5 +10,5 @@
 </Image>
   <InputEncoding>UTF-8</InputEncoding>
   <OutputEncoding>UTF-8</OutputEncoding>
-  <Url type="text/html" method="get" template='%MCR.baseurl%servlets/MCRSearchServlet?query=(allMeta contains "{searchTerms}" or content contains "{searchTerms}")'/>
+  <Url type="text/html" method="get" template='%MCR.baseurl%servlets/MCRSearchServlet?numPerPage=10&amp;maxResults=200&amp;query=(allMeta contains "{searchTerms}" or content contains "{searchTerms}")'/>
 </OpenSearchDescription>

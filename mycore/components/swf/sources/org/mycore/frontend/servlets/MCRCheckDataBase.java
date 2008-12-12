@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02 Okt 2008) $
+ * $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02 Okt 2008) $
+ * @version $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02. Okt 2008) $
  */
 abstract public class MCRCheckDataBase extends MCRCheckBase {
     /**

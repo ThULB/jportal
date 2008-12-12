@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28 Jul 2008) $
+ * $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28. Jul 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -77,7 +77,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * 
  * @author Heiko Helmbrecht
  * 
- * @version $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28 Jul 2008) $
+ * @version $Revision: 13769 $ $Date: 2008-07-28 11:06:48 +0200 (Mo, 28. Jul 2008) $
  */
 public class MCRZipServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;

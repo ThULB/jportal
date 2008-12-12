@@ -1,5 +1,5 @@
 /*
- * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
+ * $Revision: 14528 $ $Date: 2008-12-09 17:45:41 +0100 (Di, 09. Dez 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
  * is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as published by the Free
  * Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
@@ -38,7 +38,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
  * Represents a stored file with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $
+ * @version $Revision: 14528 $ $Date: 2008-12-09 17:45:41 +0100 (Di, 09. Dez 2008) $
  */
 public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
     /** The ID of the store that holds this file's content */
@@ -302,6 +302,10 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
      *            the source for the file's content bytes
      */
     public void setContentFrom(InputStream source) throws MCRPersistenceException {
+        setContentFrom(source, true);
+    }
+
+    public long setContentFrom(InputStream source, boolean storeContentChange) throws MCRPersistenceException {
         ensureNotDeleted();
 
         String old_md5 = this.md5;
@@ -327,36 +331,39 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
         size = cis.getLength();
         md5 = cis.getMD5String();
 
-        boolean changed = ((size != old_size) || (!md5.equals(old_md5)));
-
-        if (changed) {
-            lastModified = new GregorianCalendar();
-        }
-
-        manager.storeNode(this);
-
-        if (changed && hasParent()) {
-            getParent().sizeOfChildChanged(old_size, size);
-        }
-
         if (old_storageID.length() != 0) {
             old_store.deleteContent(old_storageID);
         }
 
-        // If file content has changed, call event handlers to index content
+        boolean changed = ((size != old_size) || (!md5.equals(old_md5)));
+
         if (changed) {
-            String type = (isNew ? MCREvent.CREATE_EVENT : MCREvent.UPDATE_EVENT);
-            MCREvent event = new MCREvent(MCREvent.FILE_TYPE, type);
-            event.put("file", this);
-            MCREventManager.instance().handleEvent(event);
+            lastModified = new GregorianCalendar();
+            if(storeContentChange) storeContentChange(size - old_size);
         }
+        
+        return size - old_size;
+    }
+
+    public void storeContentChange(long sizeDiff) {
+        manager.storeNode(this);
+
+        if (hasParent())
+            getParent().sizeOfChildChanged(sizeDiff);
+
+        // If file content has changed, call event handlers to index content
+        String type = (isNew ? MCREvent.CREATE_EVENT : MCREvent.UPDATE_EVENT);
+        MCREvent event = new MCREvent(MCREvent.FILE_TYPE, type);
+        event.put("file", this);
+        MCREventManager.instance().handleEvent(event);
 
         isNew = false;
     }
 
     /**
-     * Deletes this file and its content stored in the system. Note that after calling this method, the file object is deleted and invalid and can not be used
-     * any more.
+     * Deletes this file and its content stored in the system. Note that after
+     * calling this method, the file object is deleted and invalid and can not
+     * be used any more.
      */
     public void delete() throws MCRPersistenceException {
         ensureNotDeleted();
@@ -370,7 +377,7 @@ public class MCRFile extends MCRFilesystemNode implements MCRFileReader {
             MCREventManager.instance().handleEvent(event);
 
             if (hasParent()) {
-                getParent().sizeOfChildChanged(size, 0);
+                getParent().sizeOfChildChanged(-size);
             }
         }
 

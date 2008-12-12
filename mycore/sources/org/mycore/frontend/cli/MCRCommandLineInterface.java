@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14364 $ $Date: 2008-11-07 17:29:41 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14364 $ $Date: 2008-11-07 17:29:41 +0100 (Fr, 07. Nov 2008) $
  * 
  * This file is part of M y C o R e See http://www.mycore.de/ for details.
  * 
@@ -59,7 +59,7 @@ import org.mycore.user.MCRUserMgr;
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14364 $ $Date: 2008-11-07 17:29:41 +0100 (Fr, 07 Nov 2008) $
+ * @version $Revision: 14364 $ $Date: 2008-11-07 17:29:41 +0100 (Fr, 07. Nov 2008) $
  */
 public class MCRCommandLineInterface {
     /** The Logger */

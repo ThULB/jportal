@@ -4,31 +4,31 @@
 	<categories>
 		<category ID="LANG0000">
 			<label xml:lang="de" text="unbekannt" description="xxx#xx"/>
-            <label xml:lang="en" text="مجهول" description="xxx#xx"/>
+			<label xml:lang="en" text="unknown" description="xxx#xx"/>
 		</category>
 		<category ID="LANG0001">
 			<label xml:lang="de" text="deutsch" description="ger#de"/>
-            <label xml:lang="en" text="عربي" description="ara#ar"/>
+			<label xml:lang="en" text="german" description="ger#de"/>
 		</category>
 		<category ID="LANG0002">
 			<label xml:lang="de" text="englisch" description="eng#en"/>
-			<label xml:lang="en" text="فارسي" description="fas#fa"/>
+			<label xml:lang="en" text="english" description="eng#en"/>
 		</category>
 		<category ID="LANG0003">
 			<label xml:lang="de" text="arabisch" description="ara#ar"/>
-			<label xml:lang="en" text="عثماني-ترکي" description="tur#tr"/>
+			<label xml:lang="en" text="arabic" description="ara#ar"/>
 		</category>
 		<category ID="LANG0004">
 			<label xml:lang="de" text="dänisch" description="dan#da"/>
-			<label xml:lang="en" text="مزود بترجمة إلى الفارسية مكتوبة بين الأسطر " description="ara#ar"/>
+			<label xml:lang="en" text="danish" description="dan#da"/>
 		</category>
 		<category ID="LANG0005">
 			<label xml:lang="de" text="französisch" description="fre#fr"/>
-			<label xml:lang="en" text="فارسي مع ترجمة عربية بين السطور" description="fas#fa"/>
+			<label xml:lang="en" text="french" description="fre#fr"/>
 		</category>
 		<category ID="LANG0006">
 			<label xml:lang="de" text="griechisch" description="gre#el"/>
-			<label xml:lang="ar" text="مزود بترجمة إلى العثمانية التركية مكتوبة بين الأسطر" description="ara#ar"/>
+			<label xml:lang="en" text="greek" description="gre#el"/>
 		</category>
 		<category ID="LANG0007">
 			<label xml:lang="de" text="hebräisch" description="heb#iw"/>

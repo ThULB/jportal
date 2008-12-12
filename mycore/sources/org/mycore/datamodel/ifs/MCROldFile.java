@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07 Aug 2008) $
+ * $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07. Aug 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ import org.mycore.common.events.MCREventManager;
  * ONLY!
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07 Aug 2008) $
+ * @version $Revision: 13834 $ $Date: 2008-08-07 15:25:01 +0200 (Do, 07. Aug 2008) $
  * @deprecated use MCRFile
  */
 public class MCROldFile implements MCRFileReader {

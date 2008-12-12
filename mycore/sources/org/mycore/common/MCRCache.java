@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07 Feb 2008) $
+ * $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07. Feb 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -45,7 +45,7 @@ import org.mycore.services.mbeans.MCRJMXBridge;
  * @see java.util.Hashtable
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07 Feb 2008) $
+ * @version $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07. Feb 2008) $
  */
 public class MCRCache {
     /**

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.MCRUtils;
  * the content of a file is stored.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07 Nov 2008) $
+ * @version $Revision: 14354 $ $Date: 2008-11-07 15:23:02 +0100 (Fr, 07. Nov 2008) $
  */
 public abstract class MCRContentStore {
     /** The unique store ID for this MCRContentStore implementation */

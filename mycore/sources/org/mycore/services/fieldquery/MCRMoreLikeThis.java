@@ -1,5 +1,5 @@
 /*
- * $Revision: 13507 $ $Date: 2008-05-09 16:01:12 +0200 (Fr, 09 Mai 2008) $
+ * $Revision: 13507 $ $Date: 2008-05-09 16:01:12 +0200 (Fr, 09. Mai 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

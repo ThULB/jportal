@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13381 $ $Date: 2008-04-11 11:14:19 +0200 (Fr, 11 Apr 2008) $
+ * $Revision: 14449 $ $Date: 2008-11-21 11:38:18 +0100 (Fr, 21. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.collection.PersistentList;
@@ -41,7 +40,7 @@ import org.mycore.datamodel.classifications2.MCRLabel;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13381 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision: 14449 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  * @since 2.0
  */
@@ -159,9 +158,15 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
         return level;
     }
 
+    public boolean hasChildren() {
+        if (right != left)
+            return (right - left) > 1;
+        return super.hasChildren();
+    }
+
     /**
-     * @return the positionInParent
-     */
+    * @return the positionInParent
+    */
     public int getPositionInParent() {
         LOGGER.debug("getposition called for " + getId() + " with: " + this.positionInParent);
         if (parent == null) {
@@ -225,7 +230,7 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
      * @param labels
      *            the labels to set
      */
-    public void setLabels(Map<String, MCRLabel> labels) {
+    public void setLabels(Collection<MCRLabel> labels) {
         this.labels = labels;
     }
 

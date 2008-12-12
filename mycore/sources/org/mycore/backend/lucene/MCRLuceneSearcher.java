@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14487 $ $Date: 2008-11-26 14:46:55 +0100 (Mi, 26. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,6 +35,7 @@ import java.util.Vector;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -344,20 +345,22 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
             MCRSortBy sb = sortBy.get(j);
             MCRFieldDef fds = sb.getField();
             if (null != fds) {
-                String field = fds.getName();
-                String values[] = doc.getValues(field);
-                if (null != values) {
-                    for (int i = 0; i < values.length; i++) {
-                        MCRFieldDef fd = MCRFieldDef.getDef(field);
-                        MCRFieldValue fv = new MCRFieldValue(fd, values[i]);
-                        hit.addSortData(fv);
-                    }
-                } else if ("score".equals(field) && null != score) {
-                    MCRFieldDef fd = MCRFieldDef.getDef(field);
-                    MCRFieldValue fv = new MCRFieldValue(fd, score);
-                    hit.addSortData(fv);
-                }
-            }
+				String field = fds.getName();
+				if ("score".equals(field)) {
+					if (null != score) {
+						MCRFieldDef fd = MCRFieldDef.getDef(field);
+						MCRFieldValue fv = new MCRFieldValue(fd, score);
+						hit.addSortData(fv);
+					}
+				} else {
+					String values[] = doc.getValues(field);
+					for (int i = 0; i < values.length; i++) {
+						MCRFieldDef fd = MCRFieldDef.getDef(field);
+						MCRFieldValue fv = new MCRFieldValue(fd, values[i]);
+						hit.addSortData(fv);
+					}
+				}
+			}
         }
     }
 
@@ -624,7 +627,12 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 if (delayedFuture != null && !delayedFuture.isDone()) {
                     cancelDelayedIndexCloser();
                 }
-                delayedFuture = scheduler.schedule(delayedCloser, 2, TimeUnit.SECONDS);
+                try {
+                    delayedFuture = scheduler.schedule(delayedCloser, 2, TimeUnit.SECONDS);
+                } catch (RejectedExecutionException e) {
+                    LOGGER.warn("Cannot schedule delayed IndexWriter closer. Closing IndexWriter now.");
+                    closeIndexWriter();
+                }
             }
         }
 

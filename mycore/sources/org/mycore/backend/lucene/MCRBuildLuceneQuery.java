@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.services.fieldquery.MCRFieldDef;
  * 
  * @author Harald Richter
  * 
- * @version $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07 Nov 2008) $
+ * @version $Revision: 14347 $ $Date: 2008-11-07 06:59:47 +0100 (Fr, 07. Nov 2008) $
  * 
  */
 public class MCRBuildLuceneQuery {

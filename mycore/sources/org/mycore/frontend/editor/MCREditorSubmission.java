@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25 Okt 2008) $
+ * $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.jdom.xpath.XPath;
  * HTML page that contains a MyCoRe XML editor form.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25 Okt 2008) $
+ * @version $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25. Okt 2008) $
  */
 public class MCREditorSubmission {
     private final static Logger LOGGER = Logger.getLogger(MCREditorSubmission.class);

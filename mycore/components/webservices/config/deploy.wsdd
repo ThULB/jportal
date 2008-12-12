@@ -4,7 +4,7 @@
 <!--   Deployment of MyCoRe-WebServices                    -->
 <!--   derived from axis 1.4 server-config                 -->
 <!--   SimpleAuthenticationHandler added for adminservice  -->
-<!-- $Revision: 11774 $ $Date: 2007-06-14 16:02:37 +0200 (Do, 14 Jun 2007) $        -->
+<!-- $Revision: 14433 $ $Date: 2008-11-18 10:04:09 +0100 (Di, 18. Nov 2008) $        -->
 <!-- ==============================================        -->
 
 <deployment name="defaultClientConfig"
@@ -100,7 +100,7 @@
   </responseFlow>
  </transport>
 
-  <service name="MCRWebService" provider="java:MCRRPC">
+  <service name="MCRWebService" provider="java:MCRRPC" style="rpc" use="literal">
     <requestFlow>
 <!-- used in combination with wss4j to send userid and password    
       <handler type="java:org.apache.ws.axis.security.WSDoAllReceiver">

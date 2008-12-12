@@ -1551,7 +1551,7 @@ public class MCROAIProvider extends MCRServlet {
                     if (classifications.contains(classificationId)) {
                         String categoryId = classification.getCategId();
                         MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID(classificationId, categoryId), -1);
-                        Collection<org.mycore.datamodel.classifications2.MCRLabel> labels = category.getLabels().values();
+                        Collection<org.mycore.datamodel.classifications2.MCRLabel> labels = category.getLabels();
                         boolean found = false;
                         for (MCRLabel label : labels) {
                             if (label.getLang().equals("x-dini")) {
@@ -1561,8 +1561,12 @@ public class MCROAIProvider extends MCRServlet {
                             }
                         }
                         if (!found) {
-                            categoryId = category.getParent().getId().getID() + ":" + categoryId;
-                            setSpec.append(" ").append(categoryId);
+                        	MCRCategory parent;
+                            while ((parent = category.getParent()) != null) {
+                            	categoryId = parent.getId().getID() + ":" + categoryId;
+                            	category = parent;
+                            }	
+                        	setSpec.append(" ").append(categoryId);
                         }
                     }
                 }

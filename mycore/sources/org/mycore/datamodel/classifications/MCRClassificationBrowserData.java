@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationBrowserData.java,v $
- * $Revision: 14185 $ $Date: 2008-10-21 17:53:28 +0200 (Di, 21 Okt 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.datamodel.classifications;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -389,15 +390,13 @@ public class MCRClassificationBrowserData {
         final Element xNavtree = new Element("classificationlist");
         xDocument.addContent(xNavtree);
         String browserClass = "";
-        String Counter = "";
 
         LOGGER.debug("get all classification IDs");
         final Set<MCRCategoryID> allIDs = getClassificationPool().getAllIDs();
-        List<MCRCategoryID> ids = new ArrayList<MCRCategoryID>(allIDs.size());
-        ids.addAll(allIDs);
-        LOGGER.debug("fetched all classification IDs");
+        LOGGER.debug("query classification links");
+        final Map<MCRCategoryID, Boolean> countMap = MCRCategLinkServiceFactory.getInstance().hasLinks(allIDs);
 
-        for (MCRCategoryID id : ids) {
+        for (MCRCategoryID id : countMap.keySet()) {
             LOGGER.debug("get classification " + id);
             MCRCategory classif = getClassificationPool().getClassificationAsPojo(id, false);
             LOGGER.debug("get browse element");
@@ -451,13 +450,8 @@ public class MCRClassificationBrowserData {
             cli.setAttribute("browserClass", browserClass);
             setObjectTypes(browserClass);
             LOGGER.debug("counting linked objects");
-            try {
-                Counter = String.valueOf(MCRCategLinkServiceFactory.getInstance().hasLinks(classif.getId()));
-            } catch (Exception ignore) {
-                Counter = "unknown";
-            }
             LOGGER.debug("counting linked objects ... done");
-            cli.setAttribute("hasLinks", Counter);
+            cli.setAttribute("hasLinks", String.valueOf(countMap.get(id).booleanValue()));
             xNavtree.addContent(cli);
         }
         return new Document(xDocument);
@@ -466,7 +460,7 @@ public class MCRClassificationBrowserData {
     private static Element getBrowseElement(MCRCategory classif) {
         Element ce = new Element("classification");
         ce.setAttribute("ID", classif.getId().getRootID());
-        for (MCRLabel label : classif.getLabels().values()) {
+        for (MCRLabel label : classif.getLabels()) {
             Element labelElement = new Element("label");
             if (label.getLang() != null) {
                 labelElement.setAttribute("lang", label.getLang(), Namespace.XML_NAMESPACE);
@@ -493,6 +487,7 @@ public class MCRClassificationBrowserData {
 
         LOGGER.debug("Show tree for classification:" + classif.getId());
         final MCRCategory cl = getClassificationPool().getClassificationAsPojo(classif.getId(), true);
+        LOGGER.debug("Got classification");
         MCRClassificationPool cp = getClassificationPool();
         MCRLabel labels = getLabel(cl, lang);
         Element xDocument = new Element("classificationBrowse");
@@ -554,7 +549,7 @@ public class MCRClassificationBrowserData {
         final Element CreateButton = new Element("userCanCreate");
         final Element EditButton = new Element("userCanEdit");
         final Element DeleteButton = new Element("userCanDelete");
-
+        LOGGER.debug("now we check this right for the current user");
         // now we check this right for the current user
         if (cp.isEdited(getClassification().getId()) == false) {
             String permString = String.valueOf(AI.checkPermission("create-classification"));
@@ -602,10 +597,20 @@ public class MCRClassificationBrowserData {
 
         int i = 0;
         Element line;
+        List<MCRCategoryID> ids = new ArrayList<MCRCategoryID>();
+        LOGGER.debug("process tree lines: fetch ids");
+        while ((line = getTreeline(i++)) != null) {
+            final String catid = line.getAttributeValue("ID");
+            ids.add(new MCRCategoryID(cl.getId().getRootID(), catid));
+        }
+        i = 0;
+        LOGGER.debug("fetch Map<MCRCategoryID,Boolean>");
+        Map<MCRCategoryID, Boolean> countMap = MCRCategLinkServiceFactory.getInstance().hasLinks(ids);
+        LOGGER.debug("process tree lines: build xml tree");
         while ((line = getTreeline(i++)) != null) {
 
             final String catid = line.getAttributeValue("ID");
-            boolean hasLinks = MCRCategLinkServiceFactory.getInstance().hasLinks(new MCRCategoryID(cl.getId().getRootID(), catid));
+            boolean hasLinks = countMap.get(new MCRCategoryID(cl.getId().getRootID(), catid)).booleanValue();
             final String status = line.getAttributeValue("hasChildren");
 
             Element label = (Element) XPath.selectSingleNode(line, "label[lang('" + lang + "')]");
@@ -673,6 +678,7 @@ public class MCRClassificationBrowserData {
                 comment.setText(description);
             }
         }
+        LOGGER.debug("Building XML document");
 
         xNavtree.setAttribute("rowcount", "" + i);
         xDocument.addContent(xNavtree);
@@ -848,7 +854,7 @@ public class MCRClassificationBrowserData {
     }
 
     private static MCRLabel getLabel(MCRCategory co, String lang) {
-        for (MCRLabel label : co.getLabels().values()) {
+        for (MCRLabel label : co.getLabels()) {
             if (label.getLang().equals(lang)) {
                 return label;
             }
@@ -889,14 +895,14 @@ public class MCRClassificationBrowserData {
     private static class MCRCategoryElementFactory {
         static Element getCategoryElement(MCRCategory category, boolean withCounter, int numberObjects) {
             Element ce = new Element("category");
-            Map<String, MCRLabel> labels = category.getLabels();
+            Collection<MCRLabel> labels = category.getLabels();
             ce.setAttribute("ID", category.getId().getID());
             if (withCounter) {
                 ce.setAttribute("counter", Integer.toString(numberObjects));
             }
 
-            for (String key : labels.keySet()) {
-                ce.addContent(getElement(labels.get(key)));
+            for (MCRLabel label : labels) {
+                ce.addContent(getElement(label));
             }
             for (MCRCategory child : category.getChildren()) {
                 ce.addContent(getCategoryElement(child, withCounter, numberObjects));

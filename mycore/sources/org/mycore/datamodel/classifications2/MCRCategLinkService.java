@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14158 $ $Date: 2008-10-20 17:57:03 +0200 (Mo, 20 Okt 2008) $
+ * $Revision: 14412 $ $Date: 2008-11-14 15:54:04 +0100 (Fr, 14. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14158 $ $Date: 2008-10-20 17:57:03 +0200 (Mo, 20 Okt 2008) $
+ * @version $Revision: 14412 $ $Date: 2008-11-14 15:54:04 +0100 (Fr, 14. Nov 2008) $
  * @since 2.0
  */
 public interface MCRCategLinkService {
@@ -41,7 +41,7 @@ public interface MCRCategLinkService {
      *            the id of a category
      * @return true if the classification is used
      */
-    public abstract boolean hasLinks(MCRCategoryID categID);
+    public abstract Map<MCRCategoryID, Boolean> hasLinks(Collection<MCRCategoryID> categIDs);
 
     /**
      * Counts links to a collection of categories.
@@ -62,6 +62,26 @@ public interface MCRCategLinkService {
      * @return a Map with MCRCategoryID as key and the number of links as value
      */
     public abstract Map<MCRCategoryID, Number> countLinksForType(Collection<MCRCategoryID> categIDs, String type);
+
+    /**
+     * Counts links to child categories of a given parent category.
+     * 
+     * @param parentID
+     *            MCRCategoryID of parent, counting is done for each child
+     * @return a Map with MCRCategoryID as key and the number of links as value
+     */
+    public abstract Map<MCRCategoryID, Number> countLinks(MCRCategoryID parentID);
+
+    /**
+     * Counts links to child categories of a given parent category.
+     * 
+     * @param parentID
+     *            MCRCategoryID of parent, counting is done for each child
+     * @param type
+     *            restrict links that refer to object of this type
+     * @return a Map with MCRCategoryID as key and the number of links as value
+     */
+    public abstract Map<MCRCategoryID, Number> countLinksForType(MCRCategoryID parentID, String type);
 
     /**
      * Delete all links that refer to the given Object ID.

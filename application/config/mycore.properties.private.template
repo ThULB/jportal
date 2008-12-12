@@ -1,6 +1,6 @@
 #-- ===================================================================
 #-- MyCoRe sample application private properties template file       
-#-- $Revision: 13743 $ $Date: 2008-07-14 14:09:07 +0200 (Mo, 14 Jul 2008) $                  
+#-- $Revision: 14560 $ $Date: 2008-12-11 14:10:09 +0100 (Do, 11. Dez 2008) $                  
 #-- ===================================================================
 #
 # The MyCoRe properties PRIVATE sample file for the Dublin Core Demo
@@ -279,10 +279,12 @@
 
 # DINIspec - searchField mapping: ddc = subject, pub-type = type, doc-type=format;
 # MCR.OAI.Dini-mapping=
-  MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type, subject
+
+  MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type
+# MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type, subject
   MCR.OAI.Setscheme.Classids.MCROAIProvider.format=DocPortal_class_00000006
   MCR.OAI.Setscheme.Classids.MCROAIProvider.type=DocPortal_class_00000005
-  MCR.OAI.Setscheme.Classids.MCROAIProvider.subject=DocPortal_class_00000009
+# MCR.OAI.Setscheme.Classids.MCROAIProvider.subject=DocPortal_class_00000009
 
 ##############################################################################
 # The MyCoRe properties URN file for the DocPortal                           #

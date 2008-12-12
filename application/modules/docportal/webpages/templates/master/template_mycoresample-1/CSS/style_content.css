@@ -508,3 +508,20 @@ input.editorRadio {}
 label.editorRadio {}
 input.editorCheckbox {}
 label.editorCheckbox {}
+
+/* Classification browser */
+
+.classificationBrowser ul {
+   list-style-type: none;
+}
+
+.classificationBrowser input {
+   width: 20px;
+   border-style:solid;
+   border-width:1px;
+   border-color:#888888;
+   padding: 1px;
+   font-size: 6pt;
+   font-weight: bold;
+}
+

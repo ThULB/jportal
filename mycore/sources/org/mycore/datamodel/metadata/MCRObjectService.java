@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08 Okt 2008) $
+ * $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,7 @@ import org.mycore.common.MCRConfiguration;
  * </ul>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08 Okt 2008) $
+ * @version $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08. Okt 2008) $
  */
 public class MCRObjectService {
     // service data

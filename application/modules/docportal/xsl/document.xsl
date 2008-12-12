@@ -100,6 +100,15 @@
 
   <xsl:template match="/mycoreobject[contains(@ID,'_document_')]" mode="resulttitle" priority="1">
     <xsl:choose>
+      <xsl:when test="metadata/titles/title[contains(@type,'main')] and metadata/titles/title[contains(@type,'sub')]">
+        <xsl:call-template name="printI18N">
+          <xsl:with-param name="nodes" select="metadata/titles/title[contains(@type,'main')]"/>
+        </xsl:call-template>
+        <xsl:value-of select="': '"/>
+        <xsl:call-template name="printI18N">
+          <xsl:with-param name="nodes" select="metadata/titles/title[contains(@type,'sub')]"/>
+        </xsl:call-template>
+      </xsl:when>
       <xsl:when test="metadata/titles">
         <xsl:call-template name="printI18N">
           <xsl:with-param name="nodes" select="metadata/titles/title"/>

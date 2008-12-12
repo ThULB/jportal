@@ -1,5 +1,5 @@
 /*
- * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
+ * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14. Jul 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
  * is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as published by the Free
  * Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
@@ -22,7 +22,7 @@ import org.mycore.common.MCRUtils;
  * structures.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $
+ * @version $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14. Jul 2008) $
  */
 public class MCRFileImportExport {
     /**

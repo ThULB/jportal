@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * $Revision: 14497 $ $Date: 2008-11-28 10:36:32 +0100 (Fr, 28. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,7 +54,7 @@ import org.mycore.frontend.cli.MCRObjectCommands;
  * This class holds methods to manage the workflow file system of MyCoRe.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * @version $Revision: 14497 $ $Date: 2008-11-28 10:36:32 +0100 (Fr, 28. Nov 2008) $
  */
 
 public class MCRSimpleWorkflowManager {
@@ -590,7 +590,7 @@ public class MCRSimpleWorkflowManager {
      *            the MCRObjectID as string
      * @param permission
      *            the permission for the ACL system
-     * @return the XML tree of the condition
+     * @return the XML tree of the condition or null if the permission is not defined
      */
     @SuppressWarnings("unchecked")
     public final org.jdom.Element getRuleFromFile(String id, String permission) {
@@ -612,6 +612,6 @@ public class MCRSimpleWorkflowManager {
         } catch (Exception ex) {
             logger.error("Can't read file " + fn);
         }
-        return new org.jdom.Element("condition").setAttribute("format", "xml");
+        return null;
     }
 }

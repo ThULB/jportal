@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14450 $ $Date: 2008-11-21 11:54:03 +0100 (Fr, 21. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -26,7 +26,7 @@ package org.mycore.datamodel.classifications2.impl;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.hibernate.criterion.Projections;
@@ -87,9 +87,9 @@ public class MCRCategoryDAOImplTest extends MCRHibTestCase {
         assertTrue("Exist check failed for Category " + category.getId(), DAO.exist(category.getId()));
         MCRCategoryImpl india = new MCRCategoryImpl();
         india.setId(new MCRCategoryID(category.getId().getRootID(), "India"));
-        india.setLabels(new HashMap<String, MCRLabel>());
-        india.getLabels().put("de", new MCRLabel("de", "Indien", null));
-        india.getLabels().put("en", new MCRLabel("en", "India", null));
+        india.setLabels(new HashSet<MCRLabel>());
+        india.getLabels().add(new MCRLabel("de", "Indien", null));
+        india.getLabels().add(new MCRLabel("en", "India", null));
         DAO.addCategory(new MCRCategoryID(category.getId().getRootID(), "Asia"), india);
         startNewTransaction();
         assertTrue("Exist check failed for Category " + india.getId(), DAO.exist(india.getId()));
@@ -115,10 +115,10 @@ public class MCRCategoryDAOImplTest extends MCRHibTestCase {
         addWorldClassification();
         MCRCategory find = category.getChildren().get(0).getChildren().get(0);
         MCRCategory dontFind = category.getChildren().get(1);
-        MCRLabel label = find.getLabels().values().iterator().next();
+        MCRLabel label = find.getLabels().iterator().next();
         List<MCRCategory> results = DAO.getCategoriesByLabel(category.getId(), label.getLang(), label.getText());
         assertFalse("No search results found", results.isEmpty());
-        assertTrue("Could not find Category: " + find.getId(), results.get(0).getLabels().containsValue(label));
+        assertTrue("Could not find Category: " + find.getId(), results.get(0).getLabels().contains(label));
         assertTrue("No search result expected.", DAO.getCategoriesByLabel(dontFind.getId(), label.getLang(), label.getText()).isEmpty());
     }
 
@@ -127,13 +127,18 @@ public class MCRCategoryDAOImplTest extends MCRHibTestCase {
         MCRCategory rootCategory = DAO.getCategory(category.getId(), 0);
         assertTrue("Children present with child Level 0.", rootCategory.getChildren().isEmpty());
         rootCategory = DAO.getCategory(category.getId(), 1);
-        assertTrue("Children present with child Level 1.", rootCategory.getChildren().get(0).getChildren().isEmpty());
+        MCRCategory origSubCategory = rootCategory.getChildren().get(0);
+        assertTrue("Children present with child Level 1.", origSubCategory.getChildren().isEmpty());
         assertEquals("Category count does not match with child Level 1.\n" + MCRStringTransformer.getString(rootCategory), category.getChildren().size(),
                 rootCategory.getChildren().size());
-        assertEquals("Children of Level 1 do not know that they are at the first level.\n" + MCRStringTransformer.getString(rootCategory), 1, rootCategory
-                .getChildren().get(0).getLevel());
+        assertEquals("Children of Level 1 do not know that they are at the first level.\n" + MCRStringTransformer.getString(rootCategory), 1, origSubCategory
+                .getLevel());
         rootCategory = DAO.getCategory(category.getId(), -1);
         assertEquals("Did not get all categories." + MCRStringTransformer.getString(rootCategory), countNodes(category), countNodes(rootCategory));
+        assertEquals("Children of Level 1 do not match", category.getChildren().size(), rootCategory.getChildren().size());
+        MCRCategory subCategory = DAO.getCategory(origSubCategory.getId(), 0);
+        assertNotNull("Did not return ", subCategory);
+        assertEquals("ObjectIDs did not match", origSubCategory.getId(), subCategory.getId());
     }
 
     public void testGetChildren() {
@@ -163,6 +168,14 @@ public class MCRCategoryDAOImplTest extends MCRHibTestCase {
         List<MCRCategoryID> classIds = DAO.getRootCategoryIDs();
         assertEquals("Result size does not match.", 1, classIds.size());
         assertEquals("Returned MCRCategoryID does not match.", find, classIds.get(0));
+    }
+
+    public void testGetRootCategories() {
+        addWorldClassification();
+        MCRCategoryID find = category.getId();
+        List<MCRCategory> classes = DAO.getRootCategories();
+        assertEquals("Result size does not match.", 1, classes.size());
+        assertEquals("Returned MCRCategoryID does not match.", find, classes.get(0).getId());
     }
 
     public void testGetRootCategory() {
@@ -242,7 +255,7 @@ public class MCRCategoryDAOImplTest extends MCRHibTestCase {
         startNewTransaction();
         rootNode = getRootCategoryFromSession();
         assertEquals("Label count does not match.", count + 1, rootNode.getLabels().size());
-        assertEquals("Label does not match.", description, rootNode.getLabels().get(lang).getDescription());
+        assertEquals("Label does not match.", description, rootNode.getLabel(lang).getDescription());
     }
 
     /**

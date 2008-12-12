@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13745 $ $Date: 2008-07-14 15:07:17 +0200 (Mo, 14 Jul 2008) $
+ * $Revision: 13745 $ $Date: 2008-07-14 15:07:17 +0200 (Mo, 14. Jul 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -43,7 +43,7 @@ import org.mycore.common.events.MCRSessionListener;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13745 $ $Date: 2008-07-14 15:07:17 +0200 (Mo, 14 Jul 2008) $
+ * @version $Revision: 13745 $ $Date: 2008-07-14 15:07:17 +0200 (Mo, 14. Jul 2008) $
  * @since 2.0
  */
 public class MCRSessionContext extends ThreadLocalSessionContext implements MCRSessionListener {

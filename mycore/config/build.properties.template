@@ -3,7 +3,7 @@
 # Basic properties for the MyCoRe build process - Change as needed!
 # These properties control CLASSPATH, LIBPATH and LD_LIBRARY_PATH
 #
-# $Revision: 13475 $ $Date: 2008-05-05 09:46:13 +0200 (Mo, 05 Mai 2008) $
+# $Revision: 14508 $ $Date: 2008-12-05 07:48:01 +0100 (Fr, 05. Dez 2008) $
 #
 #######################################################################
 
@@ -17,17 +17,7 @@
 
 # MCR.System.SharedJarsDir=/usr/share/java
 # MCR.System.Jars=ant.jar
-# MCR.System.Jars=ant.jar jai/jai_codec.jar jai/jai_core.jar
-# MCR.System.Jars=ant.jar jai/jai_codec.jar jai/jai_core.jar mysql-connector-java.jar
+# MCR.System.Jars=ant.jar jai/jai_codec.jar jai/jai_core.jar jai/mlibwrapper_jai.jar
+# MCR.System.Jars=ant.jar jai/jai_codec.jar jai/jai_core.jar jai/mlibwrapper_jai.jar mysql-connector-java.jar
 
 #######################################################################
-#
-# The called modules in order of their use. If you use the 
-# imaging you must do the 'ant install' call under
-# UNINSTALLED_imaging.
-#
-#######################################################################
-
-  MCR.Modules.MyCoRe=acl-editor,broadcasting,classhandler,indexing,swf,useradmin,userlogin,wcms,webservices,z3950
-# MCR.Modules.MyCoRe=acl-editor,broadcasting,classhandler,imaging,indexing,swf,useradmin,userlogin,wcms,webservices,z3950
-

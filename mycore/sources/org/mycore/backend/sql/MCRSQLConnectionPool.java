@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13253 $ $Date: 2008-03-07 09:05:51 +0100 (Fr, 07 Mär 2008) $
+ * $Revision: 13253 $ $Date: 2008-03-07 09:05:51 +0100 (Fr, 07. Mär 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -44,7 +44,7 @@ import org.mycore.common.xml.MCRURIResolver;
  * @author Frank L\u00fctzenkirchen
  * @author Jens Kupferschmidt
  * 
- * @version $Revision: 13253 $ $Date: 2008-03-07 09:05:51 +0100 (Fr, 07 Mär 2008) $
+ * @version $Revision: 13253 $ $Date: 2008-03-07 09:05:51 +0100 (Fr, 07. Mär 2008) $
  */
 public class MCRSQLConnectionPool {
     /** The connection pool singleton */

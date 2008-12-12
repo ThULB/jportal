@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05 Nov 2008) $
+ * $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * It can also handle file uploads.
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05 Nov 2008) $
+ * @version $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05. Nov 2008) $
  */
 public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
     private static final long serialVersionUID = 1L;

@@ -6,7 +6,7 @@
 // Andreas Trappe 	- idea, concept
 // Chi Vu Huu		- concept, development
 //
-// $Revision: 12159 $ $Date: 2007-07-27 11:21:09 +0200 (Fr, 27 Jul 2007) $ 
+// $Revision: 12159 $ $Date: 2007-07-27 11:21:09 +0200 (Fr, 27. Jul 2007) $ 
 // ============================================== 
 
 package org.mycore.services.imaging;

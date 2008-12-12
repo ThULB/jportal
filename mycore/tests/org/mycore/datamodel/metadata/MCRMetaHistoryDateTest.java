@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13567 $ $Date: 2008-06-04 14:27:47 +0200 (Mi, 04 Jun 2008) $
+ * $Revision: 13567 $ $Date: 2008-06-04 14:27:47 +0200 (Mi, 04. Jun 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -33,7 +33,7 @@ import org.mycore.common.MCRTestCase;
  * This class is a JUnit test case for org.mycore.datamodel.metadata.MCRMetaHistoryDate.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13567 $ $Date: 2008-06-04 14:27:47 +0200 (Mi, 04 Jun 2008) $
+ * @version $Revision: 13567 $ $Date: 2008-06-04 14:27:47 +0200 (Mi, 04. Jun 2008) $
  *
  */
 public class MCRMetaHistoryDateTest extends MCRTestCase {

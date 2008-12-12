@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -42,7 +42,7 @@ public class MCRStringTransformer {
         }
         sb.append(category.getId());
         sb.append('[');
-        printLabels(category.getLabels().values(), sb);
+        printLabels(category.getLabels(), sb);
         sb.append(']');
         sb.append('\n');
         for (MCRCategory child : category.getChildren()) {

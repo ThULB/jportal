@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -24,19 +24,21 @@
 package org.mycore.datamodel.classifications2.impl;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 
 /**
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * @version $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  * @since 2.0
  */
 public abstract class MCRAbstractCategoryImpl implements MCRCategory {
@@ -49,11 +51,13 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
 
     private URI URI;
 
-    protected Map<String, MCRLabel> labels;
+    protected Collection<MCRLabel> labels;
 
     protected List<MCRCategory> children;
 
     protected final ReentrantReadWriteLock childrenLock = new ReentrantReadWriteLock();
+
+    private static final String defaultLang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "en");
 
     public MCRAbstractCategoryImpl() {
         super();
@@ -79,11 +83,16 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
         return id;
     }
 
-    public Map<String, MCRLabel> getLabels() {
+    public Collection<MCRLabel> getLabels() {
         return labels;
     }
 
     public MCRCategory getRoot() {
+        if (getId().isRootID())
+            return this;
+        if (this.root == null && getParent() != null) {
+            this.root = getParent().getRoot();
+        }
         return root;
     }
 
@@ -108,7 +117,7 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
     }
 
     public final boolean isClassification() {
-        return (root != null && this.id.equals(root.getId()));
+        return getId().isRootID();
     }
 
     public void setId(MCRCategoryID id) {
@@ -143,6 +152,24 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
             this.parent.getChildren().remove(this);
             this.parent = null;
         }
+    }
+
+    public MCRLabel getCurrentLabel() {
+        MCRLabel label = getLabel(MCRSessionMgr.getCurrentSession().getCurrentLanguage());
+        if (label != null)
+            return label;
+        label = getLabel(defaultLang);
+        if (label != null)
+            return label;
+        return labels.iterator().next();
+    }
+
+    public MCRLabel getLabel(String lang) {
+        for (MCRLabel label : labels) {
+            if (label.getLang().equals(lang))
+                return label;
+        }
+        return null;
     }
 
 }

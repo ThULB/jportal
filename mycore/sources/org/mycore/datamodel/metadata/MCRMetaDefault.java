@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16 Sep 2008) $
+ * $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16. Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -34,7 +34,7 @@ import org.mycore.common.MCRException;
  * createTypedContent() and createTextSearch() are abstract methods.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16 Sep 2008) $
+ * @version $Revision: 14000 $ $Date: 2008-09-16 11:21:12 +0200 (Di, 16. Sep 2008) $
  */
 public abstract class MCRMetaDefault implements MCRMetaInterface {
     // public data

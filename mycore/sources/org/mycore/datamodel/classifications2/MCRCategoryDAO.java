@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13497 $ $Date: 2008-05-07 21:52:39 +0200 (Mi, 07 Mai 2008) $
+ * $Revision: 14450 $ $Date: 2008-11-21 11:54:03 +0100 (Fr, 21. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ import java.util.List;
  * Interface of the Data Access Object for Classifications.
  * 
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13497 $ $Date: 2008-05-07 21:52:39 +0200 (Mi, 07 Mai 2008) $
+ * @version $Revision: 14450 $ $Date: 2008-11-21 11:54:03 +0100 (Fr, 21. Nov 2008) $
  * @since 2.0
  */
 public interface MCRCategoryDAO {
@@ -111,6 +111,13 @@ public interface MCRCategoryDAO {
      * @return list of category IDs
      */
     public abstract List<MCRCategoryID> getRootCategoryIDs();
+
+    /**
+     * Returns all categories that do not have a parent category.
+     * 
+     * @return list of category IDs
+     */
+    public abstract List<MCRCategory> getRootCategories();
 
     /**
      * Returns the root Category with ancestor axis of the specified category

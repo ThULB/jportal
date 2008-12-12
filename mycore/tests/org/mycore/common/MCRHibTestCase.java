@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13780 $ $Date: 2008-07-30 09:46:52 +0200 (Mi, 30 Jul 2008) $
+ * $Revision: 13780 $ $Date: 2008-07-30 09:46:52 +0200 (Mi, 30. Jul 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.

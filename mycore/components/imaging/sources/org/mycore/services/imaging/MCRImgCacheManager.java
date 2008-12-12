@@ -17,8 +17,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -67,7 +69,7 @@ public class MCRImgCacheManager implements CacheManager {
 
     private MCRImgCacheManager() {
         cacheInIFS = (MCRDirectory) MCRFilesystemNode.getRootNode(CACHE_FOLDER);
-
+        
         if (cacheInIFS == null) {
             LOGGER.info("Img Cache not exist, creating new one");
             try {

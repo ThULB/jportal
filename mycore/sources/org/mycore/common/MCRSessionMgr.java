@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24 Apr 2008) $
+ * $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24. Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.common.events.MCRSessionListener;
  * 
  * @author Detlev Degenhardt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24 Apr 2008) $
+ * @version $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24. Apr 2008) $
  */
 public class MCRSessionMgr {
 

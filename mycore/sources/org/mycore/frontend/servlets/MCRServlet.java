@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision$ $Date$
+ * $Revision: 14519 $ $Date: 2008-12-08 08:26:57 +0100 (Mo, 08. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -68,7 +68,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision$ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
+ * @version $Revision: 14519 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
  *          2008) $
  */
 public class MCRServlet extends HttpServlet {
@@ -141,6 +141,8 @@ public class MCRServlet extends HttpServlet {
         int pos = requestURL.indexOf(contextPath, 9);
 
         BASE_URL = CONFIG.getString("MCR.baseurl", requestURL.substring(0, pos) + contextPath);
+        if (!BASE_URL.endsWith("/"))
+        	BASE_URL = BASE_URL + "/";
         SERVLET_URL = BASE_URL + "servlets/";
         MCRURIResolver.init(context, getBaseURL());
     }
@@ -441,6 +443,8 @@ public class MCRServlet extends HttpServlet {
                 value = URLEncoder.encode(parameters.getProperty(name), "UTF-8");
             } catch (UnsupportedEncodingException ex) {
                 value = parameters.getProperty(name);
+            } catch (NullPointerException npe) {
+                throw new MCRException("NullPointerException while encoding "+name,npe);
             }
             redirectURL.append(name).append("=").append(value);
         }

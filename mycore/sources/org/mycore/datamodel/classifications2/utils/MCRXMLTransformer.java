@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -24,9 +24,9 @@
 package org.mycore.datamodel.classifications2.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -69,12 +69,12 @@ public class MCRXMLTransformer {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map<String, MCRLabel> getLabel(List elements) {
-        Map<String, MCRLabel> labels = new HashMap<String, MCRLabel>(elements.size(), 1l);
+    private static Collection<MCRLabel> getLabel(List elements) {
+        Collection<MCRLabel> labels = new HashSet<MCRLabel>(elements.size(), 1l);
         for (Object o : elements) {
             Element e = (Element) o;
             String lang = e.getAttributeValue("lang", Namespace.XML_NAMESPACE);
-            labels.put(lang,new MCRLabel(lang, e.getAttributeValue("text"), e.getAttributeValue("description")));
+            labels.add(new MCRLabel(lang, e.getAttributeValue("text"), e.getAttributeValue("description")));
         }
         return labels;
     }

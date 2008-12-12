@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13351 $ $Date: 2008-04-08 08:17:43 +0200 (Di, 08 Apr 2008) $
+ * $Revision: 13351 $ $Date: 2008-04-08 08:17:43 +0200 (Di, 08. Apr 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.

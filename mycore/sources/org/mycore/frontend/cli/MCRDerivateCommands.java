@@ -1,5 +1,5 @@
 /*
- * $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15 Jul 2008) $
+ * $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15. Jul 2008) $
  * 
  * This file is part of M y C o R e See http://www.mycore.de/ for details. This program is free software; you can use it, redistribute it and / or modify it
  * under the terms of the GNU General Public License (GPL) as published by the Free Software Foundation; either version 2 of the License or (at your option) any
@@ -46,7 +46,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Frank Luetzenkirchen
- * @version $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15 Jul 2008) $
+ * @version $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15. Jul 2008) $
  */
 public class MCRDerivateCommands extends MCRAbstractCommands {
     /** The logger */

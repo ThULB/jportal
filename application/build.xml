@@ -296,7 +296,7 @@
     </antcall>
     <antcall target="script.windows.write">
       <param name="mycore.cmd.file" value="hsqldbadmin.cmd" />
-      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing $*" />
+      <param name="mycore.cmd.class" value="org.hsqldb.util.DatabaseManagerSwing" />
       <param name="mycore.cmd.dir" value="${build.bin}" />
     </antcall>
   </target>
@@ -664,8 +664,8 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mkdir dir="${build.webapps}/WEB-INF/lib" />
     <mkdir dir="${build.webapps}/WEB-INF/classes/xsl" />
     <mcr-integrate target="webapp" classpathref="mycore.jars" />
-    <antcall target="webapps.base" />
     <antcall target="safeWebContent" />
+    <antcall target="webapps.base" />
     <copy tofile="${build.webapps}/WEB-INF/classes/mycore.properties"
           file="${build.config}/mycore.properties"
           overwrite="true" />
@@ -707,6 +707,13 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <copy todir="${build.webapps}/WEB-INF">
       <fileset file="${application.config}/server-config.wsdd"/>
     </copy>
+    <echo>
+      Generate file with user for axis, only this user is allowed to deploy/undeploy webservices
+    </echo>
+    <echo file="${build.webapps}/WEB-INF/users.lst">${MCR.WebService.Admin} ${MCR.WebService.AdminPasswd}</echo>    
+    <!-- Registers the MyCoRe WSDD provider for Axis -->
+    <mkdir dir="${build.webapps}/WEB-INF/classes/META-INF/services" />
+    <echo file="${build.webapps}/WEB-INF/classes/META-INF/services/org.apache.axis.deployment.wsdd.Provider" append="false">org.mycore.services.webservices.MCRWSDDProvider</echo>
     <copy todir="${build.webapps}/WEB-INF/lib" preservelastmodified="true">
       <fileset dir="${build}/lib" includes="*.jar" excludes="servlet-api*" />
     </copy>
@@ -826,6 +833,21 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <copy todir="${MCR.Save.FileSystem}/webpages/images" preservelastmodified="true" failonerror="false">
       <fileset dir="${build.webapps}/images/" />
     </copy>
+  </target>
+  
+  <target name="restore.web-content" description="restores modified static web content">
+    <copy todir="${build.webapps}/config/" preservelastmodified="true" overwrite="true" failonerror="false">
+      <fileset dir="${MCR.Save.FileSystem}/webpages/config/" />
+    </copy>
+	<copy todir="${build.webapps}/content/" preservelastmodified="true" overwrite="true" failonerror="false">
+	  <fileset dir="${MCR.Save.FileSystem}/webpages/content/" />
+	</copy>
+    <copy todir="${build.webapps}/templates/" preservelastmodified="true" overwrite="true" failonerror="false">
+      <fileset dir="${MCR.Save.FileSystem}/webpages/templates/" />
+    </copy>
+	<copy todir="${build.webapps}/images/" preservelastmodified="true" overwrite="true" failonerror="false">
+	  <fileset dir="${MCR.Save.FileSystem}/webpages/images/" />
+	</copy>
   </target>
 
   <target name="webapp.info.shared.jars" unless="MCR.WebAppServer.SharedJarsDir">
@@ -1061,7 +1083,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <param name="cli.command" value="process ${commands.file}" />
     </antcall>
     <delete file="${commands.file}" />
-    <mcr-integrate target="create.user" classpathref="mycore.jars" />
+    <mcr-integrate target="create.users" classpathref="mycore.jars" />
     <moduleHook target="create.users" />
   </target>
 

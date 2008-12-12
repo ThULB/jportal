@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14346 $ $Date: 2008-11-07 06:56:11 +0100 (Fr, 07 Nov 2008) $
+ * $Revision: 14471 $ $Date: 2008-11-25 10:24:29 +0100 (Di, 25. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.parsers.bool.MCRCondition;
 /**
  * This servlet executes queries and presents result pages.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Harald Richter
  */
 public class MCRSearchServlet extends MCRServlet {
@@ -258,7 +258,7 @@ public class MCRSearchServlet extends MCRServlet {
                 Enumeration names = request.getParameterNames();
                 while (names.hasMoreElements()) {
                     String name = (String) (names.nextElement());
-                    if (name.endsWith(".operator") || name.endsWith(".sortField"))
+                    if (name.endsWith(".operator") || name.contains(".sortField"))
                         continue;
                     if (" maxResults numPerPage mask ".indexOf(" " + name + " ") >= 0)
                         continue;
@@ -344,6 +344,9 @@ public class MCRSearchServlet extends MCRServlet {
                   elem.setAttribute("value",elem.getText());
                   elem.removeContent();
                   
+                }
+                else if(elem.getName().startsWith("boolean")){
+                	elem.setName("boolean");
                 }
             }
 

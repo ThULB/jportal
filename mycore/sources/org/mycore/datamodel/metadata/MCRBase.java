@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
+ * $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30. Sep 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
  * the frame to produce a full functionality object.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30 Sep 2008) $
+ * @version $Revision: 14060 $ $Date: 2008-09-30 07:57:00 +0200 (Di, 30. Sep 2008) $
  */
 public abstract class MCRBase {
     /**

@@ -5,7 +5,7 @@
 <!--   SimpleAuthenticationHandler added for adminservice  -->
 <!--   for deploy/undeploy are now user and password       -->
 <!--   required                                            --> 
-<!-- $Revision: 1.1 $ $Date: 2006/11/15 09:06:21 $        -->
+<!-- $Revision: 10439 $ $Date: 2006-11-15 10:06:21 +0100 (Mi, 15. Nov 2006) $        -->
 <!-- ==============================================        -->
 
 <deployment name="defaultClientConfig"

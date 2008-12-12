@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -24,13 +24,13 @@
 package org.mycore.datamodel.classifications2;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mär 2008) $
+ * @version $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  * @since 2.0
  */
 public interface MCRCategory {
@@ -82,7 +82,17 @@ public interface MCRCategory {
     /**
      * @return the labels
      */
-    public abstract Map<String, MCRLabel> getLabels();
+    public abstract Collection<MCRLabel> getLabels();
+
+    /**
+     * @return the label in the current language (if available), default language (if available) or any other language  
+     */
+    public abstract MCRLabel getCurrentLabel();
+
+    /**
+     * @return the label in the specified language (if available) or null
+     */
+    public abstract MCRLabel getLabel(String lang);
 
     /**
      * Returns the hierarchie level of this category.

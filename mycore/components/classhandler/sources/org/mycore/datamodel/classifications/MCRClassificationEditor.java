@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRClassificationEditor.java,v $
- * $Revision: 14305 $ $Date: 2008-11-03 10:43:01 +0100 (Mo, 03 Nov 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
@@ -32,13 +32,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
+
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
@@ -177,8 +177,8 @@ public class MCRClassificationEditor {
 
             MCRCategory newCategory = MCRXMLTransformer.getCategory(id.getRootID(), newCateg, 1);
             oldCategory.getLabels().clear();
-            Map<String, MCRLabel> labels = newCategory.getLabels();
-            oldCategory.getLabels().putAll(labels);
+            Collection<MCRLabel> labels = newCategory.getLabels();
+            oldCategory.getLabels().addAll(labels);
 
             MCRClassificationBrowserData.getClassificationPool().updateClassification(classif);
             String sessionID = MCRSessionMgr.getCurrentSession().getID();
@@ -325,7 +325,7 @@ public class MCRClassificationEditor {
                 label.setLang(element.getAttributeValue("lang"));
                 label.setText(element.getAttributeValue("text"));
                 label.setDescription(element.getAttributeValue("description"));
-                classif.getLabels().put(label.getLang(), label);
+                classif.getLabels().add(label);
             }
 
             MCRClassificationBrowserData.getClassificationPool().updateClassification(classif);

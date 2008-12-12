@@ -1,6 +1,6 @@
 /*
  * $RCSfile$
- * $Revision: 5697 $ $Date: 2005-09-28 09:59:11 +0200 (Mi, 28 Sep 2005) $
+ * $Revision: 5697 $ $Date: 2005-09-28 09:59:11 +0200 (Mi, 28. Sep 2005) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,7 +29,7 @@ import org.mycore.otherpackages;
  * 
  * @author Autor
  *
- * @version $Revision: 5697 $ $Date: 2005-09-28 09:59:11 +0200 (Mi, 28 Sep 2005) $
+ * @version $Revision: 5697 $ $Date: 2005-09-28 09:59:11 +0200 (Mi, 28. Sep 2005) $
  */
 public class MCRClass {
 

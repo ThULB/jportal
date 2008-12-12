@@ -41,6 +41,8 @@
             href="{$WebApplicationBaseURL}{@mask}">
             <xsl:value-of select="i18n:translate('results.newSearch')" />
           </a>
+          <!-- commented out for snapshot -->
+          <!-- 
           |
           <a xmlns:encoder="xalan://java.net.URLEncoder"
             href="{$WebApplicationBaseURL}servlets/MCRSearchServlet?query={encoder:encode(condition[@format='text'])}&amp;XSL.Style=rss&amp;maxResults=30&amp;created.sortField=descending"
@@ -53,6 +55,7 @@
             title="PDF">
             <xsl:text>PDF</xsl:text>
           </a>
+           -->
         </td>
         <td class="resultPages">
           <xsl:value-of select="concat(i18n:translate('results.size'),' ')" />

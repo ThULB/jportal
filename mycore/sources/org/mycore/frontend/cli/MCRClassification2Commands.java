@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14114 $ $Date: 2008-10-10 08:22:32 +0200 (Fr, 10 Okt 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -325,7 +325,7 @@ public class MCRClassification2Commands extends MCRAbstractCommands {
         if (categ.isCategory()) {
             LOGGER.info(space + "  ID    : " + categ.getId().getID());
         }
-        for (MCRLabel label : categ.getLabels().values()) {
+        for (MCRLabel label : categ.getLabels()) {
             LOGGER.info(space + "  Label : (" + label.getLang() + ") " + label.getText());
         }
         List<MCRCategory> children = categ.getChildren();

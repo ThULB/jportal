@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06 Feb 2008) $
+ * $Revision: 14405 $ $Date: 2008-11-14 12:12:07 +0100 (Fr, 14. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -63,9 +63,7 @@ public class MCRFieldValue {
      */
     public MCRFieldValue(MCRFieldDef field, String value) {
         this.field = field;
-        this.value = value;
-        if (field.getDataType().equals("text") || field.getDataType().equals("name"))
-            this.value = MCRNormalizer.normalizeString(value);
+        setValue(value);
     }
 
     /**
@@ -87,6 +85,17 @@ public class MCRFieldValue {
      */
     public MCRFieldDef getField() {
         return field;
+    }
+    
+    /**
+     * Sets or updates the field value
+     * @param value the value, whicht will be normalized
+     */
+    public void setValue(String value) {
+        if (field.getDataType().equals("text") || field.getDataType().equals("name"))
+            this.value = MCRNormalizer.normalizeString(value);
+        else
+            this.value = value;
     }
 
     /**

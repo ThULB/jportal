@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22 Mai 2008) $
+ * $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * @author Frank Luetzenkirchen
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22 Mai 2008) $
+ * @version $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
  */
 public final class MCRGoogleSitemapServlet extends MCRServlet {
 

@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30 Okt 2008) $
+ * $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30. Okt 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.common.MCRConfiguration;
  * @author Thomas Scheffler (yagee)
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30 Okt 2008) $
+ * @version $Revision: 14284 $ $Date: 2008-10-30 07:59:07 +0100 (Do, 30. Okt 2008) $
  */
 public class MCRDirectoryXML {
 

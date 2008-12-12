@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * $Revision: 14566 $ $Date: 2008-12-12 12:50:25 +0100 (Fr, 12. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author Frank L\u00fctzenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14106 $ $Date: 2008-10-09 11:30:08 +0200 (Do, 09 Okt 2008) $
+ * @version $Revision: 14566 $ $Date: 2008-12-12 12:50:25 +0100 (Fr, 12. Dez 2008) $
  */
 public class MCRUtils {
     // The file slash
@@ -90,6 +90,10 @@ public class MCRUtils {
      */
     static {
         StringBuffer sb;
+        // add id as workaround
+        langlist.add("id");
+        countrylist.add("ID");
+        // add codes from locale
         for ( Locale l : Locale.getAvailableLocales()) {
             sb = new StringBuffer(l.getLanguage());
             langlist.add(sb.toString());

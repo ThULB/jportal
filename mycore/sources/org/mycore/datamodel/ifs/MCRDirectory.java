@@ -1,5 +1,5 @@
 /*
- * $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
+ * $Revision: 14528 $ $Date: 2008-12-09 17:45:41 +0100 (Di, 09. Dez 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
  * is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as published by the Free
  * Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
@@ -25,7 +25,7 @@ import org.mycore.common.MCRUsageException;
  * Represents a directory node with its metadata and content.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 13744 $ $Date: 2008-07-14 15:05:49 +0200 (Mo, 14 Jul 2008) $
+ * @version $Revision: 14528 $ $Date: 2008-12-09 17:45:41 +0100 (Di, 09. Dez 2008) $
  */
 public class MCRDirectory extends MCRFilesystemNode {
     /** The IDs of all child nodes in this directory * */
@@ -388,15 +388,14 @@ public class MCRDirectory extends MCRFilesystemNode {
     /**
      * Internal method that is called when the size of a child node has changed, to update the total size of the parent directory.
      */
-    protected void sizeOfChildChanged(long oldSize, long newSize) {
-        this.size -= oldSize;
-        this.size += newSize;
+    protected void sizeOfChildChanged(long sizeDiff) {
+        this.size += sizeDiff;
         this.lastModified = new GregorianCalendar();
 
         manager.storeNode(this);
 
         if (hasParent()) {
-            getParent().sizeOfChildChanged(oldSize, newSize);
+            getParent().sizeOfChildChanged(sizeDiff);
         }
     }
 

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12 Okt 2008) $
+ * $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,7 +46,7 @@ import org.mycore.common.MCRException;
  * same way.
  * 
  * @author Frank Lützenkirchen
- * @version $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12 Okt 2008) $
+ * @version $Revision: 14120 $ $Date: 2008-10-12 00:15:08 +0200 (So, 12. Okt 2008) $
  */
 public class MCRRequestParameters {
     protected final static Logger logger = Logger.getLogger(MCREditorServlet.class);

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14436 $ $Date: 2008-11-18 14:31:54 +0100 (Di, 18 Nov 2008) $
+ * $Revision: 14436 $ $Date: 2008-11-18 14:31:54 +0100 (Di, 18. Nov 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * the node is a MCRDirectory, the contents of that directory will be forwareded
  * to MCRLayoutService as XML data to display a detailed directory listing.
  * 
- * @author Frank LÃŒtzenkirchen
+ * @author Frank Lützenkirchen
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 

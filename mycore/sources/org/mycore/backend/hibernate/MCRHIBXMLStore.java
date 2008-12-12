@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13740 $ $Date: 2008-07-11 19:07:43 +0200 (Fr, 11 Jul 2008) $
+ * $Revision: 14509 $ $Date: 2008-12-05 11:11:42 +0100 (Fr, 05. Dez 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -177,7 +177,7 @@ public class MCRHIBXMLStore implements MCRXMLTableInterface {
         Blob blob = (Blob) session.createCriteria(MCRXMLTABLE.class).setProjection(Projections.property("xml")).add(Restrictions.eq("key", pk)).uniqueResult();
         try {
             return blob.getBinaryStream();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             throw new MCRPersistenceException("Cannot get Blob for " + mcrid, e);
         }
     }

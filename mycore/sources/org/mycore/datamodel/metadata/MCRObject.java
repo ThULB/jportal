@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27 Okt 2008) $
+ * $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27. Okt 2008) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -52,7 +52,7 @@ import org.mycore.datamodel.common.MCRXMLTableManager;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27 Okt 2008) $
+ * @version $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27. Okt 2008) $
  */
 final public class MCRObject extends MCRBase {
     // the object content

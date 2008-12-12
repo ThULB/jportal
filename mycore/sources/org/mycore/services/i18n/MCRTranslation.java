@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13770 $ $Date: 2008-07-28 13:11:00 +0200 (Mo, 28 Jul 2008) $
+ * $Revision: 14518 $ $Date: 2008-12-08 08:25:32 +0100 (Mo, 08. Dez 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -72,8 +72,16 @@ public class MCRTranslation {
         String result = null;
         Locale currentLocale = getCurrentLocale();
         LOGGER.debug("Translation for current locale: " + currentLocale.getLanguage());
-        ResourceBundle message = ResourceBundle.getBundle("messages", currentLocale);
 
+        // workaround for bug with indonesian
+        // INDONESIAN      ID     OCEANIC/INDONESIAN [*Changed 1989 from original ISO 639:1988, IN]
+        // Java doesn't work with id
+        if (currentLocale.getLanguage().equals("id")) {
+            currentLocale = new Locale("in");
+            LOGGER.debug("Translation for current locale: " + currentLocale.getLanguage());
+        }
+
+        ResourceBundle message = ResourceBundle.getBundle("messages", currentLocale);
         try {
             result = message.getString(label);
             LOGGER.debug("Translation for " + label + "=" + result);
