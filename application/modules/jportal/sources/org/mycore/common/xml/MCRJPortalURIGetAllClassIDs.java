@@ -1,20 +1,13 @@
 package org.mycore.common.xml;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.mycore.common.MCRSessionMgr;
-import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
-import org.mycore.datamodel.common.MCRXMLTableManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
@@ -38,7 +31,6 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
         try {
             Element returnXML = new Element("dummyRoot");
-            String currentLang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
             MCRCategoryDAO categDoa = MCRCategoryDAOFactory.getInstance();
             Iterator<MCRCategoryID> ci = categDoa.getRootCategoryIDs().iterator();
             while (ci.hasNext()) {
@@ -46,11 +38,9 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
                 MCRCategoryID cid = (MCRCategoryID) ci.next();
                 String classID = cid.getRootID();
                 String descr = "";
-                if ((null != categDoa.getRootCategory(cid, 0).getLabels()) && (null != categDoa.getRootCategory(cid, 0).getLabels().get(currentLang))
-                                && null != categDoa.getRootCategory(cid, 0).getLabels().get(currentLang).getText()) {
-                    descr = categDoa.getRootCategory(cid, 0).getLabels().get(currentLang).getText();
+                if ((null != categDoa.getRootCategory(cid, 0).getLabels())) {
+                    descr = categDoa.getRootCategory(cid, 0).getCurrentLabel().getText();
                 }
-                // String descr = categDoa.getRootCategory(cid, 0).getLabels().get(currentLang).getText();
                 Element item = new Element("item").setAttribute("value", classID);
                 Element label = new Element("label").setAttribute("lang", "de", Namespace.XML_NAMESPACE);
                 label.setText(descr + " (" + classID + ")");
