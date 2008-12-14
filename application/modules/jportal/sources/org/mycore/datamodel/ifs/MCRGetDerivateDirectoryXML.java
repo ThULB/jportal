@@ -40,7 +40,7 @@ public class MCRGetDerivateDirectoryXML {
 		if (DER_DIR_XML_CACHE.containsKey(derivID)) {
 			dirXML = new Element("root").addContent(((Element) DER_DIR_XML_CACHE
 					.get(derivID)).detach());
-			LOGGER.info("DirectoryXML of " + derivID + " taken from cache");
+			LOGGER.debug("DirectoryXML of " + derivID + " taken from cache");
 		}
 		// not contained in cache -> get it
 		else {
@@ -59,13 +59,13 @@ public class MCRGetDerivateDirectoryXML {
 			dirXML = MCRDirectoryXML.getInstance().getDirectoryXML(
 					(MCRDirectory) root).getRootElement();
 			LOGGER
-					.info("GetDerivateDirectoryXML: received listing of directory "
+					.info("Sending listing of directory "
 							+ derivID);
-			(new XMLOutputter()).output(dirXML, System.out);
+			//(new XMLOutputter()).output(dirXML, System.out);
 			// put in cache
 			DER_DIR_XML_CACHE.clear();
 			DER_DIR_XML_CACHE.put(derivID, dirXML);
-			LOGGER.info("DirectoryXML of " + derivID + " put into cache");
+			LOGGER.debug("DirectoryXML of " + derivID + " put into cache");
 		}
 
 		return dirXML;
