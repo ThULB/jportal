@@ -25,6 +25,7 @@ public class MCRJPortalURIResolver implements MCRResolverProvider {
 		map.put("jportal_getALLClassIDs",new MCRJPortalURIGetAllClassIDs());
 		map.put("jportal_getJournalID",new MCRJPortalURIGetJournalID());
 		map.put("jportal_includeEditorCode",new MCRJPortalURIIncludeEditorCode());
+		map.put("jportal_getDerDirXML",new MCRJPortalGetDerDirXML());
 		
 		return map;
 	}

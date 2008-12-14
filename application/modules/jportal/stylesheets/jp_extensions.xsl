@@ -1297,7 +1297,7 @@
 				<xsl:variable name="transFileList">
 					<!-- file type exist AND file type must be mapped -->
 					<xsl:if test="$idOfFileType != '' and xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]">
-						<xsl:variable name="derivXML" select="document(concat('request:servlets/MCRFileNodeServlet/',$derivid-if,'/?XSL.Style=xml'))" />
+						<xsl:variable name="derivXML" select="document(concat('jportal_getDerDirXML:',$derivid-if))" />
 						<!-- go throug all mappable file extension id's -->
 						<xsl:for-each select="xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type">
 							<xsl:variable name="mappID" select="@ID" />
