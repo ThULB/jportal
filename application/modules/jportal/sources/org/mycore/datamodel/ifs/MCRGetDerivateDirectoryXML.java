@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.ifs.MCRDirectory;
@@ -26,21 +27,19 @@ import org.mycore.datamodel.ifs.MCRFilesystemNode;
  */
 public class MCRGetDerivateDirectoryXML {
 
-	private static Logger LOGGER = Logger
-			.getLogger(MCRGetDerivateDirectoryXML.class.getName());
+	private static Logger LOGGER = Logger.getLogger(MCRGetDerivateDirectoryXML.class.getName());
 
-	private static HashMap<String, Element> DER_DIR_XML_CACHE = new HashMap<String, Element>(
-			1);
+	private static HashMap<String, Element> DER_DIR_XML_CACHE = new HashMap<String, Element>(1);
 
 	public static Element getDirXML(String derivID) throws IOException {
 
-		Element dirXML = new Element("root");
+		Element dirXML = null;
 
 		// try to receive from cache
 		if (DER_DIR_XML_CACHE.containsKey(derivID)) {
-			dirXML = new Element("root").addContent(((Element) DER_DIR_XML_CACHE
-					.get(derivID)).detach());
+			dirXML = (Element) DER_DIR_XML_CACHE.get(derivID);
 			LOGGER.debug("DirectoryXML of " + derivID + " taken from cache");
+			//(new XMLOutputter(Format.getCompactFormat())).output(dirXML, System.out);
 		}
 		// not contained in cache -> get it
 		else {
@@ -49,25 +48,18 @@ public class MCRGetDerivateDirectoryXML {
 			try {
 				root = MCRFilesystemNode.getRootNode(derivID);
 			} catch (org.mycore.common.MCRPersistenceException e) {
-				// Could not get value from JDBC result set
-				LOGGER.error(
-						"MCRGetDerivateDirectoryXML: Error while getting root node = "
-								+ derivID, e);
+				LOGGER.error("MCRGetDerivateDirectoryXML: Error while getting root node = " + derivID, e);
 				root = null;
 			}
 			// get XML of root node
-			dirXML = MCRDirectoryXML.getInstance().getDirectoryXML(
-					(MCRDirectory) root).getRootElement();
-			LOGGER
-					.info("Sending listing of directory "
-							+ derivID);
-			//(new XMLOutputter()).output(dirXML, System.out);
+			dirXML = MCRDirectoryXML.getInstance().getDirectoryXML((MCRDirectory) root).getRootElement();
+			LOGGER.debug("Sending listing of directory " + derivID);
 			// put in cache
 			DER_DIR_XML_CACHE.clear();
 			DER_DIR_XML_CACHE.put(derivID, dirXML);
 			LOGGER.debug("DirectoryXML of " + derivID + " put into cache");
+			//(new XMLOutputter(Format.getCompactFormat())).output(dirXML, System.out);
 		}
-
 		return dirXML;
 	}
 }
