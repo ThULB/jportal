@@ -255,6 +255,12 @@
         <xsl:param name="linkCurrent" select="'false'" />
         <xsl:param name="layout" select="'false'" />
         <xsl:param name="node" select="." />
+        
+        <xsl:variable name="selectPresentLang">
+           <xsl:call-template name="selectPresentLang">
+               <xsl:with-param name="nodes" select="$node/mycoreobject/metadata/maintitles/maintitle[@inherited=0]" />
+           </xsl:call-template>
+        </xsl:variable>
 
         <xsl:choose>
             <xsl:when test="$layout='true'">
@@ -302,7 +308,7 @@
                              or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
-                                <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang]">
+                                <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang or @xml:lang=$selectPresentLang]">
                                     <xsl:sort select="@inherited" order="descending" />
                                     <xsl:call-template name="printHistoryRow.rows">
                                         <xsl:with-param name="sortOrder" select="$sortOrder" />
@@ -312,7 +318,7 @@
                                 </xsl:for-each>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang]">
+                                <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang or @xml:lang=$selectPresentLang]">
                                     <xsl:sort select="@inherited" order="ascending" />
                                     <xsl:call-template name="printHistoryRow.rows">
                                         <xsl:with-param name="sortOrder" select="$sortOrder" />
