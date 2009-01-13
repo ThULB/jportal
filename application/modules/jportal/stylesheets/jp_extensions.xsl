@@ -1924,15 +1924,22 @@
                                 <xsl:variable name="art">
                                     <xsl:copy-of select="document(concat('mcrobject:',@id))" />
                                 </xsl:variable>
-                                <li>
-                                    <xsl:call-template name="printHistoryRow">
-                                        <xsl:with-param name="sortOrder" select="'ascending'" />
-                                        <xsl:with-param name="printCurrent" select="'true'" />
-                                        <xsl:with-param name="linkCurrent" select="'true'" />
-                                        <xsl:with-param name="layout" select="'false'" />
-                                        <xsl:with-param name="node" select="xalan:nodeset($art)" />
+                                <xsl:variable name="linkID">
+                                    <xsl:call-template name="objectLink">
+                                        <xsl:with-param name="obj_id" select="@id" />
                                     </xsl:call-template>
-                                </li>
+                                </xsl:variable>
+                                <xsl:if test="contains($linkID, 'jparticle')">
+                                    <li>
+                                        <xsl:call-template name="printHistoryRow">
+                                            <xsl:with-param name="sortOrder" select="'ascending'" />
+                                            <xsl:with-param name="printCurrent" select="'true'" />
+                                            <xsl:with-param name="linkCurrent" select="'true'" />
+                                            <xsl:with-param name="layout" select="'false'" />
+                                            <xsl:with-param name="node" select="xalan:nodeset($art)" />
+                                        </xsl:call-template>
+                                    </li>
+                                </xsl:if>
                                 <div id="detailed-linkedart"></div>
                             </xsl:for-each>
                             <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">

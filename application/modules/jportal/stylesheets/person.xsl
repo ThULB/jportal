@@ -221,7 +221,7 @@
                         </table>
                         <!--10***note*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:if test="$CurrentUser!='gast'">
+                            <xsl:if test="$CurrentUser!='gast' or ./metadata/def.note/note[@type] = 'visible'">
                                 <xsl:call-template name="printMetaDates">
                                     <xsl:with-param select="./metadata/def.note/note" name="nodes" />
                                     <xsl:with-param select="i18n:translate('editormask.labels.note')" name="label" />
