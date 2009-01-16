@@ -30,12 +30,15 @@
 			<fileset dir="${build.bin}" includes="*.sh" />
 		</chmod>
 
+	</target>
+
+	<target name="config">
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
 
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
-
+		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRDeadLinkFinder" />
 	</target>
 
 	<!-- ============================================== -->
@@ -44,10 +47,6 @@
 		<echo>
             Start building JPortal webapp
         </echo>
-
-		<!-- properties merging -->
-		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
-		<mcr-config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
 
 		<!-- jportal -->
 		<echo>
