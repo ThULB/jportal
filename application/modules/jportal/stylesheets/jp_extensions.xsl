@@ -1275,66 +1275,79 @@
     </xsl:template>
     
     <!-- ===================================================================================================== -->
-    
+   
     <xsl:template name="mappFile">
-		<xsl:param name="derivid-if" />
-		<xsl:param name="file" />
-
-		<xsl:variable name="fileMappings">
-			<xsl:copy-of select="document('webapp:fileMappings.xml')" />
-		</xsl:variable>
-		<xsl:choose>
-			<!-- file mapping(s) available ? -->
-			<xsl:when test="xalan:nodeset($fileMappings)/fileMappings/fileMapping" >		
-				<xsl:variable name="fileName">
-					<xsl:value-of select="substring-after(substring-before($file,'.'),'/')" />
-				</xsl:variable>
-				<xsl:variable name="fileExt">
-					<xsl:call-template name="getFileType">
-						<xsl:with-param name="fileName" select="$file" />
-					</xsl:call-template>
-				</xsl:variable>
-				<xsl:variable name="fileContentTypes">
-					<xsl:copy-of select="document('webapp:FileContentTypes.xml')" />
-				</xsl:variable>
-				<xsl:variable name="idOfFileType">
-					<xsl:value-of select="xalan:nodeset($fileContentTypes)/FileContentTypes/type/rules/extension[text()=$fileExt]/../../@ID" />
-				</xsl:variable>
-				<xsl:variable name="transFileList">
-					<!-- file type exist AND file type must be mapped -->
-					<xsl:if test="$idOfFileType != '' and xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]">
-						<xsl:variable name="derivXML" select="document(concat('jportal_getDerDirXML:',$derivid-if))" />
-						<!-- go throug all mappable file extension id's -->
-						<xsl:for-each select="xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type">
-							<xsl:variable name="mappID" select="@ID" />
-							<!--  go throug all file extensions belonging to extension id's -->
-							<xsl:for-each select="xalan:nodeset($fileContentTypes)/FileContentTypes/type[@ID=$mappID]/rules/extension">
-								<!-- is current extension id in derivate xml ? -->
-								<xsl:variable name="fileNameTmp" select="concat($fileName,'.',text())" />
-								<xsl:variable name="mappableNode" select="xalan:nodeset($derivXML)/mcr_directory/children/child/name[text()=$fileNameTmp]" />
-								<xsl:if test="$mappableNode">
-									<xsl:value-of select="concat($mappableNode,$derivid-if)" />
-								</xsl:if>
-							</xsl:for-each>
-						</xsl:for-each>
-					</xsl:if>
-				</xsl:variable>
-				<!-- return translated file -->
-				<xsl:choose>
-					<xsl:when test="contains($transFileList,$derivid-if)">
-						<xsl:value-of select="substring-before($transFileList,$derivid-if)" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$file" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="$file" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	
+        <xsl:param name="derivid-if" />
+        <xsl:param name="file" />
+        <xsl:param name="fileExistVerification" select="'true'"/>
+        
+        <xsl:variable name="fileMappings">
+            <xsl:copy-of select="document('webapp:fileMappings.xml')" />
+        </xsl:variable>
+        <xsl:choose>
+            <!-- file mapping(s) available ? -->
+            <xsl:when test="xalan:nodeset($fileMappings)/fileMappings/fileMapping" >        
+                <xsl:variable name="fileName">
+                    <xsl:value-of select="substring-after(substring-before($file,'.'),'/')" />
+                </xsl:variable>
+                <xsl:variable name="fileExt">
+                    <xsl:call-template name="getFileType">
+                        <xsl:with-param name="fileName" select="$file" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="fileContentTypes">
+                    <xsl:copy-of select="document('webapp:FileContentTypes.xml')" />
+                </xsl:variable>
+                <xsl:variable name="idOfFileType">
+                    <xsl:value-of select="xalan:nodeset($fileContentTypes)/FileContentTypes/type/rules/extension[text()=$fileExt]/../../@ID" />
+                </xsl:variable>
+                <xsl:variable name="transFileList">
+                    <!-- file type exist AND file type must be mapped -->
+                    <xsl:if test="$idOfFileType != '' and xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]">
+                       <!-- make a difference between real file verification and blind guessing of mappable file -->
+                       <xsl:choose>
+                            <!-- file existing will be verified -->
+                            <xsl:when test="$fileExistVerification = 'true'">
+                                <xsl:variable name="derivXML" select="document(concat('jportal_getDerDirXML:',$derivid-if))" />
+                                <!-- go through all mappable file extension id's -->
+                                <xsl:for-each select="xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type">
+                                    <xsl:variable name="mappID" select="@ID" />
+                                    <!--  go throug all file extensions belonging to extension id's -->
+                                    <xsl:for-each select="xalan:nodeset($fileContentTypes)/FileContentTypes/type[@ID=$mappID]/rules/extension">
+                                        <!-- is current extension id in derivate xml ? -->
+                                        <xsl:variable name="fileNameTmp" select="concat($fileName,'.',text())" />
+                                        <xsl:variable name="mappableNode" select="xalan:nodeset($derivXML)/mcr_directory/children/child/name[text()=$fileNameTmp]" />
+                                        <xsl:if test="$mappableNode">
+                                            <xsl:value-of select="concat($mappableNode,$derivid-if)" />
+                                        </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:for-each>
+                            </xsl:when>
+                            <!-- NO file existing won't be verified -> blind taking of first file in FileContentTypes.xml -->
+                            <xsl:otherwise>
+                               <xsl:variable name="mappExtID" select="xalan:nodeset($fileMappings)/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type[position()=1]/@ID"/>
+                               <xsl:variable name="mappFileExt" select="xalan:nodeset($fileContentTypes)/FileContentTypes/type[@ID=$mappExtID]/rules/extension[position()=1]/text()" />
+                               <xsl:value-of select="concat($fileName,'.',$mappFileExt,$derivid-if)"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:if>
+                </xsl:variable>
+                <!-- return translated file -->
+                <xsl:choose>
+                    <xsl:when test="contains($transFileList,$derivid-if)">
+                        <xsl:value-of select="substring-before($transFileList,$derivid-if)" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="$file" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$file" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
 	<!-- ===================================================================================================== -->
 	
     <xsl:template name="getFileLabel">
