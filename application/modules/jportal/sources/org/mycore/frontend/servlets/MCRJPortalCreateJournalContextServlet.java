@@ -56,7 +56,6 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
     }
 
     public void doGetPost(MCRServletJob job) throws JDOMException, IOException {
-
         if (!access())
             throw new MCRException("Access denied. Please authorise yourself.");
 
@@ -72,6 +71,8 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
             createContext(job);
         else if (mode.equals("getUsers"))
             getLayoutService().sendXML(job.getRequest(), job.getResponse(), new Document(getUsers()));
+        else if (mode.equals("getGroups"))
+            getLayoutService().sendXML(job.getRequest(), job.getResponse(), new Document(getGroups()));
 
     }
 
@@ -108,13 +109,15 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
         String reqKeyUsersTOC = "jp.cjc.usersTOC";
         String reqKeyUsersArt = "jp.cjc.usersART";
         String reqKeyusersALL = "jp.cjc.usersALL";
+        String reqKeygroup = "jp.cjc.group";
         if (req.getParameter(reqKeyUsersTOC) != null && req.getParameterValues(reqKeyUsersTOC).length > 0)
             uc.setUserListTOC(req.getParameterValues(reqKeyUsersTOC));
         if (req.getParameter(reqKeyUsersArt) != null && req.getParameterValues(reqKeyUsersArt).length > 0)
             uc.setUserListArt(req.getParameterValues(reqKeyUsersArt));
-        if (req.getParameter(reqKeyusersALL) != null && req.getParameterValues(reqKeyusersALL).length > 0) {
+        if (req.getParameter(reqKeyusersALL) != null && req.getParameterValues(reqKeyusersALL).length > 0)
             uc.setUserListTOCArt(req.getParameterValues(reqKeyusersALL));
-        }
+        if (req.getParameter(reqKeygroup) != null && req.getParameterValues(reqKeygroup).length > 0)
+            uc.setGroup(req.getParameterValues(reqKeygroup));
         uc.setup();
 
         // forward to journal page
@@ -153,6 +156,20 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
             String userID = (String) ulIt.next();
             String userName = um.retrieveUser(userID).getUserContact().getFirstName() + " " + um.retrieveUser(userID).getUserContact().getLastName();
             Element userElem = new Element("user").setAttribute("id", userID).setText(userName);
+            users.addContent(userElem);
+        }
+        return users;
+    }
+    
+    public Element getGroups() {
+        Element users = new Element("groups");
+        MCRUserMgr um = MCRUserMgr.instance();
+        // grouplist
+        List<String> gl = um.getAllGroupIDs();
+        Iterator<String> glIt = gl.iterator();
+        while (glIt.hasNext()) {
+            String groupID = (String) glIt.next();
+            Element userElem = new Element("group").setAttribute("id", groupID);
             users.addContent(userElem);
         }
         return users;

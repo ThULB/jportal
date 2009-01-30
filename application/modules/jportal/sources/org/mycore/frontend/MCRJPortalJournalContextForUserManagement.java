@@ -24,6 +24,10 @@ public class MCRJPortalJournalContextForUserManagement {
 
     private String userListTOCArt[];
 
+    private String artGr = "";
+
+    private String volGr = "";
+
     private static final MCRConfiguration PROPS = MCRConfiguration.instance();
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalJournalContextForUserManagement.class);;
@@ -34,7 +38,16 @@ public class MCRJPortalJournalContextForUserManagement {
     }
 
     public void setup() {
-        createGroups();
+        if (artGr.equals("") && volGr.equals(""))
+            createGroups();
+        else
+            LOGGER.debug("Waiting 2s!");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         assignUsers();
         setupACLS();
     }
@@ -162,16 +175,20 @@ public class MCRJPortalJournalContextForUserManagement {
      * @return
      */
     private String getArtGRID() {
-        final String artGRID = "artGR_" + this.shortCut;
-        return artGRID;
+        if (artGr.equals(""))
+            artGr = "artGR_" + this.shortCut;
+        LOGGER.debug("Article ID: " +artGr);
+        return artGr;
     }
 
     /**
      * @return
      */
     private String getVolGRID() {
-        final String volGRID = "volGR_" + this.shortCut;
-        return volGRID;
+        if (volGr.equals(""))
+            volGr = "volGR_" + this.shortCut;
+        LOGGER.debug("Volume ID: " +volGr);
+        return volGr;
     }
 
     private String[] getUserListTOC() {
@@ -198,4 +215,12 @@ public class MCRJPortalJournalContextForUserManagement {
         this.userListTOCArt = userListTOCArt;
     }
 
+    public void setGroup(String group[]) {
+        for (int i = 0; i < group.length; i++) {
+            if (group[i].startsWith("artGR_"))
+                artGr = group[i];
+            else
+                volGr = group[i];
+        }
+    }
 }

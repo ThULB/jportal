@@ -96,6 +96,7 @@
     <panel id="maintitle_input">
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
         <hidden var="metadata/maintitles/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" default="de" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
     </panel>
     <!-- end: MainTitle -->

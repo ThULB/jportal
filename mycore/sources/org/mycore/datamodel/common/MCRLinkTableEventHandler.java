@@ -26,6 +26,7 @@ package org.mycore.datamodel.common;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.log4j.Logger;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
@@ -41,6 +42,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
+import org.mycore.parsers.bool.MCRCondition;
 
 /**
  * This class manages all operations of the LinkTables for operations of an
@@ -51,6 +53,8 @@ import org.mycore.datamodel.metadata.MCRObjectStructure;
 public class MCRLinkTableEventHandler extends MCREventHandlerBase {
 
     static MCRLinkTableManager mcr_linktable = MCRLinkTableManager.instance();
+
+    static Logger LOGGER = Logger.getLogger(MCRLinkTableEventHandler.class);
 
     /**
      * This method add the data to the link and classification table via
@@ -71,12 +75,13 @@ public class MCRLinkTableEventHandler extends MCREventHandlerBase {
             // TODO: add undo events
             checkLinkTargets(obj);
         }
-        //use Set for category collection to remove duplicates if there are any
+        // use Set for category collection to remove duplicates if there are any
         Collection<MCRCategoryID> categories = new HashSet<MCRCategoryID>();
         for (int i = 0; i < meta.size(); i++) {
             elm = meta.getMetadataElement(i);
             for (int j = 0; j < elm.size(); j++) {
                 inf = elm.getElement(j);
+                String lang = inf.getLang();
                 if (inf instanceof MCRMetaClassification) {
                     String classId = ((MCRMetaClassification) inf).getClassId();
                     String categId = ((MCRMetaClassification) inf).getCategId();
@@ -84,6 +89,7 @@ public class MCRLinkTableEventHandler extends MCREventHandlerBase {
                     continue;
                 }
                 if (inf instanceof MCRMetaLinkID) {
+                    LOGGER.debug("Tag name of MCRMetaLinkID: " + elm.getTag());
                     mcr_linktable.addReferenceLink(mcr_id.toString(), ((MCRMetaLink) inf).getXLinkHref(), MCRLinkTableManager.ENTRY_TYPE_REFERENCE, "");
                     continue;
                 }
@@ -101,6 +107,13 @@ public class MCRLinkTableEventHandler extends MCREventHandlerBase {
             mcr_linktable.addReferenceLink(obj.getId(), lid.getXLinkHrefID(), MCRLinkTableManager.ENTRY_TYPE_DERIVATE, "");
         }
 
+        // add child link
+        /*MCRObjectID parentObjID = struct.getParentID();
+        if (parentObjID != null){
+            mcr_linktable.addReferenceLink(obj.getId(), parentObjID, MCRLinkTableManager.ENTRY_TYPE_PARENT, "");
+            LOGGER.info(parentObjID + " --> " + obj.getId() + " # Child");
+        } else
+            LOGGER.info("No parent!");*/
     }
 
     private void deleteOldLinks(MCRObjectID mcr_id) {

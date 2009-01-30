@@ -39,6 +39,7 @@
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRDeadLinkFinder" />
+		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRObjectTools" />
 	</target>
 
 	<!-- ============================================== -->

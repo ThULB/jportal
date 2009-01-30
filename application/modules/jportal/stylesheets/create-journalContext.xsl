@@ -10,6 +10,10 @@
     <xsl:variable name="userList">
         <xsl:copy-of select="document('request:servlets/MCRJPortalCreateJournalContextServlet?mode=getUsers')" />
     </xsl:variable>
+    
+    <xsl:variable name="groupList">
+        <xsl:copy-of select="document('request:servlets/MCRJPortalCreateJournalContextServlet?mode=getGroups')" />
+    </xsl:variable>
 
     <!-- =================================================================================================== -->
 
@@ -72,6 +76,7 @@
                 <td>TOC:</td>
                 <td>Artikel:</td>
                 <td>TOC + Artikel:</td>
+                <td>Gruppenzuweisung:</td>
             </tr>
             <tr>
                 <td>
@@ -87,6 +92,11 @@
                 <td>
                     <xsl:call-template name="jp.cjc.getUsers">
                         <xsl:with-param name="idOfSelectBox" select="'usersALL'" />
+                    </xsl:call-template>
+                </td>
+                <td>
+                    <xsl:call-template name="jp.cjc.getGroups">
+                        <xsl:with-param name="idOfSelectBox" select="'group'" />
                     </xsl:call-template>
                 </td>
             </tr>
@@ -140,6 +150,21 @@
                 <xsl:copy-of select="'bitte wählen'" />
             </option>
             <xsl:for-each select="xalan:nodeset($userList)/users/user">
+                <xsl:sort select="text()" />
+                <option value="{@id}">
+                    <xsl:copy-of select="concat(text(),' (',@id,')')" />
+                </option>
+            </xsl:for-each>
+        </select>
+    </xsl:template>
+    
+    <xsl:template name="jp.cjc.getGroups">
+        <xsl:param name="idOfSelectBox" />
+        <select name="jp.cjc.{$idOfSelectBox}" size="17" multiple="multiple">
+            <option value="" selected="selected">
+                <xsl:copy-of select="'neu anlegen'" />
+            </option>
+            <xsl:for-each select="xalan:nodeset($groupList)/groups/group">
                 <xsl:sort select="text()" />
                 <option value="{@id}">
                     <xsl:copy-of select="concat(text(),' (',@id,')')" />

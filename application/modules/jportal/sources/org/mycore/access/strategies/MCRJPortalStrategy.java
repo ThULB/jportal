@@ -44,7 +44,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
         String objectType = getObjectType(id);
 
         if (MCRAccessManager.getAccessImpl().hasRule("default_" + objectType, permission)) {
-            LOGGER.debug("using access rule defined for object type.");
+            LOGGER.debug("using access rule defined for object type " + objectType);
             return MCRAccessManager.getAccessImpl().checkPermission("default_" + objectType, permission);
         }
         LOGGER.debug("using system default access rule.");
