@@ -23,6 +23,7 @@
 
 package org.mycore.common.xml;
 
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -44,7 +45,7 @@ import org.mycore.common.MCRException;
  * There is plenty left to do.
  * 
  * @author Detlev Degenhardt
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  * @author Thomas Scheffler (yagee)
  * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
  */
@@ -149,6 +150,14 @@ public class MCRXMLHelper {
      */
     public static Document parseXML(byte[] xml, boolean valid) throws MCRException {
         return getParser().parseXML(xml, valid);
+    }
+    
+    public static Document parseXML(InputStream inputStream) throws MCRException {
+        return getParser().parseXML(inputStream);
+    }
+    
+    public static Document parseXML(InputStream inputStream, boolean valid) throws MCRException {
+        return getParser().parseXML(inputStream, valid);
     }
 
     /**
