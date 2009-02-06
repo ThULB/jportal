@@ -1,5 +1,8 @@
 package org.mycore.frontend.cli;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,14 +12,15 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.filter.ElementFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -34,8 +38,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("cp {0} {1}", "org.mycore.frontend.cli.MCRObjectTools.cp String String", "cp [sourceID] [layoutTemplate].");
         command.add(com);
-
-        LOGGER.info("Dooh Constructor");
     }
 
     public static List<String> cp(String sourceID, int times, String layoutTemp) {
@@ -84,7 +86,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        
+
         MCRObjectID newMcrID = mcrObj.getId();
         newMcrID.setNextFreeId();
         maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
@@ -106,12 +108,54 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.getId(), precHref, layoutTemp, shortCut);
                 webContext.create();
 
+                String baseDir = MCRConfiguration.instance().getString("MCR.basedir");
+                String deployedDir = baseDir + "/build/webapps";
+                String naviFile = deployedDir + "/config/navigation.xml";
+                XMLOutputter xmlOutputter = new XMLOutputter();
+                xmlOutputter.setFormat(Format.getPrettyFormat());
+                try {
+                    Document naviDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFile),false);
+                    String keywordSearchPath = "//item[@href='/browse/keywords?XSL.dummy=" + sourceMcrId + "']";
+                    XPath xpath = XPath.newInstance(keywordSearchPath);
+                    Element keywordSearchElem = (Element) xpath.selectSingleNode(naviDoc);
+                    if (keywordSearchElem != null) {
+                        String keywordSearchElemAsStr = xmlOutputter.outputString(keywordSearchElem);
+                        keywordSearchElemAsStr = keywordSearchElemAsStr.replaceAll(sourceMcrId, newMcrID.getId());
+
+                        String searchPath = "//item[@href='/content/main/journalList/" + shortCut + "/search.xml']";
+                        xpath = XPath.newInstance(searchPath);
+                        Element searchElem = (Element) xpath.selectSingleNode(naviDoc);
+                        searchElem.addContent(3,MCRXMLHelper.parseXML(keywordSearchElemAsStr,false).getRootElement().detach());
+                    }
+                    
+                    String keywordEditPath = "//item/label[text()='Neues Schlagwort in Register aufnehmen']";
+                    xpath = XPath.newInstance(keywordEditPath);
+                    Element keywordEditElem = ((Element) xpath.selectSingleNode(naviDoc)).getParentElement();
+                    if (keywordSearchElem != null) {
+                        String keywordEditElemAsStr = xmlOutputter.outputString(keywordEditElem);
+                        keywordEditElemAsStr = keywordEditElemAsStr.replaceAll("XSL.dummy=[a-zA-Z_0-9]*\"","XSL.dummy=" + newMcrID.getId()+"\"");
+                        
+                        String editPath = "//item[@href='/content/main/journalList/" + shortCut + "/internal.xml']";
+                        xpath = XPath.newInstance(editPath);
+                        Element editElem = (Element) xpath.selectSingleNode(naviDoc);
+                        editElem.addContent(MCRXMLHelper.parseXML(keywordEditElemAsStr,false).getRootElement().detach());
+                    }
+                    
+                    xmlOutputter.output(naviDoc, new FileOutputStream(new File(naviFile)));
+                } catch (JDOMException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
                 // creating ACL for copy
                 // retrieve ACL from source Object
                 Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrId);
                 List<Element> permissions = servAcl.getChildren("servacl");
                 MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-                
+
                 for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
                     Element perm = (Element) iterator.next();
                     String permName = perm.getAttributeValue("permission");
