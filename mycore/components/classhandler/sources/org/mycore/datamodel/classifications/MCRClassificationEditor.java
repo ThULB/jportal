@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRClassificationEditor.java,v $
- * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
+ * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18 Nov 2008) $
  *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
