@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRStartClassEditorServlet.java,v $
- * $Revision: 14427 $ $Date: 2008-11-17 11:24:21 +0100 (Mo, 17 Nov 2008) $
+ * $Revision: 14427 $ $Date: 2008-11-17 11:24:21 +0100 (Mo, 17. Nov 2008) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -51,7 +51,7 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Anja Schaar
  * @author Jens Kupferschmidt
- * @version $Revision: 14427 $ $Date: 2008-11-17 11:24:21 +0100 (Mo, 17 Nov 2008) $
+ * @version $Revision: 14427 $ $Date: 2008-11-17 11:24:21 +0100 (Mo, 17. Nov 2008) $
  */
 
 public class MCRStartClassEditorServlet extends MCRServlet {
