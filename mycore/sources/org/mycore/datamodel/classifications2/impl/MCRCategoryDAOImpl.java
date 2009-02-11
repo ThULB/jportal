@@ -700,6 +700,7 @@ public class MCRCategoryDAOImpl implements MCRCategoryDAO {
     }
 
     private static void fillIDMap(Map<MCRCategoryID, MCRCategoryImpl> map, MCRCategoryImpl category) {
+        LOGGER.info("fillIDMap: categID: " + category.getId() + " category: " + category);
         map.put(category.getId(), category);
         for (MCRCategory subCategory : category.getChildren()) {
             fillIDMap(map, (MCRCategoryImpl) subCategory);
