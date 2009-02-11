@@ -706,7 +706,15 @@ public class MCRCategoryDAOImpl implements MCRCategoryDAO {
         for (MCRCategory subCategory : category.getChildren()) {
             LOGGER.info("fillIDMap: subCategory: " + subCategory);
             if (subCategory==null){
-                LOGGER.info("null subCategory detected:" + category.getChildren());
+                LOGGER.info("null subCategory detected in:" + category.getId());
+                for (MCRCategory cat:category.getChildren()){
+                    if (cat instanceof MCRCategoryImpl){
+                        LOGGER.info("internal:"+((MCRCategoryImpl)cat).getInternalID()+"  "+cat.getId());
+                    } else if (cat!=null){
+                        LOGGER.info("  "+cat.getId());
+                    } else
+                        LOGGER.info("null as subCategory");
+                }
             }
             fillIDMap(map, (MCRCategoryImpl) subCategory);
         }
