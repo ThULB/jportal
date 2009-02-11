@@ -25,8 +25,6 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
 
         com = new MCRCommand("remove dead links", "org.mycore.frontend.cli.MCRDeadLinkFinder.findDeadLinks", "The command remove dead links.");
         command.add(com);
-
-        LOGGER.info("Dooh Constructor");
     }
 
     public static void findDeadLinks() {
