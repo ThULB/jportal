@@ -266,14 +266,20 @@ public class MCRJPortalJournalContextForWebpages {
         // remember! preceeding item href is current item href
         String locationOfWebpageXML = deployedDir + preceedingItemHref;
         try {
-            FileUtils.forceDelete(new File(locationOfWebpageXML));
-            String webPageFolder = locationOfWebpageXML.replaceAll(".xml$", "");
-            FileUtils.deleteDirectory(new File(webPageFolder));
+            File webPageXMl = new File(locationOfWebpageXML);
+            if (webPageXMl.exists())
+                FileUtils.forceDelete(webPageXMl);
+
+            String webPageFolderLocation = locationOfWebpageXML.replaceAll(".xml$", "");
+            File webPageFolder = new File(webPageFolderLocation);
+            if (webPageFolder.exists())
+                FileUtils.deleteDirectory(webPageFolder);
+
+            LOGGER.info("Webpages for journal \"" + journalID + "\" removed successfully.");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            LOGGER.info("Removing webpages for journal \"" + journalID + "\" failed");
             e.printStackTrace();
         }
-        LOGGER.info("Webpages for journal \"" + journalID + "\" removed successfully.");
     }
 
     private void removeEntryInNavigation() {
@@ -288,6 +294,9 @@ public class MCRJPortalJournalContextForWebpages {
                 jdomElemOfLocation.detach();
                 XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
                 xmlOutputter.output(naviFileDoc, new FileOutputStream(naviFileLocation));
+                LOGGER.info("Navigation entry for journal \"" + journalID + "\" removed successfully.");
+            } else {
+                LOGGER.info("Journal \"" + journalID + "\" has no entry in " + naviFileLocation + " .");
             }
         } catch (MCRException e) {
             // TODO Auto-generated catch block
@@ -302,7 +311,6 @@ public class MCRJPortalJournalContextForWebpages {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        LOGGER.info("Navigation entry for journal \"" + journalID + "\" removed successfully.");
 
     }
 
