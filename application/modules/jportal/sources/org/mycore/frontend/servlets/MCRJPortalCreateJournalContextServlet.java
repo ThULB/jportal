@@ -24,7 +24,6 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,7 +48,7 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
 
     private static final String JOURNAL_ID = "XSL.MCR.JPortal.Create-JournalContext.ID";
 
-    private static Logger LOGGER = Logger.getLogger(MCRJPortalCreateJournalContextServlet.class);;
+    private static Logger LOGGER = Logger.getLogger(MCRJPortalCreateJournalContextServlet.class);
 
     public void init() throws ServletException {
         super.init();

@@ -1,11 +1,14 @@
 package org.mycore.frontend;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -17,6 +20,7 @@ import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -52,11 +56,37 @@ public class MCRJPortalJournalContextForWebpages {
         this.journalID = journalId;
         this.journalObjectXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(this.journalID)).getRootElement();
         this.dataModelCoverage = journalObjectXML.getChild("metadata").getChild("dataModelCoverages").getChild("dataModelCoverage")
-                        .getAttributeValue("categid");
+                .getAttributeValue("categid");
         this.journalTitle = journalObjectXML.getChild("metadata").getChild("maintitles").getChildText("maintitle");
         this.preceedingItemHref = preceedingItemHref;
         this.layoutTemplate = layoutTemplate;
         this.shortCut = shortCut;
+    }
+
+    // this private constructor is only for removing journal
+    // it is used in removeContext(MCRObject)
+    private MCRJPortalJournalContextForWebpages(MCRObject obj) {
+        try {
+            this.journalID = obj.getId().getId();
+            this.journalObjectXML = obj.createXML().getRootElement();
+            this.dataModelCoverage = journalObjectXML.getChild("metadata").getChild("dataModelCoverages").getChild("dataModelCoverage").getAttributeValue(
+                    "categid");
+            this.journalTitle = journalObjectXML.getChild("metadata").getChild("maintitles").getChildText("maintitle");
+
+            String currentItemHrefXpathString = "//hidden_websitecontexts/hidden_websitecontext";
+            XPath currentItemHrefXpath = XPath.newInstance(currentItemHrefXpathString);
+            Element currentItemHrefElem = (Element) currentItemHrefXpath.selectSingleNode(journalObjectXML);
+
+            // assigning current item href to preceeding item href
+            // is not consistent in the naming schema (totally wrong), we'll do
+            // it
+            // anyway, so there is no need to define a new class field.
+            // We'll use it to delete the files of the context
+            this.preceedingItemHref = currentItemHrefElem.getText();
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void create() throws MCRException {
@@ -187,7 +217,7 @@ public class MCRJPortalJournalContextForWebpages {
 
         // copy
         try {
-            org.apache.commons.io.FileUtils fu = new org.apache.commons.io.FileUtils();
+            FileUtils fu = new FileUtils();
             // // folders
             LOGGER.debug("copy folders of webpage content from " + srcDir + " to " + destDir);
             fu.copyDirectory(new File(srcDir), new File(destDir));
@@ -222,6 +252,58 @@ public class MCRJPortalJournalContextForWebpages {
      */
     private String getDestDirRelative() {
         return this.preceedingItemHref.substring(0, this.preceedingItemHref.lastIndexOf("/") + 1);
+    }
+
+    public static void removeContext(MCRObject obj) {
+        MCRJPortalJournalContextForWebpages journalContext = new MCRJPortalJournalContextForWebpages(obj);
+
+        journalContext.removeEntryInNavigation();
+        journalContext.removeWebpages();
+    }
+
+    private void removeWebpages() {
+        LOGGER.info("Removing webpages for journal \"" + journalID + "\" ...");
+        // remember! preceeding item href is current item href
+        String locationOfWebpageXML = deployedDir + preceedingItemHref;
+        try {
+            FileUtils.forceDelete(new File(locationOfWebpageXML));
+            String webPageFolder = locationOfWebpageXML.replaceAll(".xml$", "");
+            FileUtils.deleteDirectory(new File(webPageFolder));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        LOGGER.info("Webpages for journal \"" + journalID + "\" removed successfully.");
+    }
+
+    private void removeEntryInNavigation() {
+        LOGGER.info("Removing navigation entry for journal \"" + journalID + "\" ...");
+        String naviFileLocation = deployedDir + "/config/navigation.xml";
+        try {
+            Document naviFileDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFileLocation), false);
+            String entryInNaviFileDoc = "//item[@href='" + this.preceedingItemHref + "']";
+            Element jdomElemOfLocation = (Element) XPath.selectSingleNode(naviFileDoc, entryInNaviFileDoc);
+
+            if (jdomElemOfLocation != null) {
+                jdomElemOfLocation.detach();
+                XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+                xmlOutputter.output(naviFileDoc, new FileOutputStream(naviFileLocation));
+            }
+        } catch (MCRException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        LOGGER.info("Navigation entry for journal \"" + journalID + "\" removed successfully.");
+
     }
 
 }

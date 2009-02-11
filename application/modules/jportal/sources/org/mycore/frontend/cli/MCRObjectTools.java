@@ -114,7 +114,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 XMLOutputter xmlOutputter = new XMLOutputter();
                 xmlOutputter.setFormat(Format.getPrettyFormat());
                 try {
-                    Document naviDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFile),false);
+                    Document naviDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFile), false);
                     String keywordSearchPath = "//item[@href='/browse/keywords?XSL.dummy=" + sourceMcrId + "']";
                     XPath xpath = XPath.newInstance(keywordSearchPath);
                     Element keywordSearchElem = (Element) xpath.selectSingleNode(naviDoc);
@@ -125,22 +125,24 @@ public class MCRObjectTools extends MCRAbstractCommands {
                         String searchPath = "//item[@href='/content/main/journalList/" + shortCut + "/search.xml']";
                         xpath = XPath.newInstance(searchPath);
                         Element searchElem = (Element) xpath.selectSingleNode(naviDoc);
-                        searchElem.addContent(3,MCRXMLHelper.parseXML(keywordSearchElemAsStr,false).getRootElement().detach());
+                        searchElem.addContent(3, MCRXMLHelper.parseXML(keywordSearchElemAsStr, false).getRootElement().detach());
                     }
-                    
+
                     String keywordEditPath = "//item/label[text()='Neues Schlagwort in Register aufnehmen']";
                     xpath = XPath.newInstance(keywordEditPath);
-                    Element keywordEditElem = ((Element) xpath.selectSingleNode(naviDoc)).getParentElement();
-                    if (keywordSearchElem != null) {
+                    Element selectSingleNode = (Element) xpath.selectSingleNode(naviDoc);
+                    if (selectSingleNode != null) {
+                        Element keywordEditElem = selectSingleNode.getParentElement();
+
                         String keywordEditElemAsStr = xmlOutputter.outputString(keywordEditElem);
-                        keywordEditElemAsStr = keywordEditElemAsStr.replaceAll("XSL.dummy=[a-zA-Z_0-9]*\"","XSL.dummy=" + newMcrID.getId()+"\"");
-                        
+                        keywordEditElemAsStr = keywordEditElemAsStr.replaceAll("XSL.dummy=[a-zA-Z_0-9]*\"", "XSL.dummy=" + newMcrID.getId() + "\"");
+
                         String editPath = "//item[@href='/content/main/journalList/" + shortCut + "/internal.xml']";
                         xpath = XPath.newInstance(editPath);
                         Element editElem = (Element) xpath.selectSingleNode(naviDoc);
-                        editElem.addContent(MCRXMLHelper.parseXML(keywordEditElemAsStr,false).getRootElement().detach());
+                        editElem.addContent(MCRXMLHelper.parseXML(keywordEditElemAsStr, false).getRootElement().detach());
                     }
-                    
+
                     xmlOutputter.output(naviDoc, new FileOutputStream(new File(naviFile)));
                 } catch (JDOMException e) {
                     // TODO Auto-generated catch block
