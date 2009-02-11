@@ -1,0 +1,4 @@
+
+    	update all classifications from directory /home/chi/Development/java/workspace/jportal2/application/modules/jportal/content/classification
+	    update all classifications from directory /home/chi/Development/java/workspace/jportal2/application/../myjportal/modules/jportal/content/classification
+    

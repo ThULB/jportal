@@ -703,6 +703,7 @@ public class MCRCategoryDAOImpl implements MCRCategoryDAO {
         LOGGER.info("fillIDMap: categID: " + category.getId() + " category: " + category);
         map.put(category.getId(), category);
         for (MCRCategory subCategory : category.getChildren()) {
+            LOGGER.info("fillIDMap: subCategory: " + subCategory);
             fillIDMap(map, (MCRCategoryImpl) subCategory);
         }
     }

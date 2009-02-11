@@ -12,9 +12,9 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xlink mcr acl i18n xsl">
 
-  <!--
+  
   <xsl:include href="mcr-module-startIview.xsl"/>
-  -->
+  
 	
   <!-- Template for result list hit -->
   <xsl:template match="mcr:hit[contains(@id,'_document_')]">
@@ -370,7 +370,7 @@
                 <xsl:variable name="deriv" select="@xlink:href" />
                 <!-- MCR-IView ..start -->
                 <!-- example implementation -->
-				  <!--
+				  
                 <xsl:if test="$objectHost = 'local'">
                   <tr>
                     <td class="metanone" colspan="8">
@@ -395,7 +395,7 @@
                     </td>
                   </tr>
                 </xsl:if>
-					  -->
+					  
                 <!-- MCR - IView ..end -->
                 <tr>
                   <xsl:variable name="deriv" select="@xlink:href" />
