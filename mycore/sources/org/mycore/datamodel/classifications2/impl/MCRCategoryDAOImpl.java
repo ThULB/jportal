@@ -47,6 +47,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.classifications2.utils.MCRStringTransformer;
 
 /**
  * 
@@ -704,6 +705,9 @@ public class MCRCategoryDAOImpl implements MCRCategoryDAO {
         map.put(category.getId(), category);
         for (MCRCategory subCategory : category.getChildren()) {
             LOGGER.info("fillIDMap: subCategory: " + subCategory);
+            if (subCategory==null){
+                LOGGER.info("null subCategory detected:" + category.getChildren());
+            }
             fillIDMap(map, (MCRCategoryImpl) subCategory);
         }
     }
