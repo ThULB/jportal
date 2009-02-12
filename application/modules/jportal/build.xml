@@ -42,6 +42,7 @@
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRObjectTools" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRUsersGroupsTools" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRClassificationTools" />
+		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRHibernateTools" />
 	</target>
 
 	<!-- ============================================== -->
