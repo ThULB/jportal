@@ -33,35 +33,36 @@ public class MCRObjectTools extends MCRAbstractCommands {
         super();
         MCRCommand com = null;
 
-        com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String int String", "cp [source ID] [n times] [layoutTemplate]");
+        com = new MCRCommand("cp {0} {1} {2} {3}", "org.mycore.frontend.cli.MCRObjectTools.cp String int String String",
+                "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]");
         command.add(com);
 
-        com = new MCRCommand("cp {0} {1}", "org.mycore.frontend.cli.MCRObjectTools.cp String String", "cp [sourceID] [layoutTemplate].");
+        com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String", "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
         command.add(com);
     }
 
-    public static List<String> cp(String sourceID, int times, String layoutTemp) {
+    public static List<String> cp(String sourceID, int times, String layoutTemp, String dataModelCoverage) {
         List<String> cmd = new ArrayList<String>();
 
         for (int i = 0; i < times; i++) {
-            cmd.add("cp " + sourceID + " " + layoutTemp);
+            cmd.add("cp " + sourceID + " " + layoutTemp + " " + dataModelCoverage);
         }
 
         return cmd;
 
     }
 
-    public static void cp(String sourceMcrId, String layoutTemp) {
+    public static void cp(String sourceMcrId, String layoutTemp, String dataModelCoverage) {
         MCRObject mcrObj = new MCRObject();
         mcrObj.receiveFromDatastore(sourceMcrId);
 
-        Document mcrOrigObjXML = mcrObj.createXML();
+        Document mcrOrigObjXMLDoc = mcrObj.createXML();
 
         Element maintitleElem = null;
         try {
             String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
             XPath xpathOfmainTitle = XPath.newInstance(mainTitlePath);
-            maintitleElem = (Element) xpathOfmainTitle.selectSingleNode(mcrOrigObjXML);
+            maintitleElem = (Element) xpathOfmainTitle.selectSingleNode(mcrOrigObjXMLDoc);
         } catch (JDOMException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -71,17 +72,30 @@ public class MCRObjectTools extends MCRAbstractCommands {
         try {
             String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
             XPath xpathOfhidden_jpjournalID = XPath.newInstance(hidden_jpjournalIDPath);
-            hidden_jpjournalIDElem = (Element) xpathOfhidden_jpjournalID.selectSingleNode(mcrOrigObjXML);
+            hidden_jpjournalIDElem = (Element) xpathOfhidden_jpjournalID.selectSingleNode(mcrOrigObjXMLDoc);
         } catch (JDOMException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
+        }
+
+        if (!dataModelCoverage.equals("")) {
+            Element dataModelCoverageElem = null;
+            try {
+                String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
+                XPath xpathOfdataModelCoverage = XPath.newInstance(dataModelCoverageLocation);
+                dataModelCoverageElem = (Element) xpathOfdataModelCoverage.selectSingleNode(mcrOrigObjXMLDoc);
+                dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
+            } catch (JDOMException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         }
 
         Element hiddenWebContextsElem = null;
         try {
             String hiddenWebContextsPath = "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext";
             XPath xpathOfHiddenWebContexts = XPath.newInstance(hiddenWebContextsPath);
-            hiddenWebContextsElem = (Element) xpathOfHiddenWebContexts.selectSingleNode(mcrOrigObjXML);
+            hiddenWebContextsElem = (Element) xpathOfHiddenWebContexts.selectSingleNode(mcrOrigObjXMLDoc);
         } catch (JDOMException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -91,7 +105,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         newMcrID.setNextFreeId();
         maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
         hidden_jpjournalIDElem.setText(newMcrID.getId());
-        mcrObj.setFromJDOM(mcrOrigObjXML);
+        mcrObj.setFromJDOM(mcrOrigObjXMLDoc);
 
         mcrObj.setId(newMcrID);
         try {
@@ -107,50 +121,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 String shortCut = splitPrecHref[splitPrecHref.length - 1].replaceAll(".xml", "") + "_" + newMcrID.getNumberAsInteger();
                 MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.getId(), precHref, layoutTemp, shortCut);
                 webContext.create();
-
-                String baseDir = MCRConfiguration.instance().getString("MCR.basedir");
-                String deployedDir = baseDir + "/build/webapps";
-                String naviFile = deployedDir + "/config/navigation.xml";
-                XMLOutputter xmlOutputter = new XMLOutputter();
-                xmlOutputter.setFormat(Format.getPrettyFormat());
-                try {
-                    Document naviDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFile), false);
-                    String keywordSearchPath = "//item[@href='/browse/keywords?XSL.dummy=" + sourceMcrId + "']";
-                    XPath xpath = XPath.newInstance(keywordSearchPath);
-                    Element keywordSearchElem = (Element) xpath.selectSingleNode(naviDoc);
-                    if (keywordSearchElem != null) {
-                        String keywordSearchElemAsStr = xmlOutputter.outputString(keywordSearchElem);
-                        keywordSearchElemAsStr = keywordSearchElemAsStr.replaceAll(sourceMcrId, newMcrID.getId());
-
-                        String searchPath = "//item[@href='/content/main/journalList/" + shortCut + "/search.xml']";
-                        xpath = XPath.newInstance(searchPath);
-                        Element searchElem = (Element) xpath.selectSingleNode(naviDoc);
-                        searchElem.addContent(3, MCRXMLHelper.parseXML(keywordSearchElemAsStr, false).getRootElement().detach());
-                    }
-
-                    String keywordEditPath = "//item/label[text()='Neues Schlagwort in Register aufnehmen']";
-                    xpath = XPath.newInstance(keywordEditPath);
-                    Element selectSingleNode = (Element) xpath.selectSingleNode(naviDoc);
-                    if (selectSingleNode != null) {
-                        Element keywordEditElem = selectSingleNode.getParentElement();
-
-                        String keywordEditElemAsStr = xmlOutputter.outputString(keywordEditElem);
-                        keywordEditElemAsStr = keywordEditElemAsStr.replaceAll("XSL.dummy=[a-zA-Z_0-9]*\"", "XSL.dummy=" + newMcrID.getId() + "\"");
-
-                        String editPath = "//item[@href='/content/main/journalList/" + shortCut + "/internal.xml']";
-                        xpath = XPath.newInstance(editPath);
-                        Element editElem = (Element) xpath.selectSingleNode(naviDoc);
-                        editElem.addContent(MCRXMLHelper.parseXML(keywordEditElemAsStr, false).getRootElement().detach());
-                    }
-
-                    xmlOutputter.output(naviDoc, new FileOutputStream(new File(naviFile)));
-                } catch (JDOMException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
 
                 // creating ACL for copy
                 // retrieve ACL from source Object
