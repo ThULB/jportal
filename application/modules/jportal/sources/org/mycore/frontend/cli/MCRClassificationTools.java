@@ -51,6 +51,21 @@ public class MCRClassificationTools extends MCRAbstractCommands {
                 + "and cat1.positioninparent not in " + "(select max(cat3.positioninparent) from MCRCATEGORY cat3 "
                 + "where cat3.parentid=cat1.parentid) group by cat1.parentid";
 
+        for (List<Object[]> parentWithErrorsList = session.createSQLQuery(sqlQuery).list(); !parentWithErrorsList.isEmpty();parentWithErrorsList = session.createSQLQuery(sqlQuery).list()) {
+            for (Object[] parentWithErrors : parentWithErrorsList) {
+                Number parentID = (Number) parentWithErrors[0];
+                Number firstErrorPositionInParent = (Number) parentWithErrors[1];
+                LOGGER.info("Category " + parentID + " has the missing position " + firstErrorPositionInParent + " ...");
+                repairCategoryWithGapInPos(parentID, firstErrorPositionInParent);
+                LOGGER.info("Fixed position " + firstErrorPositionInParent + " for category " + parentID + ".");
+            }
+        }
+
+        sqlQuery = "select parentid, min(cat1.positioninparent-1) from MCRCATEGORY cat1 " + "where cat1.parentid is not null and not exists"
+                + "(select 1 from MCRCATEGORY cat2 " + "where cat2.parentid=cat1.parentid and cat2.positioninparent=(cat1.positioninparent-1))"
+                + "and cat1.positioninparent not in " + "(select max(cat3.positioninparent) from MCRCATEGORY cat3 "
+                + "where cat3.parentid=cat1.parentid) and cat1.positioninparent > 0 group by cat1.parentid";
+
         while (true) {
             List<Object[]> parentWithErrorsList = session.createSQLQuery(sqlQuery).list();
 
@@ -60,23 +75,31 @@ public class MCRClassificationTools extends MCRAbstractCommands {
 
             for (Object[] parentWithErrors : parentWithErrorsList) {
                 Number parentID = (Number) parentWithErrors[0];
-                Number firstErrorPositionInParent = (Number) parentWithErrors[1];
-                LOGGER.info("Category " + parentID + " has the missing position " + firstErrorPositionInParent + " ...");
-                repairCategory(parentID, firstErrorPositionInParent);
-                LOGGER.info("Fixed position " + firstErrorPositionInParent + " for category " + parentID + ".");
+                Number wrongStartPositionInParent = (Number) parentWithErrors[1];
+                LOGGER.info("Category " + parentID + " has the the starting position " + wrongStartPositionInParent + " ...");
+                repairCategoryWithWrongStartPos(parentID, wrongStartPositionInParent);
+                LOGGER.info("Fixed position " + wrongStartPositionInParent + " for category " + parentID + ".");
             }
         }
         LOGGER.info("Repair position in parent finished!");
     }
 
-    private static void repairCategory(Number parentID, Number firstErrorPositionInParent) {
+    private static void repairCategoryWithWrongStartPos(Number parentID, Number wrongStartPositionInParent) {
+        Session session = MCRHIBConnection.instance().getSession();
+        String sqlQuery = "update MCRCATEGORY set positioninparent= positioninparent -" + wrongStartPositionInParent + "-1 where parentid=" + parentID
+                + " and positioninparent > " + wrongStartPositionInParent;
+
+        session.createSQLQuery(sqlQuery).executeUpdate();
+    }
+
+    private static void repairCategoryWithGapInPos(Number parentID, Number firstErrorPositionInParent) {
         Session session = MCRHIBConnection.instance().getSession();
         // the query decrease the position in parent with a rate.
         // eg. posInParent: 0 1 2 5 6 7
         // at 3 the position get faulty, 5 is the min. of the position greather
         // 3
         // so the reate is 5-3 = 2
-        String sqlQuery = "update MCRCATEGORY set positioninparent=(" + "positioninparent -" + "(select min(positioninparent) from MCRCATEGORY where parentid="
+        String sqlQuery = "update MCRCATEGORY set positioninparent=(positioninparent - (select min(positioninparent) from MCRCATEGORY where parentid="
                 + parentID + " and positioninparent > " + firstErrorPositionInParent + ")+" + firstErrorPositionInParent + ") where parentid=" + parentID
                 + " and positioninparent > " + firstErrorPositionInParent;
 
