@@ -39,6 +39,26 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String", "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
         command.add(com);
+        
+        com = new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String", "export import [objectID].");
+        command.add(com);
+    }
+    
+    public static void exportImport(String objectID){
+        MCRObject mcrObject = new MCRObject();
+        // servDate will be taken from xml
+        mcrObject.setImportMode(true);
+        mcrObject.receiveFromDatastore(objectID);
+        try {
+            mcrObject.updateInDatastore();
+            LOGGER.info("Export and reimport " + objectID + " successfully.");
+        } catch (MCRPersistenceException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MCRActiveLinkException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public static List<String> cp(String sourceID, int times, String layoutTemp, String dataModelCoverage) {
