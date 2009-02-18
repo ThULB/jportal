@@ -33,6 +33,8 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.filter.ElementFilter;
+import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
@@ -42,94 +44,166 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.user.MCRUserMgr;
 
+/**
+ * @author Matthias Eichner
+ */
 public class MCRDublicateFinderServlet extends MCRServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private static Logger LOGGER = Logger.getLogger(MCRDublicateFinderServlet.class);;
+	private static Logger LOGGER = Logger.getLogger(MCRDublicateFinderServlet.class);;
 
-    private static final String FS = System.getProperty("file.seperator", "/");
+	private static final String FS = System.getProperty("file.seperator", "/");
 
-    private static final String ROOT_DIR = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
+	private static final String ROOT_DIR = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
 
-    public void init() throws ServletException {
-        super.init();
-    }
+	private int nonDoubletCount;
+	private int doubletCount;
+	private int notWorkedCount;
+	private int errorCount;
 
-    public synchronized void doGetPost(MCRServletJob job) throws JDOMException, IOException {
+	public void init() throws ServletException {
+		super.init();
+	}
 
-        // init params
-        MCRSession session = MCRSessionMgr.getCurrentSession();
-        String redMap = (String) session.get("XSL.RedunMap");
-        String redMapPath = ROOT_DIR + redMap;
+	public synchronized void doGetPost(MCRServletJob job) throws JDOMException, IOException {
+		// init params
+		MCRSession session = MCRSessionMgr.getCurrentSession();
+		String redMap = (String) session.get("XSL.RedunMap");
+		String redMapPath = ROOT_DIR + redMap;
 
-        // get redun list
-        SAXBuilder builder = new SAXBuilder();
-        Document redunMap = builder.build(redMapPath);
-        LOGGER.debug("read dublicate list from file=" + redMapPath);
+		// get redun list
+		SAXBuilder builder = new SAXBuilder();
+		Document redunMap = builder.build(redMapPath);
+		LOGGER.debug("read duplicate list from file=" + redMapPath);
 
-        // get dublicate entry
-        String dublicateID = job.getRequest().getParameter("dublicate-id").trim();
-        String xPathExpr = "//redundancyID[text()='" + dublicateID + "']";
-        LOGGER.debug("finding double entry with xpath=" + xPathExpr);
-        org.jdom.xpath.XPath xp = org.jdom.xpath.XPath.newInstance(xPathExpr);
-        Element doublet = (Element) xp.selectSingleNode(redunMap);
-        String id = doublet.getTextTrim();
-        LOGGER.debug("received double entry=" + id);
+		// get duplicate entry
+		String redunObject = job.getRequest().getParameter("redunObject").trim();
 
-        // edit doublet entry
-        if (MCRAccessManager.checkPermission(id, "writedb") && doubletChangeable(job, doublet)) {
-            // change mode of doublet
-            String status = job.getRequest().getParameter("status");
-            String user = session.getCurrentUserID();
-            String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
-                            + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
-            long time = System.currentTimeMillis();
-            java.util.Date date = new java.util.Date(time);
-            doublet.setAttribute("status", status);
-            doublet.setAttribute("user", user);
-            doublet.setAttribute("userRealName", userRealName);
-            doublet.setAttribute("time", Long.toString(time));
-            doublet.setAttribute("timePretty", date.toGMTString());
-            LOGGER.info("changed mode of doublet=" + id + " to status=" + status + ", user=" + user + ", date=" + date);
+		String xPathExpr = "//redundancyObjects[@id=" + redunObject + "]";
+		org.jdom.xpath.XPath xp = org.jdom.xpath.XPath.newInstance(xPathExpr);
+		Element redundancyObjectsElement = (Element) xp.selectSingleNode(redunMap);
 
-            // save redun list
-            Format format = Format.getPrettyFormat();
-            FileOutputStream fos = new FileOutputStream(new File(redMapPath));
-            XMLOutputter xo = new XMLOutputter(format);
-            xo.output(redunMap, fos);
-            fos.flush();
-            fos.close();
-            LOGGER.debug("saved changed  dublicate list to file=" + redMapPath);
-        } else
-            LOGGER.info("NOT changed mode of doublet=" + id + ", because already changed or no permission");
+		initCounter(job, redundancyObjectsElement);
+		// check if there are some inputs are invalid
+		int errorId = validateInput();
+		if (errorId != -1) {
+			forwardExceptionToClient(job, errorId);
+			return;
+		}
 
-        // send to client
-        forwardToClient(job, id);
-    }
+		// update the xml structure
+		updateXML(job, session, redundancyObjectsElement);
 
-    /**
-     * @param job
-     * @param id
-     * @throws IOException
-     */
-    private synchronized void forwardToClient(MCRServletJob job, String id) throws IOException {
-        String redunMapURL = job.getRequest().getParameter("redunMap");
-        String ankerPosition = job.getRequest().getParameter("ankerPosition");
-        String returnURL = MCRConfiguration.instance().getString("MCR.baseurl") + redunMapURL + "#" + ankerPosition;
-        job.getResponse().sendRedirect(returnURL);
-    }
+		// save redun list
+		Format format = Format.getPrettyFormat();
+		FileOutputStream fos = new FileOutputStream(new File(redMapPath));
+		XMLOutputter xo = new XMLOutputter(format);
+		xo.output(redunMap, fos);
+		fos.flush();
+		fos.close();
+		LOGGER.debug("saved changed  dublicate list to file=" + redMapPath);
 
-    /**
-     * @param job
-     * @param doublet
-     * @param id
-     * @return
-     */
-    private synchronized boolean doubletChangeable(MCRServletJob job, Element doublet) {
-        if (job.getRequest().getParameter("status") != null && !job.getRequest().getParameter("status").equals("open")
-                        && doublet.getAttribute("status") != null && !doublet.getAttributeValue("status").equals("open"))
-            return false;
-        return true;
-    }
+		int maxObjects = redunMap.getRootElement().getContent(new ElementFilter()).size();
+		// send to client
+		forwardToClient(job, maxObjects);
+	}
+
+	private void initCounter(MCRServletJob job, Element redObjectsElement) {
+		nonDoubletCount = 0;
+		doubletCount = 0;
+		notWorkedCount = 0;
+		errorCount = 0;
+		Filter elementAndObjectFilter = new ElementFilter("object");
+		for (int i = 1; i <= redObjectsElement.getContent(elementAndObjectFilter).size(); i++) {
+			String status = job.getRequest().getParameter("selection_" + i);
+			if (status == null || status.equals("")) {
+				notWorkedCount++;
+			} else if (status.equals("doublet")) {
+				doubletCount++;
+			} else if (status.equals("nonDoublet")) {
+				nonDoubletCount++;
+			} else if (status.equals("error")) {
+				errorCount++;
+			}
+		}
+	}
+
+	private int validateInput() {
+		if (nonDoubletCount > 1 && doubletCount > 0)
+			return 1;
+		if (doubletCount > 0 && nonDoubletCount == 0)
+			return 2;
+		return -1;
+	}
+
+	private void updateXML(MCRServletJob job, MCRSession session, Element redObjectsElement) {
+		boolean closed = true;
+		int count = 1;
+		Filter elementAndObjectFilter = new ElementFilter("object");
+		for (Object o : redObjectsElement.getContent(elementAndObjectFilter)) {
+			Element objectElement = (Element) o;
+			String objectId = "object-id_" + count;
+			String selection = job.getRequest().getParameter("selection_" + count);
+
+			if (selection == null || selection.equals("")) {
+				closed = false;
+			}
+			// edit doublet entry
+			if (MCRAccessManager.checkPermission(objectId, "writedb")) {
+				objectElement.setAttribute("status", selection);
+				LOGGER.info("changed mode of doublet=" + objectId + " to status=" + selection);
+			} else
+				LOGGER.info("NOT changed mode of doublet=" + objectId + ", because already changed or no permission");
+			count++;
+		}
+		// add some general infos to the redObjectsElements
+		String user = session.getCurrentUserID();
+		String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
+				+ MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
+		long time = System.currentTimeMillis();
+		java.util.Date date = new java.util.Date(time);
+		redObjectsElement.setAttribute("user", user);
+		redObjectsElement.setAttribute("userRealName", userRealName);
+		redObjectsElement.setAttribute("time", Long.toString(time));
+		redObjectsElement.setAttribute("timePretty", date.toGMTString());
+		if (closed)
+			redObjectsElement.setAttribute("status", "closed");
+		else
+			redObjectsElement.removeAttribute("status");
+
+		if (errorCount > 0)
+			redObjectsElement.setAttribute("hasErrors", "true");
+		else
+			redObjectsElement.removeAttribute("hasErrors");
+	}
+
+	/**
+	 * @param job
+	 * @throws IOException
+	 */
+	private synchronized void forwardToClient(MCRServletJob job, int maxObjects) throws IOException {
+		String redunObject = job.getRequest().getParameter("redunObject").trim();
+		String returnURL = getBaseURL(job);
+		int nextNum = Integer.valueOf(redunObject) + 1;
+		if (!(nextNum > maxObjects)) {
+			// show next Element
+			returnURL += "&XSL.redunObject=" + (Integer.valueOf(redunObject) + 1);
+		}
+		job.getResponse().sendRedirect(returnURL);
+	}
+
+	private synchronized void forwardExceptionToClient(MCRServletJob job, int id) throws IOException {
+		String redunObject = job.getRequest().getParameter("redunObject").trim();
+		String returnURL = getBaseURL(job);
+		returnURL += "&XSL.redunObject=" + redunObject + "&XSL.exceptionId=" + id;
+		job.getResponse().sendRedirect(returnURL);
+	}
+
+	private String getBaseURL(MCRServletJob job) {
+		String redunMapURL = job.getRequest().getParameter("redunMap");
+		String redunModeValue = job.getRequest().getParameter("redunMode");
+		String redunMode = "XSL.redunMode.SESSION=" + redunModeValue;
+		return MCRConfiguration.instance().getString("MCR.baseurl") + redunMapURL + "?" + redunMode;
+	}
 }
