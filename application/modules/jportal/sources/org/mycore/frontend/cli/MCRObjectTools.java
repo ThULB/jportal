@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
@@ -19,12 +20,18 @@ import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventManager;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
+import org.mycore.parsers.bool.MCRCondition;
+import org.mycore.services.fieldquery.MCRQuery;
+import org.mycore.services.fieldquery.MCRQueryParser;
 
 public class MCRObjectTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRObjectTools.class.getName());
@@ -37,14 +44,66 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]");
         command.add(com);
 
-        com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String", "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
+        com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String",
+                "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
         command.add(com);
-        
+
         com = new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String", "export import [objectID].");
         command.add(com);
+
+        com = new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
+                "repair-cp [sourceObjectID] to [destinationObjectID].");
+        command.add(com);
+
     }
-    
-    public static void exportImport(String objectID){
+
+    public static void repairCopy(String sourceObjectID, String destinationObjectID) {
+        // find if there the destination object allready has children
+        // when yes, add them to the destination object
+        String querystring = "parent = \"" + destinationObjectID + "\"";
+        MCRObjectCommands.selectObjectsWithQuery(querystring);
+        List<String> idList = MCRObjectCommands.getSelectedObjectIDs();
+
+        // getting source XML
+        // replace the children element
+        MCRObject sourceObject = new MCRObject();
+        Document sourceDoc = sourceObject.receiveJDOMFromDatastore(sourceObjectID);
+        
+        sourceDoc.getRootElement().getAttribute("ID").setValue(destinationObjectID);
+        sourceDoc.getRootElement().getAttribute("label").setValue(destinationObjectID);
+        
+        Element maintitle = getElementWithXpath(sourceDoc, "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']");
+        if (maintitle != null)
+            maintitle.setText(maintitle.getText() + "[Copy]");
+        
+        Element structElement = sourceDoc.getRootElement().getChild("structure");
+        Element childElement = structElement.getChild("children");
+        if (childElement != null)
+            childElement.detach();
+
+        structElement.addContent(generateChildrenHref(idList));
+
+        MCRXMLTableManager.instance().create(new MCRObjectID(destinationObjectID), sourceDoc);
+        MCRObjectCommands.repairMetadataSearchForID(destinationObjectID);
+    }
+
+    private static Element generateChildrenHref(List<String> idList) {
+        Element childrenElement = new Element("children");
+        childrenElement.setAttribute("class", "MCRMetaLinkID");
+        Namespace xlink = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+        for (String objID : idList) {
+            Element childElement = new Element("child");
+            childElement.setAttribute("inherited", "0");
+            childElement.setAttribute("type", "locator", xlink);
+            childElement.setAttribute("href", objID, xlink);
+            childElement.setAttribute("title", objID, xlink);
+
+            childrenElement.addContent(childElement);
+        }
+        return childrenElement;
+    }
+
+    public static void exportImport(String objectID) {
         MCRObject mcrObject = new MCRObject();
         // servDate will be taken from xml
         mcrObject.setImportMode(true);
@@ -78,48 +137,27 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         Document mcrOrigObjXMLDoc = mcrObj.createXML();
 
+        // we don't want to adopt children
+        mcrOrigObjXMLDoc.getRootElement().getChild("structure").getChild("children").detach();
+
         Element maintitleElem = null;
-        try {
-            String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
-            XPath xpathOfmainTitle = XPath.newInstance(mainTitlePath);
-            maintitleElem = (Element) xpathOfmainTitle.selectSingleNode(mcrOrigObjXMLDoc);
-        } catch (JDOMException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
+        maintitleElem = getElementWithXpath(mcrOrigObjXMLDoc, mainTitlePath);
 
         Element hidden_jpjournalIDElem = null;
-        try {
-            String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
-            XPath xpathOfhidden_jpjournalID = XPath.newInstance(hidden_jpjournalIDPath);
-            hidden_jpjournalIDElem = (Element) xpathOfhidden_jpjournalID.selectSingleNode(mcrOrigObjXMLDoc);
-        } catch (JDOMException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        String hidden_jpjournalIDPath = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID";
+        hidden_jpjournalIDElem = getElementWithXpath(mcrOrigObjXMLDoc, hidden_jpjournalIDPath);
 
         if (!dataModelCoverage.equals("")) {
             Element dataModelCoverageElem = null;
-            try {
-                String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
-                XPath xpathOfdataModelCoverage = XPath.newInstance(dataModelCoverageLocation);
-                dataModelCoverageElem = (Element) xpathOfdataModelCoverage.selectSingleNode(mcrOrigObjXMLDoc);
-                dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
-            } catch (JDOMException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
+            String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
+            dataModelCoverageElem = getElementWithXpath(mcrOrigObjXMLDoc, dataModelCoverageLocation);
+            dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
         }
 
         Element hiddenWebContextsElem = null;
-        try {
-            String hiddenWebContextsPath = "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext";
-            XPath xpathOfHiddenWebContexts = XPath.newInstance(hiddenWebContextsPath);
-            hiddenWebContextsElem = (Element) xpathOfHiddenWebContexts.selectSingleNode(mcrOrigObjXMLDoc);
-        } catch (JDOMException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        String hiddenWebContextsPath = "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext";
+        hiddenWebContextsElem = getElementWithXpath(mcrOrigObjXMLDoc, hiddenWebContextsPath);
 
         MCRObjectID newMcrID = mcrObj.getId();
         newMcrID.setNextFreeId();
@@ -161,5 +199,18 @@ public class MCRObjectTools extends MCRAbstractCommands {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private static Element getElementWithXpath(Document xmlDoc, String xpathExpression){
+        
+        try {
+            XPath xpath = XPath.newInstance(xpathExpression);
+            return (Element) xpath.selectSingleNode(xmlDoc);
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 }
