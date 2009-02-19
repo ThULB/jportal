@@ -3,6 +3,8 @@
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcr="http://www.mycore.org/">
 
     <xsl:include href="journalList-timeBar.xsl" />
+    
+    <xsl:param name="selected"/>
 
     <!-- =================================================================================================== -->
 
@@ -37,6 +39,17 @@
     <xsl:template name="journalList.doLayout">
         <xsl:param name="journalXMLsIF" />
         <xsl:param name="mode" />
+        
+        <xsl:variable name="firstTitle">
+          <xsl:variable name="nameOfJournal" select="xalan:nodeset($journalXMLsIF)/journalXMLs/mycoreobject[position() = 1]" />
+          <xsl:variable name="nameOfJournal.firstChar">
+            <xsl:value-of select="substring($nameOfJournal,1,1)" />
+          </xsl:variable>
+          <xsl:call-template name="journalList.lowerCase">
+            <xsl:with-param name="char" select="$nameOfJournal.firstChar" />
+          </xsl:call-template>
+        </xsl:variable>
+
         <xsl:for-each select="xalan:nodeset($journalXMLsIF)/journalXMLs/mycoreobject">
             <xsl:variable name="precTitle">
                 <xsl:variable name="pos">
@@ -75,10 +88,12 @@
                     </xsl:call-template>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:call-template name="journalList.doLayout.journals">
-                        <xsl:with-param name="prefixLabel" select="$precTitle = $title" />
-                        <xsl:with-param name="titleIF" select="$title" />
-                    </xsl:call-template>
+                    <xsl:if test="($selected = $title) or ($selected = '' and $title = $firstTitle)" >
+                      <xsl:call-template name="journalList.doLayout.journals">
+                          <xsl:with-param name="prefixLabel" select="$precTitle = $title" />
+                          <xsl:with-param name="titleIF" select="$title" />
+                      </xsl:call-template>
+                    </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
@@ -116,6 +131,7 @@
     <xsl:template name="journalList.doLayout.shortcuts">
         <xsl:param name="prefixLabel" />
         <xsl:param name="titleIF" />
+
         <xsl:if test="($prefixLabel = true) or (position() = 1)">
             <xsl:call-template name="journalList.seperator" />
             <xsl:variable name="title.upperCase">
@@ -123,7 +139,7 @@
                     <xsl:with-param name="char" select="$titleIF" />
                 </xsl:call-template>
             </xsl:variable>
-            <a href="#{$titleIF}">
+            <a href="?XSL.selected={$titleIF}">
                 <b>
                     <xsl:value-of select="$title.upperCase" />
                 </b>
@@ -156,6 +172,7 @@
         <xsl:variable name="hit">
             <mcr:hit id="{@ID}" />
         </xsl:variable>
+        
         <xsl:apply-templates select="xalan:nodeset($hit)/*">
             <xsl:with-param name="mcrobj" select="." />
         </xsl:apply-templates>
