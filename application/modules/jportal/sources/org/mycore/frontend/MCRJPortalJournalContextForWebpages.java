@@ -29,6 +29,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 public class MCRJPortalJournalContextForWebpages {
 
     private String preceedingItemHref;
+    
+    private String currentItemHref;
 
     private String layoutTemplate;
 
@@ -82,8 +84,27 @@ public class MCRJPortalJournalContextForWebpages {
             // it
             // anyway, so there is no need to define a new class field.
             // We'll use it to delete the files of the context
-            this.preceedingItemHref = currentItemHrefElem.getText();
+            this.currentItemHref = currentItemHrefElem.getText();
+            
+            this.preceedingItemHref = "/content/main/journalList/dummy.xml";
+            
+            String naviFile = deployedDir + "/config/navigation.xml";
+            Document navi = MCRXMLHelper.parseXML(new FileInputStream(naviFile),false);
+            String itemXPath = "//item[@href='" + this.currentItemHref + "']";
+            LOGGER.debug("find item with xpath=" + itemXPath + " in " + naviFile);
+            XPath xp = XPath.newInstance(itemXPath);
+            Element currentItemElem = ((Element) xp.selectSingleNode(navi));
+            this.layoutTemplate = currentItemElem.getAttributeValue("template");
+            String[] tmp = this.currentItemHref.split("/");
+            this.shortCut = tmp[tmp.length-1].replaceAll(".xml", "");
+            
         } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (MCRException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -264,7 +285,7 @@ public class MCRJPortalJournalContextForWebpages {
     private void removeWebpages() {
         LOGGER.info("Removing webpages for journal \"" + journalID + "\" ...");
         // remember! preceeding item href is current item href
-        String locationOfWebpageXML = deployedDir + preceedingItemHref;
+        String locationOfWebpageXML = deployedDir + currentItemHref;
         try {
             File webPageXMl = new File(locationOfWebpageXML);
             if (webPageXMl.exists())
@@ -287,7 +308,7 @@ public class MCRJPortalJournalContextForWebpages {
         String naviFileLocation = deployedDir + "/config/navigation.xml";
         try {
             Document naviFileDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFileLocation), false);
-            String entryInNaviFileDoc = "//item[@href='" + this.preceedingItemHref + "']";
+            String entryInNaviFileDoc = "//item[@href='" + this.currentItemHref + "']";
             Element jdomElemOfLocation = (Element) XPath.selectSingleNode(naviFileDoc, entryInNaviFileDoc);
 
             if (jdomElemOfLocation != null) {
@@ -312,6 +333,51 @@ public class MCRJPortalJournalContextForWebpages {
             e.printStackTrace();
         }
 
+    }
+
+    public static void updateContext(MCRObject obj) {
+        MCRJPortalJournalContextForWebpages context = new MCRJPortalJournalContextForWebpages(obj);
+        context.removeEntryInNavigation();
+        // you shouldn't delete everything especially the SHORTCUT.xml, which could has content
+        // so we save it into a variable
+        Document journalStartWebPage = context.getJournalStartWebpage();
+        context.removeWebpages();
+        context.copyWebpages();
+        // now we write back the content of SHORTCUT.xml
+        context.writeJournalStartWebpage(journalStartWebPage);
+        context.updateNavigation();
+    }
+
+    private void writeJournalStartWebpage(Document journalStartWebPage) {
+        String locationOfWebpageXML = deployedDir + currentItemHref;
+        XMLOutputter xmlOutputter = new XMLOutputter();
+        xmlOutputter.setFormat(Format.getPrettyFormat());
+        
+        try {
+            xmlOutputter.output(journalStartWebPage, new FileOutputStream(locationOfWebpageXML));
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private Document getJournalStartWebpage() {
+        String locationOfWebpageXML = deployedDir + currentItemHref;
+        
+        try {
+            return MCRXMLHelper.parseXML(new FileInputStream(locationOfWebpageXML), false);
+        } catch (MCRException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 
 }
