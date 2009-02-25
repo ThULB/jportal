@@ -28,7 +28,7 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         com = new MCRCommand("import export classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String", "");
         command.add(com);
 
-        com = new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.ArchiveCommands.repairLeftRightValue String",
+        com = new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.repairLeftRightValue String",
                 "fixes all left and right values in the given classification");
         command.add(com);
 
