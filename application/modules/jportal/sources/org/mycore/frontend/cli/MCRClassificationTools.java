@@ -10,6 +10,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
+import org.mycore.datamodel.classifications2.impl.MCRClassificationHelper;
 
 public class MCRClassificationTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRClassificationTools.class.getName());
@@ -23,9 +24,14 @@ public class MCRClassificationTools extends MCRAbstractCommands {
 
         com = new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", "");
         command.add(com);
-        
+
         com = new MCRCommand("import export classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String", "");
         command.add(com);
+
+        com = new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.ArchiveCommands.repairLeftRightValue String",
+                "fixes all left and right values in the given classification");
+        command.add(com);
+
     }
 
     // - get category without labels via SQL-query
@@ -56,7 +62,8 @@ public class MCRClassificationTools extends MCRAbstractCommands {
                 + "and cat1.positioninparent not in " + "(select max(cat3.positioninparent) from MCRCATEGORY cat3 "
                 + "where cat3.parentid=cat1.parentid) group by cat1.parentid";
 
-        for (List<Object[]> parentWithErrorsList = session.createSQLQuery(sqlQuery).list(); !parentWithErrorsList.isEmpty();parentWithErrorsList = session.createSQLQuery(sqlQuery).list()) {
+        for (List<Object[]> parentWithErrorsList = session.createSQLQuery(sqlQuery).list(); !parentWithErrorsList.isEmpty(); parentWithErrorsList = session
+                .createSQLQuery(sqlQuery).list()) {
             for (Object[] parentWithErrors : parentWithErrorsList) {
                 Number parentID = (Number) parentWithErrors[0];
                 Number firstErrorPositionInParent = (Number) parentWithErrors[1];
@@ -110,8 +117,13 @@ public class MCRClassificationTools extends MCRAbstractCommands {
 
         session.createSQLQuery(sqlQuery).executeUpdate();
     }
-    
-    public static void importExportClassification(String id){
-        org.mycore.datamodel.classifications2.impl.MCRClassificationTools.importExportClassification(id);
+
+    public static void importExportClassification(String id) {
+        MCRClassificationHelper.importExportClassification(id);
     }
+    
+    public static void repairLeftRightValue(String classID) {
+        MCRClassificationHelper.repairLeftRightValue(classID);
+    }
+
 }

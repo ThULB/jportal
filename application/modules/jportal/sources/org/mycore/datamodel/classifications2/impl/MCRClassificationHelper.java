@@ -10,8 +10,8 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
-public class MCRClassificationTools {
-    private static Logger LOGGER = Logger.getLogger(MCRClassificationTools.class.getName());
+public class MCRClassificationHelper {
+    private static Logger LOGGER = Logger.getLogger(MCRClassificationHelper.class.getName());
     
     public static void repairLeftRightValue(String classID) {
         final Session session = MCRHIBConnection.instance().getSession();
