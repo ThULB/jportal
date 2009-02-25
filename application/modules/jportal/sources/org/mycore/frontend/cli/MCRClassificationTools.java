@@ -1,10 +1,12 @@
 package org.mycore.frontend.cli;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
@@ -20,6 +22,9 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         command.add(com);
 
         com = new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", "");
+        command.add(com);
+        
+        com = new MCRCommand("import export classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String", "");
         command.add(com);
     }
 
@@ -98,11 +103,15 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         // eg. posInParent: 0 1 2 5 6 7
         // at 3 the position get faulty, 5 is the min. of the position greather
         // 3
-        // so the reate is 5-3 = 2
+        // so the rate is 5-3 = 2
         String sqlQuery = "update MCRCATEGORY set positioninparent=(positioninparent - (select min(positioninparent) from MCRCATEGORY where parentid="
                 + parentID + " and positioninparent > " + firstErrorPositionInParent + ")+" + firstErrorPositionInParent + ") where parentid=" + parentID
                 + " and positioninparent > " + firstErrorPositionInParent;
 
         session.createSQLQuery(sqlQuery).executeUpdate();
+    }
+    
+    public static void importExportClassification(String id){
+        org.mycore.datamodel.classifications2.impl.MCRClassificationTools.importExportClassification(id);
     }
 }

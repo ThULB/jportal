@@ -40,14 +40,13 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.classifications2.utils.MCRCategoryTransformer;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -60,7 +59,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 public class MCRClassification2Commands extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRClassification2Commands.class);
 
-    private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
+    private static final MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
 
     /** Default transformer script */
     public static final String DEFAULT_TRANSFORMER = "save-classification.xsl";
