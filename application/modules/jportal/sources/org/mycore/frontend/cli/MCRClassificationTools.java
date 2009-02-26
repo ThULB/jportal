@@ -25,7 +25,7 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         com = new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", "");
         command.add(com);
 
-        com = new MCRCommand("import export classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String", "");
+        com = new MCRCommand("import export classification {0} {1}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String int", "");
         command.add(com);
 
         com = new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.repairLeftRightValue String",
@@ -118,8 +118,8 @@ public class MCRClassificationTools extends MCRAbstractCommands {
         session.createSQLQuery(sqlQuery).executeUpdate();
     }
 
-    public static void importExportClassification(String id) {
-        MCRClassificationHelper.importExportClassification(id);
+    public static void importExportClassification(String id, int boolValue) {
+        MCRClassificationHelper.importExportClassification(id, boolValue);
     }
     
     public static void repairLeftRightValue(String classID) {
