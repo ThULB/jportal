@@ -721,11 +721,11 @@
                 <xsl:when test="$deleted = 'true'">
                   <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=srestoreobj">
                     <img src="{$WebApplicationBaseURL}images/workflow_restore.gif"
-                      title="{i18n:translate('swf.object.restoreObject')}" />
+                      title="{i18n:translate('jportal.object.restoreObject')}" />
                   </a>
                   <a id="obj_del" href="javascript:confirmDelete('{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=exportAndDelete')">
                     <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
-                      title="{i18n:translate('swf.object.delObject')}" />
+                      title="{i18n:translate('jportal.object.delObject')}" />
                   </a>
                 </xsl:when>
                 <!-- not deleted -->

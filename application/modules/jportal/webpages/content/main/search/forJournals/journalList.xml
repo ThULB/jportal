@@ -2,8 +2,6 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
     <section xml:lang="de" title="Blättern A - Z">
-        <p>Wählen sie ein Zeitschrift aus der folgenden Liste:</p>
-        <p></p>
         <p>
             <journallist mode="alphabetical" />
         </p>
