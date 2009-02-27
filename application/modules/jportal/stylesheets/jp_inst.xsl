@@ -10,8 +10,8 @@
         <xsl:param name="mcrobjlink" />
         <xsl:variable select="100" name="DESCRIPTION_LENGTH" />
         <xsl:variable select="@host" name="host" />
-        <xsl:variable name="obj_id">
 
+        <xsl:variable name="obj_id">
             <xsl:value-of select="@id" />
         </xsl:variable>
         <xsl:variable name="cXML">
@@ -19,7 +19,7 @@
         </xsl:variable>
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
-                <td id="leaf-front">
+                <td id="leaf-front" rowspan="5">
                     <div>
                         <img src="{$WebApplicationBaseURL}images/institut2.gif" />
                     </div>
@@ -53,7 +53,7 @@
                 </td>
             </tr>
         </table>
-        <table cellspacing="0" cellpadding="0">
+       <table cellspacing="0" cellpadding="0">
             <tr id="leaf-whitespaces">
                 <td colspan="2"></td>
             </tr>
@@ -266,7 +266,10 @@
                         </table>
                         <!--14*** Editor Buttons ************************************* -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="get.redun.editObj" />
+                          <xsl:call-template name="editobject">
+                            <xsl:with-param select="'false'" name="accessdelete" />
+                            <xsl:with-param select="./@ID" name="id" />
+                          </xsl:call-template>
                         </table>
                         <!-- 
                             <xsl:call-template name="editobject">
@@ -321,3 +324,4 @@
     </xsl:template>
     <!-- ============================================================================================================ -->
 </xsl:stylesheet>
+

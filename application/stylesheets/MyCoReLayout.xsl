@@ -593,7 +593,8 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <!-- ============================================================================================================= -->
+    <!-- ============================================================================================================= --> 
+
         <!-- The template write the icon line to edit an object -->
     <xsl:template name="editobject">
 
@@ -608,37 +609,65 @@
             </xsl:if>
         </xsl:variable>
 
+        <!-- deleted -->
+        <xsl:variable name="deleted">
+          <xsl:call-template name="isFlagSet">
+            <xsl:with-param name="flagName" select="'deleted'" />
+          </xsl:call-template>
+        </xsl:variable>
+        
+        <!-- its better to include this function to a global javascript class -->
+        <script type="text/javascript">
+          function confirmDelete(delUrl) {
+            if (confirm("Objekt wirklich löschen?")) {
+              document.location = delUrl;
+            }
+          }
+        </script>
+
         <xsl:if test="$objectHost = 'local'">
             <xsl:choose>
-
                 <xsl:when test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
                     <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
                     <tr>
-                        <td class="metaname">
+                      <td class="metaname">
                             <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
-                        </td>
-                        <td class="metavalue">
-
+                      </td>
+                      <td class="metavalue">
+                        <xsl:choose>
+                          <!-- deleted -->
+                          <xsl:when test="$deleted = 'true'">
+                            <a
+                              href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=srestoreobj">
+                              <img src="{$WebApplicationBaseURL}images/workflow_restore.gif"
+                                title="{i18n:translate('swf.object.restoreObject')}" />
+                            </a>
+                            <a id="obj_del"
+                              href="javascript:confirmDelete('{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=exportAndDelete')">
+                              <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
+                                title="{i18n:translate('swf.object.delObject')}" />
+                            </a>
+                          </xsl:when>
+                          <!-- not deleted -->
+                          <xsl:otherwise>
                             <xsl:if test="acl:checkPermission($id,'writedb')">
-
-                                <a
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
-                                    <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif" title="{i18n:translate('swf.object.editObject')}" />
-                                </a>
-                                <!--<a
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
-                                    <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
-                                    title="{i18n:translate('swf.object.editACL')}"/>
-                                    </a>-->
+                              <a
+                                href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                                <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
+                                  title="{i18n:translate('swf.object.editObject')}" />
+                              </a>
                             </xsl:if>
                             <xsl:if test="acl:checkPermission($id,'deletedb')">
-
-                                <a id="obj_del"
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
-                                    <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif" title="{i18n:translate('swf.object.delObject')}" />
-                                </a>
+                              <a id="obj_del"
+                                href="javascript:confirmDelete('{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
+                                <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
+                                  title="{i18n:translate('swf.object.delObject')}" />
+                              </a>
                             </xsl:if>
-                        </td>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                    
+                      </td>
                     </tr>
                 </xsl:when>
             </xsl:choose>
@@ -652,52 +681,83 @@
     <xsl:param name="accessedit" />
     <xsl:param name="accessdelete" />
     <xsl:param name="id" />
-    <xsl:param name="layout" select="'$'"/>
+    <xsl:param name="layout" select="'$'" />
     <xsl:variable name="layoutparam">
       <xsl:if test="$layout != '$'">
-        <xsl:value-of select="concat('&amp;layout=',$layout)"/>
+        <xsl:value-of select="concat('&amp;layout=',$layout)" />
       </xsl:if>
     </xsl:variable>
+
+    <!-- deleted -->
+    <xsl:variable name="deleted">
+      <xsl:call-template name="isFlagSet">
+        <xsl:with-param name="flagName" select="'deleted'" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <!-- its better to include this function to a global javascript class -->
+    <script type="text/javascript">
+      function confirmDelete(delUrl) {
+        if (confirm("Objekt wirklich löschen?")) {
+          document.location = delUrl;
+        }
+      }
+    </script>
+
     <xsl:if test="$objectHost = 'local'">
       <xsl:choose>
-        <xsl:when test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
-          <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+        <xsl:when
+          test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
+          <xsl:variable name="type"
+            select="substring-before(substring-after($id,'_'),'_')" />
           <tr>
             <td class="metaname">
-              <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
+              <xsl:value-of
+                select="concat(i18n:translate('metaData.edit'),' :')" />
             </td>
             <td class="metavalue">
-              <xsl:if test="acl:checkPermission($id,'writedb')">
-                <a
-                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
-                  <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
-                    title="{i18n:translate('swf.object.editObject')}" />
-                </a>
-                <a
-                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
-                  <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
-                    title="{i18n:translate('swf.object.editACL')}" />
-                </a>
-                <xsl:if test="$accessnbn = 'true'">
-                  <a
-                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
-                    <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif"
-                      title="{i18n:translate('swf.object.addNBN')}" />
+              <xsl:choose>
+                <!-- deleted -->
+                <xsl:when test="$deleted = 'true'">
+                  <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=srestoreobj">
+                    <img src="{$WebApplicationBaseURL}images/workflow_restore.gif"
+                      title="{i18n:translate('swf.object.restoreObject')}" />
                   </a>
-                </xsl:if>
-                <a
-                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
-                  <img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
-                    title="{i18n:translate('swf.derivate.addDerivate')}" />
-                </a>
-              </xsl:if>
-              <xsl:if test="acl:checkPermission($id,'deletedb')">
-                <a
-                  href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj">
-                  <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
-                    title="{i18n:translate('swf.object.delObject')}" />
-                </a>
-              </xsl:if>
+                  <a id="obj_del" href="javascript:confirmDelete('{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=exportAndDelete')">
+                    <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
+                      title="{i18n:translate('swf.object.delObject')}" />
+                  </a>
+                </xsl:when>
+                <!-- not deleted -->
+                <xsl:otherwise>
+                  <xsl:if test="acl:checkPermission($id,'writedb')">
+                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                      <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
+                        title="{i18n:translate('swf.object.editObject')}" />
+                    </a>
+                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
+                      <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
+                        title="{i18n:translate('swf.object.editACL')}" />
+                    </a>
+                    <xsl:if test="$accessnbn = 'true'">
+                      <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
+                        <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif"
+                          title="{i18n:translate('swf.object.addNBN')}" />
+                      </a>
+                    </xsl:if>
+                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
+                      <img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
+                        title="{i18n:translate('swf.derivate.addDerivate')}" />
+                    </a>
+                  </xsl:if>
+                  <xsl:if test="acl:checkPermission($id,'deletedb')">
+                    <a href="javascript:confirmDelete('{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
+                      <img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
+                        title="{i18n:translate('swf.object.delObject')}" />
+                    </a>
+                  </xsl:if>
+                </xsl:otherwise>
+              </xsl:choose>
             </td>
           </tr>
         </xsl:when>

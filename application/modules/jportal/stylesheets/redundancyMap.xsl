@@ -12,7 +12,7 @@
   <xsl:param name="template" select="'template_DublicateFinder'" />
 
   <xsl:variable name="PageTitle" select="'Dublettenfinder'" />
-  <xsl:variable name="ServletName" select="'MCRDublicateFinderServlet'" />
+  <xsl:variable name="ServletName" select="'MCRDuplicateFinderServlet'" />
 
   <!--
     =====================================================================================
@@ -718,41 +718,5 @@
       </td>
     </tr>
   </xsl:template>
-
-  <!--
-    =====================================================================================
-  -->
-
-  <!--   <xsl:template name="editobject_with_der"></xsl:template>  -->
-
-  <!--
-    =====================================================================================
-  -->
-
-  <!--
-    <xsl:template name="editobject"> <xsl:param name="accessedit" />
-    <xsl:param name="accessdelete" /> <xsl:param name="id" /> <xsl:param
-    name="layout" select="'$'" /> <xsl:variable name="layoutparam">
-    <xsl:if test="$layout != '$'"> <xsl:value-of
-    select="concat('&amp;layout=',$layout)" /> </xsl:if> </xsl:variable>
-    <xsl:if test="$objectHost = 'local' and
-    not(xalan:nodeset($filteredRedunMap)//redundancyID[text()=$id])">
-    <xsl:choose> <xsl:when test="acl:checkPermission($id,'writedb') or
-    acl:checkPermission($id,'deletedb')"> <xsl:variable name="type"
-    select="substring-before(substring-after($id,'_'),'_')" /> <tr> <td
-    class="metaname"> <xsl:value-of
-    select="concat(i18n:translate('metaData.edit'),' :')" /> </td> <td
-    class="metavalue"> <xsl:if
-    test="acl:checkPermission($id,'writedb')"> <a
-    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj"
-    target="_blank"> <img
-    src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
-    title="{i18n:translate('swf.object.editObject')}" /> </a> </xsl:if>
-    </td> </tr> </xsl:when> </xsl:choose> </xsl:if> </xsl:template>
-  -->
-
-  <!--
-    =====================================================================================
-  -->
 
 </xsl:stylesheet>

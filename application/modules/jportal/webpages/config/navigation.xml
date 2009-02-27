@@ -119,6 +119,10 @@
                 <label xml:lang="en">Manage groups- users</label>
             </item>
         </item>
+        <item href="/content/main/recyclebin.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Papierkorb</label>
+            <label xml:lang="en">Recycle bin</label>
+        </item>
         <item href="/content/main/tools.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Tools</label>
             <item href="/content/main/tools/dubFinder.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">

@@ -68,7 +68,7 @@
                                         <tr>
                                             <td>
                                                 <printlatestobjects sortfield="created" maxresults="3" objecttype="jparticle" start="true"
-                                                    overwritelayout="true">
+                                                    overwritelayout="true" mcrqlcond="deletedFlag = false">
                                                 </printlatestobjects>
 
                                             </td>

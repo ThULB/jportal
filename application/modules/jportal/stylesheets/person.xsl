@@ -20,7 +20,7 @@
         </xsl:variable>
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
-                <td id="leaf-front">
+                <td id="leaf-front" rowspan="5">
                     <div>
                         <img src="{$WebApplicationBaseURL}images/person2.gif" />
                     </div>
@@ -319,7 +319,10 @@
                         </table>
                         <!--*** Editor Buttons ************************************* -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="get.redun.editObj" />
+                          <xsl:call-template name="editobject">
+                            <xsl:with-param select="'false'" name="accessdelete" />
+                            <xsl:with-param select="./@ID" name="id" />
+                          </xsl:call-template>
                         </table>
                     </td>
                 </tr>

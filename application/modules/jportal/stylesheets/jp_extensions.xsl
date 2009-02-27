@@ -1071,7 +1071,28 @@
                 </xsl:for-each>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
 
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="isFlagSet">
+      <xsl:param name="flagName" />
+      <xsl:for-each select="./service/servflags/servflag">
+        <xsl:if test="text() = $flagName" >
+          <xsl:value-of select="'true'" />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:template>
+
+    <!-- ===================================================================================================== -->
+
+    <xsl:template name="isFlagTypeSet">
+      <xsl:param name="flagName" />
+      <xsl:for-each select="./service/servflags/servflag">
+        <xsl:if test="@type = $flagName" >
+          <xsl:value-of select="'true'" />
+        </xsl:if>
+      </xsl:for-each>
     </xsl:template>
 
     <!-- ===================================================================================================== -->

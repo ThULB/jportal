@@ -2,9 +2,13 @@
     <servlet-name>MCRJPortalCLIServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalCLIServlet</servlet-class>
 </servlet>
-<servlet id="MCRDublicateFinderServlet">
-    <servlet-name>MCRDublicateFinderServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRDublicateFinderServlet</servlet-class>
+<servlet id="MCRDuplicateFinderServlet">
+    <servlet-name>MCRDuplicateFinderServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRDuplicateFinderServlet</servlet-class>
+</servlet>
+<servlet id="MCRRecycleBinServlet">
+    <servlet-name>MCRRecycleBinServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinServlet</servlet-class>
 </servlet>
 <servlet id="MCRJPortalCreateContext">
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
@@ -14,14 +18,26 @@
     <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalLinkFileServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalStartEditorServlet">
+    <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRJPortalStartEditorServlet</servlet-class>
+</servlet>
 
+<servlet-mapping>
+    <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
+    <url-pattern>/servlets/MCRJPortalStartEditorServlet/*</url-pattern>
+</servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalCLIServlet</servlet-name>
     <url-pattern>/cli</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRDublicateFinderServlet</servlet-name>
-    <url-pattern>/servlets/MCRDublicateFinderServlet/*</url-pattern>
+    <servlet-name>MCRDuplicateFinderServlet</servlet-name>
+    <url-pattern>/servlets/MCRDuplicateFinderServlet/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>MCRRecycleBinServlet</servlet-name>
+    <url-pattern>/servlets/MCRRecycleBinServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>

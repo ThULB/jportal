@@ -47,11 +47,11 @@ import org.mycore.user.MCRUserMgr;
 /**
  * @author Matthias Eichner
  */
-public class MCRDublicateFinderServlet extends MCRServlet {
+public class MCRDuplicateFinderServlet extends MCRServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Logger LOGGER = Logger.getLogger(MCRDublicateFinderServlet.class);;
+	private static Logger LOGGER = Logger.getLogger(MCRDuplicateFinderServlet.class);;
 
 	private static final String FS = System.getProperty("file.seperator", "/");
 

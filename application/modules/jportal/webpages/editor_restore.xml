@@ -1,0 +1,37 @@
+<MyCoReWebPage>
+	<section title="Wiederherstellen der Daten" xml:lang="de">
+		<p></p>
+		<br/>
+		<p></p>
+		<center>
+			<table width="80%">
+				<tr align="center">
+					<td align="center">
+						<font color="red">Das wiederherstellen der Daten war erfolgreich.</font>
+					</td>
+				</tr>
+			</table>
+		</center>
+		<p>
+		<a href="JavaScript:history.back(1)" >zurück</a>
+		</p>
+	</section>
+
+	<section title="Restore data" xml:lang="en">
+		<p></p>
+		<br/>
+		<p></p>
+		<center>
+			<table width="80%">
+				<tr align="center">
+					<td align="center">
+						<font color="red">The data was successfully restored.</font>
+					</td>
+				</tr>
+			</table>
+		</center>
+		<p>
+		<a href="JavaScript:history.back(1)" >back</a>
+		</p>		
+	</section>
+</MyCoReWebPage>

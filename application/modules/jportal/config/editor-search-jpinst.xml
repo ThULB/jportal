@@ -22,6 +22,12 @@
       <!-- Search in field "name" with operator "contains" -->
       <hidden var="conditions/boolean/condition2/@field" default="instname" />
       <hidden var="conditions/boolean/condition2/@operator" default="like" />
+
+      <!-- Search only when "deletedFlag" equals false -->
+      <hidden var="conditions/boolean/condition3/@field" default="deletedFlag" />
+      <hidden var="conditions/boolean/condition3/@operator" default="=" />
+      <hidden var="conditions/boolean/condition3/@value" default="false" />
+
       <cell row="1" col="1" anchor="EAST">
         <text i18n="editor.search.institution.name" />
       </cell>
