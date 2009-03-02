@@ -3,7 +3,7 @@
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcr="http://www.mycore.org/">
 
     <xsl:include href="journalList-timeBar.xsl" />
-    
+
     <xsl:param name="selected"/>
     
     <xsl:variable name="maxListObjectCount" select="'15'" />
@@ -21,12 +21,15 @@
                 <xsl:with-param name="journalIDsIF" select="$journalIDs" />
             </xsl:call-template>
         </xsl:variable>
-        
+
         <xsl:variable name="objectCount" select="count(xalan:nodeset($journalXMLs)/journalXMLs/mycoreobject)" />
 
         <!-- do layout -->
         <xsl:choose>
           <xsl:when test="$objectCount > 0">
+            <p>
+              <xsl:value-of select="'Wählen sie eine Zeitschrift aus der folgenden Liste:'" />
+            </p>
             <xsl:call-template name="journalList.doLayout">
                 <xsl:with-param name="journalXMLsIF" select="$journalXMLs" />
                 <xsl:with-param name="mode" select="'shortcut'" />
@@ -40,9 +43,11 @@
             </xsl:call-template>
           </xsl:when>
           <xsl:otherwise>
-            <b>
-              <xsl:value-of select="i18n:translate('jportal.a-z.emptyList')"/>
-            </b>
+            <p>
+              <b>
+                <xsl:value-of select="i18n:translate('jportal.a-z.emptyList')"/>
+              </b>
+            </p>
           </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
