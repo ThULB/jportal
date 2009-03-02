@@ -256,7 +256,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode add a flag to the flag list.
+     * This method add a flag to the flag list.
      * 
      * @param value -
      *            the new flag as string
@@ -271,7 +271,26 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode get all flags from the flag list as a string.
+     * This method adds a flag to the flag list.
+     * 
+     * @param type
+     *              an type as string
+     * @param value
+     *              the new flag value as string
+     */
+    public final void addFlag(String type, String value) {
+        if ((value == null) || ((value = value.trim()).length() == 0))
+            return;
+        if((type == null) || ((type = type.trim()).length() == 0))
+            type = null;
+
+        MCRMetaLangText flag = new MCRMetaLangText("service", "servflag", null, type, 0, null, value);
+        flags.add(flag);        
+    }
+    
+    
+    /**
+     * This method get all flags from the flag list as a string.
      * 
      * @return the flags string
      */
@@ -286,6 +305,38 @@ public class MCRObjectService {
     }
 
     /**
+     * This method returns all flag values of the specified type.
+     * 
+     * @param type
+     *              a type as string.
+     * @return a list of flag values
+     */
+    protected final ArrayList<MCRMetaLangText> getFlagsAsMCRMetaLangText(String type) {
+        ArrayList<MCRMetaLangText> flagList = new ArrayList<MCRMetaLangText>();
+        for(MCRMetaLangText metaLangText : flags) {
+            if(metaLangText.getType() != null && metaLangText.getType().equals(type))
+                flagList.add(metaLangText);
+        }
+        return flagList;
+    }
+
+    /**
+     * This method returns all flag values of the specified type.
+     * 
+     * @param type
+     *              a type as string.
+     * @return a list of flag values
+     */
+    public final ArrayList<String> getFlags(String type) {
+        ArrayList<String> flagList = new ArrayList<String>();
+        ArrayList<MCRMetaLangText> internalList = getFlagsAsMCRMetaLangText(type);
+        for(MCRMetaLangText metaLangText : internalList) {
+            flagList.add(metaLangText.getText());
+        }
+        return flagList;
+    }
+
+    /**
      * This method return the size of the flag list.
      * 
      * @return the size of the flag list
@@ -295,7 +346,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode get a single flag from the flag list as a string.
+     * This method get a single flag from the flag list as a string.
      * 
      * @exception IndexOutOfBoundsException
      *                throw this exception, if the index is false
@@ -305,8 +356,21 @@ public class MCRObjectService {
         if ((index < 0) || (index > flags.size())) {
             throw new IndexOutOfBoundsException("Index error in getFlag.");
         }
-
         return flags.get(index).getText();
+    }
+
+    /**
+     * This method gets a single flag type from the flag list as a string.
+     * 
+     * @exception IndexOutOfBoundsException
+     *                throw this exception, if the index is false
+     * @return a flag type
+     */
+    public final String getFlagType(int index) throws IndexOutOfBoundsException {
+        if ((index < 0) || (index > flags.size())) {
+            throw new IndexOutOfBoundsException("Index error in getFlag.");
+        }
+        return flags.get(index).getType();       
     }
 
     /**
@@ -331,6 +395,20 @@ public class MCRObjectService {
     }
 
     /**
+     * Proves if the type is set in the flag list.
+     * @param type
+     *              a type as string
+     * @return  true if the flag list contains flags with this type,
+     *          otherwise false
+     */
+    public final boolean isFlagTypeSet(String type) {
+        ArrayList<MCRMetaLangText> internalList = getFlagsAsMCRMetaLangText(type);
+        if(internalList.size() > 0)
+            return true;
+        return false;
+    }
+
+    /**
      * This methode remove a flag from the flag list.
      * 
      * @param index
@@ -345,9 +423,21 @@ public class MCRObjectService {
 
         flags.remove(index);
     }
+    
+    /**
+     * This method removes all flags of the specified type from
+     * the flag list.
+     * 
+     * @param type
+     *            a type as string
+     */
+    public final void removeFlags(String type) {
+        ArrayList<MCRMetaLangText> internalList = getFlagsAsMCRMetaLangText(type);
+        flags.removeAll(internalList);
+    }
 
     /**
-     * This methode set a flag in the flag list.
+     * This method set a flag in the flag list.
      * 
      * @param index
      *            a index in the list
@@ -363,7 +453,30 @@ public class MCRObjectService {
         if ((value == null) || ((value = value.trim()).length() == 0)) {
             return;
         }
-        MCRMetaLangText flag = new MCRMetaLangText("service", "servflag", null, null, 0, null, value);
+        MCRMetaLangText oldFlag = flags.get(index);
+        MCRMetaLangText flag = new MCRMetaLangText("service", "servflag", null, oldFlag.getType(), 0, null, value);
+        flags.set(index, flag);
+    }
+
+    /**
+     * This method sets the type value of a flag at the specified index.
+     * 
+     * @param index
+     *            a index in the list
+     * @param value
+     *            the value of a flag as string
+     * @exception IndexOutOfBoundsException
+     *                throw this exception, if the index is false
+     */
+    public final void replaceFlagType(int index, String value) throws IndexOutOfBoundsException {
+        if ((index < 0) || (index > flags.size())) {
+            throw new IndexOutOfBoundsException("Index error in replaceFlag.");
+        }
+        if ((value == null) || ((value = value.trim()).length() == 0)) {
+            return;
+        }
+        MCRMetaLangText oldFlag = flags.get(index);
+        MCRMetaLangText flag = new MCRMetaLangText("service", "servflag", null, value, 0, null, oldFlag.getText());
         flags.set(index, flag);
     }
 
