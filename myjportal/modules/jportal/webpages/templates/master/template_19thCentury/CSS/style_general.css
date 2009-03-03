@@ -125,19 +125,19 @@ html,body {
 }
 
 #transparent-logo[id] {
-	background: url(../IMAGES/19th-logo.png) no-repeat;
+	background: url(../IMAGES/20th-logo.png) no-repeat;
 	position: absolute;
 	top: 30px;
-	right: 25px;
-	width: 476px;
-	height: 173px;
+	right: 108px;
+	width: 420px;
+	height: 166px;
 }
 
 #transparent-logo {
-	background: url(../IMAGES/19th-logo.gif) no-repeat;
+	background: url(../IMAGES/20th-logo.png) no-repeat;
 	position: absolute;
 	top: 31px;
-	right: 25px;
-	width: 478px;
-	height: 171px;
+	right: 108px;
+	width: 420px;
+	height: 166px;
 }
