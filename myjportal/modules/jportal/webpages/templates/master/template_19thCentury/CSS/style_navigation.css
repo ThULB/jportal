@@ -185,7 +185,7 @@ div.main_menu {
     height: 11px;    
     font-family: Verdana, Arial, Helvetica, sans-serif;
 	position: absolute;
-	top: 185px;
+	top: 206px;
 	left: 31px;
 }
 
@@ -222,8 +222,8 @@ div.main_menu {
 
 #navi_main_active
 {
-	background-color: #fcc300;	
-    border: 1px solid #b6b874;
+    background-color: #1fade3;	
+    border: 1px solid #0e9cd2;
 }
 
 .navi_main_content
@@ -276,7 +276,7 @@ font-size: 11px;
 	padding-top: 3px;
 	padding-left: 3px;
 	display: block;
-	background-color: #d4c9b0;	
+	background-color: #c0c3c4;
     color:  #000000;
     width: 180px;
     height: 18px;
@@ -289,8 +289,8 @@ font-size: 11px;
 .navi_main th a:hover
 {
     text-decoration: underline;  
-    border: 1px solid #b6b874; 
-    background-color: #fcc300;
+    background-color: #1fade3;
+    border: 1px solid #0e9cd2; 
 }
 
 .navi_main th a .marked
