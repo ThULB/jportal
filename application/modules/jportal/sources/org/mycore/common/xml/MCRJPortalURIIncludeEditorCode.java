@@ -1,15 +1,7 @@
 package org.mycore.common.xml;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FilterInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -20,25 +12,33 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 
 public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIIncludeEditorCode.class);
-
     private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
-
-    private static String URI = "jportal_includeEditorCode";
-
-    private static HashMap CACHE = new HashMap();
-
-    private static final String SEP = "#$#$#$#";
+//    private static MCRCache CACHE;
 
     private final String JPJOURNAL = "jpjournal";
-
     private final String JPARTICLE = "jparticle";
 
+    private static final String SEP = "#$#$#$#";
+    private static String URI = "jportal_includeEditorCode";
     private static final String FS = System.getProperty("file.seperator", "/");
+    private static final String CONFIG_PREFIX = "MCR.UriResolver.";
+
+//    public MCRJPortalURIIncludeEditorCode() {
+//        initCache();
+//    }
+
+//    private void initCache() {
+//        if (CACHE == null) {
+//            int cacheSize = MCRConfiguration.instance().getInt(CONFIG_PREFIX + "classification.CacheSize", 1000);
+//            CACHE = new MCRCache(cacheSize, "MCRJPortalURIIncludeEditorCode");
+//        }
+//    }
 
     /**
      * 
@@ -59,7 +59,6 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
      * @throws JDOMException
      * 
      */
-
     public Element resolveElement(String uri) throws IOException, JDOMException {
         LOGGER.debug("start resolving " + uri);
 
@@ -97,11 +96,11 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         String propKey = "MCR.Module-JPortal.DynamicClassification.journal";
 
         // try to get code to be included from cache
-        String cacheKey = getCacheKey("DUMMY", uri);
-        if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
-            LOGGER.debug("Editor code for jpjournal with URI=" + uri + " has been found in cache. So, just return it.");
-            return ((Element) CACHE.get(cacheKey));
-        }
+//        String cacheKey = getCacheKey("DUMMY", uri);
+//        if (!CACHE.isEmpty() && CACHE.keys().contains(cacheKey)) {
+//            LOGGER.debug("Editor code for jpjournal with URI=" + uri + " has been found in cache. So, just return it.");
+//            return ((Element) CACHE.get(cacheKey));
+//        }
 
         // is property set ?
         Properties props = MCRConfiguration.instance().getProperties();
@@ -140,8 +139,8 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         LOGGER.debug((new XMLOutputter()).outputString(editor));
 
         // cache
-        CACHE.put(cacheKey, editor.getRootElement());
-        LOGGER.debug("Editor code for jpjournal with URI=" + uri + " put to cache.");
+//        CACHE.put(cacheKey, editor.getRootElement());
+//        LOGGER.debug("Editor code for jpjournal with URI=" + uri + " put to cache.");
 
         // return editor code
         return editor.getRootElement();
@@ -157,10 +156,10 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         String fileContainingEditorCode = pars[3];
         String idOfPieceOfCode = pars[4];
 
-        boolean cacheAble = true;
+//        boolean cacheAble = true;
 
-        if (pars.length == 6)
-            cacheAble = Boolean.parseBoolean(pars[5]);
+//        if (pars.length == 6)
+//            cacheAble = Boolean.parseBoolean(pars[5]);
 
         // get journal ID
         String journalID = MCRJPortalURIGetJournalID.getID();
@@ -170,19 +169,19 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         }
 
         // try to get code to be included from cache
-        String cacheKey = getCacheKey(journalID, uri);
-        if (cacheAble) {
-            if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
-                LOGGER.debug("Editor code for journal=" + journalID + " and URI=" + uri + " has been found in cache. So, just return it.");
-                return ((Element) CACHE.get(cacheKey));
-            }
-        }
+//        String cacheKey = getCacheKey(journalID, uri);
+//        if (cacheAble) {
+//            if (!CACHE.isEmpty() && CACHE.keys().contains(cacheKey)) {
+//                LOGGER.debug("Editor code for journal=" + journalID + " and URI=" + uri + " has been found in cache. So, just return it.");
+//                return ((Element) CACHE.get(cacheKey));
+//            }
+//        }
 
         // get class id
         String classID = MCRJPortalURIGetClassID.getClassID(journalID, xPathWhereToFindClassIDInJournalXML);
         if (classID == null || classID.equals("")) {
             LOGGER.debug("BREAK: classid is null or emtpy");
-            CACHE.put(cacheKey, getEmptyAnswer());
+//            CACHE.put(cacheKey, getEmptyAnswer());
             return getEmptyAnswer();
         }
 
@@ -190,12 +189,12 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         String blackList = CONFIG.getString("MCR.Module-JPortal.SearchMask.ClassiBlackList", "");
         if (!blackList.equals("") && blackList.indexOf(classID) != -1) {
             LOGGER.debug("BREAK: classid=" + classID + " ON blacklist");
-            CACHE.put(cacheKey, getEmptyAnswer());
+//            CACHE.put(cacheKey, getEmptyAnswer());
             return getEmptyAnswer();
         }
 
         // get piece of code and return it
-        Element pieceOfCode = getPieceOfCode(fileContainingEditorCode, idOfPieceOfCode, cacheKey);
+        Element pieceOfCode = getPieceOfCode(fileContainingEditorCode, idOfPieceOfCode /*, cacheKey*/);
         if (pieceOfCode != null)
             return pieceOfCode;
         else {
@@ -208,16 +207,16 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
      * @param fileContainingEditorCode
      * @param idOfPieceOfCode
      */
-    private Element getPieceOfCode(String fileContainingEditorCode, String idOfPieceOfCode) {
+    /*private Element getPieceOfCode(String fileContainingEditorCode, String idOfPieceOfCode) {
         return getPieceOfCode(fileContainingEditorCode, idOfPieceOfCode, "");
-    }
+    }*/
 
     /**
      * @param fileContainingEditorCode
      * @param idOfPieceOfCode
      * @param cacheKey
      */
-    private Element getPieceOfCode(String fileContainingEditorCode, String idOfPieceOfCode, String cacheKey) {
+    private Element getPieceOfCode(String fileContainingEditorCode, String idOfPieceOfCode/*, String cacheKey*/) {
         // get piece of code and return it
         String sourceLoc = "webapp:" + fileContainingEditorCode;
         Element sourceCode = MCRURIResolver.instance().resolve(sourceLoc);
@@ -228,12 +227,12 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
             Element answer = (Element) xpath.selectSingleNode(doc);
             if (answer == null) {
                 LOGGER.debug("piece of code with xpath=" + xpathEx + " NOT found");
-                if (!cacheKey.equals(""))
-                    CACHE.put(cacheKey, getEmptyAnswer());
+//                if (!cacheKey.equals(""))
+//                    CACHE.put(cacheKey, getEmptyAnswer());
                 return null;
             }
-            if (!cacheKey.equals(""))
-                CACHE.put(cacheKey, answer);
+//            if (!cacheKey.equals(""))
+//                CACHE.put(cacheKey, answer);
             return answer;
         } catch (JDOMException e) {
             e.printStackTrace();
@@ -241,9 +240,9 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         return null;
     }
 
-    private String getCacheKey(String prefix, String uri) {
-        return prefix + SEP + uri;
-    }
+//    private String getCacheKey(String prefix, String uri) {
+//        return prefix + SEP + uri;
+//    }
 
     private static Element getEmptyAnswer() {
         return (new Element("root"));
