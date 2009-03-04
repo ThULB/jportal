@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- ============================================== -->
-<!-- $Revision: 575 $ $Date: 2008-09-04 14:26:32 +0200 (Do, 04 Sep 2008) $ -->
+<!-- $Revision$ $Date$ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n">
@@ -14,9 +14,7 @@
         <xsl:param name="journalID" />
         <html>
             <head>
-                <xsl:call-template name="jp.layout.getHTMLHeader">
-                    <xsl:with-param name="nameOfTemplate" select="'template_19thCentury'" />
-                </xsl:call-template>
+                <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
                 <div id="time">
@@ -100,7 +98,7 @@
                                 </div>
                                 <div id="contentArea">
                                     <div id="contentWrapper">
-
+                                        
                                         <xsl:call-template name="template_19thCentury.write.content" />
                                     </div>
                                 </div>
