@@ -30,7 +30,18 @@ public class MCRRemoveJPortalJournalContextEventHandler extends MCREventHandlerB
         
         if (objType.equals("jpjournal")){
             MCRJPortalJournalContextForWebpages.updateContext(obj);
-            LOGGER.info("Handle update \"" + objectID + ".");
+            LOGGER.info("Updated context for \"" + objectID + "\".");
         }
     }
+    /*
+    @Override
+    protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+        MCRObjectID objectID = obj.getId();
+        String objType = objectID.getTypeId();
+        
+        if (objType.equals("jpjournal")){
+            MCRJPortalJournalContextForWebpages.createContext(obj);
+            LOGGER.info("Created context for \"" + objectID + "\".");
+        }
+    }*/
 }
