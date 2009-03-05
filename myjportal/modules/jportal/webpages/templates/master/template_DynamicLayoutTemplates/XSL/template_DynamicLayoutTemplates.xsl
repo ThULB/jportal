@@ -44,7 +44,7 @@
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:when test="$template_DynamicLayoutTemplates = 'template_20thCentury'">
-                        <xsl:call-template name="template_19thCentury">
+                        <xsl:call-template name="template_20thCentury">
                             <xsl:with-param name="journalsMaintitle" select="$journalMaintitle" />
                             <xsl:with-param name="periodetitle" select="$timeFrame" />
                             <xsl:with-param name="journalID" select="$journalsID" />
