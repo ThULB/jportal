@@ -22,7 +22,7 @@ public class MCRRemoveJPortalJournalContextEventHandler extends MCREventHandlerB
             MCRJPortalJournalContextForWebpages.removeContext(obj);
         }
     }
-    
+    /*
     @Override
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         MCRObjectID objectID = obj.getId();
@@ -33,6 +33,7 @@ public class MCRRemoveJPortalJournalContextEventHandler extends MCREventHandlerB
             LOGGER.info("Updated context for \"" + objectID + "\".");
         }
     }
+    */
     /*
     @Override
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
