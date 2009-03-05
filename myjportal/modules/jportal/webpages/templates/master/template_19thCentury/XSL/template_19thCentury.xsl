@@ -14,7 +14,9 @@
         <xsl:param name="journalID" />
         <html>
             <head>
-                <xsl:call-template name="jp.layout.getHTMLHeader" />
+                <xsl:call-template name="jp.layout.getHTMLHeader">
+                    <xsl:with-param name="nameOfTemplate" select="'template_19thCentury'" />
+                </xsl:call-template>
             </head>
             <body>
                 <div id="time">
@@ -98,7 +100,7 @@
                                 </div>
                                 <div id="contentArea">
                                     <div id="contentWrapper">
-                                        
+
                                         <xsl:call-template name="template_19thCentury.write.content" />
                                     </div>
                                 </div>
