@@ -204,7 +204,7 @@ public class MCRCleanUpRedundancyInDB {
     }
 
     /**
-     * Checks if the element is equal an element from the same parent.
+     * Checks if the element is equal to an element from the same parent.
      * @param element The element to check.
      * @return If the element in the parent already exists.
      */

@@ -28,7 +28,7 @@ public class MCRCheckForDuplicates {
     /**
      * The start method.
      * @param type Valid types are "person" and "jpinst".
-     * @throws Exceptios
+     * @throws Exception
      */
     public static void createCheckForDuplicatesFile(String type) throws Exception {
         if (type == null) {
@@ -141,7 +141,7 @@ public class MCRCheckForDuplicates {
     }
 
     /**
-     * Each type needs a different table layout, depending on conditions.
+     * Each type needs a different table layout, depending on their conditions.
      * @param type The type.
      * @return A new table head as String.
      */
