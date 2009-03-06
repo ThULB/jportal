@@ -11,6 +11,7 @@
 	<xsl:param name="toc.sortBy.jpvolume" select="'position'" />
 	<xsl:param name="toc.sortBy.jparticle" select="'size'" />
 	<xsl:param select="5" name="maxLinkedArts" />
+    <xsl:param select="5" name="maxLinkedCals" />
 
 	<xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
@@ -1673,6 +1674,14 @@
         </xsl:if>-#->
         </xsl:template>-->
     <!-- ===================================================================================================== -->
+    
+    <xsl:template name="jportalFormatISODate">
+        <xsl:param name="date" />
+        <xsl:param name="locale" select="$CurrentLang" />
+        <xsl:value-of xmlns:mcrxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
+            select="mcrxml:formatISODate( string( $date ),string( $locale ) )" />
+    </xsl:template>
+
     <xsl:template name="printMetaDates">
         <!-- prints a table row for a given nodeset -->
         <xsl:param name="volume-node" />
@@ -1950,7 +1959,7 @@
                         <br></br>
                         <xsl:choose>
                             <xsl:when test="$OID='person'">
-                                <xsl:value-of select="i18n:translate('metaData.person.linked')" />
+                                <xsl:value-of select="i18n:translate('metaData.person.linked.article')" />
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:value-of select="i18n:translate('metaData.jpinst.linked')" />
@@ -1997,6 +2006,95 @@
             </table>
         </xsl:if>
     </xsl:template>
+    
+    <!-- ===================================================================================================== -->
+    <xsl:template name="listLinkedCals">
+        <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
+            <xsl:value-of select="encoder:encode(concat('link = ',/mycoreobject/@ID))" />
+        </xsl:variable>
+        <xsl:variable name="linkedCal">
+            <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql)))" />
+        </xsl:variable>
+        <xsl:variable name="OID">
+            <xsl:call-template name="typeOfObjectID">
+                <xsl:with-param name="id" select="/mycoreobject/@ID" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
+            <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                <tr>
+                    <td valign="top" id="detailed-labels">
+                        <br></br>
+                        <xsl:choose>
+                            <xsl:when test="$OID='person'">
+                                <xsl:value-of select="i18n:translate('metaData.person.linked.calendar')" />
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:value-of select="i18n:translate('metaData.jpinst.linked')" />
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </td>
+
+                   <xsl:variable name="tempStringHits" >
+                    <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
+                      <xsl:variable name="cal">
+                        <xsl:copy-of select="document(concat('mcrobject:',@id))" />
+                      </xsl:variable>
+                      <xsl:variable name="isCal">
+                        <xsl:value-of select="count(xalan:nodeset($cal)/mycoreobject/metadata/contentClassis1/contentClassi1[@categid='calendar'])" />
+                      </xsl:variable>
+                      <xsl:if test="$isCal > 0">
+                        <xsl:value-of select="'#'" />
+                      </xsl:if>
+                    </xsl:for-each>
+                   </xsl:variable>
+                   <xsl:variable name="hitCount" select="string-length($tempStringHits)" />
+
+                    <td>
+                        <ul>
+                            <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
+                                <xsl:variable name="art">
+                                    <xsl:copy-of select="document(concat('mcrobject:',@id))" />
+                                </xsl:variable>
+                                <xsl:variable name="isCal" >
+                                  <xsl:value-of select="count(xalan:nodeset($art)/mycoreobject/metadata/contentClassis1/contentClassi1[@categid='calendar'])" />
+                                </xsl:variable>
+                                <xsl:variable name="linkID">
+                                    <xsl:call-template name="objectLink">
+                                        <xsl:with-param name="obj_id" select="@id" />
+                                    </xsl:call-template>
+                                </xsl:variable>
+                                <xsl:if test="contains($linkID, 'jpjournal') and $isCal > 0">
+                                      <li>
+                                          <xsl:call-template name="printHistoryRow">
+                                              <xsl:with-param name="sortOrder" select="'ascending'" />
+                                              <xsl:with-param name="printCurrent" select="'true'" />
+                                              <xsl:with-param name="linkCurrent" select="'true'" />
+                                              <xsl:with-param name="layout" select="'false'" />
+                                              <xsl:with-param name="node" select="xalan:nodeset($art)" />
+                                          </xsl:call-template>
+                                      </li>
+                                  <div id="detailed-linkedart"></div>
+                                </xsl:if>
+                            </xsl:for-each>
+                            <xsl:if test="$hitCount > $maxLinkedCals">
+                                <li>
+                                    <a xmlns:encoder="xalan://java.net.URLEncoder"
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
+                                        <xsl:value-of
+                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',$hitCount,') &gt;&gt;')" />
+                                    </a>
+                                </li>
+                            </xsl:if>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </xsl:if>
+    </xsl:template>
+    
+    
+    
     <!-- ===================================================================================================== -->
     <xsl:template name="browseCtrlJP">
 

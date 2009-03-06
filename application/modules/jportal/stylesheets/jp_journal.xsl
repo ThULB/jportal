@@ -302,40 +302,40 @@
                         <!--4***date*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="publishedFrom">
-                              <xsl:call-template name="formatISODate">
+                              <xsl:call-template name="jportalFormatISODate">
                                 <xsl:with-param name="date" select="./metadata/dates/date[@inherited='0' and @type='published_from']" />
-                                <xsl:with-param name="format" select="i18n:translate('metaData.dateYearMonthDay')" />
                               </xsl:call-template>
                             </xsl:variable>
                             <xsl:variable name="publishedUntil">
-                              <xsl:call-template name="formatISODate">
+                              <xsl:call-template name="jportalFormatISODate">
                                 <xsl:with-param name="date" select="./metadata/dates/date[@inherited='0' and @type='published_until']" />
                                 <xsl:with-param name="format" select="i18n:translate('metaData.dateYearMonthDay')" />
                               </xsl:call-template>
                             </xsl:variable>
                             <xsl:variable name="published">
-                              <xsl:call-template name="formatISODate">
+                              <xsl:call-template name="jportalFormatISODate">
                                 <xsl:with-param name="date" select="./metadata/dates/date[@inherited='0' and @type='published']" />
-                                <xsl:with-param name="format" select="i18n:translate('metaData.dateYearMonthDay')" />
                               </xsl:call-template>
                             </xsl:variable>
 
-                            <td valign="top" id="detailed-labels">
-                            </td>
-                            <td class="metavalue">
-                              <xsl:choose>
-                                <xsl:when test="$published != '??'">
-                                  <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
-                                  <xsl:value-of select="concat(': ', $published)" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                  <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published_from')" />
-                                  <xsl:value-of select="concat(' ', $publishedFrom, ' ')" />
-                                  <xsl:value-of select="i18n:translate('metaData.jpjournal.date.until')" />
-                                  <xsl:value-of select="concat(' ', $publishedUntil)" />
-                                </xsl:otherwise>
-                              </xsl:choose>
-                            </td>
+                            <xsl:if test="$published != '??' or $publishedUntil != '??' or $publishedFrom != '??'" >
+                              <td valign="top" id="detailed-labels">
+                              </td>
+                              <td class="metavalue">
+                                <xsl:choose>
+                                  <xsl:when test="$published != '??'">
+                                    <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
+                                    <xsl:value-of select="concat(': ', $published)" />
+                                  </xsl:when>
+                                  <xsl:otherwise>
+                                    <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published_from')" />
+                                    <xsl:value-of select="concat(' ', $publishedFrom, ' ')" />
+                                    <xsl:value-of select="i18n:translate('metaData.jpjournal.date.until')" />
+                                    <xsl:value-of select="concat(' ', $publishedUntil)" />
+                                  </xsl:otherwise>
+                                </xsl:choose>
+                             </td>
+                           </xsl:if>
                         </table>
                         <!--4***tradition*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
