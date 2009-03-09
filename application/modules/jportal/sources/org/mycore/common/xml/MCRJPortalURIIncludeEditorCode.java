@@ -12,7 +12,6 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
-import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 
 public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolver {

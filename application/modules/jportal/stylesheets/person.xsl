@@ -11,7 +11,6 @@
         <xsl:variable select="100" name="DESCRIPTION_LENGTH" />
         <xsl:variable select="@host" name="host" />
         <xsl:variable name="obj_id">
-
             <xsl:value-of select="@id" />
         </xsl:variable>
 
@@ -232,6 +231,9 @@
                         <!-- linked articles-->
                         <xsl:call-template name="listLinkedArts" />
 
+                        <!-- linked calendars-->
+                        <xsl:call-template name="listLinkedCals" />
+
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
@@ -331,7 +333,7 @@
     </xsl:template>
     
     <xsl:template name="getIdentifier">
-        <xsl:if test="./metadata/def.identifier/identifier[@type='pnd']">
+      <xsl:if test="./metadata/def.identifier/identifier[@type='pnd']">
         <table>
             <tr>
                 <td id="detailed-labels">
@@ -357,9 +359,9 @@
                 </td>
             </tr>
         </table>
-        </xsl:if>
-                        
-                        <!--14***identifier*************************************-->
+      </xsl:if>
+            
+      <!--14***identifier*************************************-->
       <xsl:if test="./metadata/def.identifier/identifier[@type='ppn']">
         <table>
             <tr>

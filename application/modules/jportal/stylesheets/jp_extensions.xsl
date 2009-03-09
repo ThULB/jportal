@@ -263,13 +263,16 @@
            </xsl:call-template>
         </xsl:variable>
 
+        <xsl:variable name="objectID" select="xalan:nodeset($node)/mycoreobject/@ID" />
         <xsl:choose>
             <xsl:when test="$layout='true'">
                 <span id="leaf-headline2">
-                    <xsl:if
-                        test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-                                or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')
-                                ">
+                    <xsl:if test="contains(/mycoreobject/@ID,'jparticle') or
+                                contains(/mycoreobject/@ID,'jpvolume') or
+                                contains(/mycoreobject/@ID,'jpjournal') or
+                                contains($objectID,'jparticle') or
+                                contains($objectID,'jpvolume') or
+                                contains($objectID,'jpjournal')">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
                                 <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang]">
@@ -303,10 +306,13 @@
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <span id="leaf-headline2">
-                    <xsl:if
-                        test="contains(/mycoreobject/@ID,'jparticle') or contains(/mycoreobject/@ID,'jpvolume')
-                             or contains(xalan:nodeset($node)/mycoreobject/@ID,'jparticle') or contains(xalan:nodeset($node)/mycoreobject/@ID,'jpvolume')">
+                 <span id="leaf-headline2">
+                    <xsl:if test="contains(/mycoreobject/@ID,'jparticle') or
+                                contains(/mycoreobject/@ID,'jpvolume') or
+                                contains(/mycoreobject/@ID,'jpjournal') or
+                                contains($objectID,'jpjournal') or
+                                contains($objectID,'jpvolume') or
+                                contains($objectID,'jparticle')">
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
                                 <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang or @xml:lang=$selectPresentLang]">
@@ -328,8 +334,8 @@
                                     </xsl:call-template>
                                 </xsl:for-each>
                             </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
+                        </xsl:choose> 
+                      </xsl:if>
                 </span>
             </xsl:otherwise>
         </xsl:choose>
@@ -1942,7 +1948,7 @@
     <!-- ===================================================================================================== -->
     <xsl:template name="listLinkedArts">
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
-            <xsl:value-of select="encoder:encode(concat('link = ',/mycoreobject/@ID))" />
+            <xsl:value-of select="encoder:encode(concat('(objectType = jparticle) and (deletedFlag = false) and (link = ', /mycoreobject/@ID, ')'))"/>
         </xsl:variable>
         <xsl:variable name="linkedArt">
             <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql)))" />
@@ -1994,7 +2000,7 @@
                             <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
-                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
                                             select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
@@ -2010,9 +2016,9 @@
     <!-- ===================================================================================================== -->
     <xsl:template name="listLinkedCals">
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
-            <xsl:value-of select="encoder:encode(concat('link = ',/mycoreobject/@ID))" />
+            <xsl:value-of select="encoder:encode(concat('(objectType = jpjournal) and (deletedFlag = false) and (contentClassi1 = calendar) and (link = ', /mycoreobject/@ID, ')'))"/>
         </xsl:variable>
-        <xsl:variable name="linkedCal">
+         <xsl:variable name="linkedCal">
             <xsl:copy-of select="xalan:nodeset(document(concat('query:term=',$mcrSql)))" />
         </xsl:variable>
         <xsl:variable name="OID">
@@ -2034,55 +2040,36 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </td>
-
-                   <xsl:variable name="tempStringHits" >
-                    <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
-                      <xsl:variable name="cal">
-                        <xsl:copy-of select="document(concat('mcrobject:',@id))" />
-                      </xsl:variable>
-                      <xsl:variable name="isCal">
-                        <xsl:value-of select="count(xalan:nodeset($cal)/mycoreobject/metadata/contentClassis1/contentClassi1[@categid='calendar'])" />
-                      </xsl:variable>
-                      <xsl:if test="$isCal > 0">
-                        <xsl:value-of select="'#'" />
-                      </xsl:if>
-                    </xsl:for-each>
-                   </xsl:variable>
-                   <xsl:variable name="hitCount" select="string-length($tempStringHits)" />
-
                     <td>
                         <ul>
-                            <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
-                                <xsl:variable name="art">
+                            <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit[number($maxLinkedCals)>position()-1]">
+                                <xsl:variable name="cal">
                                     <xsl:copy-of select="document(concat('mcrobject:',@id))" />
-                                </xsl:variable>
-                                <xsl:variable name="isCal" >
-                                  <xsl:value-of select="count(xalan:nodeset($art)/mycoreobject/metadata/contentClassis1/contentClassi1[@categid='calendar'])" />
                                 </xsl:variable>
                                 <xsl:variable name="linkID">
                                     <xsl:call-template name="objectLink">
                                         <xsl:with-param name="obj_id" select="@id" />
                                     </xsl:call-template>
                                 </xsl:variable>
-                                <xsl:if test="contains($linkID, 'jpjournal') and $isCal > 0">
-                                      <li>
-                                          <xsl:call-template name="printHistoryRow">
-                                              <xsl:with-param name="sortOrder" select="'ascending'" />
-                                              <xsl:with-param name="printCurrent" select="'true'" />
-                                              <xsl:with-param name="linkCurrent" select="'true'" />
-                                              <xsl:with-param name="layout" select="'false'" />
-                                              <xsl:with-param name="node" select="xalan:nodeset($art)" />
-                                          </xsl:call-template>
-                                      </li>
-                                  <div id="detailed-linkedart"></div>
+                                <xsl:if test="contains($linkID, 'jpjournal')">
+                                    <li>
+                                        <xsl:call-template name="printHistoryRow">
+                                            <xsl:with-param name="sortOrder" select="'ascending'" />
+                                            <xsl:with-param name="printCurrent" select="'true'" />
+                                            <xsl:with-param name="linkCurrent" select="'true'" />
+                                            <xsl:with-param name="layout" select="'false'" />
+                                            <xsl:with-param name="node" select="xalan:nodeset($cal)" />
+                                        </xsl:call-template>
+                                    </li>
                                 </xsl:if>
+                                <div id="detailed-linkedart"></div>
                             </xsl:for-each>
-                            <xsl:if test="$hitCount > $maxLinkedCals">
+                            <xsl:if test="count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit)>$maxLinkedCals">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
-                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={encoder:encode(concat('(link = ',./@ID,')'))}&amp;numPerPage=10">
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
-                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',$hitCount,') &gt;&gt;')" />
+                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
                                 </li>
                             </xsl:if>
