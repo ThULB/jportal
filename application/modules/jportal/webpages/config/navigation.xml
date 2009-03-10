@@ -127,11 +127,11 @@
             <label xml:lang="de">Tools</label>
             <item href="/content/main/tools/dubFinder.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">Dublettenfinder</label>
-                <item href="/redundancy-person.xml?XSL.RedunMap.SESSION=redundancy-person.xml" type="extern" target="_self" style="normal" replaceMenu="false"
+                <item href="/doubletFinder/redundancy-person.xml?XSL.RedunMap.SESSION=doubletFinder/redundancy-person.xml" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
                     <label xml:lang="de">Personenindex</label>
                 </item>
-                <item href="/redundancy-jpinst.xml?XSL.RedunMap.SESSION=redundancy-jpinst.xml" type="extern" target="_self" style="normal" replaceMenu="false"
+                <item href="/doubletFinder/redundancy-jpinst.xml?XSL.RedunMap.SESSION=doubletFinder/redundancy-jpinst.xml" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
                     <label xml:lang="de">Institutionsindex</label>
                 </item>

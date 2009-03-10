@@ -7,6 +7,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.parsers.bool.MCRCondition;
@@ -24,6 +25,8 @@ import org.mycore.services.fieldquery.MCRResults;
 public class MCRCheckForDuplicates {
 
     private static final Logger LOGGER = Logger.getLogger(MCRCheckForDuplicates.class);
+    private static final String FS = System.getProperty("file.seperator", "/");
+    private static final String DIR = MCRConfiguration.instance().getString("MCR.doubletFinder") + FS;
 
     /**
      * The start method.
@@ -71,15 +74,12 @@ public class MCRCheckForDuplicates {
                 MCRMetaElement meta = mcr.getMetadata().getMetadataElement("def.heading");
                 Element lastNameElement = getConditionElementById("lastName", meta);
                 Element firstNameElement = getConditionElementById("firstName", meta);
-                if (lastNameElement != null)
-                    objectElement.addContent(lastNameElement);
-                if (firstNameElement != null)
-                    objectElement.addContent(firstNameElement);
+                objectElement.addContent(lastNameElement);
+                objectElement.addContent(firstNameElement);
             } else if (type.equals("jpinst")) {
                 MCRMetaElement meta = mcr.getMetadata().getMetadataElement("names");
                 Element fullnameElement = getConditionElementById("fullname", meta);
-                if (fullnameElement != null)
-                    objectElement.addContent(fullnameElement);
+                objectElement.addContent(fullnameElement);
             }
             count++;
             // do a simple log
@@ -89,7 +89,7 @@ public class MCRCheckForDuplicates {
         // writes the xml-file
         Document d = new Document(rootElement);
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-        FileOutputStream output = new FileOutputStream("checkForDuplicates.xml");
+        FileOutputStream output = new FileOutputStream(DIR + "checkForDuplicates-" + type + ".xml");
         outputter.output(d, output);
     }
 
@@ -129,14 +129,15 @@ public class MCRCheckForDuplicates {
      * @return A new condition element.
      */
     protected static Element getConditionElementById(String id, MCRMetaElement meta) {
-        if (meta == null || meta.size() == 0)
-            return null;
-        Element childElement = meta.getElement(0).createXML().getChild(id);
-        if (childElement == null)
-            return null;
         Element conditionElement = new Element("condition");
-        conditionElement.setAttribute("id", ((Element) childElement).getName());
-        conditionElement.setAttribute("value", ((Element) childElement).getText());
+        conditionElement.setAttribute("id", id);
+        conditionElement.setAttribute("value", "");
+        if (meta != null && meta.size() != 0) {
+            Element childElement = meta.getElement(0).createXML().getChild(id);
+            if (childElement != null) {
+                conditionElement.setAttribute("value", ((Element) childElement).getText());
+            }
+        }
         return conditionElement;
     }
 

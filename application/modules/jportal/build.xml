@@ -47,153 +47,162 @@
 
 	<!-- ============================================== -->
 
-	<target name="create.webapp">
-		<echo>
-            Start building JPortal webapp
-        </echo>
-
-		<!-- jportal -->
-		<echo>
-	         building JPortal webapp
-	    </echo>
-		<antcall target="jp.webapps.inside">
-			<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
-		</antcall>
-
-		<!-- MyJPortal -->
-		<echo>
-	         building MyJPortal webapp
-	    </echo>
-		<antcall target="jp.webapps.inside">
-			<param name="JPortal.HomeURL" value="${env.MYJPORTAL_HOME}" />
-		</antcall>
-
-		<!-- Registering templates -->
-		<echo>
-             building JPortal webapp - Registering templates
-        </echo>
-		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
-		<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
-
+	<target name="create.directories" depends="init" description="Creates directory structure">
+		<!-- recycle bin dir -->
+		<mkdir dir="${MCR.recycleBin}" />
+		<!-- doublet finder dir -->
+		<mkdir dir="${MCR.doubletFinder}" />
 	</target>
 
 	<!-- ============================================== -->
 
-	<target name="jp.webapps.inside">
+		<target name="create.webapp">
+			<echo>
+            Start building JPortal webapp
+        </echo>
 
-		<!-- file mappings config -->
-		<copy todir="${build.webapps}">
-			<fileset dir="${JPortal.HomeURL}/config" includes="FileContentTypes.xml" />
-			<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
-		</copy>
+			<!-- jportal -->
+			<echo>
+	         building JPortal webapp
+	    </echo>
+			<antcall target="jp.webapps.inside">
+				<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
+			</antcall>
 
-		<!-- web.xml -->
-		<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
-		<antcall target="do.merge">
-			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
-		</antcall>
+			<!-- MyJPortal -->
+			<echo>
+	         building MyJPortal webapp
+	    </echo>
+			<antcall target="jp.webapps.inside">
+				<param name="JPortal.HomeURL" value="${env.MYJPORTAL_HOME}" />
+			</antcall>
 
-		<!-- editors -->
-		<copy todir="${build.webapps}/editor/">
-			<fileset dir="${JPortal.HomeURL}/config" includes="editor-*.xml" />
-			<fileset dir="${JPortal.HomeURL}/config" includes="imports-*.xml" />
-		</copy>
+			<!-- Registering templates -->
+			<echo>
+             building JPortal webapp - Registering templates
+        </echo>
+			<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
+			<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
 
-		<!-- webpages stuff -->
-		<antcall target="jp.webapps.copyWebPages">
-			<param name="sourcedir.webpages" value="${JPortal.HomeURL}/webpages" />
-		</antcall>
+		</target>
 
-		<!-- xsl -->
-		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/stylesheets" />
-		</antcall>
+		<!-- ============================================== -->
 
-		<!-- templates  -->
-		<copy todir="${build.webapps}/webpages/templates" failonerror="false">
-			<fileset dir="${JPortal.HomeURL}/webpages/templates/" />
-		</copy>
-		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/webpages/templates/" />
-		</antcall>
+		<target name="jp.webapps.inside">
 
-	</target>
+			<!-- file mappings config -->
+			<copy todir="${build.webapps}">
+				<fileset dir="${JPortal.HomeURL}/config" includes="FileContentTypes.xml" />
+				<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
+			</copy>
 
-	<!-- =================================================================== -->
+			<!-- web.xml -->
+			<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
+			<antcall target="do.merge">
+				<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
+			</antcall>
 
-	<target name="i18n">
-		<echo level="info">
+			<!-- editors -->
+			<copy todir="${build.webapps}/editor/">
+				<fileset dir="${JPortal.HomeURL}/config" includes="editor-*.xml" />
+				<fileset dir="${JPortal.HomeURL}/config" includes="imports-*.xml" />
+			</copy>
+
+			<!-- webpages stuff -->
+			<antcall target="jp.webapps.copyWebPages">
+				<param name="sourcedir.webpages" value="${JPortal.HomeURL}/webpages" />
+			</antcall>
+
+			<!-- xsl -->
+			<antcall target="jp.webapps.copyXSL">
+				<param name="sourcedir.XSL" value="${JPortal.HomeURL}/stylesheets" />
+			</antcall>
+
+			<!-- templates  -->
+			<copy todir="${build.webapps}/webpages/templates" failonerror="false">
+				<fileset dir="${JPortal.HomeURL}/webpages/templates/" />
+			</copy>
+			<antcall target="jp.webapps.copyXSL">
+				<param name="sourcedir.XSL" value="${JPortal.HomeURL}/webpages/templates/" />
+			</antcall>
+
+		</target>
+
+		<!-- =================================================================== -->
+
+		<target name="i18n">
+			<echo level="info">
             building ${ant.project.name} webapp.i18n
         </echo>
 
-		<!-- i18n -->
-		<antcall target="properties.merge">
-			<param name="module" value="${module.dir}/config/messages_de.properties" />
-			<param name="locale_param" value="de" />
-		</antcall>
-		<antcall target="properties.merge">
-			<param name="module" value="${module.dir}/config/messages_en.properties" />
-			<param name="locale_param" value="en" />
-		</antcall>
-		<antcall target="properties.merge">
-			<param name="module" value="${module.dir}/config/messages_pl.properties" />
-			<param name="locale_param" value="pl" />
-		</antcall>
+			<!-- i18n -->
+			<antcall target="properties.merge">
+				<param name="module" value="${module.dir}/config/messages_de.properties" />
+				<param name="locale_param" value="de" />
+			</antcall>
+			<antcall target="properties.merge">
+				<param name="module" value="${module.dir}/config/messages_en.properties" />
+				<param name="locale_param" value="en" />
+			</antcall>
+			<antcall target="properties.merge">
+				<param name="module" value="${module.dir}/config/messages_pl.properties" />
+				<param name="locale_param" value="pl" />
+			</antcall>
 
-		<antcall target="properties.merge">
-			<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_de.properties" />
-			<param name="locale_param" value="de" />
-		</antcall>
-		<antcall target="properties.merge">
-			<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_en.properties" />
-			<param name="locale_param" value="en" />
-		</antcall>
-	</target>
+			<antcall target="properties.merge">
+				<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_de.properties" />
+				<param name="locale_param" value="de" />
+			</antcall>
+			<antcall target="properties.merge">
+				<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_en.properties" />
+				<param name="locale_param" value="en" />
+			</antcall>
+		</target>
 
-	<!-- =================================================================== -->
+		<!-- =================================================================== -->
 
-	<!-- create a new template_DynamicLayoutTemplates.xsl 
+		<!-- create a new template_DynamicLayoutTemplates.xsl 
 	<target name="jp.webapps.dynamicLayoutTemplates">
 		<taskdef name="templatecheck" classname="org.mycore.common.MCRDynamicLayoutTemplatesTask" classpathref="application.classpath" />
 		<templatecheck choosepath="${build.webapps}/WEB-INF/classes/xsl/template_DynamicLayoutTemplates.xsl" />
 	</target>
     -->
 
-	<!-- =================================================================== -->
+		<!-- =================================================================== -->
 
-	<target name="jp.webapps.copyWebPages">
-		<!-- webpages stuff to "webapps" -->
-		<copy todir="${build.webapps}" failonerror="false">
-			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
-		</copy>
-	</target>
-	<!-- =================================================================== -->
+		<target name="jp.webapps.copyWebPages">
+			<!-- webpages stuff to "webapps" -->
+			<copy todir="${build.webapps}" failonerror="false">
+				<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
+			</copy>
+		</target>
+		<!-- =================================================================== -->
 
-	<target name="jp.webapps.copyXSL">
-		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" failonerror="false">
-			<fileset dir="${sourcedir.XSL}" includes="**/*.xsl" />
-		</copy>
-	</target>
-	<!-- =================================================================== -->
+		<target name="jp.webapps.copyXSL">
+			<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" failonerror="false">
+				<fileset dir="${sourcedir.XSL}" includes="**/*.xsl" />
+			</copy>
+		</target>
+		<!-- =================================================================== -->
 
-	<target name="compile">
-		<echo>Compiling JPortal classes...</echo>
-		<antcall target="javac">
-			<param name="packages" value="org/mycore/**" />
-		</antcall>
-	</target>
+		<target name="compile">
+			<echo>Compiling JPortal classes...</echo>
+			<antcall target="javac">
+				<param name="packages" value="org/mycore/**" />
+			</antcall>
+		</target>
 
-	<!-- =================================================================== -->
+		<!-- =================================================================== -->
 
-	<target name="javac" depends="init">
-		<echo>Compiling ${packages}</echo>
-		<javac srcdir="${env.JPORTAL_HOME}/sources" destdir="${build.classes}" includes="${packages}" classpathref="bootstrap.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
-		</javac>
-	</target>
+		<target name="javac" depends="init">
+			<echo>Compiling ${packages}</echo>
+			<javac srcdir="${env.JPORTAL_HOME}/sources" destdir="${build.classes}" includes="${packages}" classpathref="bootstrap.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
+			</javac>
+		</target>
 
-	<!-- =================================================================== -->
+		<!-- =================================================================== -->
 
-	<!--
+		<!--
 	<target name="init">
 		<mkdir dir="${basedir}/classes" />
 		<path id="mycore.classpath">
@@ -203,6 +212,6 @@
 	</target>
     -->
 
-	<!-- =================================================================== -->
+		<!-- =================================================================== -->
 
-</project>
+	</project>
