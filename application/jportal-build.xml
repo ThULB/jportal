@@ -18,6 +18,7 @@
 	<loadproperties srcFile="${env.JPORTAL_HOME}/config/mycore.properties">
 		<filterchain>
 			<tokenfilter>
+				<replacestring from="%MCR.basedir%" to="${MCR.basedir}" />
 				<replacestring from="%MCR.datadir%" to="${MCR.datadir}" />
 			</tokenfilter>
 		</filterchain>

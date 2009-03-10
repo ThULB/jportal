@@ -48,6 +48,7 @@
 	<!-- ============================================== -->
 
 	<target name="create.directories" depends="init" description="Creates directory structure">
+		<modulePreHook target="create.directories" />
 		<!-- recycle bin dir -->
 		<mkdir dir="${MCR.recycleBin}" />
 		<!-- doublet finder dir -->
