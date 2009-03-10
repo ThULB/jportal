@@ -179,7 +179,7 @@
             select="concat(' Bearbeitungsstatus: ',$progressTotal,'% (',$numDoublets+$numNonDoublets+$numError,'/',$numTotal,')')" />
           <xsl:if test="$progressTotal != 0">
             <xsl:copy-of
-              select="concat(', davon ',$progressAccepted,'% Aufnahmen, ',$progressDenied,'% Originale und ', $progressError,'% falsch erkannte Aufnahmen')" />
+              select="concat(', davon ',$progressAccepted,'% Dubletten, ',$progressDenied,'% Originale und ', $progressError,'% falsch erkannte Aufnahmen')" />
           </xsl:if>
         </b>
       </td>

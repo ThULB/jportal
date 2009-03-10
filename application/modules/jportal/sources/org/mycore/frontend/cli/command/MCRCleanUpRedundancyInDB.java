@@ -29,10 +29,8 @@ import org.mycore.datamodel.metadata.MCRObject;
 public class MCRCleanUpRedundancyInDB {
 
     private static final Logger LOGGER = Logger.getLogger(MCRCleanUpRedundancyInDB.class);
-
     private static final String FS = System.getProperty("file.seperator", "/");
-
-    private static final String ROOT_DIR = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
+    private static final String ROOT_DIR = MCRConfiguration.instance().getString("MCR.doubletFinder") + FS;
 
     /**
      * The xml document is stored for the whole process.
@@ -53,7 +51,7 @@ public class MCRCleanUpRedundancyInDB {
         File file = new File(ROOT_DIR + "redundancy-" + type + ".xml");
         if (!file.exists()) {
             LOGGER.error("Couldnt find the file of type: " + type);
-            LOGGER.error("A file like 'redundancy-person.xml' in 'build/webapps' is necessary.");
+            LOGGER.error("A file like 'redundancy-person.xml' in 'build/webapps/doubletFinder' is necessary.");
             return commands;
         }
         LOGGER.info("Redundancy file found: " + file);
