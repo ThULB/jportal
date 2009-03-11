@@ -35,7 +35,17 @@
         <xsl:variable name="objId" select="'&amp;objid='" />
         <xsl:variable name="acPool" select="'&amp;acpool='" />
 
-        <xsl:variable name="objIdFilterEncoded" select="encoder:encode(encoder:encode($objIdFilter))"/>
+        <xsl:variable name="objIdFilterEncoded">
+            <xsl:choose>
+                <xsl:when test="contains($objIdFilter,'&amp;')">
+                    <xsl:value-of select="encoder:encode(encoder:encode($objIdFilter))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$objIdFilter"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        
         <xsl:choose>
             <xsl:when test="($objIdFilterEncoded != '') and ($acPoolFilter != '')">
                 <xsl:value-of select="concat($objId, $objIdFilterEncoded, $acPool, $acPoolFilter)" />
