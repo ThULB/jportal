@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcr="http://www.mycore.org/" >
+    
+    <xsl:param name="linkedList" />
+    <xsl:param name="nonLinkedList" />
+    <xsl:param name="errorList" />
+
     <xsl:variable name="ServletName" select="'MCRRecycleBinServlet'" />
     
     <!-- =================================================================================================== -->
     <xsl:template match="recycleBin">
+        <!-- load js -->
+        <xsl:call-template name="recycleBinJS" />
+
         <!-- get data -->
         <xsl:variable name="recycleIDs">
             <xsl:call-template name="get.allRecycleBinIDs" />
@@ -31,6 +39,9 @@
                 </xsl:call-template>
               </table>
               <br />
+              <span style="padding-right:24px">
+                <input type="button" value="select all" onclick="selectAll();" />
+              </span>
               <span style="padding-right:8px">
                 <input type="submit" name="submit" value="Delete" />
               </span>
@@ -45,6 +56,22 @@
             </b>
           </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- =================================================================================================== -->
+
+    <xsl:template name="recycleBinJS">
+      <script type="text/javascript">
+        function selectAll() {
+            var el = document.forms['recycleBin'].elements;
+            var i = 0;
+            while(i != el.length) {
+                if(el[i].type.toLowerCase() == 'checkbox')
+                  el[i].checked = true;
+                i++;
+            }
+        }
+      </script>
     </xsl:template>
 
     <!-- =================================================================================================== -->
@@ -143,4 +170,80 @@
         </xsl:choose>
     </xsl:template>
 
+    <!-- =================================================================================================== -->
+    <!-- =========== special page for deleted objects ============ -->
+    <!-- =================================================================================================== -->
+     <xsl:template match="recycleBinDeletedPage">
+      <xsl:if test="$nonLinkedList != ''">
+        <p>
+          <strong><xsl:value-of select="'Gelöschte Objekte:'" /></strong>
+          <br />
+          <xsl:call-template name="printStringList">
+            <xsl:with-param name="list" select="$nonLinkedList"/>
+            <xsl:with-param name="sep" select="','"/>
+          </xsl:call-template>
+        </p>
+      </xsl:if>
+      <xsl:if test="$linkedList != ''">
+        <p>
+          <span style="font-weight: bolder; color:#992222;">
+            <xsl:value-of select="'nicht gelöschte Objekte (noch verlinkt):'" />
+          </span>
+          <br />
+          <xsl:call-template name="printStringList">
+            <xsl:with-param name="list" select="$linkedList"/>
+            <xsl:with-param name="sep" select="','"/>
+          </xsl:call-template>
+        </p>
+      </xsl:if>
+      <xsl:if test="$errorList != ''">
+        <p>
+          <span style="font-weight: bolder; color:#ff0000;">
+            <xsl:value-of select="'nicht gelöschte Objekte (Exception aufgetreten!):'" />
+          </span>
+          <br />
+          <xsl:call-template name="printStringList">
+            <xsl:with-param name="list" select="$errorList"/>
+            <xsl:with-param name="sep" select="','"/>
+          </xsl:call-template>
+        </p>
+      </xsl:if>
+      <p>
+        <a href="{$WebApplicationBaseURL}/content/main/recyclebin.xml">zurück zum Papierkorb</a>
+      </p>
+    </xsl:template>
+
+   <!-- =========== prints recursive a string list ========== -->    
+    <xsl:template name="printStringList">
+      <xsl:param name="list"/>
+      <xsl:param name="sep" />
+
+      <xsl:call-template name="printFirstElementInList">
+        <xsl:with-param name="list" select="$list"/>
+        <xsl:with-param name="sep" select="$sep"/>
+      </xsl:call-template>
+      <br />
+      <xsl:variable name="nextEntry" select="substring-after($list, $sep)" />
+      <xsl:if test="$nextEntry != ''">
+        <xsl:call-template name="printStringList">
+        <xsl:with-param name="list" select="$nextEntry"/>
+        <xsl:with-param name="sep" select="$sep"/>
+      </xsl:call-template>
+      </xsl:if>
+    </xsl:template>
+
+    <!-- =================================================================================================== -->
+
+    <xsl:template name="printFirstElementInList">
+      <xsl:param name="list"/>
+      <xsl:param name="sep" />
+      <xsl:choose>
+        <xsl:when test="contains($list, $sep)">
+          <xsl:value-of select="substring-before($list, $sep)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$list" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>

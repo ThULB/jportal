@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <section xml:lang="de" title="Papierkorb: Objekte gelöscht">
+        <p>
+            <recycleBinDeletedPage/>
+        </p>
+    </section>
+    <meta>
+        <log date="2009-02-20" time="13:02" labelPath=" » Papierkorb" lastEditor="administrator" />
+    </meta>
+    <section xml:lang="en" title="Recycle bin: objects deleted">
+        <p>
+            <recycleBinDeletedPage/>
+        </p>
+    </section>
+    <meta>
+        <log date="2009-02-20" time="13:02" labelPath=" » Recycle bin" lastEditor="administrator" />
+    </meta>
+</MyCoReWebPage>

@@ -69,7 +69,7 @@ public class MCRCheckForDuplicates {
             Element objectElement = new Element("object");
             objectElement.setAttribute("objId", mcr.getId().getId());
             rootElement.addContent(objectElement);
-            // set the condition information in depending on the type 
+            // set the condition information depending on the type 
             if (type.equals("person")) {
                 MCRMetaElement meta = mcr.getMetadata().getMetadataElement("def.heading");
                 Element lastNameElement = getConditionElementById("lastName", meta);
@@ -122,8 +122,8 @@ public class MCRCheckForDuplicates {
 
     /**
      * Returns the condition element of a specified id in an meta element.
-     * Each type has different condition. For example a name or a date.
-     * This function creates an condition element for the specified type. 
+     * Each type has different conditions. For example a name or a date.
+     * This method creates an condition element for the specified type. 
      * @param id The condition id.
      * @param meta The meta element.
      * @return A new condition element.

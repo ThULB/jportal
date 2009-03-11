@@ -8,11 +8,10 @@
   Analyse-Datei erzeugt wurde.</span>
   <br style="color: rgb(255, 0, 0);" />
   <span style="color: rgb(255, 0, 0);">Die Analyse-Datei erzeugen
-  Sie mit folgenden CLI-Befehlen:
-  <ol>
-  <li>create checkForDuplicates.xml for type: {0}</li>
-  <li>find duplicates</li>
-  </ol>
+  Sie mit folgendem CLI-Befehl:
+  <ul>
+  <li>find duplicates type: {0}</li>
+   </ul>
   Eine bearbeiteter Dublettenindex kann anschließend mit dem CLI-Befehl 'clean up redundancy in database for type: {0}' bereinigt werden.
 </span>
   <br />
