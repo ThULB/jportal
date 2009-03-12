@@ -43,7 +43,7 @@ public class MCRCheckForDuplicates {
 
         // File appender for logging
         SimpleLayout layout = new SimpleLayout();
-        FileAppender fileAppender = new FileAppender(layout, DIR, false);
+        FileAppender fileAppender = new FileAppender(layout, DIR + "error-" + type + ".log");
         LOGGER.addAppender(fileAppender);
 
         // get the search condition
