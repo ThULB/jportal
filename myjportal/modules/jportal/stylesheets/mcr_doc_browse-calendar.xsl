@@ -71,7 +71,7 @@
    <xsl:variable name="actnode" select="position()" />  
    <xsl:variable name="query">
     <xsl:value-of select="concat('(',$search,'1+=+', col[2]/@lineID, ')')"/>
-    <xsl:value-of select="concat('+and+(',$search,'2+=+', 'site)')"/>
+<!--<xsl:value-of select="concat('+and+(',$search,'2+=+', 'site)')"/> -->
     <xsl:value-of select="''"/>
     <xsl:if test="string-length(../@doctype)>0">
       <xsl:value-of select="concat('+and+', ../@doctype)"/>
