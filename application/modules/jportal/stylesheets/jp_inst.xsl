@@ -234,9 +234,9 @@
                             </xsl:call-template>
                         </table>
                         <!-- linked articles-->
-                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="listLinkedArts" />
-                        </table>
+                        <xsl:call-template name="listLinkedArts" />
+
+            			<!-- print system data -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">
@@ -253,7 +253,7 @@
                                     <br />
                                 </td>
                             </tr>
-                        </table>              
+                        </table>
                         <!-- System data ##################################### -->
                         <xsl:call-template name="get.systemData"/>
                         
@@ -324,4 +324,3 @@
     </xsl:template>
     <!-- ============================================================================================================ -->
 </xsl:stylesheet>
-
