@@ -25,12 +25,14 @@ public class MCRCreateRedundancyMap {
     private static final String DIR = MCRConfiguration.instance().getString("MCR.doubletFinder") + FS;
 
     /**
-     * Inner methode which needed a checkForDuplicates.xml.
+     * Creates a file with duplicate informations of a specified type.
      * @throws Exception
      */
     public static void internalCreateRedundancyMap(String type) throws Exception {
-        Document d = new SAXBuilder().build(new File(DIR + "checkForDuplicates-" + type + ".xml"));
-        if (d == null) {
+        Document d;
+        try {
+            d = new SAXBuilder().build(new File(DIR + "checkForDuplicates-" + type + ".xml"));
+        } catch(Exception e) {
             LOGGER.error("Couldnt find checkForDuplicates-" + type + ".xml");
             return;
         }
@@ -103,7 +105,6 @@ public class MCRCreateRedundancyMap {
 
         LOGGER.info("Create the duplicate xml-file.");
         // generate a new xml-document with the duplicates
-        // format: <redundancyID notRedundancyID="redId 1">redId 2</redundancyID>.
         Document duplicateXMLFile = new Document();
         Element duplicateRootElement = new Element("redundancyMap");
         duplicateRootElement.setAttribute("type", type);

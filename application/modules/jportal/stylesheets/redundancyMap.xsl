@@ -595,6 +595,7 @@
                   <xsl:call-template name="printDublicates.entry" />
                 </div>
                 <!-- forcing a newline -->
+                <div style="clear:left" />
                 <div style="clear:right" />
               </xsl:otherwise>
             </xsl:choose>

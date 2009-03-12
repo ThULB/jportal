@@ -2,7 +2,9 @@ package org.mycore.frontend.cli.command;
 
 import java.io.FileOutputStream;
 
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.apache.log4j.SimpleLayout;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
@@ -39,6 +41,11 @@ public class MCRCheckForDuplicates {
             return;
         }
 
+        // File appender for logging
+        SimpleLayout layout = new SimpleLayout();
+        FileAppender fileAppender = new FileAppender(layout, DIR, false);
+        LOGGER.addAppender(fileAppender);
+
         // get the search condition
         MCRCondition cond = null;
         if (type.equals("person")) {
@@ -62,9 +69,15 @@ public class MCRCheckForDuplicates {
         rootElement.setAttribute("tableHead", getTableHead(type));
         long count = 0;
         for (MCRHit mcrHit : result) {
-            // get the mcr object
             MCRObject mcr = new MCRObject();
-            mcr.receiveFromDatastore(mcrHit.getID());
+            // try to get a valid MCRObject from datastore 
+            try {
+                mcr.receiveFromDatastore(mcrHit.getID());
+            } catch(Exception e) {
+                // Exception occurred -> do no not end the cycle
+                LOGGER.error("exception occurred while receving mycore object from datastore (" + mcrHit.getID() + "): " + e);
+                continue;
+            }
             // creates a new element for each object in the db.
             Element objectElement = new Element("object");
             objectElement.setAttribute("objId", mcr.getId().getId());
@@ -91,6 +104,9 @@ public class MCRCheckForDuplicates {
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         FileOutputStream output = new FileOutputStream(DIR + "checkForDuplicates-" + type + ".xml");
         outputter.output(d, output);
+        
+        // remove appender
+        LOGGER.removeAppender(fileAppender);
     }
 
     /**
