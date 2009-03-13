@@ -11,6 +11,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.user.MCRUserMgr;
@@ -27,6 +28,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
     protected static String restorePage = pagedir + CONFIG.getString("MCR.SWF.PageRestore", "editor_restore.xml");
     protected static String restoreErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorRestore", "editor_error_restore.xml");
     protected static String exportErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorExport", "editor_error_export.xml");
+    protected static String linkErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorLink", "editor_error_link.xml");
 
     protected static String recycleDir = CONFIG.getString("MCR.recycleBin", "data" + FS + "recycleBin");
 
@@ -40,6 +42,11 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }
+        if(hasLinks(cd.mytfmcrid)) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + linkErrorPage));
+            return;
+        }
+
         MCRSession session = MCRSessionMgr.getCurrentSession();
         String user = session.getCurrentUserID();
         String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
@@ -63,6 +70,13 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             cd.myfile = deleteerrorpage;
         }
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
+    }
+
+    protected boolean hasLinks(String id) {
+        int linkCount = MCRLinkTableManager.instance().countReferenceLinkTo(id);
+        if(linkCount > 0)
+            return true;
+        return false;
     }
 
     /**

@@ -66,13 +66,13 @@ public class MCRRecycleBinServlet extends MCRServlet {
                 restoreObject(id);
         }
 
+        // wait 2 seconds -> updateInDatastore needs this time
+        Thread.sleep(2000);
         // send response
         if(submitID.equals("Restore")) {
             Element element = MCRURIResolver.instance().resolve("webapp:" + recycleBinPage);
             getLayoutService().doLayout(job.getRequest(), job.getResponse(), new Document(element));
         } else {
-            // wait 2 seconds -> updateInDatastore needs this time
-            Thread.sleep(2000);
             job.getRequest().setAttribute("XSL.nonLinkedList", getStringList(nonLinkedObjects));
             job.getRequest().setAttribute("XSL.linkedList", getStringList(linkedObjects));
             job.getRequest().setAttribute("XSL.errorList", getStringList(errorObjects));
