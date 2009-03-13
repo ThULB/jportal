@@ -73,7 +73,7 @@
 							<div id="whitespace"></div>
 							<span id="headline">
 								<a
-									href="http://www.urmel-dl.de/urmel/content/main/content.xml"
+									href="http://www.urmel-dl.de/"
 									target="_blank">
 									UrMEL
 								</a>

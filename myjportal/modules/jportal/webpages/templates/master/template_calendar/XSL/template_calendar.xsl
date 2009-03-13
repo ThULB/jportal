@@ -29,7 +29,7 @@
                     <table id="headline">
                         <tr>
                             <td>
-                                <a href="http://www.urmel-dl.de/urmel/content/main/content.xml" target="_blank">UrMEL</a>
+                                <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
                             </td>
                             <td>|</td>
                             <td>

@@ -37,7 +37,7 @@
                         <td width="100%">
                             <div id="whitespace"></div>
                             <span id="headline">
-                                <a href="http://www.urmel-dl.de/urmel/content/main/content.xml" target="_blank">UrMEL</a>
+                                <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
                                 <xsl:copy-of select="'     |     '" />
                                 <a href="http://zs.thulb.uni-jena.de/content/below/index.xml" target="_self">Journals@UrMEL</a>
                             </span>
