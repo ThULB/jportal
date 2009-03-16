@@ -27,9 +27,9 @@
                 <a id="transparent-logo" href="{$WebApplicationBaseURL}">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.gif" />
                 </a>
-                <a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/whatsnew.xml">
+                <!-- a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/whatsnew.xml">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-button.png" />
-                </a>
+                </a-->
                 <div id="topleft-logo" />
                 <div id="topright-logo" />
                 <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #646466;">
