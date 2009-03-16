@@ -2,6 +2,7 @@ package org.mycore.frontend.servlets;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -12,8 +13,11 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.user.MCRUserMgr;
 
 /**
@@ -29,6 +33,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
     protected static String restoreErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorRestore", "editor_error_restore.xml");
     protected static String exportErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorExport", "editor_error_export.xml");
     protected static String linkErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorLink", "editor_error_link.xml");
+    protected static String childlinkedErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorChildLinked", "editor_error_childlinked.xml");
 
     protected static String recycleDir = CONFIG.getString("MCR.recycleBin", "data" + FS + "recycleBin");
 
@@ -46,20 +51,35 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + linkErrorPage));
             return;
         }
-
-        MCRSession session = MCRSessionMgr.getCurrentSession();
-        String user = session.getCurrentUserID();
-        String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
-                + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
+        
         try {
             MCRObject obj = new MCRObject();
             obj.receiveFromDatastore(cd.mytfmcrid);
-            MCRObjectService service = obj.getService();
-            if(!service.isFlagSet("deleted")) {
-                service.addFlag("deleted");
-                service.addFlag("deletedFrom", userRealName + "(" + user + ")");
+            ArrayList<MCRObject> childs = getChilds(obj);
+
+            // check if childs are linked
+            boolean childLinked = false;
+            for(MCRObject child : childs) {
+                if(hasLinks(child.getId().getId()))
+                    childLinked = true;
             }
-            obj.updateInDatastore();
+            if(childLinked == true) {
+                job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + childlinkedErrorPage));
+                return;   
+            }
+
+            // get some useful infos
+            MCRSession session = MCRSessionMgr.getCurrentSession();
+            String user = session.getCurrentUserID();
+            String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
+                    + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
+
+            // delete all objects (set flags)
+            deleteObject(obj, userRealName, user);
+            for(MCRObject child : childs) {
+                deleteObject(child, userRealName, user);
+            }
+
             cd.myfile = deletepage;
         } catch (Exception e) {
             if (LOGGER.isDebugEnabled()) {
@@ -70,6 +90,37 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             cd.myfile = deleteerrorpage;
         }
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
+    }
+
+    /**
+     * Returns all children of a MCRObject
+     * @param mcrObj the parent MCRObject
+     * @return all childs
+     */
+    protected ArrayList<MCRObject> getChilds(MCRObject mcrObj) {
+        ArrayList<MCRObject> childs = new ArrayList<MCRObject>();
+        MCRObjectStructure struct = mcrObj.getStructure();
+        for(int i = 0; i < struct.getChildSize(); i++) {
+            String childID = struct.getChild(i).getXLinkHref();
+            MCRObject mcrChild = new MCRObject();
+            mcrChild.receiveFromDatastore(childID);
+            childs.add(mcrChild);
+            childs.addAll(getChilds(mcrChild));
+        }
+        return childs;
+    }
+
+    protected void deleteObject(MCRObject mcrObj, String userRealName, String user) {
+        MCRObjectService service = mcrObj.getService();
+        if(!service.isFlagSet("deleted")) {
+            service.addFlag("deleted");
+            service.addFlag("deletedFrom", userRealName + "(" + user + ")");
+        }
+        try {
+            mcrObj.updateInDatastore();
+        } catch(Exception exc) {
+            LOGGER.error("Exception occurred durring deleting object " + mcrObj);
+        }
     }
 
     protected boolean hasLinks(String id) {

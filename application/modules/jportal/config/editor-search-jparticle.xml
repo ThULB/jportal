@@ -1,6 +1,6 @@
 <editor id="searchmask">
 
-    <target format="xml" method="post" name="MCRSearchServlet" type="servlet" />
+    <target format="xml" method="post" name="MCRJPortalSearchServlet" type="servlet" />
     <components var="/query" root="root">
 
         <panel lines="off" id="root">
@@ -11,11 +11,6 @@
             <hidden var="conditions/boolean/boolean/condition90/@field" default="journalID_art" />
             <hidden var="conditions/boolean/boolean/condition90/@operator" default="=" />
             <include cacheable="false" uri="jportal_getJournalID:conditions/boolean/boolean/condition90/@value" />
-
-            <!-- Search only when "deletedFlag" equals false -->
-            <hidden var="conditions/boolean/condition11/@field" default="deletedFlag" />
-            <hidden var="conditions/boolean/condition11/@operator" default="=" />
-            <hidden var="conditions/boolean/condition11/@value" default="false" />
 
             <!-- search in formal description -->
             <cell anchor="WEST" colspan="4" col="1" row="1" class="searchmaskHeadlines" >

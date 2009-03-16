@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor id="searchmask">
-    <target format="xml" method="post" name="MCRSearchServlet" type="servlet" />
+    <target format="xml" method="post" name="MCRJPortalSearchServlet" type="servlet" />
     <components var="/query" root="root">
 
         <panel lines="off" id="root">
@@ -15,13 +15,6 @@
             </cell>
 
             <hidden var="conditions/boolean/@operator" default="and" />
-            
-            <!-- not operator for deletedFlag -->
-            <hidden var="conditions/boolean/boolean2/@operator" default="not" />
-            <!-- Search only when "deletedFlag" equals false -->
-            <hidden var="conditions/boolean/boolean2/condition1/@field" default="deletedFlag" />
-            <hidden var="conditions/boolean/boolean2/condition1/@operator" default="=" />
-            <hidden var="conditions/boolean/boolean2/condition1/@value" default="true" />
             
             <!-- Search for fields of type bibdescript -->
             <cell var="conditions/boolean/boolean/condition1" col="1" row="2" colspan="2">

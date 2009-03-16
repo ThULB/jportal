@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor id="searchmask">
-	<target format="xml" method="post" name="MCRSearchServlet" type="servlet"/>
+	<target format="xml" method="post" name="MCRJPortalSearchServlet" type="servlet"/>
 	<components var="/query" root="root">
 		<panel lines="off" id="root">
 			<hidden default="editor_form_search-jpvolume.xml" var="@mask"/>
 			<hidden default="xml" var="conditions/@format"/>
-            
-            <!-- Search only when "deletedFlag" equals false -->
-            <hidden var="conditions/boolean/condition11/@field" default="deletedFlag" />
-            <hidden var="conditions/boolean/condition11/@operator" default="=" />
-            <hidden var="conditions/boolean/condition11/@value" default="false" />
 
 			<!-- Search for fields of type name -->
 			<cell var="conditions/boolean/condition1/@field" anchor="EAST" col="1" row="1">

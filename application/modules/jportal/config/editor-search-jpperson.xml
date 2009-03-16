@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <editor id="searchmask">
-	<target format="xml" method="post" name="MCRSearchServlet" type="servlet"/>
+	<target format="xml" method="post" name="MCRJPortalSearchServlet" type="servlet"/>
 	<components var="/query" root="root">
 		<panel lines="off" id="root">
 			<hidden default="editor_form_search-jpperson.xml" var="@mask"/>
@@ -10,11 +10,6 @@
 			<hidden default="headingLastName" var="conditions/boolean/condition1/@field"/>
 			<hidden default="contains"
 				var="conditions/boolean/condition1/@operator"/>
-
-            <!-- Search only when "deletedFlag" equals false -->
-            <hidden var="conditions/boolean/condition11/@field" default="deletedFlag" />
-            <hidden var="conditions/boolean/condition11/@operator" default="=" />
-            <hidden var="conditions/boolean/condition11/@value" default="false" />
 
 			<cell anchor="EAST" col="1" row="1">
 				<text i18n="editor.search.person.lastName"/>

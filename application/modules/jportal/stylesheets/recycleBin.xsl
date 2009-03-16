@@ -150,7 +150,7 @@
             <xsl:value-of select="encoder:encode('(deletedFlag = true)')" />
         </xsl:variable>
         <xsl:variable name="queryURI">
-            <xsl:value-of select="concat('query:term=',$term,'&amp;maxResults=0')" />
+            <xsl:value-of select="concat('jportal_query:term=',$term,'&amp;maxResults=0')" />
         </xsl:variable>
         <xsl:copy-of select="document($queryURI)" />
     </xsl:template>

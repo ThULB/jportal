@@ -440,7 +440,7 @@
             <xsl:value-of select="concat($objType,$mCRQLConditions_encoded)" />
         </xsl:variable>
         <xsl:variable name="queryURI">
-            <xsl:value-of select="concat('query:term=',$term,'&amp;sortby=',$sortField,
+            <xsl:value-of select="concat('jportal_query:term=',$term,'&amp;sortby=',$sortField,
             '&amp;order=descending&amp;maxResults=',$maxResults)" />
         </xsl:variable>
         <!-- do layout -->
@@ -544,7 +544,7 @@
     <xsl:template name="printLatestObjects.all">
         <xsl:param name="query2" />
         <xsl:param name="sortBy" />
-        <a href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$query2}&amp;{$sortBy}.sortField=descending&amp;numPerPage=10&amp;maxResults=0">
+        <a href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?query={$query2}&amp;{$sortBy}.sortField=descending&amp;numPerPage=10&amp;maxResults=0">
             <xsl:value-of select="i18n:translate('latestObjects.more')" />
         </a>
     </xsl:template>

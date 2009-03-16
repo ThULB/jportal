@@ -77,8 +77,8 @@
       <xsl:value-of select="concat('+and+', ../@doctype)"/>
     </xsl:if>
    </xsl:variable>
-   <xsl:variable name="href2All" select="concat($ServletsBaseURL, 'MCRSearchServlet', $HttpSession, '?numPerPage=10','&amp;mask=browse/',$type,'&amp;query=',$query)" />
-   <xsl:variable name="href2" select="concat($ServletsBaseURL, 'MCRSearchServlet', $HttpSession, '?numPerPage=10','&amp;mask=browse/',$type,'&amp;query=',$query,$filterJournalID)" />
+   <xsl:variable name="href2All" select="concat($ServletsBaseURL, 'MCRJPortalSearchServlet', $HttpSession, '?numPerPage=10','&amp;mask=browse/',$type,'&amp;query=',$query)" />
+   <xsl:variable name="href2" select="concat($ServletsBaseURL, 'MCRJPortalSearchServlet', $HttpSession, '?numPerPage=10','&amp;mask=browse/',$type,'&amp;query=',$query,$filterJournalID)" />
 <!--   <xsl:variable name="img1"  select="concat($WebApplicationBaseURL, 'images/', col[1]/@folder1, '.gif')" />-->
    <xsl:variable name="img2"  select="concat($WebApplicationBaseURL, 'images/', col[1]/@folder2, '.gif')" />
    <xsl:variable name="img3"  select="concat($WebApplicationBaseURL, 'images/folder_blank.gif')" />

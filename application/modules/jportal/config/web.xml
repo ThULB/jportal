@@ -22,7 +22,16 @@
     <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalStartEditorServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalSearchServlet">
+    <servlet-name>MCRJPortalSearchServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRJPortalSearchServlet</servlet-class>
+</servlet>
 
+
+<servlet-mapping>
+    <servlet-name>MCRJPortalSearchServlet</servlet-name>
+    <url-pattern>/servlets/MCRJPortalSearchServlet/*</url-pattern>
+</servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
     <url-pattern>/servlets/MCRJPortalStartEditorServlet/*</url-pattern>
