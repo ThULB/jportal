@@ -1483,7 +1483,7 @@
             <xsl:with-param name="location" select="'navi'" />
             <xsl:with-param name="childrenKinds" select="$kindOfChildren2" />
             <xsl:with-param name="childrenXML" select="xalan:nodeset($children)" />
-            <xsl:with-param name="numChildren" select="count($children)" />
+            <xsl:with-param name="numChildren" select="count(xalan:nodeset($children)/mcr:results/mcr:hit)" />
         </xsl:call-template>
         <xsl:variable name="toc.pos.verif">
             <xsl:choose>
