@@ -21,6 +21,8 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
+import org.mycore.parsers.bool.MCRNotCondition;
+import org.mycore.parsers.bool.MCROrCondition;
 import org.mycore.services.fieldquery.MCRCachedQueryData;
 import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRFieldType;
@@ -151,10 +153,6 @@ public class MCRJPortalSearchServlet extends MCRSearchServlet {
             }
         }
 
-        // add deletedFlag to input except deletedFlag is already set
-        if(!isDeletedFlagSet(input))
-            addDeletedFlag(input);
-
         Document clonedQuery = (Document)(input.clone()); // Keep for later re-use
 
         // Show incoming query document
@@ -165,6 +163,9 @@ public class MCRJPortalSearchServlet extends MCRSearchServlet {
 
         org.jdom.Element root = input.getRootElement();
         MCRCondition cond =  cleanupQuery(input);
+        // add deletedFlag to input except deletedFlag is already set
+        if(!isConditionFlagSet(cond, "deletedFlag") || !isConditionFlagSet(cond, "fileDeleted"))
+            addDeletedFlags(input, cond);
 
         // Execute query
         MCRResults result = MCRQueryManager.search(MCRQuery.parseXML(input));
@@ -178,48 +179,30 @@ public class MCRJPortalSearchServlet extends MCRSearchServlet {
         sendRedirect(request, response, result.getID(), npp);
     }
 
-    protected boolean isDeletedFlagSet(Document doc) {
-        Filter filter = new Filter() {
-            @Override
-            public boolean matches(Object arg0) {
-                if(!(arg0 instanceof Element))
-                    return false;
-                Element e = (Element)arg0;
-                if(!"condition".equals(e.getName()))
-                    return false;
-                if(!"deletedFlag".equals(e.getAttributeValue("field")))
-                    return false;
-                return true;
-            }
-        };
-        Iterator i = doc.getDescendants(filter);
-        if(i.hasNext())
+    protected boolean isConditionFlagSet(MCRCondition cond, String flag) {
+        if(cond.toString().contains(flag))
             return true;
         return false;
     }
 
     /**
-     * changes the condition in a form like: (old cond) and (deletedFlag = true)
+     * changes the condition in a form like: ((old cond) and (deletedFlag = false)) or fileDeleted = false
      * @param doc the document to change
      */
-    protected void addDeletedFlag(Document doc) {
-        // get conditions from doc
-        Element conditionsElement = doc.getRootElement().getChild("conditions");
-        Element firstCondition = (Element)conditionsElement.getChildren().get(0);
-        conditionsElement.removeContent(firstCondition);
-
-        // create deleted condition
-        MCRFieldDef fieldDef = MCRFieldDef.getDef("deletedFlag");
-        String op = "=";
-        String value = "false";
-        MCRQueryCondition qryCond = new MCRQueryCondition(fieldDef, op, value);
-        Element deletedFlagCondition = qryCond.toXML(); 
-
-        // put all together
-        Element andCondition = new MCRAndCondition().toXML();
-        andCondition.addContent(firstCondition);
-        andCondition.addContent(deletedFlagCondition);
-        conditionsElement.addContent(andCondition);
+    protected void addDeletedFlags(Document doc, MCRCondition cond) {
+        if(!isConditionFlagSet(cond, "deletedFlag")) {
+            // create deletedFlag condition
+            MCRFieldDef fieldDef = MCRFieldDef.getDef("deletedFlag");
+            String op = "=";
+            String value = "false";
+            MCRQueryCondition deletedFlagCond = new MCRQueryCondition(fieldDef, op, value);
+            cond = new MCRAndCondition(cond, deletedFlagCond);
+        }
+        // create document
+        Element conditionsElement = (Element)doc.getRootElement().getChild("conditions");
+        conditionsElement.removeContent();
+        // add new conditions element
+        conditionsElement.addContent(cond.toXML());
     }
 
     private String getReqParameter(HttpServletRequest req, String name, String defaultValue) {

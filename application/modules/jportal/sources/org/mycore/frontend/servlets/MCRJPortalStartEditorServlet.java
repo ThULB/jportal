@@ -13,9 +13,9 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
-import org.mycore.datamodel.metadata.MCRMetaLink;
+import org.mycore.datamodel.metadata.MCRBase;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
 import org.mycore.user.MCRUserMgr;
@@ -37,6 +37,9 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
 
     protected static String recycleDir = CONFIG.getString("MCR.recycleBin", "data" + FS + "recycleBin");
 
+    /**
+     * Sets the deleted flag for the delivered mcrobject and all his children.
+     */
     @Override
     public void sdelobj(MCRServletJob job, CommonData cd) throws IOException {
         if (!MCRAccessManager.checkPermission(cd.mytfmcrid, "deletedb")) {
@@ -75,9 +78,9 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
                     + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
 
             // delete all objects (set flags)
-            deleteObject(obj, userRealName, user);
+            markAsDeleted(obj, userRealName, user);
             for(MCRObject child : childs) {
-                deleteObject(child, userRealName, user);
+                markAsDeleted(child, userRealName, user);
             }
 
             cd.myfile = deletepage;
@@ -87,6 +90,40 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             } else {
                 LOGGER.error(e.getMessage());
             }
+            cd.myfile = deleteerrorpage;
+        }
+        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
+    }
+
+    /**
+     * Sets the deleted flag for the delivered derivate.
+     */
+    @Override
+    public void sdelder(MCRServletJob job, CommonData cd) throws IOException {
+        if (!MCRAccessManager.checkPermission(cd.myremcrid, "deletedb")) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
+            return;
+        }
+        if (cd.mysemcrid.length() == 0) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
+            return;
+        }
+
+        // get some useful infos
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        String user = session.getCurrentUserID();
+        String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
+                + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
+
+        MCRDerivate der = new MCRDerivate();
+        try {
+            // get the derivate from db
+            der.receiveFromDatastore(cd.mysemcrid);
+            markAsDeleted(der, userRealName, user);
+            StringBuffer sb = new StringBuffer();
+            sb.append("receive/").append(cd.myremcrid);
+            cd.myfile = sb.toString();
+        } catch (Exception e) {
             cd.myfile = deleteerrorpage;
         }
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
@@ -110,19 +147,32 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         return childs;
     }
 
-    protected void deleteObject(MCRObject mcrObj, String userRealName, String user) {
-        MCRObjectService service = mcrObj.getService();
+    /**
+     * Marks a MCRBaseObject as deleted.
+     * @param mcrBase the base object which will be marked as deleted
+     * @param userRealName the real name of the user who deletes this object
+     * @param user the short user name
+     */
+    protected void markAsDeleted(MCRBase mcrBase, String userRealName, String user) {
+        MCRObjectService service = mcrBase.getService();
         if(!service.isFlagSet("deleted")) {
             service.addFlag("deleted");
             service.addFlag("deletedFrom", userRealName + "(" + user + ")");
         }
         try {
-            mcrObj.updateInDatastore();
+            mcrBase.updateInDatastore();
+            
+            
         } catch(Exception exc) {
-            LOGGER.error("Exception occurred durring deleting object " + mcrObj);
+            LOGGER.error("Exception occurred durring deleting object " + mcrBase);
         }
     }
 
+    /**
+     * Checks if the object is linked to other objects
+     * @param id the object id
+     * @return if the object is linked
+     */
     protected boolean hasLinks(String id) {
         int linkCount = MCRLinkTableManager.instance().countReferenceLinkTo(id);
         if(linkCount > 0)
@@ -177,7 +227,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
     }
 
     /**
-     * Removes the 'deleted' flag of a metadata object. The object is now
+     * Removes the 'deleted' flag of a metadata object. The object then is
      * visible for all search querys.
      */
     public void srestoreobj(MCRServletJob job, CommonData cd) throws IOException {

@@ -23,10 +23,20 @@
             </xsl:call-template>
         </xsl:variable>
 
+        <xsl:variable name="recycleDerivateIDs">
+            <xsl:call-template name="get.allRecycleBinDerivateIDs" />
+        </xsl:variable>
+        <xsl:variable name="recycleDerivatesXMLs">
+          <xsl:call-template name="get.recycleBinDerivatesXMLs">
+            <xsl:with-param name="recycleIDsIF" select="$recycleDerivateIDs" />
+          </xsl:call-template>
+        </xsl:variable>
+
         <!-- do layout -->
         <xsl:choose>
           <!-- test if recycle bin is empty -->
-          <xsl:when test="xalan:nodeset($recycleXMLs)/recycleXMLs/mycoreobject[position() = 1]" >
+          <xsl:when test="xalan:nodeset($recycleXMLs)/recycleXMLs/mycoreobject[position() = 1] or
+          xalan:nodeset($recycleDerivatesXMLs)/recycleXMLs/mycorederivate[position() = 1] " >
             <form id="recycleBin" action="{$ServletsBaseURL}{$ServletName}" method="post">
               <table width="75%">
                 <th width="5%"></th>
@@ -34,8 +44,11 @@
                 <th width="15%" align="left"><xsl:value-of select="'Typ'" /></th>
                 <th width="30%" align="left"><xsl:value-of select="'gelöscht am'" /></th>
                 <th align="left"><xsl:value-of select="'gelöscht von'" /></th>
-                <xsl:call-template name="recycleBin.doLayout">
+                <xsl:call-template name="recycleBin.printObjects">
                     <xsl:with-param name="recycleXMLsIF" select="$recycleXMLs" />
+                </xsl:call-template>
+                <xsl:call-template name="recycleBin.printDerivates">
+                    <xsl:with-param name="recycleXMLsIF" select="$recycleDerivatesXMLs" />
                 </xsl:call-template>
               </table>
               <br />
@@ -76,10 +89,25 @@
 
     <!-- =================================================================================================== -->
 
-    <xsl:template name="recycleBin.doLayout">
+    <xsl:template name="recycleBin.printObjects">
       <xsl:param name="recycleXMLsIF" />
 
-      <xsl:for-each select="xalan:nodeset($recycleXMLsIF)/recycleXMLs/mycoreobject">        
+      <xsl:for-each select="xalan:nodeset($recycleXMLsIF)/recycleXMLs/mycoreobject">
+        <xsl:call-template name="printEntry" />
+      </xsl:for-each>
+    </xsl:template>
+
+    <!-- =================================================================================================== -->
+
+    <xsl:template name="recycleBin.printDerivates">
+      <xsl:param name="recycleXMLsIF" />
+        <xsl:for-each select="xalan:nodeset($recycleXMLsIF)/recycleXMLs/mycorederivate">
+          <xsl:call-template name="printEntry" />
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- =================================================================================================== -->
+    <xsl:template name="printEntry">
         <tr>
           <!-- Checkbox -->
           <td>
@@ -112,7 +140,6 @@
             <xsl:value-of select="./service/servflags/servflag[@type='deletedFrom']/text()" />
           </td>
         </tr>
-      </xsl:for-each>
     </xsl:template>
 
     <!-- =================================================================================================== -->
@@ -136,6 +163,26 @@
 
     <!-- =================================================================================================== -->
 
+    <xsl:template name="get.recycleBinDerivatesXMLs">
+        <xsl:param name="recycleIDsIF" />
+        <xsl:variable name="xmlsUnsorted">
+             <xsl:element name="xmlsUnsorted">
+               <xsl:for-each select="xalan:nodeset($recycleIDsIF)/mcr:results/mcr:hit/mcr:metaData/mcr:field[@name = 'DerivateID']">
+                  <xsl:copy-of select="document(concat('mcrobject:',.))" />
+               </xsl:for-each>
+            </xsl:element>
+        </xsl:variable>
+        <xsl:element name="recycleXMLs">
+            <xsl:for-each select="xalan:nodeset($xmlsUnsorted)/xmlsUnsorted/mycorederivate">
+              <xsl:sort select="@ID"  data-type="text" order="ascending" />
+              <xsl:copy-of select="." />
+            </xsl:for-each>
+        </xsl:element>
+    </xsl:template>
+
+
+    <!-- =================================================================================================== -->
+
     <xsl:template name="recycleList.cutID">
         <xsl:param name="fullID" />
         <xsl:variable name="temp" select="substring-after($fullID, '_')"/>
@@ -150,7 +197,21 @@
             <xsl:value-of select="encoder:encode('(deletedFlag = true)')" />
         </xsl:variable>
         <xsl:variable name="queryURI">
-            <xsl:value-of select="concat('jportal_query:term=',$term,'&amp;maxResults=0')" />
+            <!-- do the default query, not needed to append deletedFlag or fileDeleted -->
+            <xsl:value-of select="concat('query:term=',$term,'&amp;maxResults=0')" />
+        </xsl:variable>
+        <xsl:copy-of select="document($queryURI)" />
+    </xsl:template>
+    
+    <!-- =================================================================================================== -->
+
+    <xsl:template name="get.allRecycleBinDerivateIDs">
+        <xsl:variable name="term">
+            <xsl:value-of select="encoder:encode('(fileDeleted = true)')" />
+        </xsl:variable>
+        <xsl:variable name="queryURI">
+            <!-- do the default query, not needed to append deletedFlag or fileDeleted -->
+            <xsl:value-of select="concat('query:term=',$term,'&amp;maxResults=0')" />
         </xsl:variable>
         <xsl:copy-of select="document($queryURI)" />
     </xsl:template>
@@ -164,6 +225,7 @@
           <xsl:when test="$objectID = 'jportal_person'"><xsl:value-of select="'Person'"/></xsl:when>
           <xsl:when test="$objectID = 'jportal_jpvolume'"><xsl:value-of select="'Band'"/></xsl:when>
           <xsl:when test="$objectID = 'jportal_jparticle'"><xsl:value-of select="'Artikel'"/></xsl:when>
+          <xsl:when test="$objectID = 'jportal_derivate'"><xsl:value-of select="'Derivat'"/></xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="'Unbekannt'"/>
           </xsl:otherwise>

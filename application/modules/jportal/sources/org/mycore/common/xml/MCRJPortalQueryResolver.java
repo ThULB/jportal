@@ -47,8 +47,7 @@ public class MCRJPortalQueryResolver implements MCRResolver {
             return null;
         }
         // add deletedFlag condition if its not set
-        if(!query.contains("deletedFlag"))
-            query = addDeletedFlag(query);
+        query = addDeletedFlag(query);
 
         Document input = getQueryDocument(query, sortby, order, maxResults);
         // Execute query
@@ -66,8 +65,11 @@ public class MCRJPortalQueryResolver implements MCRResolver {
         return "0";
     }
 
-    private static String addDeletedFlag(String query) {
-        return "(" + query + ") and (deletedFlag = false)";
+    private static String addDeletedFlag(String oldQry) {
+        String newQry = oldQry;
+        if(!newQry.contains("deletedFlag"))
+            newQry = "(" + newQry + ") and (deletedFlag = false)";
+        return newQry;
     }
 
     private static Document getQueryDocument(String query, String sortby, String order, String maxResults) {
