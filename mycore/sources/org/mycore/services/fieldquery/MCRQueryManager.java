@@ -42,7 +42,7 @@ import org.mycore.parsers.bool.MCRTrueCondition;
 /**
  * Executes queries on all configured searchers and returns query results.
  * 
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  */
 public class MCRQueryManager {
 
@@ -198,11 +198,32 @@ public class MCRQueryManager {
     /** Split query into subqueries for each index, recombine results */
     private static MCRResults buildCombinedResults(MCRCondition cond, List<MCRSortBy> sortBy, boolean not) {
         boolean and = (cond instanceof MCRAndCondition);
-        Hashtable table = groupConditionsByIndex(cond);
-        MCRResults totalResults = null;
+        Hashtable<String,List<MCRCondition>> table = groupConditionsByIndex(cond);
 
-        for (Enumeration indexes = table.keys(); indexes.hasMoreElements();) {
-            List conditions = (List) (table.get(indexes.nextElement()));
+        MCRResults totalResults = null;
+        // only if ONE condition list is in the table, which has two or more elements
+        // -> split the conditions and build sub results
+        if(table.size() == 1) {
+            // get the condition list
+            List<MCRCondition> mixedCondList = table.values().iterator().next();
+            if(mixedCondList.size() >= 2) {
+                for(MCRCondition mixedCond : mixedCondList) {
+                    MCRResults subResults = buildResults(mixedCond, 0, sortBy, true);
+                    if (totalResults == null)
+                        totalResults = subResults;
+                    else if (and) {
+                        totalResults.and(subResults);
+                        if (totalResults.getNumHits() == 0)
+                            break; // 0 and ? := 0, we do not need to query the rest
+                    } else
+                        totalResults.or(subResults);
+                }
+                return totalResults;
+            }
+        }
+
+        for (Enumeration<String> indexes = table.keys(); indexes.hasMoreElements();) {
+            List<MCRCondition> conditions = table.get(indexes.nextElement());
             MCRCondition subCond = buildSubCondition(conditions, and, not);
 
             MCRResults subResults = buildResults(subCond, 0, sortBy, true);
@@ -224,7 +245,7 @@ public class MCRQueryManager {
      * Build a table from index ID to a List of conditions referencing this
      * index
      */
-    private static Hashtable groupConditionsByIndex(MCRCondition cond) {
+    private static Hashtable<String,List<MCRCondition>> groupConditionsByIndex(MCRCondition cond) {
         Hashtable<String,List<MCRCondition>> table = new Hashtable<String,List<MCRCondition>>();
         List children = null;
 

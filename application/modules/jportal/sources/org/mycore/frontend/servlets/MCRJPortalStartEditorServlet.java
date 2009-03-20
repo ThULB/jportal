@@ -1,5 +1,6 @@
 package org.mycore.frontend.servlets;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,11 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.datamodel.ifs.MCRContentStore;
+import org.mycore.datamodel.ifs.MCRContentStoreFactory;
+import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFile;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -36,6 +42,8 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
     protected static String childlinkedErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorChildLinked", "editor_error_childlinked.xml");
 
     protected static String recycleDir = CONFIG.getString("MCR.recycleBin", "data" + FS + "recycleBin");
+    
+    protected static String filestoreDir = CONFIG.getString("MCR.IFS.ContentStore.FS.URI");
 
     /**
      * Sets the deleted flag for the delivered mcrobject and all his children.
@@ -95,8 +103,12 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
     }
 
+    
+    private int fileCount = 0;
+    private int deletedCount = 0;
     /**
-     * Sets the deleted flag for the delivered derivate.
+     * Sets the deleted flag for the delivered derivate. If the derivate has no
+     * content (file deleted) then it will be completly removed.
      */
     @Override
     public void sdelder(MCRServletJob job, CommonData cd) throws IOException {
@@ -119,7 +131,19 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         try {
             // get the derivate from db
             der.receiveFromDatastore(cd.mysemcrid);
-            markAsDeleted(der, userRealName, user);
+            // get file/directory
+            MCRFilesystemNode fileNode = MCRFilesystemNode.getRootNode(der.getId().getId());
+            fileCount = 0;
+            deletedCount = 0;
+            deleteZombieFiles(fileNode);
+            // check if derivate has files left.
+            if(deletedCount >= 1 && deletedCount == fileCount) {
+                // delete the whole derivate
+                der.deleteFromDatastore(cd.mysemcrid);
+            } else {
+                // set deleted flag
+                markAsDeleted(der, userRealName, user);
+            }
             StringBuffer sb = new StringBuffer();
             sb.append("receive/").append(cd.myremcrid);
             cd.myfile = sb.toString();
@@ -127,6 +151,33 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             cd.myfile = deleteerrorpage;
         }
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
+    }
+
+    /**
+     * TODO: change this if ifs2 comes -> need to be solved global!
+     * Removes all zombie entries in the database.
+     * @param node the root file node
+     */
+    protected void deleteZombieFiles(MCRFilesystemNode node) {
+        if(node instanceof MCRDirectory) {
+            // do recursive search through directories
+            MCRDirectory dir = (MCRDirectory)node;
+            for(MCRFilesystemNode childs : dir.getChildren()) {
+                deleteZombieFiles(childs);
+            }
+        } else if(node instanceof MCRFile) {
+            MCRFile file = (MCRFile)node;
+            if(!fileExists(file)) {
+                file.delete();
+                deletedCount++;
+            }
+            fileCount++;
+        }
+    }
+
+    protected boolean fileExists(MCRFile file) {
+        File f = new File(filestoreDir + FS + file.getStorageID());
+        return f.exists();
     }
 
     /**
