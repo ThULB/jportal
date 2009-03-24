@@ -15,16 +15,16 @@
 
         <!-- get data -->
         <xsl:variable name="recycleIDs">
-            <xsl:call-template name="get.allRecycleBinIDs" />
+          <xsl:call-template name="get.allRecycleBinIDs" />
         </xsl:variable>
         <xsl:variable name="recycleXMLs">
-            <xsl:call-template name="get.recycleBinXMLs">
-                <xsl:with-param name="recycleIDsIF" select="$recycleIDs" />
-            </xsl:call-template>
+          <xsl:call-template name="get.recycleBinXMLs">
+            <xsl:with-param name="recycleIDsIF" select="$recycleIDs" />
+          </xsl:call-template>
         </xsl:variable>
-
+ 
         <xsl:variable name="recycleDerivateIDs">
-            <xsl:call-template name="get.allRecycleBinDerivateIDs" />
+          <xsl:call-template name="get.allRecycleBinDerivateIDs" />
         </xsl:variable>
         <xsl:variable name="recycleDerivatesXMLs">
           <xsl:call-template name="get.recycleBinDerivatesXMLs">
@@ -47,7 +47,7 @@
                 <xsl:call-template name="recycleBin.printObjects">
                     <xsl:with-param name="recycleXMLsIF" select="$recycleXMLs" />
                 </xsl:call-template>
-                <xsl:call-template name="recycleBin.printDerivates">
+                 <xsl:call-template name="recycleBin.printDerivates">
                     <xsl:with-param name="recycleXMLsIF" select="$recycleDerivatesXMLs" />
                 </xsl:call-template>
               </table>
@@ -165,13 +165,27 @@
 
     <xsl:template name="get.recycleBinDerivatesXMLs">
         <xsl:param name="recycleIDsIF" />
-        <xsl:variable name="xmlsUnsorted">
-             <xsl:element name="xmlsUnsorted">
-               <xsl:for-each select="xalan:nodeset($recycleIDsIF)/mcr:results/mcr:hit/mcr:metaData/mcr:field[@name = 'DerivateID']">
-                  <xsl:copy-of select="document(concat('mcrobject:',.))" />
-               </xsl:for-each>
-            </xsl:element>
+
+        <!-- creates a string list of derivates separated by a comma -->
+        <xsl:variable name="stringList">        
+          <xsl:for-each select="xalan:nodeset($recycleIDsIF)/mcr:results/mcr:hit/mcr:metaData/mcr:field[@name = 'DerivateID']">
+            <xsl:value-of select="text()" />
+            <xsl:if test="position() != last()">
+              <xsl:value-of select="','" />
+            </xsl:if>
+          </xsl:for-each>
         </xsl:variable>
+
+        <!-- loads the documents from the string list -->
+        <xsl:variable name="xmlsUnsorted">
+          <xsl:element name="xmlsUnsorted">
+            <xsl:call-template name="recycleBin.createXMLFromStringList">
+              <xsl:with-param name="list" select="$stringList"/>
+              <xsl:with-param name="sep" select="','"/>
+            </xsl:call-template>
+          </xsl:element>
+        </xsl:variable>
+
         <xsl:element name="recycleXMLs">
             <xsl:for-each select="xalan:nodeset($xmlsUnsorted)/xmlsUnsorted/mycorederivate">
               <xsl:sort select="@ID"  data-type="text" order="ascending" />
@@ -180,6 +194,37 @@
         </xsl:element>
     </xsl:template>
 
+    <!-- =================================================================================================== -->
+ 
+    <!-- loads all objects from a string list. redundancy elements will be only loaded
+    one time. Example: a,a,b,c,d,d,d -> loads the elements a,b,c,d -->
+    <xsl:template name="recycleBin.createXMLFromStringList">
+      <xsl:param name="list" />
+      <xsl:param name="sep" />
+
+      <xsl:variable name="first" select="substring-before($list, $sep)" />
+      <xsl:variable name="listAfter" select="substring-after($list, $sep)" />
+
+      <xsl:if test="$listAfter != ''">
+        <xsl:variable name="next" select="substring-before($listAfter, $sep)" />
+        <xsl:choose>
+          <xsl:when test="($next = '' and $listAfter != $first) or ($next != '' and $first != $next)">
+            <xsl:copy-of select="document(concat('mcrobject:',$first))" />
+          </xsl:when>
+        </xsl:choose>
+        <xsl:choose>
+          <xsl:when test="contains($listAfter, $sep)">
+            <xsl:call-template name="recycleBin.createXMLFromStringList">
+              <xsl:with-param name="list" select="$listAfter" />
+              <xsl:with-param name="sep" select="$sep"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:copy-of select="document(concat('mcrobject:',$listAfter))" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:if>
+    </xsl:template>
 
     <!-- =================================================================================================== -->
 
