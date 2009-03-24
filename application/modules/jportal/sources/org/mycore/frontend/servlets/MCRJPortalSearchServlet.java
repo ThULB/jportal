@@ -164,7 +164,7 @@ public class MCRJPortalSearchServlet extends MCRSearchServlet {
         org.jdom.Element root = input.getRootElement();
         MCRCondition cond =  cleanupQuery(input);
         // add deletedFlag to input except deletedFlag is already set
-        if(!isConditionFlagSet(cond, "deletedFlag") || !isConditionFlagSet(cond, "fileDeleted"))
+        if(!isConditionFlagSet(cond, "deletedFlag"))
             addDeletedFlags(input, cond);
 
         // Execute query
@@ -200,6 +200,7 @@ public class MCRJPortalSearchServlet extends MCRSearchServlet {
         }
         // create document
         Element conditionsElement = (Element)doc.getRootElement().getChild("conditions");
+        conditionsElement.setAttribute("format", "xml");
         conditionsElement.removeContent();
         // add new conditions element
         conditionsElement.addContent(cond.toXML());
