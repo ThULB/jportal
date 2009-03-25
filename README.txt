@@ -51,7 +51,7 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 -- vi $DOCPORTAL_HOME/config/mycore.properties.private
 --- set $MCR.basedir to your <$DOCPORTAL_HOME>
 --- set $MCR.FileUpload.IP to your local running server's IP address
---- add module "JPortal" to system, by appending on property "MCR.Modules.Application" the value "jportal"
+--- add module "JPortal" to system, by setting the property "MCR.Modules.Application" to the value "jportal"
 
 
 6. INSTALLATION
