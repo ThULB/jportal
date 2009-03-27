@@ -30,7 +30,7 @@
 
 <servlet-mapping>
     <servlet-name>MCRJPortalSearchServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalSearchServlet/*</url-pattern>
+    <url-pattern>/servlets/MCRSearchServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalStartEditorServlet</servlet-name>

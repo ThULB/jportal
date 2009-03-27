@@ -953,7 +953,7 @@
                                                       </script>
                                                       <form method="get">
                                                           <xsl:attribute name="action">
-                                                              <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRJPortalStartEditorServlet',$JSessionID)" />
+                                                              <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)" />
                                                           </xsl:attribute>
                                                           <input name="lang" type="hidden" value="{$CurrentLang}" />
                                                           <input name="se_mcrid" type="hidden">
@@ -2020,7 +2020,7 @@
                             <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
-                                        href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
                                             select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
@@ -2087,7 +2087,7 @@
                             <xsl:if test="count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit)>$maxLinkedCals">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
-                                        href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
+                                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
                                             select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
@@ -2125,7 +2125,7 @@
             <td>
                 <div id="switch-notcurrent">
                     <a
-                        href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
+                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
                         <xsl:value-of select="i18n:translate('metaData.resultlist')" />
                     </a>
                 </div>
