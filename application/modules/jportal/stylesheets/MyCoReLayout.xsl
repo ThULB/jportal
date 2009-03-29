@@ -544,7 +544,7 @@
     <xsl:template name="printLatestObjects.all">
         <xsl:param name="query2" />
         <xsl:param name="sortBy" />
-        <a href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?query={$query2}&amp;{$sortBy}.sortField=descending&amp;numPerPage=10&amp;maxResults=0">
+        <a href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$query2}&amp;{$sortBy}.sortField=descending&amp;numPerPage=10&amp;maxResults=0">
             <xsl:value-of select="i18n:translate('latestObjects.more')" />
         </a>
     </xsl:template>

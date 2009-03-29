@@ -216,7 +216,7 @@
         </xsl:if>
         <xsl:if test="string-length($numPerPage)>0">
             <a
-                href="{$ServletsBaseURL}MCRJPortalSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
+                href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
                 ^
             </a>
         </xsl:if>

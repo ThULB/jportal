@@ -299,10 +299,10 @@
     -->
     <xsl:template name="PageGen">
         <!--
-            MCRJPortalSearchServlet?mode=results&amp;id={@id}&amp;numPerPage={@numPerPage}&amp;page={number(@page)+1}
+            MCRSearchServlet?mode=results&amp;id={@id}&amp;numPerPage={@numPerPage}&amp;page={number(@page)+1}
         -->
         <xsl:param name="i" select="1" />
-        <xsl:param name="href" select="concat($ServletsBaseURL, 'MCRJPortalSearchServlet',$HttpSession,'?mode=results')" />
+        <xsl:param name="href" select="concat($ServletsBaseURL, 'MCRSearchServlet',$HttpSession,'?mode=results')" />
         <xsl:param name="id" />
         <xsl:param name="size" />
         <xsl:param name="currentpage" />
