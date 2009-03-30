@@ -595,7 +595,7 @@
     </xsl:template>
     <!-- ============================================================================================================= --> 
 
-        <!-- The template write the icon line to edit an object -->
+    <!-- The template write the icon line to edit an object -->
     <xsl:template name="editobject">
 
         <xsl:param name="accessedit" />

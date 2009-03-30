@@ -3,10 +3,7 @@ package org.mycore.frontend.servlets;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -14,23 +11,27 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 
 public class MCRRecycleBinServlet extends MCRServlet {
 
     private static final String FS = System.getProperty("file.seperator", "/");
+    private static final String webappsDir = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
     protected static String recycleBinExportDir = CONFIG.getString("MCR.recycleBinExportDir", "data" + FS + "recycleBin");    
-    protected static String recycleBinPage = CONFIG.getString("MCR.recycleBinPage", "content" + FS + "main" + FS + "recyclebin.xml");
     protected static String recycleBinDeletedPage = CONFIG.getString("MCR.recycleBinDeletedPage", "content" + FS + "main" + FS + "recycleBinDeletedPage.xml");
 
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {
+        // check ACL
+        if(!MCRAccessManager.checkPermission("deletedb")) {
+            // TODO - error page
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + ""));
+            return;
+        }
         String submitID = job.getRequest().getParameter("submit");
         if(submitID == null || submitID.equals("")) {
             // TODO - error page
@@ -47,10 +48,6 @@ public class MCRRecycleBinServlet extends MCRServlet {
             String id = pName.replaceFirst("cb_", "");
             selectedObjects.add(id);
         }
-
-        // the final return element
-        Element returnElement = null;
-
         // if restore button pushed, restore all selectedobjects
         if (submitID.equals("Restore")) {
             for(String id : selectedObjects) {
@@ -58,7 +55,10 @@ public class MCRRecycleBinServlet extends MCRServlet {
                 baseObj.receiveFromDatastore(id);
                 restoreObject(baseObj);
             }
-            returnElement = MCRURIResolver.instance().resolve("webapp:" + recycleBinPage);
+            // wait 2 seconds -> updateInDatastore needs this time
+            Thread.sleep(2000);
+            // load recycle bin
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "servlets/MCRRecycleBinPageGenerationServlet"));
         }
         // if delete button pushed, remove all derivates and all non linked mcrobjects
         else if(submitID.equals("Delete")) {
@@ -92,16 +92,42 @@ public class MCRRecycleBinServlet extends MCRServlet {
             ArrayList<String> deletedList = selectedObjects;
             deletedList.removeAll(linkedObjects);
             deletedList.removeAll(errorObjects);
-            // set xsl params
-            job.getRequest().setAttribute("XSL.nonLinkedList", getStringList(deletedList));
-            job.getRequest().setAttribute("XSL.linkedList", getStringList(linkedObjects));
-            job.getRequest().setAttribute("XSL.errorList", getStringList(errorObjects));
-            returnElement = MCRURIResolver.instance().resolve("webapp:" + recycleBinDeletedPage);
+
+            // create the result xml file
+            createResultFile(deletedList, linkedObjects, errorObjects);
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBinResultPage.xml"));
         }
-        // wait 2 seconds -> updateInDatastore needs this time
-        Thread.sleep(2000);
-        // send response
-        getLayoutService().doLayout(job.getRequest(), job.getResponse(), new Document(returnElement));
+    }
+
+    protected void createResultFile(ArrayList<String> deleted, ArrayList<String> linked, ArrayList<String> error) throws Exception {
+        // create result file
+        Element rootElement = new Element("recycleBinResultPage");
+        Element deletedElement = new Element("deleted");
+        Element linkedElement = new Element("linked");
+        Element errorElement = new Element("error");
+        rootElement.addContent(deletedElement);
+        rootElement.addContent(linkedElement);
+        rootElement.addContent(errorElement);
+
+        for (String id : deleted) {
+            Element entry = new Element("entry");
+            entry.setAttribute("id", id);
+            deletedElement.addContent(entry);
+        }
+        for (String id : linked) {
+            Element entry = new Element("entry");
+            entry.setAttribute("id", id);
+            linkedElement.addContent(entry);
+        }
+        for (String id : error) {
+            Element entry = new Element("entry");
+            entry.setAttribute("id", id);
+            errorElement.addContent(entry);
+        }
+        // write the xml document to the file system
+        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+        FileOutputStream output = new FileOutputStream(webappsDir + "recycleBinResultPage.xml");
+        outputter.output(new Document(rootElement), output);
     }
 
     /**

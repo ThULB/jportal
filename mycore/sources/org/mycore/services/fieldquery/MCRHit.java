@@ -47,7 +47,7 @@ import org.mycore.common.MCRException;
  * 
  * @see MCRResults
  * @author Arne Seifert
- * @author Frank Lützenkirchen
+ * @author Frank Lï¿½tzenkirchen
  */
 public class MCRHit {
     /** logger */
@@ -117,6 +117,10 @@ public class MCRHit {
         return host;
     }
 
+    public List<MCRFieldValue> getMetaData() {
+        return metaData;
+    }    
+    
     /**
      * Returns a combination of ID and host alias to be used as key
      * 

@@ -119,10 +119,6 @@
                 <label xml:lang="en">Manage groups- users</label>
             </item>
         </item>
-        <item href="/content/main/recyclebin.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
-            <label xml:lang="de">Papierkorb</label>
-            <label xml:lang="en">Recycle bin</label>
-        </item>
         <item href="/content/main/tools.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Tools</label>
             <item href="/content/main/tools/dubFinder.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
@@ -153,6 +149,10 @@
             </item>
             <item href="/modules/webcli/launchpad.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">WebCLI</label>
+            </item>
+            <item href="/servlets/MCRRecycleBinPageGenerationServlet" type="extern" target="_self" style="normal" replaceMenu="false">
+              <label xml:lang="de">Papierkorb</label>
+              <label xml:lang="en">Recycle bin</label>
             </item>
         </item>
         <item href="/content/main/contact.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
