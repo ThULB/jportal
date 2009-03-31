@@ -57,6 +57,10 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBin.xml"));
     }
 
+    /**
+     * Returns an arraylist of all deleted mcr objects.
+     * @return arraylist of deleted mcr objects
+     */
     protected ArrayList<RecycleBinEntry> getDeletedMCRObjects() {
         ArrayList<RecycleBinEntry> entries = new ArrayList<RecycleBinEntry>();
 
@@ -67,11 +71,17 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
 
         for (int i = 0; i < results.getNumHits(); i++) {
             MCRHit hit = results.getHit(i);
-            entries.add(getRecEntryFromId(hit.getID()));
+            RecycleBinEntry entry = getRecEntryFromId(hit.getID());
+            if(entry != null)
+                entries.add(entry);            
         }
         return entries;
     }
 
+    /**
+     * Returns an arraylist of all deleted mcr derivates.
+     * @return arraylist of deleted mcr derivates
+     */
     protected ArrayList<RecycleBinEntry> getDeletedMCRDerivates() {
         Hashtable<String, RecycleBinEntry> subEntries = new Hashtable<String, RecycleBinEntry>();
 
@@ -84,12 +94,21 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
             MCRHit hit = results.getHit(i);
             String id = getMetaData(hit, MCRFieldDef.getDef("DerivateID"));
             // it is possible that derivates will be found more than one time
-            if(!subEntries.containsKey(id))
-                subEntries.put(id, getRecEntryFromId(id));
+            if(!subEntries.containsKey(id)) {
+                RecycleBinEntry entry = getRecEntryFromId(id);
+                if(entry != null)
+                    subEntries.put(id, entry);
+            }
         }
         return new ArrayList<RecycleBinEntry>(subEntries.values());
     }
 
+    /**
+     * Gets the metadata value of an lucene search hit and a field definition.
+     * @param hit from which hit you want the meta data
+     * @param compareDef of which field definition
+     * @return metadatavalue of an field or null if none definied
+     */
     protected String getMetaData(MCRHit hit, MCRFieldDef compareDef) {
         List<MCRFieldValue> list = hit.getMetaData();
         for(MCRFieldValue v : list) {
@@ -98,8 +117,13 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
         }
         return null;
     }
-    
-    
+
+    /**
+     * Creates an RecycleBinEntry instance from the specified id.
+     * Try to set the deletedAt and the deletedFrom parameter.
+     * @param id id of the mcrbase object
+     * @return a new RecycleBinEntry instance
+     */
     protected RecycleBinEntry getRecEntryFromId(String id) {
         RecycleBinEntry recEntry = new RecycleBinEntry();
         recEntry.objId = id;
@@ -108,12 +132,22 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
             mcrBase = new MCRDerivate();
         else
             mcrBase = new MCRObject();
-        mcrBase.receiveFromDatastore(recEntry.objId);
+
+        try {
+            mcrBase.receiveFromDatastore(recEntry.objId);
+        } catch(Exception exc) {
+            /* do not throw an exception here because most of the time 
+            the object is still in the deleting process.*/
+            return null;
+        }
         recEntry.deletedAt = mcrBase.getService().getDate("modifydate");
         recEntry.deletedFrom = mcrBase.getService().getFlags("deletedFrom").get(0);
         return recEntry;
     }
 
+    /**
+     * Helperclass which represents an xml entry. 
+     */
     private class RecycleBinEntry {
         public String objId;
 
