@@ -10,6 +10,8 @@ public class MCRDuplicateCommands extends MCRAbstractCommands {
         MCRCommand cleanUpRed = new MCRCommand("clean up redundancy in database for type: {0}", "org.mycore.frontend.cli.command.MCRCleanUpRedundancyInDB.cleanUp String", "cleans up the redundancy in the database of a specific type.");
         command.add(cleanUpRed);
 
+        MCRCommand merge = new MCRCommand("merge file {1} of type {0} with redundancy map", "org.mycore.frontend.cli.command.MCRMergeAndreasRedundancyMap.merge String String", "");
+        command.add(merge);
 //        MCRCommand generatePersons = new MCRCommand("generate persons between {0} and {1}", "org.mycore.frontend.cli.command.MCRGenerateObjects.generatePersons int int", "generates persons between start and stop");
 //        command.add(generatePersons);
 //        
