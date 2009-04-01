@@ -953,7 +953,7 @@
                                                       </script>
                                                       <form method="get">
                                                           <xsl:attribute name="action">
-                                                              <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRStartEditorServlet',$JSessionID)" />
+                                                              <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRJPortalStartEditorServlet',$JSessionID)" />
                                                           </xsl:attribute>
                                                           <input name="lang" type="hidden" value="{$CurrentLang}" />
                                                           <input name="se_mcrid" type="hidden">

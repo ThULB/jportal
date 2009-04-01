@@ -43,8 +43,10 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
             Element entry = new Element("entry");
             entry.setAttribute("id", recEntry.objId);
             entry.setAttribute("type", recEntry.getType());
-            entry.setAttribute("deletedAt", recEntry.deletedAt.toString());
-            entry.setAttribute("deletedFrom", recEntry.deletedFrom);
+            if(recEntry.deletedAt != null)
+                entry.setAttribute("deletedAt", recEntry.deletedAt.toString());
+            if(recEntry.deletedFrom != null)
+                entry.setAttribute("deletedFrom", recEntry.deletedFrom);
             entriesElement.addContent(entry);
         }
 
@@ -141,7 +143,9 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
             return null;
         }
         recEntry.deletedAt = mcrBase.getService().getDate("modifydate");
-        recEntry.deletedFrom = mcrBase.getService().getFlags("deletedFrom").get(0);
+        ArrayList<String> flags = mcrBase.getService().getFlags("deletedFrom");
+        if(flags.size() > 0)
+            recEntry.deletedFrom = flags.get(0);
         return recEntry;
     }
 

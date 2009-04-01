@@ -95,6 +95,8 @@ public class MCRRecycleBinServlet extends MCRServlet {
 
             // create the result xml file
             createResultFile(deletedList, linkedObjects, errorObjects);
+            // wait 2 seconds -> updateInDatastore needs this time
+            Thread.sleep(2000);
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBinResultPage.xml"));
         }
     }

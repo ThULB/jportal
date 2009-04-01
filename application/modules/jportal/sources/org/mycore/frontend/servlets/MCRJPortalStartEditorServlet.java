@@ -66,7 +66,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         try {
             MCRObject obj = new MCRObject();
             obj.receiveFromDatastore(cd.mytfmcrid);
-            ArrayList<MCRObject> childs = getChilds(obj);
+            ArrayList<MCRObject> childs = getNonDeletedChilds(obj);
 
             // check if childs are linked
             boolean childLinked = false;
@@ -181,21 +181,35 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
     }
 
     /**
-     * Returns all children of a MCRObject
+     * Returns all children of a MCRObject where the deleted flag is not set.
      * @param mcrObj the parent MCRObject
      * @return all childs
      */
-    protected ArrayList<MCRObject> getChilds(MCRObject mcrObj) {
+    protected ArrayList<MCRObject> getNonDeletedChilds(MCRObject mcrObj) {
         ArrayList<MCRObject> childs = new ArrayList<MCRObject>();
         MCRObjectStructure struct = mcrObj.getStructure();
         for(int i = 0; i < struct.getChildSize(); i++) {
             String childID = struct.getChild(i).getXLinkHref();
             MCRObject mcrChild = new MCRObject();
             mcrChild.receiveFromDatastore(childID);
-            childs.add(mcrChild);
-            childs.addAll(getChilds(mcrChild));
+            // add only childs which are not deleted
+            if(!isDeletedFlagSet(mcrChild))
+                childs.add(mcrChild);
+            childs.addAll(getNonDeletedChilds(mcrChild));
         }
         return childs;
+    }
+
+    /**
+     * Checks if the deleted flag of an mcrobject is set.
+     * @param obj the mcr object
+     * @return returns true if the flag is set, otherwise false
+     */
+    protected boolean isDeletedFlagSet(MCRObject obj) {
+        MCRObjectService service = obj.getService();
+        if(service.isFlagSet("deleted"))
+            return true;
+        return false;
     }
 
     /**
