@@ -54,6 +54,10 @@
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
+    <url-pattern>/recycleBin.xml</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
     <url-pattern>/servlets/MCRRecycleBinPageGenerationServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>

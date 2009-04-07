@@ -47,7 +47,7 @@
         </p>
       </xsl:if>
       <p>
-        <a href="{$WebApplicationBaseURL}servlets/MCRRecycleBinPageGenerationServlet">zurück zum Papierkorb</a>
+        <a href="{$WebApplicationBaseURL}recycleBin.xml">zurück zum Papierkorb</a>
       </p>
     </xsl:template>
 </xsl:stylesheet>

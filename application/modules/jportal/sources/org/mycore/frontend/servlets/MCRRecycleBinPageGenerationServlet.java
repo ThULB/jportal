@@ -51,12 +51,14 @@ public class MCRRecycleBinPageGenerationServlet extends MCRServlet {
         }
 
         // write the xml document to the file system
-        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-        FileOutputStream output = new FileOutputStream(DIR + "recycleBin.xml");
-        outputter.output(new Document(rootElement), output);
+//        XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
+//        FileOutputStream output = new FileOutputStream(DIR + "recycleBin.xml");
+//        outputter.output(new Document(rootElement), output);
 
+        
         // go to generated xml file
-        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBin.xml"));
+//        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBin.xml"));
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), new Document(rootElement));
     }
 
     /**

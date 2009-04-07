@@ -22,6 +22,14 @@
         <xsl:variable name="cXML">
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
+        
+        <xsl:call-template name="jpjournal.printResultListEntry">
+          <xsl:with-param name="cXML" select="$cXML"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <xsl:template name="jpjournal.printResultListEntry">
+      <xsl:param name="cXML" />
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
                 <td id="leaf-front" colspan="1" rowspan="6">
