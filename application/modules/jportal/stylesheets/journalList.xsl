@@ -79,7 +79,7 @@
     <xsl:choose>
       <xsl:when test="$objectCount &lt; $maxListObjectCount">
         <xsl:for-each select="section">
-          <b><a><xsl:value-of select="@name"/></a></b>
+          <p><a style="font-weight:bold"><xsl:value-of select="@name"/></a></p>
           <xsl:for-each select="journal">
             <xsl:call-template name="jpjournal.printResultListEntry">
               <xsl:with-param name="cXML" select="document(concat('mcrobject:',text()))"/>
@@ -90,7 +90,7 @@
       <xsl:otherwise>
         <xsl:choose>
           <xsl:when test="$selected = ''">
-            <b><a><xsl:value-of select="section[position() = 1]/journal/@name"/></a></b>
+            <p><a style="font-weight:bold"><xsl:value-of select="section[position() = 1]/@name"/></a></p>
             <xsl:for-each select="section[position() = 1]/journal">
               <xsl:call-template name="jpjournal.printResultListEntry">
                 <xsl:with-param name="cXML" select="document(concat('mcrobject:',text()))"/>
@@ -98,7 +98,7 @@
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
-            <b><a><xsl:value-of select="$selected"/></a></b>
+            <p><a style="font-weight:bold"><xsl:value-of select="$selected"/></a></p>
             <xsl:for-each select="section[@name = $selected]/journal">
               <xsl:call-template name="jpjournal.printResultListEntry">
                 <xsl:with-param name="cXML" select="document(concat('mcrobject:',text()))"/>
