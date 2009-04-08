@@ -86,7 +86,9 @@ public class MCRJPortalJournalContextForWebpages {
             // We'll use it to delete the files of the context
             this.currentItemHref = currentItemHrefElem.getText();
             
-            this.preceedingItemHref = "/content/main/journalList/dummy.xml";
+            String[] help = this.currentItemHref.split("/");
+            
+            this.preceedingItemHref = this.currentItemHref.replaceAll(help[help.length-1], "dummy.xml");
             
             String naviFile = deployedDir + "/config/navigation.xml";
             Document navi = MCRXMLHelper.parseXML(new FileInputStream(naviFile),false);

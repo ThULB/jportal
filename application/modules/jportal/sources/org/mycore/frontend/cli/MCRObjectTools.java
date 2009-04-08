@@ -35,12 +35,31 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
         command.add(com);
 
-        com = new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String", "export import [objectID].");
+        com = new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String",
+                "export import [objectID].");
         command.add(com);
 
         com = new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
                 "repair-cp [sourceObjectID] to [destinationObjectID].");
+
+        com = new MCRCommand("update context of journal {0}", "org.mycore.frontend.cli.MCRObjectTools.updateJournalContext String",
+                "update context of journal [journalID].");
         command.add(com);
+
+    }
+
+    public static void updateJournalContext(String journalID) {
+        MCRObject mcrObj = new MCRObject();
+        mcrObj.receiveFromDatastore(journalID);
+
+        String objType = mcrObj.getId().getTypeId();
+
+        if (objType.equals("jpjournal")) {
+            MCRJPortalJournalContextForWebpages.updateContext(mcrObj);
+            LOGGER.info("Updated context for \"" + journalID + "\".");
+        } else{
+            LOGGER.info(journalID + " in no journal!");
+        }
 
     }
 
@@ -55,14 +74,14 @@ public class MCRObjectTools extends MCRAbstractCommands {
         // replace the children element
         MCRObject sourceObject = new MCRObject();
         Document sourceDoc = sourceObject.receiveJDOMFromDatastore(sourceObjectID);
-        
+
         sourceDoc.getRootElement().getAttribute("ID").setValue(destinationObjectID);
         sourceDoc.getRootElement().getAttribute("label").setValue(destinationObjectID);
-        
+
         Element maintitle = getElementWithXpath(sourceDoc, "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']");
         if (maintitle != null)
             maintitle.setText(maintitle.getText() + "[Copy]");
-        
+
         Element structElement = sourceDoc.getRootElement().getChild("structure");
         Element childElement = structElement.getChild("children");
         if (childElement != null)
@@ -164,7 +183,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
                 String[] splitPrecHref = precHref.split("/");
                 String shortCut = splitPrecHref[splitPrecHref.length - 1].replaceAll(".xml", "") + "_" + newMcrID.getNumberAsInteger();
-                MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.getId(), precHref, layoutTemp, shortCut);
+                MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.getId(), precHref,
+                        layoutTemp, shortCut);
                 webContext.create();
 
                 // creating ACL for copy
@@ -176,7 +196,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
                     Element perm = (Element) iterator.next();
                     String permName = perm.getAttributeValue("permission");
-                    MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for " + newMcrID.toString());
+                    MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for "
+                            + newMcrID.toString());
                 }
             }
         } catch (MCRPersistenceException e) {
@@ -188,8 +209,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
     }
 
-    private static Element getElementWithXpath(Document xmlDoc, String xpathExpression){
-        
+    private static Element getElementWithXpath(Document xmlDoc, String xpathExpression) {
+
         try {
             XPath xpath = XPath.newInstance(xpathExpression);
             return (Element) xpath.selectSingleNode(xmlDoc);
@@ -197,7 +218,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         return null;
     }
 }
