@@ -26,6 +26,7 @@ public class MCRMergeOldRedundancyMap {
     public static void merge(String type, String file) throws Exception {
 
         // open both files
+        File oldFile;
         Document oldDocument;
         Document myDocument;
         try {
@@ -35,17 +36,19 @@ public class MCRMergeOldRedundancyMap {
             return;
         }
         try {
-            myDocument = new SAXBuilder().build(new File(DIR + "redundancy-" + type + ".xml"));
+            oldFile = new File(DIR + "redundancy-" + type + ".xml");
+            myDocument = new SAXBuilder().build(oldFile);
         } catch(Exception e) {
             LOGGER.error("Couldnt find redundancy-" + type + ".xml");
             return;
         }
 
         merge(oldDocument.getRootElement(), myDocument.getRootElement());
-        
+        // rename old file
+        oldFile.renameTo(new File(DIR + "redundancy-" + type + "-old.xml"));
         // save merged document
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-        FileOutputStream output = new FileOutputStream(DIR + "redundancy-" + type + "-merged.xml");
+        FileOutputStream output = new FileOutputStream(DIR + "redundancy-" + type + ".xml");
         outputter.output(myDocument, output);
     }
 
