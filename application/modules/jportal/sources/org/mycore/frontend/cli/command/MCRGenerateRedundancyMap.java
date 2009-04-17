@@ -92,12 +92,12 @@ public class MCRGenerateRedundancyMap {
         }
 
         /**
-         * Returns the name of a search hit. It will
-         * be compared afterwards to another hits name.
-         * @param mcrHit
-         * @return
+         * Returns the compare criteria of a search hit. In the default
+         * case its the sort by values.
+         * @param mcrHit the search hit
+         * @return a new compare criteria for an MyCoRe Object
          */
-        protected String getName(MCRHit mcrHit) {
+        protected String getCompareCriteria(MCRHit mcrHit) {
             String objectName = "";
             List<MCRFieldValue> fieldValues = mcrHit.getSortData();
             for(int i = 0; i < fieldValues.size(); i++) {
@@ -144,15 +144,15 @@ public class MCRGenerateRedundancyMap {
 
             // go through all results
             for (MCRHit mcrHit : result) {
-                // get the name of the mcr hit object
-                String objectName = getName(mcrHit);
+                // get the compare criteria of the mycore hit object
+                String compareCriteria = getCompareCriteria(mcrHit);
                 // set the current redundancy object
-                RedundancyObject currentRedundancyObject = new RedundancyObject(mcrHit.getID(), objectName);
+                RedundancyObject currentRedundancyObject = new RedundancyObject(mcrHit.getID(), compareCriteria);
                 // test if the objects are equal, if true returned they are duplicates
                 if(areObjectsEqual(currentRedundancyObject, previousRedundancyObject)) {
                     // there is no existing group element for the duplicates -> create a new group element
                     if(currentGroupElement == null) {
-                        currentGroupElement = createGroupElement(groupCount++, objectName);
+                        currentGroupElement = createGroupElement(groupCount++, compareCriteria);
                         currentGroupElement.addContent(createObjectElement(previousRedundancyObject.getObjId()));
                         redundancyMap.addContent(currentGroupElement);
                     }
@@ -185,8 +185,8 @@ public class MCRGenerateRedundancyMap {
         }
 
         /**
-         * Creates a group as element. Each equal redundancy objects will be stored
-         * in one group.
+         * Creates a group as element. A group contains redundancy
+         * objects elements as childs.
          * @param id the id of the group. its a increasing integer number.
          * @param name the name of the group 
          * @return a new group element
@@ -198,8 +198,7 @@ public class MCRGenerateRedundancyMap {
             return groupElement;
         }
         /**
-         * Creates a single object element. This object elements are childs
-         * of a group. They only contains the id of an mcr object.
+         * Creates a single redundancy object element.
          * @param id the id of the mcr object
          * @return a new object element.
          */
@@ -249,7 +248,7 @@ public class MCRGenerateRedundancyMap {
         protected String getType() {
             return "person";
         }
-        protected String getName(MCRHit mcrHit) {
+        protected String getCompareCriteria(MCRHit mcrHit) {
             String objectName = "";
             List<MCRFieldValue> fieldValues = mcrHit.getSortData();
             for(int i = 0; i < fieldValues.size(); i++) {
@@ -262,20 +261,20 @@ public class MCRGenerateRedundancyMap {
     }
 
     /**
-     * A redundancy object is defined by an id and a name.
+     * A redundancy object is defined by an id and a compare criteria.
      */
     private static class RedundancyObject {
         private String objId;
-        private String name;
-        public RedundancyObject(String objId, String name) {
+        private String compareCriteria;
+        public RedundancyObject(String objId, String compareCriteria) {
             this.objId = objId;
-            this.name = name;
+            this.compareCriteria = compareCriteria;
         }
         public String getObjId() {
             return objId;
         }
         public String getName() {
-            return name;
+            return compareCriteria;
         }
     }
 }
