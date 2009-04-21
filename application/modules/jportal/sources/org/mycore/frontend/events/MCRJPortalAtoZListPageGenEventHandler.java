@@ -14,6 +14,7 @@ import org.mycore.frontend.pagegeneration.MCRJPortalAtoZListPageGenerator;
 /**
  * This EventHandler generates the AtoZ list if a journal is added,
  * deleted or updated. The data is stored to the journalList.xml file.
+ * @author Matthias Eichner
  */
 public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
 
@@ -75,9 +76,9 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
             pageGen.createJournalList();
         }
         if(action == Action.INSERT)
-            pageGen.insertJournalToTree(obj);
+            pageGen.insertJournal(obj);
         else if(action == Action.REMOVE)
-            pageGen.removeJournalFromJournalList(obj);
+            pageGen.removeJournal(obj);
         pageGen.saveJournalList();
     }
 

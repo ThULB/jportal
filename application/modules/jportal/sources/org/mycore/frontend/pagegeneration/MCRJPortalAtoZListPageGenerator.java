@@ -29,6 +29,10 @@ import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
 import org.mycore.services.fieldquery.MCRSortBy;
 
+/**
+ * Main class to create, load, save or manipulate the AtoZ list.
+ * @author Matthias Eichner
+ */
 public class MCRJPortalAtoZListPageGenerator {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalAtoZListPageGenerator.class);
@@ -55,7 +59,6 @@ public class MCRJPortalAtoZListPageGenerator {
      *   &lt;/section&gt;<br/>
      *   ...
      * </p>
-     * @throws Exception
      */
     public Element createJournalList() {
         // create the new root node
@@ -82,7 +85,7 @@ public class MCRJPortalAtoZListPageGenerator {
             try {
                 mcrObj.receiveFromDatastore(hit.getID());
                 // add the journal to the tree
-                addJournalToJournalList(mcrObj);
+                addJournalToEnd(mcrObj);
             } catch(Exception exc) {
                 LOGGER.error(exc);
             }
@@ -109,7 +112,8 @@ public class MCRJPortalAtoZListPageGenerator {
 
     /**
      * Saves the journalList as an xml file to the build/webapps folder.
-     * @throws Exception
+     * @throws FileNotFoundException
+     * @throws IOException
      */
     public synchronized void saveJournalList() throws FileNotFoundException, IOException {
         // save document
@@ -127,8 +131,9 @@ public class MCRJPortalAtoZListPageGenerator {
     /**
      * This method adds a journal to the journalList. The journal will append at the
      * end of its section.
+     * @throws JDOMException
      */
-    public void addJournalToJournalList(MCRObject mcrObj) throws JDOMException {
+    public void addJournalToEnd(MCRObject mcrObj) throws JDOMException {
         String title = getTitle(mcrObj);
         String firstChar = title.substring(0, 1).toUpperCase();
         Element section = getSection(firstChar);
@@ -138,18 +143,20 @@ public class MCRJPortalAtoZListPageGenerator {
     /**
      * Inserts the journal in the journalList. Shifts the journals at that
      * position and any following to the right.
+     * @throws JDOMException
      */
-    public void insertJournalToTree(MCRObject mcrObj) throws JDOMException {
+    public void insertJournal(MCRObject mcrObj) throws JDOMException {
         String title = getTitle(mcrObj);
         String firstChar = title.substring(0, 1).toUpperCase();
         Element section = getSection(firstChar);
-        addJournalToSection(section, title, mcrObj.getId().getId());
+        insertJournalToSection(section, title, mcrObj.getId().getId());
     }
 
     /**
      * Removes a journal from the journalList.
+     * @throws JDOMException
      */
-    public void removeJournalFromJournalList(MCRObject mcrObj) throws JDOMException {
+    public void removeJournal(MCRObject mcrObj) throws JDOMException {
         String title = getTitle(mcrObj);
         String firstChar = title.substring(0, 1).toUpperCase();
         Element section = getSection(firstChar);
@@ -186,6 +193,12 @@ public class MCRJPortalAtoZListPageGenerator {
         return section;
     }
 
+    /**
+     * Adds a journal to the end of a section.
+     * @param section at which section the journal will be added
+     * @param title the title of the journal
+     * @param id the id of the journal
+     */
     private void addJournalToEndOfSection(Element section, String title, String id) {
         if(isJournalInSection(section, id))
             return;
@@ -196,7 +209,14 @@ public class MCRJPortalAtoZListPageGenerator {
         section.addContent(journal);
     }
 
-    private void addJournalToSection(Element section, String title, String id) {
+    /**
+     * Inserts a journal in a section. Shifts the journals at that
+     * position and any following to the right.
+     * @param section at which section the journal will be added
+     * @param title the title of the journal
+     * @param id the id of the journal
+     */
+    private void insertJournalToSection(Element section, String title, String id) {
         if(isJournalInSection(section, id))
             return;
         // remove journals temporarily
@@ -260,8 +280,8 @@ public class MCRJPortalAtoZListPageGenerator {
 
     /**
      * Returns the maintitle of an journal.
-     * @param obj
-     * @return
+     * @param obj the journal as an mcr object
+     * @return the title of the mcr object
      * @throws JDOMException
      */
     private String getTitle(MCRObject obj) throws JDOMException {
