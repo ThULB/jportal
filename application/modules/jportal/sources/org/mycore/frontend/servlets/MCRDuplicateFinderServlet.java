@@ -52,12 +52,17 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
 
     private static Logger LOGGER = Logger.getLogger(MCRDuplicateFinderServlet.class);;
+
     private static final String FS = System.getProperty("file.seperator", "/");
+
     private static final String ROOT_DIR = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
 
     private int nonDoubletCount;
+
     private int doubletCount;
+
     private int notWorkedCount;
+
     private int errorCount;
 
     public void init() throws ServletException {
@@ -158,11 +163,8 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
                 closed = false;
             }
             // edit doublet entry
-            if (MCRAccessManager.checkPermission(objectId, "writedb")) {
-                objectElement.setAttribute("status", selection);
-                LOGGER.info("changed mode of doublet=" + objectId + " to status=" + selection);
-            } else
-                LOGGER.info("NOT changed mode of doublet=" + objectId + ", because already changed or no permission");
+            objectElement.setAttribute("status", selection);
+            
             count++;
         }
         // add some general infos to the redObjectsElements
