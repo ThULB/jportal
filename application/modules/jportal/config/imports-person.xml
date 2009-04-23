@@ -91,10 +91,10 @@
         <hidden var="@notinherit" default="true" />
         <hidden var="@heritable" default="true" />
         <cell col="1" row="1" anchor="NORTHWEST" var="alternative[@type='complete']">
-            <repeater min="0" max="10" ref="personName" />
+            <repeater min="0" max="1024" ref="personName" />
         </cell>
         <cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
-            <repeater min="0" max="10">
+            <repeater min="0" max="1024">
                 <panel>
                     <cell col="1" row="1" anchor="NORTHWEST">
                         <text i18n="editor.search.person.freetext" />
