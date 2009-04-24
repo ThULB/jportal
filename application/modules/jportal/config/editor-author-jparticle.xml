@@ -11,4 +11,5 @@
             <cell row="1" col="1" anchor="NORTHWEST" ref="globalImport.jparticle" />
         </panel>
     </components>
+    <cancel url="servlets/MCRJPortalEditorCancelServlet" />
 </editor>
