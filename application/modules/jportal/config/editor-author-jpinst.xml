@@ -4,7 +4,7 @@
 <editor>
     <!--      <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" /> -->
     <source uri="{sourceUri}" />
-    <target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />
+    <target type="servlet" name="MCRJPortalCheckCommitDataServlet" method="post" format="xml" />
     <components root="author-jpinst" var="/mycoreobject">
         <include uri="webapp:editor/imports-jpinst.xml" />
         <panel id="author-jpinst">

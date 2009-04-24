@@ -30,6 +30,10 @@
     <servlet-name>MCRJPortalSearchServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalSearchServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalCheckCommitDataServlet">
+    <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet</servlet-class>
+</servlet>
 
 
 <servlet-mapping>
@@ -67,4 +71,8 @@
 <servlet-mapping>
     <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
     <url-pattern>/servlets/MCRJPortalLinkFileServlet/*</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+  <url-pattern>/servlets/MCRJPortalCheckCommitDataServlet</url-pattern>
 </servlet-mapping>

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Properties;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -324,5 +326,31 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         job.getRequest().setAttribute("XSL.restoredObject", cd.mytfmcrid);
         Element element = MCRURIResolver.instance().resolve("webapp:" + cd.myfile);
         getLayoutService().doLayout(job.getRequest(), job.getResponse(), new Document(element));
+    }
+  
+    @Override
+    public void seditobj(MCRServletJob job, CommonData cd) throws IOException {
+        if (!MCRAccessManager.checkPermission(cd.mytfmcrid, "writedb")) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
+            return;
+        }
+        if (cd.mytfmcrid.length() == 0) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
+            return;
+        }
+
+        StringBuffer sb = new StringBuffer();
+        // TODO: should transform mcrobject and use "session:" to save roundtrip
+        Properties params = new Properties();
+        sb.append("request:receive/").append(cd.mytfmcrid).append("?XSL.Style=editor");
+        params.put("sourceUri", sb.toString());
+        sb = new StringBuffer();
+        sb.append(job.getRequest().getHeader("Referer"));
+        params.put("returnUrl", sb.toString());
+        params.put("mcrid", cd.mytfmcrid);
+        params.put("type", cd.mytype);
+        params.put("step", cd.mystep);
+        String base = getBaseURL() + cd.myfile;
+        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(base, params)));
     }
 }

@@ -2,7 +2,7 @@
 <!-- ?xml version="1.0" encoding="ISO-8859-1"?-->
 <!DOCTYPE editor>
 <editor>
-    <target type="servlet" name="MCRCheckCommitDataServlet" method="post" format="xml" />
+    <target type="servlet" name="MCRJPortalCheckCommitDataServlet" method="post" format="xml" />
     <source uri="{sourceUri}" />
     <components root="editor-jpjournal" var="/mycoreobject">
         <include uri="webapp:editor/imports-jpjournal.xml" />
