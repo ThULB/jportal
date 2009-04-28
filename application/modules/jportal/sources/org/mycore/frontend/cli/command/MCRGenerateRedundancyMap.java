@@ -1,5 +1,6 @@
 package org.mycore.frontend.cli.command;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -68,6 +69,10 @@ public class MCRGenerateRedundancyMap {
         protected abstract String getTableHead();
 
         protected String getFileName() {
+            File directory = new File(DIR);
+            if (!directory.exists())
+                directory.mkdir();
+            
             return DIR + "redundancy-" + getType() + ".xml";
         }
         protected ArrayList<MCRSortBy> createSortByList() {
