@@ -77,6 +77,7 @@ public class MCRContentTools extends MCRAbstractCommands {
         }
 
         xo.output(naviJDOM, new FileOutputStream(naviFileLocation));
+        LOGGER.info("Fixed " + nodes.size() + " labels.");
     }
 
     public static void cleanNavi() throws JDOMException, MCRException, IOException {
