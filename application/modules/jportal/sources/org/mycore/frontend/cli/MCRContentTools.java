@@ -41,27 +41,42 @@ public class MCRContentTools extends MCRAbstractCommands {
     }
 
     public static void fixlabel(String pattern) throws JDOMException, IOException {
-        String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml";
-        Document naviJDOM = MCRXMLHelper.parseXML(new FileInputStream(naviFielLocation), false);
+        String mcrBasedir = MCRConfiguration.instance().getString("MCR.basedir");
+        String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml";
+        Document naviJDOM = MCRXMLHelper.parseXML(new FileInputStream(naviFileLocation), false);
 
         List<Element> nodes = XPath.selectNodes(naviJDOM, "//item[contains(./label/text(),'" + pattern + "')]");
         XPath itemXpath = XPath.newInstance("./item[contains(@href,'/receive/')]");
         XPath maintileXpath = XPath.newInstance("//metadata/maintitles/maintitle");
 
-        for (Element node : nodes) {
-            Element item = (Element) itemXpath.selectSingleNode(node);
-            String href = item.getAttributeValue("href") + "&XSL.Style=xml";
-            String mcrID = href.replaceFirst("/receive/", "").substring(0, 26);
-            Element mcrObj = MCRURIResolver.instance().resolve("mcrobject:" + mcrID);
-            String label = ((Element)maintileXpath.selectSingleNode(mcrObj)).getText();
-            String oldLabel = node.getChildText("label");
-            node.getChild("label").setText(label);
-            LOGGER.info("change " + oldLabel + " to " + label);
-        }
-        
         XMLOutputter xo = new XMLOutputter();
         xo.setFormat(Format.getPrettyFormat());
-        xo.output(naviJDOM, new FileOutputStream(naviFielLocation));
+        for (Element node : nodes) {
+            // find journal entry in navigation.xml
+            // retrieve journal ID --> get the maintitle from metadata XML
+            Element item = (Element) itemXpath.selectSingleNode(node);
+            String href = item.getAttributeValue("href");
+            String mcrID = href.replaceFirst("/receive/", "").substring(0, 26);
+
+            if (mcrID.startsWith("jportal_jpjournal")) {
+                Element mcrObj = MCRURIResolver.instance().resolve("mcrobject:" + mcrID);
+                String label = ((Element) maintileXpath.selectSingleNode(mcrObj)).getText();
+
+                // change title in webcontext webpage XML eg. alz.xml
+                String webPageXmlLocation = node.getAttributeValue("href");
+                Element webPageXML = MCRURIResolver.instance().resolve("webapp:" + webPageXmlLocation);
+                Element section = webPageXML.getChild("section");
+                section.setAttribute("title", label);
+                xo.output(webPageXML, new FileOutputStream(mcrBasedir + "/build/webapps" +webPageXmlLocation));
+
+                // change label in navigation.xml
+                String oldLabel = node.getChildText("label");
+                node.getChild("label").setText(label);
+                LOGGER.info("change " + oldLabel + " to " + label);
+            }
+        }
+
+        xo.output(naviJDOM, new FileOutputStream(naviFileLocation));
     }
 
     public static void cleanNavi() throws JDOMException, MCRException, IOException {
