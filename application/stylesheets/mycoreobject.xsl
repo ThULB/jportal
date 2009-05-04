@@ -55,12 +55,61 @@
         <xsl:call-template name="resultsub" />
         <xsl:choose>
 
+<<<<<<< .working
             <xsl:when test="($obj_host != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
                 <!-- if access granted: print metadata -->
                 <xsl:apply-templates select="." mode="present" />
                 <!-- IE Fix for padding and border -->
                 <hr />
             </xsl:when>
+=======
+  <!-- Internal link from Derivate ********************************* -->
+  <xsl:template match="internals">
+  <xsl:if test="$objectHost = 'local'">
+    <xsl:variable name="obj_host" select="../../../@host" />
+    <xsl:variable name="derivid" select="../../@ID" />
+    <xsl:variable name="derivlabel" select="../../@label" />
+    <xsl:variable name="derivmain" select="internal/@maindoc" />
+    <xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')" />
+    <xsl:variable name="derivifs" select="concat($derivbase,$derivmain,$HttpSession,'?hosts=',$obj_host)" />
+    <xsl:variable name="derivdir" select="concat($derivbase,$HttpSession,'?hosts=',$obj_host)" />
+    <xsl:variable name="derivxml" select="concat('ifs:/',$derivid,'?hosts=',$obj_host)" />
+    <xsl:variable name="details" select="document($derivxml)" />
+    <xsl:variable name="ctype" select="$details/mcr_directory/children/child[name=$derivmain]/contentType" />
+    <xsl:variable name="ftype" select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[@ID=$ctype]/label" />
+    <xsl:variable name="size" select="$details/mcr_directory/size" />
+    <div class="derivateHeading">
+      <xsl:choose>
+        <xsl:when test="../titles">
+          <xsl:call-template name="printI18N">
+            <xsl:with-param name="nodes" select="../titles/title"/>
+            <xsl:with-param name="next" select="'&lt;br /&gt;'" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+		  <xsl:value-of select="$derivlabel" />
+		</xsl:otherwise>
+      </xsl:choose>  
+    </div>
+    <div class="derivate">
+      <a href="{$derivifs}" target="_blank">
+        <xsl:value-of select="$derivmain" />
+      </a>
+      (
+      <xsl:value-of select="ceiling(number($size) div 1024)" />
+      &#160;kB) &#160;&#160;
+      <xsl:variable name="ziplink" select="concat($ServletsBaseURL,'MCRZipServlet',$JSessionID,'?id=',$derivid)" />
+      <a class="linkButton" href="{$ziplink}">
+        <xsl:value-of select="i18n:translate('buttons.zipGen')" />
+      </a>
+      &#160;
+      <a href="{$derivdir}">
+        <xsl:value-of select="i18n:translate('buttons.details')" />
+      </a>
+    </div>
+  </xsl:if>
+  </xsl:template>
+>>>>>>> .merge-rechts.r833
 
             <xsl:otherwise>
                 <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
