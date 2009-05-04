@@ -1,5 +1,6 @@
 package org.mycore.frontend.servlets;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -10,6 +11,7 @@ import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
 
 public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
+    private static Logger LOGGER = Logger.getLogger(MCRJPortalCheckCommitDataServlet.class);
 
     private static final long serialVersionUID = 1L;
 
