@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -52,7 +53,7 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
             e.printStackTrace();
         }
         String id = objXML.getRootElement().getAttributeValue("ID");
-        MCRXMLTableManager.instance().update(new MCRObjectID(id), objXML);
+        MCRXMLTableManager.instance().update(new MCRObjectID(id), objXML, new Date());
         LOGGER.info("imported object " + id + " to blob from " + file);
     }
 

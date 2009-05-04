@@ -56,11 +56,11 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
             return;
         }
-        if (cd.mytfmcrid.length() == 0) {
+        if (cd.mytfmcrid.getId().length() == 0) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }
-        if(hasLinks(cd.mytfmcrid)) {
+        if(hasLinks(cd.mytfmcrid.getId())) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + linkErrorPage));
             return;
         }
@@ -118,7 +118,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
             return;
         }
-        if (cd.mysemcrid.length() == 0) {
+        if (cd.mysemcrid.getId().length() == 0) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }
@@ -141,7 +141,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             // check if derivate has files left.
             if(deletedCount >= 1 && deletedCount == fileCount) {
                 // delete the whole derivate
-                der.deleteFromDatastore(cd.mysemcrid);
+                der.deleteFromDatastore(cd.mysemcrid.getId());
             } else {
                 // set deleted flag
                 markAsDeleted(der, userRealName, user);
@@ -255,7 +255,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
             return;
         }
-        if (cd.mytfmcrid.length() == 0) {
+        if (cd.mytfmcrid.getId().length() == 0) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }
@@ -280,7 +280,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         }
         // delete
         try {
-            obj.deleteFromDatastore(cd.mytfmcrid);
+            obj.deleteFromDatastore(cd.mytfmcrid.getId());
             cd.myfile = deletepage;
         } catch(Exception e) {
             if (LOGGER.isDebugEnabled()) {
@@ -298,7 +298,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
      * visible for all search querys.
      */
     public void srestoreobj(MCRServletJob job, CommonData cd) throws IOException {
-        if (cd.mytfmcrid.length() == 0) {
+        if (cd.mytfmcrid.getId().length() == 0) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }
@@ -334,7 +334,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
             return;
         }
-        if (cd.mytfmcrid.length() == 0) {
+        if (cd.mytfmcrid.getId().length() == 0) {
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
             return;
         }

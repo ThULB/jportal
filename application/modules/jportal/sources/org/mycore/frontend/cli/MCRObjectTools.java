@@ -1,6 +1,7 @@
 package org.mycore.frontend.cli;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         structElement.addContent(generateChildrenHref(idList));
 
-        MCRXMLTableManager.instance().create(new MCRObjectID(destinationObjectID), sourceDoc);
+        MCRXMLTableManager.instance().create(new MCRObjectID(destinationObjectID), sourceDoc, new Date());
         MCRObjectCommands.repairMetadataSearchForID(destinationObjectID);
     }
 

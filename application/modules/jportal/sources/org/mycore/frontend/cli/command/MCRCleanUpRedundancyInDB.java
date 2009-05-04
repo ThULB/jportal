@@ -3,6 +3,7 @@ package org.mycore.frontend.cli.command;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -132,7 +133,7 @@ public class MCRCleanUpRedundancyInDB {
         String originalObjectId = originalElement.getAttributeValue("objId");
         for (Element duplicateElement : duplicateElements) {
             String dupObjectId = duplicateElement.getAttributeValue("objId");
-            List<String> list = MCRLinkTableManager.instance().getSourceOf(dupObjectId, "reference");
+            Collection<String> list = MCRLinkTableManager.instance().getSourceOf(dupObjectId, "reference");
             for (String source : list) {
                 // add replace command
                 commands.add("internal replace links " + source + " " + dupObjectId + " " + originalObjectId);

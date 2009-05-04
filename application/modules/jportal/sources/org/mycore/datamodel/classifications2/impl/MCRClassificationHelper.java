@@ -17,7 +17,7 @@ public class MCRClassificationHelper {
         final Session session = MCRHIBConnection.instance().getSession();
         final MCRCategoryID rootID = MCRCategoryID.rootID(classID);
         MCRCategoryImpl classification = MCRCategoryDAOImpl.getByNaturalID(session, rootID);
-        MCRCategoryDAOImpl.calculateLeftRightAndLevel(classification, 0, 0);
+        classification.calculateLeftRightAndLevel(0, 0);
     }
 
     public static void importExportClassification(String id, int boolValue) {

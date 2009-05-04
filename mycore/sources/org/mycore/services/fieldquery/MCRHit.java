@@ -118,10 +118,6 @@ public class MCRHit {
         return host;
     }
 
-    public List<MCRFieldValue> getMetaData() {
-        return metaData;
-    }    
-    
     /**
      * Returns a combination of ID and host alias to be used as key
      * 
