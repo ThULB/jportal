@@ -33,9 +33,18 @@
 	</target>
 
 	<target name="config">
+		<!-- merge mycore.properties-->
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
 
+		<!-- merge searchfields.xml -->
+	    <xmltask source="${build.config}/searchfields.xml" dest="${build.config}/searchfields.xml">
+	      <insert path="/:searchfields/:index[1]/:field[8]" position="after" file="${module.dir}/config/searchfields-metadata.xml"/>
+	   	  <insert path="/:searchfields/:index[2]/:field[3]" position="after" file="${module.dir}/config/searchfields-content.xml"/>
+	    </xmltask>
+	    <replace file="${build.config}/searchfields.xml" token='xmlns=""' />
+
+		<!-- add cli commands -->
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJournalSummary" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRDeadLinkFinder" />
