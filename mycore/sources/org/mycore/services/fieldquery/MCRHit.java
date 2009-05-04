@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13682 $ $Date: 2008-07-03 11:52:22 +0200 (Do, 03. Jul 2008) $
+ * $Revision: 15042 $ $Date: 2009-03-30 12:56:33 +0200 (Mo, 30. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,6 +31,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 
 /**
@@ -126,7 +127,7 @@ public class MCRHit {
      * 
      * @return a unique key for this MCRHit
      */
-    String getKey() {
+    public String getKey() {
         return key;
     }
 
@@ -173,6 +174,10 @@ public class MCRHit {
     public List<MCRFieldValue> getSortData() {
         return sortData;
     }
+
+    public List<MCRFieldValue> getMetaData() {
+        return metaData;
+    }    
     
     /**
      * Compares this hit with another hit by comparing the value of the given
@@ -213,7 +218,7 @@ public class MCRHit {
      * @param other
      *            the other hit
      */
-    void merge(MCRHit other) {
+    public void merge(MCRHit other) {
         // Copy other hit sort data
         if (this.sortData.isEmpty() && !other.sortData.isEmpty()) {
             this.sortData.addAll(other.sortData);
@@ -235,12 +240,12 @@ public class MCRHit {
      *         child element and multiple 'metaData' child elements
      */
     public Element buildXML() {
-        Element eHit = new Element("hit", MCRFieldDef.mcrns);
+        Element eHit = new Element("hit", MCRConstants.MCR_NAMESPACE);
         eHit.setAttribute("id", this.id);
         eHit.setAttribute("host", this.host);
 
         if (!sortData.isEmpty()) {
-            Element eSort = new Element("sortData", MCRFieldDef.mcrns);
+            Element eSort = new Element("sortData", MCRConstants.MCR_NAMESPACE);
             eHit.addContent(eSort);
 
             for (int i = 0; i < sortData.size(); i++) {
@@ -258,7 +263,7 @@ public class MCRHit {
                 if ((eMeta != null) && (count == 0))
                     continue;
 
-                eMeta = new Element("metaData", MCRFieldDef.mcrns);
+                eMeta = new Element("metaData", MCRConstants.MCR_NAMESPACE);
                 eHit.addContent(eMeta);
                 count = 0;
                 if (i > 0)
@@ -288,7 +293,7 @@ public class MCRHit {
 
         MCRHit hit = new MCRHit(id, hostAlias);
 
-        Element eSort = xml.getChild("sortData", MCRFieldDef.mcrns);
+        Element eSort = xml.getChild("sortData", MCRConstants.MCR_NAMESPACE);
         if (eSort != null) {
             List children = eSort.getChildren();
             for (Iterator it = children.iterator(); it.hasNext();) {

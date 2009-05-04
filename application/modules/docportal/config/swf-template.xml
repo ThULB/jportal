@@ -13,9 +13,12 @@
       <editor id="author-foobar">
         <source uri="{sourceUri}" />
         <cancel url="{cancelUrl}" />
-        <target type="servlet" name="MCRCheckNewDataServlet" method="post" format="xml" />
+        <target type="servlet" name="MCRCheckNewDataServlet"
+          method="post" format="xml" />
         <validationMessage i18n="editor.common.validationMessage" />
-        <components root="edit-file" var="/mycoreobject">
+        <components root="edit-file" var="/mycoreobject"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <include uri="webapp:editor/imports-common.xml" />
           <include uri="webapp:editor/editor-foobar.xml" />
         </components>

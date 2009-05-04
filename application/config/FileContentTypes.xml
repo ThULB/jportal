@@ -476,6 +476,15 @@
     </rules>
   </type>  
   
+  <type ID="flv">
+    <label>Flash Video</label>
+    <url>http://de.wikipedia.org/wiki/Flash_Video</url>
+    <mime>video/x-flv</mime>
+    <rules>
+      <extension score="1.0">flv</extension>
+    </rules>
+  </type>
+
 <!--==== Graphics types =========================================-->
 
   <type ID="plot">
@@ -498,6 +507,7 @@
     <label>JPEG Grafik</label>
     <mime>image/jpeg</mime>
     <rules>
+      <extension score="0.9">JPG</extension>
       <extension score="0.9">jpg</extension>
       <extension score="0.9">jpeg</extension>
       <pattern score="0.9" offset="0" format="hex">FFD8</pattern>

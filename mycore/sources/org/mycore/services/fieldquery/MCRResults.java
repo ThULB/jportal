@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14016 $ $Date: 2008-09-18 12:07:06 +0200 (Do, 18. Sep 2008) $
+ * $Revision: 15124 $ $Date: 2009-04-30 09:27:14 +0200 (Do, 30. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.services.fieldquery;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -34,6 +35,7 @@ import java.util.Random;
 import org.apache.batik.dom.util.HashTable;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.mycore.common.MCRConstants;
 
 /**
  * This class represents the results of a query performed by MCRSearcher.
@@ -49,11 +51,11 @@ import org.jdom.Element;
  * @author Arne Seifert
  * @author Frank L\u00fctzenkirchen
  * @author Jens Kupferschmidt
- * @version $Revision: 14016 $ $Date: 2008-09-18 12:07:06 +0200 (Do, 18. Sep 2008) $
+ * @version $Revision: 15124 $ $Date: 2009-04-30 09:27:14 +0200 (Do, 30. Apr 2009) $
  */
 public class MCRResults implements Iterable<MCRHit> {
     /** The list of MCRHit objects */
-    private ArrayList<MCRHit> hits = new ArrayList<MCRHit>();
+    protected ArrayList<MCRHit> hits = new ArrayList<MCRHit>();
 
     /** The state of the connection */
     private HashTable hostconnection = new HashTable();
@@ -62,7 +64,7 @@ public class MCRResults implements Iterable<MCRHit> {
      * A map containing MCRHit IDs used for and/or operations on two different
      * MCRResult objects
      */
-    private HashMap<String, MCRHit> map = new HashMap<String, MCRHit>();
+    protected HashMap<String, MCRHit> map = new HashMap<String, MCRHit>();
 
     /** If true, this results are already sorted */
     private boolean isSorted = false;
@@ -132,11 +134,8 @@ public class MCRResults implements Iterable<MCRHit> {
      *            the key of the hit
      * @return the MCRHit, if it exists
      */
-    private MCRHit getHit(String key) {
-        if (map.containsKey(key)) {
-            return map.get(key);
-        }
-        return null;
+    protected MCRHit getHit(String key) {
+        return map.get(key);
     }
 
     /**
@@ -218,16 +217,17 @@ public class MCRResults implements Iterable<MCRHit> {
      *         hit child elements
      */
     public Element buildXML(int min, int max) {
-        Element results = new Element("results", MCRFieldDef.mcrns);
+        Element results = new Element("results", MCRConstants.MCR_NAMESPACE);
         results.setAttribute("id", getID());
         results.setAttribute("sorted", Boolean.toString(isSorted()));
         results.setAttribute("numHits", String.valueOf(getNumHits()));
 
         for (int i = 0; i < hostconnection.size(); i++) {
-            Element connection = new Element("hostconnection", MCRFieldDef.mcrns);
+            Element connection = new Element("hostconnection", MCRConstants.MCR_NAMESPACE);
             connection.setAttribute("host", (String) hostconnection.key(i));
             String msg = (String) hostconnection.item(i);
-            if (msg == null) msg = "";
+            if (msg == null)
+                msg = "";
             connection.setAttribute("message", msg);
             if (msg.length() == 0) {
                 connection.setAttribute("connection", "true");
@@ -238,7 +238,7 @@ public class MCRResults implements Iterable<MCRHit> {
         }
 
         for (int i = min; i <= max; i++)
-            results.addContent(hits.get(i).buildXML());
+            results.addContent(getHit(i).buildXML());
 
         return results;
     }
@@ -262,23 +262,25 @@ public class MCRResults implements Iterable<MCRHit> {
      *            the alias of the host where the hits come from
      * @return the number of hits added
      */
-    int merge(Document doc, String hostAlias) {
+    protected int merge(Document doc, String hostAlias) {
         Element xml = doc.getRootElement();
         int numHitsBefore = this.getNumHits();
         int numRemoteHits = Integer.parseInt(xml.getAttributeValue("numHits"));
 
-        List connectionList = xml.getChildren("hostconnection", MCRFieldDef.mcrns);
-        for (Iterator it = connectionList.iterator(); it.hasNext();) {
-            Element connectionElement = (Element) (it.next());
+        @SuppressWarnings("unchecked")
+        List<Element> connectionList = xml.getChildren("hostconnection", MCRConstants.MCR_NAMESPACE);
+        for (Iterator<Element> it = connectionList.iterator(); it.hasNext();) {
+            Element connectionElement = it.next();
             String conKey = connectionElement.getAttributeValue("host");
             String conValue = connectionElement.getAttributeValue("message");
             hostconnection.put(conKey, conValue);
         }
 
-        List hitList = xml.getChildren("hit", MCRFieldDef.mcrns);
+        @SuppressWarnings("unchecked")
+        List<Element> hitList = xml.getChildren("hit", MCRConstants.MCR_NAMESPACE);
         hits.ensureCapacity(numHitsBefore + numRemoteHits);
-        for (Iterator it = hitList.iterator(); it.hasNext();) {
-            Element hitElement = (Element) (it.next());
+        for (Iterator<Element> it = hitList.iterator(); it.hasNext();) {
+            Element hitElement = it.next();
             MCRHit hit = MCRHit.parseXML(hitElement, hostAlias);
             hits.add(hit);
             map.put(hit.getKey(), hit);
@@ -302,29 +304,35 @@ public class MCRResults implements Iterable<MCRHit> {
      * lists.
      * 
      * @param other
-     *            the other result list
+     *            the other result lists
      */
-    public void and(MCRResults other) {
-        // x AND {} is always {}
-        if (other.getNumHits() == 0) {
-            map.clear();
-            hits.clear();
-            return;
+    public static MCRResults intersect(MCRResults... others) {
+        //check if result is empty
+        for (MCRResults other : others) {
+            // x AND {} is always {}
+            if (other.getNumHits() == 0) {
+                return new MCRResults();
+            }
         }
-
-        int numHits = this.getNumHits();
-        for (int i = 0; i < numHits; i++) {
-            MCRHit a = this.getHit(i);
-            String key = a.getKey();
-            MCRHit b = other.getHit(key);
-
-            if (b == null) {
-                map.remove(key);
-                hits.remove(i--);
-                numHits--;
-            } else
-                a.merge(b);
+        final MCRResults firstResult = others[0];
+        MCRResults totalResult = new MCRResults();
+        final List<MCRResults> subResultList = Arrays.asList(others).subList(1, others.length);
+        //merge everything together
+        for (MCRHit hit : firstResult) {
+            boolean complete = true;
+            final String key = hit.getKey();
+            for (MCRResults other : subResultList) {
+                MCRHit otherHit = other.getHit(key);
+                if (otherHit == null) {
+                    complete = false;
+                    break;
+                }
+                hit.merge(otherHit);
+            }
+            if (complete)
+                totalResult.addHit(hit);
         }
+        return totalResult;
     }
 
     /**
@@ -332,12 +340,15 @@ public class MCRResults implements Iterable<MCRHit> {
      * list. Combines the MCRHit data of both result lists.
      * 
      * @param other
-     *            the other result list
+     *            the other result lists
      */
-    public void or(MCRResults other) {
-        int numHits = other.getNumHits();
-        for (int i = 0; i < numHits; i++)
-            this.addHit(other.getHit(i));
+    public static MCRResults union(MCRResults... others) {
+        MCRResults totalResult = new MCRResults();
+        for (MCRResults other : others) {
+            for (MCRHit hit : other)
+                totalResult.addHit(hit);
+        }
+        return totalResult;
     }
 
     public Iterator<MCRHit> iterator() {
@@ -353,7 +364,16 @@ public class MCRResults implements Iterable<MCRHit> {
      *            the exception message of the connection or an empty string
      */
     public void setHostConnection(String host, String msg) {
-        if (msg == null) msg = "";
+        if (msg == null)
+            msg = "";
         hostconnection.put(host, msg);
+    }
+
+    /**
+     * returns false if {@link #addHit(MCRHit)} and {@link #merge(Document, String)} are safe operations. 
+     * @return
+     */
+    public boolean isReadonly() {
+        return false;
     }
 }

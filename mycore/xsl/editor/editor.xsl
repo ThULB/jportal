@@ -332,9 +332,7 @@
     </xsl:if>
   </td>
   <td class="editorPMUD">
-    <xsl:if test="number($num) &gt; 1">
-      <input tabindex="999" type="image" name="_m-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-minus.png"/>
-    </xsl:if>
+    <input tabindex="999" type="image" name="_m-{$var}-{position()}" src="{$WebApplicationBaseURL}images/pmud-minus.png"/>
   </td>
   <xsl:choose>
     <xsl:when test="$rep/@arrows='false'" />
@@ -670,7 +668,8 @@
 
 <!-- ======== label text ======== -->
 <xsl:template match="text">
-  <label class="editorText">
+  <label>
+    <xsl:call-template name="editor.set.css" />
     <xsl:call-template name="output.label" />
   </label>
 </xsl:template>

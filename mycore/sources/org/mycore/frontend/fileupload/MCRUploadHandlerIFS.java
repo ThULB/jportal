@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
+ * $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,12 +24,11 @@
 package org.mycore.frontend.fileupload;
 
 import java.io.InputStream;
-import java.util.List;
+import java.util.Collection;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
-
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.backend.hibernate.MCRHIBConnection;
@@ -48,7 +47,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
+ * @version $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  * 
  * @see MCRUploadHandler
  */
@@ -256,11 +255,10 @@ public class MCRUploadHandlerIFS extends MCRUploadHandler {
         return "";
     }
 
-    @SuppressWarnings("unchecked")
     protected static void setDefaultPermissions(MCRObjectID derID) {
         if (CONFIG.getBoolean("MCR.Access.AddDerivateDefaultRule", true)) {
             MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-            List<String> configuredPermissions = AI.getAccessPermissionsFromConfiguration();
+            Collection<String> configuredPermissions = AI.getAccessPermissionsFromConfiguration();
             for (String permission : configuredPermissions) {
                 MCRAccessManager.addRule(derID, permission, MCRAccessManager.getTrueRule(), "default derivate rule");
             }

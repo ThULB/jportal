@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14987 $ $Date: 2009-03-20 22:10:57 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -189,7 +189,6 @@ public class MCRHIBCtrlCommands extends MCRAbstractCommands {
         bout.close();
     }
 
-    @SuppressWarnings("unchecked")
     private static void importFile(String file, final String entityName) throws DocumentException {
         File importFile = new File(file);
         if (importFile.exists() && importFile.isDirectory()) {

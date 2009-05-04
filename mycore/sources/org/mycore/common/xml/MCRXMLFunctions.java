@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13429 $ $Date: 2008-04-23 16:59:13 +0200 (Mi, 23. Apr 2008) $
+ * $Revision: 15030 $ $Date: 2009-03-27 10:44:45 +0100 (Fr, 27. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,6 +31,9 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.parsers.bool.MCRCondition;
@@ -38,6 +41,7 @@ import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
+import org.mycore.services.urn.MCRURNManager;
 
 /**
  * @author Thomas Scheffler (yagee)
@@ -120,12 +124,11 @@ public class MCRXMLFunctions {
             LOGGER.debug(sb.toString());
         }
         Locale locale = new Locale(iso639Language);
-        SimpleDateFormat df = new SimpleDateFormat(simpleFormat, locale);
         MCRMetaISO8601Date mcrdate = new MCRMetaISO8601Date();
         mcrdate.setFormat(isoFormat);
         mcrdate.setDate(isoDate);
-        Date date = mcrdate.getDate();
-        return (date == null) ? "?" + isoDate + "?" : df.format(date);
+        String formatted=mcrdate.format(simpleFormat, locale);
+        return (formatted == null) ? "?" + isoDate + "?" : formatted;
     }
 
     public static String getISODate(String simpleDate, String simpleFormat, String isoFormat) throws ParseException {
@@ -164,5 +167,31 @@ public class MCRXMLFunctions {
             LOGGER.debug("total query time: " + qtime);
         }
         return result.getNumHits();
+    }
+    
+    /**
+     * @return true if the given object has an urn assigned, false otherwise
+     * */
+    public static boolean hasURNDefined(String objId) {
+        if (objId == null) {
+            return false;
+        }
+        try {
+            return MCRURNManager.hasURNAssigned(objId);
+        } catch (Exception ex) {
+            LOGGER.error("Error while retrieving urn from database for object " + objId, ex);
+            return false;
+        }
+    }
+    
+    public static boolean classAvailable(String className){
+        try {
+            Class.forName(className);
+            LOGGER.debug("found class: "+className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            LOGGER.debug("did not found class: "+className);
+            return false;
+        }
     }
 }

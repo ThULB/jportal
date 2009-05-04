@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14998 $ $Date: 2009-03-24 14:08:58 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,7 +32,7 @@ package org.mycore.common.events;
  * 
  * @author Frank Luetzenkirchen
  */
-public class MCREvent extends java.util.Hashtable {
+public class MCREvent extends java.util.Hashtable<String, Object> {
     /**
      * Default version ID
      */

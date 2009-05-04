@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25. Okt 2008) $
+ * $Revision: 14901 $ $Date: 2009-03-16 12:26:12 +0100 (Mo, 16. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -26,6 +26,7 @@ package org.mycore.frontend.editor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -36,17 +37,20 @@ import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
+import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRConstants;
 
 /**
  * Container class that holds all data and files edited and submitted from an
  * HTML page that contains a MyCoRe XML editor form.
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 14245 $ $Date: 2008-10-25 11:47:29 +0200 (Sa, 25. Okt 2008) $
+ * @version $Revision: 14901 $ $Date: 2009-03-16 12:26:12 +0100 (Mo, 16. Mär 2009) $
  */
 public class MCREditorSubmission {
     private final static Logger LOGGER = Logger.getLogger(MCREditorSubmission.class);
@@ -66,13 +70,15 @@ public class MCREditorSubmission {
     private MCRRequestParameters parms;
 
     private Document xml;
-    
+
     private String rootName;
 
     private final static String ATTR_SEP = "__";
+
     private final static String BLANK = " ";
+
     private final static String BLANK_ESCAPED = "_-_";
-    
+
     /**
      * Set variables from source xml file that should be edited
      * 
@@ -82,6 +88,7 @@ public class MCREditorSubmission {
      *            the editor definition
      */
     MCREditorSubmission(Element input, Element editor) {
+        setAdditionalNamespaces(editor);
         buildAttribTable(editor);
         rootName = input.getName();
         setVariablesFromXML("", input, new Hashtable());
@@ -90,34 +97,35 @@ public class MCREditorSubmission {
 
     MCREditorSubmission(MCRRequestParameters parms, Element editor, boolean validate) {
         this.parms = parms;
-        rootName = parms.getParameter( "_root" );
+        rootName = parms.getParameter("_root");
         setVariablesFromSubmission(parms, editor);
         Collections.sort(variables);
         setRepeatsFromSubmission();
-        if (validate) 
+        setAdditionalNamespaces(editor);
+        if (validate)
             validate(parms, editor);
     }
 
     MCREditorSubmission(Element saved, List submitted, String root, MCRRequestParameters parms) {
         Element input = saved.getChild("input");
         List children = input.getChildren();
-        
-        String varpath = parms.getParameter("subselect.varpath");
-        boolean merge = "true".equals( parms.getParameter("subselect.merge") );
 
-        Hashtable<String,String> table = new Hashtable<String,String>(); 
-        
+        String varpath = parms.getParameter("subselect.varpath");
+        boolean merge = "true".equals(parms.getParameter("subselect.merge"));
+
+        Hashtable<String, String> table = new Hashtable<String, String>();
+
         for (int i = 0; i < children.size(); i++) {
             Element var = (Element) (children.get(i));
             String path = var.getAttributeValue("name");
             String value = var.getAttributeValue("value");
-            
-            if( merge )
-              table.put( path, value );
+
+            if (merge)
+                table.put(path, value);
             else if (path.equals(varpath) || path.startsWith(varpath + "/"))
-              continue;
+                continue;
             else
-              table.put( path, value );
+                table.put(path, value);
         }
 
         for (int i = 0; i < submitted.size(); i++) {
@@ -125,49 +133,62 @@ public class MCREditorSubmission {
             String path = var.getPath();
             String value = var.getValue();
             path = varpath + path.substring(root.length());
-            table.put( path, value );
+            table.put(path, value);
         }
-        
-        for( Iterator<String> it = table.keySet().iterator(); it.hasNext(); )
-        {
-          String path = it.next();
-          String value = table.get( path );
-          addVariable(path, value);
+
+        for (Iterator<String> it = table.keySet().iterator(); it.hasNext();) {
+            String path = it.next();
+            String value = table.get(path);
+            addVariable(path, value);
         }
 
         Collections.sort(variables);
         setRepeatsFromVariables();
     }
 
-    MCREditorSubmission( Element editor )
-    {
-      Element input = editor.getChild( "input" );
-      List children = input.getChildren();
+    MCREditorSubmission(Element editor) {
+        Element input = editor.getChild("input");
+        List children = input.getChildren();
 
-      for( int i = 0; i < children.size(); i++ )
-      {
-        Element var = (Element)( children.get( i ) );
-        String path = var.getAttributeValue( "name" );
-        String value = var.getAttributeValue( "value" );
-        addVariable( path, value );
-      }
+        for (int i = 0; i < children.size(); i++) {
+            Element var = (Element) (children.get(i));
+            String path = var.getAttributeValue("name");
+            String value = var.getAttributeValue("value");
+            addVariable(path, value);
+        }
 
-      Collections.sort( variables );
-      setRepeatsFromVariables();
+        Collections.sort(variables);
+        setRepeatsFromVariables();
     }
-    
+
+    private String getNamespacePrefix(Namespace ns) {
+        if ((ns == null) || ns.equals(Namespace.NO_NAMESPACE))
+            return "";
+        Iterator<String> it = nsMap.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) (it.next());
+            if (ns.equals(nsMap.get(key)))
+                return key + ":";
+        }
+        String msg = "Namespace " + ns.getURI() + " used in editor source input, but not declared in editor definition. Using: "
+                + ns.getPrefix();
+        LOGGER.warn(msg);
+        return ns.getPrefix() + ":";
+    }
+
     private void setVariablesFromXML(String prefix, Element element, Hashtable predecessors) {
-        String key = element.getName();
+        String key = getNamespacePrefix(element.getNamespace()) + element.getName();
+
         setVariablesFromXML(prefix, key, element, predecessors);
 
         List attributes = element.getAttributes();
         for (int i = 0; i < attributes.size(); i++) {
             Attribute attribute = (Attribute) (attributes.get(i));
-            String name = attribute.getName();
-            String value = attribute.getValue().replace(BLANK,BLANK_ESCAPED);
+            String name = getNamespacePrefix(attribute.getNamespace()) + attribute.getName();
+            String value = attribute.getValue().replace(BLANK, BLANK_ESCAPED);
             if ((value == null) || (value.length() == 0))
                 continue;
-            key = element.getName() + ATTR_SEP + name + ATTR_SEP + value;
+            key = getNamespacePrefix(element.getNamespace()) + element.getName() + ATTR_SEP + name + ATTR_SEP + value;
             if (constraints.containsKey(key))
                 setVariablesFromXML(prefix, key, element, predecessors);
         }
@@ -192,7 +213,7 @@ public class MCREditorSubmission {
             Attribute attribute = (Attribute) (attributes.get(i));
             String value = attribute.getValue();
             if ((value != null) && (value.length() > 0))
-                addVariable(path + "/@" + attribute.getName(), value);
+                addVariable(path + "/@" + getNamespacePrefix(attribute.getNamespace()) + attribute.getName(), value);
         }
 
         // Add values of all children
@@ -220,7 +241,7 @@ public class MCREditorSubmission {
                 int pos3 = var.indexOf("]", pos2);
                 String name = var.substring(0, pos1).trim();
                 String attr = var.substring(pos1 + 2, pos2).trim();
-                String value = var.substring(pos2 + 2, pos3 - 1).trim().replace(BLANK,BLANK_ESCAPED);
+                String value = var.substring(pos2 + 2, pos3 - 1).trim().replace(BLANK, BLANK_ESCAPED);
                 if (name.indexOf("/") >= 0)
                     name = name.substring(name.lastIndexOf("/") + 1).trim();
                 String key = name + ATTR_SEP + attr + ATTR_SEP + value;
@@ -412,7 +433,8 @@ public class MCREditorSubmission {
 
                     if ((oper != null) && (oper.length() > 0))
                         ok = MCRInputValidator.instance().compare(valueA, valueB, oper, type, format);
-                    if ((clazz != null) && (clazz.length() > 0) && (condition.getAttributeValue("field1") != null) && (condition.getAttributeValue("field2") != null))
+                    if ((clazz != null) && (clazz.length() > 0) && (condition.getAttributeValue("field1") != null)
+                            && (condition.getAttributeValue("field2") != null))
                         ok = ok && MCRInputValidator.instance().validateExternally(clazz, method, valueA, valueB);
 
                     if (!ok) {
@@ -612,10 +634,10 @@ public class MCREditorSubmission {
 
     private void buildTargetXML() {
         Element root;
-        if( variables.size() > 0 )
-          root = new Element(((MCREditorVariable)(variables.get(0))).getPathElements()[0]);
+        if (variables.size() > 0)
+            root = buildElement(((MCREditorVariable) (variables.get(0))).getPathElements()[0]);
         else
-          root = new Element(rootName.replace("/",""));
+            root = buildElement(rootName.replace("/", ""));
 
         for (int i = 0; i < variables.size(); i++) {
             MCREditorVariable var = (MCREditorVariable) (variables.get(i));
@@ -631,10 +653,13 @@ public class MCREditorSubmission {
                     name = name.substring(0, pos) + "_XXX_" + name.substring(pos + 1, name.length() - 1);
                 }
 
-                Element child = parent.getChild(name);
+                Namespace ns = getNamespace(name);
+                if (ns != null)
+                    name = name.substring(name.indexOf(":") + 1);
+                Element child = parent.getChild(name, ns);
 
                 if (child == null) {
-                    child = new Element(name);
+                    child = new Element(name, ns);
                     parent.addContent(child);
                 }
 
@@ -647,12 +672,12 @@ public class MCREditorSubmission {
                 parent.addContent(var.getValue());
                 node = parent;
             } else {
-                LOGGER.debug( "Setting attribute " + var.getPath() + " = " + var.getValue() );
-                parent.setAttribute(var.getAttributeName(), var.getValue());
+                LOGGER.debug("Setting attribute " + var.getPath() + " = " + var.getValue());
+                setAttribute(parent, var.getAttributeName(), var.getValue());
                 node = parent.getAttribute(var.getAttributeName());
             }
 
-            FileItem file = ( parms == null ? null : parms.getFileItem(var.getPath()) );
+            FileItem file = (parms == null ? null : parms.getFileItem(var.getPath()));
 
             if (file != null) {
                 file2node.put(file, node);
@@ -662,6 +687,78 @@ public class MCREditorSubmission {
 
         renameRepeatedElements(root);
         xml = new Document(root);
+    }
+
+    /**
+     * A map from namespace prefix to namespace for the namespaces registered in
+     * the editor definition.
+     */
+    private HashMap<String, Namespace> nsMap = new HashMap<String, Namespace>();
+
+    /**
+     * Stores the list of additional namespaces declared in the components
+     * element of the editor definition. These namespaces and its prefixes can
+     * be used in editor variable paths (var attributes of cells).
+     */
+    @SuppressWarnings("unchecked")
+    private void setAdditionalNamespaces(Element editor) {
+        Element components = editor.getChild("components");
+        List<Namespace> namespaces = components.getAdditionalNamespaces();
+        for (Namespace ns : namespaces)
+            nsMap.put(ns.getPrefix(), ns);
+        nsMap.put("xml", Namespace.XML_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.DV_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.METS_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.MODS_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.XLINK_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.XSI_NAMESPACE);
+        setNamespaceIfUndefined(MCRConstants.XSL_NAMESPACE);
+    }
+
+    private void setNamespaceIfUndefined(Namespace namespace) {
+        if (!nsMap.containsKey(namespace.getPrefix()))
+            nsMap.put(namespace.getPrefix(), namespace);
+    }
+
+    /**
+     * Extracts namespace prefix from the given name (the part before the ":")
+     * and resolves it to the namespace registered in the editor definition.
+     */
+    private Namespace getNamespace(String name) {
+        int pos1 = name.indexOf(":");
+        int pos2 = name.indexOf(ATTR_SEP);
+        if ((pos1 == -1) || ((pos1 > pos2) && (pos2 >= 0)))
+            return null;
+        String prefix = name.substring(0, pos1);
+        if (!nsMap.containsKey(prefix)) {
+            String msg = "Namespace prefix " + prefix + " is used in editor variable, but not defined";
+            throw new MCRConfigurationException(msg);
+        }
+        return nsMap.get(prefix);
+    }
+
+    /**
+     * Builds a new XML element for data output. The name may contain a
+     * namespace prefix, which is resolved to a namespace then.
+     */
+    private Element buildElement(String name) {
+        Namespace ns = getNamespace(name);
+        if (ns != null)
+            name = name.substring(name.indexOf(":") + 1);
+        return new Element(name, ns);
+    }
+
+    /**
+     * Sets attribute value of the given parent element. The name may contain a
+     * namespace prefix, which is resolved to a namespace then.
+     */
+    private void setAttribute(Element parent, String name, String value) {
+        Namespace ns = getNamespace(name);
+        if (ns != null) {
+            name = name.substring(name.indexOf(":") + 1);
+            parent.setAttribute(name, value, ns);
+        } else
+            parent.setAttribute(name, value);
     }
 
     private void renameRepeatedElements(Element element) {
@@ -678,8 +775,8 @@ public class MCREditorSubmission {
             element.setName(name.substring(0, pos));
             int pos2 = name.indexOf(ATTR_SEP, pos + 2);
             String attr = name.substring(pos + 2, pos2);
-            String val = name.substring(pos2 + 2).replace(BLANK_ESCAPED,BLANK);
-            element.setAttribute(attr, val);
+            String val = name.substring(pos2 + 2).replace(BLANK_ESCAPED, BLANK);
+            setAttribute(element, attr, val);
         }
 
         List children = element.getChildren();

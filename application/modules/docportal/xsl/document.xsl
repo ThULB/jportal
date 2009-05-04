@@ -11,10 +11,6 @@
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   exclude-result-prefixes="xlink mcr acl i18n xsl">
-
-  
-  <xsl:include href="mcr-module-startIview.xsl"/>
-  
 	
   <!-- Template for result list hit -->
   <xsl:template match="mcr:hit[contains(@id,'_document_')]">
@@ -27,7 +23,7 @@
       <xsl:value-of select="@id" />
     </xsl:variable>
     <tr>
-      <td class="resultTitle">
+      <td class="resultTitle" width="60%">
         <xsl:copy-of select="$mcrobjlink" />
       </td>
       <td class="resultTitle" width="10"/>
@@ -72,17 +68,17 @@
             <xsl:with-param name="nodes" select="$mcrobj/metadata/formats/format" />
             <xsl:with-param name="host" select="$host" />
             <xsl:with-param name="next" select="', '"/>
-          </xsl:call-template>
-          ,
+          </xsl:call-template>, 
+          
           <!-- type -->
           <xsl:call-template name="printClass">
             <xsl:with-param name="nodes" select="$mcrobj/metadata/types/type" />
             <xsl:with-param name="host" select="$host" />
             <xsl:with-param name="next" select="', '"/>
-          </xsl:call-template>
-          ,
-          <xsl:value-of select="$mcrobj/@ID" />
-          ,
+          </xsl:call-template>, 
+          
+          <xsl:value-of select="$mcrobj/@ID" />, 
+          
           <xsl:variable name="date">
             <xsl:call-template name="formatISODate">
               <xsl:with-param name="date"
@@ -213,72 +209,58 @@
       <!-- DC 08 *** Publisher ***************************************** -->
       <!--    09 *** PublisherLink ************************************* -->
 
-      <xsl:choose>
-        <xsl:when test="./metadata/publishlinks">
-          <tr>
-            <td valign="top" class="metaname">
-              <xsl:value-of
-                select="concat(i18n:translate('metaData.document.publisher'),' :')" />
-            </td>
-            <td class="metavalue">
+      <xsl:if test="./metadata/publishlinks or ./metadata/publishers">
+        <tr>
+          <td valign="top" class="metaname">
+            <xsl:value-of select="concat(i18n:translate('metaData.document.publisher'),' :')" />
+          </td>
+          <td class="metavalue">
+            <xsl:if test="./metadata/publishlinks">
               <xsl:call-template name="personlink">
-                <xsl:with-param name="nodes"
-                  select="./metadata/publishlinks/publishlink" />
+                <xsl:with-param name="nodes" select="./metadata/publishlinks/publishlink" />
                 <xsl:with-param name="host" select="$obj_host" />
               </xsl:call-template>
-            </td>
-          </tr>
-        </xsl:when>
-        <xsl:when test="./metadata/publishers">
-          <tr>
-            <td class="metaname">
-              <xsl:value-of
-                select="concat(i18n:translate('metaData.document.publisher'),' :')" />
-            </td>
-            <td class="metavalue">
+            </xsl:if>
+            <xsl:if test="./metadata/publishlinks or ./metadata/publishers">
+              <br />
+            </xsl:if>
+            <xsl:if test="./metadata/publishers">
               <xsl:call-template name="printI18N">
                 <xsl:with-param name="nodes" select="./metadata/publishers/publisher" />
                 <xsl:with-param name="next" select="'&lt;br /&gt;'"/>
               </xsl:call-template>
-            </td>
-          </tr>
-        </xsl:when>
-      </xsl:choose>
+            </xsl:if>
+          </td>
+        </tr>
+      </xsl:if>
 
       <!-- DC 10 *** Contributor *************************************** -->
       <!-- DC 11 *** ContributorLink *********************************** -->
 
-      <xsl:choose>
-        <xsl:when test="./metadata/contriblinks">
-          <tr>
-            <td valign="top" class="metaname">
-              <xsl:value-of
-                select="concat(i18n:translate('metaData.document.contributor'),' :')" />
-            </td>
-            <td class="metavalue">
+      <xsl:if test="./metadata/contriblinks or ./metadata/contributors">
+        <tr>
+          <td valign="top" class="metaname">
+            <xsl:value-of select="concat(i18n:translate('metaData.document.contributor'),' :')" />
+          </td>
+          <td class="metavalue">
+            <xsl:if test="./metadata/contriblinks">
               <xsl:call-template name="personlink">
-                <xsl:with-param name="nodes"
-                  select="./metadata/contriblinks/contriblink" />
+                <xsl:with-param name="nodes" select="./metadata/contriblinks/contriblink" />
                 <xsl:with-param name="host" select="$obj_host" />
               </xsl:call-template>
-            </td>
-          </tr>
-        </xsl:when>
-        <xsl:when test="./metadata/contributors">
-          <tr>
-            <td class="metaname">
-              <xsl:value-of
-                select="concat(i18n:translate('metaData.document.contributor'),' :')" />
-            </td>
-            <td class="metavalue">
+            </xsl:if>
+            <xsl:if test="./metadata/contriblinks or ./metadata/contributors">
+              <br />
+            </xsl:if>
+            <xsl:if test="./metadata/contributors">
               <xsl:call-template name="printI18N">
                 <xsl:with-param name="nodes" select="./metadata/contributors/contributor" />
                 <xsl:with-param name="next" select="'&lt;br /&gt;'"/>
               </xsl:call-template>
-            </td>
-          </tr>
-        </xsl:when>
-      </xsl:choose>
+            </xsl:if>
+          </td>
+        </tr>
+      </xsl:if>
 
       <!--    05 *** Origin ********************************************* -->
 
@@ -370,8 +352,7 @@
                 <xsl:variable name="deriv" select="@xlink:href" />
                 <!-- MCR-IView ..start -->
                 <!-- example implementation -->
-				  
-                <xsl:if test="$objectHost = 'local'">
+                <xsl:if test="$jai.available">
                   <tr>
                     <td class="metanone" colspan="8">
                       <xsl:variable name="supportedMainFile">
@@ -395,7 +376,6 @@
                     </td>
                   </tr>
                 </xsl:if>
-					  
                 <!-- MCR - IView ..end -->
                 <tr>
                   <xsl:variable name="deriv" select="@xlink:href" />
@@ -928,7 +908,7 @@
   <xsl:template name="personlink">
     <xsl:param name="nodes" />
     <xsl:for-each select="$nodes">
-      <xsl:if test="position() != 1">,</xsl:if>
+      <xsl:if test="position() != 1">, </xsl:if>
       <xsl:call-template name="objectLink">
         <xsl:with-param name="obj_id" select="@xlink:href" />
       </xsl:call-template>

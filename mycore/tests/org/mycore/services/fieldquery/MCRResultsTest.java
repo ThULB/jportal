@@ -6,32 +6,32 @@ import org.mycore.common.MCRTestCase;
 
 public class MCRResultsTest extends MCRTestCase {
 
-    public void testAndMerge() throws Exception {
+    public void testIntersect() throws Exception {
         ArrayList<MCRResults> results = createSampleResults();
         MCRResults res1 = results.get(0);
         MCRResults res2 = results.get(1);
         MCRResults res3 = results.get(2);
 
-        res1.and(res2);
-        assertEquals(2, res1.getNumHits()); // 1 3
-        res1.and(res3);
-        assertEquals(1, res1.getNumHits()); // 1
-        res2.and(res3);
-        assertEquals(2, res2.getNumHits()); // 1 7
+        MCRResults newRes = MCRResults.intersect(new MCRResults[] {res1, res2});
+        assertEquals(2, newRes.getNumHits()); // 1 3
+        newRes = MCRResults.intersect(new MCRResults[] {newRes, res3});
+        assertEquals(1, newRes.getNumHits()); // 1
+        newRes = MCRResults.intersect(new MCRResults[] {res2, res3});
+        assertEquals(2, newRes.getNumHits()); // 1 7
     }
 
-    public void testOrMerge() throws Exception {
+    public void testUnion() throws Exception {
         ArrayList<MCRResults> results = createSampleResults();
         MCRResults res1 = results.get(0);
         MCRResults res2 = results.get(1);
         MCRResults res3 = results.get(2);
 
-        res1.or(res2);
-        assertEquals(5, res1.getNumHits()); // 0 1 2 3 7
-        res1.or(res3);
-        assertEquals(8, res1.getNumHits()); // all
-        res2.or(res3);
-        assertEquals(6, res2.getNumHits()); // 1 3 4 5 6 7
+        MCRResults newRes = MCRResults.union(new MCRResults[] {res1, res2});
+        assertEquals(5, newRes.getNumHits()); // 0 1 2 3 7
+        newRes = MCRResults.union(new MCRResults[] {newRes, res3});
+        assertEquals(8, newRes.getNumHits()); // all
+        newRes = MCRResults.union(new MCRResults[] {res2, res3});
+        assertEquals(6, newRes.getNumHits()); // 1 3 4 5 6 7
     }
 
     protected ArrayList<MCRResults> createSampleResults() {

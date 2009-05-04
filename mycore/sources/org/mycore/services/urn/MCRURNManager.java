@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14766 $ $Date: 2009-02-19 10:49:52 +0100 (Do, 19. Feb 2009) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -213,6 +213,28 @@ public class MCRURNManager {
     }
 
     /**
+     * @return true if the given object has an urn assigned
+     * */
+    public static boolean hasURNAssigned(String objId){
+        return store.hasURNAssigned(objId);
+    }
+    
+    /** 
+     * Assigns the given urn to the given derivate ID 
+     * @param urn 
+     *      the urn to assign
+     * @param derivateID 
+     *      the id of the derivate
+     * @param path 
+     *      the path of the derivate in the internal filesystem
+     * @param filename 
+     *      the filename
+     */
+    public static void assignURN(String urn, String derivateID, String path, String filename) {
+        store.assignURN(urn, derivateID, path, filename);
+    }
+    
+    /**
      * Retrieves the URN that is assigned to the given document ID
      * 
      * @return the urn, or null if no urn is assigned to this ID
@@ -235,6 +257,13 @@ public class MCRURNManager {
      */
     public static void removeURN(String urn) {
         store.removeURN(urn);
+    }
+    
+    /**
+     * Removes the urn (and assigned document ID) from the persistent store
+     */
+    public static void removeURNByObjectID(String objID) {
+        store.removeURNByObjectID(objID);
     }
     
     /**

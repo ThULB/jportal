@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14132 $ $Date: 2008-10-16 10:39:50 +0200 (Do, 16. Okt 2008) $
+ * $Revision: 15034 $ $Date: 2009-03-27 13:52:43 +0100 (Fr, 27. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,15 +27,19 @@ import static org.mycore.common.events.MCRSessionEvent.Type.activated;
 import static org.mycore.common.events.MCRSessionEvent.Type.passivated;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.log4j.Logger;
-
+import org.hibernate.Transaction;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.events.MCRSessionEvent;
 import org.mycore.common.events.MCRSessionListener;
 import org.mycore.datamodel.classifications.MCRClassificationBrowserData;
@@ -47,14 +51,21 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @author Frank L�tzenkirchen
+ * @author Frank L\u00fctzenkirchen
  * 
- * @version $Revision: 14132 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mrz
+ * @version $Revision: 15034 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17 Mrz
  *          2008) $
  */
 public class MCRSession implements Cloneable {
     /** A map storing arbitrary session data * */
-    private Map map = new HashMap();
+    private Map<Object, Object> map = new Hashtable<Object, Object>();
+
+    @SuppressWarnings("unchecked")
+    private Map.Entry<Object, Object>[] emptyEntryArray = new Map.Entry[0];
+
+    private List<Map.Entry<Object, Object>> mapEntries;
+
+    private boolean mapChanged = true;
 
     AtomicInteger accessCount;
 
@@ -78,7 +89,7 @@ public class MCRSession implements Cloneable {
     /** The unique ID of this session */
     private String sessionID = null;
 
-    /** -ASC- f�r MCRClassificationBrowser Class session daten */
+    /** -ASC- for MCRClassificationBrowser Class session data */
     public MCRClassificationBrowserData BData = null;
 
     private String FullName = null;
@@ -89,6 +100,10 @@ public class MCRSession implements Cloneable {
 
     private long loginTime, lastAccessTime, thisAccessTime, createTime;
 
+    private boolean dataBaseAccess;
+
+    private ThreadLocal<Transaction> transaction = new ThreadLocal<Transaction>();
+
     /**
      * The constructor of a MCRSession. As default the user ID is set to the
      * value of the property variable named 'MCR.Users.Guestuser.UserName'.
@@ -97,6 +112,8 @@ public class MCRSession implements Cloneable {
         MCRConfiguration config = MCRConfiguration.instance();
         userID = config.getString("MCR.Users.Guestuser.UserName", "gast");
         language = config.getString("MCR.Metadata.DefaultLang", "de");
+        dataBaseAccess = MCRConfiguration.instance().getBoolean("MCR.Persistence.Database.Enable", true);
+
         accessCount = new AtomicInteger();
         concurrentAccess = new AtomicInteger();
 
@@ -149,11 +166,28 @@ public class MCRSession implements Cloneable {
     }
 
     /**
+     * Returns a list of all stored object keys within MCRSession.
+     * This method is not thread safe.
+     * I you need thread safe access to all stored objects use {@link MCRSession#getMapEntries()} instead.
      * @return Returns a list of all stored object keys within MCRSession as
      *         java.util.Ierator
      */
-    public Iterator getObjectsKeyList() {
+    public Iterator<Object> getObjectsKeyList() {
         return Collections.unmodifiableSet(map.keySet()).iterator();
+    }
+
+    /**
+     * Returns an unmodifiable list of all entries in this MCRSession
+     * This method is thread safe.
+     */
+    public List<Map.Entry<Object, Object>> getMapEntries() {
+        if (this.mapChanged) {
+            this.mapChanged = false;
+            final Set<Entry<Object, Object>> entrySet = Collections.unmodifiableMap(map).entrySet();
+            final Map.Entry<Object, Object>[] entryArray = entrySet.toArray(emptyEntryArray);
+            this.mapEntries = Collections.unmodifiableList(Arrays.asList(entryArray));
+        }
+        return this.mapEntries;
     }
 
     /** returns the current user ID */
@@ -206,6 +240,7 @@ public class MCRSession implements Cloneable {
 
     /** Stores an object under the given key within the session * */
     public Object put(Object key, Object value) {
+        mapChanged = true;
         return map.put(key, value);
     }
 
@@ -215,6 +250,7 @@ public class MCRSession implements Cloneable {
     }
 
     public void deleteObject(Object key) {
+        mapChanged = true;
         map.remove(key);
     }
 
@@ -262,6 +298,7 @@ public class MCRSession implements Cloneable {
         // clear bound objects
         LOGGER.debug("Clearing local map.");
         map.clear();
+        mapEntries = null;
         this.sessionID = null;
     }
 
@@ -349,22 +386,64 @@ public class MCRSession implements Cloneable {
     public long getCreateTime() {
         return createTime;
     }
-    
-    public Principal getUserPrincipal(){
-        MCRServletJob job=(MCRServletJob) get("MCRServletJob");
-        if (job==null)
+
+    public Principal getUserPrincipal() {
+        MCRServletJob job = (MCRServletJob) get("MCRServletJob");
+        if (job == null)
             return null;
         return job.getRequest().getUserPrincipal();
     }
-    
-    public boolean isPrincipalInRole(String role){
-        Principal p=getUserPrincipal();
-        if (p==null)
+
+    public boolean isPrincipalInRole(String role) {
+        Principal p = getUserPrincipal();
+        if (p == null)
             return false;
-        MCRServletJob job=(MCRServletJob) get("MCRServletJob");
-        if (job==null)
+        MCRServletJob job = (MCRServletJob) get("MCRServletJob");
+        if (job == null)
             return false;
         return job.getRequest().isUserInRole(role);
+    }
+
+    /**
+     * starts a new database transaction.
+     */
+    public void beginTransaction() {
+        if (dataBaseAccess)
+            transaction.set(MCRHIBConnection.instance().getSession().beginTransaction());
+    }
+
+    /**
+     * commits the database transaction.
+     * Commit is only done if {@link #isTransactionActive()} returns true.
+     */
+    public void commitTransaction() {
+        if (isTransactionActive()) {
+            transaction.get().commit();
+            beginTransaction();
+            MCRHIBConnection.instance().getSession().clear();
+            transaction.get().commit();
+            transaction.remove();
+        }
+    }
+
+    /**
+     * forces the database transaction to roll back.
+     * Roll back is only performed if {@link #isTransactionActive()} returns true.
+     */
+    public void rollbackTransaction() {
+        if (isTransactionActive()) {
+            transaction.get().rollback();
+            MCRHIBConnection.instance().getSession().close();
+            transaction.remove();
+        }
+    }
+
+    /**
+     * Is the transaction still alive?
+     * @return true if the transaction is still alive
+     */
+    public boolean isTransactionActive() {
+        return dataBaseAccess && transaction.get() != null && transaction.get().isActive();
     }
 
 }

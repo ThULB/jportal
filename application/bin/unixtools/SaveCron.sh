@@ -3,5 +3,5 @@
 
 mkdir $DOCPORTAL_HOME/logs
 D=`date '+%Y%m%d'`
-$DOCPORTAL_HOME/build/bin/Save.sh > $DOCPORTAL_HOME/logs/save$D.txt
+$DOCPORTAL_HOME/build/bin/Save.sh > $DOCPORTAL_HOME/logs/save-$D.txt
 

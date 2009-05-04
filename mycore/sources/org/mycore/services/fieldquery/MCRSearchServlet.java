@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14471 $ $Date: 2008-11-25 10:24:29 +0100 (Di, 25. Nov 2008) $
+ * $Revision: 14975 $ $Date: 2009-03-20 12:19:57 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -305,7 +305,7 @@ public class MCRSearchServlet extends MCRServlet {
         String npp = root.getAttributeValue("numPerPage", "0");
 
         // Store query and results in cache
-        new MCRCachedQueryData( result, clonedQuery, cond );
+        MCRCachedQueryData.cache( result, clonedQuery, cond );
 
         // Redirect browser to first results page
         sendRedirect(request, response, result.getID(), npp);

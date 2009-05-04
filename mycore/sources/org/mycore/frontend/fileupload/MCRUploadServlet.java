@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
+ * $Revision: 15114 $ $Date: 2009-04-29 10:32:28 +0200 (Mi, 29. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,6 +33,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URLDecoder;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -47,9 +48,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.log4j.Logger;
-import org.hibernate.Transaction;
 import org.jdom.Element;
-import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
@@ -70,7 +69,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * @author Frank Lützenkirchen
  * @author Harald Richter
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14552 $ $Date: 2008-12-10 13:50:10 +0100 (Mi, 10. Dez 2008) $
+ * @version $Revision: 15114 $ $Date: 2009-04-29 10:32:28 +0200 (Mi, 29. Apr 2009) $
  * @see org.mycore.frontend.fileupload.MCRUploadHandler
  */
 public final class MCRUploadServlet extends MCRServlet implements Runnable {
@@ -243,13 +242,28 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
             return;
         }
 
+        MCRSession session = MCRSessionMgr.getCurrentSession();
         if (method.equals("startUploadSession")) {
             String uploadId = req.getParameter("uploadId");
+            if (uploadId == null) {
+                StringBuilder sb = new StringBuilder("'uploadId' was not submitted. Request:\n");
+                @SuppressWarnings("unchecked")
+                Enumeration<String> headerNames = req.getHeaderNames();
+                while (headerNames.hasMoreElements()) {
+                    String header = headerNames.nextElement();
+                    @SuppressWarnings("unchecked")
+                    Enumeration<String> headerValues = req.getHeaders(header);
+                    while (headerValues.hasMoreElements()) {
+                        sb.append(header).append(':').append(headerValues.nextElement()).append('\n');
+                    }
+                }
+                throw new MCRException(sb.toString());
+            }
             int numFiles = Integer.parseInt(req.getParameter("numFiles"));
             MCRUploadHandlerManager.getHandler(uploadId).startUpload(numFiles);
 
             // Remember current MCRSession for upload
-            String sessionID = MCRSessionMgr.getCurrentSession().getID();
+            String sessionID = session.getID();
             sessionIDs.put(uploadId, sessionID);
 
             LOGGER.info("UploadServlet start session " + uploadId);
@@ -299,7 +313,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
                 int numFiles = paths.size();
                 LOGGER.info("UploadHandler uploading " + numFiles + " file(s)");
                 handler.startUpload(numFiles);
-                job.commitTransaction();
+                session.commitTransaction();
 
                 for (int i = 0; i < numFiles; i++) {
                     FileItem item = sub.getFile(paths.get(i));
@@ -314,7 +328,7 @@ public final class MCRUploadServlet extends MCRServlet implements Runnable {
                     } else
                         handler.receiveFile(path, in, 0, null);
                 }
-                job.beginTransaction();
+                session.beginTransaction();
 
                 handler.finishUpload();
             }

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27. Okt 2008) $
+ * $Revision: 14656 $ $Date: 2009-01-27 10:46:56 +0100 (Di, 27. Jan 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.datamodel.metadata;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -40,7 +41,7 @@ import org.mycore.common.MCRUtils;
  * 
  * @author Jens Kupferschmidt
  * @author Mathias Hegner
- * @version $Revision: 14257 $ $Date: 2008-10-27 16:59:00 +0100 (Mo, 27. Okt 2008) $
+ * @version $Revision: 14656 $ $Date: 2009-01-27 10:46:56 +0100 (Di, 27. Jan 2009) $
  */
 public class MCRObjectMetadata {
     // logger
@@ -117,19 +118,27 @@ public class MCRObjectMetadata {
 
         return heritMeta;
     }
-    
+
     /**
      * <em>removeInheritedMetadata</em> removes all inherited metadata elements  
      * 
-     */    
+     */
     public final void removeInheritedMetadata() {
-        for (int i = 0; i < size(); ++i) {
-            MCRMetaElement me = meta_list.get(i);
+        Iterator<MCRMetaElement> elements = meta_list.iterator();
+        int counter = 0;
+        while (elements.hasNext()) {
+            MCRMetaElement me = elements.next();
             if (me.getHeritable())
                 me.removeInheritedObject();
+            //remove meta element if empty (else isValid() will fail)
+            if (me.size() == 0) {
+                elements.remove();
+                tag_names.remove(counter);
+            } else
+                counter++;
         }
     }
-    
+
     /**
      * This method append MCRMetaElement's from a given MCRObjectMetadata to
      * this data set.
@@ -164,7 +173,7 @@ public class MCRObjectMetadata {
                 }
             } else {
                 tag_names.add(newtag);
-                newelm.setHeritable(true);
+                newelm.setNotInherit(false);
                 meta_list.add(newelm);
             }
         }
@@ -373,7 +382,7 @@ public class MCRObjectMetadata {
 
         return true;
     }
-    
+
     /**
      * This method put debug data to the logger (for the debug mode).
      */

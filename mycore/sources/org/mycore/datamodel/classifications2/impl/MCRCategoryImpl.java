@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14449 $ $Date: 2008-11-21 11:38:18 +0100 (Fr, 21. Nov 2008) $
+ * $Revision: 15078 $ $Date: 2009-04-16 12:52:54 +0200 (Do, 16. Apr 2009) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -40,103 +40,12 @@ import org.mycore.datamodel.classifications2.MCRLabel;
  * 
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14449 $ $Date: 2008-02-06 17:27:24 +0000 (Mi, 06 Feb
- *          2008) $
+ * @version $Revision: 15078 $ $Date: 2009-04-16 12:52:54 +0200 (Do, 16. Apr 2009) $
  * @since 2.0
  */
 public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializable {
 
     private static final long serialVersionUID = -7431317191711000317L;
-
-    protected static class ChildList extends ArrayList<MCRCategory> {
-        private static final long serialVersionUID = 5844882597476033744L;
-
-        private MCRCategory root;
-
-        private MCRCategory thisCategory;
-
-        /**
-         * @param root
-         * @param thisCategory
-         */
-        public ChildList(MCRCategory root, MCRCategory thisCategory) {
-            super();
-            this.root = root;
-            this.thisCategory = thisCategory;
-        }
-
-        @Override
-        public void add(int index, MCRCategory element) {
-            super.add(index, wrapCategory(element, thisCategory, root));
-        }
-
-        @Override
-        public boolean add(MCRCategory e) {
-            return super.add(wrapCategory(e, thisCategory, root));
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends MCRCategory> c) {
-            return super.addAll(wrapCategories(c, thisCategory, root));
-        }
-
-        @Override
-        public boolean addAll(int index, Collection<? extends MCRCategory> c) {
-            return super.addAll(index, wrapCategories(c, thisCategory, root));
-        }
-
-        @Override
-        public void clear() {
-            for (int i = 0; i < size(); i++) {
-                removeAncestorReferences(get(i));
-            }
-            super.clear();
-        }
-
-        @Override
-        public MCRCategory remove(int index) {
-            MCRCategory category = super.remove(index);
-            removeAncestorReferences(category);
-            return category;
-        }
-
-        @Override
-        public boolean remove(Object o) {
-            boolean removed = super.remove(o);
-            if (removed) {
-                removeAncestorReferences((MCRCategory) o);
-            }
-            return removed;
-        }
-
-        /**
-         * @param category
-         */
-        private void removeAncestorReferences(MCRCategory category) {
-            if (category instanceof MCRAbstractCategoryImpl) {
-                ((MCRAbstractCategoryImpl) category).parent = null;
-                ((MCRAbstractCategoryImpl) category).root = null;
-            }
-        }
-
-        @Override
-        protected void removeRange(int fromIndex, int toIndex) {
-            for (int i = fromIndex; i < toIndex; i++) {
-                removeAncestorReferences(get(i));
-            }
-            super.removeRange(fromIndex, toIndex);
-        }
-
-        @Override
-        public MCRCategory set(int index, MCRCategory element) {
-            MCRCategory category = super.set(index, element);
-            if (category != element) {
-                removeAncestorReferences(category);
-            }
-            return category;
-        }
-
-    }
 
     private static Logger LOGGER = Logger.getLogger(MCRCategoryImpl.class);
 
@@ -159,6 +68,9 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
     }
 
     public boolean hasChildren() {
+        //if children is initialized and has objects use it and don't depend on db values
+        if (this.children != null && this.children.size() > 0)
+            return true;
         if (right != left)
             return (right - left) > 1;
         return super.hasChildren();
@@ -178,28 +90,32 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
             if (position == -1) {
                 // sometimes indexOf does not find this instance so we need to
                 // check for the ID here to
-                position = 0;
-                for (MCRCategory sibling : parent.getChildren()) {
-                    if (sibling.getId().equals(getId()))
-                        return position;
-                    position++;
-                }
-                if (LOGGER.isDebugEnabled()) {
-                    StringBuilder sb = new StringBuilder("List of children of parent: ");
-                    sb.append(parent.getId()).append('\n');
-                    for (MCRCategory sibling : parent.getChildren()) {
-                        sb.append(sibling.getId()).append('\n');
-                    }
-                    LOGGER.debug(sb.toString());
-
-                }
-                throw new IndexOutOfBoundsException("Position -1 is not valid.");
+                position = getPositionInParentByID();
             }
             return position;
         } catch (RuntimeException e) {
             LOGGER.error("Cannot use parent.getChildren() here", e);
             throw e;
         }
+    }
+
+    private int getPositionInParentByID() {
+        int position = 0;
+        for (MCRCategory sibling : parent.getChildren()) {
+            if (sibling.getId().equals(getId()))
+                return position;
+            position++;
+        }
+        if (LOGGER.isDebugEnabled()) {
+            StringBuilder sb = new StringBuilder("List of children of parent: ");
+            sb.append(parent.getId()).append('\n');
+            for (MCRCategory sibling : parent.getChildren()) {
+                sb.append(sibling.getId()).append('\n');
+            }
+            LOGGER.debug(sb.toString());
+
+        }
+        throw new IndexOutOfBoundsException("Position -1 is not valid.");
     }
 
     /**
@@ -219,7 +135,7 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
         if (children instanceof PersistentList) {
             this.children = children;
         } else {
-            ChildList newChildren = new ChildList(this.root, this);
+            MCRCategoryChildList newChildren = new MCRCategoryChildList(this.root, this);
             newChildren.addAll(children);
             this.children = newChildren;
         }
@@ -289,6 +205,8 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
             catImpl = (MCRCategoryImpl) category;
             // don't use setParent() as it call add() from ChildList
             catImpl.parent = parent;
+            if (root == null)
+                root = catImpl;
             catImpl.setRoot(root);
             if (parent != null) {
                 catImpl.level = parent.getLevel() + 1;
@@ -309,11 +227,83 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
         catImpl.setId(category.getId());
         catImpl.labels = category.getLabels();
         catImpl.parent = parent;
+        if (root == null)
+            root = catImpl;
         catImpl.setRoot(root);
         catImpl.level = parent.getLevel() + 1;
         catImpl.children = new ArrayList<MCRCategory>(category.getChildren().size());
         catImpl.getChildren().addAll(wrapCategories(category.getChildren(), catImpl, root));
         return catImpl;
+    }
+
+    MCRCategoryImpl getLeftSiblingOrOfAncestor() {
+        int index = getPositionInParent();
+        MCRCategoryImpl parent = (MCRCategoryImpl) getParent();
+        if (index > 0) {
+            // has left sibling
+            return (MCRCategoryImpl) parent.getChildren().get(index - 1);
+        }
+        if (parent.getParent() != null) {
+            // recursive call to get left sibling of parent
+            return parent.getLeftSiblingOrOfAncestor();
+        }
+        return parent;// is root
+    }
+
+    MCRCategoryImpl getLeftSiblingOrParent() {
+        int index = getPositionInParent();
+        MCRCategoryImpl parent = (MCRCategoryImpl) getParent();
+        if (index == 0) {
+            return parent;
+        }
+        return (MCRCategoryImpl) parent.getChildren().get(index - 1);
+    }
+
+    MCRCategoryImpl getRightSiblingOrOfAncestor() {
+        int index = getPositionInParent();
+        MCRCategoryImpl parent = (MCRCategoryImpl) getParent();
+        if (index + 1 < parent.getChildren().size()) {
+            // has right sibling
+            return (MCRCategoryImpl) parent.getChildren().get(index + 1);
+        }
+        if (parent.getParent() != null) {
+            // recursive call to get right sibling of parent
+            return parent.getRightSiblingOrOfAncestor();
+        }
+        return parent;// is root
+    }
+
+    MCRCategoryImpl getRightSiblingOrParent() {
+        int index = getPositionInParent();
+        MCRCategoryImpl parent = (MCRCategoryImpl) getParent();
+        if (index + 1 == parent.getChildren().size()) {
+            return parent;
+        }
+        // get Element at index that would be at index+1 after insert
+        return (MCRCategoryImpl) parent.getChildren().get(index + 1);
+    }
+
+    /**
+     * calculates left and right value throug the subtree rooted at
+     * <code>co</code>.
+     * 
+     * @param leftStart
+     *            this.left will be set to this value
+     * @param levelStart
+     *            this.getLevel() will return this value
+     * @return this.right
+     */
+    int calculateLeftRightAndLevel(int leftStart, int levelStart) {
+        int curValue = leftStart;
+        final int nextLevel = levelStart + 1;
+        setLeft(leftStart);
+        setLevel(levelStart);
+        for (MCRCategory child : getChildren()) {
+            LOGGER.debug(child.getId());
+            curValue = ((MCRCategoryImpl) child).calculateLeftRightAndLevel(++curValue, nextLevel);
+        }
+        setRight(++curValue);
+        return curValue;
     }
 
     /**
@@ -333,7 +323,7 @@ public class MCRCategoryImpl extends MCRAbstractCategoryImpl implements Serializ
 
     public void setRootID(String rootID) {
         if (this.getId() == null)
-            setId(new MCRCategoryID(rootID, null));
+            setId(MCRCategoryID.rootID(rootID));
         else if (!this.getId().getRootID().equals(rootID)) {
             setId(new MCRCategoryID(rootID, this.getId().getID()));
         }

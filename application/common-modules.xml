@@ -247,7 +247,7 @@
       </unjar>
       <xslt basedir="${application}.config}"
             classpathref="application.classpath"
-            in="${application.config}/searchfields.xml"
+            in="${build.config}/searchfields.xml"
             style="${mycore.stylesheets}/searchfields2searchmask.xsl"
             out="@{dir.editor}/@{filename.editor}"
             force="true">
@@ -265,7 +265,7 @@
       <echo level="info">Generated editor definition file @{filename.editor}</echo>
       <xslt basedir="${application.config}"
             classpathref="application.classpath"
-            in="${application.config}/searchfields.xml"
+            in="${build.config}/searchfields.xml"
             style="${mycore.stylesheets}/searchfields2searchmask.xsl"
             out="@{dir.webpage}/@{filename.webpage}"
             force="true">

@@ -37,13 +37,13 @@
         <sequential>
           <if>
             <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@module/build.xml">
+              <fileset dir="." includes="modules/@{module}/build.xml">
                 <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
               </fileset>
             </resourcecount>
             <then>
               <subant target="pre.@{target}" inheritall="true" inheritrefs="true">
-                <fileset dir="." includes="modules/@module/build.xml">
+                <fileset dir="." includes="modules/@{module}/build.xml">
                   <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
                 </fileset>
               </subant>
@@ -99,7 +99,7 @@
   <target name="info" depends="init" description="Shows Java/Ant/Operating System version, CLASSPATH etc.">
     <modulePreHook target="info" />
     <echo level="info">Base directory     : ${basedir}</echo>
-    <echo level="info">MyCoRe home dir    : ${env.MYCORE_HOME}</echo>
+    <echo level="info">MyCoRe lib dir     : ${mycore.lib}</echo>
     <echo level="info">DocPortal home dir : ${env.DOCPORTAL_HOME}</echo>
     <echo level="info">Operating system   : ${os.name} Version ${os.version} on ${os.arch} </echo>
     <echo level="info">Java version       : JDK ${ant.java.version} Version ${java.version} from ${java.vendor}</echo>
@@ -119,17 +119,12 @@
     <copy file="${application.config}/hibernate/hibernate.cfg.xml.template"
           tofile="${application.config}/hibernate/hibernate.cfg.xml"
           overwrite="false" />
-    <!-- copy DTD -->
-    <copy todir="${MCR.Hibernate.DTD.Directory}">
-      <fileset dir="${mycore.schema}" includes="hibernate-*.dtd" />
-    </copy>
     <copy todir="${build.config}" overwrite="true">
-      <fileset dir="${mycore.config}" includes="fieldtypes.xml" />
       <fileset dir="${application.config}" includes="ContentStoreSelectionRules.xml" />
       <fileset dir="${application.config}" includes="FileContentTypes.xml" />
-      <fileset dir="${application.config}" includes="searchfields.xml" />
       <fileset dir="${application.config}" includes="hosts.xml" />
       <fileset dir="${application.config}" includes="MCRRESUMPTIONTOKEN.hbm.xml" />
+      <fileset dir="${application.config}" includes="editor_default_acls_derivate.xml" />
       <fileset dir="${application.config}" includes="editor_default_acls_classification.xml" />
       <fileset dir="${application.config}/hibernate" includes="**" />
     </copy>
@@ -730,11 +725,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <antcall target="copy.webapp.shared.jars" />
     <antcall target="webapp.info.shared.jars" />
     <antcall target="webapp.info.unix" />
-
-    <!-- Copy / Unpack fckEditor files (WYSIWYG HTML Editor) -->
-    <unzip src="${env.MYCORE_HOME}/lib/fckEditor.zip" dest="${build.webapps}" />
-    <copy file="${env.MYCORE_HOME}/config/fckconfig.js" todir="${build.webapps}/fck" />
-
+  	
     <!-- Replace URL in browser search plug-in -->
     <copy todir="${build.webapps}" overwrite="yes">
       <fileset dir="${application.webpages}" includes="docportal_opensearch_desc.xml docportal-plugin.xml" />
@@ -749,11 +740,11 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- - - - - - - - - - - - - - - - - - 
           target: webapp.applet                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="webapp.applet">
+    <target name="webapp.applet" depends="init">
       <antcall target="genkey" />
       <if>
         <uptodate targetfile="${build.webapps}/applet/upload.jar">
-          <srcfiles dir="${mycore}/sources" includes="org/mycore/frontend/fileupload/**/*.java" />
+          <srcfiles file="${mycore.jar}" />
           <srcfiles dir="${SIGN.KeyStore}" includes="${SIGN.Alias}" />
         </uptodate>
         <then>
@@ -763,49 +754,17 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
           <echo level="info">
             Building the upload applet used for file uploads...
           </echo>
+          <unjar dest="${build.webapps}/applet" src="${mycore.jar}">
+            <patternset includes="uploadApplet-unsigned.jar"/>
+          </unjar>
           <!-- Compile applet to JDK 1.4 -->
-          <mkdir dir="${build.webapps}/applet/sources" />
-          <mkdir dir="${build.webapps}/applet/classes" />
-          <copy todir="${build.webapps}/applet/sources" preservelastmodified="true">
-            <fileset dir="${mycore}/sources">
-              <include name="org/mycore/frontend/fileupload/MCRUploadAppl*.java" />
-              <include name="org/mycore/frontend/fileupload/MCRUploadComm*r.java" />
-              <include name="org/mycore/frontend/fileupload/MCRUploadExce*.java" />
-              <include name="org/mycore/frontend/fileupload/MCRUploadProg*.java" />
-            </fileset>
-          </copy>
-          <javac srcdir="${build.webapps}/applet/sources"
-                 destdir="${build.webapps}/applet/classes"
-                 includes="org/mycore/**"
-                 classpathref="application.classpath"
-                 debug="${debug}"
-                 optimize="${optimize}"
-                 target="1.4"
-                 source="1.4"
-                 encoding="${sourceencoding}"
-                 deprecation="${deprecation}">
-          </javac>
-          <!-- build applet jar -->
-          <copy file="${mycore.config}/messages_de.MCRUploadApplet"
-                tofile="${build.webapps}/applet/messages_de.properties"
-                preservelastmodified="true" />
-          <copy file="${mycore.config}/messages_en.MCRUploadApplet"
-                tofile="${build.webapps}/applet/messages_en.properties"
-                preservelastmodified="true" />
-          <jar jarfile="${build.webapps}/applet/unsigned.jar">
-            <fileset dir="${build.webapps}/applet/classes" />
-            <fileset dir="${build.webapps}/applet">
-              <include name="messages*" />
-              <include name="mycore.properties*" />
-            </fileset>
-          </jar>
-          <signjar jar="${build.webapps}/applet/unsigned.jar"
+          <signjar jar="${build.webapps}/applet/uploadApplet-unsigned.jar"
                    signedjar="${build.webapps}/applet/upload.jar"
                    alias="${SIGN.Alias}"
                    keystore="${SIGN.KeyStore}/${SIGN.Alias}"
                    storepass="${SIGN.Password}"
                    keypass="${SIGN.Password}" />
-          <delete file="${build.webapps}/applet/unsigned.jar" />
+          <delete file="${build.webapps}/applet/uploadApplet-unsigned.jar" />
           <chmod dir="${build.webapps}/applet" perm="ugo+r" />
         </else>
       </if>
@@ -1017,7 +976,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
     <path id="javadocs.classpath">
       <fileset dir="${basedir}/lib" includes="*.jar" />
-      <fileset dir="${env.MYCORE_HOME}/lib" includes="*.jar" />
+      <fileset dir="${build.lib}/lib" includes="*.jar" />
     </path>
 
     <condition property="javadocs.outdated">
@@ -1115,7 +1074,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     	update permission read for id webpage:/servlets/MCRUserAdminServlet?mode=newuser with rulefile grant-admins.xml described by ${acl-description.admins}
     	update permission read for id webpage:/servlets/MCRUserAdminServlet?mode=newgroup with rulefile grant-admins.xml described by ${acl-description.admins}
     	
-    	update permission read for id webpage:/content/main/admin.xml with rulefile require-login.xml described by ${acl-description.require-login}
+    	update permission read for id webpage:/content/main/admin.xml with rulefile grant-admins.xml described by ${acl-description.admins}
     	update permission read for id webpage:/servlets/MCRSessionListingServlet with rulefile grant-admins.xml described by ${acl-description.admins}
     </echo>
     <antcall target="invoke.cli">
@@ -1147,6 +1106,20 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
                    layout="advanced" />
     <moduleHook target="create.searchmask" />
   </target>
+
+      <!-- =================================================================== -->
+      <!-- Runs CruiseControl build                                            -->
+      <!-- =================================================================== -->
+
+      <target name="cc.build">
+        <exec executable="svn">
+          <arg line="update" />
+        </exec>
+        <ant target="clean" />
+        <ant target="create.jar">
+          <property name="deprecation" value="on" />
+        </ant>
+      </target>
 
 </project>
 

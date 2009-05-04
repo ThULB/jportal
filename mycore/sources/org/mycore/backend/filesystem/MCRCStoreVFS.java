@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28. Feb 2008) $
+ * $Revision: 14585 $ $Date: 2009-01-09 16:03:37 +0100 (Fr, 09. Jan 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -33,6 +33,7 @@ import org.apache.commons.vfs.FileSystemManager;
 import org.apache.commons.vfs.FileSystemOptions;
 import org.apache.commons.vfs.VFS;
 import org.apache.commons.vfs.provider.sftp.SftpFileSystemConfigBuilder;
+import org.apache.log4j.Logger;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
@@ -66,7 +67,7 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * @author Werner Greßhoff
  * @author Frank Lützenkirchen
  * 
- * @version $Revision: 13207 $ $Date: 2008-02-28 15:20:41 +0100 (Do, 28. Feb 2008) $
+ * @version $Revision: 14585 $ $Date: 2009-01-09 16:03:37 +0100 (Fr, 09. Jan 2009) $
  */
 public class MCRCStoreVFS extends MCRContentStore {
 
@@ -75,6 +76,8 @@ public class MCRCStoreVFS extends MCRContentStore {
     private FileSystemOptions opts;
 
     private String uri;
+
+    private static final Logger LOGGER = Logger.getLogger(MCRCStoreVFS.class);
 
     protected String doStoreContent(MCRFileReader file, MCRContentInputStream source) throws Exception {
         StringBuffer storageId = new StringBuffer();
@@ -99,7 +102,13 @@ public class MCRCStoreVFS extends MCRContentStore {
 
     protected void doDeleteContent(String storageId) throws Exception {
         FileObject targetObject = fsManager.resolveFile(getBase(), storageId);
-        targetObject.delete();
+        LOGGER.debug("Delete fired on: "+targetObject);
+        LOGGER.debug("targetObject.class = "+targetObject.getClass().getName());
+        if (targetObject.delete()){
+            LOGGER.debug("Delete of "+targetObject+" was successful.");
+        } else {
+            LOGGER.warn("Delete of "+targetObject+" was NOT successful (w/o errors given).");
+        }
     }
 
     protected void doRetrieveContent(MCRFileReader file, OutputStream target) throws Exception {

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17. Mär 2008) $
+ * $Revision: 14589 $ $Date: 2009-01-14 15:17:28 +0100 (Mi, 14. Jan 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -48,7 +48,7 @@ public class MCRXMLTableEventHandler extends MCREventHandlerBase {
      */
     protected final void handleObjectCreated(MCREvent evt, MCRObject obj) {
         org.jdom.Document doc = obj.createXML();
-        mcr_xmltable.create(obj.getId(), doc);
+        mcr_xmltable.create(obj.getId(), doc, obj.getService().getDate("modifydate"));
     }
 
     /**
@@ -61,7 +61,7 @@ public class MCRXMLTableEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        mcr_xmltable.update(obj.getId(), obj.createXML());
+        mcr_xmltable.update(obj.getId(), obj.createXML(), obj.getService().getDate("modifydate"));
     }
 
     /**
@@ -87,7 +87,7 @@ public class MCRXMLTableEventHandler extends MCREventHandlerBase {
      */
     protected final void handleDerivateCreated(MCREvent evt, MCRDerivate der) {
         org.jdom.Document doc = der.createXML();
-        mcr_xmltable.create(der.getId(), doc);
+        mcr_xmltable.create(der.getId(), doc, der.getService().getDate("modifydate"));
     }
 
     /**
@@ -100,7 +100,7 @@ public class MCRXMLTableEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleDerivateUpdated(MCREvent evt, MCRDerivate der) {
-        mcr_xmltable.update(der.getId(), der.createXML());
+        mcr_xmltable.update(der.getId(), der.createXML(), der.getService().getDate("modifydate"));
     }
 
     /**

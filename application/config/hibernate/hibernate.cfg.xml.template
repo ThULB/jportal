@@ -62,13 +62,15 @@
 
     <!-- configuration pool via c3p0 -->
     <!-- HowTo: http://www.hibernate.org/214.html -->
+    <property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
     <property name="c3p0.validate">false</property>
-    <property name="c3p0.max_statements">20</property>
-    <property name="c3p0.idle_test_period">300</property>
-    <property name="c3p0.timeout">100</property>
-    <property name="c3p0.min_size">10</property>
-    <property name="c3p0.max_size">100</property>
-    <property name="c3p0.acquire_increment">2</property>
+    <property name="c3p0.maxStatements">2000</property>
+    <property name="c3p0.maxStatementsPerConnection">30</property>
+    <property name="c3p0.idleConnectionTestPeriod">300</property>
+    <property name="c3p0.minPoolSize">10</property>
+    <property name="c3p0.maxPoolSize">100</property>
+    <property name="c3p0.acquireIncrement">2</property>
+    <property name="c3p0.numHelperThreads">6</property>
 
     <!-- misc options -->
     <property name="hibernate.bytecode.use_reflection_optimizer">true</property>

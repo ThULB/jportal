@@ -17,10 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -171,6 +169,21 @@ public class MCRImgCacheManager implements CacheManager {
 
     public boolean existInCache(MCRFile image) {
         return (existInCache(image, THUMB) || existInCache(image, ORIG) || existInCache(image, CACHE));
+    }
+
+    public Dimension getImgDimension(MCRFile image) {
+        Dimension dim = new Dimension();
+        try {
+            Element addData = image.getAdditionalData("ImageMetaData");
+    
+            if (addData != null) {
+                dim.width = Integer.parseInt(addData.getChild("imageSize").getChild("width").getText());
+                dim.height = Integer.parseInt(addData.getChild("imageSize").getChild("height").getText());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return dim;
     }
 
     public int getImgWidth(MCRFile image) {

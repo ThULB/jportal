@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14589 $ $Date: 2009-01-14 15:17:28 +0100 (Mi, 14. Jan 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,13 +24,18 @@
 package org.mycore.backend.hibernate.tables;
 
 import java.sql.Blob;
+import java.util.Date;
 
-public class MCRXMLTABLE {
+import org.mycore.datamodel.common.MCRObjectIDDate;
+
+public class MCRXMLTABLE implements MCRObjectIDDate {
     private MCRXMLTABLEPK key;
     
     private String type;
 
     private Blob xml;
+    
+    private Date lastModified;
 
     public MCRXMLTABLE() {
         this.key = new MCRXMLTABLEPK();
@@ -50,6 +55,9 @@ public class MCRXMLTABLE {
         this.key = key;
     }
 
+    /* (non-Javadoc)
+     * @see org.mycore.backend.hibernate.tables.MCRObjectIDDate#getId()
+     */
     public String getId() {
         return this.key.getId();
     }
@@ -89,4 +97,15 @@ public class MCRXMLTABLE {
     public void setXmlByteArray(byte[] xml) {
         this.xml = new MCRBlob(xml);
     }
+
+	/* (non-Javadoc)
+     * @see org.mycore.backend.hibernate.tables.MCRObjectIDDate#getLastModified()
+     */
+	public Date getLastModified() {
+		return lastModified;
+	}
+
+	public void setLastModified(Date lastModified) {
+		this.lastModified = lastModified;
+	}
 }

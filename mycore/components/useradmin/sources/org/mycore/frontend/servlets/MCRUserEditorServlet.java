@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
+ * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -46,7 +47,7 @@ import org.mycore.user.MCRUserMgr;
  * of the mycore system.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
+ * @version $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  */
 public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
     private static final long serialVersionUID = 1L;
@@ -133,35 +134,18 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
             // current user.
             MCRUser currentUser = MCRUserMgr.instance().retrieveUser(currentUserID);
 
-            if (AI.checkPermission("administrate-user")) {
+            if (MCRAccessManager.checkPermission("administrate-user")) {
                 groupIDs = MCRUserMgr.instance().getAllGroupIDs();
-            } else if (AI.checkPermission("create-user")) {
-                groupIDs = currentUser.getAllGroupIDs();
+            } else if (MCRAccessManager.checkPermission("create-user")) {
+                groupIDs = currentUser.getGroupIDs();
             } else {
-                // There are no permissions to assign any groups to a new user.
-                // Possibly someone tried to call the new user form directly
-                // without
-                // checking the privileges using the MCRUserAdminServlet first.
-                LOGGER.warn("MCRUserEditorServlet: not enough permissions! " + "Someone might have tried to call the new user form directly.");
-
-                // TODO: Hier muss irgendwie eine vern�nftige Fehlermeldung
-                // her!
-                // Aktuell spielt das MCREditorServlet noch nicht mit. Die
-                // folgenden
-                // Zeilen z.B. f�hren zu einem "impossible to open input
-                // stream"
-                // Fehler im MCREditorServlet (weil halt error 403 gesendet
-                // wird)
-                String msg = "You do not have enough permissions for this use case!";
-                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN, msg);
-
+                LOGGER.warn("MCRUserEditorServlet: not enough permissions! "
+                        + "Someone might have tried to call the new user form directly.");
+                showNoPrivsPage(job);
                 return;
             }
         } catch (MCRException ex) {
-            // TODO: Es gibt Probleme mit den Fehlermeldungen, siehe oben.
-            String msg = "An error occured while retrieving a user object from the store!";
-            job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
-
+            showNoPrivsPage(job);
             return;
         }
 
@@ -169,8 +153,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
         org.jdom.Element root = new org.jdom.Element("items");
 
         for (int i = 0; i < groupIDs.size(); i++) {
-            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) groupIDs.get(i))
-                            .setAttribute("label", (String) groupIDs.get(i));
+            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) groupIDs.get(i)).setAttribute("label",
+                    (String) groupIDs.get(i));
             root.addContent(item);
         }
 
@@ -192,43 +176,18 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
      */
     private void getAllGroups(MCRServletJob job) throws IOException {
         List<String> groupIDs;
-        try {
-            if (AI.checkPermission("administrate-user")) {
-                groupIDs = MCRUserMgr.instance().getAllGroupIDs();
-            } else {
-                // There are no permissions to assign any groups to a new user.
-                // Possibly someone tried to call the new user form directly
-                // without
-                // checking the privileges using the MCRUserAdminServlet first.
-                LOGGER.warn("MCRUserEditorServlet: not enough permissions! " + "Someone might have tried to call the new user form directly.");
-
-                // TODO: Hier muss irgendwie eine vern�nftige Fehlermeldung
-                // her!
-                // Aktuell spielt das MCREditorServlet noch nicht mit. Die
-                // folgenden
-                // Zeilen z.B. f�hren zu einem "impossible to open input
-                // stream"
-                // Fehler im MCREditorServlet (weil halt error 403 gesendet
-                // wird)
-                String msg = "You do not have enough permissions for this use case!";
-                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN, msg);
-
-                return;
-            }
-        } catch (MCRException ex) {
-            // TODO: Es gibt Probleme mit den Fehlermeldungen, siehe oben.
-            String msg = "An error occured while retrieving a user object from the store!";
-            job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
-
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
+            showNoPrivsPage(job);
             return;
         }
+        groupIDs = MCRUserMgr.instance().getAllGroupIDs();
 
         // Loop over all assignable group IDs
         org.jdom.Element root = new org.jdom.Element("items");
 
         for (int i = 0; i < groupIDs.size(); i++) {
-            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) groupIDs.get(i))
-                            .setAttribute("label", (String) groupIDs.get(i));
+            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) groupIDs.get(i)).setAttribute("label",
+                    (String) groupIDs.get(i));
             root.addContent(item);
         }
 
@@ -250,42 +209,18 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
      */
     private void getAllUsers(MCRServletJob job) throws IOException {
         List<String> userIDs;
-        try {
-            if (AI.checkPermission("administrate-user")) {
-                userIDs = MCRUserMgr.instance().getAllUserIDs();
-            } else {
-                // There are no permissions to assign any groups to a new user.
-                // Possibly someone tried to call the new user form directly
-                // without
-                // checking the privileges using the MCRUserAdminServlet first.
-                LOGGER.warn("MCRUserEditorServlet: not enough permissions! " + "Someone might have tried to call the new user form directly.");
-
-                // TODO: Hier muss irgendwie eine vern�nftige Fehlermeldung
-                // her!
-                // Aktuell spielt das MCREditorServlet noch nicht mit. Die
-                // folgenden
-                // Zeilen z.B. f�hren zu einem "impossible to open input
-                // stream"
-                // Fehler im MCREditorServlet (weil halt error 403 gesendet
-                // wird)
-                String msg = "You do not have enough permissions for this use case!";
-                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN, msg);
-
-                return;
-            }
-        } catch (MCRException ex) {
-            // TODO: Es gibt Probleme mit den Fehlermeldungen, siehe oben.
-            String msg = "An error occured while retrieving a user object from the store!";
-            job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
-
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
+            showNoPrivsPage(job);
             return;
         }
+        userIDs = MCRUserMgr.instance().getAllUserIDs();
 
         // Loop over all assignable group IDs
         org.jdom.Element root = new org.jdom.Element("items");
 
         for (int i = 0; i < userIDs.size(); i++) {
-            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) userIDs.get(i)).setAttribute("label", (String) userIDs.get(i));
+            org.jdom.Element item = new org.jdom.Element("item").setAttribute("value", (String) userIDs.get(i)).setAttribute("label",
+                    (String) userIDs.get(i));
             root.addContent(item);
         }
 
@@ -308,9 +243,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
      */
     private void retrieveAllUserXML(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("administrate-user")) {
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
             showNoPrivsPage(job);
-
             return;
         }
 
@@ -322,7 +256,6 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
             String msg = "An error occured while retrieving a user object from the store!";
             job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
         }
-
         return;
     }
 
@@ -332,9 +265,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
      */
     private void retrieveUserXML(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("modify-user")) {
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
             showNoPrivsPage(job);
-
             return;
         }
 
@@ -348,7 +280,6 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
             String msg = "An error occured while retrieving a user object from the store!";
             job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
         }
-
         return;
     }
 
@@ -358,9 +289,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
      */
     private void retrieveGroupXML(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("modify-group")) {
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
             showNoPrivsPage(job);
-
             return;
         }
 
@@ -374,7 +304,6 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
             String msg = "An error occured while retrieving a group object from the store!";
             job.getResponse().sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, msg);
         }
-
         return;
     }
 
@@ -408,7 +337,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
         String useCase = parms.getParameter("usecase");
 
         // Determine the use case
-        if ((useCase.equals("create-user") || useCase.equals("modify-user")) && jdomDoc.getRootElement().getName().equals("mycoreuser")) {
+        if ((useCase.equals("create-user") || useCase.equals("modify-user") || useCase.equals("modify-contact"))
+                && jdomDoc.getRootElement().getName().equals("mycoreuser")) {
             String numID = Integer.toString(MCRUserMgr.instance().getMaxUserNumID() + 1);
             jdomDoc.getRootElement().getChild("user").setAttribute("numID", numID);
 
@@ -429,18 +359,29 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
 
                     LOGGER.info("User " + currentUserID + " has successfully created the new user: " + newUser.getID());
                 } else {
-                    MCRUser thisUser = new MCRUser(userElement, true);
+                    String uid = jdomDoc.getRootElement().getChild("user").getAttributeValue("ID");
+                    String newpwd = jdomDoc.getRootElement().getChild("user").getChild("user.password").getText();
+                    MCRUserMgr umgr = MCRUserMgr.instance();
+                    MCRUser olduser = umgr.retrieveUser(uid);
+                    MCRUser thisUser = null;
+                    if (olduser.getPassword().compareTo(newpwd) == 0) {
+                        thisUser = new MCRUser(userElement, false);
+                    } else {
+                        thisUser = new MCRUser(userElement, true);
+                    }
                     MCRUserMgr.instance().updateUser(thisUser);
                 }
 
                 // doLayout(job, "xml", jdomDoc, true);
                 showOkPage(job);
             } catch (MCRException ex) {
-                generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), ex, false);
+                generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), ex,
+                        false);
 
                 return;
             }
-        } else if ((useCase.equals("create-group") || useCase.equals("modify-group")) && jdomDoc.getRootElement().getName().equals("mycoregroup")) {
+        } else if ((useCase.equals("create-group") || useCase.equals("modify-group"))
+                && jdomDoc.getRootElement().getName().equals("mycoregroup")) {
             try {
                 String groupID = jdomDoc.getRootElement().getChild("group").getAttributeValue("ID");
                 if (groupID == null)
@@ -454,7 +395,8 @@ public class MCRUserEditorServlet extends MCRUserAdminGUICommons {
                 // doLayout(job, "xml", jdomDoc, true);
                 showOkPage(job);
             } catch (MCRException ex) {
-                generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), ex, false);
+                generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ex.getMessage(), ex,
+                        false);
                 return;
             }
         } else {

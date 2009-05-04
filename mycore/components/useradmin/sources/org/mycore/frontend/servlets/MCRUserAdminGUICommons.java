@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14665 $ $Date: 2009-01-29 07:41:35 +0100 (Do, 29. Jan 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,10 +24,6 @@
 package org.mycore.frontend.servlets;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Enumeration;
-import java.util.Properties;
 
 import javax.servlet.ServletException;
 
@@ -39,9 +35,12 @@ import org.mycore.common.MCRSessionMgr;
  * management of the mycore system.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14665 $ $Date: 2009-01-29 07:41:35 +0100 (Do, 29. Jan 2009) $
  */
 public class MCRUserAdminGUICommons extends MCRServlet {
+
+    private static final long serialVersionUID = 1L;
+
     protected String pageDir = null;
 
     protected String noPrivsPage = null;

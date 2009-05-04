@@ -83,7 +83,7 @@
       </cell>
       <cell row="8" col="1" anchor="NORTHWEST">
         <text><label>
-          <include uri="request:searchfields.xml?XSL.Style=help" />
+          <include uri="xslStyle:searchfields-help:resource:searchfields.xml" />
         </label></text>
       </cell>
     </panel>

@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Kurzanleitung für Autoren">
+  <p>
+  <strong>1. Allgemeines 
+  <br />
+  </strong>Diese Anleitung soll im Kurzformat beschreiben, wie ein
+  neues Dokument in den auf dem 
+  <br />
+  DocPortalProjekt basierenden DokumentenServer einzustellen ist.
+  Diese Anleitung bezieht 
+  <br />
+  sich auf den Standort der Universität Leipzig. Zur Nachnutzung an
+  anderen Einrichtungen 
+  <br />
+  muss diese Anleitung entsprechend modifiziert werden. 
+  <br />
+  </p>
+  <p>
+  <strong>2. Zugang zum System 
+  <br />
+  </strong>Der öffentliche Dokumenten, 
+  <br />
+  Dissertationsund 
+  <br />
+  HabilitationsServer 
+  <br />
+  der Universität Leipzig 
+  <br />
+  ist mittels WEBBrowser 
+  <br />
+  unter der Adresse 
+  <a href="http://dol.dl.unileipzig">http://dol.dl.unileipzig</a>. 
+  <br />
+  de/ erreichbar. Alternativ 
+  <br />
+  kann die Adresse 
+  <a href="http://dol.dl.unileipzig">http://dol.dl.unileipzig</a>. 
+  <br />
+  de:8391/index.html verwendet werden. 
+  <br />
+  Die Arbeitsabläufe zum Einbringen der Dokumente in das System
+  sind durch das 
+  <br />
+  Universitätsrechenzentrum fest vorgeschrieben und werden von ihm
+  überwacht. Die Autoren 
+  <br />
+  der Dokumente, Audiooder 
+  <br />
+  VideoObjekte 
+  <br />
+  können selbige nur in den Verarbeitungsprozess 
+  <br />
+  (Workflow) einbringen. Im weiteren wird nur noch von Objekten
+  gesprochen. Anschließend 
+  <br />
+  erfolgt eine Prüfung und ggf. Berichtigung der Metadaten durch
+  die Mitarbeiter in den 
+  <br />
+  Instituten und Fachbereichen. Erst mit dem Freischalten des
+  Objektes durch diese wird das 
+  <br />
+  Objekt endgültig im Server verfügbar und ggf. volltextindiziert. 
+  <br />
+  Um Dokumente als Autor einzustellen, wählen Sie den Punkt
+  'AutorSeite' 
+  <br />
+  auf der Startseite 
+  <br />
+  aus.</p>
+  <p>
+  <br />
+  <strong>3. Anmelden am System</strong>
+  <br />
+  Möchte man sein Objekt in den DokumentenServer 
+  <br />
+  der Universität Leipzig einbringen, ist es 
+  <br />
+  zuerst erforderlich das LOGIN / Password beim Betreuer der
+  Fakultät / des Institutes zu 
+  <br />
+  erfragen. Ist Ihr Institut / Ihre Fakultät nicht in der Liste
+  unten aufgeführt, muss hier 
+  <br />
+  erst eine verantwortliche Stelle eingerichtet werden. 
+  <br />
+  Institut Login Ansprechpartner Kontakt 
+  <br />
+  Informatik informatik Dr. D. Sosna 
+  <a href="mailto:dieter@informatik.unileipzig">
+  dieter@informatik.unileipzig</a>. 
+  <br />
+  de 
+  <br />
+  URZ urz J. Kupferschmidt 
+  <a href="mailto:kupferschmidt@rz.unileipzig">
+  kupferschmidt@rz.unileipzig</a>. 
+  <br />
+  de 
+  <br />
+  Tabelle 1: Liste der Fakultäten/Institute für OnlineEingabe 
+  <br />
+  von Objekten 
+  <br />
+  Bitte beachten Sie das im weiteren die GROßund 
+  <br />
+  Kleinschreibung eine signifikante Rolle 
+  <br />
+  spielt. Die Empfehlung ist daher grundsätzlich die
+  Kleinschreibung zu verwenden. 
+  <br />
+  Alternativ zum Einstieg über die Startseite können Sie auch über
+  den Menüpunkt 'AutorSeite' 
+  <br />
+  gehen. Nachdem Sie vom Betreuer Ihr ggf. zeitlich begrenztes
+  Login erhalten haben, können 
+  <br />
+  Sie nun den Benutzer wechseln und sich somit für die Dateneingabe
+  autorisieren. Sie haben 
+  <br />
+  beim Start immer das &lt;Login:gast&gt;. Um es zu ändern, klicken
+  Sie auf Login in der 
+  <br />
+  Menüzeile (oben rechts). 
+  <br />
+  Sie sind nun autorisiert, Personendaten und Dokumente in den
+  Arbeitsbereich (Workflow) 
+  <br />
+  einzustellen. Mit dem Verweis 'Rückkehr zur MyCoRe
+  Anwendung' kommen Sie wieder auf 
+  <br />
+  die Autorenseite. Oben rechts ist jetzt ihr Login vermerkt.
+  Beginnen Sie mit der Eingabe der 
+  <br />
+  Daten zur Person. 
+  <br />
+  </p>
+  <p>
+  <strong>4. Eingabe der Personendaten</strong>
+  <br />
+  04.11.04 
+  <br />
+  3 
+  <br />
+  Abbildung 3: LoginDialog 
+  <br />
+  Abbildung 4: Auswahlmenü nach erfolgreichem Login 
+  <br />
+  Kurzanleitung zum Einstellen von Dokumenten Version 3 
+  <br />
+  Die Eingabe der Personendaten ist optional. Wenn Sie diese
+  Möglichkeit nutzen wollen, sind 
+  <br />
+  alle Felder die einen (*) haben, Pflichtfelder und zur
+  Identifikation und für die 
+  <br />
+  Weiterverarbeitung wichtig. Die Eingabe der Personendaten lohnt
+  nur, wenn Sie 
+  <br />
+  perspektivisch weitere Dokumente einstellen wollen. Bevor Sie
+  neue Daten einstellen, sollten 
+  <br />
+  Sie Prüfen, ob für Sie nicht schon ein Datensatz existiert.
+  Hierzu starten Sie eine Suche in den 
+  <br />
+  Personendaten. Haben Sie eine gesuchte Person gefunden, so
+  enthält die Anzeige auch die 
+  <br />
+  dazugehörige ReferenzID 
+  <br />
+  der Person, z. B. UBLAuthor_author_00000001. 
+  <br />
+  Ist eine Neuerfassung erforderlich, so wird als Ergebnis der
+  Eingabe eine ReferenzID 
+  <br />
+  der 
+  <br />
+  Person ausgegeben, die bei der Metadateneingabe zu den Objekten
+  (Dokumenten) in Feldern 
+  <br />
+  "Autor", "Publiziert",
+  "Beteiligter" angegeben werden kann. Auf diese
+  PersonenID 
+  <br />
+  kann auch 
+  <br />
+  später immer wieder innerhalb des DokumentenServers 
+  <br />
+  referenziert werden. 
+  <br />
+  Hinweise: 
+  <br />
+  • Füllen Sie alle mit (*) gekennzeichneten Felder aus! 
+  <br />
+  • Bei der Namensangabe ist mindestens Vorund 
+  <br />
+  Nachname erforderlich. 
+  <br />
+  • Hinter dem ?Button 
+  <br />
+  verbergen sich zu jedem Eingabefeld hilfreiche Hinweise. 
+  <br />
+  Prüfen Sie Ihre Eingaben bevor Sie [Speichern] drücken! Sie
+  können die Daten auf 
+  <br />
+  diesem DokumentenServer 
+  <br />
+  nachträglich nur mit Hilfe eines berechtigten Bearbeiters 
+  <br />
+  ( i. d. R. der Ansprechpartner ) verändern, bearbeiten oder
+  löschen. 
+  <br />
+  </p>
+  <p>
+  <strong>5. Eingabe von Institutionsdaten</strong>
+  <br />
+  Genauso wie mit Personendaten kann auch mit Daten zu
+  Institutionen verfahren werden. Auch 
+  <br />
+  hier kann es sinnvoll sein, auf diese Angaben im Objekt in den
+  Feldern "Publizist" und 
+  <br />
+  "Beteiligter" zu referenzieren. Beispiele wären externe
+  wissenschaftliche Einrichtungen oder 
+  <br />
+  Verlage. Auch bei der Neuanlage der Institutiosdaten sollten Sie
+  prüfen, ob diese nicht schon 
+  <br />
+  existieren. 
+  <br />
+  Die Vorgehensweise ist bei der Dateneingabe analog zu den
+  Personendaten. Wählen Sie im 
+  <br />
+  'DocumenteAutor' 
+  <br />
+  den Start der Eingabe von Institutionsdaten aus. Es Erscheint die
+  
+  <br />
+  Eingabemaske für Institutionen. 
+  <br />
+  Hinweise: 
+  <br />
+  • Füllen Sie alle mit (*) gekennzeichneten Felder aus! 
+  <br />
+  • Hinter dem ?Button 
+  <br />
+  verbergen sich zu jedem Eingabefeld hilfreiche Hinweise. 
+  <br />
+  Prüfen Sie Ihre Eingaben bevor Sie [Speichern] drücken! Sie
+  können die Daten auf 
+  <br />
+  diesem DokumentenServer 
+  <br />
+  nachträglich nur mit Hilfe eines berechtigten Bearbeiters 
+  <br />
+  ( i. d. R. der Ansprechpartner ) verändern, bearbeiten oder
+  löschen. 
+  <br />
+  </p>
+  <p>
+  <strong>6. Einstellen neuer Dokumente</strong>
+  <br />
+  Der Ablauf der Dateneingabe für die Metadaten des eigentlichen
+  Objektes ist analog zu denen 
+  <br />
+  der Personenund 
+  <br />
+  Institutionsdaten. Beachten Sie auf jeden Fall die Eingabe in die
+  
+  <br />
+  Pflichtfelder. Im ersten Schritt werden nur die Metadaten des
+  Objektes erfasst. Sind diese in 
+  <br />
+  den Workflow eingestellt, können die eigentlichen digitalen
+  Objekte hinzugefügt werden. 
+  <br />
+  Hinweise: 
+  <br />
+  • Füllen Sie alle mit (*) gekennzeichneten Felder aus! 
+  <br />
+  • Hinter dem ?Button 
+  <br />
+  verbergen sich zu jedem Eingabefeld hilfreiche Hinweise. 
+  <br />
+  Prüfen Sie Ihre Eingaben bevor Sie [Speichern] drücken! Sie
+  können die Daten auf 
+  <br />
+  diesem DokumentenServer 
+  <br />
+  nachträglich nur mit Hilfe eines berechtigten Bearbeiters 
+  <br />
+  ( i. d. R. der Ansprechpartner ) verändern, bearbeiten oder
+  löschen. 
+  <br />
+  </p>
+  <p>
+  <strong>7. Ergänzen der digitalen Objekte 
+  <br />
+  </strong>Nachdem Sie die erforderlichen Metadaten für ihr Objekt
+  im Workflow hinterlegt haben, 
+  <br />
+  gehen Sie nun auf den Menüpunkt 'DokumentBearbeiter' 
+  <br />
+  hier erhalten Sie die folgende 
+  <br />
+  Anzeige des Workflows. Als Autor eines Dokumentes sind Sie nicht
+  berechtigt, dieses oder 
+  <br />
+  die zugehörigen Metadaten nachträglich zu verändern. Was jedoch
+  gestattet und auch 
+  <br />
+  erforderlich ist, ist das Hinzufügen der eigentlichen Objekte zu
+  Ihren Metadaten. Zum 
+  <br />
+  Start des FileUploadDialoges 
+  <br />
+  drücken Sie bitte diesen Button: . Für alle 
+  <br />
+  anderen Knöpfe habe Sie als Autor keine Berechtigung. 
+  <br />
+  Es öffnet sich nun der FileUploadDialog. 
+  <br />
+  Hier können Sie nun die abzulegenden Dateien 
+  <br />
+  auswählen. Diese werden dem Workflow bei der Funktion Speichern
+  (Submit) hinzugefügt. 
+  <br />
+  Sie können theoretisch beliebig viele Blöcke von Dateien an ein
+  MetadatenObjekt 
+  <br />
+  anhängen. 
+  <br />
+  <br />
+  <strong>8. Fehlerbehandlung 
+  <br />
+  </strong>Sollten Ihnen bei der Eingabe der Daten Fehler angezeigt
+  werden, so sollten Sie als erstes 
+  <br />
+  prüfen, ob alle Pflichtfelder ausgefüllt sind. Die Angaben der
+  Fehler werden Ihnen etwas 
+  <br />
+  ungewohnt erscheinen, es werden die Originalfehlermeldungen
+  direkt weitergegeben. Dies ist 
+  <br />
+  sinnvoll, da das Spektrum der Tests sehr umfangreich ist und eine
+  programmtechnische 
+  <br />
+  Übersetzung nicht sehr sinnvoll erscheint. Das Verfahren hat sich
+  in einem anderen Projekt 
+  <br />
+  bewährt. Im Anschluss finden Sie eine Tabelle der Datenfelder,
+  ihrer Synonyme, wie sie in 
+  <br />
+  den Fehlermeldungen auftreten und eine Übersicht der
+  Pflichtfelder. 
+  <br />
+  Nr. Bezeichner Synonym disshab 
+  <br />
+  1 Name names Pflicht 
+  <br />
+  2 Geschlecht females Pflicht 
+  <br />
+  3 Institution Institutions Pflicht 
+  <br />
+  4 Adresse addresses optional 
+  <br />
+  5 Telefon phones optional 
+  <br />
+  6 Geburtsdatum dates Pflicht 
+  <br />
+  7 Beruf professions optional 
+  <br />
+  8 Berufsklasse profclasses Pflicht 
+  <br />
+  9 Nationalität nationals Pflicht 
+  <br />
+  10 URL's urls optional 
+  <br />
+  11 eMail emails Pflicht 
+  <br />
+  12 Referenzen references optional 
+  <br />
+  13 Anmerkungen notes optional 
+  <br />
+  14 Publikationen publications optional 
+  <br />
+  Tabelle 1: Synonyme und Pflichtfelder der Personendaten in der
+  Übersicht 
+  <br />
+  Nr. Bezeichner Synonym document 
+  <br />
+  1 Titel (DC) titles Pflicht 
+  <br />
+  2 Creator (DC) creators Pflicht 
+  <br />
+  3 CreatorLink creatorlinks optional 
+  <br />
+  4 Subject (DC) subjects optional 
+  <br />
+  5 Origin origins Pflicht 
+  <br />
+  6 Description (DC) descriptions eine Angabe Pflicht 
+  <br />
+  7 DescriptURL descripturls optional 
+  <br />
+  8 Publisher (DC) publishers optional 
+  <br />
+  9 PublisherLink publishlinks optional 
+  <br />
+  10 Contributor (DC) contibutors optional 
+  <br />
+  Nr. Bezeichner Synonym document 
+  <br />
+  11 ContribLink contriblinks optional 
+  <br />
+  12 Date (DC) dates optional 
+  <br />
+  13 Type (DC) types Pflicht 
+  <br />
+  14 Format (DC) formats Pflicht 
+  <br />
+  15 Identifier (DC) identifiers optional 
+  <br />
+  16 Source (DC) souces optional 
+  <br />
+  17 SourceLink sourcelinks optional 
+  <br />
+  18 Languages (DC) languages optional 
+  <br />
+  19 Keywords keywords optional 
+  <br />
+  20 Coverage (DC) coverage optional 
+  <br />
+  21 CoverageLink coveragelinks optional 
+  <br />
+  22 CoverageDate coveragedates optional 
+  <br />
+  23 Relation (DC) relations optional 
+  <br />
+  24 RelationLink relationlinks optional 
+  <br />
+  25 RelationISBN relationisbns optional 
+  <br />
+  26 Rights (DC) rights Pflicht 
+  <br />
+  27 RightsLink rightlinks optional 
+  <br />
+  28 Size sizes optional 
+  <br />
+  29 Place places optional 
+  <br />
+  30 ISBN isbns optional 
+  <br />
+  31 NBN nbns optional 
+  <br />
+  32 URN urns optional 
+  <br />
+  33 DDBContact contacts optional 
+  <br />
+  34 Notes notes optional 
+  <br />
+  35 Citation citations optional 
+  <br />
+  Synonyme und Pflichtfelder in der Übersicht 
+  <br />
+  Im Beispiel wurde vergessen, den Namen des Autors (names)
+  einzutragen. Der erste Eintrag, 
+  <br />
+  welcher gefunden wurde ist unter dem Synonym für das Geschlecht
+  (females) gefunden 
+  <br />
+  worden. Zur Fehlerbehebung sollten Sie sich also die Stelle
+  zwischen dem erwarteten Eintrag 
+  <br />
+  (in diesem Fall der Name) und dem nächsten gefundenen Eintrage
+  (Geschlecht) ansehen. 
+  <br />
+  </p>
+  <p>
+  <strong>9. Sichern der Objekte</strong>
+  <br />
+  Mit dem aktuellen DocPortalSystem 
+  <br />
+  besteht die Möglichkeit, Objekte nur bestimmten 
+  <br />
+  Gruppen von Nutzern oder bestimmten HostAdressen/ 
+  <br />
+  NetzDomains 
+  <br />
+  zugänglich zu machen. 
+  <br />
+  Weiterhin kann ein Arbeitszustand festgelegt werden, welcher aber
+  hinsichtlich der 
+  <br />
+  Darstellung keine Wirkung hat. Wurde eine bestimmte
+  Leseberechtigung seitens des Autors 
+  <br />
+  vergeben, so dürfen nur Leser mit diesem recht das Dokument
+  ansehen. Zum Einstellen der 
+  <br />
+  Rechte dient der folgende Formularabschnitt. 
+  <br />
+  Bitte benutzen Sie diese Felder nur, wenn Sie wirklich möchten,
+  dass nur ausgewählte Nutzer 
+  <br />
+  auf Ihr Objekt zugreifen dürfen. Geben Sie nichts an, so ist das
+  Objekt öffentlich zugänglich 
+  <br />
+  und kann von allen genutzt werden.. 
+  <br />
+  <br />
+  <strong>10. Freischalten des Objektes 
+  <br />
+  </strong>Nachdem Sie die Daten eingegeben und mit dem Drücken des
+  Buttons gespeichert haben, 
+  <br />
+  werden die Metadaten und die eingestellten ObjektDateien 
+  <br />
+  im Workflow gespeichert. Sie 
+  <br />
+  können dies sehen, wenn Sie auf die Seite
+  'DokumentBearbeiter' 
+  <br />
+  gehen. Hier werden die im 
+  <br />
+  Workflow vorhandenen Daten angezeigt. Ändern können Sie diese
+  Daten jedoch nicht mehr! 
+  <br />
+  Gleichzeitig mit Ihrem Speichern (Submit) wird eine Mail an das
+  URZ geschickt, welches die 
+  <br />
+  Bearbeitung und das endgültige Einstellen der Daten in das System
+  veranlasst.</p>
+</section>
+<meta><log date="2005-05-10" time="09:17" labelPath="Hauptmenü links &gt; Anleitungen und mehr &gt; Kurzanleitung für Autoren" lastEditor="Administrator" /></meta></MyCoReWebPage>

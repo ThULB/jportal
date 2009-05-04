@@ -10,7 +10,7 @@
     <xsl:include href="MyCoReLayout.xsl" />
     <xsl:include href="indexpage-common.xsl" />
     <xsl:variable name="MainTitle" select="i18n:translate('indexpage.maintitle')" />
-    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.pagetitle')" />
+    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.creators.pagetitle')" />
     <xsl:param name="WebApplicationBaseURL" />
     <xsl:param name="HttpSession" />
 
@@ -23,8 +23,8 @@
     <xsl:template name="index.headline">
         <tr valign="top">
             <td class="metaname">
-                <xsl:value-of select="i18n:translate('indexpage.headline.select')" />
-                <xsl:value-of select="i18n:translate('indexpage.headline.indextitle')" />
+                <xsl:value-of select="i18n:translate('indexpage.creators.headline.select')" />
+                <xsl:value-of select="i18n:translate('indexpage.creators.headline.indextitle')" />
             </td>
         </tr>
     </xsl:template>
@@ -47,7 +47,7 @@
                         <td class="metavalue">
                             <form action="{$WebApplicationBaseURL}indexpage{$HttpSession}?searchclass={$IndexID}" method="post">
                                 <b>
-                                    <xsl:value-of select="i18n:translate('indexpage.creators.index')" />
+                                    <xsl:value-of select="i18n:translate('indexpage.index')" />
                                 </b>
                                 <xsl:call-template name="getSelectBox" />
                                 <xsl:text></xsl:text>
@@ -62,7 +62,7 @@
                                     <b>
                                         <xsl:text></xsl:text>
                                         <xsl:value-of select="results/@numHits" />
-                                        <xsl:value-of select="i18n:translate('indexpage.creators.hits')" />
+                                        <xsl:value-of select="i18n:translate('indexpage.hits')" />
                                     </b>
                                     <input type="submit" class="button" value="{i18n:translate('indexpage.buttons.filter.disable')}" />
                                 </form>
@@ -195,7 +195,7 @@
 
     <!-- ========== Einleitender Text ========== -->
     <xsl:template name="IntroText">
-        <xsl:value-of select="i18n:translate('indexpage.introtext')" />
+        <xsl:value-of select="i18n:translate('indexpage.creators.introtext')" />
         <p>
             <xsl:value-of select="' | '" />
             <xsl:for-each select="xalan:nodeset($AtoZ)/search">

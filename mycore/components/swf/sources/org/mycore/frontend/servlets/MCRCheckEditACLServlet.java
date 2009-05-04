@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,6 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -42,11 +44,12 @@ import org.mycore.datamodel.metadata.MCRObjectService;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 public class MCRCheckEditACLServlet extends MCRCheckACLBase {
 
     private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckEditACLServlet.class);
 
     /**
      * The method return an URL with the next working step. If okay flag is
@@ -61,10 +64,10 @@ public class MCRCheckEditACLServlet extends MCRCheckACLBase {
     protected String getNextURL(MCRObjectID ID, boolean okay) throws MCRActiveLinkException {
         StringBuffer sb = new StringBuffer();
         if (okay) {
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append("editor_").append(ID.getTypeId()).append("_editor.xml");
+            sb.append(WFM.getWorkflowFile(pagedir,ID.getBase()));
         } else {
 
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
+            sb.append(pagedir).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
         }
         return sb.toString();
     }
@@ -76,7 +79,7 @@ public class MCRCheckEditACLServlet extends MCRCheckACLBase {
      *            the MCRObjectID of the MCRObject
      */
     public final void sendMail(MCRObjectID ID) {
-        List addr = WFM.getMailAddress(ID.getTypeId(), "weditacl");
+        List<String> addr = WFM.getMailAddress(ID.getBase(), "weditacl");
 
         if (addr.size() == 0) {
             return;
@@ -108,7 +111,7 @@ public class MCRCheckEditACLServlet extends MCRCheckACLBase {
      *            the MCRObjectID
      */
     public final boolean storeService(org.jdom.Element outelm, MCRServletJob job, MCRObjectID ID) {
-        String fn = WFM.getDirectoryPath(ID.getTypeId()) + File.separator + ID.getId() + ".xml";
+        String fn = WFM.getDirectoryPath(ID.getBase()) + File.separator + ID.getId() + ".xml";
         MCRObject obj = new MCRObject();
         obj.setFromURI(fn);
         MCRObjectService service = new MCRObjectService();
@@ -135,4 +138,19 @@ public class MCRCheckEditACLServlet extends MCRCheckACLBase {
         LOGGER.info("Object " + ID.getId() + " stored under " + fn + ".");
         return true;
     }
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        if (MCRAccessManager.checkPermission("create-"+ID.getBase())) {
+            return true;
+        }
+        if (MCRAccessManager.checkPermission("create-"+ID.getTypeId())) {
+            return true;
+        }
+        return false;
+    }
+
 }

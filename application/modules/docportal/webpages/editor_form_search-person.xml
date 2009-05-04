@@ -73,7 +73,7 @@
       <cell row="3" col="2" anchor="WEST" var="conditions/boolean/condition4/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[CountAuthor]:2:children:DocPortal_class_00000002" cacheable="false" />
+          <include uri="classification:editor[CountAuthor]:2:noEmptyLeaves:children:DocPortal_class_00000002" cacheable="false" />
         </list>
       </cell>
       <cell row="3" col="3" anchor="WEST">

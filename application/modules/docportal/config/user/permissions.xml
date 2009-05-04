@@ -26,6 +26,17 @@
     </boolean>
    </condition>
   </mcrpermission>    
+  <mcrpermission name="modify-contact" description="Modify right for user data" ruledescription="For administrators only">
+   <condition format="xml">
+    <boolean operator="or">
+     <condition value="admingroup" operator="=" field="group"/>
+     <condition value="editorgroup1" operator="=" field="group"/>
+     <condition value="editorgroup2" operator="=" field="group"/>
+     <condition value="authorgroup1" operator="=" field="group"/>
+     <condition value="authorgroup2" operator="=" field="group"/>
+   </boolean>
+   </condition>
+  </mcrpermission>    
   <mcrpermission name="delete-user" description="Delete right for user data" ruledescription="For administrators only">
    <condition format="xml">
     <boolean operator="or">

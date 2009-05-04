@@ -1,6 +1,6 @@
 /*
- * $Revision: 14327 $ 
- * $Date: 2008-11-05 11:34:51 +0100 (Mi, 05. Nov 2008) $
+ * $Revision: 15115 $ 
+ * $Date: 2009-04-29 11:01:56 +0200 (Mi, 29. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,19 +25,22 @@ package org.mycore.frontend.editor;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.jdom.Attribute;
 import org.jdom.Content;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.Namespace;
 import org.jdom.filter.ElementFilter;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
 
@@ -71,6 +74,7 @@ public class MCREditorDefReader
     editor.setAttribute( "id", ref );
     editor.addContent( include );
     resolveIncludes( editor );
+    checkDuplicateIDs( editor );
     resolveReferences();
     if( validate ) validate( uri, ref );
     
@@ -78,14 +82,28 @@ public class MCREditorDefReader
     LOGGER.info( "Finished reading editor definition in " + time + " ms" );
   }
   
+  private void checkDuplicateIDs(Element editor) {
+        Set<String> ids = new HashSet<String>();
+        Iterator<Element> elements = editor.getDescendants(new ElementFilter());
+        while (elements.hasNext()) {
+            String id = elements.next().getAttributeValue("id");
+            if ((id == null) || (id.trim().length() == 0))
+                continue;
+            if (ids.contains(id)) {
+                String msg = "Duplicate ID '" + id + "', already used in editor definition";
+                throw new MCRConfigurationException(msg);
+            } else
+                ids.add(id);
+        }
+    }
+  
   private void validate( String uri, String ref )
   {
     if( ( ref != null ) && ( ref.length() > 0 ) ) uri += "#" + ref;
     LOGGER.info( "Validating editor " + uri + "..." );
     
     Document doc = new Document( editor );
-    Namespace xsi = Namespace.getNamespace( "xsi", "http://www.w3.org/2001/XMLSchema-instance" );
-    editor.setAttribute( "noNamespaceSchemaLocation", "editor.xsd", xsi );
+    editor.setAttribute( "noNamespaceSchemaLocation", "editor.xsd", MCRConstants.XSI_NAMESPACE );
 
     XMLOutputter xout = new XMLOutputter();
     xout.setFormat( Format.getPrettyFormat() );
@@ -104,7 +122,7 @@ public class MCREditorDefReader
     }
 
     editor.detach();
-    editor.removeAttribute("noNamespaceSchemaLocation", xsi);
+    editor.removeAttribute("noNamespaceSchemaLocation", MCRConstants.XSI_NAMESPACE);
     LOGGER.info( "Validation succeeded." );
   }
 
@@ -317,6 +335,8 @@ public class MCREditorDefReader
     defaultAttributes.get( "editor" ).setProperty( "class", "editor" );
     defaultAttributes.put( "helpPopup", new Properties() );
     defaultAttributes.get( "helpPopup" ).setProperty( "class", "editorButton" );
+    defaultAttributes.put( "text", new Properties() );
+    defaultAttributes.get( "text" ).setProperty( "class", "editorText" );
     defaultAttributes.put( "textfield", new Properties() );
     defaultAttributes.get( "textfield" ).setProperty( "class", "editorTextfield" );
     defaultAttributes.put( "textarea", new Properties() );

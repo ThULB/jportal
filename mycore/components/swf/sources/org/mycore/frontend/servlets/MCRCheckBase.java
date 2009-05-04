@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,11 +25,7 @@ package org.mycore.frontend.servlets;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import org.jdom.Document;
-import org.mycore.access.MCRAccessInterface;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.workflow.MCREditorOutValidator;
@@ -41,16 +37,14 @@ import org.mycore.user.MCRUserMgr;
  * output XML for metadata object and derivate objects.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 abstract public class MCRCheckBase extends MCRServlet {
-    protected static Logger LOGGER = Logger.getLogger(MCRCheckBase.class);
+
+    private static final long serialVersionUID = 1L;
 
     // The file separator
     String NL = System.getProperty("file.separator");
-
-    // The Access Manager
-    protected static MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
     // The Workflow Manager
     protected static MCRSimpleWorkflowManager WFM = MCRSimpleWorkflowManager.instance();
@@ -58,7 +52,12 @@ abstract public class MCRCheckBase extends MCRServlet {
     // The User Manager
     protected static MCRUserMgr UM = MCRUserMgr.instance();
 
-    protected List errorlog;
+    // pagedir
+    protected static String pagedir = CONFIG.getString("MCR.SWF.PageDir", "");
+
+    protected List<String> errorlog;
+
+    protected static String usererrorpage = pagedir + CONFIG.getString("MCR.SWF.PageErrorUser", "editor_error_user.xml");
 
     /**
      * The method return an URL with the next working step. If okay flag is
@@ -112,7 +111,7 @@ abstract public class MCRCheckBase extends MCRServlet {
      * 
      * @author Thomas Scheffler (yagee)
      * 
-     * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+     * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
      */
     protected class EditorValidator extends MCREditorOutValidator {
         /**
@@ -130,4 +129,14 @@ abstract public class MCRCheckBase extends MCRServlet {
         }
 
     }
+
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        return false;
+    }
+
 }

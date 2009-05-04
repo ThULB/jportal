@@ -17,6 +17,7 @@
     <element name="titles" minOccurs='0' maxOccurs='1'>
       <mcrmetalangtext name="title" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="1024" />
     </element>
+    <element name="fileset" minOccurs='0' maxOccurs='1'/>
   </derivate>
   <service>
     <!-- Service Dates -->

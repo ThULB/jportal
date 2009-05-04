@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15101 $ $Date: 2009-04-22 16:14:02 +0200 (Mi, 22. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,15 +23,14 @@
 
 package org.mycore.services.webservices;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
 import org.apache.log4j.Logger;
-
 import org.jdom.Document;
+import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.common.MCRXMLTableManager;
-import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQuery;
@@ -43,7 +42,7 @@ import org.mycore.services.fieldquery.MCRResults;
  * 
  * @author Harald Richter
  * 
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15101 $ $Date: 2009-04-22 16:14:02 +0200 (Mi, 22. Apr 2009) $
  * 
  */
 public class MCRWebService implements MCRWS {
@@ -76,9 +75,10 @@ public class MCRWebService implements MCRWS {
      * @see MCRWS#MCRDoRetrieveClassification(java.lang.String,
      *      java.lang.String, java.lang.String)
      */
-    public org.w3c.dom.Document MCRDoRetrieveClassification(String level, String type, String classID, String categID, String format ) throws Exception {
-        if ( null == format )
-          format = "metadata";
+    public org.w3c.dom.Document MCRDoRetrieveClassification(String level, String type, String classID, String categID, String format)
+            throws Exception {
+        if (null == format)
+            format = "metadata";
 
         String uri = "classification:" + format + ":" + level + ":" + type + ":" + classID + ":" + categID;
         org.jdom.Element cl = MCRURIResolver.instance().resolve(uri);
@@ -88,7 +88,7 @@ public class MCRWebService implements MCRWS {
             logger.debug(outputter.outputString(cl));
         }
 
-        org.jdom.Document d = new org.jdom.Document( (org.jdom.Element)( cl.clone() ) );
+        org.jdom.Document d = new org.jdom.Document((org.jdom.Element) (cl.clone()));
         return new org.jdom.output.DOMOutputter().output(d);
     }
 
@@ -98,20 +98,27 @@ public class MCRWebService implements MCRWS {
      * @see MCRWS#MCRDoQuery(org.w3c.dom.Document)
      */
     public org.w3c.dom.Document MCRDoQuery(org.w3c.dom.Document query) throws Exception {
-        org.jdom.input.DOMBuilder d = new org.jdom.input.DOMBuilder();
-        Document doc = d.build(query);
+        Document doc = null;
+        try {
+            org.jdom.input.DOMBuilder d = new org.jdom.input.DOMBuilder();
+            doc = d.build(query);
 
-        if (logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
+                org.jdom.output.XMLOutputter outputter = new org.jdom.output.XMLOutputter();
+                logger.debug(outputter.outputString(doc));
+            }
+
+            // Execute query
+            MCRResults res = MCRQueryManager.search(MCRQuery.parseXML(doc), true);
+            Document result = new Document(res.buildXML());
+
+            org.jdom.output.DOMOutputter doo = new org.jdom.output.DOMOutputter();
+            return doo.output(result);
+        } catch (Exception e) {
             org.jdom.output.XMLOutputter outputter = new org.jdom.output.XMLOutputter();
-            logger.debug(outputter.outputString(doc));
+            logger.error("Error while excuting query:\n" + outputter.outputString(doc), e);
+            throw e;
         }
-
-        // Execute query
-        MCRResults res = MCRQueryManager.search(MCRQuery.parseXML(doc), true);
-        Document result = new Document(res.buildXML());
-
-        org.jdom.output.DOMOutputter doo = new org.jdom.output.DOMOutputter();
-        return doo.output(result);
     }
 
     /*
@@ -131,22 +138,22 @@ public class MCRWebService implements MCRWS {
         if (to == null)
             to = "";
         if ((from.length() != 0) || (to.length() != 0)) {
-          logger.debug("Input parameter : type=" + type + "   from=" + from + "   to=" + to);
-          List links = new ArrayList();
-          MCRLinkTableManager LM = MCRLinkTableManager.instance();
-          // Look for links
-          if ((from = from.trim()).length() != 0) {
-            // logger.debug("Use MCRLinkTableManager.getDestinationOf("+from+","+type+")");
-            links = LM.getDestinationOf(from, type);
-        } else {
-            // logger.debug("Use MCRLinkTableManager.getSourceOf("+to+","+type+")");
-            links = LM.getSourceOf(to, type);
-        }
-        // logger.debug("Get "+(new Integer(links.size())).toString()+" results");
-        for (int i = 0; i < links.size(); i++) {
-            MCRHit hit = new MCRHit((String) links.get(i));
-            results.addHit(hit);
-        }
+            logger.debug("Input parameter : type=" + type + "   from=" + from + "   to=" + to);
+            Collection<String> links = Collections.emptyList();
+            MCRLinkTableManager LM = MCRLinkTableManager.instance();
+            // Look for links
+            if ((from = from.trim()).length() != 0) {
+                // logger.debug("Use MCRLinkTableManager.getDestinationOf("+from+","+type+")");
+                links = LM.getDestinationOf(from, type);
+            } else {
+                // logger.debug("Use MCRLinkTableManager.getSourceOf("+to+","+type+")");
+                links = LM.getSourceOf(to, type);
+            }
+            // logger.debug("Get "+(new Integer(links.size())).toString()+" results");
+            for (String link : links) {
+                MCRHit hit = new MCRHit(link);
+                results.addHit(hit);
+            }
         } else {
             logger.warn("Input parameter from and to are empty!");
         }
@@ -155,5 +162,5 @@ public class MCRWebService implements MCRWS {
         org.jdom.output.DOMOutputter doo = new org.jdom.output.DOMOutputter();
         return doo.output(result);
     }
-    
+
 }

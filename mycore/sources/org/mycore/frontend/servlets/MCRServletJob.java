@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14775 $ $Date: 2009-02-23 16:25:39 +0100 (Mo, 23. Feb 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Transaction;
 
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 
 /**
@@ -39,7 +40,7 @@ import org.mycore.common.MCRConfigurationException;
  * get-methods to return the objects set while constructing the job object.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14775 $ $Date: 2009-02-23 16:25:39 +0100 (Mo, 23. Feb 2009) $
  */
 public class MCRServletJob {
     /** The HttpServletRequest object */
@@ -72,39 +73,6 @@ public class MCRServletJob {
     /** returns the HttpServletResponse object */
     public HttpServletResponse getResponse() {
         return theResponse;
-    }
-
-    /**
-     * starts a new database transaction.
-     */
-    public void beginTransaction() {
-        transaction = MCRHIBConnection.instance().getSession().beginTransaction();
-    }
-
-    /**
-     * commits the database transaction.
-     * Commit is only done if {@link #isTransactionActive()} returns true.
-     */
-    public void commitTransaction() {
-        if (isTransactionActive())
-            transaction.commit();
-    }
-
-    /**
-     * forces the database transaction to roll back.
-     * Roll back is only performed if {@link #isTransactionActive()} returns true.
-     */
-    public void rollbackTransaction() {
-        if (isTransactionActive())
-            transaction.rollback();
-    }
-
-    /**
-     * Is the transaction still alive?
-     * @return true if the transaction is still alive
-     */
-    public boolean isTransactionActive() {
-        return transaction != null && transaction.isActive();
     }
 
     /** returns true if the current http request was issued from the local host * */

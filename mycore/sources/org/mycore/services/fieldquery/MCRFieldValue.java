@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14405 $ $Date: 2008-11-14 12:12:07 +0100 (Fr, 14. Nov 2008) $
+ * $Revision: 15005 $ $Date: 2009-03-25 10:04:53 +0100 (Mi, 25. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,8 @@
 package org.mycore.services.fieldquery;
 
 import org.jdom.Element;
+import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRNormalizer;
 import org.mycore.datamodel.ifs.MCRFile;
@@ -62,6 +64,8 @@ public class MCRFieldValue {
      *            the value of the field, as a String
      */
     public MCRFieldValue(MCRFieldDef field, String value) {
+        if (field == null)
+            throw new NullPointerException("MCRFieldDef cannot be null.");
         this.field = field;
         setValue(value);
     }
@@ -76,6 +80,8 @@ public class MCRFieldValue {
      *            when indexing data
      */
     MCRFieldValue(MCRFieldDef field, MCRFile file) {
+        if (field == null)
+            throw new NullPointerException("MCRFieldDef cannot be null.");
         this.field = field;
         this.file = file;
     }
@@ -86,7 +92,7 @@ public class MCRFieldValue {
     public MCRFieldDef getField() {
         return field;
     }
-    
+
     /**
      * Sets or updates the field value
      * @param value the value, whicht will be normalized
@@ -128,7 +134,7 @@ public class MCRFieldValue {
      *         content
      */
     public Element buildXML() {
-        Element eField = new Element("field", MCRFieldDef.mcrns);
+        Element eField = new Element("field", MCRConstants.MCR_NAMESPACE);
         eField.setAttribute("name", field.getName());
         eField.addContent(value);
         return eField;
@@ -152,7 +158,8 @@ public class MCRFieldValue {
 
         return new MCRFieldValue(MCRFieldDef.getDef(name), value);
     }
-    
-    public String toString()
-    { return this.field.getName() + " = " + this.value; }
+
+    public String toString() {
+        return this.field.getName() + " = " + this.value;
+    }
 }

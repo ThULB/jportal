@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,6 +28,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.Element;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
@@ -43,9 +46,13 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 abstract public class MCRCheckACLBase extends MCRCheckBase {
+
+    private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckACLBase.class);
+
     /**
      * This method overrides doGetPost of MCRServlet and handels all actions
      * against the ACL data.
@@ -56,7 +63,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
     public void doGetPost(MCRServletJob job) throws Exception {
         // read the XML data
         MCREditorSubmission sub = (MCREditorSubmission) (job.getRequest().getAttribute("MCREditorSubmission"));
-        org.jdom.Document indoc = sub.getXML();
+        Document indoc = sub.getXML();
 
         // read the parameter
         MCRRequestParameters parms;
@@ -88,8 +95,14 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
             ID = new MCRObjectID(oldmcrid);
         }
 
+        // check access
+        if (!checkAccess(ID)) {
+            job.getResponse().sendRedirect(getBaseURL() + usererrorpage);
+            return;
+        }
+
         // create a service object and prepare it
-        org.jdom.Element outelm = prepareService((org.jdom.Document) indoc.clone(), ID, job, lang);
+        Element outelm = prepareService((Document) indoc.clone(), ID, job, lang);
 
         // Save the prepared metadata object
         boolean okay = storeService(outelm, job, ID);
@@ -112,7 +125,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
      * @param ID
      *            the MCRObjectID
      */
-    abstract public boolean storeService(org.jdom.Element outelm, MCRServletJob job, MCRObjectID ID);
+    abstract public boolean storeService(Element outelm, MCRServletJob job, MCRObjectID ID);
 
     /**
      * The method read the incoming servacls JDOM tree in a MCRService and
@@ -128,33 +141,36 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
      * @param lang
      *            the current language
      */
-    protected org.jdom.Element prepareService(org.jdom.Document jdom_in, MCRObjectID ID, MCRServletJob job, String lang) throws Exception {
-        org.jdom.Element elm_out = null;
+    protected Element prepareService(Document jdom_in, MCRObjectID ID, MCRServletJob job, String lang) throws Exception {
+        Element elm_out = null;
         ArrayList<String> logtext = new ArrayList<String>();
-        org.jdom.Element root = jdom_in.getRootElement();
+        Element root = jdom_in.getRootElement();
         if (root != null) {
-            org.jdom.Element servacls = root.getChild("servacls");
+            Element servacls = root.getChild("servacls");
             if (servacls != null) {
-                List servacllist = servacls.getChildren("servacl");
+                @SuppressWarnings("unchecked")
+                List<Element> servacllist = servacls.getChildren("servacl");
                 if (servacllist.size() != 0) {
                     for (int i = 0; i < servacllist.size(); i++) {
-                        org.jdom.Element servacl = (org.jdom.Element) servacllist.get(i);
-                        org.jdom.Element outcond = servacl.getChild("condition");
+                        Element servacl = servacllist.get(i);
+                        Element outcond = servacl.getChild("condition");
                         if (outcond != null) {
-                            org.jdom.Element outbool = outcond.getChild("boolean");
+                            Element outbool = outcond.getChild("boolean");
                             if (outbool != null) {
-                                List inbool = outbool.getChildren("boolean");
+                                @SuppressWarnings("unchecked")
+                                List<Element> inbool = outbool.getChildren("boolean");
                                 String outoper = outbool.getAttributeValue("operator");
                                 if (inbool.size() != 0 && outoper != null && !outoper.equals("true")) {
                                     for (int j = 0; j < inbool.size(); j++) {
-                                        List incondlist = ((org.jdom.Element) inbool.get(j)).getChildren("condition");
+                                        @SuppressWarnings("unchecked")
+                                        List<Element> incondlist = inbool.get(j).getChildren("condition");
                                         int k = incondlist.size();
                                         if (k != 0) {
                                             for (int l = 0; l < k; l++) {
-                                                org.jdom.Element incond = (org.jdom.Element) incondlist.get(l);
+                                                Element incond = incondlist.get(l);
                                                 String condvalue = incond.getAttributeValue("value");
                                                 if (condvalue == null || (condvalue = condvalue.trim()).length() == 0) {
-                                                    ((org.jdom.Element) inbool.get(j)).removeContent(incond);
+                                                    ((Element) inbool.get(j)).removeContent(incond);
                                                     k--;
                                                     l--;
                                                     continue;
@@ -162,7 +178,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
                                                 String condfield = incond.getAttributeValue("field");
                                                 if (condfield.equals("user")) {
                                                     if (!UM.existUser(condvalue)) {
-                                                        ((org.jdom.Element) inbool.get(j)).removeContent(incond);
+                                                        inbool.get(j).removeContent(incond);
                                                         k--;
                                                         l--;
                                                         continue;
@@ -170,7 +186,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
                                                 }
                                                 if (condfield.equals("group")) {
                                                     if (!UM.existGroup(condvalue)) {
-                                                        ((org.jdom.Element) inbool.get(j)).removeContent(incond);
+                                                        inbool.get(j).removeContent(incond);
                                                         k--;
                                                         l--;
                                                         continue;
@@ -178,7 +194,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
                                                 }
                                                 if (condfield.equals("date")) {
                                                     if (MCRUtils.covertDateToISO(condvalue) == null) {
-                                                        ((org.jdom.Element) inbool.get(j)).removeContent(incond);
+                                                        inbool.get(j).removeContent(incond);
                                                         k--;
                                                         l--;
                                                         continue;
@@ -186,15 +202,15 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
                                                 }
                                             }
                                             if (k == 1) {
-                                                String inbooloper = ((org.jdom.Element) inbool.get(j)).getAttributeValue("operator");
+                                                String inbooloper = inbool.get(j).getAttributeValue("operator");
                                                 if ((inbooloper != null) && inbooloper.toLowerCase().equals("and")) {
-                                                    org.jdom.Element newtrue = new org.jdom.Element("boolean");
+                                                    Element newtrue = new Element("boolean");
                                                     newtrue.setAttribute("operator", "true");
-                                                    ((org.jdom.Element) inbool.get(j)).addContent(newtrue);
+                                                    inbool.get(j).addContent(newtrue);
                                                 } else {
-                                                    org.jdom.Element newfalse = new org.jdom.Element("boolean");
+                                                    Element newfalse = new Element("boolean");
                                                     newfalse.setAttribute("operator", "false");
-                                                    ((org.jdom.Element) inbool.get(j)).addContent(newfalse);
+                                                    inbool.get(j).addContent(newfalse);
                                                 }
                                             }
                                         } else {
@@ -207,7 +223,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
                                     }
                                 }
                             } else {
-                                outbool = new org.jdom.Element("boolean");
+                                outbool = new Element("boolean");
                                 outbool.setAttribute("operator", "true");
                                 outcond.addContent(outbool);
                             }
@@ -224,7 +240,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
         } else {
             logtext.add("The service part is null.");
         }
-        elm_out = (org.jdom.Element) root.clone();
+        elm_out = (Element) root.clone();
         errorHandlerValid(job, logtext, ID, lang);
         return elm_out;
     }
@@ -241,7 +257,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
      * @param lang
      *            the current language
      */
-    private final void errorHandlerValid(MCRServletJob job, List logtext, MCRObjectID ID, String lang) throws Exception {
+    private final void errorHandlerValid(MCRServletJob job, List<String> logtext, MCRObjectID ID, String lang) throws Exception {
         if (logtext.size() == 0) {
             return;
         }
@@ -254,7 +270,7 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
         // prepare editor with error messages
         String pagedir = CONFIG.getString("MCR.SWF.PageDir", "");
         String myfile = pagedir + CONFIG.getString("MCR.SWF.PageErrorFormular", "editor_error_formular.xml");
-        org.jdom.Document jdom = null;
+        Document jdom = null;
 
         try {
             InputStream in = (new URL(getBaseURL() + myfile + "?XSL.Style=xml")).openStream();
@@ -265,31 +281,32 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
 
             jdom = new org.jdom.input.SAXBuilder().build(in);
 
-            org.jdom.Element root = jdom.getRootElement();
-            List sectionlist = root.getChildren("section");
+            Element root = jdom.getRootElement();
+            @SuppressWarnings("unchecked")
+            List<Element> sectionlist = root.getChildren("section");
 
             for (int i = 0; i < sectionlist.size(); i++) {
-                org.jdom.Element section = (org.jdom.Element) sectionlist.get(i);
+                Element section = sectionlist.get(i);
 
                 if (!section.getAttributeValue("lang", org.jdom.Namespace.XML_NAMESPACE).equals(lang.toLowerCase())) {
                     continue;
                 }
 
-                org.jdom.Element p = new org.jdom.Element("p");
+                Element p = new Element("p");
                 section.addContent(0, p);
 
-                org.jdom.Element center = new org.jdom.Element("center");
+                Element center = new Element("center");
 
                 // the error message
-                org.jdom.Element table = new org.jdom.Element("table");
+                Element table = new Element("table");
                 table.setAttribute("width", "80%");
 
                 for (int j = 0; j < logtext.size(); j++) {
-                    org.jdom.Element tr = new org.jdom.Element("tr");
-                    org.jdom.Element td = new org.jdom.Element("td");
-                    org.jdom.Element el = new org.jdom.Element("font");
+                    Element tr = new Element("tr");
+                    Element td = new Element("td");
+                    Element el = new Element("font");
                     el.setAttribute("color", "red");
-                    el.addContent((String) logtext.get(j));
+                    el.addContent(logtext.get(j));
                     td.addContent(el);
                     tr.addContent(td);
                     table.addContent(tr);
@@ -297,26 +314,26 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
 
                 center.addContent(table);
                 section.addContent(1, center);
-                p = new org.jdom.Element("p");
+                p = new Element("p");
                 section.addContent(2, p);
 
                 // the edit button
-                org.jdom.Element form = section.getChild("form");
+                Element form = section.getChild("form");
                 form.setAttribute("action", job.getResponse().encodeRedirectURL(getBaseURL() + "servlets/MCRStartEditorServlet"));
 
-                org.jdom.Element input1 = new org.jdom.Element("input");
+                Element input1 = new Element("input");
                 input1.setAttribute("name", "lang");
                 input1.setAttribute("type", "hidden");
                 input1.setAttribute("value", lang);
                 form.addContent(input1);
 
-                org.jdom.Element input2 = new org.jdom.Element("input");
+                Element input2 = new Element("input");
                 input2.setAttribute("name", "se_mcrid");
                 input2.setAttribute("type", "hidden");
                 input2.setAttribute("value", ID.getId());
                 form.addContent(input2);
 
-                org.jdom.Element input3 = new org.jdom.Element("input");
+                Element input3 = new Element("input");
                 input3.setAttribute("name", "type");
                 input3.setAttribute("type", "hidden");
                 input3.setAttribute("value", ID.getTypeId());
@@ -330,4 +347,5 @@ abstract public class MCRCheckACLBase extends MCRCheckBase {
         job.getRequest().setAttribute("XSL.Style", lang);
         getLayoutService().doLayout(job.getRequest(), job.getResponse(), jdom);
     }
+    
 }

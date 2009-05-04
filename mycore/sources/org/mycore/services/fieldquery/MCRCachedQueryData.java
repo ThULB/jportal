@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14975 $ $Date: 2009-03-20 12:19:57 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -74,13 +74,17 @@ public class MCRCachedQueryData
   /** The number of hits per page */
   private int numPerPage;
   
-  public MCRCachedQueryData( MCRResults results, Document query, MCRCondition condition )
+  public static void cache(MCRResults results, Document query, MCRCondition condition) {
+    MCRCachedQueryData data = new MCRCachedQueryData(results, query, condition);
+    cache.put( results.getID(), data );
+    MCRSessionMgr.getCurrentSession().put( LAST_QUERY_IN_SESSION, data );
+  }
+  
+  private MCRCachedQueryData( MCRResults results, Document query, MCRCondition condition )
   {
     this.results = results;
     this.query = query;
     this.condition = condition;
-    cache.put( results.getID(), this );
-    MCRSessionMgr.getCurrentSession().put( LAST_QUERY_IN_SESSION, this );
   }
 
   public int getNumPerPage()

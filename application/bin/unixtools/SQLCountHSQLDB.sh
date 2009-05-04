@@ -5,7 +5,7 @@
 # SQLCountHSQLDB.sh TABLE MCRProjectID
 #
 
-export CLASSPATH=$CLASSPATH:$DOCPORTAL_HOME/build/lib/third-party.jar
+export CLASSPATH=$CLASSPATH:$DOCPORTAL_HOME/build/lib/hsqldb_1_8_0_7.jar
 
 cd $DOCPORTAL_HOME/build/bin
 

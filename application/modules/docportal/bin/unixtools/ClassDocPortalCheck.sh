@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 #
 # Check the XML Schema with a parser sample
 #

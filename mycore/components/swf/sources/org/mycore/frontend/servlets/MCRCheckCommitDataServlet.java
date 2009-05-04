@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,6 +25,8 @@ package org.mycore.frontend.servlets;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRMailer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -37,11 +39,12 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 public class MCRCheckCommitDataServlet extends MCRCheckDataBase {
 
     private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckCommitDataServlet.class);
 
     /**
      * The method is a dummy and return an URL with the next working step.
@@ -55,16 +58,16 @@ public class MCRCheckCommitDataServlet extends MCRCheckDataBase {
     public final String getNextURL(MCRObjectID ID, boolean okay) throws MCRActiveLinkException {
         // commit to the server
         MCRSimpleWorkflowManager wfm = MCRSimpleWorkflowManager.instance();
-        okay = wfm.commitMetadataObject(ID.getTypeId(), ID.getId());
+        okay = wfm.commitMetadataObject(ID);
 
         StringBuffer sb = new StringBuffer();
         if (okay) {
             // then delete the data
-            wfm.deleteMetadataObject(ID.getTypeId(), ID.getId());
+            wfm.deleteMetadataObject(ID);
             // return all is ready
             sb.append("receive/").append(ID.getId());
         } else {
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
+            sb.append(pagedir).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
         }
         return sb.toString();
     }
@@ -76,14 +79,13 @@ public class MCRCheckCommitDataServlet extends MCRCheckDataBase {
      *            the MCRObjectID of the MCRObject
      */
     public final void sendMail(MCRObjectID ID) {
-        MCRSimpleWorkflowManager wfm = MCRSimpleWorkflowManager.instance();
-        List addr = wfm.getMailAddress(ID.getTypeId(), "wcommit");
+        List <String> addr = WFM.getMailAddress(ID.getTypeId(), "wcommit");
 
         if (addr.size() == 0) {
             return;
         }
 
-        String sender = wfm.getMailSender();
+        String sender = WFM.getMailSender();
         String appl = CONFIG.getString("MCR.SWF.Mail.ApplicationID", "DocPortal");
         String subject = "Automatically generated message from " + appl;
         StringBuffer text = new StringBuffer();
@@ -96,4 +98,17 @@ public class MCRCheckCommitDataServlet extends MCRCheckDataBase {
             LOGGER.error("Can't send a mail to " + addr);
         }
     }
+
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        if (MCRAccessManager.checkPermission(ID, "writedb")) {
+            return true;
+        }
+        return false;
+    }
+
 }

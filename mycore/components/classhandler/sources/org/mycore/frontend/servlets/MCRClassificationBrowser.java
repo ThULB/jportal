@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13278 $ $Date: 2008-03-17 17:12:15 +0100 (Mo, 17. Mär 2008) $
+ * $Revision: 15054 $ $Date: 2009-03-31 15:24:46 +0200 (Di, 31. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -57,7 +57,7 @@ public class MCRClassificationBrowser extends MCRServlet {
         /*
          * default classification
          */
-        LOGGER.debug("Start brwosing in classifications");
+        LOGGER.debug("Start browsing in classifications");
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
         lang = mcrSession.getCurrentLanguage();
 
@@ -86,29 +86,28 @@ public class MCRClassificationBrowser extends MCRServlet {
 
         try {
             LOGGER.debug("Creation of BData.");
-            LOGGER.debug("URI: "+uri);
-            LOGGER.debug("MODE: "+mode);
-            LOGGER.debug("ACTCLID: "+actclid);
-            LOGGER.debug("ACTCATEG: "+actcateg);
+            LOGGER.debug("URI: " + uri);
+            LOGGER.debug("MODE: " + mode);
+            LOGGER.debug("ACTCLID: " + actclid);
+            LOGGER.debug("ACTCATEG: " + actcateg);
             mcrSession.BData = new MCRClassificationBrowserData(uri, mode, actclid, actcateg);
         } catch (MCRConfigurationException cErr) {
-            generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, cErr.getMessage(), cErr, false);
+            generateErrorPage(job.getRequest(), job.getResponse(), HttpServletResponse.SC_INTERNAL_SERVER_ERROR, cErr.getMessage(), cErr,
+                    false);
         }
 
         Document jdomFile = getEmbeddingPage(mcrSession.BData.getPageName());
         Document jdom = null;
- 
-        if (mode.equalsIgnoreCase("edit") && (actclid.length() == 0 && ((uri.length() == 0) || uri.equalsIgnoreCase("/default")))) {
-            // alle Klasifikationen auflisten (auch die nicht eingebundenen)
+
+        if (mode.equalsIgnoreCase("edit") && mcrSession.BData.getClassification() == null) {
+            // alle Klassifikationen auflisten (auch die nicht eingebundenen)
             jdom = mcrSession.BData.createXmlTreeforAllClassifications();
 
         } else {
             jdom = mcrSession.BData.createXmlTree(lang);
         }
         jdom = mcrSession.BData.loadTreeIntoSite(jdomFile, jdom);
-        doLayout(job, mcrSession.BData.getXslStyle(), jdom); // use the
-        // stylesheet-postfix
-        // from properties
+        doLayout(job, mcrSession.BData.getXslStyle(), jdom); // use the stylesheet-postfix from properties
     }
 
     private org.jdom.Document getEmbeddingPage(String coverPage) throws Exception {

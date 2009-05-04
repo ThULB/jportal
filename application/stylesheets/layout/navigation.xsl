@@ -839,31 +839,31 @@
         <xsl:choose>
             <xsl:when test="$CurrentUser='gast'">
                 <td>
-                    <a href="{$loginURL}">
-                        <b>
-                            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
-                        </b>
+                    <strong> 
+                    <a href="{$loginURL}">                       
+                            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />                        
                     </a>
+                    </strong>
                 </td>
             </xsl:when>
             <xsl:otherwise>
                 <td>
-                    <a href="{$loginURL}&amp;uid=gast&amp;pwd=gast">
-                        <b>
-                            <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
-                        </b>
+                    <strong>
+                    <a href="{$loginURL}&amp;uid=gast&amp;pwd=gast">                        
+                            <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />                        
                     </a>
+                    </strong>
                 </td>
                 <xsl:call-template name="get.placeHolder">
                     <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
                     <xsl:with-param name="seperatorChar" select="$seperatorChar" />
                 </xsl:call-template>
                 <td>
-                    <a href="{$loginURL}">
-                        <b>
-                            <xsl:value-of select="i18n:translate('component.userlogin.titles.pageTitle.login')" />
-                        </b>
+                    <strong>
+                    <a href="{$loginURL}">                        
+                            <xsl:value-of select="i18n:translate('component.userlogin.titles.pageTitle.login')" />                        
                     </a>
+                    </strong>
                 </td>
             </xsl:otherwise>
         </xsl:choose>

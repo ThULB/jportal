@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
+ * $Revision: 14791 $ $Date: 2009-03-02 10:40:29 +0100 (Mo, 02. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,7 +54,6 @@ public abstract class MCRWCMSServlet extends MCRServlet {
 
     protected static final String VALIDATOR = "JTidy";
 
-    protected static final String LOGINSERVLET_URL = getServletBaseURL() + "MCRLoginServlet";
 
     protected void doGetPost(MCRServletJob job) throws Exception {
         if (MCRWebsiteWriteProtection.printInfoPageIfNoAccess(job.getRequest(), job.getResponse(), getBaseURL()))
@@ -69,8 +68,10 @@ public abstract class MCRWCMSServlet extends MCRServlet {
             session.put("rootNodes", new ArrayList());
             // forward
             processRequest(job.getRequest(), job.getResponse());
-        } else
+        } else{
+            String LOGINSERVLET_URL = getServletBaseURL() + "MCRLoginServlet";
             job.getResponse().sendRedirect(LOGINSERVLET_URL);
+        }
     }
 
     protected final boolean accessGeneral() {

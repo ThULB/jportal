@@ -3,7 +3,15 @@
 # read data from save of the user system and build single user and group files
 #
 
-SOURCE=$DOCPORTAL_HOME/save/user
+BASE=`cat $DOCPORTAL_HOME/build/config/mycore.properties | grep -v '#' | grep -v '%' | grep 'MCR.basedir'`
+BASEDIR=`echo "$BASE"| cut -f2 -d= `
+export BASEDIR
+
+SAVE=`cat $DOCPORTAL_HOME/build/config/mycore.properties | grep -v '#' | grep 'MCR.Save.FileSystem'`
+SAVEDIR=`echo "$SAVE"| cut -f2 -d= | sed -e "s#%MCR.basedir%#$BASEDIR#g"`
+export SAVEDIR
+
+SOURCE=$SAVEDIR/user
 
 for LIB in `ls $MYCORE_HOME/lib/*.jar`
   do

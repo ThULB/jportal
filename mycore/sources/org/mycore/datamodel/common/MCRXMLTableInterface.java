@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14921 $ $Date: 2009-03-17 11:32:43 +0100 (Di, 17. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,6 +24,7 @@
 package org.mycore.datamodel.common;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import org.mycore.common.MCRPersistenceException;
@@ -32,7 +33,7 @@ import org.mycore.common.MCRPersistenceException;
  * This interface is designed to choose the Persistence for the XML tables.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14921 $ $Date: 2009-03-17 11:32:43 +0100 (Di, 17. Mär 2009) $
  */
 public interface MCRXMLTableInterface {
     /**
@@ -58,7 +59,7 @@ public interface MCRXMLTableInterface {
      * @exception MCRPersistenceException
      *                if the method arguments are not correct
      */
-    public void create(String mcrid, byte[] xml, int version) throws MCRPersistenceException;
+    public void create(String mcrid, byte[] xml, int version, Date lastModified) throws MCRPersistenceException;
 
     /**
      * The method remove a item for the MCRObjectID from the datastore.
@@ -84,7 +85,7 @@ public interface MCRXMLTableInterface {
      * @exception MCRPersistenceException
      *                if the method arguments are not correct
      */
-    public void update(String mcrid, byte[] xml, int version) throws MCRPersistenceException;
+    public void update(String mcrid, byte[] xml, int version, Date lastModified) throws MCRPersistenceException;
 
     /**
      * The method retrieve a dataset for the given MCRObjectID and returns the
@@ -137,4 +138,17 @@ public interface MCRXMLTableInterface {
      * @return a ArrayList of MCRObjectID's
      */
     public List<String> retrieveAllIDs(String type);
+    
+    /**
+     * lists objects of the specified <code>type</code> and their last modified date. 
+     * @param type type of object
+     * @return
+     */
+    public List<MCRObjectIDDate> listObjectDates(String type);
+    
+    /**
+     * returns when the last change was made.
+     * @return a Date of the last change (insert/update/delete)
+     */
+    public Date getLastModified();
 }

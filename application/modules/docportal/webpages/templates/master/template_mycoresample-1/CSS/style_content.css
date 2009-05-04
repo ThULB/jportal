@@ -525,3 +525,24 @@ label.editorCheckbox {}
    font-weight: bold;
 }
 
+ul.cbList {
+  margin-left:0;
+  list-style-type: none;
+  padding-left: 0.5em;
+}
+
+ul.cbList li {
+  margin: 0;
+  margin-left: 1em;
+}
+
+ul.cbList input {
+	vertical-align: middle;
+	border: none;
+	background: transparent;
+}
+
+span.cbNum {
+	margin:0 0.5em;
+    font-family: monospace;
+}

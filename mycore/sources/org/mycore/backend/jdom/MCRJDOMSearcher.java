@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14943 $ $Date: 2009-03-18 12:07:51 +0100 (Mi, 18. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -46,6 +46,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMSource;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -225,26 +226,26 @@ public class MCRJDOMSearcher extends MCRSearcher {
 
         Element stylesheet = new Element("stylesheet");
         stylesheet.setAttribute("version", "1.0");
-        stylesheet.setNamespace(MCRFieldDef.xslns);
+        stylesheet.setNamespace(MCRConstants.XSL_NAMESPACE);
         stylesheet.addNamespaceDeclaration(MCRFieldDef.xalanns);
         stylesheet.addNamespaceDeclaration(extns);
         stylesheet.setAttribute("extension-element-prefixes", "ext");
 
-        Element output = new Element("output", MCRFieldDef.xslns);
+        Element output = new Element("output", MCRConstants.XSL_NAMESPACE);
         output.setAttribute("method", "text");
         stylesheet.addContent(output);
 
-        Element template = new Element("template", MCRFieldDef.xslns);
+        Element template = new Element("template", MCRConstants.XSL_NAMESPACE);
         template.setAttribute("match", "/data");
         stylesheet.addContent(template);
 
-        Element choose = new Element("choose", MCRFieldDef.xslns);
+        Element choose = new Element("choose", MCRConstants.XSL_NAMESPACE);
         template.addContent(choose);
 
-        Element when = new Element("when", MCRFieldDef.xslns);
+        Element when = new Element("when", MCRConstants.XSL_NAMESPACE);
         when.addContent("t");
 
-        Element otherwise = new Element("otherwise", MCRFieldDef.xslns);
+        Element otherwise = new Element("otherwise", MCRConstants.XSL_NAMESPACE);
         otherwise.addContent("f");
         choose.addContent(when).addContent(otherwise);
 
@@ -258,7 +259,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
         }
 
         Document xsl = (Document) (xslTemplate.clone());
-        xsl.getRootElement().getChild("template", MCRFieldDef.xslns).getChild("choose", MCRFieldDef.xslns).getChild("when", MCRFieldDef.xslns).setAttribute("test", condition);
+        xsl.getRootElement().getChild("template", MCRConstants.XSL_NAMESPACE).getChild("choose", MCRConstants.XSL_NAMESPACE).getChild("when", MCRConstants.XSL_NAMESPACE).setAttribute("test", condition);
         Source xslsrc = new JDOMSource(xsl);
         Transformer transformer;
         try {
@@ -387,7 +388,7 @@ public class MCRJDOMSearcher extends MCRSearcher {
         return MCRInputValidator.instance().compare(valueA, valueB, operator, "string", null);
     }
 
-    public void addSortData(Iterator hits, List<MCRSortBy> sortBy) {
+    public void addSortData(Iterator<MCRHit> hits, List<MCRSortBy> sortBy) {
         while (hits.hasNext()) {
             MCRHit hit = (MCRHit) hits.next();
             Document data = map.get(hit.getID());

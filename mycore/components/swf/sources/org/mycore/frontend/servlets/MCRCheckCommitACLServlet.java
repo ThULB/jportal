@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,6 +25,7 @@ package org.mycore.frontend.servlets;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRMailer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -39,11 +40,12 @@ import org.mycore.datamodel.metadata.MCRObjectService;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 public class MCRCheckCommitACLServlet extends MCRCheckACLBase {
 
     private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckCommitACLServlet.class);
 
     private static String storedrules = CONFIG.getString("MCR.Access.StorePermissions", "read,write,delete");
 
@@ -85,7 +87,7 @@ public class MCRCheckCommitACLServlet extends MCRCheckACLBase {
      *            the MCRObjectID of the MCRObject
      */
     public final void sendMail(MCRObjectID ID) {
-        List addr = WFM.getMailAddress(ID.getTypeId(), "seditacl");
+        List<String> addr = WFM.getMailAddress(ID.getTypeId(), "seditacl");
 
         if (addr.size() == 0) {
             return;
@@ -138,4 +140,17 @@ public class MCRCheckCommitACLServlet extends MCRCheckACLBase {
         LOGGER.info("Update ACLs for ID " + ID.getId() + "in server.");
         return true;
     }
+    
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        if (MCRAccessManager.checkPermission(ID, "writedb")) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- * $Revision: 14222 $ $Date: 2008-10-23 08:53:29 +0200 (Do, 23. Okt 2008) $
+ * $Revision: 14944 $ $Date: 2009-03-18 12:19:32 +0100 (Mi, 18. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,13 +24,13 @@ package org.mycore.services.fieldquery;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.output.XMLOutputter;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.xml.MCRURIResolver;
 
 /**
@@ -44,15 +44,7 @@ public class MCRFieldDef {
     /** The logger */
     private static final Logger LOGGER = Logger.getLogger(MCRFieldDef.class);
 
-    private static Hashtable<String,MCRFieldDef> fieldTable = new Hashtable<String,MCRFieldDef>();
-
-    public final static Namespace xslns = Namespace.getNamespace("xsl", "http://www.w3.org/1999/XSL/Transform");
-
-    public final static Namespace mcrns = Namespace.getNamespace("mcr", "http://www.mycore.org/");
-
-    public final static Namespace xmlns = Namespace.getNamespace("xml", "http://www.w3.org/XML/1998/namespace");
-
-    public final static Namespace xlinkns = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+    private static Hashtable<String, MCRFieldDef> fieldTable = new Hashtable<String, MCRFieldDef>();
 
     public final static Namespace xalanns = Namespace.getNamespace("xalan", "http://xml.apache.org/xalan");
 
@@ -66,13 +58,13 @@ public class MCRFieldDef {
     static {
         Element def = getConfigFile();
 
-        List children = def.getChildren("index", mcrns);
+        List children = def.getChildren("index", MCRConstants.MCR_NAMESPACE);
 
         for (int i = 0; i < children.size(); i++) {
             Element index = (Element) (children.get(i));
             String id = index.getAttributeValue("id");
 
-            List fields = index.getChildren("field", mcrns);
+            List fields = index.getChildren("field", MCRConstants.MCR_NAMESPACE);
 
             for (int j = 0; j < fields.size(); j++)
                 new MCRFieldDef(id, (Element) fields.get(j));
@@ -156,8 +148,7 @@ public class MCRFieldDef {
      */
     public static List<MCRFieldDef> getFieldDefs(String index) {
         List<MCRFieldDef> fields = new ArrayList<MCRFieldDef>();
-        for (Iterator iter = fieldTable.values().iterator(); iter.hasNext();) {
-            MCRFieldDef field = (MCRFieldDef) (iter.next());
+        for (MCRFieldDef field : fieldTable.values()) {
             if (field.index.equals(index))
                 fields.add(field);
         }
@@ -327,13 +318,13 @@ public class MCRFieldDef {
 
         // <xsl:if test="contains(@objects,$objecType)">
         if (objects != null) {
-            Element xif = new Element("if", xslns);
+            Element xif = new Element("if", MCRConstants.XSL_NAMESPACE);
             xif.setAttribute("test", "contains('" + objects.trim() + "',$objectType)");
             xsl = xif;
         }
 
         // <xsl:for-each select="{@xpath}">
-        Element forEach1 = new Element("for-each", xslns);
+        Element forEach1 = new Element("for-each", MCRConstants.XSL_NAMESPACE);
         forEach1.setAttribute("select", xpath);
         if (xsl == null)
             xsl = forEach1;
@@ -350,12 +341,12 @@ public class MCRFieldDef {
             else
                 current = current.getParentElement();
         }
-        
+
         if (MCRFieldDef.OBJECT_CATEGORY.equals(fieldDef.getAttributeValue("source"))) {
             // current(): <format classid="DocPortal_class_00000006"
             // categid="FORMAT0002"/>
             // URI: classification:metadata:levels:parents:{class}:{categ}
-            Element forEach2 = new Element("for-each", xslns);
+            Element forEach2 = new Element("for-each", MCRConstants.XSL_NAMESPACE);
             forEach1.addContent(forEach2);
             String uri = "document(concat('classification:metadata:0:parents:',current()/@classid,':',current()/@categid))//category";
             forEach2.setAttribute("select", uri);
@@ -368,7 +359,7 @@ public class MCRFieldDef {
 
         // <xsl:value-of select="{@value}" />
         String valueExpr = fieldDef.getAttributeValue("value");
-        Element valueOf = new Element("value-of", xslns);
+        Element valueOf = new Element("value-of", MCRConstants.XSL_NAMESPACE);
         valueOf.setAttribute("select", valueExpr);
         fieldValue.addContent(valueOf);
 

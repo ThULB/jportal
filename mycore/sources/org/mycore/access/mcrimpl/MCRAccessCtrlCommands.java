@@ -24,8 +24,6 @@
 package org.mycore.access.mcrimpl;
 
 import org.apache.log4j.Logger;
-
-import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRCommand;
@@ -70,7 +68,6 @@ public class MCRAccessCtrlCommands extends MCRAbstractCommands {
      *            the access permission for the rule
      */
     public static void validate(String objid, String permission) {
-    	MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
-        System.out.println("current user has access: " + AI.checkPermission(objid, permission));
+        System.out.println("current user has access: " + MCRAccessManager.checkPermission(objid, permission));
     }
 }

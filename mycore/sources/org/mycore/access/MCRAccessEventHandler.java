@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14481 $ $Date: 2008-11-25 14:50:29 +0100 (Di, 25. Nov 2008) $
+ * $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -24,12 +24,10 @@
 // package
 package org.mycore.access;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.jdom.Element;
-
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -43,7 +41,7 @@ import org.mycore.datamodel.metadata.MCRObject;
  * simple workflow.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14481 $ $Date: 2008-11-25 14:50:29 +0100 (Di, 25. Nov 2008) $
+ * @version $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  */
 public class MCRAccessEventHandler extends MCREventHandlerBase {
 
@@ -175,7 +173,7 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
         long t1 = System.currentTimeMillis();
 
         // create
-        List li = AI.getPermissionsForID(base.getId().getId());
+        Collection<String> li = AI.getPermissionsForID(base.getId().getId());
         int aclsize = 0;
         if (li != null) {
             aclsize = li.size();
@@ -206,7 +204,7 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
         long t1 = System.currentTimeMillis();
 
         // update
-        List li = AI.getPermissionsForID(base.getId().getId());
+        Collection<String> li = AI.getPermissionsForID(base.getId().getId());
         int aclsize = 0;
         if (li != null) {
             aclsize = li.size();
@@ -256,10 +254,9 @@ public class MCRAccessEventHandler extends MCREventHandlerBase {
      * @param overwrite
      */
     private void setDefaultPermissions(String id, boolean overwrite) {
-        List savedPermissions = MCRAccessManager.getPermissionsForID(id);
-        List configuredPermissions = AI.getAccessPermissionsFromConfiguration();
-        for (Iterator it = configuredPermissions.iterator(); it.hasNext();) {
-            String permission = (String) it.next();
+        Collection<String> savedPermissions = MCRAccessManager.getPermissionsForID(id);
+        Collection<String> configuredPermissions = AI.getAccessPermissionsFromConfiguration();
+        for (String permission: configuredPermissions) {
             if (storedrules.indexOf(permission) != -1) {
                 if (savedPermissions != null && savedPermissions.contains(permission)) {
                     if (overwrite) {

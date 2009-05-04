@@ -1,6 +1,6 @@
 /**
  * $RCSfile: MCRClassificationEditor.java,v $
- * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
+ * $Revision: 14785 $ $Date: 2009-02-27 15:49:17 +0100 (Fr, 27. Feb 2009) $
  *
  * This file is part of ***  M y C o R e  *** 
  * See http://www.mycore.de/ for details.
@@ -101,8 +101,9 @@ public class MCRClassificationEditor {
                 return false;
 
             Element newCateg = (Element) categories.getChild("category").clone();
-            MCRCategoryID newID = MCRCategoryID.rootID(newCateg.getAttributeValue("ID"));
-            classif = MCRClassificationBrowserData.getClassificationPool().getClassificationAsPojo(MCRCategoryID.rootID(id.getRootID()), true);
+            MCRCategoryID newID = new MCRCategoryID(id.getRootID(), newCateg.getAttributeValue("ID"));
+            classif = MCRClassificationBrowserData.getClassificationPool().getClassificationAsPojo(MCRCategoryID.rootID(id.getRootID()),
+                    true);
 
             // check the new category entry
             if (newID.getID().equalsIgnoreCase(id.getID())) {
@@ -111,9 +112,9 @@ public class MCRClassificationEditor {
             }
 
             newCateg = setNewJDOMCategElement(newCateg);
-            newCateg.setAttribute("counter", "0");
 
-            if (!DAO.exist(newID)) {
+            final MCRCategory findCategory = findCategory(classif, newID);
+            if (findCategory == null) {
                 if (!id.getID().equals("empty")) {
 
                     MCRCategory prevCateg = findCategory(classif, id);
@@ -134,8 +135,10 @@ public class MCRClassificationEditor {
                     MCRClassificationBrowserData.ClassUserTable.put(classif.getId().getRootID(), sessionID);
                     return true;
                 }
+            } else {
+                LOGGER.error("The category " + newID + " does already exist.");
+                return false;
             }
-            return false;
         } catch (Exception e1) {
             e1.printStackTrace();
             LOGGER.error("Classification creation fails. Reason is:" + e1.getMessage());
@@ -161,7 +164,8 @@ public class MCRClassificationEditor {
             Element clroot = indoc.getRootElement();
             Element newCateg = (Element) clroot.getChild("categories").getChild("category").clone();
             String newID = newCateg.getAttributeValue("ID");
-            classif = MCRClassificationBrowserData.getClassificationPool().getClassificationAsPojo(MCRCategoryID.rootID(id.getRootID()), true);
+            classif = MCRClassificationBrowserData.getClassificationPool().getClassificationAsPojo(MCRCategoryID.rootID(id.getRootID()),
+                    true);
             newCateg = setNewJDOMCategElement(newCateg);
             // check the category entry
             if (!newID.equalsIgnoreCase(id.getID())) {
@@ -419,6 +423,7 @@ public class MCRClassificationEditor {
             index--;
         }
         parent.getChildren().get(index).getChildren().add(cat);
+        MCRClassificationBrowserData.getClassificationPool().getMovedCategories().add(cat.getId());
         return true;
     }
 
@@ -439,8 +444,8 @@ public class MCRClassificationEditor {
         parent.getChildren().remove(oldIndex);
 
         grandParent.getChildren().add(newIndex + 1, cat);
+        MCRClassificationBrowserData.getClassificationPool().getMovedCategories().add(cat.getId());
         return true;
-
     }
 
     public boolean saveAll() {

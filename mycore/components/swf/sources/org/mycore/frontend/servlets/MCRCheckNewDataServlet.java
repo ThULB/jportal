@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15123 $ $Date: 2009-04-30 09:03:07 +0200 (Do, 30. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,10 +25,11 @@ package org.mycore.frontend.servlets;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRMailer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
 
 /**
  * The servlet store the MCREditorServlet output XML in a file of a MCR type
@@ -37,11 +38,12 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15123 $ $Date: 2009-04-30 09:03:07 +0200 (Do, 30. Apr 2009) $
  */
 public class MCRCheckNewDataServlet extends MCRCheckDataBase {
 
     private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckNewDataServlet.class);
 
     /**
      * The method return an URL with the next working step. If okay flag is
@@ -56,10 +58,10 @@ public class MCRCheckNewDataServlet extends MCRCheckDataBase {
     protected String getNextURL(MCRObjectID ID, boolean okay) throws MCRActiveLinkException {
         StringBuffer sb = new StringBuffer();
         if (okay) {
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append("editor_").append(ID.getTypeId()).append("_editor.xml");
+            sb.append(WFM.getWorkflowFile(pagedir, ID.getBase()));
         } else {
 
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
+            sb.append(pagedir).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
         }
         return sb.toString();
     }
@@ -71,14 +73,13 @@ public class MCRCheckNewDataServlet extends MCRCheckDataBase {
      *            the MCRObjectID of the MCRObject
      */
     public final void sendMail(MCRObjectID ID) {
-        MCRSimpleWorkflowManager wfm = MCRSimpleWorkflowManager.instance();
-        List addr = wfm.getMailAddress(ID.getTypeId(), "wnewobj");
+        List<String> addr = WFM.getMailAddress(ID.getTypeId(), "wnewobj");
 
         if (addr.size() == 0) {
             return;
         }
 
-        String sender = wfm.getMailSender();
+        String sender = WFM.getMailSender();
         String appl = CONFIG.getString("MCR.SWF.Mail.ApplicationID", "DocPortal");
         String subject = "Automatically generated message from " + appl;
         StringBuffer text = new StringBuffer();
@@ -91,4 +92,20 @@ public class MCRCheckNewDataServlet extends MCRCheckDataBase {
             LOGGER.error("Can't send a mail to " + addr);
         }
     }
+    
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        if (MCRAccessManager.checkPermission("create-"+ID.getBase())) {
+            return true;
+        }
+        if (MCRAccessManager.checkPermission("create-"+ID.getTypeId())) {
+            return true;
+        }
+        return false;
+    }
+
 }

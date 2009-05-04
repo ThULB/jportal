@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,23 +23,24 @@
 
 package org.mycore.frontend.servlets;
 
+import static org.jdom.Namespace.XML_NAMESPACE;
+import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
+import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
+
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.xpath.XPath;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorSubmission;
-import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
-
-import static org.jdom.Namespace.XML_NAMESPACE;
-import static org.mycore.common.MCRConstants.XLINK_NAMESPACE;
-import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
 
 /**
  * The servlet store the MCREditorServlet output XML in a file of a MCR type
@@ -48,9 +49,12 @@ import static org.mycore.common.MCRConstants.XSI_NAMESPACE;
  * with <b>todo </b> <em>repair</em>.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 public class MCRCheckEditDerivateServlet extends MCRCheckBase {
+
+    private static final long serialVersionUID = 1L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckEditDerivateServlet.class);
 
     /**
      * This method overrides doGetPost of MCRServlet. <br />
@@ -104,9 +108,15 @@ public class MCRCheckEditDerivateServlet extends MCRCheckBase {
             der.setFromXML(xml, true);
             MCRObjectID objID = new MCRObjectID(e.getAttributeValue("href", XLINK_NAMESPACE));
 
+            // check access
+            if (!checkAccess(objID)) {
+                job.getResponse().sendRedirect(getBaseURL() + usererrorpage);
+                return;
+            }
+
             // update data
             StringBuffer sb = new StringBuffer();
-            sb.append(WFM.getDirectoryPath(objID.getTypeId())).append(File.separator).append(derID.getId()).append(".xml");
+            sb.append(WFM.getDirectoryPath(objID.getBase())).append(File.separator).append(derID.getId()).append(".xml");
             MCRUtils.writeJDOMToFile(indoc, new File(sb.toString()));
             okay = true;
             url = getNextURL(objID, okay);
@@ -131,9 +141,9 @@ public class MCRCheckEditDerivateServlet extends MCRCheckBase {
         StringBuffer sb = new StringBuffer();
         if (okay) {
             // return all is ready
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append("editor_").append(ID.getTypeId()).append("_editor.xml");
+            sb.append(WFM.getWorkflowFile(pagedir, ID.getBase()));
         } else {
-            sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
+            sb.append(pagedir).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
         }
         return sb.toString();
     }
@@ -145,12 +155,11 @@ public class MCRCheckEditDerivateServlet extends MCRCheckBase {
      *            the MCRObjectID of the MCRObject
      */
     public final void sendMail(MCRObjectID ID) {
-        MCRSimpleWorkflowManager wfm = MCRSimpleWorkflowManager.instance();
-        List addr = wfm.getMailAddress(ID.getTypeId(), "weditder");
+        List<String> addr = WFM.getMailAddress(ID.getTypeId(), "weditder");
         if (addr.size() == 0) {
             return;
         }
-        String sender = wfm.getMailSender();
+        String sender = WFM.getMailSender();
         String appl = CONFIG.getString("MCR.SWF.Mail.ApplicationID", "MyCoRe");
         String subject = "Automatically generated message from " + appl;
         StringBuffer text = new StringBuffer();
@@ -162,4 +171,20 @@ public class MCRCheckEditDerivateServlet extends MCRCheckBase {
             LOGGER.error("Can't send a mail to " + addr);
         }
     }
+    
+    /**
+     * check the access permission
+     * @param ID the mycore ID
+     * @return true if the access is set
+     */
+    protected boolean checkAccess(MCRObjectID ID) {
+        if (MCRAccessManager.checkPermission("create-"+ID.getBase())) {
+            return true;
+        }
+        if (MCRAccessManager.checkPermission("create-"+ID.getTypeId())) {
+            return true;
+        }
+        return false;
+    }
+
 }

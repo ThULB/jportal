@@ -107,7 +107,7 @@
       <cell row="5" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition5/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[CountDocument]:2:children:DocPortal_class_00000002" />
+          <include cacheable="false" uri="classification:editor[CountDocument]:2:noEmptyLeaves:children:DocPortal_class_00000002" />
         </list>
       </cell>
 
@@ -120,7 +120,7 @@
       <cell row="7" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition7/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000006" />
+          <include cacheable="false" uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000006" />
         </list>
       </cell>
 
@@ -133,7 +133,7 @@
       <cell row="8" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition8/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000004" />
+          <include cacheable="false" uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000004" />
         </list>
       </cell>
 
@@ -146,7 +146,7 @@
       <cell row="9" col="2" colspan="2" anchor="WEST" var="conditions/boolean/boolean/condition9/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose"/>
-          <include cacheable="false" uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000005" />
+          <include cacheable="false" uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000005" />
         </list>
       </cell>
        
@@ -246,8 +246,7 @@
               <list type="dropdown">
                 <item value="" i18n="editor.search.choose" />
                 <item value="title" i18n="editor.search.document.title" />
-                <item value="author" i18n="editor.search.document.author" />
-                <item value="dateCreated" i18n="editor.search.document.datecr" />
+                <item value="created" i18n="editor.search.document.datecr" />
               </list>
             </cell>
             <cell row="1" col="2" anchor="WEST" var="@order">

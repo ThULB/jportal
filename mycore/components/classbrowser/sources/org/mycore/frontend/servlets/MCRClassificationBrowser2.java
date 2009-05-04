@@ -37,6 +37,8 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 
+import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRException;
 import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -91,7 +93,10 @@ public class MCRClassificationBrowser2 extends MCRServlet {
         xml.setAttribute("webpage", req.getParameter("webpage"));
 
         MCRAndCondition queryCondition = new MCRAndCondition();
-        MCRQueryCondition categCondition = new MCRQueryCondition(MCRFieldDef.getDef(field), "=", "DUMMY");
+        final MCRFieldDef fieldDef = MCRFieldDef.getDef(field);
+        if (fieldDef == null)
+            throw new MCRConfigurationException("Search field '" + field + "' is not defined.");
+        MCRQueryCondition categCondition = new MCRQueryCondition(fieldDef, "=", "DUMMY");
         queryCondition.addChild(categCondition);
 
         if ((objectType != null) && (objectType.trim().length() > 0)) {
@@ -108,33 +113,32 @@ public class MCRClassificationBrowser2 extends MCRServlet {
             xml.setAttribute("parameters", parameters);
 
         List<Element> data = new ArrayList<Element>();
-        List<MCRCategory> children = MCRCategoryDAOFactory.getInstance().getChildren(id);
-        for (MCRCategory child : children) {
+        MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(id, 1);
+        for (MCRCategory child : category.getChildren()) {
+            String childID = child.getId().getID();
+            categCondition.setValue(childID);
             int numResults = (countResults ? MCRQueryManager.search(new MCRQuery(queryCondition)).getNumHits() : 1);
 
             if ((!emptyLeaves) && (numResults < 1))
                 continue;
 
-            Element category = new Element("category");
-            data.add(category);
+            Element categoryE = new Element("category");
+            data.add(categoryE);
             if (countResults)
-                category.setAttribute("numResults", String.valueOf(numResults));
+                categoryE.setAttribute("numResults", String.valueOf(numResults));
 
-            String childID = child.getId().getID();
+            categoryE.setAttribute("id", childID);
+            categoryE.setAttribute("children", Boolean.toString(child.hasChildren()));
 
-            category.setAttribute("id", childID);
-            category.setAttribute("children", Boolean.toString(child.hasChildren()));
-
-            categCondition.setValue(childID);
-            category.setAttribute("query", URLEncoder.encode(queryCondition.toString(), "UTF-8"));
+            categoryE.setAttribute("query", URLEncoder.encode(queryCondition.toString(), "UTF-8"));
 
             if (uri && (child.getURI() != null))
-                category.addContent(new Element("uri").setText(child.getURI().toString()));
+                categoryE.addContent(new Element("uri").setText(child.getURI().toString()));
 
-            addLabel(req, child, category);
+            addLabel(req, child, categoryE);
         }
 
-        countLinks(req, emptyLeaves, objectType, id, data);
+        countLinks(req, emptyLeaves, objectType, category, data);
         sortCategories(req, data);
         xml.addContent(data);
         renderToHTML(job, req, xml);
@@ -159,13 +163,13 @@ public class MCRClassificationBrowser2 extends MCRServlet {
     }
 
     /** Add link count to each category */
-    private void countLinks(HttpServletRequest req, boolean emptyLeaves, String objectType, MCRCategoryID id, List<Element> data) {
+    private void countLinks(HttpServletRequest req, boolean emptyLeaves, String objectType, MCRCategory category, List<Element> data) {
         if (!Boolean.valueOf(req.getParameter("countlinks")))
             return;
         if (objectType.trim().length() == 0)
             objectType = null;
-        String classifID = id.getRootID();
-        Map<MCRCategoryID, Number> count = MCRCategLinkServiceFactory.getInstance().countLinksForType(id, objectType);
+        String classifID = category.getId().getRootID();
+        Map<MCRCategoryID, Number> count = MCRCategLinkServiceFactory.getInstance().countLinksForType(category, objectType, true);
         for (Iterator<Element> it = data.iterator(); it.hasNext();) {
             Element child = it.next();
             MCRCategoryID childID = new MCRCategoryID(classifID, child.getAttributeValue("id"));

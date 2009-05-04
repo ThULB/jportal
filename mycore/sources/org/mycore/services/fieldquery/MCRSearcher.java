@@ -1,5 +1,5 @@
 /*
- * $Revision: 14215 $ $Date: 2008-10-22 13:58:41 +0200 (Mi, 22. Okt 2008) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
+ * $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $ This file is part of M y C o R e See http://www.mycore.de/ for details. This program
  * is free software; you can use it, redistribute it and / or modify it under the terms of the GNU General Public License (GPL) as published by the Free
  * Software Foundation; either version 2 of the License or (at your option) any later version. This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
@@ -9,6 +9,7 @@
 
 package org.mycore.services.fieldquery;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -85,12 +86,12 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
         if (returnID != null)
             return returnID;
 
-        List list = MCRLinkTableManager.instance().getSourceOf(ownerID, MCRLinkTableManager.ENTRY_TYPE_DERIVATE);
-        if ((list == null) || (list.size() == 0))
+        Collection<String> list = MCRLinkTableManager.instance().getSourceOf(ownerID, MCRLinkTableManager.ENTRY_TYPE_DERIVATE);
+        if ((list == null) || (list.isEmpty()))
             return file.getID();
 
         // Return ID of MCRObject this MCRFile belongs to
-        returnID = (String) (list.get(0));
+        returnID = list.iterator().next();
         RETURN_ID_CACHE.put(ownerID, returnID);
         return returnID;
     }
@@ -98,14 +99,14 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
     protected void handleFileCreated(MCREvent evt, MCRFile file) {
         String entryID = file.getID();
         String returnID = getReturnID(file);
-        List fields = MCRData2Fields.buildFields(file, index);
+        List<MCRFieldValue> fields = MCRData2Fields.buildFields(file, index);
         addToIndex(entryID, returnID, fields);
     }
 
     protected void handleFileUpdated(MCREvent evt, MCRFile file) {
         String entryID = file.getID();
         String returnID = getReturnID(file);
-        List fields = MCRData2Fields.buildFields(file, index);
+        List<MCRFieldValue> fields = MCRData2Fields.buildFields(file, index);
         removeFromIndex(entryID);
         addToIndex(entryID, returnID, fields);
     }
@@ -121,13 +122,13 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
 
     protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
         String entryID = obj.getId().getId();
-        List fields = MCRData2Fields.buildFields(obj, index);
+        List<MCRFieldValue> fields = MCRData2Fields.buildFields(obj, index);
         addToIndex(entryID, entryID, fields);
     }
 
     protected void handleObjectUpdated(MCREvent evt, MCRObject obj) {
         String entryID = obj.getId().getId();
-        List fields = MCRData2Fields.buildFields(obj, index);
+        List<MCRFieldValue> fields = MCRData2Fields.buildFields(obj, index);
         removeFromIndex(entryID);
         addToIndex(entryID, entryID, fields);
     }
@@ -161,7 +162,7 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      * @param fields
      *            a List of MCRFieldValue objects
      */
-    public void addToIndex(String entryID, String returnID, List fields) {
+    public void addToIndex(String entryID, String returnID, List<MCRFieldValue> fields) {
     }
 
     /**
@@ -199,7 +200,7 @@ public abstract class MCRSearcher extends MCREventHandlerBase implements MCREven
      * @param sortBy
      *            the MCRFieldDef fields that are sort criteria
      */
-    public void addSortData(Iterator hits, List<MCRSortBy> sortBy) {
+    public void addSortData(Iterator<MCRHit> hits, List<MCRSortBy> sortBy) {
     }
 
     /**

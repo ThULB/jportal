@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14796 $ $Date: 2009-03-02 16:43:18 +0100 (Mo, 02. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,9 +38,9 @@ import org.jdom.Element;
 public class MCRBooleanClauseParser {
     private static Pattern bracket = Pattern.compile("\\([^)(]*\\)");
     
-    private static Pattern and = Pattern.compile("\\b[aA][nN][dD]\\b");
+    private static Pattern and = Pattern.compile("[)\\s]+[aA][nN][dD][\\s(]+");
 
-    private static Pattern or = Pattern.compile("\\b[oO][rR]\\b");
+    private static Pattern or = Pattern.compile("[)\\s]+[oO][rR][\\s(]+");
 
     private static Pattern marker = Pattern.compile("@<([0-9]*)>@");
 

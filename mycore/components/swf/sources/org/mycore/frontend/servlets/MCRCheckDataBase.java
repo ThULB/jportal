@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02. Okt 2008) $
+ * $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,6 +23,7 @@
 
 package org.mycore.frontend.servlets;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +32,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.jdom.Element;
 
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
@@ -41,6 +44,7 @@ import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
+import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
 
 /**
  * This class is the superclass of servlets which checks the MCREditorServlet
@@ -49,10 +53,12 @@ import org.mycore.frontend.editor.MCRRequestParameters;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14083 $ $Date: 2008-10-02 16:41:41 +0200 (Do, 02. Okt 2008) $
+ * @version $Revision: 15107 $ $Date: 2009-04-23 11:52:43 +0200 (Do, 23. Apr 2009) $
  */
 abstract public class MCRCheckDataBase extends MCRCheckBase {
-    /**
+    private static final long serialVersionUID = 8744330302159842747L;
+    private static Logger LOGGER = Logger.getLogger(MCRCheckDataBase.class);
+   /**
      * This method overrides doGetPost of MCRServlet. <br />
      */
     public void doGetPost(MCRServletJob job) throws Exception {
@@ -75,7 +81,7 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
         LOGGER.debug("XSL.target.param.0 = " + oldmcrid);
         LOGGER.debug("XSL.target.param.1 = " + oldtype);
         LOGGER.debug("XSL.target.param.2 = " + oldstep);
-
+        
         // get the MCRSession object for the current thread from the session
         // manager.
         MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
@@ -109,19 +115,24 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
             indoc.getRootElement().setAttribute("ID", ID.getId());
         }
 
+        // check access
+        if (!checkAccess(ID)) {
+            job.getResponse().sendRedirect(getBaseURL() + usererrorpage);
+            return;
+        }
+
         // Save the incoming to a file
         byte[] outxml = MCRUtils.getByteArray(indoc);
-        String savedir = CONFIG.getString("MCR.SWF.Directory." + ID.getTypeId());
-        String NL = System.getProperty("file.separator");
-        String fullname = savedir + NL + ID.getId() + ".xml";
-        storeMetadata(outxml, job, ID, fullname);
+        File savedir = MCRSimpleWorkflowManager.instance().getDirectoryPath(ID.getBase());
+        File fullname = new File(savedir, ID.getId() + ".xml");
+        storeMetadata(outxml, job, ID, fullname.getAbsolutePath());
 
         // create a metadata object and prepare it
         org.jdom.Document outdoc = prepareMetadata((org.jdom.Document) indoc.clone(), ID, job, lang);
         outxml = MCRUtils.getByteArray(outdoc);
 
         // Save the prepared metadata object
-        boolean okay = storeMetadata(outxml, job, ID, fullname);
+        boolean okay = storeMetadata(outxml, job, ID, fullname.getAbsolutePath());
 
         // call the getNextURL and sendMail methods
         String url = getNextURL(ID, okay);
@@ -194,7 +205,7 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
     /**
      * A method to handle valid errors.
      */
-    private final void errorHandlerValid(MCRServletJob job, List logtext, MCRObjectID ID, String lang) throws Exception {
+    private final void errorHandlerValid(MCRServletJob job, List<String> logtext, MCRObjectID ID, String lang) throws Exception {
         if (logtext.size() == 0) {
             return;
         }
@@ -206,7 +217,7 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
             String jSessionID = CONFIG.getString("MCR.Session.Param", ";jsessionid=");
             sessionID = jSessionID + session.getId();
         }
-        
+
         // write to the log file
         for (int i = 0; i < logtext.size(); i++) {
             LOGGER.error(logtext.get(i));
@@ -227,29 +238,30 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
 
             jdom = new org.jdom.input.SAXBuilder().build(in);
 
-            org.jdom.Element root = jdom.getRootElement();
-            List sectionlist = root.getChildren("section");
+            Element root = jdom.getRootElement();
+            @SuppressWarnings("unchecked")
+            List<Element> sectionlist = root.getChildren("section");
 
             for (int i = 0; i < sectionlist.size(); i++) {
-                org.jdom.Element section = (org.jdom.Element) sectionlist.get(i);
+                Element section = sectionlist.get(i);
 
                 if (!section.getAttributeValue("lang", org.jdom.Namespace.XML_NAMESPACE).equals(lang.toLowerCase())) {
                     continue;
                 }
 
-                org.jdom.Element p = new org.jdom.Element("p");
+                Element p = new Element("p");
                 section.addContent(0, p);
 
-                org.jdom.Element center = new org.jdom.Element("center");
+                Element center = new Element("center");
 
                 // the error message
-                org.jdom.Element table = new org.jdom.Element("table");
+                Element table = new Element("table");
                 table.setAttribute("width", "80%");
 
                 for (int j = 0; j < logtext.size(); j++) {
-                    org.jdom.Element tr = new org.jdom.Element("tr");
-                    org.jdom.Element td = new org.jdom.Element("td");
-                    org.jdom.Element el = new org.jdom.Element("font");
+                    Element tr = new Element("tr");
+                    Element td = new Element("td");
+                    Element el = new Element("font");
                     el.setAttribute("color", "red");
                     el.addContent((String) logtext.get(j));
                     td.addContent(el);
@@ -259,7 +271,7 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
 
                 center.addContent(table);
                 section.addContent(1, center);
-                p = new org.jdom.Element("p");
+                p = new Element("p");
                 section.addContent(2, p);
             }
         } catch (org.jdom.JDOMException e) {
@@ -269,5 +281,5 @@ abstract public class MCRCheckDataBase extends MCRCheckBase {
         // restart editor
         getLayoutService().doLayout(job.getRequest(), job.getResponse(), jdom);
     }
-
+    
 }

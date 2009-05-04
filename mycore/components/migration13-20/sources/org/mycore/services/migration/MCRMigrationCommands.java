@@ -2,14 +2,15 @@ package org.mycore.services.migration;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom.JDOMException;
-
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRAbstractCommands;
@@ -36,11 +37,16 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         com = new MCRCommand("migrate classifications", "org.mycore.services.migration.MCRMigrationCommands.migrateClassifications",
                 "Migrates the version 1 classification system to the current version");
         command.add(com);
-        com = new MCRCommand("internal classificationmigration step {0}", "org.mycore.services.migration.MCRMigrationCommands.migrateClassifications int",
+        com = new MCRCommand("internal classificationmigration step {0}",
+                "org.mycore.services.migration.MCRMigrationCommands.migrateClassifications int",
                 "Internal commands for classification migration");
         command.add(com);
-        com = new MCRCommand("migrate history date in type {0}", "org.mycore.services.migration.MCRMigrationCommands.migrateMCRMetaHistoryDate String",
-                "Internal commands for the migration of the MCRMetaHistoryDate text lines to multi languages for MyCoRe type {0}");
+        com = new MCRCommand("migrate MCRXMLTABLE", "org.mycore.services.migration.MCRMigrationCommands.migrateMCRXMLTable",
+                "Migrates of the MCRXMLTable layout to the 2.0 format");
+        command.add(com);
+        com = new MCRCommand("internal migrate MCRXMLTABLE entry {0}",
+                "org.mycore.services.migration.MCRMigrationCommands.migrateMCRXMLTable String",
+                "Internal command for the migration of the MCRXMLTable layout to the 2.0 format");
         command.add(com);
     }
 
@@ -152,22 +158,35 @@ public class MCRMigrationCommands extends MCRAbstractCommands {
         }
     }
 
+    public static List<String> migrateMCRXMLTable() {
+        MCRXMLTableManager tm = MCRXMLTableManager.instance();
+        LinkedList<String> commands = new LinkedList<String>();
+        for (String id : tm.retrieveAllIDs()) {
+            commands.add("internal migrate MCRXMLTABLE entry " + id);
+        }
+        return commands;
+    }
+
     /**
-     * This method migrate the MCRMetaHistoryDate text entries from a single text to multi language texts as sequence of XML text elements. The method read the
-     * data to the API and store it to the backend again.
+     * Migrates the MCRXMLTABLE to the version with last modified attribute.
      * 
-     * @param type
-     *            the MyCoRe data type which includes a MCRMetaHistoryDate element
+     * @param objectID
+     *            the objectID to be migrated
      * @throws Exception
      */
-    public static void migrateMCRMetaHistoryDate(String type) throws Exception {
-        MCRXMLTableManager tm = MCRXMLTableManager.instance();
-        MCRObject obj = null;
-        for (String id : tm.retrieveAllIDs(type)) {
-            obj = new MCRObject();
-            MCRObjectID oid = new MCRObjectID(id);
+    public static void migrateMCRXMLTable(String objectID) throws Exception {
+        MCRObjectID oid = new MCRObjectID(objectID);
+        if (objectID.indexOf("_derivate_") > -1) {
+            MCRDerivate der=new MCRDerivate();
+            der.receiveFromDatastore(oid);
+            der.setImportMode(true);
+            der.updateXMLInDatastore();
+        } else {
+            MCRObject obj = new MCRObject();
             obj.receiveFromDatastore(oid);
+            obj.setImportMode(true);
             obj.updateInDatastore();
         }
     }
+
 }

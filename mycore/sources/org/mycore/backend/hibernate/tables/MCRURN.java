@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14743 $ $Date: 2009-02-17 09:51:32 +0100 (Di, 17. Feb 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,10 +28,12 @@ package org.mycore.backend.hibernate.tables;
  * 
  * @author Heiko Helmbrecht
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14743 $ $Date: 2009-02-17 09:51:32 +0100 (Di, 17. Feb 2009) $
  */
 public class MCRURN {
     private MCRURNPK key;
+    private String path;
+    private String filename;
 
     /**
      * The constructor of the class MCRURN
@@ -52,6 +54,22 @@ public class MCRURN {
         this.key = new MCRURNPK();
         key.setMcrid(id);
         key.setMcrurn(urn);
+    }
+
+    /**
+     * The constructor of the class MCRURN
+     * 
+     * @param id
+     *            The document ID
+     * @param urn
+     *            The URN
+     */
+    public MCRURN(String id, String urn, String path, String filename) {
+        this.key = new MCRURNPK();
+        key.setMcrid(id);
+        key.setMcrurn(urn);
+        this.path = path;
+        this.filename = filename;
     }
 
     /**
@@ -114,4 +132,33 @@ public class MCRURN {
         key.setMcrurn(urn);
     }
 
+    /**
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * @param path
+     *            the path to set
+     */
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    /**
+     * @return the filename
+     */
+    public String getFilename() {
+        return filename;
+    }
+
+    /**
+     * @param filename
+     *            the filename to set
+     */
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 }

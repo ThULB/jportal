@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15022 $ $Date: 2009-03-26 14:53:00 +0100 (Do, 26. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,13 +50,13 @@ import org.mycore.datamodel.ifs.MCRFileReader;
  * </code>
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15022 $ $Date: 2009-03-26 14:53:00 +0100 (Do, 26. Mär 2009) $
  */
 public class MCRAVExtRealHelix extends MCRAudioVideoExtender {
-    
+
     /** The logger */
-    private final static Logger LOGGER = Logger.getLogger( MCRAVExtRealHelix.class );
-    
+    private final static Logger LOGGER = Logger.getLogger(MCRAVExtRealHelix.class);
+
     public MCRAVExtRealHelix() {
     }
 
@@ -148,11 +148,16 @@ public class MCRAVExtRealHelix extends MCRAudioVideoExtender {
             playerStarterCT = con.getContentType();
         } catch (Exception exc) {
             String msg = "Error parsing metadata from Real Server ViewSource: " + file.getStorageID();
-            LOGGER.warn( msg, exc );
+            LOGGER.warn(msg, exc);
         }
     }
 
     public void getPlayerStarterTo(OutputStream out, String startPos, String stopPos) throws MCRPersistenceException {
+        if (basePlayerStarter == null || basePlayerStarter.length() < 8) {
+            String msg = "Temporary Failure. Could not start streaming of file: " + file.getPath();
+            throw new MCRPersistenceException(msg);
+        }
+
         try {
             StringBuffer cgi = new StringBuffer(basePlayerStarter);
             cgi.append(file.getStorageID());

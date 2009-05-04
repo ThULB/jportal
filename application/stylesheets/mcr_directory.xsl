@@ -19,11 +19,10 @@
     <xsl:variable name="sourcelink"
       select="concat('mcrobject:',$derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href)" />
     <xsl:variable name="sourcedoc" select="document($sourcelink)" />
-	<xsl:variable name="accesseditvalue">
+    <xsl:variable name="accesseditvalue">
       <xsl:choose>
         <!-- if source object and derivate allows writing -->
-        <xsl:when
-          test="acl:checkPermission($derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href,'writedb') ">
+        <xsl:when test="acl:checkPermission($derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href,'writedb') and acl:checkPermission(ownerID,'writedb')">
           <xsl:value-of select="'true'" />
         </xsl:when>
         <xsl:otherwise>
@@ -31,8 +30,17 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    
-    <xsl:call-template name="mcr_directory.saveDerivate" />
+    <xsl:variable name="accessdeletevalue">
+      <xsl:choose>
+        <!-- if source object and derivate allows deleting -->
+        <xsl:when test="acl:checkPermission($derivdoc/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href,'deletedb') and acl:checkPermission(ownerID,'deletedb')">
+          <xsl:value-of select="'true'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'false'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
     <!-- check the access rights -->
     <table id="metaData" cellpadding="0" cellspacing="0">
@@ -81,7 +89,7 @@
           <xsl:variable name="maindoc" select="$derivdoc/mycorederivate/derivate/internals/internal/@maindoc" />
           <xsl:variable name="derivifs"
             select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivdoc/mycorederivate/@ID,'/',$maindoc,$HttpSession,'?hosts=',$obj_host)" />
-          <a href="{$derivifs}">
+          <a href="{$derivifs}" target="_blank">
             <xsl:value-of select="$maindoc" />
           </a>
         </td>
@@ -125,6 +133,7 @@
       <xsl:apply-templates select="path" />
       <xsl:apply-templates select="children">
         <xsl:with-param name="accesseditvalue" select="$accesseditvalue" />
+        <xsl:with-param name="accessdeletevalue" select="$accessdeletevalue" />
         <xsl:with-param name="maindoc" select="$derivdoc/mycorederivate/derivate/internals/internal/@maindoc" />
         <xsl:with-param name="se_mcrid" select="$derivdoc/mycorederivate/@ID" />
         <xsl:with-param name="re_mcrid" select="$sourcedoc/mycoreobject/@ID" />
@@ -196,6 +205,7 @@
   <!-- Child componets ********************************************** -->
   <xsl:template match="children">
     <xsl:param name="accesseditvalue" />
+    <xsl:param name="accessdeletevalue" />
     <xsl:param name="maindoc" />
     <xsl:param name="se_mcrid" />
     <xsl:param name="re_mcrid" />
@@ -264,7 +274,7 @@
           <xsl:if test="@type = 'file'">
             <xsl:variable name="derivifs"
               select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/',$derivmain,$HttpSession,'?hosts=',$host)" />
-            <a>
+            <a target="_blank">
               <xsl:attribute name="href">
                 <xsl:value-of select="$derivifs" />
               </xsl:attribute>
@@ -290,7 +300,7 @@
           <xsl:value-of select="date" />
         </td>
         <td class="metavalue">
-          <xsl:if test="$accesseditvalue = 'true'">
+          <xsl:if test="$accessdeletevalue = 'true'">
             <form action="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet{$HttpSession}" method="get">
               <input name="lang" type="hidden" value="{$CurrentLang}" />
               <input name="se_mcrid" type="hidden">

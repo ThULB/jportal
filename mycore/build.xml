@@ -19,18 +19,26 @@
   <property name="sourcerelease" value="1.5" />
   <property name="sourceencoding" value="ISO-8859-15" />
   <property name="env.MYCORE_HOME" value="." />
+  <!-- Junit properties -->
+  <property name="junit.printsummary" value="on" />
+  <property name="junit.showoutput" value="false" />
+  <property name="junit.dir" value="${basedir}" />
+  <property name="junit.formatter.type" value="brief" />
+  <property name="junit.formatter.usefile" value="false" />
   <!-- System CLASSPATH is concatenated to any specified classpaths at the end! -->
   <property name="build.sysclasspath" value="last" />
   <!-- Path definitions -->
   <property name="target.dir" location="${basedir}/build" />
   <property name="target.sources" location="${target.dir}/sources" />
   <property name="target.classes" location="${target.dir}/classes" />
+  <property name="target.appletbase" location="${target.dir}/upload-applet" />
+  <property name="target.appletclasses" location="${target.appletbase}/classes" />
   <property name="target.config" location="${target.dir}/config" />
   <property name="target.javadocs" location="${target.dir}/javadocs" />
   <property name="target.libs" location="${target.dir}/lib" />
   <property name="target.jarbase" location="${target.dir}/jarbase" />
   <property name="components.dir" location="${basedir}/components" />
-  <property name="target.version" value="2.0 beta" />
+  <property name="target.version" value="2.0" />
 
   <condition property="ant1.7">
     <available classname="org.apache.tools.ant.taskdefs.condition.AntVersion" />
@@ -180,14 +188,31 @@
   <!-- =================================================================== -->
 
   <target name="init">
-    <!-- find out revision number of HEAD, need svn installed -->
-    <exec executable="svn" outputproperty="svnlog.out">
-      <arg line="info ${basedir}" />
-    </exec>
-    <echo level="debug">${svnlog.out}</echo>
-    <propertyregex property="revision.number" input="${svnlog.out}" select="\1">
-      <regexp pattern="evision: ([0-9]*)" />
-    </propertyregex>
+    <!-- find out revision number of HEAD -->
+  	<if>
+  		<not>
+  			<isset property="revision.number" />
+  		</not>
+  		<then>
+  			<condition property="svn.entries.present">
+  				<available file="${basedir}/.svn/entries"/>
+  			</condition>
+  			<fail unless="svn.entries.present">
+  				SVN REVISION ERROR
+  				Cannot determine Subversion revision number of MyCoRe.
+  				Please run ant with
+  				ant -Drevision.number=&lt;svn revision&gt; &lt;ant target&gt;
+  			</fail>
+	  	    <loadfile srcfile="${basedir}/.svn/entries" property="svn.rev.line">
+	  	        <filterchain>
+	  	            <headfilter lines="1" skip="3"/>
+	  	        </filterchain>
+	  	    </loadfile>
+	  	    <propertyregex property="revision.number" input="${svn.rev.line}" select="\1">
+				<regexp pattern="([0-9]*)" />
+	  	    </propertyregex>
+  		</then>
+  	</if>
     <echo level="info">MyCoRe Revision found: ${revision.number}</echo>
     <property name="mycore.version" value="${target.version} r${revision.number}" />
     <!-- include imaging component only if JAI is available -->
@@ -204,19 +229,41 @@
       </dirset>
     </path>
   </target>
+  
+  <!-- =================================================================== -->
+  <!-- Runs CruiseControl build                                            -->
+  <!-- =================================================================== -->
+
+  <target name="cc.build">
+    <exec executable="svn">
+      <arg line="update" />
+    </exec>
+    <ant target="clean" />
+    <ant target="jar">
+      <property name="deprecation" value="on" />
+    </ant>
+    <mkdir dir="${target.dir}/tests" />
+    <ant target="test">
+      <property name="junit.printsummary" value="off" />
+      <property name="junit.formatter.type" value="xml" />
+      <property name="junit.formatter.usefile" value="true" />
+      <property name="junit.dir" value="${target.dir}/tests" />
+    </ant>
+  </target>
 
   <!-- =================================================================== -->
   <!-- Runs JUnit test cases                                               -->
   <!-- =================================================================== -->
 
   <target name="test" depends="init,compile_testcases">
-    <junit printsummary="on" fork="true">
+    <junit printsummary="${junit.printsummary}" fork="true" showoutput="${junit.showoutput}">
       <classpath>
         <path refid="mycore.classpath" />
         <pathelement location="${basedir}/tests" />
       </classpath>
-      <formatter type="brief" usefile="false" />
-      <batchtest>
+      <formatter type="${junit.formatter.type}" usefile="${junit.formatter.usefile}" unless="junit.formatter.classname" />
+      <formatter classname="${junit.formatter.classname}" extension="${junit.formatter.extension}" usefile="${junit.formatter.usefile}" if="junit.formatter.classname" />
+      <batchtest todir="${junit.dir}">
         <fileset dir="${target.classes}">
           <include name="**/*Test*.class" />
           <exclude name="**/FulltextTester.class" />
@@ -243,17 +290,20 @@
     <property name="jarfile" value="mycore.jar" />
     <echo level="info">Creating ${jarfile} containing all compiled classes...</echo>
     <mkdir dir="${target.libs}" />
+    <antcall target="jar.copy-web" />
     <antcall target="jar.copy-xsl" />
     <antcall target="jar.copy-config" />
     <antcall target="jar.copy-schema" />
     <antcall target="jar.copy-resources" />
     <antcall target="jar.copy-components" />
+    <antcall target="jar.upload-applet" />
     <jar destfile="${target.libs}/${jarfile}">
       <fileset dir="${target.classes}" includes="**/*.class" />
       <fileset dir="${target.classes}" includes="META-INF/services/*" />
       <fileset dir="${target.jarbase}" />
       <fileset dir="${basedir}" includes="integrate.xml" />
       <manifest>
+        <attribute name="Main-Class" value="org.mycore.MCRCoreVersion" />
         <attribute name="MCR-Version" value="${target.version} r${revision.number}" />
       </manifest>
     </jar>
@@ -266,6 +316,17 @@
     <moduleHook target="jar" />
   </target>
 
+  <!-- - - - - - - - - - - - - - - - - - 
+          target: jar.copy-xsl                      
+         - - - - - - - - - - - - - - - - - -->
+  <target name="jar.copy-web">
+    <mkdir dir="${target.jarbase}/web" />
+  	<copy todir="${target.jarbase}/web" file="${basedir}/lib/fckEditor.zip"/>
+    <mkdir dir="${target.jarbase}/web/fck" />
+  	<copy todir="${target.jarbase}/web/fck" file="${basedir}/config/fckconfig.js"/>
+    <mkdir dir="${target.jarbase}/web/oai" />
+  	<copy todir="${target.jarbase}/web/oai" file="${basedir}/xsl/oai2.xsl"/>
+  </target>
   <!-- - - - - - - - - - - - - - - - - - 
           target: jar.copy-xsl                      
          - - - - - - - - - - - - - - - - - -->
@@ -399,14 +460,48 @@ public class MCRCoreVersion{
   public static String getVersion(){return VERSION;}
   public static int getRevision(){return REVISION;}
   public static String getCompleteVersion(){return COMPLETE;}
+  public static void main(String arg[]){
+    	System.out.printf("MyCoRe\tver: %s\trev: %d\n",VERSION,REVISION);
+  }
 }
 ]]>
     </echo>
     <antcall target="javac">
-      <param name="packages" value="org/mycore/**" />
+      <param name="packages" value="**" />
       <param name="excludes" value="${mcr.exclude}" />
     </antcall>
     <moduleHook target="compile" />
+  </target>
+  
+  <target name="compile.upload-applet" depends="init">
+    <mkdir dir="${target.appletclasses}"/>
+    <javac destdir="${target.appletclasses}"
+           includes="org/mycore/frontend/fileupload/**"
+      	   excludes="org/mycore/frontend/fileupload/*Handler* org/mycore/frontend/fileupload/*Servlet*"
+           classpathref="mycore.classpath"
+           debug="${debug}"
+           optimize="${optimize}"
+           target="1.4"
+           source="1.4"
+           encoding="${sourceencoding}"
+      	   fork="yes"
+           deprecation="${deprecation}">
+      <src>
+        <path refid="sources.path" />
+      </src>
+    </javac>
+  </target>
+  
+  <target name="jar.upload-applet" depends="compile.upload-applet">
+    <copy file="${basedir}/config/messages_de.MCRUploadApplet"
+          tofile="${target.appletclasses}/messages_de.properties"
+          preservelastmodified="true" />
+    <copy file="${basedir}/config/messages_en.MCRUploadApplet"
+          tofile="${target.appletclasses}/messages_en.properties"
+          preservelastmodified="true" />
+    <jar jarfile="${target.jarbase}/uploadApplet-unsigned.jar">
+      <fileset dir="${target.appletclasses}" />
+    </jar>
   </target>
 
   <!-- =================================================================== -->

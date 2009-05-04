@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14503 $ $Date: 2008-12-01 09:39:50 +0100 (Mo, 01. Dez 2008) $
+ * $Revision: 15033 $ $Date: 2009-03-27 12:29:59 +0100 (Fr, 27. MÃ¤r 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -35,6 +35,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
@@ -93,7 +94,7 @@ import org.mycore.user.MCRUserMgr;
  * @author Frank Lützenkirchen
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14503 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
+ * @version $Revision: 15033 $ $Date: 2008-05-21 15:53:52 +0200 (Mi, 21. Mai
  *          2008) $
  */
 public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
@@ -384,10 +385,11 @@ public class MCRLayoutService implements org.apache.xalan.trace.TraceListener {
                     props.put(name.substring(4), session.getAttribute(name));
             }
         }
-        for (Iterator it = mcrSession.getObjectsKeyList(); it.hasNext();) {
-            String name = it.next().toString();
-            if (name.startsWith("XSL."))
-                props.put(name.substring(4), mcrSession.get(name));
+        for (Map.Entry<Object, Object> entry : mcrSession.getMapEntries()) {
+            String key = entry.getKey().toString();
+            if (key.startsWith("XSL.")) {
+                props.put(key.substring(4), entry.getValue());
+            }
         }
         for (Enumeration e = request.getParameterNames(); e.hasMoreElements();) {
             String name = e.nextElement().toString();

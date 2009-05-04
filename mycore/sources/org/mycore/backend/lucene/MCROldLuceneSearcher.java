@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14869 $ $Date: 2009-03-13 11:39:15 +0100 (Fr, 13. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -384,7 +384,7 @@ public class MCROldLuceneSearcher extends MCRSearcher {
         return result;
     }
     
-    public void addSortData(Iterator hits, List<MCRSortBy> sortBy)
+    public void addSortData(Iterator<MCRHit> hits, List<MCRSortBy> sortBy)
     {
       try
       {

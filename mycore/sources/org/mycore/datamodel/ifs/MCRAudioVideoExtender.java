@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15022 $ $Date: 2009-03-26 14:53:00 +0100 (Do, 26. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -32,6 +32,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
 
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -43,7 +44,7 @@ import org.mycore.common.MCRUtils;
  * size etc. and to start a player to stream the asset to a browser.
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 15022 $ $Date: 2009-03-26 14:53:00 +0100 (Do, 26. Mär 2009) $
  */
 public abstract class MCRAudioVideoExtender {
     /** Constant for media type = video */
@@ -431,6 +432,7 @@ public abstract class MCRAudioVideoExtender {
     protected String getMetadata(String url) throws MCRPersistenceException {
         try {
             URLConnection connection = getConnection(url);
+            connection.setConnectTimeout(getConnectTimeout());
             ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
             forwardData(connection, out);
 
@@ -439,5 +441,9 @@ public abstract class MCRAudioVideoExtender {
             String msg = "Could not get metadata from Audio/Video Store URL: " + url;
             throw new MCRPersistenceException(msg, exc);
         }
+    }
+
+    protected int getConnectTimeout() {
+        return MCRConfiguration.instance().getInt("MCR.IFS.AVExtender.ConnectTimeout", 0);
     }
 }

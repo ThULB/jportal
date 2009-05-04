@@ -16,7 +16,7 @@
   </host>
   <host 
 	  alias="sample" 
-	  url="http://mycoresamplelinux.dl.uni-leipzig.de/"
+	  url="http://www.mycore.de:8291/"
 	  class="org.mycore.services.fieldquery.MCRQueryClientWebService"
 	  access="webservice"
 	  servicepath="services/MCRWebService"

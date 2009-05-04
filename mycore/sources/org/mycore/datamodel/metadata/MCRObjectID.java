@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14941 $ $Date: 2009-03-18 12:03:35 +0100 (Mi, 18. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -41,7 +41,7 @@ import org.mycore.datamodel.common.MCRXMLTableManager;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14941 $ $Date: 2009-03-18 12:03:35 +0100 (Mi, 18. Mär 2009) $
  */
 public final class MCRObjectID {
     /**
@@ -183,12 +183,9 @@ public final class MCRObjectID {
                     mcrid.append(i);
                     mylastnumber = i;
                 } else {
-                    mylastnumber += 1;
-
                     while ((mylastnumber % number_distance) != 0) {
                         mylastnumber += 1;
                     }
-
                     mcrid.append(mylastnumber);
                 }
 

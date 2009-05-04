@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08. Okt 2008) $
+ * $Revision: 14870 $ $Date: 2009-03-13 12:15:22 +0100 (Fr, 13. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -56,7 +56,8 @@ import org.mycore.common.MCRConfiguration;
  * </ul>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14091 $ $Date: 2008-10-08 10:49:31 +0200 (Mi, 08. Okt 2008) $
+ * @author Matthias Eichner
+ * @version $Revision: 14870 $ $Date: 2009-03-13 12:15:22 +0100 (Fr, 13. Mär 2009) $
  */
 public class MCRObjectService {
     // service data
@@ -90,7 +91,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode read the XML input stream part from a DOM part for the
+     * This method read the XML input stream part from a DOM part for the
      * structure data of the document.
      * 
      * @param service_element
@@ -179,11 +180,11 @@ public class MCRObjectService {
      * @return the date as GregorianCalendar
      */
     public final Date getDate(String type) {
-    	MCRMetaISO8601Date isoDate = getISO8601Date(type);
-    	if(isoDate == null){
-        	return null;
-    	}
-		return isoDate.getDate();
+        MCRMetaISO8601Date isoDate = getISO8601Date(type);
+        if(isoDate == null){
+            return null;
+        }
+        return isoDate.getDate();
     }
     
     private final MCRMetaISO8601Date getISO8601Date(String type){
@@ -208,7 +209,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode set a date element in the dates list to a actual date value.
+     * This method set a date element in the dates list to a actual date value.
      * If the given type exists, the date was update.
      * 
      * @param type
@@ -219,7 +220,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode set a date element in the dates list to a given date value.
+     * This method set a date element in the dates list to a given date value.
      * If the given type exists, the date was update.
      * 
      * @param type
@@ -239,7 +240,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode set a date element in the dates list to a given date value.
+     * This method set a date element in the dates list to a given date value.
      * If the given type exists, the date was update.
      * 
      * @param date
@@ -274,7 +275,7 @@ public class MCRObjectService {
      * This method adds a flag to the flag list.
      * 
      * @param type
-     *              an type as string
+     *              a type as string
      * @param value
      *              the new flag value as string
      */
@@ -287,8 +288,7 @@ public class MCRObjectService {
         MCRMetaLangText flag = new MCRMetaLangText("service", "servflag", null, type, 0, null, value);
         flags.add(flag);        
     }
-    
-    
+
     /**
      * This method get all flags from the flag list as a string.
      * 
@@ -368,13 +368,13 @@ public class MCRObjectService {
      */
     public final String getFlagType(int index) throws IndexOutOfBoundsException {
         if ((index < 0) || (index > flags.size())) {
-            throw new IndexOutOfBoundsException("Index error in getFlag.");
+            throw new IndexOutOfBoundsException("Index error in getFlagType.");
         }
         return flags.get(index).getType();       
     }
 
     /**
-     * This methode return a boolean value if the given flag is set or not.
+     * This method return a boolean value if the given flag is set or not.
      * 
      * @param value
      *            a searched flag
@@ -409,7 +409,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode remove a flag from the flag list.
+     * This method remove a flag from the flag list.
      * 
      * @param index
      *            a index in the list
@@ -481,7 +481,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode add a rule to the rules list.
+     * This method add a rule to the rules list.
      * 
      * @param permission -
      *            the new permission as string
@@ -529,7 +529,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode get a single rule from the rules list as a JDOM Element.
+     * This method get a single rule from the rules list as a JDOM Element.
      * 
      * @exception IndexOutOfBoundsException
      *                throw this exception, if the index is false
@@ -543,7 +543,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode get a single permission name of rule from the rules list as a
+     * This method get a single permission name of rule from the rules list as a
      * string.
      * 
      * @exception IndexOutOfBoundsException
@@ -558,7 +558,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode remove a rule from the rules list.
+     * This method remove a rule from the rules list.
      * 
      * @param index
      *            a index in the list
@@ -573,7 +573,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode create a XML stream for all structure data.
+     * This method create a XML stream for all structure data.
      * 
      * @exception MCRException
      *                if the content of this class is not valid
@@ -646,7 +646,7 @@ public class MCRObjectService {
     }
 
     /**
-     * This methode returns the index for the given flag value.
+     * This method returns the index for the given flag value.
      * 
      * @param value
      *            the value of a flag as string

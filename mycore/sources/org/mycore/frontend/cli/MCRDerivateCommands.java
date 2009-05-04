@@ -1,5 +1,5 @@
 /*
- * $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15. Jul 2008) $
+ * $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  * 
  * This file is part of M y C o R e See http://www.mycore.de/ for details. This program is free software; you can use it, redistribute it and / or modify it
  * under the terms of the GNU General Public License (GPL) as published by the Free Software Foundation; either version 2 of the License or (at your option) any
@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -46,7 +47,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Frank Luetzenkirchen
- * @version $Revision: 13751 $ $Date: 2008-07-15 12:00:32 +0200 (Di, 15. Jul 2008) $
+ * @version $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  */
 public class MCRDerivateCommands extends MCRAbstractCommands {
     /** The logger */
@@ -466,10 +467,10 @@ public class MCRDerivateCommands extends MCRAbstractCommands {
             obj.getDerivate().getInternals().setSourcePath(nid.toString());
             LOGGER.info("New Internal Path ====>" + nid.toString());
             // add ACL's
-            List l = ACCESS_IMPL.getPermissionsForID(nid.toString());
-            for (int i = 0; i < l.size(); i++) {
-                Element rule = ACCESS_IMPL.getRule(nid.toString(), (String) l.get(i));
-                obj.getService().addRule((String) l.get(i), rule);
+            Collection<String> l = ACCESS_IMPL.getPermissionsForID(nid.toString());
+            for (String permission : l) {
+                Element rule = ACCESS_IMPL.getRule(nid.toString(), permission);
+                obj.getService().addRule(permission, rule);
             }
             // build JDOM
             xml = obj.createXML();

@@ -51,7 +51,7 @@
       <cell row="1" col="4" anchor="WEST" ref="SMTitle" />
 
       <!-- Search in field "author" with operator "contains" -->
-      <hidden var="conditions/boolean/condition3/@field" default="author" />
+      <hidden var="conditions/boolean/condition3/@field" default="authorTitle" />
       <hidden var="conditions/boolean/condition3/@operator" default="contains" />
       <cell row="2" col="1" anchor="EAST">
         <text i18n="editor.search.document.author"/>
@@ -73,7 +73,7 @@
       <cell row="3" col="2" anchor="WEST" var="conditions/boolean/condition4/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[CountDocument]:2:children:DocPortal_class_00000002" cacheable="false" />
+          <include uri="classification:editor[CountDocument]:2:noEmptyLeaves:children:DocPortal_class_00000002" cacheable="false" />
         </list>
       </cell>
       <cell row="3" col="3" anchor="WEST">
@@ -90,7 +90,7 @@
       <cell row="4" col="2" anchor="WEST" var="conditions/boolean/condition5/@value">
         <list type="dropdown">
           <item value="" i18n="editor.search.choose" />
-          <include uri="classification:editor[TextCounter]:2:children:DocPortal_class_00000005" cacheable="false" />
+          <include uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000005" cacheable="false" />
         </list>
       </cell>
       <cell row="4" col="3" anchor="WEST">

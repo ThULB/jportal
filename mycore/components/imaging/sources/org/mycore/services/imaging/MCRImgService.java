@@ -34,6 +34,10 @@ public class MCRImgService {
 
     private static Logger LOGGER = Logger.getLogger(MCRImgService.class.getName());
 
+    public enum ScaleMode {
+        fitWidth, fitHeight, normal
+    }
+
     public MCRImgService() {
         MCRConfiguration config = MCRConfiguration.instance();
         USE_CACHE = (new Boolean(config.getString("MCR.Module-iview.useCache"))).booleanValue();
@@ -42,7 +46,7 @@ public class MCRImgService {
     // Image getter methods
 
     // fit to Width x Heigth, even Thumbnail
-    public void getImage(MCRFile image, int newWidth, int newHeight, OutputStream output) throws IOException {
+    public void getImage(MCRFile image, int newWidth, int newHeight, OutputStream output, ScaleMode scaleMode) throws IOException {
         MCRConfiguration config = MCRConfiguration.instance();
         ImgProcessor processor = new MCRImgProcessor();
         float jpegQuality = java.lang.Float.parseFloat(config.getString("MCR.Module-iview.jpegQuality"));
@@ -50,7 +54,6 @@ public class MCRImgService {
 
         String filename = image.getName();
 
-        boolean outputFilled = false;
         float scaleHelp = 1;
 
         try {
@@ -100,7 +103,6 @@ public class MCRImgService {
                 LOGGER.debug("Get Thumbnail from ImgCache for " + filename);
 
                 cache.getImage(image, MCRImgCacheManager.THUMB, output);
-                outputFilled = true;
                 // newWidth <= cacheWidth && newHeight <= cacheHeight
             } else if ((newWidth <= cacheWidth) && cache.existInCache(image, MCRImgCacheManager.CACHE)) {
                 LOGGER.debug("Get Cache from ImgCache for " + filename);
@@ -119,15 +121,35 @@ public class MCRImgService {
                 input = image.getContentAsInputStream();
             }
 
-            if (!outputFilled) {
-                processor.resize(input, newWidth, newHeight, output);
-                input.close();
+            if (input != null) {
+                try {
+                    switch (scaleMode) {
+                    case fitWidth:
+                        processor.resizeFitWidth(input, newWidth, output);
+                        break;
+                    default:
+                        processor.resize(input, newWidth, newHeight, output);
+                        break;
+                    }
+                } finally {
+                    input.close();
+                }
             }
         } else {
             LOGGER.debug("Get " + filename + " Width x Height - use Processor");
             InputStream input = image.getContentAsInputStream();
-            processor.resize(input, newWidth, newHeight, output);
-            input.close();
+            try {
+                switch (scaleMode) {
+                case fitWidth:
+                    processor.resizeFitWidth(input, newWidth, output);
+                    break;
+                default:
+                    processor.resize(input, newWidth, newHeight, output);
+                    break;
+                }
+            } finally {
+                input.close();
+            }
         }
 
         output.close();
@@ -147,7 +169,8 @@ public class MCRImgService {
         getImage(image, xTopPos, yTopPos, boundWidth, boundHeight, (float) boundWidth / (float) origWidth, output);
     }
 
-    public void getImage(MCRFile image, int xTopPos, int yTopPos, int boundWidth, int boundHeight, float scaleFactor, OutputStream output) throws IOException {
+    public void getImage(MCRFile image, int xTopPos, int yTopPos, int boundWidth, int boundHeight, float scaleFactor, OutputStream output)
+            throws IOException {
         MCRConfiguration config = MCRConfiguration.instance();
         ImgProcessor processor = new MCRImgProcessor();
         float jpegQuality = java.lang.Float.parseFloat(config.getString("MCR.Module-iview.jpegQuality"));
@@ -188,10 +211,8 @@ public class MCRImgService {
             LOGGER.debug("getImage - ROI # OrigHeight: " + origHeight);
 
             int resWidth = (int) (scaleFactor * origWidth);
-            int resHeight = (int) (scaleFactor * origHeight);
 
             int cacheWidth = Integer.parseInt(config.getString("MCR.Module-iview.cache.size.width"));
-            int cacheHeight = Integer.parseInt(config.getString("MCR.Module-iview.cache.size.height"));
 
             xTopPos = (int) (xTopPos * scaleFactor);
             yTopPos = (int) (yTopPos * scaleFactor);

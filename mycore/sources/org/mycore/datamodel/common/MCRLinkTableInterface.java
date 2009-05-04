@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,14 +23,14 @@
 
 package org.mycore.datamodel.common;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 /**
  * This interface is designed to choose the persistence for the link tables.
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14986 $ $Date: 2009-03-20 21:41:45 +0100 (Fr, 20. Mär 2009) $
  */
 public interface MCRLinkTableInterface {
     
@@ -88,7 +88,7 @@ public interface MCRLinkTableInterface {
      * mcrto;
      * 
      */
-    public Map getCountedMapOfMCRTO(String mcrtoPrefix);
+    public Map<String, Number> getCountedMapOfMCRTO(String mcrtoPrefix);
 
     /**
      * Returns a List of all link sources of <code>to</code> and a special
@@ -101,7 +101,7 @@ public interface MCRLinkTableInterface {
      *            classid, child, parent, reference and derivate.
      * @return List of Strings (Source-IDs)
      */
-    public List getSourcesOf(String to, String type);
+    public Collection<String> getSourcesOf(String to, String type);
 
     /**
      * Returns a List of all link destination of <code>from</code> and a
@@ -114,6 +114,6 @@ public interface MCRLinkTableInterface {
      *            classid, child, parent, reference and derivate.
      * @return List of Strings (Destination-IDs)
      */
-    public List getDestinationsOf(String from, String type);
+    public Collection<String> getDestinationsOf(String from, String type);
 
 }

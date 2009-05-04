@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14487 $ $Date: 2008-11-26 14:46:55 +0100 (Mi, 26. Nov 2008) $
+ * $Revision: 15102 $ $Date: 2009-04-22 16:40:15 +0200 (Mi, 22. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -28,6 +28,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -51,18 +53,24 @@ import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.Hits;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopFieldDocCollector;
+import org.apache.lucene.search.TopFieldDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.jdom.Element;
-
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRException;
@@ -85,6 +93,8 @@ import org.mycore.services.plugins.TextFilterPluginManager;
  * @author Thomas Scheffler (yagee)
  */
 public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler.Closeable {
+    private static final String SORTABLE_SUFFIX = ".sortable";
+
     /** The logger */
     private final static Logger LOGGER = Logger.getLogger(MCRLuceneSearcher.class);
 
@@ -158,9 +168,8 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         }
         // should work like GermanAnalyzer without stemming and removing of stopwords
         SimpleAnalyzer simpleAnalyzer = new SimpleAnalyzer();
-        List fds = MCRFieldDef.getFieldDefs(getIndex());
-        for (int i = 0; i < fds.size(); i++) {
-            MCRFieldDef fd = (MCRFieldDef) (fds.get(i));
+        List<MCRFieldDef> fds = MCRFieldDef.getFieldDefs(getIndex());
+        for (MCRFieldDef fd : fds) {
             if ("name".equals(fd.getDataType())) {
                 ((PerFieldAnalyzerWrapper) analyzer).addAnalyzer(fd.getName(), simpleAnalyzer);
             }
@@ -241,6 +250,10 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         modifyIndex(modifyAction);
     }
 
+    /**
+     * As opposed to {@link MCRSearcher} the returned MCRResult is read only.
+     * @see MCRSearcher#search(MCRCondition, int, List, boolean)
+     */
     public MCRResults search(MCRCondition condition, int maxResults, List<MCRSortBy> sortBy, boolean addSortData) {
         MCRResults results = new MCRResults();
 
@@ -269,66 +282,59 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         if (maxResults <= 0)
             maxResults = 1000000;
 
-        Hits hits;
-        int found;
-
-        synchronized (CONFIG) {
-            long start = System.currentTimeMillis();
-            try {
-                if (indexReader == null && indexSearcher == null) {
-                    //Lucene 2.4.0 has problems with initializing IndexReader with File|String
-                    //see https://issues.apache.org/jira/browse/LUCENE-1430
-                    FSDirectory indexDir = FSDirectory.getDirectory(IndexDir.getAbsolutePath());
-                    indexReader = IndexReader.open(indexDir);
+        long start = System.currentTimeMillis();
+        if (indexReader == null && indexSearcher == null) {
+            //Lucene 2.4.0 has problems with initializing IndexReader with File|String
+            //see https://issues.apache.org/jira/browse/LUCENE-1430
+            FSDirectory indexDir = FSDirectory.getDirectory(IndexDir.getAbsolutePath());
+            indexReader = IndexReader.open(indexDir);
+            indexSearcher = new IndexSearcher(indexReader);
+        } else {
+            if (!indexReader.isCurrent()) {
+                IndexReader newReader = indexReader.reopen();
+                if (newReader != indexReader) {
+                    LOGGER.info("new Searcher for index: " + ID);
+                    indexReader.close();
+                    indexSearcher.close();
+                    indexReader = newReader;
                     indexSearcher = new IndexSearcher(indexReader);
-                } else {
-                    if (!indexReader.isCurrent()) {
-                        IndexReader newReader = indexReader.reopen();
-                        if (newReader != indexReader) {
-                            LOGGER.info("new Searcher for index: " + ID);
-                            indexReader.close();
-                            indexSearcher.close();
-                            indexReader = newReader;
-                            indexSearcher = new IndexSearcher(indexReader);
-                        }
-                    }
-                }
-
-            } catch (IOException e) {
-                LOGGER.error(e.getClass().getName() + ": " + e.getMessage());
-                LOGGER.error(MCRException.getStackTraceAsString(e));
-            }
-            hits = indexSearcher.search(luceneQuery);
-            found = hits.length();
-            LOGGER.info("Number of Objects found : " + found + " Time for Search: " + (System.currentTimeMillis() - start));
-        }
-
-        MCRResults result = new MCRResults();
-        DecimalFormat df = new DecimalFormat("0.00000000000");
-
-        for (int i = 0; i < found; i++) {
-            org.apache.lucene.document.Document doc = hits.doc(i);
-            // org.apache.lucene.document.Document doc = searcher.doc(hits.scoreDocs[i].doc);
-
-            String id = doc.get("returnid");
-            MCRHit hit = new MCRHit(id);
-
-            for (int j = 0; j < addableFields.size(); j++) {
-                MCRFieldDef fd = addableFields.elementAt(j);
-                String value = doc.get(fd.getName());
-                if (null != value) {
-                    MCRFieldValue fv = new MCRFieldValue(fd, value);
-                    hit.addMetaData(fv);
                 }
             }
-
-            String score = df.format(hits.score(i));
-            // String score = Float.toString(hits.scoreDocs[i].score);
-            addSortDataToHit(sortBy, doc, hit, score);
-            result.addHit(hit);
         }
 
+        final Sort sortFields = buildSortFields(sortBy);
+        TopFieldDocCollector collector = new TopFieldDocCollector(indexReader, sortFields, maxResults);
+        indexSearcher.search(luceneQuery, collector);
+        //Lucene 2.4.1 has a bug: be sure to call collector.topDocs() just once
+        //see http://issues.apache.org/jira/browse/LUCENE-942
+        TopFieldDocs topFieldDocs = (TopFieldDocs) collector.topDocs();
+        LOGGER.info("Number of Objects found: " + topFieldDocs.scoreDocs.length + " Time for Search: "
+                + (System.currentTimeMillis() - start));
+        MCRResults result = new MCRLuceneResults(indexSearcher, topFieldDocs, addableFields);
         return result;
+    }
+
+    private Sort buildSortFields(List<MCRSortBy> sortBy) {
+        ArrayList<SortField> sortList = new ArrayList<SortField>(sortBy.size());
+        for (MCRSortBy sortByElement : sortBy) {
+            SortField sortField;
+            if (sortByElement.getField().getName().equals("score"))
+                sortField = SortField.FIELD_SCORE;
+            else {
+                String name = sortByElement.getField().getName();
+                if (isTokenized(sortByElement.getField())) {
+                    name += SORTABLE_SUFFIX;
+                }
+                sortField = new SortField(name, sortByElement.getSortOrder() == MCRSortBy.DESCENDING);
+            }
+            sortList.add(sortField);
+        }
+        if (LOGGER.isDebugEnabled()) {
+            for (SortField sortField : sortList) {
+                LOGGER.info("Sort by: " + sortField.getField() + (sortField.getReverse() ? " descending" : " accending"));
+            }
+        }
+        return new Sort(sortList.toArray(new SortField[0]));
     }
 
     /**
@@ -345,26 +351,28 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
             MCRSortBy sb = sortBy.get(j);
             MCRFieldDef fds = sb.getField();
             if (null != fds) {
-				String field = fds.getName();
-				if ("score".equals(field)) {
-					if (null != score) {
-						MCRFieldDef fd = MCRFieldDef.getDef(field);
-						MCRFieldValue fv = new MCRFieldValue(fd, score);
-						hit.addSortData(fv);
-					}
-				} else {
-					String values[] = doc.getValues(field);
-					for (int i = 0; i < values.length; i++) {
-						MCRFieldDef fd = MCRFieldDef.getDef(field);
-						MCRFieldValue fv = new MCRFieldValue(fd, values[i]);
-						hit.addSortData(fv);
-					}
-				}
-			}
+                String field = fds.getName();
+                if ("score".equals(field)) {
+                    if (null != score) {
+                        MCRFieldDef fd = MCRFieldDef.getDef(field);
+                        MCRFieldValue fv = new MCRFieldValue(fd, score);
+                        hit.addSortData(fv);
+                    }
+                } else {
+                    if (isTokenized(fds)) {
+                        field += SORTABLE_SUFFIX;
+                    }
+                    String values[] = doc.getValues(field);
+                    for (int i = 0; i < values.length; i++) {
+                        MCRFieldValue fv = new MCRFieldValue(fds, values[i]);
+                        hit.addSortData(fv);
+                    }
+                }
+            }
         }
     }
 
-    public void addToIndex(String entryID, String returnID, List fields) {
+    public void addToIndex(String entryID, String returnID, List<MCRFieldValue> fields) {
         LOGGER.info("MCRLuceneSearcher indexing data of " + entryID);
 
         if ((fields == null) || (fields.size() == 0)) {
@@ -373,8 +381,8 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
 
         try {
             Document doc = buildLuceneDocument(fields);
-            doc.add(new Field("mcrid", entryID, Field.Store.YES, Field.Index.UN_TOKENIZED));
-            doc.add(new Field("returnid", returnID, Field.Store.YES, Field.Index.UN_TOKENIZED));
+            doc.add(new Field("mcrid", entryID, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.add(new Field("returnid", returnID, Field.Store.YES, Field.Index.NOT_ANALYZED));
             LOGGER.debug("lucene document build " + entryID);
             addDocumentToLucene(doc, analyzer);
         } catch (Exception e) {
@@ -399,7 +407,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 IndexWriterAction modifyAction = IndexWriterAction.addRamDir(modifyExecutor, ramDir);
                 modifyIndex(modifyAction);
                 ramDir = new RAMDirectory();
-                writerRamDir = new IndexWriter(ramDir, analyzer, true);
+                writerRamDir = new IndexWriter(ramDir, analyzer, true, MaxFieldLength.LIMITED);
                 ramDirEntries = 0;
             }
         } else {
@@ -421,7 +429,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
      * @return The lucene document
      * 
      */
-    public static Document buildLuceneDocument(List fields) throws Exception {
+    public static Document buildLuceneDocument(List<MCRFieldValue> fields) throws Exception {
         Document doc = new Document();
 
         for (int i = 0; i < fields.size(); i++) {
@@ -438,7 +446,8 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 if (PLUGIN_MANAGER.isSupported(mcrfile.getContentType())) {
                     LOGGER.debug("####### Index MCRFile: " + mcrfile.getPath());
 
-                    BufferedReader in = new BufferedReader(PLUGIN_MANAGER.transform(mcrfile.getContentType(), mcrfile.getContentAsInputStream()));
+                    BufferedReader in = new BufferedReader(PLUGIN_MANAGER.transform(mcrfile.getContentType(), mcrfile
+                            .getContentAsInputStream()));
                     String s;
                     StringBuffer text = new StringBuffer();
                     while ((s = in.readLine()) != null) {
@@ -448,7 +457,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                     s = text.toString();
                     s = MCRNormalizer.normalizeString(s);
 
-                    doc.add(new Field(name, s, Field.Store.NO, Field.Index.TOKENIZED));
+                    doc.add(new Field(name, s, Field.Store.NO, Field.Index.ANALYZED));
                 }
             } else {
                 if ("date".equals(type) || "time".equals(type) || "timestamp".equals(type)) {
@@ -465,13 +474,15 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 }
 
                 if (type.equals("identifier")) {
-                    doc.add(new Field(name, content, Field.Store.YES, Field.Index.UN_TOKENIZED));
+                    doc.add(new Field(name, content, Field.Store.YES, Field.Index.NOT_ANALYZED));
                 }
 
                 if (type.equals("Text") || type.equals("name") || (type.equals("text") && field.getField().isSortable())) {
-                    doc.add(new Field(name, content, Field.Store.YES, Field.Index.TOKENIZED));
+                    doc.add(new Field(name, content, Field.Store.YES, Field.Index.ANALYZED));
+                    if (field.getField().isSortable())
+                        doc.add(new Field(name + SORTABLE_SUFFIX, content, Field.Store.YES, Field.Index.NOT_ANALYZED));
                 } else if (type.equals("text")) {
-                    doc.add(new Field(name, content, Field.Store.NO, Field.Index.TOKENIZED));
+                    doc.add(new Field(name, content, Field.Store.NO, Field.Index.ANALYZED));
                 }
             }
         }
@@ -479,18 +490,25 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         return doc;
     }
 
-    public void addSortData(Iterator hits, List<MCRSortBy> sortBy) {
+    private boolean isTokenized(MCRFieldDef fieldDef) {
+        String type = fieldDef.getDataType();
+        if (type.equals("Text") || type.equals("name") || type.equals("text"))
+            return true;
+        return false;
+    }
+
+    public void addSortData(Iterator<MCRHit> hits, List<MCRSortBy> sortBy) {
         try {
             while (hits.hasNext()) {
-                MCRHit hit = (MCRHit) hits.next();
+                MCRHit hit = hits.next();
                 String id = hit.getID();
                 Term te1 = new Term("mcrid", id);
 
                 TermQuery qu = new TermQuery(te1);
 
-                Hits hitl = indexSearcher.search(qu);
-                if (hitl.length() > 0) {
-                    org.apache.lucene.document.Document doc = hitl.doc(0);
+                TopDocs hitl = indexSearcher.search(qu, 1);
+                if (hitl.totalHits > 0) {
+                    org.apache.lucene.document.Document doc = indexSearcher.doc(hitl.scoreDocs[0].doc);
                     addSortDataToHit(sortBy, doc, hit, null);
                 }
             }
@@ -501,7 +519,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
 
     public void clearIndex() {
         try {
-            IndexWriter writer = new IndexWriter(IndexDir, analyzer, true);
+            IndexWriter writer = new IndexWriter(IndexDir, analyzer, true, MaxFieldLength.LIMITED);
             writer.close();
         } catch (IOException e) {
             LOGGER.error(e.getClass().getName() + ": " + e.getMessage());
@@ -528,7 +546,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         if ("rebuild".equals(mode) || "insert".equals(mode)) {
             try {
                 ramDir = new RAMDirectory();
-                writerRamDir = new IndexWriter(ramDir, analyzer, true);
+                writerRamDir = new IndexWriter(ramDir, analyzer, true, MaxFieldLength.LIMITED);
                 ramDirEntries = 0;
                 useRamDir = true;
             } catch (Exception e) {
@@ -678,6 +696,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
         }
 
         private synchronized void closeIndexWriter() {
+            //TODO: check if indexWriter.commit() is sufficient here
             Lock writerLock = IndexCloserLock.writeLock();
             try {
                 //do not allow IndexWriterAction being processed while closing IndexWriter
@@ -706,7 +725,7 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
                 LOGGER.info("No Entries in Directory, initialize: " + indexDir);
                 create = true;
             }
-            modifier = new IndexWriter(indexDir, analyzer, create);
+            modifier = new IndexWriter(indexDir, analyzer, create, MaxFieldLength.LIMITED);
             modifier.setMergeFactor(200);
             modifier.setMaxBufferedDocs(2000);
             return modifier;
@@ -832,5 +851,171 @@ public class MCRLuceneSearcher extends MCRSearcher implements MCRShutdownHandler
             }
         }
 
+    }
+
+    /**
+     * This class is a special Lucene version of MCRResults
+     * It is read only but fast on large result set as it is filled lazy. 
+     * @author Thomas Scheffler (yagee)
+     */
+    private static class MCRLuceneResults extends MCRResults {
+
+        private TopFieldDocs topDocs;
+
+        private IndexSearcher indexSearcher;
+
+        private Collection<MCRFieldDef> addableFields;
+
+        private static final DecimalFormat df = new DecimalFormat("0.00000000000");
+
+        private boolean loadComplete = false;
+
+        public MCRLuceneResults(IndexSearcher indexSearcher, TopFieldDocs topDocs, Collection<MCRFieldDef> addableFields) {
+            super();
+            this.indexSearcher = indexSearcher;
+            this.topDocs = topDocs;
+            this.addableFields = addableFields;
+            topDocs.totalHits = topDocs.scoreDocs.length;
+            super.hits = new ArrayList<MCRHit>(topDocs.totalHits);
+            super.hits.addAll(Collections.nCopies(topDocs.totalHits, (MCRHit) null));
+            setSorted(true);
+        }
+
+        @Override
+        public boolean isReadonly() {
+            return true;
+        }
+
+        @Override
+        public void addHit(MCRHit hit) {
+            throw new UnsupportedOperationException("MCRResults are read only");
+        }
+
+        @Override
+        protected int merge(org.jdom.Document doc, String hostAlias) {
+            throw new UnsupportedOperationException("MCRResults are read only");
+        }
+
+        @Override
+        protected MCRHit getHit(String key) {
+            if (!loadComplete) {
+                for (int i = 0; i < getNumHits(); i++)
+                    inititializeTopDoc(i);
+                loadComplete = true;
+            }
+            return super.getHit(key);
+        }
+
+        @Override
+        public MCRHit getHit(int i) {
+            if (i < 0 || i > topDocs.totalHits) {
+                return null;
+            }
+            MCRHit hit = super.getHit(i);
+            if (hit == null) {
+                inititializeTopDoc(i);
+                hit = super.getHit(i);
+            }
+            return hit;
+        }
+
+        private void inititializeTopDoc(int i) {
+            //initialize
+            MCRHit hit;
+            try {
+                hit = getMCRHit(topDocs.scoreDocs[i]);
+            } catch (Exception e) {
+                if (topDocs.scoreDocs.length <= i) {
+                    throw new MCRException("TopDocs is not initialized.", e);
+                }
+                throw new MCRException("Error while fetching Lucene document: " + topDocs.scoreDocs[i].doc, e);
+            }
+            super.hits.set(i, hit);
+            MCRHit oldHit = super.map.get(hit.getKey());
+            if (oldHit != null)
+                oldHit.merge(hit);
+            else
+                super.map.put(hit.getKey(), hit);
+        }
+
+        private MCRHit getMCRHit(ScoreDoc scoreDoc) throws CorruptIndexException, IOException {
+            org.apache.lucene.document.Document doc = indexSearcher.doc(scoreDoc.doc);
+
+            String id = doc.get("returnid");
+            MCRHit hit = new MCRHit(id);
+
+            for (MCRFieldDef fd : addableFields) {
+                String value = doc.get(fd.getName());
+                if (null != value) {
+                    MCRFieldValue fv = new MCRFieldValue(fd, value);
+                    hit.addMetaData(fv);
+                }
+            }
+
+            String score = df.format(scoreDoc.score);
+            addSortDataToHit(doc, hit, score, topDocs.fields);
+            return hit;
+        }
+
+        private static void addSortDataToHit(org.apache.lucene.document.Document doc, MCRHit hit, String score, SortField[] sortFields) {
+            for (SortField sortField : sortFields) {
+                String fieldName;
+                if (sortField.getField().endsWith(SORTABLE_SUFFIX))
+                    fieldName = sortField.getField().substring(0, sortField.getField().length() - SORTABLE_SUFFIX.length());
+                else
+                    fieldName = sortField.getField();
+                if (SortField.FIELD_SCORE == sortField || sortField.getField() == null) {
+                    if (null != score) {
+                        MCRFieldDef fd = MCRFieldDef.getDef("score");
+                        MCRFieldValue fv = new MCRFieldValue(fd, score);
+                        hit.addSortData(fv);
+                    }
+                } else {
+                    String values[] = doc.getValues(sortField.getField());
+                    for (int i = 0; i < values.length; i++) {
+                        MCRFieldValue fv = new MCRFieldValue(MCRFieldDef.getDef(fieldName), values[i]);
+                        hit.addSortData(fv);
+                    }
+                }
+
+            }
+        }
+
+        @Override
+        public int getNumHits() {
+            return topDocs.totalHits;
+        }
+
+        @Override
+        public void cutResults(int maxResults) {
+            while ((hits.size() > maxResults) && (maxResults > 0)) {
+                MCRHit hit = hits.remove(hits.size() - 1);
+                topDocs.totalHits--;
+                if (hit != null)
+                    map.remove(hit.getKey());
+            }
+        }
+
+        @Override
+        public Iterator<MCRHit> iterator() {
+            return new Iterator<MCRHit>() {
+                int i = 0;
+
+                public boolean hasNext() {
+                    return i < topDocs.totalHits;
+                }
+
+                public MCRHit next() {
+                    MCRHit hit = getHit(i);
+                    i++;
+                    return hit;
+                }
+
+                public void remove() {
+                    throw new UnsupportedOperationException("MCRResults are read only");
+                }
+
+            };
+        }
     }
 }

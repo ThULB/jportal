@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24. Apr 2008) $
+ * $Revision: 14909 $ $Date: 2009-03-16 18:06:26 +0100 (Mo, 16. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -49,7 +49,7 @@ import org.mycore.common.events.MCRSessionListener;
  * 
  * @author Detlev Degenhardt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13438 $ $Date: 2008-04-24 14:55:40 +0200 (Do, 24. Apr 2008) $
+ * @version $Revision: 14909 $ $Date: 2009-03-16 18:06:26 +0100 (Mo, 16. Mär 2009) $
  */
 public class MCRSessionMgr {
 
@@ -193,10 +193,10 @@ public class MCRSessionMgr {
     static ReentrantReadWriteLock getListenersLock() {
         return listenersLock;
     }
-    
-    public static void close(){
+
+    public static void close() {
         listenersLock.writeLock().lock();
-        for (MCRSession session:sessions.values()){
+        for (MCRSession session : sessions.values().toArray(new MCRSession[0])) {
             session.close();
         }
         listenersLock.writeLock().unlock();

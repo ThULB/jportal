@@ -93,7 +93,7 @@
       <!-- Corporation ********************************************* -->
 
       <xsl:if
-        test="./metadata/names/nickname | ./metadata/names/property">
+        test="./metadata/names/name/nickname | ./metadata/names/name/property">
         <tr>
           <td class="metaname">
             <xsl:value-of

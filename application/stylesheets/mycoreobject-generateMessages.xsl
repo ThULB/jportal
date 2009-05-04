@@ -28,7 +28,7 @@
       We define a helper variable to perform this filtering now.
     -->
     <xsl:variable name="unique-list"
-      select="./metadata/*/*[not(local-name()=local-name(following::*) and ((@type=following::*/@type) or (not(@type) and (following::*[not(@type)]))))]" />
+      select="./metadata/*/*[not(local-name()=local-name(following-sibling::*) and ((@type=following-sibling::*/@type) or (not(@type) and (following-sibling::*[not(@type)]))))]" />
     <xsl:for-each select="$unique-list">
       <xsl:sort select="local-name()" />
       <xsl:sort select="@type" />

@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
+ * $Revision: 14980 $ $Date: 2009-03-20 14:02:28 +0100 (Fr, 20. Mär 2009) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -38,7 +38,7 @@ import org.mycore.datamodel.classifications2.MCRLabel;
 /**
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
+ * @version $Revision: 14980 $ $Date: 2009-03-20 14:02:28 +0100 (Fr, 20. Mär 2009) $
  * @since 2.0
  */
 public abstract class MCRAbstractCategoryImpl implements MCRCategory {
@@ -57,10 +57,12 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
 
     protected final ReentrantReadWriteLock childrenLock = new ReentrantReadWriteLock();
 
-    private static final String defaultLang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "en");
+    private static String defaultLang;
 
     public MCRAbstractCategoryImpl() {
         super();
+        if (defaultLang == null)
+            defaultLang = MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "en");
     }
 
     public List<MCRCategory> getChildren() {
@@ -77,7 +79,7 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
         return children;
     }
 
-    abstract void setChildren(List<MCRCategory> children);
+    protected abstract void setChildren(List<MCRCategory> children);
 
     public MCRCategoryID getId() {
         return id;
@@ -158,6 +160,7 @@ public abstract class MCRAbstractCategoryImpl implements MCRCategory {
         MCRLabel label = getLabel(MCRSessionMgr.getCurrentSession().getCurrentLanguage());
         if (label != null)
             return label;
+        System.out.println("current Language:" + defaultLang);
         label = getLabel(defaultLang);
         if (label != null)
             return label;

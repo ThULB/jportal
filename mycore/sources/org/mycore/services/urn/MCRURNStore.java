@@ -1,6 +1,6 @@
 /**
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14766 $ $Date: 2009-02-19 10:49:52 +0100 (Do, 19. Feb 2009) $
  *
  * This file is part of ** M y C o R e **
  * Visit our homepage at http://www.mycore.de/ for details.
@@ -35,6 +35,9 @@ public interface MCRURNStore {
     /** Assigns the given urn to the given document ID */
     public void assignURN(String urn, String documentID);
 
+    /** Assigns the given urn to the given derivate ID */
+    public void assignURN(String urn, String derivate, String path, String filename);
+    
     /**
      * Retrieves the URN that is assigned to the given document ID
      * 
@@ -53,4 +56,13 @@ public interface MCRURNStore {
      * Removes the urn (and assigned document ID) from the persistent store
      */
     public void removeURN(String urn);
+    
+    /**
+     * Removes the urn (and assigned document ID) from the persistent store by the 
+     * given object id
+     */
+    public void removeURNByObjectID(String objID);
+    
+    /**Checks wether an object or derivate has an urn assigned*/
+    public boolean hasURNAssigned(String objId);
 }

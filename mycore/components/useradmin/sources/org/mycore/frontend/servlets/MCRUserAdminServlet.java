@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
+ * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -29,6 +29,8 @@ import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.MCRWebsiteWriteProtection;
 
 /**
@@ -36,7 +38,7 @@ import org.mycore.frontend.MCRWebsiteWriteProtection;
  * management of the mycore system.
  * 
  * @author Detlev Degenhardt
- * @version $Revision: 13529 $ $Date: 2008-05-22 13:24:38 +0200 (Do, 22. Mai 2008) $
+ * @version $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  */
 public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
     /**
@@ -72,11 +74,12 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
         if (mode == null) {
             mode = "";
         }
-
         if (mode.equals("newuser")) {
             createUser(job);
         } else if (mode.equals("modifyuser")) {
             modifyUser(job);
+        } else if (mode.equals("modifycontact")) {
+            modifyContact(job);
         } else if (mode.equals("listalluser")) {
             listallUser(job);
         } else if (mode.equals("newgroup")) {
@@ -84,7 +87,6 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
         } else if (mode.equals("modifygroup")) {
             modifyGroup(job);
         } else { // no valid mode
-
             String msg = "The request did not contain a valid mode for this servlet!";
             job.getResponse().sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
         }
@@ -101,20 +103,18 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
      */
     private void createUser(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("create-user")) {
+        if (!MCRAccessManager.checkPermission("create-user")) {
             showNoPrivsPage(job);
-
             return;
         }
 
-        // Now we redirect the browser to the create-user formular
+        // Now we redirect the browser to the create-user form
         String editorFormular = pageDir + "editor_form_create-user.xml";
         String base = getBaseURL() + editorFormular;
         Properties params = new Properties();
         params.put("cancelUrl", getBaseURL() + cancelPage);
         params.put("usecase", "create-user");
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(base, params)));
-
         return;
     }
 
@@ -129,25 +129,23 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
      */
     private void createGroup(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("create-group")) {
+        if (!MCRAccessManager.checkPermission("create-group")) {
             showNoPrivsPage(job);
             return;
         }
 
-        // Now we redirect the browser to the create-user formular
+        // Now we redirect the browser to the create-user form
         String editorFormular = pageDir + "editor_form_create-group.xml";
         String base = getBaseURL() + editorFormular;
         Properties params = new Properties();
         params.put("cancelUrl", getBaseURL() + cancelPage);
         params.put("usecase", "create-group");
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(base, params)));
-
         return;
     }
 
     /**
-     * This method handles the list all users use case. The result is the XML of
-     * userlist
+     * This method handles the list all users use case. The result is the XML list of the user
      * 
      * @param job
      *            The MCRServletJob instance
@@ -156,25 +154,24 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
      */
     private void listallUser(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("administrate-user")) {
+        if (!MCRAccessManager.checkPermission("administrate-user")) {
             showNoPrivsPage(job);
 
             return;
         }
 
-        // Now we redirect the browser to the userlist formular
+        // Now we redirect the browser to the user list form
         String UserServlet = getBaseURL() + "servlets/MCRUserEditorServlet?mode=retrievealluserxml";
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(UserServlet));
-
         return;
     }
 
     /**
-     * This method is still experimental !
+     * This method start the modification of all user data
      */
     private void modifyUser(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("modify-user")) {
+        if (!MCRAccessManager.checkPermission("modify-user")) {
             showNoPrivsPage(job);
             return;
         }
@@ -182,6 +179,9 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
         // Now we redirect the browser to the modify-user formular
         String editorFormular = pageDir + "editor_form_modify-user.xml";
         String uid = getProperty(job.getRequest(), "uid");
+        if (uid == null || uid.length() == 0) {
+            uid = MCRSessionMgr.getCurrentSession().getCurrentUserID();
+        }
         String base = getBaseURL() + editorFormular;
         Properties params = new Properties();
         params.put("uid", uid);
@@ -193,11 +193,33 @@ public class MCRUserAdminServlet extends MCRUserAdminGUICommons {
     }
 
     /**
+     * This method start the modification of user contact data
+     */
+    private void modifyContact(MCRServletJob job) throws IOException {
+        // get the system guest user
+        if (!MCRAccessManager.checkPermission("modify-user") && !MCRAccessManager.checkPermission("modify-contact")) {
+            showNoPrivsPage(job);
+            return;            
+        }
+        
+        // Now we redirect the browser to the modify-user formular
+        String editorFormular = pageDir + "editor_form_modify-contact.xml";
+        String uid = MCRSessionMgr.getCurrentSession().getCurrentUserID();
+        String base = getBaseURL() + editorFormular;
+        Properties params = new Properties();
+        params.put("uid", uid);
+        params.put("cancelUrl", getBaseURL() + cancelPage);
+        params.put("usecase", "modify-contact");
+        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(base, params)));
+        return;
+    }
+
+    /**
      * This method is still experimental !
      */
     private void modifyGroup(MCRServletJob job) throws IOException {
         // We first check the privileges for this use case
-        if (!AI.checkPermission("modify-user")) {
+        if (!MCRAccessManager.checkPermission("modify-user")) {
             showNoPrivsPage(job);
             return;
         }

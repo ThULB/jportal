@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15105 $ $Date: 2009-04-23 11:23:28 +0200 (Do, 23. Apr 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,7 +25,6 @@ package org.mycore.frontend.indexbrowser;
 
 import java.util.Enumeration;
 
-import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -37,10 +36,13 @@ import org.mycore.frontend.servlets.MCRServletJob;
  */
 public class MCRIndexBrowserServlet extends MCRServlet {
 
+    private static final long serialVersionUID = 4963472470316616461L;
+
     protected void doGetPost(MCRServletJob job) throws Exception {
-        Enumeration ee = job.getRequest().getParameterNames();
+        @SuppressWarnings("unchecked")
+        Enumeration<String> ee = job.getRequest().getParameterNames();
         while (ee.hasMoreElements()) {
-            String param = (String) ee.nextElement();
+            String param = ee.nextElement();
             System.out.println("PARAM: " + param + " VALUE: " + job.getRequest().getParameter(param));
         }
 
@@ -54,15 +56,16 @@ public class MCRIndexBrowserServlet extends MCRServlet {
         indexbrowser.getQuery();
         indexbrowser.getResultList();
         Document pageContent = indexbrowser.getXMLContent();
-
-        job.getRequest().setAttribute("XSL.Style", searchclass);
+        if (getProperty(job.getRequest(), "XSL.Style") == null) {
+            job.getRequest().setAttribute("XSL.Style", searchclass);
+        }
         getLayoutService().doLayout(job.getRequest(), job.getResponse(), pageContent);
     }
 
     private String getMode(MCRServletJob job) {
-        if (job.getRequest().getParameter("mode")!=null && !job.getRequest().getParameter("mode").trim().equals("")) {
+        if (job.getRequest().getParameter("mode") != null && !job.getRequest().getParameter("mode").trim().equals("")) {
             return job.getRequest().getParameter("mode").toLowerCase().trim();
-        } else 
+        } else
             return "prefix";
     }
 }

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,8 +27,6 @@ import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
-import org.mycore.access.MCRAccessInterface;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 
@@ -40,14 +38,12 @@ import org.mycore.common.MCRException;
  * 
  * @author Detlev Degenhardt
  * @author Jens Kupferschmidt
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  */
 abstract class MCRUserObject {
     protected static Logger logger = Logger.getLogger(MCRUserObject.class.getName());
 
     protected static MCRConfiguration config = null;
-    
-    protected static MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
     /** The maximum length of user and group names */
     public static final int id_len = 20;
@@ -96,9 +92,7 @@ abstract class MCRUserObject {
      *            Timestamp to set the creation date
      */
     public final void setCreationDate(Timestamp time) {
-        if (modificationIsAllowed()) {
             creationDate = time;
-        }
     }
 
     /**
@@ -106,9 +100,7 @@ abstract class MCRUserObject {
      * called.
      */
     public final void setCreationDate() {
-        if (modificationIsAllowed()) {
             creationDate = new Timestamp(new GregorianCalendar().getTime().getTime());
-        }
     }
 
     /**
@@ -119,9 +111,7 @@ abstract class MCRUserObject {
      *            Timestamp to set the modified date
      */
     public final void setModifiedDate(Timestamp time) {
-        if (modificationIsAllowed()) {
             modifiedDate = time;
-        }
     }
 
     /**
@@ -129,9 +119,7 @@ abstract class MCRUserObject {
      * called.
      */
     public final void setModifiedDate() {
-        if (modificationIsAllowed()) {
             modifiedDate = new Timestamp(new GregorianCalendar().getTime().getTime());
-        }
     }
 
     /**
@@ -141,9 +129,7 @@ abstract class MCRUserObject {
      *            the creator of a user or group
      */
     public final void setCreator(String creator) {
-        if (modificationIsAllowed()) {
             this.creator = trim(creator);
-        }
     }
 
     /**
@@ -192,13 +178,6 @@ abstract class MCRUserObject {
      * or group object as a JDOM element.
      */
     abstract public org.jdom.Element toJDOMElement() throws MCRException;
-
-    /**
-     * This method must be implemented by a subclass and the returns true if the
-     * current user or session may modify the current user object, false
-     * otherwise.
-     */
-    abstract public boolean modificationIsAllowed() throws MCRException;
 
     /**
      * This method must be implemented by a subclass and returns the the ID of

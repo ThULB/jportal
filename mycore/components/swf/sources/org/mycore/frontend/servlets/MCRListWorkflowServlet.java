@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14496 $ $Date: 2008-11-28 10:27:42 +0100 (Fr, 28. Nov 2008) $
+ * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -38,11 +38,11 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
-
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.xml.MCRXMLHelper;
@@ -59,7 +59,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * <p />
  * &gt;mcr_workflow type="..." step="..."&lt; <br />
  * &gt;item ID="..."&lt; <br />
- * &gt;label&lt;Die 99 582 am Lokschuppen in Sch�nheide&gt;/label&lt; <br />
+ * &gt;label&lt;Die 99 582 am Lokschuppen in Schoenheide&gt;/label&lt; <br />
  * &gt;data&lt;Jens Kupferschmidt&gt;/data&lt; <br />
  * &gt;data&lt;2004-06-08&gt;/data&lt; <br />
  * &gt;derivate ID="..." label="..."&lt; <br />
@@ -71,7 +71,7 @@ import org.mycore.frontend.workflow.MCRSimpleWorkflowManager;
  * <b>.../servlets/MCRListWorkflowServlet/XSL.Style=xml&type=...&step=... </b>
  * 
  * @author Jens Kupferschmidt
- * @version $Revision: 14496 $ $Date: 2008-11-28 10:27:42 +0100 (Fr, 28. Nov 2008) $
+ * @version $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
  */
 public class MCRListWorkflowServlet extends MCRServlet {
 
@@ -87,9 +87,6 @@ public class MCRListWorkflowServlet extends MCRServlet {
     private static String SLASH = System.getProperty("file.separator");
 
     private static String DefaultLang = null;
-
-    // The Access Manager
-    private static MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
     /** Initialisation of the servlet */
     public void init() throws MCRConfigurationException, javax.servlet.ServletException {
@@ -111,28 +108,66 @@ public class MCRListWorkflowServlet extends MCRServlet {
      *            an instance of MCRServletJob
      */
     public void doGetPost(MCRServletJob job) throws Exception {
+        // get the base
+        String base = getProperty(job.getRequest(), "base");
+        if (base != null) {
+            base = base.trim();
+            LOGGER.debug("MCRListWorkflowServlet : base = " + base);
+        }
+
         // get the type
-        String type = getProperty(job.getRequest(), "type").trim();
-        LOGGER.debug("MCRListWorkflowServlet : type = " + type);
+        String type = getProperty(job.getRequest(), "type");
+        if (type != null) {
+            type = type.trim();
+            LOGGER.debug("MCRListWorkflowServlet : type = " + type);
+        }
 
         // get the step
-        String step = getProperty(job.getRequest(), "step").trim();
-        LOGGER.debug("MCRListWorkflowServlet : step = " + step);
+        String step = getProperty(job.getRequest(), "step");
+        if (step != null) {
+            step = step.trim();
+            LOGGER.debug("MCRListWorkflowServlet : step = " + step);
+        }
+
+        if (((base == null) && (type == null)) || (step == null)) {
+            throw new MCRException("Wrong parameter input.");
+        }
 
         // get the lang
         String lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage();
         LOGGER.debug("MCRListWorkflowServlet : lang = " + lang);
 
+        if (type == null) {
+            int ibase = base.indexOf('_');
+            if (ibase == -1) {
+                type = base;
+            } else {
+                type = base.substring(ibase + 1);
+            }
+        }
         // read directory
-        ArrayList workfiles = new ArrayList();
-        ArrayList derifiles = new ArrayList();
+        ArrayList<String> workfiles;
+        ArrayList<String> derifiles;
 
-        if (AI.checkPermission("create-" + type)) {
-            workfiles = WFM.getAllObjectFileNames(type);
-            derifiles = WFM.getAllDerivateFileNames(type);
+        if (base != null && MCRAccessManager.checkPermission("create-" + base)) {
+            workfiles = WFM.getAllObjectFileNames(base);
+            derifiles = WFM.getAllDerivateFileNames(base);
+        } else {
+            if (MCRAccessManager.checkPermission("create-" + type)) {
+                workfiles = WFM.getAllObjectFileNames(type);
+                derifiles = WFM.getAllDerivateFileNames(type);
+            } else {
+                workfiles = new ArrayList<String>();
+                derifiles = new ArrayList<String>();
+            }
         }
 
-        String dirname = WFM.getDirectoryPath(type);
+        File dirname = null;
+        if (base != null) {
+            dirname = WFM.getDirectoryPath(base);
+        } else {
+            dirname = WFM.getDirectoryPath(type);
+        }
 
         // read the derivate XML files
         ArrayList<String> derobjid = new ArrayList<String>();
@@ -152,13 +187,13 @@ public class MCRListWorkflowServlet extends MCRServlet {
         for (int i = 0; i < derifiles.size(); i++) {
             dername = (String) derifiles.get(i);
 
-            StringBuffer sd = (new StringBuffer(dirname)).append(SLASH).append(dername);
+            File derivateFile = new File(dirname, dername);
             mainfile = "";
             label = "Derivate of " + dername.substring(0, dername.length() - 4);
             objid = "";
 
             try {
-                der_in = MCRXMLHelper.parseURI(sd.toString(), false);
+                der_in = MCRXMLHelper.parseURI(derivateFile.toURI().toString(), false);
                 // LOGGER.debug("Derivate file "+dername+" was readed.");
                 der = der_in.getRootElement();
                 label = der.getAttributeValue("label");
@@ -196,8 +231,16 @@ public class MCRListWorkflowServlet extends MCRServlet {
 
         // create a XML JDOM tree with master tag mcr_workflow
         // prepare the transformer stylesheet
-        String xslfile = "xsl/mycoreobject-" + type + "-to-workflow.xsl";
+        String xslfile = "xsl/mycoreobject-" + base + "-to-workflow.xsl";
         Document styleSheet = MCRXMLResource.instance().getResource(xslfile);
+        if (styleSheet == null) {
+            xslfile = "xsl/mycoreobject-" + type + "-to-workflow.xsl";
+            styleSheet = MCRXMLResource.instance().getResource(xslfile);
+            if (styleSheet == null) {
+                xslfile = "xsl/mycoreobject-to-workflow.xsl";
+                styleSheet = MCRXMLResource.instance().getResource(xslfile);
+            }
+        }
 
         // build the frame of mcr_workflow
         org.jdom.Element root = new org.jdom.Element("mcr_workflow");
@@ -219,37 +262,38 @@ public class MCRListWorkflowServlet extends MCRServlet {
         parameters.put("DefaultLang", DefaultLang);
         parameters.put("CurrentLang", lang);
         MCRXSLTransformation.setParameters(handler, parameters);
+        MCRAccessInterface ai = MCRAccessManager.getAccessImpl();
         // run the loop over all objects in the workflow
         for (int i = 0; i < workfiles.size(); i++) {
             String wfile = (String) workfiles.get(i);
-            StringBuffer sb = (new StringBuffer(dirname)).append(SLASH).append(wfile);
+            File wf = new File(dirname, wfile);
             org.jdom.Element elm = null;
 
             try {
-                workflow_in = MCRXMLHelper.parseURI(sb.toString(), false);
+                workflow_in = MCRXMLHelper.parseURI(wf.toURI().toString(), false);
                 MCRObject obj = new MCRObject();
                 obj.setFromJDOM(workflow_in);
                 MCRObjectService service = obj.getService();
                 int j = service.getRuleIndex("writewf");
                 if (j != -1) {
                     writewf = service.getRule(j).getCondition();
-                    if (!AI.checkPermission(writewf)) {
+                    if (!ai.checkPermission(writewf)) {
                         continue;
                     }
                 }
                 j = service.getRuleIndex("deletewf");
                 if (j != -1) {
                     deletewf = service.getRule(j).getCondition();
-                    bdeletewf = AI.checkPermission(deletewf);
+                    bdeletewf = ai.checkPermission(deletewf);
                 } else {
                     bdeletewf = true;
                 }
                 j = service.getRuleIndex("writedb");
                 if (j != -1) {
                     writedb = service.getRule(j).getCondition();
-                    bwritedb = AI.checkPermission(writedb);
+                    bwritedb = ai.checkPermission(writedb);
                 } else {
-                    bwritedb = AI.checkPermission(obj.getId().toString(), "writedb");
+                    bwritedb = MCRAccessManager.checkPermission(obj.getId().toString(), "writedb");
                 }
             } catch (Exception ex) {
                 if (LOGGER.isDebugEnabled()) {
@@ -295,7 +339,7 @@ public class MCRListWorkflowServlet extends MCRServlet {
                         LOGGER.debug("Derivate under " + dir.getName());
 
                         if (dir.isDirectory()) {
-                            ArrayList dirlist = MCRUtils.getAllFileNames(dir);
+                            ArrayList<String> dirlist = MCRUtils.getAllFileNames(dir);
 
                             for (int k = 0; k < dirlist.size(); k++) {
                                 org.jdom.Element file = new org.jdom.Element("file");

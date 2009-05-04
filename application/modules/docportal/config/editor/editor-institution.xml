@@ -22,7 +22,7 @@
     <hidden var="service/servdates" descendants="true" />
     <hidden var="service/servacls"  descendants="true" />
     <hidden var="service/servflags" descendants="true" />
-    <hidden var="metadata/@lang"    default="de" />
+    <hidden var="metadata/@xml:lang"    default="de" />
 
    <cell col="1" row="1" anchor="NORTHWEST" ref="LINameP"/>
    <cell col="2" row="1" anchor="NORTHWEST" ref="DIName"/>
@@ -85,7 +85,7 @@
     <hidden var="metadata/names/@notinherit" default="false"/>
     <hidden var="metadata/names/@heritable" default="true"/>
     <hidden var="metadata/names/name/@inherited" default="0"/>
-    <hidden var="metadata/names/name/@lang" default="de"/>
+    <hidden var="metadata/names/name/@xml:lang" default="de"/>
     <cell col="1" row="1" anchor="NORTHWEST" ref="DINameName" />
     <cell col="2" row="1" anchor="NORTHWEST" ref="AINameName"/>
     <cell col="1" row="2" anchor="NORTHWEST" ref="DINameNick"/>
@@ -120,7 +120,7 @@
     <hidden var="metadata/addresses/@notinherit" default="false"/>
     <hidden var="metadata/addresses/@heritable" default="true"/>
     <hidden var="metadata/addresses/address/@inherited" default="0"/>
-    <hidden var="metadata/addresses/address/@lang" default="de"/>
+    <hidden var="metadata/addresses/address/@xml:lang" default="de"/>
     <cell col="1" row="1" anchor="NORTHWEST" ref="Scountry" var="metadata/addresses/address/country" sortnr="2"/>
     <cell col="2" row="1" anchor="NORTHWEST" ref="AAddressCountry"/>
     <cell col="1" row="2" anchor="NORTHWEST" ref="Sstate" var="metadata/addresses/address/state" sortnr="2"/>
@@ -148,7 +148,7 @@
 
   <panel id="DPhoneRef">
     <hidden var="@inherited" default="0"/>
-    <hidden var="@lang" default="de"/>
+    <hidden var="@xml:lang" default="de"/>
     <cell col="1" row="1" anchor="NORTHWEST" ref="Sphone" var="@type" sortnr="3"/>
     <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" sortnr="3"/>
   </panel>
@@ -160,10 +160,10 @@
     <hidden var="metadata/urls/@notinherit" default="false"/>
     <hidden var="metadata/urls/@heritable" default="true"/>
     <hidden var="metadata/urls/url/@inherited" default="0"/>
-    <hidden var="metadata/urls/url/@type" default="locator"/>
-    <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@title" sortnr="4"/>
+    <hidden var="metadata/urls/url/@xlink:type" default="locator"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@xlink:title" sortnr="4"/>
     <cell col="2" row="1" anchor="NORTHWEST" ref="AURLTitle"/>
-    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@href" sortnr="4"/>
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@xlink:href" sortnr="4"/>
     <cell col="2" row="2" anchor="NORTHWEST" ref="AURLReference"/>
   </panel>
 
@@ -174,7 +174,7 @@
     <hidden var="metadata/emails/@notinherit" default="false"/>
     <hidden var="metadata/emails/@heritable" default="true"/>
     <hidden var="metadata/emails/email/@inherited" default="0"/>
-    <hidden var="metadata/emails/email/@lang" default="de"/>
+    <hidden var="metadata/emails/email/@xml:lang" default="de"/>
     <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/emails/email" sortnr="5"/>
   </panel>
 
@@ -191,7 +191,7 @@
 
   <panel id="DNoteRef">
     <hidden var="@inherited" default="0"/>
-    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" sortnr="6" default="de"/>
+    <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" sortnr="6" default="de"/>
     <cell col="2" row="1" anchor="NORTHWEST" ref="TFarea4096" sortnr="6" default=""/>
   </panel>
 

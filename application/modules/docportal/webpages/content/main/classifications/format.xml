@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+  
+  <section i18n="browse.document.format.title" xml:lang="all">
+    <classificationbrowser classification="DocPortal_class_00000006" restriction="(objectType = document)" field="format" countresults="true"
+      parameters="numPerPage=10" style="docportal"/>
+  </section>
+  
+</MyCoReWebPage>

@@ -22,7 +22,7 @@
     <hidden var="service/servdates" descendants="true" />
     <hidden var="service/servacls"  descendants="true" />
     <hidden var="service/servflags" descendants="true" />
-    <hidden var="metadata/@lang"    default="de"/>
+    <hidden var="metadata/@xml:lang"    default="de"/>
     <hidden var="metadata/creators" descendants="true" />
 	<hidden var="metadata/subjects" descendants="true" />
 	<hidden var="metadata/descripturls" descendants="true" />
@@ -55,7 +55,7 @@
                   </condition>
                 </textarea>
               </cell>
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de"/>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
               <cell col="3" row="1" anchor="NORTHWEST" ref="STitleType" var="@type" />
             </panel>
           </repeater>
@@ -117,7 +117,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de"/>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
               <cell col="3" row="1" anchor="NORTHWEST" ref="SDescriptType" var="@type" />
             </panel>
           </repeater>
@@ -133,7 +133,7 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="publisher/@inherited" default="0" />
-        <hidden var="publisher/@lang"      default="de" />
+        <hidden var="publisher/@xml:lang"      default="de" />
         <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="publisher" />
         <cell col="2" row="1" anchor="WEST" ref="SPublisherType" var="publisher/@type" />
         <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
@@ -157,7 +157,7 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="contributor/@inherited" default="0"  />
-        <hidden var="contributor/@lang"      default="de" />
+        <hidden var="contributor/@xml:lang"      default="de" />
         <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="contributor" />
         <cell col="2" row="1" anchor="WEST" ref="SContributorType" var="contributor/@type" />
         <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
@@ -247,7 +247,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -266,7 +266,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -310,7 +310,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -329,7 +329,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -348,7 +348,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -369,7 +369,7 @@
               <cell col="1" row="1" anchor="NORTHWEST">
                 <textfield id="TFCoRights" width="48" maxlength="1024" />
               </cell>
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -388,7 +388,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -407,7 +407,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -426,7 +426,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -445,7 +445,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
             </panel>
           </repeater>
         </cell>
@@ -466,17 +466,23 @@
   <repeater id="PersonLink" min="1" max="5" pos="right">  
     <panel>
       <hidden var="@inherited" default="0"       />
-      <hidden var="@type"      default="locator" />
-      <hidden var="@title"     default="Person"  />
-      <hidden var="@href"  />
+      <hidden var="@xlink:type"      default="locator" />
+      <hidden var="@xlink:title"     default="Person"  />
+      <hidden var="@xlink:href"  />
       <cell row="1" col="1" width="100%">
-        <output var="@title" default="Person" />
+        <output var="@xlink:title" />
         <text label="&#160;&#160;&#160;" /> <!-- &nbsp; -->
       </cell>
       <cell row="1" col="2">
         <subselect id="sub.select4" type="webpage" href="indexpage?searchclass=creators_sub">
-          <label xml:lang="de">Auswählen</label>
-          <label xml:lang="en">Select</label>
+          <label xml:lang="de">Person wählen</label>
+          <label xml:lang="en">Select person</label>
+        </subselect>
+      </cell>
+      <cell row="1" col="3">
+        <subselect id="sub.select5" type="webpage" href="indexpage?searchclass=subselect-institution">
+          <label xml:lang="de">Institution wählen</label>
+          <label xml:lang="en">Select person</label>
         </subselect>
       </cell>
     </panel>

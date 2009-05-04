@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -27,6 +27,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -49,7 +50,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * @version $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. Mär 2009) $
  */
 public class MCRXMLTableManager {
     /** The link table manager singleton */
@@ -84,6 +85,10 @@ public class MCRXMLTableManager {
         tablelist = new Hashtable<String, MCRXMLTableInterface>();
         jdomCache = new MCRCache(CONFIG.getInt("MCR.Persistence.XML.Store.CacheSize", 100), "XMLTable JDOMs");
         number_distance = CONFIG.getInt("MCR.Metadata.ObjectID.NumberDistance", 1);
+        List<String> objectTypes = getAllAllowedMCRObjectIDTypes();
+        for (String type : objectTypes) {
+            initXMLTable(type);
+        }
     }
 
     /**
@@ -100,10 +105,15 @@ public class MCRXMLTableManager {
             return tablelist.get(type);
         }
 
+        MCRXMLTableInterface inst = initXMLTable(type);
+
+        return inst;
+    }
+
+    private MCRXMLTableInterface initXMLTable(String type) {
         MCRXMLTableInterface inst = (MCRXMLTableInterface) CONFIG.getInstanceOf("MCR.Persistence.XML.Store.Class");
         inst.init(type);
         tablelist.put(type, inst);
-
         return inst;
     }
 
@@ -118,8 +128,8 @@ public class MCRXMLTableManager {
      * @exception MCRException
      *                if the method arguments are not correct
      */
-    public void create(MCRObjectID mcrid, org.jdom.Document xml) throws MCRException {
-        getXMLTable(mcrid.getTypeId()).create(mcrid.getId(), MCRUtils.getByteArray(xml), 1);
+    public void create(MCRObjectID mcrid, org.jdom.Document xml, Date lastModified) throws MCRException {
+        getXMLTable(mcrid.getTypeId()).create(mcrid.getId(), MCRUtils.getByteArray(xml), 1, lastModified);
         jdomCache.put(mcrid, xml);
         CONFIG.systemModified();
     }
@@ -135,8 +145,8 @@ public class MCRXMLTableManager {
      * @exception MCRException
      *                if the method arguments are not correct
      */
-    public void create(MCRObjectID mcrid, byte[] xml) throws MCRException {
-        getXMLTable(mcrid.getTypeId()).create(mcrid.getId(), xml, 1);
+    public void create(MCRObjectID mcrid, byte[] xml, Date lastModified) throws MCRException {
+        getXMLTable(mcrid.getTypeId()).create(mcrid.getId(), xml, 1, lastModified);
         CONFIG.systemModified();
     }
 
@@ -166,8 +176,8 @@ public class MCRXMLTableManager {
      * @exception MCRException
      *                if the method arguments are not correct
      */
-    public void update(MCRObjectID mcrid, org.jdom.Document xml) throws MCRException {
-        getXMLTable(mcrid.getTypeId()).update(mcrid.getId(), MCRUtils.getByteArray(xml), 1);
+    public void update(MCRObjectID mcrid, org.jdom.Document xml, Date lastModified) throws MCRException {
+        getXMLTable(mcrid.getTypeId()).update(mcrid.getId(), MCRUtils.getByteArray(xml), 1, lastModified);
         jdomCache.put(mcrid, xml);
         CONFIG.systemModified();
     }
@@ -183,8 +193,8 @@ public class MCRXMLTableManager {
      * @exception MCRException
      *                if the method arguments are not correct
      */
-    public void update(MCRObjectID mcrid, byte[] xml) throws MCRException {
-        getXMLTable(mcrid.getTypeId()).update(mcrid.getId(), xml, 1);
+    public void update(MCRObjectID mcrid, byte[] xml, Date lastModified) throws MCRException {
+        getXMLTable(mcrid.getTypeId()).update(mcrid.getId(), xml, 1, lastModified);
         jdomCache.remove(mcrid);
         CONFIG.systemModified();
     }
@@ -334,4 +344,18 @@ public class MCRXMLTableManager {
 
         return jDoc;
     }
+
+    /**
+     * lists objects of the specified <code>type</code> and their last modified date. 
+     * @param type type of object
+     * @return
+     */
+    public List<MCRObjectIDDate> listObjectDates(String type) {
+        return getXMLTable(type).listObjectDates(type);
+    }
+
+    public Date getLastModified() {
+        return tablelist.values().iterator().next().getLastModified();
+    }
+
 }

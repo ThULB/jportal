@@ -26,9 +26,6 @@
       xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
       xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink mcr i18n acl">
       <xsl:param name="objectHost" select="'local'"/>
-      <gxsl:if test="$useIView='on'">
-        <xsl:include href="mcr-module-startIview.xsl" />
-      </gxsl:if>
       <gxsl:call-template name="generateHitTemplate" />
       <gxsl:call-template name="generateLinkTemplate" />
       <gxsl:call-template name="generateTitleTemplate" />
@@ -152,7 +149,7 @@
             
             We define a helper variable to perform this filtering now.
           -->
-        <gxsl:variable name="unique-list" select="./metadata/*/*[not(local-name()=local-name(following::*) and ((@type=following::*/@type) or (not(@type) and (following::*[not(@type)]))))]"/>
+        <gxsl:variable name="unique-list" select="./metadata/*/*[not(local-name()=local-name(following-sibling::*) and ((@type=following-sibling::*/@type) or (not(@type) and (following-sibling::*[not(@type)]))))]"/>
         <gxsl:for-each select="$unique-list">
           <gxsl:variable name="defTag" select="local-name(..)" />
           <gxsl:variable name="curTag" select="local-name()" />
@@ -362,7 +359,7 @@
           <gxsl:if test="$useIView='on'">
             <gxsl:comment> MCR-IView ..start </gxsl:comment>
             <gxsl:comment> example implementation </gxsl:comment>
-            <xsl:if test="$objectHost = 'local'">
+            <xsl:if test="$jai.available">
               <xsl:for-each select="./structure/derobjects/derobject">
                 <xsl:variable name="deriv" select="@xlink:href" />
                 <xsl:variable name="firstSupportedFile">

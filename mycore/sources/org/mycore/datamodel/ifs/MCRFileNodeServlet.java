@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14436 $ $Date: 2008-11-18 14:31:54 +0100 (Di, 18. Nov 2008) $
+ * $Revision: 14775 $ $Date: 2009-02-23 16:25:39 +0100 (Mo, 23. Feb 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -54,7 +54,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
  * 
- * @version $Revision: 14436 $ $Date: 2008-01-14 11:02:17 +0000 (Mo, 14 Jan
+ * @version $Revision: 14775 $ $Date: 2008-01-14 11:02:17 +0000 (Mo, 14 Jan
  *          2008) $
  */
 public class MCRFileNodeServlet extends MCRServlet {
@@ -246,7 +246,7 @@ public class MCRFileNodeServlet extends MCRServlet {
             res.setContentType(file.getContentType().getMimeType());
             res.setContentLength((int) (file.getSize()));
             // no transaction needed to copy long streams over slow connections
-            job.commitTransaction();
+            MCRSessionMgr.getCurrentSession().commitTransaction();
             OutputStream out = new BufferedOutputStream(res.getOutputStream());
             file.getContentTo(out);
             out.close();

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07. Feb 2008) $
+ * $Revision: 15000 $ $Date: 2009-03-24 16:42:03 +0100 (Di, 24. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -23,9 +23,7 @@
 
 package org.mycore.common;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
@@ -45,7 +43,7 @@ import org.mycore.services.mbeans.MCRJMXBridge;
  * @see java.util.Hashtable
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 13092 $ $Date: 2008-02-07 16:03:14 +0100 (Do, 07. Feb 2008) $
+ * @version $Revision: 15000 $ $Date: 2009-03-24 16:42:03 +0100 (Di, 24. Mär 2009) $
  */
 public class MCRCache {
     /**

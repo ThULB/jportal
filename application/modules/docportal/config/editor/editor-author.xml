@@ -21,7 +21,7 @@
     <hidden var="service/servdates" descendants="true" />
     <hidden var="service/servacls"  descendants="true" />
     <hidden var="service/servflags" descendants="true" />
-    <hidden var="metadata/@lang"    default="de" />
+    <hidden var="metadata/@xml:lang"    default="de" />
 
     <!-- ========== metadata/names/name ========== -->
 
@@ -31,7 +31,7 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="name/@inherited" default="0"/>
-        <hidden var="name/@lang" default="de"/>
+        <hidden var="name/@xml:lang" default="de"/>
         <cell col="1" row="1" anchor="WEST" ref="APNameSurname" />
         <cell col="2" row="1" anchor="WEST" var="name/surname">
           <textfield id="ZPNameSurname" width="48" maxlength="128">
@@ -110,7 +110,7 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="address/@inherited" default="0"/>
-        <hidden var="address/@lang" default="de"/>
+        <hidden var="address/@xml:lang" default="de"/>
         <cell col="1" row="1" anchor="NORTHWEST" ref="AAddressCountry"/>
         <cell col="2" row="1" anchor="NORTHWEST" ref="Scountry" var="address/country" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="AAddressState"/>
@@ -137,7 +137,7 @@
           <repeater min="1" max="5" pos="right">
             <panel>
               <hidden var="@inherited" default="0"/>
-              <hidden var="@lang" default="de"/>
+              <hidden var="@xml:lang" default="de"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="Sphone" var="@type" />
               <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" />
             </panel>
@@ -174,7 +174,7 @@
               <cell col="1" row="2" anchor="NORTHWEST">
                 <panel>
                   <cell col="1" row="1" anchor="WEST" ref="TFzeile128" sortnr="7"/>
-                  <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de"/>
+                  <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
                 </panel>
               </cell>
             </panel>
@@ -212,11 +212,11 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="url/@inherited" default="0"/>
-        <hidden var="url/@type" default="locator"/>
+        <hidden var="url/@xlink:type" default="locator"/>
         <cell col="1" row="1" anchor="NORTHWEST" ref="AURLTitle"/>
-        <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="url/@title" />
+        <cell col="2" row="1" anchor="NORTHWEST" ref="TFzeile128" var="url/@xlink:title" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="AURLReference"/>
-        <cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile128" var="url/@href" />
+        <cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile128" var="url/@xlink:href" />
       </panel>
     </cell>
 
@@ -228,7 +228,7 @@
       <panel>
         <include ref="inherit.heritable" />
         <hidden var="email/@inherited" default="0"/>
-        <hidden var="email/@lang" default="de"/>
+        <hidden var="email/@xml:lang" default="de"/>
         <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="email" />
       </panel>
     </cell>
@@ -245,7 +245,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de"/>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
             </panel>
           </repeater>
         </cell>
@@ -264,7 +264,7 @@
             <panel>
               <hidden var="@inherited" default="0"/>
               <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
-              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de"/>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
             </panel>
           </repeater>
         </cell>

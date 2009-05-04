@@ -11,7 +11,9 @@
 <!-- Stephan Schmidt 	- html prototype			-->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-    xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
+    xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions">
+
+<xsl:variable name="jai.available" select="mcrxml:classAvailable('javax.media.jai.JAI')"/>
 
 <xsl:include href="mcr-module-iview.xsl" />
 <!--
@@ -111,7 +113,7 @@
 		<iframe marginheight="0" marginwidth="0" frameborder="0" 
 			src="{concat($iview.home,$derivID,$pathOfImage,$HttpSession,'?mode=generateLayout&amp;XSL.MCR.Module-iview.navi.zoom.SESSION=',$scaleFactor,'&amp;XSL.MCR.Module-iview.display.SESSION=',$display,'&amp;XSL.MCR.Module-iview.style.SESSION=',$style,'&amp;XSL.MCR.Module-iview.lastEmbeddedURL.SESSION=',$lastEmbeddedURL,'&amp;XSL.MCR.Module-iview.embedded.SESSION=true&amp;XSL.MCR.Module-iview.move=reset')}" 
 			name="iview" width="{$width}" height="{$height}" align="left">
-		  <p><xsl:value-of select="i18n:translate('iview.error')"/></p>
+		  <p><xsl:value-of select="i18n:translate('component.iview.error')"/></p>
 		</iframe>		
 		
 	</xsl:template>

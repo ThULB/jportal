@@ -7,8 +7,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder">
 
-    <xsl:variable name="MainTitle" select="i18n:translate('indexpage.sub.maintitle')" />
-    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle')" />
+    <xsl:variable name="MainTitle" select="i18n:translate('indexpage.creators.maintitle')" />
+    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.creators.pagetitle')" />
     <xsl:variable name="Servlet" select="'MCRIndexBrowserServlet'" />
     <xsl:include href="MyCoReLayout.xsl" />
     <xsl:include href="indexpage-common.xsl" />
@@ -32,7 +32,7 @@
     <xsl:template name="index.headline">
         <tr valign="top">
             <td class="metaname">
-                <xsl:value-of select="i18n:translate('indexpage.sub.headline.select')" />
+                <xsl:value-of select="i18n:translate('indexpage.creators.headline.select')" />
                 <xsl:value-of select="$IndexTitle" />
             </td>
         </tr>
@@ -56,7 +56,7 @@
                         <form action="{$WebApplicationBaseURL}indexpage{$HttpSession}?searchclass={$IndexID}" method="post">
                             <td class="metavalue">
                                 <b>
-                                    <xsl:value-of select="i18n:translate('indexpage.sub.index')" />
+                                    <xsl:value-of select="i18n:translate('indexpage.index')" />
                                     <xsl:text> </xsl:text>
                                     <xsl:call-template name="getSelectBox" />
                                 </b>
@@ -64,13 +64,13 @@
                             <td>
                                 <input type="text" class="button" size="30" name="search" value="{$search}" />
                                 <xsl:text> </xsl:text>
-                                <input type="submit" class="button" value="{i18n:translate('indexpage.sub.buttons.search')}" />
+                                <input type="submit" class="button" value="{i18n:translate('indexpage.buttons.search')}" />
                             </td>
                         </form>
                         <xsl:if test="string-length($search) &gt; 0 ">
                             <td>
                                 <form action="{$WebApplicationBaseURL}indexpage{$HttpSession}?searchclass={$IndexID}&amp;search={@prefix}" method="post">
-                                    <input type="submit" class="button" value="{i18n:translate('indexpage.sub.buttons.filter.disable')}" />
+                                    <input type="submit" class="button" value="{i18n:translate('indexpage.buttons.filter.disable')}" />
                                 </form>
                             </td>
                         </xsl:if>
@@ -83,7 +83,7 @@
                                 <b>
                                     <xsl:text></xsl:text>
                                     <xsl:value-of select="results/@numHits" />
-                                    <xsl:value-of select="i18n:translate('indexpage.sub.hits')" />
+                                    <xsl:value-of select="i18n:translate('indexpage.hits')" />
                                 </b>
                             </td>
                         </tr>
@@ -128,18 +128,18 @@
                                 <xsl:when test="contains(/indexpage/@path,'-')">
                                     <b>
                                         <a class="nav" href="{$up.url}">
-                                            <xsl:value-of select="i18n:translate('indexpage.sub.link.back')" />
+                                            <xsl:value-of select="i18n:translate('indexpage.link.back')" />
                                         </a>
                                     </b>
                                 </xsl:when>
                                 <xsl:when test="string-length($search) &gt; 0">
                                     <b>
-                                        <xsl:value-of select="i18n:translate('indexpage.sub.results.overallindex.filtered')" />
+                                        <xsl:value-of select="i18n:translate('indexpage.results.overallindex.filtered')" />
                                     </b>
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <b>
-                                        <xsl:value-of select="i18n:translate('indexpage.sub.results.overallindex')" />
+                                        <xsl:value-of select="i18n:translate('indexpage.results.overallindex')" />
                                     </b>
                                 </xsl:otherwise>
                             </xsl:choose>
@@ -168,7 +168,7 @@
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <b>
-                                        <xsl:value-of select="i18n:translate('indexpage.sub.results.overallindex')" />
+                                        <xsl:value-of select="i18n:translate('indexpage.results.overallindex')" />
                                     </b>
                                 </xsl:otherwise>
                             </xsl:choose>
@@ -198,7 +198,7 @@
             </td>
             <td class="td1" valign="top" style="padding-right:5px;">
                 <a
-                    href="{$url}&amp;_var_@href={col[@name='id']}&amp;_var_@title={concat(col[@name='surname'], ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
+                    href="{$url}&amp;_var_@xlink:href={col[@name='id']}&amp;_var_@xlink:title={concat(col[@name='surname'], ', ', col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])}">
                     <xsl:value-of
                         select="concat(col[@name='surname'],', ',col[@name='academic'],' ',col[@name='peerage'],' ',col[@name='firstname'],' ',col[@name='prefix'])" />
                 </a>
@@ -225,11 +225,11 @@
     </xsl:template>
 
     <!-- ========== Titel ========== -->
-    <xsl:variable name="IndexTitle" select="i18n:translate('indexpage.sub.indextitle')" />
+    <xsl:variable name="IndexTitle" select="i18n:translate('indexpage.creators.indextitle')" />
 
     <!-- ========== Einleitender Text ========== -->
     <xsl:template name="IntroText">
-        <xsl:value-of select="i18n:translate('indexpage.sub.introtext')" />
+        <xsl:value-of select="i18n:translate('indexpage.creators.introtext')" />
         <p>
             <form method="post">
                 <xsl:attribute name="action">
@@ -238,7 +238,7 @@
                       <xsl:value-of select="concat('XSL.editor.session.id=',$subselect.session)" />
                     </xsl:if>
                 </xsl:attribute>
-                <input type="submit" class="submit" value="{i18n:translate('indexpage.sub.select.cancel')}" />
+                <input type="submit" class="submit" value="{i18n:translate('indexpage.buttons.cancel')}" />
             </form>
         </p>
         <p>

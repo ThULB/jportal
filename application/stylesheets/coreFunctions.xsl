@@ -44,6 +44,17 @@
         </xsl:choose>
     </xsl:template>
     <!--
+        Template: UrlDeleteParam
+        synopsis: removes a jsessionID parameter from a URL
+        param:
+        
+        url: URL to remove the session
+    -->
+    <xsl:template name="UrlDeleteSession">
+        <xsl:param name="url" />
+        <xsl:value-of xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" select="mcrxml:regexp($url, ';jsessionid=[^?#]+', '')"/>
+    </xsl:template>
+    <!--
         Template: UrlSetParam
         synopsis: Replaces a parameter value or adds a parameter to an URL
         param:
@@ -311,17 +322,20 @@
         <!-- jumpSize is to determine the pages to be skipped -->
         <xsl:variable name="jumpSize">
             <xsl:choose>
-                <!-- current printed page number is smaller than current displayed page -->
+                <!-- current printed page number is smaller than current displayed page
+-->
                 <xsl:when test="$i &lt; $currentpage">
                     <xsl:choose>
                         <!-- This is to support a bigger PageWindow at the end of page listing and
-                            to skip a jump of 2 -->
+                            to skip a jump of 2
+-->
                         <xsl:when
                             test="(($totalpage - $PageWindowSize - 1) &lt;= $i) or
                         (($currentpage - floor(($PageWindowSize -1) div 2) - 1) = 2)">
                             <xsl:value-of select="1" />
                         </xsl:when>
-                        <!-- This is to support a bigger PageWindow at the begin of page listing -->
+                        <!-- This is to support a bigger PageWindow at the begin of page listing
+-->
                         <xsl:when test="($totalpage - $currentpage) &lt; $PageWindowSize">
                             <xsl:value-of select="($totalpage - $PageWindowSize - 1)" />
                         </xsl:when>
@@ -338,7 +352,8 @@
                         <!-- jump only one if your near currentpage,
                             or at last page 
                             or to support bigger window at beginning
-                            or to skip a jump of 2 -->
+                            or to skip a jump of 2
+-->
                         <xsl:when
                             test="( (($i - $currentpage) &lt; round(($PageWindowSize -1) div 2)) or ($i = $totalpage) or ($currentpage &lt;=$PageWindowSize and $i &lt;= $PageWindowSize) or ($totalpage - $i = 2))">
                             <xsl:value-of select="1" />
@@ -452,21 +467,20 @@
     -->
 
     <xsl:template name="getBrowserAddress">
+        <xsl:variable name="RequestURL.sessionRemoved">
+            <xsl:call-template name="UrlDeleteSession">
+                <xsl:with-param name="url" select="$RequestURL" />
+            </xsl:call-template>
+        </xsl:variable>
         <!--remove $lastPage-->
         <xsl:variable name="RequestURL.lastPageDel">
             <xsl:call-template name="UrlDelParam">
-                <xsl:with-param name="url" select="$RequestURL" />
-                <xsl:with-param name="par" select="'XSL.lastPage.SESSION'" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="WebApplicationBaseURL.lastPageDel">
-            <xsl:call-template name="UrlDelParam">
-                <xsl:with-param name="url" select="$WebApplicationBaseURL" />
+                <xsl:with-param name="url" select="$RequestURL.sessionRemoved" />
                 <xsl:with-param name="par" select="'XSL.lastPage.SESSION'" />
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="RequestURL.WebURLDel">
-            <xsl:value-of select="concat('/',substring-after($RequestURL.lastPageDel,$WebApplicationBaseURL.lastPageDel))" />
+            <xsl:value-of select="concat('/',substring-after($RequestURL.lastPageDel,$WebApplicationBaseURL))" />
         </xsl:variable>
         <!--remove $lang -->
         <xsl:variable name="cleanURL">

@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05. Nov 2008) $
+ * $Revision: 14910 $ $Date: 2009-03-16 20:20:01 +0100 (Mo, 16. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -66,7 +66,7 @@ import org.mycore.frontend.servlets.MCRServletJob;
  * It can also handle file uploads.
  * 
  * @author Frank L�tzenkirchen
- * @version $Revision: 14326 $ $Date: 2008-11-05 10:08:39 +0100 (Mi, 05. Nov 2008) $
+ * @version $Revision: 14910 $ $Date: 2009-03-16 20:20:01 +0100 (Mo, 16. Mär 2009) $
  */
 public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
     private static final long serialVersionUID = 1L;
@@ -203,10 +203,12 @@ public class MCREditorServlet extends MCRServlet implements MCRSessionListener {
                 editorResolved = startSession(parameters, ref, uri, validate);
             }
 
+            String clazz1 = editor.getAttributeValue("class");
+            String clazz2 = editorResolved.getAttributeValue("class");
             editor.removeContent();
             editor.addContent(editorResolved.cloneContent());
             editor.setAttribute("session", editorResolved.getAttributeValue("session"));
-            editor.setAttribute("class", editorResolved.getAttributeValue("class"));
+            editor.setAttribute("class", ( clazz1 == null ? clazz2 : clazz1 ) );
         }
     }
 

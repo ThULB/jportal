@@ -1,6 +1,6 @@
 /*
  * $RCSfile: MCRClassificationBrowserData.java,v $
- * $Revision: 14437 $ $Date: 2008-11-18 15:39:31 +0100 (Di, 18. Nov 2008) $
+ * $Revision: 15054 $ $Date: 2009-03-31 15:24:46 +0200 (Di, 31. Mär 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -25,19 +25,17 @@ package org.mycore.datamodel.classifications;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
-
-import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
@@ -69,8 +67,6 @@ public class MCRClassificationBrowserData {
     private static MCRConfiguration config;
 
     private static final Logger LOGGER = Logger.getLogger(MCRClassificationBrowserData.class);
-
-    private static final MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
     private ArrayList<Element> lines;
 
@@ -125,7 +121,8 @@ public class MCRClassificationBrowserData {
         MCRSessionMgr.addSessionListener(ClassUserTableCleaner);
     }
 
-    public MCRClassificationBrowserData(final String u, final String mode, final String actclid, final String actEditorCategid) throws Exception {
+    public MCRClassificationBrowserData(final String u, final String mode, final String actclid, final String actEditorCategid)
+            throws Exception {
         uri = u;
         config = MCRConfiguration.instance();
         LOGGER.debug(" incomming Path " + uri);
@@ -216,10 +213,11 @@ public class MCRClassificationBrowserData {
         LOGGER.debug("setObjectTypes(" + browserClass + ")");
         try {
             // NOTE: read *.Doctype for compatiblity reasons
-            objectType = config.getString("MCR.ClassificationBrowser." + browserClass + ".Objecttype", config.getString("MCR.ClassificationBrowser."
-                    + browserClass + ".Doctype", null));
+            objectType = config.getString("MCR.ClassificationBrowser." + browserClass + ".Objecttype", config.getString(
+                    "MCR.ClassificationBrowser." + browserClass + ".Doctype", null));
         } catch (final org.mycore.common.MCRConfigurationException noDoctype) {
-            objectType = config.getString("MCR.ClassificationBrowser.default.ObjectType", config.getString("MCR.ClassificationBrowser.default.Doctype"));
+            objectType = config.getString("MCR.ClassificationBrowser.default.ObjectType", config
+                    .getString("MCR.ClassificationBrowser.default.Doctype"));
         }
 
         if (objectType != null) {
@@ -275,6 +273,8 @@ public class MCRClassificationBrowserData {
 
     public final void setClassification(final MCRCategoryID classifID) throws Exception {
         classif = getClassificationPool().getClassificationAsPojo(classifID, true);
+        if (classif == null)
+            return;
         lines = new ArrayList<Element>();
         totalNumOfDocs = 0;
         putCategoriesintoLines(-1, classif.getChildren());
@@ -343,9 +343,8 @@ public class MCRClassificationBrowserData {
     private Element setTreeline(MCRCategory categ) {
         Element categElement = MCRCategoryElementFactory.getCategoryElement(categ, false, 0);
         categElement.setAttribute("level", String.valueOf(categ.getLevel() + 1));
-        MCRCategory category = findCategory(classif, categ.getId().getID());
 
-        if (category.hasChildren()) {
+        if (categ.hasChildren()) {
             categElement.setAttribute("hasChildren", "T");
         } else {
             categElement.setAttribute("hasChildren", " ");
@@ -379,7 +378,7 @@ public class MCRClassificationBrowserData {
         LOGGER.debug("create XML tree for all classifications");
         final Element xDocument = new Element("classificationbrowse");
         final Element CreateClassButton = new Element("userCanCreate");
-        if (AI.checkPermission("create-classification")) {
+        if (MCRAccessManager.checkPermission("create-classification")) {
             CreateClassButton.addContent("true");
         } else {
             CreateClassButton.addContent("false");
@@ -391,12 +390,16 @@ public class MCRClassificationBrowserData {
         xDocument.addContent(xNavtree);
         String browserClass = "";
 
-        LOGGER.debug("get all classification IDs");
-        final Set<MCRCategoryID> allIDs = getClassificationPool().getAllIDs();
         LOGGER.debug("query classification links");
-        final Map<MCRCategoryID, Boolean> countMap = MCRCategLinkServiceFactory.getInstance().hasLinks(allIDs);
+        final Map<MCRCategoryID, Boolean> countMap = new HashMap<MCRCategoryID, Boolean>();
+        for (MCRCategoryID classID : getClassificationPool().getAllIDs()) {
+            MCRCategory classif = getClassificationPool().getClassificationAsPojo(classID, false);
+            countMap.putAll(MCRCategLinkServiceFactory.getInstance().hasLinks(classif));
+        }
 
         for (MCRCategoryID id : countMap.keySet()) {
+            if (!id.isRootID())
+                continue;
             LOGGER.debug("get classification " + id);
             MCRCategory classif = getClassificationPool().getClassificationAsPojo(id, false);
             LOGGER.debug("get browse element");
@@ -411,12 +414,12 @@ public class MCRClassificationBrowserData {
             }
             // set permissions
             if (getClassificationPool().isEdited(id) == false) {
-                if (AI.checkPermission(id.getRootID(), "writedb")) {
+                if (MCRAccessManager.checkPermission(id.getRootID(), "writedb")) {
                     cli.setAttribute("userCanEdit", "true");
                 } else {
                     cli.setAttribute("userCanEdit", "false");
                 }
-                if (AI.checkPermission(id.getRootID(), "deletedb")) {
+                if (MCRAccessManager.checkPermission(id.getRootID(), "deletedb")) {
                     cli.setAttribute("userCanDelete", "true");
                 } else {
                     cli.setAttribute("userCanDelete", "false");
@@ -552,13 +555,13 @@ public class MCRClassificationBrowserData {
         LOGGER.debug("now we check this right for the current user");
         // now we check this right for the current user
         if (cp.isEdited(getClassification().getId()) == false) {
-            String permString = String.valueOf(AI.checkPermission("create-classification"));
+            String permString = String.valueOf(MCRAccessManager.checkPermission("create-classification"));
             CreateButton.addContent(permString);
             xDocument.addContent(CreateButton);
-            permString = String.valueOf(AI.checkPermission(cl.getId().getRootID(), "writedb"));
+            permString = String.valueOf(MCRAccessManager.checkPermission(cl.getId().getRootID(), "writedb"));
             EditButton.addContent(permString);
             xDocument.addContent(EditButton);
-            permString = String.valueOf(AI.checkPermission(cl.getId().getRootID(), "deletedb"));
+            permString = String.valueOf(MCRAccessManager.checkPermission(cl.getId().getRootID(), "deletedb"));
             DeleteButton.addContent(permString);
             xDocument.addContent(DeleteButton);
         } else {
@@ -605,7 +608,7 @@ public class MCRClassificationBrowserData {
         }
         i = 0;
         LOGGER.debug("fetch Map<MCRCategoryID,Boolean>");
-        Map<MCRCategoryID, Boolean> countMap = MCRCategLinkServiceFactory.getInstance().hasLinks(ids);
+        Map<MCRCategoryID, Boolean> countMap = MCRCategLinkServiceFactory.getInstance().hasLinks(getClassification());
         LOGGER.debug("process tree lines: build xml tree");
         while ((line = getTreeline(i++)) != null) {
 
@@ -614,6 +617,10 @@ public class MCRClassificationBrowserData {
             final String status = line.getAttributeValue("hasChildren");
 
             Element label = (Element) XPath.selectSingleNode(line, "label[lang('" + lang + "')]");
+            if (label == null) {
+                label = (Element) XPath.selectSingleNode(line, "label[lang('"
+                        + MCRConfiguration.instance().getString("MCR.Metadata.DefaultLang", "en") + "')]");
+            }
             if (label == null) {
                 label = (Element) XPath.selectSingleNode(line, "label");
             }
@@ -749,9 +756,10 @@ public class MCRClassificationBrowserData {
         ArrayList<String> itemname = new ArrayList<String>();
         ArrayList<Integer> itemlevel = new ArrayList<Integer>();
         ArrayList<Element> itemelm = new ArrayList<Element>();
-        List navitreelist = navitree.getChildren();
+        @SuppressWarnings("unchecked")
+        List<Element> navitreelist = navitree.getChildren();
         for (int i = 0; i < navitreelist.size(); i++) {
-            final Element child = (Element) (navitreelist.get(i));
+            final Element child = navitreelist.get(i);
             final Element col1 = (Element) (child.getChildren().get(0));
             final Element col2 = (Element) (child.getChildren().get(1));
             final String sText = col2.getText();
@@ -770,18 +778,8 @@ public class MCRClassificationBrowserData {
         for (int i = 0; i < itemname.size(); i++) {
             itemnum[i] = i;
         }
-        // debug
-        // for (int i = 0; i < itemnum.length; i++) {
-        // System.out.println("===> " + i + " " + itemnum[i] + " " +
-        // itemname.get(itemnum[i]));
-        // }
         // sort
         sortMyTreePerLevel(0, itemname.size(), 1, itemname, itemlevel, itemnum);
-        // debug
-        // for (int i = 0; i < itemnum.length; i++) {
-        // System.out.println("---> " + i + " " + itemnum[i] + " " +
-        // itemname.get(itemnum[i]));
-        // }
         // write back
         for (int i = 0; i < itemnum.length; i++) {
             navitree.addContent(itemelm.get(itemnum[i]));
@@ -789,7 +787,8 @@ public class MCRClassificationBrowserData {
         return xDoc;
     }
 
-    private final void sortMyTreePerLevel(int von, int bis, int level, ArrayList<String> itemname, ArrayList<Integer> itemlevel, int[] itemnum) {
+    private final void sortMyTreePerLevel(int von, int bis, int level, ArrayList<String> itemname, ArrayList<Integer> itemlevel,
+            int[] itemnum) {
         if (von == bis)
             return;
         // System.out.println("$$$>" + von + " " + bis);

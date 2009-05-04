@@ -302,9 +302,11 @@ At present the following roles are provided: <b>publisher</b> and <b>publisher</
   <list id="SPublisherType" width="60" type="dropdown">
     <item value="publisher">
       <label xml:lang="de">Verlag</label>
+      <label xml:lang="en">Publisher</label>
     </item>
     <item value="publication">
       <label xml:lang="de">Herausgeber</label>
+      <label xml:lang="en">Editor</label>
     </item>
   </list>
 
@@ -948,8 +950,8 @@ Select the gender of the person.
 <!-- *** Data for the Profession *** -->
 
   <text id="LProfession">
-    <label xml:lang="de">&#160;&#160;&#160;Beruf/Tätigkeit&#160;(*)&#160;&#160;&#160;</label>
-    <label xml:lang="en">&#160;&#160;&#160;Profession/Job&#160;(*)&#160;&#160;&#160;</label>
+    <label xml:lang="de">&#160;&#160;&#160;Beruf/Tätigkeit&#160;&#160;&#160;</label>
+    <label xml:lang="en">&#160;&#160;&#160;Profession/Job&#160;&#160;&#160;</label>
   </text>
 
   <helpPopup id="HProfession" width="400px" height="250px">
@@ -1138,6 +1140,7 @@ Input can be word segments with an '*' extension. A minimum of 3 characters is r
   </text>
 
   <list id="Scountry" width="160" type="dropdown">
+    <item value=""><label xml:lang="de">bitte wählen</label></item>
     <item value="Deutschland"><label xml:lang="de">Deutschland</label></item>
     <item value="Österreich"><label xml:lang="de">Österreich</label></item>
     <item value="Schweiz"><label xml:lang="de">Schweiz</label></item>
