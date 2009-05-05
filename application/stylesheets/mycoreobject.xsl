@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ============================================== -->
-<!-- $Revision: 1.18 $ $Date: 2006/11/14 10:49:45 $ -->
-<!-- ============================================== -->
+    <!-- ============================================== -->
+    <!-- $Revision: 1.18 $ $Date: 2006/11/14 10:49:45 $ -->
+    <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcr="http://www.mycore.org/"
-    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-    xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr xalan i18n acl">
+    xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
+    exclude-result-prefixes="xlink mcr xalan i18n acl">
 
     <xsl:include href="MyCoReLayout.xsl" />
     <!-- include custom templates for supported objecttypes -->
@@ -54,15 +54,19 @@
 
         <xsl:call-template name="resultsub" />
         <xsl:choose>
-
-<<<<<<< .working
             <xsl:when test="($obj_host != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
                 <!-- if access granted: print metadata -->
                 <xsl:apply-templates select="." mode="present" />
                 <!-- IE Fix for padding and border -->
                 <hr />
             </xsl:when>
-=======
+
+            <xsl:otherwise>
+                <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
   <!-- Internal link from Derivate ********************************* -->
   <xsl:template match="internals">
   <xsl:if test="$objectHost = 'local'">
@@ -87,8 +91,8 @@
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-		  <xsl:value-of select="$derivlabel" />
-		</xsl:otherwise>
+          <xsl:value-of select="$derivlabel" />
+        </xsl:otherwise>
       </xsl:choose>  
     </div>
     <div class="derivate">
@@ -109,14 +113,6 @@
     </div>
   </xsl:if>
   </xsl:template>
->>>>>>> .merge-rechts.r833
-
-            <xsl:otherwise>
-                <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
-            </xsl:otherwise>
-
-        </xsl:choose>
-    </xsl:template>
 
     <xsl:template match="/mycoreobject" mode="present" priority="0">
         <xsl:variable name="objectType" select="substring-before(substring-after(@ID,'_'),'_')" />
