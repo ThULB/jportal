@@ -68,3 +68,16 @@
     <field name="volContentClassi4"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis4/volContentClassi4" value="@ID"/>
     <field name="volContentClassi5"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis5/volContentClassi5" value="@ID"/>
     <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
+
+    <!-- Search in institutions metadata -->
+    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
+
+    <!-- Search in person metadata -->
+    <field name="headingFirstName"  type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true" i18n="editor.search.person.firstName" />
+    <field name="headingLastName"   type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="lastName" sortable="true" i18n="editor.search.person.lastName" />
+    <field name="lastname"          type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/lastName | /mycoreobject/metadata/def.alternative/alternative/lastName" value="text()" i18n="editor.search.person.lastName" />
+    <field name="firstname"         type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/firstName | /mycoreobject/metadata/def.alternative/alternative/firstName" value="text()" i18n="editor.search.person.firstName" />
+    <field name="anyname"           type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/* | /mycoreobject/metadata/def.alternative/alternative/*" value="text()" i18n="editor.search.person.anyName" />
+    <field name="place"             type="name" source="objectMetadata" objects="person corporation" xpath="/mycoreobject/metadata/*[contains(local-name(),'placeOf')]/* | /mycoreobject/metadata/def.location/location" value="text()" i18n="editor.search.person.place" />
+    <field name="personNote"        type="text" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.note/note" value="text()"  />
+ 

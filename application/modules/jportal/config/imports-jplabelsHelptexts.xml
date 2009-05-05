@@ -194,8 +194,6 @@
 
     <text id="LINameP_bold" i18n="editormask.labels.LINameP" />
 
-    <helpPopup id="HIName" width="400px" height="250px" i18n="editormask.labels.LINamePhelppop" />
-
     <text id="LAddress" i18n="editormask.labels.LAddress" />
 
     <helpPopup id="HAddress" width="400px" height="250px" i18n="editormask.labels.LAddresshelppop" />
