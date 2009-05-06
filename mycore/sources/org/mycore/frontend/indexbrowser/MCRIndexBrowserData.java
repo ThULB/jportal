@@ -383,6 +383,11 @@ public class MCRIndexBrowserData {
                 LOGGER.debug("\n" + out.outputString(hit.buildXML()));
             }
             List<MCRFieldValue> sortData = hit.getSortData();
+            MCRFieldDef mainSortField = myQuery.getSortBy().get(0).getField();
+            if (sortData.size() == 0 || !sortData.get(0).getField().equals(mainSortField)) {
+                MCRFieldValue value = new MCRFieldValue(mainSortField, "???undefined???");
+                sortData.add(0, value);
+            }
             //TODO this is kind of ugly
             listelm[0] = sortData.get(0).getValue();
             if (sortData.size() > 1) {
