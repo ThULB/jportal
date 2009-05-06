@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. Mär 2009) $
+ * $Revision: 14994 $ $Date: 2009-03-24 13:01:57 +0100 (Di, 24. MÃ€r 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -993,7 +993,7 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
         }
 
         private static long getSystemLastModified() {
-            long xmlLastModified = MCRXMLTableManager.instance().getLastModified().getTime();
+            long xmlLastModified = MCRXMLTableManager.instance().getLastModified();
             long classLastModified = DAO.getLastModified();
             return Math.max(xmlLastModified, classLastModified);
         }

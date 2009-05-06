@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. Mär 2009) $
+ * $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. MÃ€r 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -50,7 +50,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
  * 
  * @author Jens Kupferschmidt
  * @author Thomas Scheffler (yagee)
- * @version $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. Mär 2009) $
+ * @version $Revision: 14924 $ $Date: 2009-03-17 13:17:42 +0100 (Di, 17. MÃ€r 2009) $
  */
 public class MCRXMLTableManager {
     /** The link table manager singleton */
@@ -354,8 +354,8 @@ public class MCRXMLTableManager {
         return getXMLTable(type).listObjectDates(type);
     }
 
-    public Date getLastModified() {
-        return tablelist.values().iterator().next().getLastModified();
+    public long getLastModified() {
+        return CONFIG.getSystemLastModified();
     }
 
 }
