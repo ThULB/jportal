@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ============================================== -->
+<!-- $Revision$ $Date$ -->
+<!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:layoutUtils="xalan:///org.mycore.frontend.MCRLayoutUtilities" exclude-result-prefixes="xalan">
     <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" xalan:indent-amount="2" doctype-public="-//W3C//DTD HTML 4.01//EN"
@@ -20,9 +23,7 @@
     <xsl:variable name="MainTitle">
         <xsl:value-of select="$MCR.NameOfProject" />
     </xsl:variable>
-
-    <xsl:param name="href" />
-
+    <!-- assign right browser address -->
     <xsl:variable name="browserAddress">
         <xsl:call-template name="getBrowserAddress" />
     </xsl:variable>
@@ -34,7 +35,6 @@
             <xsl:with-param name="navigationBase" select="$navigationBase" />
         </xsl:call-template>
     </xsl:param>
-
     <!-- set useTarget to 'yes' if you want the target attribute to appear in links
         the wcms controls. This would break HTML 4.01 strict compatiblity but allows
         the browser to open new windows when clicking on certain links.
@@ -63,8 +63,10 @@
     <xsl:include href="footer.xsl" />
     <xsl:include href="navigation.xsl" />
     <xsl:include href="wcms_common.xsl" />
-    <xsl:include href="modules-includes.xsl" />
-    <xsl:include href="jp_extensions.xsl" />
+
+    <!-- includes the stylesheets which are set in the mycore.properties file -->
+    <xsl:include href="xslInclude:components" />
+    <xsl:include href="xslInclude:modules" />
 
     <!-- =================================================================================================== -->
     <xsl:template name="generatePage">

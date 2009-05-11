@@ -266,13 +266,13 @@
                         </table>
                         <!--14*** Editor Buttons ************************************* -->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
-                          <xsl:call-template name="editobject">
+                          <xsl:call-template name="jp_editobject">
                             <xsl:with-param select="'false'" name="accessdelete" />
                             <xsl:with-param select="./@ID" name="id" />
                           </xsl:call-template>
                         </table>
                         <!-- 
-                            <xsl:call-template name="editobject">
+                            <xsl:call-template name="jp_editobject">
                             <xsl:with-param select="$accessedit" name="accessedit"/>
                             <xsl:with-param select="./@ID" name="id"/>
                             </xsl:call-template>  -->

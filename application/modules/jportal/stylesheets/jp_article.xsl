@@ -699,13 +699,13 @@
                         <!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
                         <xsl:call-template name="showAdminHead" />
                         <!--*** Editor Buttons ************************************* -->
-                        <!--      <xsl:call-template name="editobject_with_der">
+                        <!--      <xsl:call-template name="jp_editobject_with_der">
                             <xsl:with-param select="$accessedit" name="accessedit"/>
                             <xsl:with-param select="./@ID" name="id"/>
                             </xsl:call-template>-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
 
-                            <xsl:call-template name="editobject_with_der">
+                            <xsl:call-template name="jp_editobject_with_der">
                                 <xsl:with-param select="$accessedit" name="accessedit" />
                                 <xsl:with-param select="./@ID" name="id" />
                             </xsl:call-template>

@@ -20,9 +20,11 @@
   <xsl:param name="CurrentUser" />
   <xsl:param name="CurrentGroups" />
   <xsl:param name="MCRSessionID" />
-  <!-- HttpSession is empty if cookies are enabled, else ";jsessionid=<id>" -->
+  <!-- HttpSession is empty if cookies are enabled, else ";jsessionid=<id>"
+-->
   <xsl:param name="HttpSession" />
-  <!-- JSessionID is alway like ";jsessionid=<id>" and good for internal calls -->
+  <!-- JSessionID is alway like ";jsessionid=<id>" and good for internal calls
+-->
   <xsl:param name="JSessionID" />
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="DefaultLang" />
@@ -52,7 +54,8 @@
     </xsl:choose>
   </xsl:variable>
   
-  <!-- ============================================================================================================= -->
+  <!-- =============================================================================================================
+-->
 
   <xsl:template match="/">
     <xsl:call-template name="generatePage" />
@@ -313,6 +316,7 @@
     </xsl:for-each>
   </xsl:template>
 
+  <!-- convert line feed (lf) to new line (br) -->
   <xsl:template name="lf2br">
     <xsl:param name="string" />
     <xsl:choose>
