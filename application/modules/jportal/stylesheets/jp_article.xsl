@@ -785,5 +785,35 @@
         </xsl:if>
     </xsl:template>
     <!-- =============================================================================================== -->
+    
+
+    <!-- ===================================================================================================== -->
+    <!-- prints the list of authors -->
+    <!-- ===================================================================================================== -->
+    <xsl:template name="getAuthorList">
+        <xsl:param name="objectXML" />
+        <xsl:param name="listLength" />
+
+        <xsl:for-each select="xalan:nodeset($objectXML)/mycoreobject/metadata/participants/participant[number($listLength)+1>position()]">
+            <xsl:if test="position()=1">
+                <xsl:call-template name="lineSpace" />
+                <i>
+                    <xsl:value-of select="i18n:translate('editormask.labels.participants_label')" />
+                </i>
+                :
+            </xsl:if>
+            <xsl:if test="position()>1">
+                <xsl:copy-of select="';  '" />
+            </xsl:if>
+            <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@xlink:href))/mycoreobject" />
+            <xsl:call-template name="objectLink">
+                <xsl:with-param name="obj_id" select="@xlink:href" />
+            </xsl:call-template>
+        </xsl:for-each>
+        <xsl:if test="number(count($objectXML/mycoreobject/metadata/participants/participant))>number($listLength)">
+            <xsl:copy-of select="';   ...'" />
+        </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
