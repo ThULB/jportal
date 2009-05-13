@@ -9,8 +9,10 @@ import org.jdom.Element;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
@@ -32,10 +34,19 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
             } else {
                 return true;
             }
-        } else if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
-            return checkPermissionOfType(id, permission);
-        } else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
-            return true;
+        }
+
+        try {
+            if(MCRObject.existInDatastore(id)) {
+                if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_") || permission.equals("read")) {
+                    return checkPermissionOfType(id, permission);
+                } else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
+                    return true;
+                }
+            };
+        } catch(MCRException e) {
+            // do not throw an exception here. maybe the id is not a valid mcr id.
+            // then the default strategy at this points is to return always false.
         }
         return false;
     }

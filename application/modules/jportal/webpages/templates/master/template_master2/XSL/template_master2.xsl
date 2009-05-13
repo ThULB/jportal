@@ -25,7 +25,7 @@
                     </xsl:call-template>
                 </div>
                 <a id="transparent-logo" href="{$WebApplicationBaseURL}">
-                    <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.gif" />
+                    <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.png" />
                 </a>
                 <!-- a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/whatsnew.xml">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-button.png" />
