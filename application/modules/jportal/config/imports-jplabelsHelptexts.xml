@@ -212,6 +212,10 @@
 
     <helpPopup id="HEmail" width="400px" height="250px" i18n="editormask.labels.HEmailhelppop" />
 
+    <!-- *** Data for the Identifier ** -->
+
+    <text id="Lidentifier" i18n="editormask.labels.Lidentifier" />
+
     <!-- *** Data for the Note ** -->
 
     <text id="LNote" i18n="editormask.labels.LNote" />

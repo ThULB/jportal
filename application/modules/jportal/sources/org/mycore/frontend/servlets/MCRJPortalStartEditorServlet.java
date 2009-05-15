@@ -347,7 +347,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         sb = new StringBuffer();
         sb.append(job.getRequest().getHeader("Referer"));
         params.put("returnUrl", sb.toString());
-        params.put("mcrid", cd.mytfmcrid);
+        params.put("mcrid", cd.mytfmcrid.getId());
         params.put("type", cd.mytype);
         params.put("step", cd.mystep);
         String base = getBaseURL() + cd.myfile;

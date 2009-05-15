@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <components xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="editor.xsd">
     <include uri="webapp:editor/editor-commons.xml" />
+    <include uri="webapp:editor/imports-jplabelsHelptexts.xml"/> s
     <panel id="globalImport.person" lines="on">
         <hidden var="@ID" />
         <hidden var="@label" />
@@ -262,12 +263,6 @@
     <hidden var="@notinherit" default="true" />
     <hidden var="@heritable" default="true" />
   </panel>
-  <text id="Lidentifier">
-    <label xml:lang="de">
-      <xhtml:span class="editorlabel">&#160;externe Kennung &#160;</xhtml:span>
-
-    </label>
-  </text>
   <helpPopup id="Hidentifier" width="400" height="250">
     <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben sie die dort verwendete ID an.</label>
   </helpPopup>
