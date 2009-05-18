@@ -75,23 +75,6 @@
             <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select2" />
         </cell>
     </panel>
-    <!--get institution list ======================================================-->
-    <panel id="getInst">
-        <cell row="1" col="1" anchor="NORTHWEST" ref="inst_label" />
-        <cell row="1" col="2" width="100%">
-            <output var="@label" />
-            <text label=" (" />
-            <output var="@href" />
-            <text label=")" />
-        </cell>
-        <cell row="2" col="2">
-            <subselect id="sub.select4" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6"
-                i18n="editormask.common.sub.select2" />
-        </cell>
-        <cell row="3" col="1" width="100%">
-            <text label="-" />
-        </cell>
-    </panel>
     <!-- participants ================================================================== -->
     <panel id="participants_input">
         <hidden var="metadata/participants/@class" default="MCRMetaLinkID" sortnr="3" />

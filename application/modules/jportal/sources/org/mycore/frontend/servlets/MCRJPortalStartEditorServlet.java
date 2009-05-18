@@ -26,6 +26,7 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
+import org.mycore.frontend.servlets.MCRStartEditorServlet.CommonData;
 import org.mycore.user.MCRUserMgr;
 
 /**
@@ -105,6 +106,34 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
     }
 
+    
+    @Override
+    public void seditder(MCRServletJob job, CommonData cd) throws IOException {
+        if (!MCRAccessManager.checkPermission(cd.myremcrid.getId(), "writedb")) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
+            return;
+        }
+        if (!cd.mysemcrid.isValid()) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
+            return;
+        }
+        StringBuffer sb = new StringBuffer();
+        Properties params = new Properties();
+        sb.append("request:receive/").append(cd.mysemcrid).append("?XSL.Style=editor");
+        params.put("sourceUri", sb.toString());
+        sb = new StringBuffer();
+        sb.append(getBaseURL()).append("receive/").append(cd.myremcrid.getId());
+        params.put("cancelUrl", sb.toString());
+        params.put("se_mcrid", cd.mysemcrid.getId());
+        params.put("re_mcrid", cd.myremcrid.getId());
+        params.put("type", cd.mytype);
+        params.put("step", cd.mystep);
+        sb = new StringBuffer();
+        sb.append(getBaseURL()).append(pagedir).append("jp_editor_form_commit-derivate.xml");
+        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(sb.toString(), params)));
+    }
+    
+    
     
     private int fileCount = 0;
     private int deletedCount = 0;
