@@ -241,8 +241,8 @@ public class MCRGenerateRedundancyMap {
         @Override
         protected ArrayList<String> getSortByStringList() {
             ArrayList<String> sortByList = new ArrayList<String>();
-            sortByList.add("lastname");
-            sortByList.add("firstname");
+            sortByList.add("headingLastName");
+            sortByList.add("headingFirstName");
             return sortByList;
         }
         @Override

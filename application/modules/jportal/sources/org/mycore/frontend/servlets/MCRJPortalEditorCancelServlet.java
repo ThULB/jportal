@@ -9,12 +9,18 @@ public class MCRJPortalEditorCancelServlet extends MCRServlet {
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {
         String referer = job.getRequest().getHeader("Referer");
-        // first try -> go to return url
-        String url = getValueOfReferer(referer, "returnUrl");
-        if(url != null) {
-            url = URLDecoder.decode(url, "UTF-8");
+        
+        String url = null;
+        String returnUrl = getValueOfReferer(referer, "returnUrl");
+        String cancelUrl = getValueOfReferer(referer, "cancelUrl");
+        // first try -> go to cancel url
+        if(cancelUrl != null) {
+            url = URLDecoder.decode(cancelUrl, "UTF-8");
+        } else if(returnUrl != null) {
+            // next try -> go to return url
+            url = URLDecoder.decode(returnUrl, "UTF-8");
         } else {
-            // next try -> go to edited object
+            // finally try -> go to edited object
             String mcrId = getValueOfReferer(referer, "mcrid");
             url = getBaseURL() + "receive/" + mcrId;
             if(mcrId == null) {
@@ -22,7 +28,6 @@ public class MCRJPortalEditorCancelServlet extends MCRServlet {
                 url = getBaseURL();
             }
         }
-        
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(url));
     }
 
