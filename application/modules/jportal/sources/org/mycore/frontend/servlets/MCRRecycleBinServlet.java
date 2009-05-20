@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
@@ -24,6 +26,8 @@ public class MCRRecycleBinServlet extends MCRServlet {
     protected static String recycleBinExportDir = CONFIG.getString("MCR.recycleBinExportDir", "data" + FS + "recycleBin");    
     protected static String recycleBinDeletedPage = CONFIG.getString("MCR.recycleBinDeletedPage", "content" + FS + "main" + FS + "recycleBinDeletedPage.xml");
 
+    private static Logger LOGGER = Logger.getLogger(MCRRecycleBinServlet.class);
+    
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {
         // check ACL
@@ -85,6 +89,7 @@ public class MCRRecycleBinServlet extends MCRServlet {
                     baseObj.receiveFromDatastore(id);
                     exportAndDelete(baseObj);
                 } catch(Exception exc) {
+                    LOGGER.error(exc);
                     errorObjects.add(id);
                 }
             }
