@@ -725,21 +725,21 @@
                 <!-- not deleted -->
                 <xsl:otherwise>
                   <xsl:if test="acl:checkPermission($id,'writedb')">
-                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                    <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
                       <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
                         title="{i18n:translate('swf.object.editObject')}" />
                     </a>
-                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
+                    <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                       <img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
                         title="{i18n:translate('swf.object.editACL')}" />
                     </a>
                     <xsl:if test="$accessnbn = 'true'">
-                      <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
+                      <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=saddnbn">
                         <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif"
                           title="{i18n:translate('swf.object.addNBN')}" />
                       </a>
                     </xsl:if>
-                    <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
+                    <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
                       <img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
                         title="{i18n:translate('swf.derivate.addDerivate')}" />
                     </a>

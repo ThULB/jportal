@@ -12,6 +12,7 @@ import org.jdom.Element;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
@@ -36,7 +37,7 @@ import org.mycore.user.MCRUserMgr;
 public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
 
     private static final long serialVersionUID = 1L;
-
+    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
     private static final String FS = System.getProperty("file.seperator", "/");
     protected static String restorePage = pagedir + CONFIG.getString("MCR.SWF.PageRestore", "editor_restore.xml");
     protected static String restoreErrorPage = pagedir + CONFIG.getString("MCR.SWF.PageErrorRestore", "editor_error_restore.xml");

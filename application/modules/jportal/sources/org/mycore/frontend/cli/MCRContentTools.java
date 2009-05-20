@@ -43,7 +43,7 @@ public class MCRContentTools extends MCRAbstractCommands {
     public static void fixlabel(String pattern) throws JDOMException, IOException {
         String mcrBasedir = MCRConfiguration.instance().getString("MCR.basedir");
         String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml";
-        Document naviJDOM = MCRXMLHelper.parseXML(new FileInputStream(naviFileLocation), false);
+        Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFileLocation), false);
 
         List<Element> nodes = XPath.selectNodes(naviJDOM, "//item[contains(./label/text(),'" + pattern + "')]");
         XPath itemXpath = XPath.newInstance("./item[contains(@href,'/receive/')]");
@@ -82,7 +82,7 @@ public class MCRContentTools extends MCRAbstractCommands {
 
     public static void cleanNavi() throws JDOMException, MCRException, IOException {
         String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml";
-        Document naviJDOM = MCRXMLHelper.parseXML(new FileInputStream(naviFielLocation), false);
+        Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFielLocation), false);
 
         List<Element> nodes = XPath.selectNodes(naviJDOM, "//item[contains(@href,'/receive/jportal_jpjournal')]");
 

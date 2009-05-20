@@ -675,7 +675,7 @@
 
                             <li>
                                 <a
-                                    href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
+                                    href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
                                     <xsl:value-of select="i18n:translate(concat('metaData.',$type,'.[singular]'))" />
                                 </a>
                             </li>

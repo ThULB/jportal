@@ -2,6 +2,7 @@ package org.mycore.frontend.servlets;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -11,6 +12,7 @@ import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
 
 public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
+	private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCheckCommitDataServlet.class);
 
     private static final long serialVersionUID = 1L;

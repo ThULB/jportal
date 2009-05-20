@@ -21,8 +21,9 @@ import org.mycore.datamodel.metadata.MCRObjectService;
 
 public class MCRRecycleBinServlet extends MCRServlet {
 
-    private static final String FS = System.getProperty("file.seperator", "/");
-    private static final String webappsDir = MCRConfiguration.instance().getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
+    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
+	private static final String FS = System.getProperty("file.seperator", "/");
+    private static final String webappsDir = CONFIG.getString("MCR.basedir") + FS + "build" + FS + "webapps" + FS;
     protected static String recycleBinExportDir = CONFIG.getString("MCR.recycleBinExportDir", "data" + FS + "recycleBin");    
     protected static String recycleBinDeletedPage = CONFIG.getString("MCR.recycleBinDeletedPage", "content" + FS + "main" + FS + "recycleBinDeletedPage.xml");
 

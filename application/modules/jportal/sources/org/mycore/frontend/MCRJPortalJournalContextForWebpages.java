@@ -91,7 +91,7 @@ public class MCRJPortalJournalContextForWebpages {
             this.preceedingItemHref = this.currentItemHref.replaceAll(help[help.length-1], "dummy.xml");
             
             String naviFile = deployedDir + "/config/navigation.xml";
-            Document navi = MCRXMLHelper.parseXML(new FileInputStream(naviFile),false);
+            Document navi = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFile),false);
             String itemXPath = "//item[@href='" + this.currentItemHref + "']";
             LOGGER.debug("find item with xpath=" + itemXPath + " in " + naviFile);
             XPath xp = XPath.newInstance(itemXPath);
@@ -309,7 +309,7 @@ public class MCRJPortalJournalContextForWebpages {
         LOGGER.info("Removing navigation entry for journal \"" + journalID + "\" ...");
         String naviFileLocation = deployedDir + "/config/navigation.xml";
         try {
-            Document naviFileDoc = MCRXMLHelper.parseXML(new FileInputStream(naviFileLocation), false);
+            Document naviFileDoc = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFileLocation), false);
             String entryInNaviFileDoc = "//item[@href='" + this.currentItemHref + "']";
             Element jdomElemOfLocation = (Element) XPath.selectSingleNode(naviFileDoc, entryInNaviFileDoc);
 
@@ -370,7 +370,7 @@ public class MCRJPortalJournalContextForWebpages {
         String locationOfWebpageXML = deployedDir + currentItemHref;
         
         try {
-            return MCRXMLHelper.parseXML(new FileInputStream(locationOfWebpageXML), false);
+            return MCRXMLHelper.getParser().parseXML(new FileInputStream(locationOfWebpageXML), false);
         } catch (MCRException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
