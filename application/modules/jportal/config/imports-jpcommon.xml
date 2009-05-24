@@ -68,6 +68,8 @@
             <output var="@href" />
             <text label=")" />
         </cell>
+        <!-- the result list for search=xxxxxxxxxxxxxxxxxxxxx is always empty -->
+        <!-- so pressing the add person or institution give you an empty list -->
         <cell anchor="NORTHWEST" row="2" col="1">
             <subselect id="sub.select1" type="webpage" href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" i18n="editormask.common.sub.select1" />
         </cell>
