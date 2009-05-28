@@ -1287,8 +1287,16 @@ public final class MCRURIResolver implements javax.xml.transform.URIResolver, En
                     // the last
                 }
                 subname = subname.substring(1);// remove @
-                LOGGER.debug("Setting attribute " + subname + "=" + value);
-                current.setAttribute(subname, value);
+                if(subname.contains(":")) {
+                    String nsString = subname.substring(0, subname.indexOf(":"));
+                    String key = subname.substring(subname.indexOf(":") + 1);
+                    Namespace ns = Namespace.getNamespace(nsString, "http://www.w3.org/1999/xlink");
+                    current.setAttribute(key, value, ns);
+                } else {
+                    LOGGER.debug("Setting attribute " + subname + "=" + value);
+                    current.setAttribute(subname, value);
+                }
+                
                 return;
             }
             Element newcurrent = current.getChild(subname);

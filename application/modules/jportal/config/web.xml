@@ -38,6 +38,10 @@
     <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalIndexBrowserServlet">
+    <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet</servlet-class>
+</servlet>
 
 
 <servlet-mapping>
@@ -83,4 +87,8 @@
 <servlet-mapping>
   <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
   <url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
+  <url-pattern>/indexpage</url-pattern>
 </servlet-mapping>
