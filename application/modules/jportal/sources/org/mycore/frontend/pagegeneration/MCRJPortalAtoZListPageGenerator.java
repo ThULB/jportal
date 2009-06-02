@@ -49,6 +49,10 @@ public class MCRJPortalAtoZListPageGenerator {
         return journalListElement;
     }
 
+    public File getJournalXmlFile() {
+        return new File(JOURNAL_XML);
+    }
+
     /**
      * Creates the AtoZ list as an element. The structure of the element is:
      * <p>

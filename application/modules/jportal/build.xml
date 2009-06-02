@@ -8,6 +8,7 @@
 	<property name="env.JPORTAL_HOME" value="${basedir}/modules/jportal" />
 	<property name="module.base" value="jportal" />
 	<property name="module.dir" value="${basedir}/modules/${module.base}" />
+	<property name="objectTypes" value="person,jpinst,jpjournal,jpvolume,jparticle" />
 
 	<!-- ============================================== -->
 	<target name="usage">
@@ -42,6 +43,29 @@
 
 	</target>
 
+	<!-- =================================================================== -->
+	<!-- Create schemas					                                     -->
+	<!-- =================================================================== -->
+	<!--<target name="jp.create.schema" depends="create.schema">-->
+	<target name="create.schema">
+		<!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
+		<for list="${objectTypes}" param="objectType" parallel="true">
+			<sequential>
+				<if>
+					<available file="${module.dir}/config/datamodel2/@{objectType}.xml" />
+					<then>
+						<xslt style="${module.dir}/xsl/objecttype.xsl" in="${module.dir}/config/datamodel2/@{objectType}.xml" out="build/schema/datamodel-@{objectType}.xsd" />
+					</then>
+					<else>
+						<antcall target="model2schema">
+							<param name="metadata.schema" value="${module.dir}/config/datamodel/@{objectType}.xml" />
+						</antcall>
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+
 	<target name="config">
 		<!-- merge mycore.properties-->
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
@@ -66,14 +90,23 @@
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRContentTools" />
 	</target>
 
-	<!-- ============================================== -->
-
+	<!-- =================================================================== -->
+	<!-- create directories   		                                         -->
+	<!-- =================================================================== -->
 	<target name="create.directories" depends="init" description="Creates directory structure">
 		<modulePreHook target="create.directories" />
 		<!-- recycle bin dir -->
 		<mkdir dir="${MCR.recycleBinExportDir}" />
 		<!-- doublet finder dir -->
 		<mkdir dir="${MCR.doubletFinder}" />
+
+		<!-- create mcr directories for object types -->
+		<for list="${objectTypes}" param="objectType" parallel="true">
+			<sequential>
+				<mkdir dir="${MCR.SWF.Directory.@{objectType}}" />
+			</sequential>
+		</for>
+
 	</target>
 
 	<!-- ============================================== -->
@@ -90,6 +123,16 @@
 		<antcall target="jp.webapps.inside">
 			<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
 		</antcall>
+
+		<!-- copy editors -->
+		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
+			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="**/*.xml" excludes="**/editor_default_acls*.xml" />
+			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="editor-*.xml" />
+			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="imports-*.xml" />
+		</copy>
+
+		<!-- generate swf pages -->
+		<antcall target="genSWFPage" />
 
 		<!-- MyJPortal -->
 		<echo>
@@ -108,6 +151,7 @@
 
 	</target>
 
+
 	<!-- ============================================== -->
 
 	<target name="jp.webapps.inside">
@@ -123,12 +167,6 @@
 		<antcall target="do.merge">
 			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
 		</antcall>
-
-		<!-- editors -->
-		<copy todir="${build.webapps}/editor/">
-			<fileset dir="${JPortal.HomeURL}/config" includes="editor-*.xml" />
-			<fileset dir="${JPortal.HomeURL}/config" includes="imports-*.xml" />
-		</copy>
 
 		<!-- webpages stuff -->
 		<antcall target="jp.webapps.copyWebPages">
@@ -150,6 +188,46 @@
 
 	</target>
 
+	<!-- ============================================== -->
+	
+	<target name="genSWFPage">
+		<property name="stylesheet" value="${module.dir}/config/swf-page.xsl" />
+		<property name="template" value="${module.dir}/config/swf-template.xml" />
+		<property name="titleuri" value="${module.dir}/config/swf-titles.xml" />
+
+		<for list="${objectTypes}" param="objectType">
+			<sequential>
+				<for list="author,commit,editor" param="step">
+					<sequential>
+						<if>
+							<uptodate targetfile="${build.webapps}/editor_form_@{step}-@{objectType}.xml">
+								<srcfiles file="${template}" />
+								<srcfiles file="${stylesheet}" />
+								<srcfiles file="${titleuri}" />
+							</uptodate>
+							<else>
+								<xslt basedir="${module.dir}" classpathref="application.classpath" in="${template}" style="${stylesheet}" out="${build.webapps}/editor_form_@{step}-@{objectType}.xml">
+									<param name="objectType" expression="@{objectType}" />
+									<param name="step" expression="@{step}" />
+									<param name="titleuri" expression="${titleuri}" />
+								</xslt>
+							</else>
+						</if>
+					</sequential>
+				</for>
+				<if>
+					<available file="${module.dir}/config/editor/@{objectType}/editor_default_acls_@{objectType}.xml" />
+					<then>
+						<copy tofile="${build.webapps}/WEB-INF/classes/editor_default_acls_@{objectType}.xml" file="${module.dir}/config/editor/@{objectType}/editor_default_acls_@{objectType}.xml" preservelastmodified="true" />
+					</then>
+					<else>
+						<copy tofile="${build.webapps}/WEB-INF/classes/editor_default_acls_@{objectType}.xml" file="${module.dir}/config/editor/editor_default_acls.xml" preservelastmodified="true" />
+					</else>
+				</if>
+			</sequential>
+		</for>
+	</target>
+	
 	<!-- =================================================================== -->
 
 	<target name="i18n">

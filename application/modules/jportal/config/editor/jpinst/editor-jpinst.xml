@@ -2,7 +2,7 @@
 <imports>
 	<include uri="webapp:editor/imports-jpcommon.xml"/>
 	<include uri="webapp:editor/imports-jplabelsHelptexts.xml"/> s
-	<panel id="globalImport.jpinst" lines="on">
+	<panel id="edit-jpinst" lines="on">
 		<hidden var="ID"/>
 		<hidden var="label"/>
 		<hidden var="metadata/@lang" default="de"/>

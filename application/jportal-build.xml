@@ -6,6 +6,7 @@
 	<property name="env.MYJPORTAL_HOME" value="${basedir}/../myjportal/modules/jportal" />
 	<property name="env.JPORTAL_HOME" value="${basedir}/modules/jportal" />
 
+
 	<!-- Read in properties from config/mycore.properties -->
 	<loadproperties srcFile="${basedir}/config/mycore.properties.private">
 		<filterchain>
@@ -31,52 +32,6 @@
 	<property name="acl-description.jp.editorsTOC" value="journal editors for TOC" />
 	<property name="acl-description.jp.editors" value="journal editors" />
 	<property name="acl-description.jp.invisible" value="invisible" />
-
-	<!-- =================================================================== -->
-	<!-- Create schemas					                                   -->
-	<!-- =================================================================== -->
-	<target name="jp.create.schema" depends="create.schema">
-		<!-- Translate *.xml to *.xsd using MCRMetadataSchema.xsl -->
-		<antcall target="jp.do.transform">
-			<param name="metadata.schema" value="${MCR.persistence_config_jpjournal}" />
-		</antcall>
-		<antcall target="jp.do.transform">
-			<param name="metadata.schema" value="${MCR.persistence_config_jpvolume}" />
-		</antcall>
-		<antcall target="jp.do.transform">
-			<param name="metadata.schema" value="${MCR.persistence_config_jparticle}" />
-		</antcall>
-		<antcall target="jp.do.transform">
-			<param name="metadata.schema" value="${MCR.persistence_config_person}" />
-		</antcall>
-		<antcall target="jp.do.transform">
-			<param name="metadata.schema" value="${MCR.persistence_config_jpinst}" />
-		</antcall>
-		<move todir="${build.schema}">
-			<fileset dir="${build.schema}" includes="${MCR.persistence_config_jpjournal} 
-	      	${MCR.persistence_config_jpvolume} 
-	      	${MCR.persistence_config_jparticle} 
-	      	${MCR.persistence_config_person} 
-	      	${MCR.persistence_config_jpinst}" />
-			<mapper type="glob" from="*.xml" to="*.xsd" />
-		</move>
-	</target>
-
-	<target name="jp.do.transform" depends="init">
-		<echo>Transforming ${metadata.schema}...</echo>
-		<xslt basedir="${env.JPORTAL_HOME}/config/${metadata.schema}" classpathref="application.classpath" in="${env.JPORTAL_HOME}/config/${metadata.schema}" style="${build.stylesheets}/MCRMetadataSchema.xsl" out="${build.schema}/${metadata.schema}" />
-	</target>
-
-	<!-- =================================================================== -->
-	<!-- .. 							                                       -->
-	<!-- =================================================================== -->
-	<target name="jp.create.metastore">
-		<mkdir dir="${MCR.SWF.Directory.jpjournal}" />
-		<mkdir dir="${MCR.SWF.Directory.jpvolume}" />
-		<mkdir dir="${MCR.SWF.Directory.jparticle}" />
-		<mkdir dir="${MCR.SWF.Directory.person}" />
-		<mkdir dir="${MCR.SWF.Directory.jpinst}" />
-	</target>
 
 	<!-- =================================================================== -->
 	<!-- Load all classifications                                            -->

@@ -72,12 +72,12 @@
                                 </cell>
                                 <cell row="2" col="1">
                                     <subselect id="sub.select_search1" type="webpage"
-                                        href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx"
+                                        href="indexpage?searchclass=jpperson_sub&amp;mode=prefix&amp;init=true"
                                         i18n="editormask.common.sub.select1" />
                                 </cell>
                                 <cell row="2" col="2">
                                     <subselect id="sub.select2" type="webpage"
-                                        href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;search=xxxxxxxxxxxxxxxxxxxxx" sortnr="6"
+                                        href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;init=true" sortnr="6"
                                         i18n="editormask.common.sub.select2" />
                                 </cell>
 

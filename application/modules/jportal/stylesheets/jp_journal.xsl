@@ -649,7 +649,7 @@
         <xsl:param name="id" />
         <xsl:param name="layout" />
         <xsl:param name="types" />
-        <xsl:param select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40href=',$id)" name="xmltempl" />
+        <xsl:param select="concat('&amp;_xml_structure%2Fparents%2Fparent%2F%40xlink%3Ahref=',$id)" name="xmltempl" />
         <xsl:variable name="suffix">
 
             <xsl:if test="string-length($layout)&gt;0">

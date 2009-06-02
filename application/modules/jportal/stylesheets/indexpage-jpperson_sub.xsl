@@ -9,7 +9,7 @@
 
     <xsl:variable name="MainTitle" select="i18n:translate('indexpage.sub.maintitle')" />
     <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle.institution')" />
-    <xsl:variable name="Servlet" select="'MCRIndexBrowserServlet'" />
+    <xsl:variable name="Servlet" select="'MCRJPortalIndexBrowserServlet'" />
     <xsl:include href="MyCoReLayout.xsl" />
     <xsl:include href="indexpage-common.xsl" />
     <xsl:param name="WebApplicationBaseURL" />

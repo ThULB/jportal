@@ -2,7 +2,7 @@
 <imports>
     <include uri="webapp:editor/imports-jpcommon.xml" />
     <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
-    <panel id="globalImport.jpvolume" lines="on">
+    <panel id="edit-jpvolume" lines="on">
         <hidden var="ID" />
         <hidden var="label" />
         <hidden var="metadata/@lang" default="de" />
