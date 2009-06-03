@@ -40,17 +40,15 @@ public class MCRJPortalAtoZListPageGenerator {
     private static final String WEBAPPS_DIR = MCRConfiguration.instance().getString("MCR.webappsDir", "build"+FS+"webapps");
     private static final String JOURNAL_XML = WEBAPPS_DIR + FS + "content" + FS + "main" + FS + "journalList.xml";
 
+    private Document doc;
     private Element journalListElement;
 
-    public void setJournalListElement(Element journalListElement) {
-        this.journalListElement = journalListElement;
-    }
-    public Element getJournalListElement() {
-        return journalListElement;
+    public Document getJournalList() {
+        return doc;
     }
 
-    public File getJournalXmlFile() {
-        return new File(JOURNAL_XML);
+    public boolean journalListExists() {
+        return new File(JOURNAL_XML).exists();
     }
 
     /**
@@ -64,11 +62,11 @@ public class MCRJPortalAtoZListPageGenerator {
      *   ...
      * </p>
      */
-    public Element createJournalList() {
+    public void createJournalList() {
         // create the new root node
-        Element journalList = new Element("journalList");
-        journalList.setAttribute("mode", "alphabetical");
-        setJournalListElement(journalList);
+        journalListElement = new Element("journalList");
+        journalListElement.setAttribute("mode", "alphabetical");
+        doc = new Document(journalListElement);
         // search qry
         MCRFieldDef def1 = MCRFieldDef.getDef("objectType");
         MCRCondition cond1 = new MCRQueryCondition(def1, "=", "jpjournal");
@@ -94,7 +92,6 @@ public class MCRJPortalAtoZListPageGenerator {
                 LOGGER.error(exc);
             }
         }
-        return journalListElement;
     }
 
     /**
@@ -103,15 +100,16 @@ public class MCRJPortalAtoZListPageGenerator {
      * @throws IOException
      * @throws JDOMException
      */
-    public void loadJournalList() throws FileNotFoundException, IOException, JDOMException {
+    public Document loadJournalList() throws FileNotFoundException, IOException, JDOMException {
         File file = new File(JOURNAL_XML);
         if (!file.exists()) {
             LOGGER.error("Couldnt find journalList.xml.");
             throw new FileNotFoundException(file.getAbsolutePath());
         }
         SAXBuilder builder = new SAXBuilder();
-        Document document = builder.build(file);
-        setJournalListElement(document.getRootElement());
+        doc = builder.build(file);
+        journalListElement = doc.getRootElement();
+        return doc;
     }
 
     /**
@@ -124,11 +122,6 @@ public class MCRJPortalAtoZListPageGenerator {
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         File journalListFile = new File(JOURNAL_XML);
         FileOutputStream output = new FileOutputStream(journalListFile, false);
-        Document doc = null;
-        if(journalListElement.getParent() != null)
-            doc = (Document)journalListElement.getParent();
-        else
-            doc = new Document(journalListElement);
         outputter.output(doc, output);
     }
 

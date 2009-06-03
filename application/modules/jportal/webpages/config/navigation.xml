@@ -10,7 +10,7 @@
             <label xml:lang="en">Search</label>
             <item href="/content/main/search/forJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
                 <label xml:lang="de">nach Zeitschriften suchen</label>
-                <item href="/content/main/journalList.xml?dummy=value" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <item href="/journalList.xml" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                     <label xml:lang="de">A - Z</label>
                 </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
@@ -64,7 +64,7 @@
                 <label xml:lang="de">in Webseiten suchen</label>
             </item>
         </item>
-        <item href="/content/main/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
+        <item href="/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
             <label xml:lang="de">A - Z</label>
             <item href="/content/main/journalList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">Platzhalter</label>
@@ -150,7 +150,7 @@
             <item href="/modules/webcli/launchpad.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">WebCLI</label>
             </item>
-            <item href="/servlets/MCRRecycleBinPageGenerationServlet" type="extern" target="_self" style="normal" replaceMenu="false">
+            <item href="/recycleBin.xml" type="extern" target="_self" style="normal" replaceMenu="false">
               <label xml:lang="de">Papierkorb</label>
               <label xml:lang="en">Recycle bin</label>
             </item>

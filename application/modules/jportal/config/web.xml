@@ -38,10 +38,15 @@
     <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
 </servlet>
+<servlet id="MCRJPortalAtoZListServlet">
+    <servlet-name>MCRJPortalAtoZListServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.MCRJPortalAtoZListServlet</servlet-class>
+</servlet>
 <servlet id="MCRJPortalIndexBrowserServlet">
     <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
     <servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet</servlet-class>
 </servlet>
+
 
 
 <servlet-mapping>
@@ -69,10 +74,6 @@
     <url-pattern>/recycleBin.xml</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
-    <url-pattern>/servlets/MCRRecycleBinPageGenerationServlet/*</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
     <url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*</url-pattern>
 </servlet-mapping>
@@ -87,6 +88,10 @@
 <servlet-mapping>
   <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
   <url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>MCRJPortalAtoZListServlet</servlet-name>
+  <url-pattern>/journalList.xml</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
   <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>

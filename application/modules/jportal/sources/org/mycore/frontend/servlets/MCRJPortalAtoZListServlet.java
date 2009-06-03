@@ -1,9 +1,6 @@
 package org.mycore.frontend.servlets;
 
-import java.io.File;
-
 import org.jdom.Document;
-import org.jdom.Element;
 import org.mycore.frontend.pagegeneration.MCRJPortalAtoZListPageGenerator;
 
 public class MCRJPortalAtoZListServlet extends MCRServlet {
@@ -13,18 +10,16 @@ public class MCRJPortalAtoZListServlet extends MCRServlet {
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {
         MCRJPortalAtoZListPageGenerator gen = new MCRJPortalAtoZListPageGenerator();
-        File journalListFile = gen.getJournalXmlFile();
-        Element journalListElement = null;
         // if journalList.xml not exists -> create it
-        if(!journalListFile.exists()) {
+        if(!gen.journalListExists()) {
             gen.createJournalList();
             gen.saveJournalList();
         } else {
             // load from file
             gen.loadJournalList();
         }
-        journalListElement = gen.getJournalListElement(); 
-        getLayoutService().sendXML(job.getRequest(), job.getResponse(), new Document(journalListElement));
+        Document journalListDocument = gen.getJournalList(); 
+        getLayoutService().doLayout(job.getRequest(), job.getResponse(), journalListDocument);
     }
 
 }
