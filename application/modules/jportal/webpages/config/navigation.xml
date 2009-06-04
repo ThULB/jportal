@@ -10,7 +10,7 @@
             <label xml:lang="en">Search</label>
             <item href="/content/main/search/forJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
                 <label xml:lang="de">nach Zeitschriften suchen</label>
-                <item href="/journalList.xml" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <item href="/journalList.xml?dummy=value" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                     <label xml:lang="de">A - Z</label>
                 </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
