@@ -16,6 +16,7 @@ public class MCRJPortalIndexBrowserServlet extends MCRIndexBrowserServlet {
         } else {
             MCRJPortalIndexBrowserSearcher searcher = new MCRJPortalIndexBrowserSearcher(incomingBrowserData, config);
             resultList = searcher.doSearch();
+            MCRIndexBrowserCache.addToCache(incomingBrowserData, resultList);
         }
         MCRIndexBrowserXmlGenerator xmlGen = new MCRIndexBrowserXmlGenerator(resultList, incomingBrowserData, config);
         return xmlGen.getXMLContent();
