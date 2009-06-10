@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.frontend.indexbrowser;
+package org.mycore.frontend.indexbrowser.lucene;
 
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -46,7 +46,6 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectCreated(MCREvent evt, MCRObject obj) {
-        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
         MCRIndexBrowserCache.deleteIndexCacheFromHashtable(getObjectType(obj));
     }
 
@@ -65,7 +64,6 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectUpdated(MCREvent evt, MCRObject obj) {
-        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
         MCRIndexBrowserCache.deleteIndexCacheFromHashtable(getObjectType(obj));
     }
 
@@ -79,7 +77,6 @@ public class MCRIndexBrowserEventHandler extends MCREventHandlerBase {
      *            the MCRObject that caused the event
      */
     protected final void handleObjectDeleted(MCREvent evt, MCRObject obj) {
-        MCRIndexBrowserData.deleteIndexCacheOfObjectType(getObjectType(obj));
         MCRIndexBrowserCache.deleteIndexCacheFromHashtable(getObjectType(obj));
     }
 

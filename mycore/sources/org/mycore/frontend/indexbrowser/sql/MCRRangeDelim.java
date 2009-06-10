@@ -1,6 +1,6 @@
 /*
  * 
- * $Revision: 13085 $ $Date: 2008-02-06 18:27:24 +0100 (Mi, 06. Feb 2008) $
+ * $Revision: 15330 $ $Date: 2009-06-08 15:47:06 +0200 (Mo, 08 Jun 2009) $
  *
  * This file is part of ***  M y C o R e  ***
  * See http://www.mycore.de/ for details.
@@ -21,7 +21,7 @@
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
 
-package org.mycore.frontend.indexbrowser;
+package org.mycore.frontend.indexbrowser.sql;
 
 /**
  * @author Frank Lützenkirchen
