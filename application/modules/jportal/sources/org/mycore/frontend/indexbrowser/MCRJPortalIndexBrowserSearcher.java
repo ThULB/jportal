@@ -1,5 +1,8 @@
 package org.mycore.frontend.indexbrowser;
 
+import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserConfig;
+import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserIncomingData;
+import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserSearcher;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;
@@ -17,7 +20,7 @@ public class MCRJPortalIndexBrowserSearcher extends MCRIndexBrowserSearcher {
 
         // is object type
         MCRFieldDef objectTypeDef = MCRFieldDef.getDef("objectType");
-        cAnd.addChild(new MCRQueryCondition(objectTypeDef, "=", indexConfig.getTable()));
+        cAnd.addChild(new MCRQueryCondition(objectTypeDef, "=", indexConfig.getIndex()));
         
         // is a search string defined?
         if (browseData.getSearch() != null && browseData.getSearch().length() > 0) {
