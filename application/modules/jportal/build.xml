@@ -85,7 +85,7 @@
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRObjectTools" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRUsersGroupsTools" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRClassificationTools" />
-		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRDuplicateCommands" />
+		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalPageGenCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRContentTools" />
 	</target>
@@ -97,8 +97,6 @@
 		<modulePreHook target="create.directories" />
 		<!-- recycle bin dir -->
 		<mkdir dir="${MCR.recycleBinExportDir}" />
-		<!-- doublet finder dir -->
-		<mkdir dir="${MCR.doubletFinder}" />
 
 		<!-- create mcr directories for object types -->
 		<for list="${objectTypes}" param="objectType" parallel="true">

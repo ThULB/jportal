@@ -21,7 +21,7 @@ public class MCRMergeOldRedundancyMap {
 
     private static final Logger LOGGER = Logger.getLogger(MCRMergeOldRedundancyMap.class);
     private static final String FS = System.getProperty("file.seperator", "/");
-    private static final String DIR = MCRConfiguration.instance().getString("MCR.doubletFinder") + FS;
+    private static final String DIR = MCRConfiguration.instance().getString("MCR.doubletFinder.path") + FS;
 
     public static void merge(String type, String file) throws Exception {
 
