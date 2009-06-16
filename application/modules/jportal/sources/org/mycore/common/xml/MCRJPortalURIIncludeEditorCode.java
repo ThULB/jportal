@@ -219,11 +219,10 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         // get piece of code and return it
         String sourceLoc = "webapp:" + fileContainingEditorCode;
         Element sourceCode = MCRURIResolver.instance().resolve(sourceLoc);
-        Document doc = new Document(sourceCode);
         try {
             String xpathEx = "/*/includeMyChildren[@id='" + idOfPieceOfCode + "']";
             XPath xpath = XPath.newInstance(xpathEx);
-            Element answer = (Element) xpath.selectSingleNode(doc);
+            Element answer = (Element) xpath.selectSingleNode(sourceCode);
             if (answer == null) {
                 LOGGER.debug("piece of code with xpath=" + xpathEx + " NOT found");
 //                if (!cacheKey.equals(""))
