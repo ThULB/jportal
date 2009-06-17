@@ -70,11 +70,11 @@
     <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
 
     <!-- Search in institutions metadata -->
-    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" i18n="editor.search.jpinst.label" />
+    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" addable="true" i18n="editor.search.jpinst.label" />
 
     <!-- Search in person metadata -->
-    <field name="headingFirstName"  type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true" i18n="editor.search.person.firstName" />
-    <field name="headingLastName"   type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="lastName" sortable="true" i18n="editor.search.person.lastName" />
+    <field name="headingFirstName"  type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true" addable="true" i18n="editor.search.person.firstName" />
+    <field name="headingLastName"   type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="lastName" sortable="true" addable="true" i18n="editor.search.person.lastName" />
     <field name="lastname"          type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/lastName | /mycoreobject/metadata/def.alternative/alternative/lastName" value="text()" i18n="editor.search.person.lastName" />
     <field name="firstname"         type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/firstName | /mycoreobject/metadata/def.alternative/alternative/firstName" value="text()" i18n="editor.search.person.firstName" />
     <field name="anyname"           type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading/* | /mycoreobject/metadata/def.alternative/alternative/*" value="text()" i18n="editor.search.person.anyName" />
