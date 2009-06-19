@@ -92,6 +92,22 @@
                     <xsl:with-param name="knoten" select="$cXML" />
                 </xsl:call-template>
             </tr>
+            <tr>
+                <td>
+                    <xsl:call-template name="lineSpace" />
+                    <span id="leaf-published">
+                        <i>
+                            <xsl:value-of select="i18n:translate('metaData.published')" />
+                            <xsl:text>: </xsl:text>
+                        </i>
+                        <xsl:call-template name="printHistoryRow">
+                            <xsl:with-param name="sortOrder" select="'descending'" />
+                            <xsl:with-param name="printCurrent" select="'false'" />
+                            <xsl:with-param name="node" select="xalan:nodeset($cXML)" />
+                        </xsl:call-template>
+                    </span>
+                </td>
+            </tr>
         </table>
         <table cellspacing="0" cellpadding="0">
             <tr id="leaf-whitespaces">
