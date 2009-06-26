@@ -54,7 +54,7 @@
 				<if>
 					<available file="${module.dir}/config/datamodel2/@{objectType}.xml" />
 					<then>
-						<xslt style="${module.dir}/xsl/objecttype.xsl" in="${module.dir}/config/datamodel2/@{objectType}.xml" out="build/schema/datamodel-@{objectType}.xsd" />
+						<xslt style="${module.dir}/stylesheets/objecttype.xsl" in="${module.dir}/config/datamodel2/@{objectType}.xml" out="build/schema/datamodel-@{objectType}.xsd" />
 					</then>
 					<else>
 						<antcall target="model2schema">

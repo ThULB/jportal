@@ -67,17 +67,27 @@
         <cell col="1" row="171">
             <br />
         </cell> 
+        
+        <!-- ########################## derivates ################################## --> 
+        <cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
+            <text>
+                <label css-style="editorHeadlines" i18n="metaData.headlines.derivates" />
+            </text>
+        </cell>
+        <cell class="editorLabel" row="210" col="1" anchor="NORTHWEST" ref="derivateLink_label" />
+        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" />
+        
         <!-- ########################## misc ################################## --> 
-        <cell anchor="WEST" colspan="4" col="1" row="172" class="editorHeadlines">
+        <cell anchor="WEST" colspan="4" col="1" row="250" class="editorHeadlines">
             <text>
                 <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
             </text>
         </cell>  
-        <cell class="editorMandatory" row="180" col="1" anchor="NORTHWEST" ref="parent_label" />
-        <cell row="180" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
+        <cell class="editorMandatory" row="260" col="1" anchor="NORTHWEST" ref="parent_label" />
+        <cell row="260" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
             <!-- position -->
-        <cell class="editorLabel" row="190" col="1" anchor="NORTHWEST" ref="position_label" />
-        <cell row="190" col="2" anchor="NORTHWEST" ref="position_input" />
+        <cell class="editorLabel" row="270" col="1" anchor="NORTHWEST" ref="position_label" />
+        <cell row="270" col="2" anchor="NORTHWEST" ref="position_input" />
             <!-- .. -->
         <!--
             <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" /> <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" /> <cell row="230"
@@ -87,11 +97,11 @@
             anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />
         -->           
             <!-- ================================================================================================= -->
-        <cell col="1" row="200">
+        <cell col="1" row="300">
             <br />
             <br />
         </cell>
-        <cell row="200" col="2" anchor="EAST" ref="save" />
+        <cell row="300" col="2" anchor="EAST" ref="save" />
     </panel>
     <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
         <text>

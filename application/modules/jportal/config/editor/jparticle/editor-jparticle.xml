@@ -75,21 +75,31 @@
         <cell col="1" row="190">
             <br />
         </cell>
+
+        <!-- ########################## derivates ################################## --> 
+        <cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
+            <text>
+                <label css-style="editorHeadlines" i18n="metaData.headlines.derivates" />
+            </text>
+        </cell>
+        <cell class="editorLabel" row="210" col="1" anchor="NORTHWEST" ref="derivateLink_label" />
+        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" />
+
         <!-- ########################## misc ################################## -->
-        <cell anchor="WEST" colspan="4" col="1" row="191" class="editorHeadlines">
+        <cell anchor="WEST" colspan="4" col="1" row="291" class="editorHeadlines">
             <text>
                 <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
             </text>
         </cell>
         <!-- parent -->
-        <cell class="editorMandatory" row="200" col="1" anchor="NORTHWEST" ref="parent_label" />
-        <cell row="200" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
+        <cell class="editorMandatory" row="300" col="1" anchor="NORTHWEST" ref="parent_label" />
+        <cell row="300" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
-        <cell row="250" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+        <cell row="350" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
-        <cell row="300" col="1" anchor="EAST" />
-        <cell row="300" col="2" anchor="EAST" ref="save" />
+        <cell row="400" col="1" anchor="EAST" />
+        <cell row="400" col="2" anchor="EAST" ref="save" />
     </panel>
     <!-- panel definitions -->
     <!-- MainTitle ================================================================== -->

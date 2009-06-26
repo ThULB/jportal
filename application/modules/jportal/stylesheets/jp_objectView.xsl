@@ -1551,6 +1551,9 @@
                                     <xsl:with-param name="obj_id" select="@xlink:href" />
                                 </xsl:call-template>
                             </xsl:when>
+                            <xsl:when test="@class='MCRMetaDerivateLink'">
+                              <xsl:call-template name="derivateLink" />
+                            </xsl:when>
                             <xsl:otherwise>
                                 <xsl:choose>
                                     <xsl:when test="$allowHTMLInArticles = 'true'">

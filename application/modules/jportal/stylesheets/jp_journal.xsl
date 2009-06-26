@@ -181,16 +181,11 @@
     <!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
     <xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <xsl:choose>
-            <!--
-                you could insert any title-like metadata here, e.g.
-                replace "your-tags/here" by something of your metadata
-            -->
-            <xsl:when test="./metadata/your-tags">
+            <xsl:when test="./metadata/maintitles/maintitle">
                 <xsl:call-template name="printI18N">
-                    <xsl:with-param select="./metadata/your-tags/here" name="nodes" />
+                    <xsl:with-param select="./metadata/maintitles/maintitle" name="nodes" />
                 </xsl:call-template>
             </xsl:when>
-
             <xsl:otherwise>
                 <xsl:value-of select="@label" />
             </xsl:otherwise>

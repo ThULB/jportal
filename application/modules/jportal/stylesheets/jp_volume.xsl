@@ -352,13 +352,9 @@
     <!--Template for generated link names and result titles: see mycoreobject.xsl, results.xsl, MyCoReLayout.xsl-->
     <xsl:template priority="1" mode="resulttitle" match="/mycoreobject[contains(@ID,'_jpvolume_')]">
         <xsl:choose>
-            <!--
-                you could insert any title-like metadata here, e.g.
-                replace "your-tags/here" by something of your metadata
-            -->
-            <xsl:when test="./metadata/your-tags">
+            <xsl:when test="./metadata/maintitles/maintitle">
                 <xsl:call-template name="printI18N">
-                    <xsl:with-param select="./metadata/your-tags/here" name="nodes" />
+                    <xsl:with-param select="./metadata/maintitles/maintitle" name="nodes" />
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
@@ -640,6 +636,16 @@
                                 </table>
                             </xsl:if>
                         </xsl:if>
+
+                        <!--7*** derivate links *************************************-->
+                        <table cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDates">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/derivateLinks" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.derivateLink_label')" name="label" />
+                            </xsl:call-template>
+                        </table>
+
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">

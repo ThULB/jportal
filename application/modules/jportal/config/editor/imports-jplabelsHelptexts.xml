@@ -40,6 +40,9 @@
     <!-- *** Data for the mainauthor *** -->
     <text id="participants_label" i18n="editormask.labels.participants_label" />
 
+    <!-- *** Data for the mainauthor *** -->
+    <text id="derivateLink_label" i18n="editormask.labels.derivateLink_label" />
+
     <text id="participants_label_bold" i18n="editormask.labels.participants_label" />
 
     <!-- *** Data for the keyword *** -->

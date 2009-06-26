@@ -33,6 +33,11 @@
         <element name="keywords" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="keyword" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
         </element>
+
+        <element name="derivateLinks" minOccurs='0' maxOccurs='1'>
+          <mcrmetaderivatelink name="derivateLink" class="MCRMetaDerivateLink" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+
         <!-- 07 - abstract -->
         <!-- type = short | long -->
         <element name="abstracts" minOccurs='0' maxOccurs='1'>

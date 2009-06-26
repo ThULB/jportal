@@ -44,6 +44,11 @@
         <element name="collationNotes" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="collationNote" class="MCRMetaLangText" minOccurs='0' maxOccurs='30' length="4096" />
         </element>
+
+        <element name="derivateLinks" minOccurs='0' maxOccurs='1'>
+          <mcrmetaderivatelink name="derivateLink" class="MCRMetaDerivateLink" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+
         <!-- date -->
         <element name="dates" minOccurs='0' maxOccurs='1'>
             <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2' />
