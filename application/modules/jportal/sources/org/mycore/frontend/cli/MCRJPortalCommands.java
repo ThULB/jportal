@@ -27,6 +27,17 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         command.add(com);
         com = new MCRCommand("import dbblob from {0}", "org.mycore.frontend.cli.MCRJPortalCommands.importBlob String", "");
         command.add(com);
+
+        com = new MCRCommand("convert datamodel1 to datamodel2 from file {0}", "org.mycore.frontend.cli.command.MCRDatamodelToDatamodel2Command.convert String",
+        "converts a datamodel 1 file to a new datamodel 2 one");
+        command.add(com);
+
+        com = new MCRCommand("convert ifs linking to derivate linking", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.convert",
+        "converts the old ifs linking of articles and journals to the new derivate linking");
+        command.add(com);
+
+        com = new MCRCommand("internal replace ifs link {0} {1}", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.replaceLink String String", "");
+        command.add(com);
     }
 
     public static void exportBlob(String objectID, String file) {
