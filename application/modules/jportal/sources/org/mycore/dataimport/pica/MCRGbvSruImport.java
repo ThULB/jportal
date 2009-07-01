@@ -16,7 +16,6 @@ public class MCRGbvSruImport implements MCRDataRetriever {
         this.url = url;
     }
 
-    @Override
     public Document getXMLData() {
         Document doc = null;
         try {
