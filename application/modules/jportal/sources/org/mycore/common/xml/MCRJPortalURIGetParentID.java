@@ -10,7 +10,6 @@ public class MCRJPortalURIGetParentID implements MCRURIResolver.MCRResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetParentID.class);
 
-    @Override
     public Element resolveElement(String URI) throws Exception {
         String parentID = URI.substring(URI.indexOf(":") + 1);
         LOGGER.debug("ParentID used to get editor template: " + parentID);
