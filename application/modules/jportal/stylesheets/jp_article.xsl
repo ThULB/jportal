@@ -234,6 +234,7 @@
                         <xsl:call-template name="printClass">
                             <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/rubrics/rubric" />
                             <xsl:with-param name="host" select="'local'" />
+                            <xsl:with-param name="next" select="', '" />
                         </xsl:call-template>
                     </td>
                 </tr>
