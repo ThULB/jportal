@@ -4,13 +4,13 @@
 /*									*/
 /************************************/
 
-#sponsoredlogo-dividing-line {
+.sponsoredlogo-dividing-line {
 	height: 2px; 
 	border-bottom: solid 2px #B2B2B2; 
 	width: 150px; 
 	margin: 0px auto;
 }
-#sponsoredlogo-box {
+.sponsoredlogo-box {
 	margin-left: 20px; 
 	width: 100px; 
 	height: 45px; 
@@ -19,12 +19,12 @@
 	margin-bottom: 5px;
 }	
 	
-#sponsoredlogo-styles {
+.sponsoredlogo-styles {
 	line-height: 0px;
 
 }
 
-#sponsoredlogo-styles img {
+.sponsoredlogo-styles img {
 	vertical-align: middle;
 	border:none; 
 }

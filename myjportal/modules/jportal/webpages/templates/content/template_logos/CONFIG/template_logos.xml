@@ -3,23 +3,23 @@
     <template>
         <journalID value="jportal_jpjournal_00000024" />
         <xhtml>
-            <div style="position:relative;left:20px;">
-                <a href="http://www.dfg.de" id="sponsoredlogo-styles">
+            <div style="position:relative;left:20px;margin-top:10px;">
+                <a href="http://www.dfg.de" class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/DFG_zweizeilig_sw.png"  />
                 </a>
             </div>
-            <div id="sponsoredlogo-box">
+            <div class="sponsoredlogo-box">
                 <a href="http://www.thulb.uni-jena.de"
-                    id="sponsoredlogo-styles">
+                    class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/thulb.png"
                         alt="thulb" />
                 </a>
             </div>
-            <div id="sponsoredlogo-box">
+            <div class="sponsoredlogo-box">
                 <a href="http://www2.uni-jena.de/biologie/ehh/"
-                    id="sponsoredlogo-styles">
+                    class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/ernsthaeckelhaus.png"
                         alt="Ernst-Haeckel-Haus" />
@@ -31,25 +31,25 @@
         <!-- jlm -->
         <journalID value="jportal_jpjournal_00000029" />
         <xhtml>
-            <div style="position:relative;left:20px;">
-                <a href="http://www.dfg.de" id="sponsoredlogo-styles">
+            <div style="position:relative;left:20px;margin-top:10px;">
+                <a href="http://www.dfg.de" class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/DFG_zweizeilig_sw.png"  />
                 </a>
             </div>
-            <div id="sponsoredlogo-box" style="position:relative;top:20px;">
-                <a href="http://www.thulb.uni-jena.de"
-                    id="sponsoredlogo-styles">
+            <div style="position:relative;left:20px;margin-top:10px;">
+                <a href="http://www.klassik-stiftung.de/"
+                    class="sponsoredlogo-styles">
                     <img
-                        src="templates/content/template_logos/IMAGES/thulb.png"
+                        src="templates/content/template_logos/IMAGES/KlassikStiftungW-2.png"
                          />
                 </a>
             </div>
-            <div style="position:relative;left:20px;top:40px;">
-                <a href="http://www.klassik-stiftung.de/"
-                    id="sponsoredlogo-styles">
+            <div style="position:relative;left:20px;margin-top:10px;" >
+                <a href="http://www.thulb.uni-jena.de"
+                    class="sponsoredlogo-styles">
                     <img
-                        src="templates/content/template_logos/IMAGES/KlassikStiftungW-2.png"
+                        src="templates/content/template_logos/IMAGES/thulb.png"
                          />
                 </a>
             </div>
@@ -60,9 +60,9 @@
         <journalID value="jportal_jpjournal_00000051" />
         <journalID value="jportal_jpjournal_00000052" />
         <xhtml>
-            <div id="sponsoredlogo-box">
+            <div class="sponsoredlogo-box">
                 <a href="http://www.thulb.uni-jena.de"
-                    id="sponsoredlogo-styles">
+                    class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/thulb.png"
                         alt="thulb" />
@@ -70,7 +70,7 @@
             </div>
             <div>
                 <a href="http://www.bibliothek.uni-erfurt.de"
-                    id="sponsoredlogo-styles">
+                    class="sponsoredlogo-styles">
                     <img
                         src="templates/content/template_logos/IMAGES/UFBE.png"
                         alt="thulb" />
