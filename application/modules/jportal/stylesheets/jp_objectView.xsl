@@ -1518,6 +1518,7 @@
                                 <xsl:call-template name="printClass">
                                     <xsl:with-param name="nodes" select="." />
                                     <xsl:with-param name="host" select="$objectHost" />
+                                    <xsl:with-param name="next" select="', '" />
                                 </xsl:call-template>
                                 <xsl:call-template name="printClassInfo">
                                     <xsl:with-param name="nodes" select="." />
