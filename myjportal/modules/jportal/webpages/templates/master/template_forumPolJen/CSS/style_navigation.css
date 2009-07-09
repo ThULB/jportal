@@ -214,6 +214,7 @@ div.main_menu {
     border-width: 0px;
     vertical-align: top;
     width: 200px;
+    margin-bottom: 8px;
 }
 
 #navi_main_active
