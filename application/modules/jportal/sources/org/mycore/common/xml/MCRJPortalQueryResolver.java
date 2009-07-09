@@ -19,8 +19,11 @@ public class MCRJPortalQueryResolver implements MCRResolver {
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalQueryResolver.class);
 
     private static final String QUERY_PARAM = "term";
+
     private static final String SORT_PARAM = "sortby";
+
     private static final String ORDER_PARAM = "order";
+
     private static final String MAXRESULTS_PARAM = "maxResults";
 
     /**
@@ -53,6 +56,7 @@ public class MCRJPortalQueryResolver implements MCRResolver {
         // Execute query
         long start = System.currentTimeMillis();
         MCRResults result = MCRQueryManager.search(MCRQuery.parseXML(input));
+
         long qtime = System.currentTimeMillis() - start;
         LOGGER.debug("MCRSearchServlet total query time: " + qtime);
         return result.buildXML();
@@ -67,7 +71,7 @@ public class MCRJPortalQueryResolver implements MCRResolver {
 
     private static String addDeletedFlag(String oldQry) {
         String newQry = oldQry;
-        if(!newQry.contains("deletedFlag"))
+        if (!newQry.contains("deletedFlag"))
             newQry = "(" + newQry + ") and (deletedFlag = false)";
         return newQry;
     }

@@ -2,8 +2,10 @@
 <MyCoReWebPage>
     <section xml:lang="de" title="Suche nach Personen">
         <p>
-            Bitte beachten sie, dass sich die Suche auf alle Personen in Journals@UrMEL bezieht.
+            Bitte beachten Sie, dass sich die Suche auf alle Personen in Journals@UrMEL bezieht.
             <br />
+            Nutzen Sie bitte auch die Möglichkeit der Trunkierung mit „*“
+            <br/>
         </p>
         <editor id="searchmask-de">
             <include uri="webapp:editor/editor-search-jpperson.xml" />

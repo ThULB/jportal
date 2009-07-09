@@ -23,7 +23,7 @@
       <xsl:when test="$objectCount > 0">
         <p>
           <xsl:value-of
-            select="'Wählen sie eine Zeitschrift aus der folgenden Liste:'" />
+            select="'Wählen Sie eine Zeitschrift aus der folgenden Liste:'" />
         </p>
         <xsl:call-template name="journalList.printShortcuts">
           <xsl:with-param name="objectCount" select="$objectCount" />

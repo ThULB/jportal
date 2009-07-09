@@ -35,13 +35,20 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 4. PREPERATION 
 ======================================
 ======================================
-- Setting system environment variables
+- Setting system environment variables (this is optional)
 -- $MYCORE_HOME to <Installation-Directory>/jportal/mycore
 -- $DOCPORTAL_HOME to <Installation-Directory>/jportal/application
 
 - Create JPortal properties 
 -- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
 -- cp $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml.template $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml
+
+- Imaging component and Image viewer (this is optional)
+-- depends on JAI library
+-- can be downloaded from https://jai.dev.java.net/
+-- put the library files into $MYCORE_HOME/lib
+-- the component will be activated automatically, no property setting needed 
+   just the existence of the library files in $MYCORE_HOME/lib
 
 
 5. CONFIGURATION
@@ -64,14 +71,13 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          2. ant jar
    2. Application
          1. cd $DOCPORTAL_HOME
-         3. ant -f jportal-build.xml create.schema jar create.scripts create.directories
+         3. ant create.schema create.jar create.scripts create.directories
          4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         5. ant -f jportal-build.xml jp.create.usermanag jp.create.default-rules jp.create.class webapps
-         6. make sure Image-Viewer is installed 
+         5. ant create.users create.default-rules create.class create.webapp
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
-cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant -f jportal-build.xml jar create.scripts webapps 
+cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant create.jar create.scripts create.webapp
 
 
 7. RUNNING
