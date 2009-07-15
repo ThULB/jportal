@@ -36,7 +36,7 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         "converts the old ifs linking of articles and journals to the new derivate linking");
         command.add(com);
 
-        com = new MCRCommand("internal replace ifs link {0} {1}", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.replaceLink String String", "");
+        com = new MCRCommand("internal replace ifs link {0}", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.replaceLink String", "");
         command.add(com);
     }
 

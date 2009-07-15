@@ -41,18 +41,7 @@ public class MCRLinkConvertCommand {
         // go through all articles and volumes
         for(MCRHit hit : results) {
             // get the mcr object
-            MCRObject mcrObj = new MCRObject();
-            mcrObj.receiveFromDatastore(hit.getID());
-
-            // if a ifs link exists in the metadata part
-            MCRMetaElement ifsLinksElement = mcrObj.getMetadata().getMetadataElement("ifsLinks");
-            if(ifsLinksElement != null) {
-                MCRMetaInterface ifsLink = ifsLinksElement.getElement(0);
-                if(ifsLink.getSubTag().equals("ifsLink") && ifsLink instanceof MCRMetaLangText) {
-                    String href = ((MCRMetaLangText)ifsLink).getText();
-                    commandList.add("internal replace ifs link " + mcrObj.getId() + " " + href);
-                }
-            }
+            commandList.add("internal replace ifs link " + hit.getID());
             if(count % 10000 == 0)
                 LOGGER.info(count + " elements checked");
             count++;
@@ -60,29 +49,34 @@ public class MCRLinkConvertCommand {
         return commandList;
     }
 
-    public static void replaceLink(String mcrObjId, String href) throws Exception {
+    public static void replaceLink(String mcrObjId) throws Exception {
         MCRObject mcrObj = new MCRObject();
         mcrObj.receiveFromDatastore(mcrObjId);
-
+        
         // remove old ifs link
-        mcrObj.getMetadata().removeMetadataElement("ifsLinks");
-        // add new derivateLink
-        MCRMetaElement derivateLinksElement = new MCRMetaElement();
-        derivateLinksElement.setTag("derivateLinks");
-        derivateLinksElement.setClassName("MCRMetaDerivateLink");
-        derivateLinksElement.setHeritable(false);
-        derivateLinksElement.setNotInherit(true);
+        MCRMetaElement oldIFSLinks = mcrObj.getMetadata().removeMetadataElement("ifsLinks");
+        if (oldIFSLinks != null) {
+            // add new derivateLink
+            MCRMetaElement derivateLinksElement = new MCRMetaElement();
+            derivateLinksElement.setTag("derivateLinks");
+            derivateLinksElement.setClassName("MCRMetaDerivateLink");
+            derivateLinksElement.setHeritable(false);
+            derivateLinksElement.setNotInherit(true);
 
-        MCRMetaDerivateLink derivateLink = new MCRMetaDerivateLink();
-        derivateLink.setInherited(0);
-        derivateLink.setSubTag("derivateLink");
-        derivateLink.setReference(href, null, null);
+            MCRMetaDerivateLink derivateLink = new MCRMetaDerivateLink();
+            derivateLink.setInherited(0);
+            derivateLink.setSubTag("derivateLink");
+            String href = ((MCRMetaLangText) oldIFSLinks.getElement(0)).getText();
+            derivateLink.setReference(href, null, null);
 
-        derivateLinksElement.addMetaObject(derivateLink);
-        mcrObj.getMetadata().setMetadataElement(derivateLinksElement, "derivateLinks");
+            derivateLinksElement.addMetaObject(derivateLink);
+            mcrObj.getMetadata().setMetadataElement(derivateLinksElement, "derivateLinks");
 
-        mcrObj.updateInDatastore();
+            mcrObj.updateInDatastore();
 
-        LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
+            LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
+        } else {
+            LOGGER.info("object " + mcrObj.getId() + " has no links.");
+        }
     }
 }
