@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000050">
+    <label xml:lang="de" text="Gattung 1826"/>
+    <categories>
+        <category ID="00001000">
+            <label xml:lang="de" text="I.a) Naturgeschichte"/>
+        </category>
+        <category ID="00002000">
+            <label xml:lang="de" text="I.b) Zoologie"/>
+        </category>
+        <category ID="00003000">
+            <label xml:lang="de" text="I.c) Anatomie"/>
+        </category>
+        <category ID="00004000">
+            <label xml:lang="de" text="I.d) Physiologie"/>
+        </category>
+        <category ID="00005000">
+            <label xml:lang="de" text="I.e) Medizin"/>
+        </category>
+        <category ID="00006000">
+            <label xml:lang="de" text="I.f) Botantik"/>
+        </category>
+        <category ID="00007000">
+            <label xml:lang="de" text="I.g) Mineralogie"/>
+        </category>
+        <category ID="00008000">
+            <label xml:lang="de" text="I.h) Chemie"/>
+        </category>
+        <category ID="00009000">
+            <label xml:lang="de" text="I.i) Physik"/>
+        </category>
+        <category ID="00010000">
+            <label xml:lang="de" text="I.k) Mathematik"/>
+        </category>
+        <category ID="00011000">
+            <label xml:lang="de" text="I.m) Reisen"/>
+        </category>
+        <category ID="00012000">
+            <label xml:lang="de" text="II.n) Geographie"/>
+        </category>
+        <category ID="00013000">
+            <label xml:lang="de" text="II.o) Geschichte"/>
+        </category>
+        <category ID="00014000">
+            <label xml:lang="de" text="II.p) Aesthetik, Kunst und Sprachen"/>
+        </category>
+        <category ID="00015000">
+            <label xml:lang="de" text="II.q) Philosophie"/>
+        </category>
+        <category ID="00016000">
+            <label xml:lang="de" text="II.r) Litteratur"/>
+        </category>
+        <category ID="00017000">
+            <label xml:lang="de" text="II.s) Gewerbe, Oeconomie und Technologie"/>
+        </category>
+    </categories>
+</mycoreclass>

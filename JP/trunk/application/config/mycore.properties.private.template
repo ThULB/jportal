@@ -1,0 +1,375 @@
+#-- ===================================================================
+#-- MyCoRe sample application private properties template file       
+#-- $Revision: 14560 $ $Date: 2008-12-11 14:10:09 +0100 (Do, 11. Dez 2008) $                  
+#-- ===================================================================
+#
+# The MyCoRe properties PRIVATE sample file for the Dublin Core Demo
+#
+##############################################################################
+# System titles
+##############################################################################
+
+# Displayed title in the WEB browser
+  MCR.NameOfProject=DocPortal
+  
+# The String of the commandline interface prompt
+  MCR.CommandLineInterface.SystemName=%MCR.NameOfProject%
+
+##############################################################################
+# Module includes, component excludes
+##############################################################################
+  MCR.Modules.Application=docportal
+
+#exclude these mycore components
+ MCR.Components.Exclude=migration13-20
+
+#############################################################################
+# WEB browser base URL
+#############################################################################
+
+# The base URL of the web application, e.g. for tomcat http://localhost:8080/docportal/
+  MCR.baseurl=http://localhost:8291/
+  
+# If MyCoRe runs behind a proxy, e.g. Apache mod_proxy, you should set
+# this property to the IP of the proxy, so that IP based access control will 
+# work. The IP of the local host and 127.0.0.1 are automatically trusted.
+# MCR.Request.TrustedProxies=132.252.180.211, 132.252.176.92
+  
+#############################################################################
+# System directories
+#############################################################################
+
+# The base directory of the DocPortal installation and data, e.g. for windows c:/program files/docportal
+  MCR.basedir=/home/mcradmin/docportal
+  
+# The data directory of the DocPortal installation
+  MCR.datadir=%MCR.basedir%/data
+  
+# The save directory of the DocPortal installation
+  MCR.Save.FileSystem=%MCR.basedir%/save
+  
+# The Lucene store directories
+  MCR.Searcher.lucene-metadata.IndexDir=%MCR.datadir%/lucene-index4metadata
+  MCR.Searcher.lucene-content.IndexDir=%MCR.datadir%/lucene-index4content
+
+# The filestore dirctory for IFS
+  MCR.IFS.ContentStore.FS.URI=%MCR.datadir%/filestore
+
+# EHCache directory
+  MCR.EHCache.diskStore.path=%MCR.datadir%/ehcache
+
+# if you don't set this, hibernate-mapping.dtd is stored in your system-temp-directory
+  MCR.Hibernate.DTD.Directory=%MCR.basedir%/build/schema
+
+##############################################################################
+# JDBC Parameter (need to build scripts)
+##############################################################################
+
+# JDBC parameters for connecting to DB2
+# MCR.Persistence.SQL.Type=db2
+# MCR.Persistence.SQL.Database.Name=docportal
+
+# JDBC parameters for connecting to MySQL
+# MCR.Persistence.SQL.Type=mysql
+# MCR.Persistence.SQL.Database.Name=docportal
+
+# JDBC parameters for connecting to HSQLDB
+  MCR.Persistence.SQL.Type=hsqldb
+  MCR.Persistence.SQL.Database.Name=docportal
+  MCR.Persistence.SQL.Data.Directory=%MCR.datadir%/hsqldb-data
+  MCR.Persistence.SQL.Database.Port=8298
+  MCR.Persistence.SQL.Database.URL=jdbc:hsqldb:hsql://localhost:8298
+
+##############################################################################
+# Webservices                                                                #
+##############################################################################
+
+# The user which is allowed to deploy/undeploy Webservices
+# Values are stored in WEB-INF/users.lst and used by Axis-AdminServlet 
+# Values are used in ant-task (see docportal/modules/module-webservices/build.xml)
+# to deploy/undeploy webservice
+# if these values are not set deployment results in an error message
+  MCR.WebService.Admin=administrator
+  MCR.WebService.AdminPasswd=alleswirdgut
+
+##############################################################################
+# User Management                                                            #
+##############################################################################
+
+# The switch to determine whether we use password encryption or not
+# (turn on='true' or off='false'). Please refer to the UserGuide before
+# switching encryption on!
+  MCR.Users.UsePasswordEncryption=true
+
+# The configuration for the superuser
+  MCR.Users.Superuser.UserName=administrator
+  MCR.Users.Superuser.UserPasswd=alleswirdgut
+  MCR.Users.Superuser.GroupName=admingroup
+
+# The configuration for the guestuser
+  MCR.Users.Guestuser.UserName=gast
+  MCR.Users.Guestuser.UserPasswd=gast
+  MCR.Users.Guestuser.GroupName=guestgroup
+
+##############################################################################
+# Mail
+##############################################################################
+
+# Generic mail configuration for MCRMailer
+# The server for outgoing mails
+  MCR.Mail.Server=my-mail-host.de
+# The mail protocol
+  MCR.Mail.Protocol=smtp
+# The debug option
+  MCR.Mail.Debug=false
+# Encoding for the mail
+  MCR.Mail.Encoding=UTF-8
+# Number of send tries
+  MCR.Mail.NumTries=1
+# Editor Mail adresses for Messages add1@serv1,add2@serv2,...
+  MCR.Mail.Address=
+  
+##############################################################################
+# Editor
+##############################################################################
+
+# Files smaller than this number of bytes will be kept in memory
+  MCR.Editor.FileUpload.MemoryThreshold=1000000
+
+# Maximum size of any file that is uploaded with editor form
+  MCR.Editor.FileUpload.MaxSize=5000000
+
+# Directory where files may be temporary stored during upload
+  MCR.Editor.FileUpload.TempStoragePath=%MCR.datadir%/fileupload
+
+##############################################################################
+# File Upload
+##############################################################################
+
+# FileUpload connection
+# MCR.FileUpload.IP=
+  MCR.FileUpload.Port=8299
+
+##############################################################################
+# Helix Universal Server 9.0 (Real) File Content Store                       #
+##############################################################################
+
+# The class that implements the Real Server 8.0 / 9.0 content store:
+# MCR.IFS.ContentStore.HELIX.Class=org.mycore.backend.filesystem.MCRCStoreRemoteFTP
+
+# Hostname, port, user ID and password for FTP connections to
+# Real Server host:
+# MCR.IFS.ContentStore.HELIX.Hostname=realhelix.uni-essen.de
+# MCR.IFS.ContentStore.HELIX.FTPPort=21
+# MCR.IFS.ContentStore.HELIX.UserID=XXXX
+# MCR.IFS.ContentStore.HELIX.Password=XXXX
+
+# If true, debug messages for FTP session will be written to STDOUT:
+# MCR.IFS.ContentStore.HELIX.DebugFTP=false
+
+# The directory on the Real Server host where the files are stored:
+# MCR.IFS.ContentStore.HELIX.BaseDirectory=/real/content/
+
+# The class that implements the AudioVideoExtender for this store:
+# MCR.IFS.AVExtender.HELIX.Class=org.mycore.backend.realhelix.MCRAVExtRealHelix
+
+# URL where clients can download the Real Player:
+# MCR.IFS.AVExtender.HELIX.RealPlayerURL=http://www.real.com/player/index.html
+
+# URL where clients can download Windows Media Player:
+# MCR.IFS.AVExtender.HELIX.MediaPlayerURL=http://www.microsoft.com/windows/windowsmedia/download/
+
+# Base URL of Real Server RAM generator mount point,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.RamGenBaseURL=http://realhelix.uni-essen.de:4887/ramgen/content/
+
+# Base URL of Helix Server ASX generator mount point,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.AsxGenBaseURL=http://realhelix.uni-essen.de:4887/asxgen/content/
+
+# Base URL of Real Server View Source script,
+# MUST end with a slash (/)
+# MCR.IFS.AVExtender.HELIX.ViewSourceBaseURL=http://realhelix.uni-essen.de:4887/viewsource/template.html?src=/content/
+
+##############################################################################
+# IBM VideoCharger Server 8.1 File Content Store                             #
+##############################################################################
+
+# The class that implements the VideoCharger 7.1 / 8.1 content store:
+# MCR.IFS.ContentStore.VC.Class=org.mycore.backend.videocharger.MCRCStoreVideoCharger
+
+# Hostname, port, user ID and password for FTP connections to 
+# IBM VideoCharger server:
+
+# MCR.IFS.ContentStore.VC.Hostname=videocharger.uni-essen.de
+# MCR.IFS.ContentStore.VC.FTPPort=4324
+# MCR.IFS.ContentStore.VC.UserID=XXXX
+# MCR.IFS.ContentStore.VC.Password=XXXX
+
+# If true, debug messages for FTP session will be written to STDOUT:
+# MCR.IFS.ContentStore.VC.DebugFTP=false
+
+# The class that implements the AudioVideoExtender for this store:
+# MCR.IFS.AVExtender.VC.Class=org.mycore.backend.videocharger.MCRAVExtVideoCharger
+
+# URL where clients can download the IBM VideoCharger Player:
+# MCR.IFS.AVExtender.VC.PlayerURL=http://videocharger.uni-essen.de/vs_public/download/en_US/player.html
+
+# URLs of VideoCharger vslist and iscpfsel CGI scripts:
+# This is used to start VideoCharger player and to get metadata:
+
+# MCR.IFS.AVExtender.VC.VSListURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/vslist
+# MCR.IFS.AVExtender.VC.ISCPFSelURL=http://videocharger.uni-essen.de/vs_public/cgi-bin/iscpfsel
+
+##############################################################################
+# OAI Clients                                                                #
+##############################################################################
+
+## instance independent settings
+# the email address of the oai admin
+  MCR.OAI.AdmineMail=%MCR.Mail.Address%
+
+# A temporary directory to store the resumption tokens
+  MCR.OAI.Resumptiontoken.Dir=%MCR.datadir%/tmp
+# the store, where resumption tokens are saved
+  MCR.OAI.Resumptiontoken.Store=org.mycore.backend.hibernate.MCRHIBResumptionTokenStore
+# timeout, after which the resumption tokens will be deleted (in hours)
+  MCR.OAI.Resumptiontoken.Timeout=48
+
+# implementation of the OAI query interface
+  MCR.OAI.QueryService=org.mycore.services.oai.MCROAIQueryImpl
+# Number of results in the list
+  MCR.OAI.MaxReturns=50
+# A String not allowed in MCROBJIDs
+  MCR.OAI.Separator.Hit=;
+# A String not allowed in SPECS and SPECDESCRIPTIONS
+  MCR.OAI.Separator.Spec=###
+
+# just the url of friends-providers
+# MCR.OAI.Friends=mycoresamplelinux.dl.uni-leipzig.de/servlets/MCROAIDataProvider
+
+# metadata transformer stylesheets: oai_dc is required, others are optional and use as input metadata format oai_dc
+  MCR.OAI.Metadata.Transformer.oai_dc=MyCoReOAI-mycore2dc.xsl
+
+# qualified Dublin Core
+  MCR.OAI.Metadata.Transformer.oai_qdc=MyCoReOAI-mycore2dcqualified.xsl
+  MCR.OAI.Metadata.Namespace.oai_qdc=http://www.mycore.de/xmlns/qdc
+  MCR.OAI.Metadata.Schema.oai_qdc=http://www.mycore.de/schema/qdc.xsd
+# MCR.OAI.Metadata.Element.oai_qdc=
+
+# xMetaDiss
+# MCR.OAI.Metadata.Transformer.xmetadiss=MyCoReOAI-mycore2xMetaDiss.xsl
+# MCR.OAI.Metadata.Namespace.xmetadiss=http://www.ddb.de/standards/xMetaDiss/
+# MCR.OAI.metadata.schema.xmetadiss=http://www.ddb.de/standards/xmetadiss/xmetadiss.xsd
+# MCR.OAI.Metadata.Element.xmetadiss=
+
+# xEpicur
+# MCR.OAI.Metadata.Transformer.epicur=MyCoReOAI-mycore2xepicur.xsl
+# MCR.OAI.Metadata.Namespace.epicur=urn:nbn:dC:1111-2004033116
+# MCR.OAI.metadata.schema.epicur=urn:nbn:dC:1111-2004033116 http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:dC:1111-2004033116
+# MCR.OAI.Metadata.Element.epicur=
+
+## instance dependent settings for instance OAIProvider
+  MCR.OAI.Repository.Identifier.MCROAIProvider=oai.mycore.de
+  MCR.OAI.Repository.Name.MCROAIProvider=MyCoRe Repository DocPortal
+
+# a mycore-query condition that is joined with "AND" with the other query (from,until,set)
+# you can restrict an instance here to a special document-type or something else
+  MCR.OAI.QueryRestriction.OAIProvider=<condition field="objecttype" value="document" operator="=" />
+
+# DINIspec - searchField mapping: ddc = subject, pub-type = type, doc-type=format;
+# MCR.OAI.Dini-mapping=
+
+  MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type
+# MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type, subject
+  MCR.OAI.Setscheme.Classids.MCROAIProvider.format=DocPortal_class_00000006
+  MCR.OAI.Setscheme.Classids.MCROAIProvider.type=DocPortal_class_00000005
+# MCR.OAI.Setscheme.Classids.MCROAIProvider.subject=DocPortal_class_00000009
+
+##############################################################################
+# The MyCoRe properties URN file for the DocPortal                           #
+##############################################################################
+
+# By default, all users in group "admins" can add a URN to a document
+# If another group should also be able to do this, set the group name here
+# MCR.URN.AdminGroup=admingroup
+
+# CHANGE: Subnamespace for Campus MyCoRe
+  MCR.URN.SubNamespace.UBL.Prefix=urn:nbn:de:mcr:1-
+  MCR.URN.SubNamespace.UBL.NISSBuilder=org.mycore.services.urn.MCRNISSBuilderDateCounter
+  MCR.URN.SubNamespace.UBL.NISSPattern=yyyyMMdd-HHmmss-
+
+# URL of the master resolver at Deutsche Bibliothek
+  MCR.URN.Resolver.MasterURL=http://nbn-resolving.de/urn/resolver.pl?urn=
+
+# URL for local redirects to registered documents
+  MCR.URN.Resolver.DocumentURL=receive/
+
+##############################################################################
+# Applet JAR signing Parameters                                              #
+##############################################################################
+
+# Alias for key pair, e.g. mycore
+  SIGN.Alias=docportal
+
+# File where the keys are stored in
+  SIGN.KeyStore=%MCR.basedir%/build/keystore
+
+# Password for keystore and key pair
+# SET IN PRIVATE.PROPERTIES: SIGN.Password
+  SIGN.Password=alleswirdgut
+
+# Number of days the key should be valid
+  SIGN.Validity=1000
+
+# Name, organization and country of signer
+  SIGN.Name=Dokumenten-Server DocPortal
+  SIGN.OrgUnit=DocPortal
+  SIGN.Organization=MyCoRe
+  SIGN.Country=Germany
+
+##############################################################################
+# Logging System                                                             #
+##############################################################################
+
+# Set the log level and appender for the general logger
+# appender flog: use for fast logging
+# appender stdout: use if performance is not important but details
+
+  log4j.rootLogger=INFO, stdout
+# log4j.logger.org.mycore=DEBUG
+# log4j.rootLogger=DEBUG, flog
+
+# exclude MyCoRe classes from debug
+  log4j.logger.org.mycore.access.MCRAccessBaseImpl=INFO
+  log4j.logger.org.mycore.access.mcrimpl.MCRAccessRule=INFO
+  log4j.logger.org.mycore.access.mcrimpl.MCRRuleStore=INFO
+  log4j.logger.org.mycore.backend.hibernate=ERROR
+  log4j.logger.org.mycore.common.MCRUtils=INFO
+  log4j.logger.org.mycore.common.xml.MCRURIResolver=INFO
+  log4j.logger.org.mycore.common.xml.MCRLayoutService=INFO
+  log4j.logger.org.mycore.datamodel.classifications.MCRClassificationQuery=INFO
+  log4j.logger.org.mycore.services.plugins.TextFilterPluginManager=INFO
+  log4j.logger.org.mycore.services.fieldquery.MCRFieldDef=INFO
+  log4j.logger.org.mycore.services.i18n.MCRTranslation=INFO
+  log4j.logger.org.mycore.user=INFO
+
+#exclude external classes from debug
+  log4j.logger.org.hibernate=ERROR
+  log4j.logger.org.hsqldb=ERROR
+  log4j.logger.com.mchange=ERROR
+  log4j.logger.org.pdfbox=ERROR
+
+##############################################################################
+# Website                                                                    #
+##############################################################################
+
+# Read access verification for the website
+## true | false 
+## "true": each displayed webpage and menu item will be checked if 
+## allowed to watch
+## "false": no check will be done. every page can be watched by everyone
+## -> use "false" if you don't have restrictions, 'cause loading times are shorter
+MCR.Website.ReadAccessVerification=true
+
+##############################################################################

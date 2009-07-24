@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO_8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<head>
+ <maintitle xml:lang="de">DocPortal</maintitle>
+ <maintitle xml:lang="en">DocPortal</maintitle>
+ <pagetitle xml:lang="de">Fehlende Zugriffsberechtigung</pagetitle>
+ <pagetitle xml:lang="en">Access Rights are missing</pagetitle>
+</head>
+
+<section title="Keine Zugriffsberechtigung" xml:lang="de">
+<center>
+<table width="80%">
+ <tr align="center">
+  <td align="center">
+<font color="red">
+Sie sind nicht befugt, die angeforderten Inhalte einzusehen!
+</font>
+  </td>
+ </tr>
+</table>
+</center>
+</section>
+
+<section title="No Access Rights" xml:lang="en">
+<center>
+<table width="80%">
+ <tr align="center">
+  <td align="center">
+<font color="red">
+You aren't allowed to see the required data! 
+</font>
+  </td>
+ </tr>
+</table>
+</center>
+</section>
+
+</MyCoReWebPage>
+
+

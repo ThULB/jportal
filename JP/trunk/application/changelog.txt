@@ -1,0 +1,37 @@
+
+Version 2.0 (actual head tree)
+==============================
+- Added "ant create.searchmask" to generate search masks from searchfields.xml
+- Refactoring the build process for the application. Split to a source, a build and a data tree.
+- Move scripts of Unix and Windows from bin to their directories.
+- Replaced MyCoRe-Logo in upper left corner by DocPortal logo
+- Split message_*.properties into messages_common_*.properties and messages_datamodel_*.properties
+
+Version 1.3.x
+===========
+ - image-viewer module added 
+ - Remove the old persitence layer.
+ - Change the CreateDatebase to the CM8 tree only.
+ - Redesign the CM8 persitence.
+ - Change the search perstence to EventHandler model.
+ - Add an EventHandler for the LinkTableManager. 
+ - Remove the TypedContent construct from teh datamodel classes.
+
+Version 1.2
+===========
+ - mycoresample and docportal merged to one sample application
+ - docportal initial works with HSQLDB and JDOM, no additional
+   installations are nessesary
+
+Version 1.1
+===========
+ - Move the sample data th a separarte CVS tree.
+ - Add commands to create the SQL tables.
+ - Stylesheets make use of the 'query:' protocol to save
+   http request to the MCRQueryServlet.
+ - Add the configuration for the MCRIndexServlet to support robots.
+
+Version 1.0
+===========
+ - initial release
+

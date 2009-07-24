@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Suche nach Ausgaben">
+    <editor id="searchmask-de">
+      <include uri="webapp:editor/editor-search-jpvolume.xml"/>
+    </editor>
+  </section>
+  <section xml:lang="en" title="Search for volumes">
+    <editor id="searchmask-en">
+      <include uri="webapp:editor/editor-search-jpvolume.xml"/>
+    </editor>
+  </section>
+</MyCoReWebPage>

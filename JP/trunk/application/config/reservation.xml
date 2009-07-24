@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE nbn-printable>
+
+<nbn-printable title="NBN Reservierung">
+  <section title="NBN-Reservierungsdaten">
+    <h3 class="font">Sehr geehrter miami-Kunde!</h3>
+       Zur dauerhaften und eindeutigen Identifizierung einer von Ihnen erstellen Online-Publikation
+       wird Ihnen ein Persistent Identifier aus dem Namensraum NBN (National Bibliography Number) zugeteilt.
+       Die Auflösung des Identifiers in eine abrufbare Internet-Adresse (URL) kann online über den angegebenen Resolver erfolgen.<br/>
+       <br/>
+       Der Identifier ist zusammen mit der vollständigen Resolver-Adresse in der unten angegebenen Form in Ihrem Dokument aufzunehmen.
+       Die Daten sollten unterhalb des Titels und vor dem Text eingefügt werden.<br/>
+       <br/>
+       Die gedruckte und die Online-Publikation müssen vollständig übereinstimmen.
+  </section>
+</nbn-printable>

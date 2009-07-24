@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000049">
+    <label xml:lang="de" text="Textsprache"/>
+    <categories>
+        <category ID="00001000">
+            <label xml:lang="de" text="deutsch"/>
+        </category>
+        <category ID="00002000">
+            <label xml:lang="de" text="deutsch / französisch"/>
+        </category>
+        <category ID="00003000">
+            <label xml:lang="de" text="deutsch / griechisch"/>
+        </category>
+        <category ID="00004000">
+            <label xml:lang="de" text="deutsch / latein"/>
+        </category>
+        <category ID="00005000">
+            <label xml:lang="de" text="deutsch / russisch"/>
+        </category>
+        <category ID="00006000">
+            <label xml:lang="de" text="deutsch / ungarisch"/>
+        </category>
+        <category ID="00007000">
+            <label xml:lang="de" text="englisch"/>
+        </category>
+        <category ID="00008000">
+            <label xml:lang="de" text="englisch / latein"/>
+        </category>
+        <category ID="00009000">
+            <label xml:lang="de" text="französisch"/>
+        </category>
+        <category ID="00010000">
+            <label xml:lang="de" text="französisch / latein"/>
+        </category>
+        <category ID="00011000">
+            <label xml:lang="de" text="italienisch"/>
+        </category>
+        <category ID="00012000">
+            <label xml:lang="de" text="latein"/>
+        </category>
+        <category ID="00013000">
+            <label xml:lang="de" text="niederländisch"/>
+        </category>
+        <category ID="00014000">
+            <label xml:lang="de" text="schwedisch"/>
+        </category>
+    </categories>
+</mycoreclass>

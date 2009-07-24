@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000063">
+    <label xml:lang="de" text="Bestandsnachweis" description="Bestandsnachweis" />
+    <label xml:lang="en" text="Location" description="Location" />
+    <categories>
+        <category ID="thulb">
+            <label xml:lang="de" text="ThULB" />
+            <label xml:lang="en" text="ThULB" />
+        </category>
+        <category ID="haabWeimar">
+            <label xml:lang="de" text="HAAB Weimar"></label>
+        </category>
+        <category ID="ufbErfurtGotha">
+            <label xml:lang="de" text="UFB Erfurt / Gotha"></label>
+        </category>
+        <category ID="cityArchiveEisenberg">
+            <label xml:lang="de" text="Stadtarchiv Eisenberg"></label>
+        </category>
+        <category ID="cityArchiveSuhl">
+            <label xml:lang="de" text="Stadtarchiv Suhl"></label>
+        </category>
+        <category ID="cityLibrarySuhl">
+            <label xml:lang="de" text="Stadtbibliothek Suhl"></label>
+        </category>
+        <category ID="cityLibraryLangensalza">
+            <label xml:lang="de" text="Stadtbibliothek Bad Langensalza"></label>
+        </category>
+        <category ID="tuIlmenau">
+            <label xml:lang="de" text="TU Ilmenau"></label>
+        </category>
+        <category ID="ulbHalle">
+            <label xml:lang="de" text="ULB Halle"></label>
+        </category>
+        <category ID="countryArchiveRudolstadt">
+            <label xml:lang="de" text="Staatsarchiv Rudolstadt"></label>
+        </category>
+    </categories>
+</mycoreclass>

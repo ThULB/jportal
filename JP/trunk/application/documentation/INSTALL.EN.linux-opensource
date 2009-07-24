@@ -1,0 +1,93 @@
+Installation instructions for DocPortal under Linux
+
+1. Software Requirements
+========================
+
+- Java 1.5 or higher
+  tested with JDK 1.5
+
+- Jakarta-ant version 1.7 or higher
+  Download: http://www.artfiles.org/apache.org/ant/binaries
+  tested: apache-ant-1.7.0-bin.tar.gz
+  It is recommended to deinstall old versions of RPM packages!
+
+- command line Subversion
+
+To use DocPortal as a test system it is not required to install
+a DBMS or web application server. MyCoRe comes with HSQLDB (a
+lightweight Java based database engine) and Jetty (a lightweight
+Java web server software).
+For informations about alternatives look into the User Guide.
+
+
+2. Configuration and Installation
+=================================
+
+- create a new user (mcradmin) with following profile
+  export MYCORE_HOME=/Path_to_MyCoRe
+  export DOCPORTAL_HOME=/Path_to_DocPortal
+
+- compile mycore
+  + cd $MYCORE_HOME
+  + cp config/build.properties.template config/build.properties
+  + ant jar
+
+- docportal
+  + cd $DOCPORTAL_HOME
+  + cp config/mycore.properties.private.template config/mycore.properties.private
+  + cp config/hibernate/hibernate.cfg.xml.template config/hibernate/hibernate.cfg.xml
+
+- edit config/mycore.properties.private
+  MCR.basedir=/Path_to_DocPortal
+
+- check config/hibernate/hibernate.cfg.xml
+  This file is preconfigured for HSQLDB. If you use the default configuration
+  there is nothing to be done.
+
+- check configuration and compile
+  + ant info				# check the output
+  + ant create.schema
+  + ant create.jar
+
+
+2.1. Installation of optional components
+========================================
+
+- MyCoRe contains components for an Image-Viewer (Imaging and IView), that are
+  according to license agreements not installed by default. This components are
+  located in $MYCORE_HOME/components. The directory imaging contains a special
+  install.txt. Please, install as explained there.
+
+
+3. Create data structure
+========================
+
+  + ant create.scripts
+  + ant create.directories
+  + nohup build/bin/hsqldbstart.sh &		# start HSQLDB as background process
+
+
+4. Load sample data
+===================
+
+  + ant create.users
+  + ant create.default-rules
+  + ant create.class
+
+
+5. Create webapplication
+========================
+
+  + ant create.webapp
+  + nohup build/bin/jettystart.sh &		# start Jetty as background process
+
+You can see the application using following URL
+  + http://localhost:8291/
+
+
+6. Stop all processes
+=====================
+
+ + cd $DOCPORTAL_HOME
+ + build/bin/jettystop.sh			# stop Jetty
+ + build/bin/hsqldbstop.sh			# stop HSQLDB

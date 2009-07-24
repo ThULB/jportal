@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mcrdefaultacls>
+ <servacls class="MCRMetaAccessRule">
+  <servacl permission="writewf">
+   <condition format="xml">
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="editors" operator="=" field="group"/>
+     </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="deletewf">
+   <condition format="xml">
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+     </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="writedb">
+   <condition format="xml">
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="editors" operator="=" field="group"/>
+     </boolean>
+   </condition>
+  </servacl>
+ </servacls>
+</mcrdefaultacls>

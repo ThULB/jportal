@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ================================================= -->
+<!-- $Revision: 1.11 $ $Date: 2007-11-15 09:18:03 $ -->
+<!-- ================================================= -->
+
+<project name="DocPortal datamodel" default="info" basedir="../..">
+  
+  <import file="${basedir}/common-modules.xml"/>
+  
+  <property name="build.sysclasspath" value="last"/>
+  <property name="module.base" value="docportal"/>
+  <property name="module.name" value="${module.base}"/>
+  <property name="module.dir" value="${env.DOCPORTAL_HOME}/modules/${module.name}"/>
+  <property name="objectTypes" value="document,author,institution"/>
+  <loadproperties srcFile="${module.dir}/config/mycore.properties">
+    <filterchain>
+      <tokenfilter>
+        <replacestring from="%MCR.basedir%" to="${MCR.basedir}"/>
+        <replacestring from="%MCR.datadir%" to="${MCR.datadir}"/>
+      </tokenfilter>
+    </filterchain>
+  </loadproperties>
+  
+  <!-- =================================================================== -->
+  <!-- Info                                                                -->
+  <!-- =================================================================== -->
+  
+  <target name="info" description="shows information on docportal module">
+    <echo>${ant.project.name} will add support for the following object types: ${objectTypes}</echo>
+  </target>
+  
+  <!-- =================================================================== -->
+  <!-- Create new directories                                              -->
+  <!-- =================================================================== -->
+  
+  <target name="create.directories" description="--> creates workflow directories">
+    <echo level="info"> building ${ant.project.name} create.directories </echo>
+    
+    <mkdir dir="${MCR.SWF.Directory.base}"/>
+    <for list="${objectTypes}" param="objectType" parallel="true">
+      <sequential>
+        <mkdir dir="${MCR.SWF.Directory.@{objectType}}"/>
+      </sequential>
+    </for>
+  </target>
+  
+  <!-- ================================= 
+  target: create.schema              
+  ================================= -->
+  <target name="create.schema" description="--> Create XSD Schema files">
+    <echo level="info"> building ${ant.project.name} create.schema </echo>
+    
+    <for list="${objectTypes}" param="objectType" parallel="true">
+      <sequential>
+        <antcall target="model2schema">
+          <param name="metadata.schema" value="${module.dir}/config/datamodel/@{objectType}.xml"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
+  
+  <!-- ================================= 
+  target: create.users              
+  ================================= -->
+  <target name="create.users" description="--> Adds some sample users">
+    <echo level="info"> building ${ant.project.name} create.users </echo>
+    
+    <property name="commands.file" value="${basedir}/commands.txt"/>
+    <echo file="${commands.file}" append="false">
+      <![CDATA[
+          load permissions data from file permissions.xml
+
+          create group data from file group_readergroup1.xml
+          create group data from file group_authorgroup1.xml
+          create group data from file group_editorgroup1.xml
+          create user data from file user_reader1A.xml
+          create user data from file user_author1A.xml
+          create user data from file user_author1B.xml
+          create user data from file user_editor1A.xml
+          create user data from file user_editor1B.xml
+
+          create group data from file group_readergroup2.xml
+          create group data from file group_authorgroup2.xml
+          create group data from file group_editorgroup2.xml
+          create user data from file user_reader2A.xml
+          create user data from file user_author2A.xml
+          create user data from file user_author2B.xml
+          create user data from file user_editor2A.xml
+          create user data from file user_editor2B.xml
+
+          check user data consistency
+      ]]>
+    </echo>
+    <antcall target="invoke.cli">
+      <param name="cli.directory" value="${module.dir}/config/user"/>
+      <param name="cli.command" value="process ${commands.file}"/>
+    </antcall>
+    <delete file="${commands.file}"/>
+  </target>
+  
+  <!-- ================================= 
+  target: config              
+  ================================= -->
+  <target name="config" description="--> Merges docportal properties to mycore.properties">
+    <!-- Merge properties -->
+    <mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${module.dir}/config/mycore.properties"/>
+    <xmltask source="${build.config}/searchfields.xml" dest="${build.config}/searchfields.xml">
+      <insert path="/:searchfields/:index[1]/:field[8]" position="after" file="${module.dir}/config/searchfields.xml"/>
+    </xmltask>
+    <replace file="${build.config}/searchfields.xml" token='xmlns=""' />
+  </target>
+  
+  <!-- ================================= 
+  target: create.scripts              
+  ================================= -->
+  <target name="create.scripts" description="--> Adds support for the docportal datamodel to the CLI (and webapp)">
+    <echo level="info"> building ${ant.project.name} create.scripts </echo>
+    
+    <!-- Copy scripts -->
+    <copy todir="${build.bin}" flatten="true" preservelastmodified="true">
+      <fileset dir="${module.dir}/bin/unixtools" includes="**/*.sh"/>
+    </copy>
+    <chmod perm="755">
+      <fileset dir="${build.bin}" includes="*.sh"/>
+    </chmod>
+  </target>
+  
+  <!-- ================================= 
+  target: create.webapp              
+  ================================= -->
+  <target name="create.webapp">
+    <echo level="info"> building ${ant.project.name} webapp </echo>
+    <!-- copy editors -->
+    <copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
+      <fileset dir="${module.dir}/config/editor" includes="**/*.xml" excludes="**/editor_default_acls*.xml"/>
+    </copy>
+    
+    <!-- copy stylesheets -->
+    <copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" overwrite="true">
+      <fileset dir="${module.dir}/xsl" includes="**/*.xsl"/>
+      <fileset dir="${module.dir}/webpages/templates" includes="**/*.xsl"/>
+    </copy>
+    
+    <copy todir="${build.webapps}/WEB-INF/classes" flatten="true" preservelastmodified="true" failonerror="false">
+      <fileset file="${module.dir}/config/editor/editor_default_acls_*.xml"/>
+    </copy>
+    
+    <!-- copy webpages -->
+    <copy todir="${build.webapps}" preservelastmodified="true" includeemptydirs="false">
+      <fileset dir="${module.dir}/webpages" includes="**/*" excludes="templates/master/*/XSL/*"/>
+    </copy>
+    
+    <antcall target="genSWFPage"/>
+    <available property="web.xml.present" file="${module.dir}/config/web.xml"/>
+    <antcall target="do.merge">
+      <param name="web.xml.file" value="${module.dir}/config/web.xml"/>
+    </antcall>
+  </target>
+  
+  <target name="i18n">
+    <echo level="info"> building ${ant.project.name} i18n </echo>
+    
+    <!-- i18n -->
+    <antcall target="properties.merge">
+      <param name="module" value="${module.dir}/config/messages_de.properties"/>
+      <param name="locale_param" value="de"/>
+    </antcall>
+    
+    <antcall target="properties.merge">
+      <param name="module" value="${module.dir}/config/messages_en.properties"/>
+      <param name="locale_param" value="en"/>
+    </antcall>
+  </target>
+  
+  <target name="genSWFPage">
+    <property name="stylesheet" value="${module.dir}/config/swf-page.xsl"/>
+    <property name="template" value="${module.dir}/config/swf-template.xml"/>
+    <property name="titleuri" value="${module.dir}/config/swf-titles.xml"/>
+    <for list="${objectTypes}" param="objectType">
+      <sequential>
+        <for list="author,commit,editor" param="step">
+          <sequential>
+            <xslt basedir="${module.dir}" classpathref="application.classpath" in="${template}" style="${stylesheet}"
+              out="${build.webapps}/editor_form_@{step}-@{objectType}.xml">
+              <param name="objectType" expression="@{objectType}"/>
+              <param name="step" expression="@{step}"/>
+              <param name="titleuri" expression="${titleuri}"/>
+            </xslt>
+          </sequential>
+        </for>
+        <if>
+          <available file="${module.dir}/config/editor/editor_default_acls_@{objectType}.xml"/>
+          <then>
+            <copy tofile="${build.webapps}/WEB-INF/classes/editor_default_acls_@{objectType}.xml"
+              file="${module.dir}/config/editor/editor_default_acls_@{objectType}.xml" preservelastmodified="true"/>
+          </then>
+          <else>
+            <copy tofile="${build.webapps}/WEB-INF/classes/editor_default_acls_@{objectType}.xml"
+              file="${module.dir}/config/editor/editor_default_acls.xml" preservelastmodified="true"/>
+          </else>
+        </if>
+        <antcall target="addObjectType">
+          <param name="objectType" value="@{objectType}"/>
+          <param name="module" value="${module.name}"/>
+        </antcall>
+      </sequential>
+    </for>
+  </target>
+  
+  <!-- ================================= 
+  target: create.class              
+  ================================= -->
+  <target name="create.class" description="--> loads/updates DocPortal classifications">
+    <property name="commands.file" value="${basedir}/commands.txt"/>
+    <delete file="${commands.file}"/>
+    <echo file="${commands.file}" append="false"> <![CDATA[update all classifications from directory ${module.dir}/classifications
+]]>
+    </echo>
+    <antcall target="invoke.cli">
+      <param name="cli.directory" value="${basedir}"/>
+      <param name="cli.command" value="process ${commands.file}"/>
+    </antcall>
+    <delete file="${commands.file}"/>
+  </target>
+  
+</project>

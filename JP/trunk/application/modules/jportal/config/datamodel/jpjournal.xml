@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<configuration type="jpjournal">
+    <structure>
+        <!-- Object Children -->
+        <element name="children" minOccurs='0' maxOccurs='1'>
+            <mcrmetalinkid name="child" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <!-- Derivate Objects -->
+        <element name="derobjects" minOccurs='0' maxOccurs='1'>
+            <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+    </structure>
+    <metadata>
+        <!-- 01 - Maintitle -->
+        <element name="maintitles" minOccurs='1' maxOccurs='1'>
+            <mcrmetalangtext name="maintitle" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="1024" />
+        </element>
+        <!-- Sorted by Maintitle -->
+        <element name="maintitlesForSorting" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="maintitleForSorting" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
+        </element>
+        <!-- 02 - SubTitles -->
+        <!-- types = addtitle | shorttitle | misc. -->
+        <element name="subtitles" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="subtitle" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <!-- 03 - participants -->
+        <!-- for @types watch jportal_class_00000007 -->
+        <element name="participants" minOccurs='1' maxOccurs='1'>
+            <mcrmetalinkid name="participant" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+        <!-- date -->
+        <element name="dates" minOccurs='0' maxOccurs='1'>
+            <mcrmetaiso8601date name="date" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='2' />
+        </element>
+        
+        <!-- tradition / calendar extension -->
+        <element name="traditions" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="tradition" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+       
+        <!-- ##################################################################### -->
+        
+        <!-- type = short | long | toc -->
+        <element name="abstracts" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='3' length="4096" />
+        </element>
+        <!-- type = issn | isbn | nbn | doi | misc. -->
+        <element name="identis" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <!-- 12 - language -->
+        <element name="languages" minOccurs='1' maxOccurs='1'>
+            <mcrmetaclassification name="language" class="MCRMetaClassification" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+        <!-- 13 - rights -->
+        <element name="rights" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="right" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="1024" />
+        </element>
+        <!-- 14 - notes -->
+        <element name="notes" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
+        </element>
+        <!-- 16 - predeces -->
+        <element name="predeces" minOccurs='0' maxOccurs='1'>
+            <mcrmetalink name="predece" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <!-- 17 - successor -->
+        <element name="successors" minOccurs='0' maxOccurs='1'>
+            <mcrmetalink name="successor" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <!-- data model coverage -->
+        <element name="dataModelCoverages" minOccurs='1' maxOccurs='1'>
+            <mcrmetaclassification name="dataModelCoverage" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+        </element>
+        <!-- content classifications -->
+        <element name="contentClassis1" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi1" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis2" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi2" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis3" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi3" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis4" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi4" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis5" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi5" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis6" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi6" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis7" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi7" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis8" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi8" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis9" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi9" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <element name="contentClassis10" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="contentClassi10" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+        <!-- ================================================================================================= -->
+        <!-- Hidden information to be used in heritated objects (volumes, articles) -->
+        <!-- id's of rubrics classi in articles -->
+        <element name="hidden_rubricsID" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_rubricID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- id's of pub-type classi in articles -->
+        <element name="hidden_pubTypesID" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_pubTypeID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional classification for articles -->
+        <element name="hidden_classispub" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classipub" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional 2. classification for articles -->
+        <element name="hidden_classispub2" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classipub2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional 3. classification for articles -->
+        <element name="hidden_classispub3" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classipub3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional 4. classification for articles -->
+        <element name="hidden_classispub4" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classipub4" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- 1. optional generic value -->
+        <element name="hidden_genhiddenfields1" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_genhiddenfield1" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- 2. optional generic value -->
+        <element name="hidden_genhiddenfields2" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_genhiddenfield2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- 3. optional generic value -->
+        <element name="hidden_genhiddenfields3" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_genhiddenfield3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- id's of rubrics classi in articles -->
+        <element name="hidden_jpjournalsID" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_jpjournalID" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- optional value for websitecontext -->
+        <element name="hidden_websitecontexts" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_websitecontext" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- dynamically includes for volumes -->
+        <element name="hidden_classiVol1" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol1" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol2" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol2" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol3" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol3" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol4" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol4" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol5" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol5" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <element name="hidden_classiVol6" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="hidden_classiVol6" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' />
+        </element>
+        <!-- ================================================================================================= -->
+    </metadata>
+    <service>
+        <!-- Service Dates -->
+        <element name="servdates" minOccurs='0' maxOccurs='1'>
+            <mcrmetaiso8601date name="servdate" class="MCRMetaISO8601Date" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+        <!-- Service Flags -->
+        <element name="servflags" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="servflag" class="MCRMetaLangText" minOccurs='1' maxOccurs='unbounded' length="256" />
+        </element>
+        <!-- Service ACLs -->
+        <element name="servacls" minOccurs='0' maxOccurs='1'>
+            <mcrmetaaccessrule name="servacl" class="MCRMetaAccessRule" minOccurs='1' maxOccurs='unbounded' length="512" />
+        </element>
+    </service>
+</configuration>

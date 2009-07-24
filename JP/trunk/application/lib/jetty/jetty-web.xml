@@ -1,0 +1,25 @@
+<?xml version="1.0"  encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<!-- =================================================================== -->
+<!-- MyCoRe Papyri application configuration file for jetty              -->
+<!-- $Revision: 1.1 $ $Date: 2005/11/28 12:13:11 $                      -->
+<!-- =================================================================== -->
+
+<!--
+This is the jetty specific web application configuration file.  When starting
+a Web Application, the WEB-INF/web-jetty.xml file is looked for and if found, tr
+eated
+as a org.mortbay.xml.XmlConfiguration file and is applied to the
+org.mortbay.jetty.servlet.WebApplicationContext objet
+-->
+
+<Configure class="org.mortbay.jetty.servlet.WebApplicationContext">
+
+  <Set name="statsOn" type="boolean">true</Set>
+  <Call name="getWebApplicationHandler">
+    <Set name="usingCookies">true</Set>
+  </Call>
+
+</Configure>
+

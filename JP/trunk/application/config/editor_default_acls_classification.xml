@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mcrdefaultacls>
+ <servacls class="MCRMetaAccessRule">
+  <servacl permission="read">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- IP -->
+     <boolean operator="or" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="writedb">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="administrator" operator="=" field="user"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- IP -->
+     <boolean operator="or" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+  <servacl permission="deletedb">
+   <condition format="xml">
+    <boolean operator="and">
+     <!-- USER OR GROUP -->
+     <boolean operator="or">
+      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="administrator" operator="=" field="user"/>
+     </boolean>
+	 <!-- DATE -->
+     <boolean operator="and" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- IP -->
+     <boolean operator="or" >
+      <boolean operator="true" />
+      <boolean operator="true" />
+     </boolean>
+	 <!-- -->
+    </boolean>
+   </condition>
+  </servacl>
+ </servacls>
+</mcrdefaultacls>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+  ID="urmel_class_00000001">
+  <label xml:lang="de" text="Geschlecht" />
+  <label xml:lang="en" text="Gender" />
+  <categories>
+    <category ID="male">
+      <label xml:lang="de" text="männlich" />
+      <label xml:lang="en" text="male" />
+    </category>
+    <category ID="female">
+      <label xml:lang="de" text="weiblich" />
+      <label xml:lang="en" text="female" />
+    </category>
+    <category ID="unknown">
+      <label xml:lang="de" text="unbekannt" />
+      <label xml:lang="en" text="unknown" />
+    </category>
+  </categories>
+</mycoreclass>

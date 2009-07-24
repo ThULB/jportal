@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000047">
+    <label xml:lang="de" text="Rubriken"/>
+    <categories>
+        <category ID="00001000">
+            <label xml:lang="de" text="Allgemeine Naturgeschichte"/>
+        </category>
+        <category ID="00002000">
+            <label xml:lang="de" text="Allgemeines"/>
+        </category>
+        <category ID="00003000">
+            <label xml:lang="de" text="Anatomie"/>
+        </category>
+        <category ID="00004000">
+            <label xml:lang="de" text="Anatomie und Medicin"/>
+        </category>
+        <category ID="00005000">
+            <label xml:lang="de" text="Anatomie und Physiologie"/>
+        </category>
+        <category ID="00006000">
+            <label xml:lang="de" text="Ankündigungen"/>
+        </category>
+        <category ID="00007000">
+            <label xml:lang="de" text="Antikritiken"/>
+        </category>
+        <category ID="00008000">
+            <label xml:lang="de" text="Auszüge"/>
+        </category>
+        <category ID="00009000">
+            <label xml:lang="de" text="Beylagen"/>
+        </category>
+        <category ID="00010000">
+            <label xml:lang="de" text="Botanik"/>
+        </category>
+        <category ID="00011000">
+            <label xml:lang="de" text="Druckfehler"/>
+        </category>
+        <category ID="00012000">
+            <label xml:lang="de" text="Geologie und Mineralogie"/>
+        </category>
+        <category ID="00013000">
+            <label xml:lang="de" text="Kategoriale Einordnung fehlt"/>
+        </category>
+        <category ID="00014000">
+            <label xml:lang="de" text="Kleinigkeiten"/>
+        </category>
+        <category ID="00015000">
+            <label xml:lang="de" text="Kleinigkeiten"/>
+        </category>
+        <category ID="00016000">
+            <label xml:lang="de" text="Kritiken"/>
+        </category>
+        <category ID="00017000">
+            <label xml:lang="de" text="Kritiken und Auszüge"/>
+        </category>
+        <category ID="00018000">
+            <label xml:lang="de" text="Litteratur"/>
+        </category>
+        <category ID="00019000">
+            <label xml:lang="de" text="Mathematik"/>
+        </category>
+        <category ID="00020000">
+            <label xml:lang="de" text="Mathematik, Physik und Chemie"/>
+        </category>
+        <category ID="00021000">
+            <label xml:lang="de" text="Mathematik, Physik und Pharmacie"/>
+        </category>
+        <category ID="00022000">
+            <label xml:lang="de" text="Medicin"/>
+        </category>
+        <category ID="00023000">
+            <label xml:lang="de" text="Medicin u.a."/>
+        </category>
+        <category ID="00024000">
+            <label xml:lang="de" text="Medicin und Pharmacie"/>
+        </category>
+        <category ID="00025000">
+            <label xml:lang="de" text="Mineralogie"/>
+        </category>
+        <category ID="00026000">
+            <label xml:lang="de" text="Mineralogie, Chemie, Physik und Mathematik"/>
+        </category>
+        <category ID="00027000">
+            <label xml:lang="de" text="Naturalientausch"/>
+        </category>
+        <category ID="00028000">
+            <label xml:lang="de" text="Naturgeschichte"/>
+        </category>
+        <category ID="00029000">
+            <label xml:lang="de" text="Naturkunde"/>
+        </category>
+        <category ID="00030000">
+            <label xml:lang="de" text="Physik und Chemie"/>
+        </category>
+        <category ID="00031000">
+            <label xml:lang="de" text="Physik und Mathematik"/>
+        </category>
+        <category ID="00032000">
+            <label xml:lang="de" text="Physiologie und Medicin"/>
+        </category>
+        <category ID="00033000">
+            <label xml:lang="de" text="Preisaufgaben"/>
+        </category>
+        <category ID="00034000">
+            <label xml:lang="de" text="Streit"/>
+        </category>
+        <category ID="00035000">
+            <label xml:lang="de" text="Tausch und Verkauf"/>
+        </category>
+        <category ID="00036000">
+            <label xml:lang="de" text="Vorles-Cataloge"/>
+        </category>
+        <category ID="00037000">
+            <label xml:lang="de" text="Wirthschaft"/>
+        </category>
+        <category ID="00038000">
+            <label xml:lang="de" text="Zoologie"/>
+        </category>
+        <category ID="00039000">
+            <label xml:lang="de" text="Zoologie und vergleichende Anatomie"/>
+        </category>
+        <category ID="00040000">
+            <label xml:lang="de" text="Zoologie, Medicin und Anatomie"/>
+        </category>
+    </categories>
+</mycoreclass>

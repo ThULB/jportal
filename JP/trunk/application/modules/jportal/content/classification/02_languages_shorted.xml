@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
+      ID="jportal_class_00000002" >
+      <label xml:lang="de" text="Sprachkrzel" description="Sprachkürzel nach ISO 639-1" />
+      <categories>
+<!--		  
+            <category ID="aa">
+                  <label xml:lang="de" text="Afar" />
+            </category>
+            <category ID="ab">
+                  <label xml:lang="de" text="Abchasisch" />
+            </category>
+            <category ID="af">
+                  <label xml:lang="de" text="Afrikaans" />
+            </category>
+            <category ID="ar">
+                  <label xml:lang="de" text="Arabisch" />
+            </category>
+            <category ID="as">
+                  <label xml:lang="de" text="Assamesisch" />
+            </category>
+            <category ID="ay">
+                  <label xml:lang="de" text="Aymara" />
+            </category>
+            <category ID="az">
+                  <label xml:lang="de" text="Aserbaidschanisch" />
+            </category>
+            <category ID="ba">
+                  <label xml:lang="de" text="Baschkirisch" />
+            </category>
+            <category ID="be">
+                  <label xml:lang="de" text="Belorussisch" />
+            </category>
+            <category ID="bg">
+                  <label xml:lang="de" text="Bulgarisch" />
+            </category>
+            <category ID="bh">
+                  <label xml:lang="de" text="Biharisch" />
+            </category>
+            <category ID="bi">
+                  <label xml:lang="de" text="Bislamisch" />
+            </category>
+            <category ID="bn">
+                  <label xml:lang="de" text="Bengalisch" />
+            </category>
+            <category ID="bo">
+                  <label xml:lang="de" text="Tibetanisch" />
+            </category>
+            <category ID="br">
+                  <label xml:lang="de" text="Bretonisch" />
+            </category>
+            <category ID="ca">
+                  <label xml:lang="de" text="Katalanisch" />
+            </category>
+            <category ID="co">
+                  <label xml:lang="de" text="Korsisch" />
+            </category>
+            <category ID="cs">
+                  <label xml:lang="de" text="Tschechisch" />
+            </category>
+            <category ID="cy">
+                  <label xml:lang="de" text="Walisisch" />
+            </category>
+            <category ID="da">
+                  <label xml:lang="de" text="Daenisch" />
+            </category>
+-->
+            <category ID="de">
+                  <label xml:lang="de" text="Deutsch" />
+            </category>
+<!--
+            <category ID="dz">
+                  <label xml:lang="de" text="Dzongkha, Bhutani" />
+            </category>
+-->
+            <category ID="el">
+                  <label xml:lang="de" text="Griechisch" />
+            </category>
+            <category ID="en">
+                  <label xml:lang="de" text="Englisch" />
+            </category>
+<!--
+            <category ID="eo">
+                  <label xml:lang="de" text="Esperanto" />
+            </category>
+-->	
+            <category ID="es">
+                  <label xml:lang="de" text="Spanisch" />
+            </category>
+<!--		  
+            <category ID="et">
+                  <label xml:lang="de" text="Estnisch" />
+            </category>
+            <category ID="eu">
+                  <label xml:lang="de" text="Baskisch" />
+            </category>
+            <category ID="fa">
+                  <label xml:lang="de" text="Persisch" />
+            </category>
+            <category ID="fi">
+                  <label xml:lang="de" text="Finnisch" />
+            </category>
+            <category ID="fj">
+                  <label xml:lang="de" text="Fiji" />
+            </category>
+            <category ID="fo">
+                  <label xml:lang="de" text="Faeroeiisch" />
+            </category>
+-->
+            <category ID="fr">
+                  <label xml:lang="de" text="Franzoesisch" />
+            </category>
+<!--		  
+            <category ID="fy">
+                  <label xml:lang="de" text="Friesisch" />
+            </category>
+            <category ID="ga">
+                  <label xml:lang="de" text="Irisch" />
+            </category>
+            <category ID="gd">
+                  <label xml:lang="de" text="Schottisches Gaelisch" />
+            </category>
+            <category ID="gl">
+                  <label xml:lang="de" text="Galizisch" />
+            </category>
+            <category ID="gn">
+                  <label xml:lang="de" text="Guarani" />
+            </category>
+            <category ID="gu">
+                  <label xml:lang="de" text="Gujaratisch" />
+            </category>
+            <category ID="ha">
+                  <label xml:lang="de" text="Haussa" />
+            </category>
+-->
+            <category ID="he">
+                  <label xml:lang="de" text="Hebraeisch" />
+            </category>
+	<!--
+            <category ID="hi">
+                  <label xml:lang="de" text="Hindi" />
+            </category>
+            <category ID="hr">
+                  <label xml:lang="de" text="Kroatisch" />
+            </category>
+            <category ID="hu">
+                  <label xml:lang="de" text="Ungarisch" />
+            </category>
+            <category ID="hy">
+                  <label xml:lang="de" text="Armenisch" />
+            </category>
+            <category ID="ia">
+                  <label xml:lang="de" text="Interlingua" />
+            </category>
+            <category ID="id">
+                  <label xml:lang="de" text="Indonesisch" />
+            </category>
+            <category ID="ie">
+                  <label xml:lang="de" text="Interlingue" />
+            </category>
+            <category ID="ik">
+                  <label xml:lang="de" text="Inupiak" />
+            </category>
+            <category ID="is">
+                  <label xml:lang="de" text="Isl??ndisch" />
+            </category>
+		-->
+            <category ID="it">
+                  <label xml:lang="de" text="Italienisch" />
+            </category>
+		  <!--
+            <category ID="iu">
+                  <label xml:lang="de" text="Inuktitut (Eskimo)" />
+            </category>
+            <category ID="ja">
+                  <label xml:lang="de" text="Japanisch" />
+            </category>
+            <category ID="jv">
+                  <label xml:lang="de" text="Javanisch" />
+            </category>
+            <category ID="ka">
+                  <label xml:lang="de" text="Georgisch" />
+            </category>
+            <category ID="kk">
+                  <label xml:lang="de" text="Kasachisch" />
+            </category>
+            <category ID="kl">
+                  <label xml:lang="de" text="Kalaallisut (Groenlaendisch)" />
+            </category>
+            <category ID="km">
+                  <label xml:lang="de" text="Kambodschanisch" />
+            </category>
+            <category ID="kn">
+                  <label xml:lang="de" text="Kannada" />
+            </category>
+            <category ID="ko">
+                  <label xml:lang="de" text="Koreanisch" />
+            </category>
+            <category ID="ks">
+                  <label xml:lang="de" text="Kaschmirisch" />
+            </category>
+            <category ID="ku">
+                  <label xml:lang="de" text="Kurdisch" />
+            </category>
+            <category ID="ky">
+                  <label xml:lang="de" text="Kirgisisch" />
+            </category>
+		-->
+            <category ID="la">
+                  <label xml:lang="de" text="Lateinisch" />
+            </category>
+<!--		  
+            <category ID="ln">
+                  <label xml:lang="de" text="Lingala" />
+            </category>
+            <category ID="lo">
+                  <label xml:lang="de" text="Laotisch" />
+            </category>
+            <category ID="lt">
+                  <label xml:lang="de" text="Litauisch" />
+            </category>
+            <category ID="lv">
+                  <label xml:lang="de" text="Lettisch" />
+            </category>
+            <category ID="mg">
+                  <label xml:lang="de" text="Malagasisch" />
+            </category>
+            <category ID="mi">
+                  <label xml:lang="de" text="Maorisch" />
+            </category>
+            <category ID="mk">
+                  <label xml:lang="de" text="Mazedonisch" />
+            </category>
+            <category ID="ml">
+                  <label xml:lang="de" text="Malajalam" />
+            </category>
+            <category ID="mn">
+                  <label xml:lang="de" text="Mongolisch" />
+            </category>
+            <category ID="mo">
+                  <label xml:lang="de" text="Moldavisch" />
+            </category>
+            <category ID="mr">
+                  <label xml:lang="de" text="Marathi" />
+            </category>
+            <category ID="ms">
+                  <label xml:lang="de" text="Malaysisch" />
+            </category>
+            <category ID="mt">
+                  <label xml:lang="de" text="Maltesisch" />
+            </category>
+            <category ID="my">
+                  <label xml:lang="de" text="Burmesisch" />
+            </category>
+            <category ID="na">
+                  <label xml:lang="de" text="Nauruisch" />
+            </category>
+            <category ID="ne">
+                  <label xml:lang="de" text="Nepalesisch" />
+            </category>
+            <category ID="nl">
+                  <label xml:lang="de" text="Hollaendisch" />
+            </category>
+            <category ID="no">
+                  <label xml:lang="de" text="Norwegisch" />
+            </category>
+            <category ID="oc">
+                  <label xml:lang="de" text="Okzitanisch" />
+            </category>
+            <category ID="om">
+                  <label xml:lang="de" text="Oromo" />
+            </category>
+            <category ID="or">
+                  <label xml:lang="de" text="Oriya" />
+            </category>
+            <category ID="pa">
+                  <label xml:lang="de" text="Pundjabisch" />
+            </category>
+-->
+            <category ID="pl">
+                  <label xml:lang="de" text="Polnisch" />
+            </category>
+<!--
+            <category ID="ps">
+                  <label xml:lang="de" text="Paschtu" />
+            </category>
+            <category ID="pt">
+                  <label xml:lang="de" text="Portugiesisch" />
+            </category>
+            <category ID="qu">
+                  <label xml:lang="de" text="Quechua" />
+            </category>
+            <category ID="rm">
+                  <label xml:lang="de" text="Raetoromanisch" />
+            </category>
+            <category ID="rn">
+                  <label xml:lang="de" text="Kirundisch" />
+            </category>
+            <category ID="ro">
+                  <label xml:lang="de" text="Rumaenisch" />
+            </category>
+            <category ID="ru">
+                  <label xml:lang="de" text="Russisch" />
+            </category>
+            <category ID="rw">
+                  <label xml:lang="de" text="Kijarwanda" />
+            </category>
+            <category ID="sa">
+                  <label xml:lang="de" text="Sanskrit" />
+            </category>
+            <category ID="sd">
+                  <label xml:lang="de" text="Zinti" />
+            </category>
+            <category ID="sg">
+                  <label xml:lang="de" text="Sango" />
+            </category>
+            <category ID="sh">
+                  <label xml:lang="de" text="Serbokroatisch (veraltet)" />
+            </category>
+            <category ID="si">
+                  <label xml:lang="de" text="Singhalesisch" />
+            </category>
+            <category ID="sk">
+                  <label xml:lang="de" text="Slowakisch" />
+            </category>
+            <category ID="sl">
+                  <label xml:lang="de" text="Slowenisch" />
+            </category>
+            <category ID="sm">
+                  <label xml:lang="de" text="Samoanisch" />
+            </category>
+            <category ID="sn">
+                  <label xml:lang="de" text="Schonisch" />
+            </category>
+            <category ID="so">
+                  <label xml:lang="de" text="Somalisch" />
+            </category>
+            <category ID="sq">
+                  <label xml:lang="de" text="Albanisch" />
+            </category>
+            <category ID="sr">
+                  <label xml:lang="de" text="Serbisch" />
+            </category>
+            <category ID="ss">
+                  <label xml:lang="de" text="Swasilaendisch" />
+            </category>
+            <category ID="st">
+                  <label xml:lang="de" text="Sesothisch" />
+            </category>
+            <category ID="su">
+                  <label xml:lang="de" text="Sudanesisch" />
+            </category>
+            <category ID="sv">
+                  <label xml:lang="de" text="Schwedisch" />
+            </category>
+            <category ID="sw">
+                  <label xml:lang="de" text="Suaheli" />
+            </category>
+            <category ID="ta">
+                  <label xml:lang="de" text="Tamilisch" />
+            </category>
+            <category ID="te">
+                  <label xml:lang="de" text="Tegulu" />
+            </category>
+            <category ID="tg">
+                  <label xml:lang="de" text="Tadschikisch" />
+            </category>
+            <category ID="th">
+                  <label xml:lang="de" text="Thai" />
+            </category>
+            <category ID="ti">
+                  <label xml:lang="de" text="Tigrinja" />
+            </category>
+            <category ID="tk">
+                  <label xml:lang="de" text="Turkmenisch" />
+            </category>
+            <category ID="tl">
+                  <label xml:lang="de" text="Tagalog" />
+            </category>
+            <category ID="tn">
+                  <label xml:lang="de" text="Sezuan" />
+            </category>
+            <category ID="to">
+                  <label xml:lang="de" text="Tongaisch" />
+            </category>
+            <category ID="tr">
+                  <label xml:lang="de" text="Tuerkisch" />
+            </category>
+            <category ID="ts">
+                  <label xml:lang="de" text="Tsongaisch" />
+            </category>
+            <category ID="tt">
+                  <label xml:lang="de" text="Tatarisch" />
+            </category>
+            <category ID="tw">
+                  <label xml:lang="de" text="Twi" />
+            </category>
+            <category ID="ug">
+                  <label xml:lang="de" text="Uigur" />
+            </category>
+            <category ID="uk">
+                  <label xml:lang="de" text="Ukrainisch" />
+            </category>
+            <category ID="ur">
+                  <label xml:lang="de" text="Urdu" />
+            </category>
+            <category ID="uz">
+                  <label xml:lang="de" text="Usbekisch" />
+            </category>
+            <category ID="vi">
+                  <label xml:lang="de" text="Vietnamesisch" />
+            </category>
+            <category ID="vo">
+                  <label xml:lang="de" text="Volapuek" />
+            </category>
+            <category ID="wo">
+                  <label xml:lang="de" text="Wolof" />
+            </category>
+            <category ID="xh">
+                  <label xml:lang="de" text="Xhosa" />
+            </category>
+            <category ID="yi">
+                  <label xml:lang="de" text="Jiddish" />
+            </category>
+            <category ID="yo">
+                  <label xml:lang="de" text="Joruba" />
+            </category>
+            <category ID="za">
+                  <label xml:lang="de" text="Zhuang" />
+            </category>
+            <category ID="zh">
+                  <label xml:lang="de" text="Chinesisch" />
+            </category>
+            <category ID="zu">
+                  <label xml:lang="de" text="Zulu" />
+            </category>
+-->
+      </categories>
+</mycoreclass>

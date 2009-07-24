@@ -1,0 +1,53 @@
+<item href="JOURNAL_PATHTOSHORTCUT.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false" template="TEMPLATE_NAME">
+    <label xml:lang="de">JOURNAL_NAME</label>
+    <item href="JOURNAL_PATHTOSHORTCUT/search.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+        <label xml:lang="de">Suche</label>
+        <label xml:lang="en">Retrieval</label>
+        <item href="/browse/keywords?XSL.dummy=JOURNAL_ID" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">mittels Schlagwortregister</label>
+            <label xml:lang="en">for articles (experts)</label>
+        </item>
+        <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true&amp;dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">nach Artikeln (Experten)</label>
+            <label xml:lang="en">for articles (experts)</label>
+        </item>
+        <item href="/editor_form_search-jpinst.xml?XSL.editor.source.new=true&amp;dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">nach Institutionen</label>
+            <label xml:lang="en">for institutions</label>
+        </item>
+        <item href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true&amp;dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">nach Personen</label>
+            <label xml:lang="en">for persons</label>
+        </item>
+    </item>
+    <item href="/receive/JOURNAL_ID?XSL.toc.pos.SESSION=1&amp;XSL.view.objectmetadata.SESSION=true" type="extern" target="_self" style="normal"
+        replaceMenu="false" constrainPopUp="false">
+        <label xml:lang="de">Blättern</label>
+        <label xml:lang="en">Browse</label>
+    </item>
+    <item href="JOURNAL_PATHTOSHORTCUT/internal.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+        <label xml:lang="de">Intern</label>
+        <label xml:lang="en">Internal</label>
+        <item href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj&amp;dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Institution anlegen</label>
+            <label xml:lang="en">create institution</label>
+        </item>
+        <item href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj&amp;dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Person anlegen</label>
+            <label xml:lang="en">create person</label>
+        </item>
+        <item href="/browse/default?mode=edit&amp;clid=jportal_class_00000083&amp;XSL.dummy=JOURNAL_ID" type="extern" target="_self" style="normal"
+            replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Neues Schlagwort in Register aufnehmen</label>
+        </item>
+    </item>
+    <item href="JOURNAL_PATHTOSHORTCUT/masthead.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+        <label xml:lang="de">Impressum</label>
+        <label xml:lang="de">Imprint</label>
+    </item>
+</item>

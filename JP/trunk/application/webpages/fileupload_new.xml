@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Dateien oder Verzeichnisse hochladen" xml:lang="de">
+  <p>
+    Mit dem folgenden Java-Applet können Sie eine, aber auch mehrere Dateien 
+    oder ganze Verzeichnisse auf den Dokumenten-Server hochladen. Damit Sie 
+    dieses Applet nutzen können, ist die Installation eines <b>Java 1.4.x</b> 
+    Plugins in Ihrem Web-Browser erforderlich. Falls dieses Applet nicht 
+    dargestellt wird, lesen Sie bitte unsere 
+    <a href="help_applet.xml">Hinweise zur Installation des 
+    Java 1.4 Plugins</a>. Nach der Installation können Sie mit der 
+    Dateiübertragung fortfahren.
+  </p>
+  <fileupload/>
+  <p>
+    Sollten Sie kein Java-Applet haben oder diese Funktionalität nicht auf 
+    Ihrem System nutzen wollen, können Sie einzelnen Dateien bis 4 MB Größe 
+    direkt mittels des folgenden Formulares hochladen:
+  </p>
+</section>
+
+<section title="Upload of files or directories" xml:lang="en">
+  <p>
+    You can upload your files or directories with the Java applet below, 
+    provided the necessary Java plugins are installed. For more information 
+    refer to <a href="help_applet.xml">hints for the installation</a>.
+  </p>
+  <fileupload/>
+  <p>
+    If you do not want to use the Java applet, you can use this form for 
+    upload. However, file size will be restricted to 4 MB maximum/file.
+  </p>
+</section>
+
+<section xml:lang="all">
+  <editor id="author-addfile">
+    <target type="servlet" name="MCRUploadServlet" method="post" format="xml" />
+    <cancel url="{cancelUrl}" />
+    
+    <components root="fileupload" var="/upload">
+      <headline anchor="CENTER">
+        <text i18n="editor.common.addFile" />
+      </headline>
+      <include uri="webapp:editor/imports-fileupload.xml" />
+    </components>
+  </editor>
+</section>
+
+</MyCoReWebPage>

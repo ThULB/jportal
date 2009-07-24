@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+	<section xml:lang="de" title="Technischer Hintergrund">
+  <p>Der DocPortal-Server besteht aus vier Grundkomponenten, die
+  wie folgend charakterisiert werden können:</p>
+  <p>
+    <strong>Backends</strong>
+  </p>
+  <p>Dieser Teil bezeichnet Komponenten von Drittanbietern, welche
+  zur Speicherung der Daten einer MyCoRe-Anwendung genutzt werden.
+  Es steht eine Lösung aus den freien wahlweisen Produkten HSQLDB, MySQL, JDOM-Store und Apache Lucene zur
+  Verfügung.</p>
+  <p>
+    <strong>MyCoRe-Kern</strong>
+  </p>
+  <p>Der MyCoRe-Kern enthält alle allgemeinen Klassen,
+  Konfigurationsdateien und Stylesheets, welche zur Gestaltung
+  einer beliebigen MyCoRe-Anwendung aus den bereitgestellten Komponenten erforderlich sind. Alle Dateine
+  des MyCoRe-Kerns sind in dem JAR-File mycore.jar
+  enthalten. Diese Datei wird komplett so in die Anwendungsebene
+  übernommen.</p>
+  <p>
+    <strong>DocPortal</strong>
+  </p>
+  <p>DocPortal ist eine Anwendung. Hier sind alle gemeinsamen
+  Konfigurationsdateien und Daten für die eigentlichen Applikationen
+  gespeichert. Gemeinsame Dateien sind
+  z. B. die Konfiguration des Datenmodells, Konverter, Web-Seiten oder auch
+  diese Dokumentation. Beim Zusammenbau der eigentlichen Anwendung
+  werden alle Daten aus DocPortal in den webapps-Baum kopiert und
+  dann durch die Datenzugriffe auf die Backends der eigentlichen Anwendung ergänzt.</p>
+  <p>
+    <strong>Servlet-Engine</strong>
+  </p>
+  <p>
+  Docportal bringt eine Third-Party Servlet-Engine namens Jetty mit. Dies dient dem
+  Betrieb der Web-Anwendung. Alternativ kann auch die Tomcat-Servlet-Engine des Apache-
+  Projektes verwendet werden.</p> 
+  <p>
+    <strong>Weitere Komponenten</strong>
+  </p>
+  <p>
+  MyCoRe bietet noch zusätzliche Funktionalitäten wie NBN-Generator, OAI-Schnittstelle, Z3950-
+	  Schnittstelle oder Bildbetrachter sowie ein Web-Autorensystem WCMS.</p>
+  <p>
+  <br />
+  </p>
+</section>
+<meta><log date="2005-05-10" time="08:52" labelPath="Hauptmenü links &gt; Hilfe &gt; Allgemeines" lastEditor="Administrator" /></meta></MyCoReWebPage>

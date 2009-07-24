@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="DocPortal_class_00000004">
+	<label xml:lang="de" text="DocPortal Sprachen" description="DocPortal Klassifikation der Sprachen nach ISO 639-1/-2"/>
+	<categories>
+		<category ID="LANG0000">
+			<label xml:lang="de" text="unbekannt" description="xxx#xx"/>
+			<label xml:lang="en" text="unknown" description="xxx#xx"/>
+		</category>
+		<category ID="LANG0001">
+			<label xml:lang="de" text="deutsch" description="ger#de"/>
+			<label xml:lang="en" text="german" description="ger#de"/>
+		</category>
+		<category ID="LANG0002">
+			<label xml:lang="de" text="englisch" description="eng#en"/>
+			<label xml:lang="en" text="english" description="eng#en"/>
+		</category>
+		<category ID="LANG0003">
+			<label xml:lang="de" text="arabisch" description="ara#ar"/>
+			<label xml:lang="en" text="arabic" description="ara#ar"/>
+		</category>
+		<category ID="LANG0004">
+			<label xml:lang="de" text="dänisch" description="dan#da"/>
+			<label xml:lang="en" text="danish" description="dan#da"/>
+		</category>
+		<category ID="LANG0005">
+			<label xml:lang="de" text="französisch" description="fre#fr"/>
+			<label xml:lang="en" text="french" description="fre#fr"/>
+		</category>
+		<category ID="LANG0006">
+			<label xml:lang="de" text="griechisch" description="gre#el"/>
+			<label xml:lang="en" text="greek" description="gre#el"/>
+		</category>
+		<category ID="LANG0007">
+			<label xml:lang="de" text="hebräisch" description="heb#iw"/>
+			<label xml:lang="en" text="hebrew" description="heb#iw"/>
+		</category>
+		<category ID="LANG0008">
+			<label xml:lang="de" text="italienisch" description="ita#it"/>
+			<label xml:lang="en" text="italian" description="ita#it"/>
+		</category>
+		<category ID="LANG0009">
+			<label xml:lang="de" text="niederländisch" description="dut#nl"/>
+			<label xml:lang="en" text="dutch" description="dut#nl"/>
+		</category>
+		<category ID="LANG0010">
+			<label xml:lang="de" text="norwegisch" description="nor#no"/>
+			<label xml:lang="en" text="norwegian" description="nor#no"/>
+		</category>
+		<category ID="LANG0011">
+			<label xml:lang="de" text="russisch" description="rus#ru"/>
+			<label xml:lang="en" text="russian" description="rus#ru"/>
+		</category>
+		<category ID="LANG0012">
+			<label xml:lang="de" text="schwedisch" description="swe#sv"/>
+			<label xml:lang="en" text="swedish" description="swe#sv"/>
+		</category>
+		<category ID="LANG0013">
+			<label xml:lang="de" text="spanisch" description="spa#es"/>
+			<label xml:lang="en" text="spanish" description="spa#es"/>
+		</category>
+	</categories>
+</mycoreclass>

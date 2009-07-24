@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ============================================== -->
+<!-- $Revision: 1.2 $ $Date: 2007-09-28 05:49:31 $ -->
+<!-- ============================================== -->
+
+<imports>
+
+  <!-- ========== headline ========== -->
+
+  <headline anchor="CENTER">
+    <text>
+      <label xml:lang="de">Die mit * gekennzeichneten Felder sind Pflichtfelder.</label>
+      <label xml:lang="en">Fields marked with * are required.</label>
+     </text>
+  </headline>
+
+  <panel id="editor-document">
+    <hidden var="@ID" />
+    <hidden var="@label" />
+    <hidden var="@version" />
+    <hidden var="service/servdates" descendants="true" />
+    <hidden var="service/servacls"  descendants="true" />
+    <hidden var="service/servflags" descendants="true" />
+    <hidden var="metadata/@xml:lang"    default="de"/>
+    <hidden var="metadata/creators" descendants="true" />
+	<hidden var="metadata/subjects" descendants="true" />
+	<hidden var="metadata/descripturls" descendants="true" />
+	<hidden var="metadata/sourcelinks"  descendants="true" />
+	<hidden var="metadata/coveragelinks" descendants="true" />
+	<hidden var="metadata/coveragedates" descendants="true" />
+	<hidden var="metadata/relationlinks" descendants="true" />
+	<hidden var="metadata/relationisbns" descendants="true" />
+	<hidden var="metadata/rightslinks" descendants="true" />
+	<hidden var="metadata/isbns" descendants="true" />
+	<hidden var="metadata/nbns" descendants="true" />
+	<hidden var="metadata/urns" descendants="true" />
+
+    <!-- ========== metadata/titles/title ========== -->
+    
+    <cell col="1" row="1" anchor="NORTHWEST" ref="LTitleP"/>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="HTitle"/>
+    <cell col="3" row="1" anchor="NORTHWEST" var="metadata/titles[@class='MCRMetaLangText']">
+      <panel id="DTitle">
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="WEST" var="title" >
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST">
+                <textarea id="TFCoTitle" width="62" height="3" maxlength="1024">
+                  <condition id="CoTitle" required="true">
+                    <label xml:lang="de">Bitte tragen Sie den Titel ein!</label>
+                    <label xml:lang="en">Please enter the title!</label>
+                  </condition>
+                </textarea>
+              </cell>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
+              <cell col="3" row="1" anchor="NORTHWEST" ref="STitleType" var="@type" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/creatorlinks/creatorlink -->
+
+    <cell col="1" row="3" anchor="NORTHWEST" ref="LCreatorP"/>   
+    <cell col="2" row="3" anchor="NORTHWEST" ref="HCreator"/>
+    <cell col="3" row="3" anchor="NORTHWEST" var="metadata/creatorlinks[@class='MCRMetaLinkID']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell row="1" col="1" anchor="NORTHWEST" var="creatorlink" ref="PersonLink" />
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/origins/origin ========== -->
+
+    <cell col="1" row="4" anchor="NORTHWEST" ref="LOriginP"/>
+    <cell col="2" row="4" anchor="NORTHWEST" ref="HOrigin"/>
+    <cell col="3" row="4" anchor="NORTHWEST" var="metadata/origins[@class='MCRMetaClassification']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="WEST" var="origin">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <hidden var="@classid"   default="DocPortal_class_00000002" />
+              <cell col="1" row="1" anchor="WEST" var="@categid">
+                <list id="COriginDoc" width="300" type="dropdown">
+                  <item value="">
+                    <label xml:lang="de">(bitte wählen)</label>
+                    <label xml:lang="en">(select please)</label>
+                  </item>
+                  <include uri="classification:editor:-1:children:DocPortal_class_00000002" cacheable="false"/>
+                  <condition id="CoOriginDoc" required="true" >
+                    <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+                    <label xml:lang="en">Please select one entry!</label>
+                  </condition>
+                </list>
+              </cell>
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/descriptions/description ========== -->
+    
+    <cell col="1" row="5" anchor="NORTHWEST" ref="LDescription"/>
+    <cell col="2" row="5" anchor="NORTHWEST" ref="HDescription"/>
+    <cell col="3" row="5" anchor="NORTHWEST" var="metadata/descriptions[@class='MCRMetaLangText']">
+      <panel id="DDescription">
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="description">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de"/>
+              <cell col="3" row="1" anchor="NORTHWEST" ref="SDescriptType" var="@type" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/publishers/publisher ========== -->
+    
+    <cell col="1" row="6" anchor="NORTHWEST" ref="LPublisher"/>
+    <cell col="2" row="6" anchor="NORTHWEST" ref="HPublisher"/>
+    <cell col="3" row="6" anchor="NORTHWEST" var="metadata/publishers[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="publisher/@inherited" default="0" />
+        <hidden var="publisher/@xml:lang"      default="de" />
+        <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="publisher" />
+        <cell col="2" row="1" anchor="WEST" ref="SPublisherType" var="publisher/@type" />
+        <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/publishlinks/publishlink ========== -->
+
+    <cell col="3" row="7" anchor="NORTHWEST" var="metadata/publishlinks[@class='MCRMetaLinkID']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell row="1" col="1" anchor="NORTHWEST" var="publishlink" ref="PersonLink" />
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/contributors/contributor ========== -->
+
+    <cell col="1" row="8" anchor="NORTHWEST" ref="LContributor"/>
+    <cell col="2" row="8" anchor="NORTHWEST" ref="HContributor"/>
+    <cell col="3" row="8" anchor="NORTHWEST" var="metadata/contributors[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="contributor/@inherited" default="0"  />
+        <hidden var="contributor/@xml:lang"      default="de" />
+        <cell col="1" row="1" anchor="WEST" ref="TFzeile128" var="contributor" />
+        <cell col="2" row="1" anchor="WEST" ref="SContributorType" var="contributor/@type" />
+        <cell col="3" row="1" anchor="WEST" ref="BCreator"/>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/contriblinks/contriblink ========== -->
+
+    <cell col="3" row="9" anchor="NORTHWEST" var="metadata/contriblinks[@class='MCRMetaLinkID']">
+      <panel>
+        <cell row="1" col="1" anchor="NORTHWEST" var="contriblink" ref="PersonLink" />
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/dates/date ========== -->
+    
+    <cell col="1" row="10" anchor="NORTHWEST" ref="LDate"/>
+    <cell col="2" row="10" anchor="NORTHWEST" ref="HDate"/>
+    <cell col="3" row="10" anchor="NORTHWEST" var="metadata/dates[@class='MCRMetaISO8601Date']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="date/@inherited" default="0" />
+        <cell col="1" row="1" anchor="WEST" ref="TFzeile10" var="date" />
+        <cell col="2" row="1" anchor="WEST" ref="SDateType" var="date/@type" />
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/types/type ========== -->
+
+    <cell col="1" row="11" anchor="NORTHWEST" ref="LTypeP"/>
+    <cell col="2" row="11" anchor="NORTHWEST" ref="HType"/>
+    <cell col="3" row="11" anchor="NORTHWEST" var="metadata/types[@class='MCRMetaClassification']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="type/@inherited" default="0" />
+        <hidden var="type/@classid"   default="DocPortal_class_00000005" />
+        <cell col="1" row="1" anchor="WEST" var="type/@categid" >
+          <list id="CType" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000005" cacheable="false"/>
+            <condition id="CoTypeDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/formats/format ========== -->
+
+    <cell col="1" row="12" anchor="NORTHWEST" ref="LFormatP"/>
+    <cell col="2" row="12" anchor="NORTHWEST" ref="HFormat"/>
+    <cell col="3" row="12" anchor="NORTHWEST" var="metadata/formats[@class='MCRMetaClassification']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="format/@inherited" default="0" />
+        <hidden var="format/@classid"   default="DocPortal_class_00000006" />
+        <cell col="1" row="1" anchor="WEST" var="format/@categid">
+          <list id="CFormat" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000006" cacheable="false"/>
+            <condition id="CoFormatDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/identifiers/identifier ========== -->
+
+    <cell col="1" row="13" anchor="NORTHWEST" ref="LIdentifier"/>
+    <cell col="2" row="13" anchor="NORTHWEST" ref="HIdentifier"/>
+    <cell col="3" row="13" anchor="NORTHWEST" var="metadata/identifiers[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="identifier">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/sources/source ========== -->
+    
+    <cell col="1" row="14" anchor="NORTHWEST" ref="LSource"/>
+    <cell col="2" row="14" anchor="NORTHWEST" ref="HSource"/>
+    <cell col="3" row="14" anchor="NORTHWEST" var="metadata/sources[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="source">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/languages/language ========== -->
+
+    <cell col="1" row="15" anchor="NORTHWEST" ref="LLanguageP"/>
+    <cell col="2" row="15" anchor="NORTHWEST" ref="HLanguage"/>
+    <cell col="3" row="15" anchor="NORTHWEST" var="metadata/languages[@class='MCRMetaClassification']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <hidden var="language/@inherited" default="0" />
+        <hidden var="language/@classid"   default="DocPortal_class_00000004" />
+        <cell col="1" row="1" anchor="WEST" var="language/@categid">
+          <list id="CLanguage" width="300" type="dropdown">
+            <item value="">
+              <label xml:lang="de">(bitte wählen)</label>
+              <label xml:lang="en">(select please)</label>
+            </item>
+            <include uri="classification:editor:-1:children:DocPortal_class_00000004" cacheable="false"/>
+            <condition id="CoLanguageDoc" required="true" >
+              <label xml:lang="de">Bitte wählen Sie einen Wert aus!</label>
+              <label xml:lang="en">Please select one entry!</label>
+            </condition>
+          </list>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/keywords/keyword ========== -->
+    
+    <cell col="1" row="16" anchor="NORTHWEST" ref="LKeywords"/>
+    <cell col="2" row="16" anchor="NORTHWEST" ref="HKeywords"/>
+    <cell col="3" row="16" anchor="NORTHWEST" var="metadata/keywords[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="keyword">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/coverages/coverage ========== -->
+    
+    <cell col="1" row="17" anchor="NORTHWEST" ref="LCoverage"/>
+    <cell col="2" row="17" anchor="NORTHWEST" ref="HCoverage"/>
+    <cell col="3" row="17" anchor="NORTHWEST" var="metadata/coverages[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="coverage">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/relations/relation ========== -->
+    
+    <cell col="1" row="18" anchor="NORTHWEST" ref="LRelation"/>
+    <cell col="2" row="18" anchor="NORTHWEST" ref="HRelation"/>
+    <cell col="3" row="18" anchor="NORTHWEST" var="metadata/relations[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="relation">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/rights/right ========== -->
+    
+    <cell col="1" row="19" anchor="NORTHWEST" ref="LRightsP"/>
+    <cell col="2" row="19" anchor="NORTHWEST" ref="HRights"/>
+    <cell col="3" row="19" anchor="NORTHWEST" var="metadata/rights[@class='MCRMetaLangText']">
+     <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="right">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST">
+                <textfield id="TFCoRights" width="48" maxlength="1024" />
+              </cell>
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/sizes/size ========== -->
+    
+    <cell col="1" row="20" anchor="NORTHWEST" ref="LSize"/>
+    <cell col="2" row="20" anchor="NORTHWEST" ref="HSize"/>
+    <cell col="3" row="20" anchor="NORTHWEST" var="metadata/sizes[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="size">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/contacts/contact ========== -->
+    
+    <cell col="1" row="21" anchor="NORTHWEST" ref="LContact"/>
+    <cell col="2" row="21" anchor="NORTHWEST" ref="HContact"/>
+    <cell col="3" row="21" anchor="NORTHWEST" var="metadata/contacts[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="contact">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile1024" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/notes/note ========== -->
+    
+    <cell col="1" row="22" anchor="NORTHWEST" ref="LNote"/>
+    <cell col="2" row="22" anchor="NORTHWEST" ref="HNote"/>
+    <cell col="3" row="22" anchor="NORTHWEST" var="metadata/notes[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="note">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== metadata/citations/citation ========== -->
+    
+    <cell col="1" row="23" anchor="NORTHWEST" ref="LCitation"/>
+    <cell col="2" row="23" anchor="NORTHWEST" ref="HCitation"/>
+    <cell col="3" row="23" anchor="NORTHWEST" var="metadata/citations[@class='MCRMetaLangText']">
+      <panel>
+        <include ref="inherit.heritable" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="citation">
+          <repeater min="1" max="5" pos="right">
+            <panel>
+              <hidden var="@inherited" default="0"/>
+              <cell col="1" row="1" anchor="NORTHWEST" ref="TFarea4096" />
+              <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@xml:lang" default="de" />
+            </panel>
+          </repeater>
+        </cell>
+      </panel>
+    </cell>
+
+    <!-- ========== The End ========== -->
+    
+    <cell col="1" colspan="3" row="24" anchor="WEST">
+      <space width="0px" height="20px"/>
+    </cell>
+    <cell col="3" row="25" anchor="WEST" ref="TwoButtons" />
+    
+  </panel>
+
+<!-- ============================================================ -->
+
+  <repeater id="PersonLink" min="1" max="5" pos="right">  
+    <panel>
+      <hidden var="@inherited" default="0"       />
+      <hidden var="@xlink:type"      default="locator" />
+      <hidden var="@xlink:title"     default="Person"  />
+      <hidden var="@xlink:href"  />
+      <cell row="1" col="1" width="100%">
+        <output var="@xlink:title" />
+        <text label="&#160;&#160;&#160;" /> <!-- &nbsp; -->
+      </cell>
+      <cell row="1" col="2">
+        <subselect id="sub.select4" type="webpage" href="indexpage?searchclass=creators_sub">
+          <label xml:lang="de">Person wählen</label>
+          <label xml:lang="en">Select person</label>
+        </subselect>
+      </cell>
+      <cell row="1" col="3">
+        <subselect id="sub.select5" type="webpage" href="indexpage?searchclass=subselect-institution">
+          <label xml:lang="de">Institution wählen</label>
+          <label xml:lang="en">Select person</label>
+        </subselect>
+      </cell>
+    </panel>
+  </repeater>
+
+</imports>

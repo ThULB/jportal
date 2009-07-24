@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section title="Suchmaske für Dokumente" xml:lang="de">
+  <p>Dies ist eine komplexe Suchmaske für Dokumente.</p>
+</section>
+
+<section title="Search mask for documents" xml:lang="en">
+  <p>This is a complex search mask for finding documents.</p>
+</section>
+
+<section xml:lang="all">
+<editor id="searchmask">
+
+  <source uri="request:servlets/MCRSearchServlet?mode=load&amp;id={id}" />
+  <target type="servlet" name="MCRSearchServlet" method="post" format="xml" />
+
+  <components root="root" var="/query">
+	  
+    <include uri="webapp:editor/imports-common.xml"/>
+	  
+    <headline anchor="LEFT">
+      <text i18n="editor.search.document.labelc"/>
+    </headline>
+
+    <panel id="root"> 
+      <hidden var="@mask" default="editor_form_search-complexdocument.xml" />
+      
+      <hidden var="conditions/@format" default="xml" />
+      <hidden var="conditions/boolean/@operator" default="and" />
+
+      <!-- Search only for object type document -->
+      <hidden var="conditions/boolean/condition1/@field"    default="objectType" />
+      <hidden var="conditions/boolean/condition1/@operator" default="=" />
+      <hidden var="conditions/boolean/condition1/@value"    default="document" />
+
+      <!-- Search in field "title" with operator "contains" -->
+      <hidden var="conditions/boolean/condition2/@field" default="title" />
+      <hidden var="conditions/boolean/condition2/@operator" default="contains" />
+      <cell row="1" col="1" anchor="EAST">
+        <text i18n="editor.search.document.title" />
+      </cell>
+      <cell row="1" col="2" anchor="WEST" var="conditions/boolean/condition2/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="1" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="1" col="4" anchor="WEST" ref="SMTitle" />
+
+      <!-- Search in field "author" with operator "contains" -->
+      <hidden var="conditions/boolean/condition3/@field" default="authorTitle" />
+      <hidden var="conditions/boolean/condition3/@operator" default="contains" />
+      <cell row="2" col="1" anchor="EAST">
+        <text i18n="editor.search.document.author"/>
+      </cell>
+      <cell row="2" col="2" anchor="WEST" var="conditions/boolean/condition3/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="2" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="2" col="4" anchor="WEST" ref="SMCreator" />
+      
+      <!-- Search in field "identifier" with operator "=" -->
+      <hidden var="conditions/boolean/condition4/@field" default="identifier" />
+      <hidden var="conditions/boolean/condition4/@operator" default="=" />
+      <cell row="3" col="1" anchor="EAST">
+        <text i18n="editor.search.document.identifier"/>
+      </cell>
+      <cell row="3" col="2" anchor="WEST" var="conditions/boolean/condition4/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="3" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="3" col="4" anchor="WEST" ref="SMIdentifier" />
+      
+      <!-- Search in field "origin" with operator "=" -->
+      <hidden var="conditions/boolean/condition5/@field" default="origin" />
+      <hidden var="conditions/boolean/condition5/@operator" default="=" />
+      <cell row="4" col="1" anchor="EAST">
+        <text i18n="editor.search.document.origin"/>
+      </cell>
+      <cell row="4" col="2" anchor="WEST" var="conditions/boolean/condition5/@value">
+        <list type="dropdown">
+          <item value="" i18n="editor.search.choose" />
+          <include uri="classification:editor[CountDocument]:2:noEmptyLeaves:children:DocPortal_class_00000002" cacheable="false" />
+        </list>
+      </cell>
+      <cell row="4" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="4" col="4" anchor="WEST" ref="SMOrigin" />
+
+      <!-- Search in field "format" with operator "=" -->
+      <hidden var="conditions/boolean/condition7/@field" default="format" />
+      <hidden var="conditions/boolean/condition7/@operator" default="=" />
+      <cell row="6" col="1" anchor="EAST">
+        <text i18n="editor.search.document.format"/>
+      </cell>
+      <cell row="6" col="2" anchor="WEST" var="conditions/boolean/condition7/@value">
+        <list type="dropdown">
+          <item value="" i18n="editor.search.choose" />
+          <include uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000006" cacheable="false" />
+        </list>
+      </cell>
+      <cell row="6" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="6" col="4" anchor="WEST" ref="SMFormat" />
+
+      <!-- Search in field "language" with operator "=" -->
+      <hidden var="conditions/boolean/condition8/@field" default="language" />
+      <hidden var="conditions/boolean/condition8/@operator" default="=" />
+      <cell row="7" col="1" anchor="EAST">
+        <text i18n="editor.search.document.lang"/>
+      </cell>
+      <cell row="7" col="2" anchor="WEST" var="conditions/boolean/condition8/@value">
+        <list type="dropdown">
+          <item value="" i18n="editor.search.choose" />
+          <include uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000004" cacheable="false" />
+        </list>
+      </cell>
+      <cell row="7" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="7" col="4" anchor="WEST" ref="SMLanguage" />
+
+      <!-- Search in field "type" with operator "=" -->
+      <hidden var="conditions/boolean/condition9/@field" default="type" />
+      <hidden var="conditions/boolean/condition9/@operator" default="=" />
+      <cell row="8" col="1" anchor="EAST">
+        <text i18n="editor.search.document.type"/>
+      </cell>
+      <cell row="8" col="2" anchor="WEST" var="conditions/boolean/condition9/@value">
+        <list type="dropdown">
+          <item value="" i18n="editor.search.choose" />
+          <include uri="classification:editor[TextCounter]:2:noEmptyLeaves:children:DocPortal_class_00000005" cacheable="false" />
+        </list>
+      </cell>
+      <cell row="8" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="8" col="4" anchor="WEST" ref="SMType" />
+
+       <!-- Search in field "description" with operator "contains" -->
+      <hidden var="conditions/boolean/condition10/@field" default="description" />
+      <hidden var="conditions/boolean/condition10/@operator" default="contains" />
+      <cell row="9" col="1" anchor="EAST">
+        <text i18n="editor.search.document.descript"/>
+      </cell>
+      <cell row="9" col="2" anchor="WEST" var="conditions/boolean/condition10/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="9" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="9" col="4" anchor="WEST" ref="SMDescription" />
+		
+       <!-- Search in field "dateCreated" -->
+      <hidden var="conditions/boolean/condition11/@field" default="dateCreated" />
+      <cell row="10" col="1" anchor="EAST">
+        <text i18n="editor.search.document.date"/>
+      </cell>
+	  <cell row="10" col="2" anchor="WEST" ref="SubDate">
+      </cell>
+      <cell row="10" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="10" col="4" anchor="WEST" ref="SMDate" />
+		
+       <!-- Search in field "keywords" with operator "contains" -->
+      <hidden var="conditions/boolean/condition12/@field" default="keywords" />
+      <hidden var="conditions/boolean/condition12/@operator" default="contains" />
+      <cell row="11" col="1" anchor="EAST">
+        <text i18n="editor.search.document.keyword"/>
+      </cell>
+      <cell row="11" col="2" anchor="WEST" var="conditions/boolean/condition12/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="11" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="11" col="4" anchor="WEST" ref="SMKeywords" />
+		
+       <!-- Search in field "source" with operator "contains" -->
+      <hidden var="conditions/boolean/condition13/@field" default="source" />
+      <hidden var="conditions/boolean/condition13/@operator" default="contains" />
+      <cell row="12" col="1" anchor="EAST">
+        <text i18n="editor.search.document.source"/>
+      </cell>
+      <cell row="12" col="2" anchor="WEST" var="conditions/boolean/condition13/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="12" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="12" col="4" anchor="WEST" ref="SMSource" />
+		
+       <!-- Search in field "coverage" with operator "contains" -->
+      <hidden var="conditions/boolean/condition14/@field" default="coverage" />
+      <hidden var="conditions/boolean/condition14/@operator" default="contains" />
+      <cell row="13" col="1" anchor="EAST">
+        <text i18n="editor.search.document.coverage"/>
+      </cell>
+      <cell row="13" col="2" anchor="WEST" var="conditions/boolean/condition14/@value">
+        <textfield width="40" />
+      </cell>
+      <cell row="13" col="3" anchor="WEST">
+        <space width="20" height="0"/>
+      </cell>
+      <cell row="13" col="4" anchor="WEST" ref="SMCoverage" />
+		
+      <cell row="14" col="1" colspan="2" anchor="SOUTHWEST" height="40">
+        <text i18n="editor.search.fulltext"/>
+      </cell>
+
+      <!-- Search in field "allMeta" with operator "contains" -->
+      <hidden var="conditions/boolean/condition15/@field" default="allMeta" />
+      <hidden var="conditions/boolean/condition15/@operator" default="contains" />
+      <cell row="15" col="1" anchor="EAST">
+        <text i18n="editor.search.metadata"/>
+      </cell>
+      <cell row="15" col="2" anchor="WEST" var="conditions/boolean/condition15/@value">
+        <textfield width="40" />
+      </cell>
+
+      <!-- Search in field "content" with operator "contains" -->
+      <hidden var="conditions/boolean/condition16/@field" default="content" />
+      <hidden var="conditions/boolean/condition16/@operator" default="contains" />
+      <cell row="16" col="1" anchor="EAST">
+        <text i18n="editor.search.derivate"/>
+      </cell>
+      <cell row="16" col="2" anchor="WEST" var="conditions/boolean/condition16/@value">
+        <textfield width="40" />
+      </cell>
+
+      <!-- Select hosts to query -->
+      <cell row="17" col="1" anchor="SOUTHEAST" height="50px">
+        <text i18n="editor.search.searchon"/>
+      </cell>
+      <cell row="17" col="2" colspan="2" anchor="SOUTHWEST" var="hosts/@target">
+        <list type="radio" default="local">
+          <item value="local" i18n="editor.search.searchthis"/>
+          <item value="all" i18n="editor.search.searchall"/>
+          <item value="selected" i18n="editor.search.searchboth"/>
+        </list>
+      </cell>
+      
+      <cell row="18" col="2" colspan="2" anchor="NORTHWEST" var="hosts/host">
+        <list type="checkbox" cols="2">
+          <include uri="xslStyle:hosts:webapp:hosts.xml" />
+        </list>
+      </cell>
+		
+      <cell row="19" col="1" colspan="2" anchor="SOUTHEAST" height="50px">
+        <panel>
+          <cell row="1" col="1" anchor="WEST">
+            <text  i18n="editor.search.max" />
+          </cell>
+          <cell row="1" col="2" anchor="WEST" var="@maxResults">
+            <list type="dropdown" default="100">
+              <item value="20"  label="20"  />
+              <item value="100" label="100" />
+              <item value="500" label="500" />            
+              <item value="0"   i18n="editor.search.all" />
+            </list>
+          </cell>
+          <cell row="1" col="3" anchor="WEST">
+            <text i18n="editor.search.label" />
+          </cell>
+          <cell row="1" col="4" anchor="WEST" var="@numPerPage">
+            <list type="dropdown" default="10">
+              <item value="10" label="10" />
+              <item value="20" label="20" />
+              <item value="50" label="50" />
+              <item value="0"  i18n="editor.search.all" />
+            </list>
+          </cell>
+          <cell row="1" col="5" anchor="WEST">
+            <text i18n="editor.search.perpage" />
+          </cell>
+        </panel>
+      </cell>
+      
+      <cell row="20" col="1" colspan="2" anchor="EAST">
+        <submitButton i18n="editor.search.search" width="150px" />
+      </cell>
+    </panel>
+	  
+	<panel id="SubDate">  
+        <cell row="1" col="1" anchor="WEST" var="conditions/boolean/condition11/@operator" ref="SDateOperator">
+		</cell>
+        <cell row="1" col="2" anchor="WEST" var="conditions/boolean/condition11/@value">
+          <textfield width="35" />
+		</cell>
+    </panel>
+	  
+  </components>
+</editor>
+</section>
+
+</MyCoReWebPage>
+
+

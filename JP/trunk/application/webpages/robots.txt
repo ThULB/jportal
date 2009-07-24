@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /servlets/
+Disallow: /indexpage/
+Disallow: /browse/
+Disallow: /editor_form_search-*
+Disallow: /content/main/internal
+Sitemap: http://zs.thulb.uni-jena.de/sitemap_google.xml

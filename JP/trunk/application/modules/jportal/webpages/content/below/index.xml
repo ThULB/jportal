@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
+        <table id="home_maintable">
+            <tr>
+                <td width="50%" height="230">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+                            <td id="home_headlinerow_left">Informationen</td>
+
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <b>Herzlichen Glückwunsch, Sie haben JPortal erfolgreich installiert!</b>
+                                <br />
+                                <br />
+                                Melden sie sich als "administrator" mit "alleswirdgut" an und nutzen sie die erweiterteten Funktionalitäten.
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td height="230">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+                            <td id="home_headlinerow_left">Schnellsuche</td>
+
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <div id="home_fastsearch">
+                                    Suche im Gesamtbestand:
+                                    <div style="padding: 10px; float: left;">
+
+                                        <editor id="search-all-de">
+                                            <include uri="webapp:editor/editor-search-all.xml"></include>
+                                        </editor>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+
+                            <td id="home_headlinerow_left">Neu</td>
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <h3>
+                                    <span style="font-weight: bold;">Aktuelle Artikel:</span>
+                                </h3>
+                                <div class="horizontal-leafs">
+                                    <table cellspacing="0" cellpadding="0" id="resultList">
+                                        <tr>
+                                            <td>
+                                                <printlatestobjects sortfield="created" maxresults="3" objecttype="jparticle" start="true"
+                                                    overwritelayout="true">
+                                                </printlatestobjects>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </section>
+    <section xml:lang="en" title="JPortal 2 - Das Zeitschriften-Portal">
+        <table id="home_maintable">
+            <tr>
+                <td width="50%" height="230">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+                            <td id="home_headlinerow_left">Informations</td>
+
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <b>Welcome, you have installed JPortal sucessfully !</b>
+                                <br />
+                                <br />
+                                Please log in as "administrator" with password "alleswirdgut" and use advanced functions.
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td height="230">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+                            <td id="home_headlinerow_left">Quick search</td>
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <div id="home_fastsearch">
+                                    Search in all data:
+                                    <div style="padding: 10px; float: left;">
+                                        <editor id="search-all-de">
+                                            <include uri="webapp:editor/editor-search-all.xml"></include>
+                                        </editor>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <table id="home_table" cellspacing="0" cellpadding="0">
+                        <tr id="home_headlinerow">
+
+                            <td id="home_headlinerow_left">New</td>
+                            <td id="home_headlinerow_right">
+                                <br />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="home_table_content">
+                                <h3>
+                                    <span style="font-weight: bold;">Latest artikels:</span>
+                                </h3>
+                                <div class="horizontal-leafs">
+                                    <table cellspacing="0" cellpadding="0" id="resultList">
+                                        <tr>
+                                            <td>
+                                                <printlatestobjects sortfield="created" maxresults="3" objecttype="jparticle" start="true"
+                                                    overwritelayout="true">
+                                                </printlatestobjects>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </section>
+</MyCoReWebPage>

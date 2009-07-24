@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<fileMappings>
+	<fileMapping>
+		<type ID="txt" />
+		<type ID="xml" />
+		<mappTo>
+			<type ID="jpeg" />
+			<type ID="tiff" />
+			<type ID="gif" />
+		</mappTo>
+	</fileMapping>
+</fileMappings>

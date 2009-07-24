@@ -1,0 +1,235 @@
+/* neue Einträge */
+
+#navi_top
+{
+	margin-left:4px;
+	padding:2px;
+	color: white;
+	text-align:right;
+	position:absolute;
+	top:10px;
+	left:550px;
+	min-width:1000em,;
+	z-Index:2;
+	font-size:small;
+}
+
+#navi_top a,a:link,a:active,a:hover,a:focus
+{
+	color:white;
+	text-decoration:none;
+}
+
+#navi_left a,a:link,a:active,a:hover,a:focus
+{
+	color:black;
+}
+
+#navi_left
+{
+	vertical-align: top;
+	text-align: left;
+	width: 120px;
+}
+
+#navi_left table td
+{
+	margin:0px;
+	padding: 0px;
+	border:0px;
+	text-align:left;	
+}
+
+
+/* alte Einträge */
+
+
+td.login_navi_row {
+	height:25px;
+}
+td.login_row {
+	background:#E7D4B0 url(../IMAGES/menu_pix.gif) repeat scroll 0%;
+	padding-left:1.5%;
+}
+td.navi_row {
+	padding:3px;
+	text-align:center;
+	width:auto;
+}
+td.navi_row table {
+	margin-bottom:3px;
+	margin-left:auto;
+	margin-right:0px;
+}
+table.login_window {
+	border-style:none;
+	border-width:0px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:small;
+	font-weight:bold;
+	min-width:47px;
+	vertical-align:middle;
+	width:47px;
+}
+td.login_text {
+	text-align:left;
+}
+td.user_id {
+	padding-left:3%;
+	text-align:left;
+	width:47px;
+}
+p.whitebox {
+	margin:0px;
+	padding:2px;
+}
+td.login_window a:link {
+	color:#52818B;
+	text-decoration:none;
+}
+td.login_window a:visited {
+	color:#52818B;
+	text-decoration:none;
+}
+td.login_window a:hover {
+	color:#EEEA8B;
+	text-decoration:none;
+}
+td.login_window a:active {
+	color:#52818B;
+	text-decoration:none;
+}
+td.login_window a:focus {
+	color:#52818B;
+	text-decoration:none;
+}
+td.menus {
+	border-style:none;
+	border-width:0px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:small;
+	font-weight:bold;
+	min-width:47px;
+	vertical-align:top;
+	width:auto;
+}
+div.main_menu {
+	background:#E7D4B0 url(../IMAGES/menu_pix.gif) repeat scroll 0%;
+	border-style:none;
+	min-width:47px;
+	vertical-align:top;
+	width:auto;
+}
+#navi_below_cell {
+	padding:3px;
+	text-align:right;
+}
+#navi_below_cell table {
+	margin-left:auto;
+	margin-right:0px;
+}
+.navi_below th, .navi_below td, .navi_below a {
+	color:#FFFFFF;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:small;
+}
+.navi_below a {
+	color: #FFFFFF;
+	text-decoration:none;
+}
+.navi_below a:hover {
+	text-decoration:underline;
+}
+.navi_below .marked a {
+	text-decoration:underline;
+}
+.navi_column {
+	background:#CAD9E0 none repeat scroll 0%;
+	border-color:#0C374C;
+	border-style:none solid solid;
+	border-width:1px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+}
+table.navi_history {
+	color:#52818B;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:small;
+	font-weight:bold;
+	margin-left:auto;
+	margin-right:auto;
+	min-width:700px;
+	vertical-align:top;
+	width:100%;
+}
+.navi_history a {
+	color:#52818B;
+	font-weight:normal;
+	text-decoration:none;
+}
+.navi_history a:hover {
+	text-decoration:underline;
+}
+td.navi_history {
+	background:#BBC3C1 url(../IMAGES/navi_pix.gif) repeat scroll 0%;
+	height:10px;
+	padding-left:3%;
+	text-align:left;
+}
+td.navi_history_user {
+	padding-left:3%;
+	text-align:left;
+}
+.navi_main {
+	border-style:none;
+	border-width:0px;
+	font-family:Verdana,Arial,Helvetica,sans-serif;
+	font-size:small;
+	font-weight:bold;
+	min-width:47px;
+	vertical-align:top;
+	width:47px;
+}
+div.navi_main {
+	background:#E7D4B0 url(../IMAGES/menu_pix.gif) repeat scroll 0%;
+	border-style:none;
+	min-width:47px;
+	vertical-align:top;
+	width:auto;
+}
+div.logo {
+	background:#FFFAE5 url(../IMAGES/bg_pix.gif) repeat scroll 0%;
+	border-style:none;
+	min-width:47px;
+	vertical-align:bottom;
+	width:auto;
+}
+td.empty_box {
+	background:#FFFAE5 url(../IMAGES/bg_pix.gif) repeat scroll 0%;
+	height:31px;
+}
+.navi_main img {
+	border-style:none;
+	border-width:0px;
+	display:block;
+}
+.navi_main tr, .navi_main td {
+	font-size:11px;
+}
+.navi_main th a:hover {
+	text-decoration:underline;
+}
+.navi_main th a {
+	color:#FFFFFF;
+	font-weight:bold;
+}
+.navi_main a {
+	color:#FFFFFF;
+	font-weight:normal;
+	text-decoration:none;
+}
+.navi_main a:hover {
+	text-decoration:underline;
+}
+.navi_main .marked a {
+	text-decoration:none;
+}

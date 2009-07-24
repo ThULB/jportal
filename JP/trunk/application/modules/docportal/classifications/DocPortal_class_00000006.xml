@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:noNamespaceSchemaLocation="MCRClassification.xsd" 
+             ID="DocPortal_class_00000006">
+	<label xml:lang="de" text="DocPortal Formate" description="DocPortal Klassifikation der Formate"/>
+	<label xml:lang="en" text="DocPortal formats" description="DocPortal classification of formats"/>
+	<label xml:lang="x-dini" text="doc-type" description="DINI formal document type" />
+	<categories>
+		<category ID="FORMAT0000">
+			<label xml:lang="de" text="unbekannt"/>
+			<label xml:lang="en" text="unknown"/>
+			<label xml:lang="x-dini" text="doc-type" />
+		</category>
+		<category ID="FORMAT0001">
+			<label xml:lang="de" text="Text"/>
+			<label xml:lang="en" text="text"/>
+			<label xml:lang="x-dini" text="doc-type:text" />
+		</category>
+		<category ID="FORMAT0002">
+			<label xml:lang="de" text="Bild"/>
+			<label xml:lang="en" text="image"/>
+			<label xml:lang="x-dini" text="doc-type:image" />
+		</category>
+		<category ID="FORMAT0003">
+			<label xml:lang="de" text="Sammlung"/>
+			<label xml:lang="en" text="collection"/>
+			<label xml:lang="x-dini" text="doc-type:image" />
+		</category>
+		<category ID="FORMAT0004">
+		    <label xml:lang="de" text="Datasatz"/>
+			<label xml:lang="en" text="dataset"/>
+			<label xml:lang="x-dini" text="doc-type:data" />
+		</category>
+		<category ID="FORMAT0005">
+			<label xml:lang="de" text="Ereignis"/>
+			<label xml:lang="en" text="event"/>
+			<label xml:lang="x-dini" text="doc-type:binary" />
+		</category>
+		<category ID="FORMAT0006">
+		    <label xml:lang="de" text="Interaktive Ressource"/>
+			<label xml:lang="en" text="interactive resource"/>
+			<label xml:lang="x-dini" text="doc-type:multimedia" />
+		</category>
+		<category ID="FORMAT0007">
+			<label xml:lang="de" text="Service"/>
+			<label xml:lang="en" text="service"/>
+			<label xml:lang="x-dini" text="doc-type:binary" />
+		</category>
+		<category ID="FORMAT0008">
+			<label xml:lang="de" text="Software"/>
+			<label xml:lang="en" text="software"/>
+			<label xml:lang="x-dini" text="doc-type:binary" />
+		</category>
+		<category ID="FORMAT0009">
+			<label xml:lang="de" text="Sound"/>
+			<label xml:lang="en" text="sound"/>
+			<label xml:lang="x-dini" text="doc-type:audio" />
+		</category>
+		<category ID="FORMAT0010">
+			<label xml:lang="de" text="Video"/>
+			<label xml:lang="en" text="video"/>
+			<label xml:lang="x-dini" text="doc-type:video" />
+		</category>
+	</categories>
+</mycoreclass>
