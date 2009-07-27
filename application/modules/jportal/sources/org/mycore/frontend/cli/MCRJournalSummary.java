@@ -524,7 +524,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
     }
 
     private static int getMaxArtID() {
-        return xmltable.getNextFreeIdInt("jportal", "jparticle");
+        return xmltable.getHighestStoredID("jportal", "jparticle") + 1;
 
     }
 
@@ -532,14 +532,14 @@ public class MCRJournalSummary extends MCRAbstractCommands {
      * @return the maxVolID
      */
     private static int getMaxVolID() {
-        return xmltable.getNextFreeIdInt("jportal", "jpvolume");
+        return xmltable.getHighestStoredID("jportal", "jpvolume") + 1;
     }
 
     /**
      * @return the maxVolID
      */
     private static int getMaxJouID() {
-        return xmltable.getNextFreeIdInt("jportal", "jpjournal");
+        return xmltable.getHighestStoredID("jportal", "jpjournal") + 1;
     }
 
     public static void createCSV() throws IOException {

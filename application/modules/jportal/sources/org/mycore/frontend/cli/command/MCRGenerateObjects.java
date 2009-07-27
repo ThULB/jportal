@@ -42,8 +42,7 @@ public class MCRGenerateObjects {
         // generate new persons
         for (int i = start; i <= stop; i++) {
             MCRObjectID newMcrID = lastObject.getId();
-            id = MCRXMLTableManager.instance().getNextFreeIdInt("jportal", "person");
-            newMcrID.setNumber(id);
+            newMcrID.setNextFreeId("jportal_person");
             MCRObject newPerson = new MCRObject();
             newPerson.setId(newMcrID);
 
@@ -86,7 +85,7 @@ public class MCRGenerateObjects {
         // generate new institution
         for (int i = start; i <= stop; i++) {
             MCRObjectID newMcrID = lastObject.getId();
-            id = MCRXMLTableManager.instance().getNextFreeIdInt("jportal", "jpinst");
+            newMcrID.setNextFreeId("jportal_jpinst");
             newMcrID.setNumber(id);
             MCRObject newJpInst = new MCRObject();
             newJpInst.setId(newMcrID);
