@@ -1,2 +1,0 @@
-
-    <field name="fileDeleted"       type="boolean"    source="fileMetadata" xpath="document(concat('mcrobject:',file/@owner))/mycorederivate/service" value="count(servflags/servflag[text() = 'deleted'])>0" addable="true" />
