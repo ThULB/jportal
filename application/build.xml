@@ -33,25 +33,25 @@
   <macrodef name="modulePreHook">
     <attribute name="target" />
     <sequential>
+      <echo level="verbose">pre module Hook: @{target}</echo>
       <for list="${MCR.Modules.Application}" param="module" parallel="false">
         <sequential>
-          <if>
-            <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@{module}/build.xml">
-                <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
-              </fileset>
-            </resourcecount>
-            <then>
-              <subant target="pre.@{target}" inheritall="true" inheritrefs="true">
-                <fileset dir="." includes="modules/@{module}/build.xml">
-                  <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
-                </fileset>
-              </subant>
-            </then>
-            <else>
-              <echo level="debug">No target pre.@{target} found in module @{module}.</echo>
-            </else>
-          </if>
+          <echo level="verbose">check module: @{module}</echo>
+          <for param="build.file" parallel="false">
+            <fileset dir="." includes="modules/@{module}/build.xml">
+              <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
+            </fileset>
+            <sequential>
+              <echo level="verbose">running module: @{build.file}</echo>
+              <java fork="true" classname="org.apache.tools.ant.Main" classpath="${java.class.path}">
+                <arg value="-Dant.home=${ant.home}"/>
+                <arg value="-Dant.library.dir=${ant.library.dir}"/>
+                <arg value="-f"/>
+                <arg value="@{build.file}"/>
+                <arg value="pre.@{target}"/>
+              </java>
+            </sequential>
+          </for>
         </sequential>
       </for>
     </sequential>
@@ -59,25 +59,31 @@
   <macrodef name="moduleHook">
     <attribute name="target" />
     <sequential>
+      <echo level="verbose">module Hook: @{target}</echo>
       <for list="${MCR.Modules.Application}" param="module" parallel="false">
         <sequential>
-          <if>
-            <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@{module}/build.xml">
-                <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
-              </fileset>
-            </resourcecount>
-            <then>
-              <subant target="@{target}" inheritall="true" inheritrefs="true">
-                <fileset dir="." includes="modules/@{module}/build.xml">
-                  <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
-                </fileset>
-              </subant>
-            </then>
-            <else>
-              <echo level="debug">No target @{target} found in module @{module}.</echo>
-            </else>
-          </if>
+          <echo level="verbose">check module: @{module}</echo>
+          <for param="build.file" parallel="false">
+            <fileset dir="." includes="modules/@{module}/build.xml">
+              <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
+            </fileset>
+            <sequential>
+              <echo level="verbose">running module: @{build.file}</echo>
+              <!--
+              Note: need to fork ant process here. Modules include common-modules.xml by default
+              and calls to task artifact:dependencies will fill PermGen space quickly.
+              Forking ant process get rid of these issues as well as multiple taskdef related noisy
+              outputs.
+              -->
+              <java fork="true" classname="org.apache.tools.ant.Main" classpath="${java.class.path}">
+                <arg value="-Dant.home=${ant.home}"/>
+                <arg value="-Dant.library.dir=${ant.library.dir}"/>
+                <arg value="-f"/>
+                <arg value="@{build.file}"/>
+                <arg value="@{target}"/>
+              </java>
+            </sequential>
+          </for>
         </sequential>
       </for>
     </sequential>
