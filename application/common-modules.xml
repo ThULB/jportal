@@ -1,4 +1,4 @@
-<project name="docportal" basedir=".">
+<project name="docportal" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
   <!-- =================================================================== -->
   <!-- Global properties                                                   -->
@@ -47,17 +47,16 @@
       </tokenfilter>
     </filterchain>
   </loadproperties>
-
-  <!-- MyCoRe CVS repository root -->
-  <property name="CVSRoot" value="/cvs" />
-
-  <property name="mycore.config" value="${mycore}/config" />
-  <property name="mycore.doc" value="${mycore}/documentation" />
-  <property name="mycore.lib" value="${mycore}/build/lib" />
-  <property name="mycore.modules" value="${mycore}/components" />
-  <property name="mycore.schema" value="${mycore}/schema" />
-  <property name="mycore.stylesheets" value="${mycore}/xsl" />
-
+  <path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.0.10.jar" />
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="antlib:org.apache.maven.artifact.ant"
+           classpathref="maven-ant-tasks.classpath" />
+  <artifact:pom id="application.pom" file="${basedir}/config/pom.xml"/>	
+  <artifact:dependencies pathId="mycore.jars" filesetId="dependency.fileset" pomRefId="application.pom"/>
+	<!--
+    <dependency groupId="org.mycore" artifactId="mycore-complete" version="2.0.90-SNAPSHOT"/>
+  </artifact:dependencies>
+-->
   <property name="application" value="${env.DOCPORTAL_HOME}" />
   <property name="application.bin" value="${application}/bin" />
   <property name="application.changelogs" value="${application}/changelogs" />
@@ -98,35 +97,7 @@
   <!-- Read in properties from ${env.MYCORE_HOME}/config/build.properties -->
   <property file="${mycore.config}/build.properties" />
 
-  <path id="mycore.jars">
-    <fileset dir="${mycore.lib}" includes="*.jar" />
-  </path>
   <property resource="config/mycore.properties" classpathref="mycore.jars"/>
-
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="mycore.jars" />
-  <!-- for task is not included in antcontrib.properties by default -->
-  <taskdef name="for" classname="net.sf.antcontrib.logic.For" classpathref="mycore.jars" />
-  <if>
-    <isset property="MCR.System.SharedJarsDir" />
-    <then>
-      <path id="share.classpath">
-        <fileset dir="${MCR.System.SharedJarsDir}" includes="_dummy_ ${MCR.System.Jars}" />
-      </path>
-    </then>
-    <else>
-      <if>
-        <isset property="MCR.System.Jars" />
-        <then>
-          <path id="share.classpath">
-            <files includes="${MCR.System.Jars}" />
-          </path>
-        </then>
-        <else>
-          <path id="share.classpath" />
-        </else>
-      </if>
-    </else>
-  </if>
 
   <!-- old init entries -->
   <path id="application.classpath">
@@ -135,21 +106,19 @@
     <pathelement location="${build.config}" />
     <pathelement location="${build.schema}" />
     <pathelement location="${build.stylesheets}" />
-    <fileset dir="${build.lib}" includes="*.jar" />
+    <path refid="mycore.jars" />
     <fileset dir="${application.lib}" includes="*.jar" />
     <fileset dir="${ant.library.dir}" includes="ant.jar" />
-    <!-- add lib path of system componets -->
-    <path refid="share.classpath" />
-  </path>
-  <path id="bootstrap.classpath">
-    <path refid="application.classpath" />
-    <path refid="mycore.jars" />
   </path>
   <path id="script.classpath">
     <pathelement location="${build.classes}" />
     <pathelement location="${build.config}" />
     <pathelement location="${build.lib}/docportal.jar" />
   </path>
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" onerror="ignore" classpathref="application.classpath" />
+  <!-- for task is not included in antcontrib.properties by default -->
+  <taskdef name="for" classname="net.sf.antcontrib.logic.ForTask" classpathref="application.classpath" />
+
 
   <path id="application.libpath">
     <dirset dir="${java.home}" includes="bin bin/classic" />
@@ -180,10 +149,10 @@
     </not>
   </condition>
 
-  <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="mycore.jars" />
-  <taskdef classname="org.mycore.buildtools.anttasks.MCRIntegrateTask" name="mcr-integrate" classpathref="mycore.jars" />
-  <taskdef classname="org.mycore.buildtools.anttasks.MCRGetMyCoReJarTask" classpathref="mycore.jars" name="getMyCoReJar"/>
-  <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="mycore.jars" />
+  <taskdef classname="org.mycore.common.MCRConfigurationTask" name="mcr-config" classpathref="application.classpath" />
+  <taskdef classname="org.mycore.buildtools.anttasks.MCRIntegrateTask" name="mcr-integrate" classpathref="application.classpath" />
+  <taskdef classname="org.mycore.buildtools.anttasks.MCRGetMyCoReJarTask" classpathref="application.classpath" name="getMyCoReJar"/>
+  <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="application.classpath" />
 
   <!-- =================================================================== -->
   <!-- Search mask generation macro                                        -->
@@ -248,9 +217,11 @@
       <xslt basedir="${application}.config}"
             classpathref="application.classpath"
             in="${build.config}/searchfields.xml"
-            style="${mycore.stylesheets}/searchfields2searchmask.xsl"
             out="@{dir.editor}/@{filename.editor}"
             force="true">
+      	<style>
+      		<zipentry zipfile="${mycore.jar}" name="xsl/searchfields2searchmask.xsl"/>
+        </style>
         <param name="mode" expression="editor" />
         <param name="filename.webpage" expression="@{filename.webpage}" />
         <param name="headline.i18n" expression="@{headline.i18n}" />
@@ -266,9 +237,11 @@
       <xslt basedir="${application.config}"
             classpathref="application.classpath"
             in="${build.config}/searchfields.xml"
-            style="${mycore.stylesheets}/searchfields2searchmask.xsl"
             out="@{dir.webpage}/@{filename.webpage}"
             force="true">
+      	<style>
+      		<zipentry zipfile="${mycore.jar}" name="xsl/searchfields2searchmask.xsl"/>
+        </style>
         <param name="mode" expression="webpage" />
         <param name="filename.editor" expression="@{filename.editor}" />
         <param name="title.de" expression="@{title.de}" />
@@ -299,7 +272,7 @@
 
     <property name="env.LIBPATH" value="${application.libpath.translated}" />
     <property name="env.LD_LIBRARY_PATH" value="${application.libpath.translated}" />
-    <getMyCoReJar classpathref="mycore.jars" property="mycore.jar"/>
+    <getMyCoReJar classpathref="application.classpath" property="mycore.jar"/>
   </target>
 
   <!-- System CLASSPATH is completely ignored! -->

@@ -195,7 +195,6 @@
         <xsl:param name="spaceBetweenMainLinks" /><!-- use pixel values -->
         <xsl:param name="borderWidthTopDown" /><!-- use pixel values -->
         <xsl:param name="borderWidthSides" /><!-- use percent values -->
-        <xsl:param name="textIndent" select="'0px'" /> <!-- use pixel values -->
 
         <xsl:variable name="subRootNode">
             <xsl:call-template name="get.subRootNode">
@@ -246,7 +245,7 @@
                                     <td style="height:{$menuPointHeigth}px;">
                                         <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
                                     </td>
-                                    <th colspan="{$depth + 1}" style="text-align:left; text-indent: {$textIndent}; ">
+                                    <th colspan="{$depth + 1}" style="text-align:left">
                                         <xsl:call-template name="addLink" />
                                     </th>
                                 </tr>
@@ -286,7 +285,7 @@
                 </table>
             </xsl:when>
         </xsl:choose>
-        <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.MCRCoreVersion">
+        <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion">
             <a href="http://www.mycore.de">
                 <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="powered by &lt;MyCoRe&gt;" title="{i18n:translate('mycore.version', mcrver:getCompleteVersion())}" />
             </a>
