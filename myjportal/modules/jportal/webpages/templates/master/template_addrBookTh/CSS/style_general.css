@@ -155,3 +155,22 @@ table.naviContent .underlineO{
 table.naviContent .underline{
 	border-bottom: solid 3px white;
 }
+
+.city {
+	color: #64191b;
+	font-size: 16px;
+	font-family: serif;
+	font-weight: bold;
+	margin-left: 452px;
+	margin-top: 55px;
+	float: left;
+}
+
+.pubYear {
+	color: #005523;
+	font-family: serif;
+	font-weight: bold;
+	margin-left: 607px;
+	margin-top: 59px;
+
+}
