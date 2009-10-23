@@ -1,6 +1,6 @@
 package org.mycore.frontend.cli;
 
-import org.mycore.frontend.pagegeneration.MCRJPortalAtoZListPageGenerator;
+import org.mycore.frontend.pagegeneration.JournalListManager;
 
 
 public class MCRJPortalPageGenCommands extends MCRAbstractCommands {
@@ -14,8 +14,6 @@ public class MCRJPortalPageGenCommands extends MCRAbstractCommands {
     }
 
     public static void pgAtoZList() throws Exception {
-        MCRJPortalAtoZListPageGenerator generator = new MCRJPortalAtoZListPageGenerator();
-        generator.createJournalList();
-        generator.saveJournalList();
+        JournalListManager.instance().createJournalLists();
     }
 }
