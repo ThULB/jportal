@@ -33,25 +33,25 @@
   <macrodef name="modulePreHook">
     <attribute name="target" />
     <sequential>
-      <echo level="verbose">pre module Hook: @{target}</echo>
       <for list="${MCR.Modules.Application}" param="module" parallel="false">
         <sequential>
-          <echo level="verbose">check module: @{module}</echo>
-          <for param="build.file" parallel="false">
-            <fileset dir="." includes="modules/@{module}/build.xml">
-              <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
-            </fileset>
-            <sequential>
-              <echo level="verbose">running module: @{build.file}</echo>
-              <java fork="true" classname="org.apache.tools.ant.Main" classpath="${java.class.path}">
-                <arg value="-Dant.home=${ant.home}"/>
-                <arg value="-Dant.library.dir=${ant.library.dir}"/>
-                <arg value="-f"/>
-                <arg value="@{build.file}"/>
-                <arg value="pre.@{target}"/>
-              </java>
-            </sequential>
-          </for>
+          <if>
+            <resourcecount when="greater" count="0">
+              <fileset dir="." includes="modules/@{module}/build.xml">
+                <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
+              </fileset>
+            </resourcecount>
+            <then>
+              <subant target="pre.@{target}" inheritall="true" inheritrefs="true">
+                <fileset dir="." includes="modules/@{module}/build.xml">
+                  <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
+                </fileset>
+              </subant>
+            </then>
+            <else>
+              <echo level="debug">No target pre.@{target} found in module @{module}.</echo>
+            </else>
+          </if>
         </sequential>
       </for>
     </sequential>
@@ -59,31 +59,25 @@
   <macrodef name="moduleHook">
     <attribute name="target" />
     <sequential>
-      <echo level="verbose">module Hook: @{target}</echo>
       <for list="${MCR.Modules.Application}" param="module" parallel="false">
         <sequential>
-          <echo level="verbose">check module: @{module}</echo>
-          <for param="build.file" parallel="false">
-            <fileset dir="." includes="modules/@{module}/build.xml">
-              <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
-            </fileset>
-            <sequential>
-              <echo level="verbose">running module: @{build.file}</echo>
-              <!--
-              Note: need to fork ant process here. Modules include common-modules.xml by default
-              and calls to task artifact:dependencies will fill PermGen space quickly.
-              Forking ant process get rid of these issues as well as multiple taskdef related noisy
-              outputs.
-              -->
-              <java fork="true" classname="org.apache.tools.ant.Main" classpath="${java.class.path}">
-                <arg value="-Dant.home=${ant.home}"/>
-                <arg value="-Dant.library.dir=${ant.library.dir}"/>
-                <arg value="-f"/>
-                <arg value="@{build.file}"/>
-                <arg value="@{target}"/>
-              </java>
-            </sequential>
-          </for>
+          <if>
+            <resourcecount when="greater" count="0">
+              <fileset dir="." includes="modules/@{module}/build.xml">
+                <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
+              </fileset>
+            </resourcecount>
+            <then>
+              <subant target="@{target}" inheritall="true" inheritrefs="true">
+                <fileset dir="." includes="modules/@{module}/build.xml">
+                  <containsregexp expression="\u003ctarget.*name=\u0022@{target}\u0022" />
+                </fileset>
+              </subant>
+            </then>
+            <else>
+              <echo level="debug">No target @{target} found in module @{module}.</echo>
+            </else>
+          </if>
         </sequential>
       </for>
     </sequential>
@@ -137,7 +131,7 @@
     <xmltask source="${build.config}/ehcache.xml" dest="${build.config}/ehcache.xml">
       <replace path="/ehcache/diskStore/@path" withText="${MCR.EHCache.diskStore.path}" />
     </xmltask>
-    <mcr-integrate target="config" classpathref="application.classpath" />
+    <mcr-integrate target="config" classpathref="mycore.jars" />
     <mcr-config propertyfile="${build.config}/mycore.properties"
                 mergeFile="${application.config}/mycore.properties.private" />
     <moduleHook target="config" />
@@ -207,7 +201,7 @@
     <chmod perm="755">
       <fileset dir="${build.bin}" includes="*.sh" />
     </chmod>
-    <mcr-integrate target="create.scripts" classpathref="application.classpath" />
+    <mcr-integrate target="create.scripts" classpathref="mycore.jars" />
     <moduleHook target="create.scripts" />
   </target>
 
@@ -522,16 +516,13 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
   <target name="getJars">
     <echo level="info">Get jars from core</echo>
-    <copy todir="build/lib">
-      <fileset refid="dependency.fileset"/>
-      <mapper type="flatten" />
+    <copy todir="${build.lib}">
+      <fileset dir="${mycore.lib}" includes="*.jar" />
     </copy>
-   <delete>
-    <fileset dir="build/lib">
-      <filename name="**/mycore-*.jar"/>
-      <filename name="**/mycore-complete*.jar" negate="true"/>
-    </fileset>
-   </delete>
+    <mkdir dir="${build.lib}/licenses" />
+    <copy todir="${build.lib}/licenses">
+      <fileset dir="${mycore.lib}" includes="*.txt" />
+    </copy>
   </target>
 
   <!-- =================================================================== -->
@@ -556,7 +547,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
   <target name="compile" depends="getJars">
     <modulePreHook target="compile" />
-    <mcr-integrate target="compile" classpathref="application.classpath" />
+    <mcr-integrate target="compile" classpathref="mycore.jars" />
     <echo level="info">Compiling a DocPortal classes...</echo>
     <antcall target="javac">
       <param name="packages" value="org/mycore/**" />
@@ -594,13 +585,13 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
   <target name="webservice.deploy" description="Call the deploy target for the WebServices">
     <modulePreHook target="webservice.deploy" />
-    <mcr-integrate target="webservice.deploy" classpathref="application.classpath" />
+    <mcr-integrate target="webservice.deploy" classpathref="mycore.jars" />
     <moduleHook target="webservice.deploy" />
   </target>
 
   <target name="webservice.undeploy" description="Call the undeploy target for the WebServices">
     <modulePreHook target="webservice.undeploy" />
-    <mcr-integrate target="webservice.undeploy" classpathref="application.classpath" />
+    <mcr-integrate target="webservice.undeploy" classpathref="mycore.jars" />
     <moduleHook target="webservice.undeploy" />
   </target>
 
@@ -667,7 +658,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
     <mkdir dir="${build.webapps}/WEB-INF/classes" />
     <mkdir dir="${build.webapps}/WEB-INF/lib" />
     <mkdir dir="${build.webapps}/WEB-INF/classes/xsl" />
-    <mcr-integrate target="webapp" classpathref="application.classpath" />
+    <mcr-integrate target="webapp" classpathref="mycore.jars" />
     <antcall target="safeWebContent" />
     <antcall target="webapps.base" />
     <copy tofile="${build.webapps}/WEB-INF/classes/mycore.properties"
@@ -679,7 +670,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
 
   <target name="i18n">
     <modulePreHook target="i18n" />
-    <mcr-integrate target="i18n" classpathref="application.classpath" />
+    <mcr-integrate target="i18n" classpathref="mycore.jars" />
     <moduleHook target="i18n" />
   </target>
 
@@ -730,8 +721,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
           overwrite="true"
           file="${application.stylesheets}/objecttypes.xsl" />
 
-    <antcall target="create.webapp.upload-applet" />
-	  <antcall target="create.webapp.metsmods-applet" />
+    <antcall target="webapp.applet" />
     <antcall target="copy.webapp.shared.jars" />
     <antcall target="webapp.info.shared.jars" />
     <antcall target="webapp.info.unix" />
@@ -750,42 +740,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
   <!-- - - - - - - - - - - - - - - - - - 
           target: webapp.applet                      
          - - - - - - - - - - - - - - - - - -->
-  <target name="create.webapp.metsmods-applet" description="Build the metsmods applet">
-      <antcall target="genkey" />
-      <if>
-        <uptodate targetfile="${build.webapps}/applet_metsmods/metsmods.jar">
-          <srcfiles file="${mycore.jar}" />
-          <srcfiles dir="${SIGN.KeyStore}" includes="${SIGN.Alias}" />
-        </uptodate>
-        <then>
-          <echo level="info">MCRMetsModsApplet is up to date</echo>
-        </then>
-        <else>
-          <echo level="info">
-            Building the metsmods applet used for Mets/Mods...
-          </echo>
-          <unjar dest="${build.webapps}/applet_metsmods" src="${mycore.jar}">
-            <patternset includes="metsmodsApplet-unsigned.jar"/>
-          </unjar>
- 	      <copy todir="${build.webapps}/applet_metsmods">
-		    <fileset dir="${build.lib}">
-			  <include name="jdom-1.1.jar"/>
-			  <include name="mycore.jar" />	
-		    </fileset>
-	     </copy>
-          <signjar jar="${build.webapps}/applet_metsmods/metsmodsApplet-unsigned.jar"
-                   signedjar="${build.webapps}/applet_metsmods/metsmods.jar"
-                   alias="${SIGN.Alias}"
-                   keystore="${SIGN.KeyStore}/${SIGN.Alias}"
-                   storepass="${SIGN.Password}"
-                   keypass="${SIGN.Password}" />
-          <delete file="${build.webapps}/applet_metsmods/metsmodsApplet-unsigned.jar" />
-          <chmod dir="${build.webapps}/applet_metsmods" perm="ugo+r" />
-        </else>
-      </if>
-  </target>
-	
-  <target  name="create.webapp.upload-applet" description="Build the upload applet">
+    <target name="webapp.applet" depends="init">
       <antcall target="genkey" />
       <if>
         <uptodate targetfile="${build.webapps}/applet/upload.jar">
@@ -802,6 +757,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
           <unjar dest="${build.webapps}/applet" src="${mycore.jar}">
             <patternset includes="uploadApplet-unsigned.jar"/>
           </unjar>
+          <!-- Compile applet to JDK 1.4 -->
           <signjar jar="${build.webapps}/applet/uploadApplet-unsigned.jar"
                    signedjar="${build.webapps}/applet/upload.jar"
                    alias="${SIGN.Alias}"
@@ -812,7 +768,8 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
           <chmod dir="${build.webapps}/applet" perm="ugo+r" />
         </else>
       </if>
-  </target>
+    </target>
+
 
   <!-- create a new chooseTemplate.xsl -->
   <target name="webapps.templates">
@@ -1085,7 +1042,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <param name="cli.command" value="process ${commands.file}" />
     </antcall>
     <delete file="${commands.file}" />
-    <mcr-integrate target="create.users" classpathref="application.classpath" />
+    <mcr-integrate target="create.users" classpathref="mycore.jars" />
     <moduleHook target="create.users" />
   </target>
 
@@ -1125,7 +1082,7 @@ ${java.home}/bin/java -Xmx${java.maxmemory} ${mycore.cmd.class}
       <param name="cli.command" value="process ${commands.file}" />
     </antcall>
     <delete file="${commands.file}" />
-    <mcr-integrate target="create.default-rules" classpathref="application.classpath" />
+    <mcr-integrate target="create.default-rules" classpathref="mycore.jars" />
     <moduleHook target="create.default-rules" />
   </target>
 
