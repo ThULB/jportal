@@ -1,14 +1,12 @@
 package org.mycore.frontend.events;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.jdom.Document;
-import org.jdom.JDOMException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.frontend.pagegeneration.JournalListManager;
 import org.mycore.frontend.pagegeneration.MCRJPortalAtoZListPageGenerator;
 
 /**
@@ -27,7 +25,8 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
         if(!isJournal(obj))
             return;
         try {
-            updateAtoZList(obj, Action.INSERT);
+            LOGGER.info("Create entry in A-Z list for " + obj.getId());
+            JournalListManager.instance().createJournalLists();
         } catch(Exception e) {
             LOGGER.error(e);
         }
@@ -39,7 +38,8 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
         if(!isJournal(obj))
             return;
         try {
-            updateAtoZList(obj, Action.REMOVE);
+            LOGGER.info("Delete entry in A-Z list for " + obj.getId());
+            JournalListManager.instance().createJournalLists();
         } catch(Exception e) {
             LOGGER.error(e);
         }
@@ -51,10 +51,8 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
         if(!isJournal(obj))
             return;
         try {
-            if(isDeletedFlagSet(obj))
-                updateAtoZList(obj, Action.REMOVE);
-            else
-                updateAtoZList(obj, Action.INSERT);
+            LOGGER.info("Updating entry in A-Z list for " + obj.getId());
+            JournalListManager.instance().createJournalLists();
         } catch(Exception e) {
             LOGGER.error(e);
         }

@@ -64,7 +64,7 @@
                 <label xml:lang="de">in Webseiten suchen</label>
             </item>
         </item>
-        <item href="/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
+        <item href="/content/main/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
             <label xml:lang="de">A - Z</label>
             <item href="/content/main/journalList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">Platzhalter</label>

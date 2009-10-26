@@ -177,9 +177,9 @@
 		<hidden var="metadata/urls/@heritable" default="true"/>
 		<hidden var="metadata/urls/url/@inherited" default="0"/>
 		<hidden var="metadata/urls/url/@type" default="locator"/>
-		<cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@title" ordernr="4"/>
+		<cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@xlink:title" ordernr="4"/>
         <cell col="2" row="1" anchor="NORTHWEST" ref="AURLTitle"/>
-		<cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@href" ordernr="4"/>
+		<cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="metadata/urls/url/@xlink:href" ordernr="4"/>
         <cell col="2" row="2" anchor="NORTHWEST" ref="AURLReference"/>
 	</panel>
 	<panel id="DEmail">

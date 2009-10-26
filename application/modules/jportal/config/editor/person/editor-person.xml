@@ -221,7 +221,7 @@
                 <panel>
                     <hidden var="@inherited" default="0" />
                     <hidden var="@xtype" default="locator" />
-                    <cell anchor="WEST" ref="TFzeile128" var="@href" />
+                    <cell anchor="WEST" ref="TFzeile128" var="@xlink:href" />
                 </panel>
             </repeater>
         </cell>
