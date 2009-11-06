@@ -37,7 +37,7 @@
         <sequential>
           <if>
             <resourcecount when="greater" count="0">
-              <fileset dir="." includes="modules/@{module}/build.xml">
+              <fileset dir="." includes="${MCR.Modules.BasePath}/@{module}/build.xml">
                 <containsregexp expression="\u003ctarget.*name=\u0022pre.@{target}\u0022" />
               </fileset>
             </resourcecount>

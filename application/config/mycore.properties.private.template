@@ -18,6 +18,7 @@
 ##############################################################################
 # Module includes, component excludes
 ##############################################################################
+  MCR.Modules.BasePath=modules
   MCR.Modules.Application=docportal
 
 #exclude these mycore components

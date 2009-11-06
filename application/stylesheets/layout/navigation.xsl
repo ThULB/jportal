@@ -285,7 +285,7 @@
                 </table>
             </xsl:when>
         </xsl:choose>
-        <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion">
+        <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.MCRCoreVersion">
             <a href="http://www.mycore.de">
                 <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="powered by &lt;MyCoRe&gt;" title="{i18n:translate('mycore.version', mcrver:getCompleteVersion())}" />
             </a>
