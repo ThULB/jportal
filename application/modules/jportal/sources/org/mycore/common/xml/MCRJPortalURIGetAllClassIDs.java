@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Namespace;
-import org.mycore.common.MCRCache;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -16,19 +15,36 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetAllClassIDs.class);
 
-    private static String URI = "jportal_getALLClassIDs:";
+    private String URI = "jportal_getALLClassIDs:";
 
     private Element returnXML = null;
 
     private List<MCRCategoryID> categoryRootIDs = null;
+    
+    private MCRCategoryDAO categDAO;
+
+    public MCRJPortalURIGetAllClassIDs() {
+        categDAO = MCRCategoryDAOFactory.getInstance();
+    }
+    
+    public MCRJPortalURIGetAllClassIDs(MCRCategoryDAO dao) {
+        categDAO = dao;
+    }
 
     /**
      * 
      * Syntax: jportal_getAllClassIDs
      * 
-     * @return <dummyRoot> <list type="dropdown"> <item value="{classification id}"> <label xml:lang="de">{classification description}</label> </item> </list>
-     *         </dummyRoot>
-     * 
+     * @return 
+     * <p><blockquote><pre>
+     * &lt;dummyRoot> 
+     *  &lt;list type="dropdown"> 
+     *      &lt;item value="{classification id}"> 
+     *          &lt;label xml:lang="de">{classification description}&lt;/label> 
+     *      &lt;/item>
+     *   &lt;/list>
+     * &lt;/dummyRoot>
+     * </pre></blockquote></p>
      */
     public Element resolveElement(String uri) {
         LOGGER.debug("start resolving " + uri);
@@ -36,27 +52,26 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
         if (!wellURI(uri))
             throw new IllegalArgumentException("Invalid format of uri given to resolve " + URI + "=" + uri);
 
-        MCRCategoryDAO categDoa = MCRCategoryDAOFactory.getInstance();
-        List<MCRCategoryID> currentRootIds = categDoa.getRootCategoryIDs();
+        List<MCRCategoryID> currentRootIds = categDAO.getRootCategoryIDs();
         // if the current categorys differs from the previous generated,
         // then create an updated xml tree
         if(returnXML == null ||
            categoryRootIDs == null ||
            !currentRootIds.containsAll(categoryRootIDs)) {
             categoryRootIDs = currentRootIds;
-            returnXML = createXML(categDoa, categoryRootIDs);
+            returnXML = createXML(categDAO, categoryRootIDs);
         }
         return returnXML;
     }
 
-    private Element createXML(MCRCategoryDAO categDoa, List<MCRCategoryID> ids) {
+    private Element createXML(MCRCategoryDAO categDAO, List<MCRCategoryID> ids) {
         Element returnXML = new Element("dummyRoot");
         Iterator<MCRCategoryID> ci = ids.iterator();
         while (ci.hasNext()) {
             MCRCategoryID cid = (MCRCategoryID) ci.next();
             String classID = cid.getRootID();
             String descr = "";
-            MCRCategory rootCat = categDoa.getRootCategory(cid, 0);
+            MCRCategory rootCat = categDAO.getRootCategory(cid, 0);
             if ((null != rootCat.getLabels())) {
                 descr = rootCat.getCurrentLabel().getText();
             }
