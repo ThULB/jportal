@@ -15,12 +15,6 @@
 # The String of the commandline interface prompt
   MCR.CommandLineInterface.SystemName=%MCR.NameOfProject%
 
-##############################################################################
-# Module includes, component excludes
-##############################################################################
-  MCR.Modules.BasePath=modules
-  MCR.Modules.Application=docportal
-
 #exclude these mycore components
  MCR.Components.Exclude=migration13-20
 
@@ -62,6 +56,12 @@
 # if you don't set this, hibernate-mapping.dtd is stored in your system-temp-directory
   MCR.Hibernate.DTD.Directory=%MCR.basedir%/build/schema
 
+##############################################################################
+# Module includes, component excludes
+##############################################################################
+  MCR.Modules.BaseDir=%MCR.basedir%
+  MCR.Modules.Application=docportal
+  
 ##############################################################################
 # JDBC Parameter (need to build scripts)
 ##############################################################################
