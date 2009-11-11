@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="MyCoReModule - JPortal" default="usage" basedir="../..">
+<project name="MyCoReModule - JPortal" default="usage" basedir="${MCR.Basedir}">
 
 	<property name="build.sysclasspath" value="last" />
 	<import file="${basedir}/common-modules.xml" />
@@ -424,7 +424,7 @@
 				]]>
 		</echo>
 		<antcall target="invoke.cli">
-			<param name="cli.directory" value="${basedir}/modules/jportal/config/rightsManag" />
+			<param name="cli.directory" value="${env.JPORTAL_HOME}/config/rightsManag" />
 			<param name="cli.command" value="process ${commands.file}" />
 		</antcall>
 		<delete file="${commands.file}" />
@@ -448,7 +448,7 @@
 		  ]]>
 		</echo>
 		<antcall target="invoke.cli">
-			<param name="cli.directory" value="${basedir}/modules/jportal/config/usersAndGroups" />
+			<param name="cli.directory" value="${env.JPORTAL_HOME}/config/usersAndGroups" />
 			<param name="cli.command" value="process ${commands.file}" />
 		</antcall>
 		<delete file="${commands.file}" />

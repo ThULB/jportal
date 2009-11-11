@@ -31,22 +31,22 @@ class MockHelper {
         getMockControl().reset();
     }
 
-    public MCRCategory createMCRCategory(String rootID, String id, List<MCRCategory> childList) {
+    public MCRCategory createMCRCategory(String rootID, String id, List<MCRCategory> childList, Integer level) {
         MCRCategory categoryMock = getMockControl().createMock(MCRCategory.class);
         expect(categoryMock.getId()).andReturn(new MCRCategoryID(rootID, id)).anyTimes();
         expect(categoryMock.getChildren()).andReturn(childList).anyTimes();
         expect(categoryMock.getLabels()).andReturn(getLabelsList()).anyTimes();
         expect(categoryMock.getLabel("de")).andReturn((MCRLabel) getLabelsList().toArray()[0]).anyTimes();
         expect(categoryMock.getLabel("en")).andReturn((MCRLabel) getLabelsList().toArray()[1]).anyTimes();
-        expect(categoryMock.getLevel()).andReturn(1).anyTimes();
+        expect(categoryMock.getLevel()).andReturn(level).anyTimes();
         expect(categoryMock.hasChildren()).andReturn(!childList.isEmpty()).anyTimes();
         return categoryMock;
     }
 
-    public LinkedList<MCRCategory> childList(String rootID, int size) {
+    public LinkedList<MCRCategory> childList(String rootID, int size, String childIDPrefix, Integer level) {
         LinkedList<MCRCategory> linkedList = new LinkedList<MCRCategory>();
         for (int i = 0; i < size; i++) {
-            linkedList.add(createMCRCategory(rootID, "child_" + i, Collections.EMPTY_LIST));
+            linkedList.add(createMCRCategory(rootID, childIDPrefix + i, Collections.EMPTY_LIST, level));
         }
         
         return linkedList;
@@ -64,9 +64,12 @@ class MockHelper {
 
     public MCRCategoryDAO createDAO() {
         String rootID = "rootID_withChildren";
-        LinkedList<MCRCategory> childList = childList(rootID, CHILD_SIZE);
-        childList.add(createMCRCategory(rootID, "withSubs", childList(rootID, CHILD_SIZE)));
-        MCRCategory categoryMock = createMCRCategory(rootID, "", childList);
+        int level = 0;
+        int level2 = level + 1;
+        LinkedList<MCRCategory> childList = childList(rootID, CHILD_SIZE, "child_", level2);
+        childList.add(createMCRCategory(rootID, "withSubs", childList(rootID, CHILD_SIZE, "subChild_", level2 + 1), level2));
+        childList.add(createMCRCategory(rootID, "underwithSubs", Collections.EMPTY_LIST, level2));
+        MCRCategory categoryMock = createMCRCategory(rootID, "", childList, level);
         
         MCRCategoryDAO categoryDAOMock = getMockControl().createMock(MCRCategoryDAO.class);
         expect(categoryDAOMock.getRootCategoryIDs()).andReturn(createCategoryIDMockList(ROOTCATEG_SIZE)).anyTimes();
@@ -100,7 +103,13 @@ class MockHelper {
     }
 
     private Map<MCRCategoryID, Boolean> getLinkBoolMap() {
-        Map<MCRCategoryID, Boolean> boolMap = new HashMap<MCRCategoryID, Boolean>();
+        Map<MCRCategoryID, Boolean> boolMap = new HashMap<MCRCategoryID, Boolean>(){
+            @Override
+            public Boolean get(Object key) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        };
         return boolMap;
     }
 

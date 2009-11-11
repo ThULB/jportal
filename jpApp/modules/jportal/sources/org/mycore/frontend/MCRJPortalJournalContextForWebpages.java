@@ -48,11 +48,13 @@ public class MCRJPortalJournalContextForWebpages {
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalJournalContextForWebpages.class);;
 
-    private static String homeDir = PROPS.getString("MCR.basedir");
+    private static String homeDir = PROPS.getString("MCR.Modules.BaseDir");
+
+    private static String baseDir = PROPS.getString("MCR.basedir");
 
     private final static String SRC_DIR = "/modules/jportal/webpages/create-journalContext/";
 
-    private static String deployedDir = homeDir + "/build/webapps";
+    private static String deployedDir = baseDir + "/build/webapps";
 
     public MCRJPortalJournalContextForWebpages(String journalId, String preceedingItemHref, String layoutTemplate, String shortCut) {
         this.journalID = journalId;

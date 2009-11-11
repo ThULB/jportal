@@ -39,8 +39,8 @@ public class MCRClassificationPoolTest extends TestCase {
     }
 
     public void testUpdateClassification() throws Exception {
-        MCRCategory classification = categoryDAOMock.createMCRCategory("rootID", "", new LinkedList<MCRCategory>());
-        MCRCategory fakeCategory = categoryDAOMock.createMCRCategory("rootID", "fakeCateg", new LinkedList<MCRCategory>());
+        MCRCategory classification = categoryDAOMock.createMCRCategory("rootID", "", new LinkedList<MCRCategory>(),0);
+        MCRCategory fakeCategory = categoryDAOMock.createMCRCategory("rootID", "fakeCateg", new LinkedList<MCRCategory>(), 1);
         categoryDAOMock.replay();
         
         classification.getChildren().add(fakeCategory);
