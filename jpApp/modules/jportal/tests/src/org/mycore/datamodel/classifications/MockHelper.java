@@ -98,7 +98,7 @@ class MockHelper {
         MCRCategLinkService linkServiceMock = getMockControl().createMock(MCRCategLinkService.class);
         expect(linkServiceMock.getLinksFromCategory(isA(MCRCategoryID.class))).andReturn(getLinkList()).anyTimes();
         expect(linkServiceMock.hasLinks(isA(MCRCategory.class))).andReturn(getLinkBoolMap()).anyTimes();
-        expect(linkServiceMock.hasLink(isA(MCRCategoryID.class))).andReturn(false).anyTimes();
+        expect(linkServiceMock.hasLink(isA(MCRCategory.class))).andReturn(false).anyTimes();
         return linkServiceMock;
     }
 
