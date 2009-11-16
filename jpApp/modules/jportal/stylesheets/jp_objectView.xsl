@@ -175,23 +175,21 @@
                             <xsl:with-param name="kindOfChildren" select="$OID" />
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:variable name="siblings">
-                        <xsl:copy-of select="xalan:nodeset(document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder)))" />
-                    </xsl:variable>
+                    <xsl:variable name="siblings" select="document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))"/>
                     <xsl:variable name="currentNode">
-                        <xsl:copy-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[@id=$currentID]" />
+                        <xsl:copy-of select="$siblings/mcr:results/mcr:hit[@id=$currentID]" />
                     </xsl:variable>
 
-                    <xsl:for-each select="xalan:nodeset($siblings)/mcr:results/mcr:hit">
+                    <xsl:for-each select="$siblings/mcr:results/mcr:hit">
                         <xsl:variable name="pos">
                             <xsl:value-of select="position()" />
                         </xsl:variable>
                         <xsl:if test="@id=$currentID">
                             <xsl:variable name="pred">
-                                <xsl:value-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[position()=number($pos)-1]/@id" />
+                                <xsl:value-of select="$siblings/mcr:results/mcr:hit[position()=number($pos)-1]/@id" />
                             </xsl:variable>
                             <xsl:variable name="suc">
-                                <xsl:value-of select="xalan:nodeset($siblings)/mcr:results/mcr:hit[position()=number($pos)+1]/@id" />
+                                <xsl:value-of select="$siblings/mcr:results/mcr:hit[position()=number($pos)+1]/@id" />
                             </xsl:variable>
 
                             <xsl:choose>
@@ -353,18 +351,16 @@
                 <xsl:with-param name="kindOfChildren" select="$kindOfChildren2" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="children">
-            <xsl:copy-of select="xalan:nodeset(document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder)))" />
-        </xsl:variable>
+        <xsl:variable name="children" select="document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))"/>
         <xsl:call-template name="printTOCNavi">
             <xsl:with-param name="location" select="'navi'" />
             <xsl:with-param name="childrenKinds" select="$kindOfChildren2" />
-            <xsl:with-param name="childrenXML" select="xalan:nodeset($children)" />
-            <xsl:with-param name="numChildren" select="count(xalan:nodeset($children)/mcr:results/mcr:hit)" />
+            <xsl:with-param name="childrenXML" select="$children" />
+            <xsl:with-param name="numChildren" select="count($children/mcr:results/mcr:hit)" />
         </xsl:call-template>
         <xsl:variable name="toc.pos.verif">
             <xsl:choose>
-                <xsl:when test="$toc.pageSize>count(xalan:nodeset($children)/mcr:results/mcr:hit)">
+                <xsl:when test="$toc.pageSize>count($children/mcr:results/mcr:hit)">
                     <xsl:value-of select="1" />
                 </xsl:when>
                 <xsl:otherwise>
@@ -374,7 +370,7 @@
         </xsl:variable>
 
         <table id="resultList" cellpadding="0" cellspacing="0">
-            <xsl:for-each select="xalan:nodeset($children)/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+            <xsl:for-each select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
                 <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
                 <xsl:apply-templates select="." mode="toc">
                     <xsl:with-param name="mcrobj" select="$mcrobj" />
@@ -786,15 +782,13 @@
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
             <xsl:value-of select="encoder:encode(concat('(objectType = jparticle) and (link = ', /mycoreobject/@ID, ')'))"/>
         </xsl:variable>
-        <xsl:variable name="linkedArt">
-            <xsl:copy-of select="xalan:nodeset(document(concat('jportal_query:term=',$mcrSql)))" />
-        </xsl:variable>
+        <xsl:variable name="linkedArt" select="document(concat('jportal_query:term=',$mcrSql))" />
         <xsl:variable name="OID">
             <xsl:call-template name="typeOfObjectID">
                 <xsl:with-param name="id" select="/mycoreobject/@ID" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:if test="xalan:nodeset($linkedArt)/mcr:results/mcr:hit">
+        <xsl:if test="$linkedArt/mcr:results/mcr:hit">
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                 <tr>
                     <td valign="top" id="detailed-labels">
@@ -811,10 +805,8 @@
                     </td>
                     <td>
                         <ul>
-                            <xsl:for-each select="xalan:nodeset($linkedArt)/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
-                                <xsl:variable name="art">
-                                    <xsl:copy-of select="document(concat('mcrobject:',@id))" />
-                                </xsl:variable>
+                            <xsl:for-each select="$linkedArt/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
+                                <xsl:variable name="art" select="document(concat('mcrobject:',@id))" />
                                 <xsl:variable name="linkID">
                                     <xsl:call-template name="objectLink">
                                         <xsl:with-param name="obj_id" select="@id" />
@@ -827,18 +819,18 @@
                                             <xsl:with-param name="printCurrent" select="'true'" />
                                             <xsl:with-param name="linkCurrent" select="'true'" />
                                             <xsl:with-param name="layout" select="'false'" />
-                                            <xsl:with-param name="node" select="xalan:nodeset($art)" />
+                                            <xsl:with-param name="node" select="$art" />
                                         </xsl:call-template>
                                     </li>
                                 </xsl:if>
                                 <div id="detailed-linkedart"></div>
                             </xsl:for-each>
-                            <xsl:if test="count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit)>$maxLinkedArts">
+                            <xsl:if test="count($linkedArt/mcr:results/mcr:hit)>$maxLinkedArts">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
                                         href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
-                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedArt)/mcr:results/mcr:hit),') &gt;&gt;')" />
+                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count($linkedArt/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
                                 </li>
                             </xsl:if>
@@ -856,15 +848,13 @@
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
             <xsl:value-of select="encoder:encode(concat('(objectType = jpjournal) and (contentClassi1 = calendar) and (link = ', /mycoreobject/@ID, ')'))"/>
         </xsl:variable>
-         <xsl:variable name="linkedCal">
-            <xsl:copy-of select="xalan:nodeset(document(concat('jportal_query:term=',$mcrSql)))" />
-        </xsl:variable>
+         <xsl:variable name="linkedCal" select="document(concat('jportal_query:term=',$mcrSql))" />
         <xsl:variable name="OID">
             <xsl:call-template name="typeOfObjectID">
                 <xsl:with-param name="id" select="/mycoreobject/@ID" />
             </xsl:call-template>
         </xsl:variable>
-        <xsl:if test="xalan:nodeset($linkedCal)/mcr:results/mcr:hit">
+        <xsl:if test="$linkedCal/mcr:results/mcr:hit">
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                 <tr>
                     <td valign="top" id="detailed-labels">
@@ -880,10 +870,8 @@
                     </td>
                     <td>
                         <ul>
-                            <xsl:for-each select="xalan:nodeset($linkedCal)/mcr:results/mcr:hit[number($maxLinkedCals)>position()-1]">
-                                <xsl:variable name="cal">
-                                    <xsl:copy-of select="document(concat('mcrobject:',@id))" />
-                                </xsl:variable>
+                            <xsl:for-each select="$linkedCal/mcr:results/mcr:hit[number($maxLinkedCals)>position()-1]">
+                                <xsl:variable name="cal" select="document(concat('mcrobject:',@id))" />
                                 <xsl:variable name="linkID">
                                     <xsl:call-template name="objectLink">
                                         <xsl:with-param name="obj_id" select="@id" />
@@ -896,18 +884,18 @@
                                             <xsl:with-param name="printCurrent" select="'true'" />
                                             <xsl:with-param name="linkCurrent" select="'true'" />
                                             <xsl:with-param name="layout" select="'false'" />
-                                            <xsl:with-param name="node" select="xalan:nodeset($cal)" />
+                                            <xsl:with-param name="node" select="$cal" />
                                         </xsl:call-template>
                                     </li>
                                 </xsl:if>
                                 <div id="detailed-linkedart"></div>
                             </xsl:for-each>
-                            <xsl:if test="count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit)>$maxLinkedCals">
+                            <xsl:if test="count($linkedCal/mcr:results/mcr:hit)>$maxLinkedCals">
                                 <li>
                                     <a xmlns:encoder="xalan://java.net.URLEncoder"
                                         href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?query={$mcrSql}&amp;numPerPage=10">
                                         <xsl:value-of
-                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count(xalan:nodeset($linkedCal)/mcr:results/mcr:hit),') &gt;&gt;')" />
+                                            select="concat(' ',i18n:translate('metaData.person.linked.showAll'),' (',count($linkedCal/mcr:results/mcr:hit),') &gt;&gt;')" />
                                     </a>
                                 </li>
                             </xsl:if>
