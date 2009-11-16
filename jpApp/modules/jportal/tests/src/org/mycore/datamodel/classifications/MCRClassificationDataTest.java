@@ -6,13 +6,11 @@ import junit.framework.TestCase;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategLinkService;
 
-public class MCRClassificationBrowserDataTest extends TestCase {
+public class MCRClassificationDataTest extends TestCase {
     private MockHelper mockHelper = new MockHelper();
     
     public void testCreateXMLTree_closedFolder() throws Exception {
@@ -27,8 +25,8 @@ public class MCRClassificationBrowserDataTest extends TestCase {
         String actclid = "rootID_withChildren";
         String actEditorCategid = "";
         
-        RowCreator rowCreator_NoLines = new RowCreator_NoLines(classificationPoolMock, linkService, MCRConfiguration.instance());
-        MCRClassificationBrowserData browserData_NoLines = new MCRClassificationBrowserData(u, mode, actclid, actEditorCategid, classificationPoolMock, permissionTool, linkService, rowCreator_NoLines);
+        RowCreator rowCreator_NoLines = new RowCreator_NoLines(classificationPoolMock, MCRConfiguration.instance());
+        MCRClassificationData browserData_NoLines = new MCRClassificationData(u, mode, actclid, actEditorCategid, classificationPoolMock, permissionTool, rowCreator_NoLines);
         assertNotNull(browserData_NoLines);
         assertNotNull(browserData_NoLines.getClassification());
         
@@ -58,8 +56,8 @@ public class MCRClassificationBrowserDataTest extends TestCase {
         String actclid = "rootID_withChildren";
         String actEditorCategid = "";
         
-        RowCreator rowCreator_NoLines = new RowCreator_NoLines(classificationPoolMock, linkService, MCRConfiguration.instance());
-        MCRClassificationBrowserData browserData_NoLines = new MCRClassificationBrowserData(u, mode, actclid, actEditorCategid, classificationPoolMock, permissionTool, linkService, rowCreator_NoLines);
+        RowCreator rowCreator_NoLines = new RowCreator_NoLines(classificationPoolMock, MCRConfiguration.instance());
+        MCRClassificationData browserData_NoLines = new MCRClassificationData(u, mode, actclid, actEditorCategid, classificationPoolMock, permissionTool, rowCreator_NoLines);
         assertNotNull(browserData_NoLines);
         assertNotNull(browserData_NoLines.getClassification());
         
