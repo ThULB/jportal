@@ -1324,7 +1324,7 @@ Each server must be selected explicitly.
   <helpPopup id="SMMaxResult" width="400px" height="250px">
     <label xml:lang="de">
 Hier können Sie die maximale Anzahl von Treffern auswählen, welche pro Suche angezeigt werden sollen. 
-Wenn sie  <b>OUT</b> wählen, wir die maximale Treffrzahl vom System bestimmt.
+Wenn Sie  <b>OUT</b> wählen, wird die maximale Treffrzahl vom System bestimmt.
     </label>
     <label xml:lang="en">
 You can specify the number of returned results to be displayed in the result list. 

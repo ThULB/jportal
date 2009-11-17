@@ -21,7 +21,7 @@
   <xsl:template match="redundancyMap">
     <xsl:choose>
       <xsl:when test="$CurrentUser='gast'">
-        Zugriff verweigert! Bitte melden sie sich an.
+        Zugriff verweigert! Bitte melden Sie sich an.
       </xsl:when>
       <xsl:otherwise>
         <table width="100%">
@@ -674,7 +674,7 @@
             select="'Dublette(n) konnten keiner Original-Aufnahme zugewiesen werden.'" />
           <br />
           <xsl:value-of
-            select="'Bitte definieren sie nur EINE Aufnahme als `keine Dublette (Original)`.'" />
+            select="'Bitte definieren Sie nur EINE Aufnahme als `keine Dublette (Original)`.'" />
         </xsl:when>
         <xsl:when test="$exceptionId=2">
           <xsl:value-of

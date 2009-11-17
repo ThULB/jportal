@@ -78,7 +78,7 @@
 
 		<xsl:choose>
 			<xsl:when test="$CurrentUser='gast'">
-				Zugriff untersagt. Bitte melden sie sich am System an!
+				Zugriff untersagt. Bitte melden Sie sich am System an!
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:call-template name="journalStatistic.main" />

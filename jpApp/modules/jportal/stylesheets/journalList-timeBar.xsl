@@ -160,7 +160,7 @@
 
     <xsl:template name="journalList.chooseZoom">
         <form id="journalList.zoom" action="{$RequestURL}" method="post">
-            Wählen sie die Vergrößerungsfaktor :
+            Wählen Sie die Vergrößerungsfaktor :
             <select name="XSL.spreading.SESSION" size="1" onChange="document.getElementById('journalList.zoom').submit()">
                 <option value="1">
                     <xsl:call-template name="journalList.preselect">

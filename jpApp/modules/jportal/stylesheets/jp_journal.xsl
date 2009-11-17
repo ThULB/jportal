@@ -459,7 +459,7 @@
                                     <td valign="top" class="metavalue" style="color:#FF0000;">
                                         Sie haben noch keinen Zeitschriften-Kontext (Webseiten, Rechteverwaltung) eingerichtet.
                                         <br />
-                                        Möchten sie dies jetzt tun?
+                                        Möchten Sie dies jetzt tun?
                                         <br />
                                         <br />
                                         <a

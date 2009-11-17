@@ -235,7 +235,7 @@
     </label>
   </text>
   <helpPopup id="Hlink" width="400" height="250">
-    <label xml:lang="de">Geben sie Links zu externen Webseiten an, die sich dieser Person widmen.</label>
+    <label xml:lang="de">Geben Sie Links zu externen Webseiten an, die sich dieser Person widmen.</label>
 
   </helpPopup>
 
@@ -264,7 +264,7 @@
     <hidden var="@heritable" default="true" />
   </panel>
   <helpPopup id="Hidentifier" width="400" height="250">
-    <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben sie die dort verwendete ID an.</label>
+    <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben Sie die dort verwendete ID an.</label>
   </helpPopup>
   
   <panel id="DNote">

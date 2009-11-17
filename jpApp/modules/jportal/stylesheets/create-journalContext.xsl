@@ -19,7 +19,7 @@
 
     <xsl:template match="/create-journalContext">
         <xsl:choose>
-            <xsl:when test="not(acl:checkPermission($MCR.JPortal.Create-JournalContext.ID, 'writedb'))">Zugriff untersagt. Bitte melden sie sich an!</xsl:when>
+            <xsl:when test="not(acl:checkPermission($MCR.JPortal.Create-JournalContext.ID, 'writedb'))">Zugriff untersagt. Bitte melden Sie sich an!</xsl:when>
             <xsl:otherwise>
                 <form action="{$ServletsBaseURL}MCRJPortalCreateJournalContextServlet" method="post">
                     <input type="hidden" name="mode" value="createContext" />

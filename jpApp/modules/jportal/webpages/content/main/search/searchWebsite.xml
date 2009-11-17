@@ -3,7 +3,7 @@
 <MyCoReWebPage>
     <section xml:lang="de" title="Webseiten durchsuchen">
         <p>
-            Bitte geben sie ihren Suchbegriff ein*:
+            Bitte geben Sie ihren Suchbegriff ein*:
             <search-website />
         </p>
         <p></p>
