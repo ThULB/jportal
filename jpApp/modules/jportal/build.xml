@@ -149,10 +149,27 @@
         </echo>
 		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
 		<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
-
+		<antcall target="override.components"></antcall>
 	</target>
-
-
+	
+	<property name="iview.location" value="${build}/components/components/iview"/>
+	<target name="override.components">
+		<antcall target="override.iview"></antcall>
+	</target>
+	
+	<target name="override.iview">
+		<echo>Override Iview Components with ${module.dir}/components/iview</echo>
+		<copy todir="${iview.location}" overwrite="true">
+			<fileset dir="${module.dir}/components/iview" excludes="**/xsl/"></fileset>
+		</copy>
+		<copy todir="${build}/webapps/modules/iview" overwrite="true">
+			<fileset dir="${module.dir}/components/iview/web/modules/iview"></fileset>
+		</copy>
+		<copy todir="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+			<fileset dir="${module.dir}/components/iview/xsl" includes="*.xsl"></fileset>
+		</copy>
+	</target>
+	
 	<!-- ============================================== -->
 
 	<target name="jp.webapps.inside">
