@@ -69,13 +69,13 @@
         </cell> 
         
         <!-- ########################## derivates ################################## --> 
-        <cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
+        <!-- cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
             <text>
                 <label css-style="editorHeadlines" i18n="metaData.headlines.derivates" />
             </text>
         </cell>
         <cell class="editorLabel" row="210" col="1" anchor="NORTHWEST" ref="derivateLink_label" />
-        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" />
+        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" /-->
         
         <!-- ########################## misc ################################## --> 
         <cell anchor="WEST" colspan="4" col="1" row="250" class="editorHeadlines">
