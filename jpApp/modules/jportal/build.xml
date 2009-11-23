@@ -160,7 +160,7 @@
 	<target name="override.iview">
 		<echo>Override Iview Components with ${module.dir}/components/iview</echo>
 		<copy todir="${iview.location}" overwrite="true">
-			<fileset dir="${module.dir}/components/iview" excludes="**/xsl/"></fileset>
+			<fileset dir="${module.dir}/components/iview" excludes="**/xsl/ integrate.xml"></fileset>
 		</copy>
 		<copy todir="${build}/webapps/modules/iview" overwrite="true">
 			<fileset dir="${module.dir}/components/iview/web/modules/iview"></fileset>
