@@ -24,20 +24,11 @@
       <xsl:when test="contains(/mycoreobject/@ID,'_jpjournal_') 
                 or contains(/mycoreobject/@ID,'_jpvolume_') 
                 or contains(/mycoreobject/@ID,'_jparticle_')  ">
-        <xsl:choose>
-          <xsl:when test="$view.objectmetadata='false'">
-            <xsl:call-template name="printHistoryRow">
-              <xsl:with-param name="sortOrder" select="'descending'" />
-              <xsl:with-param name="printCurrent" select="'false'" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="printHistoryRow">
-              <xsl:with-param name="sortOrder" select="'descending'" />
-              <xsl:with-param name="printCurrent" select="'true'" />
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:call-template name="printHistoryRow">
+          <xsl:with-param name="sortOrder" select="'descending'" />
+          <xsl:with-param name="printCurrent" select="'true'" />
+          <xsl:with-param name="node" select="./.." />
+        </xsl:call-template>
       </xsl:when>
       <xsl:when test="contains(/mycoreobject/@ID,'_person_') ">
         <xsl:value-of select="'Person - Metadaten'" />
@@ -177,8 +168,7 @@
     <xsl:value-of select="document('jportal_getJournalID:noXPath')/dummyRoot/hidden/@default" />
   </xsl:template>
 
-	<!-- =================================================================================
--->
+	<!-- ================================================================================= -->
     <xsl:template name="HTMLPageTitle">
 
         <xsl:variable name="titleFront">
@@ -211,8 +201,6 @@
 
         <xsl:value-of select="concat($titleFront,' - ',$MainTitle)" />
     </xsl:template>
-    <!-- =================================================================================
--->
-    
+    <!-- ================================================================================= -->
 
 </xsl:stylesheet>

@@ -1063,7 +1063,7 @@
                         <xsl:choose>
                             <xsl:when test="$sortOrder='descending'">
                                 <xsl:choose>
-                                    <xsl:when test="position()!=last() and $view.objectmetadata='true'">
+                                    <xsl:when test="position()!=last()">
                                         <xsl:value-of select="concat($text,$date, ' \ ')" />
                                     </xsl:when>
                                     <xsl:otherwise>
