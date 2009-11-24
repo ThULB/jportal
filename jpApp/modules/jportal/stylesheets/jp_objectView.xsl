@@ -806,13 +806,8 @@
                     <td>
                         <ul>
                             <xsl:for-each select="$linkedArt/mcr:results/mcr:hit[number($maxLinkedArts)>position()-1]">
-                                <xsl:variable name="art" select="document(concat('mcrobject:',@id))" />
-                                <xsl:variable name="linkID">
-                                    <xsl:call-template name="objectLink">
-                                        <xsl:with-param name="obj_id" select="@id" />
-                                    </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:if test="contains($linkID, 'jparticle')">
+                                <xsl:if test="contains(@id, 'jparticle')">
+                                    <xsl:variable name="art" select="document(concat('mcrobject:',@id))" />
                                     <li>
                                         <xsl:call-template name="printHistoryRow">
                                             <xsl:with-param name="sortOrder" select="'ascending'" />
@@ -871,13 +866,8 @@
                     <td>
                         <ul>
                             <xsl:for-each select="$linkedCal/mcr:results/mcr:hit[number($maxLinkedCals)>position()-1]">
-                                <xsl:variable name="cal" select="document(concat('mcrobject:',@id))" />
-                                <xsl:variable name="linkID">
-                                    <xsl:call-template name="objectLink">
-                                        <xsl:with-param name="obj_id" select="@id" />
-                                    </xsl:call-template>
-                                </xsl:variable>
-                                <xsl:if test="contains($linkID, 'jpjournal')">
+                                <xsl:if test="contains(@id, 'jpjournal')">
+                                    <xsl:variable name="cal" select="document(concat('mcrobject:',@id))" />
                                     <li>
                                         <xsl:call-template name="printHistoryRow">
                                             <xsl:with-param name="sortOrder" select="'ascending'" />
