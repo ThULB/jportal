@@ -10,7 +10,7 @@
 ##############################################################################
 
 # Displayed title in the WEB browser
-  MCR.NameOfProject=DocPortal
+  MCR.NameOfProject=JPortal
   
 # The String of the commandline interface prompt
   MCR.CommandLineInterface.SystemName=%MCR.NameOfProject%
@@ -35,7 +35,7 @@
 #############################################################################
 
 # The base directory of the DocPortal installation and data, e.g. for windows c:/program files/docportal
-  MCR.basedir=/home/mcradmin/docportal
+  MCR.basedir=/home/mcradmin/application
   
 # The data directory of the DocPortal installation
   MCR.datadir=%MCR.basedir%/data
@@ -59,8 +59,8 @@
 ##############################################################################
 # Module includes, component excludes
 ##############################################################################
-  MCR.Modules.BaseDir=%MCR.basedir%
-  MCR.Modules.Application=docportal
+  MCR.Modules.BaseDir=%MCR.basedir%/../jpApp
+  MCR.Modules.Application=jportal
   
 ##############################################################################
 # JDBC Parameter (need to build scripts)

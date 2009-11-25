@@ -272,40 +272,18 @@
                                 </div>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:choose>
-                                    <xsl:when test="/mycoreobject[contains(@ID,'_jparticle_')]
-                                        or  $children='false'">
-                                        <div id="switch-notcurrent">
-                                            <xsl:variable name="URLDetails">
-                                                <xsl:call-template name="UrlSetParam">
-                                                    <xsl:with-param name="url"
-                                                        select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/structure/parents/parent/@xlink:href,$HttpSession)" />
-                                                    <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
-                                                    <xsl:with-param name="value" select="'true'" />
-                                                </xsl:call-template>
-                                            </xsl:variable>
-                                            <a href="{$URLDetails}">
-                                                <xsl:value-of
-                                                    select="concat(i18n:translate('metadata.navi.content'),' ',/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text(),' ',i18n:translate('metadata.navi.show'))" />
-                                            </a>
-                                        </div>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <div id="switch-notcurrent">
-                                            <xsl:variable name="URLDetails">
-                                                <xsl:call-template name="UrlSetParam">
-                                                    <xsl:with-param name="url"
-                                                        select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)" />
-                                                    <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
-                                                    <xsl:with-param name="value" select="'true'" />
-                                                </xsl:call-template>
-                                            </xsl:variable>
-                                            <a href="{$URLDetails}">
-                                                <xsl:value-of select="i18n:translate('metadata.navi.showcontent')" />
-                                            </a>
-                                        </div>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                              <div id="switch-notcurrent">
+                                <xsl:variable name="URLDetails">
+                                  <xsl:call-template name="UrlSetParam">
+                                    <xsl:with-param name="url" select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)" />
+                                    <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
+                                    <xsl:with-param name="value" select="'true'" />
+                                  </xsl:call-template>
+                                </xsl:variable>
+                                <a href="{$URLDetails}">
+                                  <xsl:value-of select="i18n:translate('metadata.navi.showcontent')" />
+                                </a>
+                              </div>
                             </xsl:otherwise>
                         </xsl:choose>
                     </td>
@@ -326,7 +304,8 @@
     <!-- prints the children of an mcr object -->
     <!-- ===================================================================================================== -->
     <xsl:template name="printChildren">
-        <xsl:variable name="kindOfChildren2">
+        <!-- lucene implementation -->
+        <!--<xsl:variable name="kindOfChildren2">
             <xsl:choose>
                 <xsl:when test="./structure/children/child[position()=1]/@xlink:href">
                     <xsl:call-template name="typeOfObjectID">
@@ -338,6 +317,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
             <xsl:value-of select="encoder:encode(concat('parent = ',./@ID))" />
         </xsl:variable>
@@ -351,6 +331,7 @@
                 <xsl:with-param name="kindOfChildren" select="$kindOfChildren2" />
             </xsl:call-template>
         </xsl:variable>
+
         <xsl:variable name="children" select="document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))"/>
         <xsl:call-template name="printTOCNavi">
             <xsl:with-param name="location" select="'navi'" />
@@ -368,7 +349,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
         <table id="resultList" cellpadding="0" cellspacing="0">
             <xsl:for-each select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
                 <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
@@ -380,6 +360,39 @@
                         </xsl:call-template>
                     </xsl:with-param>
                 </xsl:apply-templates>
+            </xsl:for-each>
+        </table>-->
+
+        <!-- children implementation -->
+        <xsl:variable name="numChildren" select="count(./structure/children/child)" />
+        
+        <xsl:variable name="toc.pos.verif">
+            <xsl:choose>
+                <xsl:when test="$toc.pageSize>$numChildren">
+                    <xsl:value-of select="1" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$toc.pos" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <table>
+          <tr>
+            <td>
+              <xsl:value-of select="concat(i18n:translate('metaData.sortbuttons.numberofres'),': ')" />
+              <b><xsl:value-of select="$numChildren" /></b>
+              <xsl:call-template name="printTOCNavi.chooseHitPage">
+                <xsl:with-param name="numberOfChildren" select="$numChildren" />
+              </xsl:call-template>
+            </td>
+          </tr>
+        </table>
+
+        <table id="resultList" cellpadding="0" cellspacing="0">
+            <xsl:for-each select="./structure/children/child[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+                <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@xlink:href))" />
+                <xsl:apply-templates select="$mcrobj/mycoreobject" mode="toc" />
             </xsl:for-each>
         </table>
     </xsl:template>
@@ -452,7 +465,7 @@
                                 <xsl:value-of select="$numChildren" />
                             </b>
                             <xsl:call-template name="printTOCNavi.chooseHitPage">
-                                <xsl:with-param name="children" select="xalan:nodeset($childrenXML)" />
+                                <xsl:with-param name="numberOfChildren" select="count(xalan:nodeset($childrenXML)/mcr:results/mcr:hit)" />
                             </xsl:call-template>
                         </td>
                     </tr>
@@ -518,10 +531,7 @@
     <!-- prints the result list navigation if results > $toc.pageSize -->
     <!-- ===================================================================================================== -->
     <xsl:template name="printTOCNavi.chooseHitPage">
-        <xsl:param name="children" />
-        <xsl:variable name="numberOfChildren">
-            <xsl:value-of select="count(xalan:nodeset($children)/mcr:results/mcr:hit)" />
-        </xsl:variable>
+        <xsl:param name="numberOfChildren" />
         <xsl:variable name="numberOfHitPages">
             <xsl:value-of select="ceiling(number($numberOfChildren) div number($toc.pageSize))" />
         </xsl:variable>
@@ -1125,7 +1135,6 @@
 
         <!--LOCAL REQUEST -->
         <xsl:if test="$objectHost = 'local'">
-            <xsl:variable name="mcrobj" select="document(concat('mcrobject:',$obj_id))/mycoreobject" />
             <xsl:choose>
                 <xsl:when test="acl:checkPermission($obj_id,'read')">
                     <a href="{$WebApplicationBaseURL}receive/{$obj_id}{$HttpSession}?{$requestParam}" alt="{$hoverText}" title="{$hoverText}">
@@ -1140,10 +1149,11 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
+                    <!-- <xsl:variable name="mcrobj" select="document(concat('mcrobject:',$obj_id))/mycoreobject" />-->
                     <!-- Build Login URL for LoginServlet -->
                     <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="LoginURL"
                         select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )" />
-                    <xsl:apply-templates select="$mcrobj" mode="resulttitle" />
+                    <xsl:value-of select="$obj_name" />
                     &#160;
                     <a href="{$LoginURL}">
                         <img src="{concat($WebApplicationBaseURL,'images/paper_lock.gif')}" />

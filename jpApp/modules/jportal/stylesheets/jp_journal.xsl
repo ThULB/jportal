@@ -13,23 +13,22 @@
     <xsl:template match="mcr:hit[contains(@id,'_jpjournal_')]">
         <xsl:param name="mcrobj" />
         <xsl:param name="mcrobjlink" />
-        <xsl:variable select="100" name="DESCRIPTION_LENGTH" />
-        <xsl:variable select="@host" name="host" />
 
-        <xsl:variable name="obj_id">
-            <xsl:value-of select="@id" />
-        </xsl:variable>
         <xsl:variable name="cXML">
             <xsl:copy-of select="document(concat('mcrobject:',@id))" />
         </xsl:variable>
-        
-        <xsl:call-template name="jpjournal.printResultListEntry">
-          <xsl:with-param name="cXML" select="$cXML"/>
-        </xsl:call-template>
+        <xsl:apply-templates select="$cXML" mode="toc" />
     </xsl:template>
 
+    <!-- ============================================================================================================== -->
     <xsl:template name="jpjournal.printResultListEntry">
       <xsl:param name="cXML" />
+      <xsl:apply-templates select="$cXML" mode="toc" />
+    </xsl:template>
+
+    <!-- ============================================================================================================== -->
+
+    <xsl:template priority="1" mode="toc" match="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <table cellspacing="0" cellpadding="0" id="leaf-all">
             <tr>
                 <td id="leaf-front" colspan="1" rowspan="6">
@@ -38,7 +37,7 @@
                 <td id="leaf-linkarea2">
                     <xsl:variable name="journalAddress">
                         <xsl:variable name="webAddress">
-                            <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
+                            <xsl:value-of select="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()" />
                         </xsl:variable>
                         <xsl:choose>
                             <xsl:when
@@ -51,17 +50,17 @@
                         </xsl:choose>
                     </xsl:variable>
                     <a href="{$journalAddress}{$HttpSession}">
-                        <xsl:value-of select="xalan:nodeset($cXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
+                        <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle/text()" />
                     </a>
                     <br />
                 </td>
             </tr>
             <!-- additional -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/subtitles/subtitle">
+            <xsl:if test="/mycoreobject/metadata/subtitles/subtitle">
                 <tr>
                     <td id="leaf-additional">
                         <i>
-                            <xsl:copy-of select="xalan:nodeset($cXML)/mycoreobject/metadata/subtitles/subtitle/text()" />
+                            <xsl:copy-of select="/mycoreobject/metadata/subtitles/subtitle/text()" />
                         </i>
                         <br />
                         <br />
@@ -69,22 +68,22 @@
                 </tr>
             </xsl:if>
             <!-- date -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and (@type='published_from' or @type='published_until')]">
+            <xsl:if test="/mycoreobject/metadata/dates/date[@inherited='0' and (@type='published_from' or @type='published_until')]">
                 <tr>
                     <td id="leaf-additional">
                         <i>Erscheinungsverlauf:&#160;&#160;</i>
                         <xsl:variable name="format_from">
                             <xsl:choose>
                                 <xsl:when
-                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=4">
+                                    test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=4">
                                     <xsl:value-of select="i18n:translate('metaData.dateYear')" />
                                 </xsl:when>
                                 <xsl:when
-                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=7">
+                                    test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=7">
                                     <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
                                 </xsl:when>
                                 <xsl:when
-                                    test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=10">
+                                    test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']))=10">
                                     <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
                                 </xsl:when>
                                 <xsl:otherwise>
@@ -94,23 +93,23 @@
                         </xsl:variable>
                         <xsl:call-template name="formatISODate">
                             <xsl:with-param name="date"
-                                select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']/text()" />
+                                select="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_from']/text()" />
                             <xsl:with-param name="format" select="$format_from" />
                         </xsl:call-template>
                         <xsl:value-of select="'&#160;-&#160;'"></xsl:value-of>
-                        <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@type='published_until']">
+                        <xsl:if test="/mycoreobject/metadata/dates/date[@type='published_until']">
                             <xsl:variable name="format_until">
                                 <xsl:choose>
                                     <xsl:when
-                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=4">
+                                        test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=4">
                                         <xsl:value-of select="i18n:translate('metaData.dateYear')" />
                                     </xsl:when>
                                     <xsl:when
-                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=7">
+                                        test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=7">
                                         <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
                                     </xsl:when>
                                     <xsl:when
-                                        test="string-length(normalize-space(xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=10">
+                                        test="string-length(normalize-space(/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']))=10">
                                         <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
                                     </xsl:when>
                                     <xsl:otherwise>
@@ -119,8 +118,7 @@
                                 </xsl:choose>
                             </xsl:variable>
                             <xsl:call-template name="formatISODate">
-                                <xsl:with-param name="date"
-                                    select="xalan:nodeset($cXML)/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']/text()" />
+                                <xsl:with-param name="date" select="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_until']/text()" />
                                 <xsl:with-param name="format" select="$format_until" />
                             </xsl:call-template>
                         </xsl:if>
@@ -130,10 +128,10 @@
                 </tr>
             </xsl:if>
             <!-- authors -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant">
+            <xsl:if test="/mycoreobject/metadata/participants/participant">
                 <xsl:call-template name="printMetaDate_typeSensitive">
                     <xsl:with-param select="'right'" name="textalign" />
-                    <xsl:with-param select="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant" name="nodes" />
+                    <xsl:with-param select="/mycoreobject/metadata/participants/participant" name="nodes" />
                     <xsl:with-param select="i18n:translate('editormask.labels.participants_label')" name="label" />
                     <xsl:with-param name="typeClassi" select="'jportal_class_00000007'" />
                     <xsl:with-param name="mode" select="'xlink'" />
@@ -141,10 +139,10 @@
                 </xsl:call-template>
             </xsl:if>
             <!-- id's -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/identis/identi">
+            <xsl:if test="/mycoreobject/metadata/identis/identi">
                 <xsl:call-template name="printMetaDate_typeSensitive">
                     <xsl:with-param select="'right'" name="textalign" />
-                    <xsl:with-param select="xalan:nodeset($cXML)/mycoreobject/metadata/identis/identi" name="nodes" />
+                    <xsl:with-param select="/mycoreobject/metadata/identis/identi" name="nodes" />
                     <xsl:with-param select="i18n:translate('editormask.labels.identi')" name="label" />
                     <xsl:with-param name="typeClassi" select="'jportal_class_00000010'" />
                     <xsl:with-param name="mode" select="'text'" />
@@ -152,7 +150,7 @@
                 </xsl:call-template>
             </xsl:if>
             <!-- lang -->
-            <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/languages/language">
+            <xsl:if test="/mycoreobject/metadata/languages/language">
                 <tr>
                     <td id="leaf-additional">
                         <i>
@@ -160,7 +158,7 @@
                             :
                         </i>
                         <xsl:call-template name="printClass">
-                            <xsl:with-param name="nodes" select="xalan:nodeset($cXML)/mycoreobject/metadata/languages/language" />
+                            <xsl:with-param name="nodes" select="/mycoreobject/metadata/languages/language" />
                             <xsl:with-param name="host" select="'local'" />
                             <xsl:with-param name="next" select="', '" />
                         </xsl:call-template>
