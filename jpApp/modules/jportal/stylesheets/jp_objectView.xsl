@@ -572,7 +572,10 @@
     <!-- shows a navigation control to browse through the result list of a search -->
     <!-- ===================================================================================================== -->
     <xsl:template name="browseCtrlJP">
-        <xsl:if test="string-length($previousObject)>0">
+        <xsl:variable name="hasPrev" select="string-length($previousObject)>0" />
+        <xsl:variable name="hasNext" select="string-length($nextObject)>0" />
+    
+        <xsl:if test="$hasPrev">
             <xsl:variable name="hostParam">
                 <xsl:if test="$previousObjectHost != 'local'">
                     <xsl:value-of select="concat('?host=',$previousObjectHost)" />
@@ -585,7 +588,7 @@
                 </a>
             </td>
         </xsl:if>
-        <xsl:if test="string-length($numPerPage)>0">
+        <xsl:if test="$hasPrev or $hasNext">
             <td>
                 <div id="switch-notcurrent">
                     <a
@@ -595,7 +598,7 @@
                 </div>
             </td>
         </xsl:if>
-        <xsl:if test="string-length($nextObject)>0">
+        <xsl:if test="$hasNext">
             <xsl:variable name="hostParam">
                 <xsl:if test="$nextObjectHost != 'local'">
                     <xsl:value-of select="concat('?host=',$nextObjectHost)" />
