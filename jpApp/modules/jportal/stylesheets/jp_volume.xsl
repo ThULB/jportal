@@ -234,10 +234,17 @@
                     </td>
                 </tr>
             </xsl:if>
-            <xsl:call-template name="printDerivates">
-                <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-                <xsl:with-param name="knoten" select="." />
-            </xsl:call-template>
+            <!-- derivates -->
+            <tr>
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0">
+                  <xsl:call-template name="printDerivates">
+                    <xsl:with-param name="obj_id" select="@ID" />
+                    <xsl:with-param name="knoten" select="./.." />
+                  </xsl:call-template>
+                </table>
+              </td>
+            </tr>
         </table>
         <br />
     </xsl:template>

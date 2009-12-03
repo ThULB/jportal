@@ -131,35 +131,12 @@
               <xsl:with-param name="length" select="400" />
             </xsl:call-template>
           </xsl:variable>
-          <xsl:variable name="children">
-            <xsl:choose>
-              <xsl:when test="/mycoreobject/structure/children">
-                <xsl:value-of select="'true'" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="'false'" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:choose>
-            <xsl:when test="(contains(/mycoreobject/@ID,'_jparticle_')) 
-              or ($children='false') ">
-              <xsl:call-template name="objectLinking">
-                <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-                <xsl:with-param name="obj_name" select="$shortlabel" />
-                <xsl:with-param name="hoverText" select="$name" />
-                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
-              </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="objectLinking">
-                <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-                <xsl:with-param name="obj_name" select="$shortlabel" />
-                <xsl:with-param name="hoverText" select="$name" />
-                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=1'" />
-              </xsl:call-template>
-            </xsl:otherwise>
-          </xsl:choose>
+          <xsl:call-template name="objectLinking">
+            <xsl:with-param name="obj_id" select="@ID" />
+            <xsl:with-param name="obj_name" select="$shortlabel" />
+            <xsl:with-param name="hoverText" select="$name" />
+            <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
+          </xsl:call-template>
         </td>
       </tr>
       <!-- date -->
@@ -236,10 +213,16 @@
       </xsl:if>
 
       <!-- derivates -->
-      <xsl:call-template name="printDerivates">
-        <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-        <xsl:with-param name="knoten" select="." />
-      </xsl:call-template>
+      <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0">
+            <xsl:call-template name="printDerivates">
+              <xsl:with-param name="obj_id" select="@ID" />
+              <xsl:with-param name="knoten" select="./.." />
+            </xsl:call-template>
+          </table>
+        </td>
+      </tr>
     </table>
     <br />
   </xsl:template>
@@ -739,7 +722,7 @@
     <xsl:param name="objectXML" />
     <xsl:param name="listLength" />
 
-    <xsl:for-each select="xalan:nodeset($objectXML)/mycoreobject/metadata/participants/participant[number($listLength)+1>position()]">
+    <xsl:for-each select="xalan:nodeset($objectXML)/metadata/participants/participant">
       <xsl:if test="position()=1">
         <xsl:call-template name="lineSpace" />
         <i>
