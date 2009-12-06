@@ -39,4 +39,11 @@ public class MCRJPortalIndexBrowserServlet extends MCRIndexBrowserServlet {
 
         return new MCRIndexBrowserIncomingData(search, mode, searchclass, fromTo, init);
     }
+    
+    protected String getMode(HttpServletRequest request) {
+        if (request.getParameter("mode") != null && !request.getParameter("mode").trim().equals("")) {
+            return request.getParameter("mode").toLowerCase().trim();
+        } else
+            return "prefix";
+    }
 }
