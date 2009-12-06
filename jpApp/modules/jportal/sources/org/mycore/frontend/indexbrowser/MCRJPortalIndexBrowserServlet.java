@@ -2,9 +2,12 @@ package org.mycore.frontend.indexbrowser;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.jdom.Document;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserCache;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserEntry;
+import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserIncomingData;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserServlet;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserXmlGenerator;
 
@@ -27,4 +30,13 @@ public class MCRJPortalIndexBrowserServlet extends MCRIndexBrowserServlet {
         return xmlGen.getXMLContent();
     }
 
+    protected MCRIndexBrowserIncomingData getIncomingBrowserData(HttpServletRequest request) {
+        String search = "*" + request.getParameter("search") + "*";
+        String mode = getMode(request);
+        String searchclass = request.getParameter("searchclass");
+        String fromTo = request.getParameter("fromTo");
+        String init = request.getParameter("init");
+
+        return new MCRIndexBrowserIncomingData(search, mode, searchclass, fromTo, init);
+    }
 }

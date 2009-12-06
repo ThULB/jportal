@@ -305,7 +305,48 @@
     <!-- ===================================================================================================== -->
     <xsl:template name="printChildren">
         <!-- lucene implementation -->
-        <!--<xsl:variable name="kindOfChildren2">
+        <xsl:call-template name="printChildren_lucene"/>
+        <!-- children implementation -->
+<!--    	<xsl:call-template name="printChildren_nolucene"/>-->
+        
+    </xsl:template>
+    
+    <xsl:template name="printChildren_nolucene">
+    	<xsl:variable name="numChildren" select="count(./structure/children/child)" />
+        
+        <xsl:variable name="toc.pos.verif">
+            <xsl:choose>
+                <xsl:when test="$toc.pageSize>$numChildren">
+                    <xsl:value-of select="1" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$toc.pos" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
+        <table>
+          <tr>
+            <td>
+              <xsl:value-of select="concat(i18n:translate('metaData.sortbuttons.numberofres'),': ')" />
+              <b><xsl:value-of select="$numChildren" /></b>
+              <xsl:call-template name="printTOCNavi.chooseHitPage">
+                <xsl:with-param name="numberOfChildren" select="$numChildren" />
+              </xsl:call-template>
+            </td>
+          </tr>
+        </table>
+
+        <table id="resultList" cellpadding="0" cellspacing="0">
+            <xsl:for-each select="./structure/children/child[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+                <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@xlink:href))" />
+                <xsl:apply-templates select="$mcrobj/mycoreobject" mode="toc" />
+            </xsl:for-each>
+        </table>
+    </xsl:template>
+    
+    <xsl:template name="printChildren_lucene">
+    	<xsl:variable name="kindOfChildren2">
             <xsl:choose>
                 <xsl:when test="./structure/children/child[position()=1]/@xlink:href">
                     <xsl:call-template name="typeOfObjectID">
@@ -360,39 +401,6 @@
                         </xsl:call-template>
                     </xsl:with-param>
                 </xsl:apply-templates>
-            </xsl:for-each>
-        </table>-->
-
-        <!-- children implementation -->
-        <xsl:variable name="numChildren" select="count(./structure/children/child)" />
-        
-        <xsl:variable name="toc.pos.verif">
-            <xsl:choose>
-                <xsl:when test="$toc.pageSize>$numChildren">
-                    <xsl:value-of select="1" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$toc.pos" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-
-        <table>
-          <tr>
-            <td>
-              <xsl:value-of select="concat(i18n:translate('metaData.sortbuttons.numberofres'),': ')" />
-              <b><xsl:value-of select="$numChildren" /></b>
-              <xsl:call-template name="printTOCNavi.chooseHitPage">
-                <xsl:with-param name="numberOfChildren" select="$numChildren" />
-              </xsl:call-template>
-            </td>
-          </tr>
-        </table>
-
-        <table id="resultList" cellpadding="0" cellspacing="0">
-            <xsl:for-each select="./structure/children/child[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
-                <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@xlink:href))" />
-                <xsl:apply-templates select="$mcrobj/mycoreobject" mode="toc" />
             </xsl:for-each>
         </table>
     </xsl:template>

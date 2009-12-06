@@ -3,19 +3,8 @@ package org.mycore.common.xml;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.output.XMLOutputter;
-import org.mycore.common.MCRCache;
-import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
-import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver.MCRResolver;
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRDirectoryXML;
-import org.mycore.datamodel.ifs.MCRFile;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.ifs.MCRGetDerivateDirectoryXML;
 
 public class MCRJPortalGetDerDirXML implements MCRResolver {

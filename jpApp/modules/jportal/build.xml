@@ -158,7 +158,7 @@
 	
 	<target name="override.iview">
 		<echo>Override Iview Components with ${module.dir}/components/iview</echo>
-		<copy todir="${build}/webapps/modules/iview" overwrite="true">
+		<copy todir="${build.webapps}/modules/iview" overwrite="true">
 			<fileset dir="${module.dir}/components/iview/web/modules/iview"></fileset>
 		</copy>
 		<copy todir="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
