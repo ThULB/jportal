@@ -31,7 +31,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
             } else {
                 return true;
             }
-        } else if (MCRObjectID.isValid(id)) {
+        } else if (isValidID(id)) {
             if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_")
                     || permission.equals("read")) {
                 return checkPermissionOfType(id, permission);
@@ -43,6 +43,11 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
         }
 
         return false;
+    }
+
+    private boolean isValidID(String id) {
+//        return MCRObjectID.isValid(id);
+        return new MCRObjectID().setID(id);
     }
 
     public boolean checkPermissionOfType(String id, String permission) {
