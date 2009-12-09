@@ -137,12 +137,4 @@ class MockHelper {
         return mockControl;
     }
 
-    public MCRPermissionTool createPermissionTool() {
-        MCRPermissionTool permissionToolMock = getMockControl().createMock(MCRPermissionTool.class);
-        expect(permissionToolMock.checkPermission(isA(String.class))).andReturn(true).anyTimes();
-        expect(permissionToolMock.checkPermission(isA(String.class), isA(String.class))).andReturn(true).anyTimes();
-        return permissionToolMock;
-    }
-    
-    
 }
