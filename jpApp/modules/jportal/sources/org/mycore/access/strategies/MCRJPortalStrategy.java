@@ -47,7 +47,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
 
     private boolean isValidID(String id) {
 //        return MCRObjectID.isValid(id);
-        return new MCRObjectID().setID(id);
+        return new MCRObjectID().setID(id) && !id.contains("_class_");
     }
 
     public boolean checkPermissionOfType(String id, String permission) {
