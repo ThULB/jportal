@@ -31,7 +31,7 @@
     <field name="contentClassi10"    type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis10/contentClassi10" value="@ID"/>  
 
     <!-- Search in volumes metadata -->  
-    <field name="maintitles_vol"        type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
+    <field name="maintitles_vol"        type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
     <field name="subtitles_vol"         type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
     <field name="subtitles__vol_type"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />   
     <field name="participants_vol"      type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
@@ -41,7 +41,7 @@
     <field name="journalID_vol"         type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
     <field name="position_vol"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />
     <!-- Search in article metadata -->
-    <field name="maintitles_art"        type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
+    <field name="maintitles_art"        type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
     <field name="subtitles_art"         type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editormask.labels.subtitle" />
     <field name="subtitles__art_type"   type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />     
     <field name="participants_art"      type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
