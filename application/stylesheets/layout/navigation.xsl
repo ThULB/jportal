@@ -61,6 +61,7 @@
         <xsl:param name="menuPointHeigth" /><!-- use pixel values -->
         <xsl:param name="spaceBetweenLinks" /><!-- use pixel values -->
         <xsl:param name="seperatorChar" /><!-- use pixel values -->
+        <xsl:param name="padding-right" select="10" /><!-- use pixel values -->
 
         <xsl:variable name="readAccess">
             <xsl:call-template name="get.readAccess">
@@ -112,7 +113,7 @@
                     <td>
                         <xsl:call-template name="navigation.flags" />
                     </td>
-                    <td style="width:10px;"></td>
+                    <td style="width:{$padding-right}px;"></td>
                 </tr>
             </table>
         </xsl:if>
