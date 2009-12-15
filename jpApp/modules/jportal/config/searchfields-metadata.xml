@@ -36,7 +36,7 @@
     <field name="subtitles__vol_type"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />   
     <field name="participants_vol"      type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
     <field name="participants_vol_type" type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" />          
-    <field name="dates_vol"             type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
+    <field name="dates_vol"             type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date[@type='published']" value="text()" sortable="true" i18n="editor.search.document.date" />
     <field name="notes_vol"             type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
     <field name="journalID_vol"         type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
     <field name="position_vol"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />

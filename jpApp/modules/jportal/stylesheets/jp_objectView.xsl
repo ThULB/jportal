@@ -123,14 +123,16 @@
 	<xsl:template name="jp_objectView_initJS">
 		<script type="text/javascript">
 			function confirmDelete(delUrl) {
-			if (confirm("Objekt wirklich löschen?")) {
+			if
+			(confirm("Objekt wirklich löschen?")) {
 			document.location = delUrl;
 			}
 			}
       </script>
 		<script type="text/javascript">
 			function confirmFormDelete() {
-			if (confirm("Objekt wirklich löschen?")) {
+			if (confirm("Objekt
+			wirklich löschen?")) {
 			return true;
 			}
 			return false;
@@ -496,6 +498,10 @@
 				<xsl:value-of select="'&amp;sortby=position_vol'" />
 			</xsl:when>
 			<xsl:when
+				test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='date')">
+				<xsl:value-of select="'&amp;sortby=dates_vol'" />
+			</xsl:when>
+			<xsl:when
 				test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
 				<xsl:value-of select="'&amp;sortby=maintitles_art'" />
 			</xsl:when>
@@ -633,6 +639,14 @@
 													</xsl:call-template>
 													<xsl:value-of
 														select="i18n:translate('metaData.sortbuttons.position')" />
+												</option>
+												<option value="date">
+													<xsl:call-template name="checkSelection">
+														<xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume" />
+														<xsl:with-param name="compVal2" select="'date'" />
+													</xsl:call-template>
+													<xsl:value-of
+														select="i18n:translate('metaData.sortbuttons.chronological')" />
 												</option>
 											</select>
 										</xsl:otherwise>
@@ -1443,7 +1457,6 @@
 									<xsl:with-param name="flagName" select="'deleted'" />
 								</xsl:call-template>
 							</xsl:variable>
-
 							<xsl:if test="$isDeleted != 'true'">
 								<tr>
 									<td align="left" valign="top" id="detailed-links">
@@ -1626,19 +1639,29 @@
 											<xsl:variable name="deriv" select="@xlink:href" />
 											<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
 											<xsl:variable name="derivate" select="document($derivlink)" />
-											<xsl:apply-templates
-												select="$derivate/mycorederivate/derivate/internals">
-												<xsl:with-param name="objID" select="$obj_id" />
-												<xsl:with-param name="objectXML" select="$knoten" />
-											</xsl:apply-templates>
-											<xsl:apply-templates
-												select="$derivate/mycorederivate/derivate/externals">
-												<xsl:with-param name="objID" select="$obj_id" />
-												<xsl:with-param name="objectXML" select="$knoten" />
-											</xsl:apply-templates>
-											<xsl:if test="position()!=last()">
-												<xsl:copy-of select="' '"></xsl:copy-of>
-												<xsl:call-template name="lineSpace" />
+											<xsl:variable name="isDeleted">
+												<xsl:call-template name="isFlagSet">
+													<xsl:with-param name="path"
+														select="$derivate/mycorederivate" />
+													<xsl:with-param name="flagName" select="'deleted'" />
+												</xsl:call-template>
+											</xsl:variable>
+											<xsl:if test="$isDeleted != 'true'">
+												<xsl:apply-templates
+													select="$derivate/mycorederivate/derivate/internals">
+													<xsl:with-param name="objID" select="$obj_id" />
+													<xsl:with-param name="objectXML" select="$knoten" />
+												</xsl:apply-templates>
+												<xsl:apply-templates
+													select="$derivate/mycorederivate/derivate/externals">
+													<xsl:with-param name="objID" select="$obj_id" />
+													<xsl:with-param name="objectXML" select="$knoten" />
+												</xsl:apply-templates>
+												<xsl:if test="position()!=last()">
+													<xsl:copy-of select="' '">
+													</xsl:copy-of>
+													<xsl:call-template name="lineSpace" />
+												</xsl:if>
 											</xsl:if>
 										</xsl:for-each>
 									</xsl:otherwise>
@@ -1654,53 +1677,77 @@
 			<xsl:when test="$knoten != '' and not(mcr:metaData)">
 				<xsl:if
 					test="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
-					<tr>
-						<td id="leaf-additional">
-							<xsl:call-template name="lineSpace" />
-							<table cellpadding="0" cellspacing="0">
-								<xsl:for-each
-									select="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
-									<xsl:apply-templates select=".">
-										<xsl:with-param name="objID" select="$obj_id" />
-									</xsl:apply-templates>
-									<xsl:if test="position()!=last()">
-										<xsl:copy-of select="', '" />
-										<xsl:call-template name="lineSpace" />
-									</xsl:if>
-								</xsl:for-each>
-							</table>
-						</td>
-					</tr>
+					<xsl:variable name="derivateID"
+						select="substring-before(xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink/text(),'/')" />
+					<xsl:variable name="derivateObj"
+						select="document(concat('mcrobject:',$derivateID))" />
+					<xsl:variable name="isDeleted">
+						<xsl:call-template name="isFlagSet">
+							<xsl:with-param name="path" select="$derivateObj/mycorederivate" />
+							<xsl:with-param name="flagName" select="'deleted'" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:if test="$isDeleted != 'true'">
+						<tr>
+							<td id="leaf-additional">
+								<xsl:call-template name="lineSpace" />
+								<table cellpadding="0" cellspacing="0">
+									<xsl:for-each
+										select="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
+										<xsl:apply-templates select=".">
+											<xsl:with-param name="objID" select="$obj_id" />
+										</xsl:apply-templates>
+										<xsl:if test="position()!=last()">
+											<xsl:copy-of select="', '" />
+											<xsl:call-template name="lineSpace" />
+										</xsl:if>
+									</xsl:for-each>
+								</table>
+							</td>
+						</tr>
+					</xsl:if>
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
-					<tr>
-						<td align="left" valign="top" id="detailed-links">
-							<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-								<tr>
-									<td colspan="3" style="padding-left: 10px;">
-										<xsl:apply-templates select=".">
-											<xsl:with-param name="objID" select="$obj_id" />
-										</xsl:apply-templates>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					<xsl:if test="acl:checkPermission($obj_id,'deletedb')">
+					<xsl:variable name="derivateID"
+						select="substring-before(/mycoreobject/metadata/ifsLinks/ifsLink/text(),'/')" />
+					<xsl:variable name="derivateObj"
+						select="document(concat('mcrobject:',$derivateID))" />
+					<xsl:variable name="isDeleted">
+						<xsl:call-template name="isFlagSet">
+							<xsl:with-param name="path" select="$derivateObj/mycorederivate" />
+							<xsl:with-param name="flagName" select="'deleted'" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:if test="$isDeleted != 'true'">
 						<tr>
-							<td colspan="3" width="30" valign="top" align="center">
-								<xsl:variable name="url">
-									<xsl:value-of
-										select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalLinkFileServlet.mode=removeLink&amp;jportalLinkFileServlet.from=',$obj_id,'&amp;jportalLinkFileServlet.to=',text())" />
-								</xsl:variable>
-								<a href="{$url}">
-									<img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif"
-										title="Diesen Link entfernen" alt="Diesen Link entfernen" />
-								</a>
+							<td align="left" valign="top" id="detailed-links">
+								<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+									<tr>
+										<td colspan="3" style="padding-left: 10px;">
+											<xsl:apply-templates select=".">
+												<xsl:with-param name="objID" select="$obj_id" />
+											</xsl:apply-templates>
+										</td>
+									</tr>
+								</table>
 							</td>
 						</tr>
+						<xsl:if test="acl:checkPermission($obj_id,'deletedb')">
+							<tr>
+								<td colspan="3" width="30" valign="top" align="center">
+									<xsl:variable name="url">
+										<xsl:value-of
+											select="concat($ServletsBaseURL,'MCRJPortalLinkFileServlet?jportalLinkFileServlet.mode=removeLink&amp;jportalLinkFileServlet.from=',$obj_id,'&amp;jportalLinkFileServlet.to=',text())" />
+									</xsl:variable>
+									<a href="{$url}">
+										<img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif"
+											title="Diesen Link entfernen" alt="Diesen Link entfernen" />
+									</a>
+								</td>
+							</tr>
+						</xsl:if>
 					</xsl:if>
 				</xsl:for-each>
 			</xsl:otherwise>
