@@ -70,7 +70,7 @@
    <xsl:variable name="href1" select="concat($WebApplicationBaseURL, 'browse', col[2]/@searchbase, $HttpSession)" />
    <xsl:variable name="actnode" select="position()" />  
    <xsl:variable name="query">
-    <xsl:value-of select="concat('(',$search,'1+=+', col[2]/@lineID, ')')"/>
+    <xsl:value-of select="concat('(',$search,'1+=+&quot;', col[2]/@lineID, '&quot;)')"/>
 <!--<xsl:value-of select="concat('+and+(',$search,'2+=+', 'site)')"/> -->
     <xsl:value-of select="''"/>
     <xsl:if test="string-length(../@doctype)>0">
