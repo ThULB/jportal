@@ -63,7 +63,7 @@ public class MCRRecycleBinServlet extends MCRServlet {
             // wait 2 seconds -> updateInDatastore needs this time
             Thread.sleep(2000);
             // load recycle bin
-            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "servlets/MCRRecycleBinPageGenerationServlet"));
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + "recycleBin.xml"));
         }
         // if delete button pushed, remove all derivates and all non linked mcrobjects
         else if(submitID.equals("Delete")) {
