@@ -8,7 +8,7 @@
     <!-- ============================================== -->
     <!-- the template                                   -->
     <!-- ============================================== -->
-    <xsl:template name="template_thueringen">
+    <xsl:template name="template_thLegislativExekutiv">
         <xsl:variable name="journalsID">
           <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
         </xsl:variable>
@@ -18,15 +18,21 @@
         <xsl:variable name="journalMaintitle">
           <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
         </xsl:variable>
+        <xsl:variable name="periodetitle">
+          <xsl:copy-of select="concat(xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_from']/text(),' - ',xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_until']/text())" />
+        </xsl:variable>
+        <xsl:variable name="additionalTitle">
+          <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/subtitles/subtitle/text()" />
+        </xsl:variable>
 
         <html>
             <head>
                 <xsl:call-template name="jp.layout.getHTMLHeader">
-                    <xsl:with-param name="nameOfTemplate" select="'template_thueringen'" />
+                    <xsl:with-param name="nameOfTemplate" select="'template_thLegislativExekutiv'" />
                 </xsl:call-template>
             </head>
             <body>
-                <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #858688;">
+                <table width="100%" height="34px" border="0" cellspacing="0" cellpadding="0" style="background-color: #858688;">
                     <tr valign="center">
                         <td style="padding-left: 10px;">
                             <div id="headline">
@@ -48,25 +54,43 @@
                     </tr>
                 </table>
 
-                <table height="179" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;">
-                  <tr>
-                    <td style="width:550px; background-image:url({$WebApplicationBaseURL}templates/master/template_thueringen/IMAGES/th_header_left.jpg); background-repeat:no-repeat;">
+                <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #bd1220;">
+                  <tr valign="left">
+                    <td style="border-color:#a19794; border-style:solid; border-top-width: 1px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px;">
                       <div id="journal-title">
-                        <xsl:copy-of select="$journalMaintitle" />
+                        <xsl:copy-of select="concat($journalMaintitle, ' ', $periodetitle, ' ', $additionalTitle)" />
                       </div>
+                    </td>
+                  </tr>
+                </table>
+
+                <table height="112" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;background:#44352e;">
+                  <tr>
+                    <td style="background-image:url({$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/header.png);
+                               background-repeat:no-repeat; width:1024px; 
+                               border-color:#a19794; border-style:solid; border-bottom-width: 1px; border-top-width: 0px;
+                               border-left-width: 0px; border-right-width: 0px;">
+                        <div id="headerBorder">
+                        </div>
+                    </td>
+                  </tr>
+                </table>
+
+                <table height="60" width="100%" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td>
                       <div id="navi_history">
                         <xsl:call-template name="navigation.history" />
                       </div>
                     </td>
+                  </tr>
+                  <tr>
                     <td>
-                      <table width="100%" height="179" cellspacing="0" >
-                        <tr><td
-                          style="background-image:url({$WebApplicationBaseURL}templates/master/template_thueringen/IMAGES/th_header_center.jpg); background-repeat:repeat-x;">
-                        </td></tr>
-                      </table>
-                    </td>
-                    <td
-                      style="width:150px; background-image:url({$WebApplicationBaseURL}templates/master/template_thueringen/IMAGES/th_header_right.jpg); background-repeat:no-repeat;">
+                      <div id="th-logo">
+                        <a href="http://www.urmel-dl.de/">
+                          <img src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/thLogo.png" width="117" height="49" border="0" />
+                        </a>
+                      </div>
                     </td>
                   </tr>
                 </table>
@@ -83,7 +107,7 @@
                                     <!-- use pixel values -->
                                     <xsl:with-param name="columnWidthIcon" select="'9'"/>
                                     <!-- use percent values -->
-                                    <xsl:with-param name="spaceBetweenMainLinks" select="'2'"/>
+                                    <xsl:with-param name="spaceBetweenMainLinks" select="'4'"/>
                                     <!-- use pixel values -->
                                     <xsl:with-param name="borderWidthTopDown" select="'15'"/>
                                     <!-- use pixel values -->
@@ -91,10 +115,25 @@
                                     <!-- use percent values -->
                                   </xsl:call-template>
                                 </div>
-                                <!-- are special logos for current used journal available ? -> if yes, get them -->
-                                <xsl:call-template name="template_logos.getLogos">
-                                    <xsl:with-param name="journalsID" select="$journalID" />
-                                </xsl:call-template>
+
+                                <div id="logo-thulb">
+                                    <a href="http://www.thulb.uni-jena.de/" 
+                                       onmouseover="hover1.src='{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/thulb_logo_hover.png'"
+                                       onmouseout="hover1.src='{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/thulb_logo.png'" >
+                                       <img name="hover1" src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/thulb_logo.png"
+                                            width="85" height="30" border="0">
+                                       </img>
+                                    </a>
+                                </div>
+                                <div id="logo-archive">
+                                    <a href="http://www.thueringen.de/de/staatsarchive/" 
+                                       onmouseover="hover2.src='{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/archive_logo.png'"
+                                       onmouseout="hover2.src='{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/archive_logo.png'" >
+                                       <img name="hover2" src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/archive_logo.png"
+                                            width="106" height="30" border="0">
+                                       </img>
+                                    </a>
+                                </div>
                             </td>
                             <td width="max" valign="top" style="height: 12px">
                                 <xsl:text> </xsl:text>
@@ -107,7 +146,7 @@
                             <td width="max" valign="top" style="height: 500px;">
                                 <div id="contentArea">
                                     <div id="contentWrapper">
-                                        <xsl:call-template name="template_thueringen.write.content" />
+                                        <xsl:call-template name="template_thLegislativExekutiv.write.content" />
                                     </div>
                                 </div>
                             </td>
@@ -119,12 +158,12 @@
     </xsl:template>
 
     <!-- Template for Content ================================================================================== -->
-    <xsl:template name="template_thueringen.write.content">
+    <xsl:template name="template_thLegislativExekutiv.write.content">
         <xsl:call-template name="jp.layout.getHTMLContent" />
     </xsl:template>
 
     <!-- Template for User info ================================================================================ -->
-    <xsl:template name="template_thueringen.userInfo">
+    <xsl:template name="template_thLegislativExekutiv.userInfo">
 
         <!-- BEGIN: login values -->
         <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="LoginURL"
@@ -136,7 +175,7 @@
                 <td class="login_window">
                     <!-- Login-Button / 2 Pfeile =================================== -->
                     <a href="{$LoginURL}">
-                        <img src="{$WebApplicationBaseURL}templates/master/template_thueringen/IMAGES/login-switch.gif" border="0" />
+                        <img src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/IMAGES/login-switch.gif" border="0" />
                     </a>
                 </td>
                 <td class="login_text">

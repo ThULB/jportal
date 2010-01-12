@@ -180,10 +180,8 @@ div.main_menu {
 #navi_history{
 	color: #646567;
 	font-family: Verdana;
-	font-weight: bold;
-	left: 214px;
-	position: absolute;
-	top: 133px;
+	padding-left: 214px;
+	padding-top: 8px;
 }
 
 #navi_history a
@@ -219,7 +217,7 @@ div.main_menu {
 
 #navi_main_active
 {
-	background-color: #0089bf;
+	background-color: #BD1220;
 	color: white;
 }
 
@@ -268,11 +266,11 @@ font-size: 11px;
 {
 	font-weight: bold;
 	padding-top:5px;
-	padding-left: 15px;
+	padding-left: 16px;
 	display: block;
-	background-color: #ebebec;	
+	background-color: #e1dcd6;	
     color:  #646567;
-    width: 168px;
+    width: 160px;
     text-decoration: none;
     font-family:verdana;
 	height:20px;
@@ -283,7 +281,7 @@ font-size: 11px;
 .navi_main th a:hover
 {
     text-decoration: none;  
-    background-color: #00abf0;
+    background-color: #e21526;
     color: white;
 }
 
@@ -291,7 +289,7 @@ font-size: 11px;
 {
 	font-weight: bold;
     text-decoration: none;
-    background-color: #00abf0;
+    background-color: #e21526;
 }
 
 .navi_main td a
@@ -303,7 +301,7 @@ font-size: 11px;
 .navi_main td a:hover
 {
     font-weight : normal;	
-    color:  #00abf0;
+    color:  #e21526;
     text-decoration: none;
 }
 
@@ -323,7 +321,7 @@ font-size: 11px;
 	padding-top: 3px;
 	padding-left: 3px;
 	display: block;
-	background-color: #00abf0;
+	background-color: #e21526;
     color:  #646567;
     width: 100%;
     height: 18px;
