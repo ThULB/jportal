@@ -26,10 +26,6 @@
     <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalStartEditorServlet</servlet-class>
 </servlet>
-<servlet id="MCRJPortalSearchServlet">
-    <servlet-name>MCRJPortalSearchServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalSearchServlet</servlet-class>
-</servlet>
 <servlet id="MCRJPortalCheckCommitDataServlet">
     <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet</servlet-class>
@@ -46,13 +42,6 @@
     <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
     <servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet</servlet-class>
 </servlet>
-
-
-
-<servlet-mapping>
-    <servlet-name>MCRJPortalSearchServlet</servlet-name>
-    <url-pattern>/servlets/MCRSearchServlet/*</url-pattern>
-</servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
     <url-pattern>/servlets/MCRJPortalStartEditorServlet/*</url-pattern>

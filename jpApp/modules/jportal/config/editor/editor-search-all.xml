@@ -3,7 +3,7 @@
 
 <editor id="search-all">
 
-    <target type="servlet" name="MCRJPortalSearchServlet" method="post" format="xml" />
+    <target type="servlet" name="MCRSearchServlet" method="post" format="xml" />
     <validationMessage>
         <label xml:lang="de">Bitte Suchbegriff eingeben!</label>
         <label xml:lang="en">Please, enter a search subject!</label>

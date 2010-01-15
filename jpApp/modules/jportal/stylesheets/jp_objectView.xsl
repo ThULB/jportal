@@ -219,7 +219,7 @@
 						</xsl:call-template>
 					</xsl:variable>
 					<xsl:variable name="siblings"
-						select="document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
+						select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
 					<xsl:variable name="currentNode">
 						<xsl:copy-of select="$siblings/mcr:results/mcr:hit[@id=$currentID]" />
 					</xsl:variable>
@@ -441,7 +441,7 @@
 		</xsl:variable>
 
 		<xsl:variable name="children"
-			select="document(concat('jportal_query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
+			select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
 		<xsl:call-template name="printTOCNavi">
 			<xsl:with-param name="location" select="'navi'" />
 			<xsl:with-param name="childrenKinds" select="$kindOfChildren2" />
@@ -981,7 +981,7 @@
 				select="encoder:encode(concat('(objectType = jparticle) and (link = ', /mycoreobject/@ID, ')'))" />
 		</xsl:variable>
 		<xsl:variable name="linkedArt"
-			select="document(concat('jportal_query:term=',$mcrSql))" />
+			select="document(concat('query:term=',$mcrSql))" />
 		<xsl:variable name="OID">
 			<xsl:call-template name="typeOfObjectID">
 				<xsl:with-param name="id" select="/mycoreobject/@ID" />
@@ -1050,7 +1050,7 @@
 				select="encoder:encode(concat('(objectType = jpjournal) and (contentClassi1 = calendar) and (link = ', /mycoreobject/@ID, ')'))" />
 		</xsl:variable>
 		<xsl:variable name="linkedCal"
-			select="document(concat('jportal_query:term=',$mcrSql))" />
+			select="document(concat('query:term=',$mcrSql))" />
 		<xsl:variable name="OID">
 			<xsl:call-template name="typeOfObjectID">
 				<xsl:with-param name="id" select="/mycoreobject/@ID" />

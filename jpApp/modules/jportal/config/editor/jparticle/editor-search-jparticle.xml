@@ -1,6 +1,6 @@
 <editor id="searchmask">
 
-    <target format="xml" method="post" name="MCRJPortalSearchServlet" type="servlet" />
+    <target format="xml" method="post" name="MCRSearchServlet" type="servlet" />
     <components var="/query" root="root">
 
         <panel lines="off" id="root">
