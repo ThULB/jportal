@@ -8,6 +8,10 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.parsers.bool.MCRCondition;
 
+/**
+ * @author "Huu Chi Vu"
+ *
+ */
 public class JPQueryEngine extends MCRDefaultQueryEngine {
     @Override
     public MCRResults search(MCRQuery query, boolean comesFromRemoteHost) {
