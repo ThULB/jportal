@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="mycore/components/useradmin/sources"/>
+	<classpathentry kind="src" path="mycore/tests"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/tests/src"/>
 	<classpathentry kind="src" path="mycore/components/buildtools/sources"/>
 	<classpathentry kind="src" path="mycore/components/webservices/sources"/>
@@ -90,5 +91,9 @@
 	<classpathentry kind="lib" path="mycore/components/webservices/lib/wsdl4j-1.5.1.jar"/>
 	<classpathentry kind="lib" path="mycore/components/webservices/lib/wss4j.jar"/>
 	<classpathentry kind="lib" path="mycore/components/webservices/lib/xmlsec-1.2.1.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/easymock-2.5.2.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/easymockclassextension.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jai_codec.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jai_core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
