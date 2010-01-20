@@ -321,7 +321,9 @@
 			<path refid="application.classpath"/>
 			<fileset dir="${env.JPORTAL_HOME}/lib" includes="*.jar" />
 		</path>
-		<javac srcdir="${env.JPORTAL_HOME}/sources" destdir="${build.classes}" includes="${packages}" classpathref="jportal.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
+		<javac destdir="${build.classes}" includes="${packages}" classpathref="jportal.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
+			<src path="${env.JPORTAL_HOME}/sources"/>
+			<src path="${env.JPORTAL_HOME}/components/mycore-importer/src/main/java"/>
 		</javac>
 	</target>
 

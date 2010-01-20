@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="mycore/components/useradmin/sources"/>
+	<classpathentry kind="src" path="jpApp/modules/jportal/components/mycore-importer/src/main/java"/>
+	<classpathentry kind="src" path="jpApp/modules/jportal/components/mycore-importer/src/test/java"/>
 	<classpathentry kind="src" path="mycore/tests"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/tests/src"/>
 	<classpathentry kind="src" path="mycore/components/buildtools/sources"/>
