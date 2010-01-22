@@ -20,23 +20,31 @@ public class JPQueryEngine extends MCRDefaultQueryEngine {
         return super.search(query, comesFromRemoteHost);
     }
     
+    /**
+     * Splits the string of a query field into an and-condition.
+     * E.g. anyname="Max Mueller" --> (anyname="Max") and (anyname=Mueller) 
+     * @param query
+     * @return
+     */
     protected MCRQuery splitCondition(MCRQuery query) {
-        try {
-            String fieldName = MCRConfiguration.instance().getString("MCR.IndexBrowser.jpperson_sub.Searchfield");
-            Document queryXML = query.buildXML();
-            Element condElem = (Element) XPath.selectSingleNode(queryXML, "//condition[@field='"+fieldName+"']");
-            if (condElem != null) {
-                MCRAndCondition andCondition = createSplittedCond(condElem);
-                
-                Element parentElement = condElem.getParentElement();
-                condElem.detach();
-                parentElement.addContent(andCondition.toXML());
-                query = MCRQuery.parseXML(queryXML);
+        if (query != null) {
+            try {
+                String fieldName = MCRConfiguration.instance().getString("MCR.IndexBrowser.jpperson_sub.Searchfield");
+                Document queryXML = query.buildXML();
+                Element condElem = (Element) XPath.selectSingleNode(queryXML, "//condition[@field='" + fieldName + "']");
+                if (condElem != null) {
+                    MCRAndCondition andCondition = createSplittedCond(condElem);
+
+                    Element parentElement = condElem.getParentElement();
+                    condElem.detach();
+                    parentElement.addContent(andCondition.toXML());
+                    query = MCRQuery.parseXML(queryXML);
+                }
+            } catch (JDOMException e) {
+                e.printStackTrace();
             }
-        } catch (JDOMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
+        
         return query;
     }
 
