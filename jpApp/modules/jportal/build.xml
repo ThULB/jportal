@@ -149,23 +149,27 @@
         </echo>
 		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
 		<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
-		<antcall target="override.components"></antcall>
+		<antcall target="override.components">
+		</antcall>
 	</target>
-	
+
 	<target name="override.components">
-		<antcall target="override.iview"></antcall>
+		<antcall target="override.iview">
+		</antcall>
 	</target>
-	
+
 	<target name="override.iview">
 		<echo>Override Iview Components with ${module.dir}/components/iview</echo>
 		<copy todir="${build.webapps}/modules/iview" overwrite="true">
-			<fileset dir="${module.dir}/components/iview/web/modules/iview"></fileset>
+			<fileset dir="${module.dir}/components/iview/web/modules/iview">
+			</fileset>
 		</copy>
 		<copy todir="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
-			<fileset dir="${module.dir}/components/iview/xsl" includes="*.xsl"></fileset>
+			<fileset dir="${module.dir}/components/iview/xsl" includes="*.xsl">
+			</fileset>
 		</copy>
 	</target>
-	
+
 	<!-- ============================================== -->
 
 	<target name="jp.webapps.inside">
@@ -308,9 +312,9 @@
 
 	<target name="JPortalLib">
 		<echo>Copy JPortal Libs...</echo>
-								<copy todir="${build.lib}" preservelastmodified="true">
+		<copy todir="${build.lib}" preservelastmodified="true">
 			<fileset dir="${env.JPORTAL_HOME}/lib" includes="*.jar" />
-								</copy>
+		</copy>
 	</target>
 
 	<!-- =================================================================== -->
@@ -318,12 +322,12 @@
 	<target name="javac" depends="init">
 		<echo>Compiling ${packages}</echo>
 		<path id="jportal.classpath">
-			<path refid="application.classpath"/>
+			<path refid="application.classpath" />
 			<fileset dir="${env.JPORTAL_HOME}/lib" includes="*.jar" />
 		</path>
 		<javac destdir="${build.classes}" includes="${packages}" classpathref="jportal.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
-			<src path="${env.JPORTAL_HOME}/sources"/>
-			<src path="${env.JPORTAL_HOME}/components/mycore-importer/src/main/java"/>
+			<src path="${env.JPORTAL_HOME}/sources" />
+			<src path="${env.JPORTAL_HOME}/components/mycore-importer/src/main/java" />
 		</javac>
 	</target>
 
