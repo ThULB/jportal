@@ -26,7 +26,7 @@
         </element>
         <!-- 03 - participants -->
         <!-- for @types watch jportal_class_00000007 -->
-        <element name="participants" minOccurs='1' maxOccurs='1'>
+        <element name="participants" minOccurs='0' maxOccurs='1'>
             <mcrmetalinkid name="participant" class="MCRMetaLinkID" minOccurs='1' maxOccurs='unbounded' />
         </element>
         <!-- date -->

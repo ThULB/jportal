@@ -3,6 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
 	ID="jportal_person_00000009" label="jportal_person_00000009" version="2.0"
 	xsi:noNamespaceSchemaLocation="datamodel-person.xsd">
+	<structure/>
 	<metadata xml:lang="de">
 		<def.heading class="MCRMetaXML" heritable="true"
 			notinherit="true">
@@ -34,4 +35,5 @@
 			<gender inherited="0" classid="urmel_class_00000001" categid="male" />
 		</def.gender>
 	</metadata>
+	<service/>
 </mycoreobject>
