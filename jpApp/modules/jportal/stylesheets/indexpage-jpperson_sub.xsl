@@ -8,7 +8,7 @@
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder">
 
     <xsl:variable name="MainTitle" select="i18n:translate('indexpage.sub.maintitle')" />
-    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle.institution')" />
+    <xsl:variable name="PageTitle" select="i18n:translate('indexpage.sub.pagetitle.person')" />
     <xsl:variable name="Servlet" select="'MCRIndexBrowserServlet'" />
     <xsl:include href="MyCoReLayout.xsl" />
     <xsl:include href="indexpage-common.xsl" />
