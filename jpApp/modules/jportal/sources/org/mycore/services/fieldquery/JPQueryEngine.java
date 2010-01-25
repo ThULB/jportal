@@ -52,6 +52,7 @@ public class JPQueryEngine extends MCRDefaultQueryEngine {
         String field = condElem.getAttributeValue("field");
         String operator = condElem.getAttributeValue("operator");
         String value = condElem.getAttributeValue("value");
+        value = value.replaceAll(",", "");
         String[] splittedValue = value.split(" ");
         
         MCRFieldDef fieldDef = MCRFieldDef.getDef(field); 
