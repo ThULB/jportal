@@ -1,4 +1,4 @@
-package org.mycore.dataimport.pica.thulb;
+package org.mycore.dataimport.pica.gbv;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,11 +7,11 @@ import org.mycore.dataimport.pica.MCRPicaCatalog;
 import org.mycore.dataimport.pica.MCRPicaConnector;
 
 /**
- * The thulb catalog. The connection is made to "http://gso.gbv.de/sru/DB=2.1".
+ * The gbv catalog. The connection is made to "http://gso.gbv.de/sru/DB=2.1".
  *
  * @author Matthias Eichner
  */
-public class MCRThulbCatalog extends MCRPicaCatalog {
+public class MCRGbvCatalog extends MCRPicaCatalog {
 
     @Override
     protected MCRPicaConnector getConnector(String query) throws MalformedURLException {

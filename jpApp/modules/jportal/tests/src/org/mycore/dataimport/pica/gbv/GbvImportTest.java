@@ -1,4 +1,4 @@
-package org.mycore.dataimport.pica.thulb;
+package org.mycore.dataimport.pica.gbv;
 
 import java.io.File;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.mycore.dataimport.pica.MCRPicaCatalog.RecordSchema;
 import org.mycore.importer.MCRImportRecord;
 import org.mycore.importer.mapping.MCRImportMappingManager;
 
-public class ThulbImportTest extends MCRTestCase {
+public class GbvImportTest extends MCRTestCase {
 
     @Override
     protected void setUp() throws Exception {
@@ -20,7 +20,7 @@ public class ThulbImportTest extends MCRTestCase {
     public static void testThulbShort() throws Exception {
         String query = "pica.all+%3D+%22Musikalisches+Wochenblatt%22";
 
-        MCRThulbCatalog thulbCatalog = new MCRThulbCatalog();
+        MCRGbvCatalog thulbCatalog = new MCRGbvCatalog();
         thulbCatalog.setRecordSchema(RecordSchema.pica_b);
         thulbCatalog.addRecordFilter(new MCRPicaJournalFilter());
         List<MCRImportRecord> recordList = thulbCatalog.getCatalogData(query, "short_journal");
@@ -30,7 +30,7 @@ public class ThulbImportTest extends MCRTestCase {
         // pica.ppn+%3D+%22129473383%22
         String query = "pica.all+%3D+%22Musikalisches+Wochenblatt%22";
 
-        MCRThulbCatalog thulbCatalog = new MCRThulbCatalog();
+        MCRGbvCatalog thulbCatalog = new MCRGbvCatalog();
         thulbCatalog.addRecordFilter(new MCRPicaJournalFilter());
         List<MCRImportRecord> recordList = thulbCatalog.getCatalogData(query, "journal");
 

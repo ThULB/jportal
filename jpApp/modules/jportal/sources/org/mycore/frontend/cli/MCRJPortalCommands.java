@@ -41,6 +41,9 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         
         com = new MCRCommand("start gbv sru pica import", "org.mycore.dataimport.pica.MCRGbvSruImportCommand.gbcSruImport", "");
         command.add(com);
+
+        com = new MCRCommand("import journals with mapping file {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.importJournals String", "");
+        command.add(com);
     }
 
     public static void exportBlob(String objectID, String file) {
