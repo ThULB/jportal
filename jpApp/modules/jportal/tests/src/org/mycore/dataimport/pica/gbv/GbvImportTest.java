@@ -35,7 +35,7 @@ public class GbvImportTest extends MCRTestCase {
         List<MCRImportRecord> recordList = thulbCatalog.getCatalogData(query, "journal");
 
         MCRImportMappingManager mappingManager = MCRImportMappingManager.getInstance();
-        mappingManager.init(new File("/home/matthias/pica-import/mapping/thulb-catalog.xml"));
+        mappingManager.init(new File("jpApp/modules/jportal/config/import/gbv-catalog.xml"));
 
         mappingManager.startMapping(recordList);
     }
