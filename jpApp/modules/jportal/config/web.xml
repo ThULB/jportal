@@ -6,14 +6,6 @@
     <servlet-name>MCRDuplicateFinderServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRDuplicateFinderServlet</servlet-class>
 </servlet>
-<servlet id="MCRRecycleBinServlet">
-    <servlet-name>MCRRecycleBinServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinServlet</servlet-class>
-</servlet>
-<servlet id="MCRRecycleBinPageGenerationServlet">
-    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinPageGenerationServlet</servlet-class>
-</servlet>
 <servlet id="MCRJPortalCreateContext">
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet</servlet-class>
@@ -53,14 +45,6 @@
 <servlet-mapping>
     <servlet-name>MCRDuplicateFinderServlet</servlet-name>
     <url-pattern>/servlets/MCRDuplicateFinderServlet/*</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>MCRRecycleBinServlet</servlet-name>
-    <url-pattern>/servlets/MCRRecycleBinServlet/*</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
-    <url-pattern>/recycleBin.xml</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>

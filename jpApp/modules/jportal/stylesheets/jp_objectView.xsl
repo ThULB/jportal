@@ -1713,7 +1713,7 @@
 					<xsl:variable name="derivateID"
 						select="substring-before(/mycoreobject/metadata/ifsLinks/ifsLink/text(),'/')" />
 					<xsl:variable name="derivateObj"
-						select="document(concat('mcrobject:',$derivateID))" />
+						select="document(concat('notnull:mcrobject:',$derivateID))" />
 					<xsl:variable name="isDeleted">
 						<xsl:call-template name="isFlagSet">
 							<xsl:with-param name="path" select="$derivateObj/mycorederivate" />

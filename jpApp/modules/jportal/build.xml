@@ -6,9 +6,15 @@
 	<import file="${basedir}/common-modules.xml" />
 	<property name="env.MYJPORTAL_HOME" value="${MCR.Modules.BaseDir}/myjportal/modules/jportal" />
 	<property name="env.JPORTAL_HOME" value="${MCR.Modules.BaseDir}/modules/jportal" />
+	<property name="JPComponentsDir" value="${env.JPORTAL_HOME}/components" />
 	<property name="module.base" value="jportal" />
 	<property name="module.dir" value="${MCR.Modules.BaseDir}/modules/${module.base}" />
 	<property name="objectTypes" value="person,jpinst,jpjournal,jpvolume,jparticle" />
+
+	<path id="sources.path">
+		<dirset dir="${env.JPORTAL_HOME}" includes="sources" />
+		<dirset dir="${JPComponentsDir}" includes="**/src/main/java" />
+	</path>
 
 	<!-- ============================================== -->
 	<target name="usage">
@@ -73,6 +79,15 @@
 		<!-- merge mycore.properties-->
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.JPORTAL_HOME}/config/mycore.properties" />
 		<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="${env.MYJPORTAL_HOME}/config/mycore.properties" />
+
+		<for param="mycore.properties.file">
+			<fileset id="mycore.properties.components" dir="${JPComponentsDir}">
+				<include name="**/src/main/resources/config/mycore.properties" />
+			</fileset>
+			<sequential>
+				<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="@{mycore.properties.file}" />
+			</sequential>
+		</for>
 
 		<!-- merge searchfields.xml -->
 		<xmltask source="${build.config}/searchfields.xml" dest="${build.config}/searchfields.xml">
@@ -185,6 +200,16 @@
 		<antcall target="do.merge">
 			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
 		</antcall>
+		<for param="web.xml.file">
+			<fileset id="web.xml.components" dir="${JPComponentsDir}">
+				<include name="**/src/main/resources/config/web.xml" />
+			</fileset>
+			<sequential>
+				<antcall target="do.merge">
+					<param name="web.xml.file" value="@{web.xml.file}" />
+				</antcall>
+			</sequential>
+		</for>
 
 		<!-- webpages stuff -->
 		<antcall target="jp.webapps.copyWebPages">
@@ -258,14 +283,49 @@
 			<param name="module" value="${module.dir}/config/messages_de.properties" />
 			<param name="locale_param" value="de" />
 		</antcall>
+		<for param="message.properties.file">
+			<fileset id="message.properties.components" dir="${JPComponentsDir}">
+				<include name="**/src/main/resources/localization/messages_de.properties" />
+			</fileset>
+			<sequential>
+				<antcall target="properties.merge">
+					<param name="module" value="@{message.properties.file}" />
+					<param name="locale_param" value="de" />
+				</antcall>
+			</sequential>
+		</for>
+
 		<antcall target="properties.merge">
 			<param name="module" value="${module.dir}/config/messages_en.properties" />
 			<param name="locale_param" value="en" />
 		</antcall>
+		<for param="message.properties.file">
+			<fileset id="message.properties.components" dir="${JPComponentsDir}">
+				<include name="**/src/main/resources/localization/messages_en.properties" />
+			</fileset>
+			<sequential>
+				<antcall target="properties.merge">
+					<param name="module" value="@{message.properties.file}" />
+					<param name="locale_param" value="en" />
+				</antcall>
+			</sequential>
+		</for>
+		
 		<antcall target="properties.merge">
 			<param name="module" value="${module.dir}/config/messages_pl.properties" />
 			<param name="locale_param" value="pl" />
 		</antcall>
+		<for param="message.properties.file">
+			<fileset id="message.properties.components" dir="${JPComponentsDir}">
+				<include name="**/src/main/resources/localization/messages_pl.properties" />
+			</fileset>
+			<sequential>
+				<antcall target="properties.merge">
+					<param name="module" value="@{message.properties.file}" />
+					<param name="locale_param" value="pl" />
+				</antcall>
+			</sequential>
+		</for>
 
 		<antcall target="properties.merge">
 			<param name="module" value="${env.MYJPORTAL_HOME}/config/messages_de.properties" />
@@ -292,6 +352,7 @@
 		<!-- webpages stuff to "webapps" -->
 		<copy todir="${build.webapps}" failonerror="false">
 			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
+			<fileset dir="${JPComponentsDir}" includes="**/src/main/resources/xml/*.xml" />
 		</copy>
 	</target>
 	<!-- =================================================================== -->
@@ -299,6 +360,7 @@
 	<target name="jp.webapps.copyXSL">
 		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" failonerror="false">
 			<fileset dir="${sourcedir.XSL}" includes="**/*.xsl" />
+			<fileset dir="${JPComponentsDir}" includes="**/src/main/resources/xsl/*.xsl" />
 		</copy>
 	</target>
 	<!-- =================================================================== -->
@@ -326,8 +388,7 @@
 			<fileset dir="${env.JPORTAL_HOME}/lib" includes="*.jar" />
 		</path>
 		<javac destdir="${build.classes}" includes="${packages}" classpathref="jportal.classpath" debug="${debug}" optimize="${optimize}" target="${javatarget}" source="${sourcerelease}" encoding="${sourceencoding}" deprecation="${deprecation}">
-			<src path="${env.JPORTAL_HOME}/sources" />
-			<src path="${env.JPORTAL_HOME}/components/mycore-importer/src/main/java" />
+			<src refid="sources.path" />
 		</javac>
 	</target>
 
