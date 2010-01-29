@@ -1,12 +1,8 @@
 package org.mycore.services.fieldquery;
 
-import java.io.IOException;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.parsers.bool.MCRAndCondition;
