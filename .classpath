@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="mycore/components/useradmin/sources"/>
+	<classpathentry kind="src" path="jpApp/modules/jportal/components/recycle-bin/src/main/java"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/components/mycore-importer/src/main/java"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/components/mycore-importer/src/test/java"/>
 	<classpathentry kind="src" path="mycore/tests"/>
@@ -24,6 +25,7 @@
 	<classpathentry kind="src" path="mycore/components/swf/sources"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/sources"/>
 	<classpathentry kind="src" path="mycore/components/classbrowser/sources"/>
+	<classpathentry kind="src" path="jpApp/modules/jportal/components/data-importer/src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="mycore/lib/activation.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/ant-contrib.jar"/>
