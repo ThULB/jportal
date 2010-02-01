@@ -46,7 +46,7 @@
     <field name="subtitles__art_type"   type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />     
     <field name="participants_art"      type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
     <field name="participants_artQuick" type="name"      source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:label" />             
-    <field name="dates_art"             type="date"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/dates/date" value="text()" sortable="true" i18n="editormask.labels.date_label" />
+    <field name="dates_art"             type="date"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/dates/date[0]" value="text()" sortable="true" i18n="editormask.labels.date_label" />
     <field name="keywords_art"          type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editormask.labels.keyword" />
     <field name="abstracts_art"         type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editormask.labels.abstract" />
     <field name="identis_art"           type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editormask.labels.identi" />
