@@ -7,7 +7,7 @@
     <field name="subtitles_type"    type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />
     <field name="participants"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
     <field name="participants_type" type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" />     
-    <field name="dates"             type="date"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
+    <field name="dates"             type="date"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date[0]" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
     <field name="dates_type"        type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date" value="@type" />      
     <field name="classis"           type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/classis/classi" value="@ID" i18n="editor.search.document.classi" />
     <field name="abstracts"         type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editor.search.document.abstract" />
@@ -70,7 +70,7 @@
     <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
 
     <!-- Search in institutions metadata -->
-    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" addable="true" i18n="editor.search.jpinst.label" />
+    <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname[0]" value="text()" sortable="true" addable="true" i18n="editor.search.jpinst.label" />
 
     <!-- Search in person metadata -->
     <field name="headingFirstName"  type="name" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.heading/heading" value="firstName" sortable="true" addable="true" i18n="editor.search.person.firstName" />
