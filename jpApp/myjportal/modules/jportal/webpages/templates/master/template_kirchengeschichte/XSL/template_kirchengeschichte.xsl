@@ -45,7 +45,7 @@
 						<table height="146" width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td style="background-image:url({$WebApplicationBaseURL}templates/master/template_kirchengeschichte/IMAGES/header.png);
-	                               background-repeat:no-repeat; background-position:center; width:1024px;">
+	                               background-repeat:no-repeat; background-position:196px; width:1024px;">
 	                          		<div id="navi_history">
 										<xsl:call-template name="navigation.history" />
 									</div>
