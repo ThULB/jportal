@@ -124,6 +124,9 @@ html, body {
 	width: 154px;
 }
 
+#poweredByMycore img {
+    width: 0px;
+}
 
 #contentWrapper{
 	width: 98%;
