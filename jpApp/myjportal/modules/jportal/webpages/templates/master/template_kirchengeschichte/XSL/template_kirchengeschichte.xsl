@@ -95,9 +95,19 @@
                                        </img>
                                     </a>
                                 </div>
-                                <div id="logo-kirchengeschichte">
+                                <div id="logo-text">
                                     <a href="http://www.uni-jena.de/kirchengeschichte-p-138.html"> 
                                        Lehrstuhl für Kirchengeschichte
+                                    </a>
+                                </div>
+                                <div id="logo-text">
+                                    <a href="http://www.urmel-dl.de/content/main/misc/electoralis.xml"> 
+                                       DFG-Projekt Bibliotheca Electoralis
+                                    </a>
+                                </div>
+                                <div id="logo-text">
+                                    <a href="http://www.urmel-dl.de/content/main/collections/roerer.xml"> 
+                                       DFG-Projekt Sammlung Georg Rörer
                                     </a>
                                 </div>
                             </td>

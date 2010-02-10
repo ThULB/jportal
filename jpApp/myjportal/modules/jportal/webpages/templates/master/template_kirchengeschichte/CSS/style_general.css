@@ -108,7 +108,7 @@ html, body {
 	width: 154px;
 }
 
-#logo-kirchengeschichte {
+#logo-text {
 	border-style:solid;
 	border-color: #E1D7D0;
 	border-top-width:0px;
@@ -121,12 +121,12 @@ html, body {
 	width: 154px;
 }
 
-#logo-kirchengeschichte a {
+#logo-text a {
 	color: #959698;
 	text-decoration:none;	
 }
 
-#logo-kirchengeschichte a:hover {
+#logo-text a:hover {
 	color:black;
 }
 
