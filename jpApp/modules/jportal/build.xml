@@ -82,7 +82,7 @@
 
 		<for param="mycore.properties.file">
 			<fileset id="mycore.properties.components" dir="${JPComponentsDir}">
-				<include name="**/src/main/resources/config/mycore.properties" />
+				<include name="**/src/main/config/mycore.properties" />
 			</fileset>
 			<sequential>
 				<mcr-config propertyfile="${build.config}/mycore.properties" mergeFile="@{mycore.properties.file}" />
@@ -106,6 +106,7 @@
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRJPortalPageGenCommands" />
 		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MCRContentTools" />
+		<mcr-config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.redundancy.cli.MCRRedundancyCommands" />
 	</target>
 
 	<!-- =================================================================== -->
@@ -202,7 +203,7 @@
 		</antcall>
 		<for param="web.xml.file">
 			<fileset id="web.xml.components" dir="${JPComponentsDir}">
-				<include name="**/src/main/resources/config/web.xml" />
+				<include name="**/src/main/config/web.xml" />
 			</fileset>
 			<sequential>
 				<antcall target="do.merge">
