@@ -1675,10 +1675,8 @@
 		<!-- links  -->
 		<xsl:choose>
 			<xsl:when test="$knoten != '' and not(mcr:metaData)">
-				<xsl:if
-					test="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
-					<xsl:variable name="derivateID"
-						select="substring-before(xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink/text(),'/')" />
+				<xsl:for-each select="$knoten/mycoreobject/metadata/ifsLinks/ifsLink">
+					<xsl:variable name="derivateID" select="substring-before(./text(),'/')" />
 					<xsl:variable name="derivateObj"
 						select="document(concat('mcrobject:',$derivateID))" />
 					<xsl:variable name="isDeleted">
@@ -1692,21 +1690,18 @@
 							<td id="leaf-additional">
 								<xsl:call-template name="lineSpace" />
 								<table cellpadding="0" cellspacing="0">
-									<xsl:for-each
-										select="xalan:nodeset($knoten)/mycoreobject/metadata/ifsLinks/ifsLink">
-										<xsl:apply-templates select=".">
-											<xsl:with-param name="objID" select="$obj_id" />
-										</xsl:apply-templates>
-										<xsl:if test="position()!=last()">
-											<xsl:copy-of select="', '" />
-											<xsl:call-template name="lineSpace" />
-										</xsl:if>
-									</xsl:for-each>
+									<xsl:apply-templates select=".">
+										<xsl:with-param name="objID" select="$obj_id" />
+									</xsl:apply-templates>
+									<xsl:if test="position()!=last()">
+										<xsl:copy-of select="', '" />
+										<xsl:call-template name="lineSpace" />
+									</xsl:if>
 								</table>
 							</td>
 						</tr>
 					</xsl:if>
-				</xsl:if>
+				</xsl:for-each>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
