@@ -1711,7 +1711,7 @@
 			<xsl:otherwise>
 				<xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
 					<xsl:variable name="derivateID"
-						select="substring-before(/mycoreobject/metadata/ifsLinks/ifsLink/text(),'/')" />
+						select="substring-before(./text(),'/')" />
 					<xsl:variable name="derivateObj"
 						select="document(concat('notnull:mcrobject:',$derivateID))" />
 					<xsl:variable name="isDeleted">
