@@ -1611,65 +1611,105 @@
 			</xsl:when>
 			<!-- search result list -->
 			<xsl:otherwise>
-				<xsl:if test="xalan:nodeset($knoten)/mycoreobject/structure/derobjects">
-					<tr>
-						<td id="leaf-additional">
-							<xsl:call-template name="lineSpace" />
-							<table cellpadding="0" cellspacing="0">
-								<xsl:value-of select="i18n:translate('metaData.derivate.plural')" />
-								<xsl:choose>
-									<!-- fulltext hit -->
-									<xsl:when test="mcr:metaData">
-										<xsl:for-each select="mcr:metaData">
-											<xsl:apply-templates select=".">
-												<xsl:with-param name="objID" select="$obj_id" />
-												<xsl:with-param name="objectXML" select="$knoten" />
-											</xsl:apply-templates>
-											<xsl:copy-of select="' (Treffer im Volltext)'" />
-											<xsl:if test="position() != last()">
-												<xsl:copy-of select="' '" />
-												<xsl:call-template name="lineSpace" />
-											</xsl:if>
-										</xsl:for-each>
-									</xsl:when>
-									<!-- hit not in fulltext -->
-									<xsl:otherwise>
-										<xsl:for-each
-											select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
-											<xsl:variable name="deriv" select="@xlink:href" />
-											<xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
-											<xsl:variable name="derivate" select="document($derivlink)" />
-											<xsl:variable name="isDeleted">
-												<xsl:call-template name="isFlagSet">
-													<xsl:with-param name="path"
-														select="$derivate/mycorederivate" />
-													<xsl:with-param name="flagName" select="'deleted'" />
-												</xsl:call-template>
-											</xsl:variable>
-											<xsl:if test="$isDeleted != 'true'">
+				<xsl:for-each select="$knoten/mycoreobject/structure/derobjects/derobject">
+					<xsl:variable name="derivID"
+						select="./@xlink:href" />
+					<xsl:variable name="derivateObj"
+						select="document(concat('mcrobject:',$derivID))" />
+					<xsl:variable name="isDeleted">
+						<xsl:call-template name="isFlagSet">
+							<xsl:with-param name="path"
+								select="$derivateObj/mycorederivate" />
+							<xsl:with-param name="flagName"
+								select="'deleted'" />
+						</xsl:call-template>
+					</xsl:variable>
+					<xsl:if
+						test="($knoten/mycoreobject/structure/derobjects) and not($isDeleted = 'true')">
+						<tr>
+							<td id="leaf-additional">
+								<xsl:call-template name="lineSpace" />
+								<table cellpadding="0"
+									cellspacing="0">
+									<xsl:value-of
+										select="i18n:translate('metaData.derivate.plural')" />
+									<xsl:value-of select="$isDeleted"></xsl:value-of>
+									<xsl:choose>
+										<!-- fulltext hit -->
+										<xsl:when test="mcr:metaData">
+											<xsl:for-each
+												select="mcr:metaData">
 												<xsl:apply-templates
-													select="$derivate/mycorederivate/derivate/internals">
-													<xsl:with-param name="objID" select="$obj_id" />
-													<xsl:with-param name="objectXML" select="$knoten" />
+													select=".">
+													<xsl:with-param
+														name="objID" select="$obj_id" />
+													<xsl:with-param
+														name="objectXML" select="$knoten" />
 												</xsl:apply-templates>
-												<xsl:apply-templates
-													select="$derivate/mycorederivate/derivate/externals">
-													<xsl:with-param name="objID" select="$obj_id" />
-													<xsl:with-param name="objectXML" select="$knoten" />
-												</xsl:apply-templates>
-												<xsl:if test="position()!=last()">
-													<xsl:copy-of select="' '">
-													</xsl:copy-of>
-													<xsl:call-template name="lineSpace" />
+												<xsl:copy-of
+													select="' (Treffer im Volltext)'" />
+												<xsl:if
+													test="position() != last()">
+													<xsl:copy-of
+														select="' '" />
+													<xsl:call-template
+														name="lineSpace" />
 												</xsl:if>
-											</xsl:if>
-										</xsl:for-each>
-									</xsl:otherwise>
-								</xsl:choose>
-							</table>
-						</td>
-					</tr>
-				</xsl:if>
+											</xsl:for-each>
+										</xsl:when>
+										<!-- hit not in fulltext -->
+										<xsl:otherwise>
+											<xsl:for-each
+												select="xalan:nodeset($knoten)/mycoreobject/structure/derobjects/derobject">
+												<xsl:variable
+													name="deriv" select="@xlink:href" />
+												<xsl:variable
+													name="derivlink" select="concat('mcrobject:',$deriv)" />
+												<xsl:variable
+													name="derivate" select="document($derivlink)" />
+												<xsl:variable
+													name="isDeleted">
+													<xsl:call-template
+														name="isFlagSet">
+														<xsl:with-param
+															name="path" select="$derivate/mycorederivate" />
+														<xsl:with-param
+															name="flagName" select="'deleted'" />
+													</xsl:call-template>
+												</xsl:variable>
+												<xsl:if
+													test="$isDeleted != 'true'">
+													<xsl:apply-templates
+														select="$derivate/mycorederivate/derivate/internals">
+														<xsl:with-param
+															name="objID" select="$obj_id" />
+														<xsl:with-param
+															name="objectXML" select="$knoten" />
+													</xsl:apply-templates>
+													<xsl:apply-templates
+														select="$derivate/mycorederivate/derivate/externals">
+														<xsl:with-param
+															name="objID" select="$obj_id" />
+														<xsl:with-param
+															name="objectXML" select="$knoten" />
+													</xsl:apply-templates>
+													<xsl:if
+														test="position()!=last()">
+														<xsl:copy-of
+															select="' '">
+														</xsl:copy-of>
+														<xsl:call-template
+															name="lineSpace" />
+													</xsl:if>
+												</xsl:if>
+											</xsl:for-each>
+										</xsl:otherwise>
+									</xsl:choose>
+								</table>
+							</td>
+						</tr>
+					</xsl:if>
+				</xsl:for-each>
 			</xsl:otherwise>
 		</xsl:choose>
 		<!-- links  -->
@@ -1705,8 +1745,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
-					<xsl:variable name="derivateID"
-						select="substring-before(./text(),'/')" />
+					<xsl:variable name="derivateID" select="substring-before(./text(),'/')" />
 					<xsl:variable name="derivateObj"
 						select="document(concat('notnull:mcrobject:',$derivateID))" />
 					<xsl:variable name="isDeleted">
@@ -1715,21 +1754,31 @@
 							<xsl:with-param name="flagName" select="'deleted'" />
 						</xsl:call-template>
 					</xsl:variable>
-					<xsl:if test="$isDeleted != 'true'">
+					<xsl:variable name="hasPermission"
+						select="acl:checkPermission($obj_id,'deletedb')" />
+					<xsl:if test="($isDeleted != 'true')">
 						<tr>
 							<td align="left" valign="top" id="detailed-links">
 								<table cellpadding="0" cellspacing="0" id="detailed-contenttable">
 									<tr>
 										<td colspan="3" style="padding-left: 10px;">
-											<xsl:apply-templates select=".">
-												<xsl:with-param name="objID" select="$obj_id" />
-											</xsl:apply-templates>
+											<xsl:choose>
+												<xsl:when test="($derivateObj/null) and $hasPermission">
+													<xsl:value-of
+														select="i18n:translate('metaData.derivate.link.sourceNotexist')" />
+												</xsl:when>
+												<xsl:when test="not($derivateObj/null)">
+													<xsl:apply-templates select=".">
+														<xsl:with-param name="objID" select="$obj_id" />
+													</xsl:apply-templates>
+												</xsl:when>
+											</xsl:choose>
 										</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
-						<xsl:if test="acl:checkPermission($obj_id,'deletedb')">
+						<xsl:if test="$hasPermission">
 							<tr>
 								<td colspan="3" width="30" valign="top" align="center">
 									<xsl:variable name="url">
