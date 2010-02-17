@@ -1611,21 +1611,28 @@
 			</xsl:when>
 			<!-- search result list -->
 			<xsl:otherwise>
-				<xsl:for-each select="$knoten/mycoreobject/structure/derobjects/derobject">
-					<xsl:variable name="derivID"
-						select="./@xlink:href" />
-					<xsl:variable name="derivateObj"
-						select="document(concat('mcrobject:',$derivID))" />
-					<xsl:variable name="isDeleted">
-						<xsl:call-template name="isFlagSet">
-							<xsl:with-param name="path"
-								select="$derivateObj/mycorederivate" />
-							<xsl:with-param name="flagName"
-								select="'deleted'" />
-						</xsl:call-template>
-					</xsl:variable>
-					<xsl:if
-						test="($knoten/mycoreobject/structure/derobjects) and not($isDeleted = 'true')">
+				<xsl:variable name="isdeletedExt">
+					<xsl:for-each
+						select="$knoten/mycoreobject/structure/derobjects/derobject">
+						<xsl:variable name="derivID"
+							select="./@xlink:href" />
+						<xsl:variable name="derivateObj"
+							select="document(concat('mcrobject:',$derivID))" />
+						<xsl:variable name="isDeleted">
+							<xsl:call-template name="isFlagSet">
+								<xsl:with-param name="path"
+									select="$derivateObj/mycorederivate" />
+								<xsl:with-param name="flagName"
+									select="'deleted'" />
+							</xsl:call-template>
+						</xsl:variable>
+						<xsl:if test="not($isDeleted = 'true')">
+							<xsl:value-of select="'false'" />
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:variable>
+				<xsl:if
+						test="($knoten/mycoreobject/structure/derobjects) and not($isdeletedExt = '')">
 						<tr>
 							<td id="leaf-additional">
 								<xsl:call-template name="lineSpace" />
@@ -1633,7 +1640,6 @@
 									cellspacing="0">
 									<xsl:value-of
 										select="i18n:translate('metaData.derivate.plural')" />
-									<xsl:value-of select="$isDeleted"></xsl:value-of>
 									<xsl:choose>
 										<!-- fulltext hit -->
 										<xsl:when test="mcr:metaData">
@@ -1709,7 +1715,6 @@
 							</td>
 						</tr>
 					</xsl:if>
-				</xsl:for-each>
 			</xsl:otherwise>
 		</xsl:choose>
 		<!-- links  -->
