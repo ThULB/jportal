@@ -2,8 +2,8 @@
 <import>
     <config>
         <projectName>jportal</projectName>
-        <datamodelPath>jpApp/modules/jportal/config/</datamodelPath>
-        <saveToPath>application/build/import/</saveToPath>
+        <datamodelPath>{MCR.basedir}/../jpApp/modules/jportal/config/</datamodelPath>
+        <saveToPath>{MCR.basedir}/build/import/</saveToPath>
         <createClassificationMapping>false</createClassificationMapping>
     </config>
 

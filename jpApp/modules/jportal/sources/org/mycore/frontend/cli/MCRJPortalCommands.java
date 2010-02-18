@@ -44,6 +44,9 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
 
         com = new MCRCommand("import journals with mapping file {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.importJournals String", "");
         command.add(com);
+        
+        com = new MCRCommand("internal create default context {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.createContext String", "");
+        command.add(com);
     }
 
     public static void exportBlob(String objectID, String file) {

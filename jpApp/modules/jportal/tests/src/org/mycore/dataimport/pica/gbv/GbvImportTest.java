@@ -3,6 +3,7 @@ package org.mycore.dataimport.pica.gbv;
 import java.io.File;
 import java.util.List;
 
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRTestCase;
 import org.mycore.dataimport.pica.MCRPicaJournalFilter;
 import org.mycore.dataimport.pica.MCRPicaCatalog.RecordSchema;
@@ -27,6 +28,7 @@ public class GbvImportTest extends MCRTestCase {
     }
 
     public static void testThulbJournalImport() throws Exception {
+        MCRConfiguration.instance().set("MCR.basedir", "application");
         // pica.ppn+%3D+%22129473383%22
         String query = "pica.all+%3D+%22Musikalisches+Wochenblatt%22";
 
