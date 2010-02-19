@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.transform.Source;
+
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -13,10 +15,13 @@ import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
@@ -47,6 +52,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 "update context of journal [journalID].");
         command.add(com);
 
+        com = new MCRCommand("move file {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.moveFile String String",
+                "move file abs. path to abs. path");
+        command.add(com);
+
     }
 
     public static void updateJournalContext(String journalID) {
@@ -58,7 +67,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         if (objType.equals("jpjournal")) {
             MCRJPortalJournalContextForWebpages.updateContext(mcrObj);
             LOGGER.info("Updated context for \"" + journalID + "\".");
-        } else{
+        } else {
             LOGGER.info(journalID + " in no journal!");
         }
 
@@ -221,5 +230,50 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
 
         return null;
+    }
+
+    public static void moveFile(String sourcePath, String destPath) {
+        MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
+
+        MCRFilesystemNode destNode;
+        if (destPath.startsWith("..")) {
+            destNode = sourceNode.getParent().getChildByPath(destPath);
+        } else {
+            destNode = getFileSystemNode(destPath);
+        }
+
+        if (destNode instanceof MCRDirectory) {
+            sourceNode.move((MCRDirectory)destNode);
+        } else {
+            LOGGER.info(destPath + " is not a directory");
+        }
+    }
+
+    private static MCRFilesystemNode getFileSystemNode(String sourcePath) {
+        String ownerID = getOwnerID(sourcePath);
+        MCRFilesystemNode root = MCRFilesystemNode.getRootNode(ownerID);
+        int pos = ownerID.length() + 1;
+        StringBuffer path = new StringBuffer(sourcePath.substring(pos));
+        if (path.length() > 1 && (path.charAt(path.length() - 1) == '/')) {
+            path.deleteCharAt(path.length() - 1);
+        }
+        MCRFilesystemNode node = ((MCRDirectory) root).getChildByPath(path.toString());
+        return node;
+    }
+
+    private static String getOwnerID(String path) {
+        StringBuffer ownerID = new StringBuffer(path.length());
+        boolean running = true;
+        for (int i = (path.charAt(0) == '/') ? 1 : 0; (i < path.length() && running); i++) {
+            switch (path.charAt(i)) {
+            case '/':
+                running = false;
+                break;
+            default:
+                ownerID.append(path.charAt(i));
+                break;
+            }
+        }
+        return ownerID.toString();
     }
 }
