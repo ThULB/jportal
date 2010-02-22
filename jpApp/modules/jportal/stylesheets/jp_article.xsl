@@ -70,7 +70,7 @@
       </tr>
       <xsl:call-template name="printDerivates">
         <xsl:with-param name="obj_id" select="@id" />
-        <xsl:with-param name="knoten" select="$cXML" />
+        <xsl:with-param name="knoten" select="xalan:nodeset($cXML)" />
       </xsl:call-template>
       <tr>
         <td>
