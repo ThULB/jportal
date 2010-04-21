@@ -369,7 +369,7 @@
 	<target name="compile" depends="JPortalLib">
 		<echo>Compiling JPortal classes...</echo>
 		<antcall target="javac">
-			<param name="packages" value="org/mycore/**" />
+			<param name="packages" value="org/*/**" />
 		</antcall>
 	</target>
 

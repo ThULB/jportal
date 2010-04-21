@@ -1,0 +1,14 @@
+
+<!-- **************************************************************** -->
+<!-- Servlets and mappings of urn assignment                          -->
+<!-- **************************************************************** -->
+
+<servlet id="MCRAddURNToObjectServlet">
+  <servlet-name>MCRAddURNToObjectServlet</servlet-name>
+  <servlet-class>org.mycore.frontend.servlets.MCRAddURNToObjectServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+  <servlet-name>MCRAddURNToObjectServlet</servlet-name>
+  <url-pattern>/servlets/MCRAddURNToObjectServlet</url-pattern>
+</servlet-mapping>
