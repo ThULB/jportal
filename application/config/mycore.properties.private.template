@@ -281,10 +281,10 @@
 # DINIspec - searchField mapping: ddc = subject, pub-type = type, doc-type=format;
 # MCR.OAI.Dini-mapping=
 
-  MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type
+# MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type
 # MCR.OAI.Setscheme.Searchfields.MCROAIProvider=format,type, subject
-  MCR.OAI.Setscheme.Classids.MCROAIProvider.format=DocPortal_class_00000006
-  MCR.OAI.Setscheme.Classids.MCROAIProvider.type=DocPortal_class_00000005
+# MCR.OAI.Setscheme.Classids.MCROAIProvider.format=DocPortal_class_00000006
+# MCR.OAI.Setscheme.Classids.MCROAIProvider.type=DocPortal_class_00000005
 # MCR.OAI.Setscheme.Classids.MCROAIProvider.subject=DocPortal_class_00000009
 
 ##############################################################################

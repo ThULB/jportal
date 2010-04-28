@@ -13,13 +13,16 @@ import org.mycore.parsers.bool.MCRCondition;
  *
  */
 public class JPQueryEngine extends MCRDefaultQueryEngine {
+
     @Override
     public MCRResults search(MCRQuery query, boolean comesFromRemoteHost) {
         query = splitCondition(query);
-        query = addDeletedFlags(query);
+        String index = getIndex(query.getCondition());
+        if(index.equals("metadata"))
+            query = addDeletedFlags(query);
         return super.search(query, comesFromRemoteHost);
     }
-    
+
     /**
      * Splits the string of a query field into an and-condition.
      * E.g. anyname="Max Mueller" --> (anyname="Max") and (anyname=Mueller) 
@@ -86,7 +89,7 @@ public class JPQueryEngine extends MCRDefaultQueryEngine {
             cond = new MCRAndCondition(cond, deletedFlagCond);
             query.setCondition(cond);
         }
-        
+
         return query;
     }
 }
