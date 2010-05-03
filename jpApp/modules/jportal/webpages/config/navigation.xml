@@ -64,8 +64,16 @@
                 <label xml:lang="de">in Webseiten suchen</label>
             </item>
         </item>
+        <item href="/content/main/calendarList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false" template="template_master2">
+            <label xml:lang="de">Kalender A - Z</label>
+            <label xml:lang="de">Calendar A - Z</label>
+            <item href="/content/main/calendarList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Platzhalter</label>
+            </item>
+        </item>
         <item href="/content/main/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
-            <label xml:lang="de">A - Z</label>
+            <label xml:lang="de">Zeitschriften A - Z</label>
+            <label xml:lang="en">Journals A - Z</label>
             <item href="/content/main/journalList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                 <label xml:lang="de">Platzhalter</label>
             </item>
