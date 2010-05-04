@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:mcr="http://www.mycore.org/">
+  xmlns:mcr="http://www.mycore.org/"
+  exclude-result-prefixes="mcr i18n">
 
   <xsl:include href="MyCoReLayout.xsl" />
   <xsl:include href="objecttypes.xsl" />
@@ -22,8 +23,14 @@
     <xsl:choose>
       <xsl:when test="$objectCount > 0">
         <p>
-          <xsl:value-of
-            select="'Wählen Sie eine Zeitschrift aus der folgenden Liste:'" />
+          <xsl:choose>
+            <xsl:when test="@type = 'journal'">
+              <xsl:value-of select="i18n:translate('jportal.a-z.journal.introduction')" />  
+            </xsl:when>
+            <xsl:when test="@type = 'calendar'">
+              <xsl:value-of select="i18n:translate('jportal.a-z.calendar.introduction')" />
+            </xsl:when>
+          </xsl:choose>
         </p>
         <xsl:call-template name="journalList.printShortcuts">
           <xsl:with-param name="objectCount" select="$objectCount" />
@@ -37,7 +44,14 @@
       <xsl:otherwise>
         <p>
           <b>
-            <xsl:value-of select="i18n:translate('jportal.a-z.emptyList')" />
+            <xsl:choose>
+              <xsl:when test="@type = 'journal'">
+                <xsl:value-of select="i18n:translate('jportal.a-z.journal.emptyList')" />
+              </xsl:when>
+              <xsl:when test="@type = 'calendar'">
+                <xsl:value-of select="i18n:translate('jportal.a-z.calendar.emptyList')" />
+              </xsl:when>
+            </xsl:choose>
           </b>
         </p>
       </xsl:otherwise>

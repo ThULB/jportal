@@ -10,15 +10,29 @@ import java.util.TreeSet;
 public class JournalList implements Collection<Entry> {
 
     private TreeSet<Section> sections;
+    private String type;
 
     public JournalList() {
+        this(null);
+    }
+
+    public JournalList(String type) {
+        this.type = type;
         this.sections = new TreeSet<Section>();
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
+    public String getType() {
+        return type;
     }
 
     public void setSections(TreeSet<Section> sections) {
         this.sections = sections;
     }
-
+    
     public TreeSet<Section> getSections() {
         return sections;
     }

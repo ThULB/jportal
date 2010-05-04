@@ -330,7 +330,7 @@
             <hidden var="metadata/volContentClassis1/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis1/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis1/volContentClassi1">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi1_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi1_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi1_input_repeater">
@@ -351,7 +351,7 @@
             <hidden var="metadata/volContentClassis2/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis2/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis2/volContentClassi2">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi2_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi2_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi2_input_repeater">
@@ -372,7 +372,7 @@
             <hidden var="metadata/volContentClassis3/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis3/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis3/volContentClassi3">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi3_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi3_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi3_input_repeater">
@@ -393,7 +393,7 @@
             <hidden var="metadata/volContentClassis4/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis4/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis4/volContentClassi4">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi4_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi4_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi4_input_repeater">
@@ -414,7 +414,7 @@
             <hidden var="metadata/volContentClassis5/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis5/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis5/volContentClassi5">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi5_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi5_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi5_input_repeater">
@@ -435,7 +435,7 @@
             <hidden var="metadata/volContentClassis6/@notinherit" default="false" />
             <hidden var="metadata/volContentClassis6/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/volContentClassis6/volContentClassi6">
-                <repeater min="0" max="10" anchor="NORTHWEST" ref="volContentClassi6_input_repeater" />
+                <repeater min="0" max="30" anchor="NORTHWEST" ref="volContentClassi6_input_repeater" />
             </cell>
         </panel>
         <panel id="volContentClassi6_input_repeater">

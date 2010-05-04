@@ -28,7 +28,7 @@ public class JournalListCfgToXMLTest extends MCRTestCase {
         MCRQuery query = new MCRQuery(new MCRAndCondition(cond1, cond2), sortByList, 0);
         
         JournalListCfg journalListCfg = new JournalListCfg();
-        JournalListDef journalListDef = new JournalListDef("journalList.xml", query);
+        JournalListDef journalListDef = new JournalListDef("journalList.xml", "journal", query);
         
         assertTrue(journalListCfg.addListDef(journalListDef));
         

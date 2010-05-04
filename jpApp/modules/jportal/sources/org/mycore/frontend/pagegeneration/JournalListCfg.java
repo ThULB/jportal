@@ -11,13 +11,16 @@ import org.mycore.services.fieldquery.MCRQuery;
 public class JournalListCfg {
     public static class JournalListDef implements Comparable<JournalListDef>{
         private String fileName;
+        private String type;
+
         private MCRQuery query;
         
         protected JournalListDef() {
         }
         
-        public JournalListDef(String fileName, MCRQuery query) {
+        public JournalListDef(String fileName, String type,MCRQuery query) {
             this.setFileName(fileName);
+            this.setType(type);
             this.setQuery(query);
         }
 
@@ -36,7 +39,12 @@ public class JournalListCfg {
         public MCRQuery getQuery() {
             return query;
         }
-
+        public String getType() {
+            return type;
+        }
+        public void setType(String type) {
+            this.type = type;
+        }
         public int compareTo(JournalListDef o) {
             return getFileName().compareTo(o.getFileName());
         }

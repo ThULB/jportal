@@ -13,7 +13,8 @@ import org.mycore.services.fieldquery.MCRResults;
 public class MCRResultsToJournalList extends JournalList {
     Logger LOGGER = Logger.getLogger(MCRResultsToJournalList.class);
 
-    public MCRResultsToJournalList(MCRResults results) throws JDOMException {
+    public MCRResultsToJournalList(MCRResults results, String type) throws JDOMException {
+        this.setType(type);
         XPath xPath = XPath.newInstance("maintitles/maintitle/text()");
         for (MCRHit mcrHit : results) {
             MCRObject mcrObj = new MCRObject();

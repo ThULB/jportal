@@ -62,7 +62,7 @@ public class JournalListManager {
         
         for (JournalListDef journalListDef : listDefs) {
             MCRResults results = MCRQueryManager.search(journalListDef.getQuery());
-            JournalList journalList = new MCRResultsToJournalList(results);
+            JournalList journalList = new MCRResultsToJournalList(results, journalListDef.getType());
             Document journalListXML = new JournalListToXML(journalList);
             FileOutputStream fileOutputStream = new FileOutputStream(journalListLocation + journalListDef.getFileName());
             outputter.output(journalListXML, fileOutputStream);

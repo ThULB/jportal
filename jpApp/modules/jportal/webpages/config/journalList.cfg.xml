@@ -2,6 +2,7 @@
 <journalListCfg>
 	<journalListDef>
 		<fileName>journalList.xml</fileName>
+        <type>journal</type>
 		<query>
 			<sortBy>
 				<field name="maintitles" order="ascending" />
@@ -19,6 +20,7 @@
 	</journalListDef>
 	<journalListDef>
 		<fileName>calendarList.xml</fileName>
+        <type>calendar</type>
 		<query>
 			<sortBy>
 				<field name="maintitles" order="ascending" />

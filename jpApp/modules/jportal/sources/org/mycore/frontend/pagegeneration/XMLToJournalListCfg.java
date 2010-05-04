@@ -20,6 +20,7 @@ public class XMLToJournalListCfg extends JournalListCfg {
     private class XMLToJournalListDef extends JournalListDef {
         public XMLToJournalListDef(Element listDefXML) {
             setFileName(listDefXML.getChildText("fileName"));
+            setType(listDefXML.getChildText("type"));
             MCRQuery query = MCRQuery.parseXML((Element)listDefXML.getChild("query").detach());
             setQuery(query);
         }
