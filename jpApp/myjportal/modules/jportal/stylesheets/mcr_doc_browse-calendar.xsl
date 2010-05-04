@@ -14,6 +14,7 @@
     <xsl:variable name="Navigation.title" select="i18n:translate('component.classhandler.cal.title')" />
     <xsl:variable name="MainTitle" select="i18n:translate('common.titles.mainTitle')" />
     <xsl:variable name="PageTitle" select="$Navigation.title" />
+    <xsl:param name="filterChecked" select="false"/>
 
 <!-- The main template -->
     <xsl:template match="classificationBrowser">
@@ -23,15 +24,15 @@
         <xsl:variable name="filterJournalID" select="concat('+and+(journalID_vol+=+', $journalsID, ')')" />
         <script type="text/javascript">
             <xsl:value-of select="'&lt;!--'" />
-            function filterSearch(){ for (i=0; i &lt; document.anchors.length; i++){
-        help = document.anchors[i].attributes["href"].nodeValue;
-        document.anchors[i].attributes["href"].nodeValue = document.anchors[i].attributes["altHref"].nodeValue;
-        document.anchors[i].attributes["altHref"].nodeValue = help;
-    }
-}
-//-->
-</script>
-
+            function filterSearch() {
+              for (i=0; i &lt; document.anchors.length; i++) {
+                help = document.anchors[i].attributes["href"].nodeValue;
+                document.anchors[i].attributes["href"].nodeValue = document.anchors[i].attributes["altHref"].nodeValue;
+                document.anchors[i].attributes["altHref"].nodeValue = help;
+              }
+            }
+            //-->
+        </script>
 
     <div id="classificationBrowser" >
    <p class="classBrowserHeadline">
@@ -45,7 +46,15 @@
         <tr>
             <td><xsl:value-of select="concat(i18n:translate('component.classhandler.cal.label.browsAll'),': ')"/> </td>
             <td>
-                <input type="checkbox" onclick="filterSearch()" />
+                <xsl:choose>
+                  <xsl:when test="$filterChecked='true'">
+                    <input type="checkbox" onclick="filterSearch()" checked="checked" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input type="checkbox" onclick="filterSearch()" />
+                  </xsl:otherwise>
+                </xsl:choose>
+                
             </td>
         </tr>
     </table>
@@ -67,7 +76,9 @@
  <xsl:variable name="view" select="@view" />
  <xsl:variable name="restriction" select="@restriction" />
  <xsl:for-each select="row">
-   <xsl:variable name="href1" select="concat($WebApplicationBaseURL, 'browse', col[2]/@searchbase, $HttpSession)" />
+   <xsl:variable name="href_folder" select="concat($WebApplicationBaseURL, 'browse', col[2]/@searchbase, $HttpSession)" />
+   <xsl:variable name="href_folder_filter" select="concat($WebApplicationBaseURL, 'browse', col[2]/@searchbase, $HttpSession, '?XSL.filterChecked=true')" />
+   
    <xsl:variable name="actnode" select="position()" />  
    <xsl:variable name="query">
     <xsl:value-of select="concat('(',$search,'1+=+&quot;', normalize-space(col[2]/@lineID), '&quot;)')"/>
@@ -107,7 +118,15 @@
         </xsl:call-template>
         <xsl:choose>
          <xsl:when test="col[1]/@plusminusbase">
-          <a href='{$href1}' ><img border="0" src='{$img1}' /></a>
+           <xsl:choose>
+              <xsl:when test="$filterChecked='true'">
+                <a name="folder" href="{$href_folder_filter}" altHref="{$href_folder}" ><img border="0" src='{$img1}' /></a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a name="folder" href="{$href_folder}" altHref="{$href_folder_filter}" ><img border="0" src='{$img1}' /></a>  
+              </xsl:otherwise>
+           </xsl:choose>
+            
 		 </xsl:when>
 		 <xsl:otherwise>
 		  <img border="0" src='{$img1}' />
