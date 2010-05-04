@@ -219,6 +219,30 @@
                 </td>
             </tr>
 
+            <!-- author - only for calendars -->
+            <xsl:variable name="journalId" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
+            <xsl:if test="$journalId">
+              <xsl:variable name="journal" select="document(concat('mcrobject:',$journalId))/mycoreobject"/>
+              <xsl:variable name="journalType" select="$journal/metadata/contentClassis1/contentClassi1/@categid" />
+              <xsl:if test="$journalType = 'calendar'">
+                <xsl:variable name="authorName" >
+                  <xsl:value-of select="$journal/metadata/participants/participant[@xlink:title='author']/@xlink:label" />
+                </xsl:variable>
+                <xsl:if test="$authorName">
+                  <tr>
+                    <td id="leaf-additional">
+                      <xsl:call-template name="lineSpace" />
+                      <i>
+                          <xsl:value-of select="concat(i18n:translate('editormask.labels.author'),': ')" />
+                      </i>
+                      <xsl:value-of select="$authorName" />
+                      <xsl:call-template name="lineSpace" />
+                    </td>
+                  </tr>
+                </xsl:if>
+              </xsl:if>
+            </xsl:if>
+
             <xsl:call-template name="getContentClassis"/>
 
             <!-- note, if exist  -->
