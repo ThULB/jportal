@@ -499,7 +499,8 @@
 				update permission read for id webpage:/content/main/tools.xml with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				update permission read for id webpage:/content/main/recyclebin.xml with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				update permission read for id webpage:/content/main/journalList/dummy.xml with rulefile ever-false.xml described by ${acl-description.jp.invisible}
-				
+				update permission read for id webpage:/content/main/calendarList/dummy.xml with rulefile ever-false.xml described by ${acl-description.jp.invisible}
+
 				load permissions data from file wcms-permissions.xml
 				update permission write for id webpage:navigation with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				]]>
