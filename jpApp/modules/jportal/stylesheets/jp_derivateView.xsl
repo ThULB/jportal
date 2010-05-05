@@ -51,9 +51,10 @@
                         <!-- <xsl:value-of select="mcr:field[@name='filePath']/text()" /> -->
                         <!-- check if a file mapping has to be done -->
                         <xsl:call-template name="mappFile">
-                    <xsl:with-param name="derivid-if" select="$derivid"/>
-                    <xsl:with-param name="file" select="mcr:field[@name='filePath']/text()" />
-                  </xsl:call-template>
+                          <xsl:with-param name="derivid-if" select="$derivid"/>
+                          <xsl:with-param name="filePath" select="mcr:field[@name='filePath']/text()" />
+                          <xsl:with-param name="fileName" select="mcr:field[@name='fileName']/text()" />
+                        </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:value-of select="internal/@maindoc" />
@@ -215,70 +216,55 @@
    
     <xsl:template name="mappFile">
         <xsl:param name="derivid-if" />
-        <xsl:param name="file" />
-        <xsl:param name="fileExistVerification" select="'true'"/>
-        
+        <xsl:param name="filePath" />
+        <xsl:param name="fileName" />
+
         <xsl:variable name="fileMappings" select="document('webapp:fileMappings.xml')" />
+
         <xsl:choose>
             <!-- file mapping(s) available ? -->
-            <xsl:when test="$fileMappings/fileMappings/fileMapping" >        
-                <xsl:variable name="fileName">
-                    <xsl:value-of select="substring-after(substring-before($file,'.'),'/')" />
-                </xsl:variable>
-                <xsl:variable name="fileExt">
-                    <xsl:call-template name="getFileType">
-                        <xsl:with-param name="fileName" select="$file" />
-                    </xsl:call-template>
-                </xsl:variable>
-                <xsl:variable name="fileContentTypes" select="document('webapp:FileContentTypes.xml')" />
-                <xsl:variable name="idOfFileType" select="$fileContentTypes/FileContentTypes/type/rules/extension[text()=$fileExt]/../../@ID" />
+            <xsl:when test="$fileMappings/fileMappings/fileMapping" >
+                <!-- contains the mapped files separated by comma -->
                 <xsl:variable name="transFileList">
-                    <!-- file type exist AND file type must be mapped -->
-                    <xsl:if test="$idOfFileType != '' and $fileMappings/fileMappings/fileMapping/type[@ID=$idOfFileType]">
-                       <!-- make a difference between real file verification and blind guessing of mappable file -->
-                       <xsl:choose>
-                            <!-- file existing will be verified -->
-                            <xsl:when test="$fileExistVerification = 'true'">
-                                <xsl:variable name="derivXML" select="document(concat('ifs:',$derivid-if))" />
-                                <!-- go through all mappable file extension id's -->
-                                <xsl:for-each select="$fileMappings/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type">
-                                    <xsl:variable name="mappID" select="@ID" />
-                                    <!--  go throug all file extensions belonging to extension id's -->
-                                    <xsl:for-each select="$fileContentTypes/FileContentTypes/type[@ID=$mappID]/rules/extension">
-                                        <!-- is current extension id in derivate xml ? -->
-                                        <xsl:variable name="fileNameTmp" select="concat($fileName,'.',text())" />
-                                        <xsl:variable name="mappableNode" select="$derivXML/mcr_directory/children/child/name[text()=$fileNameTmp]" />
-                                        <xsl:if test="$mappableNode">
-                                            <xsl:value-of select="concat($mappableNode,$derivid-if)" />
-                                        </xsl:if>
-                                    </xsl:for-each>
-                                </xsl:for-each>
-                            </xsl:when>
-                            <!-- NO file existing won't be verified -> blind taking of first file in FileContentTypes.xml -->
-                            <xsl:otherwise>
-                               <xsl:variable name="mappExtID" select="$fileMappings/fileMappings/fileMapping/type[@ID=$idOfFileType]/../mappTo/type[position()=1]/@ID"/>
-                               <xsl:variable name="mappFileExt" select="$fileContentTypes/FileContentTypes/type[@ID=$mappExtID]/rules/extension[position()=1]/text()" />
-                               <xsl:value-of select="concat($fileName,'.',$mappFileExt,$derivid-if)"/>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:if>
+                  <!-- derivate root path -->
+                  <xsl:variable name="rootPath" select="substring-before($filePath,$fileName)" />
+                  <!-- file name without extension -->
+                  <xsl:variable name="fileNameWithoutExt" select="substring-before($fileName,'.')" />
+                  <xsl:variable name="derivXML" select="document(concat('ifs:',$derivid-if, $rootPath))" />
+                  <xsl:variable name="contentTypeId">
+                    <xsl:value-of select="$derivXML/mcr_directory/children/child/name[text()=$fileName]/../contentType" />
+                  </xsl:variable>
+                  <xsl:variable name="fileContentTypes" select="document('webapp:FileContentTypes.xml')" />
+                  <!-- file type exist AND file type must be mapped -->
+                  <xsl:if test="$fileMappings/fileMappings/fileMapping/type[@ID=$contentTypeId]">
+                    <!-- go through all mappable file extension id's -->
+                    <xsl:for-each select="$fileMappings/fileMappings/fileMapping[type/@ID=$contentTypeId]/mappTo/type">
+                      <xsl:variable name="mapId" select="@ID" />
+                      <xsl:for-each select="$derivXML/mcr_directory/children/child[starts-with(name, $fileNameWithoutExt)]">
+                        <xsl:if test="contentType = $mapId">
+                          <xsl:value-of select="concat(name, ',')" />
+                        </xsl:if>
+                      </xsl:for-each>
+                    </xsl:for-each>
+                  </xsl:if>
                 </xsl:variable>
+
                 <!-- return translated file -->
                 <xsl:choose>
-                    <xsl:when test="contains($transFileList,$derivid-if)">
-                        <xsl:value-of select="substring-before($transFileList,$derivid-if)" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="$file" />
-                    </xsl:otherwise>
+                  <xsl:when test="$transFileList">
+                    <xsl:value-of select="substring-before($transFileList, ',')" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$filePath" />
+                  </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$file" />
+                <xsl:value-of select="$filePath" />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
   <!-- ===================================================================================================== -->
   
     <xsl:template name="getFileLabel">
