@@ -185,6 +185,54 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + cd.myfile));
     }
 
+    @Override
+    public void sdelfile(MCRServletJob job, CommonData cd) throws IOException {
+        if (!MCRAccessManager.checkPermission(cd.mysemcrid.getId(), "deletedb")) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + usererrorpage));
+            return;
+        }
+        if (!cd.mysemcrid.isValid()) {
+            job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(getBaseURL() + mcriderrorpage));
+            return;
+        }
+
+        int all = 0;
+
+        int i = cd.extparm.indexOf("####nrall####");
+        int j = 0;
+
+        if (i != -1) {
+            j = cd.extparm.indexOf("####", i + 13);
+            all = Integer.parseInt(cd.extparm.substring(i + 13, j));
+        }
+
+        i = cd.extparm.indexOf("####nrthe####");
+
+        if (i != -1) {
+            j = cd.extparm.indexOf("####", i + 13);
+            Integer.parseInt(cd.extparm.substring(i + 13, j));
+        }
+
+        if (all > 1) {
+            i = cd.extparm.indexOf("####filename####");
+
+            if (i != -1) {
+                String filename = cd.extparm.substring(i + 16, cd.extparm.length());
+
+                try {
+                    MCRDirectory rootdir = MCRDirectory.getRootDirectory(cd.mysemcrid.getId());
+                    rootdir.getChildByPath(filename).delete();
+                } catch (Exception ex) {
+                    LOGGER.warn("Can't remove file " + filename, ex);
+                }
+            }
+        }
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(getBaseURL()).append("servlets/MCRFileNodeServlet/").append(cd.mysemcrid).append("/?hosts=local");
+        job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(sb.toString()));
+    }
+    
     /**
      * TODO: change this if ifs2 comes -> need to be solved global!
      * Removes all zombie entries in the database.
