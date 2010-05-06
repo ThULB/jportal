@@ -436,6 +436,7 @@
 	<property name="acl-description.jp.journalAdmins" value="journal admins" />
 	<property name="acl-description.jp.editorsTOC" value="journal editors for TOC" />
 	<property name="acl-description.jp.editors" value="journal editors" />
+	<property name="acl-description.jp.derivateGroup" value="journal editors for derivates" />
 	<property name="acl-description.jp.invisible" value="invisible" />
 
 	<!-- =================================================================== -->
@@ -470,7 +471,7 @@
 		    	update permission read for id default with rulefile grant-all.xml described by ${acl-description.jp.all}
 			    update permission writedb for id default with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				update permission deletedb for id default with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
-				
+
 				update permission read for id default_jpjournal with rulefile grant-all.xml described by ${acl-description.jp.all}
 				update permission read for id default_jpvolume with rulefile grant-all.xml described by ${acl-description.jp.all}
 				update permission read for id default_jparticle with rulefile grant-all.xml described by ${acl-description.jp.all}
@@ -483,12 +484,14 @@
 				update permission writedb for id default_jparticle with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 				update permission writedb for id default_person with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 				update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
-				
+				update permission writedb for id default_derivate with rulefile grant-derivategroup.xml described by ${acl-description.jp.derivateGroup}
+
 				update permission deletedb for id default_jpjournal with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				update permission deletedb for id default_jpvolume with rulefile grant-admingroup.xml described by ${acl-description.jp.admins}
 				update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
 				update permission deletedb for id default_person with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}
-				update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}			
+				update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml described by ${acl-description.jp.editors}	
+				update permission deletedb for id default_derivate with rulefile grant-derivategroup.xml described by ${acl-description.jp.derivateGroup}
 				]]>
 		</echo>
 		<!-- specify read access for the webpages -->
@@ -520,13 +523,13 @@
 		<echo level="info"> building ${ant.project.name} create.users </echo>
 		<property name="commands.file" value="${basedir}/commands.txt" />
 		<echo file="${commands.file}" append="false">
-
 			<!--init superuser-->
 			<!--change to user ${MCR.Users.Superuser.UserName} with alleswirdgut-->
 			<![CDATA[
 	      	create group data from file journalgroup.xml
 	      	create group data from file volumegroup.xml
 	      	create group data from file editorsgroup.xml
+			create group data from file derivategroup.xml
 		  ]]>
 		</echo>
 		<antcall target="invoke.cli">
