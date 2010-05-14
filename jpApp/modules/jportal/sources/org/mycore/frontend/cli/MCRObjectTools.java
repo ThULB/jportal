@@ -1,5 +1,6 @@
 package org.mycore.frontend.cli;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -25,6 +27,10 @@ import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
+import org.mycore.importer.MCRImportRecord;
+import org.mycore.importer.convert.MCRImportXMLConverter;
+import org.mycore.importer.mapping.MCRImportMappingManager;
+import org.mycore.importer.mcrimport.MCRImportImporter;
 
 public class MCRObjectTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRObjectTools.class.getName());
@@ -56,6 +62,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 "move file abs. path to abs. path");
         command.add(com);
 
+        com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
+                "converts a volume to an article");
+        command.add(com);
     }
 
     public static void updateJournalContext(String journalID) {
@@ -70,7 +79,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
         } else {
             LOGGER.info(journalID + " in no journal!");
         }
-
     }
 
     public static void repairCopy(String sourceObjectID, String destinationObjectID) {
@@ -275,5 +283,37 @@ public class MCRObjectTools extends MCRAbstractCommands {
             }
         }
         return ownerID.toString();
+    }
+
+    public static List<String> convertVolumesToArticles(String volumeIds) throws Exception {
+        ArrayList<MCRImportRecord> recordList = new ArrayList<MCRImportRecord>();
+        ArrayList<String> commandList = new ArrayList<String>();
+        for(String volumeId : volumeIds.split(",")) {
+            // get mcr volume object
+            MCRObject volume = new MCRObject();
+            volume.receiveFromDatastore(volumeId);
+            Document volumeDoc = volume.createXML();
+            // convert volume to mcrimportrecord
+            MCRImportXMLConverter xmlConverter = new MCRImportXMLConverter("article");
+            MCRImportRecord record = xmlConverter.convert(volumeDoc);
+            recordList.add(record);
+            // add delete command for volume
+            StringBuffer deleteCommand = new StringBuffer("delete object ");
+            commandList.add(deleteCommand.append(volumeId).toString());
+        }
+
+        // start mapping
+        StringBuffer fileBuf = new StringBuffer(MCRConfiguration.instance().getString("MCR.Modules.BaseDir"));
+        fileBuf.append("/modules/jportal/config/import/volumeToArticle.xml");
+        File mappingFile = new File(fileBuf.toString());
+        MCRImportMappingManager.getInstance().init(mappingFile);
+        MCRImportMappingManager.getInstance().startMapping(recordList);
+        // import article to mycore
+        MCRImportImporter importer = new MCRImportImporter(mappingFile);
+        importer.generateMyCoReFiles();
+        // return command list containing delete commands for volumes and
+        // create commands for articles
+        commandList.addAll(importer.getCommandList());
+        return commandList;
     }
 }
