@@ -35,6 +35,9 @@
                 <cell col="2" row="121" anchor="NORTHWEST" ref="Dlink" var="def.link" />
                 <cell class="editorLabel" col="1" row="122" anchor="NORTHWEST" ref="Lidentifier" />
                 <cell col="2" row="122" anchor="NORTHWEST" ref="Didentifier" var="def.identifier" />
+                <cell class="editorLabel" col="1" row="125" anchor="NORTHWEST" ref="LdoubletOf" />
+                <cell col="2" row="125" anchor="NORTHWEST" ref="DdoubletOf" var="def.doubletOf" />
+                
                 <cell col="1" row="130" anchor="NORTHWEST">
                     <text i18n="jportal.editor.required" />
                 </cell>
@@ -266,6 +269,16 @@
   <helpPopup id="Hidentifier" width="400" height="250">
     <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben Sie die dort verwendete ID an.</label>
   </helpPopup>
+  
+  <!-- doubletOf -->
+  <panel id="DdoubletOf">
+    <hidden var="@class" default="MCRMetaLangText" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="doubletOf" ref="TFzeile128" />
+  </panel>
+  <text id="LdoubletOf" i18n="editormask.labels.LdoubletOf" />
+  <helpPopup id="HdoubletOf" width="400" height="250" i18n="editormask.labels.HdoubletOf" />
   
   <panel id="DNote">
     <hidden var="@class" default="MCRMetaLangText" />

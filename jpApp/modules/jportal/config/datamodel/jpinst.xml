@@ -37,6 +37,10 @@
                 <type name="ppn" />
             </mcrmetalangtext>
         </element>
+        <!-- doubletOf -->
+        <element name="def.doubletOf" minOccurs='0' maxOccurs='1'>
+          <mcrmetalangtext name="doubletOf" class="MCRMetaLangText" minOccurs='1' maxOccurs='1' length="256" />
+        </element>
     </metadata>
     <service>
         <!-- Service Dates -->
