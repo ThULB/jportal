@@ -1,5 +1,6 @@
 package org.mycore.frontend.servlets;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -12,6 +13,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRBase;
@@ -181,7 +183,11 @@ public class MCRRecycleBinServlet extends MCRServlet {
     protected void exportAndDelete(MCRBase baseObj) throws Exception {
         Document doc = baseObj.createXML();
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
-        FileOutputStream output = new FileOutputStream(recycleBinExportDir + FS + baseObj.getLabel() + ".xml");
+        File dir = new File(recycleBinExportDir + FS);
+        if(!dir.exists())
+            dir.mkdirs();
+        StringBuffer fileName = new StringBuffer(baseObj.getId().getId()).append(".xml");
+        FileOutputStream output = new FileOutputStream(new File(dir, fileName.toString()));
         outputter.output(doc, output);
         // delete
         baseObj.deleteFromDatastore(baseObj.getId().getId());

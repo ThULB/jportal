@@ -24,6 +24,8 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLTableManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
@@ -64,6 +66,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
                 "converts a volume to an article");
+        command.add(com);
+        
+        com = new MCRCommand("add derivates {0} to object {1}", "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String",
+                "adds one ore more derivates to an object ");
         command.add(com);
     }
 
@@ -315,5 +321,19 @@ public class MCRObjectTools extends MCRAbstractCommands {
         // create commands for articles
         commandList.addAll(importer.getCommandList());
         return commandList;
+    }
+
+    public static void addDerivatesToObject(String derivateIds, String objectId) throws Exception {
+        String[] derivateIdArray = derivateIds.split(",");
+        for(String derId : derivateIdArray) {
+            MCRDerivate der = new MCRDerivate();
+            der.receiveFromDatastore(derId);
+            // set link in derivate
+            MCRMetaLinkID objLink = new MCRMetaLinkID();
+            objLink.setSubTag("linkmeta");
+            objLink.setReference(objectId, null, null);
+            der.getDerivate().setLinkMeta(objLink);
+            der.updateInDatastore();
+        }
     }
 }
