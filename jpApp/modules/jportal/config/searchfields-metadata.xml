@@ -38,8 +38,15 @@
     <field name="participants_vol_type" type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" />          
     <field name="dates_vol"             type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date[0]" value="text()" sortable="true" i18n="editor.search.document.date" />
     <field name="notes_vol"             type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
+    <field name="identis_vol"           type="identifier"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editormask.labels.identi" addable="true"/>
     <field name="journalID_vol"         type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
     <field name="position_vol"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />
+    <field name="volContentClassi1"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis1/volContentClassi1" value="@ID"/>
+    <field name="volContentClassi2"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis2/volContentClassi2" value="@ID"/>
+    <field name="volContentClassi3"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis3/volContentClassi3" value="@ID"/>
+    <field name="volContentClassi4"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis4/volContentClassi4" value="@ID"/>
+    <field name="volContentClassi5"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis5/volContentClassi5" value="@ID"/>
+    <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
     <!-- Search in article metadata -->
     <field name="maintitles_art"        type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
     <field name="subtitles_art"         type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editormask.labels.subtitle" />
@@ -62,12 +69,6 @@
     <field name="sizes_art"             type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />       
     <field name="refs_art"              type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
     <field name="journalID_art"     type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
-    <field name="volContentClassi1"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis1/volContentClassi1" value="@ID"/>
-    <field name="volContentClassi2"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis2/volContentClassi2" value="@ID"/>
-    <field name="volContentClassi3"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis3/volContentClassi3" value="@ID"/>
-    <field name="volContentClassi4"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis4/volContentClassi4" value="@ID"/>
-    <field name="volContentClassi5"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis5/volContentClassi5" value="@ID"/>
-    <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
 
     <!-- Search in institutions metadata -->
     <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" addable="true" i18n="editor.search.jpinst.label" />

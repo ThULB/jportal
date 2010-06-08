@@ -1,6 +1,7 @@
 package org.mycore.frontend.cli;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,6 +14,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
+import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
@@ -33,6 +35,13 @@ import org.mycore.importer.MCRImportRecord;
 import org.mycore.importer.convert.MCRImportXMLConverter;
 import org.mycore.importer.mapping.MCRImportMappingManager;
 import org.mycore.importer.mcrimport.MCRImportImporter;
+import org.mycore.parsers.bool.MCRCondition;
+import org.mycore.services.fieldquery.MCRFieldValue;
+import org.mycore.services.fieldquery.MCRHit;
+import org.mycore.services.fieldquery.MCRQuery;
+import org.mycore.services.fieldquery.MCRQueryManager;
+import org.mycore.services.fieldquery.MCRQueryParser;
+import org.mycore.services.fieldquery.MCRResults;
 
 public class MCRObjectTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRObjectTools.class.getName());
@@ -66,11 +75,54 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
                 "converts a volume to an article");
+        com = new MCRCommand("vd17Import sgn {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String",
+        "converts a volume to an article");
+        
+        com = new MCRCommand("vd17ImportVol", "org.mycore.frontend.cli.MCRObjectTools.vd17ImportVol",
+        "converts a volume to an article");
+        
         command.add(com);
         
         com = new MCRCommand("add derivates {0} to object {1}", "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String",
                 "adds one ore more derivates to an object ");
         command.add(com);
+    }
+    
+    public static void vd17Import(String sgn) throws IOException{
+        MCRQueryParser parser = new MCRQueryParser();
+        Element condition = new Element("condition");
+        condition.setAttribute("field", "identis_vol");
+        condition.setAttribute("operator", "=");
+        condition.setAttribute("value", sgn);
+        MCRCondition mcrCondition = parser.parse(condition);
+        
+        MCRResults results = MCRQueryManager.search(new MCRQuery(mcrCondition));
+        
+        Element xml = results.buildXML();
+        
+        XMLOutputter outputter = new XMLOutputter();
+        outputter.output(xml, System.out);
+    }
+    
+    public static void vd17ImportVol() throws IOException{
+        MCRQueryParser parser = new MCRQueryParser();
+        Element condition = new Element("condition");
+        condition.setAttribute("field", "volContentClassi2");
+        condition.setAttribute("operator", "=");
+        condition.setAttribute("value", "calender");
+        MCRCondition mcrCondition = parser.parse(condition);
+        
+        MCRResults results = MCRQueryManager.search(new MCRQuery(mcrCondition));
+        
+        for (MCRHit mcrHit : results) {
+            List<MCRFieldValue> metaData = mcrHit.getMetaData();
+            
+            LOGGER.info("Hit: " + mcrHit.getKey() + " List: " + metaData.size());
+            for (MCRFieldValue mcrFieldValue : metaData) {
+                LOGGER.info(mcrFieldValue.getField().getName() + " Field: " + mcrFieldValue.getValue());
+            }
+        }
+        
     }
 
     public static void updateJournalContext(String journalID) {
