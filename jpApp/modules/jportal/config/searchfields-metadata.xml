@@ -82,4 +82,4 @@
     <field name="personNote"        type="text" source="objectMetadata" objects="person" xpath="/mycoreobject/metadata/def.note/note" value="text()"  />
     
     <!-- person & jpinst -->
-    <field name="doubletOf"         type="text" source="objectMetadata" objects="person jpinst" xpath="/mycoreobject/metadata/def.doubletOf/doubletOf" value="text()"  />
+    <field name="doubletOf"         type="identifier" source="objectMetadata" objects="person jpinst" xpath="/mycoreobject/metadata/def.doubletOf/doubletOf" value="text()" addable="true" />
