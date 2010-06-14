@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.Properties;
 
 import org.jdom.Document;
@@ -17,8 +16,6 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRLinkTableManager;
-import org.mycore.datamodel.ifs.MCRContentStore;
-import org.mycore.datamodel.ifs.MCRContentStoreFactory;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
@@ -27,7 +24,6 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
-import org.mycore.frontend.servlets.MCRStartEditorServlet.CommonData;
 import org.mycore.user.MCRUserMgr;
 
 /**
@@ -133,11 +129,7 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         sb.append(getBaseURL()).append(pagedir).append("jp_editor_form_commit-derivate.xml");
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(buildRedirectURL(sb.toString(), params)));
     }
-    
-    
-    
-    private int fileCount = 0;
-    private int deletedCount = 0;
+
     /**
      * Sets the deleted flag for the delivered derivate. If the derivate has no
      * content (file deleted) then it will be completly removed.
@@ -165,17 +157,14 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
             der.receiveFromDatastore(cd.mysemcrid);
             // get file/directory
             MCRFilesystemNode fileNode = MCRFilesystemNode.getRootNode(der.getId().getId());
-            fileCount = 0;
-            deletedCount = 0;
-            deleteZombieFiles(fileNode);
+
             // check if derivate has files left.
-            if(deletedCount >= 1 && deletedCount == fileCount) {
+            if(deleteZombieFiles(fileNode))
                 // delete the whole derivate
                 der.deleteFromDatastore(cd.mysemcrid.getId());
-            } else {
+            else
                 // set deleted flag
                 markAsDeleted(der, userRealName, user);
-            }
             StringBuffer sb = new StringBuffer();
             sb.append("receive/").append(cd.myremcrid);
             cd.myfile = sb.toString();
@@ -232,27 +221,38 @@ public class MCRJPortalStartEditorServlet extends MCRStartEditorServlet {
         sb.append(getBaseURL()).append("servlets/MCRFileNodeServlet/").append(cd.mysemcrid).append("/?hosts=local");
         job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(sb.toString()));
     }
-    
+
     /**
      * TODO: change this if ifs2 comes -> need to be solved global!
-     * Removes all zombie entries in the database.
+     * Removes all zombie entries in database.
      * @param node the root file node
+     * @return returns true if all files of the derivate are deleted,
+     * if files remain false is returned 
      */
-    protected void deleteZombieFiles(MCRFilesystemNode node) {
+    protected boolean deleteZombieFiles(MCRFilesystemNode node) {
+        return deleteZombieFiles(node, new ZombieFileStatus());
+    }
+
+    private boolean deleteZombieFiles(MCRFilesystemNode node, ZombieFileStatus status) {
         if(node instanceof MCRDirectory) {
             // do recursive search through directories
             MCRDirectory dir = (MCRDirectory)node;
-            for(MCRFilesystemNode childs : dir.getChildren()) {
-                deleteZombieFiles(childs);
-            }
+            for(MCRFilesystemNode childs : dir.getChildren())
+                deleteZombieFiles(childs, status);
         } else if(node instanceof MCRFile) {
             MCRFile file = (MCRFile)node;
             if(!fileExists(file)) {
                 file.delete();
-                deletedCount++;
+                status.deletedCount++;
             }
-            fileCount++;
+            status.fileCount++;
         }
+        return status.deletedCount >= 1 && status.deletedCount == status.fileCount;
+    }
+    
+    private class ZombieFileStatus {
+        public int deletedCount = 0;
+        public int fileCount = 0;
     }
 
     protected boolean fileExists(MCRFile file) {
