@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <templates>
+    <!-- isis -->
     <template>
         <journalID value="jportal_jpjournal_00000024" />
         <xhtml>
@@ -23,6 +24,14 @@
                     <img
                         src="templates/content/template_logos/IMAGES/ernsthaeckelhaus.png"
                         alt="Ernst-Haeckel-Haus" />
+                </a>
+            </div>
+            <div class="sponsoredlogo-box">
+                <a href="http://www.ub.uni-frankfurt.de/"
+                    class="sponsoredlogo-styles">
+                    <img
+                        src="templates/content/template_logos/IMAGES/ub.png"
+                        alt="ub" />
                 </a>
             </div>
         </xhtml>

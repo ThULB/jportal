@@ -123,34 +123,4 @@
         <xsl:call-template name="jp.layout.getHTMLContent" />
     </xsl:template>
 
-    <!-- Template for User info ================================================================================ -->
-    <xsl:template name="template_thueringen.userInfo">
-
-        <!-- BEGIN: login values -->
-        <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="LoginURL"
-            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?lang=',$CurrentLang,'&amp;amp;url=', encoder:encode( string( $RequestURL ) ) )" />
-        <!-- END OF: login values -->
-        <table class="login_window" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="login_space"></td>
-                <td class="login_window">
-                    <!-- Login-Button / 2 Pfeile =================================== -->
-                    <a href="{$LoginURL}">
-                        <img src="{$WebApplicationBaseURL}templates/master/template_thueringen/IMAGES/login-switch.gif" border="0" />
-                    </a>
-                </td>
-                <td class="login_text">
-                    <text i18n="editor.start.LoginText.label" />
-                    :
-                </td>
-                <td class="user_id">
-                    <p class="whitebox">
-                        <xsl:value-of select="$CurrentUser" />
-                    </p>
-                </td>
-            </tr>
-        </table>
-
-    </xsl:template>
-
 </xsl:stylesheet>
