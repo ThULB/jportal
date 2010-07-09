@@ -3,6 +3,7 @@ package org.mycore.frontend.servlets;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -28,11 +29,10 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
         // read the parameter
         MCRRequestParameters parms;
 
-        if (sub == null) {
+        if (sub == null)
             parms = new MCRRequestParameters(job.getRequest());
-        } else {
+        else
             parms = sub.getParameters();
-        }
 
         String oldmcrid = parms.getParameter("mcrid");
         String oldtype = parms.getParameter("type");
@@ -70,9 +70,9 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
             hasid = false;
         }
 
-        if (!hasid) {
+        if (!hasid)
             indoc.getRootElement().setAttribute("ID", ID.getId());
-        }
+
         // create a metadata object and prepare it
         Document preparedMetadataDocument = prepareMetadata((Document) indoc.clone(), ID, job, lang);
         MCRObject mcrObj = new MCRObject();
@@ -80,10 +80,13 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
 
         // update or create in datastore
         if(MCRObject.existInDatastore(ID)) {
+            MCRObjectID parentID = mcrObj.getStructure().getParentID();
+            if(parentID == null || !MCRObject.existInDatastore(parentID))
+                throw new MCRException("Error while updating MCRObject '" + ID.getId() +  "'!" +
+                        " Parent id '" + parentID.getId() + "' doesnt exists!");
             mcrObj.updateInDatastore();
-        } else {
+        } else
             mcrObj.createInDatastore();
-        }
 
         // try to go to the returnUrl, otherwise to the edited object
         String url = parms.getParameter("returnUrl");
