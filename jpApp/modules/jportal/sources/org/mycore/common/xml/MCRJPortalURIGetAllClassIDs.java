@@ -57,6 +57,7 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
         // then create an updated xml tree
         if(returnXML == null ||
            categoryRootIDs == null ||
+           currentRootIds.size() != categoryRootIDs.size() ||
            !currentRootIds.containsAll(categoryRootIDs)) {
             categoryRootIDs = currentRootIds;
             returnXML = createXML(categDAO, categoryRootIDs);
@@ -72,9 +73,8 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
             String classID = cid.getRootID();
             String descr = "";
             MCRCategory rootCat = categDAO.getRootCategory(cid, 0);
-            if ((null != rootCat.getLabels())) {
+            if ((null != rootCat.getLabels()))
                 descr = rootCat.getCurrentLabel().getText();
-            }
             Element item = new Element("item").setAttribute("value", classID);
             Element label = new Element("label").setAttribute("lang", "de", Namespace.XML_NAMESPACE);
             label.setText(descr + " (" + classID + ")");
