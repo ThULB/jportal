@@ -3,7 +3,6 @@ package org.mycore.frontend.servlets;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -80,10 +79,10 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
 
         // update or create in datastore
         if(MCRObject.existInDatastore(ID)) {
-            MCRObjectID parentID = mcrObj.getStructure().getParentID();
-            if(parentID == null || !MCRObject.existInDatastore(parentID))
-                throw new MCRException("Error while updating MCRObject '" + ID.getId() +  "'!" +
-                        " Parent id '" + parentID.getId() + "' doesnt exists!");
+//            MCRObjectID parentID = mcrObj.getStructure().getParentID();
+//            if(parentID == null || !MCRObject.existInDatastore(parentID))
+//                throw new MCRException("Error while updating MCRObject '" + ID.getId() +  "'!" +
+//                        " Parent id '" + parentID.getId() + "' doesnt exists!");
             mcrObj.updateInDatastore();
         } else
             mcrObj.createInDatastore();
