@@ -48,7 +48,14 @@
         <hidden var="structure/parents/parent/@inherited" default="0" />
         <hidden var="structure/parents/parent/@xlink:type" default="locator" />
         <hidden var="structure/parents/parent/@xlink:title" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="structure/parents/parent/@xlink:href" ref="TFzeile32" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="structure/parents/parent/@xlink:href">
+          <textfield id="tf.parent" width="32" maxlength="32">
+            <condition id="cond.parent.required" required="true">
+              <label xml:lang="de">Bitte geben Sie eine valide MyCoRe ID an!</label>
+              <label xml:lang="en">Please enter a valid MyCoRe ID!</label>
+            </condition>
+          </textfield>
+        </cell>
     </panel>
     <!-- save ================================================================== -->
     <panel id="save">

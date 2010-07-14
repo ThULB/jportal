@@ -11,6 +11,11 @@
         <source uri="{sourceUri}" />
         <cancel url="servlets/MCRJPortalEditorCancelServlet" />
 
+        <validationMessage>
+          <label xml:lang="de">Eingabefehler: Bitte korrigieren Sie die markierten Felder.</label>
+          <label xml:lang="en">Type error: Please correct the marked fields.</label>
+        </validationMessage>
+
         <target type="servlet" name="changedByXsl" method="post" format="xml" />
         <components root="editor-file" var="/mycoreobject"
           xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
