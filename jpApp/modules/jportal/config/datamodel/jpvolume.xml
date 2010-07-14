@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration type="jpvolume">
     <structure>
         <!-- Object Parent -->
@@ -36,6 +36,24 @@
         <!-- type = issn | isbn | nbn | doi | misc. -->
         <element name="identis" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="people" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="person" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="publicationNotes" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="publicationNote" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="normedPubLocations" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="normedPubLocation" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="footNotes" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="footNote" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="bibEvidences" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="bibEvidence" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
+        </element>
+        <element name="indexFields" minOccurs='0' maxOccurs='1'>
+            <mcrmetalangtext name="indexField" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
         </element>
         <!-- type = short | long -->
         <element name="abstracts" minOccurs='0' maxOccurs='1'>
