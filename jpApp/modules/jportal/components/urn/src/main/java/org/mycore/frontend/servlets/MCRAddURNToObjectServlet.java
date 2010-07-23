@@ -220,7 +220,7 @@ public class MCRAddURNToObjectServlet extends MCRStartEditorServlet {
         alterDerivateDOM(objDer, fileset);
 
         try {
-            derivate.updateInDatastore();
+            derivate.updateXMLInDatastore();
         } catch (Exception ex) {
             LOGGER.error("An exception occured while updating the object " + derivate.getId()
                     + " in database. The adding of the fileset element failed.", ex);
