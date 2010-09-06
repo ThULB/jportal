@@ -202,6 +202,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
     }
 
+    // dataModelCoverage: browse, fully
     public static List<String> cp(String sourceID, int times, String layoutTemp, String dataModelCoverage) {
         List<String> cmd = new ArrayList<String>();
 
