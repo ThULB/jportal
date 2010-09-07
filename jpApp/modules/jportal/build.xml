@@ -312,7 +312,7 @@
 				</antcall>
 			</sequential>
 		</for>
-		
+
 		<antcall target="properties.merge">
 			<param name="module" value="${module.dir}/config/messages_pl.properties" />
 			<param name="locale_param" value="pl" />

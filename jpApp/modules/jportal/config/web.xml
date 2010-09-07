@@ -1,64 +1,100 @@
 <servlet id="MCRJPortalCLIServlet">
-    <servlet-name>MCRJPortalCLIServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCLIServlet</servlet-class>
+	<servlet-name>MCRJPortalCLIServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalCLIServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRDuplicateFinderServlet">
-    <servlet-name>MCRDuplicateFinderServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRDuplicateFinderServlet</servlet-class>
+	<servlet-name>MCRDuplicateFinderServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRDuplicateFinderServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalCreateContext">
-    <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet</servlet-class>
+	<servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalLinkFileServlet">
-    <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalLinkFileServlet</servlet-class>
+	<servlet-name>MCRJPortalLinkFileServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalLinkFileServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalStartEditorServlet">
-    <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalStartEditorServlet</servlet-class>
+	<servlet-name>MCRJPortalStartEditorServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalStartEditorServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalCheckCommitDataServlet">
-    <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet</servlet-class>
+	<servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalEditorCancelServlet">
-    <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
+	<servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet
+	</servlet-class>
 </servlet>
 <servlet id="MCRJPortalIndexBrowserServlet">
-    <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet</servlet-class>
+	<servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
+	<servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet
+	</servlet-class>
 </servlet>
 <servlet-mapping>
-    <servlet-name>MCRJPortalStartEditorServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalStartEditorServlet/*</url-pattern>
+	<servlet-name>MCRJPortalStartEditorServlet</servlet-name>
+	<url-pattern>/servlets/MCRJPortalStartEditorServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRJPortalCLIServlet</servlet-name>
-    <url-pattern>/cli</url-pattern>
+	<servlet-name>MCRJPortalCLIServlet</servlet-name>
+	<url-pattern>/cli</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRDuplicateFinderServlet</servlet-name>
-    <url-pattern>/servlets/MCRDuplicateFinderServlet/*</url-pattern>
+	<servlet-name>MCRDuplicateFinderServlet</servlet-name>
+	<url-pattern>/servlets/MCRDuplicateFinderServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*</url-pattern>
+	<servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
+	<url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*
+	</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-    <servlet-name>MCRJPortalLinkFileServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalLinkFileServlet/*</url-pattern>
+	<servlet-name>MCRJPortalLinkFileServlet</servlet-name>
+	<url-pattern>/servlets/MCRJPortalLinkFileServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-  <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
-  <url-pattern>/servlets/MCRJPortalCheckCommitDataServlet</url-pattern>
+	<servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+	<url-pattern>/servlets/MCRJPortalCheckCommitDataServlet</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-  <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
-  <url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
+	<servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
+	<url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
-  <servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
-  <url-pattern>/indexpage</url-pattern>
+	<servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
+	<url-pattern>/indexpage</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>Jersey Web Application</servlet-name>
+	<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer
+	</servlet-class>
+	<init-param>
+		<param-name>com.sun.jersey.config.property.resourceConfigClass
+		</param-name>
+		<param-value>com.sun.jersey.api.core.PackagesResourceConfig
+		</param-value>
+	</init-param>
+	<init-param>
+		<param-name>com.sun.jersey.config.property.packages</param-name>
+		<param-value>org.mycore</param-value>
+	</init-param>
+	<init-param>
+		<param-name>com.sun.jersey.config.feature.DisableXmlSecurity
+		</param-name>
+		<param-value>true</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>Jersey Web Application</servlet-name>
+	<url-pattern>/jsr/*</url-pattern>
 </servlet-mapping>

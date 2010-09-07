@@ -26,7 +26,7 @@
 	<classpathentry kind="src" path="mycore/components/migration13-20/sources"/>
 	<classpathentry kind="src" path="mycore/components/swf/sources"/>
 	<classpathentry kind="src" path="mycore/components/classbrowser/sources"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="mycore/lib/activation.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/antlr-2.7.6.jar"/>
@@ -65,7 +65,7 @@
 	<classpathentry kind="lib" path="mycore/lib/jdom-1.1.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/jid3lib-0.5.4.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/jna.jar"/>
-	<classpathentry kind="lib" path="mycore/lib/joda-time-1.6.jar"/>
+	<classpathentry kind="lib" path="mycore/lib/joda-time-1.6.jar" sourcepath="/home/chi/.m2/repository/joda-time/joda-time/1.6/joda-time-1.6-sources.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/jsch-0.1.28.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/json-lib-1.1-jdk15.jar"/>
 	<classpathentry kind="lib" path="mycore/lib/jta-1.1.jar"/>
@@ -99,5 +99,9 @@
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/easymockclassextension.jar"/>
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jai_codec.jar"/>
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jai_core.jar"/>
+	<classpathentry kind="lib" path="/usr/share/ant/lib/ant.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jersey-bundle-1.3.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/asm-3.1.jar"/>
+	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jsr311-api-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
