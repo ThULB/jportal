@@ -96,5 +96,5 @@
 
 <servlet-mapping>
 	<servlet-name>Jersey Web Application</servlet-name>
-	<url-pattern>/jsr/*</url-pattern>
+	<url-pattern>/jax-sr/*</url-pattern>
 </servlet-mapping>
