@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.jdom.Element;
 import org.mycore.parsers.bool.MCRCondition;
@@ -19,18 +20,25 @@ import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
 
-import fsu.thulb.searchpojo.AtomLink;
-import fsu.thulb.searchpojo.FieldValue;
-import fsu.thulb.searchpojo.Hit;
-import fsu.thulb.searchpojo.SearchResults;
+import fsu.thulb.http.UriTools;
+import fsu.thulb.jp.searchpojo.AtomLink;
+import fsu.thulb.jp.searchpojo.FieldValue;
+import fsu.thulb.jp.searchpojo.Hit;
+import fsu.thulb.jp.searchpojo.SearchResults;
 
 @Path("/calendar")
 public class CalenderResource {
 
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public SearchResults calendar(@Context HttpHeaders headers){
-        String host = headers.getRequestHeader("Host").get(0);
+    public SearchResults calendar(@Context UriInfo uriInfo, @Context HttpHeaders headers){
+        String host = headers.getRequestHeader("host").get(0);
+        String baseURI = uriInfo.getBaseUri().toString();
+        if(!baseURI.endsWith(host + "/")){
+            new UriTools();
+            baseURI = UriTools.removeLastPathSegment(baseURI);
+        }
+        
         MCRQueryParser parser = new MCRQueryParser();
         Element condition = new Element("condition");
         condition.setAttribute("field", "identis_vol");
@@ -39,14 +47,14 @@ public class CalenderResource {
         MCRCondition mcrCondition = parser.parse(condition);
         
         MCRResults results = MCRQueryManager.search(new MCRQuery(mcrCondition));
-        return createSearchResults(results, host);
+        return createSearchResults(results, baseURI);
     }
 
-    private SearchResults createSearchResults(MCRResults results, String host) {
+    private SearchResults createSearchResults(MCRResults results, String baseUri) {
         ArrayList<Hit> hitList = new ArrayList<Hit>();
         for (MCRHit mcrHit : results) {
             Hit hit = new Hit();
-            AtomLink atomLink = createAtomLink(mcrHit.getID(), host);
+            AtomLink atomLink = createAtomLink(mcrHit.getID(), baseUri);
             List<FieldValue> fieldValues = createFieldValues(mcrHit.getMetaData());
             hit.setLink(atomLink);
             hit.setFieldValues(fieldValues);
@@ -57,9 +65,9 @@ public class CalenderResource {
         return new SearchResults(hitList);
     }
 
-    private AtomLink createAtomLink(String id, String host) {
+    private AtomLink createAtomLink(String id, String baseUri) {
         AtomLink atomLink = new AtomLink();
-        String href = "http://"+ host + "/receive/" + id + "?XSL.Style=xml";
+        String href = baseUri + "receive/" + id + "?XSL.Style=xml";
         atomLink.setHref(href);
         
         return atomLink;
