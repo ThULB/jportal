@@ -1,13 +1,18 @@
 package org.mycore.frontend.cli;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.transform.Source;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -18,8 +23,6 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.backend.hibernate.MCRHIBConnection;
-import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRActiveLinkException;
@@ -31,10 +34,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
-import org.mycore.importer.MCRImportRecord;
-import org.mycore.importer.convert.MCRImportXMLConverter;
-import org.mycore.importer.mapping.MCRImportMappingManager;
-import org.mycore.importer.mcrimport.MCRImportImporter;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.services.fieldquery.MCRFieldValue;
 import org.mycore.services.fieldquery.MCRHit;
@@ -42,6 +41,12 @@ import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
+
+import fsu.thulb.http.HttpTools;
+import fsu.thulb.jaxb.JaxbTools;
+import fsu.thulb.jp.searchpojo.AtomLink;
+import fsu.thulb.jp.searchpojo.ContentEntry;
+import fsu.thulb.jp.searchpojo.StorageContentList;
 
 public class MCRObjectTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRObjectTools.class.getName());
@@ -75,11 +80,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
                 "converts a volume to an article");
-        com = new MCRCommand("vd17Import sgn {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String",
-        "converts a volume to an article");
         
-        com = new MCRCommand("vd17ImportVol", "org.mycore.frontend.cli.MCRObjectTools.vd17ImportVol",
-        "converts a volume to an article");
+        com = new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String",
+        "vd17Import url");
         
         command.add(com);
         
@@ -88,41 +91,23 @@ public class MCRObjectTools extends MCRAbstractCommands {
         command.add(com);
     }
     
-    public static void vd17Import(String sgn) throws IOException{
-        MCRQueryParser parser = new MCRQueryParser();
-        Element condition = new Element("condition");
-        condition.setAttribute("field", "identis_vol");
-        condition.setAttribute("operator", "=");
-        condition.setAttribute("value", sgn);
-        MCRCondition mcrCondition = parser.parse(condition);
+    public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRPersistenceException, MCRActiveLinkException{
+        StorageContentList storageContentList = JaxbTools.unmarschall(new URL(url), StorageContentList.class);
         
-        MCRResults results = MCRQueryManager.search(new MCRQuery(mcrCondition));
         
-        Element xml = results.buildXML();
-        
-        XMLOutputter outputter = new XMLOutputter();
-        outputter.output(xml, System.out);
+        ContentEntry participantEntries = storageContentList.getContentFor("participant");
+        importObjects(participantEntries);
+        ContentEntry jpVolumeEntries = storageContentList.getContentFor("jpvolume");
+        importObjects(jpVolumeEntries);
     }
-    
-    public static void vd17ImportVol() throws IOException{
-        MCRQueryParser parser = new MCRQueryParser();
-        Element condition = new Element("condition");
-        condition.setAttribute("field", "volContentClassi2");
-        condition.setAttribute("operator", "=");
-        condition.setAttribute("value", "calender");
-        MCRCondition mcrCondition = parser.parse(condition);
-        
-        MCRResults results = MCRQueryManager.search(new MCRQuery(mcrCondition));
-        
-        for (MCRHit mcrHit : results) {
-            List<MCRFieldValue> metaData = mcrHit.getMetaData();
-            
-            LOGGER.info("Hit: " + mcrHit.getKey() + " List: " + metaData.size());
-            for (MCRFieldValue mcrFieldValue : metaData) {
-                LOGGER.info(mcrFieldValue.getField().getName() + " Field: " + mcrFieldValue.getValue());
-            }
+
+    private static void importObjects(ContentEntry contentEntries) throws URISyntaxException, MCRActiveLinkException {
+        for (AtomLink participantLink : contentEntries.getLink()) {
+            MCRObject mcrObject = new MCRObject();
+            mcrObject.setImportMode(true);
+            mcrObject.setFromURI(new URI(participantLink.getHref()));
+            mcrObject.updateInDatastore();
         }
-        
     }
 
     public static void updateJournalContext(String journalID) {
@@ -344,37 +329,37 @@ public class MCRObjectTools extends MCRAbstractCommands {
         return ownerID.toString();
     }
 
-    public static List<String> convertVolumesToArticles(String volumeIds) throws Exception {
-        ArrayList<MCRImportRecord> recordList = new ArrayList<MCRImportRecord>();
-        ArrayList<String> commandList = new ArrayList<String>();
-        for(String volumeId : volumeIds.split(",")) {
-            // get mcr volume object
-            MCRObject volume = new MCRObject();
-            volume.receiveFromDatastore(volumeId);
-            Document volumeDoc = volume.createXML();
-            // convert volume to mcrimportrecord
-            MCRImportXMLConverter xmlConverter = new MCRImportXMLConverter("article");
-            MCRImportRecord record = xmlConverter.convert(volumeDoc);
-            recordList.add(record);
-            // add delete command for volume
-            StringBuffer deleteCommand = new StringBuffer("delete object ");
-            commandList.add(deleteCommand.append(volumeId).toString());
-        }
-
-        // start mapping
-        StringBuffer fileBuf = new StringBuffer(MCRConfiguration.instance().getString("MCR.Modules.BaseDir"));
-        fileBuf.append("/modules/jportal/config/import/volumeToArticle.xml");
-        File mappingFile = new File(fileBuf.toString());
-        MCRImportMappingManager.getInstance().init(mappingFile);
-        MCRImportMappingManager.getInstance().startMapping(recordList);
-        // import article to mycore
-        MCRImportImporter importer = new MCRImportImporter(mappingFile);
-        importer.generateMyCoReFiles();
-        // return command list containing delete commands for volumes and
-        // create commands for articles
-        commandList.addAll(importer.getCommandList());
-        return commandList;
-    }
+//    public static List<String> convertVolumesToArticles(String volumeIds) throws Exception {
+//        ArrayList<MCRImportRecord> recordList = new ArrayList<MCRImportRecord>();
+//        ArrayList<String> commandList = new ArrayList<String>();
+//        for(String volumeId : volumeIds.split(",")) {
+//            // get mcr volume object
+//            MCRObject volume = new MCRObject();
+//            volume.receiveFromDatastore(volumeId);
+//            Document volumeDoc = volume.createXML();
+//            // convert volume to mcrimportrecord
+//            MCRImportXMLConverter xmlConverter = new MCRImportXMLConverter("article");
+//            MCRImportRecord record = xmlConverter.convert(volumeDoc);
+//            recordList.add(record);
+//            // add delete command for volume
+//            StringBuffer deleteCommand = new StringBuffer("delete object ");
+//            commandList.add(deleteCommand.append(volumeId).toString());
+//        }
+//
+//        // start mapping
+//        StringBuffer fileBuf = new StringBuffer(MCRConfiguration.instance().getString("MCR.Modules.BaseDir"));
+//        fileBuf.append("/modules/jportal/config/import/volumeToArticle.xml");
+//        File mappingFile = new File(fileBuf.toString());
+//        MCRImportMappingManager.getInstance().init(mappingFile);
+//        MCRImportMappingManager.getInstance().startMapping(recordList);
+//        // import article to mycore
+//        MCRImportImporter importer = new MCRImportImporter(mappingFile);
+//        importer.generateMyCoReFiles();
+//        // return command list containing delete commands for volumes and
+//        // create commands for articles
+//        commandList.addAll(importer.getCommandList());
+//        return commandList;
+//    }
 
     public static void addDerivatesToObject(String derivateIds, String objectId) throws Exception {
         String[] derivateIdArray = derivateIds.split(",");
