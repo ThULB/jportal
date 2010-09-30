@@ -64,9 +64,9 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          2. ant jar
    2. Application
          1. cd $DOCPORTAL_HOME
-         3. ant -f jportal-build.xml create.schema jar create.scripts create.directories
+         3. ant create.schema jar create.scripts create.directories
          4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         5. ant -f jportal-build.xml jp.create.usermanag jp.create.default-rules jp.create.class webapps
+         5. ant jp.create.usermanag jp.create.default-rules jp.create.class webapps
          6. make sure Image-Viewer is installed 
          
 6.2 REINSTALLATION - already installed application 
