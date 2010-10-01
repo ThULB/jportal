@@ -664,6 +664,51 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
+                            <!--6*** publication note *************************************-->
+                            <xsl:if test="./metadata/publicationNotes/publicationNote">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/publicationNotes/publicationNote" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.publicationNote')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--6*** publication note *************************************-->
+                            <xsl:if test="./metadata/footNotes/footNote">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/footNotes/footNote" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.footNote')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--6*** publication note *************************************-->
+                            <xsl:if test="./metadata/normedPubLocations/normedPubLocation">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/normedPubLocations/normedPubLocation" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.normedPubLocation')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--6*** publication note *************************************-->
+                            <xsl:if test="./metadata/bibEvidences/bibEvidence">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/bibEvidences/bibEvidence" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.bibEvidence')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
+                            <!--6*** publication note *************************************-->
+                            <xsl:if test="./metadata/indexFields/indexField">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/indexFields/indexField" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.indexField')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
                             <!--6*** abstract *************************************-->
                             <xsl:if test="./metadata/abstracts/abstract">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">

@@ -45,5 +45,13 @@
             <label xml:lang="de" text="URN" />
             <label xml:lang="en" text="URN" />
         </category>
+        <category ID="Signatur">
+            <label xml:lang="de" text="Signatur" />
+            <label xml:lang="en" text="Signature" />
+        </category>
+        <category ID="ppn">
+            <label xml:lang="de" text="PPN" />
+            <label xml:lang="en" text="PPN" />
+        </category>
     </categories>
 </mycoreclass>
