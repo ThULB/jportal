@@ -37,6 +37,7 @@
         <element name="identis" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="identi" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
         </element>
+        <!-- added for VD17 -->
         <element name="people" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="person" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
         </element>
@@ -55,6 +56,7 @@
         <element name="indexFields" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="indexField" class="MCRMetaLangText" minOccurs='0' maxOccurs='unbounded' length="1024" />
         </element>
+        <!-- added for VD17 END -->
         <!-- type = short | long -->
         <element name="abstracts" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="abstract" class="MCRMetaLangText" minOccurs='0' maxOccurs='30' length="4096" />

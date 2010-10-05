@@ -25,6 +25,9 @@
             <!-- partic -->
         <cell class="editorLabel" row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
         <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
+            <!-- people -->
+        <cell class="editorLabel" row="31" col="1" anchor="NORTHWEST" ref="people_label" />
+        <cell row="31" col="2" anchor="NORTHWEST" ref="people_input" />
             <!-- date -->
         <cell class="editorLabel" row="40" col="1" anchor="NORTHWEST" ref="date_label" />
         <!-- tradition -->

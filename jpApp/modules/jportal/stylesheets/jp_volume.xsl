@@ -498,6 +498,15 @@
                                 <xsl:with-param select="i18n:translate('editormask.labels.participants_label')" name="label" />
                             </xsl:call-template>
                         </table>
+                        <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
+                            <xsl:call-template name="printMetaDate_typeSensitive">
+                                <xsl:with-param select="'right'" name="textalign" />
+                                <xsl:with-param select="./metadata/people/person" name="nodes" />
+                                <xsl:with-param select="i18n:translate('editormask.labels.people_label')" name="label" />
+                                <xsl:with-param name="typeClassi" select="'jportal_class_00000007'" />
+                                <xsl:with-param name="mode" select="'text'" />
+                            </xsl:call-template>
+                        </table>
                         <!--4***date*************************************-->
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
                             <xsl:variable name="nodes" select="./metadata/dates/date[@inherited='0']" />
