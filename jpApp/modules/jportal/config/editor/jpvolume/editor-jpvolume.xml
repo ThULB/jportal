@@ -25,9 +25,6 @@
             <!-- partic -->
         <cell class="editorLabel" row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
         <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
-            <!-- people -->
-        <cell class="editorLabel" row="31" col="1" anchor="NORTHWEST" ref="people_label" />
-        <cell row="31" col="2" anchor="NORTHWEST" ref="people_input" />
             <!-- date -->
         <cell class="editorLabel" row="40" col="1" anchor="NORTHWEST" ref="date_label" />
         <!-- tradition -->
@@ -56,6 +53,31 @@
             <!-- note -->
         <cell class="editorLabel" row="160" col="1" anchor="NORTHWEST" ref="note_label" />
         <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
+        
+            <!-- person -->
+        <cell class="editorLabel" row="162" col="1" anchor="NORTHWEST" ref="person_label" />
+        <cell row="162" col="2" anchor="NORTHWEST" ref="person_input" />
+        
+            <!-- publication note -->
+        <cell class="editorLabel" row="164" col="1" anchor="NORTHWEST" ref="publicationNote_label" />
+        <cell row="164" col="2" anchor="NORTHWEST" ref="publicationNote_input" />
+            
+            <!-- normed pubLocation -->
+        <cell class="editorLabel" row="166" col="1" anchor="NORTHWEST" ref="normedPubLocation_label" />
+        <cell row="166" col="2" anchor="NORTHWEST" ref="normedPubLocation_input" />
+        
+            <!-- foot note -->
+        <cell class="editorLabel" row="168" col="1" anchor="NORTHWEST" ref="footNote_label" />
+        <cell row="168" col="2" anchor="NORTHWEST" ref="footNote_input" />
+        
+            <!-- bib evidence -->
+        <cell class="editorLabel" row="170" col="1" anchor="NORTHWEST" ref="bibEvidence_label" />
+        <cell row="170" col="2" anchor="NORTHWEST" ref="bibEvidence_input" />
+
+            <!-- index field -->
+        <cell class="editorLabel" row="172" col="1" anchor="NORTHWEST" ref="indexField_label" />
+        <cell row="172" col="2" anchor="NORTHWEST" ref="indexField_input" />
+
             <!-- ================================================================================================= -->
             <!-- dynamic includes, if used within a journal -->
         <include cacheable="false"
@@ -66,8 +88,8 @@
         <include cacheable="false" uri="jportal_includeEditorCode:jparticle:hidden_classiVol5/hidden_classiVol5:editor/editor-dynamicInludes.xml:include_volContent5-classi_code_head" />
         <include cacheable="false" uri="jportal_includeEditorCode:jparticle:hidden_classiVol6/hidden_classiVol6:editor/editor-dynamicInludes.xml:include_volContent6-classi_code_head" />
             <!-- Hidden information to be used in heritated objects (volumes, articles) -->
-        <cell row="170" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
-        <cell col="1" row="171">
+        <cell row="180" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+        <cell col="1" row="181">
             <br />
         </cell> 
         
@@ -189,6 +211,73 @@
         <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
     </panel>
+    <!-- person ================================================================== -->
+    <panel id="person_input">
+        <hidden var="metadata/people/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/people/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/people/person" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="person_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="person_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    <!-- publication note ================================================================== -->
+    <panel id="publicationNote_input">
+        <hidden var="metadata/publicationNotes/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/publicationNotes/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/publicationNotes/publicationNote" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="publicationNote_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="publicationNote_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    <!-- normed PubLocation ================================================================== -->
+    <panel id="normedPubLocation_input">
+        <hidden var="metadata/normedPubLocations/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/normedPubLocations/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/normedPubLocations/normedPubLocation" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="normedPubLocation_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="normedPubLocation_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    <!-- foot note ================================================================== -->
+    <panel id="footNote_input">
+        <hidden var="metadata/footNotes/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/footNotes/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/footNotes/footNote" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="footNote_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="footNote_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    <!-- bib evidence ================================================================== -->
+    <panel id="bibEvidence_input">
+        <hidden var="metadata/bibEvidences/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/bibEvidences/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/bibEvidences/bibEvidence" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="bibEvidence_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="bibEvidence_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    <!-- indexField ================================================================== -->
+    <panel id="indexField_input">
+        <hidden var="metadata/indexFields/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/indexFields/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/indexFields/indexField" ordernr="1">
+            <repeater min="0" max="10" anchor="NORTHWEST" ref="indexField_input_repeater" />
+        </cell>
+    </panel>
+    <panel id="indexField_input_repeater">
+        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+    </panel>
+    
     <!-- collation note ================================================================== -->
     <panel id="collation_note_input">
         <hidden var="metadata/collationNotes/@class" default="MCRMetaLangText" />

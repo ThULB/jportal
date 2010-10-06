@@ -567,7 +567,10 @@
                             ./metadata/volContentClassis4/volContentClassi4 | 
                             ./metadata/volContentClassis5/volContentClassi5 | 
                             ./metadata/volContentClassis6/volContentClassi6 | 
-                            ./metadata/notes/note | ./metadata/abstracts/abstract">
+                            ./metadata/notes/note | ./metadata/abstracts/abstract |
+                            ./metadata/people/person | ./metadata/publicationNotes/publicationNote |
+                            ./metadata/normedPubLocation/normedPubLocations | ./metadata/footNotes/footNote |
+                            ./metadata/bibEvidences/bibEvidence | ./metadata/indexFields/indexField">
                             <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                                 <tr>
                                     <td colspan="2" id="detailed-innerdivlines">
@@ -673,6 +676,15 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
+                            <!--6*** person *************************************-->
+                            <xsl:if test="./metadata/people/person">
+                                <table cellspacing="0" cellpadding="0" id="detailed-view">
+                                    <xsl:call-template name="printMetaDates">
+                                        <xsl:with-param select="./metadata/people/person" name="nodes" />
+                                        <xsl:with-param select="i18n:translate('editormask.labels.person_label')" name="label" />
+                                    </xsl:call-template>
+                                </table>
+                            </xsl:if>
                             <!--6*** publication note *************************************-->
                             <xsl:if test="./metadata/publicationNotes/publicationNote">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
@@ -682,7 +694,7 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
-                            <!--6*** publication note *************************************-->
+                            <!--6*** foot note *************************************-->
                             <xsl:if test="./metadata/footNotes/footNote">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:call-template name="printMetaDates">
@@ -691,7 +703,7 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
-                            <!--6*** publication note *************************************-->
+                            <!--6*** normed pubLocation *************************************-->
                             <xsl:if test="./metadata/normedPubLocations/normedPubLocation">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:call-template name="printMetaDates">
@@ -700,7 +712,7 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
-                            <!--6*** publication note *************************************-->
+                            <!--6*** bib evidences *************************************-->
                             <xsl:if test="./metadata/bibEvidences/bibEvidence">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:call-template name="printMetaDates">
@@ -709,7 +721,7 @@
                                     </xsl:call-template>
                                 </table>
                             </xsl:if>
-                            <!--6*** publication note *************************************-->
+                            <!--6*** index fields *************************************-->
                             <xsl:if test="./metadata/indexFields/indexField">
                                 <table cellspacing="0" cellpadding="0" id="detailed-view">
                                     <xsl:call-template name="printMetaDates">

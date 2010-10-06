@@ -67,6 +67,23 @@
     <!-- *** Data for the identi *** -->
     <text id="identi_label" i18n="editormask.labels.identi" />
 
+    
+        <!-- *** Data for the publication note *** -->
+    <text id="publicationNote_label" i18n="editormask.labels.publicationNote" />
+    
+        <!-- *** Data for the normed publication *** -->
+    <text id="normedPubLocation_label" i18n="editormask.labels.normedPubLocation" />
+    
+        <!-- *** Data for the footnote *** -->
+    <text id="footNote_label" i18n="editormask.labels.footNote" />
+    
+        <!-- *** Data for the bib evidence *** -->
+    <text id="bibEvidence_label" i18n="editormask.labels.bibEvidence" />
+    
+        <!-- *** Data for the index field *** -->
+    <text id="indexField_label" i18n="editormask.labels.indexField" />
+    
+
     <helpPopup id="identi_help" width="400px" height="250px" i18n="editormask.labels.identihelppop" />
 
     <!-- *** Data for the right *** -->
