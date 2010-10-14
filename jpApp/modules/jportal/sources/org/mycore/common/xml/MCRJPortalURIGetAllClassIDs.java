@@ -10,6 +10,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
 
 public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
 
@@ -73,8 +74,10 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
             String classID = cid.getRootID();
             String descr = "";
             MCRCategory rootCat = categDAO.getRootCategory(cid, 0);
-            if ((null != rootCat.getLabels()))
-                descr = rootCat.getCurrentLabel().getText();
+            MCRLabel currentLabel = rootCat.getCurrentLabel();
+            if (null != currentLabel) {
+                descr = currentLabel.getText();
+            }
             Element item = new Element("item").setAttribute("value", classID);
             Element label = new Element("label").setAttribute("lang", "de", Namespace.XML_NAMESPACE);
             label.setText(descr + " (" + classID + ")");
