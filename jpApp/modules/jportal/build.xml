@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<project name="MyCoReModule - JPortal" default="usage" basedir="${MCR.Basedir}">
+<project name="MyCoReModule - JPortal" default="usage" basedir="${MCR.basedir}">
 
 	<property name="build.sysclasspath" value="last" />
 	<import file="${basedir}/common-modules.xml" />

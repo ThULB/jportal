@@ -162,6 +162,10 @@
               <label xml:lang="de">Papierkorb</label>
               <label xml:lang="en">Recycle bin</label>
             </item>
+            <item href="/editor_form_search-expert.xml" type="extern" target="_self" style="normal" replaceMenu="false">
+              <label xml:lang="de">Expertensuche</label>
+              <label xml:lang="en">Expert search</label>
+            </item>
         </item>
         <item href="/content/main/contact.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Kontakt</label>

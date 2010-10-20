@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="jpApp/modules/jportal/components/recycle-bin/src/main/java"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/tests/src"/>
 	<classpathentry kind="src" path="jpApp/modules/jportal/sources"/>
-	<classpathentry kind="src" path="jpApp/modules/jportal/components/data-importer/src/main/java"/>
 	<classpathentry kind="src" path="mycore/components/useradmin/sources"/>
 	<classpathentry kind="src" path="mycore/tests"/>
 	<classpathentry kind="src" path="mycore/components/buildtools/sources"/>
@@ -102,7 +101,6 @@
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/asm-3.1.jar"/>
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/jsr311-api-1.1.jar"/>
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/JPJaxbPojos-0.0.1-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/WebTools-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="jpApp/modules/jportal/lib/GenericTools-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
