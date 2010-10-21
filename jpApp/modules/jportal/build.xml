@@ -9,7 +9,7 @@
 	<property name="JPComponentsDir" value="${env.JPORTAL_HOME}/components" />
 	<property name="module.base" value="jportal" />
 	<property name="module.dir" value="${MCR.Modules.BaseDir}/modules/${module.base}" />
-	<property name="objectTypes" value="person,jpinst,jpjournal,jpvolume,jparticle" />
+	<property name="objectTypes" value="person,jpinst,jpjournal,jpjournal-admin,jpvolume,jparticle" />
 
 	<path id="sources.path">
 		<dirset dir="${env.JPORTAL_HOME}" includes="sources" />

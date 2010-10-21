@@ -881,8 +881,17 @@
 			<xsl:choose>
 				<xsl:when
 					test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
-					<xsl:variable name="type"
-						select="substring-before(substring-after($id,'_'),'_')" />
+                <xsl:variable name="type">
+                <xsl:choose>
+                  <xsl:when test="acl:checkPermission('modify-group')">
+                    <xsl:value-of select="concat(substring-before(substring-after($id,'_'),'_'),'&amp;layout=admin&amp;')" />
+                   </xsl:when>
+                   <xsl:otherwise>
+                      <xsl:value-of select="substring-before(substring-after($id,'_'),'_')" />
+                   </xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                                      
 					<tr>
 						<td class="metaname">
 							<xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
@@ -905,11 +914,12 @@
 								<!-- not deleted -->
 								<xsl:otherwise>
 									<xsl:if test="acl:checkPermission($id,'writedb')">
-										<a
-											href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
-											<img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
-												title="{i18n:translate('swf.object.editObject')}" />
-										</a>
+                                    
+                                      <a
+                                          href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
+                                          <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
+                                          title="{i18n:translate('swf.object.editObject')}" /> </a>
+                                     
 										<a
 											href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
 											<img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
