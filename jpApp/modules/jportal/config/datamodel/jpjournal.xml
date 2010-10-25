@@ -104,6 +104,11 @@
         <element name="contentClassis10" minOccurs='0' maxOccurs='1'>
             <mcrmetaclassification name="contentClassi10" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />
         </element>
+        <element name="ddcs" minOccurs='1' maxOccurs='1'>
+            <mcrmetaclassification name="ddc" class="MCRMetaClassification" minOccurs='1' maxOccurs='unbounded' />
+        </element>
+    	
+    	
         <!-- ================================================================================================= -->
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
         <!-- id's of rubrics classi in articles -->

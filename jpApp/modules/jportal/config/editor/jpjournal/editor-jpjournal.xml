@@ -28,7 +28,6 @@
         <!-- date -->
         <cell class="editorLabel" row="75" col="1" anchor="NORTHWEST" ref="date_label" />
         <cell row="75" col="2" anchor="NORTHWEST" ref="date_input" />
-        
         <!-- tradition -->
         <cell class="editorLabel" row="80" col="1" anchor="NORTHWEST" ref="tradition_label" />
         <cell row="80" col="2" anchor="NORTHWEST" ref="tradition_input" />
@@ -47,6 +46,9 @@
         <!-- successor -->
         <cell class="editorLabel" row="140" col="1" anchor="NORTHWEST" ref="successor_label" />
         <cell row="140" col="2" anchor="NORTHWEST" ref="successor_input" />
+          <!--  DDC -->
+        <cell class="editorLabel" row="145" col="1" anchor="NORTHWEST" ref="ddc_label" />>
+        <cell row="145" col="2" anchor="WEST" ref="dewey" />
         <!-- ########################## content description ################################## -->
         <cell col="1" row="160">
             <br />
@@ -303,7 +305,29 @@
     <list id="date_type" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000009" />
     </list>
-
+    
+	  <!-- DEWEY -->
+	  <panel id="dewey">
+            <hidden var="metadata/ddcs/@class" default="MCRMetaClassification" />
+            <hidden var="metadata/ddcs/@notinherit" default="false" />
+            <hidden var="metadata/ddcs/@heritable" default="false" />
+            <cell col="1" row="1" anchor="NORTHWEST" var="metadata/ddcs/ddc">
+                <repeater min="0" max="10" anchor="NORTHWEST" ref="ddcs_repeater" />
+            </cell>
+        </panel>
+        <!-- repeater -->
+        <panel id="ddcs_repeater">
+            <hidden var="@classid" default="jportal_class_00000003" />
+            <cell col="1" row="2" anchor=" NORTHWEST" ref="ddc" var="@categid" />
+        </panel>
+		    <list id="ddc" width="300" type="dropdown">
+            <item value="">
+                <label xml:lang="de"></label>
+            </item>
+            <include uri="classification:editor:-1:children:jportal_class_00000003" />
+        </list>
+        
+		  
     <!-- jpjournalID ================================================================== -->
     <panel id="jpjournalID_input">
         <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />

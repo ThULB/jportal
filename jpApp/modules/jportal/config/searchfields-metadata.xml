@@ -13,6 +13,7 @@
     <field name="abstracts"         type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editor.search.document.abstract" />
     <field name="identis"           type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editor.search.document.identi" />
     <field name="identis_type"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/identis/identi" value="@type" />      
+    <field name="ddc_type"      	type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/ddcs/ddc" value="@categid" />      
     <field name="languages"         type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/languages/language" value="@ID" i18n="editor.search.document.language" />
     <field name="rightsjournal"     type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/rights/right" value="text()" i18n="editor.search.document.right" />                
     <field name="notes"             type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />

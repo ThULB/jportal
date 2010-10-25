@@ -330,4 +330,6 @@
         <include cacheable="false" uri="jportal_getClassLabel:getDirectely:jportal_class_00000067" />
     </text>
 
+	<text id="ddc_label" i18n="metaData.common.ddc" />
+
 </imports>
