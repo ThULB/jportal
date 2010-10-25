@@ -28,6 +28,9 @@
                     <item href="/browse/projectname" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">Projekten</label>
                     </item>
+                    <item href="/browse/ddcproject" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    	<label xml:lang="de">DDC-Projekten</label>
+                    </item>
                     <item href="/browse/inventoryevidence" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">Bestandsnachweisen</label>
                     </item>
