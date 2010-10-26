@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jportal_mcr_migration">
+	<echo>Basedir ${basedir}</echo>
+	<property name="objectTypes" value="person,jpinst,jpjournal,jpjournal-admin,jpvolume,jparticle" />
+	<target name="create.schema">
+		<for list="${objectTypes}" param="objectType" parallel="true">
+			<sequential>
+				<antcall target="model2schema">
+					<param name="metadata.schema" value="${module.directory}/datamodel/@{objectType}.xml" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+</project>
