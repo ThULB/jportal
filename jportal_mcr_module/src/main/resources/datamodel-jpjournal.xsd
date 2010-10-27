@@ -1,0 +1,1011 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml-2001.xsd"/>
+<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlinks-2001.xsd"/>
+<xsd:simpleType name="mcrdefaulttype">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="256"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrdefaultform">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="256"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrdateformat">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="256"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrobjectid">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="64"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrcategory">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="128"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrdimension">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="128"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:simpleType name="mcrmeasurement">
+<xsd:restriction base="xsd:string">
+<xsd:maxLength value="64"/>
+</xsd:restriction>
+</xsd:simpleType>
+<xsd:element name="mycoreobject" type="MCRObject"/>
+<xsd:complexType name="MCRObject">
+<xsd:all>
+<xsd:element name="structure" type="MCRObjectStructure" minOccurs="1" maxOccurs="1"/>
+<xsd:element name="metadata" type="MCRObjectMetadata" minOccurs="1" maxOccurs="1"/>
+<xsd:element name="service" type="MCRObjectService" minOccurs="1" maxOccurs="1"/>
+</xsd:all>
+<xsd:attribute name="ID" type="xsd:string" use="required"/>
+<xsd:attribute name="label" type="xsd:string" use="required"/>
+<xsd:attribute name="version" type="xsd:string" use="optional"/>
+</xsd:complexType>
+<xsd:complexType name="MCRObjectStructure">
+<xsd:sequence>
+<xsd:element name="children" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="child" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xlink:type"/>
+<xsd:attribute ref="xlink:href" use="optional"/>
+<xsd:attribute ref="xlink:title" use="optional"/>
+<xsd:attribute ref="xlink:label" use="optional"/>
+<xsd:attribute ref="xlink:from" use="optional"/>
+<xsd:attribute ref="xlink:to" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLinkID"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="derobjects" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="derobject" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xlink:type"/>
+<xsd:attribute ref="xlink:href" use="optional"/>
+<xsd:attribute ref="xlink:title" use="optional"/>
+<xsd:attribute ref="xlink:label" use="optional"/>
+<xsd:attribute ref="xlink:from" use="optional"/>
+<xsd:attribute ref="xlink:to" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLinkID"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+    </xsd:sequence>
+<xsd:attribute ref="xml:lang"/>
+</xsd:complexType>
+<xsd:complexType name="MCRObjectMetadata">
+<xsd:all>
+<xsd:element name="maintitles" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="maintitle" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="maintitlesForSorting" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="maintitleForSorting" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="subtitles" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="subtitle" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="participants" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="participant" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xlink:type"/>
+<xsd:attribute ref="xlink:href" use="optional"/>
+<xsd:attribute ref="xlink:title" use="optional"/>
+<xsd:attribute ref="xlink:label" use="optional"/>
+<xsd:attribute ref="xlink:from" use="optional"/>
+<xsd:attribute ref="xlink:to" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLinkID"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="dates" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="date" minOccurs="1" maxOccurs="2">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="format" use="optional" type="mcrdateformat"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaISO8601Date"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="traditions" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="tradition" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="abstracts" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="abstract" minOccurs="0" maxOccurs="3">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="identis" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="identi" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="languages" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="language" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="rights" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="right" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="notes" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="note" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="predeces" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="predece" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xlink:type"/>
+<xsd:attribute ref="xlink:href" use="optional"/>
+<xsd:attribute ref="xlink:title" use="optional"/>
+<xsd:attribute ref="xlink:label" use="optional"/>
+<xsd:attribute ref="xlink:from" use="optional"/>
+<xsd:attribute ref="xlink:to" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLink"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="successors" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="successor" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xlink:type"/>
+<xsd:attribute ref="xlink:href" use="optional"/>
+<xsd:attribute ref="xlink:title" use="optional"/>
+<xsd:attribute ref="xlink:label" use="optional"/>
+<xsd:attribute ref="xlink:from" use="optional"/>
+<xsd:attribute ref="xlink:to" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLink"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="dataModelCoverages" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="dataModelCoverage" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis1" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi1" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi2" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi3" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis4" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi4" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis5" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi5" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis6" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi6" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis7" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi7" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis8" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi8" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis9" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi9" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="contentClassis10" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="contentClassi10" minOccurs="0" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="ddcs" minOccurs="1" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="ddc" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:attribute name="classid" use="required" type="mcrobjectid"/>
+<xsd:attribute name="categid" use="required" type="mcrcategory"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaClassification"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_rubricsID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_rubricID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_pubTypesID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_pubTypeID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classispub" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classipub" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classispub2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classipub2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classispub3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classipub3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classispub4" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classipub4" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_genhiddenfields1" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_genhiddenfield1" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_genhiddenfields2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_genhiddenfield2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_genhiddenfields3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_genhiddenfield3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_jpjournalsID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_jpjournalID" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_websitecontexts" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_websitecontext" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol1" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol1" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol2" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol3" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol4" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol4" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol5" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol5" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="hidden_classiVol6" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="hidden_classiVol6" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+    </xsd:all>
+<xsd:attribute ref="xml:lang"/>
+</xsd:complexType>
+<xsd:complexType name="MCRObjectService">
+<xsd:all>
+<xsd:element name="servdates" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="servdate" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="format" use="optional" type="mcrdateformat"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaISO8601Date"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="servflags" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="servflag" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute name="form" use="optional" type="mcrdefaultform"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:integer"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaLangText"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+<xsd:element name="servacls" minOccurs="0" maxOccurs="1">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element name="servacl" minOccurs="1" maxOccurs="unbounded">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:any processContents="skip"/>
+</xsd:sequence>
+<xsd:attribute name="permission" use="required" type="xsd:string"/>
+<xsd:attribute name="inherited" use="optional" type="xsd:string"/>
+<xsd:attribute name="type" use="optional" type="mcrdefaulttype"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaAccessRule"/>
+<xsd:attribute name="heritable" type="xsd:boolean" use="optional"/>
+<xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
+</xsd:complexType>
+</xsd:element>
+    </xsd:all>
+<xsd:attribute ref="xml:lang"/>
+</xsd:complexType>
+</xsd:schema>
