@@ -14,9 +14,12 @@
 			<param name="cli.directory" value="${module.directory}/acl" />
 			<param name="cli.command" value="process webacl-commands" />
 		</antcall>
-		<echo>ACL for users and groups</echo>
+	</target>
+	
+	<target name="create.users">
+		<echo>Create users and groups</echo>
 		<antcall target="invoke.cli">
-			<param name="cli.directory" value="${env.JPORTAL_HOME}/acl" />
+			<param name="cli.directory" value="${module.directory}/usersAndGroups" />
 			<param name="cli.command" value="process usersAndGroups-commands" />
 		</antcall>
 	</target>
