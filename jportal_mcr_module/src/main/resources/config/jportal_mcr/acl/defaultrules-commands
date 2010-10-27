@@ -1,0 +1,24 @@
+update permission read for id default with rulefile grant-all.xml described by always allowed
+update permission writedb for id default with rulefile grant-admingroup.xml described by admins
+update permission deletedb for id default with rulefile grant-admingroup.xml described by admins
+
+update permission read for id default_jpjournal with rulefile grant-all.xml described by always allowed
+update permission read for id default_jpvolume with rulefile grant-all.xml described by always allowed
+update permission read for id default_jparticle with rulefile grant-all.xml described by always allowed
+update permission read for id default_person with rulefile grant-all.xml described by always allowed
+update permission read for id default_jpinst with rulefile grant-all.xml described by always allowed
+update permission read for id default_derivate with rulefile grant-all.xml described by always allowed
+
+update permission writedb for id default_jpjournal with rulefile grant-journalgroup.xml described by journal admins
+update permission writedb for id default_jpvolume with rulefile grant-volumegroup.xml described by journal editors for TOC
+update permission writedb for id default_jparticle with rulefile grant-editorsgroup.xml described by journal editors
+update permission writedb for id default_person with rulefile grant-editorsgroup.xml described by journal editors
+update permission writedb for id default_jpinst with rulefile grant-editorsgroup.xml described by journal editors
+update permission writedb for id default_derivate with rulefile grant-derivategroup.xml described by journal editors for derivates
+
+update permission deletedb for id default_jpjournal with rulefile grant-admingroup.xml described by admins
+update permission deletedb for id default_jpvolume with rulefile grant-admingroup.xml described by admins
+update permission deletedb for id default_jparticle with rulefile grant-editorsgroup.xml described by journal editors
+update permission deletedb for id default_person with rulefile grant-editorsgroup.xml described by journal editors
+update permission deletedb for id default_jpinst with rulefile grant-editorsgroup.xml described by journal editors	
+update permission deletedb for id default_derivate with rulefile grant-derivategroup.xml described by journal editors for derivates
