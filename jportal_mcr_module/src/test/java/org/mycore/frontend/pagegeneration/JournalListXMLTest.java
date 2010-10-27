@@ -23,6 +23,8 @@ public class JournalListXMLTest extends TestCase {
         assertTrue(journalList.add(entry4));
         assertTrue(journalList.add(entry3));
         
+        journalList.setType("foo");
+        
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         outputter.output(new JournalListToXML(journalList), System.out);
     }

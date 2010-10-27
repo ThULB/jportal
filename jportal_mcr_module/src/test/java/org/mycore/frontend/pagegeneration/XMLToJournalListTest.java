@@ -12,9 +12,8 @@ import org.jdom.input.SAXBuilder;
 public class XMLToJournalListTest extends TestCase {
 
     public void testXMLToJournalList() throws JDOMException, IOException {
-        FileInputStream input = new FileInputStream("resources/journalList.xml");
         SAXBuilder builder = new SAXBuilder();
-        Document xml = builder.build(input);
+        Document xml = builder.build(this.getClass().getResourceAsStream("/journalList.xml"));
         assertNotNull(xml);
         
         XMLToJournalList journalList = new XMLToJournalList(xml);

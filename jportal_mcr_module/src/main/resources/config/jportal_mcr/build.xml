@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jportal_mcr" basedir="../../../..">
+	<import file="${basedir}/common-modules.xml" />
+	<property name="module.directory" location="${ant.file}/.." />
+
+	<target name="create.default-rules" description="loads default acl rules for archive application">
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${module.directory}/acl" />
+			<param name="cli.command" value="process defaultrules-commands" />
+		</antcall>
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${module.directory}/acl" />
+			<param name="cli.command" value="process webacl-commands" />
+		</antcall>
+	</target>
+</project>

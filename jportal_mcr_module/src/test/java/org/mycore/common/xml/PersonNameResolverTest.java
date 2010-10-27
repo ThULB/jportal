@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 public class PersonNameResolverTest extends TestCase {
     public void testResolve() throws Exception {
         SAXBuilder builder = new SAXBuilder();
-        final Document personXML = builder.build(new File("jpApp/modules/jportal/tests/resources/mcrObj/person.xml"));
+        final Document personXML = builder.build(this.getClass().getResourceAsStream("/mcrObj/person.xml"));
         assertNotNull(personXML);
         
         PersonNameResolver personNameResolver = new PersonNameResolver(){

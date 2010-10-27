@@ -1,14 +1,16 @@
 package org.mycore.frontend.pagegeneration;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+public class JournalListToXMLTest {
 
-public class JournalListToXMLTest extends TestCase {
-
+    @Test
     public void testJournalListXML() throws IOException {
         JournalList journalList = new JournalList();
         Entry entry0 = new Entry("Der Fuchs", "0");
@@ -23,8 +25,9 @@ public class JournalListToXMLTest extends TestCase {
         assertTrue(journalList.add(entry4));
         assertTrue(journalList.add(entry3));
         
+        journalList.setType("foo");
+        
         XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
         outputter.output(new JournalListToXML(journalList), System.out);
     }
-
 }
