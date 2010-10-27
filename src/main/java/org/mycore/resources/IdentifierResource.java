@@ -15,9 +15,9 @@ public class IdentifierResource {
     public String nextFreeID(@PathParam("base_id") String base_id){
         MCRSession currentSession = MCRSessionMgr.getCurrentSession();
         currentSession.beginTransaction();
-        MCRObjectID mcrObjectID = new MCRObjectID();
-        mcrObjectID.setNextFreeId(base_id);
+        MCRObjectID mcrObjectID = MCRObjectID.getNextFreeId(base_id);
         currentSession.commitTransaction();
-        return mcrObjectID.getId();
+        currentSession.close();
+        return mcrObjectID.toString();
     }
 }

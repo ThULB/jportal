@@ -22,10 +22,11 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectStructure;
@@ -35,7 +36,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 public class MCRJournalSummary extends MCRAbstractCommands {
 
-    static MCRXMLTableManager xmltable;
+    static MCRXMLMetadataManager xmlMetadataManager;
 
     private static int maxArtID;
 
@@ -65,16 +66,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
     }
 
     private static MCRObject getActualObject(String type, int ID) {
-        MCRObjectID MOID = new MCRObjectID("jportal_" + type + Integer.toString(ID));
-        MCRObject actObj = new MCRObject();
+        MCRObjectID MOID = MCRObjectID.getInstance("jportal_" + type + Integer.toString(ID));
 
-        try {
-            actObj.receiveFromDatastore(MOID);
-        } catch (Exception e) {
-            actObj = null;
-        }
-
-        return actObj;
+        return MCRMetadataManager.retrieveMCRObject(MOID);
     }
 
     private static void ParseObjects(String type, String ObjType, int maxID, String JID) {
@@ -97,7 +91,6 @@ public class MCRJournalSummary extends MCRAbstractCommands {
                 // check for journal belonging to the object
                 MCRObjectID objParentID = objStruct.getParentID();
                 MCRObjectID objParentIDtemp = objStruct.getParentID();
-                MCRObject objParent = new MCRObject();
                 boolean checker = true;
 
                 // get upstairs through the xml-tree until the root is
@@ -105,16 +98,16 @@ public class MCRJournalSummary extends MCRAbstractCommands {
                 while (objParentID != null) {
 
                     objParentIDtemp = objParentID;
-                    // error if the founded ID has no Object in the database
-                    try {
-                        objParent.receiveFromDatastore(objParentID);
-                    } catch (Exception e) {
+                    // error if the founded ID has no Object in the database#
+                    if (MCRMetadataManager.exists(objParentID)) {
+                        MCRObject objParent = MCRMetadataManager.retrieveMCRObject(objParentID);
+                        objParentID = objParent.getStructure().getParentID();
+                    } else {
                         logger.info("Error, parent is null!");
                         logger.info(object.getId());
                         logger.info(objParentID);
                         checker = false;
                     }
-                    objParentID = objParent.getStructure().getParentID();
                 }// while
                 if ((JID.equals("all") || JID.equals(objParentIDtemp.toString())) && checker) {
                     if (!journals.containsKey(objParentIDtemp)) {
@@ -455,7 +448,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
         logger.info("Go Go Go!");
         logger.info("====================");
 
-        xmltable = MCRXMLTableManager.instance();
+        xmlMetadataManager = MCRXMLMetadataManager.instance();
 
         maxArtID = getMaxArtID();
         maxVolID = getMaxVolID();
@@ -488,7 +481,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
         logger.info("Go Go Go!");
         logger.info("====================");
 
-        xmltable = MCRXMLTableManager.instance();
+        xmlMetadataManager = MCRXMLMetadataManager.instance();
 
         maxArtID = getMaxArtID();
         maxVolID = getMaxVolID();
@@ -524,7 +517,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
     }
 
     private static int getMaxArtID() {
-        return xmltable.getHighestStoredID("jportal", "jparticle") + 1;
+        return xmlMetadataManager.getHighestStoredID("jportal", "jparticle") + 1;
 
     }
 
@@ -532,14 +525,14 @@ public class MCRJournalSummary extends MCRAbstractCommands {
      * @return the maxVolID
      */
     private static int getMaxVolID() {
-        return xmltable.getHighestStoredID("jportal", "jpvolume") + 1;
+        return xmlMetadataManager.getHighestStoredID("jportal", "jpvolume") + 1;
     }
 
     /**
      * @return the maxVolID
      */
     private static int getMaxJouID() {
-        return xmltable.getHighestStoredID("jportal", "jpjournal") + 1;
+        return xmlMetadataManager.getHighestStoredID("jportal", "jpjournal") + 1;
     }
 
     public static void createCSV() throws IOException {

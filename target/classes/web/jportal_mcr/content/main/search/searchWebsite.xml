@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <section xml:lang="de" title="Webseiten durchsuchen">
+        <p>
+            Bitte geben Sie ihren Suchbegriff ein*:
+            <search-website />
+        </p>
+        <p></p>
+        <p></p>
+        <p>* Diese Suche funktioniert nur, wenn Google ihre Webseiten bereits indiziert hat.</p>
+    </section>
+    <meta>
+        <log date="2007-12-06" time="17:34" labelPath=" » Suche » Webseiten durchsuchen" lastEditor="administrator" />
+    </meta>
+</MyCoReWebPage>

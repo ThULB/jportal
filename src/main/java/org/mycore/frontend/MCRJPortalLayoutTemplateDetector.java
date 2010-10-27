@@ -7,7 +7,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRJPortalURIGetJournalID;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalLayoutTemplateDetector {
@@ -37,7 +37,7 @@ public class MCRJPortalLayoutTemplateDetector {
         }
 
         // get "date-from" of journal
-        Document objXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(journalID));
+        Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
         org.jdom.xpath.XPath xpath = null;
         Integer dateOfJournal = 0;
         Element dateNode = null;

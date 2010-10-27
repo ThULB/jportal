@@ -82,17 +82,17 @@ public class MCRJPortalLinkFileServlet extends MCRServlet {
     }
 
     private void setLink(HttpServletRequest request) throws MCRPersistenceException, MCRActiveLinkException, IOException {
-        MCRObjectID from = new MCRObjectID(getFrom(request));
+        MCRObjectID from = MCRObjectID.getInstance(getFrom(request));
         String to = getTo(request);
-        LOGGER.debug("set link from " + from.getId() + " to " + to);
+        LOGGER.debug("set link from " + from + " to " + to);
         MCRJPortalLink link = new MCRJPortalLink(from, to);
         link.set();
     }
 
     private void removeLink(HttpServletRequest request) throws MCRActiveLinkException, JDOMException, IOException {
-        MCRObjectID from = new MCRObjectID(getFrom(request));
+        MCRObjectID from = MCRObjectID.getInstance(getFrom(request));
         String to = getTo(request);
-        LOGGER.debug("remove link from " + from.getId() + " to " + to);
+        LOGGER.debug("remove link from " + from + " to " + to);
         MCRJPortalLink link = new MCRJPortalLink(from, to);
         link.remove();
     }

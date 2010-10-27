@@ -1,0 +1,4104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="jportal_class_00000003" xsi:noNamespaceSchemaLocation="MCRClassification.xsd">
+  <label description="Dewey Dezimal-Klassifikation" text="DDC" xml:lang="de" />
+  <label text="ddc:jportal_class_00000003" xml:lang="x-dini" />
+  <categories>
+    <category ID="0">
+      <label text="000 Informatik, Informationswissenschaft, allgemeine Werke" xml:lang="de" />
+      <label text="ddc:0" xml:lang="x-dini" />
+      <category ID="00">
+        <label text="000 Informatik, Wissen, Systeme" xml:lang="de" />
+        <label text="ddc:00" xml:lang="x-dini" />
+        <category ID="000">
+          <label text="000 Informatik, Informationswissenschaft, allgemeine Werke" xml:lang="de" />
+          <label text="ddc:000" xml:lang="x-dini" />
+        </category>
+        <category ID="001">
+          <label text="001 Wissen" xml:lang="de" />
+          <label text="ddc:001" xml:lang="x-dini" />
+        </category>
+        <category ID="002">
+          <label text="002 Das Buch" xml:lang="de" />
+          <label text="ddc:002" xml:lang="x-dini" />
+        </category>
+        <category ID="003">
+          <label text="003 Systeme" xml:lang="de" />
+          <label text="ddc:003" xml:lang="x-dini" />
+        </category>
+        <category ID="004">
+          <label text="004 Datenverarbeitung; Informatik" xml:lang="de" />
+          <label text="ddc:004" xml:lang="x-dini" />
+        </category>
+        <category ID="005">
+          <label text="005 Programmierung, Programme, Daten" xml:lang="de" />
+          <label text="ddc:005" xml:lang="x-dini" />
+        </category>
+        <category ID="006">
+          <label text="006 Spezielle Methoden der Informatik" xml:lang="de" />
+          <label text="ddc:006" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="01">
+        <label text="010 Bibliografien" xml:lang="de" />
+        <label text="ddc:01" xml:lang="x-dini" />
+        <category ID="010">
+          <label text="010 Bibliografien und Bibliografieren" xml:lang="de" />
+          <label text="ddc:010" xml:lang="x-dini" />
+        </category>
+        <category ID="011">
+          <label text="011 Bibliografien" xml:lang="de" />
+          <label text="ddc:011" xml:lang="x-dini" />
+        </category>
+        <category ID="012">
+          <label text="012 Personalbibliografien" xml:lang="de" />
+          <label text="ddc:012" xml:lang="x-dini" />
+        </category>
+        <category ID="014">
+          <label text="014 Bibliografien anonymer und pseudonymer Werke" xml:lang="de" />
+          <label text="ddc:014" xml:lang="x-dini" />
+        </category>
+        <category ID="015">
+          <label text="015 National- und Regionalbibliografien" xml:lang="de" />
+          <label text="ddc:015" xml:lang="x-dini" />
+        </category>
+        <category ID="016">
+          <label text="016 Fachbibliografien" xml:lang="de" />
+          <label text="ddc:016" xml:lang="x-dini" />
+        </category>
+        <category ID="017">
+          <label text="017 Allgemeine Sachkataloge" xml:lang="de" />
+          <label text="ddc:017" xml:lang="x-dini" />
+        </category>
+        <category ID="018">
+          <label text="018 Kataloge nach Autor, Erscheinungsjahr usw." xml:lang="de" />
+          <label text="ddc:018" xml:lang="x-dini" />
+        </category>
+        <category ID="019">
+          <label text="019 Kreuzkataloge" xml:lang="de" />
+          <label text="ddc:019" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="02">
+        <label text="020 Bibliotheks- und Informationswissenschaften" xml:lang="de" />
+        <label text="ddc:02" xml:lang="x-dini" />
+        <category ID="020">
+          <label text="020 Bibliotheks- und Informationswissenschaften" xml:lang="de" />
+          <label text="ddc:020" xml:lang="x-dini" />
+        </category>
+        <category ID="021">
+          <label text="021 Bibliothekskooperation, Bibliotheken und Öffentlichkeit" xml:lang="de" />
+          <label text="ddc:021" xml:lang="x-dini" />
+        </category>
+        <category ID="022">
+          <label text="022 Bibliothekstechnik, Gebäudeverwaltung" xml:lang="de" />
+          <label text="ddc:022" xml:lang="x-dini" />
+        </category>
+        <category ID="023">
+          <label text="023 Personalmanagement" xml:lang="de" />
+          <label text="ddc:023" xml:lang="x-dini" />
+        </category>
+        <category ID="025">
+          <label text="025 Bibliothekarische Tätigkeiten" xml:lang="de" />
+          <label text="ddc:025" xml:lang="x-dini" />
+        </category>
+        <category ID="026">
+          <label text="026 Spezialbibliotheken" xml:lang="de" />
+          <label text="ddc:026" xml:lang="x-dini" />
+        </category>
+        <category ID="027">
+          <label text="027 Universalbibliotheken" xml:lang="de" />
+          <label text="ddc:027" xml:lang="x-dini" />
+        </category>
+        <category ID="028">
+          <label text="028 Lektüre und Nutzung anderer Informationsmittel" xml:lang="de" />
+          <label text="ddc:028" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="03">
+        <label text="030 Enzyklopädien" xml:lang="de" />
+        <label text="ddc:03" xml:lang="x-dini" />
+        <category ID="030">
+          <label text="030 Allgemeinenzyklopädien" xml:lang="de" />
+          <label text="ddc:030" xml:lang="x-dini" />
+        </category>
+        <category ID="031">
+          <label text="031 Enzyklopädien in amerikanischem Englisch" xml:lang="de" />
+          <label text="ddc:031" xml:lang="x-dini" />
+        </category>
+        <category ID="032">
+          <label text="032 Enzyklopädien in Englisch" xml:lang="de" />
+          <label text="ddc:032" xml:lang="x-dini" />
+        </category>
+        <category ID="033">
+          <label text="033 Enzyklopädien in Deutsch und Niederländisch" xml:lang="de" />
+          <label text="ddc:033" xml:lang="x-dini" />
+        </category>
+        <category ID="034">
+          <label text="034 Enzyklopädien in Französisch, Okzitanisch und Katalanisch" xml:lang="de" />
+          <label text="ddc:034" xml:lang="x-dini" />
+        </category>
+        <category ID="035">
+          <label text="035 Enzyklopädien in Italienisch, Rumänisch und Rätoromanisch" xml:lang="de" />
+          <label text="ddc:035" xml:lang="x-dini" />
+        </category>
+        <category ID="036">
+          <label text="036 Enzyklopädien in Spanisch und Portugiesisch" xml:lang="de" />
+          <label text="ddc:036" xml:lang="x-dini" />
+        </category>
+        <category ID="037">
+          <label text="037 Enzyklopädien in slawischen Sprachen" xml:lang="de" />
+          <label text="ddc:037" xml:lang="x-dini" />
+        </category>
+        <category ID="038">
+          <label text="038 Enzyklopädien in skandinavischen Sprachen" xml:lang="de" />
+          <label text="ddc:038" xml:lang="x-dini" />
+        </category>
+        <category ID="039">
+          <label text="039 Enzyklopädien in anderen Sprachen" xml:lang="de" />
+          <label text="ddc:039" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="05">
+        <label text="050 Zeitschriften, fortlaufende Sammelwerke" xml:lang="de" />
+        <label text="ddc:05" xml:lang="x-dini" />
+        <category ID="050">
+          <label text="050 Zeitschriften, andere fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:050" xml:lang="x-dini" />
+        </category>
+        <category ID="051">
+          <label text="051 Fortlaufende Sammelwerke in amerikanischem Englisch" xml:lang="de" />
+          <label text="ddc:051" xml:lang="x-dini" />
+        </category>
+        <category ID="052">
+          <label text="052 Fortlaufende Sammelwerke in Englisch" xml:lang="de" />
+          <label text="ddc:052" xml:lang="x-dini" />
+        </category>
+        <category ID="053">
+          <label text="053 Fortlaufende Sammelwerke in Deutsch und Niederländisch" xml:lang="de" />
+          <label text="ddc:053" xml:lang="x-dini" />
+        </category>
+        <category ID="054">
+          <label text="054 Fortlaufende Sammelwerke in Französisch, Okzitanisch und Katalanisch" xml:lang="de" />
+          <label text="ddc:054" xml:lang="x-dini" />
+        </category>
+        <category ID="055">
+          <label text="055 Fortlaufende Sammelwerke in Italienisch, Rumänisch und Rätoromanisch" xml:lang="de" />
+          <label text="ddc:055" xml:lang="x-dini" />
+        </category>
+        <category ID="056">
+          <label text="056 Fortlaufende Sammelwerke in Spanisch und Portugiesisch" xml:lang="de" />
+          <label text="ddc:056" xml:lang="x-dini" />
+        </category>
+        <category ID="057">
+          <label text="057 Fortlaufende Sammelwerke in slawischen Sprachen" xml:lang="de" />
+          <label text="ddc:057" xml:lang="x-dini" />
+        </category>
+        <category ID="058">
+          <label text="058 Fortlaufende Sammelwerke in skandinavischen Sprachen" xml:lang="de" />
+          <label text="ddc:058" xml:lang="x-dini" />
+        </category>
+        <category ID="059">
+          <label text="059 Fortlaufende Sammelwerke in anderen Sprachen" xml:lang="de" />
+          <label text="ddc:059" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="06">
+        <label text="060 Verbände und Organisationen, Museumswissenschaft" xml:lang="de" />
+        <label text="ddc:06" xml:lang="x-dini" />
+        <category ID="060">
+          <label text="060 Verbände und Organisationen, Museumswissenschaft" xml:lang="de" />
+          <label text="ddc:060" xml:lang="x-dini" />
+        </category>
+        <category ID="061">
+          <label text="061 Verbände und Organisationen in Nordamerika" xml:lang="de" />
+          <label text="ddc:061" xml:lang="x-dini" />
+        </category>
+        <category ID="062">
+          <label text="062 Verbände und Organisationen in Großbritannien und Irland" xml:lang="de" />
+          <label text="ddc:062" xml:lang="x-dini" />
+        </category>
+        <category ID="063">
+          <label text="063 Verbände und Organisationen in Mitteleuropa; in Deutschland" xml:lang="de" />
+          <label text="ddc:063" xml:lang="x-dini" />
+        </category>
+        <category ID="064">
+          <label text="064 Verbände und Organisationen in Frankreich und Monaco" xml:lang="de" />
+          <label text="ddc:064" xml:lang="x-dini" />
+        </category>
+        <category ID="065">
+          <label text="065 Verbände und Organisationen in Italien und auf benachbarten Inseln" xml:lang="de" />
+          <label text="ddc:065" xml:lang="x-dini" />
+        </category>
+        <category ID="066">
+          <label text="066 Verbände und Organisationen auf der Iberischen Halbinsel und benachbarten Inseln" xml:lang="de" />
+          <label text="ddc:066" xml:lang="x-dini" />
+        </category>
+        <category ID="067">
+          <label text="067 Verbände und Organisationen in Osteuropa; in Russland" xml:lang="de" />
+          <label text="ddc:067" xml:lang="x-dini" />
+        </category>
+        <category ID="068">
+          <label text="068 Verbände und Organisationen in anderen Gebieten" xml:lang="de" />
+          <label text="ddc:068" xml:lang="x-dini" />
+        </category>
+        <category ID="069">
+          <label text="069 Museumswissenschaft" xml:lang="de" />
+          <label text="ddc:069" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="07">
+        <label text="070 Nachrichtenmedien, Journalismus, Verlagswesen" xml:lang="de" />
+        <label text="ddc:07" xml:lang="x-dini" />
+        <category ID="070">
+          <label text="070 Nachrichtenmedien, Journalismus, Verlagswesen" xml:lang="de" />
+          <label text="ddc:070" xml:lang="x-dini" />
+        </category>
+        <category ID="071">
+          <label text="071 Journalismus und Zeitungen in Nordamerika" xml:lang="de" />
+          <label text="ddc:071" xml:lang="x-dini" />
+        </category>
+        <category ID="072">
+          <label text="072 Journalismus und Zeitungen in Großbritannien und Irland" xml:lang="de" />
+          <label text="ddc:072" xml:lang="x-dini" />
+        </category>
+        <category ID="073">
+          <label text="073 Journalismus und Zeitungen in Mitteleuropa; in Deutschland" xml:lang="de" />
+          <label text="ddc:073" xml:lang="x-dini" />
+        </category>
+        <category ID="074">
+          <label text="074 Journalismus und Zeitungen in Frankreich und Monaco" xml:lang="de" />
+          <label text="ddc:074" xml:lang="x-dini" />
+        </category>
+        <category ID="075">
+          <label text="075 Journalismus und Zeitungen in Italien und auf benachbarten Inseln" xml:lang="de" />
+          <label text="ddc:075" xml:lang="x-dini" />
+        </category>
+        <category ID="076">
+          <label text="076 Journalismus und Zeitungen auf der iberischen Halbinsel und benachbarten Inseln" xml:lang="de" />
+          <label text="ddc:076" xml:lang="x-dini" />
+        </category>
+        <category ID="077">
+          <label text="077 Journalismus und Zeitungen in Osteuropa; in Russland" xml:lang="de" />
+          <label text="ddc:077" xml:lang="x-dini" />
+        </category>
+        <category ID="078">
+          <label text="078 Journalismus und Zeitungen in Skandinavien" xml:lang="de" />
+          <label text="ddc:078" xml:lang="x-dini" />
+        </category>
+        <category ID="079">
+          <label text="079 Journalismus und Zeitungen in anderen Gebieten" xml:lang="de" />
+          <label text="ddc:079" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="08">
+        <label text="080 Allgemeine Sammelwerke, Zitatensammlungen" xml:lang="de" />
+        <label text="ddc:08" xml:lang="x-dini" />
+        <category ID="080">
+          <label text="080 Allgemeine Sammelwerke, Zitatensammlungen" xml:lang="de" />
+          <label text="ddc:080" xml:lang="x-dini" />
+        </category>
+        <category ID="081">
+          <label text="081 Sammelwerke in amerikanischem Englisch" xml:lang="de" />
+          <label text="ddc:081" xml:lang="x-dini" />
+        </category>
+        <category ID="082">
+          <label text="082 Sammelwerke in Englisch" xml:lang="de" />
+          <label text="ddc:082" xml:lang="x-dini" />
+        </category>
+        <category ID="083">
+          <label text="083 Sammelwerke in Deutsch und Niederländisch" xml:lang="de" />
+          <label text="ddc:083" xml:lang="x-dini" />
+        </category>
+        <category ID="084">
+          <label text="084 Sammelwerke in Französisch, Okzitanisch und Katalanisch" xml:lang="de" />
+          <label text="ddc:084" xml:lang="x-dini" />
+        </category>
+        <category ID="085">
+          <label text="085 Sammelwerke in Italienisch, Rumänisch und Rätoromanisch" xml:lang="de" />
+          <label text="ddc:085" xml:lang="x-dini" />
+        </category>
+        <category ID="086">
+          <label text="086 Sammelwerke in Spanisch und Portugiesisch" xml:lang="de" />
+          <label text="ddc:086" xml:lang="x-dini" />
+        </category>
+        <category ID="087">
+          <label text="087 Sammelwerke in slawischen Sprachen" xml:lang="de" />
+          <label text="ddc:087" xml:lang="x-dini" />
+        </category>
+        <category ID="088">
+          <label text="088 Sammelwerke in skandinavischen Sprachen" xml:lang="de" />
+          <label text="ddc:088" xml:lang="x-dini" />
+        </category>
+        <category ID="089">
+          <label text="089 Sammelwerke in anderen Sprachen" xml:lang="de" />
+          <label text="ddc:089" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="09">
+        <label text="090 Handschriften, seltene Bücher" xml:lang="de" />
+        <label text="ddc:09" xml:lang="x-dini" />
+        <category ID="090">
+          <label text="090 Handschriften, seltene Bücher" xml:lang="de" />
+          <label text="ddc:090" xml:lang="x-dini" />
+        </category>
+        <category ID="091">
+          <label text="091 Handschriften" xml:lang="de" />
+          <label text="ddc:091" xml:lang="x-dini" />
+        </category>
+        <category ID="092">
+          <label text="092 Blockbücher" xml:lang="de" />
+          <label text="ddc:092" xml:lang="x-dini" />
+        </category>
+        <category ID="093">
+          <label text="093 Inkunabeln" xml:lang="de" />
+          <label text="ddc:093" xml:lang="x-dini" />
+        </category>
+        <category ID="094">
+          <label text="094 Gedruckte Bücher" xml:lang="de" />
+          <label text="ddc:094" xml:lang="x-dini" />
+        </category>
+        <category ID="095">
+          <label text="095 Bücher mit besonderem Einband" xml:lang="de" />
+          <label text="ddc:095" xml:lang="x-dini" />
+        </category>
+        <category ID="096">
+          <label text="096 Bücher mit besonderen Illustrationen" xml:lang="de" />
+          <label text="ddc:096" xml:lang="x-dini" />
+        </category>
+        <category ID="097">
+          <label text="097 Bücher aus besonderem Besitz oder besonderer Herkunft" xml:lang="de" />
+          <label text="ddc:097" xml:lang="x-dini" />
+        </category>
+        <category ID="098">
+          <label text="098 Verbotene Bücher, Fälschungen, Scherzdrucke" xml:lang="de" />
+          <label text="ddc:098" xml:lang="x-dini" />
+        </category>
+        <category ID="099">
+          <label text="099 Bücher mit besonderem Format" xml:lang="de" />
+          <label text="ddc:099" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="1">
+      <label text="100  Philosophie und Psychologie" xml:lang="de" />
+      <label text="ddc:1" xml:lang="x-dini" />
+      <category ID="10">
+        <label text="100 Philosophie" xml:lang="de" />
+        <label text="ddc:10" xml:lang="x-dini" />
+        <category ID="100">
+          <label text="100 Philosophie und Psychologie" xml:lang="de" />
+          <label text="ddc:100" xml:lang="x-dini" />
+        </category>
+        <category ID="101">
+          <label text="101 Theorie der Philosophie" xml:lang="de" />
+          <label text="ddc:101" xml:lang="x-dini" />
+        </category>
+        <category ID="102">
+          <label text="102 Verschiedenes" xml:lang="de" />
+          <label text="ddc:102" xml:lang="x-dini" />
+        </category>
+        <category ID="103">
+          <label text="103 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:103" xml:lang="x-dini" />
+        </category>
+        <category ID="105">
+          <label text="105 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:105" xml:lang="x-dini" />
+        </category>
+        <category ID="106">
+          <label text="106 Verbände und Organisationen, Management" xml:lang="de" />
+          <label text="ddc:106" xml:lang="x-dini" />
+        </category>
+        <category ID="107">
+          <label text="107 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:107" xml:lang="x-dini" />
+        </category>
+        <category ID="108">
+          <label text="108 Behandlung nach Personengruppen" xml:lang="de" />
+          <label text="ddc:108" xml:lang="x-dini" />
+        </category>
+        <category ID="109">
+          <label text="109 Histor. Behandlung, Behandlung mehrerer Einzelpersonen" xml:lang="de" />
+          <label text="ddc:109" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="11">
+        <label text="110 Metaphysik" xml:lang="de" />
+        <label text="ddc:11" xml:lang="x-dini" />
+        <category ID="110">
+          <label text="110 Metaphysik" xml:lang="de" />
+          <label text="ddc:110" xml:lang="x-dini" />
+        </category>
+        <category ID="111">
+          <label text="111 Ontologie" xml:lang="de" />
+          <label text="ddc:111" xml:lang="x-dini" />
+        </category>
+        <category ID="113">
+          <label text="113 Kosmologie" xml:lang="de" />
+          <label text="ddc:113" xml:lang="x-dini" />
+        </category>
+        <category ID="114">
+          <label text="114 Raum" xml:lang="de" />
+          <label text="ddc:114" xml:lang="x-dini" />
+        </category>
+        <category ID="115">
+          <label text="115 Zeit" xml:lang="de" />
+          <label text="ddc:115" xml:lang="x-dini" />
+        </category>
+        <category ID="116">
+          <label text="116 Veränderung" xml:lang="de" />
+          <label text="ddc:116" xml:lang="x-dini" />
+        </category>
+        <category ID="117">
+          <label text="117 Struktur" xml:lang="de" />
+          <label text="ddc:117" xml:lang="x-dini" />
+        </category>
+        <category ID="118">
+          <label text="118 Kraft und Energie" xml:lang="de" />
+          <label text="ddc:118" xml:lang="x-dini" />
+        </category>
+        <category ID="119">
+          <label text="119 Zahl und Quantität" xml:lang="de" />
+          <label text="ddc:119" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="12">
+        <label text="120 Epistemologie" xml:lang="de" />
+        <label text="ddc:12" xml:lang="x-dini" />
+        <category ID="120">
+          <label text="120 Epistemologie, Kausalität, Menschenbild" xml:lang="de" />
+          <label text="ddc:120" xml:lang="x-dini" />
+        </category>
+        <category ID="121">
+          <label text="121 Epistemologie" xml:lang="de" />
+          <label text="ddc:121" xml:lang="x-dini" />
+        </category>
+        <category ID="122">
+          <label text="122 Kausalität" xml:lang="de" />
+          <label text="ddc:122" xml:lang="x-dini" />
+        </category>
+        <category ID="123">
+          <label text="123 Determinismus, Indeterminismus" xml:lang="de" />
+          <label text="ddc:123" xml:lang="x-dini" />
+        </category>
+        <category ID="124">
+          <label text="124 Teleologie" xml:lang="de" />
+          <label text="ddc:124" xml:lang="x-dini" />
+        </category>
+        <category ID="126">
+          <label text="126 Das Selbst" xml:lang="de" />
+          <label text="ddc:126" xml:lang="x-dini" />
+        </category>
+        <category ID="127">
+          <label text="127 Das Unbewusste, das Unterbewusste" xml:lang="de" />
+          <label text="ddc:127" xml:lang="x-dini" />
+        </category>
+        <category ID="128">
+          <label text="128 Menschenbild" xml:lang="de" />
+          <label text="ddc:128" xml:lang="x-dini" />
+        </category>
+        <category ID="129">
+          <label text="129 Ursprung und Schicksal der individuellen Seele" xml:lang="de" />
+          <label text="ddc:129" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="13">
+        <label text="130 Parapsychologie, Okkultismus" xml:lang="de" />
+        <label text="ddc:13" xml:lang="x-dini" />
+        <category ID="130">
+          <label text="130 Parapsychologie und Okkultismus" xml:lang="de" />
+          <label text="ddc:130" xml:lang="x-dini" />
+        </category>
+        <category ID="131">
+          <label text="131 Parapsychologische und okkulte Methoden" xml:lang="de" />
+          <label text="ddc:131" xml:lang="x-dini" />
+        </category>
+        <category ID="133">
+          <label text="133 Einzelne Themen der Parapsychologie und des Okkultismus" xml:lang="de" />
+          <label text="ddc:133" xml:lang="x-dini" />
+        </category>
+        <category ID="135">
+          <label text="135 Träume, Mysterien" xml:lang="de" />
+          <label text="ddc:135" xml:lang="x-dini" />
+        </category>
+        <category ID="137">
+          <label text="137 Divinatorische Graphologie" xml:lang="de" />
+          <label text="ddc:137" xml:lang="x-dini" />
+        </category>
+        <category ID="138">
+          <label text="138 Physiognomie" xml:lang="de" />
+          <label text="ddc:138" xml:lang="x-dini" />
+        </category>
+        <category ID="139">
+          <label text="139 Phrenologie" xml:lang="de" />
+          <label text="ddc:139" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="14">
+        <label text="140 Einzelne philosophische Schulen" xml:lang="de" />
+        <label text="ddc:14" xml:lang="x-dini" />
+        <category ID="140">
+          <label text="140 Einzelne philosophische Schulen" xml:lang="de" />
+          <label text="ddc:140" xml:lang="x-dini" />
+        </category>
+        <category ID="141">
+          <label text="141 Idealismus und verwandte Systeme" xml:lang="de" />
+          <label text="ddc:141" xml:lang="x-dini" />
+        </category>
+        <category ID="142">
+          <label text="142 Kritizismus" xml:lang="de" />
+          <label text="ddc:142" xml:lang="x-dini" />
+        </category>
+        <category ID="143">
+          <label text="143 Bergsonismus, Intuitionismus" xml:lang="de" />
+          <label text="ddc:143" xml:lang="x-dini" />
+        </category>
+        <category ID="144">
+          <label text="144 Humanismus und verwandte Systeme" xml:lang="de" />
+          <label text="ddc:144" xml:lang="x-dini" />
+        </category>
+        <category ID="145">
+          <label text="145 Sensualismus" xml:lang="de" />
+          <label text="ddc:145" xml:lang="x-dini" />
+        </category>
+        <category ID="146">
+          <label text="146 Naturalismus und verwandte Systeme" xml:lang="de" />
+          <label text="ddc:146" xml:lang="x-dini" />
+        </category>
+        <category ID="147">
+          <label text="147 Pantheismus und verwandte Systeme" xml:lang="de" />
+          <label text="ddc:147" xml:lang="x-dini" />
+        </category>
+        <category ID="148">
+          <label text="148 Eklektizismus, Liberalismus, Traditionalismus" xml:lang="de" />
+          <label text="ddc:148" xml:lang="x-dini" />
+        </category>
+        <category ID="149">
+          <label text="149 Sonstige philosophische Systeme" xml:lang="de" />
+          <label text="ddc:149" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="15">
+        <label text="150 Psychologie" xml:lang="de" />
+        <label text="ddc:15" xml:lang="x-dini" />
+        <category ID="150">
+          <label text="150 Psychologie" xml:lang="de" />
+          <label text="ddc:150" xml:lang="x-dini" />
+        </category>
+        <category ID="152">
+          <label text="152 Sinneswahrnehmung, Bewegung, Emotionen, Triebe" xml:lang="de" />
+          <label text="ddc:152" xml:lang="x-dini" />
+        </category>
+        <category ID="153">
+          <label text="153 Kognitive Prozesse, Intelligenz" xml:lang="de" />
+          <label text="ddc:153" xml:lang="x-dini" />
+        </category>
+        <category ID="154">
+          <label text="154 Das Unterbewusste, veränderte Bewusstseinszustände" xml:lang="de" />
+          <label text="ddc:154" xml:lang="x-dini" />
+        </category>
+        <category ID="155">
+          <label text="155 Differentielle Psychologie, Entwicklungspsychologie" xml:lang="de" />
+          <label text="ddc:155" xml:lang="x-dini" />
+        </category>
+        <category ID="156">
+          <label text="156 Vergleichende Psychologie" xml:lang="de" />
+          <label text="ddc:156" xml:lang="x-dini" />
+        </category>
+        <category ID="158">
+          <label text="158 Angewandte Psychologie" xml:lang="de" />
+          <label text="ddc:158" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="16">
+        <label text="160 Logik" xml:lang="de" />
+        <label text="ddc:16" xml:lang="x-dini" />
+        <category ID="160">
+          <label text="160 Logik" xml:lang="de" />
+          <label text="ddc:160" xml:lang="x-dini" />
+        </category>
+        <category ID="161">
+          <label text="161 Induktion" xml:lang="de" />
+          <label text="ddc:161" xml:lang="x-dini" />
+        </category>
+        <category ID="162">
+          <label text="162 Deduktion" xml:lang="de" />
+          <label text="ddc:162" xml:lang="x-dini" />
+        </category>
+        <category ID="165">
+          <label text="165 Fehlschlüsse, Fehlerquellen" xml:lang="de" />
+          <label text="ddc:165" xml:lang="x-dini" />
+        </category>
+        <category ID="166">
+          <label text="166 Syllogismen" xml:lang="de" />
+          <label text="ddc:166" xml:lang="x-dini" />
+        </category>
+        <category ID="167">
+          <label text="167 Hypothesen" xml:lang="de" />
+          <label text="ddc:167" xml:lang="x-dini" />
+        </category>
+        <category ID="168">
+          <label text="168 Argument, Überzeugung" xml:lang="de" />
+          <label text="ddc:168" xml:lang="x-dini" />
+        </category>
+        <category ID="169">
+          <label text="169 Analogie" xml:lang="de" />
+          <label text="ddc:169" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="17">
+        <label text="170 Ethik" xml:lang="de" />
+        <label text="ddc:17" xml:lang="x-dini" />
+        <category ID="170">
+          <label text="170 Ethik" xml:lang="de" />
+          <label text="ddc:170" xml:lang="x-dini" />
+        </category>
+        <category ID="171">
+          <label text="171 Ethische Systeme" xml:lang="de" />
+          <label text="ddc:171" xml:lang="x-dini" />
+        </category>
+        <category ID="172">
+          <label text="172 Politische Ethik" xml:lang="de" />
+          <label text="ddc:172" xml:lang="x-dini" />
+        </category>
+        <category ID="173">
+          <label text="173 Familienethik" xml:lang="de" />
+          <label text="ddc:173" xml:lang="x-dini" />
+        </category>
+        <category ID="174">
+          <label text="174 Berufsethik" xml:lang="de" />
+          <label text="ddc:174" xml:lang="x-dini" />
+        </category>
+        <category ID="175">
+          <label text="175 Sport- und Freizeitethik" xml:lang="de" />
+          <label text="ddc:175" xml:lang="x-dini" />
+        </category>
+        <category ID="176">
+          <label text="176 Sexual- und Reproduktionsethik" xml:lang="de" />
+          <label text="ddc:176" xml:lang="x-dini" />
+        </category>
+        <category ID="177">
+          <label text="177 Sozialethik" xml:lang="de" />
+          <label text="ddc:177" xml:lang="x-dini" />
+        </category>
+        <category ID="178">
+          <label text="178 Konsumethik" xml:lang="de" />
+          <label text="ddc:178" xml:lang="x-dini" />
+        </category>
+        <category ID="179">
+          <label text="179 Andere ethische Normen" xml:lang="de" />
+          <label text="ddc:179" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="18">
+        <label text="180 Antike, mittelalterliche und östliche Philosophie" xml:lang="de" />
+        <label text="ddc:18" xml:lang="x-dini" />
+        <category ID="180">
+          <label text="180 Antike, mittelalterliche und östliche Philosophie" xml:lang="de" />
+          <label text="ddc:180" xml:lang="x-dini" />
+        </category>
+        <category ID="181">
+          <label text="181 Östliche Philosophie" xml:lang="de" />
+          <label text="ddc:181" xml:lang="x-dini" />
+        </category>
+        <category ID="182">
+          <label text="182 Vorsokratiker" xml:lang="de" />
+          <label text="ddc:182" xml:lang="x-dini" />
+        </category>
+        <category ID="183">
+          <label text="183 Sokratische und verwandte Philosophien" xml:lang="de" />
+          <label text="ddc:183" xml:lang="x-dini" />
+        </category>
+        <category ID="184">
+          <label text="184 Platonismus" xml:lang="de" />
+          <label text="ddc:184" xml:lang="x-dini" />
+        </category>
+        <category ID="185">
+          <label text="185 Aristotelismus" xml:lang="de" />
+          <label text="ddc:185" xml:lang="x-dini" />
+        </category>
+        <category ID="186">
+          <label text="186 Skeptizismus, Neoplatonismus" xml:lang="de" />
+          <label text="ddc:186" xml:lang="x-dini" />
+        </category>
+        <category ID="187">
+          <label text="187 Epikureismus" xml:lang="de" />
+          <label text="ddc:187" xml:lang="x-dini" />
+        </category>
+        <category ID="188">
+          <label text="188 Stoizismus" xml:lang="de" />
+          <label text="ddc:188" xml:lang="x-dini" />
+        </category>
+        <category ID="189">
+          <label text="189 Westliche Philosophie des Mittelalters" xml:lang="de" />
+          <label text="ddc:189" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="19">
+        <label text="190 Moderne westliche Philosophie" xml:lang="de" />
+        <label text="ddc:19" xml:lang="x-dini" />
+        <category ID="190">
+          <label text="190 Moderne westliche Philosophie" xml:lang="de" />
+          <label text="ddc:190" xml:lang="x-dini" />
+        </category>
+        <category ID="191">
+          <label text="191 Philosophie in den USA und Kanada" xml:lang="de" />
+          <label text="ddc:191" xml:lang="x-dini" />
+        </category>
+        <category ID="192">
+          <label text="192 Philosophie in Großbritannien und Irland" xml:lang="de" />
+          <label text="ddc:192" xml:lang="x-dini" />
+        </category>
+        <category ID="193">
+          <label text="193 Philosophie in Deutschland und Österreich" xml:lang="de" />
+          <label text="ddc:193" xml:lang="x-dini" />
+        </category>
+        <category ID="194">
+          <label text="194 Philosophie in Frankreich" xml:lang="de" />
+          <label text="ddc:194" xml:lang="x-dini" />
+        </category>
+        <category ID="195">
+          <label text="195 Philosophie in Italien" xml:lang="de" />
+          <label text="ddc:195" xml:lang="x-dini" />
+        </category>
+        <category ID="196">
+          <label text="196 Philosophie in Spanien und Portugal" xml:lang="de" />
+          <label text="ddc:196" xml:lang="x-dini" />
+        </category>
+        <category ID="197">
+          <label text="197 Philosophie in Russland und der früheren Sowjetunion" xml:lang="de" />
+          <label text="ddc:197" xml:lang="x-dini" />
+        </category>
+        <category ID="198">
+          <label text="198 Philosophie in Skandinavien" xml:lang="de" />
+          <label text="ddc:198" xml:lang="x-dini" />
+        </category>
+        <category ID="199">
+          <label text="199 Philosophie in anderen Gebieten" xml:lang="de" />
+          <label text="ddc:199" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="2">
+      <label text="200  Religion" xml:lang="de" />
+      <label text="ddc:2" xml:lang="x-dini" />
+      <category ID="20">
+        <label text="200 Religion" xml:lang="de" />
+        <label text="ddc:20" xml:lang="x-dini" />
+        <category ID="200">
+          <label text="200 Religion" xml:lang="de" />
+          <label text="ddc:200" xml:lang="x-dini" />
+        </category>
+        <category ID="201">
+          <label text="201 Religiöse Mythologie, Sozialethik" xml:lang="de" />
+          <label text="ddc:201" xml:lang="x-dini" />
+        </category>
+        <category ID="202">
+          <label text="202 Doktrinen" xml:lang="de" />
+          <label text="ddc:202" xml:lang="x-dini" />
+        </category>
+        <category ID="203">
+          <label text="203 Gottesdienst u. andere öffentl. Formen der Religionsausübung" xml:lang="de" />
+          <label text="ddc:203" xml:lang="x-dini" />
+        </category>
+        <category ID="204">
+          <label text="204 Religiöse Erfahrung, religiöses Leben, Religionsausübung" xml:lang="de" />
+          <label text="ddc:204" xml:lang="x-dini" />
+        </category>
+        <category ID="205">
+          <label text="205 Religiöse Ethik" xml:lang="de" />
+          <label text="ddc:205" xml:lang="x-dini" />
+        </category>
+        <category ID="206">
+          <label text="206 Religiöse Führer und Organisationen" xml:lang="de" />
+          <label text="ddc:206" xml:lang="x-dini" />
+        </category>
+        <category ID="207">
+          <label text="207 Mission, religiöse Erziehung" xml:lang="de" />
+          <label text="ddc:207" xml:lang="x-dini" />
+        </category>
+        <category ID="208">
+          <label text="208 Quellen" xml:lang="de" />
+          <label text="ddc:208" xml:lang="x-dini" />
+        </category>
+        <category ID="209">
+          <label text="209 Sekten, Reformbewegungen" xml:lang="de" />
+          <label text="ddc:209" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="21">
+        <label text="210 Religionsphilosophie, Religionstheorie" xml:lang="de" />
+        <label text="ddc:21" xml:lang="x-dini" />
+        <category ID="210">
+          <label text="210 Religionsphilosophie, Religionstheorie" xml:lang="de" />
+          <label text="ddc:210" xml:lang="x-dini" />
+        </category>
+        <category ID="211">
+          <label text="211 Gottesvorstellungen" xml:lang="de" />
+          <label text="ddc:211" xml:lang="x-dini" />
+        </category>
+        <category ID="212">
+          <label text="212 Gottesfrage, Eigenschaften Gottes" xml:lang="de" />
+          <label text="ddc:212" xml:lang="x-dini" />
+        </category>
+        <category ID="213">
+          <label text="213 Schöpfung" xml:lang="de" />
+          <label text="ddc:213" xml:lang="x-dini" />
+        </category>
+        <category ID="214">
+          <label text="214 Theodizee" xml:lang="de" />
+          <label text="ddc:214" xml:lang="x-dini" />
+        </category>
+        <category ID="215">
+          <label text="215 Naturwissenschaft und Religion" xml:lang="de" />
+          <label text="ddc:215" xml:lang="x-dini" />
+        </category>
+        <category ID="218">
+          <label text="218 Menschenbild" xml:lang="de" />
+          <label text="ddc:218" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="22">
+        <label text="220 Bibel" xml:lang="de" />
+        <label text="ddc:22" xml:lang="x-dini" />
+        <category ID="220">
+          <label text="220 Bibel" xml:lang="de" />
+          <label text="ddc:220" xml:lang="x-dini" />
+        </category>
+        <category ID="221">
+          <label text="221 Altes Testament (Tenach)" xml:lang="de" />
+          <label text="ddc:221" xml:lang="x-dini" />
+        </category>
+        <category ID="222">
+          <label text="222 Geschichtsbücher des Alten Testaments" xml:lang="de" />
+          <label text="ddc:222" xml:lang="x-dini" />
+        </category>
+        <category ID="223">
+          <label text="223 Poetische Bücher des Alten Testaments" xml:lang="de" />
+          <label text="ddc:223" xml:lang="x-dini" />
+        </category>
+        <category ID="224">
+          <label text="224 Prophetische Bücher des Alten Testaments" xml:lang="de" />
+          <label text="ddc:224" xml:lang="x-dini" />
+        </category>
+        <category ID="225">
+          <label text="225 Neues Testament" xml:lang="de" />
+          <label text="ddc:225" xml:lang="x-dini" />
+        </category>
+        <category ID="226">
+          <label text="226 Evangelien, Apostelgeschichte" xml:lang="de" />
+          <label text="ddc:226" xml:lang="x-dini" />
+        </category>
+        <category ID="227">
+          <label text="227 Briefe" xml:lang="de" />
+          <label text="ddc:227" xml:lang="x-dini" />
+        </category>
+        <category ID="228">
+          <label text="228 Johannes-Apokalypse (Offenbarung des Johannes)" xml:lang="de" />
+          <label text="ddc:228" xml:lang="x-dini" />
+        </category>
+        <category ID="229">
+          <label text="229 Apokryphen, Pseudepigraphen" xml:lang="de" />
+          <label text="ddc:229" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="23">
+        <label text="230 Christentum, Christliche Dogmatik" xml:lang="de" />
+        <label text="ddc:23" xml:lang="x-dini" />
+        <category ID="230">
+          <label text="230 Christentum, Christliche Dogmatik" xml:lang="de" />
+          <label text="ddc:230" xml:lang="x-dini" />
+        </category>
+        <category ID="231">
+          <label text="231 Gotteslehre, Trinität" xml:lang="de" />
+          <label text="ddc:231" xml:lang="x-dini" />
+        </category>
+        <category ID="232">
+          <label text="232 Jesus Christus und die Heilige Familie" xml:lang="de" />
+          <label text="ddc:232" xml:lang="x-dini" />
+        </category>
+        <category ID="233">
+          <label text="233 Menschenbild" xml:lang="de" />
+          <label text="ddc:233" xml:lang="x-dini" />
+        </category>
+        <category ID="234">
+          <label text="234 Erlösung, Gnade" xml:lang="de" />
+          <label text="ddc:234" xml:lang="x-dini" />
+        </category>
+        <category ID="235">
+          <label text="235 Heilige, Engel, Dämonen" xml:lang="de" />
+          <label text="ddc:235" xml:lang="x-dini" />
+        </category>
+        <category ID="236">
+          <label text="236 Eschatologie" xml:lang="de" />
+          <label text="ddc:236" xml:lang="x-dini" />
+        </category>
+        <category ID="238">
+          <label text="238 Glaubensbekenntnisse, Katechismen" xml:lang="de" />
+          <label text="ddc:238" xml:lang="x-dini" />
+        </category>
+        <category ID="239">
+          <label text="239 Apologetik, Polemik" xml:lang="de" />
+          <label text="ddc:239" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="24">
+        <label text="240 Christliche Ethik, Praktische Theologie" xml:lang="de" />
+        <label text="ddc:24" xml:lang="x-dini" />
+        <category ID="240">
+          <label text="240 Christliche Ethik, Erbauung" xml:lang="de" />
+          <label text="ddc:240" xml:lang="x-dini" />
+        </category>
+        <category ID="241">
+          <label text="241 Christliche Ethik" xml:lang="de" />
+          <label text="ddc:241" xml:lang="x-dini" />
+        </category>
+        <category ID="242">
+          <label text="242 Erbauungsliteratur" xml:lang="de" />
+          <label text="ddc:242" xml:lang="x-dini" />
+        </category>
+        <category ID="243">
+          <label text="243 Christliche Lebenshilfe für Einzelpersonen" xml:lang="de" />
+          <label text="ddc:243" xml:lang="x-dini" />
+        </category>
+        <category ID="246">
+          <label text="246 Kunst im Christentum" xml:lang="de" />
+          <label text="ddc:246" xml:lang="x-dini" />
+        </category>
+        <category ID="247">
+          <label text="247 Kirchenausstattung, liturgisches Gerät" xml:lang="de" />
+          <label text="ddc:247" xml:lang="x-dini" />
+        </category>
+        <category ID="248">
+          <label text="248 Christliche Erfahrung, christliches Leben, Religionsausübung" xml:lang="de" />
+          <label text="ddc:248" xml:lang="x-dini" />
+        </category>
+        <category ID="249">
+          <label text="249 Christliches Leben in der Familie" xml:lang="de" />
+          <label text="ddc:249" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="25">
+        <label text="250 Christliche Pastoraltheologie, Ordensgemeinschaften" xml:lang="de" />
+        <label text="ddc:25" xml:lang="x-dini" />
+        <category ID="250">
+          <label text="250 Christliche Pastoraltheologie, Ordensgemeinschaften" xml:lang="de" />
+          <label text="ddc:250" xml:lang="x-dini" />
+        </category>
+        <category ID="251">
+          <label text="251 Homiletik" xml:lang="de" />
+          <label text="ddc:251" xml:lang="x-dini" />
+        </category>
+        <category ID="252">
+          <label text="252 Predigttexte" xml:lang="de" />
+          <label text="ddc:252" xml:lang="x-dini" />
+        </category>
+        <category ID="253">
+          <label text="253 Pastoraltheologie" xml:lang="de" />
+          <label text="ddc:253" xml:lang="x-dini" />
+        </category>
+        <category ID="254">
+          <label text="254 Gemeindeleitung" xml:lang="de" />
+          <label text="ddc:254" xml:lang="x-dini" />
+        </category>
+        <category ID="255">
+          <label text="255 Religiöse Kongregationen und Orden" xml:lang="de" />
+          <label text="ddc:255" xml:lang="x-dini" />
+        </category>
+        <category ID="259">
+          <label text="259 Kategorialseelsorge" xml:lang="de" />
+          <label text="ddc:259" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="26">
+        <label text="260 Kirchenorganisation, Sozialethik, Gottesdienst" xml:lang="de" />
+        <label text="ddc:26" xml:lang="x-dini" />
+        <category ID="260">
+          <label text="260 Kirchenorganisation, Sozialethik, Gottesdienst" xml:lang="de" />
+          <label text="ddc:260" xml:lang="x-dini" />
+        </category>
+        <category ID="261">
+          <label text="261 Christliche Sozialethik" xml:lang="de" />
+          <label text="ddc:261" xml:lang="x-dini" />
+        </category>
+        <category ID="262">
+          <label text="262 Kirchenorganisation, Ekklesiologie" xml:lang="de" />
+          <label text="ddc:262" xml:lang="x-dini" />
+        </category>
+        <category ID="263">
+          <label text="263 Heilige Zeiten und Orte" xml:lang="de" />
+          <label text="ddc:263" xml:lang="x-dini" />
+        </category>
+        <category ID="264">
+          <label text="264 Öffentliche Religionsausübung" xml:lang="de" />
+          <label text="ddc:264" xml:lang="x-dini" />
+        </category>
+        <category ID="265">
+          <label text="265 Sakramente, andere Riten und Zeremonien" xml:lang="de" />
+          <label text="ddc:265" xml:lang="x-dini" />
+        </category>
+        <category ID="266">
+          <label text="266 Mission" xml:lang="de" />
+          <label text="ddc:266" xml:lang="x-dini" />
+        </category>
+        <category ID="267">
+          <label text="267 Religiöse Organisationen" xml:lang="de" />
+          <label text="ddc:267" xml:lang="x-dini" />
+        </category>
+        <category ID="268">
+          <label text="268 Religiöse Erziehung" xml:lang="de" />
+          <label text="ddc:268" xml:lang="x-dini" />
+        </category>
+        <category ID="269">
+          <label text="269 Geistliche Erneuerung" xml:lang="de" />
+          <label text="ddc:269" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="27">
+        <label text="270 Geschichte des Christentums" xml:lang="de" />
+        <label text="ddc:27" xml:lang="x-dini" />
+        <category ID="270">
+          <label text="270 Geschichte des Christentums, Kirchengeschichte" xml:lang="de" />
+          <label text="ddc:270" xml:lang="x-dini" />
+        </category>
+        <category ID="271">
+          <label text="271 Religiöse Orden in der Kirchengeschichte" xml:lang="de" />
+          <label text="ddc:271" xml:lang="x-dini" />
+        </category>
+        <category ID="272">
+          <label text="272 Verfolgungen in der Kirchengeschichte" xml:lang="de" />
+          <label text="ddc:272" xml:lang="x-dini" />
+        </category>
+        <category ID="273">
+          <label text="273 Dogmatische Kontroversen, Häresie" xml:lang="de" />
+          <label text="ddc:273" xml:lang="x-dini" />
+        </category>
+        <category ID="274">
+          <label text="274 Geschichte des Christentums in Europa" xml:lang="de" />
+          <label text="ddc:274" xml:lang="x-dini" />
+        </category>
+        <category ID="275">
+          <label text="275 Geschichte des Christentums in Asien" xml:lang="de" />
+          <label text="ddc:275" xml:lang="x-dini" />
+        </category>
+        <category ID="276">
+          <label text="276 Geschichte des Christentums in Afrika" xml:lang="de" />
+          <label text="ddc:276" xml:lang="x-dini" />
+        </category>
+        <category ID="277">
+          <label text="277 Geschichte des Christentums in Nordamerika" xml:lang="de" />
+          <label text="ddc:277" xml:lang="x-dini" />
+        </category>
+        <category ID="278">
+          <label text="278 Geschichte des Christentums in Südamerika" xml:lang="de" />
+          <label text="ddc:278" xml:lang="x-dini" />
+        </category>
+        <category ID="279">
+          <label text="279 Geschichte des Christentums in anderen Gebieten" xml:lang="de" />
+          <label text="ddc:279" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="28">
+        <label text="280 Christliche Konfessionen und Denominationen" xml:lang="de" />
+        <label text="ddc:28" xml:lang="x-dini" />
+        <category ID="280">
+          <label text="280 Christliche Konfessionen, Denominationen und Sekten" xml:lang="de" />
+          <label text="ddc:280" xml:lang="x-dini" />
+        </category>
+        <category ID="281">
+          <label text="281 Frühkirche, Ostkirchen" xml:lang="de" />
+          <label text="ddc:281" xml:lang="x-dini" />
+        </category>
+        <category ID="282">
+          <label text="282 Römisch-katholische Kirche" xml:lang="de" />
+          <label text="ddc:282" xml:lang="x-dini" />
+        </category>
+        <category ID="283">
+          <label text="283 Anglikanische Kirchen" xml:lang="de" />
+          <label text="ddc:283" xml:lang="x-dini" />
+        </category>
+        <category ID="284">
+          <label text="284 Protestantische Kirchen kontinentaleuropäischen Ursprungs" xml:lang="de" />
+          <label text="ddc:284" xml:lang="x-dini" />
+        </category>
+        <category ID="285">
+          <label text="285 Presbyterianer, Kongregationalisten" xml:lang="de" />
+          <label text="ddc:285" xml:lang="x-dini" />
+        </category>
+        <category ID="286">
+          <label text="286 Baptisten, Disciples of Christ, Adventisten" xml:lang="de" />
+          <label text="ddc:286" xml:lang="x-dini" />
+        </category>
+        <category ID="287">
+          <label text="287 Methodisten und verwandte Kirchen" xml:lang="de" />
+          <label text="ddc:287" xml:lang="x-dini" />
+        </category>
+        <category ID="289">
+          <label text="289 Andere Konfessionen, Denominationen und Sekten" xml:lang="de" />
+          <label text="ddc:289" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="29">
+        <label text="290 Andere Religionen" xml:lang="de" />
+        <label text="ddc:29" xml:lang="x-dini" />
+        <category ID="290">
+          <label text="290 Andere Religionen" xml:lang="de" />
+          <label text="ddc:290" xml:lang="x-dini" />
+        </category>
+        <category ID="292">
+          <label text="292 Griechische und römische Religion" xml:lang="de" />
+          <label text="ddc:292" xml:lang="x-dini" />
+        </category>
+        <category ID="293">
+          <label text="293 Germanische Religion" xml:lang="de" />
+          <label text="ddc:293" xml:lang="x-dini" />
+        </category>
+        <category ID="294">
+          <label text="294 Religionen indischen Ursprungs" xml:lang="de" />
+          <label text="ddc:294" xml:lang="x-dini" />
+        </category>
+        <category ID="295">
+          <label text="295 Parsismus" xml:lang="de" />
+          <label text="ddc:295" xml:lang="x-dini" />
+        </category>
+        <category ID="296">
+          <label text="296 Judentum" xml:lang="de" />
+          <label text="ddc:296" xml:lang="x-dini" />
+        </category>
+        <category ID="297">
+          <label text="297 Islam, Babismus, Bahaismus" xml:lang="de" />
+          <label text="ddc:297" xml:lang="x-dini" />
+        </category>
+        <category ID="298">
+          <label text="298 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:298" xml:lang="x-dini" />
+        </category>
+        <category ID="299">
+          <label text="299 Weitere Religionen" xml:lang="de" />
+          <label text="ddc:299" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="3">
+      <label text="300  Sozialwissenschaften" xml:lang="de" />
+      <label text="ddc:3" xml:lang="x-dini" />
+      <category ID="30">
+        <label text="300 Sozialwissenschaften, Soziologie" xml:lang="de" />
+        <label text="ddc:30" xml:lang="x-dini" />
+        <category ID="300">
+          <label text="300 Sozialwissenschaften" xml:lang="de" />
+          <label text="ddc:300" xml:lang="x-dini" />
+        </category>
+        <category ID="301">
+          <label text="301 Soziologie, Sozialanthropologie" xml:lang="de" />
+          <label text="ddc:301" xml:lang="x-dini" />
+        </category>
+        <category ID="302">
+          <label text="302 Soziale Interaktion" xml:lang="de" />
+          <label text="ddc:302" xml:lang="x-dini" />
+        </category>
+        <category ID="303">
+          <label text="303 Gesellschaftliche Prozesse" xml:lang="de" />
+          <label text="ddc:303" xml:lang="x-dini" />
+        </category>
+        <category ID="304">
+          <label text="304 Faktoren mit Einfluss auf das soziale Verhalten" xml:lang="de" />
+          <label text="ddc:304" xml:lang="x-dini" />
+        </category>
+        <category ID="305">
+          <label text="305 Gesellschaftliche Gruppen" xml:lang="de" />
+          <label text="ddc:305" xml:lang="x-dini" />
+        </category>
+        <category ID="306">
+          <label text="306 Kultur, kulturelle Einrichtungen" xml:lang="de" />
+          <label text="ddc:306" xml:lang="x-dini" />
+        </category>
+        <category ID="307">
+          <label text="307 Soziale Lebensformen" xml:lang="de" />
+          <label text="ddc:307" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="31">
+        <label text="310 Statistik" xml:lang="de" />
+        <label text="ddc:31" xml:lang="x-dini" />
+        <category ID="310">
+          <label text="310 Sammelwerke allgemeiner Statistiken" xml:lang="de" />
+          <label text="ddc:310" xml:lang="x-dini" />
+        </category>
+        <category ID="314">
+          <label text="314 Allgemeine Statistiken über Europa" xml:lang="de" />
+          <label text="ddc:314" xml:lang="x-dini" />
+        </category>
+        <category ID="315">
+          <label text="315 Allgemeine Statistiken über Asien" xml:lang="de" />
+          <label text="ddc:315" xml:lang="x-dini" />
+        </category>
+        <category ID="316">
+          <label text="316 Allgemeine Statistiken über Afrika" xml:lang="de" />
+          <label text="ddc:316" xml:lang="x-dini" />
+        </category>
+        <category ID="317">
+          <label text="317 Allgemeine Statistiken über Nordamerika" xml:lang="de" />
+          <label text="ddc:317" xml:lang="x-dini" />
+        </category>
+        <category ID="318">
+          <label text="318 Allgemeine Statistiken über Südamerika" xml:lang="de" />
+          <label text="ddc:318" xml:lang="x-dini" />
+        </category>
+        <category ID="319">
+          <label text="319 Allgemeine Statistiken über andere Gebiete" xml:lang="de" />
+          <label text="ddc:319" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="32">
+        <label text="320 Politik" xml:lang="de" />
+        <label text="ddc:32" xml:lang="x-dini" />
+        <category ID="320">
+          <label text="320 Politik" xml:lang="de" />
+          <label text="ddc:320" xml:lang="x-dini" />
+        </category>
+        <category ID="321">
+          <label text="321 Staats- und Regierungsformen" xml:lang="de" />
+          <label text="ddc:321" xml:lang="x-dini" />
+        </category>
+        <category ID="322">
+          <label text="322 Beziehungen des Staats zu organisierten Gruppen" xml:lang="de" />
+          <label text="ddc:322" xml:lang="x-dini" />
+        </category>
+        <category ID="323">
+          <label text="323 Bürgerliche und politische Rechte" xml:lang="de" />
+          <label text="ddc:323" xml:lang="x-dini" />
+        </category>
+        <category ID="324">
+          <label text="324 Politische Willensbildung, Parteien, Wahlen" xml:lang="de" />
+          <label text="ddc:324" xml:lang="x-dini" />
+        </category>
+        <category ID="325">
+          <label text="325 Internationale Migration, Kolonisation" xml:lang="de" />
+          <label text="ddc:325" xml:lang="x-dini" />
+        </category>
+        <category ID="326">
+          <label text="326 Sklaverei und Befreiung" xml:lang="de" />
+          <label text="ddc:326" xml:lang="x-dini" />
+        </category>
+        <category ID="327">
+          <label text="327 Internationale Beziehungen" xml:lang="de" />
+          <label text="ddc:327" xml:lang="x-dini" />
+        </category>
+        <category ID="328">
+          <label text="328 Gesetzgebung" xml:lang="de" />
+          <label text="ddc:328" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="33">
+        <label text="330 Wirtschaft" xml:lang="de" />
+        <label text="ddc:33" xml:lang="x-dini" />
+        <category ID="330">
+          <label text="330 Wirtschaft" xml:lang="de" />
+          <label text="ddc:330" xml:lang="x-dini" />
+        </category>
+        <category ID="331">
+          <label text="331 Arbeit" xml:lang="de" />
+          <label text="ddc:331" xml:lang="x-dini" />
+        </category>
+        <category ID="332">
+          <label text="332 Finanzwirtschaft" xml:lang="de" />
+          <label text="ddc:332" xml:lang="x-dini" />
+        </category>
+        <category ID="333">
+          <label text="333 Energie- und Landschaftsökonomie" xml:lang="de" />
+          <label text="ddc:333" xml:lang="x-dini" />
+        </category>
+        <category ID="334">
+          <label text="334 Genossenschaften" xml:lang="de" />
+          <label text="ddc:334" xml:lang="x-dini" />
+        </category>
+        <category ID="335">
+          <label text="335 Sozialismus und verwandte Systeme" xml:lang="de" />
+          <label text="ddc:335" xml:lang="x-dini" />
+        </category>
+        <category ID="336">
+          <label text="336 Öffentliches Finanzwesen" xml:lang="de" />
+          <label text="ddc:336" xml:lang="x-dini" />
+        </category>
+        <category ID="337">
+          <label text="337 Internationale Volkswirtschaft" xml:lang="de" />
+          <label text="ddc:337" xml:lang="x-dini" />
+        </category>
+        <category ID="338">
+          <label text="338 Produktion" xml:lang="de" />
+          <label text="ddc:338" xml:lang="x-dini" />
+        </category>
+        <category ID="339">
+          <label text="339 Makroökonomie und verwandte Themen" xml:lang="de" />
+          <label text="ddc:339" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="34">
+        <label text="340 Recht" xml:lang="de" />
+        <label text="ddc:34" xml:lang="x-dini" />
+        <category ID="340">
+          <label text="340 Recht" xml:lang="de" />
+          <label text="ddc:340" xml:lang="x-dini" />
+        </category>
+        <category ID="341">
+          <label text="341 Völkerrecht" xml:lang="de" />
+          <label text="ddc:341" xml:lang="x-dini" />
+        </category>
+        <category ID="342">
+          <label text="342 Verfassungs- und Verwaltungsrecht" xml:lang="de" />
+          <label text="ddc:342" xml:lang="x-dini" />
+        </category>
+        <category ID="343">
+          <label text="343 Militärrecht, Finanz- und Steuerrecht, Wirtschaftsrecht" xml:lang="de" />
+          <label text="ddc:343" xml:lang="x-dini" />
+        </category>
+        <category ID="344">
+          <label text="344 Arbeits-, Sozial-, Bildungs- und Kulturrecht" xml:lang="de" />
+          <label text="ddc:344" xml:lang="x-dini" />
+        </category>
+        <category ID="345">
+          <label text="345 Strafrecht, Strafprozessrecht" xml:lang="de" />
+          <label text="ddc:345" xml:lang="x-dini" />
+        </category>
+        <category ID="346">
+          <label text="346 Privatrecht" xml:lang="de" />
+          <label text="ddc:346" xml:lang="x-dini" />
+        </category>
+        <category ID="347">
+          <label text="347 Zivilprozessrecht, Gerichtsverfassungsrecht" xml:lang="de" />
+          <label text="ddc:347" xml:lang="x-dini" />
+        </category>
+        <category ID="348">
+          <label text="348 Gesetze und Verordnungen, Rechtsfälle und Entscheidungen" xml:lang="de" />
+          <label text="ddc:348" xml:lang="x-dini" />
+        </category>
+        <category ID="349">
+          <label text="349 Recht einzelner Gebietskörperschaften und Gebiete" xml:lang="de" />
+          <label text="ddc:349" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="35">
+        <label text="350 öffentliche Verwaltung, Militär" xml:lang="de" />
+        <label text="ddc:35" xml:lang="x-dini" />
+        <category ID="350">
+          <label text="350 Öffentliche Verwaltung, Militär" xml:lang="de" />
+          <label text="ddc:350" xml:lang="x-dini" />
+        </category>
+        <category ID="351">
+          <label text="351 Öffentliche Verwaltung" xml:lang="de" />
+          <label text="ddc:351" xml:lang="x-dini" />
+        </category>
+        <category ID="352">
+          <label text="352 Allgemeines zur öffentlichen Verwaltung" xml:lang="de" />
+          <label text="ddc:352" xml:lang="x-dini" />
+        </category>
+        <category ID="353">
+          <label text="353 Einzelne Bereiche der öffentlichen Verwaltung" xml:lang="de" />
+          <label text="ddc:353" xml:lang="x-dini" />
+        </category>
+        <category ID="354">
+          <label text="354 Verwaltung von Wirtschaft und Umwelt" xml:lang="de" />
+          <label text="ddc:354" xml:lang="x-dini" />
+        </category>
+        <category ID="355">
+          <label text="355 Militärwissenschaft" xml:lang="de" />
+          <label text="ddc:355" xml:lang="x-dini" />
+        </category>
+        <category ID="356">
+          <label text="356 Infanterie und Kriegführung" xml:lang="de" />
+          <label text="ddc:356" xml:lang="x-dini" />
+        </category>
+        <category ID="357">
+          <label text="357 Kavallerie und Kriegführung" xml:lang="de" />
+          <label text="ddc:357" xml:lang="x-dini" />
+        </category>
+        <category ID="358">
+          <label text="358 Luftwaffe, andere Spezialeinheiten" xml:lang="de" />
+          <label text="ddc:358" xml:lang="x-dini" />
+        </category>
+        <category ID="359">
+          <label text="359 Marine und Kriegführung" xml:lang="de" />
+          <label text="ddc:359" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="36">
+        <label text="360 Gesellschaftliche Probleme, Sozialdienste" xml:lang="de" />
+        <label text="ddc:36" xml:lang="x-dini" />
+        <category ID="360">
+          <label text="360 Gesellsch. Probleme u. Sozialdienste; Verbände u. Organisationen" xml:lang="de" />
+          <label text="ddc:360" xml:lang="x-dini" />
+        </category>
+        <category ID="361">
+          <label text="361 Gesellschaftliche Probleme und Sozialarbeit im Allgemeinen" xml:lang="de" />
+          <label text="ddc:361" xml:lang="x-dini" />
+        </category>
+        <category ID="362">
+          <label text="362 Probleme und Dienste der Sozialarbeit" xml:lang="de" />
+          <label text="ddc:362" xml:lang="x-dini" />
+        </category>
+        <category ID="363">
+          <label text="363 Andere gesellschaftliche Probleme und Sozialdienste" xml:lang="de" />
+          <label text="ddc:363" xml:lang="x-dini" />
+        </category>
+        <category ID="364">
+          <label text="364 Kriminologie" xml:lang="de" />
+          <label text="ddc:364" xml:lang="x-dini" />
+        </category>
+        <category ID="365">
+          <label text="365 Strafvollzugseinrichtungen und ähnliche Einrichtungen" xml:lang="de" />
+          <label text="ddc:365" xml:lang="x-dini" />
+        </category>
+        <category ID="366">
+          <label text="366 Gesellschaften, Logen" xml:lang="de" />
+          <label text="ddc:366" xml:lang="x-dini" />
+        </category>
+        <category ID="367">
+          <label text="367 Allgemeine Vereine und Klubs" xml:lang="de" />
+          <label text="ddc:367" xml:lang="x-dini" />
+        </category>
+        <category ID="368">
+          <label text="368 Versicherungswesen" xml:lang="de" />
+          <label text="ddc:368" xml:lang="x-dini" />
+        </category>
+        <category ID="369">
+          <label text="369 Verschiedene Arten von Verbänden und Vereinen" xml:lang="de" />
+          <label text="ddc:369" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="37">
+        <label text="370 Erziehung, Schul- und Bildungswesen" xml:lang="de" />
+        <label text="ddc:37" xml:lang="x-dini" />
+        <category ID="370">
+          <label text="370 Erziehung, Schul- und Bildungswesen" xml:lang="de" />
+          <label text="ddc:370" xml:lang="x-dini" />
+        </category>
+        <category ID="371">
+          <label text="371 Schulen, schulische Aktivitäten; Sonderpädagogik" xml:lang="de" />
+          <label text="ddc:371" xml:lang="x-dini" />
+        </category>
+        <category ID="372">
+          <label text="372 Primarstufe" xml:lang="de" />
+          <label text="ddc:372" xml:lang="x-dini" />
+        </category>
+        <category ID="373">
+          <label text="373 Sekundarstufe" xml:lang="de" />
+          <label text="ddc:373" xml:lang="x-dini" />
+        </category>
+        <category ID="374">
+          <label text="374 Erwachsenenbildung" xml:lang="de" />
+          <label text="ddc:374" xml:lang="x-dini" />
+        </category>
+        <category ID="375">
+          <label text="375 Lehrpläne, Curricula" xml:lang="de" />
+          <label text="ddc:375" xml:lang="x-dini" />
+        </category>
+        <category ID="378">
+          <label text="378 Hochschulbildung" xml:lang="de" />
+          <label text="ddc:378" xml:lang="x-dini" />
+        </category>
+        <category ID="379">
+          <label text="379 Bildungspolitik und -finanzierung" xml:lang="de" />
+          <label text="ddc:379" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="38">
+        <label text="380 Handel, Kommunikation, Verkehr" xml:lang="de" />
+        <label text="ddc:38" xml:lang="x-dini" />
+        <category ID="380">
+          <label text="380 Handel, Kommunikation, Verkehr" xml:lang="de" />
+          <label text="ddc:380" xml:lang="x-dini" />
+        </category>
+        <category ID="381">
+          <label text="381 Handel" xml:lang="de" />
+          <label text="ddc:381" xml:lang="x-dini" />
+        </category>
+        <category ID="382">
+          <label text="382 Internationaler Handel" xml:lang="de" />
+          <label text="ddc:382" xml:lang="x-dini" />
+        </category>
+        <category ID="383">
+          <label text="383 Post" xml:lang="de" />
+          <label text="ddc:383" xml:lang="x-dini" />
+        </category>
+        <category ID="384">
+          <label text="384 Kommunikation; Telekommunikation" xml:lang="de" />
+          <label text="ddc:384" xml:lang="x-dini" />
+        </category>
+        <category ID="385">
+          <label text="385 Eisenbahn, Schienenverkehr" xml:lang="de" />
+          <label text="ddc:385" xml:lang="x-dini" />
+        </category>
+        <category ID="386">
+          <label text="386 Binnenschifffahrt, Fährverkehr" xml:lang="de" />
+          <label text="ddc:386" xml:lang="x-dini" />
+        </category>
+        <category ID="387">
+          <label text="387 See-, Luft- und Raumfahrt" xml:lang="de" />
+          <label text="ddc:387" xml:lang="x-dini" />
+        </category>
+        <category ID="388">
+          <label text="388 Verkehr; Straßenverkehr" xml:lang="de" />
+          <label text="ddc:388" xml:lang="x-dini" />
+        </category>
+        <category ID="389">
+          <label text="389 Metrologie, Normung" xml:lang="de" />
+          <label text="ddc:389" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="39">
+        <label text="390 Sitten und Bräuche" xml:lang="de" />
+        <label text="ddc:39" xml:lang="x-dini" />
+        <category ID="390">
+          <label text="390 Sitten und Bräuche" xml:lang="de" />
+          <label text="ddc:390" xml:lang="x-dini" />
+        </category>
+        <category ID="391">
+          <label text="391 Kleidung, äußeres Erscheinungsbild" xml:lang="de" />
+          <label text="ddc:391" xml:lang="x-dini" />
+        </category>
+        <category ID="392">
+          <label text="392 Sitten und Bräuche nach Lebensphasen und im Familienleben" xml:lang="de" />
+          <label text="ddc:392" xml:lang="x-dini" />
+        </category>
+        <category ID="393">
+          <label text="393 Sterbe- und Bestattungsriten" xml:lang="de" />
+          <label text="ddc:393" xml:lang="x-dini" />
+        </category>
+        <category ID="394">
+          <label text="394 Allgemeine Sitten und Bräuche" xml:lang="de" />
+          <label text="ddc:394" xml:lang="x-dini" />
+        </category>
+        <category ID="395">
+          <label text="395 Etikette (Benehmen)" xml:lang="de" />
+          <label text="ddc:395" xml:lang="x-dini" />
+        </category>
+        <category ID="398">
+          <label text="398 Folklore" xml:lang="de" />
+          <label text="ddc:398" xml:lang="x-dini" />
+        </category>
+        <category ID="399">
+          <label text="399 Bräuche des Krieges und der Diplomatie" xml:lang="de" />
+          <label text="ddc:399" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="4">
+      <label text="400  Sprache" xml:lang="de" />
+      <label text="ddc:4" xml:lang="x-dini" />
+      <category ID="40">
+        <label text="400 Sprache" xml:lang="de" />
+        <label text="ddc:40" xml:lang="x-dini" />
+        <category ID="400">
+          <label text="400 Sprache" xml:lang="de" />
+          <label text="ddc:400" xml:lang="x-dini" />
+        </category>
+        <category ID="401">
+          <label text="401 Sprachphilosophie, Sprachtheorie" xml:lang="de" />
+          <label text="ddc:401" xml:lang="x-dini" />
+        </category>
+        <category ID="402">
+          <label text="402 Verschiedenes" xml:lang="de" />
+          <label text="ddc:402" xml:lang="x-dini" />
+        </category>
+        <category ID="403">
+          <label text="403 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:403" xml:lang="x-dini" />
+        </category>
+        <category ID="404">
+          <label text="404 Einzelne Themen" xml:lang="de" />
+          <label text="ddc:404" xml:lang="x-dini" />
+        </category>
+        <category ID="405">
+          <label text="405 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:405" xml:lang="x-dini" />
+        </category>
+        <category ID="406">
+          <label text="406 Verbände und Organisationen, Management" xml:lang="de" />
+          <label text="ddc:406" xml:lang="x-dini" />
+        </category>
+        <category ID="407">
+          <label text="407 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:407" xml:lang="x-dini" />
+        </category>
+        <category ID="408">
+          <label text="408 Behandlung nach Personengruppen" xml:lang="de" />
+          <label text="ddc:408" xml:lang="x-dini" />
+        </category>
+        <category ID="409">
+          <label text="409 Geografische, personenbezogene Behandlung" xml:lang="de" />
+          <label text="ddc:409" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="41">
+        <label text="410 Linguistik" xml:lang="de" />
+        <label text="ddc:41" xml:lang="x-dini" />
+        <category ID="410">
+          <label text="410 Linguistik" xml:lang="de" />
+          <label text="ddc:410" xml:lang="x-dini" />
+        </category>
+        <category ID="411">
+          <label text="411 Schriftsysteme" xml:lang="de" />
+          <label text="ddc:411" xml:lang="x-dini" />
+        </category>
+        <category ID="412">
+          <label text="412 Etymologie" xml:lang="de" />
+          <label text="ddc:412" xml:lang="x-dini" />
+        </category>
+        <category ID="413">
+          <label text="413 Wörterbücher" xml:lang="de" />
+          <label text="ddc:413" xml:lang="x-dini" />
+        </category>
+        <category ID="414">
+          <label text="414 Phonologie, Phonetik" xml:lang="de" />
+          <label text="ddc:414" xml:lang="x-dini" />
+        </category>
+        <category ID="415">
+          <label text="415 Grammatik" xml:lang="de" />
+          <label text="ddc:415" xml:lang="x-dini" />
+        </category>
+        <category ID="417">
+          <label text="417 Dialektologie, historische Linguistik" xml:lang="de" />
+          <label text="ddc:417" xml:lang="x-dini" />
+        </category>
+        <category ID="418">
+          <label text="418 Standardsprache; Angewandte Linguistik" xml:lang="de" />
+          <label text="ddc:418" xml:lang="x-dini" />
+        </category>
+        <category ID="419">
+          <label text="419 Zeichen- und Gebärdensprachen" xml:lang="de" />
+          <label text="ddc:419" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="42">
+        <label text="420 Englisch, Altenglisch" xml:lang="de" />
+        <label text="ddc:42" xml:lang="x-dini" />
+        <category ID="420">
+          <label text="420 Englisch, Altenglisch" xml:lang="de" />
+          <label text="ddc:420" xml:lang="x-dini" />
+        </category>
+        <category ID="421">
+          <label text="421 Schriftsystem und Phonologie des Englischen" xml:lang="de" />
+          <label text="ddc:421" xml:lang="x-dini" />
+        </category>
+        <category ID="422">
+          <label text="422 Etymologie des Englischen" xml:lang="de" />
+          <label text="ddc:422" xml:lang="x-dini" />
+        </category>
+        <category ID="423">
+          <label text="423 Englische Wörterbücher" xml:lang="de" />
+          <label text="ddc:423" xml:lang="x-dini" />
+        </category>
+        <category ID="425">
+          <label text="425 Englische Grammatik" xml:lang="de" />
+          <label text="ddc:425" xml:lang="x-dini" />
+        </category>
+        <category ID="427">
+          <label text="427 Varianten des Englischen, Mittelenglisch" xml:lang="de" />
+          <label text="ddc:427" xml:lang="x-dini" />
+        </category>
+        <category ID="428">
+          <label text="428 Englisch als Standardsprache" xml:lang="de" />
+          <label text="ddc:428" xml:lang="x-dini" />
+        </category>
+        <category ID="429">
+          <label text="429 Altenglisch (Angelsächsisch)" xml:lang="de" />
+          <label text="ddc:429" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="43">
+        <label text="430 Deutsch, germanische Sprachen allgemein" xml:lang="de" />
+        <label text="ddc:43" xml:lang="x-dini" />
+        <category ID="430">
+          <label text="430 Germanische Sprachen; Deutsch" xml:lang="de" />
+          <label text="ddc:430" xml:lang="x-dini" />
+        </category>
+        <category ID="431">
+          <label text="431 Schriftsystem und Phonologie des Deutschen" xml:lang="de" />
+          <label text="ddc:431" xml:lang="x-dini" />
+        </category>
+        <category ID="432">
+          <label text="432 Etymologie des Deutschen" xml:lang="de" />
+          <label text="ddc:432" xml:lang="x-dini" />
+        </category>
+        <category ID="433">
+          <label text="433 Deutsche Wörterbücher" xml:lang="de" />
+          <label text="ddc:433" xml:lang="x-dini" />
+        </category>
+        <category ID="435">
+          <label text="435 Deutsche Grammatik" xml:lang="de" />
+          <label text="ddc:435" xml:lang="x-dini" />
+        </category>
+        <category ID="437">
+          <label text="437 Varianten des Deutschen" xml:lang="de" />
+          <label text="ddc:437" xml:lang="x-dini" />
+        </category>
+        <category ID="438">
+          <label text="438 Deutsch als Standardsprache" xml:lang="de" />
+          <label text="ddc:438" xml:lang="x-dini" />
+        </category>
+        <category ID="439">
+          <label text="439 Andere germanische Sprachen" xml:lang="de" />
+          <label text="ddc:439" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="44">
+        <label text="440 Französisch, romanische Sprachen allgemein" xml:lang="de" />
+        <label text="ddc:44" xml:lang="x-dini" />
+        <category ID="440">
+          <label text="440 Romanische Sprachen; Französisch" xml:lang="de" />
+          <label text="ddc:440" xml:lang="x-dini" />
+        </category>
+        <category ID="441">
+          <label text="441 Schriftsystem und Phonologie des Französischen" xml:lang="de" />
+          <label text="ddc:441" xml:lang="x-dini" />
+        </category>
+        <category ID="442">
+          <label text="442 Etymologie des Französischen" xml:lang="de" />
+          <label text="ddc:442" xml:lang="x-dini" />
+        </category>
+        <category ID="443">
+          <label text="443 Französische Wörterbücher" xml:lang="de" />
+          <label text="ddc:443" xml:lang="x-dini" />
+        </category>
+        <category ID="445">
+          <label text="445 Französische Grammatik" xml:lang="de" />
+          <label text="ddc:445" xml:lang="x-dini" />
+        </category>
+        <category ID="447">
+          <label text="447 Varianten des Französischen" xml:lang="de" />
+          <label text="ddc:447" xml:lang="x-dini" />
+        </category>
+        <category ID="448">
+          <label text="448 Französisch als Standardsprache" xml:lang="de" />
+          <label text="ddc:448" xml:lang="x-dini" />
+        </category>
+        <category ID="449">
+          <label text="449 Okzitanisch und Katalanisch" xml:lang="de" />
+          <label text="ddc:449" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="45">
+        <label text="450 Italienisch, Rumänisch, Rätoromanisch" xml:lang="de" />
+        <label text="ddc:45" xml:lang="x-dini" />
+        <category ID="450">
+          <label text="450 Italienisch, Rumänisch, Rätoromanisch" xml:lang="de" />
+          <label text="ddc:450" xml:lang="x-dini" />
+        </category>
+        <category ID="451">
+          <label text="451 Schriftsystem und Phonologie des Italienischen" xml:lang="de" />
+          <label text="ddc:451" xml:lang="x-dini" />
+        </category>
+        <category ID="452">
+          <label text="452 Etymologie des Italienischen" xml:lang="de" />
+          <label text="ddc:452" xml:lang="x-dini" />
+        </category>
+        <category ID="453">
+          <label text="453 Italienische Wörterbücher" xml:lang="de" />
+          <label text="ddc:453" xml:lang="x-dini" />
+        </category>
+        <category ID="455">
+          <label text="455 Italienische Grammatik" xml:lang="de" />
+          <label text="ddc:455" xml:lang="x-dini" />
+        </category>
+        <category ID="457">
+          <label text="457 Varianten des Italienischen" xml:lang="de" />
+          <label text="ddc:457" xml:lang="x-dini" />
+        </category>
+        <category ID="458">
+          <label text="458 Italienisch als Standardsprache" xml:lang="de" />
+          <label text="ddc:458" xml:lang="x-dini" />
+        </category>
+        <category ID="459">
+          <label text="459 Rumänisch, Rätoromanisch" xml:lang="de" />
+          <label text="ddc:459" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="46">
+        <label text="460 Spanisch, Portugiesisch" xml:lang="de" />
+        <label text="ddc:46" xml:lang="x-dini" />
+        <category ID="460">
+          <label text="460 Spanisch, Portugiesisch" xml:lang="de" />
+          <label text="ddc:460" xml:lang="x-dini" />
+        </category>
+        <category ID="461">
+          <label text="461 Schriftsystem und Phonologie des Spanischen" xml:lang="de" />
+          <label text="ddc:461" xml:lang="x-dini" />
+        </category>
+        <category ID="462">
+          <label text="462 Etymologie des Spanischen" xml:lang="de" />
+          <label text="ddc:462" xml:lang="x-dini" />
+        </category>
+        <category ID="463">
+          <label text="463 Spanische Wörterbücher" xml:lang="de" />
+          <label text="ddc:463" xml:lang="x-dini" />
+        </category>
+        <category ID="465">
+          <label text="465 Spanische Grammatik" xml:lang="de" />
+          <label text="ddc:465" xml:lang="x-dini" />
+        </category>
+        <category ID="467">
+          <label text="467 Varianten des Spanischen" xml:lang="de" />
+          <label text="ddc:467" xml:lang="x-dini" />
+        </category>
+        <category ID="468">
+          <label text="468 Spanisch als Standardsprache" xml:lang="de" />
+          <label text="ddc:468" xml:lang="x-dini" />
+        </category>
+        <category ID="469">
+          <label text="469 Portugiesisch" xml:lang="de" />
+          <label text="ddc:469" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="47">
+        <label text="470 Latein, italische Sprachen" xml:lang="de" />
+        <label text="ddc:47" xml:lang="x-dini" />
+        <category ID="470">
+          <label text="470 Italische Sprachen; Latein" xml:lang="de" />
+          <label text="ddc:470" xml:lang="x-dini" />
+        </category>
+        <category ID="471">
+          <label text="471 Schriftsystem und Phonologie des Lateinischen" xml:lang="de" />
+          <label text="ddc:471" xml:lang="x-dini" />
+        </category>
+        <category ID="472">
+          <label text="472 Etymologie des Lateinischen" xml:lang="de" />
+          <label text="ddc:472" xml:lang="x-dini" />
+        </category>
+        <category ID="473">
+          <label text="473 Lateinische Wörterbücher" xml:lang="de" />
+          <label text="ddc:473" xml:lang="x-dini" />
+        </category>
+        <category ID="475">
+          <label text="475 Lateinische Grammatik" xml:lang="de" />
+          <label text="ddc:475" xml:lang="x-dini" />
+        </category>
+        <category ID="477">
+          <label text="477 Altlatein, Mittellatein, Neulatein, Kirchenlatein, Vulgärlatein" xml:lang="de" />
+          <label text="ddc:477" xml:lang="x-dini" />
+        </category>
+        <category ID="478">
+          <label text="478 Gebrauch des klassischen Lateins" xml:lang="de" />
+          <label text="ddc:478" xml:lang="x-dini" />
+        </category>
+        <category ID="479">
+          <label text="479 Andere italische Sprachen" xml:lang="de" />
+          <label text="ddc:479" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="48">
+        <label text="480 Griechisch" xml:lang="de" />
+        <label text="ddc:48" xml:lang="x-dini" />
+        <category ID="480">
+          <label text="480 Hellenische Sprachen; Klassisches Griechisch" xml:lang="de" />
+          <label text="ddc:480" xml:lang="x-dini" />
+        </category>
+        <category ID="481">
+          <label text="481 Schriftsystem und Phonologie des klassischen Griechisch" xml:lang="de" />
+          <label text="ddc:481" xml:lang="x-dini" />
+        </category>
+        <category ID="482">
+          <label text="482 Etymologie des klassischen Griechisch" xml:lang="de" />
+          <label text="ddc:482" xml:lang="x-dini" />
+        </category>
+        <category ID="483">
+          <label text="483 Wörterbücher des klassischen Griechisch" xml:lang="de" />
+          <label text="ddc:483" xml:lang="x-dini" />
+        </category>
+        <category ID="485">
+          <label text="485 Grammatik des klassischen Griechisch" xml:lang="de" />
+          <label text="ddc:485" xml:lang="x-dini" />
+        </category>
+        <category ID="487">
+          <label text="487 Protogriechisch, Mittelgriechisch" xml:lang="de" />
+          <label text="ddc:487" xml:lang="x-dini" />
+        </category>
+        <category ID="488">
+          <label text="488 Gebrauch des klassischen Griechisch" xml:lang="de" />
+          <label text="ddc:488" xml:lang="x-dini" />
+        </category>
+        <category ID="489">
+          <label text="489 Andere hellenische Sprachen, Neugriechisch" xml:lang="de" />
+          <label text="ddc:489" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="49">
+        <label text="490 Andere Sprachen" xml:lang="de" />
+        <label text="ddc:49" xml:lang="x-dini" />
+        <category ID="490">
+          <label text="490 Andere Sprachen" xml:lang="de" />
+          <label text="ddc:490" xml:lang="x-dini" />
+        </category>
+        <category ID="491">
+          <label text="491 Ostindoeuropäische und keltische Sprachen" xml:lang="de" />
+          <label text="ddc:491" xml:lang="x-dini" />
+        </category>
+        <category ID="492">
+          <label text="492 Afroasiatische Sprachen; Semitische Sprachen" xml:lang="de" />
+          <label text="ddc:492" xml:lang="x-dini" />
+        </category>
+        <category ID="493">
+          <label text="493 Nichtsemitische afroasiatische Sprachen" xml:lang="de" />
+          <label text="ddc:493" xml:lang="x-dini" />
+        </category>
+        <category ID="494">
+          <label text="494 Altaische, uralische, hyperboräische u. dravidische Sprachen" xml:lang="de" />
+          <label text="ddc:494" xml:lang="x-dini" />
+        </category>
+        <category ID="495">
+          <label text="495 Ost- und südostasiatische Sprachen" xml:lang="de" />
+          <label text="ddc:495" xml:lang="x-dini" />
+        </category>
+        <category ID="496">
+          <label text="496 Afrikanische Sprachen" xml:lang="de" />
+          <label text="ddc:496" xml:lang="x-dini" />
+        </category>
+        <category ID="497">
+          <label text="497 Sprachen der Ureinwohner Nordamerikas" xml:lang="de" />
+          <label text="ddc:497" xml:lang="x-dini" />
+        </category>
+        <category ID="498">
+          <label text="498 Sprachen der Ureinwohner Südamerikas" xml:lang="de" />
+          <label text="ddc:498" xml:lang="x-dini" />
+        </category>
+        <category ID="499">
+          <label text="499 Austronesische und andere Sprachen" xml:lang="de" />
+          <label text="ddc:499" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="5">
+      <label text="500  Naturwissenschaften und Mathematik" xml:lang="de" />
+      <label text="ddc:5" xml:lang="x-dini" />
+      <category ID="50">
+        <label text="500 Naturwissenschaften" xml:lang="de" />
+        <label text="ddc:50" xml:lang="x-dini" />
+        <category ID="500">
+          <label text="500 Naturwissenschaften und Mathematik" xml:lang="de" />
+          <label text="ddc:500" xml:lang="x-dini" />
+        </category>
+        <category ID="501">
+          <label text="501 Philosophie, Theorie" xml:lang="de" />
+          <label text="ddc:501" xml:lang="x-dini" />
+        </category>
+        <category ID="502">
+          <label text="502 Verschiedenes" xml:lang="de" />
+          <label text="ddc:502" xml:lang="x-dini" />
+        </category>
+        <category ID="503">
+          <label text="503 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:503" xml:lang="x-dini" />
+        </category>
+        <category ID="505">
+          <label text="505 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:505" xml:lang="x-dini" />
+        </category>
+        <category ID="506">
+          <label text="506 Verbände und Organisationen, Management" xml:lang="de" />
+          <label text="ddc:506" xml:lang="x-dini" />
+        </category>
+        <category ID="507">
+          <label text="507 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:507" xml:lang="x-dini" />
+        </category>
+        <category ID="508">
+          <label text="508 Natur allgemein, Naturgeschichte" xml:lang="de" />
+          <label text="ddc:508" xml:lang="x-dini" />
+        </category>
+        <category ID="509">
+          <label text="509 Histor., geogr., personenbezogene Behandlung" xml:lang="de" />
+          <label text="ddc:509" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="51">
+        <label text="510 Mathematik" xml:lang="de" />
+        <label text="ddc:51" xml:lang="x-dini" />
+        <category ID="510">
+          <label text="510 Mathematik" xml:lang="de" />
+          <label text="ddc:510" xml:lang="x-dini" />
+        </category>
+        <category ID="511">
+          <label text="511 Allgemeine mathematische Prinzipien" xml:lang="de" />
+          <label text="ddc:511" xml:lang="x-dini" />
+        </category>
+        <category ID="512">
+          <label text="512 Algebra" xml:lang="de" />
+          <label text="ddc:512" xml:lang="x-dini" />
+        </category>
+        <category ID="513">
+          <label text="513 Arithmetik" xml:lang="de" />
+          <label text="ddc:513" xml:lang="x-dini" />
+        </category>
+        <category ID="514">
+          <label text="514 Topologie" xml:lang="de" />
+          <label text="ddc:514" xml:lang="x-dini" />
+        </category>
+        <category ID="515">
+          <label text="515 Analysis" xml:lang="de" />
+          <label text="ddc:515" xml:lang="x-dini" />
+        </category>
+        <category ID="516">
+          <label text="516 Geometrie" xml:lang="de" />
+          <label text="ddc:516" xml:lang="x-dini" />
+        </category>
+        <category ID="518">
+          <label text="518 Numerische Analysis" xml:lang="de" />
+          <label text="ddc:518" xml:lang="x-dini" />
+        </category>
+        <category ID="519">
+          <label text="519 Wahrscheinlichkeitstheorien, mathematische Statistik" xml:lang="de" />
+          <label text="ddc:519" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="52">
+        <label text="520 Astronomie" xml:lang="de" />
+        <label text="ddc:52" xml:lang="x-dini" />
+        <category ID="520">
+          <label text="520 Astronomie und zugeordnete Wissenschaften" xml:lang="de" />
+          <label text="ddc:520" xml:lang="x-dini" />
+        </category>
+        <category ID="521">
+          <label text="521 Himmelsmechanik" xml:lang="de" />
+          <label text="ddc:521" xml:lang="x-dini" />
+        </category>
+        <category ID="522">
+          <label text="522 Verfahren, Ausstattung, Materialien" xml:lang="de" />
+          <label text="ddc:522" xml:lang="x-dini" />
+        </category>
+        <category ID="523">
+          <label text="523 Einzelne Himmelskörper und Phänomene" xml:lang="de" />
+          <label text="ddc:523" xml:lang="x-dini" />
+        </category>
+        <category ID="525">
+          <label text="525 Die Erde (astronomische Geografie)" xml:lang="de" />
+          <label text="ddc:525" xml:lang="x-dini" />
+        </category>
+        <category ID="526">
+          <label text="526 Mathematische Geografie" xml:lang="de" />
+          <label text="ddc:526" xml:lang="x-dini" />
+        </category>
+        <category ID="527">
+          <label text="527 Astronomische Navigation" xml:lang="de" />
+          <label text="ddc:527" xml:lang="x-dini" />
+        </category>
+        <category ID="528">
+          <label text="528 Ephemeriden" xml:lang="de" />
+          <label text="ddc:528" xml:lang="x-dini" />
+        </category>
+        <category ID="529">
+          <label text="529 Chronologie" xml:lang="de" />
+          <label text="ddc:529" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="53">
+        <label text="530 Physik" xml:lang="de" />
+        <label text="ddc:53" xml:lang="x-dini" />
+        <category ID="530">
+          <label text="530 Physik" xml:lang="de" />
+          <label text="ddc:530" xml:lang="x-dini" />
+        </category>
+        <category ID="531">
+          <label text="531 Klassische Mechanik; Festkörpermechanik" xml:lang="de" />
+          <label text="ddc:531" xml:lang="x-dini" />
+        </category>
+        <category ID="532">
+          <label text="532 Strömungsmechanik; Hydromechanik" xml:lang="de" />
+          <label text="ddc:532" xml:lang="x-dini" />
+        </category>
+        <category ID="533">
+          <label text="533 Mechanik der Gase" xml:lang="de" />
+          <label text="ddc:533" xml:lang="x-dini" />
+        </category>
+        <category ID="534">
+          <label text="534 Schall und verwandte Schwingungen" xml:lang="de" />
+          <label text="ddc:534" xml:lang="x-dini" />
+        </category>
+        <category ID="535">
+          <label text="535 Sichtbares Licht, Infrarot- und Ultraviolettstrahlung" xml:lang="de" />
+          <label text="ddc:535" xml:lang="x-dini" />
+        </category>
+        <category ID="536">
+          <label text="536 Wärme" xml:lang="de" />
+          <label text="ddc:536" xml:lang="x-dini" />
+        </category>
+        <category ID="537">
+          <label text="537 Elektrizität, Elektronik" xml:lang="de" />
+          <label text="ddc:537" xml:lang="x-dini" />
+        </category>
+        <category ID="538">
+          <label text="538 Magnetismus" xml:lang="de" />
+          <label text="ddc:538" xml:lang="x-dini" />
+        </category>
+        <category ID="539">
+          <label text="539 Moderne Physik" xml:lang="de" />
+          <label text="ddc:539" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="54">
+        <label text="540 Chemie" xml:lang="de" />
+        <label text="ddc:54" xml:lang="x-dini" />
+        <category ID="540">
+          <label text="540 Chemie und zugeordnete Wissenschaften" xml:lang="de" />
+          <label text="ddc:540" xml:lang="x-dini" />
+        </category>
+        <category ID="541">
+          <label text="541 Physikalische Chemie" xml:lang="de" />
+          <label text="ddc:541" xml:lang="x-dini" />
+        </category>
+        <category ID="542">
+          <label text="542 Verfahren, Ausstattung und Materialien" xml:lang="de" />
+          <label text="ddc:542" xml:lang="x-dini" />
+        </category>
+        <category ID="543">
+          <label text="543 Analytische Chemie" xml:lang="de" />
+          <label text="ddc:543" xml:lang="x-dini" />
+        </category>
+        <category ID="546">
+          <label text="546 Anorganische Chemie" xml:lang="de" />
+          <label text="ddc:546" xml:lang="x-dini" />
+        </category>
+        <category ID="547">
+          <label text="547 Organische Chemie" xml:lang="de" />
+          <label text="ddc:547" xml:lang="x-dini" />
+        </category>
+        <category ID="548">
+          <label text="548 Kristallografie" xml:lang="de" />
+          <label text="ddc:548" xml:lang="x-dini" />
+        </category>
+        <category ID="549">
+          <label text="549 Mineralogie" xml:lang="de" />
+          <label text="ddc:549" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="55">
+        <label text="550 Geowissenschaften" xml:lang="de" />
+        <label text="ddc:55" xml:lang="x-dini" />
+        <category ID="550">
+          <label text="550 Geowissenschaften" xml:lang="de" />
+          <label text="ddc:550" xml:lang="x-dini" />
+        </category>
+        <category ID="551">
+          <label text="551 Geologie, Hydrologie, Meteorologie" xml:lang="de" />
+          <label text="ddc:551" xml:lang="x-dini" />
+        </category>
+        <category ID="552">
+          <label text="552 Petrologie" xml:lang="de" />
+          <label text="ddc:552" xml:lang="x-dini" />
+        </category>
+        <category ID="553">
+          <label text="553 Wirtschaftsgeologie" xml:lang="de" />
+          <label text="ddc:553" xml:lang="x-dini" />
+        </category>
+        <category ID="554">
+          <label text="554 Geologie Europas" xml:lang="de" />
+          <label text="ddc:554" xml:lang="x-dini" />
+        </category>
+        <category ID="555">
+          <label text="555 Geologie Asiens" xml:lang="de" />
+          <label text="ddc:555" xml:lang="x-dini" />
+        </category>
+        <category ID="556">
+          <label text="556 Geologie Afrikas" xml:lang="de" />
+          <label text="ddc:556" xml:lang="x-dini" />
+        </category>
+        <category ID="557">
+          <label text="557 Geologie Nordamerikas" xml:lang="de" />
+          <label text="ddc:557" xml:lang="x-dini" />
+        </category>
+        <category ID="558">
+          <label text="558 Geologie Südamerikas" xml:lang="de" />
+          <label text="ddc:558" xml:lang="x-dini" />
+        </category>
+        <category ID="559">
+          <label text="559 Geologie anderer Gebiete" xml:lang="de" />
+          <label text="ddc:559" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="56">
+        <label text="560 Paläontologie" xml:lang="de" />
+        <label text="ddc:56" xml:lang="x-dini" />
+        <category ID="560">
+          <label text="560 Paläontologie; Paläozoologie" xml:lang="de" />
+          <label text="ddc:560" xml:lang="x-dini" />
+        </category>
+        <category ID="561">
+          <label text="561 Paläobotanik; fossile Mikroorganismen" xml:lang="de" />
+          <label text="ddc:561" xml:lang="x-dini" />
+        </category>
+        <category ID="562">
+          <label text="562 Fossile Wirbellose (Invertebrata)" xml:lang="de" />
+          <label text="ddc:562" xml:lang="x-dini" />
+        </category>
+        <category ID="563">
+          <label text="563 Fossile Wirbellose des Meeres und der Meeresküste" xml:lang="de" />
+          <label text="ddc:563" xml:lang="x-dini" />
+        </category>
+        <category ID="564">
+          <label text="564 Fossile Weichtiere u. Weichtierartige (Mollusca u. Molluscoidea)" xml:lang="de" />
+          <label text="ddc:564" xml:lang="x-dini" />
+        </category>
+        <category ID="565">
+          <label text="565 Fossile Gliederfüßer (Arthropoda)" xml:lang="de" />
+          <label text="ddc:565" xml:lang="x-dini" />
+        </category>
+        <category ID="566">
+          <label text="566 Fossile Chordatiere (Chordata)" xml:lang="de" />
+          <label text="ddc:566" xml:lang="x-dini" />
+        </category>
+        <category ID="567">
+          <label text="567 Fossile wechselwarme Wirbeltiere; fossile Fische" xml:lang="de" />
+          <label text="ddc:567" xml:lang="x-dini" />
+        </category>
+        <category ID="568">
+          <label text="568 Fossile Vögel (Aves)" xml:lang="de" />
+          <label text="ddc:568" xml:lang="x-dini" />
+        </category>
+        <category ID="569">
+          <label text="569 Fossile Säugetiere (Mammalia)" xml:lang="de" />
+          <label text="ddc:569" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="57">
+        <label text="570 Biowissenschaften; Biologie" xml:lang="de" />
+        <label text="ddc:57" xml:lang="x-dini" />
+        <category ID="570">
+          <label text="570 Biowissenschaften; Biologie" xml:lang="de" />
+          <label text="ddc:570" xml:lang="x-dini" />
+        </category>
+        <category ID="571">
+          <label text="571 Physiologie und verwandte Themen" xml:lang="de" />
+          <label text="ddc:571" xml:lang="x-dini" />
+        </category>
+        <category ID="572">
+          <label text="572 Biochemie" xml:lang="de" />
+          <label text="ddc:572" xml:lang="x-dini" />
+        </category>
+        <category ID="573">
+          <label text="573 Physiologische Systeme von Tieren" xml:lang="de" />
+          <label text="ddc:573" xml:lang="x-dini" />
+        </category>
+        <category ID="575">
+          <label text="575 Teile und physiologische Systeme von Pflanzen" xml:lang="de" />
+          <label text="ddc:575" xml:lang="x-dini" />
+        </category>
+        <category ID="576">
+          <label text="576 Genetik und Evolution" xml:lang="de" />
+          <label text="ddc:576" xml:lang="x-dini" />
+        </category>
+        <category ID="577">
+          <label text="577 Ökologie" xml:lang="de" />
+          <label text="ddc:577" xml:lang="x-dini" />
+        </category>
+        <category ID="578">
+          <label text="578 Naturgeschichte der Organismen" xml:lang="de" />
+          <label text="ddc:578" xml:lang="x-dini" />
+        </category>
+        <category ID="579">
+          <label text="579 Mikroorganismen, Pilze und Algen (Fungi und Algae)" xml:lang="de" />
+          <label text="ddc:579" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="58">
+        <label text="580 Pflanzen (Botanik)" xml:lang="de" />
+        <label text="ddc:58" xml:lang="x-dini" />
+        <category ID="580">
+          <label text="580 Pflanzen (Botanik)" xml:lang="de" />
+          <label text="ddc:580" xml:lang="x-dini" />
+        </category>
+        <category ID="581">
+          <label text="581 Einzelne naturgeschichtliche Themen" xml:lang="de" />
+          <label text="ddc:581" xml:lang="x-dini" />
+        </category>
+        <category ID="582">
+          <label text="582 Pflanzen mit spezifischen (vegetativen) Merkmalen u. Blüten" xml:lang="de" />
+          <label text="ddc:582" xml:lang="x-dini" />
+        </category>
+        <category ID="583">
+          <label text="583 Zweikeimblättrige (Dicotyledoneae)" xml:lang="de" />
+          <label text="ddc:583" xml:lang="x-dini" />
+        </category>
+        <category ID="584">
+          <label text="584 Einkeimblättrige (Monocotyledoneae)" xml:lang="de" />
+          <label text="ddc:584" xml:lang="x-dini" />
+        </category>
+        <category ID="585">
+          <label text="585 Nacktsamer (Gymnospermae); Nadelgehölze (Coniferae)" xml:lang="de" />
+          <label text="ddc:585" xml:lang="x-dini" />
+        </category>
+        <category ID="586">
+          <label text="586 Blütenlose Pflanzen (Cryptogamia)" xml:lang="de" />
+          <label text="ddc:586" xml:lang="x-dini" />
+        </category>
+        <category ID="587">
+          <label text="587 Farnpflanzen (Pteridophyta)" xml:lang="de" />
+          <label text="ddc:587" xml:lang="x-dini" />
+        </category>
+        <category ID="588">
+          <label text="588 Moose (Bryophyta)" xml:lang="de" />
+          <label text="ddc:588" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="59">
+        <label text="590 Tiere (Zoologie)" xml:lang="de" />
+        <label text="ddc:59" xml:lang="x-dini" />
+        <category ID="590">
+          <label text="590 Tiere (Zoologie)" xml:lang="de" />
+          <label text="ddc:590" xml:lang="x-dini" />
+        </category>
+        <category ID="591">
+          <label text="591 Einzelne naturgeschichtliche Themen" xml:lang="de" />
+          <label text="ddc:591" xml:lang="x-dini" />
+        </category>
+        <category ID="592">
+          <label text="592 Wirbellose (Invertebrata)" xml:lang="de" />
+          <label text="ddc:592" xml:lang="x-dini" />
+        </category>
+        <category ID="593">
+          <label text="593 Wirbellose Tiere des Meeres und der Meeresküste" xml:lang="de" />
+          <label text="ddc:593" xml:lang="x-dini" />
+        </category>
+        <category ID="594">
+          <label text="594 Weichtiere und Weichtierartige (Mollusca und Molluscoidea)" xml:lang="de" />
+          <label text="ddc:594" xml:lang="x-dini" />
+        </category>
+        <category ID="595">
+          <label text="595 Gliederfüßer (Arthropoda)" xml:lang="de" />
+          <label text="ddc:595" xml:lang="x-dini" />
+        </category>
+        <category ID="596">
+          <label text="596 Chordatiere (Chordata)" xml:lang="de" />
+          <label text="ddc:596" xml:lang="x-dini" />
+        </category>
+        <category ID="597">
+          <label text="597 Wechselwarme Wirbeltiere; Fische" xml:lang="de" />
+          <label text="ddc:597" xml:lang="x-dini" />
+        </category>
+        <category ID="598">
+          <label text="598 Vögel (Aves)" xml:lang="de" />
+          <label text="ddc:598" xml:lang="x-dini" />
+        </category>
+        <category ID="599">
+          <label text="599 Säugetiere (Mammalia)" xml:lang="de" />
+          <label text="ddc:599" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="6">
+      <label text="600  Technik, Medizin, angewandte Wissenschaften" xml:lang="de" />
+      <label text="ddc:6" xml:lang="x-dini" />
+      <category ID="60">
+        <label text="600 Technik" xml:lang="de" />
+        <label text="ddc:60" xml:lang="x-dini" />
+        <category ID="600">
+          <label text="600 Technik, Technologie" xml:lang="de" />
+          <label text="ddc:600" xml:lang="x-dini" />
+        </category>
+        <category ID="601">
+          <label text="601 Philosophie, Theorie" xml:lang="de" />
+          <label text="ddc:601" xml:lang="x-dini" />
+        </category>
+        <category ID="602">
+          <label text="602 Verschiedenes" xml:lang="de" />
+          <label text="ddc:602" xml:lang="x-dini" />
+        </category>
+        <category ID="603">
+          <label text="603 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:603" xml:lang="x-dini" />
+        </category>
+        <category ID="604">
+          <label text="604 Einzelne Themen" xml:lang="de" />
+          <label text="ddc:604" xml:lang="x-dini" />
+        </category>
+        <category ID="605">
+          <label text="605 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:605" xml:lang="x-dini" />
+        </category>
+        <category ID="606">
+          <label text="606 Verbände und Organisationen" xml:lang="de" />
+          <label text="ddc:606" xml:lang="x-dini" />
+        </category>
+        <category ID="607">
+          <label text="607 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:607" xml:lang="x-dini" />
+        </category>
+        <category ID="608">
+          <label text="608 Erfindungen, Patente" xml:lang="de" />
+          <label text="ddc:608" xml:lang="x-dini" />
+        </category>
+        <category ID="609">
+          <label text="609 Histor., geogr., personenbezogene Behandlung" xml:lang="de" />
+          <label text="ddc:609" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="61">
+        <label text="610 Medizin und Gesundheit" xml:lang="de" />
+        <label text="ddc:61" xml:lang="x-dini" />
+        <category ID="610">
+          <label text="610 Medizin und Gesundheit" xml:lang="de" />
+          <label text="ddc:610" xml:lang="x-dini" />
+        </category>
+        <category ID="611">
+          <label text="611 Anatomie, Zytologie, Histologie des Menschen" xml:lang="de" />
+          <label text="ddc:611" xml:lang="x-dini" />
+        </category>
+        <category ID="612">
+          <label text="612 Physiologie des Menschen" xml:lang="de" />
+          <label text="ddc:612" xml:lang="x-dini" />
+        </category>
+        <category ID="613">
+          <label text="613 Gesundheitsförderung" xml:lang="de" />
+          <label text="ddc:613" xml:lang="x-dini" />
+        </category>
+        <category ID="614">
+          <label text="614 Inzidenz und Prävention von Krankheiten" xml:lang="de" />
+          <label text="ddc:614" xml:lang="x-dini" />
+        </category>
+        <category ID="615">
+          <label text="615 Pharmakologie, Therapie" xml:lang="de" />
+          <label text="ddc:615" xml:lang="x-dini" />
+        </category>
+        <category ID="616">
+          <label text="616 Krankheiten" xml:lang="de" />
+          <label text="ddc:616" xml:lang="x-dini" />
+        </category>
+        <category ID="617">
+          <label text="617 Chirurgie und verwandte medizinische Fachrichtungen" xml:lang="de" />
+          <label text="ddc:617" xml:lang="x-dini" />
+        </category>
+        <category ID="618">
+          <label text="618 Gynäkologie, Pädiatrie, Geriatrie" xml:lang="de" />
+          <label text="ddc:618" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="62">
+        <label text="620 Ingenieurwissenschaften" xml:lang="de" />
+        <label text="ddc:62" xml:lang="x-dini" />
+        <category ID="620">
+          <label text="620 Ingenieurwissenschaften und zugeordnete Tätigkeiten" xml:lang="de" />
+          <label text="ddc:620" xml:lang="x-dini" />
+        </category>
+        <category ID="621">
+          <label text="621 Angewandte Physik" xml:lang="de" />
+          <label text="ddc:621" xml:lang="x-dini" />
+        </category>
+        <category ID="622">
+          <label text="622 Bergbau und verwandte Tätigkeiten" xml:lang="de" />
+          <label text="ddc:622" xml:lang="x-dini" />
+        </category>
+        <category ID="623">
+          <label text="623 Militärtechnik, Schiffbau" xml:lang="de" />
+          <label text="ddc:623" xml:lang="x-dini" />
+        </category>
+        <category ID="624">
+          <label text="624 Bauingenieurwesen, Ingenieurbauten" xml:lang="de" />
+          <label text="ddc:624" xml:lang="x-dini" />
+        </category>
+        <category ID="625">
+          <label text="625 Straßenbau, Schienenverkehrstechnik" xml:lang="de" />
+          <label text="ddc:625" xml:lang="x-dini" />
+        </category>
+        <category ID="627">
+          <label text="627 Wasserbau" xml:lang="de" />
+          <label text="ddc:627" xml:lang="x-dini" />
+        </category>
+        <category ID="628">
+          <label text="628 Versorgungs- und Entsorgungstechnik; Umwelttechnik" xml:lang="de" />
+          <label text="ddc:628" xml:lang="x-dini" />
+        </category>
+        <category ID="629">
+          <label text="629 Andere Bereiche der Ingenieurwissenschaften" xml:lang="de" />
+          <label text="ddc:629" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="63">
+        <label text="630 Landwirtschaft" xml:lang="de" />
+        <label text="ddc:63" xml:lang="x-dini" />
+        <category ID="630">
+          <label text="630 Landwirtschaft und verwandte Bereiche" xml:lang="de" />
+          <label text="ddc:630" xml:lang="x-dini" />
+        </category>
+        <category ID="631">
+          <label text="631 Verfahren, Ausstattung, Materialien" xml:lang="de" />
+          <label text="ddc:631" xml:lang="x-dini" />
+        </category>
+        <category ID="632">
+          <label text="632 Schäden, Krankheiten, Schädlinge an Pflanzen" xml:lang="de" />
+          <label text="ddc:632" xml:lang="x-dini" />
+        </category>
+        <category ID="633">
+          <label text="633 Feld- und Plantagenfrüchte" xml:lang="de" />
+          <label text="ddc:633" xml:lang="x-dini" />
+        </category>
+        <category ID="634">
+          <label text="634 Obstplantagen, Früchte, Forstwirtschaft" xml:lang="de" />
+          <label text="ddc:634" xml:lang="x-dini" />
+        </category>
+        <category ID="635">
+          <label text="635 Gartenpflanzen (Gartenbau)" xml:lang="de" />
+          <label text="ddc:635" xml:lang="x-dini" />
+        </category>
+        <category ID="636">
+          <label text="636 Viehzucht, Tierhaltung" xml:lang="de" />
+          <label text="ddc:636" xml:lang="x-dini" />
+        </category>
+        <category ID="637">
+          <label text="637 Herstellung u. Verarbeitung von Milch u. verwandten Produkten" xml:lang="de" />
+          <label text="ddc:637" xml:lang="x-dini" />
+        </category>
+        <category ID="638">
+          <label text="638 Insektenzucht" xml:lang="de" />
+          <label text="ddc:638" xml:lang="x-dini" />
+        </category>
+        <category ID="639">
+          <label text="639 Jagd, Fischerei, Naturschutz" xml:lang="de" />
+          <label text="ddc:639" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="64">
+        <label text="640 Hauswirtschaft" xml:lang="de" />
+        <label text="ddc:64" xml:lang="x-dini" />
+        <category ID="640">
+          <label text="640 Hauswirtschaft" xml:lang="de" />
+          <label text="ddc:640" xml:lang="x-dini" />
+        </category>
+        <category ID="641">
+          <label text="641 Essen und Trinken" xml:lang="de" />
+          <label text="ddc:641" xml:lang="x-dini" />
+        </category>
+        <category ID="642">
+          <label text="642 Mahlzeiten, Tischkultur" xml:lang="de" />
+          <label text="ddc:642" xml:lang="x-dini" />
+        </category>
+        <category ID="643">
+          <label text="643 Wohnen, Wohnungseinrichtung" xml:lang="de" />
+          <label text="ddc:643" xml:lang="x-dini" />
+        </category>
+        <category ID="644">
+          <label text="644 Haushaltsgeräte" xml:lang="de" />
+          <label text="ddc:644" xml:lang="x-dini" />
+        </category>
+        <category ID="645">
+          <label text="645 Möbel, Möblierung" xml:lang="de" />
+          <label text="ddc:645" xml:lang="x-dini" />
+        </category>
+        <category ID="646">
+          <label text="646 Nähen, Handarbeiten, Alltagsleben" xml:lang="de" />
+          <label text="ddc:646" xml:lang="x-dini" />
+        </category>
+        <category ID="647">
+          <label text="647 Hauswirtschaft in öffentlichen Einrichtungen" xml:lang="de" />
+          <label text="ddc:647" xml:lang="x-dini" />
+        </category>
+        <category ID="648">
+          <label text="648 Hauswirtschaft in Privathaushalten" xml:lang="de" />
+          <label text="ddc:648" xml:lang="x-dini" />
+        </category>
+        <category ID="649">
+          <label text="649 Säuglings- und Kleinkinderpflege, häusliche Pflege" xml:lang="de" />
+          <label text="ddc:649" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="65">
+        <label text="650 Management" xml:lang="de" />
+        <label text="ddc:65" xml:lang="x-dini" />
+        <category ID="650">
+          <label text="650 Management" xml:lang="de" />
+          <label text="ddc:650" xml:lang="x-dini" />
+        </category>
+        <category ID="651">
+          <label text="651 Bürotätigkeiten" xml:lang="de" />
+          <label text="ddc:651" xml:lang="x-dini" />
+        </category>
+        <category ID="652">
+          <label text="652 Techniken schriftlicher Kommunikation" xml:lang="de" />
+          <label text="ddc:652" xml:lang="x-dini" />
+        </category>
+        <category ID="653">
+          <label text="653 Stenografie" xml:lang="de" />
+          <label text="ddc:653" xml:lang="x-dini" />
+        </category>
+        <category ID="657">
+          <label text="657 Buchhaltung" xml:lang="de" />
+          <label text="ddc:657" xml:lang="x-dini" />
+        </category>
+        <category ID="658">
+          <label text="658 Allgemeine Betriebsführung" xml:lang="de" />
+          <label text="ddc:658" xml:lang="x-dini" />
+        </category>
+        <category ID="659">
+          <label text="659 Werbung, Öffentlichkeitsarbeit" xml:lang="de" />
+          <label text="ddc:659" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="66">
+        <label text="660 Chemische Verfahrenstechnik" xml:lang="de" />
+        <label text="ddc:66" xml:lang="x-dini" />
+        <category ID="660">
+          <label text="660 Chemische Verfahrenstechnik" xml:lang="de" />
+          <label text="ddc:660" xml:lang="x-dini" />
+        </category>
+        <category ID="661">
+          <label text="661 Industriechemikalien" xml:lang="de" />
+          <label text="ddc:661" xml:lang="x-dini" />
+        </category>
+        <category ID="662">
+          <label text="662 Spreng- und Brennstoffe und verwandte Produkte" xml:lang="de" />
+          <label text="ddc:662" xml:lang="x-dini" />
+        </category>
+        <category ID="663">
+          <label text="663 Getränketechnologie" xml:lang="de" />
+          <label text="ddc:663" xml:lang="x-dini" />
+        </category>
+        <category ID="664">
+          <label text="664 Lebensmitteltechnologie" xml:lang="de" />
+          <label text="ddc:664" xml:lang="x-dini" />
+        </category>
+        <category ID="665">
+          <label text="665 Industrielle Öle, Fette, Wachse, Gase" xml:lang="de" />
+          <label text="ddc:665" xml:lang="x-dini" />
+        </category>
+        <category ID="666">
+          <label text="666 Keramiktechnologie und zugeordnete Bereiche" xml:lang="de" />
+          <label text="ddc:666" xml:lang="x-dini" />
+        </category>
+        <category ID="667">
+          <label text="667 Chemische Reinigung, Färben, Beschichtung" xml:lang="de" />
+          <label text="ddc:667" xml:lang="x-dini" />
+        </category>
+        <category ID="668">
+          <label text="668 Herstellung anderer organischer Stoffe" xml:lang="de" />
+          <label text="ddc:668" xml:lang="x-dini" />
+        </category>
+        <category ID="669">
+          <label text="669 Metallurgie" xml:lang="de" />
+          <label text="ddc:669" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="67">
+        <label text="670 Industrielle Fertigung" xml:lang="de" />
+        <label text="ddc:67" xml:lang="x-dini" />
+        <category ID="670">
+          <label text="670 Industrielle Fertigung" xml:lang="de" />
+          <label text="ddc:670" xml:lang="x-dini" />
+        </category>
+        <category ID="671">
+          <label text="671 Metalle, Metallverarbeitung" xml:lang="de" />
+          <label text="ddc:671" xml:lang="x-dini" />
+        </category>
+        <category ID="672">
+          <label text="672 Eisen, Stahl, andere Eisenlegierungen" xml:lang="de" />
+          <label text="ddc:672" xml:lang="x-dini" />
+        </category>
+        <category ID="673">
+          <label text="673 Nichteisenmetalle" xml:lang="de" />
+          <label text="ddc:673" xml:lang="x-dini" />
+        </category>
+        <category ID="674">
+          <label text="674 Holzverarbeitung, Holzprodukte, Kork" xml:lang="de" />
+          <label text="ddc:674" xml:lang="x-dini" />
+        </category>
+        <category ID="675">
+          <label text="675 Leder- und Pelzverarbeitung" xml:lang="de" />
+          <label text="ddc:675" xml:lang="x-dini" />
+        </category>
+        <category ID="676">
+          <label text="676 Papierherstellung und -verarbeitung" xml:lang="de" />
+          <label text="ddc:676" xml:lang="x-dini" />
+        </category>
+        <category ID="677">
+          <label text="677 Textilien, Textiltechnik" xml:lang="de" />
+          <label text="ddc:677" xml:lang="x-dini" />
+        </category>
+        <category ID="678">
+          <label text="678 Elastomere, Elastomerprodukte" xml:lang="de" />
+          <label text="ddc:678" xml:lang="x-dini" />
+        </category>
+        <category ID="679">
+          <label text="679 Andere Produkte aus einzelnen Materialien" xml:lang="de" />
+          <label text="ddc:679" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="68">
+        <label text="680 Fertigung von Produkten für bestimmte Verwendungszwecke" xml:lang="de" />
+        <label text="ddc:68" xml:lang="x-dini" />
+        <category ID="680">
+          <label text="680 Fertigung von Produkten für bestimmte Verwendungszwecke" xml:lang="de" />
+          <label text="ddc:680" xml:lang="x-dini" />
+        </category>
+        <category ID="681">
+          <label text="681 Präzisionsinstrumente, feinwerktechnische Geräte" xml:lang="de" />
+          <label text="ddc:681" xml:lang="x-dini" />
+        </category>
+        <category ID="682">
+          <label text="682 Kleinere Schmiedearbeiten (Hufschmieden)" xml:lang="de" />
+          <label text="ddc:682" xml:lang="x-dini" />
+        </category>
+        <category ID="683">
+          <label text="683 Eisen- und Haushaltswaren" xml:lang="de" />
+          <label text="ddc:683" xml:lang="x-dini" />
+        </category>
+        <category ID="684">
+          <label text="684 Einrichtungsgegenstände, Heimwerken" xml:lang="de" />
+          <label text="ddc:684" xml:lang="x-dini" />
+        </category>
+        <category ID="685">
+          <label text="685 Leder- und Pelzwaren und verwandte Produkte" xml:lang="de" />
+          <label text="ddc:685" xml:lang="x-dini" />
+        </category>
+        <category ID="686">
+          <label text="686 Drucken und verwandte Tätigkeiten" xml:lang="de" />
+          <label text="ddc:686" xml:lang="x-dini" />
+        </category>
+        <category ID="687">
+          <label text="687 Kleidung, Accessoires" xml:lang="de" />
+          <label text="ddc:687" xml:lang="x-dini" />
+        </category>
+        <category ID="688">
+          <label text="688 Andere Produkte, Verpackungstechnik" xml:lang="de" />
+          <label text="ddc:688" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="69">
+        <label text="690 Hausbau, Bauhandwerk" xml:lang="de" />
+        <label text="ddc:69" xml:lang="x-dini" />
+        <category ID="690">
+          <label text="690 Wohnbauten" xml:lang="de" />
+          <label text="ddc:690" xml:lang="x-dini" />
+        </category>
+        <category ID="691">
+          <label text="691 Baumaterialien" xml:lang="de" />
+          <label text="ddc:691" xml:lang="x-dini" />
+        </category>
+        <category ID="692">
+          <label text="692 Bauplanung, Bauhilfstechniken" xml:lang="de" />
+          <label text="ddc:692" xml:lang="x-dini" />
+        </category>
+        <category ID="693">
+          <label text="693 Einzelne Baumaterialien und Verwendungszwecke" xml:lang="de" />
+          <label text="ddc:693" xml:lang="x-dini" />
+        </category>
+        <category ID="694">
+          <label text="694 Holzbau, Zimmerhandwerk" xml:lang="de" />
+          <label text="ddc:694" xml:lang="x-dini" />
+        </category>
+        <category ID="695">
+          <label text="695 Dachdeckerhandwerk" xml:lang="de" />
+          <label text="ddc:695" xml:lang="x-dini" />
+        </category>
+        <category ID="696">
+          <label text="696 Sanitäranlagen" xml:lang="de" />
+          <label text="ddc:696" xml:lang="x-dini" />
+        </category>
+        <category ID="697">
+          <label text="697 Heizung, Lüftung, Klimatisierung" xml:lang="de" />
+          <label text="ddc:697" xml:lang="x-dini" />
+        </category>
+        <category ID="698">
+          <label text="698 Maler- und Tapezierarbeiten" xml:lang="de" />
+          <label text="ddc:698" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="7">
+      <label text="700  Künste und Unterhaltung" xml:lang="de" />
+      <label text="ddc:7" xml:lang="x-dini" />
+      <category ID="70">
+        <label text="700 Künste" xml:lang="de" />
+        <label text="ddc:70" xml:lang="x-dini" />
+        <category ID="700">
+          <label text="700 Künste; Bildende Kunst und Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:700" xml:lang="x-dini" />
+        </category>
+        <category ID="701">
+          <label text="701 Kunstphilosophie, Kunsttheorie der Bildenden Kunst und des Kunsthandwerks" xml:lang="de" />
+          <label text="ddc:701" xml:lang="x-dini" />
+        </category>
+        <category ID="702">
+          <label text="702 Verschiedenes zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:702" xml:lang="x-dini" />
+        </category>
+        <category ID="703">
+          <label text="703 Wörterbücher, Enzyklopädien zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:703" xml:lang="x-dini" />
+        </category>
+        <category ID="704">
+          <label text="704 Spezielle Themen zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:704" xml:lang="x-dini" />
+        </category>
+        <category ID="705">
+          <label text="705 Fortlaufende Sammelwerke zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:705" xml:lang="x-dini" />
+        </category>
+        <category ID="706">
+          <label text="706 Verbände und Organisationen, Management der Bildenden Kunst und des Kunsthandwerks" xml:lang="de" />
+          <label text="ddc:706" xml:lang="x-dini" />
+        </category>
+        <category ID="707">
+          <label text="707 Ausbildung, Forschung, verwandte Themen zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:707" xml:lang="x-dini" />
+        </category>
+        <category ID="708">
+          <label text="708 Kunstgalerien, Museen, Privatsammlungen zur Bildenden Kunst und zum Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:708" xml:lang="x-dini" />
+        </category>
+        <category ID="709">
+          <label text="709 Histor., geogr., personenbezogene Behandlung der Bildenden Kunst und des Kunsthandwerks" xml:lang="de" />
+          <label text="ddc:709" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="71">
+        <label text="710 Landschaftsgestaltung, Raumplanung" xml:lang="de" />
+        <label text="ddc:71" xml:lang="x-dini" />
+        <category ID="710">
+          <label text="710 Landschaftsgestaltung, Raumplanung" xml:lang="de" />
+          <label text="ddc:710" xml:lang="x-dini" />
+        </category>
+        <category ID="711">
+          <label text="711 Raumplanung" xml:lang="de" />
+          <label text="ddc:711" xml:lang="x-dini" />
+        </category>
+        <category ID="712">
+          <label text="712 Landschaftsgestaltung" xml:lang="de" />
+          <label text="ddc:712" xml:lang="x-dini" />
+        </category>
+        <category ID="713">
+          <label text="713 Landschaftsgestaltung für Verkehrswege" xml:lang="de" />
+          <label text="ddc:713" xml:lang="x-dini" />
+        </category>
+        <category ID="714">
+          <label text="714 Wasser als Gestaltungselement" xml:lang="de" />
+          <label text="ddc:714" xml:lang="x-dini" />
+        </category>
+        <category ID="715">
+          <label text="715 Gehölze als Gestaltungselemente" xml:lang="de" />
+          <label text="ddc:715" xml:lang="x-dini" />
+        </category>
+        <category ID="716">
+          <label text="716 Stauden als Gestaltungselemente" xml:lang="de" />
+          <label text="ddc:716" xml:lang="x-dini" />
+        </category>
+        <category ID="717">
+          <label text="717 Sonstige Gestaltungselemente" xml:lang="de" />
+          <label text="ddc:717" xml:lang="x-dini" />
+        </category>
+        <category ID="718">
+          <label text="718 Friedhofsanlagen" xml:lang="de" />
+          <label text="ddc:718" xml:lang="x-dini" />
+        </category>
+        <category ID="719">
+          <label text="719 Naturlandschaften" xml:lang="de" />
+          <label text="ddc:719" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="72">
+        <label text="720 Architektur" xml:lang="de" />
+        <label text="ddc:72" xml:lang="x-dini" />
+        <category ID="720">
+          <label text="720 Architektur" xml:lang="de" />
+          <label text="ddc:720" xml:lang="x-dini" />
+        </category>
+        <category ID="721">
+          <label text="721 Architektonische Konstruktion" xml:lang="de" />
+          <label text="ddc:721" xml:lang="x-dini" />
+        </category>
+        <category ID="722">
+          <label text="722 Architektur bis ca. 300" xml:lang="de" />
+          <label text="ddc:722" xml:lang="x-dini" />
+        </category>
+        <category ID="723">
+          <label text="723 Architektur von ca. 300 bis 1399" xml:lang="de" />
+          <label text="ddc:723" xml:lang="x-dini" />
+        </category>
+        <category ID="724">
+          <label text="724 Architektur ab 1400" xml:lang="de" />
+          <label text="ddc:724" xml:lang="x-dini" />
+        </category>
+        <category ID="725">
+          <label text="725 Öffentliche Gebäude" xml:lang="de" />
+          <label text="ddc:725" xml:lang="x-dini" />
+        </category>
+        <category ID="726">
+          <label text="726 Sakralbauten" xml:lang="de" />
+          <label text="ddc:726" xml:lang="x-dini" />
+        </category>
+        <category ID="727">
+          <label text="727 Gebäude für Bildung, Lehre und Forschung" xml:lang="de" />
+          <label text="ddc:727" xml:lang="x-dini" />
+        </category>
+        <category ID="728">
+          <label text="728 Wohnbauten und ähnliche Gebäude" xml:lang="de" />
+          <label text="ddc:728" xml:lang="x-dini" />
+        </category>
+        <category ID="729">
+          <label text="729 Innenarchitektur" xml:lang="de" />
+          <label text="ddc:729" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="73">
+        <label text="730 Plastik, Keramik, Metallkunst" xml:lang="de" />
+        <label text="ddc:73" xml:lang="x-dini" />
+        <category ID="730">
+          <label text="730 Plastische Kunst; Bildhauerei" xml:lang="de" />
+          <label text="ddc:730" xml:lang="x-dini" />
+        </category>
+        <category ID="731">
+          <label text="731 Techniken, Formen und Motive der Bildhauerei" xml:lang="de" />
+          <label text="ddc:731" xml:lang="x-dini" />
+        </category>
+        <category ID="732">
+          <label text="732 Bildhauerei bis ca. 500" xml:lang="de" />
+          <label text="ddc:732" xml:lang="x-dini" />
+        </category>
+        <category ID="733">
+          <label text="733 Griechische, römische und etruskische Bildhauerei" xml:lang="de" />
+          <label text="ddc:733" xml:lang="x-dini" />
+        </category>
+        <category ID="734">
+          <label text="734 Bildhauerei von ca. 500 bis 1399" xml:lang="de" />
+          <label text="ddc:734" xml:lang="x-dini" />
+        </category>
+        <category ID="735">
+          <label text="735 Bildhauerei ab 1400" xml:lang="de" />
+          <label text="ddc:735" xml:lang="x-dini" />
+        </category>
+        <category ID="736">
+          <label text="736 Schnitzen, Schnitzereien" xml:lang="de" />
+          <label text="ddc:736" xml:lang="x-dini" />
+        </category>
+        <category ID="737">
+          <label text="737 Numismatik, Siegelkunde" xml:lang="de" />
+          <label text="ddc:737" xml:lang="x-dini" />
+        </category>
+        <category ID="738">
+          <label text="738 Keramikkunst" xml:lang="de" />
+          <label text="ddc:738" xml:lang="x-dini" />
+        </category>
+        <category ID="739">
+          <label text="739 Metallkunst" xml:lang="de" />
+          <label text="ddc:739" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="74">
+        <label text="740 Zeichnen, Kunsthandwerk" xml:lang="de" />
+        <label text="ddc:74" xml:lang="x-dini" />
+        <category ID="740">
+          <label text="740 Zeichnen, Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:740" xml:lang="x-dini" />
+        </category>
+        <category ID="741">
+          <label text="741 Zeichnen, Zeichnungen" xml:lang="de" />
+          <label text="ddc:741" xml:lang="x-dini" />
+        </category>
+        <category ID="742">
+          <label text="742 Perspektive" xml:lang="de" />
+          <label text="ddc:742" xml:lang="x-dini" />
+        </category>
+        <category ID="743">
+          <label text="743 Zeichnen und Zeichnungen nach Motiven" xml:lang="de" />
+          <label text="ddc:743" xml:lang="x-dini" />
+        </category>
+        <category ID="745">
+          <label text="745 Kunsthandwerk" xml:lang="de" />
+          <label text="ddc:745" xml:lang="x-dini" />
+        </category>
+        <category ID="746">
+          <label text="746 Textilkunst" xml:lang="de" />
+          <label text="ddc:746" xml:lang="x-dini" />
+        </category>
+        <category ID="747">
+          <label text="747 Innendekoration" xml:lang="de" />
+          <label text="ddc:747" xml:lang="x-dini" />
+        </category>
+        <category ID="748">
+          <label text="748 Glas" xml:lang="de" />
+          <label text="ddc:748" xml:lang="x-dini" />
+        </category>
+        <category ID="749">
+          <label text="749 Mobiliar, Accessoires" xml:lang="de" />
+          <label text="ddc:749" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="75">
+        <label text="750 Malerei" xml:lang="de" />
+        <label text="ddc:75" xml:lang="x-dini" />
+        <category ID="750">
+          <label text="750 Malerei, Gemälde" xml:lang="de" />
+          <label text="ddc:750" xml:lang="x-dini" />
+        </category>
+        <category ID="751">
+          <label text="751 Verfahren, Ausstattung, Materialien, Formen" xml:lang="de" />
+          <label text="ddc:751" xml:lang="x-dini" />
+        </category>
+        <category ID="752">
+          <label text="752 Farbe" xml:lang="de" />
+          <label text="ddc:752" xml:lang="x-dini" />
+        </category>
+        <category ID="753">
+          <label text="753 Symbolik, Allegorie, Mythologie, Legenden" xml:lang="de" />
+          <label text="ddc:753" xml:lang="x-dini" />
+        </category>
+        <category ID="754">
+          <label text="754 Genremalerei" xml:lang="de" />
+          <label text="ddc:754" xml:lang="x-dini" />
+        </category>
+        <category ID="755">
+          <label text="755 Religion" xml:lang="de" />
+          <label text="ddc:755" xml:lang="x-dini" />
+        </category>
+        <category ID="757">
+          <label text="757 Menschliche Darstellungen" xml:lang="de" />
+          <label text="ddc:757" xml:lang="x-dini" />
+        </category>
+        <category ID="758">
+          <label text="758 Andere Motive" xml:lang="de" />
+          <label text="ddc:758" xml:lang="x-dini" />
+        </category>
+        <category ID="759">
+          <label text="759 Histor., geogr., personenbezogene Behandlung" xml:lang="de" />
+          <label text="ddc:759" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="76">
+        <label text="760 Grafische Verfahren" xml:lang="de" />
+        <label text="ddc:76" xml:lang="x-dini" />
+        <category ID="760">
+          <label text="760 Grafische Verfahren; Druckverfahren, Drucke" xml:lang="de" />
+          <label text="ddc:760" xml:lang="x-dini" />
+        </category>
+        <category ID="761">
+          <label text="761 Hochdruckverfahren (Blockdruck)" xml:lang="de" />
+          <label text="ddc:761" xml:lang="x-dini" />
+        </category>
+        <category ID="763">
+          <label text="763 Lithografische Verfahren" xml:lang="de" />
+          <label text="ddc:763" xml:lang="x-dini" />
+        </category>
+        <category ID="764">
+          <label text="764 Farblithografie, Serigrafie" xml:lang="de" />
+          <label text="ddc:764" xml:lang="x-dini" />
+        </category>
+        <category ID="765">
+          <label text="765 Metallschnitt" xml:lang="de" />
+          <label text="ddc:765" xml:lang="x-dini" />
+        </category>
+        <category ID="766">
+          <label text="766 Mezzotinto, Aquatinta und verwandte Verfahren" xml:lang="de" />
+          <label text="ddc:766" xml:lang="x-dini" />
+        </category>
+        <category ID="767">
+          <label text="767 Kupferstich, Radierung" xml:lang="de" />
+          <label text="ddc:767" xml:lang="x-dini" />
+        </category>
+        <category ID="769">
+          <label text="769 Drucke" xml:lang="de" />
+          <label text="ddc:769" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="77">
+        <label text="770 Fotografie, Computerkunst" xml:lang="de" />
+        <label text="ddc:77" xml:lang="x-dini" />
+        <category ID="770">
+          <label text="770 Fotografieren, Fotografien, Computerkunst" xml:lang="de" />
+          <label text="ddc:770" xml:lang="x-dini" />
+        </category>
+        <category ID="771">
+          <label text="771 Verfahren, Ausstattung, Materialien" xml:lang="de" />
+          <label text="ddc:771" xml:lang="x-dini" />
+        </category>
+        <category ID="772">
+          <label text="772 Fotochemische Verfahren mit Metallsalzen" xml:lang="de" />
+          <label text="ddc:772" xml:lang="x-dini" />
+        </category>
+        <category ID="773">
+          <label text="773 Pigmentdruckverfahren" xml:lang="de" />
+          <label text="ddc:773" xml:lang="x-dini" />
+        </category>
+        <category ID="774">
+          <label text="774 Holografie" xml:lang="de" />
+          <label text="ddc:774" xml:lang="x-dini" />
+        </category>
+        <category ID="775">
+          <label text="775 Digitale Fotografie" xml:lang="de" />
+          <label text="ddc:775" xml:lang="x-dini" />
+        </category>
+        <category ID="776">
+          <label text="776 Computerkunst (Digitale Kunst)" xml:lang="de" />
+          <label text="ddc:776" xml:lang="x-dini" />
+        </category>
+        <category ID="778">
+          <label text="778 Bereiche und Arten der Fotografie" xml:lang="de" />
+          <label text="ddc:778" xml:lang="x-dini" />
+        </category>
+        <category ID="779">
+          <label text="779 Fotografien" xml:lang="de" />
+          <label text="ddc:779" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="78">
+        <label text="780 Musik" xml:lang="de" />
+        <label text="ddc:78" xml:lang="x-dini" />
+        <category ID="780">
+          <label text="780 Musik" xml:lang="de" />
+          <label text="ddc:780" xml:lang="x-dini" />
+        </category>
+        <category ID="781">
+          <label text="781 Allgemeine Prinzipien, musikalische Formen" xml:lang="de" />
+          <label text="ddc:781" xml:lang="x-dini" />
+        </category>
+        <category ID="782">
+          <label text="782 Vokalmusik" xml:lang="de" />
+          <label text="ddc:782" xml:lang="x-dini" />
+        </category>
+        <category ID="783">
+          <label text="783 Musik für einzelne Stimmen; Die Stimme" xml:lang="de" />
+          <label text="ddc:783" xml:lang="x-dini" />
+        </category>
+        <category ID="784">
+          <label text="784 Instrumente, Instrumentalensembles" xml:lang="de" />
+          <label text="ddc:784" xml:lang="x-dini" />
+        </category>
+        <category ID="785">
+          <label text="785 Ensembles mit einem Instrument pro Stimme" xml:lang="de" />
+          <label text="ddc:785" xml:lang="x-dini" />
+        </category>
+        <category ID="786">
+          <label text="786 Tasteninstrumente, andere Instrumente" xml:lang="de" />
+          <label text="ddc:786" xml:lang="x-dini" />
+        </category>
+        <category ID="787">
+          <label text="787 Streichinstrumente" xml:lang="de" />
+          <label text="ddc:787" xml:lang="x-dini" />
+        </category>
+        <category ID="788">
+          <label text="788 Blasinstrumente" xml:lang="de" />
+          <label text="ddc:788" xml:lang="x-dini" />
+        </category>
+        <category ID="789">
+          <label text="789 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:789" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="79">
+        <label text="790 Sport, Spiele, Unterhaltung" xml:lang="de" />
+        <label text="ddc:79" xml:lang="x-dini" />
+        <category ID="790">
+          <label text="790 Freizeitgestaltung, darstellende Künste" xml:lang="de" />
+          <label text="ddc:790" xml:lang="x-dini" />
+        </category>
+        <category ID="791">
+          <label text="791 Öffentliche Darbietungen, Film, Rundfunk" xml:lang="de" />
+          <label text="ddc:791" xml:lang="x-dini" />
+        </category>
+        <category ID="792">
+          <label text="792 Bühnenkunst" xml:lang="de" />
+          <label text="ddc:792" xml:lang="x-dini" />
+        </category>
+        <category ID="793">
+          <label text="793 Aktions- und Gesellschaftsspiele, Gesellschafts- u. Volkstanz" xml:lang="de" />
+          <label text="ddc:793" xml:lang="x-dini" />
+        </category>
+        <category ID="794">
+          <label text="794 Geschicklichkeits- und Strategiespiele" xml:lang="de" />
+          <label text="ddc:794" xml:lang="x-dini" />
+        </category>
+        <category ID="795">
+          <label text="795 Glücksspiele" xml:lang="de" />
+          <label text="ddc:795" xml:lang="x-dini" />
+        </category>
+        <category ID="796">
+          <label text="796 Athletische Sportarten u. Spiele, Freiluftsportarten u. -spiele" xml:lang="de" />
+          <label text="ddc:796" xml:lang="x-dini" />
+        </category>
+        <category ID="797">
+          <label text="797 Wasser- und Luftsport" xml:lang="de" />
+          <label text="ddc:797" xml:lang="x-dini" />
+        </category>
+        <category ID="798">
+          <label text="798 Reitsport, Tierrennen" xml:lang="de" />
+          <label text="ddc:798" xml:lang="x-dini" />
+        </category>
+        <category ID="799">
+          <label text="799 Sportfischen, Jagdsport, Sportschießen" xml:lang="de" />
+          <label text="ddc:799" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="8">
+      <label text="800  Literatur" xml:lang="de" />
+      <label text="ddc:8" xml:lang="x-dini" />
+      <category ID="80">
+        <label text="800 Literatur, Rhetorik, Literaturwissenschaft" xml:lang="de" />
+        <label text="ddc:80" xml:lang="x-dini" />
+        <category ID="800">
+          <label text="800 Literatur und Rhetorik" xml:lang="de" />
+          <label text="ddc:800" xml:lang="x-dini" />
+        </category>
+        <category ID="801">
+          <label text="801 Literaturtheorie" xml:lang="de" />
+          <label text="ddc:801" xml:lang="x-dini" />
+        </category>
+        <category ID="802">
+          <label text="802 Verschiedenes" xml:lang="de" />
+          <label text="ddc:802" xml:lang="x-dini" />
+        </category>
+        <category ID="803">
+          <label text="803 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:803" xml:lang="x-dini" />
+        </category>
+        <category ID="805">
+          <label text="805 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:805" xml:lang="x-dini" />
+        </category>
+        <category ID="806">
+          <label text="806 Verbände und Organisationen, Management" xml:lang="de" />
+          <label text="ddc:806" xml:lang="x-dini" />
+        </category>
+        <category ID="807">
+          <label text="807 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:807" xml:lang="x-dini" />
+        </category>
+        <category ID="808">
+          <label text="808 Rhetorik, Anthologien" xml:lang="de" />
+          <label text="ddc:808" xml:lang="x-dini" />
+        </category>
+        <category ID="809">
+          <label text="809 Geschichte, Darstellung, Literaturwissenschaft und -kritik" xml:lang="de" />
+          <label text="ddc:809" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="81">
+        <label text="810 Englische Literatur Amerikas" xml:lang="de" />
+        <label text="ddc:81" xml:lang="x-dini" />
+        <category ID="810">
+          <label text="810 Englische Literatur Amerikas" xml:lang="de" />
+          <label text="ddc:810" xml:lang="x-dini" />
+        </category>
+        <category ID="811">
+          <label text="811 Amerikanische Versdichtung" xml:lang="de" />
+          <label text="ddc:811" xml:lang="x-dini" />
+        </category>
+        <category ID="812">
+          <label text="812 Amerikanische Dramen" xml:lang="de" />
+          <label text="ddc:812" xml:lang="x-dini" />
+        </category>
+        <category ID="813">
+          <label text="813 Amerikanische Erzählprosa" xml:lang="de" />
+          <label text="ddc:813" xml:lang="x-dini" />
+        </category>
+        <category ID="814">
+          <label text="814 Amerikanische Essays" xml:lang="de" />
+          <label text="ddc:814" xml:lang="x-dini" />
+        </category>
+        <category ID="815">
+          <label text="815 Amerikanische Reden" xml:lang="de" />
+          <label text="ddc:815" xml:lang="x-dini" />
+        </category>
+        <category ID="816">
+          <label text="816 Amerikanische Briefe" xml:lang="de" />
+          <label text="ddc:816" xml:lang="x-dini" />
+        </category>
+        <category ID="817">
+          <label text="817 Amerikanischer Humor, amerikanische Satire" xml:lang="de" />
+          <label text="ddc:817" xml:lang="x-dini" />
+        </category>
+        <category ID="818">
+          <label text="818 Amerikanische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:818" xml:lang="x-dini" />
+        </category>
+        <category ID="819">
+          <label text="819 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:819" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="82">
+        <label text="820 Englische, altenglische Literatur" xml:lang="de" />
+        <label text="ddc:82" xml:lang="x-dini" />
+        <category ID="820">
+          <label text="820 Englische, altenglische Literatur" xml:lang="de" />
+          <label text="ddc:820" xml:lang="x-dini" />
+        </category>
+        <category ID="821">
+          <label text="821 Englische Versdichtung" xml:lang="de" />
+          <label text="ddc:821" xml:lang="x-dini" />
+        </category>
+        <category ID="822">
+          <label text="822 Englische Dramen" xml:lang="de" />
+          <label text="ddc:822" xml:lang="x-dini" />
+        </category>
+        <category ID="823">
+          <label text="823 Englische Erzählprosa" xml:lang="de" />
+          <label text="ddc:823" xml:lang="x-dini" />
+        </category>
+        <category ID="824">
+          <label text="824 Englische Essays" xml:lang="de" />
+          <label text="ddc:824" xml:lang="x-dini" />
+        </category>
+        <category ID="825">
+          <label text="825 Englische Reden" xml:lang="de" />
+          <label text="ddc:825" xml:lang="x-dini" />
+        </category>
+        <category ID="826">
+          <label text="826 Englische Briefe" xml:lang="de" />
+          <label text="ddc:826" xml:lang="x-dini" />
+        </category>
+        <category ID="827">
+          <label text="827 Englischer Humor, englische Satire" xml:lang="de" />
+          <label text="ddc:827" xml:lang="x-dini" />
+        </category>
+        <category ID="828">
+          <label text="828 Englische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:828" xml:lang="x-dini" />
+        </category>
+        <category ID="829">
+          <label text="829 Altenglische (Angelsächsische) Literatur" xml:lang="de" />
+          <label text="ddc:829" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="83">
+        <label text="830 Deutsche Literatur, Literatur in verwandten Sprachen" xml:lang="de" />
+        <label text="ddc:83" xml:lang="x-dini" />
+        <category ID="830">
+          <label text="830 Literatur in germanischen Sprachen; Deutsche Literatur" xml:lang="de" />
+          <label text="ddc:830" xml:lang="x-dini" />
+        </category>
+        <category ID="831">
+          <label text="831 Deutsche Versdichtung" xml:lang="de" />
+          <label text="ddc:831" xml:lang="x-dini" />
+        </category>
+        <category ID="832">
+          <label text="832 Deutsche Dramen" xml:lang="de" />
+          <label text="ddc:832" xml:lang="x-dini" />
+        </category>
+        <category ID="833">
+          <label text="833 Deutsche Erzählprosa" xml:lang="de" />
+          <label text="ddc:833" xml:lang="x-dini" />
+        </category>
+        <category ID="834">
+          <label text="834 Deutsche Essays" xml:lang="de" />
+          <label text="ddc:834" xml:lang="x-dini" />
+        </category>
+        <category ID="835">
+          <label text="835 Deutsche Reden" xml:lang="de" />
+          <label text="ddc:835" xml:lang="x-dini" />
+        </category>
+        <category ID="836">
+          <label text="836 Deutsche Briefe" xml:lang="de" />
+          <label text="ddc:836" xml:lang="x-dini" />
+        </category>
+        <category ID="837">
+          <label text="837 Deutscher Humor, deutsche Satire" xml:lang="de" />
+          <label text="ddc:837" xml:lang="x-dini" />
+        </category>
+        <category ID="838">
+          <label text="838 Deutsche vermischte Schriften" xml:lang="de" />
+          <label text="ddc:838" xml:lang="x-dini" />
+        </category>
+        <category ID="839">
+          <label text="839 Literatur in anderen germanischen Sprachen" xml:lang="de" />
+          <label text="ddc:839" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="84">
+        <label text="840 Französische Literatur, Literatur in verwandten Sprachen" xml:lang="de" />
+        <label text="ddc:84" xml:lang="x-dini" />
+        <category ID="840">
+          <label text="840 Literatur in romanischen Sprachen; Französische Literatur" xml:lang="de" />
+          <label text="ddc:840" xml:lang="x-dini" />
+        </category>
+        <category ID="841">
+          <label text="841 Französische Versdichtung" xml:lang="de" />
+          <label text="ddc:841" xml:lang="x-dini" />
+        </category>
+        <category ID="842">
+          <label text="842 Französische Dramen" xml:lang="de" />
+          <label text="ddc:842" xml:lang="x-dini" />
+        </category>
+        <category ID="843">
+          <label text="843 Französische Erzählprosa" xml:lang="de" />
+          <label text="ddc:843" xml:lang="x-dini" />
+        </category>
+        <category ID="844">
+          <label text="844 Französische Essays" xml:lang="de" />
+          <label text="ddc:844" xml:lang="x-dini" />
+        </category>
+        <category ID="845">
+          <label text="845 Französische Reden" xml:lang="de" />
+          <label text="ddc:845" xml:lang="x-dini" />
+        </category>
+        <category ID="846">
+          <label text="846 Französische Briefe" xml:lang="de" />
+          <label text="ddc:846" xml:lang="x-dini" />
+        </category>
+        <category ID="847">
+          <label text="847 Französischer Humor, französische Satire" xml:lang="de" />
+          <label text="ddc:847" xml:lang="x-dini" />
+        </category>
+        <category ID="848">
+          <label text="848 Französische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:848" xml:lang="x-dini" />
+        </category>
+        <category ID="849">
+          <label text="849 Okzitanische, katalanische Literatur" xml:lang="de" />
+          <label text="ddc:849" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="85">
+        <label text="850 Italienische, rumänische, rätoromanische Literatur" xml:lang="de" />
+        <label text="ddc:85" xml:lang="x-dini" />
+        <category ID="850">
+          <label text="850 Italienische, rumänische, rätoromanische Literatur" xml:lang="de" />
+          <label text="ddc:850" xml:lang="x-dini" />
+        </category>
+        <category ID="851">
+          <label text="851 Italienische Versdichtung" xml:lang="de" />
+          <label text="ddc:851" xml:lang="x-dini" />
+        </category>
+        <category ID="852">
+          <label text="852 Italienische Dramen" xml:lang="de" />
+          <label text="ddc:852" xml:lang="x-dini" />
+        </category>
+        <category ID="853">
+          <label text="853 Italienische Erzählprosa" xml:lang="de" />
+          <label text="ddc:853" xml:lang="x-dini" />
+        </category>
+        <category ID="854">
+          <label text="854 Italienische Essays" xml:lang="de" />
+          <label text="ddc:854" xml:lang="x-dini" />
+        </category>
+        <category ID="855">
+          <label text="855 Italienische Reden" xml:lang="de" />
+          <label text="ddc:855" xml:lang="x-dini" />
+        </category>
+        <category ID="856">
+          <label text="856 Italienische Briefe" xml:lang="de" />
+          <label text="ddc:856" xml:lang="x-dini" />
+        </category>
+        <category ID="857">
+          <label text="857 Italienischer Humor, italienische Satire" xml:lang="de" />
+          <label text="ddc:857" xml:lang="x-dini" />
+        </category>
+        <category ID="858">
+          <label text="858 Italienische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:858" xml:lang="x-dini" />
+        </category>
+        <category ID="859">
+          <label text="859 Rumänische, rätoromanische Literatur" xml:lang="de" />
+          <label text="ddc:859" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="86">
+        <label text="860 Spanische, portugiesische Literatur" xml:lang="de" />
+        <label text="ddc:86" xml:lang="x-dini" />
+        <category ID="860">
+          <label text="860 Spanische, portugiesische Literatur" xml:lang="de" />
+          <label text="ddc:860" xml:lang="x-dini" />
+        </category>
+        <category ID="861">
+          <label text="861 Spanische Versdichtung" xml:lang="de" />
+          <label text="ddc:861" xml:lang="x-dini" />
+        </category>
+        <category ID="862">
+          <label text="862 Spanische Dramen" xml:lang="de" />
+          <label text="ddc:862" xml:lang="x-dini" />
+        </category>
+        <category ID="863">
+          <label text="863 Spanische Erzählprosa" xml:lang="de" />
+          <label text="ddc:863" xml:lang="x-dini" />
+        </category>
+        <category ID="864">
+          <label text="864 Spanische Essays" xml:lang="de" />
+          <label text="ddc:864" xml:lang="x-dini" />
+        </category>
+        <category ID="865">
+          <label text="865 Spanische Reden" xml:lang="de" />
+          <label text="ddc:865" xml:lang="x-dini" />
+        </category>
+        <category ID="866">
+          <label text="866 Spanische Briefe" xml:lang="de" />
+          <label text="ddc:866" xml:lang="x-dini" />
+        </category>
+        <category ID="867">
+          <label text="867 Spanischer Humor, spanische Satire" xml:lang="de" />
+          <label text="ddc:867" xml:lang="x-dini" />
+        </category>
+        <category ID="868">
+          <label text="868 Spanische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:868" xml:lang="x-dini" />
+        </category>
+        <category ID="869">
+          <label text="869 Portugiesische Literatur" xml:lang="de" />
+          <label text="ddc:869" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="87">
+        <label text="870 Lateinische, italische Literatur" xml:lang="de" />
+        <label text="ddc:87" xml:lang="x-dini" />
+        <category ID="870">
+          <label text="870 Italische Literatur; Lateinische Literatur" xml:lang="de" />
+          <label text="ddc:870" xml:lang="x-dini" />
+        </category>
+        <category ID="871">
+          <label text="871 Lateinische Versdichtung" xml:lang="de" />
+          <label text="ddc:871" xml:lang="x-dini" />
+        </category>
+        <category ID="872">
+          <label text="872 Lateinische dramatische Versdichtung, Dramen" xml:lang="de" />
+          <label text="ddc:872" xml:lang="x-dini" />
+        </category>
+        <category ID="873">
+          <label text="873 Lateinische erzählende Versdichtung, Erzählprosa" xml:lang="de" />
+          <label text="ddc:873" xml:lang="x-dini" />
+        </category>
+        <category ID="874">
+          <label text="874 Lateinische lyrische Versdichtung" xml:lang="de" />
+          <label text="ddc:874" xml:lang="x-dini" />
+        </category>
+        <category ID="875">
+          <label text="875 Lateinische Reden" xml:lang="de" />
+          <label text="ddc:875" xml:lang="x-dini" />
+        </category>
+        <category ID="876">
+          <label text="876 Lateinische Briefe" xml:lang="de" />
+          <label text="ddc:876" xml:lang="x-dini" />
+        </category>
+        <category ID="877">
+          <label text="877 Lateinischer Humor, lateinische Satire" xml:lang="de" />
+          <label text="ddc:877" xml:lang="x-dini" />
+        </category>
+        <category ID="878">
+          <label text="878 Lateinische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:878" xml:lang="x-dini" />
+        </category>
+        <category ID="879">
+          <label text="879 Literatur in anderen italischen Sprachen" xml:lang="de" />
+          <label text="ddc:879" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="88">
+        <label text="880 Griechische Literatur" xml:lang="de" />
+        <label text="ddc:88" xml:lang="x-dini" />
+        <category ID="880">
+          <label text="880 Griechische Literatur; Klassische griechische Literatur" xml:lang="de" />
+          <label text="ddc:880" xml:lang="x-dini" />
+        </category>
+        <category ID="881">
+          <label text="881 Klassische griechische Versdichtung" xml:lang="de" />
+          <label text="ddc:881" xml:lang="x-dini" />
+        </category>
+        <category ID="882">
+          <label text="882 Klassische griechische dramatische Versdichtung, Dramen" xml:lang="de" />
+          <label text="ddc:882" xml:lang="x-dini" />
+        </category>
+        <category ID="883">
+          <label text="883 Klassische griechische erzählende Versdichtung, Erzählprosa" xml:lang="de" />
+          <label text="ddc:883" xml:lang="x-dini" />
+        </category>
+        <category ID="884">
+          <label text="884 Klassische griechische lyrische Versdichtung" xml:lang="de" />
+          <label text="ddc:884" xml:lang="x-dini" />
+        </category>
+        <category ID="885">
+          <label text="885 Klassische griechische Reden" xml:lang="de" />
+          <label text="ddc:885" xml:lang="x-dini" />
+        </category>
+        <category ID="886">
+          <label text="886 Klassische griechische Briefe" xml:lang="de" />
+          <label text="ddc:886" xml:lang="x-dini" />
+        </category>
+        <category ID="887">
+          <label text="887 Humor und Satire in klassischem Griechisch" xml:lang="de" />
+          <label text="ddc:887" xml:lang="x-dini" />
+        </category>
+        <category ID="888">
+          <label text="888 Klassische griechische vermischte Schriften" xml:lang="de" />
+          <label text="ddc:888" xml:lang="x-dini" />
+        </category>
+        <category ID="889">
+          <label text="889 Neugriechische Literatur" xml:lang="de" />
+          <label text="ddc:889" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="89">
+        <label text="890 Literatur in anderen Sprachen" xml:lang="de" />
+        <label text="ddc:89" xml:lang="x-dini" />
+        <category ID="890">
+          <label text="890 Literatur in anderen Sprachen" xml:lang="de" />
+          <label text="ddc:890" xml:lang="x-dini" />
+        </category>
+        <category ID="891">
+          <label text="891 Ostindoeuropäische, keltische Literatur" xml:lang="de" />
+          <label text="ddc:891" xml:lang="x-dini" />
+        </category>
+        <category ID="892">
+          <label text="892 Afroasiatische Literatur; Semitische Literatur" xml:lang="de" />
+          <label text="ddc:892" xml:lang="x-dini" />
+        </category>
+        <category ID="893">
+          <label text="893 Nichtsemitische afroasiatische Literatur" xml:lang="de" />
+          <label text="ddc:893" xml:lang="x-dini" />
+        </category>
+        <category ID="894">
+          <label text="894 Altaische, uralische, hyperboräische, dravidische Literatur" xml:lang="de" />
+          <label text="ddc:894" xml:lang="x-dini" />
+        </category>
+        <category ID="895">
+          <label text="895 Literatur Ost- und Südostasiens" xml:lang="de" />
+          <label text="ddc:895" xml:lang="x-dini" />
+        </category>
+        <category ID="896">
+          <label text="896 Afrikanische Literatur" xml:lang="de" />
+          <label text="ddc:896" xml:lang="x-dini" />
+        </category>
+        <category ID="897">
+          <label text="897 Literatur der Ureinwohner Nordamerikas" xml:lang="de" />
+          <label text="ddc:897" xml:lang="x-dini" />
+        </category>
+        <category ID="898">
+          <label text="898 Literatur der Ureinwohner Südamerikas" xml:lang="de" />
+          <label text="ddc:898" xml:lang="x-dini" />
+        </category>
+        <category ID="899">
+          <label text="899 Austronesische Literatur, Literatur in anderen Sprachen" xml:lang="de" />
+          <label text="ddc:899" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+    <category ID="9">
+      <label text="900  Geschichte und Geografie" xml:lang="de" />
+      <label text="ddc:9" xml:lang="x-dini" />
+      <category ID="90">
+        <label text="900 Geschichte" xml:lang="de" />
+        <label text="ddc:90" xml:lang="x-dini" />
+        <category ID="900">
+          <label text="900 Geschichte und Geografie" xml:lang="de" />
+          <label text="ddc:900" xml:lang="x-dini" />
+        </category>
+        <category ID="901">
+          <label text="901 Philosophie, Theorie" xml:lang="de" />
+          <label text="ddc:901" xml:lang="x-dini" />
+        </category>
+        <category ID="902">
+          <label text="902 Verschiedenes" xml:lang="de" />
+          <label text="ddc:902" xml:lang="x-dini" />
+        </category>
+        <category ID="903">
+          <label text="903 Wörterbücher, Enzyklopädien" xml:lang="de" />
+          <label text="ddc:903" xml:lang="x-dini" />
+        </category>
+        <category ID="904">
+          <label text="904 Historische Sammelbeiträge" xml:lang="de" />
+          <label text="ddc:904" xml:lang="x-dini" />
+        </category>
+        <category ID="905">
+          <label text="905 Fortlaufende Sammelwerke" xml:lang="de" />
+          <label text="ddc:905" xml:lang="x-dini" />
+        </category>
+        <category ID="906">
+          <label text="906 Verbände und Organisationen, Management" xml:lang="de" />
+          <label text="ddc:906" xml:lang="x-dini" />
+        </category>
+        <category ID="907">
+          <label text="907 Ausbildung, Forschung, verwandte Themen" xml:lang="de" />
+          <label text="ddc:907" xml:lang="x-dini" />
+        </category>
+        <category ID="908">
+          <label text="908 Behandlung nach Personengruppen" xml:lang="de" />
+          <label text="ddc:908" xml:lang="x-dini" />
+        </category>
+        <category ID="909">
+          <label text="909 Weltgeschichte" xml:lang="de" />
+          <label text="ddc:909" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="91">
+        <label text="910 Geografie, Reisen" xml:lang="de" />
+        <label text="ddc:91" xml:lang="x-dini" />
+        <category ID="910">
+          <label text="910 Geografie, Reisen" xml:lang="de" />
+          <label text="ddc:910" xml:lang="x-dini" />
+        </category>
+        <category ID="911">
+          <label text="911 Historische Geografie" xml:lang="de" />
+          <label text="ddc:911" xml:lang="x-dini" />
+        </category>
+        <category ID="912">
+          <label text="912 Atlanten, Karten, Pläne" xml:lang="de" />
+          <label text="ddc:912" xml:lang="x-dini" />
+        </category>
+        <category ID="913">
+          <label text="913 Geografie und Reisen in der Alten Welt" xml:lang="de" />
+          <label text="ddc:913" xml:lang="x-dini" />
+        </category>
+        <category ID="914">
+          <label text="914 Geografie und Reisen in Europa" xml:lang="de" />
+          <label text="ddc:914" xml:lang="x-dini" />
+        </category>
+        <category ID="915">
+          <label text="915 Geografie und Reisen in Asien" xml:lang="de" />
+          <label text="ddc:915" xml:lang="x-dini" />
+        </category>
+        <category ID="916">
+          <label text="916 Geografie und Reisen in Afrika" xml:lang="de" />
+          <label text="ddc:916" xml:lang="x-dini" />
+        </category>
+        <category ID="917">
+          <label text="917 Geografie und Reisen in Nordamerika" xml:lang="de" />
+          <label text="ddc:917" xml:lang="x-dini" />
+        </category>
+        <category ID="918">
+          <label text="918 Geografie und Reisen in Südamerika" xml:lang="de" />
+          <label text="ddc:918" xml:lang="x-dini" />
+        </category>
+        <category ID="919">
+          <label text="919 Geografie und Reisen in anderen Gebieten" xml:lang="de" />
+          <label text="ddc:919" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="92">
+        <label text="920 Biografie, Genealogie" xml:lang="de" />
+        <label text="ddc:92" xml:lang="x-dini" />
+        <category ID="920">
+          <label text="920 Biografie, Genealogie, Namenkunde, Heraldik" xml:lang="de" />
+          <label text="ddc:920" xml:lang="x-dini" />
+        </category>
+        <category ID="921">
+          <label text="921 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:921" xml:lang="x-dini" />
+        </category>
+        <category ID="922">
+          <label text="922 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:922" xml:lang="x-dini" />
+        </category>
+        <category ID="923">
+          <label text="923 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:923" xml:lang="x-dini" />
+        </category>
+        <category ID="924">
+          <label text="924 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:924" xml:lang="x-dini" />
+        </category>
+        <category ID="925">
+          <label text="925 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:925" xml:lang="x-dini" />
+        </category>
+        <category ID="926">
+          <label text="926 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:926" xml:lang="x-dini" />
+        </category>
+        <category ID="927">
+          <label text="927 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:927" xml:lang="x-dini" />
+        </category>
+        <category ID="928">
+          <label text="928 (Optionale Notation)" xml:lang="de" />
+          <label text="ddc:928" xml:lang="x-dini" />
+        </category>
+        <category ID="929">
+          <label text="929 Genealogie, Namenkunde, Heraldik" xml:lang="de" />
+          <label text="ddc:929" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="93">
+        <label text="930 Geschichte der Alten Welt (bis ca. 499), Archäologie" xml:lang="de" />
+        <label text="ddc:93" xml:lang="x-dini" />
+        <category ID="930">
+          <label text="930 Geschichte der Alten Welt bis ca. 499, Archäologie" xml:lang="de" />
+          <label text="ddc:930" xml:lang="x-dini" />
+        </category>
+        <category ID="931">
+          <label text="931 Geschichte Chinas bis 420" xml:lang="de" />
+          <label text="ddc:931" xml:lang="x-dini" />
+        </category>
+        <category ID="932">
+          <label text="932 Geschichte Ägyptens bis 640" xml:lang="de" />
+          <label text="ddc:932" xml:lang="x-dini" />
+        </category>
+        <category ID="933">
+          <label text="933 Geschichte Palästinas bis 70" xml:lang="de" />
+          <label text="ddc:933" xml:lang="x-dini" />
+        </category>
+        <category ID="934">
+          <label text="934 Geschichte Indiens bis 647" xml:lang="de" />
+          <label text="ddc:934" xml:lang="x-dini" />
+        </category>
+        <category ID="935">
+          <label text="935 Geschichte Mesopotamiens und des Hochlands von Iran bis 637" xml:lang="de" />
+          <label text="ddc:935" xml:lang="x-dini" />
+        </category>
+        <category ID="936">
+          <label text="936 Geschichte Europas nördlich und westlich von Italien bis ca. 499" xml:lang="de" />
+          <label text="ddc:936" xml:lang="x-dini" />
+        </category>
+        <category ID="937">
+          <label text="937 Geschichte Italiens und benachbarter Gebiete bis 476" xml:lang="de" />
+          <label text="ddc:937" xml:lang="x-dini" />
+        </category>
+        <category ID="938">
+          <label text="938 Geschichte Griechenland bis 323" xml:lang="de" />
+          <label text="ddc:938" xml:lang="x-dini" />
+        </category>
+        <category ID="939">
+          <label text="939 Geschichte anderer Teile der Alten Welt bis ca. 640" xml:lang="de" />
+          <label text="ddc:939" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="94">
+        <label text="940 Geschichte Europas" xml:lang="de" />
+        <label text="ddc:94" xml:lang="x-dini" />
+        <category ID="940">
+          <label text="940 Geschichte Europas" xml:lang="de" />
+          <label text="ddc:940" xml:lang="x-dini" />
+        </category>
+        <category ID="941">
+          <label text="941 Geschichte Großbritanniens und Irlands" xml:lang="de" />
+          <label text="ddc:941" xml:lang="x-dini" />
+        </category>
+        <category ID="942">
+          <label text="942 Geschichte Englands und Wales'" xml:lang="de" />
+          <label text="ddc:942" xml:lang="x-dini" />
+        </category>
+        <category ID="943">
+          <label text="943 Geschichte Mitteleuropas; Deutschlands" xml:lang="de" />
+          <label text="ddc:943" xml:lang="x-dini" />
+        </category>
+        <category ID="944">
+          <label text="944 Geschichte Frankreichs und Monacos" xml:lang="de" />
+          <label text="ddc:944" xml:lang="x-dini" />
+        </category>
+        <category ID="945">
+          <label text="945 Geschichte der italienischen Halbinsel und benachbarter Inseln" xml:lang="de" />
+          <label text="ddc:945" xml:lang="x-dini" />
+        </category>
+        <category ID="946">
+          <label text="946 Geschichte der iberischen Halbinsel und benachbarter Inseln" xml:lang="de" />
+          <label text="ddc:946" xml:lang="x-dini" />
+        </category>
+        <category ID="947">
+          <label text="947 Geschichte Osteuropas; Russlands" xml:lang="de" />
+          <label text="ddc:947" xml:lang="x-dini" />
+        </category>
+        <category ID="948">
+          <label text="948 Geschichte Skandinaviens" xml:lang="de" />
+          <label text="ddc:948" xml:lang="x-dini" />
+        </category>
+        <category ID="949">
+          <label text="949 Geschichte anderer Teile Europas" xml:lang="de" />
+          <label text="ddc:949" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="95">
+        <label text="950 Geschichte Asiens" xml:lang="de" />
+        <label text="ddc:95" xml:lang="x-dini" />
+        <category ID="950">
+          <label text="950 Geschichte Asiens; des Fernen Ostens" xml:lang="de" />
+          <label text="ddc:950" xml:lang="x-dini" />
+        </category>
+        <category ID="951">
+          <label text="951 Geschichte Chinas und benachbarter Gebiete" xml:lang="de" />
+          <label text="ddc:951" xml:lang="x-dini" />
+        </category>
+        <category ID="952">
+          <label text="952 Geschichte Japans" xml:lang="de" />
+          <label text="ddc:952" xml:lang="x-dini" />
+        </category>
+        <category ID="953">
+          <label text="953 Geschichte der arabischen Halbinsel und benachbarter Gebiete" xml:lang="de" />
+          <label text="ddc:953" xml:lang="x-dini" />
+        </category>
+        <category ID="954">
+          <label text="954 Geschichte Südasiens; Indiens" xml:lang="de" />
+          <label text="ddc:954" xml:lang="x-dini" />
+        </category>
+        <category ID="955">
+          <label text="955 Geschichte Irans" xml:lang="de" />
+          <label text="ddc:955" xml:lang="x-dini" />
+        </category>
+        <category ID="956">
+          <label text="956 Geschichte des Nahen Ostens" xml:lang="de" />
+          <label text="ddc:956" xml:lang="x-dini" />
+        </category>
+        <category ID="957">
+          <label text="957 Geschichte Sibiriens (des Asiatischen Russlands)" xml:lang="de" />
+          <label text="ddc:957" xml:lang="x-dini" />
+        </category>
+        <category ID="958">
+          <label text="958 Geschichte Zentralasiens" xml:lang="de" />
+          <label text="ddc:958" xml:lang="x-dini" />
+        </category>
+        <category ID="959">
+          <label text="959 Geschichte Südostasiens" xml:lang="de" />
+          <label text="ddc:959" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="96">
+        <label text="960 Geschichte Afrikas" xml:lang="de" />
+        <label text="ddc:96" xml:lang="x-dini" />
+        <category ID="960">
+          <label text="960 Geschichte Afrikas" xml:lang="de" />
+          <label text="ddc:960" xml:lang="x-dini" />
+        </category>
+        <category ID="961">
+          <label text="961 Geschichte Tunesiens und Libyens" xml:lang="de" />
+          <label text="ddc:961" xml:lang="x-dini" />
+        </category>
+        <category ID="962">
+          <label text="962 Geschichte Ägyptens und Sudans" xml:lang="de" />
+          <label text="ddc:962" xml:lang="x-dini" />
+        </category>
+        <category ID="963">
+          <label text="963 Geschichte Äthiopiens und Eritreas" xml:lang="de" />
+          <label text="ddc:963" xml:lang="x-dini" />
+        </category>
+        <category ID="964">
+          <label text="964 Geschichte der nordwestafrikanischen Küste und vorgelagerter Inseln" xml:lang="de" />
+          <label text="ddc:964" xml:lang="x-dini" />
+        </category>
+        <category ID="965">
+          <label text="965 Geschichte Algerien" xml:lang="de" />
+          <label text="ddc:965" xml:lang="x-dini" />
+        </category>
+        <category ID="966">
+          <label text="966 Geschichte Westafrikas und vorgelagerter Inseln" xml:lang="de" />
+          <label text="ddc:966" xml:lang="x-dini" />
+        </category>
+        <category ID="967">
+          <label text="967 Geschichte Zentralafrikas und vorgelagerter Inseln" xml:lang="de" />
+          <label text="ddc:967" xml:lang="x-dini" />
+        </category>
+        <category ID="968">
+          <label text="968 Geschichte des südlichen Afrikas; der Republik Südafrika" xml:lang="de" />
+          <label text="ddc:968" xml:lang="x-dini" />
+        </category>
+        <category ID="969">
+          <label text="969 Geschichte der Inseln des südlichen Indischen Ozeans" xml:lang="de" />
+          <label text="ddc:969" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="97">
+        <label text="970 Geschichte Nordamerikas" xml:lang="de" />
+        <label text="ddc:97" xml:lang="x-dini" />
+        <category ID="970">
+          <label text="970 Geschichte Nordamerikas" xml:lang="de" />
+          <label text="ddc:970" xml:lang="x-dini" />
+        </category>
+        <category ID="971">
+          <label text="971 Geschichte Kanadas" xml:lang="de" />
+          <label text="ddc:971" xml:lang="x-dini" />
+        </category>
+        <category ID="972">
+          <label text="972 Geschichte Mittelamerikas; Mexikos" xml:lang="de" />
+          <label text="ddc:972" xml:lang="x-dini" />
+        </category>
+        <category ID="973">
+          <label text="973 Geschichte der USA" xml:lang="de" />
+          <label text="ddc:973" xml:lang="x-dini" />
+        </category>
+        <category ID="974">
+          <label text="974 Geschichte des Nordostens der USA" xml:lang="de" />
+          <label text="ddc:974" xml:lang="x-dini" />
+        </category>
+        <category ID="975">
+          <label text="975 Geschichte des Südostens der USA" xml:lang="de" />
+          <label text="ddc:975" xml:lang="x-dini" />
+        </category>
+        <category ID="976">
+          <label text="976 Geschichte des mittleren Südens der USA" xml:lang="de" />
+          <label text="ddc:976" xml:lang="x-dini" />
+        </category>
+        <category ID="977">
+          <label text="977 Geschichte des mittleren Nordes der USA" xml:lang="de" />
+          <label text="ddc:977" xml:lang="x-dini" />
+        </category>
+        <category ID="978">
+          <label text="978 Geschichte des Westens der USA" xml:lang="de" />
+          <label text="ddc:978" xml:lang="x-dini" />
+        </category>
+        <category ID="979">
+          <label text="979 Geschichte des Pazifischen Beckens und des Pazifischen Rückens" xml:lang="de" />
+          <label text="ddc:979" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="98">
+        <label text="980 Geschichte Südamerikas" xml:lang="de" />
+        <label text="ddc:98" xml:lang="x-dini" />
+        <category ID="980">
+          <label text="980 Geschichte Südamerikas" xml:lang="de" />
+          <label text="ddc:980" xml:lang="x-dini" />
+        </category>
+        <category ID="981">
+          <label text="981 Geschichte Brasiliens" xml:lang="de" />
+          <label text="ddc:981" xml:lang="x-dini" />
+        </category>
+        <category ID="982">
+          <label text="982 Geschichte Argentiniens" xml:lang="de" />
+          <label text="ddc:982" xml:lang="x-dini" />
+        </category>
+        <category ID="983">
+          <label text="983 Geschichte Chiles" xml:lang="de" />
+          <label text="ddc:983" xml:lang="x-dini" />
+        </category>
+        <category ID="984">
+          <label text="984 Geschichte Boliviens" xml:lang="de" />
+          <label text="ddc:984" xml:lang="x-dini" />
+        </category>
+        <category ID="985">
+          <label text="985 Geschichte Perus" xml:lang="de" />
+          <label text="ddc:985" xml:lang="x-dini" />
+        </category>
+        <category ID="986">
+          <label text="986 Geschichte Kolumbiens und Ecuadors" xml:lang="de" />
+          <label text="ddc:986" xml:lang="x-dini" />
+        </category>
+        <category ID="987">
+          <label text="987 Geschichte Venezuelas" xml:lang="de" />
+          <label text="ddc:987" xml:lang="x-dini" />
+        </category>
+        <category ID="988">
+          <label text="988 Geschichte Guyanas" xml:lang="de" />
+          <label text="ddc:988" xml:lang="x-dini" />
+        </category>
+        <category ID="989">
+          <label text="989 Geschichte Paraguays und Uruguays" xml:lang="de" />
+          <label text="ddc:989" xml:lang="x-dini" />
+        </category>
+      </category>
+      <category ID="99">
+        <label text="990 Geschichte anderer Gebiete" xml:lang="de" />
+        <label text="ddc:99" xml:lang="x-dini" />
+        <category ID="990">
+          <label text="990 Geschichte anderer Gebiete" xml:lang="de" />
+          <label text="ddc:990" xml:lang="x-dini" />
+        </category>
+        <category ID="993">
+          <label text="993 Geschichte Neuseelands" xml:lang="de" />
+          <label text="ddc:993" xml:lang="x-dini" />
+        </category>
+        <category ID="994">
+          <label text="994 Geschichte Australiens" xml:lang="de" />
+          <label text="ddc:994" xml:lang="x-dini" />
+        </category>
+        <category ID="995">
+          <label text="995 Geschichte Melanesiens; Neuguineas" xml:lang="de" />
+          <label text="ddc:995" xml:lang="x-dini" />
+        </category>
+        <category ID="996">
+          <label text="996 Geschichte anderer Regionen des Pazifik; Polynesiens" xml:lang="de" />
+          <label text="ddc:996" xml:lang="x-dini" />
+        </category>
+        <category ID="997">
+          <label text="997 Geschichte der Inseln im Atlantik" xml:lang="de" />
+          <label text="ddc:997" xml:lang="x-dini" />
+        </category>
+        <category ID="998">
+          <label text="998 Geschichte der Arktischen Inseln und der Antarktis" xml:lang="de" />
+          <label text="ddc:998" xml:lang="x-dini" />
+        </category>
+        <category ID="999">
+          <label text="999 Geschichte der Extraterrestrischen Welten" xml:lang="de" />
+          <label text="ddc:999" xml:lang="x-dini" />
+        </category>
+      </category>
+    </category>
+  </categories>
+</mycoreclass>
+

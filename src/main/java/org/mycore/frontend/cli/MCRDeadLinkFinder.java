@@ -1,5 +1,6 @@
 package org.mycore.frontend.cli;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +14,12 @@ import org.jdom.filter.Filter;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
+
+import fsu.thulb.jp.datamodel.common.MCRMetadata;
 
 public class MCRDeadLinkFinder extends MCRAbstractCommands {
     private static final Namespace xlink = Namespace.getNamespace("http://www.w3.org/1999/xlink");
@@ -51,8 +57,7 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
             } else {
                 // retrieve the object with the faulty reference
                 // LOGGER.info("object: " + keyMCRFrom);
-                faultyObj.receiveFromDatastore(keyMCRFrom);
-                faultyObjDoc = faultyObj.createXML();
+                faultyObjDoc = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(keyMCRFrom));
                 objectXMLs.put(keyMCRFrom, faultyObjDoc);
             }
 
@@ -103,14 +108,7 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
                 }
             }
 
-            faultyObj.setFromJDOM(faultyObjDoc);
-            try {
-                faultyObj.updateInDatastore();
-            } catch (MCRPersistenceException e1) {
-                e1.printStackTrace();
-            } catch (MCRActiveLinkException e1) {
-                e1.printStackTrace();
-            }
+            MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(keyMCRFrom), faultyObjDoc, new Date());
 
             // XML holen, fehlerhafte Links löschen
             LOGGER.info(maintitle.toString() + ": " + keyMCRFrom + " link with " + keyMCRTo);

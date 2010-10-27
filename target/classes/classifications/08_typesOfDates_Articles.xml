@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000008">
+	<label xml:lang="de" text="Datums-Typen in Artikel" description="Datums-Typen in Artikeln"/>
+	<label xml:lang="en" text="Dates in article" description="Dates in article"/>
+	<categories>
+		<category ID="published">
+			<label xml:lang="de" text="Erschienen"/>
+			<label xml:lang="en" text="Published"/>
+		</category>
+		<category ID="published_Original">
+			<label xml:lang="de" text="Erscheinungsjahr des rez. Werkes"></label>
+			<label xml:lang="en" text="Reviewed work published"/>
+		</category>
+		<category ID="published_Original_From">
+			<label xml:lang="de" text="Erscheinungsbeginn der rez. Werke"/>
+			<label xml:lang="en" text="Reviewed work published from"/>
+		</category>
+		<category ID="published_Original_Till">
+			<label xml:lang="de" text="Erscheinungsende der rez. Werke"/>
+			<label xml:lang="en" text="Reviewed work published to"/>
+		</category>
+	</categories>
+</mycoreclass>

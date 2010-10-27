@@ -12,7 +12,7 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -50,7 +50,7 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
     }
 
     public static void exportBlob(String objectID, String file) {
-        Document objXML = new MCRObject().receiveJDOMFromDatastore(new MCRObjectID(objectID));
+        Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(objectID));
         XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
         try {
             xo.output(objXML, new FileOutputStream(new File(file)));
@@ -73,7 +73,7 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
             e.printStackTrace();
         }
         String id = objXML.getRootElement().getAttributeValue("ID");
-        MCRXMLTableManager.instance().update(new MCRObjectID(id), objXML, new Date());
+        MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(id), objXML, new Date());
         LOGGER.info("imported object " + id + " to blob from " + file);
     }
 

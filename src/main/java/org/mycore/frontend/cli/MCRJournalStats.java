@@ -3,6 +3,7 @@ package org.mycore.frontend.cli;
 import java.util.HashMap;
 
 import org.mycore.datamodel.metadata.MCRMetaLink;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
@@ -26,8 +27,7 @@ public class MCRJournalStats extends MCRAbstractCommands {
 	private static int AllObjectsCounter = 0;
 
 	MCRJournalStats(MCRObjectID ID, String JournalType) {
-		MCRObject Journal = new MCRObject();
-		Journal.receiveFromDatastore(ID);
+		MCRObject Journal = MCRMetadataManager.retrieveMCRObject(ID);
 		this.ID = ID;
 		this.name = Journal.getMetadata().createXML().getChild("maintitles")
 				.getChild("maintitle").getText();

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.common.MCRException;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
@@ -64,7 +64,7 @@ public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
         // TODO: use cache
         LOGGER.debug("getClassID => journalID=" + journalID);
 
-        Document journalXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(journalID));
+        Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
         int sepPos = XPathWhereToFindClassIDInJournalXML.indexOf("/");
         String tag1 = XPathWhereToFindClassIDInJournalXML.substring(0, sepPos);
         String tag2 = XPathWhereToFindClassIDInJournalXML.substring(sepPos + 1, XPathWhereToFindClassIDInJournalXML.length());

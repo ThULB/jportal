@@ -9,7 +9,9 @@ import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.MCRJPortalCommands;
 import org.mycore.parsers.bool.MCROrCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;
@@ -50,8 +52,7 @@ public class MCRLinkConvertCommand {
     }
 
     public static void replaceLink(String mcrObjId) throws Exception {
-        MCRObject mcrObj = new MCRObject();
-        mcrObj.receiveFromDatastore(mcrObjId);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrObjId));
         
         // remove old ifs link
         MCRMetaElement oldIFSLinks = mcrObj.getMetadata().removeMetadataElement("ifsLinks");
@@ -59,7 +60,7 @@ public class MCRLinkConvertCommand {
             // add new derivateLink
             MCRMetaElement derivateLinksElement = new MCRMetaElement();
             derivateLinksElement.setTag("derivateLinks");
-            derivateLinksElement.setClassName("MCRMetaDerivateLink");
+            derivateLinksElement.setClass(MCRMetaDerivateLink.class);
             derivateLinksElement.setHeritable(false);
             derivateLinksElement.setNotInherit(true);
 
@@ -70,9 +71,9 @@ public class MCRLinkConvertCommand {
             derivateLink.setReference(href, null, null);
 
             derivateLinksElement.addMetaObject(derivateLink);
-            mcrObj.getMetadata().setMetadataElement(derivateLinksElement, "derivateLinks");
+            mcrObj.getMetadata().setMetadataElement(derivateLinksElement);
 
-            mcrObj.updateInDatastore();
+            MCRMetadataManager.update(mcrObj);
 
             LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
         } else {

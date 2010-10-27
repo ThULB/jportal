@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigation dir="/content" template="template_master2" hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal"
+    href="navigation">
+    <!-- main menu  -->
+    <navi-main dir="/main/" href="navi-main">
+        <label xml:lang="de">Hauptmenü links</label>
+        <label xml:lang="en">Main menu left</label>
+        <item href="/content/main/search.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
+            <label xml:lang="de">Suche</label>
+            <label xml:lang="en">Search</label>
+            <item href="/content/main/search/forJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
+                <label xml:lang="de">nach Zeitschriften suchen</label>
+                <item href="/journalList.xml?dummy=value" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    <label xml:lang="de">A - Z</label>
+                </item>
+                <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Blättern in...</label>
+                    <item href="/browse/categoriesEZB" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">EZB-Fächerliste</label>
+                    </item>
+                    <item href="/browse/categoriesZDB" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">ZDB-Fächerliste</label>
+                    </item>
+                    <item href="/browse/journaltype" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Zeitschriftentypen</label>
+                    </item>
+                    <item href="/browse/projectname" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Projekten</label>
+                    </item>
+                    <item href="/browse/ddcproject" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                    	<label xml:lang="de">DDC-Projekten</label>
+                    </item>
+                    <item href="/browse/inventoryevidence" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                        <label xml:lang="de">Bestandsnachweisen</label>
+                    </item>
+                </item>
+                <item href="/content/main/search/forJournals/browseTimeBar.xml" type="intern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Chronologische Sicht</label>
+                </item>
+                <item href="/editor_form_search-jpjournal.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Expertensuche</label>
+                </item>
+            </item>
+            <item href="/content/main/search/inJournals.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="true">
+                <label xml:lang="de">in Zeitschriften suchen</label>
+                <item href="/editor_form_search-jparticle.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">nach Artikeln</label>
+                </item>
+                <item href="/editor_form_search-jpinst.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">nach Institutionen</label>
+                </item>
+                <item href="/editor_form_search-jpperson.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">nach Personen</label>
+                </item>
+                <item href="/editor_form_search-expert.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false">
+                    <label xml:lang="de">Expertensuche</label>
+                    <label xml:lang="en">expert search</label>
+                </item>
+            </item>
+            <item href="/content/main/search/searchWebsite.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">in Webseiten suchen</label>
+            </item>
+        </item>
+        <item href="/content/main/calendarList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false" template="template_master2">
+            <label xml:lang="de">Kalender A - Z</label>
+            <label xml:lang="de">Calendar A - Z</label>
+            <item href="/content/main/calendarList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Platzhalter</label>
+            </item>
+        </item>
+        <item href="/content/main/journalList.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
+            <label xml:lang="de">Zeitschriften A - Z</label>
+            <label xml:lang="en">Journals A - Z</label>
+            <item href="/content/main/journalList/dummy.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Platzhalter</label>
+            </item>
+        </item>
+        <item href="/content/main/jpEditors.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Editoren</label>
+            <label xml:lang="en">Editors</label>
+            <item href="/servlets/MCRStartEditorServlet?type=jpjournal&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
+                replaceMenu="false">
+                <label xml:lang="de">neue Zeitschrift</label>
+                <label xml:lang="en">new journal</label>
+            </item>
+            <item href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
+                replaceMenu="false">
+                <label xml:lang="de">neue Person</label>
+                <label xml:lang="en">new person</label>
+            </item>
+            <item href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
+                replaceMenu="false">
+                <label xml:lang="de">neue Institution</label>
+                <label xml:lang="en">new institution</label>
+            </item>
+            <item href="/browse?mode=edit" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Klassifikationseditor</label>
+                <label xml:lang="en">Classification Editor</label>
+            </item>
+        </item>
+        <item href="/content/main/useradmin.xml" type="intern" target="_self" style="normal" replaceMenu="false">
+            <label xml:lang="de">Nutzerverwaltung</label>
+            <label xml:lang="en">User administration</label>
+            <item href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=CreatePwdDialog" type="extern" target="_self" style="normal"
+                replaceMenu="false">
+                <label xml:lang="de">Passwort ändern</label>
+                <label xml:lang="en">Change password</label>
+            </item>
+            <item href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=ShowUser" type="extern" target="_self" style="normal"
+                replaceMenu="false">
+                <label xml:lang="de">Nutzerdaten anzeigen</label>
+                <label xml:lang="en">Show user data</label>
+            </item>
+            <item href="/servlets/MCRUserAdminServlet?mode=newuser" type="extern" target="_self" style="normal" replaceMenu="false">
+                <label xml:lang="de">Nutzer anlegen</label>
+                <label xml:lang="en">Create new user</label>
+            </item>
+            <item href="/servlets/MCRUserAdminServlet?mode=newgroup" type="extern" target="_self" style="normal" replaceMenu="false">
+                <label xml:lang="de">Gruppe anlegen</label>
+                <label xml:lang="en">Create a group</label>
+            </item>
+            <item href="/servlets/MCRUserAjaxServlet" type="extern" target="_self" style="normal" replaceMenu="false">
+                <label xml:lang="de">Nutzer- Gruppenverwaltung</label>
+                <label xml:lang="en">Manage groups- users</label>
+            </item>
+        </item>
+        <item href="/content/main/tools.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Tools</label>
+            <item href="/content/main/tools/dubFinder.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Dublettenfinder</label>
+                <item href="/doubletFinder/redundancy-person.xml?XSL.RedunMap.SESSION=doubletFinder/redundancy-person.xml" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Personenindex</label>
+                </item>
+                <item href="/doubletFinder/redundancy-jpinst.xml?XSL.RedunMap.SESSION=doubletFinder/redundancy-jpinst.xml" type="extern" target="_self" style="normal" replaceMenu="false"
+                    constrainPopUp="false">
+                    <label xml:lang="de">Institutionsindex</label>
+                </item>
+            </item>
+            <item href="/content/main/tools/statistic.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">Statistik</label>
+            </item>
+            <item href="/servlets/MCRSessionListingServlet?sessionListing.mode=listSessions" type="extern" target="_self" style="normal" replaceMenu="false"
+                constrainPopUp="false">
+                <label xml:lang="de">Aktive Sitzungen anzeigen</label>
+                <label xml:lang="en">Show active sessions</label>
+            </item>
+            <item href="/servlets/MCRBroadcastingServlet?mode=getReceiverList" type="extern" target="_self" style="normal" replaceMenu="false"
+                constrainPopUp="false">
+                <label xml:lang="de">Module - Broadcasting</label>
+            </item>
+            <item href="/servlets/MCRACLEditorServlet_v2?mode=getACLEditor" type="extern" target="_self" style="normal" replaceMenu="false">
+                <label xml:lang="de">ACL-Editor</label>
+            </item>
+            <item href="/modules/webcli/launchpad.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+                <label xml:lang="de">WebCLI</label>
+            </item>
+            <item href="/recycleBin.xml" type="extern" target="_self" style="normal" replaceMenu="false">
+              <label xml:lang="de">Papierkorb</label>
+              <label xml:lang="en">Recycle bin</label>
+            </item>
+            <item href="/editor_form_search-expert.xml" type="extern" target="_self" style="normal" replaceMenu="false">
+              <label xml:lang="de">Expertensuche</label>
+              <label xml:lang="en">Expert search</label>
+            </item>
+        </item>
+        <item href="/content/main/contact.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Kontakt</label>
+            <label xml:lang="de">Contact</label>
+        </item>
+    </navi-main>
+    <!-- main menu  -->
+    <!-- navi bar below -->
+    <navi-below dir="/below/" href="navi-below">
+        <label xml:lang="de">Menü oben</label>
+        <label xml:lang="en">Menu above</label>
+        <item href="/content/below/index.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
+            <label xml:lang="de">Start</label>
+            <label xml:lang="en">Home</label>
+        </item>
+        <item href="/servlets/MCRWCMSLoginServlet" type="extern" target="_self" style="normal" template="template_wcms">
+            <label xml:lang="de">WCMS</label>
+            <label xml:lang="en">WCMS</label>
+            <dynamicContentBinding>
+                <rootTag>cms</rootTag>
+            </dynamicContentBinding>
+        </item>
+        <item href="/content/below/sitemap.xml" type="extern" target="_self" style="normal">
+            <label xml:lang="de">Sitemap</label>
+            <label xml:lang="en">Site map</label>
+        </item>
+    </navi-below>
+    <!-- END OF: navi bar below -->
+</navigation>
+

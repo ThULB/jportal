@@ -33,6 +33,7 @@ import org.jdom.Element;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.frontend.cli.MCRDerivateCommands;
+import org.xml.sax.SAXParseException;
 
 public class MCRJPortalCLIServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
@@ -54,14 +55,19 @@ public class MCRJPortalCLIServlet extends MCRServlet {
             LOGGER.info("#########################################################");
             Document answerXML = new Document(getAnswerXML(true));
             getLayoutService().sendXML(job.getRequest(), job.getResponse(), answerXML);
-            executeCommand();
+            try {
+                executeCommand();
+            } catch (SAXParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         } else {
             Document answerXML = new Document(getAnswerXML(false));
             getLayoutService().sendXML(job.getRequest(), job.getResponse(), answerXML);
         }
     }
 
-    private void executeCommand() {
+    private void executeCommand() throws SAXParseException {
 
         //MCRObjectCommands.repairMetadataSearch("person");
         //MCRObjectCommands.repairMetadataSearch("jpinst");

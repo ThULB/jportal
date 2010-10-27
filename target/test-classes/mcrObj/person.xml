@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+	ID="jportal_person_00000009" label="jportal_person_00000009" version="2.0"
+	xsi:noNamespaceSchemaLocation="datamodel-person.xsd">
+	<structure/>
+	<metadata xml:lang="de">
+		<def.heading class="MCRMetaXML" heritable="true"
+			notinherit="true">
+			<heading xml:lang="de" inherited="0">
+				<lastName>Neumann</lastName>
+				<firstName>John</firstName>
+			</heading>
+		</def.heading>
+		<def.alternative class="MCRMetaXML" heritable="true"
+			notinherit="true">
+			<alternative xml:lang="de" inherited="0" type="complete">
+				<lastName>Newman</lastName>
+				<firstName>Joooh</firstName>
+			</alternative>
+			<alternative xml:lang="de" inherited="0" type="complete">
+				<lastName>Oldman</lastName>
+				<firstName>Old</firstName>
+			</alternative>
+			<alternative xml:lang="de" inherited="0" type="single">
+				<name>Freitext</name>
+			</alternative>
+		</def.alternative>
+		<def.peerage class="MCRMetaLangText" heritable="true"
+			notinherit="true">
+			<peerage xml:lang="de" inherited="0" form="plain">erqwe</peerage>
+		</def.peerage>
+		<def.gender class="MCRMetaClassification" heritable="true"
+			notinherit="true">
+			<gender inherited="0" classid="urmel_class_00000001" categid="male" />
+		</def.gender>
+	</metadata>
+	<service/>
+</mycoreobject>

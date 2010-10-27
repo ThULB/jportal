@@ -6,7 +6,10 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUtils;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorSubmission;
@@ -63,31 +66,33 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
             mmcrid = oldmcrid;
         }
 
-        MCRObjectID ID = new MCRObjectID(mmcrid);
+        MCRObjectID ID = MCRObjectID.getInstance(mmcrid);
 
         if (!ID.getTypeId().equals(oldtype)) {
-            ID = new MCRObjectID(oldmcrid);
+            ID = MCRObjectID.getInstance(oldmcrid);
             hasid = false;
         }
 
-        if (!hasid)
-            indoc.getRootElement().setAttribute("ID", ID.getId());
+        if (!hasid) {
+            indoc.getRootElement().setAttribute("ID", ID.toString());
+        }
 
         // create a metadata object and prepare it
         Document preparedMetadataDocument = prepareMetadata((Document) indoc.clone(), ID, job, lang);
-        MCRObject mcrObj = new MCRObject();
-        mcrObj.setFromJDOM(preparedMetadataDocument);
+        MCRObject mcrObj = new MCRObject(preparedMetadataDocument);
 
         // update or create in datastore
-        if(MCRObject.existInDatastore(ID)) {
+        if(MCRMetadataManager.exists(ID)) {
             MCRObjectID parentID = mcrObj.getStructure().getParentID();
             if( parentID != null && 
-                (!MCRObject.existInDatastore(parentID) || ID.equals(parentID)))
-                throw new MCRException("Error while updating MCRObject '" + ID.getId() +  "'!" +
-                        " Parent id '" + parentID.getId() + "' doesnt exists or is equal to the object!");
-            mcrObj.updateInDatastore();
-        } else
-            mcrObj.createInDatastore();
+                (!MCRMetadataManager.exists(parentID) || ID.equals(parentID)))
+                throw new MCRException("Error while updating MCRObject '" + ID +  "'!" +
+                        " Parent id '" + parentID + "' doesnt exists or is equal to the object!");
+            MCRMetadataManager.update(mcrObj);
+        } else {
+            MCRMetadataManager.create(mcrObj);
+        }
+        
 
         // try to go to the returnUrl, otherwise to the edited object
         String url = parms.getParameter("returnUrl");
@@ -103,7 +108,7 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
         StringBuffer sb = new StringBuffer();
         if (okay) {
             // return all is ready
-            sb.append("receive/").append(ID.getId());
+            sb.append("receive/").append(ID.toString());
         } else {
             sb.append(CONFIG.getString("MCR.SWF.PageDir", "")).append(CONFIG.getString("MCR.SWF.PageErrorStore", "editor_error_store.xml"));
         }

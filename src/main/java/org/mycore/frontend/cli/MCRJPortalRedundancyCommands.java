@@ -9,7 +9,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mycore.datamodel.common.MCRLinkTableManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRFieldValue;
@@ -62,7 +64,7 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
 
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
         ArrayList<String> commandList = new ArrayList<String>();
-        if(!MCRObject.existInDatastore(doubletOf)) {
+        if(!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
             String errorMsg ="'" + doublet + "' is defined as a doublet of the nonexistent object '" + doubletOf + "'!" +
                 " The doublet is not removed!";
             // print to console

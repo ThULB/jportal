@@ -9,7 +9,7 @@ import org.jdom.Element;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
@@ -21,7 +21,9 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
 
     private static MCRConfiguration CONFIG = MCRConfiguration.instance();
-
+    
+   
+    
     public boolean checkPermission(String id, String permission) {
         if (superUser())
             return true;
@@ -32,8 +34,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
                 return true;
             }
         } else if (isValidID(id)) {
-            if (id.contains("_jpjournal_") || id.contains("_person_") || id.contains("_jpinst_") || id.contains("_derivate_")
-                    || permission.equals("read")) {
+            if (isJpID(id) || permission.equals("read")) {
                 return checkPermissionOfType(id, permission);
             } else if ((checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission))) {
                 return true;
@@ -45,11 +46,63 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
         return false;
     }
 
-    private boolean isValidID(String id) {
-//        return MCRObjectID.isValid(id);
-        return new MCRObjectID().setID(id) && !id.contains("_class_");
+    private boolean isJpID(String id) {
+        String[] jpIdTypes = {"_jpjournal_", "_person_", "_jpinst_", "_derivate_"};
+        for (String type : jpIdTypes) {
+            if(id.contains(type)){
+                return true;
+            }
+        }
+        
+        return false;
     }
 
+    private boolean isValidID(String id) {
+        if(id.contains("_class_")){
+            return false;
+        }
+        
+        if (id == null) {
+            return false;
+        }
+
+        String mcr_id = id.trim();
+
+        int MAX_LENGTH = 64;
+        
+        if (mcr_id.length() > MAX_LENGTH  || mcr_id.length() == 0) {
+            return false;
+        }
+
+        String[] idParts = MCRObjectID.getIDParts(mcr_id);
+
+        if (idParts.length != 3) {
+            return false;
+        }
+
+        String mcr_project_id = idParts[0].intern();
+
+        String mcr_type_id = idParts[1].toLowerCase().intern();
+
+        if (!CONFIG.getBoolean("MCR.Metadata.Type." + mcr_type_id, false)) {
+            return false;
+        }
+
+        int mcr_number = -1;
+
+        try {
+            mcr_number = Integer.parseInt(idParts[2]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        if (mcr_number < 0) {
+            return false;
+        }
+
+        return true;
+    }
+   
     public boolean checkPermissionOfType(String id, String permission) {
         String objectType = getObjectType(id);
 
@@ -72,7 +125,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     public boolean checkPermissionOfTopObject(String id, String permission) {
         boolean allowed = false;
         if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
-            Document objXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(id));
+            Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(id));
             final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild(
                     "hidden_jpjournalID");
             String journalID = "";

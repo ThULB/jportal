@@ -16,11 +16,7 @@ public class JPQueryEngine extends MCRDefaultQueryEngine {
 
     @Override
     public MCRResults search(MCRQuery query, boolean comesFromRemoteHost) {
-        query = splitCondition(query);
-        String index = getIndex(query.getCondition());
-        if(index.equals("metadata"))
-            query = addDeletedFlags(query);
-        return super.search(query, comesFromRemoteHost);
+        return super.search(splitCondition(query), comesFromRemoteHost);
     }
 
     /**
@@ -71,25 +67,5 @@ public class JPQueryEngine extends MCRDefaultQueryEngine {
         if(cond.toString().contains(flag))
             return true;
         return false;
-    }
-
-    /**
-     * changes the condition in a form like: ((old cond) and (deletedFlag = false)) or fileDeleted = false
-     * @param doc the document to change
-     * @return 
-     */
-    protected MCRQuery addDeletedFlags(MCRQuery query) {
-        MCRCondition cond = query.getCondition();
-        if(!isConditionFlagSet(cond, "deletedFlag")) {
-            // create deletedFlag condition
-            MCRFieldDef fieldDef = MCRFieldDef.getDef("deletedFlag");
-            String op = "=";
-            String value = "false";
-            MCRQueryCondition deletedFlagCond = new MCRQueryCondition(fieldDef, op, value);
-            cond = new MCRAndCondition(cond, deletedFlagCond);
-            query.setCondition(cond);
-        }
-
-        return query;
     }
 }

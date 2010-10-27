@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -22,9 +23,10 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.xml.sax.SAXParseException;
 
 public class MCRJPortalJournalContextForWebpages {
 
@@ -58,7 +60,7 @@ public class MCRJPortalJournalContextForWebpages {
 
     public MCRJPortalJournalContextForWebpages(String journalId, String preceedingItemHref, String layoutTemplate, String shortCut) {
         this.journalID = journalId;
-        this.journalObjectXML = MCRXMLTableManager.instance().readDocument(new MCRObjectID(this.journalID)).getRootElement();
+        this.journalObjectXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(this.journalID)).getRootElement();
         this.dataModelCoverage = journalObjectXML.getChild("metadata").getChild("dataModelCoverages").getChild("dataModelCoverage")
                 .getAttributeValue("categid");
         this.journalTitle = journalObjectXML.getChild("metadata").getChild("maintitles").getChildText("maintitle");
@@ -71,7 +73,7 @@ public class MCRJPortalJournalContextForWebpages {
     // it is used in removeContext(MCRObject)
     private MCRJPortalJournalContextForWebpages(MCRObject obj) {
         try {
-            this.journalID = obj.getId().getId();
+            this.journalID = obj.getId().toString();
             this.journalObjectXML = obj.createXML().getRootElement();
             this.dataModelCoverage = journalObjectXML.getChild("metadata").getChild("dataModelCoverages").getChild("dataModelCoverage").getAttributeValue(
                     "categid");
@@ -109,6 +111,9 @@ public class MCRJPortalJournalContextForWebpages {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -164,15 +169,9 @@ public class MCRJPortalJournalContextForWebpages {
             e1.printStackTrace();
         }
         // save journal object in mycore
-        MCRObject mo = new MCRObject();
-        mo.setFromJDOM(new Document().addContent(journalObjectXML.detach()));
-        try {
-            mo.updateInDatastore();
-        } catch (MCRPersistenceException e) {
-            e.printStackTrace();
-        } catch (MCRActiveLinkException e) {
-            e.printStackTrace();
-        }
+        Document newJournalXML = new Document().addContent(journalObjectXML.detach());
+        MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(journalID), newJournalXML, new Date());
+        
         LOGGER.info("updated journal object");
     }
 
@@ -335,6 +334,9 @@ public class MCRJPortalJournalContextForWebpages {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        } catch (SAXParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }
@@ -377,6 +379,9 @@ public class MCRJPortalJournalContextForWebpages {
             // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SAXParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }

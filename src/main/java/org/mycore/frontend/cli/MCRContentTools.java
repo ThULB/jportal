@@ -1,8 +1,6 @@
 package org.mycore.frontend.cli;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -18,9 +16,9 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
-import org.mycore.datamodel.common.MCRXMLTableManager;
-import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.xml.sax.SAXParseException;
 
 public class MCRContentTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRContentTools.class.getName());
@@ -40,7 +38,7 @@ public class MCRContentTools extends MCRAbstractCommands {
         command.add(com);
     }
 
-    public static void fixlabel(String pattern) throws JDOMException, IOException {
+    public static void fixlabel(String pattern) throws JDOMException, IOException, MCRException, SAXParseException {
         String mcrBasedir = MCRConfiguration.instance().getString("MCR.basedir");
         String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml";
         Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFileLocation), false);
@@ -80,7 +78,7 @@ public class MCRContentTools extends MCRAbstractCommands {
         LOGGER.info("Fixed " + nodes.size() + " labels.");
     }
 
-    public static void cleanNavi() throws JDOMException, MCRException, IOException {
+    public static void cleanNavi() throws JDOMException, MCRException, IOException, SAXParseException {
         String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml";
         Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFielLocation), false);
 
@@ -93,7 +91,7 @@ public class MCRContentTools extends MCRAbstractCommands {
             // some starts with http://zs.thulb.uni-jena.de/
             if (mcrID.startsWith("jportal_jpjournal")) {
                 // test if the journal exists
-                if (!MCRXMLTableManager.instance().exist(new MCRObjectID(mcrID))) {
+                if (!MCRXMLMetadataManager.instance().exists(MCRObjectID.getInstance(mcrID))) {
                     // we have to remove the parent node
                     // <item href="/content/main/journals/pam/internal.xml....
                     //      .......

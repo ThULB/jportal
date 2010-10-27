@@ -1,0 +1,37 @@
+<MyCoReWebPage>
+  <section title="Fehler beim Löschen des Datensatzes" xml:lang="de">
+    <p></p>
+    <br/>
+    <p></p>
+    <center>
+      <table width="80%">
+        <tr align="center">
+          <td align="center">
+            <font color="red">Der Datensatz kann nicht gelöscht werden da eines seiner Kinder noch von anderen Datensätzen verwendet wird.</font>
+          </td>
+        </tr>
+      </table>
+    </center>
+    <p>
+    <a href="JavaScript:history.back(1)" >zurück</a>
+    </p>
+  </section>
+
+  <section title="Error on delete" xml:lang="en">
+    <p></p>
+    <br/>
+    <p></p>
+    <center>
+      <table width="80%">
+        <tr align="center">
+          <td align="center">
+            <font color="red">The record couldn't be removed, because one of its child is linked in another record.</font>
+          </td>
+        </tr>
+      </table>
+    </center>
+    <p>
+    <a href="JavaScript:history.back(1)" >back</a>
+    </p>    
+  </section>
+</MyCoReWebPage>

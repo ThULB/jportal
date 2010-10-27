@@ -1,8 +1,6 @@
 package org.mycore.frontend.cli;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -11,7 +9,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
@@ -19,30 +16,24 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
-import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLTableManager;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
-import org.mycore.parsers.bool.MCRCondition;
-import org.mycore.services.fieldquery.MCRFieldValue;
-import org.mycore.services.fieldquery.MCRHit;
-import org.mycore.services.fieldquery.MCRQuery;
-import org.mycore.services.fieldquery.MCRQueryManager;
-import org.mycore.services.fieldquery.MCRQueryParser;
-import org.mycore.services.fieldquery.MCRResults;
+import org.xml.sax.SAXParseException;
 
-import fsu.thulb.http.HttpTools;
 import fsu.thulb.jaxb.JaxbTools;
 import fsu.thulb.jp.searchpojo.AtomLink;
 import fsu.thulb.jp.searchpojo.ContentEntry;
@@ -80,39 +71,36 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
                 "converts a volume to an article");
-        
-        com = new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String",
-        "vd17Import url");
-        
+
+        com = new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String", "vd17Import url");
+
         command.add(com);
-        
-        com = new MCRCommand("add derivates {0} to object {1}", "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String",
-                "adds one ore more derivates to an object ");
+
+        com = new MCRCommand("add derivates {0} to object {1}",
+                "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String", "adds one ore more derivates to an object ");
         command.add(com);
     }
-    
-    public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRPersistenceException, MCRActiveLinkException{
+
+    public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRActiveLinkException, MCRException,
+            SAXParseException {
         StorageContentList storageContentList = JaxbTools.unmarschall(new URL(url), StorageContentList.class);
-        
-        
+
         ContentEntry participantEntries = storageContentList.getContentFor("participant");
         importObjects(participantEntries);
         ContentEntry jpVolumeEntries = storageContentList.getContentFor("jpvolume");
         importObjects(jpVolumeEntries);
     }
 
-    private static void importObjects(ContentEntry contentEntries) throws URISyntaxException, MCRActiveLinkException {
+    private static void importObjects(ContentEntry contentEntries) throws URISyntaxException, MCRActiveLinkException, MCRException,
+            SAXParseException {
         for (AtomLink participantLink : contentEntries.getLink()) {
-            MCRObject mcrObject = new MCRObject();
-            mcrObject.setImportMode(true);
-            mcrObject.setFromURI(new URI(participantLink.getHref()));
-            mcrObject.updateInDatastore();
+            MCRObject mcrObject = new MCRObject(new URI(participantLink.getHref()));
+            MCRMetadataManager.update(mcrObject);
         }
     }
 
     public static void updateJournalContext(String journalID) {
-        MCRObject mcrObj = new MCRObject();
-        mcrObj.receiveFromDatastore(journalID);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
 
         String objType = mcrObj.getId().getTypeId();
 
@@ -133,8 +121,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         // getting source XML
         // replace the children element
-        MCRObject sourceObject = new MCRObject();
-        Document sourceDoc = sourceObject.receiveJDOMFromDatastore(sourceObjectID);
+        Document sourceDoc = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(sourceObjectID));
 
         sourceDoc.getRootElement().getAttribute("ID").setValue(destinationObjectID);
         sourceDoc.getRootElement().getAttribute("label").setValue(destinationObjectID);
@@ -150,7 +137,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         structElement.addContent(generateChildrenHref(idList));
 
-        MCRXMLTableManager.instance().create(new MCRObjectID(destinationObjectID), sourceDoc, new Date());
+        MCRXMLMetadataManager.instance().create(MCRObjectID.getInstance(destinationObjectID), sourceDoc, new Date());
         MCRObjectCommands.repairMetadataSearchForID(destinationObjectID);
     }
 
@@ -170,21 +157,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
         return childrenElement;
     }
 
-    public static void exportImport(String objectID) {
-        MCRObject mcrObject = new MCRObject();
-        // servDate will be taken from xml
-        mcrObject.setImportMode(true);
-        mcrObject.receiveFromDatastore(objectID);
-        try {
-            mcrObject.updateInDatastore();
-            LOGGER.info("Export and reimport " + objectID + " successfully.");
-        } catch (MCRPersistenceException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MCRActiveLinkException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public static void exportImport(String objectID) throws MCRPersistenceException, MCRActiveLinkException {
+        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
+        MCRMetadataManager.update(mcrObject);
     }
 
     // dataModelCoverage: browse, fully
@@ -199,11 +174,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
     }
 
-    public static void cp(String sourceMcrId, String layoutTemp, String dataModelCoverage) {
-        MCRObject mcrObj = new MCRObject();
-        mcrObj.receiveFromDatastore(sourceMcrId);
-
-        Document mcrOrigObjXMLDoc = mcrObj.createXML();
+    public static void cp(String sourceMcrIdStr, String layoutTemp, String dataModelCoverage) {
+        MCRObjectID sourceMcrId = MCRObjectID.getInstance(sourceMcrIdStr);
+        Document mcrOrigObjXMLDoc = MCRXMLMetadataManager.instance().retrieveXML(sourceMcrId);
 
         // we don't want to adopt children
         mcrOrigObjXMLDoc.getRootElement().getChild("structure").getChild("children").detach();
@@ -227,48 +200,38 @@ public class MCRObjectTools extends MCRAbstractCommands {
         String hiddenWebContextsPath = "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext";
         hiddenWebContextsElem = getElementWithXpath(mcrOrigObjXMLDoc, hiddenWebContextsPath);
 
-        MCRObjectID newMcrID = mcrObj.getId();
-        newMcrID.setNextFreeId();
+        MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
         maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
-        hidden_jpjournalIDElem.setText(newMcrID.getId());
-        mcrObj.setFromJDOM(mcrOrigObjXMLDoc);
+        hidden_jpjournalIDElem.setText(newMcrID.toString());
 
-        mcrObj.setId(newMcrID);
-        try {
-            mcrObj.createInDatastore();
+        MCRXMLMetadataManager.instance().create(newMcrID, mcrOrigObjXMLDoc, new Date());
 
-            if (newMcrID.getTypeId().equals("jpjournal")) {
-                // creating website context
-                String precHref = "/content/main/journalList/dummy.xml";
-                if (hiddenWebContextsElem != null)
-                    precHref = hiddenWebContextsElem.getText();
+        if (newMcrID.getTypeId().equals("jpjournal")) {
+            // creating website context
+            String precHref = "/content/main/journalList/dummy.xml";
+            if (hiddenWebContextsElem != null)
+                precHref = hiddenWebContextsElem.getText();
 
-                String[] splitPrecHref = precHref.split("/");
-                String shortCut = splitPrecHref[splitPrecHref.length - 1].replaceAll(".xml", "") + "_" + newMcrID.getNumberAsInteger();
-                MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.getId(), precHref,
-                        layoutTemp, shortCut);
-                webContext.create();
+            String[] splitPrecHref = precHref.split("/");
+            String shortCut = splitPrecHref[splitPrecHref.length - 1].replaceAll(".xml", "") + "_" + newMcrID.getNumberAsInteger();
+            MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.toString(), precHref,
+                    layoutTemp, shortCut);
+            webContext.create();
 
-                // creating ACL for copy
-                // retrieve ACL from source Object
-                Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrId);
-                List<Element> permissions = servAcl.getChildren("servacl");
-                MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
+            // creating ACL for copy
+            // retrieve ACL from source Object
+            Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrIdStr);
+            List<Element> permissions = servAcl.getChildren("servacl");
+            MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
-                for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
-                    Element perm = (Element) iterator.next();
-                    String permName = perm.getAttributeValue("permission");
-                    MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for "
-                            + newMcrID.toString());
-                }
+            for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
+                Element perm = (Element) iterator.next();
+                String permName = perm.getAttributeValue("permission");
+                MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for "
+                        + newMcrID.toString());
             }
-        } catch (MCRPersistenceException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (MCRActiveLinkException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
+
     }
 
     private static Element getElementWithXpath(Document xmlDoc, String xpathExpression) {
@@ -282,23 +245,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
 
         return null;
-    }
-
-    public static void moveFile(String sourcePath, String destPath) {
-        MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
-
-        MCRFilesystemNode destNode;
-        if (destPath.startsWith("..")) {
-            destNode = sourceNode.getParent().getChildByPath(destPath);
-        } else {
-            destNode = getFileSystemNode(destPath);
-        }
-
-        if (destNode instanceof MCRDirectory) {
-            sourceNode.move((MCRDirectory)destNode);
-        } else {
-            LOGGER.info(destPath + " is not a directory");
-        }
     }
 
     private static MCRFilesystemNode getFileSystemNode(String sourcePath) {
@@ -329,49 +275,49 @@ public class MCRObjectTools extends MCRAbstractCommands {
         return ownerID.toString();
     }
 
-//    public static List<String> convertVolumesToArticles(String volumeIds) throws Exception {
-//        ArrayList<MCRImportRecord> recordList = new ArrayList<MCRImportRecord>();
-//        ArrayList<String> commandList = new ArrayList<String>();
-//        for(String volumeId : volumeIds.split(",")) {
-//            // get mcr volume object
-//            MCRObject volume = new MCRObject();
-//            volume.receiveFromDatastore(volumeId);
-//            Document volumeDoc = volume.createXML();
-//            // convert volume to mcrimportrecord
-//            MCRImportXMLConverter xmlConverter = new MCRImportXMLConverter("article");
-//            MCRImportRecord record = xmlConverter.convert(volumeDoc);
-//            recordList.add(record);
-//            // add delete command for volume
-//            StringBuffer deleteCommand = new StringBuffer("delete object ");
-//            commandList.add(deleteCommand.append(volumeId).toString());
-//        }
-//
-//        // start mapping
-//        StringBuffer fileBuf = new StringBuffer(MCRConfiguration.instance().getString("MCR.Modules.BaseDir"));
-//        fileBuf.append("/modules/jportal/config/import/volumeToArticle.xml");
-//        File mappingFile = new File(fileBuf.toString());
-//        MCRImportMappingManager.getInstance().init(mappingFile);
-//        MCRImportMappingManager.getInstance().startMapping(recordList);
-//        // import article to mycore
-//        MCRImportImporter importer = new MCRImportImporter(mappingFile);
-//        importer.generateMyCoReFiles();
-//        // return command list containing delete commands for volumes and
-//        // create commands for articles
-//        commandList.addAll(importer.getCommandList());
-//        return commandList;
-//    }
+    //    public static List<String> convertVolumesToArticles(String volumeIds) throws Exception {
+    //        ArrayList<MCRImportRecord> recordList = new ArrayList<MCRImportRecord>();
+    //        ArrayList<String> commandList = new ArrayList<String>();
+    //        for(String volumeId : volumeIds.split(",")) {
+    //            // get mcr volume object
+    //            MCRObject volume = new MCRObject();
+    //            volume.receiveFromDatastore(volumeId);
+    //            Document volumeDoc = volume.createXML();
+    //            // convert volume to mcrimportrecord
+    //            MCRImportXMLConverter xmlConverter = new MCRImportXMLConverter("article");
+    //            MCRImportRecord record = xmlConverter.convert(volumeDoc);
+    //            recordList.add(record);
+    //            // add delete command for volume
+    //            StringBuffer deleteCommand = new StringBuffer("delete object ");
+    //            commandList.add(deleteCommand.append(volumeId).toString());
+    //        }
+    //
+    //        // start mapping
+    //        StringBuffer fileBuf = new StringBuffer(MCRConfiguration.instance().getString("MCR.Modules.BaseDir"));
+    //        fileBuf.append("/modules/jportal/config/import/volumeToArticle.xml");
+    //        File mappingFile = new File(fileBuf.toString());
+    //        MCRImportMappingManager.getInstance().init(mappingFile);
+    //        MCRImportMappingManager.getInstance().startMapping(recordList);
+    //        // import article to mycore
+    //        MCRImportImporter importer = new MCRImportImporter(mappingFile);
+    //        importer.generateMyCoReFiles();
+    //        // return command list containing delete commands for volumes and
+    //        // create commands for articles
+    //        commandList.addAll(importer.getCommandList());
+    //        return commandList;
+    //    }
 
     public static void addDerivatesToObject(String derivateIds, String objectId) throws Exception {
         String[] derivateIdArray = derivateIds.split(",");
-        for(String derId : derivateIdArray) {
-            MCRDerivate der = new MCRDerivate();
-            der.receiveFromDatastore(derId);
+        for (String derId : derivateIdArray) {
+            MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derId));
             // set link in derivate
             MCRMetaLinkID objLink = new MCRMetaLinkID();
             objLink.setSubTag("linkmeta");
             objLink.setReference(objectId, null, null);
             der.getDerivate().setLinkMeta(objLink);
-            der.updateInDatastore();
+            
+            MCRMetadataManager.update(der);
         }
     }
 }

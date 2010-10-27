@@ -4,6 +4,7 @@
 package org.mycore.backend.ifs;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -13,8 +14,7 @@ import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLTableManager;
-import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 /**
@@ -66,10 +66,10 @@ public class MCRJPortalLink {
             boolean lastLink = (XPath.newInstance("count(" + XPATH_TO_LINKS_COMPLETE + ")").numberValueOf(sourceObject).intValue() == 1);
             if (lastLink) {
                 ((Element) XPath.newInstance(XML_LOCATION_OF_LINKS).selectSingleNode(sourceObject)).detach();
-                LOGGER.debug("link " + to + " removed from object " + from.getId() + ", no more links left.");
+                LOGGER.debug("link " + to + " removed from object " + from + ", no more links left.");
             } else {
                 link.detach();
-                LOGGER.debug("link " + to + " removed from object " + from.getId());
+                LOGGER.debug("link " + to + " removed from object " + from);
             }
             // save object
             saveObject(sourceObject);
@@ -103,11 +103,11 @@ public class MCRJPortalLink {
             linkWrappingTag.addContent(link);
             objectXML.getRootElement().getChild("metadata").addContent(linkWrappingTag);
         }
-
+        
         // save object
         saveObject(objectXML);
 
-        LOGGER.debug("link in object " + from.getId() + " set to " + to);
+        LOGGER.debug("link in object " + from + " set to " + to);
     }
 
     /**
@@ -118,16 +118,14 @@ public class MCRJPortalLink {
      * @throws MCRActiveLinkException
      */
     private void saveObject(Document objectXML) throws MCRActiveLinkException {
-        MCRObject mo = new MCRObject();
-        mo.setFromJDOM(objectXML);
-        mo.updateInDatastore();
+        MCRXMLMetadataManager.instance().update(from, objectXML, new Date());
     }
 
     /**
      * @return
      */
     private Document getFromObject() {
-        Document objectXML = MCRXMLTableManager.instance().retrieveAsJDOM(from);
+        Document objectXML = MCRXMLMetadataManager.instance().retrieveXML(from);
         return objectXML;
     }
 }
