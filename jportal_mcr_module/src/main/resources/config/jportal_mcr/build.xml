@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="jportal_mcr" basedir="../../../..">
+<project name="jportal_mcr">
 	<import file="${basedir}/common-modules.xml" />
 	<property name="module.directory" location="${ant.file}/.." />
 

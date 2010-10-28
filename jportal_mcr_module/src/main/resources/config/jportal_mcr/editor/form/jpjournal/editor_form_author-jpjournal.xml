@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><MyCoReWebPage>
+  <section title="Zeitschrift anlegen" xml:lang="de"/>
+  <section title="create journal" xml:lang="en"/>
+  <section xml:lang="all">
+    <p class="editorform">
+      <editor id="editor-jpjournal">
+        <source uri="jportal_getParentID:{parentID}"/>
+        <source uri="{sourceUri}"/>
+        <cancel url="servlets/MCRJPortalEditorCancelServlet"/>
+
+        <validationMessage>
+          <label xml:lang="de">Eingabefehler: Bitte korrigieren Sie die markierten Felder.</label>
+          <label xml:lang="en">Type error: Please correct the marked fields.</label>
+        </validationMessage>
+
+        <target type="servlet" name="MCRJPortalCheckCommitDataServlet" method="post" format="xml"/>
+        <components xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-jpjournal" var="/mycoreobject">
+
+          <include uri="webapp:editor/editor-jpjournal.xml"/>
+          <panel id="editor-jpjournal">
+            <cell row="1" col="1" anchor="NORTHWEST" ref="edit-jpjournal"/>
+          </panel>
+
+        </components>
+      </editor>
+    </p>
+  </section>
+</MyCoReWebPage>
