@@ -26,18 +26,35 @@
 
 	<target name="create.webapp">
 		<echo>JPortal webapp</echo>
+
+		<echo>Copy JPortal Stuff to ${build.webapps}</echo>
+		<copy todir="${build.webapps}">
+			<fileset dir="${module.directory}" includes="fileMappings.xml" />
+		</copy>
 		
+		<echo>Copy JPortal Stuff to ${build.webapps}/editors</echo>
+		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
+			<fileset dir="${module.directory}/editor/common" includes="**/*.xml" />
+		</copy>
+
+	</target>
+
+	<target name="create.webapp_old">
+		<echo>JPortal webapp</echo>
+
 		<antcall target="jp.webapps.inside">
 			<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
 		</antcall>
 
 		<!-- copy editors -->
+		<!--
 		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
 			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="**/*.xml" excludes="**/editor_default_acls*.xml" />
 			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="editor-*.xml" />
 			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="imports-*.xml" />
 		</copy>
-
+		-->
+		
 		<!-- generate swf pages -->
 		<antcall target="genSWFPage" />
 
@@ -81,12 +98,14 @@
 	<target name="jp.webapps.inside">
 
 		<!-- file mappings config -->
+		<!--
 		<copy todir="${build.webapps}">
 			<fileset dir="${JPortal.HomeURL}/config" includes="FileContentTypes.xml" />
 			<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
 		</copy>
-
+		-->
 		<!-- web.xml -->
+		<!--
 		<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
 		<antcall target="do.merge">
 			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
@@ -101,7 +120,8 @@
 				</antcall>
 			</sequential>
 		</for>
-
+		-->
+		
 		<!-- webpages stuff -->
 		<antcall target="jp.webapps.copyWebPages">
 			<param name="sourcedir.webpages" value="${JPortal.HomeURL}/webpages" />
