@@ -1,4 +1,4 @@
-create group data from file xml/usersAndGroups/journalgroup.xml
-create group data from file xml/usersAndGroups/volumegroup.xml
-create group data from file xml/usersAndGroups/editorsgroup.xml
-create group data from file xml/usersAndGroups/derivategroup.xml
+create group data from file xml/journalgroup.xml
+create group data from file xml/volumegroup.xml
+create group data from file xml/editorsgroup.xml
+create group data from file xml/derivategroup.xml

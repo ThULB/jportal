@@ -2,6 +2,8 @@
 <project name="jportal_mcr">
 	<import file="${basedir}/common-modules.xml" />
 	<property name="module.directory" location="${ant.file}/.." />
+	<property file="${module.directory}/build.properties" /> 
+	<property name="module.jar" location="${build.lib}/${module.jar.name}" />
 
 	<target name="create.default-rules" description="loads default acl rules for archive application">
 		<echo>Default rules</echo>
@@ -27,122 +29,37 @@
 	<target name="create.webapp">
 		<echo>JPortal webapp</echo>
 
-		<echo>Copy JPortal Stuff to ${build.webapps}</echo>
-		<copy todir="${build.webapps}">
+		<echo>Copy JPortal Stuff</echo>
+		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
+			<fileset dir="${module.directory}/editor/form" includes="**/*.xml" />
+			<fileset dir="${module.directory}/editor/error" includes="**/*.xml" />
+			<fileset dir="${module.directory}/editor/restore" includes="**/*.xml" />
 			<fileset dir="${module.directory}" includes="fileMappings.xml" />
 		</copy>
-		
-		<echo>Copy JPortal Stuff to ${build.webapps}/editors</echo>
+
 		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.directory}/editor/common" includes="**/*.xml" />
 		</copy>
 
-	</target>
-
-	<target name="create.webapp_old">
-		<echo>JPortal webapp</echo>
-
-		<antcall target="jp.webapps.inside">
-			<param name="JPortal.HomeURL" value="${env.JPORTAL_HOME}" />
-		</antcall>
-
-		<!-- copy editors -->
-		<!--
-		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
-			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="**/*.xml" excludes="**/editor_default_acls*.xml" />
-			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="editor-*.xml" />
-			<fileset dir="${env.JPORTAL_HOME}/config/editor" includes="imports-*.xml" />
+		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
+			<fileset dir="${module.directory}/editor/acl" includes="**/*.xml" />
 		</copy>
-		-->
-		
-		<!-- generate swf pages -->
-		<antcall target="genSWFPage" />
 
-		<!-- MyJPortal -->
-		<echo>
-		         building MyJPortal webapp
-		    </echo>
-		<antcall target="jp.webapps.inside">
-			<param name="JPortal.HomeURL" value="${env.MYJPORTAL_HOME}" />
-		</antcall>
+		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/*.xsl" />
+			</patternset>
+		</unjar>
 
-		<!-- Registering templates -->
-		<echo>
-	             building JPortal webapp - Registering templates
-	        </echo>
-		<taskdef name="templatecheck" classname="org.mycore.common.MCRTemplateTask" classpathref="application.classpath" />
-		<templatecheck templatepath="${build.webapps}/templates/master/" choosepath="${build.webapps}/WEB-INF/classes/xsl/chooseTemplate.xsl" />
-		<antcall target="override.components">
-		</antcall>
-	</target>
-
-	<!-- =================================================================== -->
-
-	<target name="jp.webapps.copyWebPages">
-		<!-- webpages stuff to "webapps" -->
-		<!--
-		<copy todir="${build.webapps}" failonerror="false">
-			<fileset dir="${sourcedir.webpages}" excludes="**/*.xsl" />
-			<fileset dir="${JPComponentsDir}" includes="**/src/main/resources/xml/*.xml" />
-		</copy>
-		-->
-	</target>
-	<!-- =================================================================== -->
-
-	<target name="jp.webapps.copyXSL">
-		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" failonerror="false">
-			<fileset dir="${sourcedir.XSL}" includes="**/*.xsl" />
-			<fileset dir="${JPComponentsDir}" includes="**/src/main/resources/xsl/*.xsl" />
-		</copy>
-	</target>
-	<!-- =================================================================== -->
-
-	<target name="jp.webapps.inside">
-
-		<!-- file mappings config -->
-		<!--
-		<copy todir="${build.webapps}">
-			<fileset dir="${JPortal.HomeURL}/config" includes="FileContentTypes.xml" />
-			<fileset dir="${JPortal.HomeURL}/config" includes="fileMappings.xml" />
-		</copy>
-		-->
-		<!-- web.xml -->
-		<!--
-		<available property="web.xml.present" file="${JPortal.HomeURL}/config/web.xml" />
-		<antcall target="do.merge">
-			<param name="web.xml.file" value="${JPortal.HomeURL}/config/web.xml" />
-		</antcall>
-		<for param="web.xml.file">
-			<fileset id="web.xml.components" dir="${JPComponentsDir}">
-				<include name="**/src/main/config/web.xml" />
-			</fileset>
-			<sequential>
-				<antcall target="do.merge">
-					<param name="web.xml.file" value="@{web.xml.file}" />
-				</antcall>
-			</sequential>
-		</for>
-		-->
-		
-		<!-- webpages stuff -->
-		<!--
-		<antcall target="jp.webapps.copyWebPages">
-			<param name="sourcedir.webpages" value="${JPortal.HomeURL}/webpages" />
-		</antcall>
-		-->
-		<!-- xsl -->
-		<!--
-		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/stylesheets" />
-		</antcall>
-		-->
-		<!-- templates  -->
-		<copy todir="${build.webapps}/webpages/templates" failonerror="false">
-			<fileset dir="${JPortal.HomeURL}/webpages/templates/" />
-		</copy>
-		<antcall target="jp.webapps.copyXSL">
-			<param name="sourcedir.XSL" value="${JPortal.HomeURL}/webpages/templates/" />
-		</antcall>
+		<unjar dest="${build.webapps}" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="web/WEB-INF/**" />
+				<include name="web/config/navigation.xml" />
+			</patternset>
+			<regexpmapper from="^(web/)(.*)" to="\2" />
+		</unjar>
 
 	</target>
 </project>
