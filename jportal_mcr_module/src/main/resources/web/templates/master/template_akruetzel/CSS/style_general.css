@@ -1,0 +1,112 @@
+html, body {
+    margin: 0px;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+#area_left {
+	width: 257px;
+	padding-top: 0px;
+}
+
+#contentArea {
+	min-width: 630px;
+	margin-left: 35px;
+	width: 90%; 
+	min-height:155px; 
+}	
+#div_navi_main {
+	width:256px;  
+	padding : 0px;
+	margin: 0px;
+}
+#end {
+	height: 13px;
+	padding: 0px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+/*	padding-right:81px;*/
+	margin:0px;
+}
+#end img{
+	height : 20px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+#header_bg_left{
+	background:url(../IMAGES/banner_akruetzel_top_left.jpg) no-repeat;
+}
+
+#header_bg_right{
+	background:url(../IMAGES/banner_akruetzel_top_right.jpg) no-repeat;
+}
+
+#header_filler{
+	background:url(../IMAGES/banner_akruetzel_top_filler.jpg);
+	width: max; 
+	height: 100px;
+}
+
+#dummy{
+	width: 100%;
+}
+
+#footer2 {
+	width:1043px;
+	margin : 0px;
+	padding: 0px;
+	height : 30px;
+}
+
+#footer_bottom {
+	position : relative;
+	width : 255px;
+	height : 32px;
+}
+#login_div {
+	height: 12px;
+	padding : 0px;
+	width: 255px;
+	padding-bottom: 3px;
+	background-color: #FFFFFF;
+	}
+#login_div_inside {
+	padding: 2px;
+	border: 1px solid black;
+	background-color: #E6E2CC;	
+}	
+#navi {
+	height: 30px;
+	width: 450px;
+	float:right;
+	margin-top : 45px;
+	margin-right : 50px;
+	border:0px ;
+}	
+
+#navi_box {
+	width: 330px;
+}
+#navi_history {
+	height: 12px; 
+	padding : 0px;
+	padding-bottom: 3px;
+	background-color: #FFFFFF;
+}
+#navi_history_inside {
+	padding: 2px;
+	margin-left:2px;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	background-color: #E6E2CC;
+	width: 100%;
+	margin-right:0px;
+	padding-right:0;
+}
+#thulb_logo {
+	width: 64px; 
+}

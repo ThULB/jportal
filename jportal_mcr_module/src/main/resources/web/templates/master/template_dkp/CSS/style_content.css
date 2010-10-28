@@ -1,0 +1,454 @@
+/* =================================================================== */
+/* template_mycoresample-1/CSS/style_content.css                       */
+/* $Revision: 268 $ $Date: 2007-06-14 16:41:16 +0200 (Do, 14 Jun 2007) $                      */
+/* =================================================================== */
+
+/* =================================================================== */
+/* content area                                                        */
+/* =================================================================== */
+#contentArea {
+    vertical-align: top;
+    padding-top: 1em;
+    padding-left: 2px;
+    padding-right: 2px;
+    
+}
+/*IE Fix to have content inside the table: stupid browser*/
+#contentWrapper {
+    width: 90%;
+    margin: 0px auto;
+}
+
+#contentArea {
+    color:  #000000;
+    font-size: 12px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight : normal;
+    text-decoration: none;
+}
+#contentArea .headline {
+    font-weight : bold;
+    padding: 3px;
+    border-style: none none solid none;
+    border-width: 1px;
+    color:  #5E5946;
+    border-color:  #5E5946;
+    margin-bottom: 1.5em;
+}
+#contentArea hr{
+    height: 2px;
+    color: #5E5946;
+    border-style: none;
+}
+#contentArea a { 
+    color: #5E5946;
+    text-decoration: none;
+    font-weight : normal;	
+}
+#contentArea a:hover {
+    text-decoration: underline;
+}
+#contentArea input, input.helpButton, #searchMask input.submitButton, #searchMask input.resort, a.submitButton{
+    border-style: outset;
+    border-color: #15516E;
+    border-width: 1px;
+}
+#contentArea input.radio, #searchMask input.checkbox, #searchMask select{
+    border-style: inset;
+    border-color: #15516E;
+    border-width: 1px;
+    margin: 2px;
+    margin-left: 0px;
+}
+/* =================================================================== */
+/* sitemap                                                             */
+/* =================================================================== */
+.site.sitemap tr, .sitemap th, .sitemap td, .sitemap a {
+    color: #5E5946;
+    background : #FFFFFF; /* white */
+    font-size: 12;
+    font-family: Verdana, Arial, Helvetica, sans-serif; 
+    font-weight : normal;           
+    text-decoration: none;  
+}
+.sitemap a {
+    color: #5E5946;
+    font-size: 12;
+    text-decoration: none;
+    font-weight : normal;   
+}
+.sitemap a:hover {
+    text-decoration: underline;
+}
+/* headlines like "menu below..." */
+.sitemap th {
+    font-weight : bold;         
+    text-align: left;       
+    padding: 3px;   
+    color: #5E5946;
+    background : #CAD9E0;       
+    border-style: solid;
+    border-width: 1px;
+    border-color: #000000;     
+}
+.sitemap th.mainMenuPoint {
+    color: #5E5946;
+    background : #EDEDED;   
+    padding: 3px;           
+    border-color: #454545;  
+}
+.sitemap th.mainMenuPoint a {
+    color: #5E5946;
+    font-size: 100%;    
+    font-weight : bold;         
+    background: #EDEDED; 
+}
+.sitemap th.mainMenuPoint a:hover {
+    color: #5E5946;
+    font-weight : bold;         
+    background: #EDEDED; 
+}
+/* =================================================================== */
+/* search masks & login                                                */
+/* =================================================================== */
+
+#searchMask {
+}
+#searchMask input.text, #searchMask textarea.text, #userAction input.text{
+    font-weight: bold;
+    font-size: 0.9em;
+    border-style: dashed;
+    border-color: #15516E;
+    border-width: 1px;
+    margin: 2px;
+    margin-left: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    background-color: white;
+}
+#searchMask td.inputCaption, #userAction td.inputCaption{
+    text-align: right;
+    font-weight: bold;
+    padding-right: 5px;
+    color: black;
+    background-color: transparent;
+}
+#searchMask td.inputField, #searchMask td.help, #userAction td.inputField{
+    font-weight: bold;
+    background-color: transparent;
+    padding-left: 5px;
+}
+#userAction .inputHead{
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+div.submitButton{
+    text-align: center;
+    padding-top: 5px;
+}
+#contentArea a.submitButton{
+    color: black;
+    font-size: 0.9em;
+    font-weight : normal;
+    text-decoration: none;
+    padding: 0px 5px;
+}
+/* =================================================================== */
+/* result lists                                                        */
+/* =================================================================== */
+
+#resortForm{
+    margin: 0px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: #15516E;
+    padding-bottom: 5px;
+}
+#resortForm table{
+    width: 100%;
+}
+#resortForm table tr{
+    height: 20px;
+}
+#resortForm td.resort, #resortForm td.resultCount{
+    vertical-align: center;
+}
+#resortForm td.resultCount{
+    text-align: right;
+}
+#resultList{
+    margin: 5px 0px; /* top-bottom and left-right margin */
+}
+#resultList td.resultTitle, #resultList td.author{
+    background-color: white;
+}
+#resultList td.resultTitle a{
+    font-weight: bold;
+}
+#resultList div.description{
+    margin-bottom: 3px;
+}
+#resultList td.description{
+    padding: 3px;
+    background-color: white;
+}
+#pageSelection{
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-top-color: #15516E;
+    padding: 5px 8px;
+}
+/* =================================================================== */
+/* object meta data                                                    */
+/* =================================================================== */
+
+#metaHeading, #metaData, #files {
+}
+#metaHeading a img, #metaData a img, #files a img {
+    border: none;
+}
+#metaHeading .titles{
+    font-weight: bold;
+    color: black;
+    background-color: transparent;
+}
+#metaHeading .browseCtrl{
+    text-align: right;
+}
+#metaData, #files{
+    padding: 10px 0px;
+}
+/* IE Fix: Padding and inheritance is not his strength */
+#metaData td, #files td{
+    padding: 0px;
+}
+#metaData .metaname, #files .metaname {
+    width: 20%;
+    font-weight: bold;
+    background-color: transparent;
+    color: black;
+    text-align: right;
+    padding-right: 10px;
+    vertical-align: top;
+}
+#metaData .metavalue, #files .metavalue {
+    width: 80%;
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+}
+#files .metaname, #files .metavalue{
+    width: auto;
+}
+#metaData .metahead, #files .metahead{
+    text-align: center;
+    color: #15516E;
+    font-weight: bold;
+    background-color: transparent;
+}
+#metaData .adressBox{
+}
+#metaData .addressType{
+    font-weight: bold;
+}
+#metaData .address{
+    padding-left: 2em;
+}
+#metaData .derivateBox{
+}
+#metaData .derivateHeading{
+    font-weight: bold;
+}
+#metaData .derivate{
+    padding-left: 2em;
+}
+/* =================================================================== */
+/* browse classifications                                              */
+/* =================================================================== */
+
+#browseClass{
+    margin-left: 20px;
+}
+#browseClass td.img{
+}
+#browseClass td.numDocs{
+}
+#browseClass td.descr{
+    padding-left: 10px;
+}
+#browseClass div.comment{
+    font-style: italic;
+}
+
+
+/* =================================================================== */
+/*                     						   						   */
+/* new layout for journals, volumes, articles, 						   */
+/* persons and institutions                    						   */
+/* 						                    						   */
+/* =================================================================== */
+
+/* =================================================================== */
+/*  used colors:													   */
+/* 			                                                           */
+/* 			                                                           */
+/* 	darkest: 	#678093; for outer frame, content-links...      	   */
+/*  dark: 		#95A8B7; for headlines, leaf-links                	   */
+/* 	black: 		#B4C5D3; descriptions...                       	  	   */
+/*  white:		#FFFFFF; hover link color                          	   */
+/* 			                                                           */
+/* 			                                                           */
+/* =================================================================== */
+
+
+/* =================================================================== */
+/* leafs view                                                          */
+/* =================================================================== */
+#leaf-all {	
+	width: 100%;
+	color: #678093;
+	border: 1px solid #95A8B7;
+}
+
+#leaf-front{
+	border: 1px solid #95A8B7;
+	background-color: #95A8B7;
+	color: #FFFFFF;
+}
+
+#leaf-front div{
+    background-color: #95A8B7;
+	color: #FFFFFF;
+}
+
+#leaf-linkarea a:link , #leaf-linkarea a:visited , #leaf-linkarea a:active {
+    color:#678093;
+}
+
+#leaf-linkarea a:hover {
+	background-color:#95A8B7;
+    color:#FFFFFF;
+	text-decoration: none;
+}
+
+#leaf-linkarea2 a:link , #leaf-linkarea2 a:visited , #leaf-linkarea2 a:active {
+    color:#678093;
+}
+
+#leaf-linkarea2 a:hover {
+	background-color:#95A8B7;
+    color:#FFFFFF;
+	text-decoration: none;
+}
+
+#leaf-whitespaces{
+    color:#FFFFFF;
+}
+
+#leaf-headline1 {
+	color: #5E5946;
+}
+
+#leaf-headline2 {
+	color: #5E5946;
+}
+
+#leaf-preview img{
+	border: 1px solid #000000;
+}
+
+/* =================================================================== */
+/* detailed view                                                       */
+/* =================================================================== */
+#detailed-mainheadline {
+	width: max; 
+}
+
+#detailed-headlines {
+    color: #5E5946;
+	width: 230px;
+}
+
+#detailed-cube {
+	background-color:#95A8B7;
+	color: #FFFFFF;
+}
+
+#detailed-view {
+	color: #000000; 
+}
+
+#detailed-labels {
+	color: #000000;
+}
+
+#detailed-frame{
+	border: 2px solid #95A8B7;
+	float: left;
+	width: max;
+}
+
+#detailed-dividingline hr{
+	color: #5E5946;
+	background-color: #5E5946;
+}
+
+#detailed-browse{
+    border: 1px solid #95A8B7;
+	background-color: #B4C5D3;	
+}
+#detailed-innerdivlines{
+	border-top: 1px solid #95A8B7;
+}
+#detailed-xmlbutton img{
+	border: 1px solid #95A8B7;
+}
+/* =================================================================== */
+/* detailed-view content links                                         */
+/* =================================================================== */
+
+#detailed-contents {
+	background-color: #95A8B7;
+}
+
+#detailed-contents a {
+    color: #FFFFFF;
+}
+
+#detailed-contentsimg img{
+	border: 1px solid #95A8B7;
+}
+
+/* =================================================================== */
+/* searchmask-view content links                                       */
+/* =================================================================== */
+
+#searchmask-contentlinks a {
+	color: #000000;
+}
+
+/* =================================================================== */
+/* switches for detailed and leaf view                                 */
+/* =================================================================== */
+
+#switch-current{
+	background-color: #B4C5D3;
+	color: #FFFFFF;
+}
+
+#switch-notcurrent{
+	background-color: #95A8B7;
+}
+
+#switch-notcurrent a{
+	color: #FFFFFF;
+}
+
+#switch-currentside{
+	background-color: #B4C5D3;
+	color: #FFFFFF;
+}
+
+#switch-currentside a{
+	color: #FFFFFF;
+}

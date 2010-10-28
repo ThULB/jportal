@@ -1,0 +1,268 @@
+/* =================================================================== */
+/* template_mycoresample-1/CSS/style_navigation.css                    */
+/* $Revision: 264 $ $Date: 2007-05-31 16:02:16 +0100 (Do, 31 Mai 2007) $		       */
+/* =================================================================== */
+
+/* ==================================================== */
+/* Style for the login and navigation row in JLZ	*/
+/* ==================================================== */
+td.login_navi_row {
+    height: 25px;
+}
+
+td.login_row {
+    /*height: 34px;*/
+    background: #E7D4B0 url(../IMAGES/menu_pix.gif);
+    background-repeat: repeat-x repeat-y;
+    padding-left: 1.5%;
+}
+
+td.navi_row {
+    width: auto;
+    padding: 3px;
+    text-align: center;
+}
+
+td.navi_row table{
+    margin-right: 0px;
+    margin-left: auto;
+    margin-bottom: 3px;
+}
+
+/* Style for the Login-Window in JLZ */
+table.login_window {
+    font-size: 11px;
+    font-weight : bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-style: none;
+    border-width: 0px;
+    min-width: 200px;
+    width: 200px;
+    vertical-align: middle;
+    /*color: #15516E*/
+}
+	
+td.login_text {
+    text-align: right;
+}
+
+td.user_id {
+    text-align: left;
+    padding-left: 3%;
+    width: 104px;
+    /*padding-bottom: 5px;*/
+}
+
+p.whitebox {
+    margin: 0px;
+    padding: 2px;
+}
+
+td.login_window a:link {
+    color:  #003c4b;
+    text-decoration: none;
+}
+
+td.login_window a:visited {
+    color:  #003c4b;
+    text-decoration: none;
+}
+
+td.login_window a:hover {
+    color:  #FFFFFF;
+    text-decoration: none;
+}
+
+td.login_window a:active {
+    color:  #003c4b;
+    text-decoration: none;
+}
+
+td.login_window a:focus {
+    color:  #003c4b;
+    text-decoration: none;
+}
+
+/* ==================================================== */
+/* Style for the main menu				*/
+/* ==================================================== */
+td.menus {
+    font-size: 11px;
+    font-weight : bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-style: none;
+    border-width: 0px;
+    min-width: 200px;
+    width: auto;
+    vertical-align: top;
+}
+						
+div.main_menu {
+    background: #E7D4B0 url(../IMAGES/menu_pix.gif);
+    background-repeat: repeat-x repeat-y;
+    vertical-align: top;
+    min-width: 222px;
+    width: auto;
+    border-style: none;
+}
+
+/* ==================================================================================*/
+
+/* =================================================================== */
+/* Navigation below                                                    */
+/* =================================================================== */
+#navi_below_cell {
+    padding: 3px;
+    text-align: right;
+}
+#navi_below_cell table{
+    margin-right: 0px;
+    margin-left: auto;
+}
+
+.navi_below th, .navi_below td, .navi_below a
+{
+    color:  #003c4b;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+.navi_below a
+{
+    color:  #003c4b;
+    text-decoration: none;
+} 
+.navi_below a:hover
+{
+    text-decoration: underline;
+}		
+.navi_below .marked a
+{
+    text-decoration: underline;
+}	
+
+/* =================================================================== */
+/* General Main navigation column                                      */
+/* =================================================================== */
+.navi_column
+{
+    background : #CAD9E0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-style: none solid solid solid;
+    border-width: 1px;
+    border-color: #0C374C;
+}
+
+/* =================================================================== */
+/* General Main navigation column                                      */
+/* =================================================================== */
+table.navi_history
+{
+    font-size: 11px;
+    font-weight : bold;
+	min-width: 700px;
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    vertical-align: top;
+    color:  #003c4b;
+}
+.navi_history a
+{
+    color: #003c4b;
+    font-weight : normal;
+    text-decoration: none;
+}
+.navi_history a:hover
+{
+    text-decoration: underline;
+}
+td.navi_history{
+    text-align:left;
+    padding-left: 3%;
+    height: 10px;
+    background: #BBC3C1 url(../IMAGES/navi_pix.gif);
+    background-repeat: repeat-x repeat-y;
+}
+
+td.navi_history_user{
+    text-align:left;
+    padding-left: 3%;
+    /*padding-bottom: 5px;*/	/* changed for JLZ */
+}
+
+/* =================================================================== */
+/* Main navigation menu                                                */
+/* =================================================================== */
+.navi_main
+{
+    font-size: 11px;
+    font-weight : bold;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    border-style: none;
+    border-width: 0px;
+    min-width: 200px;
+    width: 270px;
+    vertical-align: top;
+}
+div.navi_main{
+    vertical-align: top;
+    min-width: 200px;
+    width: auto;
+    border-style: none;
+    background: #E7D4B0 url(../IMAGES/menu_pix.gif);
+    background-repeat: repeat-x repeat-y;
+}
+
+/* JLZ ======================================== */
+div.logo{
+    vertical-align: bottom;
+    min-width: 100px;
+    width: auto;
+    border-style: none;
+    background: #FFFAE5 url(../IMAGES/bg_pix.gif);
+    background-repeat: repeat-x repeat-y
+}
+
+td.empty_box {
+    height: 31px;
+    background: #FFFAE5 url(../IMAGES/bg_pix.gif);
+}
+/* ============================================= */
+
+.navi_main img{
+	border-style: none;
+    border-width: 0px;
+    display:block;
+}
+.navi_main tr, .navi_main td
+{
+    font-size: 11px;
+}
+.navi_main th a:hover
+{
+    text-decoration: underline;
+}
+.navi_main th a
+{
+    font-weight : bold;	
+    color:  #FFFFFF;
+}
+.navi_main a
+{
+    font-weight : normal;
+    text-decoration: none;
+    color:  #FFFFFF;
+}
+.navi_main a:hover
+{
+    text-decoration: underline;
+}
+.navi_main .marked a
+{
+    text-decoration: none;
+}
+
+#poweredByMycore img{
+    width: 0px;
+}

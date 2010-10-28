@@ -1,0 +1,133 @@
+html, body {
+    margin: 0px;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+#second-line {
+	text-align: left;
+	vertical-align: top;
+	width: 98%;
+	max-width: 1314px;
+}	
+#div_navi_main { 
+	padding: 0px;
+	margin: 0px;
+	height: 380px;
+	width: 212px;
+}
+#navi_box {
+	display: inline;
+	width: 470px;
+	height: 14px; 
+	border: 0px;
+	padding-top: 3px;
+}
+#headline a {
+	color: white;
+	font-size: 14px;
+	font-weight: bold;
+}
+#headline a:hover {
+	color: #BD1220;
+}
+
+#navigation_box a {
+	color: white;
+	font-weight: bold;
+	font-size: 14px;
+}
+#navigation_box a:hover {
+	color: #BD1220;
+}
+
+#journal-title {
+	color: white;
+	font-family: verdana;
+	font-weight: bold;
+	font-size: 18px;
+	left: 214px;
+	position: absolute;
+	top: 38px;
+	z-index: 10;
+}
+
+#contentArea {
+	margin: 2px auto;
+	width: 100%;
+}
+
+#footer {
+	width: max; 
+	height:132px; 
+	margin: 0px;
+}
+	
+#login_div {
+	text-align: left;
+	vertical-align: bottom;
+	padding: 0px;
+	width: 200px;
+	height: 25px;
+	padding-top: 35px;
+	padding-left: 16px;
+}
+
+#login_div[id] {
+	padding-top: 37px;
+	padding-bottom: 7px;
+}
+
+#login_div_inside {
+	padding: 2px;
+}
+#fsu-logo { 
+	padding-left: 8px;
+	vertical-align: top;
+	text-align: left;
+}
+
+#th-logo {
+	padding-left: 15px;
+	padding-top: 2px;
+}
+
+#headerBorder {
+	-moz-border-image:url(../IMAGES/thLogo_border.png) 5 1 1 1 stretch stretch;
+	border:1px;
+	padding:50px;
+}
+
+#logo-thulb {
+	border-style:solid;
+	border-color: #E1D7D0;
+	border-top-width:1px;
+	border-bottom-width:1px;
+	border-left-width: 0px;
+	border-right-width: 0px;
+	padding-top: 4px;
+	padding-bottom: 2px;
+	padding-left: 15px;
+	width: 154px;
+}
+#logo-archive {
+	border-style:solid;
+	border-color: #E1D7D0;
+	border-top-width:0px;
+	border-bottom-width:1px;
+	border-left-width: 0px;
+	border-right-width: 0px;
+	padding-top: 5px;
+	padding-bottom: 2px;
+	padding-left: 15px;
+	width: 154px;
+}
+
+#poweredByMycore img {
+    width: 0px;
+}
+
+#contentWrapper{
+	width: 98%;
+}

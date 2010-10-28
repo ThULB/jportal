@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000083">
+    <label xml:lang="de" text="Schlagworte" description="Schlagworte" />
+    <label xml:lang="en" text="Keywords" description="Keywords" />
+    <categories>
+        <category ID="Saturn" counter="0">
+            <label xml:lang="de" text="Saturn" />
+        </category>
+    </categories>
+</mycoreclass>

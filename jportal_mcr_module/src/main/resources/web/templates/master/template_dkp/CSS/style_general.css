@@ -1,0 +1,78 @@
+html, body {
+    margin: 0px;
+    font-family: Verdana, Helvetica, sans-serif;
+    font-size: 12px;
+    height: 100%;
+    width: 100%;
+}
+#second-line {
+	width: 100%; 
+	height:100%;  
+}	
+#div_navi_main {
+	float: left; 
+	width: 273px;
+	padding-left: 8px;
+}
+
+#navi_box {
+	float: right;
+	text-align: right; 
+	height: 147px;
+	padding-top: 14px;
+	padding-left: 80px;
+	vertical-align: top;
+}
+
+#navi_history {
+	text-align: left;
+	height: 14px;
+	vertical-align: top;
+	padding-top: 5px;
+}
+
+#navi_history a{
+	color: #5E5946;
+	text-decoration: none;
+}
+
+#navi_history a:hover{
+	color: #5E5946;
+	text-decoration: underline;
+}
+
+#navi_history_inside {
+	margin-left:2px;
+	width: auto;
+	margin-right:0px;
+}
+
+#contentArea {
+	width: max;
+	margin-left: 250px;
+}
+
+#footer {
+	width: max; 
+	height:162px; 
+	margin: 0px;
+}
+
+#login_div {
+	width: 273px;
+	height: 25px; 
+	padding-left: 31px;
+	padding-top: 7px;
+}
+
+#login{
+	vertical-align: top;
+}
+
+#thulb_logo {
+	height: 152px;
+	vertical-align: top;
+	text-align: right;
+	padding-right: 35px;
+	padding-top: 8px;
+}
