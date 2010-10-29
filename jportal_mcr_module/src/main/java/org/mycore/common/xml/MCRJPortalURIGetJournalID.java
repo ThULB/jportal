@@ -153,8 +153,7 @@ public class MCRJPortalURIGetJournalID implements MCRURIResolver.MCRResolver {
         // get website context
         Element webSiteContextElem = new Element("root");
         String baseDir = CONFIG.getString("MCR.basedir");
-        String xslPath = baseDir + "/build/webapps/WEB-INF/classes/xsl/getWebsiteContext.xsl";
-        StreamSource xsl = new StreamSource(new File(xslPath));
+        StreamSource xsl = new StreamSource(MCRJPortalURIGetJournalID.class.getResourceAsStream("/xsl/getWebsiteContext.xsl"));
         JDOMSource source = new JDOMSource(webSiteContextElem);
         JDOMResult result = new JDOMResult();
         try {

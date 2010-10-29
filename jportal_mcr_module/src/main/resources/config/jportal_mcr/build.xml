@@ -48,15 +48,15 @@
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="xsl/*.xsl" />
+				<include name="xsl/**" />
 			</patternset>
+			<regexpmapper from="^(xsl/)(.*)" to="\2" />
 		</unjar>
-
+		
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="web/WEB-INF/**" />
-				<include name="web/config/navigation.xml" />
+				<include name="web/**" />
 			</patternset>
 			<regexpmapper from="^(web/)(.*)" to="\2" />
 		</unjar>

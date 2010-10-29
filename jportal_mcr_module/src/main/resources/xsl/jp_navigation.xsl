@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
 
     <!-- ================================================================================= -->
+    <!-- 
     <xsl:template match="TOC | toc">
         <xsl:if test="$readAccess='true'">
             <xsl:for-each select="$loaded_navigation_xml//item[@href=$browserAddress]/item">
@@ -19,6 +20,7 @@
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
+     -->
     <!-- ================================================================================= -->
     <xsl:template name="navigation.history">
         <xsl:if test="$readAccess='true'">
@@ -362,7 +364,7 @@
 
     <!-- ================================================================================= -->
 
-    <xsl:template name="createTree">
+    <xsl:template name="jp_createTree">
         <xsl:param name="depth" />
         <xsl:param name="menuPointHeigth" />
         <xsl:param name="columnWidthIcon" />
@@ -482,7 +484,7 @@
     </xsl:template>
     <!-- ================================================================================= -->
     <!-- ================================================================================= -->
-    <xsl:template name="addMenuRow">
+    <xsl:template name="jp_addMenuRow">
         <xsl:param name="linkKind" />
         <xsl:param name="depth" />
         <xsl:param name="menuPointHeigth" />
@@ -696,7 +698,7 @@
 
     <!-- ================================================================================= -->
 
-    <xsl:template name="addLink">
+    <xsl:template name="jp_addLink">
         <xsl:param name="createSiteMap" />
 
         <xsl:choose>
@@ -799,7 +801,7 @@
 
     </xsl:template>
     <!-- ================================================================================= -->
-    <xsl:template name="FlagPrinter">
+    <xsl:template name="jp_FlagPrinter">
         <xsl:param name="flag" />
         <xsl:param name="lang" />
         <xsl:param name="url" />

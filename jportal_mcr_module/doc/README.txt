@@ -74,6 +74,9 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          3. ant create.schema create.jar create.scripts create.directories
          4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
          5. ant create.users create.default-rules create.class create.webapp
+         ant clean clean.data; ant resolve create.jar create.scripts
+         ant create.users create.default-rules create.class create.webapp
+         
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
