@@ -20,9 +20,7 @@ import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
-import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xml.MCRXMLHelper;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -50,13 +48,11 @@ public class MCRJPortalJournalContextForWebpages {
 
     private static Logger LOGGER = Logger.getLogger(MCRJPortalJournalContextForWebpages.class);;
 
-    private static String homeDir = PROPS.getString("MCR.Modules.BaseDir");
-
     private static String baseDir = PROPS.getString("MCR.basedir");
 
-    private final static String SRC_DIR = "/modules/jportal/webpages/create-journalContext/";
-
     private static String deployedDir = baseDir + "/build/webapps";
+    
+    private final static String SRC_DIR = deployedDir + "/create-journalContext/";
 
     public MCRJPortalJournalContextForWebpages(String journalId, String preceedingItemHref, String layoutTemplate, String shortCut) {
         this.journalID = journalId;
@@ -143,7 +139,7 @@ public class MCRJPortalJournalContextForWebpages {
         if (journalObjectXML.getChild("metadata").getChild("hidden_websitecontexts") != null)
             journalObjectXML.getChild("metadata").removeChild("hidden_websitecontexts");
         // set new values
-        String xmlTemplate = homeDir + SRC_DIR + "/partOfJournalXML.xml";
+        String xmlTemplate = SRC_DIR + "/partOfJournalXML.xml";
         SAXBuilder sb = new SAXBuilder();
         Element journalXMLCode = null;
         try {
@@ -178,7 +174,7 @@ public class MCRJPortalJournalContextForWebpages {
     private void updateNavigation() {
         LOGGER.debug("update navigation");
         // init
-        String naviSrcLoc = homeDir + SRC_DIR + this.dataModelCoverage + "/navigation.xml";
+        String naviSrcLoc = SRC_DIR + this.dataModelCoverage + "/navigation.xml";
         String naviFile = deployedDir + "/config/navigation.xml";
         Document naviXMLCode = null;
 
@@ -230,9 +226,9 @@ public class MCRJPortalJournalContextForWebpages {
         LOGGER.debug("copy webpages");
         // init
         String srcDirPrefix = SRC_DIR + this.dataModelCoverage + "/content";
-        String srcDir = homeDir + srcDirPrefix + "/JOURNAL_SHORTCUT";
+        String srcDir = srcDirPrefix + "/JOURNAL_SHORTCUT";
         String destDir = deployedDir + getDestDirRelative() + shortCut;
-        String srcFile = homeDir + srcDirPrefix + "/JOURNAL_SHORTCUT.xml";
+        String srcFile = srcDirPrefix + "/JOURNAL_SHORTCUT.xml";
         String destFile = destDir + ".xml";
 
         // test if short cut is already in use

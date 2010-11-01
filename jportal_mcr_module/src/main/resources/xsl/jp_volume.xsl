@@ -838,7 +838,7 @@
                     <xsl:for-each select="xalan:nodeset($typeToken)/token">
                         <xsl:variable select="." name="type" />
                         <li>
-                            <a href="{$ServletsBaseURL}MCRJPortalStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
+                            <a href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?type={$type}&amp;step=author&amp;todo=wnewobj{$suffix}{$xmltempl}">
                                 <xsl:value-of select="i18n:translate(concat('metaData.',$type,'.[singular]'))" />
                             </a>
                         </li>
