@@ -1,7 +1,9 @@
 package fsu.jportal.jaxb;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -10,10 +12,15 @@ import javax.xml.bind.annotation.XmlValue;
 
 @XmlRootElement
 public class JournalList {
-    public static class Journal {
+    public interface KeyAble {
+        public String getKey();
+    }
+
+    @XmlRootElement
+    public static class Journal implements KeyAble{
         private String title;
 
-        private String value;
+        private String id;
 
         public void setTitle(String title) {
             this.title = title;
@@ -24,21 +31,34 @@ public class JournalList {
             return title;
         }
 
-        public void setValue(String value) {
-            this.value = value;
+        public void setId(String value) {
+            this.id = value;
         }
 
         @XmlValue
-        public String getValue() {
-            return value;
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public String getKey() {
+            return getId();
         }
 
     }
 
-    public static class Section {
+    public static class Section implements KeyAble{
         private String name;
 
-        private List<Journal> journalList;
+        private Map<String, Journal> journals;
+        
+        public Section() {
+            
+        }
+
+        public Section(String name) {
+            setName(name);
+        }
 
         public void setName(String name) {
             this.name = name;
@@ -49,12 +69,18 @@ public class JournalList {
             return name;
         }
 
-        public void setJournalList(List<Journal> journal) {
-            this.journalList = journal;
+        public void setJournals(List<Journal> journals) {
+            for (Journal journal : journals) {
+                addJournal(journal);
+            }
         }
 
         @XmlElement(name = "journal")
-        public List<Journal> getJournalList() {
+        public List<Journal> getJournals() {
+            ArrayList<Journal> journalList = new ArrayList<Journal>();
+            if(journals != null){
+                journalList.addAll(journals.values());
+            }
             return journalList;
         }
 
@@ -65,11 +91,20 @@ public class JournalList {
         }
 
         public void addJournal(Journal journal) {
-            if (this.journalList == null) {
-                setJournalList(new ArrayList<JournalList.Journal>());
+            if (journals == null) {
+                journals = new HashMap<String, JournalList.Journal>();
             }
 
-            getJournalList().add(journal);
+            journals.put(journal.getId(), journal);
+        }
+
+        public Journal getJournal(String id) {
+            return journals.get(id);
+        }
+
+        @Override
+        public String getKey() {
+            return getName();
         }
     }
 
@@ -77,7 +112,7 @@ public class JournalList {
 
     private String type;
 
-    private List<Section> sectionList;
+    private Map<String, Section> sections;
 
     public void setMode(String mode) {
         this.mode = mode;
@@ -97,26 +132,37 @@ public class JournalList {
         return type;
     }
 
-    public void setSectionList(List<Section> section) {
-        this.sectionList = section;
+    public void setSectionList(List<Section> sectionList) {
+        for (Section section : sectionList) {
+            addSection(section);
+        }
     }
 
     @XmlElement(name = "section")
     public List<Section> getSectionList() {
+        ArrayList<Section> sectionList = new ArrayList<Section>();
+        if(sections != null){
+            sectionList.addAll(sections.values());
+        }
+        
         return sectionList;
     }
-
+    
     public void addSection(Section section) {
-        if (sectionList == null) {
-            setSectionList(new ArrayList<JournalList.Section>());
+        if (sections == null) {
+            sections = new HashMap<String, JournalList.Section>();
         }
-
-        getSectionList().add(section);
+        
+        sections.put(section.getName(), section);
     }
 
-    public Section newSection() {
-        Section section = new Section();
+    public Section newSection(String name) {
+        Section section = new Section(name);
         addSection(section);
         return section;
+    }
+
+    public Section getSection(String key) {
+        return sections.get(key);
     }
 }
