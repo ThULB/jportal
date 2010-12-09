@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.sun.jersey.api.client.ClientResponse;
@@ -24,38 +25,104 @@ import fsu.thulb.jaxb.JaxbTools;
 
 public class JournalListResourceTest extends JerseyResourceTestCase {
     public static class FakeJournalListBackend implements JournalListBackend{
-        public static HashMap<String, JournalList> journals = new HashMap<String, JournalList>();
-
+        public static HashMap<String, JournalList> journals;
+        
         @Override
         public JournalList getList(String type) {
             return journals.get(type);
         }
         
+        public static void initJournalLists(){
+            journals = new HashMap<String, JournalList>();
+        }
+        
+        public static void addJournalList(JournalList journalList){
+            journals.put(journalList.getType(), journalList);
+        }
+
+        @Override
+        public JournalList createList(String type) {
+            JournalList journalList = new JournalList();
+            journalList.setType(type);
+            journals.put(type, journalList);
+            return journalList;
+        }
+    }
+    
+    @Before
+    public void init() {
+        FakeJournalListBackend.initJournalLists();
+        System.setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
     }
     
     @Test
     public void getJournalList() throws Exception {
-        JournalList calendarList = getCalendarList();
-        HashMap<String, JournalList> journals = new HashMap<String, JournalList>();
-        journals.put(calendarList.getType(), calendarList);
-        FakeJournalListBackend.journals = journals;
-        
-        System.setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
+        FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
         JournalList journalList = resource().path("journalList.xml").queryParam("type", "calendar").type(MediaType.APPLICATION_XML).get(JournalList.class);
+        
+        assertJournalList(journalList);
+    }
+    
+    @Test
+    public void addJournalIntoExistingList() throws Exception {
+        FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
+        
         Journal journal = new Journal();
         journal.setId("testID");
         journal.setTitle("Title");
-        ClientResponse response = resource().path("journalList.xml/add/calendar").type(MediaType.APPLICATION_XML).put(ClientResponse.class, journal);
+        ClientResponse response = resource().path("journalList.xml/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
         
         assertEquals(Status.CREATED, response.getClientResponseStatus());
-        JaxbTools.marschall(FakeJournalListBackend.journals.get("calendar"), System.out);
-        assertNotNull(FakeJournalListBackend.journals.get("calendar").getSection("T"));
-
-        assertJournalList(journalList);
+        
+        JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
+        assertJournalList(calendarList);
+        Section section = calendarList.getSection("T");
+        assertNotNull("There should be a section 'T'.", section);
+        assertNotNull("There should be a journal with ID 'testID'.", section.getJournal("testID"));
+    }
+    
+    @Test
+    public void addJournalIntoEmptyList() throws Exception {
+        Journal journal = new Journal();
+        journal.setId("testID");
+        journal.setTitle("Title");
+        ClientResponse response = resource().path("journalList.xml/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
+        
+        assertEquals(Status.CREATED, response.getClientResponseStatus());
+        JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
+        Section section = calendarList.getSection("T");
+        assertNotNull("There should be a section 'T'.", section);
+        assertNotNull("There should be a journal with ID 'testID'.", section.getJournal("testID"));
+    }
+    
+    @Test
+    public void deleteJournal() throws Exception {
+        FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
+        String journalID = "book_001";
+        ClientResponse response = resource().path("journalList.xml/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        
+        assertEquals(Status.OK, response.getClientResponseStatus());
+        JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
+        Section section = calendarList.getSection("H");
+        assertNotNull("There should be a section 'H'.", section);
+        assertNull("There should be a journal with ID 'testID'.", section.getJournal(journalID));
+    }
+    
+    @Test
+    public void deleteLastJournalInSection() throws Exception {
+        FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
+        String journalID = "Value";
+        ClientResponse response = resource().path("journalList.xml/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        
+        assertEquals(Status.OK, response.getClientResponseStatus());
+        JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
+        JaxbTools.marschall(calendarList, System.out);
+        Section section = calendarList.getSection("A");
+        assertNull("There should be no section 'A'.", section);
     }
 
-    public JournalList getCalendarList() {
-        InputStream testJournalList = getClass().getResourceAsStream("/testData/xml/journalLists/calendar.xml");
+    public JournalList getCalendarList(String journalListName) {
+        InputStream testJournalList = getClass().getResourceAsStream(journalListName);
         try {
                 return JaxbTools.unmarschall(testJournalList, JournalList.class);
         } catch (JAXBException e) {
@@ -67,13 +134,14 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
 
     @Test
     public void journalListJaxb() throws Exception {
-        InputStream journalListXMLStream = getClass().getResourceAsStream("/testData/xml/journalList.xml");
+        InputStream journalListXMLStream = getClass().getResourceAsStream("/testData/xml/journalLists/calendar.xml");
         JournalList journalList = JaxbTools.unmarschall(journalListXMLStream, JournalList.class);
 
         assertJournalList(journalList);
     }
 
     public void assertJournalList(JournalList journalList) {
+        assertNotNull("Journal list is null.", journalList);
         assertEquals("calendar", journalList.getType());
         assertEquals("alphabetical", journalList.getMode());
         List<Section> sectionList = journalList.getSectionList();

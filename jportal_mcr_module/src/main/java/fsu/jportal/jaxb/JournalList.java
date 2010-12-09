@@ -1,16 +1,20 @@
 package fsu.jportal.jaxb;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
 public class JournalList {
     public interface KeyAble {
         public String getKey();
@@ -106,6 +110,16 @@ public class JournalList {
         public String getKey() {
             return getName();
         }
+
+        public boolean delJournal(String journalID) {
+            Journal remove = journals.remove(journalID);
+
+            if(remove != null){
+                return true;
+            }
+            
+            return false;
+        }
     }
 
     private String mode;
@@ -141,19 +155,19 @@ public class JournalList {
     @XmlElement(name = "section")
     public List<Section> getSectionList() {
         ArrayList<Section> sectionList = new ArrayList<Section>();
-        if(sections != null){
-            sectionList.addAll(sections.values());
+        if(getSections() != null){
+            sectionList.addAll(getSections().values());
         }
         
         return sectionList;
     }
     
     public void addSection(Section section) {
-        if (sections == null) {
-            sections = new HashMap<String, JournalList.Section>();
+        if (getSections() == null) {
+            setSections(new HashMap<String, JournalList.Section>());
         }
         
-        sections.put(section.getName(), section);
+        getSections().put(section.getName(), section);
     }
 
     public Section newSection(String name) {
@@ -163,6 +177,32 @@ public class JournalList {
     }
 
     public Section getSection(String key) {
-        return sections.get(key);
+        if(getSections() == null){
+            return null;
+        }
+        
+        return getSections().get(key);
+    }
+
+    public boolean delJournal(String journalID) {
+        Collection<Section> values = getSections().values();
+        for (Section section : values) {
+            if(section.delJournal(journalID)){
+                if(section.getJournals().isEmpty()){
+                    values.remove(section);
+                }
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    public void setSections(Map<String, Section> sections) {
+        this.sections = sections;
+    }
+
+    public Map<String, Section> getSections() {
+        return sections;
     }
 }

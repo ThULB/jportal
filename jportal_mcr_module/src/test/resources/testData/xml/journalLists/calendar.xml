@@ -3,4 +3,8 @@
     <section name="A">
         <journal title="Title">Value</journal>
     </section>
+    <section name="H">
+        <journal title="Hallo">book_001</journal>
+        <journal title="Hollo">book_002</journal>
+    </section>
 </journalList>

@@ -3,8 +3,9 @@ package fsu.jportal.resources;
 import java.net.URI;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,26 +25,54 @@ public class JournalListResource {
     @Produces(MediaType.APPLICATION_XML)
     public JournalList journalList(@QueryParam("type") String type) {
         JournalListBackend journalListBackend = getBackend();
-        
+
         return journalListBackend.getList(type);
     }
-    
-    @PUT
-    @Path("add/{type}")
+
+    @POST
+    @Path("{type}")
     @Consumes(MediaType.APPLICATION_XML)
-    public Response addJournal(@PathParam("type") String type, Journal journal){
-        JournalListBackend journalListBackend = getBackend();
-        JournalList journalList = journalListBackend.getList(type);
-        
+    public Response addJournal(@PathParam("type") String type, Journal journal) {
+        JournalList journalList = getJournalList(type);
+
         String sectionName = getSectionName(journal);
-        Section section = journalList.getSection(sectionName);
-        if(section == null){
-            section = journalList.newSection(sectionName);
+        Section section = getSection(journalList, sectionName);
+
+        section.addJournal(journal);
+
+        return Response.created(URI.create("../")).build();
+    }
+
+    @DELETE
+    @Path("{type}/{journalID}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    public Response delJournal(@PathParam("type") String type, @PathParam("journalID") String journalID) {
+        JournalList journalList = getJournalList(type);
+        
+        if(journalList.delJournal(journalID)){
+            return Response.ok().build();
         }
         
-        section.addJournal(journal);
-        
-        return Response.created(URI.create("../")).build();
+        return Response.notModified().build();
+    }
+
+    private Section getSection(JournalList journalList, String sectionName) {
+        Section section = journalList.getSection(sectionName);
+        if (section == null) {
+            section = journalList.newSection(sectionName);
+        }
+        return section;
+    }
+
+    private JournalList getJournalList(String type) {
+        JournalListBackend journalListBackend = getBackend();
+        JournalList journalList = journalListBackend.getList(type);
+
+        if (journalList == null) {
+            journalList = journalListBackend.createList(type);
+        }
+
+        return journalList;
     }
 
     private String getSectionName(Journal journal) {
@@ -62,7 +91,7 @@ public class JournalListResource {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
 }

@@ -11,4 +11,10 @@ public class JournalListBackendImpl implements JournalListBackend{
         return null;
     }
 
+    @Override
+    public JournalList createList(String type) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
