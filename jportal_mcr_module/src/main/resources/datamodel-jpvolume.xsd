@@ -49,7 +49,7 @@
 <xsd:attribute name="version" type="xsd:string" use="optional"/>
 </xsd:complexType>
 <xsd:complexType name="MCRObjectStructure">
-<xsd:sequence>
+<xsd:all>
 <xsd:element name="parents" minOccurs="1" maxOccurs="1">
 <xsd:complexType>
 <xsd:sequence>
@@ -113,7 +113,7 @@
 <xsd:attribute name="notinherit" type="xsd:boolean" use="optional"/>
 </xsd:complexType>
 </xsd:element>
-    </xsd:sequence>
+    </xsd:all>
 <xsd:attribute ref="xml:lang"/>
 </xsd:complexType>
 <xsd:complexType name="MCRObjectMetadata">
