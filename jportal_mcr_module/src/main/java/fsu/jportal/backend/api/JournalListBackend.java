@@ -8,6 +8,6 @@ public interface JournalListBackend {
 
     public JournalList getList(String type);
 
-    public JournalList createList(String type);
+    public JournalList saveList(JournalList list);
 
 }

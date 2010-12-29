@@ -11,6 +11,7 @@ import javax.xml.bind.JAXBException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.MCRConfiguration;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
@@ -41,18 +42,15 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         }
 
         @Override
-        public JournalList createList(String type) {
-            JournalList journalList = new JournalList();
-            journalList.setType(type);
-            journals.put(type, journalList);
-            return journalList;
+        public JournalList saveList(JournalList list) {
+            return journals.put(list.getType(), list);
         }
     }
     
     @Before
     public void init() {
         FakeJournalListBackend.initJournalLists();
-        System.setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
+        MCRConfiguration.instance().getProperties().setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
     }
     
     @Test
@@ -116,7 +114,6 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         
         assertEquals(Status.OK, response.getClientResponseStatus());
         JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
-        JaxbTools.marschall(calendarList, System.out);
         Section section = calendarList.getSection("A");
         assertNull("There should be no section 'A'.", section);
     }
@@ -144,8 +141,6 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         assertNotNull("Journal list is null.", journalList);
         assertEquals("calendar", journalList.getType());
         assertEquals("alphabetical", journalList.getMode());
-        List<Section> sectionList = journalList.getSectionList();
-        assertNotNull(sectionList);
         Section section = journalList.getSection("A");
         assertNotNull("Could not found section 'A'.", section);
         assertEquals("A", section.getName());

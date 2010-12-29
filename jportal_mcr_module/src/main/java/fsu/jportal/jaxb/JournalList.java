@@ -25,6 +25,14 @@ public class JournalList {
         private String title;
 
         private String id;
+        
+        public Journal() {
+        }
+        
+        public Journal(String id, String title) {
+            setId(id);
+            setTitle(title);
+        }
 
         public void setTitle(String title) {
             this.title = title;
@@ -120,6 +128,12 @@ public class JournalList {
             
             return false;
         }
+
+        public Journal newJournal(String id, String title) {
+            Journal journal = new Journal(id, title);
+            addJournal(journal);
+            return journal;
+        }
     }
 
     private String mode;
@@ -197,7 +211,36 @@ public class JournalList {
         
         return false;
     }
+    
+    public Journal newJournal(String id, String title){
+        String sectionName = getSectionName(title);
+        Section section = getOrCreateSection(sectionName);
+        return section.newJournal(id,title);
+    }
+    
+    public void addJournal(Journal journal){
+        String sectionName = getSectionName(journal);
+        Section section = getOrCreateSection(sectionName);
 
+        section.addJournal(journal);
+    }
+    
+    private String getSectionName(Journal journal) {
+        return getSectionName(journal.getTitle());
+    }
+
+    private String getSectionName(String title) {
+        return title.toUpperCase().substring(0, 1);
+    }
+    
+    private Section getOrCreateSection(String sectionName) {
+        Section section = getSection(sectionName);
+        if (section == null) {
+            section = newSection(sectionName);
+        }
+        return section;
+    }
+    
     public void setSections(Map<String, Section> sections) {
         this.sections = sections;
     }

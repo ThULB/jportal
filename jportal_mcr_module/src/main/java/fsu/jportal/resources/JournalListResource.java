@@ -13,11 +13,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.mycore.common.MCRConfiguration;
+
 import fsu.jportal.backend.api.JournalListBackend;
-import fsu.jportal.backend.impl.JournalListBackendImpl;
+import fsu.jportal.backend.impl.JournalListIFS2Backend;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
-import fsu.jportal.jaxb.JournalList.Section;
 
 @Path("journalList.xml")
 public class JournalListResource {
@@ -26,20 +27,21 @@ public class JournalListResource {
     public JournalList journalList(@QueryParam("type") String type) {
         JournalListBackend journalListBackend = getBackend();
 
-        return journalListBackend.getList(type);
+        JournalList journalList = journalListBackend.getList(type);
+        if(journalList == null){
+            journalList = new JournalList();
+        }
+        
+        return journalList;
     }
 
     @POST
     @Path("{type}")
     @Consumes(MediaType.APPLICATION_XML)
     public Response addJournal(@PathParam("type") String type, Journal journal) {
-        JournalList journalList = getJournalList(type);
-
-        String sectionName = getSectionName(journal);
-        Section section = getSection(journalList, sectionName);
-
-        section.addJournal(journal);
-
+        JournalList journalList = getOrCreateJournalList(type);
+        journalList.addJournal(journal);
+        getBackend().saveList(journalList);
         return Response.created(URI.create("../")).build();
     }
 
@@ -47,40 +49,29 @@ public class JournalListResource {
     @Path("{type}/{journalID}")
     @Consumes(MediaType.TEXT_PLAIN)
     public Response delJournal(@PathParam("type") String type, @PathParam("journalID") String journalID) {
-        JournalList journalList = getJournalList(type);
-        
-        if(journalList.delJournal(journalID)){
+        JournalList journalList = getOrCreateJournalList(type);
+
+        if (journalList.delJournal(journalID)) {
             return Response.ok().build();
         }
-        
+
         return Response.notModified().build();
     }
 
-    private Section getSection(JournalList journalList, String sectionName) {
-        Section section = journalList.getSection(sectionName);
-        if (section == null) {
-            section = journalList.newSection(sectionName);
-        }
-        return section;
-    }
-
-    private JournalList getJournalList(String type) {
+    private JournalList getOrCreateJournalList(String type) {
         JournalListBackend journalListBackend = getBackend();
         JournalList journalList = journalListBackend.getList(type);
 
         if (journalList == null) {
-            journalList = journalListBackend.createList(type);
+            journalList = new JournalList();
+            journalList.setType(type);
         }
 
         return journalList;
     }
 
-    private String getSectionName(Journal journal) {
-        return journal.getTitle().toUpperCase().substring(0, 1);
-    }
-
     private JournalListBackend getBackend() {
-        String backendName = System.getProperty(JournalListBackend.PROP_NAME, JournalListBackendImpl.class.getName());
+        String backendName = MCRConfiguration.instance().getString(JournalListBackend.PROP_NAME, JournalListIFS2Backend.class.getName());
         try {
             Class<JournalListBackend> journalListBackendClass = (Class<JournalListBackend>) Class.forName(backendName);
             return journalListBackendClass.newInstance();

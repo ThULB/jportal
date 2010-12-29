@@ -75,7 +75,7 @@
 	</init-param>
 	<init-param>
 		<param-name>com.sun.jersey.config.property.packages</param-name>
-		<param-value>org.mycore</param-value>
+		<param-value>org.mycore;fsu.jportal.resources</param-value>
 	</init-param>
 	<init-param>
 		<param-name>com.sun.jersey.config.feature.DisableXmlSecurity
