@@ -56,7 +56,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
     @Test
     public void getJournalList() throws Exception {
         FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
-        JournalList journalList = resource().path("journalList.xml").queryParam("type", "calendar").type(MediaType.APPLICATION_XML).get(JournalList.class);
+        JournalList journalList = resource().path("journalList/calendar").type(MediaType.APPLICATION_XML).get(JournalList.class);
         
         assertJournalList(journalList);
     }
@@ -68,7 +68,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         Journal journal = new Journal();
         journal.setId("testID");
         journal.setTitle("Title");
-        ClientResponse response = resource().path("journalList.xml/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
+        ClientResponse response = resource().path("journalList/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
         
         assertEquals(Status.CREATED, response.getClientResponseStatus());
         
@@ -84,7 +84,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         Journal journal = new Journal();
         journal.setId("testID");
         journal.setTitle("Title");
-        ClientResponse response = resource().path("journalList.xml/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
+        ClientResponse response = resource().path("journalList/calendar").type(MediaType.APPLICATION_XML).post(ClientResponse.class, journal);
         
         assertEquals(Status.CREATED, response.getClientResponseStatus());
         JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
@@ -97,7 +97,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
     public void deleteJournal() throws Exception {
         FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
         String journalID = "book_001";
-        ClientResponse response = resource().path("journalList.xml/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        ClientResponse response = resource().path("journalList/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
         
         assertEquals(Status.OK, response.getClientResponseStatus());
         JournalList calendarList = FakeJournalListBackend.journals.get("calendar");
@@ -110,7 +110,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
     public void deleteLastJournalInSection() throws Exception {
         FakeJournalListBackend.addJournalList(getCalendarList("/testData/xml/journalLists/calendar.xml"));
         String journalID = "Value";
-        ClientResponse response = resource().path("journalList.xml/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
+        ClientResponse response = resource().path("journalList/calendar").path(journalID).type(MediaType.TEXT_PLAIN).delete(ClientResponse.class);
         
         assertEquals(Status.OK, response.getClientResponseStatus());
         JournalList calendarList = FakeJournalListBackend.journals.get("calendar");

@@ -9,7 +9,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -20,16 +19,18 @@ import fsu.jportal.backend.impl.JournalListIFS2Backend;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
 
-@Path("journalList.xml")
+@Path("journalList")
 public class JournalListResource {
     @GET
+    @Path("{type}")
     @Produces(MediaType.APPLICATION_XML)
-    public JournalList journalList(@QueryParam("type") String type) {
+    public JournalList journalList(@PathParam("type") String type) {
         JournalListBackend journalListBackend = getBackend();
 
         JournalList journalList = journalListBackend.getList(type);
         if(journalList == null){
             journalList = new JournalList();
+            journalList.setType(type);
         }
         
         return journalList;

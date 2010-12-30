@@ -139,10 +139,12 @@
                             <td id="detailed-contentsimgpadd">
                                 <xsl:choose>
                                     <xsl:when test="($supportedMainFile!='')">
+                                    <!-- 
                                         <xsl:call-template name="iview.getEmbedded.thumbnail">
                                             <xsl:with-param name="derivID" select="$derivid" />
                                             <xsl:with-param name="pathOfImage" select="concat('/',$derivmain)" />
                                         </xsl:call-template>
+                                     -->
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <img src="{concat($WebApplicationBaseURL,'/images/dummyPreview.png')}" />
@@ -335,7 +337,10 @@
         <xsl:param name="display" />
         <xsl:param name="style" />
         <xsl:value-of
+            select="'no more iview1'" />
+            <!-- 
             select="concat($iview.home,$fullPathOfImage,$HttpSession,'?mode=generateLayout&amp;XSL.MCR.Module-iview.navi.zoom.SESSION=',$scaleFactor,'&amp;XSL.MCR.Module-iview.display.SESSION=',$display,'&amp;XSL.MCR.Module-iview.style.SESSION=',$style,'&amp;XSL.MCR.Module-iview.lastEmbeddedURL.SESSION=',$lastEmbeddedURL,'&amp;XSL.MCR.Module-iview.embedded.SESSION=false&amp;XSL.MCR.Module-iview.move=reset')" />
+             -->
     </xsl:template>
 
 
