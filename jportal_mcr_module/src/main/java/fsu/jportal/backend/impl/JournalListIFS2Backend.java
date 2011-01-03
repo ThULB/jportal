@@ -1,17 +1,12 @@
 package fsu.jportal.backend.impl;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.ifs2.MCRContent;
@@ -21,7 +16,6 @@ import org.mycore.datamodel.ifs2.MCRFileStore;
 import org.mycore.datamodel.ifs2.MCRNode;
 import org.mycore.datamodel.ifs2.MCRStore.MCRStoreConfig;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
-import org.w3c.dom.Document;
 
 import fsu.jportal.backend.api.JournalListBackend;
 import fsu.jportal.jaxb.JournalList;
@@ -61,7 +55,7 @@ public class JournalListIFS2Backend implements JournalListBackend {
     @Override
     public JournalList getList(String type) {
         try {
-            MCRFileCollection fileCollection = getJournalListStore().retrieve(collectionID);
+            MCRFileCollection fileCollection = getOrCreateJournalListStore().retrieve(collectionID);
             if (fileCollection != null) {
                 MCRNode listFile = fileCollection.getNodeByPath(buildListFileName(type));
                 return JaxbTools.unmarschall(listFile.getContent().getInputStream(), JournalList.class);
@@ -73,8 +67,19 @@ public class JournalListIFS2Backend implements JournalListBackend {
         return null;
     }
 
-    private MCRFileStore getJournalListStore() {
-        return MCRStoreManager.getStore(getStoreConfig().getID(), MCRFileStore.class);
+    private MCRFileStore getOrCreateJournalListStore() {
+        MCRFileStore store = MCRStoreManager.getStore(getStoreConfig().getID(), MCRFileStore.class);
+        if(store == null){
+            try {
+                store = MCRStoreManager.createStore(getStoreConfig(), MCRFileStore.class);
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return store;
     }
 
     @Override
@@ -109,9 +114,9 @@ public class JournalListIFS2Backend implements JournalListBackend {
     }
 
     private MCRFileCollection getOrCreateFileCollection() throws Exception {
-        MCRFileCollection fileCollection = getJournalListStore().retrieve(collectionID);
+        MCRFileCollection fileCollection = getOrCreateJournalListStore().retrieve(collectionID);
         if(fileCollection == null) {
-            fileCollection = getJournalListStore().create(collectionID);
+            fileCollection = getOrCreateJournalListStore().create(collectionID);
         }
         return fileCollection;
     }
@@ -134,13 +139,6 @@ public class JournalListIFS2Backend implements JournalListBackend {
         return type;
     }
     
-    private Document newDocument() throws ParserConfigurationException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        documentBuilderFactory.setNamespaceAware(true);
-        Document doc = documentBuilderFactory.newDocumentBuilder().newDocument();
-        return doc;
-    }
-
     public String buildListFileName(String type) {
         return type + ".xml";
     }
