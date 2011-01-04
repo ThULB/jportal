@@ -66,16 +66,18 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 ======================================
 6.1 NEW INSTALLATION
 ==================================================
-   1. Mycore:
-         1. cd $MYCORE_HOME
-         2. ant jar
-   2. Application
-         1. cd $DOCPORTAL_HOME
-         3. ant create.schema create.jar create.scripts create.directories
-         4. $DOCPORTAL_HOME/build/bin/hsqldbstart.sh
-         5. ant create.users create.default-rules create.class create.webapp
-         ant clean clean.data; ant resolve create.jar create.scripts
-         ant create.users create.default-rules create.class create.webapp
+  svn docportal from mycore.de
+  
+  cd jportal: mvn install 
+  
+  docportal config: mycore.private.properties
+  
+  					MCR.Modules.Application=common,maven    <-- maven module is important
+  					MCR.Components.Exclude=migration20-21,iview  <-- exclude iview, now using iview2
+         			ant clean clean.data; ant resolve create.jar create.scripts
+         			start DB
+         			ant create.users create.default-rules create.class create.webapp
+         			start jetty
          
          
 6.2 REINSTALLATION - already installed application 
