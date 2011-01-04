@@ -36,7 +36,7 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
             return;
         try {
             LOGGER.info("Delete entry in A-Z list for " + obj.getId());
-            JournalListManager.instance().createJournalLists();
+            JournalListManager.instance().deleteJournal(obj);
         } catch(Exception e) {
             LOGGER.error(e);
         }
@@ -49,7 +49,7 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
             return;
         try {
             LOGGER.info("Updating entry in A-Z list for " + obj.getId());
-            JournalListManager.instance().createJournalLists();
+            JournalListManager.instance().updateJournal(obj);
         } catch(Exception e) {
             LOGGER.error(e);
         }

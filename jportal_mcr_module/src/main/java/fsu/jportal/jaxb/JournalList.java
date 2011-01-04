@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
+import fsu.jportal.jaxb.JournalList.Journal;
+
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class JournalList {

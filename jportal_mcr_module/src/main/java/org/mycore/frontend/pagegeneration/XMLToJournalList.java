@@ -6,7 +6,7 @@ import java.util.List;
 import org.jdom.Document;
 import org.jdom.Element;
 
-public class XMLToJournalList extends JournalList {
+public class XMLToJournalList extends JournalListXML {
     public XMLToJournalList(Document xml) {
         List sections = xml.getRootElement().getChildren();
         

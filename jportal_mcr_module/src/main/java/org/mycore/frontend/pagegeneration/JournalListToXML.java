@@ -5,10 +5,10 @@ package org.mycore.frontend.pagegeneration;
 
 import org.jdom.Document;
 import org.jdom.Element;
-import org.mycore.frontend.pagegeneration.JournalList.Section;
+import org.mycore.frontend.pagegeneration.JournalListXML.Section;
 
 public class JournalListToXML extends Document{
-    public JournalListToXML(JournalList list) {
+    public JournalListToXML(JournalListXML list) {
         super(new Element("journalList"));
         Element rootElement = getRootElement();
         rootElement.setAttribute("mode", "alphabetical");

@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConfigurationException;
 import org.mycore.datamodel.ifs2.MCRContent;
 import org.mycore.datamodel.ifs2.MCRFile;
 import org.mycore.datamodel.ifs2.MCRFileCollection;
@@ -45,11 +46,26 @@ public class JournalListIFS2Backend implements JournalListBackend {
     }
 
     public JournalListIFS2Backend(MCRStoreConfig config) {
+        if (config == null) {
+            try {
+                config = (MCRStoreConfig) MCRConfiguration.instance().getInstanceOf("JP.JournalList.IFS.Backend");
+            } catch (MCRConfigurationException e) {
+                config = new DefaultStoreConfig();
+            }
+        }
+
         setStoreConfig(config);
     }
 
     public JournalListIFS2Backend() {
-        this(new DefaultStoreConfig());
+        // OK this looks pretty ugly, but why still stick with it?
+        // because I'm too lazy to change MyCoRe at this moment.
+        // I tried this((MCRStoreConfig) MCRConfiguration.instance().getInstanceOf("JP.JournalList.IFS.Backend", DefaultStoreConfig.class.getName()))
+        // but DefaultStoreConfig has to be public, which I won't
+        // next was this((MCRStoreConfig) MCRConfiguration.instance().getInstanceOf("JP.JournalList.IFS.Backend"))
+        // throws MCRConfigurationException when property is not set
+        // there are things you can do with MyCore, for the rest there are ugly code.
+        this(null);
     }
 
     @Override
@@ -69,7 +85,7 @@ public class JournalListIFS2Backend implements JournalListBackend {
 
     private MCRFileStore getOrCreateJournalListStore() {
         MCRFileStore store = MCRStoreManager.getStore(getStoreConfig().getID(), MCRFileStore.class);
-        if(store == null){
+        if (store == null) {
             try {
                 store = MCRStoreManager.createStore(getStoreConfig(), MCRFileStore.class);
             } catch (InstantiationException e) {
@@ -78,7 +94,7 @@ public class JournalListIFS2Backend implements JournalListBackend {
                 e.printStackTrace();
             }
         }
-        
+
         return store;
     }
 
@@ -91,13 +107,13 @@ public class JournalListIFS2Backend implements JournalListBackend {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         return null;
     }
 
     private void writeJournalListToBackend(String listFileName, String journalListAsString) throws IOException,
             UnsupportedEncodingException, Exception {
-        
+
         MCRContent source = MCRContent.readFrom(journalListAsString);
         MCRFile listFile = getOrCreateFileInBackend(listFileName);
         listFile.setContent(source);
@@ -105,9 +121,9 @@ public class JournalListIFS2Backend implements JournalListBackend {
 
     private MCRFile getOrCreateFileInBackend(String listFileName) throws Exception {
         MCRFileCollection fileCollection = getOrCreateFileCollection();
-        
+
         MCRFile listFile = (MCRFile) fileCollection.getNodeByPath(listFileName);
-        if(listFile == null) {
+        if (listFile == null) {
             listFile = fileCollection.createFile(listFileName);
         }
         return listFile;
@@ -115,7 +131,7 @@ public class JournalListIFS2Backend implements JournalListBackend {
 
     private MCRFileCollection getOrCreateFileCollection() throws Exception {
         MCRFileCollection fileCollection = getOrCreateJournalListStore().retrieve(collectionID);
-        if(fileCollection == null) {
+        if (fileCollection == null) {
             fileCollection = getOrCreateJournalListStore().create(collectionID);
         }
         return fileCollection;
@@ -125,20 +141,20 @@ public class JournalListIFS2Backend implements JournalListBackend {
         Marshaller marshaller = JAXBContext.newInstance(JournalList.class).createMarshaller();
         StringWriter stringWriter = new StringWriter();
         marshaller.marshal(list, stringWriter);
-        
+
         String journalListAsString = stringWriter.toString();
         return journalListAsString;
     }
 
     private String getJournalListType(JournalList list) throws Exception {
         String type = list.getType();
-        
-        if(type == null){
+
+        if (type == null) {
             throw new Exception("Malformed journal list.");
         }
         return type;
     }
-    
+
     public String buildListFileName(String type) {
         return type + ".xml";
     }
@@ -150,6 +166,5 @@ public class JournalListIFS2Backend implements JournalListBackend {
     private MCRStoreConfig getStoreConfig() {
         return storeConfig;
     }
-
 
 }

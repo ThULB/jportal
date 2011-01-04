@@ -12,7 +12,7 @@ public class JournalListToXMLTest {
 
     @Test
     public void testJournalListXML() throws IOException {
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");

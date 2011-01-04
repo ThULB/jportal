@@ -7,16 +7,16 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 
-public class JournalList implements Collection<Entry> {
+public class JournalListXML implements Collection<Entry> {
 
     private TreeSet<Section> sections;
     private String type;
 
-    public JournalList() {
+    public JournalListXML() {
         this(null);
     }
 
-    public JournalList(String type) {
+    public JournalListXML(String type) {
         this.type = type;
         this.sections = new TreeSet<Section>();
     }

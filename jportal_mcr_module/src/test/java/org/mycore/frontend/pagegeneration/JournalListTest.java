@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class JournalListTest extends TestCase {
 
     public void testAdd() {
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");
@@ -28,7 +28,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testAddAll(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");
@@ -49,7 +49,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testContainsAll(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");
@@ -70,7 +70,7 @@ public class JournalListTest extends TestCase {
     }
 
     public void testRemove(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         
         journalList.add(entry0);
@@ -82,7 +82,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testContains(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Foo", "0");
         
@@ -93,7 +93,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testIterator(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");
@@ -114,7 +114,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testRetainAll(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Adler", "1");
         Entry entry2 = new Entry("das Auto", "2");
@@ -141,7 +141,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testAdd2EntriesSameTile(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         
         journalList.add(entry0);
@@ -151,7 +151,7 @@ public class JournalListTest extends TestCase {
     }
     
     public void testAdd2EntriesSameTileDiffID(){
-        JournalList journalList = new JournalList();
+        JournalListXML journalList = new JournalListXML();
         Entry entry0 = new Entry("Der Fuchs", "0");
         Entry entry1 = new Entry("Der Fuchs", "1");
         

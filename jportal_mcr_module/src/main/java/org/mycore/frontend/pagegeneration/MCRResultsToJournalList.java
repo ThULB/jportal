@@ -12,7 +12,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRResults;
 
-public class MCRResultsToJournalList extends JournalList {
+public class MCRResultsToJournalList extends JournalListXML {
     Logger LOGGER = Logger.getLogger(MCRResultsToJournalList.class);
 
     public MCRResultsToJournalList(MCRResults results, String type) throws JDOMException {
