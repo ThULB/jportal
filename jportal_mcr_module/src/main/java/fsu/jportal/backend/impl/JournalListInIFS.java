@@ -1,5 +1,7 @@
 package fsu.jportal.backend.impl;
 
+import java.util.List;
+
 import org.mycore.common.MCRConfiguration;
 
 import fsu.jportal.backend.api.JournalListBackend;
@@ -7,11 +9,11 @@ import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
 import fsu.thulb.jaxb.JaxbTools;
 
-public class JournalListInIFS{
+public class JournalListInIFS {
 
     public JournalList getOrCreateJournalList(String type) {
         JournalList journalList = getBackend().getList(type);
-        if(journalList == null){
+        if (journalList == null) {
             journalList = new JournalList();
             journalList.setType(type);
         }
@@ -26,17 +28,32 @@ public class JournalListInIFS{
 
     public boolean deleteJournalInListOfType(String type, String journalID) {
         JournalList journalList = getBackend().getList(type);
-        if(journalList == null){
+        if (journalList == null) {
             return false;
         }
-        
+
         boolean delJournal = journalList.delJournal(journalID);
-        
-        if(delJournal){
+
+        if (delJournal) {
             getBackend().saveList(journalList);
         }
-        
+
         return delJournal;
+    }
+
+    public boolean deleteJournalInListOfType(String journalID) {
+        List<JournalList> journalListCollection = getBackend().getLists();
+        boolean deleted = false;
+        for (JournalList journalList : journalListCollection) {
+            boolean delJournal = journalList.delJournal(journalID);
+            
+            if (delJournal) {
+                deleted = delJournal;
+                getBackend().saveList(journalList);
+            }
+        }
+
+        return deleted;
     }
 
     private JournalListBackend getBackend() {
@@ -51,7 +68,7 @@ public class JournalListInIFS{
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-    
+
         return null;
     }
 }

@@ -45,6 +45,12 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
         public JournalList saveList(JournalList list) {
             return journals.put(list.getType(), list);
         }
+
+        @Override
+        public List<JournalList> getLists() {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
     
     @Before

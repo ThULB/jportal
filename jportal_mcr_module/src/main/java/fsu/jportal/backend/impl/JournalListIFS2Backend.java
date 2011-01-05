@@ -3,6 +3,8 @@ package fsu.jportal.backend.impl;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -74,6 +76,11 @@ public class JournalListIFS2Backend implements JournalListBackend {
             MCRFileCollection fileCollection = getOrCreateJournalListStore().retrieve(collectionID);
             if (fileCollection != null) {
                 MCRNode listFile = fileCollection.getNodeByPath(buildListFileName(type));
+                
+                if(listFile == null){
+                    return null;
+                }
+                
                 return JaxbTools.unmarschall(listFile.getContent().getInputStream(), JournalList.class);
             }
         } catch (Exception e) {
@@ -165,6 +172,24 @@ public class JournalListIFS2Backend implements JournalListBackend {
 
     private MCRStoreConfig getStoreConfig() {
         return storeConfig;
+    }
+
+    @Override
+    public List<JournalList> getLists() {
+        ArrayList<JournalList> arrayList = new ArrayList<JournalList>();
+        try {
+            MCRFileCollection fileCollection = getOrCreateJournalListStore().retrieve(collectionID);
+            if (fileCollection != null) {
+                List<MCRNode> listFile = fileCollection.getChildren();
+                
+                for (MCRNode mcrNode : listFile) {
+                    arrayList.add(JaxbTools.unmarschall(mcrNode.getContent().getInputStream(), JournalList.class));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return arrayList;
     }
 
 }

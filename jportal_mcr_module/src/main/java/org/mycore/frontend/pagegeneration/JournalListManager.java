@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -119,31 +120,64 @@ public class JournalListManager {
     }
 
     public void addToJournalLists(MCRObject obj) {
-        addToJournalLists(obj.getId().toString(), obj.createXML());
+        addToJournalLists(obj.createXML());
     }
 
-    public void addToJournalLists(String id, Document xml) {
+    public void addToJournalLists(Document xml) {
         try {
-            String mainTitle = getMainTitle(xml);
+            XpathValueReader xpathValueReader = new XpathValueReader(xml);
+            String id = xpathValueReader.getValueForPath("/mycoreobject/@ID", new AttributeValue());
+            String mainTitle = xpathValueReader.getValueForPath("/mycoreobject/metadata/maintitles/maintitle", new ElementValue());
+            String type = xpathValueReader.getValueForPath("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid", new AttributeValue());
+            
+            if(type == null){
+                type = defaultType();
+            }
+            
             if (mainTitle != null) {
                 Journal journal = new Journal(id, mainTitle);
-                new JournalListInIFS().addJournalToListOfType(defaultType(), journal);
+                new JournalListInIFS().addJournalToListOfType(type, journal);
             }
         } catch (JDOMException e) {
             e.printStackTrace();
         }
 
     }
-
-    private String getMainTitle(Document xml) throws JDOMException {
-        XPath maintitleXPath = XPath.newInstance("/mycoreobject/metadata/maintitles/maintitle");
-        List maintitleNodes = maintitleXPath.selectNodes(xml);
-
-        if (maintitleNodes.size() > 0) {
-            return ((Element) maintitleNodes.get(0)).getText();
+    
+    private interface ValueRetrieval {
+        String getValue(Object obj);
+    }
+    
+    private class ElementValue implements ValueRetrieval{
+        @Override
+        public String getValue(Object obj) {
+            return ((Element) obj).getText();
         }
+    }
+    
+    private class AttributeValue implements ValueRetrieval{
+        @Override
+        public String getValue(Object obj) {
+            return ((Attribute) obj).getValue();
+        }
+    }
 
-        return null;
+    private class XpathValueReader{
+        private Document xml;
+
+        public XpathValueReader(Document xml) {
+            this.xml = xml;
+        }
+        
+        public String getValueForPath(String path, ValueRetrieval valueRetrieval) throws JDOMException{
+            List nodes = XPath.selectNodes(xml, path);
+            
+            if (nodes.size() > 0) {
+                return valueRetrieval.getValue(nodes.get(0));
+            }
+            
+            return null;
+        }
     }
 
     private String defaultType() {
@@ -156,12 +190,19 @@ public class JournalListManager {
     }
 
     public boolean deleteJournal(String id) {
-        return new JournalListInIFS().deleteJournalInListOfType(defaultType(), id);
+        return new JournalListInIFS().deleteJournalInListOfType(id);
     }
 
-    public void updateJournal(String id, Document xml) {
-        deleteJournal(id);
-        addToJournalLists(id, xml);
+    public void updateJournal(Document xml) {
+        XpathValueReader xpathValueReader = new XpathValueReader(xml);
+        try {
+            String id = xpathValueReader.getValueForPath("/mycoreobject/@ID", new AttributeValue());
+            deleteJournal(id);
+            addToJournalLists(xml);
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public void deleteJournal(MCRObject obj) {
@@ -169,6 +210,6 @@ public class JournalListManager {
     }
 
     public void updateJournal(MCRObject obj) {
-        updateJournal(obj.getId().toString(), obj.createXML());
+        updateJournal(obj.createXML());
     }
 }

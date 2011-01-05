@@ -36,8 +36,9 @@ public class JournalListManagerTest {
     
     @Test
     public void addUpdateDelete() throws Exception {
-        String testId = "Test_id";
+        String testId = "jportal_jpjournal_00000250";
         add(testId);
+        addNoType();
         update(testId);
         
         delete(testId);
@@ -46,9 +47,9 @@ public class JournalListManagerTest {
     private void update(String testId) throws JDOMException, IOException {
         InputStream testObjXMLUpdate = getClass().getResourceAsStream("/testData/xml/mcrObj/calendarObjUpdate.xml");
         Document xmlUpdate = new SAXBuilder().build(testObjXMLUpdate);
-        journalListManager.updateJournal(testId, xmlUpdate);
+        journalListManager.updateJournal(xmlUpdate);
         
-        JournalList journalList = journalListManager.getJournalList("journals");
+        JournalList journalList = journalListManager.getJournalList("calendar");
         Section sectionA = journalList.getSection("A");
         assertNull("There should be no section A", sectionA);
         Section sectionS = journalList.getSection("S");
@@ -60,18 +61,29 @@ public class JournalListManagerTest {
 
     private void delete(String testId) throws JAXBException {
         assertTrue("Could not delete journal " + testId, journalListManager.deleteJournal(testId));
-        JournalList journalList1 = journalListManager.getJournalList("journals");
+        JournalList journalList1 = journalListManager.getJournalList("calendar");
         assertNull(journalList1.getSection("A"));
     }
 
     private void add(String testId) throws JDOMException, IOException {
         InputStream testObjXML = getClass().getResourceAsStream("/testData/xml/mcrObj/calendarObj.xml");
         Document xml = new SAXBuilder().build(testObjXML);
-        journalListManager.addToJournalLists(testId,xml);
-        JournalList journalList = journalListManager.getJournalList("journals");
+        journalListManager.addToJournalLists(xml);
+        JournalList journalList = journalListManager.getJournalList("calendar");
         Section sectionA = journalList.getSection("A");
         assertNotNull("There should be a section A", sectionA);
-        assertNotNull("There should be a journal with id " + testId, sectionA.getJournal(testId));
+        assertNotNull("There should be a journal with id jportal_jpjournal_00000250", sectionA.getJournal("jportal_jpjournal_00000250"));
+    }
+    
+    private void addNoType() throws JDOMException, IOException {
+        String testId = "jportal_jpjournal_00000251";
+        InputStream testObjXML = getClass().getResourceAsStream("/testData/xml/mcrObj/calendarObjNoType.xml");
+        Document xml = new SAXBuilder().build(testObjXML);
+        journalListManager.addToJournalLists(xml);
+        JournalList journalList = journalListManager.getJournalList("journals");
+        Section sectionB = journalList.getSection("B");
+        assertNotNull("There should be a section A", sectionB);
+        assertNotNull("There should be a journal with id " + testId, sectionB.getJournal(testId));
     }
 
     class FakeJournalListManagerCfg implements JournalListManagerCfg{
