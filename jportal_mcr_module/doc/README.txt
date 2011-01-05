@@ -71,6 +71,14 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
   cd jportal: mvn install 
   
   docportal config: mycore.private.properties
+  					add in pom.xml:
+  					<dependency>
+    					<groupId>fsu.thulb</groupId>
+    					<artifactId>jportal_mcr_module</artifactId>
+    					<version>0.0.1-SNAPSHOT</version>
+    					<type>jar</type>
+    					<scope>compile</scope>
+    				</dependency>
   
   					MCR.Modules.Application=common,maven    <-- maven module is important
   					MCR.Components.Exclude=migration20-21,iview  <-- exclude iview, now using iview2
