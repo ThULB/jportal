@@ -82,7 +82,10 @@ svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
          
 6.2 REINSTALLATION - already installed application 
 ==================================================
-cd $MYCORE_HOME; ant clean jar; cd $DOCPORTAL_HOME; ant create.jar create.scripts create.webapp
+jportal: update jportal
+jportal: mvn clean install
+go to docportal
+docportal: ant resolve create.jar create.webapp
 
 
 7. RUNNING
