@@ -16,8 +16,11 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.pagegeneration.JournalListCfg.JournalListDef;
+import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
 
@@ -104,10 +107,10 @@ public class JournalListManager {
 
         for (JournalListDef journalListDef : listDefs) {
             MCRResults results = MCRQueryManager.search(journalListDef.getQuery());
-            JournalListXML journalList = new MCRResultsToJournalList(results, journalListDef.getType());
-            Document journalListXML = new JournalListToXML(journalList);
-            FileOutputStream fileOutputStream = new FileOutputStream(journalListLocation + journalListDef.getFileName());
-            outputter.output(journalListXML, fileOutputStream);
+            for (MCRHit mcrHit : results) {
+                MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrHit.getID()));
+                updateJournal(mcrObj);
+            }
         }
     }
 
@@ -181,7 +184,7 @@ public class JournalListManager {
     }
 
     private String defaultType() {
-        return MCRConfiguration.instance().getString("JP.config.journalList.defaultType", "journals");
+        return MCRConfiguration.instance().getString("JP.config.journalList.defaultType", "journal");
     }
 
     public JournalList getJournalList(String type) {

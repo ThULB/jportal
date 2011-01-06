@@ -80,7 +80,7 @@ public class JournalListManagerTest {
         InputStream testObjXML = getClass().getResourceAsStream("/testData/xml/mcrObj/calendarObjNoType.xml");
         Document xml = new SAXBuilder().build(testObjXML);
         journalListManager.addToJournalLists(xml);
-        JournalList journalList = journalListManager.getJournalList("journals");
+        JournalList journalList = journalListManager.getJournalList("journal");
         Section sectionB = journalList.getSection("B");
         assertNotNull("There should be a section A", sectionB);
         assertNotNull("There should be a journal with id " + testId, sectionB.getJournal(testId));

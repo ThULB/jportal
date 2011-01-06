@@ -16,6 +16,7 @@ public class JournalListInIFS {
         if (journalList == null) {
             journalList = new JournalList();
             journalList.setType(type);
+            journalList.setMode("alphabetical");
         }
         return journalList;
     }

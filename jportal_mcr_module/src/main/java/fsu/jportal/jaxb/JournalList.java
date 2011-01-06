@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -106,7 +107,7 @@ public class JournalList {
 
         public void addJournal(Journal journal) {
             if (journals == null) {
-                journals = new HashMap<String, JournalList.Journal>();
+                journals = new TreeMap<String, JournalList.Journal>();
             }
 
             journals.put(journal.getId(), journal);
@@ -180,7 +181,7 @@ public class JournalList {
     
     public void addSection(Section section) {
         if (getSections() == null) {
-            setSections(new HashMap<String, JournalList.Section>());
+            setSections(new TreeMap<String, JournalList.Section>());
         }
         
         getSections().put(section.getName(), section);
