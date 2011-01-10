@@ -839,37 +839,22 @@
         <xsl:param name="seperatorChar" />
         <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="loginURL"
             select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;url=', encoder:encode( string( $RequestURL ) ) )" />
-        <xsl:choose>
-            <xsl:when test="$CurrentUser='gast'">
-                <td>
-                    <strong> 
-                    <a href="{$loginURL}">                       
-                            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />                        
-                    </a>
-                    </strong>
-                </td>
-            </xsl:when>
-            <xsl:otherwise>
-                <td>
-                    <strong>
-                    <a href="{$loginURL}&amp;uid=gast&amp;pwd=gast">                        
-                            <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />                        
-                    </a>
-                    </strong>
-                </td>
-                <xsl:call-template name="get.placeHolder">
-                    <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
-                    <xsl:with-param name="seperatorChar" select="$seperatorChar" />
-                </xsl:call-template>
-                <td>
-                    <strong>
-                    <a href="{$loginURL}">                        
-                            <xsl:value-of select="i18n:translate('component.userlogin.titles.pageTitle.login')" />                        
-                    </a>
-                    </strong>
-                </td>
-            </xsl:otherwise>
-        </xsl:choose>
+        <td>
+          <strong>
+            <xsl:choose>
+              <xsl:when test="$CurrentUser='gast'">
+                <a href="{$loginURL}">
+                  <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a href="{$ServletsBaseURL}logout">
+                  <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </strong>
+        </td>
     </xsl:template>
 
     <!-- ================================================================================= -->
