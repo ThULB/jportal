@@ -3,15 +3,14 @@ TOC
 1. LICENSE
 2. REQUIREMENTS
 3. GETTING SOURCES
-4. PREPERATION 
-5. CONFIGURATION
-6. INSTALLATION
-    6.1 NEW INSTALLATION
-    6.2 REINSTALLATION
-7. RUNNING    
-8. DEFAULT USERS
-9. RIGHTS MANAGEMENT
-10. CREATE NEW JOURNAL
+4. CONFIGURATION
+5. INSTALLATION
+    5.1 NEW INSTALLATION
+    5.2 REINSTALLATION
+6. RUNNING    
+7. DEFAULT USERS
+8. RIGHTS MANAGEMENT
+9. CREATE NEW JOURNAL
 ===========================================================================================================================
 
 1. LICENSE
@@ -24,96 +23,79 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 ======================================
 - Subversion-Client
-- JAVA 5 JDK
-- ANT
+- JAVA 6 JDK
+- MAVEN
 
 3. GETTING SOURCES
 ======================================
 ======================================
+svn checkout https://server.mycore.de/svn/docportal/trunk docportal
+svn checkout https://server.mycore.de/svn/mycore/trunk mycore
 svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 
-4. PREPERATION 
+4. CONFIGURATION  
 ======================================
 ======================================
-- Setting system environment variables (this is optional)
--- $MYCORE_HOME to <Installation-Directory>/jportal/mycore
--- $DOCPORTAL_HOME to <Installation-Directory>/jportal/application
+Setting system environment variables (this is optional)
+  - $JPORTAL_HOME to <Installation-Directory>/jportal
+  - $DOCPORTAL_HOME to <Installation-Directory>/docportal
 
-- Create JPortal properties 
--- cp $DOCPORTAL_HOME/config/mycore.properties.private.template $DOCPORTAL_HOME/config/mycore.properties.private
--- cp $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml.template $DOCPORTAL_HOME/config/hibernate/hibernate.cfg.xml
+Copy templates
+  - cp $DOCPORTAL_HOME/config/mycore.private.properties.template $DOCPORTAL_HOME/config/mycore.private.properties
+  - cp $DOCPORTAL_HOME/config/pom.xml.template $DOCPORTAL_HOME/config/pom.xml
 
-- Imaging component and Image viewer (this is optional)
--- depends on JAI library
--- can be downloaded from https://jai.dev.java.net/
--- put the library files into $MYCORE_HOME/lib
--- the component will be activated automatically, no property setting needed 
-   just the existence of the library files in $MYCORE_HOME/lib
+Setting properties in mycore.private.properties
+  - MCR.basedir=<$DOCPORTAL_HOME>
+  - MCR.Modules.Application=common,maven
+  - MCR.Components.Exclude=migration20-21,iview
 
+Add in pom.xml below the <dependencies> element
+  <dependency>
+    <groupId>fsu.thulb</groupId>
+    <artifactId>jportal_mcr_module</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <type>jar</type>
+    <scope>compile</scope>
+  </dependency>
 
-5. CONFIGURATION
+5. INSTALLATION
 ======================================
 ======================================
-- Customize jportal system 
--- vi $DOCPORTAL_HOME/config/mycore.properties.private
---- set $MCR.basedir to your <$DOCPORTAL_HOME>
---- set $MCR.FileUpload.IP to your local running server's IP address
---- add module "JPortal" to system, by setting the property "MCR.Modules.Application" to the value "jportal"
 
-
-6. INSTALLATION
-======================================
-======================================
-6.1 NEW INSTALLATION
+5.1 NEW INSTALLATION
 ==================================================
-  svn docportal from mycore.de
-  
-  cd jportal: mvn install 
-  
-  docportal config: mycore.private.properties
-  					add in pom.xml:
-  					<dependency>
-    					<groupId>fsu.thulb</groupId>
-    					<artifactId>jportal_mcr_module</artifactId>
-    					<version>0.0.1-SNAPSHOT</version>
-    					<type>jar</type>
-    					<scope>compile</scope>
-    				</dependency>
-  
-  					MCR.Modules.Application=common,maven    <-- maven module is important
-  					MCR.Components.Exclude=migration20-21,iview  <-- exclude iview, now using iview2
-         			ant clean clean.data; ant resolve create.jar create.scripts
-         			start DB
-         			ant create.users create.default-rules create.class create.webapp
-         			start jetty
-         
-         
-6.2 REINSTALLATION - already installed application 
+cd $JPORTAL_HOME
+mvn install
+cd $DOCPORTAL_HOME
+ant clean clean.data; ant resolve create.jar create.scripts
+build/bin/hsqldbstart &
+ant create.users create.default-rules create.class create.webapp
+
+5.2 REINSTALLATION - already installed application 
 ==================================================
-jportal: update jportal
-jportal: mvn clean install
-go to docportal
-docportal: ant resolve create.jar create.webapp
+cd $JPORTAL_HOME
+mvn clean install
+cd $DOCPORTAL_HOME
+ant resolve create.jar create.webapp
 
-
-7. RUNNING
+6. RUNNING
 ======================================
 ======================================          
-Once you have followed all steps from chapter 6 you can run the server and watch JPortal in action
+Once you have followed all steps from chapter 5 you can run the server and watch JPortal in action
 All you have to do is 
 - make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
 - $DOCPORTAL_HOME/build/bin/jettystart.sh
 - Go to web browser and visit http://localhost:8291
 
 
-8. DEFAULT USERS
+7. DEFAULT USERS
 ======================================
 ======================================
 By default the installation creates a super user called "administrator" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
 see what this user is allowed to do. 
 
 
-9. RIGHTS MANAGEMENT
+8. RIGHTS MANAGEMENT
 ======================================
 ======================================          
 Following groups will created by default:
@@ -153,7 +135,7 @@ Following groups will created by default:
     - 
 
          
-10. CREATE NEW JOURNAL
+9. CREATE NEW JOURNAL
 ======================================
 ======================================
    1. Go to JPortal web application in your browser
