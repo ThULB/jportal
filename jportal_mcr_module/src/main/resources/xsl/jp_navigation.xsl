@@ -14,7 +14,7 @@
                 </xsl:variable>
                 <xsl:if test="$readAccess='true'">
                     <img src="{$WebApplicationBaseURL}images/naviMenu/greenArrow.gif" />
-                    <xsl:call-template name="addLink" />
+                    <xsl:call-template name="jp_addLink" />
                     <br />
                 </xsl:if>
             </xsl:for-each>
@@ -37,7 +37,7 @@
                         <xsl:choose>
                             <xsl:when test="position()!=last()">
                                 <xsl:value-of select="' > '" />
-                                <xsl:call-template name="addLink" />
+                                <xsl:call-template name="jp_addLink" />
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:copy-of select="' > '" />
@@ -85,11 +85,11 @@
                                 <xsl:choose>
                                     <xsl:when test="@href = $browserAddress">
                                         <span class="marked">
-                                            <xsl:call-template name="addLink" />
+                                            <xsl:call-template name="jp_addLink" />
                                         </span>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:call-template name="addLink" />
+                                        <xsl:call-template name="jp_addLink" />
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </td>
@@ -249,7 +249,7 @@
                                         <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:1px; height:1px" alt="" title=""></img>
                                     </td>
                                     <th colspan="{$depth + 1}" style="text-align:left">
-                                        <xsl:call-template name="addLink" />
+                                        <xsl:call-template name="jp_addLink" />
                                     </th>
                                 </tr>
                                 <xsl:variable name="constrainPopUp">
@@ -259,7 +259,7 @@
                                 </xsl:variable>
                                 <!-- sub links, if below this MAIN menu point the searched link is located -->
                                 <xsl:if test="current()[@href = $browserAddress ] or descendant::item[@href = $browserAddress ] or $constrainPopUp='true'  ">
-                                    <xsl:call-template name="createTree">
+                                    <xsl:call-template name="jp_createTree">
                                         <xsl:with-param name="depth" select="$depth" />
                                         <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
                                         <xsl:with-param name="columnWidthIcon" select="$columnWidthIcon" />
@@ -470,7 +470,7 @@
                     </xsl:choose>
                 </xsl:variable>
                 <!-- END OF: calculate kind of link to display the right icon -> $linkKind -->
-                <xsl:call-template name="addMenuRow">
+                <xsl:call-template name="jp_addMenuRow">
                     <xsl:with-param name="linkKind" select="$linkKind" />
                     <xsl:with-param name="depth" select="$depth" />
                     <xsl:with-param name="menuPointHeigth" select="$menuPointHeigth" />
@@ -561,13 +561,13 @@
                     <xsl:choose>
                         <xsl:when test="$linkKind = 'current' or $linkKind = 'current_popedUp'">
                             <span class="marked">
-                                <xsl:call-template name="addLink">
+                                <xsl:call-template name="jp_addLink">
                                     <xsl:with-param name="linkKind" select="$linkKind" />
                                 </xsl:call-template>
                             </span>
                         </xsl:when>
                         <xsl:otherwise>
-                            <xsl:call-template name="addLink"></xsl:call-template>
+                            <xsl:call-template name="jp_addLink"></xsl:call-template>
                         </xsl:otherwise>
                     </xsl:choose>
                 </td>
