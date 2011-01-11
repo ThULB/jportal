@@ -301,6 +301,7 @@
 #detailed-derivate-div {
     width: 153px;
     float: right;
+    padding-right: 153px;
 }
 #detailed-xmlbutton{
     line-height: 0px;
@@ -336,7 +337,7 @@
     width: 145px;
 }
 
-#detailed-contentsimg {
+#detailed-contentsimg1 {
     text-align: center;
     width: 100%;
 }
