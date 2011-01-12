@@ -7,7 +7,6 @@
   <xsl:include href="jp-module-iview.xsl" />
   <xsl:include href="jp_objectView.xsl" />
   <xsl:include href="jp_derivateView.xsl" />
-  <xsl:include href="jp_directory.xsl"/>
 
   <xsl:variable name="journalID">
     <xsl:call-template name="get.journalID" />
