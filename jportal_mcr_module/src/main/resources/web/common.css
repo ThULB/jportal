@@ -299,9 +299,9 @@
 }
 
 #detailed-derivate-div {
-    width: 153px;
+    width: 256px;
     float: right;
-    padding-right: 153px;
+    margin-right: 40px;
 }
 #detailed-xmlbutton{
     line-height: 0px;

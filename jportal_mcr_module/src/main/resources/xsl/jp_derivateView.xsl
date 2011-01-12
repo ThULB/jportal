@@ -145,13 +145,14 @@
 											select="concat('/',$derivmain)" /> </xsl:call-template> -->
 									</xsl:when>
 									<xsl:otherwise>
-										<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" />
+										<a href="{$href}" >
+										<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0"/>
+										</a>
 									</xsl:otherwise>
 								</xsl:choose>
 								<br />
 							</td>
 						</tr>
-						<xsl:if test="$editAccess = 'true'">
 							<tr id="detailed-contents">
 								<td>
 									<xsl:choose>
@@ -166,6 +167,7 @@
 													</xsl:otherwise>
 												</xsl:choose>
 											</xsl:variable>
+                                            <xsl:value-of select="$label" />
 										</xsl:when>
 										<xsl:otherwise>
 											Zugriff gesperrt!
@@ -173,12 +175,13 @@
 									</xsl:choose>
 									<xsl:text>
                                 </xsl:text>
+						<xsl:if test="$editAccess = 'true'">
 									<a href="{$derivbase}">
-										<xsl:value-of select="'Details &gt;&gt; '" />
+										<xsl:value-of select="', Details &gt;&gt; '" />
 									</a>
+						</xsl:if>
 								</td>
 							</tr>
-						</xsl:if>
 					</table>
 				</xsl:when>
 				<xsl:otherwise>
@@ -278,6 +281,8 @@
 				<xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat'),' (',$typeOfFile,') ')" />
 			</xsl:when>
 			<xsl:otherwise>
+				<xsl:value-of select="$label" />
+				<!-- 
 				<xsl:choose>
 					<xsl:when test="$CurrentLang='de'">
 						<xsl:value-of select="concat(' ',$label,' ',i18n:translate('metaData.digitalisat.show'),' ')" />
@@ -286,6 +291,7 @@
 						<xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat.show'),' ',$label,' ')" />
 					</xsl:otherwise>
 				</xsl:choose>
+				 -->
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
