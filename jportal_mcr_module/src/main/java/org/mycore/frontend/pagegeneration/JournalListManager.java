@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.xml.bind.JAXBException;
+
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -20,6 +22,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.pagegeneration.JournalListCfg.JournalListDef;
+import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
@@ -27,6 +30,7 @@ import org.mycore.services.fieldquery.MCRResults;
 import fsu.jportal.backend.impl.JournalListInIFS;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
+import fsu.thulb.jaxb.JaxbTools;
 
 public class JournalListManager {
     private static JournalListManager instance;
@@ -107,10 +111,24 @@ public class JournalListManager {
 
         for (JournalListDef journalListDef : listDefs) {
             MCRResults results = MCRQueryManager.search(journalListDef.getQuery());
+            writeJournalList(journalListDef);
             for (MCRHit mcrHit : results) {
                 MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrHit.getID()));
                 updateJournal(mcrObj);
             }
+        }
+    }
+
+    private void writeJournalList(JournalListDef journalListDef) throws FileNotFoundException {
+        JournalList journalList = new JournalList();
+        String type = journalListDef.getType();
+        journalList.setType(type);
+        journalList.setUrl(MCRServlet.getBaseURL()+"rsc/journalList/"+type);
+        try {
+            JaxbTools.marschall(journalList, new FileOutputStream(journalListLocation + journalListDef.getFileName()));
+        } catch (JAXBException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 

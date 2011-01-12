@@ -142,6 +142,8 @@ public class JournalList {
     private String mode;
 
     private String type;
+    
+    private String url;
 
     private Map<String, Section> sections;
 
@@ -254,5 +256,14 @@ public class JournalList {
 
     public Map<String, Section> getSections() {
         return sections;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @XmlAttribute
+    public String getUrl() {
+        return url;
     }
 }
