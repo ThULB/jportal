@@ -202,6 +202,10 @@ public class JournalList {
     }
 
     public boolean delJournal(String journalID) {
+        if (getSections() == null) {
+            return false;
+        }
+
         Collection<Section> values = getSections().values();
         for (Section section : values) {
             if(section.delJournal(journalID)){
