@@ -35,10 +35,6 @@
                         <label xml:lang="de">Bestandsnachweisen</label>
                     </item>
                 </item>
-                <item href="/content/main/search/forJournals/browseTimeBar.xml" type="intern" target="_self" style="normal" replaceMenu="false"
-                    constrainPopUp="false">
-                    <label xml:lang="de">Chronologische Sicht</label>
-                </item>
                 <item href="/editor_form_search-jpjournal.xml?XSL.editor.source.new=true" type="extern" target="_self" style="normal" replaceMenu="false"
                     constrainPopUp="false">
                     <label xml:lang="de">Expertensuche</label>
