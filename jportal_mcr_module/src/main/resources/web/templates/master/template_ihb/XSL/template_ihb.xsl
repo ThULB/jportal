@@ -37,13 +37,16 @@
                         </div>
                         <div id="banner_right">
                             <map name="uni_ilmenau">
-                                <area shape="rect" coords="8,5,243,140"
+                                <area shape="rect" coords="2,5,183,140"
+                                    href="http://zs.thulb.uni-jena.de/content/main/journals/journal_645.xml?XSL.lastPage.SESSION=/content/main/journals/journal_645.xml"
+                                    alt="Universitätsnachrichten Ilmenau" />
+                                <area shape="rect" coords="187,5,366,140"
                                     href="http://zs.thulb.uni-jena.de/content/main/journals/iun.xml?XSL.lastPage.SESSION=/content/main/journals/iun.xml"
                                     alt="Ilmenauer Uni-Nachrichten" />
-                                <area shape="rect" coords="252,5,489,140"
+                                <area shape="rect" coords="372,5,551,140"
                                     href="http://zs.thulb.uni-jena.de/content/main/journals/ihb.xml?XSL.lastPage.SESSION=/content/main/journals/ihb.xml"
                                     alt="Ilmenauer Hochschulblatt" />
-                                <area shape="rect" coords="498,5,735,140"
+                                <area shape="rect" coords="554,5,735,140"
                                     href="http://zs.thulb.uni-jena.de/content/main/journals/inh.xml?XSL.lastPage.SESSION=/content/main/journals/inh.xml"
                                     alt="Neue Hochschule" />
                             </map>
