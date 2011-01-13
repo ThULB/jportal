@@ -822,7 +822,7 @@
 									<a id="obj_del"
 										href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=exportAndDelete')">
 										<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
-											title="{i18n:translate('swf.object.delObject')}" />
+											title="{i18n:translate('component.swf.object.delObject')}" />
 									</a>
 								</xsl:when>
 								<!-- not deleted -->
@@ -831,14 +831,14 @@
 										<a
 											href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
 											<img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
-												title="{i18n:translate('swf.object.editObject')}" />
+												title="{i18n:translate('component.swf.object.editObject')}" />
 										</a>
 									</xsl:if>
 									<xsl:if test="acl:checkPermission($id,'deletedb')">
 										<a id="obj_del"
 											href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
 											<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
-												title="{i18n:translate('swf.object.delObject')}" />
+												title="{i18n:translate('component.swf.object.delObject')}" />
 										</a>
 									</xsl:if>
 								</xsl:otherwise>
@@ -918,12 +918,12 @@
                                       <a
                                           href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
                                           <img src="{$WebApplicationBaseURL}images/workflow_objedit.gif"
-                                          title="{i18n:translate('swf.object.editObject')}" /> </a>
+                                          title="{i18n:translate('component.swf.object.editObject')}" /> </a>
                                      
 										<a
 											href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
 											<img src="{$WebApplicationBaseURL}images/workflow_acledit.gif"
-												title="{i18n:translate('swf.object.editACL')}" />
+												title="{i18n:translate('component.swf.object.editACL')}" />
 										</a>
 										<xsl:if test="$accessnbn = 'true'">
 											<a
@@ -935,14 +935,14 @@
 										<a
 											href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
 											<img src="{$WebApplicationBaseURL}images/workflow_deradd.gif"
-												title="{i18n:translate('swf.derivate.addDerivate')}" />
+												title="{i18n:translate('component.swf.derivate.addDerivate')}" />
 										</a>
 									</xsl:if>
 									<xsl:if test="acl:checkPermission($id,'deletedb')">
 										<a
 											href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
 											<img src="{$WebApplicationBaseURL}images/workflow_objdelete.gif"
-												title="{i18n:translate('swf.object.delObject')}" />
+												title="{i18n:translate('component.swf.object.delObject')}" />
 										</a>
 									</xsl:if>
 								</xsl:otherwise>
@@ -1570,7 +1570,7 @@
 															</input>
 															<input type="image"
 																src="{$WebApplicationBaseURL}images/workflow_deredit.gif"
-																title="{i18n:translate('swf.derivate.editDerivate')}" />
+																title="{i18n:translate('component.swf.derivate.editDerivate')}" />
 														</form>
 													</td>
                                                     <xsl:if test="$derivateWithURN=false() and urn:isAllowedObjectForURNAssignment($obj_id)">
@@ -1625,7 +1625,7 @@
                                                           </input>
                                                           <input name="type" type="hidden" value="{$type}" />
                                                           <input name="todo" type="hidden" value="sdelder" />
-                                                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="{i18n:translate('swf.derivate.delDerivate')}" onClick="return confirmFormDelete();" />
+                                                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="{i18n:translate('component.swf.derivate.delDerivate')}" onClick="return confirmFormDelete();" />
                                                         </form>
                                                       </td>
                                                     </xsl:if>

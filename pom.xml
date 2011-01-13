@@ -1,17 +1,90 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<artifactId>mycore-parent</artifactId>
 		<groupId>org.mycore</groupId>
 		<version>9-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
-  <groupId>fsu.thulb</groupId>
-  <artifactId>jportal</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>jportal</name>
-  <description>JPortal project</description>
-  <modules>
-  	<module>jportal_mcr_module</module>
-  </modules>
+	<groupId>fsu.thulb</groupId>
+	<artifactId>jportal</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>jportal</name>
+	<description>JPortal project</description>
+	<modules>
+		<module>jportal_mcr_module</module>
+	</modules>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>Maven Central</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>Java Net</id>
+			<url>http://download.java.net/maven/2/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>MyCoRe HQ</id>
+			<url>http://www.mycore.de/artifactory/mycore-releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>MyCoRe HQ Snapshots</id>
+			<url>http://www.mycore.de/artifactory/mycore-snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>Maven Central</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>Java Net</id>
+			<url>http://download.java.net/maven/2/</url>
+		</repository>
+		<repository>
+			<id>MyCoRe HQ</id>
+			<url>http://www.mycore.de/artifactory/mycore-releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>MyCoRe HQ Snapshots</id>
+			<url>http://www.mycore.de/artifactory/mycore-snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<distributionManagement>
+		<repository>
+			<id>MyCoRe HQ</id>
+			<name>MyCoRe HQ-releases</name>
+			<url>http://www.mycore.de/artifactory/libs-releases-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>MyCoRe HQ</id>
+			<name>MyCoRe HQ-snapshots</name>
+			<url>http://www.mycore.de/artifactory/libs-snapshots-local</url>
+		</snapshotRepository>
+		<!-- mycore site -->
+		<site>
+			<id>MyCoRe HQ</id>
+			<name>MyCoRe HQ-sites</name>
+			<url>scp://server.mycore.de/mcr/mycore.de/generated/</url>
+		</site>
+	</distributionManagement>
 </project>
