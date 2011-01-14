@@ -57,6 +57,26 @@ Add in pom.xml below the <dependencies> element
     <type>jar</type>
     <scope>compile</scope>
   </dependency>
+  
+For DB2 users, the driver and licence jar have to be installed, eG.
+  mvn install:install-file -Dfile=$PATH_TO_LIB/db2jcc.jar -DgroupId=com.ibm.db2 
+  	-DartifactId=db2jcc -Dversion=9.1 -Dpackaging=jar
+  
+  mvn install:install-file -Dfile=$PATH_TO_LIB/db2jcc_license_cu.jar 
+  	-DgroupId=com.ibm.db2 -DartifactId=db2jcc_license_cu -Dversion=9.1 -Dpackaging=jar
+  	
+  and add following into pom.xml
+  <dependency>
+  	<groupId>com.ibm.db2</groupId>
+    <artifactId>db2jcc</artifactId>
+   	<version>9.1</version>
+  </dependency>
+  <dependency>
+  	<groupId>com.ibm.db2</groupId>
+    <artifactId>db2jcc_license_cu</artifactId>
+    <version>9.1</version>
+  </dependency>
+  
 
 5. INSTALLATION
 ======================================
