@@ -21,9 +21,13 @@ import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRXMLHelper;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.cli.MCRObjectTools;
+import org.mycore.tools.MCRObjectFactory;
 import org.xml.sax.SAXParseException;
 
 public class MCRJPortalJournalContextForWebpages {
@@ -164,10 +168,15 @@ public class MCRJPortalJournalContextForWebpages {
         } catch (IOException e1) {
             e1.printStackTrace();
         }
+
         // save journal object in mycore
         Document newJournalXML = new Document().addContent(journalObjectXML.detach());
-        MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(journalID), newJournalXML, new Date());
-        
+        MCRObject journal = new MCRObject(newJournalXML);
+        try {
+            MCRMetadataManager.update(journal);
+        } catch(MCRActiveLinkException ale) {
+            LOGGER.error("while update journal", ale);
+        }
         LOGGER.info("updated journal object");
     }
 
