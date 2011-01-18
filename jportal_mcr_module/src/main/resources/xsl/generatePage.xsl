@@ -25,7 +25,7 @@
     </xsl:variable>
     <!-- assign right browser address -->
     <xsl:variable name="browserAddress">
-        <xsl:call-template name="getBrowserAddress" />
+        <xsl:call-template name="jp_getBrowserAddress" />
     </xsl:variable>
 
     <!-- look for appropriate template entry and assign -> $template -->
