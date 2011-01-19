@@ -80,7 +80,7 @@
         <item href="/content/main/jpEditors.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
             <label xml:lang="de">Editoren</label>
             <label xml:lang="en">Editors</label>
-            <item href="/servlets/MCRStartEditorServlet?type=jpjournal&amp;step=author&amp;todo=wnewobj&amp;layout=admin" type="extern" target="_self" style="normal"
+            <item href="/servlets/MCRStartEditorServlet?type=jpjournal&amp;step=author&amp;todo=wnewobj" type="extern" target="_self" style="normal"
                 replaceMenu="false">
                 <label xml:lang="de">neue Zeitschrift</label>
                 <label xml:lang="en">new journal</label>
