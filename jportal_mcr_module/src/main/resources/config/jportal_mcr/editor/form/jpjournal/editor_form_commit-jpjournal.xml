@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><MyCoReWebPage>
-  <section title="Zeitschrift bearbeiten" xml:lang="de"/>
-  <section title="edit journal" xml:lang="en"/>
+  <section title="Title(de):commit-jpjournal-admin" xml:lang="de"/>
+  <section title="Title(en):commit-jpjournal-admin" xml:lang="en"/>
   <section xml:lang="all">
     <p class="editorform">
       <editor id="editor-jpjournal">
@@ -14,10 +14,10 @@
         </validationMessage>
 
         <target type="servlet" name="MCRJPortalCheckCommitDataServlet" method="post" format="xml"/>
-        <components xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-jpjournal" var="/mycoreobject">
+        <components xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-jpjournal-admin" var="/mycoreobject">
 
           <include uri="webapp:editor/editor-jpjournal.xml"/>
-          <panel id="editor-jpjournal">
+          <panel id="editor-jpjournal-admin">
             <cell row="1" col="1" anchor="NORTHWEST" ref="edit-jpjournal"/>
           </panel>
 
