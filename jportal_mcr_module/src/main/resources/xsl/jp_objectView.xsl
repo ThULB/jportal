@@ -881,17 +881,8 @@
 			<xsl:choose>
 				<xsl:when
 					test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
-                <xsl:variable name="type">
-                <xsl:choose>
-                  <xsl:when test="acl:checkPermission('modify-group')">
-                    <xsl:value-of select="concat(substring-before(substring-after($id,'_'),'_'),'&amp;layout=admin&amp;')" />
-                   </xsl:when>
-                   <xsl:otherwise>
-                      <xsl:value-of select="substring-before(substring-after($id,'_'),'_')" />
-                   </xsl:otherwise>
-                  </xsl:choose>
-                </xsl:variable>
-                                      
+					<xsl:variable name="type"
+						select="substring-before(substring-after($id,'_'),'_')" />
 					<tr>
 						<td class="metaname">
 							<xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
