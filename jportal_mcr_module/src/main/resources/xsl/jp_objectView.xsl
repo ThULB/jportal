@@ -1018,7 +1018,6 @@
 											<xsl:with-param name="sortOrder" select="'ascending'" />
 											<xsl:with-param name="printCurrent" select="'true'" />
 											<xsl:with-param name="linkCurrent" select="'true'" />
-											<xsl:with-param name="layout" select="'false'" />
 											<xsl:with-param name="node" select="$art" />
 										</xsl:call-template>
 									</li>
@@ -1087,7 +1086,6 @@
 											<xsl:with-param name="sortOrder" select="'ascending'" />
 											<xsl:with-param name="printCurrent" select="'true'" />
 											<xsl:with-param name="linkCurrent" select="'true'" />
-											<xsl:with-param name="layout" select="'false'" />
 											<xsl:with-param name="node" select="$cal" />
 										</xsl:call-template>
 									</li>
@@ -1120,105 +1118,33 @@
 	<!--
 		============================================================================================================================
 	-->
-	<xsl:template name="printHistoryRow">
-		<xsl:param name="underline" select="'false'" />
-		<xsl:param name="sortOrder" select="'descending'" />
-		<xsl:param name="printCurrent" select="'true'" />
-		<xsl:param name="linkCurrent" select="'false'" />
-		<xsl:param name="layout" select="'false'" />
-		<xsl:param name="node" select="." />
+  <xsl:template name="printHistoryRow">
+    <xsl:param name="sortOrder" select="'descending'" />
+    <xsl:param name="printCurrent" select="'true'" />
+    <xsl:param name="linkCurrent" select="'false'" />
+    <xsl:param name="node" select="." />
 
-		<xsl:variable name="selectPresentLang">
-			<xsl:call-template name="selectPresentLang">
-				<xsl:with-param name="nodes"
-					select="$node/mycoreobject/metadata/maintitles/maintitle[@inherited=0]" />
-			</xsl:call-template>
-		</xsl:variable>
+    <xsl:variable name="objectID" select="xalan:nodeset($node)/mycoreobject/@ID" />
 
-		<xsl:variable name="objectID"
-			select="xalan:nodeset($node)/mycoreobject/@ID" />
-		<xsl:choose>
-			<xsl:when test="$layout='true'">
-				<span id="leaf-headline2">
-					<xsl:if
-						test="contains(/mycoreobject/@ID,'jparticle') or
-                                contains(/mycoreobject/@ID,'jpvolume') or
-                                contains(/mycoreobject/@ID,'jpjournal') or
-                                contains($objectID,'jparticle') or
-                                contains($objectID,'jpvolume') or
-                                contains($objectID,'jpjournal')">
-						<xsl:choose>
-							<xsl:when test="$sortOrder='descending'">
-								<xsl:for-each
-									select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang]">
-									<xsl:sort select="@inherited" order="descending" />
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder" />
-										<xsl:with-param name="printCurrent2" select="$printCurrent" />
-										<xsl:with-param name="linkCurrent" select="$linkCurrent" />
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:for-each
-									select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang]">
-									<xsl:sort select="@inherited" order="ascending" />
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder" />
-										<xsl:with-param name="printCurrent2" select="$printCurrent" />
-										<xsl:with-param name="linkCurrent" select="$linkCurrent" />
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
-				</span>
-				<xsl:if test="$underline='true'">
-					<table>
-						<tr>
-							<td id="leaf-headline1">_________________________________________________</td>
-						</tr>
-					</table>
-				</xsl:if>
-			</xsl:when>
-			<xsl:otherwise>
-				<span id="leaf-headline2">
-					<xsl:if
-						test="contains(/mycoreobject/@ID,'jparticle') or
+    <span id="leaf-headline2">
+      <xsl:if test="contains(/mycoreobject/@ID,'jparticle') or
                                 contains(/mycoreobject/@ID,'jpvolume') or
                                 contains(/mycoreobject/@ID,'jpjournal') or
                                 contains($objectID,'jpjournal') or
                                 contains($objectID,'jpvolume') or
                                 contains($objectID,'jparticle')">
-						<xsl:choose>
-							<xsl:when test="$sortOrder='descending'">
-								<xsl:for-each
-									select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang or @xml:lang=$selectPresentLang]">
-									<xsl:sort select="@inherited" order="descending" />
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder" />
-										<xsl:with-param name="printCurrent2" select="$printCurrent" />
-										<xsl:with-param name="linkCurrent" select="$linkCurrent" />
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:for-each
-									select="$node/mycoreobject/metadata/maintitles/maintitle[@xml:lang=$CurrentLang or @xml:lang=$selectPresentLang]">
-									<xsl:sort select="@inherited" order="ascending" />
-									<xsl:call-template name="printHistoryRow.rows">
-										<xsl:with-param name="sortOrder" select="$sortOrder" />
-										<xsl:with-param name="printCurrent2" select="$printCurrent" />
-										<xsl:with-param name="linkCurrent" select="$linkCurrent" />
-									</xsl:call-template>
-								</xsl:for-each>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
-				</span>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+        <xsl:for-each select="$node/mycoreobject/metadata/maintitles/maintitle">
+          <xsl:sort select="@inherited" order="{$sortOrder}" />
+          <xsl:call-template name="printHistoryRow.rows">
+            <xsl:with-param name="sortOrder" select="$sortOrder" />
+            <xsl:with-param name="printCurrent2" select="$printCurrent" />
+            <xsl:with-param name="linkCurrent" select="$linkCurrent" />
+          </xsl:call-template>
+        </xsl:for-each>
+      </xsl:if>
+    </span>
+
+  </xsl:template>
 
 	<!--
 		============================================================================================================================
