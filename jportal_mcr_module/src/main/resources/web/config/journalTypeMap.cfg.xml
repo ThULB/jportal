@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<journalListTypeMap>
+    <typeMap>
+        <entry>
+            <key>online</key>
+            <value>journal</value>
+        </entry>
+        <entry>
+            <key>historical</key>
+            <value>journal</value>
+        </entry>
+    </typeMap>
+</journalListTypeMap>

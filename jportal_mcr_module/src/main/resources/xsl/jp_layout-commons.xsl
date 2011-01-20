@@ -29,6 +29,36 @@
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
         
+        <!-- 
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript">google.load("jquery", "1");</script>
+		<script type="text/javascript"> 
+			jQuery(document).bind("toolbarloaded", function(e) {
+			//just run if a given viewType is created
+			if (e.model.id != "mainTb") { return;}
+			var toolbarModel=e.model;
+			var i=toolbarModel.getElementIndex('spring');
+
+			var buttonSet = new ToolbarButtonsetModel("softLink");
+			toolbarModel.addElement(buttonSet,i);
+			var button = new ToolbarButtonModel("softLink", {'type': 'buttonDefault'}, {'label': "softLink", 'text': false, 'icons': {primary : 'paperClip-icon'}}, "Hello World", true, false);
+			buttonSet.addButton(button);
+			//attach to events of view
+			jQuery.each(e.getViews(), function(index, view) {
+				view.events.attach(function (sender, args) {
+					if (args.type == "press") {
+						if (args.parentName == buttonSet.elementName) {
+							if (args.elementName == buttonSet.elementName) {
+								alert("Hello World!");
+							}
+						}
+					}
+				});
+			});
+			}); 
+		</script>
+         -->
+		
         <xsl:variable name="activeLinkFile" select="file:new(concat($WebApplicationBaseURL,'templates/master/',$nameOfTemplate,'/JS/activelink.js'))" />
         
         <xsl:if test="file:exists($activeLinkFile)">

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 
 import javax.xml.bind.JAXBException;
 
@@ -96,6 +97,12 @@ public class JournalListManagerTest {
         @Override
         public String getJournalListLocation() {
             return null;
+        }
+
+        @Override
+        public String getJournalTypeMapLocation() {
+            URL typeMapRsc = getClass().getResource("/config/journalTypeMap.cfg.xml");
+            return typeMapRsc.getPath();
         }
         
     }

@@ -1,13 +1,19 @@
 package org.mycore.frontend.pagegeneration;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -27,6 +33,8 @@ import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
 
+import com.sun.xml.txw2.annotation.XmlElement;
+
 import fsu.jportal.backend.impl.JournalListInIFS;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
@@ -39,6 +47,8 @@ public class JournalListManager {
 
     private String journalListLocation;
 
+    private String journalTypeMapLocation;
+
     private JournalListManager() {
     }
 
@@ -46,10 +56,39 @@ public class JournalListManager {
         public JournalListCfg getJournalListCfg();
 
         public String getJournalListLocation();
+
+        public String getJournalTypeMapLocation();
+    }
+
+    @XmlRootElement
+    public static class JournalListTypeMap {
+        private Map<String, String> typeMap;
+
+        public void setTypeMap(Map<String, String> typeMap) {
+            this.typeMap = typeMap;
+        }
+
+        @XmlElement
+        public Map<String, String> getTypeMap() {
+            return typeMap;
+        }
+
+        public void addMap(String key, String val) {
+            if (typeMap == null) {
+                typeMap = new HashMap<String, String>();
+            }
+            typeMap.put(key, val);
+        }
+
+        public String getMap(String key) {
+            return typeMap.get(key);
+        }
     }
 
     private static class DefaultJournalListManagerCfg implements JournalListManagerCfg {
         private String cfgFileLocation;
+
+        private String typeMapFileLocation;
 
         private String journalListLocation;
 
@@ -58,6 +97,7 @@ public class JournalListManager {
             String baseDir = mcrConfiguration.getString("MCR.basedir");
             String webappDir = mcrConfiguration.getString("MCR.webappsDir", "build/webapps".replace("/", File.separator));
             cfgFileLocation = baseDir + "/build/webapps/config/journalList.cfg.xml".replace("/", File.separator);
+            typeMapFileLocation = baseDir + "/build/webapps/config/journalTypeMap.cfg.xml".replace("/", File.separator);
             journalListLocation = webappDir + "/content/main/".replace("/", File.separator);
         }
 
@@ -81,6 +121,11 @@ public class JournalListManager {
             return journalListLocation;
         }
 
+        @Override
+        public String getJournalTypeMapLocation() {
+            return typeMapFileLocation;
+        }
+
     }
 
     public static JournalListManager instance() {
@@ -92,6 +137,7 @@ public class JournalListManager {
             instance = new JournalListManager();
             instance.setJournalListLocation(cfg.getJournalListLocation());
             instance.setJournalListCfg(cfg.getJournalListCfg());
+            instance.setJournalTypeMapLocation(cfg.getJournalTypeMapLocation());
         }
 
         return instance;
@@ -123,7 +169,7 @@ public class JournalListManager {
         JournalList journalList = new JournalList();
         String type = journalListDef.getType();
         journalList.setType(type);
-        journalList.setUrl(MCRServlet.getBaseURL()+"rsc/journalList/"+type);
+        journalList.setUrl(MCRServlet.getBaseURL() + "rsc/journalList/" + type);
         try {
             JaxbTools.marschall(journalList, new FileOutputStream(journalListLocation + journalListDef.getFileName()));
         } catch (JAXBException e) {
@@ -149,12 +195,30 @@ public class JournalListManager {
             XpathValueReader xpathValueReader = new XpathValueReader(xml);
             String id = xpathValueReader.getValueForPath("/mycoreobject/@ID", new AttributeValue());
             String mainTitle = xpathValueReader.getValueForPath("/mycoreobject/metadata/maintitles/maintitle", new ElementValue());
-            String type = xpathValueReader.getValueForPath("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid", new AttributeValue());
-            
-            if(type == null){
+            String type = xpathValueReader.getValueForPath("/mycoreobject/metadata/contentClassis1/contentClassi1/@categid",
+                    new AttributeValue());
+
+            File typeMapFile = new File(getJournalTypeMapLocation());
+            if (typeMapFile.exists()) {
+                try {
+                    JournalListTypeMap typeMap = JaxbTools.unmarschall(new FileInputStream(typeMapFile),
+                            JournalListTypeMap.class);
+                    String mapToType = typeMap.getMap(type);
+                    
+                    if(mapToType != null){
+                        type = mapToType;
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (type == null) {
                 type = defaultType();
             }
-            
+
             if (mainTitle != null) {
                 Journal journal = new Journal(id, mainTitle);
                 new JournalListInIFS().addJournalToListOfType(type, journal);
@@ -164,39 +228,39 @@ public class JournalListManager {
         }
 
     }
-    
+
     private interface ValueRetrieval {
         String getValue(Object obj);
     }
-    
-    private class ElementValue implements ValueRetrieval{
+
+    private class ElementValue implements ValueRetrieval {
         @Override
         public String getValue(Object obj) {
             return ((Element) obj).getText();
         }
     }
-    
-    private class AttributeValue implements ValueRetrieval{
+
+    private class AttributeValue implements ValueRetrieval {
         @Override
         public String getValue(Object obj) {
             return ((Attribute) obj).getValue();
         }
     }
 
-    private class XpathValueReader{
+    private class XpathValueReader {
         private Document xml;
 
         public XpathValueReader(Document xml) {
             this.xml = xml;
         }
-        
-        public String getValueForPath(String path, ValueRetrieval valueRetrieval) throws JDOMException{
+
+        public String getValueForPath(String path, ValueRetrieval valueRetrieval) throws JDOMException {
             List nodes = XPath.selectNodes(xml, path);
-            
+
             if (nodes.size() > 0) {
                 return valueRetrieval.getValue(nodes.get(0));
             }
-            
+
             return null;
         }
     }
@@ -232,5 +296,13 @@ public class JournalListManager {
 
     public void updateJournal(MCRObject obj) {
         updateJournal(obj.createXML());
+    }
+
+    public void setJournalTypeMapLocation(String journalTypeMapLocation) {
+        this.journalTypeMapLocation = journalTypeMapLocation;
+    }
+
+    public String getJournalTypeMapLocation() {
+        return journalTypeMapLocation;
     }
 }
