@@ -16,7 +16,6 @@
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
     xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" 
     xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
-    xmlns:urn="xalan://org.fsu.jp.urn.URNXalanExtensions"
     exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxsl">
 
 	<xsl:param name="view.objectmetadata" select="'false'" />
@@ -1491,7 +1490,7 @@
 																title="{i18n:translate('component.swf.derivate.editDerivate')}" />
 														</form>
 													</td>
-                                                    <xsl:if test="$derivateWithURN=false() and urn:isAllowedObjectForURNAssignment($obj_id)">
+                                                    <xsl:if test="$derivateWithURN=false() and mcrxsl:isAllowedObjectForURNAssignment($obj_id)">
                                                       <td width="{$cellWidth}" valign="center" align="center">
                                                         <form method="get">
                                                           <xsl:attribute name="action">
