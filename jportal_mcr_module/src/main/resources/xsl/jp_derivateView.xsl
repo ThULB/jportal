@@ -4,7 +4,8 @@
 <!-- ===================================================================================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-	xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
+	xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+	xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
 
 	<xsl:variable name="readAccessForDerivates">
 		<xsl:call-template name="get.readAccessForDerivates">
@@ -145,43 +146,43 @@
 											select="concat('/',$derivmain)" /> </xsl:call-template> -->
 									</xsl:when>
 									<xsl:otherwise>
-										<a href="{$href}" >
-										<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0"/>
+										<a href="{$href}">
+											<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
 										</a>
 									</xsl:otherwise>
 								</xsl:choose>
 								<br />
 							</td>
 						</tr>
-							<tr id="detailed-contents">
-								<td>
-									<xsl:choose>
-										<xsl:when test="$readAccess4Derivates = 'true'">
-											<xsl:variable name="label">
-												<xsl:choose>
-													<xsl:when test="name() = 'ifsLink'">
-														<xsl:value-of select="concat($fileLabel, '(~)')" />
-													</xsl:when>
-													<xsl:otherwise>
-														<xsl:value-of select="$fileLabel" />
-													</xsl:otherwise>
-												</xsl:choose>
-											</xsl:variable>
-                                            <xsl:value-of select="$label" />
-										</xsl:when>
-										<xsl:otherwise>
-											Zugriff gesperrt!
-										</xsl:otherwise>
-									</xsl:choose>
-									<xsl:text>
+						<tr id="detailed-contents">
+							<td>
+								<xsl:choose>
+									<xsl:when test="$readAccess4Derivates = 'true'">
+										<xsl:variable name="label">
+											<xsl:choose>
+												<xsl:when test="name() = 'ifsLink'">
+													<xsl:value-of select="concat($fileLabel, '(~)')" />
+												</xsl:when>
+												<xsl:otherwise>
+													<xsl:value-of select="$fileLabel" />
+												</xsl:otherwise>
+											</xsl:choose>
+										</xsl:variable>
+										<xsl:value-of select="$label" />
+									</xsl:when>
+									<xsl:otherwise>
+										Zugriff gesperrt!
+									</xsl:otherwise>
+								</xsl:choose>
+								<xsl:text>
                                 </xsl:text>
-						<xsl:if test="$editAccess = 'true'">
+								<xsl:if test="$editAccess = 'true'">
 									<a href="{$derivbase}">
 										<xsl:value-of select="', Details &gt;&gt; '" />
 									</a>
-						</xsl:if>
-								</td>
-							</tr>
+								</xsl:if>
+							</td>
+						</tr>
 					</table>
 				</xsl:when>
 				<xsl:otherwise>
@@ -282,16 +283,9 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$label" />
-				<!-- 
-				<xsl:choose>
-					<xsl:when test="$CurrentLang='de'">
-						<xsl:value-of select="concat(' ',$label,' ',i18n:translate('metaData.digitalisat.show'),' ')" />
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat.show'),' ',$label,' ')" />
-					</xsl:otherwise>
-				</xsl:choose>
-				 -->
+				<!-- <xsl:choose> <xsl:when test="$CurrentLang='de'"> <xsl:value-of select="concat(' ',$label,' ',i18n:translate('metaData.digitalisat.show'),' 
+					')" /> </xsl:when> <xsl:otherwise> <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat.show'),' ',$label,' ')" /> </xsl:otherwise> 
+					</xsl:choose> -->
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -346,6 +340,66 @@
 			/> -->
 	</xsl:template>
 
+	<!-- common archive metadata templates -->
+	<xsl:template mode="printImageLink" match="/mycoreobject">
+		<xsl:param name="staticURL" />
+		<xsl:param name="layout" />
+		<xsl:param name="xmltempl" />
+		<xsl:variable select="substring-before(substring-after(./@ID,'_'),'_')" name="type" />
+		<xsl:variable name="suffix">
+			<xsl:if test="string-length($layout)&gt;0">
+				<xsl:value-of select="concat('&amp;layout=',$layout)" />
+			</xsl:if>
+		</xsl:variable>
+		<!-- <xsl:variable name="object-view-derivate" select="acl:checkPermission(./@ID,'view-derivate')" /> -->
+		<xsl:variable name="object-view-derivate" select="'true'" />
+		<xsl:if test="./structure/derobjects">
+			<xsl:if test="$objectHost = 'local'">
+				<xsl:for-each select="./structure/derobjects/derobject">
+					<xsl:variable select="@xlink:href" name="deriv" />
+					<xsl:variable name="isDisplayedEnabled" select="mcrxsl:isDisplayedEnabledDerivate($deriv)" />
+					<xsl:variable name="mayWriteDerivate" select="acl:checkPermission($deriv,'writedb')" />
+					<xsl:choose>
+						<xsl:when
+							test="acl:checkPermissionForReadingDerivate($deriv) and $object-view-derivate and ($isDisplayedEnabled = 'true' or $mayWriteDerivate)">
+							<xsl:variable name="firstSupportedFile">
+								<xsl:call-template name="iview2.getSupport">
+									<xsl:with-param select="$deriv" name="derivID" />
+								</xsl:call-template>
+							</xsl:variable>
+							<!-- MCR-IView ..start -->
+							<xsl:if test="$firstSupportedFile != ''">
+								<a>
+									<xsl:attribute name="href">
+<xsl:value-of
+										select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,'?jumpback=true&amp;maximized=true&amp;page=',$firstSupportedFile)" />
+</xsl:attribute>
+									<xsl:attribute name="title">
+<xsl:value-of select="i18n:translate('metaData.iView')" />
+</xsl:attribute>
+									<xsl:call-template name="iview2.getImageElement">
+										<xsl:with-param select="$deriv" name="derivate" />
+										<xsl:with-param select="$firstSupportedFile" name="imagePath" />
+									</xsl:call-template>
+								</a>
+							</xsl:if>
+							<!-- MCR - IView ..end -->
+						</xsl:when>
+						<xsl:otherwise>
+							<!-- don't display a message if there are hidden derivates (with attribute display="false") -->
+							<xsl:if test="$isDisplayedEnabled = 'true'">
+								<span>
+									<!-- Zugriff auf 'Abbildung' gesperrt -->
+									<xsl:value-of select="i18n:translate('metaData.derivateLocked',i18n:translate(concat('metaData.',$type,'.[derivates]')))" />
+								</span>
+							</xsl:if>
+
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:for-each>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
 
 	<!-- ===================================================================================================== -->
 	<xsl:template name="get.thumbnailSupport">

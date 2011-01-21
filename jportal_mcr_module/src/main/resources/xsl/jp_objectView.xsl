@@ -1409,6 +1409,7 @@
 														select="$derivate/mycorederivate/derivate/externals">
 														<xsl:with-param name="objID" select="$obj_id" />
 													</xsl:apply-templates>
+<!--													<xsl:apply-templates mode="printImageLink"/>-->
 												</td>
 											</tr>
 											<tr height="30px">
