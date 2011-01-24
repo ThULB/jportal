@@ -4,8 +4,8 @@
 <!-- ===================================================================================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-	xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-	xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
+	xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl"
+	xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
 
 	<xsl:variable name="readAccessForDerivates">
 		<xsl:call-template name="get.readAccessForDerivates">
@@ -75,6 +75,17 @@
 				<xsl:call-template name="iview.getSupport.hack">
 					<xsl:with-param name="derivid_2" select="$derivid" />
 					<xsl:with-param name="mainFile" select="$derivmain" />
+					<xsl:with-param name="mcrObjId">
+						<xsl:choose>
+							<xsl:when test="name() = 'ifsLink'">
+								<xsl:value-of select="document(concat('mcrobject:',$derivid))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:value-of select="$objID"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:with-param>
+					<xsl:with-param name="type" select="name()" />
 				</xsl:call-template>
 			</xsl:variable>
 			<xsl:variable name="href">
@@ -139,11 +150,26 @@
 							<td id="detailed-contentsimgpadd">
 								<xsl:choose>
 									<xsl:when test="($supportedMainFile!='')">
-										<xsl:call-template name="derivateView">
-											<xsl:with-param name="derivateID" select="../../@ID" />
-										</xsl:call-template>
-										<!-- <xsl:call-template name="iview.getEmbedded.thumbnail"> <xsl:with-param name="derivID" select="$derivid" /> <xsl:with-param name="pathOfImage" 
-											select="concat('/',$derivmain)" /> </xsl:call-template> -->
+										<xsl:choose>
+											<!-- links -->
+											<xsl:when test="name() = 'ifsLink'">
+												<xsl:variable name="absFilePath" select="concat('/',$derivmain)" />
+												<xsl:variable name="linkMetaID" select="document(concat('mcrobject:',$derivid))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />
+
+												<a
+													href="{concat($WebApplicationBaseURL,'receive/',$linkMetaID,'?XSL.view.objectmetadata.SESSION=false&amp;jumpback=true&amp;maximized=true&amp;page=',$absFilePath)}">
+													<xsl:call-template name="iview2.getImageElement">
+														<xsl:with-param select="$derivid" name="derivate" />
+														<xsl:with-param select="$absFilePath" name="imagePath" />
+													</xsl:call-template>
+												</a>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:call-template name="derivateView">
+													<xsl:with-param name="derivateID" select="../../@ID" />
+												</xsl:call-template>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:when>
 									<xsl:otherwise>
 										<a href="{$href}">
@@ -293,6 +319,7 @@
 	<xsl:template name="iview.getSupport.hack">
 		<xsl:param name="derivid_2" />
 		<xsl:param name="mainFile" />
+		<xsl:param name="mcrObjId" />
 
 		<xsl:variable name="fileType">
 			<xsl:call-template name="getFileType">
@@ -303,14 +330,8 @@
 			<xsl:when test="$fileType!=''">
 				<xsl:choose>
 					<xsl:when test="contains($MCR.Module-iview.SupportedContentTypes,$fileType)">
-						<xsl:call-template name="iview.getAddress.hack">
-							<xsl:with-param name="fullPathOfImage" select="concat($derivid_2,'/',$mainFile)" />
-							<xsl:with-param name="height" select="'510'" />
-							<xsl:with-param name="width" select="'605'" />
-							<xsl:with-param name="scaleFactor" select="'fitToWidth'" />
-							<xsl:with-param name="display" select="'extended'" />
-							<xsl:with-param name="style" select="'image'" />
-						</xsl:call-template>
+						<xsl:value-of
+							select="concat($WebApplicationBaseURL,'receive/',$mcrObjId,'?XSL.view.objectmetadata.SESSION=false&amp;jumpback=true&amp;maximized=true&amp;page=',$mainFile)" />
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:value-of select="''" />
@@ -326,18 +347,6 @@
 	<xsl:template name="getFileType">
 		<xsl:param name="fileName" />
 		<xsl:value-of select="substring($fileName,number(string-length($fileName)-2))" />
-	</xsl:template>
-	<!-- ===================================================================================================== -->
-	<xsl:template name="iview.getAddress.hack">
-		<xsl:param name="fullPathOfImage" />
-		<xsl:param name="height" />
-		<xsl:param name="width" />
-		<xsl:param name="scaleFactor" />
-		<xsl:param name="display" />
-		<xsl:param name="style" />
-		<xsl:value-of select="'no more iview1'" />
-		<!-- select="concat($iview.home,$fullPathOfImage,$HttpSession,'?mode=generateLayout&amp;XSL.MCR.Module-iview.navi.zoom.SESSION=',$scaleFactor,'&amp;XSL.MCR.Module-iview.display.SESSION=',$display,'&amp;XSL.MCR.Module-iview.style.SESSION=',$style,'&amp;XSL.MCR.Module-iview.lastEmbeddedURL.SESSION=',$lastEmbeddedURL,'&amp;XSL.MCR.Module-iview.embedded.SESSION=false&amp;XSL.MCR.Module-iview.move=reset')" 
-			/> -->
 	</xsl:template>
 
 	<!-- common archive metadata templates -->
@@ -372,7 +381,7 @@
 								<a>
 									<xsl:attribute name="href">
 <xsl:value-of
-										select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,'?jumpback=true&amp;maximized=true&amp;page=',$firstSupportedFile)" />
+										select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,'?XSL.view.objectmetadata.SESSION=false&amp;jumpback=true&amp;maximized=true&amp;page=',$firstSupportedFile)" />
 </xsl:attribute>
 									<xsl:attribute name="title">
 <xsl:value-of select="i18n:translate('metaData.iView')" />
