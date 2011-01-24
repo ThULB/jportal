@@ -13,6 +13,7 @@ import fsu.jportal.backend.impl.JournalListIFS2Backend;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
 import fsu.jportal.jaxb.JournalList.Section;
+import fsu.thulb.jaxb.JaxbTools;
 
 public class JournalListIFS2BackendTest {
     private MCRFileStore fakeStore;
@@ -73,13 +74,17 @@ public class JournalListIFS2BackendTest {
         
         retrievedJournalList.newJournal("test_id2", "C Programming");
         retrievedJournalList.newJournal("test_id3", "Jetty, the definite guide");
+        retrievedJournalList.newJournal("test_id4", "Jebby, the fake guide");
         journalListIFS2Backend.saveList(retrievedJournalList);
         
         JournalList retrievedJournalListAgain = journalListIFS2Backend.getList(listType);
         Section sectionC = retrievedJournalListAgain.getSection("C");
         Section sectionJ = retrievedJournalListAgain.getSection("J");
         assertNotNull("Missing section 'C'", sectionC);
-        assertEquals(2, sectionJ.getJournals().size());
+        assertEquals(3, sectionJ.getJournals().size());
+        assertEquals("Java Programming", sectionJ.getJournals().get(0).getTitle());
+        assertEquals("Jebby, the fake guide", sectionJ.getJournals().get(1).getTitle());
+        assertEquals("Jetty, the definite guide", sectionJ.getJournals().get(2).getTitle());
     }
     
 }

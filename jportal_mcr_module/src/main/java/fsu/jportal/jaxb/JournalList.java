@@ -2,6 +2,8 @@ package fsu.jportal.jaxb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,8 @@ import fsu.jportal.jaxb.JournalList.Journal;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 public class JournalList {
+    
+
     public interface KeyAble {
         public String getKey();
     }
@@ -96,6 +100,14 @@ public class JournalList {
             if(journals != null){
                 journalList.addAll(journals.values());
             }
+            Comparator<? super Journal> comparator = new Comparator<Journal>() {
+
+                @Override
+                public int compare(Journal o1, Journal o2) {
+                    return o1.getTitle().compareTo(o2.getTitle());
+                }
+            };
+            Collections.sort(journalList, comparator);
             return journalList;
         }
 
