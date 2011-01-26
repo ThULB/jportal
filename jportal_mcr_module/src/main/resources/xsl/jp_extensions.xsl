@@ -4,7 +4,6 @@
   xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
 
   <xsl:include href="jp_layout-commons.xsl" />
-  <xsl:include href="jp-module-iview.xsl" />
   <xsl:include href="jp_objectView.xsl" />
   <xsl:include href="jp_derivateView.xsl" />
 

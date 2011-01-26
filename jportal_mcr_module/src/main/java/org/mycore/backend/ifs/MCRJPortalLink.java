@@ -53,8 +53,7 @@ public class MCRJPortalLink {
      * @throws MCRActiveLinkException
      * @throws IOException
      */
-    public void remove() throws JDOMException, MCRActiveLinkException, IOException {
-
+    public void remove() throws JDOMException {
         // get link
         Document sourceObject = getFromObject();
         String xpathOfLinks = XPATH_TO_LINKS_COMPLETE + "[text()='" + to + "']";
@@ -79,12 +78,9 @@ public class MCRJPortalLink {
     /**
      * Creates a link in a Mycore-Object
      * 
-     * @throws IOException
-     * @throws MCRPersistenceException
      * @throws MCRActiveLinkException
      */
-    public void set() throws IOException, MCRPersistenceException, MCRActiveLinkException {
-
+    public void set() {
         // create xml containing link
         Element link = new Element("ifsLink");
         link.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
@@ -117,7 +113,7 @@ public class MCRJPortalLink {
      *            Mycore-Object, to be saved
      * @throws MCRActiveLinkException
      */
-    private void saveObject(Document objectXML) throws MCRActiveLinkException {
+    private void saveObject(Document objectXML) {
         MCRXMLMetadataManager.instance().update(from, objectXML, new Date());
     }
 

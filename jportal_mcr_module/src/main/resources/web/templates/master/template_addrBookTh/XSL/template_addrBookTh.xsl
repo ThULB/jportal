@@ -15,25 +15,20 @@
 	<xsl:template name="template_addrBookTh">
 		<xsl:param name="journalsMaintitle" select="'Zeitschriftenname'" />
 		<xsl:param name="periodetitle" select="'Erscheinungszeitraum'" />
-		<xsl:variable name="journalID">
-			<xsl:value-of
-				select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default"/>
-		</xsl:variable>
-		<xsl:variable name="journalXML">
-			<xsl:copy-of
-				select="document(concat('mcrobject:',$journalID))" />
-		</xsl:variable>
+        <xsl:variable name="journalID">
+          <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
+        </xsl:variable>
+        <xsl:variable name="journalXML">
+          <xsl:copy-of select="document(concat('mcrobject:',$journalID))" />
+        </xsl:variable>
 		<xsl:variable name="city">
-			<xsl:value-of
-				select="xalan:nodeset($journalXML)//hidden_genhiddenfield1" />
+			<xsl:value-of select="xalan:nodeset($journalXML)//hidden_genhiddenfield1" />
 		</xsl:variable>
 		<xsl:variable name="published">
-			<xsl:value-of
-				select="xalan:nodeset($journalXML)//date[@type='published']" />
+			<xsl:value-of select="xalan:nodeset($journalXML)//date[@type='published']" />
 		</xsl:variable>
 		<xsl:variable name="published_from">
-			<xsl:value-of
-				select="xalan:nodeset($journalXML)//date[@type='published_from']" />
+			<xsl:value-of select="xalan:nodeset($journalXML)//date[@type='published_from']" />
 		</xsl:variable>
 		<xsl:variable name="published_until">
 			<xsl:value-of

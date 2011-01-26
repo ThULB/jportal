@@ -519,3 +519,12 @@ select{
 h1.section {
 	margin-top: 50px;
 }
+
+/* =================================================================== */
+/* iview 2                                                             */
+/* =================================================================== */
+.paperClip-icon {
+	background-image: url(images/paperClip.png) !important/*{iconsContent}*/;
+    height: 24px !important;
+    width: 24px !important;
+}
