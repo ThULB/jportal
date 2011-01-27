@@ -104,7 +104,7 @@ public class JournalList {
 
                 @Override
                 public int compare(Journal o1, Journal o2) {
-                    return o1.getTitle().compareTo(o2.getTitle());
+                    return o1.getTitle().compareToIgnoreCase(o2.getTitle());
                 }
             };
             Collections.sort(journalList, comparator);
