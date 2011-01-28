@@ -24,6 +24,8 @@
     <xsl:param name="objectXML" />
     <xsl:param name="detailed-view" />
     <xsl:if test="$objectHost = 'local'">
+      
+      <!-- id of the derivate -->
       <xsl:variable name="derivid">
         <xsl:choose>
           <!-- links -->
@@ -40,6 +42,7 @@
         </xsl:choose>
       </xsl:variable>
 
+      <!-- id of the mycore object which contains the derivate -->
       <xsl:variable name="objIDofDerivate">
         <xsl:choose>
           <!-- links -->
@@ -52,6 +55,7 @@
         </xsl:choose>
       </xsl:variable>
 
+      <!-- start file -->
       <xsl:variable name="derivmain">
         <xsl:choose>
           <!-- links -->
@@ -77,6 +81,14 @@
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:variable>
+
+      <!-- constructed url to the image -->
+      <xsl:variable name="iview2href">
+        <xsl:call-template name="iview.getAddress.hack">
+          <xsl:with-param name="objID" select="$objIDofDerivate"/>
+          <xsl:with-param name="mainFile" select="$derivmain" />
+        </xsl:call-template>
       </xsl:variable>
 
       <xsl:variable name="derivbase">
@@ -157,10 +169,22 @@
               <td id="detailed-contentsimgpadd">
                 <xsl:choose>
                   <xsl:when test="($supportedMainFile != '')">
-                    <xsl:call-template name="derivateLinkView">
-                      <xsl:with-param name="derivateID" select="$derivid" />
-                      <xsl:with-param name="file" select="$derivmain" />
-                    </xsl:call-template>
+                    <xsl:choose>
+                      <!-- links -->
+                      <xsl:when test="name() = 'ifsLink'">            
+                        <a href="{$iview2href}">
+                          <xsl:call-template name="iview2.getImageElement">
+                            <xsl:with-param select="$derivid" name="derivate" />
+                            <xsl:with-param select="concat('/',$derivmain)" name="imagePath" />
+                          </xsl:call-template>
+                        </a>
+                      </xsl:when>
+  					  <xsl:otherwise>
+                        <xsl:call-template name="derivateView">
+                          <xsl:with-param name="derivateID" select="../../@ID" />
+                         </xsl:call-template>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
                     <a href="{$href}">
@@ -191,8 +215,6 @@
                     Zugriff gesperrt!
                   </xsl:otherwise>
                 </xsl:choose>
-                <xsl:text>
-                                </xsl:text>
                 <xsl:if test="$editAccess = 'true'">
                   <a href="{$derivbase}">
                     <xsl:value-of select="', Details &gt;&gt; '" />
