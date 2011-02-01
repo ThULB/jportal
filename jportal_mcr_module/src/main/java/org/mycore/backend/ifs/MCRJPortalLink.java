@@ -3,22 +3,20 @@
  */
 package org.mycore.backend.ifs;
 
-import java.io.IOException;
-import java.util.Date;
+import java.util.Iterator;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.xpath.XPath;
-import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
 /**
- * @author Andreas Trappe
+ * @author Matthias Eichner
  * 
  */
 public class MCRJPortalLink {
@@ -29,11 +27,8 @@ public class MCRJPortalLink {
 
     private String to;
 
-    private static final String XML_LOCATION_OF_LINKS = "/mycoreobject/metadata/ifsLinks";
-
-    private static final String XML_TAG_FOR_LINKS = "ifsLink";
-
-    private static final String XPATH_TO_LINKS_COMPLETE = XML_LOCATION_OF_LINKS + "/" + XML_TAG_FOR_LINKS;
+    private static final String IFS_LINK = "ifsLink";
+    private static final String IFS_LINKS = "ifsLinks";
 
     /**
      * @param from,
@@ -49,30 +44,20 @@ public class MCRJPortalLink {
     /**
      * Removes a link from a Mycore-Object
      * 
-     * @throws JDOMException
      * @throws MCRActiveLinkException
-     * @throws IOException
      */
-    public void remove() throws JDOMException {
+    public void remove() throws MCRActiveLinkException {
         // get link
-        Document sourceObject = getFromObject();
-        String xpathOfLinks = XPATH_TO_LINKS_COMPLETE + "[text()='" + to + "']";
-        XPath xpath = XPath.newInstance(xpathOfLinks);
-        Element link = (Element) xpath.selectSingleNode(sourceObject);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(this.from);
 
-        // remove if exist
-        if (null != link) {
-            boolean lastLink = (XPath.newInstance("count(" + XPATH_TO_LINKS_COMPLETE + ")").numberValueOf(sourceObject).intValue() == 1);
-            if (lastLink) {
-                ((Element) XPath.newInstance(XML_LOCATION_OF_LINKS).selectSingleNode(sourceObject)).detach();
-                LOGGER.debug("link " + to + " removed from object " + from + ", no more links left.");
-            } else {
-                link.detach();
-                LOGGER.debug("link " + to + " removed from object " + from);
-            }
-            // save object
-            saveObject(sourceObject);
-        }
+        MCRMetaElement ifsLinks = mcrObj.getMetadata().getMetadataElement(IFS_LINKS);
+        MCRMetaLangText linkToRemove = getLink(ifsLinks, this.to);
+        if(linkToRemove == null)
+            return;
+
+        ifsLinks.removeMetaObject(linkToRemove);
+        LOGGER.debug("link in object " + from + " removed " + this.to);
+        MCRMetadataManager.update(mcrObj);
     }
 
     /**
@@ -80,48 +65,46 @@ public class MCRJPortalLink {
      * 
      * @throws MCRActiveLinkException
      */
-    public void set() {
-        // create xml containing link
-        Element link = new Element("ifsLink");
-        link.setAttribute("lang", "de", Namespace.XML_NAMESPACE);
-        link.setText(to);
-
-        // update object xml
-        Document objectXML = getFromObject();
-        boolean alreadyHasLink = false;
-        if (null != objectXML.getRootElement().getChild("metadata").getChild("ifsLinks"))
-            alreadyHasLink = true;
-        if (alreadyHasLink) {
-            objectXML.getRootElement().getChild("metadata").getChild("ifsLinks").addContent(link);
-        } else {
-            Element linkWrappingTag = new Element("ifsLinks");
-            linkWrappingTag.setAttribute("class", "MCRMetaLangText");
-            linkWrappingTag.addContent(link);
-            objectXML.getRootElement().getChild("metadata").addContent(linkWrappingTag);
+    public void set() throws MCRActiveLinkException {
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(this.from);
+        MCRObjectMetadata metadata = mcrObj.getMetadata();
+        // create ifsLinks if not exist
+        MCRMetaElement ifsLinks = metadata.getMetadataElement(IFS_LINKS);
+        if(ifsLinks == null) {
+            ifsLinks = new MCRMetaElement();
+            ifsLinks.setTag(IFS_LINKS);
+            ifsLinks.setClass(MCRMetaLangText.class);
+            metadata.setMetadataElement(ifsLinks);
         }
-        
-        // save object
-        saveObject(objectXML);
 
-        LOGGER.debug("link in object " + from + " set to " + to);
+        MCRMetaLangText oldLink = getLink(ifsLinks, this.to);
+        if(oldLink == null) {
+            // link doesn't exist -> create it
+            MCRMetaLangText ifsLink = new MCRMetaLangText();
+            ifsLink.setSubTag(IFS_LINK);
+            ifsLink.setText(this.to);
+            ifsLinks.addMetaObject(ifsLink);
+            // store in ifs
+            MCRMetadataManager.update(mcrObj);
+            LOGGER.debug("link in object " + from + " set to " + this.to);
+        }
     }
 
-    /**
-     * Saves a Mycore-Object in form of a JDOM-Document in Mycore.
-     * 
-     * @param objectXML,
-     *            Mycore-Object, to be saved
-     * @throws MCRActiveLinkException
-     */
-    private void saveObject(Document objectXML) {
-        MCRXMLMetadataManager.instance().update(from, objectXML, new Date());
-    }
-
-    /**
-     * @return
-     */
-    private Document getFromObject() {
-        Document objectXML = MCRXMLMetadataManager.instance().retrieveXML(from);
-        return objectXML;
+    private MCRMetaLangText getLink(MCRMetaElement ifsLinks, String linkText) {
+        if(ifsLinks == null)
+            return null;
+        Iterator<MCRMetaInterface> it = ifsLinks.iterator();
+        while(it.hasNext()) {
+            MCRMetaInterface link = it.next();
+            if( link.getSubTag().equals(IFS_LINK) &&
+                link instanceof MCRMetaLangText)
+            {
+                String text = ((MCRMetaLangText)link).getText();
+                if(text.equals(linkText)) {
+                    return (MCRMetaLangText)link;
+                }
+            }
+        }
+        return null;
     }
 }

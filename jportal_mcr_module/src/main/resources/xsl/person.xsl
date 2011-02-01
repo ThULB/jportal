@@ -128,15 +128,6 @@
                         </xsl:variable>
                         <xsl:value-of select="concat($lastName_shorted,', ',$firstName_shorted)" />
                     </td>
-                    <!--<td id="detailed-links" colspan="1" rowspan="3">
-                        <table id="detailed-contenttable" border="0" cellspacing="0">
-                        
-                        <xsl:call-template name="printDerivates">
-                        <xsl:with-param name="obj_id" select="@ID"/>
-                        </xsl:call-template>
-                        
-                        </table>
-                        </td>-->
                 </tr>
                 <tr>
                     <td colspan="2">

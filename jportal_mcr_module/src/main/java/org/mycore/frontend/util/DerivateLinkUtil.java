@@ -1,9 +1,9 @@
 package org.mycore.frontend.util;
 
-import org.jdom.JDOMException;
 import org.mycore.backend.ifs.MCRJPortalLink;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public abstract class DerivateLinkUtil {
@@ -26,12 +26,12 @@ public abstract class DerivateLinkUtil {
         return new StringBuffer(derivateId).append("/").append(file).toString();
     }
 
-    public static void setLink(MCRObjectID mcrObjId, String pathOfImage) {
+    public static void setLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRActiveLinkException {
         MCRJPortalLink link = new MCRJPortalLink(mcrObjId, pathOfImage);
         link.set();
     }
 
-    public static void removeLink(MCRObjectID mcrObjId, String pathOfImage) throws JDOMException {
+    public static void removeLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRActiveLinkException {
         MCRJPortalLink link = new MCRJPortalLink(mcrObjId, pathOfImage);
         link.remove();
     }

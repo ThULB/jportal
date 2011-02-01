@@ -142,6 +142,13 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>org.mycore.sru</groupId>
+      <artifactId>pica-query-parser</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>de.uni-jena.thulb</groupId>
       <artifactId>JPTestCases</artifactId>
       <version>0.0.1-SNAPSHOT</version>

@@ -45,6 +45,9 @@
       <!-- id of the mycore object which contains the derivate -->
       <xsl:variable name="objIDofDerivate">
         <xsl:choose>
+          <xsl:when test="not(mcrxsl:exists($derivid))">
+            <xsl:value-of select="'this derivate is deleted'" />
+          </xsl:when>
           <!-- links -->
           <xsl:when test="name() = 'ifsLink'">
             <xsl:value-of select="document(concat('mcrobject:',$derivid))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />

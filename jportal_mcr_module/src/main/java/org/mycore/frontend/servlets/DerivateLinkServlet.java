@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.jdom.JDOMException;
 import org.mycore.common.MCRUsageException;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.util.DerivateLinkUtil;
 
@@ -51,7 +52,7 @@ public class DerivateLinkServlet extends MCRServlet {
         return true;
     }
 
-    private void handleLink(MCRServletJob job, String mode) throws IOException, JDOMException {
+    private void handleLink(MCRServletJob job, String mode) throws IOException, MCRActiveLinkException {
         HttpServletRequest request = job.getRequest();
         String from = request.getParameter(FROM);
         String to = getTo(request);
