@@ -9,7 +9,8 @@
         <hidden var="service/servdates" descendants="true" />
         <hidden var="service/servacls" descendants="true" />
         <hidden var="service/servflags" descendants="true" />
-        <hidden var="metadata/ifsLinks" descendants="true" />
+        <hidden var="metadata/derivateLinks" descendants="true" />
+
         <!-- ########################## formal description ################################## -->
         <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
             <text>

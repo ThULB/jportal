@@ -741,15 +741,6 @@
                             </xsl:if>
                         </xsl:if>
 
-                        <!--7*** derivate links *************************************-->
-                        <table cellspacing="0" cellpadding="0" id="detailed-view">
-                            <xsl:call-template name="printMetaDates">
-                                <xsl:with-param select="'right'" name="textalign" />
-                                <xsl:with-param select="./metadata/derivateLinks" name="nodes" />
-                                <xsl:with-param select="i18n:translate('editormask.labels.derivateLink_label')" name="label" />
-                            </xsl:call-template>
-                        </table>
-
                         <table border="0" cellspacing="0" cellpadding="0" id="detailed-divlines">
                             <tr>
                                 <td colspan="2" id="detailed-innerdivlines">

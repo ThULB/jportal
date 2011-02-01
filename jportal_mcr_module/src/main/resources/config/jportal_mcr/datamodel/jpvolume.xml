@@ -81,9 +81,6 @@
         <element name="notes" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="note" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
         </element>
-        <element name="ifsLinks" minOccurs='0' maxOccurs='1'>
-            <mcrmetalangtext name="ifsLink" class="MCRMetaLangText" minOccurs='0' maxOccurs='1' length="4096" />
-        </element>
         <!-- dynamically generated classification -->
         <element name="volContentClassis1" minOccurs='0' maxOccurs='1'>
             <mcrmetaclassification name="volContentClassi1" class="MCRMetaClassification" minOccurs='0' maxOccurs='unbounded' />

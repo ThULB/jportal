@@ -19,7 +19,7 @@
 
   <!-- ===================================================================================================== -->
 
-  <xsl:template match="internals | ifsLink | mcr:metaData" priority="2">
+  <xsl:template match="internals | derivateLink | mcr:metaData" priority="2">
     <xsl:param name="objID" />
     <xsl:param name="objectXML" />
     <xsl:param name="detailed-view" />
@@ -29,8 +29,8 @@
       <xsl:variable name="derivid">
         <xsl:choose>
           <!-- links -->
-          <xsl:when test="name() = 'ifsLink'">
-            <xsl:value-of select="substring-before(./text(),'/')" />
+          <xsl:when test="name() = 'derivateLink'">
+            <xsl:value-of select="substring-before(@xlink:href,'/')" />
           </xsl:when>
           <!-- full text hit -->
           <xsl:when test="name() = 'mcr:metaData'">
@@ -49,7 +49,7 @@
             <xsl:value-of select="'this derivate is deleted'" />
           </xsl:when>
           <!-- links -->
-          <xsl:when test="name() = 'ifsLink'">
+          <xsl:when test="name() = 'derivateLink'">
             <xsl:value-of select="document(concat('mcrobject:',$derivid))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />
           </xsl:when>
           <xsl:otherwise>
@@ -62,8 +62,8 @@
       <xsl:variable name="derivmain">
         <xsl:choose>
           <!-- links -->
-          <xsl:when test="name() = 'ifsLink'">
-            <xsl:value-of select="substring-after(./text(),'/')" />
+          <xsl:when test="name() = 'derivateLink'">
+            <xsl:value-of select="substring-after(@xlink:href,'/')" />
           </xsl:when>
           <!-- full text hit -->
           <xsl:when test="name() = 'mcr:metaData'">
@@ -174,7 +174,7 @@
                   <xsl:when test="($supportedMainFile != '')">
                     <xsl:choose>
                       <!-- links -->
-                      <xsl:when test="name() = 'ifsLink'">            
+                      <xsl:when test="name() = 'derivateLink'">            
                         <a href="{$iview2href}">
                           <xsl:call-template name="iview2.getImageElement">
                             <xsl:with-param select="$derivid" name="derivate" />
@@ -204,7 +204,7 @@
                   <xsl:when test="$readAccess4Derivates = 'true'">
                     <xsl:variable name="label">
                       <xsl:choose>
-                        <xsl:when test="name() = 'ifsLink'">
+                        <xsl:when test="name() = 'derivateLink'">
                           <xsl:value-of select="concat($fileLabel, '(~)')" />
                         </xsl:when>
                         <xsl:otherwise>
@@ -232,7 +232,7 @@
             <xsl:when test="$readAccess4Derivates = 'true'">
               <xsl:variable name="label">
                 <xsl:choose>
-                  <xsl:when test="name()='ifsLink'">
+                  <xsl:when test="name()='derivateLink'">
                     <xsl:value-of select="concat($fileLabel, '(~)')" />
                   </xsl:when>
                   <xsl:otherwise>

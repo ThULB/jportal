@@ -882,7 +882,7 @@
     <!-- =====================================================  -->
     <xsl:template name="linkBookmarkedImage">
       <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
-      <xsl:variable name="linkExist" select="/mycoreobject/metadata/ifsLinks/ifsLink[text() = $bookmarkedImage]" />
+      <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
       <xsl:variable name="derivateCount" select="count(/mycoreobject/structure/derobjects/derobject)" />
 
       <xsl:if test="acl:checkPermission(./@ID,'writedb') and $bookmarkedImage != '' and not($linkExist) and $derivateCount &lt;= 0">
@@ -1446,8 +1446,8 @@
     </xsl:if>
 
     <!-- links -->
-    <xsl:for-each select="/mycoreobject/metadata/ifsLinks/ifsLink">
-      <xsl:variable name="derivateID" select="substring-before(./text(),'/')" />
+    <xsl:for-each select="/mycoreobject/metadata/derivateLinks/derivateLink">
+      <xsl:variable name="derivateID" select="substring-before(./@xlink:href,'/')" />
       <xsl:variable name="derivateObj" select="document(concat('notnull:mcrobject:',$derivateID))" />
       <xsl:variable name="hasPermission" select="acl:checkPermission($obj_id,'deletedb')" />
 
@@ -1475,7 +1475,7 @@
         <tr>
           <td colspan="3" width="30" valign="top" align="center">
             <xsl:variable name="url">
-              <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=removeLink&amp;from=',$obj_id,'&amp;to=',text())" />
+              <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=removeLink&amp;from=',$obj_id,'&amp;to=',@xlink:href)" />
             </xsl:variable>
             <a href="{$url}">
               <img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="Diesen Link entfernen" alt="Diesen Link entfernen" />
@@ -1575,7 +1575,7 @@
     </xsl:if>
 
     <!-- links -->
-    <xsl:for-each select="$knoten/mycoreobject/metadata/ifsLinks/ifsLink">
+    <xsl:for-each select="$knoten/mycoreobject/metadata/derivateLinks/derivateLink">
       <tr>
         <td id="leaf-additional">
           <xsl:call-template name="lineSpace" />
@@ -1711,9 +1711,6 @@
 								<xsl:call-template name="objectLink">
 									<xsl:with-param name="obj_id" select="@xlink:href" />
 								</xsl:call-template>
-							</xsl:when>
-							<xsl:when test="@class='MCRMetaDerivateLink'">
-								<xsl:call-template name="derivateLink" />
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:choose>
