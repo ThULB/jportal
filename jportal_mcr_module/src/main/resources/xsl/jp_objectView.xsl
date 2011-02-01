@@ -1373,8 +1373,8 @@
                         <xsl:with-param name="type" select="$type" />
                         <xsl:with-param name="todo" select="'saddfile'" />
                       </xsl:call-template>
+                      <input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif" title="{i18n:translate('swf.derivate.addFile')}" />
                     </form>
-                    <input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif" title="{i18n:translate('swf.derivate.addFile')}" />
                   </td>
                   <!-- edit derivate -->
                   <td width="{$cellWidth}" valign="center" align="center">
