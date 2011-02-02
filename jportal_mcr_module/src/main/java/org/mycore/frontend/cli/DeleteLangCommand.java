@@ -56,8 +56,7 @@ public class DeleteLangCommand {
 
     public static void deleteXmlLang(String id) throws Exception {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
-        Document doc = mcrObj.createXML();
+        Document doc = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
 
         Iterator it = doc.getDescendants(new XmlLangFilter());
         while(it.hasNext()) {
