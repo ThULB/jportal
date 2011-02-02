@@ -58,13 +58,16 @@ public class DeleteLangCommand {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         Document doc = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
 
+        boolean hasXmlLang = false;
         Iterator it = doc.getDescendants(new XmlLangFilter());
         while(it.hasNext()) {
+            hasXmlLang = true;
             Element eWithLang = (Element)it.next();
             eWithLang.removeAttribute("lang", Namespace.XML_NAMESPACE);
         }
 
-        MCRXMLMetadataManager.instance().update(mcrId, doc, new Date(System.currentTimeMillis()));
+        if(hasXmlLang)
+            MCRXMLMetadataManager.instance().update(mcrId, doc, new Date(System.currentTimeMillis()));
     }
 
     private static class XmlLangFilter implements Filter {
