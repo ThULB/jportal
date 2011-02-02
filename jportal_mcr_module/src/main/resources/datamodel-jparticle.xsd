@@ -201,10 +201,24 @@
           <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
         </xsd:complexType>
       </xsd:element>
-      <xsd:element name="derivateLinks" minOccurs="0" maxOccurs="1">
+      <xsd:element name="derivateLinks" minOccurs="0">
         <xsd:complexType>
-          <xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
-          <xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
+          <xsd:sequence>
+            <xsd:element name="derivateLink" minOccurs="0" maxOccurs="unbounded">
+              <xsd:complexType>
+                <xsd:attribute name="inherited" type="xsd:integer" />
+                <xsd:attribute ref="xlink:type" />
+                <xsd:attribute ref="xlink:href" />
+                <xsd:attribute ref="xlink:title" />
+                <xsd:attribute ref="xlink:label" />
+                <xsd:attribute ref="xlink:from"  />
+                <xsd:attribute ref="xlink:to" />
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+          <xsd:attribute name="class" use="required" type="xsd:string" fixed="MCRMetaDerivateLink" />
+          <xsd:attribute name="notinherit" type="xsd:boolean" />
+          <xsd:attribute name="heritable" type="xsd:boolean" />
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="abstracts" minOccurs="0" maxOccurs="1">

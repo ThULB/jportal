@@ -8,10 +8,6 @@
     <textfield id="TFzeile1024" width="64" maxlength="1024" />
     <!-- *** Text area *** -->
     <textarea id="TFarea4096" width="62" height="6" maxlength="4096" />
-    <!-- *** Language List *** -->
-    <list id="Slang" width="60" type="dropdown">
-        <include uri="classification:editor:-1:children:jportal_class_00000002" />
-    </list>
     <!-- *** author_input_repeater_type List *** -->
     <list id="participants_input_repeater_type" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000007" />

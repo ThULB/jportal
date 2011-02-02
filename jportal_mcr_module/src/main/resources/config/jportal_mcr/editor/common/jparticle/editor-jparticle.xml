@@ -77,15 +77,6 @@
             <br />
         </cell>
 
-        <!-- ########################## derivates ################################## --> 
-        <!-- cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
-            <text>
-                <label css-style="editorHeadlines" i18n="metaData.headlines.derivates" />
-            </text>
-        </cell>
-        <cell class="editorLabel" row="210" col="1" anchor="NORTHWEST" ref="derivateLink_label" />
-        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" /-->
-
         <!-- ########################## misc ################################## -->
         <cell anchor="WEST" colspan="4" col="1" row="291" class="editorHeadlines">
             <text>
@@ -107,7 +98,7 @@
     <panel id="maintitle_input">
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
         <hidden var="metadata/maintitles/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" default="de" />
+        <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
     </panel>
     <!-- end: MainTitle -->

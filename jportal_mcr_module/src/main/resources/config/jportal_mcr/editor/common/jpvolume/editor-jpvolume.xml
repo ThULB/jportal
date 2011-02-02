@@ -94,15 +94,6 @@
             <br />
         </cell> 
         
-        <!-- ########################## derivates ################################## --> 
-        <!-- cell anchor="WEST" colspan="4" col="1" row="200" class="editorHeadlines">
-            <text>
-                <label css-style="editorHeadlines" i18n="metaData.headlines.derivates" />
-            </text>
-        </cell>
-        <cell class="editorLabel" row="210" col="1" anchor="NORTHWEST" ref="derivateLink_label" />
-        <cell row="210" col="2" anchor="NORTHWEST" ref="derivateLink_input" /-->
-        
         <!-- ########################## misc ################################## --> 
         <cell anchor="WEST" colspan="4" col="1" row="250" class="editorHeadlines">
             <text>
@@ -114,14 +105,7 @@
             <!-- position -->
         <cell class="editorLabel" row="270" col="1" anchor="NORTHWEST" ref="position_label" />
         <cell row="270" col="2" anchor="NORTHWEST" ref="position_input" />
-            <!-- .. -->
-        <!--
-            <cell row="210" col="2" anchor="NORTHWEST" ref="rubricID_input_hidden" /> <cell row="220" col="2" anchor="NORTHWEST" ref="pubTypeID_input_hidden" /> <cell row="230"
-            col="2" anchor="NORTHWEST" ref="classipub_input_hidden"/> <cell row="240" col="2" anchor="NORTHWEST" ref="classipub2_input_hidden"/> <cell row="250" col="2"
-            anchor="NORTHWEST" ref="classipub3_input_hidden"/> <cell row="260" col="2" anchor="NORTHWEST" ref="websitecontext_input_hidden" /> <cell row="270" col="2"
-            anchor="NORTHWEST" ref="genhiddenfield1_input_hidden" /> <cell row="280" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input_hidden" /> <cell row="290" col="2"
-            anchor="NORTHWEST" ref="genhiddenfield3_input_hidden" />
-        -->           
+
             <!-- ================================================================================================= -->
         <cell col="1" row="300">
             <br />
@@ -138,10 +122,8 @@
       <!-- MainTitle ================================================================== -->
     <panel id="maintitle_input">
         <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
-<!--            <hidden var="metadata/maintitles/@notinherit" default="false" />-->
         <hidden var="metadata/maintitles/@heritable" default="true" />
         <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
-<!--        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/maintitles/maintitle/@lang" default="de" />-->
         <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
     </panel>
       
@@ -156,7 +138,6 @@
     </panel>
     <panel id="subtitle_input_repeater">
         <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" />
-<!--        <cell col="1" row="2" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />-->
         <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" />
     </panel>
       <!-- end: SubTitle -->
@@ -294,7 +275,6 @@
     <panel id="note_input">
         <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
         <hidden var="metadata/notes/@heritable" default="false" />
-<!--        <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="metadata/notes/note/@lang" ordernr="1" default="de" />-->
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
     </panel>
       <!-- end: note -->

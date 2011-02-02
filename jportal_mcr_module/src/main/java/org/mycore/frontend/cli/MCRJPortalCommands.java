@@ -35,10 +35,9 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         com = new MCRCommand("convert ifs linking to derivate linking", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.convert",
         "converts the old ifs linking of articles and journals to the new derivate linking");
         command.add(com);
-
         com = new MCRCommand("internal replace ifs link {0}", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.replaceLink String", "");
         command.add(com);
-        
+
         com = new MCRCommand("start gbv sru pica import", "org.mycore.dataimport.pica.MCRGbvSruImportCommand.gbcSruImport", "");
         command.add(com);
 
@@ -46,6 +45,12 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         command.add(com);
         
         com = new MCRCommand("internal create default context {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.createContext String", "");
+        command.add(com);
+
+        com = new MCRCommand("delete xml:lang", "org.mycore.frontend.cli.DeleteLangCommand.delete",
+        "deletes all xml:lang attributes in all journals, volumes and articles");
+        command.add(com);
+        com = new MCRCommand("internal delete xml:lang {0}", "org.mycore.frontend.cli.DeleteLangCommand.deleteXmlLang String", "");
         command.add(com);
     }
 
