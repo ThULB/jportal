@@ -1,9 +1,10 @@
 package org.mycore.frontend.cli.command;
 
+import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -19,8 +20,8 @@ import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
 
 public class MCRLinkConvertCommand {
-
-    private static Logger LOGGER = Logger.getLogger(MCRLinkConvertCommand.class.getName());
+    
+    private static final Logger LOGGER = Logger.getLogger(MCRLinkConvertCommand.class);
     
     public static List<String> convert() throws Exception {
         // build search condition
@@ -42,7 +43,7 @@ public class MCRLinkConvertCommand {
             // get the mcr object
             commandList.add("internal replace ifs link " + hit.getID());
             if(count % 10000 == 0)
-                LOGGER.info(count + " elements checked");
+//                LOGGER.info(count + " elements checked");
             count++;
         }
         return commandList;
@@ -67,12 +68,23 @@ public class MCRLinkConvertCommand {
             String href = ((MCRMetaLangText) oldIFSLinks.getElement(0)).getText();
             derivateLink.setReference(href, null, null);
 
-            derivateLinksElement.addMetaObject(derivateLink);
-            mcrObj.getMetadata().setMetadataElement(derivateLinksElement);
+            // check if derivate link is valid
+            try {
+                if(!derivateLink.isValid())
+                    throw new InvalidObjectException("no cause");
+                derivateLinksElement.addMetaObject(derivateLink);
+                mcrObj.getMetadata().setMetadataElement(derivateLinksElement);
+            } catch(Exception exc) {
+                LOGGER.warn("derivate link of object " + mcrObjId +
+                            " is invalid! (" + href + ")", exc);
+            }
 
-            MCRMetadataManager.update(mcrObj);
-
-            LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
+            try {
+                MCRMetadataManager.update(mcrObj);
+                LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
+            } catch(Exception exc) {
+                LOGGER.error("while updating mcrobject " + mcrObjId, exc);              
+            }
         } else {
             LOGGER.info("object " + mcrObj.getId() + " has no links.");
         }
