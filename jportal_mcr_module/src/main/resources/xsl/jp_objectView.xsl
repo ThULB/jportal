@@ -17,7 +17,8 @@
   xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
   xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
-  exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxsl derivateLinkUtil">
+  xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxsl derivateLinkUtil encoder">
 
     <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
@@ -1475,7 +1476,7 @@
         <tr>
           <td colspan="3" width="30" valign="top" align="center">
             <xsl:variable name="url">
-              <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=removeLink&amp;from=',$obj_id,'&amp;to=',@xlink:href)" />
+              <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=removeLink&amp;from=',$obj_id,'&amp;to=',encoder:encode(@xlink:href))" />
             </xsl:variable>
             <a href="{$url}">
               <img src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="Diesen Link entfernen" alt="Diesen Link entfernen" />
