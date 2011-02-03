@@ -4,8 +4,9 @@
 <!-- ===================================================================================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities">
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
+  exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl encoder layoutUtils">
 
   <xsl:variable name="readAccessForDerivates">
     <xsl:call-template name="get.readAccessForDerivates">
@@ -178,7 +179,7 @@
                         <a href="{$iview2href}">
                           <xsl:call-template name="iview2.getImageElement">
                             <xsl:with-param select="$derivid" name="derivate" />
-                            <xsl:with-param select="concat('/',$derivmain)" name="imagePath" />
+                            <xsl:with-param select="concat('/',encoder:encode($derivmain))" name="imagePath" />
                           </xsl:call-template>
                         </a>
                       </xsl:when>

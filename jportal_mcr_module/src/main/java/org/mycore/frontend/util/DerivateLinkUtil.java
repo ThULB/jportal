@@ -1,5 +1,7 @@
 package org.mycore.frontend.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -25,6 +27,12 @@ public abstract class DerivateLinkUtil {
     
     public static void bookmarkImage(String derivateId, String file) {
         MCRSession session = MCRSessionMgr.getCurrentSession();
+        // decode image path
+        try {
+            file = URLDecoder.decode(file, "UTF-8");
+        } catch(UnsupportedEncodingException uee) {
+            LOGGER.error("while bookmark image " + file, uee);
+        }
         session.put(IMAGE_BOOKMARK_FILE, file);
         session.put(IMAGE_BOOKMARK_DERIVATE_ID, derivateId);
     }
