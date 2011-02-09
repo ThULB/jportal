@@ -2,9 +2,12 @@ package org.mycore.frontend.cli.command;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -49,8 +52,9 @@ public class MCRLinkConvertCommand {
         return commandList;
     }
 
-    public static void replaceLink(String mcrObjId) throws Exception {
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(mcrObjId));
+    public static void replaceLink(String id) throws Exception {
+        MCRObjectID mcrObjId = MCRObjectID.getInstance(id);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         
         // remove old ifs link
         MCRMetaElement oldIFSLinks = mcrObj.getMetadata().removeMetadataElement("ifsLinks");
@@ -80,6 +84,8 @@ public class MCRLinkConvertCommand {
             }
 
             try {
+                Document doc = mcrObj.createXML();
+                MCRXMLMetadataManager.instance().update(mcrObjId, doc, new Date(System.currentTimeMillis()));
                 MCRMetadataManager.update(mcrObj);
                 LOGGER.info("ifs linked replaced for object " + mcrObj.getId());
             } catch(Exception exc) {
