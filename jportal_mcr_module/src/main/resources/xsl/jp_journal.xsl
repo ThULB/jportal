@@ -5,7 +5,6 @@
     xmlns:mcr="http://www.mycore.org/" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl aclObjID aclObjType"
     version="1.0">
     <xsl:param select="'local'" name="objectHost" />
-    <!--    <xsl:include href="mcr-module-startIview.xsl"/>-->
 
     <!-- ============================================================================================================== -->
 

@@ -105,6 +105,8 @@
 						<xsl:call-template name="browseCtrlJP" />
 						<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
 						<xsl:call-template name="switchToXMLview" />
+                        <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                        <xsl:call-template name="switchToHistory" />
 					</tr>
 				</table>
 
@@ -144,35 +146,43 @@
       </script>
 	</xsl:template>
 
-	<!--
-		=================================================================================================================
-	-->
-	<!--
-		shows the xml code of the current mcr object (prints the xml-button)
-	-->
-	<!--
-		=================================================================================================================
-	-->
-	<xsl:template name="switchToXMLview">
-		<xsl:if test="$view.objectmetadata='false'">
-			<!--
-				sets the XSL.Style parameter of the browser address to xmlexport
-			-->
-			<xsl:variable name="newurl">
-				<xsl:call-template name="UrlSetParam">
-					<xsl:with-param name="url" select="$RequestURL" />
-					<xsl:with-param name="par" select="'XSL.Style'" />
-					<xsl:with-param name="value" select="'xmlexport'" />
-				</xsl:call-template>
-			</xsl:variable>
-			<td id="detailed-xmlbutton">
-				<a href="{$newurl}" alt="{i18n:translate('metaData.xmlView')}"
-					title="{i18n:translate('metaData.xmlView')}">
-					<img src="{$WebApplicationBaseURL}images/xml.png" />
-				</a>
-			</td>
-		</xsl:if>
-	</xsl:template>
+  <!-- ========================================================================== -->
+  <!-- shows the xml code of the current mcr object (prints the xml-button) -->
+  <!-- ========================================================================== -->
+  <xsl:template name="switchToXMLview">
+    <xsl:if test="$view.objectmetadata='false'">
+      <!-- sets the XSL.Style parameter of the browser address to xml -->
+      <xsl:variable name="newurl">
+        <xsl:call-template name="UrlSetParam">
+          <xsl:with-param name="url" select="$RequestURL" />
+          <xsl:with-param name="par" select="'XSL.Style'" />
+          <xsl:with-param name="value" select="'xml'" />
+        </xsl:call-template>
+      </xsl:variable>
+      <td id="detailed-xmlbutton">
+        <a href="{$newurl}" alt="{i18n:translate('metaData.xmlView')}" title="{i18n:translate('metaData.xmlView')}">
+          <img src="{$WebApplicationBaseURL}images/xml.png" />
+        </a>
+      </td>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- ========================================================================== -->
+  <!-- shows the history  of the current mcr object (prints the history-button)   -->
+  <!-- ========================================================================== -->
+  <xsl:template name="switchToHistory">
+    <xsl:if test="$view.objectmetadata='false'">
+
+      <!-- sets the XSL.Style parameter of the browser address to xmlexport -->
+      <xsl:variable name="newurl" select="concat($WebApplicationBaseURL, 'history.xml?XSL.id=', @ID)" />
+
+      <td id="detailed-xmlbutton">
+        <a href="{$newurl}" alt="{i18n:translate('metaData.history')}" title="{i18n:translate('metaData.history')}">
+          <img src="{$WebApplicationBaseURL}images/history.png" />
+        </a>
+      </td>
+    </xsl:if>
+  </xsl:template>
 
 	<!--
 		=====================================================================================================
@@ -351,6 +361,8 @@
 				<xsl:call-template name="browseCtrlJP" />
 				<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
 				<xsl:call-template name="switchToXMLview" />
+                <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
+                <xsl:call-template name="switchToHistory" />
 			</tr>
 		</table>
 		<br />
@@ -460,18 +472,25 @@
 			</xsl:choose>
 		</xsl:variable>
 		<table id="resultList" cellpadding="0" cellspacing="0">
-			<xsl:for-each
-				select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
-				<xsl:variable name="mcrobj"
-					select="document(concat('mcrobject:',@id))/mycoreobject" />
-				<xsl:apply-templates select="." mode="toc">
-					<xsl:with-param name="mcrobj" select="$mcrobj" />
-					<xsl:with-param name="mcrobjlink">
-						<xsl:call-template name="objectLink">
-							<xsl:with-param name="obj_id" select="@id" />
-						</xsl:call-template>
-					</xsl:with-param>
-				</xsl:apply-templates>
+			<xsl:for-each select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+              <xsl:choose>
+                <xsl:when test="mcrxsl:exists(@id)">
+                  <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
+                  <xsl:apply-templates select="." mode="toc">
+                  <xsl:with-param name="mcrobj" select="$mcrobj" />
+                  <xsl:with-param name="mcrobjlink">
+                    <xsl:call-template name="objectLink">
+                      <xsl:with-param name="obj_id" select="@id" />
+                    </xsl:call-template>
+                  </xsl:with-param>
+                  </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+				  <xsl:message>
+                   <xsl:value-of select="concat('MyCoRe Object with id ', @id, ' is deleted! Rebuild metadata index to fix this problem.')" />
+                 </xsl:message>
+                </xsl:otherwise>
+              </xsl:choose>
 			</xsl:for-each>
 		</table>
 	</xsl:template>
@@ -1339,139 +1358,151 @@
     <xsl:if test="(./structure/derobjects) and $objectHost = 'local'">
       <xsl:for-each select="./structure/derobjects/derobject">
         <xsl:variable name="deriv" select="@xlink:href" />
-        <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
-        <xsl:variable name="derivate" select="document($derivlink)" />
-
-        <tr>
-          <td align="left" valign="top" id="detailed-links">
-            <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-              <!-- prints the derivate thumbnail -> see @jp_derivateView.xsl -->
-              <tr>
-                <td colspan="4">
-                  <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
-                    <xsl:with-param name="objID" select="$obj_id" />
-                    <xsl:with-param name="objectXML" select="document(concat('mcrobject:',$obj_id))" />
-                  </xsl:apply-templates>
-                  <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
-                    <xsl:with-param name="objID" select="$obj_id" />
-                  </xsl:apply-templates>
-                </td>
-              </tr>
-              <!-- prints the editor buttons (add, edit, delete ...) -->
-              <tr height="30px">
-                <xsl:if test="acl:checkPermission($obj_id,'writedb')">
-                  <!-- urn -->
-                  <xsl:variable name="derivateWithURN" select="mcrxsl:hasURNDefined($deriv)" />
-                  <xsl:variable name="type">
-                    <xsl:copy-of select="substring-before(substring-after($obj_id,'_'),'_')" />
-                  </xsl:variable>
-                  <xsl:variable name="cellWidth" select="'24'" />
-                  <!-- add files to derivate -->
-                  <td width="{$cellWidth}" valign="center" align="center">
-                    <form method="get">
-                      <xsl:call-template name="printDerivates_editButton">
-                        <xsl:with-param name="obj_id" select="$obj_id" />
-                        <xsl:with-param name="type" select="$type" />
-                        <xsl:with-param name="todo" select="'saddfile'" />
-                      </xsl:call-template>
-                      <input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif" title="{i18n:translate('swf.derivate.addFile')}" />
-                    </form>
-                  </td>
-                  <!-- edit derivate -->
-                  <td width="{$cellWidth}" valign="center" align="center">
-                    <form method="get">
-                      <xsl:call-template name="printDerivates_editButton">
-                        <xsl:with-param name="obj_id" select="$obj_id" />
-                        <xsl:with-param name="type" select="$type" />
-                        <xsl:with-param name="todo" select="'seditder'" />
-                      </xsl:call-template>
-                      <input name="extparm" type="hidden">
-                        <xsl:variable name="deriv" select="@xlink:href" />
-                        <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
-                        <xsl:attribute name="value">
-                          <xsl:value-of select="document($derivlink)/mcr_results/mcr_result/@label" />
-                        </xsl:attribute>
-                      </input>
-                      <input type="image" src="{$WebApplicationBaseURL}images/workflow_deredit.gif" title="{i18n:translate('component.swf.derivate.editDerivate')}" />
-                    </form>
-                  </td>
-                  <!-- add urn -->
-                  <xsl:if test="$derivateWithURN=false() and mcrxsl:isAllowedObjectForURNAssignment($obj_id)">
-                    <td width="{$cellWidth}" valign="center" align="center">
-                      <form method="get">
-                        <xsl:call-template name="printDerivates_editButton">
-                          <xsl:with-param name="action" select="'servlets/MCRAddURNToObjectServlet'"/>
-                          <xsl:with-param name="obj_id" select="$obj_id" />
-                          <xsl:with-param name="type" select="$type" />
-                          <xsl:with-param name="todo" select="'addURNToDerivates'" />
-                        </xsl:call-template>
-                        <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.urn.addURN')}" />
-                      </form>
+        <xsl:choose>
+          <xsl:when test="mcrxsl:exists($deriv)">
+            <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
+            <xsl:variable name="derivate" select="document($derivlink)" />
+            <tr>
+              <td align="left" valign="top" id="detailed-links">
+                <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+                  <!-- prints the derivate thumbnail -> see @jp_derivateView.xsl -->
+                  <tr>
+                    <td colspan="4">
+                      <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
+                        <xsl:with-param name="objID" select="$obj_id" />
+                        <xsl:with-param name="objectXML" select="document(concat('mcrobject:',$obj_id))" />
+                      </xsl:apply-templates>
+                      <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
+                        <xsl:with-param name="objID" select="$obj_id" />
+                      </xsl:apply-templates>
                     </td>
-                  </xsl:if>
-                  <!-- create mets -->
-<!--                  <td width="{$cellWidth}" valign="center" align="center">
-                    <form method="get">
-                      <xsl:attribute name="action">
-                        <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MetsServlet', $JSessionID)" />
-                      </xsl:attribute>
-                      <input name="mode" type="hidden" value="generate" />
-                      <input name="objid" type="hidden" value="$obj_id" />
-                      <input name="derid" type="hidden" value="{@xlink:href}" />
-                      <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.urn.addURN')}" />
-                    </form>
-                  </td>-->
-                  <!-- delete derivate -->
-                  <xsl:if test="not($derivateWithURN) or ($derivateWithURN and contains($CurrentGroups,'admingroup'))">
-                    <td width="{$cellWidth}" valign="center" align="center">
-                      <form method="get">
-                        <xsl:call-template name="printDerivates_editButton">
-                          <xsl:with-param name="obj_id" select="$obj_id" />
-                          <xsl:with-param name="type" select="$type" />
-                          <xsl:with-param name="todo" select="'sdelder'" />
-                        </xsl:call-template>
-                        <input type="image" src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="{i18n:translate('component.swf.derivate.delDerivate')}"
-                          onClick="return confirmFormDelete();" />
-                      </form>
-                    </td>
-                  </xsl:if>
-                </xsl:if>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr id="detailed-whitespaces">
-          <td></td>
-        </tr>
+                  </tr>
+                  <!-- prints the editor buttons (add, edit, delete ...) -->
+                  <tr height="30px">
+                    <xsl:if test="acl:checkPermission($obj_id,'writedb')">
+                      <!-- urn -->
+                      <xsl:variable name="derivateWithURN" select="mcrxsl:hasURNDefined($deriv)" />
+                      <xsl:variable name="type">
+                        <xsl:copy-of select="substring-before(substring-after($obj_id,'_'),'_')" />
+                      </xsl:variable>
+                      <xsl:variable name="cellWidth" select="'24'" />
+                      <!-- add files to derivate -->
+                      <td width="{$cellWidth}" valign="center" align="center">
+                        <form method="get">
+                          <xsl:call-template name="printDerivates_editButton">
+                            <xsl:with-param name="obj_id" select="$obj_id" />
+                            <xsl:with-param name="type" select="$type" />
+                            <xsl:with-param name="todo" select="'saddfile'" />
+                          </xsl:call-template>
+                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_deradd.gif" title="{i18n:translate('swf.derivate.addFile')}" />
+                        </form>
+                      </td>
+                      <!-- edit derivate -->
+                      <td width="{$cellWidth}" valign="center" align="center">
+                        <form method="get">
+                          <xsl:call-template name="printDerivates_editButton">
+                            <xsl:with-param name="obj_id" select="$obj_id" />
+                            <xsl:with-param name="type" select="$type" />
+                            <xsl:with-param name="todo" select="'seditder'" />
+                          </xsl:call-template>
+                          <input name="extparm" type="hidden">
+                            <xsl:variable name="deriv" select="@xlink:href" />
+                            <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
+                            <xsl:attribute name="value">
+                              <xsl:value-of select="document($derivlink)/mcr_results/mcr_result/@label" />
+                            </xsl:attribute>
+                          </input>
+                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_deredit.gif" title="{i18n:translate('component.swf.derivate.editDerivate')}" />
+                        </form>
+                      </td>
+                      <!-- add urn -->
+                      <xsl:if test="$derivateWithURN=false() and mcrxsl:isAllowedObjectForURNAssignment($obj_id)">
+                        <td width="{$cellWidth}" valign="center" align="center">
+                          <form method="get">
+                            <xsl:call-template name="printDerivates_editButton">
+                              <xsl:with-param name="action" select="'servlets/MCRAddURNToObjectServlet'"/>
+                              <xsl:with-param name="obj_id" select="$obj_id" />
+                              <xsl:with-param name="type" select="$type" />
+                              <xsl:with-param name="todo" select="'addURNToDerivates'" />
+                            </xsl:call-template>
+                            <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.urn.addURN')}" />
+                          </form>
+                        </td>
+                      </xsl:if>
+                      <!-- create mets -->
+    <!--                  <td width="{$cellWidth}" valign="center" align="center">
+                        <form method="get">
+                          <xsl:attribute name="action">
+                            <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MetsServlet', $JSessionID)" />
+                          </xsl:attribute>
+                          <input name="mode" type="hidden" value="generate" />
+                          <input name="objid" type="hidden" value="$obj_id" />
+                          <input name="derid" type="hidden" value="{@xlink:href}" />
+                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.urn.addURN')}" />
+                        </form>
+                      </td>-->
+                      <!-- delete derivate -->
+                      <xsl:if test="not($derivateWithURN) or ($derivateWithURN and contains($CurrentGroups,'admingroup'))">
+                        <td width="{$cellWidth}" valign="center" align="center">
+                          <form method="get">
+                            <xsl:call-template name="printDerivates_editButton">
+                              <xsl:with-param name="obj_id" select="$obj_id" />
+                              <xsl:with-param name="type" select="$type" />
+                              <xsl:with-param name="todo" select="'sdelder'" />
+                            </xsl:call-template>
+                            <input type="image" src="{$WebApplicationBaseURL}images/workflow_derdelete.gif" title="{i18n:translate('component.swf.derivate.delDerivate')}"
+                              onClick="return confirmFormDelete();" />
+                          </form>
+                        </td>
+                      </xsl:if>
+                    </xsl:if>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="detailed-whitespaces">
+              <td></td>
+            </tr>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('Derivate not found ', $deriv, '!')"></xsl:value-of>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </xsl:if>
 
     <!-- links -->
     <xsl:for-each select="/mycoreobject/metadata/derivateLinks/derivateLink">
       <xsl:variable name="derivateID" select="substring-before(./@xlink:href,'/')" />
-      <xsl:variable name="derivateObj" select="document(concat('notnull:mcrobject:',$derivateID))" />
       <xsl:variable name="hasPermission" select="acl:checkPermission($obj_id,'deletedb')" />
-
-      <tr>
-        <td align="left" valign="top" id="detailed-links">
-          <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-            <tr>
-              <td colspan="3" style="padding-left: 10px;">
-                <xsl:choose>
-                  <xsl:when test="($derivateObj/null) and $hasPermission">
-                    <xsl:value-of select="i18n:translate('metaData.derivate.link.sourceNotexist')" />
-                  </xsl:when>
-                  <xsl:when test="not($derivateObj/null)">
-                    <xsl:apply-templates select=".">
-                      <xsl:with-param name="objID" select="$obj_id" />
-                    </xsl:apply-templates>
-                  </xsl:when>
-                </xsl:choose>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
+      <xsl:choose>
+        <xsl:when test="mcrxsl:exists($derivateID)">
+          <xsl:variable name="derivateObj" select="document(concat('notnull:mcrobject:',$derivateID))" />
+          <tr>
+            <td align="left" valign="top" id="detailed-links">
+              <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+                <tr>
+                  <td colspan="3" style="padding-left: 10px;">
+                    <xsl:choose>
+                      <xsl:when test="($derivateObj/null) and $hasPermission">
+                        <xsl:value-of select="i18n:translate('metaData.derivate.link.sourceNotexist')" />
+                      </xsl:when>
+                      <xsl:when test="not($derivateObj/null)">
+                        <xsl:apply-templates select=".">
+                          <xsl:with-param name="objID" select="$obj_id" />
+                        </xsl:apply-templates>
+                      </xsl:when>
+                    </xsl:choose>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('Derivate (link) not found ', $derivateID, '!')"></xsl:value-of>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="$hasPermission">
         <tr>
           <td colspan="3" width="30" valign="top" align="center">

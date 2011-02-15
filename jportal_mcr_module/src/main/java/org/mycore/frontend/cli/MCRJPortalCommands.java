@@ -12,9 +12,10 @@ import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.util.DerivateLinkUtil;
 
 public class MCRJPortalCommands extends MCRAbstractCommands {
 
@@ -52,6 +53,9 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         command.add(com);
         com = new MCRCommand("internal delete xml:lang {0}", "org.mycore.frontend.cli.DeleteLangCommand.deleteXmlLang String", "");
         command.add(com);
+        
+        com = new MCRCommand("add derivate link {0} to {1}", "org.mycore.frontend.cli.MCRJPortalCommands.addDerivateLink String String", "");
+        command.add(com);
     }
 
     public static void exportBlob(String objectID, String file) {
@@ -82,4 +86,8 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         LOGGER.info("imported object " + id + " to blob from " + file);
     }
 
+    public static void addDerivateLink(String link, String id) throws MCRActiveLinkException {
+        MCRObjectID mcrId = MCRObjectID.getInstance(id);
+        DerivateLinkUtil.setLink(mcrId, link);
+    }
 }

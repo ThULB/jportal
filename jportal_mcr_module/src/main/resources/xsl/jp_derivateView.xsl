@@ -25,7 +25,7 @@
     <xsl:param name="objectXML" />
     <xsl:param name="detailed-view" />
     <xsl:if test="$objectHost = 'local'">
-      
+
       <!-- id of the derivate -->
       <xsl:variable name="derivid">
         <xsl:choose>
@@ -59,8 +59,8 @@
         </xsl:choose>
       </xsl:variable>
 
-      <!-- start file -->
-      <xsl:variable name="derivmain">
+      <!-- main file -->
+      <xsl:variable name="mainFile">
         <xsl:choose>
           <!-- links -->
           <xsl:when test="name() = 'derivateLink'">
@@ -87,11 +87,17 @@
         </xsl:choose>
       </xsl:variable>
 
+      <!-- encoded main file -->
+      <xsl:variable name="encodedMainFile" select="encoder:encode($mainFile)" />
+
+      <!-- <xsl:message><xsl:value-of select="$encodedMainFile" /></xsl:message>-->
+
+
       <!-- constructed url to the image -->
       <xsl:variable name="iview2href">
         <xsl:call-template name="iview.getAddress.hack">
           <xsl:with-param name="objID" select="$objIDofDerivate"/>
-          <xsl:with-param name="mainFile" select="$derivmain" />
+          <xsl:with-param name="mainFile" select="$encodedMainFile" />
         </xsl:call-template>
       </xsl:variable>
 
@@ -100,17 +106,22 @@
       </xsl:variable>
       <xsl:variable name="fileType">
         <xsl:call-template name="getFileType">
-          <xsl:with-param name="fileName" select="$derivmain" />
+          <xsl:with-param name="fileName" select="$mainFile" />
         </xsl:call-template>
       </xsl:variable>
+      
+      
       <!-- IView available ? -->
       <xsl:variable name="supportedMainFile">
         <xsl:call-template name="iview.getSupport.hack">
           <xsl:with-param name="objID" select="$objIDofDerivate"/>
           <xsl:with-param name="derivID" select="$derivid" />
-          <xsl:with-param name="mainFile" select="$derivmain" />
+          <xsl:with-param name="mainFile" select="$mainFile" />
         </xsl:call-template>
       </xsl:variable>
+      
+      
+      
       <xsl:variable name="href">
         <xsl:choose>
           <xsl:when test="$supportedMainFile != ''">
@@ -119,16 +130,20 @@
           <xsl:otherwise>
             <xsl:choose>
               <!-- remove double slash if exist -->
-              <xsl:when test="substring($derivbase,string-length($derivbase),1) = '/' and substring($derivmain,1,1) = '/'">
-                <xsl:value-of select="concat($derivbase,substring-after($derivmain,'/'))" />
+              <xsl:when test="substring($derivbase,string-length($derivbase),1) = '/' and substring($mainFile,1,1) = '/'">
+                <xsl:value-of select="concat($derivbase,substring-after($mainFile,'/'))" />
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="concat($derivbase,$derivmain)" />
+                <xsl:value-of select="concat($derivbase,$mainFile)" />
               </xsl:otherwise>
             </xsl:choose>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
+      
+      
+      
+      
       <xsl:variable name="fileLabel">
         <xsl:call-template name="getFileLabel">
           <xsl:with-param name="typeOfFile" select="$fileType" />
@@ -179,7 +194,7 @@
                         <a href="{$iview2href}">
                           <xsl:call-template name="iview2.getImageElement">
                             <xsl:with-param select="$derivid" name="derivate" />
-                            <xsl:with-param select="concat('/',encoder:encode($derivmain))" name="imagePath" />
+                            <xsl:with-param select="concat('/', $encodedMainFile)" name="imagePath" />
                           </xsl:call-template>
                         </a>
                       </xsl:when>
@@ -191,7 +206,7 @@
                     </xsl:choose>
                   </xsl:when>
                   <xsl:otherwise>
-                    <a href="{$href}">
+                    <a href="{$iview2href}">
                       <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
                     </a>
                   </xsl:otherwise>
@@ -241,7 +256,7 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:variable>
-              <a href="{$href}">
+              <a href="{$iview2href}">
                 <xsl:value-of select="$label" />
               </a>
             </xsl:when>

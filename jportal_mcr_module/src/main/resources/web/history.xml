@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+
+  <section title="Versionsgeschichte" xml:lang="de" />
+  <section title="Version history" xml:lang="en" />
+
+  <section xml:lang="all">
+   <history />
+  </section>
+
+  <meta>
+    <log date="2011" time="14:35" labelPath="History" lastEditor="Administrator" />
+  </meta>
+</MyCoReWebPage>

@@ -6,6 +6,7 @@
   <xsl:include href="jp_layout-commons.xsl" />
   <xsl:include href="jp_objectView.xsl" />
   <xsl:include href="jp_derivateView.xsl" />
+  <xsl:include href="history.xsl" />
 
   <xsl:variable name="journalID">
     <xsl:call-template name="get.journalID" />

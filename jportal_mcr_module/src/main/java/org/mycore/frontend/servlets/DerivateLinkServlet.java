@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.jdom.JDOMException;
 import org.mycore.common.MCRUsageException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -16,49 +15,43 @@ public class DerivateLinkServlet extends MCRServlet {
 
     private static Logger LOGGER = Logger.getLogger(DerivateLinkServlet.class);
 
-    private static final String SET_LINK = "setLink";
-    private static final String REMOVE_LINK = "removeLink";
-    private static final String SET_IMAGE = "setImage";
-    private static final String GET_IMAGE = "getImage";
-
-    private static final String FROM = "from";
-    private static final String TO = "to";
-    private static final String DERIVATE_ID = "derivateId";
-    private static final String FILE = "file";
+    private enum Mode {
+        setLink, removeLink, setImage, getImage
+    }
+    private enum Parameter {
+        mode, from, to, derivateId, file
+    }
 
     public void doGetPost(MCRServletJob job) throws Exception {
         // init
         HttpServletRequest request = job.getRequest();
-        String mode = request.getParameter("mode");
-        if (!wellRequest(mode))
-            throw new MCRUsageException("Bad request, '" + mode + "' mode parameter is empty or not valid !");
+        String modeAsString = request.getParameter(Parameter.mode.name());
+        Mode mode = null;
+        try {
+            mode = Mode.valueOf(modeAsString);
+        } catch(Exception exc) {
+            throw new MCRUsageException("Bad request, '" + modeAsString + "' mode parameter is empty or not valid !");
+        }
 
         // request dispatcher
-        if (mode.equals(SET_LINK) || mode.equals(REMOVE_LINK)) {
+        if (mode.equals(Mode.setLink) || mode.equals(Mode.removeLink)) {
             handleLink(job, mode);
-        } else if(mode.equals(SET_IMAGE)) {
+        } else if(mode.equals(Mode.setImage)) {
             handleBookmarkImage(job);
-        } else if(mode.equals(GET_IMAGE)) {
+        } else if(mode.equals(Mode.getImage)) {
             handleGetBookmarkedImage(job);
+        } else {
+            LOGGER.warn("Mode " + mode.name() + " is not implemented!");
         }
     }
 
-    private final boolean wellRequest(String mode) {
-        if ( mode == null || mode.equals("") ||
-             !(mode.equals(SET_LINK) || mode.equals(REMOVE_LINK) ||
-               mode.equals(SET_IMAGE) || mode.equals(GET_IMAGE))) {
-            return false;
-        }
-        return true;
-    }
-
-    private void handleLink(MCRServletJob job, String mode) throws IOException, MCRActiveLinkException {
+    private void handleLink(MCRServletJob job, Mode mode) throws IOException, MCRActiveLinkException {
         HttpServletRequest request = job.getRequest();
-        String from = request.getParameter(FROM);
+        String from = request.getParameter(Parameter.from.name());
         String to = getTo(request);
         MCRObjectID mcrObjId = MCRObjectID.getInstance(from);
 
-        if(mode.equals(SET_LINK)) {
+        if(mode.equals(Mode.setLink)) {
             LOGGER.debug("set link from " + from + " to " + to);
             DerivateLinkUtil.setLink(mcrObjId, to);
         } else {
@@ -69,8 +62,8 @@ public class DerivateLinkServlet extends MCRServlet {
     }
 
     private void handleBookmarkImage(MCRServletJob job) {
-        String file = job.getRequest().getParameter(FILE);
-        String derivateId = job.getRequest().getParameter(DERIVATE_ID);
+        String file = job.getRequest().getParameter(Parameter.file.name());
+        String derivateId = job.getRequest().getParameter(Parameter.derivateId.name());
         DerivateLinkUtil.bookmarkImage(derivateId, file);
     }
 
@@ -82,12 +75,12 @@ public class DerivateLinkServlet extends MCRServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     /**
      * @param request
      */
     private String getTo(HttpServletRequest request) {
-        String to = request.getParameter(TO);
+        String to = request.getParameter(Parameter.to.name());
         if (to != null && !to.equals("")) {
             return to;
         } else {

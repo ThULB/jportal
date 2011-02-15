@@ -24,15 +24,9 @@ public abstract class DerivateLinkUtil {
 
     private static final String DERIVATE_LINK = "derivateLink";
     private static final String DERIVATE_LINKS = "derivateLinks";
-    
+
     public static void bookmarkImage(String derivateId, String file) {
         MCRSession session = MCRSessionMgr.getCurrentSession();
-        // decode image path
-        try {
-            file = URLDecoder.decode(file, "UTF-8");
-        } catch(UnsupportedEncodingException uee) {
-            LOGGER.error("while bookmark image " + file, uee);
-        }
         session.put(IMAGE_BOOKMARK_FILE, file);
         session.put(IMAGE_BOOKMARK_DERIVATE_ID, derivateId);
     }
