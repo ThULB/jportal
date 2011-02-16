@@ -8,276 +8,369 @@
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
   exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl encoder layoutUtils">
 
-  <xsl:variable name="readAccessForDerivates">
-    <xsl:call-template name="get.readAccessForDerivates">
-      <xsl:with-param name="jID" select="$journalID" />
-    </xsl:call-template>
-  </xsl:variable>
-
-  <xsl:variable name="thumbnail">
-    <xsl:call-template name="get.thumbnailSupport" />
-  </xsl:variable>
-
-  <!-- ===================================================================================================== -->
-
-  <xsl:template match="internals | derivateLink | mcr:metaData" priority="2">
+  <!-- ========================================================== -->
+  <!-- derivate  -->
+  <!-- ========================================================== -->
+  <xsl:template match="internals" priority="2">
     <xsl:param name="objID" />
     <xsl:param name="objectXML" />
-    <xsl:param name="detailed-view" />
     <xsl:if test="$objectHost = 'local'">
-
-      <!-- id of the derivate -->
-      <xsl:variable name="derivid">
-        <xsl:choose>
-          <!-- links -->
-          <xsl:when test="name() = 'derivateLink'">
-            <xsl:value-of select="substring-before(@xlink:href,'/')" />
-          </xsl:when>
-          <!-- full text hit -->
-          <xsl:when test="name() = 'mcr:metaData'">
-            <xsl:value-of select="mcr:field[@name='DerivateID']/text()" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="../../@ID" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-
-      <!-- id of the mycore object which contains the derivate -->
-      <xsl:variable name="objIDofDerivate">
-        <xsl:choose>
-          <xsl:when test="not(mcrxsl:exists($derivid))">
-            <xsl:value-of select="'this derivate is deleted'" />
-          </xsl:when>
-          <!-- links -->
-          <xsl:when test="name() = 'derivateLink'">
-            <xsl:value-of select="document(concat('mcrobject:',$derivid))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$objID" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-
-      <!-- main file -->
-      <xsl:variable name="mainFile">
-        <xsl:choose>
-          <!-- links -->
-          <xsl:when test="name() = 'derivateLink'">
-            <xsl:value-of select="substring-after(@xlink:href,'/')" />
-          </xsl:when>
-          <!-- full text hit -->
-          <xsl:when test="name() = 'mcr:metaData'">
-            <!-- <xsl:value-of select="mcr:field[@name='filePath']/text()" /> -->
-            <!-- check if a file mapping has to be done -->
-            <xsl:call-template name="mappFile">
-              <xsl:with-param name="derivid-if" select="$derivid" />
-              <xsl:with-param name="filePath" select="mcr:field[@name='filePath']/text()" />
-              <xsl:with-param name="fileName" select="mcr:field[@name='fileName']/text()" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="name() = 'internals'">
-            <xsl:value-of select="internal/@maindoc" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="iview2.getSupport">
-              <xsl:with-param select="$objIDofDerivate" name="derivID"/>
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-
-      <!-- encoded main file -->
-      <xsl:variable name="encodedMainFile" select="encoder:encode($mainFile)" />
-
-      <!-- <xsl:message><xsl:value-of select="$encodedMainFile" /></xsl:message>-->
-
-
-      <!-- constructed url to the image -->
-      <xsl:variable name="iview2href">
-        <xsl:call-template name="iview.getAddress.hack">
-          <xsl:with-param name="objID" select="$objIDofDerivate"/>
-          <xsl:with-param name="mainFile" select="$encodedMainFile" />
-        </xsl:call-template>
-      </xsl:variable>
-
-      <xsl:variable name="derivbase">
-        <xsl:value-of select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivid,'/')" />
-      </xsl:variable>
-      <xsl:variable name="fileType">
-        <xsl:call-template name="getFileType">
-          <xsl:with-param name="fileName" select="$mainFile" />
-        </xsl:call-template>
-      </xsl:variable>
-      
-      
-      <!-- IView available ? -->
-      <xsl:variable name="supportedMainFile">
-        <xsl:call-template name="iview.getSupport.hack">
-          <xsl:with-param name="objID" select="$objIDofDerivate"/>
-          <xsl:with-param name="derivID" select="$derivid" />
-          <xsl:with-param name="mainFile" select="$mainFile" />
-        </xsl:call-template>
-      </xsl:variable>
-      
-      
-      
-      <xsl:variable name="href">
-        <xsl:choose>
-          <xsl:when test="$supportedMainFile != ''">
-            <xsl:value-of select="$supportedMainFile" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:choose>
-              <!-- remove double slash if exist -->
-              <xsl:when test="substring($derivbase,string-length($derivbase),1) = '/' and substring($mainFile,1,1) = '/'">
-                <xsl:value-of select="concat($derivbase,substring-after($mainFile,'/'))" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="concat($derivbase,$mainFile)" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      
-      
-      
-      
-      <xsl:variable name="fileLabel">
-        <xsl:call-template name="getFileLabel">
-          <xsl:with-param name="typeOfFile" select="$fileType" />
-        </xsl:call-template>
-      </xsl:variable>
-      <!-- access to edit ? -->
-      <xsl:variable name="editAccess">
-        <!-- <xsl:value-of select="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')" /> -->
-        <xsl:choose>
-          <xsl:when test="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')">
-            <xsl:value-of select="'true'"></xsl:value-of>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'false'"></xsl:value-of>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <!-- read access ? -->
-      <xsl:variable name="readAccess4Derivates">
-        <xsl:choose>
-          <xsl:when test="$readAccessForDerivates = ''">
-            <xsl:variable name="jourID">
-              <xsl:value-of select="xalan:nodeset($objectXML)/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
-            </xsl:variable>
-            <xsl:call-template name="get.readAccessForDerivates">
-              <xsl:with-param name="jID" select="$jourID" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="$readAccessForDerivates = 'true' or $editAccess = 'true'">
-            <xsl:value-of select="'true'"></xsl:value-of>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="'false'"></xsl:value-of>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-
+      <xsl:variable name="derivID" select="../../@ID" />
       <xsl:choose>
-        <xsl:when test="$thumbnail='true'">
-          <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-            <tr id="detailed-contentsimg1">
-              <td id="detailed-contentsimgpadd">
-                <xsl:choose>
-                  <xsl:when test="($supportedMainFile != '')">
-                    <xsl:choose>
-                      <!-- links -->
-                      <xsl:when test="name() = 'derivateLink'">            
-                        <a href="{$iview2href}">
-                          <xsl:call-template name="iview2.getImageElement">
-                            <xsl:with-param select="$derivid" name="derivate" />
-                            <xsl:with-param select="concat('/', $encodedMainFile)" name="imagePath" />
-                          </xsl:call-template>
-                        </a>
-                      </xsl:when>
-  					  <xsl:otherwise>
-                        <xsl:call-template name="derivateView">
-                          <xsl:with-param name="derivateID" select="../../@ID" />
-                         </xsl:call-template>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <a href="{$iview2href}">
-                      <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-                    </a>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <br />
-              </td>
-            </tr>
-            <tr id="detailed-contents">
-              <td>
-                <xsl:choose>
-                  <xsl:when test="$readAccess4Derivates = 'true'">
-                    <xsl:variable name="label">
-                      <xsl:choose>
-                        <xsl:when test="name() = 'derivateLink'">
-                          <xsl:value-of select="concat($fileLabel, '(~)')" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="$fileLabel" />
-                        </xsl:otherwise>
-                      </xsl:choose>
-                    </xsl:variable>
-                    <xsl:value-of select="$label" />
-                  </xsl:when>
-                  <xsl:otherwise>
-                    Zugriff gesperrt!
-                  </xsl:otherwise>
-                </xsl:choose>
-                <xsl:if test="$editAccess = 'true'">
-                  <a href="{$derivbase}">
-                    <xsl:value-of select="', Details &gt;&gt; '" />
-                  </a>
-                </xsl:if>
-              </td>
-            </tr>
-          </table>
+        <xsl:when test="mcrxsl:exists($derivID)">
+          <xsl:variable name="mainFile" select="internal/@maindoc" />
+          <xsl:call-template name="jp.derivate.print">
+            <xsl:with-param name="objID" select="$objID" />
+            <xsl:with-param name="objectXML" select="$objectXML" />
+            <xsl:with-param name="derivID" select="$derivID" />
+            <xsl:with-param name="mainFile" select="$mainFile" />
+          </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:choose>
-            <xsl:when test="$readAccess4Derivates = 'true'">
-              <xsl:variable name="label">
-                <xsl:choose>
-                  <xsl:when test="name()='derivateLink'">
-                    <xsl:value-of select="concat($fileLabel, '(~)')" />
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="$fileLabel" />
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <a href="{$iview2href}">
-                <xsl:value-of select="$label" />
-              </a>
-            </xsl:when>
-            <xsl:otherwise>
-              Zugriff gesperrt !
-            </xsl:otherwise>
-          </xsl:choose>
-
-          <xsl:if test="$editAccess = 'true'">
-            <a href="{$derivbase}">
-              <xsl:value-of select="', Details &gt;&gt; '" />
-            </a>
-          </xsl:if>
+          <xsl:call-template name="jp.derivate.doesnotexist" >
+            <xsl:with-param name="derivID" select="$derivID"/>
+          </xsl:call-template>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
   </xsl:template>
 
-  <!-- ===================================================================================================== -->
+  <!-- ========================================================== -->
+  <!-- derivate link  -->
+  <!-- ========================================================== -->
+  <xsl:template match="derivateLink" priority="2">
+    <xsl:param name="objID" />
+    <xsl:param name="objectXML" />
+    <xsl:if test="$objectHost = 'local'">
+      <xsl:variable name="derivID" select="substring-before(@xlink:href,'/')" />
+      <xsl:choose>
+        <xsl:when test="mcrxsl:exists($derivID)">
+          <xsl:variable name="mcrObjId" select="document(concat('mcrobject:',$derivID))/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href" />
+          <xsl:variable name="mainFile" select="substring-after(@xlink:href,'/')" />
+          <xsl:call-template name="jp.derivate.print">
+            <xsl:with-param name="objID" select="$mcrObjId" />
+            <xsl:with-param name="objectXML" select="$objectXML" />
+            <xsl:with-param name="derivID" select="$derivID" />
+            <xsl:with-param name="mainFile" select="$mainFile" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="jp.derivate.doesnotexist" >
+            <xsl:with-param name="derivID" select="$derivID"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
 
-  <xsl:template name="mappFile">
+  <!-- ========================================================== -->
+  <!-- Hit in text -->
+  <!-- ========================================================== -->
+  <xsl:template match="mcr:metaData" priority="2">
+    <xsl:param name="objID" />
+    <xsl:param name="objectXML" />
+    
+    <xsl:if test="$objectHost = 'local'">
+      <xsl:variable name="derivID" select="mcr:field[@name='DerivateID']/text()" />
+      <xsl:choose>
+        <xsl:when test="mcrxsl:exists($derivID)">
+          <xsl:variable name="mainFile" >
+            <!-- check if a file mapping has to be done -->
+            <xsl:call-template name="jp.derivate.mappFile">
+              <xsl:with-param name="derivid-if" select="$derivID" />
+              <xsl:with-param name="filePath" select="mcr:field[@name='filePath']/text()" />
+              <xsl:with-param name="fileName" select="mcr:field[@name='fileName']/text()" />
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:call-template name="jp.derivate.print">
+            <xsl:with-param name="objID" select="$objID" />
+            <xsl:with-param name="objectXML" select="$objectXML" />
+            <xsl:with-param name="derivID" select="$derivID" />
+            <xsl:with-param name="mainFile" select="$mainFile" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="jp.derivate.doesnotexist" >
+            <xsl:with-param name="derivID" select="$derivID"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- is called when the derivate doesn't exists -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.doesnotexist" >
+    <xsl:param name="derivID" />
+    <xsl:value-of select="concat('Derivat ', $derivID,' ist gelöscht!')"></xsl:value-of>      
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Start entry point to print a derivate -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.print">
+    <xsl:param name="objID" />
+    <xsl:param name="objectXML" />
+    <xsl:param name="derivID" />
+    <xsl:param name="mainFile" />
+
+    <!-- encoded main file -->
+    <xsl:variable name="encodedMainFile" select="encoder:encode($mainFile)" />
+    <!-- url to MCRFileNodeServlet -->
+    <xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivID,'/')" />
+    <!-- is iview2 is used or not -->
+    <xsl:variable name="useIview">
+      <xsl:call-template name="jp.derivate.iview.isSupportedFile">
+        <xsl:with-param name="objID" select="$objID"/>
+        <xsl:with-param name="file" select="$mainFile"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <!-- href -->
+    <xsl:variable name="href">
+      <xsl:choose>
+        <xsl:when test="$useIview = 'true'">
+          <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$objID,'?XSL.view.objectmetadata=false&amp;jumpback=true&amp;maximized=true&amp;page=',$encodedMainFile)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:choose>
+            <!-- remove double slash if exist -->
+            <xsl:when test="substring($derivbase,string-length($derivbase),1) = '/' and substring($encodedMainFile,1,1) = '/'">
+              <xsl:value-of select="concat($derivbase,substring-after($encodedMainFile,'/'))" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($derivbase,$encodedMainFile)" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <!-- print -->
+    <xsl:choose>
+      <xsl:when test="$view.objectmetadata='false'">
+        <!-- metadata -->
+        <xsl:call-template name="jp.derivate.print.present">
+          <xsl:with-param name="objID" select="$objID"/>
+          <xsl:with-param name="objectXML" select="$objectXML" />
+          <xsl:with-param name="derivID" select="$derivID" />
+          <xsl:with-param name="derivbase" select="$derivbase" />
+          <xsl:with-param name="useIview" select="$useIview" />
+          <xsl:with-param name="encodedMainFile" select="$encodedMainFile" />
+          <xsl:with-param name="href" select="$href" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- resultset -->
+        <xsl:call-template name="jp.derivate.print.details">
+            <xsl:with-param name="objID" select="$objID"/>
+            <xsl:with-param name="objectXML" select="$objectXML" />
+            <xsl:with-param name="derivbase" select="$derivbase" />
+            <xsl:with-param name="encodedMainFile" select="$encodedMainFile" />
+          <xsl:with-param name="href" select="$href" />
+        </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Metadataview -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.print.present">
+    <xsl:param name="objID" />
+    <xsl:param name="objectXML" />
+    <xsl:param name="derivID" />
+    <xsl:param name="derivbase" />
+    <xsl:param name="useIview" />
+    <xsl:param name="encodedMainFile" />
+    <xsl:param name="href" />
+
+    <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
+      <tr id="detailed-contentsimg1">
+        <td id="detailed-contentsimgpadd">
+          <xsl:choose>
+            <xsl:when test="$useIview = 'true'">
+              <xsl:choose>
+                <!-- links -->
+                <xsl:when test="name() = 'derivateLink'">
+                  <a href="{$href}">
+                    <xsl:call-template name="iview2.getImageElement">
+                      <xsl:with-param select="$derivID" name="derivate" />
+                      <xsl:with-param select="concat('/', $encodedMainFile)" name="imagePath" />
+                    </xsl:call-template>
+                  </a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:call-template name="derivateView">
+                    <xsl:with-param name="derivateID" select="../../@ID" />
+                  </xsl:call-template>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="{$href}">
+                <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
+          <br />
+        </td>
+      </tr>
+      <tr id="detailed-contents">
+        <td>
+          <xsl:call-template name="jp.derivate.print.details">
+            <xsl:with-param name="objID" select="$objID"/>
+            <xsl:with-param name="objectXML" select="$objectXML" />
+            <xsl:with-param name="derivbase" select="$derivbase" />
+            <xsl:with-param name="encodedMainFile" select="$encodedMainFile" />
+            <xsl:with-param name="href" select="''" />
+          </xsl:call-template>
+        </td>
+      </tr>
+    </table>
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Details & Resultset -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.print.details">
+    <xsl:param name="objID" />
+    <xsl:param name="objectXML" />
+    <xsl:param name="derivbase" />
+    <xsl:param name="encodedMainFile" />
+    <xsl:param name="href"/>
+
+    <!-- has read access? -->
+    <xsl:variable name="readAccess">
+      <xsl:call-template name="jp.derivate.readAccess">
+        <xsl:with-param name="objectXML" select="$objectXML" />
+      </xsl:call-template>
+    </xsl:variable>
+    <!-- has edit access? -->
+    <xsl:variable name="editAccess">
+      <xsl:call-template name="jp.derivate.editAccess">
+        <xsl:with-param name="objID" select="$objID" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="$readAccess = 'true' or $editAccess = 'true'">
+        <!-- get the label -->
+        <xsl:variable name="label">
+          <xsl:call-template name="jp.derivate.getFileLabel">
+            <xsl:with-param name="file" select="$encodedMainFile"/>
+          </xsl:call-template>
+          <xsl:if test="name() = 'derivateLink'">
+            <xsl:value-of select="' (~)'" />
+          </xsl:if>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$href != ''">
+            <!-- link to file -->
+            <a href="{$href}">
+              <xsl:value-of select="$label" />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <!-- simple text -->
+            <xsl:value-of select="$label" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'Zugriff gesperrt !'" />
+      </xsl:otherwise>
+    </xsl:choose>
+
+    <xsl:if test="$editAccess = 'true'">
+      <a href="{$derivbase}">
+        <xsl:value-of select="', Details &gt;&gt; '" />
+      </a>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Checks if file is supported by iview2  -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.iview.isSupportedFile">
+    <xsl:param name="objID" />
+    <xsl:param name="file" />
+
+    <xsl:variable name="fileType">
+      <xsl:call-template name="jp.derivate.getFileType">
+        <xsl:with-param name="fileName" select="$file" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:value-of select="$fileType!='' and contains($MCR.Module-iview.SupportedContentTypes, $fileType)" />
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Returns the label of a file  -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.getFileLabel">
+    <xsl:param name="file" />
+
+    <xsl:variable name="typeOfFile">
+      <xsl:call-template name="jp.derivate.getFileType">
+        <xsl:with-param name="fileName" select="$file" />
+      </xsl:call-template>
+    </xsl:variable>    
+    
+    <xsl:message><xsl:value-of select="$typeOfFile" /></xsl:message>
+    
+    <xsl:variable name="label">
+      <xsl:value-of select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[rules/extension/text()=$typeOfFile]/label/text()" />
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$label = ''">
+        <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat'),' (',$typeOfFile,') ')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$label" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Returns the type of a file  -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.getFileType">
+    <xsl:param name="fileName" />
+    <xsl:value-of select="substring-after(substring($fileName,string-length($fileName)-4), '.')" />
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Checks for read access -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.readAccess">
+    <xsl:param name="objectXML" />
+    <!-- get journal ID -->
+    <xsl:variable name="jID">
+      <xsl:choose>
+        <xsl:when test="$journalID != ''">
+          <xsl:value-of select="$journalID" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="xalan:nodeset($objectXML)/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="acl:checkPermission($jID,'read-derivates')" />
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- Checks for edit access -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.editAccess">
+    <xsl:param name="objID" />
+    <xsl:value-of select="acl:checkPermission($objID,'writedb') or acl:checkPermission($objID,'deletedb')" />
+  </xsl:template>
+
+  <!-- ========================================================== -->
+  <!-- mapps a file with fileMappings.xml -->
+  <!-- ========================================================== -->
+  <xsl:template name="jp.derivate.mappFile">
     <xsl:param name="derivid-if" />
     <xsl:param name="filePath" />
     <xsl:param name="fileName" />
@@ -327,88 +420,5 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-
-  <!-- ===================================================================================================== -->
-
-  <xsl:template name="getFileLabel">
-    <xsl:param name="typeOfFile" />
-    <xsl:variable name="label">
-      <xsl:value-of select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[rules/extension/text()=$typeOfFile]/label/text()" />
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$label = ''">
-        <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat'),' (',$typeOfFile,') ')" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$label" />
-        <!-- <xsl:choose> <xsl:when test="$CurrentLang='de'"> <xsl:value-of select="concat(' ',$label,' ',i18n:translate('metaData.digitalisat.show'),' 
-          ')" /> </xsl:when> <xsl:otherwise> <xsl:value-of select="concat(' ',i18n:translate('metaData.digitalisat.show'),' ',$label,' ')" /> </xsl:otherwise> 
-          </xsl:choose> -->
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  <!-- ===================================================================================================== -->
-  <xsl:template name="iview.getSupport.hack">
-    <xsl:param name="objID" />
-    <xsl:param name="mainFile" />
-
-    <xsl:variable name="fileType">
-      <xsl:call-template name="getFileType">
-        <xsl:with-param name="fileName" select="$mainFile" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$fileType!=''">
-        <xsl:choose>
-          <xsl:when test="contains($MCR.Module-iview.SupportedContentTypes,$fileType)">
-            <xsl:call-template name="iview.getAddress.hack">
-              <xsl:with-param name="objID" select="$objID"/>
-              <xsl:with-param name="mainFile" select="$mainFile" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="''" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="''" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  <!-- ===================================================================================================== -->
-  <xsl:template name="getFileType">
-    <xsl:param name="fileName" />
-    <xsl:value-of select="substring($fileName,number(string-length($fileName)-2))" />
-  </xsl:template>
-  <!-- ===================================================================================================== -->
-  <xsl:template name="iview.getAddress.hack">
-    <xsl:param name="objID" />
-    <xsl:param name="mainFile" />
-
-    <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$objID,'?XSL.view.objectmetadata=false&amp;jumpback=true&amp;maximized=true&amp;page=',$mainFile)" />
-  </xsl:template>
-
-  <!-- ===================================================================================================== -->
-  <xsl:template name="get.thumbnailSupport">
-    <xsl:choose>
-      <xsl:when test="/mycoreobject and $view.objectmetadata='false'">
-        <xsl:value-of select="'true'" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="'false'" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <!-- ===================================================================================================== -->
-
-  <xsl:template name="get.readAccessForDerivates">
-    <xsl:param name="jID" />
-    <xsl:if test="$jID != ''">
-      <xsl:value-of select="acl:checkPermission($jID,'read-derivates')" />
-    </xsl:if>
-  </xsl:template>
-
 
 </xsl:stylesheet>
