@@ -310,15 +310,11 @@
   <!-- ========================================================== -->
   <xsl:template name="jp.derivate.getFileLabel">
     <xsl:param name="file" />
-
     <xsl:variable name="typeOfFile">
       <xsl:call-template name="jp.derivate.getFileType">
         <xsl:with-param name="fileName" select="$file" />
       </xsl:call-template>
     </xsl:variable>    
-    
-    <xsl:message><xsl:value-of select="$typeOfFile" /></xsl:message>
-    
     <xsl:variable name="label">
       <xsl:value-of select="document('webapp:FileContentTypes.xml')/FileContentTypes/type[rules/extension/text()=$typeOfFile]/label/text()" />
     </xsl:variable>
