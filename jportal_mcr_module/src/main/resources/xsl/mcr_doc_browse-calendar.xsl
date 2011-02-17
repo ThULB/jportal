@@ -136,7 +136,14 @@
        <td class="desc">
           <xsl:choose>
             <xsl:when test="col[2]/@hasLinks='true'">
-              <a name="classLink" href='{$href2}' altHref="{$href2All}"><xsl:value-of select="col[2]/text()" /></a>
+              <xsl:choose>
+                <xsl:when test="$filterChecked='true'">
+                  <a name="classLink" href='{$href2All}' altHref="{$href2}"><xsl:value-of select="col[2]/text()" /></a>
+                </xsl:when>
+                <xsl:otherwise>
+                  <a name="classLink" href='{$href2}' altHref="{$href2All}"><xsl:value-of select="col[2]/text()" /></a>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="col[2]/text()" />
