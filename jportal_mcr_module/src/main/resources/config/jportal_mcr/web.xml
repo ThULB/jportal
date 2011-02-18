@@ -26,6 +26,28 @@
 	<servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
 	<servlet-class>org.mycore.frontend.indexbrowser.MCRJPortalIndexBrowserServlet</servlet-class>
 </servlet>
+<servlet id="MetsServlet">
+  <servlet-name>MetsServlet</servlet-name>
+  <servlet-class>org.mycore.frontend.servlets.MetsServlet</servlet-class>
+</servlet>
+
+<servlet id="MCRRecycleBinPageGenerationServlet">
+  <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
+  <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinPageGenerationServlet</servlet-class>
+</servlet>
+<servlet id="MCRRecycleBinServlet">
+  <servlet-name>MCRRecycleBinServlet</servlet-name>
+  <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
+  <url-pattern>/recycleBin.xml</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>MCRRecycleBinServlet</servlet-name>
+  <url-pattern>/servlets/MCRRecycleBinServlet/*</url-pattern>
+</servlet-mapping>
+
 
 <servlet-mapping>
 	<servlet-name>MCRJPortalCLIServlet</servlet-name>
@@ -54,6 +76,10 @@
 <servlet-mapping>
 	<servlet-name>MCRJPortalIndexBrowserServlet</servlet-name>
 	<url-pattern>/indexpage</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+  <servlet-name>MetsServlet</servlet-name>
+  <url-pattern>/servlets/MetsServlet</url-pattern>
 </servlet-mapping>
 
 <servlet>
