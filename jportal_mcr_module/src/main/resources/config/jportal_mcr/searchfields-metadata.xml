@@ -85,3 +85,8 @@
     
     <!-- person & jpinst -->
     <field name="doubletOf"         type="identifier" source="objectMetadata" objects="person jpinst" xpath="/mycoreobject/metadata/def.doubletOf/doubletOf" value="text()" addable="true" />
+    
+    <!-- classification -->
+    <field name="label_text_classi"         type="text" source="objectMetadata" objects="jpclassi" xpath="/mycoreobject/metadata/label/text" value="text()" addable="true" />
+    <field name="label_descr_classi"         type="text" source="objectMetadata" objects="jpclassi" xpath="/mycoreobject/metadata/label/description" value="text()" addable="true" />
+    

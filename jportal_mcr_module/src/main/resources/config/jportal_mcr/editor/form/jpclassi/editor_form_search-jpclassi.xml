@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Suche nach Klassifikation">
+    <editor id="searchmask-de">
+      <include uri="webapp:editor/editor-search-jpclassi.xml"/>
+    </editor>
+  </section>
+  <section xml:lang="en" title="Search for classification">
+    <editor id="searchmask-en">
+      <include uri="webapp:editor/editor-search-jpclassi.xml"/>
+    </editor>
+  </section>
+</MyCoReWebPage>
