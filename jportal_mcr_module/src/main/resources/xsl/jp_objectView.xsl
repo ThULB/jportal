@@ -1443,7 +1443,7 @@
                         </td>
                       </xsl:if>
                       <!-- delete derivate -->
-                      <xsl:if test="not($derivateWithURN) or ($derivateWithURN and contains($CurrentGroups,'admingroup'))">
+                      <xsl:if test="contains($CurrentGroups,'derDelgroup')">
                         <td width="{$cellWidth}" valign="center" align="center">
                           <form method="get">
                             <xsl:call-template name="printDerivates_editButton">

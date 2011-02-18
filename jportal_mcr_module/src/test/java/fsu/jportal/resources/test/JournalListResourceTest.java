@@ -9,6 +9,7 @@ import java.util.List;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
@@ -57,6 +58,12 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
     public void init() {
         FakeJournalListBackend.initJournalLists();
         MCRConfiguration.instance().getProperties().setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
+    }
+    
+    @After
+    public void cleanup(){
+        MCRConfiguration.instance().getProperties().remove(JournalListBackend.PROP_NAME);
+        
     }
     
     @Test
