@@ -1430,17 +1430,18 @@
                         </td>
                       </xsl:if>
                       <!-- create mets -->
-    <!--                  <td width="{$cellWidth}" valign="center" align="center">
-                        <form method="get">
-                          <xsl:attribute name="action">
-                            <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MetsServlet', $JSessionID)" />
-                          </xsl:attribute>
-                          <input name="mode" type="hidden" value="generate" />
-                          <input name="objid" type="hidden" value="$obj_id" />
-                          <input name="derid" type="hidden" value="{@xlink:href}" />
-                          <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.urn.addURN')}" />
-                        </form>
-                      </td>-->
+                      <xsl:if test="contains($CurrentGroups,'admingroup')">
+                        <td width="{$cellWidth}" valign="center" align="center">
+                          <form method="get">
+                            <xsl:attribute name="action">
+                              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MetsServlet', $JSessionID)" />
+                            </xsl:attribute>
+                            <input name="mode" type="hidden" value="generate" />
+                            <input name="derid" type="hidden" value="{@xlink:href}" />
+                            <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('metaData.mets')}" />
+                          </form>
+                        </td>
+                      </xsl:if>
                       <!-- delete derivate -->
                       <xsl:if test="not($derivateWithURN) or ($derivateWithURN and contains($CurrentGroups,'admingroup'))">
                         <td width="{$cellWidth}" valign="center" align="center">

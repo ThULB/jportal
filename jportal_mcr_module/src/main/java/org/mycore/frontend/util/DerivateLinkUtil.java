@@ -76,7 +76,7 @@ public abstract class DerivateLinkUtil {
         LOGGER.debug("link in object " + mcrObjId + " removed " + pathOfImage);
         MCRMetadataManager.update(mcrObj);
     }
-    
+
     private static MCRMetaDerivateLink getLink(MCRMetaElement derLinks, String pathOfImage) {
         if(derLinks == null)
             return null;
