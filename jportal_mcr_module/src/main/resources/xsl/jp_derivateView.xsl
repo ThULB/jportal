@@ -4,9 +4,9 @@
 <!-- ===================================================================================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
-  exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl encoder layoutUtils">
+  exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl mcrservlet layoutUtils">
 
   <!-- ========================================================== -->
   <!-- derivate  -->
@@ -116,7 +116,7 @@
     <xsl:param name="mainFile" />
 
     <!-- encoded main file -->
-    <xsl:variable name="encodedMainFile" select="encoder:encode($mainFile)" />
+    <xsl:variable name="encodedMainFile" select="mcrservlet:encodeURL($mainFile)" />
     <!-- url to MCRFileNodeServlet -->
     <xsl:variable name="derivbase" select="concat($ServletsBaseURL,'MCRFileNodeServlet/',$derivID,'/')" />
     <!-- is iview2 is used or not -->

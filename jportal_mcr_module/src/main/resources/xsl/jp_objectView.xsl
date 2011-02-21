@@ -14,11 +14,11 @@
   xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
   xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
   xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxsl derivateLinkUtil encoder">
+  exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxml derivateLinkUtil encoder">
 
     <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
@@ -474,7 +474,7 @@
 		<table id="resultList" cellpadding="0" cellspacing="0">
 			<xsl:for-each select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
               <xsl:choose>
-                <xsl:when test="mcrxsl:exists(@id)">
+                <xsl:when test="mcrxml:exists(@id)">
                   <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
                   <xsl:apply-templates select="." mode="toc">
                   <xsl:with-param name="mcrobj" select="$mcrobj" />
@@ -1359,7 +1359,7 @@
       <xsl:for-each select="./structure/derobjects/derobject">
         <xsl:variable name="deriv" select="@xlink:href" />
         <xsl:choose>
-          <xsl:when test="mcrxsl:exists($deriv)">
+          <xsl:when test="mcrxml:exists($deriv)">
             <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
             <xsl:variable name="derivate" select="document($derivlink)" />
             <tr>
@@ -1381,7 +1381,7 @@
                   <tr height="30px">
                     <xsl:if test="acl:checkPermission($obj_id,'writedb')">
                       <!-- urn -->
-                      <xsl:variable name="derivateWithURN" select="mcrxsl:hasURNDefined($deriv)" />
+                      <xsl:variable name="derivateWithURN" select="mcrxml:hasURNDefined($deriv)" />
                       <xsl:variable name="type">
                         <xsl:copy-of select="substring-before(substring-after($obj_id,'_'),'_')" />
                       </xsl:variable>
@@ -1416,7 +1416,7 @@
                         </form>
                       </td>
                       <!-- add urn -->
-                      <xsl:if test="$derivateWithURN=false() and mcrxsl:isAllowedObjectForURNAssignment($obj_id)">
+                      <xsl:if test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
                         <td width="{$cellWidth}" valign="center" align="center">
                           <form method="get">
                             <xsl:call-template name="printDerivates_editButton">
@@ -1430,7 +1430,7 @@
                         </td>
                       </xsl:if>
                       <!-- create mets -->
-                      <xsl:if test="contains($CurrentGroups,'admingroup')">
+<!--                      <xsl:if test="mcrxml:isCurrentUserInRole('admingroup')">
                         <td width="{$cellWidth}" valign="center" align="center">
                           <form method="get">
                             <xsl:attribute name="action">
@@ -1441,9 +1441,9 @@
                             <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('metaData.mets')}" />
                           </form>
                         </td>
-                      </xsl:if>
+                      </xsl:if>-->
                       <!-- delete derivate -->
-                      <xsl:if test="contains($CurrentGroups,'derDelgroup')">
+                      <xsl:if test="mcrxml:isCurrentUserInRole('derDelgroup')">
                         <td width="{$cellWidth}" valign="center" align="center">
                           <form method="get">
                             <xsl:call-template name="printDerivates_editButton">
@@ -1477,7 +1477,7 @@
       <xsl:variable name="derivateID" select="substring-before(./@xlink:href,'/')" />
       <xsl:variable name="hasPermission" select="acl:checkPermission($obj_id,'deletedb')" />
       <xsl:choose>
-        <xsl:when test="mcrxsl:exists($derivateID)">
+        <xsl:when test="mcrxml:exists($derivateID)">
           <xsl:variable name="derivateObj" select="document(concat('notnull:mcrobject:',$derivateID))" />
           <tr>
             <td align="left" valign="top" id="detailed-links">

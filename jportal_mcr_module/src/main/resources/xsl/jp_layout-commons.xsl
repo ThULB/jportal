@@ -51,7 +51,7 @@
                   if (args.type == "press") {
                     if (args.parentName == buttonSet.elementName) {
                       if (args.elementName == buttonSet.elementName) {
-                        var file = e.viewer.curImage;
+                        var file = decodeURI(e.viewer.curImage);
                         var chapterParent = e.viewer.chapterParent;
                         var derivId = chapterParent.substring(16, chapterParent.length); 
                         var servletPath = baseUrl + "servlets/DerivateLinkServlet";
