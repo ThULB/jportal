@@ -8,6 +8,8 @@
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities"
   exclude-result-prefixes="xlink mcr i18n acl xalan mcrxsl mcrservlet layoutUtils">
 
+  <xsl:variable name="showDetailedMetadata" select="/mycoreobject and $view.objectmetadata='false'" />
+
   <!-- ========================================================== -->
   <!-- derivate  -->
   <!-- ========================================================== -->
@@ -69,7 +71,7 @@
   <xsl:template match="mcr:metaData" priority="2">
     <xsl:param name="objID" />
     <xsl:param name="objectXML" />
-    
+
     <xsl:if test="$objectHost = 'local'">
       <xsl:variable name="derivID" select="mcr:field[@name='DerivateID']/text()" />
       <xsl:choose>
@@ -148,7 +150,7 @@
 
     <!-- print -->
     <xsl:choose>
-      <xsl:when test="$view.objectmetadata='false'">
+      <xsl:when test="$showDetailedMetadata = 'true'">
         <!-- metadata -->
         <xsl:call-template name="jp.derivate.print.present">
           <xsl:with-param name="objID" select="$objID"/>
@@ -400,10 +402,9 @@
             </xsl:for-each>
           </xsl:if>
         </xsl:variable>
-
         <!-- return translated file -->
         <xsl:choose>
-          <xsl:when test="$transFileList">
+          <xsl:when test="$transFileList != ''">
             <xsl:value-of select="substring-before($transFileList, ',')" />
           </xsl:when>
           <xsl:otherwise>

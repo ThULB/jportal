@@ -1564,19 +1564,21 @@
         <td id="leaf-additional">
           <xsl:call-template name="lineSpace" />
           <table cellpadding="0" cellspacing="0">
-            <xsl:value-of select="i18n:translate('metaData.derivate.plural')" />
+            <xsl:value-of select="concat(i18n:translate('metaData.derivate.plural'), ': ')" />
             <xsl:choose>
               <!-- fulltext hit -->
-              <xsl:when test="mcr:metaData">
+              <xsl:when test="mcr:metaData/mcr:field[@name='DerivateID']">
                 <xsl:for-each select="mcr:metaData">
-                  <xsl:apply-templates select=".">
-                    <xsl:with-param name="objID" select="$obj_id" />
-                    <xsl:with-param name="objectXML" select="$knoten" />
-                  </xsl:apply-templates>
-                  <xsl:copy-of select="' (Treffer im Volltext)'" />
-                  <xsl:if test="position() != last()">
-                    <xsl:copy-of select="' '" />
-                    <xsl:call-template name="lineSpace" />
+                  <xsl:if test="mcr:field[@name='DerivateID']">
+                    <xsl:apply-templates select=".">
+                      <xsl:with-param name="objID" select="$obj_id" />
+                      <xsl:with-param name="objectXML" select="$knoten" />
+                    </xsl:apply-templates>
+                    <xsl:copy-of select="' (Treffer im Volltext)'" />
+                    <xsl:if test="position() != last()">
+                      <xsl:copy-of select="' '" />
+                      <xsl:call-template name="lineSpace" />
+                    </xsl:if>
                   </xsl:if>
                 </xsl:for-each>
               </xsl:when>
