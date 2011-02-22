@@ -77,7 +77,7 @@
             </tr>
             <tr>
                  <!-- authors -->
-                <xsl:if test="$cXML/mycoreobject/metadata/participants/participant">
+                <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant">
                     <xsl:call-template name="printMetaDate_typeSensitive">
                         <xsl:with-param select="'right'" name="textalign" />
                         <xsl:with-param select="$cXML/mycoreobject/metadata/participants/participant" name="nodes" />
