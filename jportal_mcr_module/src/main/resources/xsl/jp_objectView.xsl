@@ -1358,7 +1358,7 @@
                   <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
                     <!-- prints the derivate thumbnail -> see @jp_derivateView.xsl -->
                     <tr>
-                      <td colspan="4">
+                      <td colspan="5">
                         <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
                           <xsl:with-param name="objID" select="$obj_id" />
                           <xsl:with-param name="objectXML" select="document(concat('mcrobject:',$obj_id))" />
