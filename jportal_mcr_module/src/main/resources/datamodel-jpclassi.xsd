@@ -52,7 +52,7 @@
 
 	<xsd:complexType name="MCRObjectStructure">
 		<xsd:all>
-			<xsd:element name="parents" minOccurs="1" maxOccurs="1">
+			<xsd:element name="parents" minOccurs="0" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
 						<xsd:element name="parent" minOccurs="1" maxOccurs="1">
@@ -126,7 +126,7 @@
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
-					<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaXM" />
+					<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaXML" />
 					<xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
 					<xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
 					<xsd:attribute ref="xml:lang" />
