@@ -1352,7 +1352,7 @@
           <xsl:when test="mcrxml:exists($deriv)">
             <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
             <xsl:variable name="derivate" select="document($derivlink)" />
-            <xsl:if test="$derivate/mycorederivate/derivate/@display != 'false' or mcrxml:isCurrentUserInRole('derDelgroup')">
+            <xsl:if test="(not($derivate/mycorederivate/derivate/@display) or $derivate/mycorederivate/derivate/@display = 'true') or mcrxml:isCurrentUserInRole('derDelgroup')">
               <tr>
                 <td align="left" valign="top" id="detailed-links">
                   <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
