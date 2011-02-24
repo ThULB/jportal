@@ -80,7 +80,7 @@
                 <xsl:if test="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant">
                     <xsl:call-template name="printMetaDate_typeSensitive">
                         <xsl:with-param select="'right'" name="textalign" />
-                        <xsl:with-param select="$cXML/mycoreobject/metadata/participants/participant" name="nodes" />
+                        <xsl:with-param select="xalan:nodeset($cXML)/mycoreobject/metadata/participants/participant" name="nodes" />
                         <xsl:with-param select="i18n:translate('editormask.labels.participants_label')" name="label" />
                         <xsl:with-param name="typeClassi" select="'jportal_class_00000007'" />
                         <xsl:with-param name="mode" select="'xlink'" />
