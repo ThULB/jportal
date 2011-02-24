@@ -1427,7 +1427,7 @@
                               <xsl:attribute name="action">
                                 <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', @xlink:href, $JSessionID)" />
                               </xsl:attribute>
-                              <input type="image" src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="Mets generieren" />
+                              <input type="image" src="{$WebApplicationBaseURL}images/mets.png" title="Mets generieren" />
                             </form>
                           </td>
                         </xsl:if>
@@ -1527,7 +1527,7 @@
   </xsl:template>
 
   <!-- ================================================================ -->
-  <!-- adds all important hidden input vars to the edit button          -->
+  <!-- helper method to add swf buttons for dervate                     -->
   <!-- ================================================================ -->
   <xsl:template name="printDerivates_editButton">
     <xsl:param name="obj_id" />

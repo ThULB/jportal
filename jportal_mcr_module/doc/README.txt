@@ -89,7 +89,7 @@ mvn install
 cd $DOCPORTAL_HOME 
 ant clean clean.data
 ant resolve create.jar create.scripts
-build/bin/hsqldbstart &
+build/bin/hsqldbstart.sh &
 ant create.users create.default-rules create.class create.webapp
 
 5.2 REINSTALLATION - already installed application 
