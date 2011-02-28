@@ -1425,8 +1425,10 @@
                           <td width="{$cellWidth}" valign="center" align="center">
                             <form method="get">
                               <xsl:attribute name="action">
-                                <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', @xlink:href, $JSessionID)" />
+                                <xsl:value-of select="concat($WebApplicationBaseURL, 'metseditor/start_mets_editor.xml', $JSessionID)" />
                               </xsl:attribute>
+                              <input name="derivate" type="hidden" value="{@xlink:href}" />
+                              <input name="useExistingMets" type="hidden" value="true" />
                               <input type="image" src="{$WebApplicationBaseURL}images/mets.png" title="Mets generieren" />
                             </form>
                           </td>
