@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-	<!--
-		=====================================================================================================
-	-->
-	<!--
-		This stylesheet contains all templates to show an mycore object in the
-		detail and child view
-	-->
-	<!--
-		=====================================================================================================
-	-->
+<!-- ======================================================================================== -->
+<!-- This stylesheet contains all templates to show an mycore object in the
+     detail and child view -->
+<!-- ======================================================================================== -->
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
@@ -20,131 +14,118 @@
   xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxml derivateLinkUtil encoder">
 
-    <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
+  <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
-	<xsl:param name="view.objectmetadata" select="'false'" />
+  <xsl:param name="view.objectmetadata" select="'false'" />
 
-	<xsl:param name="toc.pageSize" select="25" />
-	<xsl:param name="toc.pos" />
+  <xsl:param name="toc.pageSize" select="25" />
+  <xsl:param name="toc.pos" />
 
-	<xsl:param name="toc.sortBy.jpvolume" select="'position'" />
-	<xsl:param name="toc.sortBy.jparticle" select="'size'" />
-	<xsl:param select="5" name="maxLinkedArts" />
-	<xsl:param select="5" name="maxLinkedCals" />
+  <xsl:param name="toc.sortBy.jpvolume" select="'position'" />
+  <xsl:param name="toc.sortBy.jparticle" select="'size'" />
+  <xsl:param select="5" name="maxLinkedArts" />
+  <xsl:param select="5" name="maxLinkedCals" />
 
-	<xsl:param name="resultListEditorID" />
-	<xsl:param name="numPerPage" />
-	<xsl:param name="page" />
-	<xsl:param name="previousObject" />
-	<xsl:param name="previousObjectHost" />
-	<xsl:param name="nextObject" />
-	<xsl:param name="nextObjectHost" />
+  <xsl:param name="resultListEditorID" />
+  <xsl:param name="numPerPage" />
+  <xsl:param name="page" />
+  <xsl:param name="previousObject" />
+  <xsl:param name="previousObjectHost" />
+  <xsl:param name="nextObject" />
+  <xsl:param name="nextObjectHost" />
 
-	<xsl:variable name="allowHTMLInArticles">
-		<xsl:call-template name="get.allowHTMLInArticles" />
-	</xsl:variable>
+  <xsl:variable name="allowHTMLInArticles">
+  	<xsl:call-template name="get.allowHTMLInArticles" />
+  </xsl:variable>
 
-	<!--
-		=====================================================================================================
-	-->
-	<!-- shows the journal, volume and article view -->
-	<!--
-		=====================================================================================================
-	-->
-	<xsl:template
-		match="/mycoreobject[contains(@ID,'_jpjournal_')] 
-        | /mycoreobject[contains(@ID,'_jpvolume_')] 
-        | /mycoreobject[contains(@ID,'_jparticle_')]"
-		priority="2">
+  <!-- =================================================== -->
+  <!-- shows the journal, volume and article view -->
+  <!-- =================================================== -->
+  <xsl:template match="/mycoreobject[contains(@ID,'_jpjournal_')] | 
+                       /mycoreobject[contains(@ID,'_jpvolume_')] |
+                       /mycoreobject[contains(@ID,'_jparticle_')]"
+                priority="2">
+    <xsl:call-template name="jp_objectView_initJS" />
+    <xsl:call-template name="printMetadataHead" />
+    <xsl:choose>
+      <!-- metadata -->
+      <xsl:when test="$view.objectmetadata = 'false'">
+        <xsl:call-template name="printMetadata" />
+      </xsl:when>
+      <!-- children -->
+      <xsl:otherwise>
+        <xsl:call-template name="printChildren" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
-		<xsl:call-template name="jp_objectView_initJS" />
-		<xsl:call-template name="printSwitchViewBar" />
+  <!-- =================================================== -->
+  <!-- shows the person and institution view -->
+  <!-- =================================================== -->
+  <xsl:template match="/mycoreobject[contains(@ID,'_person_')] | 
+                       /mycoreobject[contains(@ID,'_jpinst_')]"
+                priority="2">
+    <xsl:call-template name="jp_objectView_initJS" />
+    <xsl:call-template name="printMetadataHead" />
+    <xsl:call-template name="printMetadata" />
+  </xsl:template>
 
-		<xsl:choose>
-			<!-- metadaten -->
-			<xsl:when test="$view.objectmetadata = 'false'">
-				<xsl:choose>
-					<xsl:when
-						test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
-						<xsl:apply-templates select="." mode="present">
-							<xsl:with-param name="obj_host" select="$objectHost" />
-						</xsl:apply-templates>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="i18n:translate('metaData.accessDenied')" />
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:when>
-			<!-- inhaltsverzeichnis -->
-			<xsl:otherwise>
-				<xsl:call-template name="printChildren" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
+  <!-- =================================================== -->
+  <!-- prints the metadata of an object -->
+  <!-- =================================================== -->
+  <xsl:template name="printMetadata">
+    <xsl:choose>
+      <xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
+        <xsl:apply-templates select="." mode="present">
+          <xsl:with-param name="obj_host" select="$objectHost" />
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
-	<!--
-		=====================================================================================================
-	-->
-	<!-- shows the person and institution view -->
-	<!--
-		=====================================================================================================
-	-->
-	<xsl:template
-		match="/mycoreobject[contains(@ID,'_person_')] 
-        | /mycoreobject[contains(@ID,'_jpinst_')]"
-		priority="2">
+  <!-- ================================================================== -->
+  <!-- prints the head of the metadata - contains browse, xml and history -->
+  <!-- ================================================================== -->
+  <xsl:template name="printMetadataHead">
+    <table>
+      <tr>
+        <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')] | 
+                      /mycoreobject[contains(@ID,'_jpvolume_')]  |
+                      /mycoreobject[contains(@ID,'_jparticle_')]">
+          <td>
+            <xsl:call-template name="printSwitchViewBar" />
+          </td>
+        </xsl:if>
+        <td><xsl:call-template name="browseCtrlJP" /></td>
+        <td style="padding-left: 20px;"><xsl:call-template name="switchToXMLview" /></td>
+        <td style="padding-left: 10px;"><xsl:call-template name="switchToHistory" /></td>
+      </tr>
+    </table>
+  </xsl:template>
 
-		<xsl:call-template name="jp_objectView_initJS" />
-
-		<xsl:choose>
-			<xsl:when
-				test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
-
-				<table>
-					<tr>
-						<xsl:call-template name="browseCtrlJP" />
-						<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
-						<xsl:call-template name="switchToXMLview" />
-                        <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
-                        <xsl:call-template name="switchToHistory" />
-					</tr>
-				</table>
-
-				<xsl:apply-templates select="." mode="present">
-					<xsl:with-param name="obj_host" select="$objectHost" />
-				</xsl:apply-templates>
-				<hr />
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:value-of select="i18n:translate('metaData.accessDenied')" />
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-
-	<!--
-		=================================================================================================================
-	-->
-	<!-- inits all java scripts functions -->
-	<!--
-		=================================================================================================================
-	-->
-	<xsl:template name="jp_objectView_initJS">
-		<script type="text/javascript">
-			function confirmDelete(delUrl) {
-			  if(confirm("Objekt wirklich löschen?")) {
-			    document.location = delUrl;
-			  }
-			}
-      </script>
-		<script type="text/javascript">
-			function confirmFormDelete() {
-			  if (confirm("Objekt wirklich löschen?")) {
-			    return true;
-			  }
-			  return false;
-			}
-      </script>
-	</xsl:template>
+  <!-- ================================================================== -->
+  <!-- inits all java scripts functions -->
+  <!-- ================================================================== -->
+  <xsl:template name="jp_objectView_initJS">
+    <script type="text/javascript">
+      function confirmDelete(delUrl) {
+        if(confirm("Objekt wirklich löschen?")) {
+          document.location = delUrl;
+        }
+      }
+    </script>
+    <script type="text/javascript">
+      function confirmFormDelete() {
+        if (confirm("Objekt wirklich löschen?")) {
+          return true;
+        }
+        return false;
+      }
+    </script>
+  </xsl:template>
 
   <!-- ========================================================================== -->
   <!-- shows the xml code of the current mcr object (prints the xml-button) -->
@@ -184,16 +165,10 @@
     </xsl:if>
   </xsl:template>
 
-	<!--
-		=====================================================================================================
-	-->
-	<!--
-		Prints a switch bar which contains the children and the detailed view.
-		Called by article, volume and journal.
-	-->
-	<!--
-		=====================================================================================================
-	-->
+  <!-- ========================================================================== -->
+  <!-- Prints a switch bar which contains the children and the detailed view.
+       Called by article, volume and journal. -->
+  <!-- ========================================================================== -->
 	<xsl:template name="printSwitchViewBar">
 		<xsl:variable name="children">
 			<xsl:choose>
@@ -357,15 +332,8 @@
 						</xsl:choose>
 					</td>
 				</xsl:if>
-				<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
-				<xsl:call-template name="browseCtrlJP" />
-				<td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
-				<xsl:call-template name="switchToXMLview" />
-                <td>&#160;&#160;&#160;&#160;&#160;&#160;</td>
-                <xsl:call-template name="switchToHistory" />
 			</tr>
 		</table>
-		<br />
 	</xsl:template>
 
 	<!--
@@ -735,59 +703,50 @@
 		</xsl:if>
 	</xsl:template>
 
-	<!--
-		=====================================================================================================
-	-->
-	<!--
-		shows a navigation control to browse through the result list of a
-		search
-	-->
-	<!--
-		=====================================================================================================
-	-->
-	<xsl:template name="browseCtrlJP">
-		<xsl:variable name="hasPrev" select="string-length($previousObject)>0" />
-		<xsl:variable name="hasNext" select="string-length($nextObject)>0" />
-
-		<xsl:if test="$hasPrev">
-			<xsl:variable name="hostParam">
-				<xsl:if test="$previousObjectHost != 'local'">
-					<xsl:value-of select="concat('?host=',$previousObjectHost)" />
-				</xsl:if>
-			</xsl:variable>
-			<td id="detailed-browse">
-				<a
-					href="{$WebApplicationBaseURL}receive/{$previousObject}{$HttpSession}{$hostParam}"
-					alt="{i18n:translate('metaData.resultlist.prev')}" title="{i18n:translate('metaData.resultlist.prev')}">
-					<img src="{$WebApplicationBaseURL}left.gif" />
-				</a>
-			</td>
-		</xsl:if>
-		<xsl:if test="$hasPrev or $hasNext">
-			<td>
-				<div id="switch-notcurrent">
-					<a
-						href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
-						<xsl:value-of select="i18n:translate('metaData.resultlist')" />
-					</a>
-				</div>
-			</td>
-		</xsl:if>
-		<xsl:if test="$hasNext">
-			<xsl:variable name="hostParam">
-				<xsl:if test="$nextObjectHost != 'local'">
-					<xsl:value-of select="concat('?host=',$nextObjectHost)" />
-				</xsl:if>
-			</xsl:variable>
-			<td id="detailed-browse">
-				<a
-					href="{$WebApplicationBaseURL}receive/{$nextObject}{$HttpSession}{$hostParam}"
-					alt="{i18n:translate('metaData.resultlist.next')}" title="{i18n:translate('metaData.resultlist.next')}">
-					<img src="{$WebApplicationBaseURL}right.gif" />
-				</a>
-			</td>
-		</xsl:if>
-	</xsl:template>
+  <!-- =========================================================================== -->
+  <!-- shows a navigation control to browse through the result list of a search -->
+  <!-- =========================================================================== -->
+  <xsl:template name="browseCtrlJP">
+    <xsl:variable name="hasPrev" select="string-length($previousObject)>0" />
+    <xsl:variable name="hasNext" select="string-length($nextObject)>0" />
+    <table>
+      <tr>
+        <xsl:if test="$hasPrev">
+          <xsl:variable name="hostParam">
+            <xsl:if test="$previousObjectHost != 'local'">
+              <xsl:value-of select="concat('?host=',$previousObjectHost)" />
+            </xsl:if>
+          </xsl:variable>
+          <td id="detailed-browse">
+            <a href="{$WebApplicationBaseURL}receive/{$previousObject}{$HttpSession}{$hostParam}" alt="{i18n:translate('metaData.resultlist.prev')}" title="{i18n:translate('metaData.resultlist.prev')}">
+              <img src="{$WebApplicationBaseURL}left.gif" />
+            </a>
+          </td>
+        </xsl:if>
+        <xsl:if test="$hasPrev or $hasNext">
+          <td>
+            <div id="switch-notcurrent">
+              <a href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
+                <xsl:value-of select="i18n:translate('metaData.resultlist')" />
+              </a>
+            </div>
+          </td>
+        </xsl:if>
+        <xsl:if test="$hasNext">
+          <xsl:variable name="hostParam">
+            <xsl:if test="$nextObjectHost != 'local'">
+              <xsl:value-of select="concat('?host=',$nextObjectHost)" />
+            </xsl:if>
+          </xsl:variable>
+          <td id="detailed-browse">
+            <a href="{$WebApplicationBaseURL}receive/{$nextObject}{$HttpSession}{$hostParam}" alt="{i18n:translate('metaData.resultlist.next')}" title="{i18n:translate('metaData.resultlist.next')}">
+              <img src="{$WebApplicationBaseURL}right.gif" />
+            </a>
+          </td>
+        </xsl:if>
+      </tr>
+    </table>
+  </xsl:template>
 
 	<!--
 		=====================================================================================================
