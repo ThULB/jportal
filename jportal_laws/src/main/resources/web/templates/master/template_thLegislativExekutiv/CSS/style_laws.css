@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+.register {
+	padding-bottom: 12px;
+}
+
+.register td {
+	padding-bottom: 2px;
+	padding-right: 12px;
+}
+
+.laws th {
+	text-align: left;
+	vertical-align: top;
+	padding-left: 4px;
+	padding-bottom: 2px;
+	background-color: #ccc;
+}
+
+.laws td {
+	text-align: left;
+	vertical-align: top;
+	padding-right: 24px;
+	padding-left: 4px;
+}
+
+.page {
+	white-space: nowrap;
+}
+
+.laws tr:nth-child(odd) {
+	background-color: #eee;
+}

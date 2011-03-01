@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>jportal</artifactId>
+    <groupId>fsu.thulb</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <groupId>fsu.thulb</groupId>
+  <artifactId>jportal_laws</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>jportal_laws</name>
+  <url>http://zs.thulb.uni-jena.de</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <build>
+    <plugins>
+      <!-- Plugin for compiling with 1.6 -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+              <addExtensions />
+            </manifest>
+            <manifestEntries>
+              <MCR-Application-Module>${project.name}</MCR-Application-Module>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+  	<repository>
+  		<id>maven2-repository.dev.java.net</id>
+  		<name>Java.net Repository for Maven</name>
+  		<url>http://download.java.net/maven/2/</url>
+  	</repository>
+  	<repository>
+  		<id>maven-repository.dev.java.net</id>
+  		<name>Java.net Maven 1 Repository (legacy)</name>
+  		<url>http://download.java.net/maven/1</url>
+  		<layout>legacy</layout>
+  	</repository>
+  </repositories>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>com.sun.jersey</groupId>
+    	<artifactId>jersey-server</artifactId>
+    	<version>1.4</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.sun.jersey</groupId>
+    	<artifactId>jersey-client</artifactId>
+    	<version>1.4</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.sun.grizzly</groupId>
+      <artifactId>grizzly-servlet-webserver</artifactId>
+      <version>1.9.18-i</version>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.jdom</groupId>
+    	<artifactId>jdom</artifactId>
+    	<version>1.1.1</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.sun.jersey.jersey-test-framework</groupId>
+    	<artifactId>jersey-test-framework-grizzly</artifactId>
+    	<version>1.4</version>
+    	<scope>test</scope>
+    </dependency>
+    <dependency>
+    	<groupId>org.mycore</groupId>
+    	<artifactId>mycore-base</artifactId>
+    	<version>2.0.94-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
