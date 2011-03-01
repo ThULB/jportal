@@ -14,6 +14,7 @@
 	<description>JPortal project</description>
 	<modules>
 		<module>jportal_mcr_module</module>
+        <module>jportal_laws</module>
 	</modules>
 	<pluginRepositories>
 		<pluginRepository>
