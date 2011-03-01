@@ -39,12 +39,8 @@
                                                 </td>
                                                 <td style="border-top:1px solid; border-top-color:#2D4F97; padding:0px; margin:0px">
                                                     <xsl:call-template name="navigation.row">
-                                                        <xsl:with-param name="rootNode" select="'navi-below'" />
-                                                        <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
                                                         <xsl:with-param name="menuPointHeigth" select="'24'" />
-                                                        <!-- use pixel values -->
                                                         <xsl:with-param name="spaceBetweenLinks" select="'18'" />
-                                                        <!-- use pixel values -->
                                                     </xsl:call-template>
                                                 </td>
                                             </tr>

@@ -21,12 +21,7 @@
             <body>
                 <div id="img_head" style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/2.jpg) no-repeat;">
                     <div id="navi_top">
-                        <xsl:call-template name="navigation.row">
-                            <xsl:with-param name="rootNode" select="'navi-below'" />
-                            <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                            <xsl:with-param name="menuPointHeigth" select="'21'" /><!-- use pixel values -->
-                            <xsl:with-param name="spaceBetweenLinks" select="'12'" /><!-- use pixel values -->
-                        </xsl:call-template>
+                        <xsl:call-template name="navigation.row" />
                     </div>
                 </div>
                 <img id="img_body_fading" src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/3.gif" />

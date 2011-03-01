@@ -18,15 +18,7 @@
                         <div class="navigationBelow">
 
                             <div class="top">
-                                <xsl:call-template name="navigation.row">
-                                    <xsl:with-param name="rootNode" select="'navi-below'" />
-                                    <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                                    <xsl:with-param name="menuPointHeigth" select="'21'" />
-                                    <!-- use pixel values -->
-                                    <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                                    <!-- use pixel values -->
-                                    <xsl:with-param name="seperatorChar" select="'|'" />
-                                </xsl:call-template>
+                                <xsl:call-template name="navigation.row" />
                             </div>
                             <div class="history">
                                 <xsl:call-template name="navigation.history" />

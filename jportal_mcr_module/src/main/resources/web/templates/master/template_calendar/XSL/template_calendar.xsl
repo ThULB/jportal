@@ -40,12 +40,7 @@
                     
                     <!-- top rigth menu with Sitemap, Login etc. -->
                     <div id="navigation_box">
-                        <xsl:call-template name="navigation.row">
-                            <xsl:with-param name="rootNode" select="'navi-below'" />
-                            <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                            <xsl:with-param name="menuPointHeigth" select="'21'" />
-                            <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                        </xsl:call-template>
+                        <xsl:call-template name="navigation.row" />
                     </div>
                     <!-- the img is necessary because min-width is not supported by IE6-->
                     <img src="../../../images/emtyDot1Pix.gif" width="1024px" height="0px" border="0" />

@@ -95,16 +95,8 @@
 							<td rowspan="2" width="1235"
 								style="background:url({$WebApplicationBaseURL}templates/master/template_DublicateFinder/IMAGES/18th-header-left.png) no-repeat;">
 								<div id="navigation_box">
-									<xsl:call-template
-										name="navigation.row">
-										<xsl:with-param name="rootNode"
-											select="document($navigationBase) /navigation/navi-below" />
-										<xsl:with-param
-											name="CSSLayoutClass" select="'navi_below'" />
-										<xsl:with-param
-											name="menuPointHeigth" select="'21'" />
-										<xsl:with-param
-											name="spaceBetweenLinks" select="'12'" />
+									<xsl:call-template name="navigation.row">
+										<xsl:with-param name="rootNode" select="document($navigationBase) /navigation/navi-below" />
 									</xsl:call-template>
 								</div>
 							</td>

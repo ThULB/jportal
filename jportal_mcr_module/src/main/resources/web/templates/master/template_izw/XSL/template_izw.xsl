@@ -19,17 +19,7 @@
                     <div id="banner">
                         <!--Navigation oben-->
                         <div id="navigation_row">
-                            <!--bis 14.12.05-->
-                            <!--<div id="thulb" style= "align:right; width:65px; height:19px; border: 1px solid red; image: URL({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb_log.jpg);">-->
-
-                            <xsl:call-template name="navigation.row">
-                                <!--xsl:with-param name="rootNode" select="$loaded_navigation_xml/navi-below" /-->
-                                <xsl:with-param name="rootNode" select="'navi-below'" />
-                                <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                                <xsl:with-param name="menuPointHeigth" select="'21'" /><!-- use pixel values -->
-                                <xsl:with-param name="spaceBetweenLinks" select="'12'" /><!-- use pixel values -->
-                            </xsl:call-template>
-                            <!-- </div>-->
+                          <xsl:call-template name="navigation.row" />
                         </div>
                     </div>
 

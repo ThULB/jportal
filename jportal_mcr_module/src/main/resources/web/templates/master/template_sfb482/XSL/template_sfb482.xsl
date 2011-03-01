@@ -17,12 +17,7 @@
                 <div
                     style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/fsu_logo.png) no-repeat; position:absolute; top:60px; right:22px; width: 62px; height: 71px;" />
                 <div id="navigation_box">
-                    <xsl:call-template name="navigation.row">
-                        <xsl:with-param name="rootNode" select="'navi-below'" />
-                        <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                        <xsl:with-param name="menuPointHeigth" select="'21'" />
-                        <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                    </xsl:call-template>
+                    <xsl:call-template name="navigation.row" />
                 </div>
                 <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #646466;">
                     <tr valign="TOP">

@@ -44,12 +44,7 @@
                             <td rowspan="2" width="1235"
                                 style="background:url({$WebApplicationBaseURL}templates/master/template_20thCentury/IMAGES/20th-header-left.png) no-repeat;">
                                 <div id="navigation_box">
-                                    <xsl:call-template name="navigation.row">
-                                        <xsl:with-param name="rootNode" select="'navi-below'" />
-                                        <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                                        <xsl:with-param name="menuPointHeigth" select="'21'" />
-                                        <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                                    </xsl:call-template>
+                                    <xsl:call-template name="navigation.row" />
                                 </div>
                             </td>
                             <td colspan="2" width="max" height="149"

@@ -56,87 +56,59 @@
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
-    <!-- ================================================================================= -->
-    <xsl:template name="navigation.row">
-        <xsl:param name="rootNode" />
-        <xsl:param name="CSSLayoutClass" />
-        <xsl:param name="menuPointHeigth" /><!-- use pixel values -->
-        <xsl:param name="spaceBetweenLinks" /><!-- use pixel values -->
-        <xsl:param name="seperatorChar" /><!-- use pixel values -->
-        <xsl:param name="padding-right" select="10" /><!-- use pixel values -->
 
-        <xsl:variable name="readAccess">
-            <xsl:call-template name="get.readAccess">
-                <xsl:with-param name="webpage" select="$rootNode" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="$readAccess='true'">
-            <table class="{$CSSLayoutClass}" cellspacing="0" cellpadding="0">
-                <tr>
-                    <xsl:for-each select="$loaded_navigation_xml//*[@href=$rootNode]/item">
-                        <xsl:variable name="access">
-                            <xsl:call-template name="get.readAccess">
-                                <xsl:with-param name="webpage" select="@href" />
-                                <xsl:with-param name="blockerWebpage" select="$rootNode" />
-                            </xsl:call-template>
-                        </xsl:variable>
-                        <xsl:if test="$access='true'">
-                            <td>
-                                <xsl:choose>
-                                    <xsl:when test="@href = $browserAddress">
-                                        <span class="marked">
-                                            <xsl:call-template name="jp_addLink" />
-                                        </span>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:call-template name="jp_addLink" />
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </td>
-                            <xsl:call-template name="get.placeHolder">
-                                <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
-                                <xsl:with-param name="seperatorChar" select="$seperatorChar" />
-                            </xsl:call-template>
-                        </xsl:if>
-                    </xsl:for-each>
-                    <!-- login links -->
-                    <xsl:call-template name="get.loginLinks">
-                        <xsl:with-param name="spaceBetweenLinks" select="$spaceBetweenLinks" />
-                        <xsl:with-param name="seperatorChar" select="$seperatorChar" />
-                    </xsl:call-template>
+  <!-- ================================================================================= -->
+  <!-- prints the header - Start, WCMS, Sitemap... -->
+  <!-- ================================================================================= -->
+  <xsl:template name="navigation.row">
+    <xsl:param name="rootNode" select="'navi-below'" />
+    <xsl:param name="CSSLayoutClass" select="'navi_below'" />
+    <xsl:param name="menuPointHeigth" select="21" /><!-- use pixel values -->
+    <xsl:param name="spaceBetweenLinks" select="12"/><!-- use pixel values -->
+    <xsl:param name="padding-right" select="10" /><!-- use pixel values -->
 
-                    <td>
-                        <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
-                    </td>
-                    <td>|</td>
-                    <td>
-                        <img src="{$ImageBaseURL}emtyDot1Pix.gif" style="width:{number($spaceBetweenLinks) div 2}px; height:1px;" alt=""></img>
-                    </td>
-                    <td>
-                        <xsl:call-template name="navigation.flags" />
-                    </td>
-                    <td style="width:{$padding-right}px;"></td>
-                </tr>
-            </table>
-        </xsl:if>
-    </xsl:template>
-    <!-- ================================================================================= -->
-    <xsl:template name="get.placeHolder">
-        <xsl:param name="spaceBetweenLinks" />
-        <xsl:param name="seperatorChar" />
-        <td style="width:{number($spaceBetweenLinks) div 2}px;">
-            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
-        </td>
-        <xsl:if test="$seperatorChar != ''">
-            <td>
-                <xsl:value-of select="$seperatorChar" />
-            </td>
-        </xsl:if>
-        <td style="width:{number($spaceBetweenLinks) div 2}px;">
-            <img src="{$ImageBaseURL}emtyDot1Pix.gif" alt=""></img>
-        </td>
+    <xsl:variable name="readAccess">
+      <xsl:call-template name="get.readAccess">
+        <xsl:with-param name="webpage" select="$rootNode" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="$readAccess='true'">
+      <table class="{$CSSLayoutClass}" cellspacing="0" cellpadding="0">
+        <tr>
+          <xsl:for-each select="$loaded_navigation_xml//*[@href=$rootNode]/item">
+            <xsl:variable name="access">
+              <xsl:call-template name="get.readAccess">
+                <xsl:with-param name="webpage" select="@href" />
+                <xsl:with-param name="blockerWebpage" select="$rootNode" />
+              </xsl:call-template>
+            </xsl:variable>
+            <xsl:if test="$access='true'">
+              <td style="padding-right: {$spaceBetweenLinks}px;">
+                <xsl:choose >
+                  <xsl:when test="@href = $browserAddress">
+                    <span class="marked">
+                      <xsl:call-template name="jp_addLink" />
+                    </span>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:call-template name="jp_addLink" />
+                  </xsl:otherwise>
+                </xsl:choose>
+              </td>
+            </xsl:if>
+          </xsl:for-each>
+          <!-- login links -->
+          <xsl:call-template name="get.loginLinks" />
+          <td style="padding-left:3px; padding-right: 3px;">|</td>
+          <td>
+            <xsl:call-template name="navigation.flags" />
+          </td>
+          <td style="width:{$padding-right}px;"></td>
+        </tr>
+      </table>
+    </xsl:if>
+  </xsl:template>
 
-    </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="navigation.flags">
         <xsl:variable name="englishFlag">
@@ -832,30 +804,28 @@
         </a>
     </xsl:template>
 
-    <!-- ================================================================================= -->
+  <!-- ================================================================================= -->
 
-    <xsl:template name="get.loginLinks">
-        <xsl:param name="spaceBetweenLinks" />
-        <xsl:param name="seperatorChar" />
-        <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="loginURL"
-            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;url=', encoder:encode( string( $RequestURL ) ) )" />
-        <td>
-          <strong>
-            <xsl:choose>
-              <xsl:when test="$CurrentUser='gast'">
-                <a href="{$loginURL}">
-                  <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a href="{$ServletsBaseURL}logout">
-                  <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </strong>
-        </td>
-    </xsl:template>
+  <xsl:template name="get.loginLinks">
+    <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="loginURL"
+      select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?dummy=login&amp;lang=',$CurrentLang,'&amp;url=', encoder:encode( string( $RequestURL ) ) )" />
+    <td>
+      <strong>
+        <xsl:choose>
+          <xsl:when test="$CurrentUser='gast'">
+            <a href="{$loginURL}">
+              <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <a href="{$ServletsBaseURL}logout">
+              <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </strong>
+    </td>
+  </xsl:template>
 
     <!-- ================================================================================= -->
 

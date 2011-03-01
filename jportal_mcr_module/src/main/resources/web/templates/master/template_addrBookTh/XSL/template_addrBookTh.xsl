@@ -74,12 +74,7 @@
 
 				<!-- doesnt work 100% with firefox, no idea why (use opera :)) -->
 				<div id="navigation_box">
-					<xsl:call-template name="navigation.row">
-						<xsl:with-param name="rootNode" select="'navi-below'" />
-						<xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-						<xsl:with-param name="menuPointHeigth" select="'21'" />
-						<xsl:with-param name="spaceBetweenLinks" select="'12'" />
-					</xsl:call-template>
+					<xsl:call-template name="navigation.row" />
 				</div>
 
 				<div style="height: max; width: max;">

@@ -17,12 +17,7 @@
                     <xsl:call-template name="navigation.history" />
                 </div>
                 <div id="navigation_box">
-                    <xsl:call-template name="navigation.row">
-                        <xsl:with-param name="rootNode" select="'navi-below'" />
-                        <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                        <xsl:with-param name="menuPointHeigth" select="'21'" />
-                        <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                    </xsl:call-template>
+                    <xsl:call-template name="navigation.row" />
                 </div>
                 <a id="transparent-logo" href="{$WebApplicationBaseURL}">
                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.png" />
