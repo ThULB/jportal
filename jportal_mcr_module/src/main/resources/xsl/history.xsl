@@ -14,20 +14,13 @@
     <p>
       <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
     </p>
-    <xsl:choose>
-      <xsl:when test="mcrxsl:exists($id)">
-        <xsl:variable name="verinfo" select="document(concat('versioninfo:',$id))" />
-        <xsl:call-template name="printVersionInfo">
-          <xsl:with-param name="verinfo" select="$verinfo" />
-        </xsl:call-template>
-        <p>
-          <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
-        </p>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="concat('Kein MyCoRe Objekt mit der id ', $id, ' gefunden!')"></xsl:value-of>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="verinfo" select="document(concat('versioninfo:',$id))" />
+    <xsl:call-template name="printVersionInfo">
+      <xsl:with-param name="verinfo" select="$verinfo" />
+    </xsl:call-template>
+    <p>
+      <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
+    </p>
   </xsl:template>
 
   <xsl:template name="printVersionInfo">
