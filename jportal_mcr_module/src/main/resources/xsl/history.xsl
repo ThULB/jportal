@@ -11,16 +11,23 @@
   <xsl:param name="objectUrl" select="concat($WebApplicationBaseURL, 'receive/', $id)"/>
 
   <xsl:template match="history" >
-    <p>
-      <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
-    </p>
-    <xsl:variable name="verinfo" select="document(concat('versioninfo:',$id))" />
-    <xsl:call-template name="printVersionInfo">
-      <xsl:with-param name="verinfo" select="$verinfo" />
-    </xsl:call-template>
-    <p>
-      <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
-    </p>
+    <xsl:variable name="verinfo" select="document(concat('notnull:versioninfo:',$id))" />
+    <xsl:choose>
+      <xsl:when test="$verinfo/versions">
+        <p>
+          <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
+        </p>
+        <xsl:call-template name="printVersionInfo">
+          <xsl:with-param name="verinfo" select="$verinfo" />
+        </xsl:call-template>
+        <p>
+          <a href="{$objectUrl}"><xsl:value-of select="i18n:translate('metaData.back')" /></a>
+        </p>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="i18n:translate('metaData.history.noobject', $id)"></xsl:value-of>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="printVersionInfo">
