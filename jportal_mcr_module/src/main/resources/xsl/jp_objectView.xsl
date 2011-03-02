@@ -1311,7 +1311,15 @@
           <xsl:when test="mcrxml:exists($deriv)">
             <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
             <xsl:variable name="derivate" select="document($derivlink)" />
-            <xsl:if test="(not($derivate/mycorederivate/derivate/@display) or $derivate/mycorederivate/derivate/@display = 'true') or mcrxml:isCurrentUserInRole('derDelgroup')">
+            
+            <xsl:variable name="isDeleted">
+			<xsl:call-template name="isFlagSet">
+				<xsl:with-param name="path" select="$derivate/mycorederivate" />
+				<xsl:with-param name="flagName" select="'deleted'" />
+			</xsl:call-template>
+			</xsl:variable>
+			
+            <xsl:if test="(not($derivate/mycorederivate/derivate/@display) or $derivate/mycorederivate/derivate/@display = 'true' or mcrxml:isCurrentUserInRole('derDelgroup')) and ($isDeleted != 'true')">
               <tr>
                 <td align="left" valign="top" id="detailed-links">
                   <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
@@ -1556,18 +1564,27 @@
                   <xsl:variable name="deriv" select="@xlink:href" />
                   <xsl:variable name="derivlink" select="concat('mcrobject:',$deriv)" />
                   <xsl:variable name="derivate" select="document($derivlink)" />
-                  <xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
-                    <xsl:with-param name="objID" select="$obj_id" />
-                    <xsl:with-param name="objectXML" select="$knoten" />
-                  </xsl:apply-templates>
-                  <xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
-                    <xsl:with-param name="objID" select="$obj_id" />
-                    <xsl:with-param name="objectXML" select="$knoten" />
-                  </xsl:apply-templates>
-                  <xsl:if test="position()!=last()">
-                    <xsl:copy-of select="' '">
-                    </xsl:copy-of>
-                    <xsl:call-template name="lineSpace" />
+                  
+                  <xsl:variable name="isDeleted">
+			<xsl:call-template name="isFlagSet">
+				<xsl:with-param name="path" select="$derivate/mycorederivate" />
+				<xsl:with-param name="flagName" select="'deleted'" />
+			</xsl:call-template>
+			</xsl:variable>
+			
+                  <xsl:if test="$isDeleted != 'true'">
+                  	<xsl:apply-templates select="$derivate/mycorederivate/derivate/internals">
+                  		<xsl:with-param name="objID" select="$obj_id" />
+                  		<xsl:with-param name="objectXML" select="$knoten" />
+                  	</xsl:apply-templates>
+                  	<xsl:apply-templates select="$derivate/mycorederivate/derivate/externals">
+                  		<xsl:with-param name="objID" select="$obj_id" />
+                  		<xsl:with-param name="objectXML" select="$knoten" />
+                  	</xsl:apply-templates>
+                  	<xsl:if test="position()!=last()">
+                  		<xsl:copy-of select="' '"></xsl:copy-of>
+                  		<xsl:call-template name="lineSpace" />
+                  	</xsl:if>
                   </xsl:if>
                 </xsl:for-each>
               </xsl:otherwise>
