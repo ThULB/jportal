@@ -862,9 +862,8 @@
     <xsl:template name="linkBookmarkedImage">
       <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
       <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
-      <xsl:variable name="derivateCount" select="count(/mycoreobject/structure/derobjects/derobject)" />
 
-      <xsl:if test="acl:checkPermission(./@ID,'writedb') and $bookmarkedImage != '' and not($linkExist) and $derivateCount &lt;= 0">
+      <xsl:if test="acl:checkPermission(./@ID,'writedb') and $bookmarkedImage != '' and not($linkExist)">
         <xsl:variable name="url">
           <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=setLink&amp;from=',./@ID)" />
         </xsl:variable>
