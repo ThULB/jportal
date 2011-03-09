@@ -32,6 +32,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
+import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.xml.sax.SAXParseException;
 
 import fsu.thulb.jaxb.JaxbTools;
@@ -172,6 +173,30 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         return cmd;
 
+    }
+    
+    public static List<String> moveFile(String sourcePath, String destPath) {
+        List<String> executeMoreCMDs = new ArrayList<String>();
+        MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
+        
+
+        MCRFilesystemNode destNode;
+        if (destPath.startsWith("..")) {
+            destNode = sourceNode.getParent().getChildByPath(destPath);
+        } else {
+            destNode = getFileSystemNode(destPath);
+        }
+
+        if (destNode instanceof MCRDirectory) {
+            sourceNode.move((MCRDirectory)destNode);
+            
+            executeMoreCMDs.addAll(MCRIView2Commands.tileDerivate(sourceNode.getOwnerID()));
+            executeMoreCMDs.addAll(MCRIView2Commands.tileDerivate(destNode.getOwnerID()));
+        } else {
+            LOGGER.info(destPath + " is not a directory");
+        }
+        
+        return executeMoreCMDs;
     }
 
     public static void cp(String sourceMcrIdStr, String layoutTemp, String dataModelCoverage) {

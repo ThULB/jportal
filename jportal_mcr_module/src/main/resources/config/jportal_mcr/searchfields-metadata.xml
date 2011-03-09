@@ -1,6 +1,7 @@
 
     <field name="deletedFlag"   type="boolean"    source="objectMetadata" xpath="/mycoreobject/service" value="count(servflags/servflag[text() = 'deleted'])>0" />
-
+	<field addable="true" name="linkDerivExist" source="objectMetadata" type="boolean" value="@xlink:href != ''" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" />
+	
     <!-- Search in journals metadata -->
     <field name="maintitles"        type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
     <field name="subtitles"         type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
@@ -30,7 +31,7 @@
     <field name="contentClassi8"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis8/contentClassi8" value="@ID"/>
     <field name="contentClassi9"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis9/contentClassi9" value="@ID"/>
     <field name="contentClassi10"    type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis10/contentClassi10" value="@ID"/>  
-
+	
     <!-- Search in volumes metadata -->  
     <field name="maintitles_vol"        type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/maintitles/maintitle[0]" value="text()" sortable="true" i18n="editor.search.document.maintitle" />
     <field name="subtitles_vol"         type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
@@ -48,6 +49,7 @@
     <field name="volContentClassi4"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis4/volContentClassi4" value="@ID"/>
     <field name="volContentClassi5"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis5/volContentClassi5" value="@ID"/>
     <field name="volContentClassi6"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis6/volContentClassi6" value="@ID"/>
+	
     <!-- Search in article metadata -->
     <field name="maintitles_art"        type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editormask.labels.bibdescript" />
     <field name="subtitles_art"         type="name"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editormask.labels.subtitle" />
@@ -70,6 +72,7 @@
     <field name="sizes_art"             type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/sizes/size" sortable="true" value="text()" i18n="editormask.labels.size" />       
     <field name="refs_art"              type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/refs/ref" value="text()" i18n="editormask.labels.pub_reference" />
     <field name="journalID_art"     type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
+	<field  name="linkDeriv" source="objectMetadata" type="text" value="@xlink:href" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" addable="true"/>
 
     <!-- Search in institutions metadata -->
     <field name="instname"        type="name"       source="objectMetadata" objects="jpinst" xpath="/mycoreobject/metadata/names/name/fullname" value="text()" sortable="true" addable="true" i18n="editor.search.jpinst.label" />
