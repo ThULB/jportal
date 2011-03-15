@@ -100,36 +100,23 @@
 
 	<xsd:complexType name="MCRObjectMetadata">
 		<xsd:sequence>
-			<xsd:element name="label" minOccurs="1" maxOccurs="unbounded">
+			<xsd:element name="rubric" minOccurs="1" maxOccurs="1">
 				<xsd:complexType>
 					<xsd:sequence>
-						<xsd:element name="text" minOccurs="1" maxOccurs="1">
-							<xsd:complexType>
-								<xsd:simpleContent>
-									<xsd:extension base="xsd:string">
-										<xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
-										<xsd:attribute name="form" use="optional" type="mcrdefaultform" />
-										<xsd:attribute name="inherited" use="optional" type="xsd:integer" />
-									</xsd:extension>
-								</xsd:simpleContent>
-							</xsd:complexType>
-						</xsd:element>
-						<xsd:element name="description" minOccurs="0" maxOccurs="1">
-							<xsd:complexType>
-								<xsd:simpleContent>
-									<xsd:extension base="xsd:string">
-										<xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
-										<xsd:attribute name="form" use="optional" type="mcrdefaultform" />
-										<xsd:attribute name="inherited" use="optional" type="xsd:integer" />
-									</xsd:extension>
-								</xsd:simpleContent>
+						<xsd:element name="label" minOccurs="1" maxOccurs="unbounded">
+							<xsd:complexType mixed="true">
+								<xsd:sequence maxOccurs="unbounded">
+									<xsd:any namespace="##any" minOccurs="0" processContents="skip" />
+								</xsd:sequence>
+								<xsd:attribute name="type" use="optional" type="mcrdefaulttype" />
+								<xsd:attribute name="inherited" use="optional" type="xsd:integer" />
+								<xsd:attribute ref="xml:lang" use="optional" />
 							</xsd:complexType>
 						</xsd:element>
 					</xsd:sequence>
 					<xsd:attribute name="class" type="xsd:string" use="required" fixed="MCRMetaXML" />
 					<xsd:attribute name="heritable" type="xsd:boolean" use="optional" />
 					<xsd:attribute name="notinherit" type="xsd:boolean" use="optional" />
-					<xsd:attribute ref="xml:lang" />
 				</xsd:complexType>
 			</xsd:element>
 		</xsd:sequence>
