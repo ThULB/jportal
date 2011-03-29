@@ -24,7 +24,15 @@
           <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
         </xsl:variable>
         <xsl:variable name="periodetitle">
-          <xsl:copy-of select="concat(xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_from']/text(),' - ',xalan:nodeset($journalXML)/mycoreobject/metadata/dates/date[@type='published_until']/text())" />
+          <xsl:variable name="dates" select="xalan:nodeset($journalXML)/mycoreobject/metadata/dates"/>
+          <xsl:choose>
+            <xsl:when test="$dates/date[@type='published']">
+               <xsl:copy-of select="$dates/date[@type='published']/text()" />
+            </xsl:when>
+            <xsl:when test="dates/date[@type='published_from']">
+              <xsl:copy-of select="concat($dates/date[@type='published_from']/text(), ' - ', $dates/date[@type='published_until']/text())" />
+            </xsl:when>
+          </xsl:choose>
         </xsl:variable>
         <xsl:variable name="additionalTitle">
           <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/subtitles/subtitle/text()" />
@@ -49,12 +57,7 @@
                         </td>
                         <td align="right">
                           <div id="navigation_box">
-                            <xsl:call-template name="navigation.row">
-                              <xsl:with-param name="rootNode" select="'navi-below'" />
-                              <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
-                              <xsl:with-param name="menuPointHeigth" select="'21'" />
-                              <xsl:with-param name="spaceBetweenLinks" select="'12'" />
-                            </xsl:call-template>
+                            <xsl:call-template name="navigation.row" />
                           </div>
                         </td>
                     </tr>
