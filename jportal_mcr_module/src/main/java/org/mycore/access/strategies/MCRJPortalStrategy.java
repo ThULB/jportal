@@ -141,6 +141,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     }
 
     private final static boolean superUser() {
-        return MCRSessionMgr.getCurrentSession().getCurrentUserID().equals(CONFIG.getString("MCR.Users.Superuser.UserName"));
+        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
+        return currentUserID.equals(CONFIG.getString("MCR.Users.Superuser.UserName"));
     }
 }

@@ -2,7 +2,6 @@ package org.mycore.frontend.cli;
 
 import java.util.HashMap;
 
-import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;

@@ -1,9 +1,9 @@
 package org.mycore.services.fieldquery;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-
-import junit.framework.TestCase;
 
 public class InheritanceTest extends TestCase {
     class Parent{

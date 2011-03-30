@@ -2,8 +2,10 @@ package fsu.jportal.metadata;
 
 public class RubricLabel extends XMLMetaElementEntry{
     private String lang;
-    final String TEXT = "text";
-    final String DESCRIPTION = "description";
+    final transient String TEXT = "text";
+    final transient String DESCRIPTION = "description";
+    
+    public RubricLabel() {}
     
     public RubricLabel(String lang, String text, String description) {
         this.lang = lang;

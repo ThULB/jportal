@@ -1,13 +1,18 @@
 package org.mycore.common.xml;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.transform.JDOMSource;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
+public class MCRJPortalURIGetClassID implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClassID.class);
 
@@ -99,5 +104,10 @@ public class MCRJPortalURIGetClassID implements MCRURIResolver.MCRResolver {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public Source resolve(String href, String base) throws TransformerException {
+        return new JDOMSource(resolveElement(href));
     }
 }

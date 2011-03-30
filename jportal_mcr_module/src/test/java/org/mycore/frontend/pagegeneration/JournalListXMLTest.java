@@ -2,10 +2,10 @@ package org.mycore.frontend.pagegeneration;
 
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-
-import junit.framework.TestCase;
 
 public class JournalListXMLTest extends TestCase {
 

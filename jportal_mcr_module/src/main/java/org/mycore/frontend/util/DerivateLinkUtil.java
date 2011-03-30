@@ -1,7 +1,5 @@
 package org.mycore.frontend.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;

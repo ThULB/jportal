@@ -1,6 +1,7 @@
 package fsu.jportal.backend.impl.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,6 @@ import fsu.jportal.backend.impl.JournalListIFS2Backend;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
 import fsu.jportal.jaxb.JournalList.Section;
-import fsu.thulb.jaxb.JaxbTools;
 
 public class JournalListIFS2BackendTest {
     private MCRFileStore fakeStore;

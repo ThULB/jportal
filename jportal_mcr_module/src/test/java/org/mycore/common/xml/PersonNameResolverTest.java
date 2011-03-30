@@ -1,12 +1,10 @@
 package org.mycore.common.xml;
 
-import java.io.File;
+import junit.framework.TestCase;
 
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
-
-import junit.framework.TestCase;
 
 public class PersonNameResolverTest extends TestCase {
     public void testResolve() throws Exception {

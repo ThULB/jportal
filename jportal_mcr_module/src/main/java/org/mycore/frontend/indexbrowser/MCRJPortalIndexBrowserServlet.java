@@ -6,7 +6,7 @@ import org.jdom.Document;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserCache;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserEntry;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserServlet;
-import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserUtilsFoo;
+import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserUtils;
 import org.mycore.frontend.indexbrowser.lucene.MCRIndexBrowserXmlGenerator;
 
 public class MCRJPortalIndexBrowserServlet extends MCRIndexBrowserServlet {
@@ -17,7 +17,7 @@ public class MCRJPortalIndexBrowserServlet extends MCRIndexBrowserServlet {
     protected Document createResultListDocument() {
         List<MCRIndexBrowserEntry> resultList = null;
         String index = config.getIndex();
-        String cacheKey = MCRIndexBrowserUtilsFoo.getCacheKey(index, incomingBrowserData);
+        String cacheKey = MCRIndexBrowserUtils.getCacheKey(index, incomingBrowserData);
         if(MCRIndexBrowserCache.isCached(index, cacheKey)) {
             resultList = MCRIndexBrowserCache.getFromCache(index, cacheKey);
         } else {

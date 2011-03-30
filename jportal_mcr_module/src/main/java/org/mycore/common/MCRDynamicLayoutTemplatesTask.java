@@ -1,15 +1,7 @@
 package org.mycore.common;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.FileOutputStream;
-
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.output.*;
 
 /**
  * Ant task that is looking for new templates and automatically generating a new

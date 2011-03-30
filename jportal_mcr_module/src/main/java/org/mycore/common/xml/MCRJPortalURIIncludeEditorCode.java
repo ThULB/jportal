@@ -5,16 +5,21 @@ import java.io.StringReader;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
+import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 
-public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolver {
+public class MCRJPortalURIIncludeEditorCode implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIIncludeEditorCode.class);
     private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
@@ -280,6 +285,19 @@ public class MCRJPortalURIIncludeEditorCode implements MCRURIResolver.MCRResolve
         }
 
         return true;
+    }
+
+    @Override
+    public Source resolve(String href, String base) throws TransformerException {
+        try {
+            return new JDOMSource(resolveElement(href));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 
 }

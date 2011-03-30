@@ -94,7 +94,7 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
             wc.create();
         } catch (MCRException exception) {
             try {
-                generateErrorPage(job.getRequest(), job.getResponse(), 500, exception.getMessage(), exception, true);
+                job.getResponse().sendError(500, exception.getMessage());
                 return;
             } catch (IOException e) {
                 e.printStackTrace();

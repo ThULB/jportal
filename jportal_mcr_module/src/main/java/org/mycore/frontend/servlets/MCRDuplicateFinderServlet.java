@@ -26,6 +26,9 @@ package org.mycore.frontend.servlets;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.SimpleTimeZone;
 
 import javax.servlet.ServletException;
 
@@ -38,7 +41,6 @@ import org.jdom.filter.Filter;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -168,7 +170,7 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
             count++;
         }
         // add some general infos to the redObjectsElements
-        String user = session.getCurrentUserID();
+        String user = session.getUserInformation().getCurrentUserID();
         String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
                 + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
         long time = System.currentTimeMillis();
@@ -176,7 +178,7 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
         redObjectsElement.setAttribute("user", user);
         redObjectsElement.setAttribute("userRealName", userRealName);
         redObjectsElement.setAttribute("time", Long.toString(time));
-        redObjectsElement.setAttribute("timePretty", date.toGMTString());
+        redObjectsElement.setAttribute("timePretty", toGTMString(date));
         if (closed)
             redObjectsElement.setAttribute("status", "closed");
         else
@@ -186,6 +188,14 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
             redObjectsElement.setAttribute("hasErrors", "true");
         else
             redObjectsElement.removeAttribute("hasErrors");
+    }
+    
+    private String toGTMString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat();
+        dateFormat.setTimeZone(new SimpleTimeZone(0, "GTM"));
+        dateFormat.applyPattern("dd MMM yyyy HH:mm:ss z");
+        String formatedDate = dateFormat.format(date);
+        return formatedDate;
     }
 
     private synchronized void forwardToClient(MCRServletJob job, int maxObjects) throws IOException {

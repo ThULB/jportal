@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;

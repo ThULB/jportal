@@ -3,6 +3,7 @@ package spike;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 import org.jdom.Document;
 import org.jdom.output.Format;
@@ -13,6 +14,9 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import fsu.jportal.metadata.RubricLabel;
 import fsu.jportal.metadata.XMLMetaElement;
 import fsu.jportal.metadata.XMLMetaElementEntry;
@@ -21,6 +25,7 @@ public class MCRObjectSpike {
 
     @Before
     public void init() {
+        System.setProperty("MCR.Configuration.File", "config/test.properties");
         System.setProperty("MCR.Metadata.Type.person", "true");
     }
 
@@ -39,20 +44,24 @@ public class MCRObjectSpike {
     public void createPersonObjWithMCRAPI() throws Exception {
         MCRObject mcrObject = createPersonObj();
 
-        XMLMetaElement nameMetaElement = new XMLMetaElement("def.heading");
+        XMLMetaElement<PersonName> nameMetaElement = new XMLMetaElement<PersonName>("def.heading");
         nameMetaElement.addMetaElemEntry(new PersonName("Bud", "Spencer"));
         nameMetaElement.addMetaElemEntry(new PersonName("Homer", "Simpson"));
         
         mcrObject.getMetadata().setMetadataElement(nameMetaElement.toMCRMetaElement());
 
         xmlOutput(mcrObject.createXML());
+        
+        Gson gson = new Gson();
+        Type rubricType = new TypeToken<XMLMetaElement<PersonName>>() {}.getType();
+        System.out.println(gson.toJson(rubricType));
     }
     
     @Test
     public void createRubricWithAPI() throws Exception {
         MCRObject mcrObject = createPersonObj();
 
-        XMLMetaElement rubric = new XMLMetaElement("rubric");
+        XMLMetaElement<RubricLabel> rubric = new XMLMetaElement<RubricLabel>("rubric");
         rubric.addMetaElemEntry(new RubricLabel("de", "Rubriken Test fuer MyCoRe", "test de"));
         rubric.addMetaElemEntry(new RubricLabel("de", "Rubric test for MyCoRe", "test en"));
         

@@ -10,8 +10,6 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.parsers.bool.MCROrCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;

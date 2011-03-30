@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
 import fsu.jportal.backend.impl.JournalListInIFS;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;

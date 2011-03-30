@@ -4,14 +4,17 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+
 import org.jdom.Element;
 import org.jdom.JDOMException;
+import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
-import org.mycore.common.xml.MCRURIResolver.MCRResolver;
 
-public class PersonNameResolver implements MCRResolver {
+public class PersonNameResolver implements URIResolver {
 
-    @Override
     public Element resolveElement(String URI) throws Exception {
         String uri = "mcrobject:" + URI.substring(URI.indexOf(":") + 1);
         Element personXML = getPersonXMl(uri);
@@ -73,5 +76,15 @@ public class PersonNameResolver implements MCRResolver {
         public String toString() {
             return strBuffer.toString().trim();
         }
+    }
+
+    @Override
+    public Source resolve(String href, String base) throws TransformerException {
+        try {
+            return new JDOMSource(resolveElement(href));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

@@ -3,12 +3,12 @@ package spike;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import junit.framework.TestCase;
+
 import org.apache.commons.io.FileUtils;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.output.XMLOutputter;
-
-import junit.framework.TestCase;
 
 public class XMLOutputterTest extends TestCase {
     private static final String FOO_XML = "resources/testoutput/foo.xml";

@@ -1,8 +1,6 @@
 package org.mycore.frontend.pagegeneration;
 
 
-import java.util.TreeSet;
-
 import junit.framework.TestCase;
 
 import org.mycore.frontend.pagegeneration.JournalListXML.Section;

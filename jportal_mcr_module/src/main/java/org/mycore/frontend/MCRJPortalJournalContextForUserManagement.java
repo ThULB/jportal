@@ -77,8 +77,8 @@ public class MCRJPortalJournalContextForUserManagement {
         }
 
         // save
-        MCRAccessManager.addRule(new MCRObjectID(this.journalID), "writedb", rule, "Write permission for " + this.journalID);
-        MCRAccessManager.addRule(new MCRObjectID(this.journalID), "deletedb", rule, "Delete permission for " + this.journalID);
+        MCRAccessManager.addRule(MCRObjectID.getInstance(this.journalID), "writedb", rule, "Write permission for " + this.journalID);
+        MCRAccessManager.addRule(MCRObjectID.getInstance(this.journalID), "deletedb", rule, "Delete permission for " + this.journalID);
 
         LOGGER.info("ACL's assigned for journal=" + this.journalID);
     }

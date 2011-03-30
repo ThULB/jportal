@@ -3,15 +3,20 @@ package org.mycore.common.xml;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
+
 import org.apache.log4j.Logger;
 import org.jdom.Element;
 import org.jdom.Namespace;
+import org.jdom.transform.JDOMSource;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 
-public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
+public class MCRJPortalURIGetAllClassIDs implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetAllClassIDs.class);
 
@@ -89,6 +94,11 @@ public class MCRJPortalURIGetAllClassIDs implements MCRURIResolver.MCRResolver {
             return true;
         else
             return false;
+    }
+
+    @Override
+    public Source resolve(String href, String base) throws TransformerException {
+        return new JDOMSource(resolveElement(href));
     }
 
 }

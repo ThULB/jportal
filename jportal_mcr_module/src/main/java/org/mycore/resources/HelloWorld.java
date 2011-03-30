@@ -1,13 +1,11 @@
 package org.mycore.resources;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,10 +15,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBException;
 
-import fsu.thulb.http.HttpTools;
 import fsu.thulb.jaxb.JaxbTools;
 import fsu.thulb.jp.datamodel.common.MCRObject;
-import fsu.thulb.jp.searchpojo.StorageContentList;
 
 @Path("/helloworld")
 public class HelloWorld {

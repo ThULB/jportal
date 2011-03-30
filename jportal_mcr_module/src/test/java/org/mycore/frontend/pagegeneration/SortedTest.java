@@ -5,9 +5,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.mycore.frontend.pagegeneration.JournalListXML.Section;
-
 import junit.framework.TestCase;
+
+import org.mycore.frontend.pagegeneration.JournalListXML.Section;
 
 
 public class SortedTest extends TestCase {

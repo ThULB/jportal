@@ -26,6 +26,7 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -114,13 +115,13 @@ public class MCRJournalSummary extends MCRAbstractCommands {
                         logger.info("new Journal found, with ID " + objParentIDtemp);
                         journals.put(objParentIDtemp, new MCRJournalStats(objParentIDtemp, type));
                     }
-                    if (objStruct.getDerivateSize() > 0) {
+                    if (objStruct.getDerivates().size() > 0) {
                         logger.debug("ID: " + objParentIDtemp.toString());
                         checkForDerivates(objStruct, objParentIDtemp, i);
                     }
                 }
 
-                if (objStruct.getChildSize() == 0) {
+                if (objStruct.getChildren().size() == 0) {
 
                     // if all every object is checked, else only if the journal
                     // ID is right
@@ -131,7 +132,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
                         if ((journals.get(objParentIDtemp).getObjectFocus().equals("fully") && type.equals("articles"))
                                 || (journals.get(objParentIDtemp).getObjectFocus().equals("browse") && type.equals("volumes"))) {
                             // check for completeness
-                            if (objStruct.getDerivateSize() == 0) {
+                            if (objStruct.getDerivates().size() == 0) {
                                 journals.get(objParentIDtemp).incompleteObj(object.getId());
                             } else {
                                 journals.get(objParentIDtemp).completeObj(object.getId());
@@ -149,10 +150,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
     // gets all derivates of an object and starts the derivate parsing
     private static void checkForDerivates(MCRObjectStructure objStruct, MCRObjectID objParentIDtemp, int i) {
         MCRFilesystemNode root;
-        int size = objStruct.getDerivateSize();
-
-        for (int k = 0; k < size; k++) {
-            String derivateID = objStruct.getDerivate(k).getXLinkHref();
+        for (MCRMetaLinkID derivateLink : objStruct.getDerivates()) {
+            
+            String derivateID = derivateLink.getXLinkHref();
             try {
                 root = MCRFilesystemNode.getRootNode(derivateID);
             } catch (org.mycore.common.MCRPersistenceException e) {
@@ -223,7 +223,7 @@ public class MCRJournalSummary extends MCRAbstractCommands {
         logger.info("/************************Journal Status Report*************************/");
         // go through all journal objects in the hash map
         for (int k = 0; k <= maxJouID; k++) {
-            MCRObjectID JournalID = new MCRObjectID("jportal_jpjournal_" + Integer.toString(k));
+            MCRObjectID JournalID = MCRObjectID.getInstance("jportal_jpjournal_" + Integer.toString(k));
             if (journals.containsKey(JournalID)) {
                 MCRJournalStats journal = journals.get(JournalID);
                 Element XMLjournal = new Element("journal").setAttribute("name", journal.getJournalName()).setAttribute("type",

@@ -8,17 +8,20 @@ import org.jdom.Element;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 
-public class XMLMetaElement{
-    List<XMLMetaElementEntry> listOfMetaElemEntry;
+public class XMLMetaElement<T extends XMLMetaElementEntry>{
+    List<T> listOfMetaElemEntry;
     private String tagName;
+    
+    public XMLMetaElement() {
+    }
     
     public XMLMetaElement(String tagName) {
         this.tagName = tagName;
     }
     
-    public void addMetaElemEntry(XMLMetaElementEntry entry){
+    public void addMetaElemEntry(T entry){
         if(listOfMetaElemEntry == null){
-            listOfMetaElemEntry = new ArrayList<XMLMetaElementEntry>();
+            listOfMetaElemEntry = new ArrayList<T>();
         }
         
         listOfMetaElemEntry.add(entry);

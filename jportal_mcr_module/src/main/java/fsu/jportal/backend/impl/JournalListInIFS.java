@@ -7,7 +7,6 @@ import org.mycore.common.MCRConfiguration;
 import fsu.jportal.backend.api.JournalListBackend;
 import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
-import fsu.thulb.jaxb.JaxbTools;
 
 public class JournalListInIFS {
 

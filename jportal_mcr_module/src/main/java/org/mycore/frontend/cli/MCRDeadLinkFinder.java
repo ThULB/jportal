@@ -12,14 +12,9 @@ import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.mycore.backend.hibernate.MCRHIBConnection;
-import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import fsu.thulb.jp.datamodel.common.MCRMetadata;
 
 public class MCRDeadLinkFinder extends MCRAbstractCommands {
     private static final Namespace xlink = Namespace.getNamespace("http://www.w3.org/1999/xlink");
