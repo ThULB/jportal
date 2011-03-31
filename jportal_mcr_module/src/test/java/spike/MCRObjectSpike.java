@@ -10,6 +10,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
@@ -26,7 +27,7 @@ public class MCRObjectSpike {
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
-        System.setProperty("MCR.Metadata.Type.person", "true");
+        MCRConfiguration.instance().set("MCR.Metadata.Type.person", "true");
     }
 
     @Test

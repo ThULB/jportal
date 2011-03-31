@@ -31,6 +31,7 @@ public class JournalListManagerTest {
 
     @Before
     public void init(){
+        System.setProperty("MCR.Configuration.File", "config/test.properties");
         MCRConfiguration.instance().getProperties().setProperty("JP.JournalList.IFS.Backend", FakeStoreCfg.class.getName());
         journalListManager = JournalListManager.instance(new FakeJournalListManagerCfg());
     }

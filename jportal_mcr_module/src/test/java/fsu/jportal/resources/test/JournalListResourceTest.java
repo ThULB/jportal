@@ -58,6 +58,7 @@ public class JournalListResourceTest extends JerseyResourceTestCase {
     
     @Before
     public void init() {
+        System.setProperty("MCR.Configuration.File", "src/test/resources/config/test.properties");
         FakeJournalListBackend.initJournalLists();
         MCRConfiguration.instance().getProperties().setProperty(JournalListBackend.PROP_NAME, FakeJournalListBackend.class.getName());
     }
