@@ -4,14 +4,20 @@ import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Type;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.datamodel.common.MCRLinkTableInterface;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 
@@ -26,6 +32,38 @@ import fsu.testcase.JerseyResourceTestCase;
 
 
 public class ClassificationResourceTest extends JerseyResourceTestCase{
+    public static class FakeLinkTable implements MCRLinkTableInterface{
+
+        @Override
+        public void create(String from, String to, String type, String attr) {
+            
+        }
+
+        @Override
+        public void delete(String from, String to, String type) {
+            
+        }
+
+        @Override
+        public int countTo(String fromtype, String to, String type, String restriction) {
+            return 0;
+        }
+
+        @Override
+        public Map<String, Number> getCountedMapOfMCRTO(String mcrtoPrefix) {
+            return new HashMap<String, Number>();
+        }
+
+        @Override
+        public Collection<String> getSourcesOf(String to, String type) {
+            return new ArrayList<String>();
+        }
+
+        @Override
+        public Collection<String> getDestinationsOf(String from, String type) {
+            return new ArrayList<String>();
+        }}
+    
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
@@ -38,6 +76,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         mcrProperties.setProperty("MCR.IFS2.Store.jportal_jpclassi.SlotLayout", "4-2-2");
         mcrProperties.setProperty("MCR.IFS2.Store.jportal_jpclassi.SVNRepositoryURL", "ram:///tmp");
         mcrProperties.setProperty("MCR.EventHandler.MCRObject.2.Class", "org.mycore.datamodel.common.MCRXMLMetadataEventHandler");
+        mcrProperties.setProperty("MCR.Persistence.LinkTable.Store.Class", FakeLinkTable.class.getName());
         
         try {
             MCRStoreManager.createStore("jportal_jpclassi", MCRMetadataStore.class);
@@ -67,9 +106,20 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, metaElemAsJson);
         
         URI location = response.getLocation();
-        System.out.println("URI: " + location);
-        String jsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(String.class);
-        assertEquals(metaElemAsJson, jsonResponse);
+        ClientResponse jsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        String responseBody = jsonResponse.getEntity(String.class);
+        assertEquals(metaElemAsJson, responseBody);
+
+        String modifiedRubric = responseBody.replaceAll("MyCoRe", "Jportal");
+        ClientResponse updateResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).put(ClientResponse.class, modifiedRubric);
+        String modJsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(String.class);
+        System.out.println(modJsonResponse);
+        assertEquals(modifiedRubric, modJsonResponse);
+        
+        ClientResponse deleteResponse = resource().uri(location).delete(ClientResponse.class);
+        assertEquals("Wrong HTTP status code,",Status.GONE.getStatusCode(), deleteResponse.getStatus());
+        ClientResponse deletedJsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        assertEquals(Status.NOT_FOUND.getStatusCode(), deletedJsonResponse.getStatus());
         
     }
 
