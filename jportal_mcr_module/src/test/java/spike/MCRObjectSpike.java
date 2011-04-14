@@ -5,12 +5,17 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.lang.reflect.Type;
 
+import org.jdom.Content;
 import org.jdom.Document;
+import org.jdom.Text;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaInterface;
+import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
@@ -43,15 +48,13 @@ public class MCRObjectSpike {
 
     @Test
     public void createPersonObjWithMCRAPI() throws Exception {
-        MCRObject mcrObject = createPersonObj();
+        MCRObject mcrPersonObj = createPersonObj();
 
         XMLMetaElement<PersonName> nameMetaElement = new XMLMetaElement<PersonName>("def.heading");
         nameMetaElement.addMetaElemEntry(new PersonName("Bud", "Spencer"));
         nameMetaElement.addMetaElemEntry(new PersonName("Homer", "Simpson"));
         
-        mcrObject.getMetadata().setMetadataElement(nameMetaElement.toMCRMetaElement());
-
-        xmlOutput(mcrObject.createXML());
+        xmlOutput(mcrPersonObj.createXML());
         
         Gson gson = new Gson();
         Type rubricType = new TypeToken<XMLMetaElement<PersonName>>() {}.getType();

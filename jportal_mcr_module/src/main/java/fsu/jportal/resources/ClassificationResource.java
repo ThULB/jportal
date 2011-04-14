@@ -1,8 +1,6 @@
 package fsu.jportal.resources;
 
-import java.lang.reflect.Type;
 import java.net.URI;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,33 +15,35 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.jdom.Element;
-import org.jdom.Namespace;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import fsu.jportal.metadata.RubricLabel;
-import fsu.jportal.metadata.XMLMetaElement;
+import fsu.jportal.gson.GsonManager;
+import fsu.jportal.metadata.Rubric;
 
 @Path("classifications")
 public class ClassificationResource {
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newClassification(String json) {
-        XMLMetaElement<RubricLabel> metaElement = jsonToXMLMetaElement(json);
-
+        Gson gson = GsonManager.instance().createGson();
+        Rubric rubric = gson.fromJson(json, Rubric.class);
+        
         MCRObjectID objId = MCRObjectID.getNextFreeId("jportal_jpclassi");
-
+        
         MCRObject mcrObject = createMCRObject(objId);
-        mcrObject.getMetadata().setMetadataElement(metaElement.toMCRMetaElement());
-
+        mcrObject.getMetadata().setMetadataElement(rubric.getRubricMetaElement());
+        String parentID = rubric.getParentID();
+        if(parentID  != null && !"".equals(parentID)){
+            mcrObject.getStructure().setParent(parentID);
+        }
+        
         try {
             MCRMetadataManager.create(mcrObject);
             return Response.created(URI.create(objId.toString())).build();
@@ -70,46 +70,28 @@ public class ClassificationResource {
     public String getClassification(@PathParam("id") String id) {
         try {
             MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
-            XMLMetaElement<RubricLabel> xmlMetaElement = mcrMetadataToXMLMetaElement(mcrObject.getMetadata());
+            Rubric rubric = new Rubric();
+            rubric.setRubricMetaElement(mcrObject.getMetadata().getMetadataElement(Rubric.TAGNAME));
             
-            Gson gson = new Gson();
-            return gson.toJson(xmlMetaElement, rubricType());
+            Gson gson = GsonManager.instance().createGson();
+            
+            return gson.toJson(rubric);
         } catch (MCRPersistenceException e) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-    }
-
-    private XMLMetaElement<RubricLabel> mcrMetadataToXMLMetaElement(MCRObjectMetadata mcrMetadata) {
-        List<Element> rubricList = mcrMetadata.createXML().getChildren("rubric");
-        XMLMetaElement<RubricLabel> xmlMetaElement = new XMLMetaElement<RubricLabel>("rubric");
-        for (Element rubric : rubricList) {
-            List<Element> labelList = rubric.getChildren("label");
-            for (Element label : labelList) {
-                RubricLabel rubricLabel = rubricLabelFromXML(label);
-                xmlMetaElement.addMetaElemEntry(rubricLabel);
-            }
-        }
-        return xmlMetaElement;
-    }
-
-    private RubricLabel rubricLabelFromXML(Element label) {
-        String lang = label.getAttributeValue("lang", Namespace.XML_NAMESPACE);
-        String text = label.getChildText("text");
-        String description = label.getChildText("description");
-        RubricLabel rubricLabel = new RubricLabel(lang, text, description);
-        return rubricLabel;
     }
 
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateClassification(@PathParam("id") String id, String json) {
-        XMLMetaElement<RubricLabel> metaElement = jsonToXMLMetaElement(json);
-
+        Gson gson = GsonManager.instance().createGson();
+        Rubric rubric = gson.fromJson(json, Rubric.class);
+        
         MCRObjectID objId = MCRObjectID.getInstance(id);
 
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(objId);
-        mcrObject.getMetadata().setMetadataElement(metaElement.toMCRMetaElement());
+        mcrObject.getMetadata().setMetadataElement(rubric.getRubricMetaElement());
 
         try {
             MCRMetadataManager.update(mcrObject);
@@ -139,16 +121,5 @@ public class ClassificationResource {
             e.printStackTrace();
             return Response.status(Status.CONFLICT).build();
         }
-    }
-
-    private XMLMetaElement<RubricLabel> jsonToXMLMetaElement(String json) {
-        Gson gson = new Gson();
-        return gson.<XMLMetaElement<RubricLabel>> fromJson(json, rubricType());
-    }
-
-    private Type rubricType() {
-        Type rubricType = new TypeToken<XMLMetaElement<RubricLabel>>() {
-        }.getType();
-        return rubricType;
     }
 }

@@ -48,6 +48,10 @@
 		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.directory}/editor/acl" includes="**/*.xml" />
 		</copy>
+		
+		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
+			<fileset dir="${module.directory}/" includes="**/messages_*.properties" />
+		</copy>
 
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
 			<fileset file="${module.jar}" />

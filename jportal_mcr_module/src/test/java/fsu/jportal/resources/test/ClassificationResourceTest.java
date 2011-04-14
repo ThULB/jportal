@@ -2,7 +2,6 @@ package fsu.jportal.resources.test;
 
 import static org.junit.Assert.assertEquals;
 
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,11 +21,10 @@ import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sun.jersey.api.client.ClientResponse;
 
-import fsu.jportal.metadata.RubricLabel;
-import fsu.jportal.metadata.XMLMetaElement;
+import fsu.jportal.gson.GsonManager;
+import fsu.jportal.metadata.Rubric;
 import fsu.jportal.resources.ClassificationResource;
 import fsu.testcase.JerseyResourceTestCase;
 
@@ -96,31 +94,69 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
     
     @Test
     public void createClassification() throws Exception {
-        XMLMetaElement<RubricLabel> rubric = new XMLMetaElement<RubricLabel>("rubric");
-        rubric.addMetaElemEntry(new RubricLabel("de", "Rubriken Test fuer MyCoRe", "test de"));
-        rubric.addMetaElemEntry(new RubricLabel("en", "Rubric test for MyCoRe", "test en"));
+        String serializedRubric = rubricJsonStr();
         
-        Gson gson = new Gson();
-        Type rubricType = new TypeToken<XMLMetaElement<RubricLabel>>() {}.getType();
-        String metaElemAsJson = gson.toJson(rubric, rubricType);
-        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, metaElemAsJson);
+        URI rubricLocation = assertCreateRubric(serializedRubric);
         
-        URI location = response.getLocation();
-        ClientResponse jsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        String responseBody = jsonResponse.getEntity(String.class);
-        assertEquals(metaElemAsJson, responseBody);
+        assertGetRubric(rubricLocation, serializedRubric);
+        assertUpdateRubric(rubricLocation, serializedRubric);
+        URI subRubricLocation = assertCreateSubRubric(rubricLocation);
+        assertDeleteRubric(rubricLocation, subRubricLocation);
+    }
 
-        String modifiedRubric = responseBody.replaceAll("MyCoRe", "Jportal");
-        ClientResponse updateResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).put(ClientResponse.class, modifiedRubric);
-        String modJsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(String.class);
-        System.out.println(modJsonResponse);
-        assertEquals(modifiedRubric, modJsonResponse);
-        
-        ClientResponse deleteResponse = resource().uri(location).delete(ClientResponse.class);
+    private void assertDeleteRubric(URI rubricLocation, URI subRubricLocation) {
+        ClientResponse deleteResponse = resource().uri(rubricLocation).delete(ClientResponse.class);
         assertEquals("Wrong HTTP status code,",Status.GONE.getStatusCode(), deleteResponse.getStatus());
-        ClientResponse deletedJsonResponse = resource().uri(location).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        assertEquals(Status.NOT_FOUND.getStatusCode(), deletedJsonResponse.getStatus());
-        
+        ClientResponse delRubricResponse = resource().uri(rubricLocation).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        assertEquals(Status.NOT_FOUND.getStatusCode(), delRubricResponse.getStatus());
+        ClientResponse delSubRubricResponse = resource().uri(subRubricLocation).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        assertEquals(Status.NOT_FOUND.getStatusCode(), delSubRubricResponse.getStatus());
+    }
+
+    private void assertUpdateRubric(URI rubricLocation, String serializedRubric) {
+        String modifiedRubric = serializedRubric.replaceAll("MyCoRe", "Jportal");
+        ClientResponse updateResponse = resource().uri(rubricLocation).type(MediaType.APPLICATION_JSON).put(ClientResponse.class, modifiedRubric);
+        String modJsonResponse = resource().uri(rubricLocation).type(MediaType.APPLICATION_JSON).get(String.class);
+        assertEquals(modifiedRubric, modJsonResponse);
+    }
+
+    private void assertGetRubric(URI rubricLocation, String serializedRubric) {
+        ClientResponse jsonResponse = resource().uri(rubricLocation).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        String responseBody = jsonResponse.getEntity(String.class);
+        assertEquals(serializedRubric, responseBody);
+    }
+
+    private String rubricJsonStr() {
+        Rubric rubric = new Rubric();
+        rubric.addLabel("de", "Rubriken Test fuer MyCoRe", "test de");
+        rubric.addLabel("en", "Rubric test for MyCoRe", "test en");
+        Gson gson = GsonManager.instance().createGson();
+        String serializedRubric = gson.toJson(rubric);
+        return serializedRubric;
+    }
+    
+    private String subRubricJsonStr(String parentID) {
+        Rubric rubric = new Rubric();
+        rubric.setParentID(parentID);
+        rubric.addLabel("de", "Unterrubriken Test fuer MyCoRe", "untertest de");
+        rubric.addLabel("en", "Subrubric test for MyCoRe", "subtest en");
+        Gson gson = GsonManager.instance().createGson();
+        String serializedRubric = gson.toJson(rubric);
+        return serializedRubric;
+    }
+    
+    private URI assertCreateRubric(String serializedRubric){
+        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, serializedRubric);
+        assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
+        return response.getLocation();
+    }
+    
+    private URI assertCreateSubRubric(URI parentURI){
+        String path = parentURI.getPath();
+        String parentID = path.substring(path.lastIndexOf("/")+1);
+        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, subRubricJsonStr(parentID));
+        assertEquals("could not create sub rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
+        return response.getLocation();
     }
 
     @Override
