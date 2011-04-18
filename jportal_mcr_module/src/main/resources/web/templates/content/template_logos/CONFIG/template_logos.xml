@@ -39,30 +39,78 @@
     <template>
         <!-- jlm -->
         <journalID value="jportal_jpjournal_00000029" />
+        <journalID value="jportal_jpjournal_00000358" />
+        <journalID value="jportal_jpjournal_00000359" />
+        <journalID value="jportal_jpjournal_00000360" />
+        <journalID value="jportal_jpjournal_00000361" />
         <xhtml>
-            <div style="position:relative;left:20px;margin-top:10px;">
-                <a href="http://www.dfg.de" class="sponsoredlogo-styles">
-                    <img
-                        src="templates/content/template_logos/IMAGES/DFG_zweizeilig_sw.png"  />
-                </a>
-            </div>
-            <div style="position:relative;left:20px;margin-top:10px;">
-                <a href="http://www.klassik-stiftung.de/"
-                    class="sponsoredlogo-styles">
-                    <img
-                        src="templates/content/template_logos/IMAGES/KlassikStiftungW-2.png"
-                         />
-                </a>
-            </div>
-            <div style="position:relative;left:20px;margin-top:10px;" >
-                <a href="http://www.thulb.uni-jena.de"
-                    class="sponsoredlogo-styles">
-                    <img
-                        src="templates/content/template_logos/IMAGES/thulb.png"
-                         />
-                </a>
-            </div>
-        </xhtml>
+			<style type="text/css">
+				div.dfgLogo {
+				background-image:url(../../../templates/content/template_logos/IMAGES/DFGinactive.png);
+				width:100px;height:37px;
+				}
+
+				div.dfgLogo:hover{
+				background-image:url(../../../templates/content/template_logos/IMAGES/DFGactive.png);
+				}
+				div.kswLogo {
+				background-image:url(../../../templates/content/template_logos/IMAGES/KSWinactive.png);
+				width:100px;height:37px;
+				}
+
+				div.kswLogo:hover{
+				background-image:url(../../../templates/content/template_logos/IMAGES/KSWactive.png);
+				}
+				div.thulbLogo {
+				background-image:url(../../../templates/content/template_logos/IMAGES/Thulbinactive.png);
+				width:55px;height:19px;
+				}
+
+				div.thulbLogo:hover{
+				background-image:url(../../../templates/content/template_logos/IMAGES/Thulbactive.png);
+				}
+			</style>
+			<a href="http://www.dfg.de">
+				<div class="dfgLogo" style="position:relative;left:20px;margin-top:10px;" />
+			</a>
+			<a href="http://www.klassik-stiftung.de/">
+				<div class="kswLogo" style="position:relative;left:20px;margin-top:10px;" />
+			</a>
+			<a href="http://www.thulb.uni-jena.de" >
+				<div class="thulbLogo" style="position:relative;left:20px;margin-top:10px;"/>
+			</a>
+		</xhtml>
+    </template>
+    <template>
+        <!-- aaz -->
+        <journalID value="jportal_jpjournal_00000025" />
+        <xhtml>
+			<style type="text/css">
+				div.sarLogo {
+				background-image:url(../../../templates/content/template_logos/IMAGES/StaatRudol_grau.png);
+				width:100px;height:33px;
+				}
+
+				div.sarLogo:hover{
+				background-image:url(../../../templates/content/template_logos/IMAGES/StaatsRudol.png);
+				}
+				
+				div.thulbLogo {
+				background-image:url(../../../templates/content/template_logos/IMAGES/Thulbinactive.png);
+				width:55px;height:19px;
+				}
+
+				div.thulbLogo:hover{
+				background-image:url(../../../templates/content/template_logos/IMAGES/Thulbactive.png);
+				}
+			</style>
+			<a href="http://www.thueringen.de/de/staatsarchive/rudolstadt/content.html">
+				<div class="sarLogo" style="position:relative;left:20px;margin-top:10px;" />
+			</a>
+			<a href="http://www.thulb.uni-jena.de" >
+				<div class="thulbLogo" style="position:relative;left:20px;margin-top:10px;"/>
+			</a>
+		</xhtml>
     </template>
     <template>
         <journalID value="jportal_jpjournal_00000050" />
