@@ -164,29 +164,12 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
-
-                    <xsl:choose>
-                        <xsl:when test="(contains(/mycoreobject/@ID,'_jparticle_')) or ($children='false' and $CurrentUser!='gast') ">
-                            <xsl:call-template name="objectLinking">
-                                <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-                                <xsl:with-param name="obj_name" select="$shortlabel" />
-                                <xsl:with-param name="hoverText" select="$name" />
-                                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
-                            </xsl:call-template>
-                        </xsl:when>
-                        <xsl:when test="($children='false' and $CurrentUser='gast')">
-                            <xsl:value-of select="$shortlabel" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="objectLinking">
-                                <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
-                                <xsl:with-param name="obj_name" select="$shortlabel" />
-                                <xsl:with-param name="hoverText" select="$name" />
-                                <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=true&amp;XSL.toc.pos.SESSION=1'" />
-                            </xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    
+                    <xsl:call-template name="objectLinking">
+                        <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
+                        <xsl:with-param name="obj_name" select="$shortlabel" />
+                        <xsl:with-param name="hoverText" select="$name" />
+                        <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
+                    </xsl:call-template>
                     
                     <!-- sub title, if exist  -->
                     <xsl:if test="/mycoreobject/metadata/subtitles/subtitle/text()">

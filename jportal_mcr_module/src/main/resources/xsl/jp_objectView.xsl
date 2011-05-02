@@ -445,12 +445,12 @@
                 <xsl:when test="mcrxml:exists(@id)">
                   <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
                   <xsl:apply-templates select="." mode="toc">
-                  <xsl:with-param name="mcrobj" select="$mcrobj" />
-                  <xsl:with-param name="mcrobjlink">
-                    <xsl:call-template name="objectLink">
-                      <xsl:with-param name="obj_id" select="@id" />
-                    </xsl:call-template>
-                  </xsl:with-param>
+                    <xsl:with-param name="mcrobj" select="$mcrobj" />
+                    <xsl:with-param name="mcrobjlink">
+                      <xsl:call-template name="objectLink">
+                        <xsl:with-param name="obj_id" select="@id" />
+                      </xsl:call-template>
+                    </xsl:with-param>
                   </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
