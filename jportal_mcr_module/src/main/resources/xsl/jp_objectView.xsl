@@ -170,17 +170,6 @@
        Called by article, volume and journal. -->
   <!-- ========================================================================== -->
 	<xsl:template name="printSwitchViewBar">
-		<xsl:variable name="children">
-			<xsl:choose>
-				<xsl:when test="/mycoreobject/structure/children">
-					<xsl:value-of select="'true'" />
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:value-of select="'false'" />
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
-
 		<table id="switch" cellspacing="0" cellpadding="0" border="0">
 			<tr>
 				<!-- oncle buttons :-) -->
@@ -278,8 +267,9 @@
 						</xsl:if>
 					</xsl:for-each>
 				</xsl:if>
-				<xsl:if
-					test="$CurrentUser!='gast' and contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
+        
+                <!-- detailview & children view -->
+				<xsl:if test="contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
 					<td>
 						<xsl:choose>
 							<xsl:when test="$view.objectmetadata='false'">
