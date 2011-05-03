@@ -1670,6 +1670,23 @@
 	<!--
 		=====================================================================================================
 	-->
+	<xsl:template name="printMetaNodes">
+		<xsl:param name="metaData" />
+		<xsl:param name="nodeNames" />
+		<xsl:for-each select="$nodeNames/node">
+			<xsl:variable name="nodeName" select="@name" />
+			<xsl:variable name="labelName" select="@label" />
+			<xsl:if test="$metaData/*/*[name() = $nodeName]">
+				<table cellspacing="0" cellpadding="0" id="detailed-view">
+					<xsl:call-template name="printMetaDates">
+						<xsl:with-param select="$metaData/*/*[name() = $nodeName]" name="nodes" />
+						<xsl:with-param select="i18n:translate($labelName)" name="label" />
+					</xsl:call-template>
+				</table>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+	
 	<xsl:template name="printMetaDates">
 		<!-- prints a table row for a given nodeset -->
 		<xsl:param name="volume-node" />
