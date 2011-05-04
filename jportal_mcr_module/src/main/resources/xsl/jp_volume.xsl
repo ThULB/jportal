@@ -165,11 +165,12 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:variable>
+                  
                     <xsl:call-template name="objectLinking">
                         <xsl:with-param name="obj_id" select="/mycoreobject/@ID" />
                         <xsl:with-param name="obj_name" select="$shortlabel" />
                         <xsl:with-param name="hoverText" select="$name" />
-                        <xsl:with-param name="requestParam" select="'XSL.view.objectmetadata.SESSION=false'" />
+                        <xsl:with-param name="requestParam" select="concat('XSL.view.objectmetadata.SESSION=', $children)" />
                     </xsl:call-template>
 
                     <!-- sub title, if exist -->
