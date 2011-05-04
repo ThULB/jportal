@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gesetzessammlung xmlns="http://www.thulb.uni-jena.de/gesetzessammlung/"
+	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.thulb.uni-jena.de/gesetzessammlung/Gesetzessammlung.xsd">
+	<register>
+		<titel>Chronologische Uebersicht der in der Gesetzsammlung des
+			Fürstenthums Reuß älterer Linie vom Jahr 1853 enthaltenen
+			gesetzlichen Erlasse.</titel>
+		<jahresangabe>
+			<von>1853</von>
+		</jahresangabe>
+		<herzogtum>Reuß ältere Linie</herzogtum>
+		<gesetze>
+			<gesetz>
+				<nummer>3</nummer>
+				<inhalt>Landesherrliche Verordnung, die Publication eines Gesetzes
+					über den unbestimmten summarischen Proceß und das
+					Rechnungsverfahren, nebst dazu gegebener Gebührentaxe, ingleichen
+					die bei Einführung dieses Gesetzes zu befolgender Grundsätze betr.
+				</inhalt>
+				<datum>
+					<erlass>1852-12-21</erlass>
+					<ausgabe>1853-02-18</ausgabe>
+				</datum>
+				<seite>
+					<von>9</von>
+					<bis>9</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>1</nummer>
+				<inhalt>Gesetzliche Verordnung, eine Modification der im Gesetz vom
+					21. December 1846 wegen Besetzung der Gerichtsbank im
+					Untersuchungsverfahren enthaltenen Vorschrift betr.</inhalt>
+				<datum>
+					<erlass>1852-12-29</erlass>
+					<ausgabe>1853-02-01</ausgabe>
+				</datum>
+				<seite>
+					<von>1</von>
+					<bis>1</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>5</nummer>
+				<inhalt>Gesetzliche Verordnung, einige Abänderungen in dem, nicht
+					nach dem Gesetze über unbestimmten summarischen Proceß zu
+					behandelnden bürgerlichen Rechtsstreitigkeiten betr.</inhalt>
+				<datum>
+					<erlass>1852-12-30</erlass>
+					<ausgabe>1853-03-01</ausgabe>
+				</datum>
+				<seite>
+					<von>49</von>
+					<bis>49</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>1</nummer>
+				<inhalt>Nachtrag zu dem, dem gemischten Handwerk der Schlosser,
+					Schmiede und Wagner allhier unterm 21. Octbr. 1817, so wie zu dem,
+					dem vereinigten Handwerk der Uhrmacher, Huf- und Waffenschmiede,
+					Schlosser, Büchsenmacher, Wagner und Stellmacher zu Zeulenroda
+					unterm 20. Septbr. 1756 Landesherrlich verliehenen Innungsbriefe
+				</inhalt>
+				<datum>
+					<erlass>1852-12-31</erlass>
+					<ausgabe>1853-02-01</ausgabe>
+				</datum>
+				<seite>
+					<von>2</von>
+					<bis>2</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>1</nummer>
+				<inhalt>Landesherrliche Verordnung, die Erhebung der Forder- und
+					Schließgebühren bei den Handwerksinnungen betr.</inhalt>
+				<datum>
+					<erlass>1853-01-03</erlass>
+					<ausgabe>1853-02-01</ausgabe>
+				</datum>
+				<seite>
+					<von>4</von>
+					<bis>4</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>6</nummer>
+				<inhalt>Gesetzliche Verordnung, die Abkürzung des Verfahrens bei
+					Vollstreckung gerichtlicher Erkenntnisse in Civilsachen und den
+					Edictalproceß betr.</inhalt>
+				<datum>
+					<erlass>1853-01-10</erlass>
+					<ausgabe>1853-03-08</ausgabe>
+				</datum>
+				<seite>
+					<von>53</von>
+					<bis>53</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>2</nummer>
+				<inhalt>Regierungsbekanntmachung, betr. die, in Folge des Vertrags
+					wegen Uebernahme der Ausgewiesenen, d. d. Gotha den 15. Juli 1851,
+					künftig zu beobachtenden Form der Heimathscheine</inhalt>
+				<datum>
+					<erlass>1853-01-31</erlass>
+					<ausgabe>1853-02-08</ausgabe>
+				</datum>
+				<seite>
+					<von>5</von>
+					<bis>5</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>8</nummer>
+				<inhalt>Landesherrliche Verordnung, die Publication einer
+					allgemeinen Gebührentaxe für gerichtliche, Notariats- und
+					Sachwaltergeschäfte und die bei Einführung derselben zu befolgenden
+					Grundsätze betr.</inhalt>
+				<datum>
+					<erlass>1853-02-01</erlass>
+					<ausgabe>1853-03-22</ausgabe>
+				</datum>
+				<seite>
+					<von>69</von>
+					<bis>69</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>4</nummer>
+				<inhalt>Verordnung, die Wiederherstellung einiger, durch den Erlaß
+					vom 3. April 1849 aufgehobenen Befreiungen von der Verbindlichkeit
+					zum Militärdienst betr.</inhalt>
+				<datum>
+					<erlass>1853-02-02</erlass>
+					<ausgabe>1853-02-25</ausgabe>
+				</datum>
+				<seite>
+					<von>45</von>
+					<bis>45</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>4</nummer>
+				<inhalt>Verordnung, das Maaß der Mauer- und Dachziegel betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-02-03</erlass>
+					<ausgabe>1853-02-25</ausgabe>
+				</datum>
+				<seite>
+					<von>46</von>
+					<bis>46</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>4</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, den Beitritt der
+					Großherzogl. Mecklenburg-Schwerin’schen Regierung zu der Konvention
+					wegen gegenseitiger Uebernahme der Auszuweisenden, d. d. Gotha, den
+					15. Juli 1851 betr.</inhalt>
+				<datum>
+					<erlass>1853-02-09</erlass>
+					<ausgabe>1853-02-25</ausgabe>
+				</datum>
+				<seite>
+					<von>47</von>
+					<bis>47</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>4</nummer>
+				<inhalt>Erläuternde Consistorialverordnung, die Landesherrliche
+					Verordnung vom 20. Novbr. 1852 wegen Zuziehung der Pathen bei den
+					Taufhandlungen betr.</inhalt>
+				<datum>
+					<erlass>1853-02-16</erlass>
+					<ausgabe>1853-02-25</ausgabe>
+				</datum>
+				<seite>
+					<von>48</von>
+					<bis>48</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>7</nummer>
+				<inhalt>Landesherrliche Verordnung, das Tapezieren von Zimmern
+					betreffend</inhalt>
+				<datum>
+					<erlass>1853-02-18</erlass>
+					<ausgabe>1853-03-11</ausgabe>
+				</datum>
+				<seite>
+					<von>65</von>
+					<bis>65</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>9</nummer>
+				<inhalt>Nachtrag zu den Artikeln der gemischten Innung der
+					Buchbinder, Beutler, Bürstenmacher, Riemer, Sattler und Seiler vom
+					10. December 1822, die Erweiterung des §. 2. der Specialartikel für
+					das Riemer- und Sattlerhandwerk betreffend</inhalt>
+				<datum>
+					<erlass>1853-02-18</erlass>
+					<ausgabe>1853-03-11</ausgabe>
+				</datum>
+				<seite>
+					<von>117</von>
+					<bis>117</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>5</nummer>
+				<inhalt>Bekanntmachung, die hinsichtlich der Beförderung mit der
+					Briefpost oder mit der Fahrpost geltenden Bestimmungen betreffend
+				</inhalt>
+				<datum>
+					<erlass>1853-02-21</erlass>
+					<ausgabe>1853-02-25</ausgabe>
+				</datum>
+				<seite>
+					<von>52</von>
+					<bis>52</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>7</nummer>
+				<inhalt>Gesetzliche Verordnung, die Caduzierung von
+					Untersuchnngskosten, welche von den Pflichtigen nicht einzubringen
+					sind, betreffend</inhalt>
+				<datum>
+					<erlass>1853-02-28</erlass>
+					<ausgabe>1853-03-11</ausgabe>
+				</datum>
+				<seite>
+					<von>66</von>
+					<bis>66</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>7</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, die Aufhebung der
+					bestehenden Tanzgelderfixationen, sowie die Einschärfung der
+					Verordnung im §. 8. der Regierungsverordnung vom 26. März 1852
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-03-01</erlass>
+					<ausgabe>1853-03-11</ausgabe>
+				</datum>
+				<seite>
+					<von>67</von>
+					<bis>67</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>9</nummer>
+				<inhalt>Regierungsbekanntmachung, die zwischen dem hiesigen
+					Fürstenthum und dem Königreich Belgien unterm 20. Decembr. 1852
+					geschlossenen Verträge über die Erwerbung von Eigenthum und dessen
+					Ausfuhr, und über die Auslieferung der Verbrecher betr.</inhalt>
+				<datum>
+					<erlass>1853-03-14</erlass>
+					<ausgabe>1853-04-01</ausgabe>
+				</datum>
+				<seite>
+					<von>118</von>
+					<bis>118</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>11</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, den Beitritt der
+					Großherzogl. Mecklenburg-Strelitz’schen Regierung zu der Convention
+					wegen gegenseitiger Uebernahme der Auszuweisenden d. d. Gotha den
+					15. Juli 1851 betr.</inhalt>
+				<datum>
+					<erlass>1853-03-17</erlass>
+					<ausgabe>1853-04-15</ausgabe>
+				</datum>
+				<seite>
+					<von>147</von>
+					<bis>147</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>10</nummer>
+				<inhalt>Verordnung, Erleichterung zwischen den Staaten des
+					Zollvereins und den Staaten des Steuervereins betr.</inhalt>
+				<datum>
+					<erlass>1853-03-30</erlass>
+					<ausgabe>1853-04-05</ausgabe>
+				</datum>
+				<seite>
+					<von>125</von>
+					<bis>125</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>11</nummer>
+				<inhalt>Verordnung, die Berücksichtigung der Militärpflicht bei
+					Ertheilung der Auswanderungserlaubniß betr.</inhalt>
+				<datum>
+					<erlass>1853-03-30</erlass>
+					<ausgabe>1853-04-15</ausgabe>
+				</datum>
+				<seite>
+					<von>150</von>
+					<bis>150</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>11</nummer>
+				<inhalt>Bekanntmachung, den erster Rechnungsabschluß der städtischen
+					Sparkasse zu Greiz betr.</inhalt>
+				<datum>
+					<erlass>1853-03-31</erlass>
+					<ausgabe>1853-04-15</ausgabe>
+				</datum>
+				<seite>
+					<von>152</von>
+					<bis>152</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>12</nummer>
+				<inhalt>Verordnung Fürstl. Cammer, die Erhebung der Rentgefälle
+					betreffend</inhalt>
+				<datum>
+					<erlass>1853-04-09</erlass>
+					<ausgabe>1853-05-06</ausgabe>
+				</datum>
+				<seite>
+					<von>157</von>
+					<bis>157</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>12</nummer>
+				<inhalt>Bekanntmachung, den Fahrpostverkehr mit der Schweitz betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-04-13</erlass>
+					<ausgabe>1853-05-06</ausgabe>
+				</datum>
+				<seite>
+					<von>158</von>
+					<bis>158</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>12</nummer>
+				<inhalt>Regierungsbekanntmachung, den zwischen dem hiesigen
+					Fürstenthum und dem Kaiserstaat Frankreich unterm 24. Febr. 1853
+					wegen Schutzes gegen Nachdruck abgeschlossenen Vertrag betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-04-22</erlass>
+					<ausgabe>1853-05-06</ausgabe>
+				</datum>
+				<seite>
+					<von>10</von>
+					<bis>10</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>13</nummer>
+				<inhalt>Bekanntmachung, die gesetzlichen Bestimmungen über die
+					Abgaben von neüen Ehepaaren betr.</inhalt>
+				<datum>
+					<erlass>1853-05-24</erlass>
+					<ausgabe>1853-06-07</ausgabe>
+				</datum>
+				<seite>
+					<von>170</von>
+					<bis>170</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>13</nummer>
+				<inhalt>Regierungsverordnung, die Betreibung des Brandweinhandels
+					und Brandweinschanks auf dem Lande ohne Concession hierzu</inhalt>
+				<datum>
+					<erlass>1853-05-30</erlass>
+					<ausgabe>1853-06-07</ausgabe>
+				</datum>
+				<seite>
+					<von>165</von>
+					<bis>165</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>13</nummer>
+				<inhalt>Revidirte Straßenpolizei. Ordnung betr.</inhalt>
+				<datum>
+					<erlass>1853-05-31</erlass>
+					<ausgabe>1853-06-07</ausgabe>
+				</datum>
+				<seite>
+					<von>166</von>
+					<bis>166</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>13</nummer>
+				<inhalt>Verordnung, die genaue Befolgung des vorgeschriebenen
+					Lehrstundenplans, hinsichtlich der ganzen und halben Schultage
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-05-31</erlass>
+					<ausgabe>1853-06-07</ausgabe>
+				</datum>
+				<seite>
+					<von>171</von>
+					<bis>171</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>14</nummer>
+				<inhalt>Landesherrliche Verordnung, die Veranstaltung religiöser
+					Zusammenkünfte außer der Kirche betr.</inhalt>
+				<datum>
+					<erlass>1853-05-30</erlass>
+					<ausgabe>1853-06-21</ausgabe>
+				</datum>
+				<seite>
+					<von>173</von>
+					<bis>173</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>14</nummer>
+				<inhalt>Regierungsbekanntmachung wegen Veröffentlichung des
+					Bundestagbeschlusses vom 12. Juni 1845, den hohen Adel der Familie
+					Bentinck
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-06-04</erlass>
+					<ausgabe>1853-06-21</ausgabe>
+				</datum>
+				<seite>
+					<von>175</von>
+					<bis>175</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>14</nummer>
+				<inhalt>Bekanntmachung, die Einschärfung der bestehenden, gegen
+					Beeinträchtigung des Postinteresse durch Boten und Fuhrleute
+					gerichteten Vorschriften betr.,</inhalt>
+				<datum>
+					<erlass>1853-06-11</erlass>
+					<ausgabe>1853-06-21</ausgabe>
+				</datum>
+				<seite>
+					<von>175</von>
+					<bis>175</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>25</nummer>
+				<inhalt>Bekanntmachung Fürstlicher Landesregierung, den Beitritt der
+					freien Stadt Frankfurt a. M. zu der Convention wegen gegenseitiger
+					Uebernahme der Auszuweisenden d. d. Gotha den 15. Juli 1851 betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-06-15</erlass>
+					<ausgabe>1853-07-12</ausgabe>
+				</datum>
+				<seite>
+					<von>177</von>
+					<bis>177</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>15</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, den Beitritt der
+					Königlich Würtembergischen Regierung zu dem Vertrage vom 15. Juli
+					1851, wegen gegenseitiger Uebernahme der Auszuweisenden betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-06-30</erlass>
+					<ausgabe>1853-07-12</ausgabe>
+				</datum>
+				<seite>
+					<von>178</von>
+					<bis>178</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>16</nummer>
+				<inhalt>Bekanntmachung Fürstlicher Landesregierung, die Frankirung
+					der Correspondenz durch Marken betr.</inhalt>
+				<datum>
+					<erlass>1853-07-01</erlass>
+					<ausgabe>1853-07-19</ausgabe>
+				</datum>
+				<seite>
+					<von>181</von>
+					<bis>181</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>15</nummer>
+				<inhalt>Regierungsverordnung, den Steuersatz vom inländischen
+					Rübenzucker und die Einganszölle vom ausländischen Zucker und Syrup
+					für den Zeitraum vom 1. Septbr. 1853 bis Ende August 1855 betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-07-05</erlass>
+					<ausgabe>1853-07-12</ausgabe>
+				</datum>
+				<seite>
+					<von>178</von>
+					<bis>178</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>16</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, die über das
+					Heimathsrecht in den Großherzogthümern Mecklenburg-Schwerin und
+					Mecklenburg-Strelitz anher ergangenen Mittheilungen betr.</inhalt>
+				<datum>
+					<erlass>1853-07-08</erlass>
+					<ausgabe>1853-07-19</ausgabe>
+				</datum>
+				<seite>
+					<von>185</von>
+					<bis>185</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>17</nummer>
+				<inhalt>Gesetzliche Verordnung, die Bestrafung, der bei den
+					Versammlungen der Handwerksinnungen vorkommenden
+					Ordnungswidrigkeiten betr.</inhalt>
+				<datum>
+					<erlass>1853-07-09</erlass>
+					<ausgabe>1853-07-22</ausgabe>
+				</datum>
+				<seite>
+					<von>187</von>
+					<bis>187</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>17</nummer>
+				<inhalt>Bekanntmachung einer declaratorischen Bestimmung zu §. 2.
+					der Landesherrlichen Verordnung vom 20. Febr. 1852, den Beitritt
+					der Landesangehörigen im Auslande bestehenden
+					Feuerversicherungsanstalten betr.</inhalt>
+				<datum>
+					<erlass>1853-07-14</erlass>
+					<ausgabe>1853-07-22</ausgabe>
+				</datum>
+				<seite>
+					<von>191</von>
+					<bis>191</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>18</nummer>
+				<inhalt>Bekanntmachung Fürstl. Landesregierung, die Liquidirung der
+					Kosten bei Ausstellung von Rückscheinen betr.</inhalt>
+				<datum>
+					<erlass>1853-08-01</erlass>
+					<ausgabe>1853-08-23</ausgabe>
+				</datum>
+				<seite>
+					<von>193</von>
+					<bis>193</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>19</nummer>
+				<inhalt>Bekanntmachung, der unterm 26. Novbr. 1852 und 3. und 4.
+					April 1853 abgeschlossenen Handels- und Zollverträge</inhalt>
+				<datum>
+					<erlass>1853-08-12</erlass>
+					<ausgabe>1853-08-30</ausgabe>
+				</datum>
+				<seite>
+					<von>197</von>
+					<bis>197</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>18</nummer>
+				<inhalt>Landesherrliche Verordnung, die Ertheilung von
+					Gewerbsconcessionen und Gestattung von Neubauten betr.</inhalt>
+				<datum>
+					<erlass>1853-08-17</erlass>
+					<ausgabe>1853-08-23</ausgabe>
+				</datum>
+				<seite>
+					<von>194</von>
+					<bis>194</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>20</nummer>
+				<inhalt>Regierungsverordnung, das Spinnstubenwesen auf dem Lande
+					betreffend</inhalt>
+				<datum>
+					<erlass>1853-08-22</erlass>
+					<ausgabe>1853-09-02</ausgabe>
+				</datum>
+				<seite>
+					<von>237</von>
+					<bis>237</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>20</nummer>
+				<inhalt>Regierungsbekanntmachung, den zwischen Preußen und den
+					andern Staaten des deutschen Bundes einerseits, und den Vereinigten
+					Staaten von Nordamerika anderseits, unterm 16. Juni 1852
+					abgeschlossenen Vertrag, wegen Auslieferung flüchtiger Verbrecher,
+					ingleichen den zu diesem Vertrage unterm 16. Novbr. 1852
+					abgeschlossenen Additionalartikel betr.</inhalt>
+				<datum>
+					<erlass>1853-08-24</erlass>
+					<ausgabe>1853-09-02</ausgabe>
+				</datum>
+				<seite>
+					<von>229</von>
+					<bis>229</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, Patentertheilung auf Streck- und Fleyerwerke
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-08-31</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>245</von>
+					<bis>245</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, den Beitritt des Großherzogthums Oldenburg
+					zu dem Post-Markenverein betr.</inhalt>
+				<datum>
+					<erlass>1853-09-08</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>246</von>
+					<bis>246</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>22</nummer>
+				<inhalt>Regierungsbekanntmachung, den Beitritt zu dem zwischen
+					Preußen und Oesterreich unterm 19. Febr. 1853 abgeschlossenen
+					Handels- und Zollvertrag betr.</inhalt>
+				<datum>
+					<erlass>1853-09-10</erlass>
+					<ausgabe>1853-10-04</ausgabe>
+				</datum>
+				<seite>
+					<von>251</von>
+					<bis>251</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, den zu den Innungsartikel der gemischten
+					Innung, der Buchbinder, der Böttcher, der Tischler und Glaser
+					erlassenen Nachtrag, bezüglich des Besuchs der hiesigen
+					Fortbildungsschule von Seiten der Lehrlinge der gedachten Innungen
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-09-14</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>247</von>
+					<bis>247</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, die Suspension der Getreidezölle betr.
+				</inhalt>
+				<datum>
+					<erlass>1853-09-16</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>247</von>
+					<bis>247</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, die über das Heimathsrecht der freien Stadt
+					Frankfurt a. M. anher ergangenen Mittheilungen betreffend</inhalt>
+				<datum>
+					<erlass>1853-09-17</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>248</von>
+					<bis>248</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Bekanntmachung, die Veröffentlichung der Steckbriefe hinter
+					die nach den vereinigten Staaten von Nordamerika geflüchteten
+					Verbrecher durch den Eberhardt’schen Polizeianzeiger betr.</inhalt>
+				<datum>
+					<erlass>1853-09-19</erlass>
+					<ausgabe>1853-09-27</ausgabe>
+				</datum>
+				<seite>
+					<von>249</von>
+					<bis>249</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>23</nummer>
+				<inhalt>Regierungsverordnung, das Verfahren bei Insinuationen von
+					Zufertigungen in den, nach dem unbestimmten summarischen Prozeß zu
+					verhandelnden Rechtssachen an die, dem Prozeßgericht nicht
+					unterworfene Parthei betr.</inhalt>
+				<datum>
+					<erlass>1853-09-21</erlass>
+					<ausgabe>1853-10-07</ausgabe>
+				</datum>
+				<seite>
+					<von>295</von>
+					<bis>295</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>23</nummer>
+				<inhalt>Bekanntmachung, weitere Erleichterungen des gegenseitigen
+					Verkehrs zwischen den Staaten des Zollvereins und den Staaten des
+					Steuervereins betr.</inhalt>
+				<datum>
+					<erlass>1853-09-26</erlass>
+					<ausgabe>1853-10-07</ausgabe>
+				</datum>
+				<seite>
+					<von>296</von>
+					<bis>296</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>24</nummer>
+				<inhalt>Bekanntmachung, Patentertheilung auf eine neue Art
+					Hängebrücken betr.</inhalt>
+				<datum>
+					<erlass>1853-09-28</erlass>
+					<ausgabe>1853-10-25</ausgabe>
+				</datum>
+				<seite>
+					<von>299</von>
+					<bis>299</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>24</nummer>
+				<inhalt>Erläuternder Nachtrag zu der Revidirten
+					Straßenpolizei-Ordnung vom 30. Mai 1853</inhalt>
+				<datum>
+					<erlass>1853-10-13</erlass>
+					<ausgabe>1853-10-25</ausgabe>
+				</datum>
+				<seite>
+					<von>300</von>
+					<bis>300</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>25</nummer>
+				<inhalt>Gesetz, die Ablösung der Frohndienste betr.</inhalt>
+				<datum>
+					<erlass>1853-10-15</erlass>
+					<ausgabe>1853-11-01</ausgabe>
+				</datum>
+				<seite>
+					<von>305</von>
+					<bis>305</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>24</nummer>
+				<inhalt>Regierungsverordnung, das Verbot der Abhaltung öffentlicher
+					Auctionen an Sonn- und Feiertagen betr.</inhalt>
+				<datum>
+					<erlass>1853-10-17</erlass>
+					<ausgabe>1853-10-25</ausgabe>
+				</datum>
+				<seite>
+					<von>301</von>
+					<bis>301</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>26</nummer>
+				<inhalt>Bekanntmachung, die weitere Suspension der Getreidezölle
+					betreffend</inhalt>
+				<datum>
+					<erlass>1853-10-22</erlass>
+					<ausgabe>1853-11-04</ausgabe>
+				</datum>
+				<seite>
+					<von>318</von>
+					<bis>318</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>26</nummer>
+				<inhalt>Gesetz, Abänderungen des Vereins-Zolltarifs betr.</inhalt>
+				<datum>
+					<erlass>1853-10-29</erlass>
+					<ausgabe>1853-11-04</ausgabe>
+				</datum>
+				<seite>
+					<von>313</von>
+					<bis>313</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>27</nummer>
+				<inhalt>Bekanntmachung, die Suspension des Eingangszolles für Reis
+					betr.</inhalt>
+				<datum>
+					<erlass>1853-11-11</erlass>
+					<ausgabe>1853-11-19</ausgabe>
+				</datum>
+				<seite>
+					<von>323</von>
+					<bis>323</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>27</nummer>
+				<inhalt>Bekanntmachung, die mit mehreren deutschen Staaten
+					geschlossene Uebereinkunft wegen Verpflegung erkrankter und
+					Beerdigung verstorbener Angehörigen betr.</inhalt>
+				<datum>
+					<erlass>1853-11-14</erlass>
+					<ausgabe>1853-11-29</ausgabe>
+				</datum>
+				<seite>
+					<von>319</von>
+					<bis>319</bis>
+				</seite>
+			</gesetz>
+		</gesetze>
+	</register>
+</gesetzessammlung>

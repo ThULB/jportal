@@ -1,0 +1,9 @@
+  <servlet id="SearchLawsServlet">
+    <servlet-name>SearchLawsServlet</servlet-name>
+    <servlet-class>org.mycore.frontend.servlets.SearchLawsServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>SearchLawsServlet</servlet-name>
+    <url-pattern>/servlets/SearchLawsServlet</url-pattern>
+  </servlet-mapping>

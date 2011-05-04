@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gesetzessammlung xmlns="http://www.thulb.uni-jena.de/gesetzessammlung/"
+	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.thulb.uni-jena.de/gesetzessammlung/Gesetzessammlung.xsd">
+	<register>
+		<titel>Repertorium der Gesetz-Sammlung für das Herzogthum Altenburg
+			vom Jahre 1822.</titel>
+		<jahresangabe>
+			<von>1822</von>
+		</jahresangabe>
+		<herzogtum>Sachsen-Altenburg</herzogtum>
+		<gesetze>
+			<gesetz>
+				<nummer>1</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, einen Nachtrag zu dem
+					Conscriptions-Patent vom 6. März 1820 betreffend</inhalt>
+				<datum>
+					<erlass>1822-01-05</erlass>
+					<ausgabe>1822-01-15</ausgabe>
+				</datum>
+				<seite>
+					<von>1</von>
+					<bis>1</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>2</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die erfolgte Emanirung
+					der nachfolgenden Straßen- und Wege-Polizey-Ordnung für das
+					Herzogthum Altenburg betreffend</inhalt>
+				<datum>
+					<erlass>1822-01-23</erlass>
+					<ausgabe>1822-02-05</ausgabe>
+				</datum>
+				<seite>
+					<von>2</von>
+					<bis>5</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>3</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die Größe des
+					Militär-Maßes betreffend</inhalt>
+				<datum>
+					<erlass>1822-01-28</erlass>
+					<ausgabe>1822-02-05</ausgabe>
+				</datum>
+				<seite>
+					<von>6</von>
+					<bis>6</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>4</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, daß die Altenburgischen
+					Vasallen der ihnen und ihren Witwen bisher zugekommenen Befreyung
+					von Entrichtung des Collateral-Geldes entsagt haben</inhalt>
+				<datum>
+					<erlass>1822-02-16</erlass>
+					<ausgabe>1822-02-19</ausgabe>
+				</datum>
+				<seite>
+					<von>7</von>
+					<bis>8</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>5</nummer>
+				<inhalt>Tarif des auf der Jenaischen Chaussee von der Reußischen bis
+					zur Weimar’schen Grenze zu entrichtenden Chaussee-Geldes</inhalt>
+				<datum>
+					<erlass>1822-03-11</erlass>
+					<ausgabe>1822-03-26</ausgabe>
+				</datum>
+				<seite>
+					<von>9</von>
+					<bis>9</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>6</nummer>
+				<inhalt>Verordnung der Cammer, daß die Chaussegelder-Einnchmer die
+					Reisenden auf die Chausseegeld-Entrichtung aufmerksam zu machen
+					haben</inhalt>
+				<datum>
+					<erlass>1822-04-19</erlass>
+					<ausgabe>1822-04-23</ausgabe>
+				</datum>
+				<seite>
+					<von>10</von>
+					<bis>10</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>7</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, daß den israelitischen
+					Glaubensgenossen das Hausiren in den Städten und auf dem Lande im
+					Allgemeinen und gänzlich verboten ist</inhalt>
+				<datum>
+					<erlass>1822-04-29</erlass>
+					<ausgabe>1822-05-14</ausgabe>
+				</datum>
+				<seite>
+					<von>11</von>
+					<bis>11</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>8</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die Vergütung der den
+					von Altenburg nach Gotha und von da anher beorderten Herzogl.
+					Officieren geleisieten Vorspann betreffend</inhalt>
+				<datum>
+					<erlass>1822-05-11</erlass>
+					<ausgabe>1822-05-21</ausgabe>
+				</datum>
+				<seite>
+					<von>12</von>
+					<bis>12</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>9</nummer>
+				<inhalt>Verordnung der Landes-Regierung, wodurch die Verordnung
+					eingeschärft wird, welche unterm 27. August 1821 wegen Einsendung
+					der Receptions-Gebühren von den in das Altenburgische Zuchthaus
+					einzuliefernden Sträflingen erlassen worden ist</inhalt>
+				<datum>
+					<erlass>1822-05-15</erlass>
+					<ausgabe>1822-06-04</ausgabe>
+				</datum>
+				<seite>
+					<von>13</von>
+					<bis>13</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>10</nummer>
+				<inhalt>Höchsie Verordnung, den Regierungs-Antritt Sr. Durchlaucht,
+					des Herzogs Friederich betreffend</inhalt>
+				<datum>
+					<erlass>1822-05-17</erlass>
+					<ausgabe>1822-06-04</ausgabe>
+				</datum>
+				<seite>
+					<von>14</von>
+					<bis>14</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>11</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, daß des Herzogs
+					Friederich Durchlaucht zu erklären geruhet haben, daß jede von
+					Höchstdenenselben übernommene Verbindlichkeit erst dann eine
+					verbindende Kraft haben solle, wenn der Hergang durch die
+					Contra-Signatur zweyer Mitglieder Höchstdero geheimen
+					Raths-Collegii legalisirt seyn werde</inhalt>
+				<datum>
+					<erlass>1822-05-29</erlass>
+					<ausgabe>1822-06-04</ausgabe>
+				</datum>
+				<seite>
+					<von>15</von>
+					<bis>15</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>12</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die Einquartierung der
+					Scharfschützen und freywilligen Jäger auf dem Marsch zum Exercieren
+					und auf dem Rückmarsch von demselben betreffend</inhalt>
+				<datum>
+					<erlass>1822-05-22</erlass>
+					<ausgabe>1822-06-04</ausgabe>
+				</datum>
+				<seite>
+					<von>16</von>
+					<bis>16</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>13</nummer>
+				<inhalt>Verordnung der Landes-Regierung, die Annahme ausländischer
+					Diensiboten betreffend</inhalt>
+				<datum>
+					<erlass>1822-06-17</erlass>
+					<ausgabe>1822-07-02</ausgabe>
+				</datum>
+				<seite>
+					<von>17</von>
+					<bis>17</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>14</nummer>
+				<inhalt>Verordnung der Landes-Regierung, daß durch die Geburt eines
+					Kindes in dem Entbindungshause zu Jena derjenigen Gemeinde des
+					hiesigen Landes, welche die Verpflichtung hatte, die Mutter
+					desselben aufzunehmen, kein Recht erwächst, sich der Aufnahme und
+					Erziehung eines solchen Kindes zu entschlagen</inhalt>
+				<datum>
+					<erlass>1822-06-26</erlass>
+					<ausgabe>1822-07-16</ausgabe>
+				</datum>
+				<seite>
+					<von>18</von>
+					<bis>19</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>15</nummer>
+				<inhalt>Bekanntmachung des Consistorii, daß des Herzogs Friederich
+					Durchlaucht die Ausübung der oberbischöflichen Rechte in der
+					protestantischen Kirche der hiesigen Lande Höchstdero
+					Geheimenraths-Collegio zu übertragen geruher haben</inhalt>
+				<datum>
+					<erlass>1822-06-28</erlass>
+					<ausgabe>1822-07-02</ausgabe>
+				</datum>
+				<seite>
+					<von>19</von>
+					<bis>20</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>16</nummer>
+				<inhalt>Verordnung der Landes-Regierung, daß die
+					Local-Armen-Behörden bey jeder vorkommenden Ballotage über Aufnahme
+					von Individuen den Sollicitanten bekannt zu machen haben, daß
+					dieselben, auf den Grund einer günstig ausfallenden Ballotage,
+					durchaus keine Ansprüche auf nothwendige Aufnahme in eine Innung zu
+					machen hätten</inhalt>
+				<datum>
+					<erlass>1822-07-10</erlass>
+					<ausgabe>1822-07-23</ausgabe>
+				</datum>
+				<seite>
+					<von>21</von>
+					<bis>21</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>17</nummer>
+				<inhalt>Verordnung der Landes-Regierung, die Ausstellung von Pässen
+					betreffend</inhalt>
+				<datum>
+					<erlass>1822-07-13</erlass>
+					<ausgabe>1822-07-23</ausgabe>
+				</datum>
+				<seite>
+					<von>22</von>
+					<bis>22</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>18</nummer>
+				<inhalt>Verordnung der Landes-Regierung, die zwischen den Herzogl.
+					Sachsen-Gotha-Altenburgischen und den Königl. Sächsischen,
+					ingleichen den Fürstl. Schwarzburg-Rudolstädtischen Ministerien,
+					wegen wechselseitiger Uebernahme der Vagabunden und Ausgewiesenen,
+					abgeschlossene Uebereinkunft betreffend</inhalt>
+				<datum>
+					<erlass>1822-08-03</erlass>
+					<ausgabe>1822-09-17</ausgabe>
+				</datum>
+				<seite>
+					<von>23</von>
+					<bis>27</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>19</nummer>
+				<inhalt>Steuer-Ausschreiben</inhalt>
+				<datum>
+					<erlass>1822-09-16</erlass>
+					<ausgabe>1822-10-29</ausgabe>
+				</datum>
+				<seite>
+					<von>28</von>
+					<bis>32</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>20</nummer>
+				<inhalt>Verordnung der Landes-Regierung, wodurch die wegen des Maßes
+					und Gewichtes bestehenden gesetzlichen Anordnungen eingeschärft
+					werden</inhalt>
+				<datum>
+					<erlass>1822-09-16</erlass>
+					<ausgabe>1822-09-24</ausgabe>
+				</datum>
+				<seite>
+					<von>33</von>
+					<bis>33</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>21</nummer>
+				<inhalt>Verordnung der Cammer, daß fremde Lohnkutscher und andere
+					Fuhrleute, welche Reisende hierher, oder von hier retour, oder
+					weiter bringen, sogenannte Passirzettel beym Postamte zu lösen
+					haben</inhalt>
+				<datum>
+					<erlass>1822-09-17</erlass>
+					<ausgabe>1822-10-08</ausgabe>
+				</datum>
+				<seite>
+					<von>34</von>
+					<bis>34</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>22</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die Niedersetzung einer
+					Medicinal-Commission betreffend</inhalt>
+				<datum>
+					<erlass>1822-09-21</erlass>
+					<ausgabe>1822-10-22</ausgabe>
+				</datum>
+				<seite>
+					<von>35</von>
+					<bis>36</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>23</nummer>
+				<inhalt>Bekanntmachung der Cammer, daß alle beym Herzogl. Hofe zu
+					Gotha beglaubigte Gesandte und Geschäftsträger von Entrichtung der
+					Wege-, Gleits- und Chaussee-Gelder in hiesigen Landen befreyt sind
+				</inhalt>
+				<datum>
+					<erlass>1822-09-24</erlass>
+					<ausgabe>1822-10-08</ausgabe>
+				</datum>
+				<seite>
+					<von>36</von>
+					<bis>36</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>24</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, den Cassen-Curs der
+					Kronthaler betreffend</inhalt>
+				<datum>
+					<erlass>1822-10-03</erlass>
+					<ausgabe>1822-10-15</ausgabe>
+				</datum>
+				<seite>
+					<von>37</von>
+					<bis>37</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>25</nummer>
+				<inhalt>Verordnung des Consistorii, die Trauung von Ausländern
+					betreffend</inhalt>
+				<datum>
+					<erlass>1822-10-08</erlass>
+					<ausgabe>1822-10-22</ausgabe>
+				</datum>
+				<seite>
+					<von>38</von>
+					<bis>38</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>26</nummer>
+				<inhalt>Regulativ, Unser Bundes-Contingent betreffend, und wie es
+					künftig mit der Recrutirung seiner verschiedenen Waffengattungen
+					in Unsern beyden Herzogthümern Gotha und Altenburg gehalten werden
+					soll</inhalt>
+				<datum>
+					<erlass>1822-11-11</erlass>
+					<ausgabe>1822-11-19</ausgabe>
+				</datum>
+				<seite>
+					<von>39</von>
+					<bis>57</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>27</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, daß zwischen dem
+					Herzogl. Sachsen-Gotha-Altenburgischen und dem Großherzogl.
+					Sachsen-Weimarischen, ingleichen dem Herzogl. Sachsen-Coburgischen
+					Ministerium, wegen wechselseitiger Uebernahme der Vagabunden und
+					Ausgewiesenen dieselbe Convention abgeschlossen worden ist, welche
+					mit dem Königl. Sächsischen und Schwarzburg-Rudolstädtischen
+					Gouvernement getroffen worden ist</inhalt>
+				<datum>
+					<erlass>1822-10-30</erlass>
+					<ausgabe>1822-11-12</ausgabe>
+				</datum>
+				<seite>
+					<von>58</von>
+					<bis>58</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>28</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, welche Aufnahme-Plätze
+					für die ausgewiesenen Vagabunden zwischen dem hiesigen Gouvernement
+					und dem Königl. Sächsischen, Großherzogl. Weimarischen, Herzogl.
+					Sachsen-Coburgischen und Fürstl. Schwarzburg-Rudolstädtischen
+					Gouvernement bestimmt worden sind</inhalt>
+				<datum>
+					<erlass>1822-10-30</erlass>
+					<ausgabe>1822-11-12</ausgabe>
+				</datum>
+				<seite>
+					<von>59</von>
+					<bis>59</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>29</nummer>
+				<inhalt>Verordnung der Landes-Regierung, wodurch die Feuer-Ordnung
+					eingeschärft wird</inhalt>
+				<datum>
+					<erlass>1822-11-11</erlass>
+					<ausgabe>1822-11-26</ausgabe>
+				</datum>
+				<seite>
+					<von>60</von>
+					<bis>61</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>30</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, daß zwischen der
+					hiesigen und der Fürstl. Reußischen Regierung zu Gera wegen
+					wechselseitiger Uebernahme der Vagabunden und Ausgewiesenen
+					dieselbe Convention abgeschlossen, welche mit dem Königl.
+					Sächsischen Gouvernement getroffen worden ist</inhalt>
+				<datum>
+					<erlass>1822-11-27</erlass>
+					<ausgabe>1822-12-10</ausgabe>
+				</datum>
+				<seite>
+					<von>61</von>
+					<bis>61</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>31</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, wodurch in Erinnerung
+					gebracht wird, daß mit der Großherzoglichen Regierung zu Weimar
+					vorlängst die Uebereinkunft getroffen worden war, daß in solchen
+					Fällen, wo von einer gegenseitigen Rechtshülfe zu Erhaltung der
+					öffentlichen Sicherheit die Rede ist, und wo von den Inquisiten die
+					Kosten nicht beygebracht werden können, die beyderseitigen
+					Gerichtsstellen, mit Ausnahme des baaren Verlags, eine
+					unentgeldliche Rechtspflege unter einander Statt finden lassen
+					sollen</inhalt>
+				<datum>
+					<erlass>1822-12-02</erlass>
+					<ausgabe>1822-12-10</ausgabe>
+				</datum>
+				<seite>
+					<von>62</von>
+					<bis>62</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>32</nummer>
+				<inhalt>Geschärfte Verordnung des Consistorii, daß sich die
+					Candidaten des Predigt-Amtes bey den jährlichen Prüfungen einfinden
+					sollen</inhalt>
+				<datum>
+					<erlass>1822-12-03</erlass>
+					<ausgabe>1822-12-10</ausgabe>
+				</datum>
+				<seite>
+					<von>63</von>
+					<bis>63</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>33</nummer>
+				<inhalt>Bekanntmachung der Cammer, daß zu Monstab eine
+					Beygleits-Stelle errichtet worden ist</inhalt>
+				<datum>
+					<erlass>1822-12-04</erlass>
+					<ausgabe>1822-12-17</ausgabe>
+				</datum>
+				<seite>
+					<von>64</von>
+					<bis>64</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>34</nummer>
+				<inhalt>Bekanntmachung der Cammer, daß zu Threna eine
+					Beygleits-Stelle errichtet worden ist</inhalt>
+				<datum>
+					<erlass>1822-12-04</erlass>
+					<ausgabe>1822-12-17</ausgabe>
+				</datum>
+				<seite>
+					<von>65</von>
+					<bis>65</bis>
+				</seite>
+			</gesetz>
+			<gesetz>
+				<nummer>35</nummer>
+				<inhalt>Bekanntmachung der Landes-Regierung, die Redaction des H. S.
+					Altenb. Amts- und Nachrichtsblattes betr.</inhalt>
+				<datum>
+					<erlass>1822-12-14</erlass>
+					<ausgabe>1822-12-24</ausgabe>
+				</datum>
+				<seite>
+					<von>66</von>
+					<bis>66</bis>
+				</seite>
+			</gesetz>
+		</gesetze>
+	</register>
+</gesetzessammlung>
