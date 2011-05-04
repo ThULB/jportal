@@ -89,28 +89,9 @@
             <xsl:value-of select="$loaded_navigation_xml//item[(@href=$cleanURL2) or (@href=$cleanURL)]/@href" />
         </xsl:variable>
         <!-- 2. case -->
-        <!-- TODO: -->
-        <!-- remove this code and remove tag(s) <dynamicContentBinding/> from navigation.xml -->
-        <!-- look for $browserAddress_dynamicContentBinding -->
-        <xsl:variable name="browserAddress_dynamicContentBinding">
-            <xsl:if test="  ($browserAddress_href = '') ">
-                <!-- assign name of rootTag -> $rootTag -->
-                <xsl:variable name="rootTag" select="name(*)" />
-                <xsl:for-each select="$loaded_navigation_xml//dynamicContentBinding/rootTag">
-                    <xsl:if test=" current() = $rootTag ">
-                        <xsl:for-each select="ancestor-or-self::*[@href]">
-                            <xsl:if test="position()=last()">
-                                <xsl:value-of select="@href" />
-                            </xsl:if>
-                        </xsl:for-each>
-                    </xsl:if>
-                </xsl:for-each>
-            </xsl:if>
-        </xsl:variable>
-        <!-- 3. case -->
         <!-- nothing look for $lastPage -->
         <xsl:variable name="browserAddress_lastPage">
-            <xsl:if test=" ($browserAddress_href = '') and ($browserAddress_dynamicContentBinding = '') ">
+            <xsl:if test="$browserAddress_href = ''">
                 <xsl:call-template name="get.rightPage" />
             </xsl:if>
         </xsl:variable>
@@ -121,11 +102,6 @@
                 <xsl:value-of select="$browserAddress_href" />
                 <!-- store in session -->
                 <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_href)" />
-            </xsl:when>
-            <xsl:when test=" $browserAddress_dynamicContentBinding != '' ">
-                <xsl:value-of select="$browserAddress_dynamicContentBinding" />
-                <!-- store in session -->
-                <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_dynamicContentBinding)" />
             </xsl:when>
             <xsl:when test=" $browserAddress_lastPage != '' ">
                 <xsl:value-of select="$browserAddress_lastPage" />

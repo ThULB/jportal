@@ -103,5 +103,12 @@
     	<groupId>org.mycore</groupId>
     	<artifactId>mycore-complete</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>fsu.mycore.lawcoll</groupId>
+      <artifactId>mets-law-collection</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+    
   </dependencies>
 </project>

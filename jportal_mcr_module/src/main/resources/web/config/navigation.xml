@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<navigation dir="/content" template="template_master2" hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal"
-    href="navigation">
+<navigation dir="/content" template="template_master2" hrefStartingPage="/content/below/index.xml" mainTitle="JPortal - Zeitschriften-Portal" href="navigation">
     <!-- main menu  -->
-    <navi-main dir="/main/" href="navi-main">
+    <!--  href is only for old xsl support -->
+    <menu dir="/main/" id="navi-main" href="navi-main">
         <label xml:lang="de">Hauptmenü links</label>
         <label xml:lang="en">Main menu left</label>
         <item href="/content/main/search.xml" type="intern" target="_self" style="normal" replaceMenu="true" constrainPopUp="false">
@@ -170,10 +170,10 @@
             <label xml:lang="de">Kontakt</label>
             <label xml:lang="de">Contact</label>
         </item>
-    </navi-main>
-    <!-- main menu  -->
+    </menu>
     <!-- navi bar below -->
-    <navi-below dir="/below/" href="navi-below">
+    <!--  href is only for old xsl support -->
+    <menu dir="/below/" id="navi-below" href="navi-below">
         <label xml:lang="de">Menü oben</label>
         <label xml:lang="en">Menu above</label>
         <item href="/content/below/index.xml" type="intern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
@@ -183,15 +183,20 @@
         <item href="/servlets/MCRWCMSLoginServlet" type="extern" target="_self" style="normal" template="template_wcms">
             <label xml:lang="de">WCMS</label>
             <label xml:lang="en">WCMS</label>
+            <!-- needed for old wcms -->
             <dynamicContentBinding>
                 <rootTag>cms</rootTag>
             </dynamicContentBinding>
+        </item>
+        <item href="/modules/mt-wcms/mt-wcms.xml?XSL.useMT=false" type="extern" target="_self" style="normal">
+            <label xml:lang="de">MT-WCMS</label>
+            <label xml:lang="en">MT-WCMS</label>
         </item>
         <item href="/content/below/sitemap.xml" type="extern" target="_self" style="normal">
             <label xml:lang="de">Sitemap</label>
             <label xml:lang="en">Site map</label>
         </item>
-    </navi-below>
+    </menu>
     <!-- END OF: navi bar below -->
 </navigation>
 
