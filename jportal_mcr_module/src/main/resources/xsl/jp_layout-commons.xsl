@@ -33,12 +33,14 @@
 		<script type="text/javascript">google.load("jquery", "1");</script>
         <xsl:if test="acl:checkPermission(/mycoreobject/@ID,'writedb')">
     	  <script type="text/javascript">
+            var baseUrl = "<xsl:value-of select="$WebApplicationBaseURL" />";
+            var runid = [];
             jQuery(document).bind("toolbarloaded", function(e) {
-              var baseUrl = "<xsl:value-of select="$WebApplicationBaseURL" />";
               //just run if a given viewType is created
-              if (e.model.id != "mainTb") {
+              if (e.model.id != "mainTb" || runid[e.viewer.viewID]) {
                 return;
               }
+              runid[e.viewer.viewID] = true;
               var toolbarModel=e.model;
               var i=toolbarModel.getElementIndex('spring');
               var buttonSet = new ToolbarButtonsetModel("softLink");
@@ -47,19 +49,17 @@
               buttonSet.addButton(button);
               //attach to events of view
               jQuery.each(e.getViews(), function(index, view) {
-                view.events.attach(function (sender, args) {
-                  if (args.type == "press") {
-                    if (args.parentName == buttonSet.elementName) {
-                      if (args.elementName == buttonSet.elementName) {
-                        var file = decodeURI(e.viewer.curImage);
-                        var chapterParent = e.viewer.chapterParent;
-                        var derivId = chapterParent.substring(16, chapterParent.length); 
-                        var servletPath = baseUrl + "servlets/DerivateLinkServlet";
-                        jQuery.post(servletPath, {mode: "setImage", derivateId: derivId, file: file});
-                      }
-    				}
+                jQuery(view).bind("press", function(sender, args) {
+                  if (args.parentName == buttonSet.elementName) {
+                    if (args.elementName == buttonSet.elementName) {
+                      var file = decodeURI(e.viewer.curImage);
+                      var chapterParent = e.viewer.chapterParent;
+                      var derivId = chapterParent.substring(16, chapterParent.length); 
+                      var servletPath = baseUrl + "servlets/DerivateLinkServlet";
+                      jQuery.post(servletPath, {mode: "setImage", derivateId: derivId, file: file});
+                    }
                   }
-                });
+                })
               });
             });
     	  </script>
