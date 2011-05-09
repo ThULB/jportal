@@ -218,10 +218,15 @@
         </xsl:when>
         <!-- inhaltsverzeichnis -->
         <xsl:otherwise>
-          <xsl:variable name="register" select="metadata/identis/identi[@type='Register' or @type='register']"></xsl:variable>
+          <xsl:variable name="register" select="metadata/identis/identi[@type='Register' or @type='register']" />
           <xsl:if test="$register">
             <xsl:variable name="registerUrl" select="concat($WebApplicationBaseURL, 'register/', $register)"/>
-            <xsl:apply-templates select="document($registerUrl)/gesetzessammlung" />
+            <xsl:variable name="derivateId" select="structure/derobjects/derobject/@xlink:href" />
+            <!-- this works only if the first derivate in object is the laws one -->
+            <xsl:apply-templates select="document($registerUrl)/gesetzessammlung">
+              <xsl:with-param name="objId" select="@ID" />
+              <xsl:with-param name="derivateId" select="$derivateId" />
+            </xsl:apply-templates>
           </xsl:if>
           <!-- Print children at the end -->
           <xsl:call-template name="printChildren" />

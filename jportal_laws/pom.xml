@@ -1,16 +1,18 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>jportal</artifactId>
     <groupId>fsu.thulb</groupId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  <modelVersion>4.0.0</modelVersion>
 
   <groupId>fsu.thulb</groupId>
   <artifactId>jportal_laws</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  
   <name>jportal_laws</name>
   <url>http://zs.thulb.uni-jena.de</url>
 
@@ -19,6 +21,22 @@
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>config/jportal_laws/build.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources/</directory>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
     <plugins>
       <!-- Plugin for compiling with 1.6 -->
       <plugin>
@@ -42,6 +60,13 @@
               <MCR-Application-Module>${project.name}</MCR-Application-Module>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ant-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
         </configuration>
       </plugin>
     </plugins>

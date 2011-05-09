@@ -2,8 +2,19 @@
     <servlet-name>SearchLawsServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.SearchLawsServlet</servlet-class>
   </servlet>
+  <servlet id="TestServlet" >
+    <servlet-name>TestServlet</servlet-name>
+    <servlet-class>fsu.jportal.laws.frontend.servlets.TestServlet</servlet-class>
+  </servlet>
   
+
   <servlet-mapping>
     <servlet-name>SearchLawsServlet</servlet-name>
     <url-pattern>/servlets/SearchLawsServlet</url-pattern>
   </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>TestServlet</servlet-name>
+    <url-pattern>/servlets/TestServlet</url-pattern>
+  </servlet-mapping>
+  
+  

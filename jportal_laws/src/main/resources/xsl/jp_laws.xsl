@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions"
+  exclude-result-prefixes="i18n laws">
 
   <!--
   Entry point to print all laws of a register
   -->
   <xsl:template match="/gesetzessammlung">
-    <xsl:apply-templates select="register" />
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
+    <xsl:apply-templates select="register">
+      <xsl:with-param name="objId" select="$objId"/>
+      <xsl:with-param name="derivateId" select="$derivateId"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <!-- ================================================================================= -->
 
   <!-- Print the head of the register and prints the laws -->
   <xsl:template match="register">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
     <!-- Print head -->
     <table class="register">
       <tr>
@@ -41,13 +52,19 @@
     </table>
 
     <!-- Print laws -->
-    <xsl:apply-templates select="gesetze" />
+    <xsl:apply-templates select="gesetze">
+        <xsl:with-param name="objId" select="$objId"/>
+        <xsl:with-param name="derivateId" select="$derivateId"/>
+    </xsl:apply-templates>
 
   </xsl:template>
   
   <!-- ================================================================================= -->
 
   <xsl:template match="gesetze">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
     <table class="laws">
       <tr>
         <th><xsl:value-of select="i18n:translate('jp.laws.register.nr')" /></th>
@@ -56,17 +73,35 @@
         <th><xsl:value-of select="i18n:translate('jp.laws.register.dateofissue')" /></th>
         <th><xsl:value-of select="i18n:translate('jp.laws.register.content')" /></th>
       </tr>
-
       <xsl:for-each select="gesetz">
         <tr>
-          <xsl:apply-templates select="." />
+          <xsl:apply-templates select=".">
+            <xsl:with-param name="objId" select="$objId"/>
+            <xsl:with-param name="derivateId" select="$derivateId"/>
+          </xsl:apply-templates>
         </tr>
       </xsl:for-each>    
     </table>
   </xsl:template>
 
   <xsl:template match="gesetz">
-    <td class="nr"><xsl:value-of select="nummer"/></td>
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
+    <td class="nr">
+      <xsl:variable name="image" select="laws:getImageByLaw(nummer, $derivateId)" />
+      <xsl:choose>
+        <xsl:when test="$image">
+          <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?XSL.view.objectmetadata=false&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
+          <a href="{$href}">
+            <xsl:value-of select="nummer" />
+          </a>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="nummer" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
     <td class="page">
       <xsl:choose>
         <xsl:when test="seite/bis != seite/von">
