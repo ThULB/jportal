@@ -94,7 +94,7 @@
         <xsl:when test="$image">
           <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?XSL.view.objectmetadata=false&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
           <a href="{$href}">
-            <xsl:value-of select="nummer" />
+            <b><xsl:value-of select="nummer" /></b>
           </a>
         </xsl:when>
         <xsl:otherwise>

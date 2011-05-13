@@ -12,11 +12,11 @@ public abstract class LawsXMLFunctions {
         // check null and empty
         if(numberOfLaw == null || numberOfLaw.equals("")) {
             LOGGER.warn("Lawnumber is null or empty");
-            return "";
+            return null;
         }
         if(derivateId == null || derivateId.equals("")) {
             LOGGER.warn("Derivate id is null or empty");
-            return "";
+            return null;
         }
         // get law number as integer
         int number;
@@ -24,13 +24,13 @@ public abstract class LawsXMLFunctions {
             number = Integer.parseInt(numberOfLaw);
         } catch(NumberFormatException nfe) {
             LOGGER.warn("while parsing law number " + numberOfLaw, nfe);
-            return "";
+            return null;
         }
         // get files
         MCRDirectory dir = MCRDirectory.getRootDirectory(derivateId);
         if(dir == null) {
             LOGGER.warn("Unable to get diretory of derivate " + derivateId);
-            return "";
+            return null;
         }
         return getImageByNumber(dir, number);
     }
