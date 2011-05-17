@@ -80,7 +80,7 @@ public class Rubric implements Iterable<Rubric.Label>{
         
     }
     
-    public static final String DESCRIPTION = "description";
+    public static final String DESCRIPTION = "descriptionsen";
 
     public static final String TEXT = "text";
 
@@ -91,6 +91,12 @@ public class Rubric implements Iterable<Rubric.Label>{
     public static final String TAGNAME = "rubric";
 
     public static final String PARENTID = "parentID";
+
+    public static final String CATEGID = "categID";
+
+    public static final String ROOTID = "rootID";
+
+    public static final String ID = "ID";
     
     private MCRMetaElement rubricMetaElement;
     
