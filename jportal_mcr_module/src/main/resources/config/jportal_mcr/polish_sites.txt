@@ -1,0 +1,448 @@
+Deutsch							Polnisch					Bemerkungen
+------------------------------------------------------------------------
+Suche
+nach Zeitschriften suchen
+Blättern in...   											(Zeitschrift)
+EZB-Fächerliste												(EZB - Elektronische Zeitschriftenbibliothek)
+ZDB-Fächerliste												(ZDB - Zeitschriftendatenbank)
+Zeitschriftentypen
+Projekte
+DDC-Projekte												(DDC - Dewey Decimal Classification/Dewey-Dezimalklassifikation)
+Bestandsnachweisen
+Expertensuche												(erweiterte Suche)
+-----------------------
+| in Zeitschriften suchen									(zB. in Zeitschriften nach Artikeln suchen)
+|	nach Artikeln
+|	nach Institutionen
+|	nach Personen
+|	Expertensuche
+-----------------------
+in Webseiten suchen
+Kalender A - Z												(A-Z Liste von Kalender)
+Zeitschriften A - Z
+
+-----------------------
+| Editoren													(Editor zum Anlegen eines neuen Datensatzes, zB. eine neue Zeitschrift)
+|	neue Zeitschrift
+|	neue Institution
+|	Klassifikationseditor
+-----------------------
+
+Nutzerverwaltung
+	Passwort ändern
+	Nutzerdaten anzeigen
+	Nutzer anlegen
+	Gruppe anlegen
+	Nutzer- Gruppenverwaltung
+	
+Kontakt
+Start
+Sitemap
+Anmelden
+Impressum
+Ein Projekt von
+Navigation
+Blättern
+Nutzerkennung wechseln
+Sie sind derzeit angemeldet als
+Benutzerkennung
+Passwort
+Bearbeiten
+Dokument bearbeiten
+Datenobjek hinzufügen
+Dokument löschen
+Zugriffsrechte bearbeiten
+
+---------------------------
+Zeitschriftentyp
+	Historische Zeitschrift
+	Online-Zeitschrift
+	Kalender
+---------------------------
+Projektbezeichnung
+	DFG-Projekte Ereignis Weimar-Jena
+	Religionspädagogik
+	Einzelprojekte
+	Projekte historische Kommission
+	Virtuelle Bibliothek des 18. Jh.
+	Regionalzeitschriften
+	SFB-482
+---------------------------
+Bestandsnachweis
+	ThULB	  	   	
+	HAAB Weimar	  	   	
+	UFB Erfurt / Gotha	  	   	
+	Stadtarchiv Eisenberg	  	   	
+	Stadtarchiv Suhl	  	   	
+	Stadtbibliothek Suhl	  	   	
+	Stadtbibliothek Bad Langensalza	  	   	
+	TU Ilmenau	  	   	
+	ULB Halle	  	   	
+	Staatsarchiv Rudolstadt
+---------------------------
+Kategorien EZB
+	Allgemeine und vergleichende Sprach- und Literaturwissenschaft.Indogermanistik.Aussereuropäische Sprachen und Literaturen. - Literaturo- i językoznawstwo ogólne i porównawcze. Indogermanistyka. Pozaeuropejskie języki i literatura
+	Allgemeines, Fachübergreifendes	- Teksty ogólne i interdyscyplinarne 	
+	Anglistik. Amerikanistik - Anglistyka. Amerykanistyka  	
+	Archäologie	 - Archeologia
+	Architektur, Bauingenieur- und Vermessungswesen	 - Architektura, Inżynierstwo budowy, Geodezja
+	Bildungsgeschichte - Historia nauki
+	Biologie - Biologia 	
+	Chemie und Pharmazie - Chemia i Farmacja  	   	
+	Elektrotechnik,Mess- und Regelungstechnik - Elektrotechnika, Miernictwo, Technika regulacji  	
+	Energie, Umweltschutz, Kerntechnik	- Energia, Ochrona środowiska, Technika jądrowa 	
+	Ethnologie (Volks- und Völkerkunde)	- Etnologia	   	
+	Geographie - Geografia
+	Geowissenschaften - Nauki geograficzne	   	
+	Germanistik. Niederländische Philologie. Skandinavistik	 - germanistyka, filologia niderlandzka, slawistyka  	
+	Geschichte	- historia
+	Informatik	- informatyka   	
+	Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde - instytucje informacyjne, księgoznawstwo, bibliotekarstwo, grafologia
+	Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein - Filologia klasyczna. Bizantynistyka. Filologia średniołacińska i nowogrecka. Łacina nowożytna
+	Kunstgeschichte	- historia sztuki 	
+	Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung - rolnictwo, leśnictwo, ogrodnictwo, rybołówictwo, gospodarstwo domowe, dietetyka  	   	
+	Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik - Budowa maszyn, Technika produkcyjna, Górnictwo AAAAAAAAA
+	Mathematik	- matematyka
+	Medien- und Kommunikationswissenschaften, Publizistik - media, nauka o komunikowaniu, publicystyka
+	Medizin	- medycyna   	
+	Musikwissenschaft - muzykologia   	
+	Naturwissenschaft allgemein - nauki przyrodnicze	   	
+	Pädagogik - pedagogika
+	Philosophie	 - filozofia
+	Physik	  	 - fizyka	
+	Politologie	 - politologia
+	Psychologie	 - psychologia
+	Rechtswissenschaft - prawoznawstwo  	
+	Romanistik	 - romanistyka
+	Slavistik	 - slawistyka
+	Soziologie	 - socjologia   	
+	Sport	  	 - wychowanie fizyczne
+	Technik allgemein - technika ogolna
+	Theologie und Religionswissenschaft	- teologia i religioznawstwo
+	Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie	- technika procesów przetwórczych, biotechnologia, technologia spożywcza  	   	
+	Wirtschaftswissenschaften - nauki ekonomiczne   	
+	Wissenschaftskunde, Forschung, Hochschul-. Museumswesen - ekonomia, badania naukowe, szkolnictwo wyższe, muzealnictwo
+---------------------------
+Kategorien ZDB
+Allgemeine, interdisziplinäre und fächerübergreifende Zeitschriften	  
+	Allgemeines	  
+	Allgemeine Bibliographien	  
+	Allgemeine Biographien	  
+	Wiss. Organisationen u. Institutionen	  
+	Publizistik, Medien, Informationswissenschaften	-   
+	Bibliotheks-, Dokumentations-, Verlagwesen	- Bibliotekarstwo, AAAAAAAAAAAA, działalność wydawnicza  
+	Museums- u. Archivwesen	 - muzealnictwo i AAAAAAAAAAAAAAAAAAAAAAAAA
+	Universitäten u. Hochschulen - Uniwersytety i szkoły wyższe
+	Umweltforschung u. Umweltschutz	 - Ekologia, ochrona środowiska
+	Orientalistik - orientalistyka
+	Judaica - Judaika
+Philosophie, Theologie, Psychologie, Pädagogik	- filozofia, teologia, psychologia, pedagogika
+	Philosophie	- filozofia 
+	Weltanschauungen - Światopoglądy  
+	Religionswissenschaft (nichtchristl. Rel.)	- Religioznawstwo (pozachsześciańskie)  
+	Religionswissenschaft (christl.), Theologie	 - Religioznawstwo (chsześciańskie), teologia
+	Bibelwissenschaft - Biblistyka
+	Kirchengeschichte - Historia kościoła
+	Kirchenverwaltung - Administracja kościelna
+	Praktische Theologie, Seelsorge	- Teologia praktyczna, duszpasterstwo
+	Psychologie	- psychologia 
+	Pädagogik - pedagogika
+Geschichte, Kulturgeschichte, Völkerkunde - Historia, historia kultury, etnologia
+	Geschichte u. Kulturgeschichte (allg.)	Historia i historia kultury (ogól.)
+	Historische Hilfswissenschaften	 - nauki pomocnicze historii
+	Vor- u. Frühgeschichte, Archäologie	 - Prehistoria, archeologia
+	Alte Geschichte	- Historia starożytna  
+	Mittelalterliche Geschichte	 - Historia średniowiecza 
+	Geschichte der Neuzeit	- Historia nowożytna 
+	Zeitgeschichte	- Historia współczesna
+	Deutsche Landesgeschichte - Niemiecka historia narodowa 
+	Landesgeschichte Baden-Württemberg	- Historia Badenii-Wirtembergii
+	Landesgeschichte und Landeskunde Bayern	  - Krajoznawstwo i historia Bawarii
+	Landesgeschichte und Landeskunde Hessen	  - Krajoznawstwo i historia hesji
+	Österreichische Landesgeschichte und Landeskunde; Auslandsösterreicher	- Krajoynawstwo i historia Austrii; austriaki na obczyźnie
+	Landesgeschichte außerdeutscher Länder	 - historia krajów pozaniemieckich
+	Enthnologie, Völkerkunde - etnologia
+Philologie und Kunstwissenschaften  - filologie i estetyka
+	Allgemeine Sprachwissenschaft	- Językoznawstwo ogolne
+	Allgemeine Literaturwissenschaft - Literaturoznawstwo ogólne 
+	Anglistik - Anglistyka
+	Germanistik	  - Germanistyka
+	Klassische Altertumswissenschaften	- Nauka o starożytności
+	Romanistik	- Romanistyka
+	Slavistik	- Slawistyka
+	Sonstige Sprachen u. Literaturen - Pozostałe języki i literatura
+	Kunstwissenschaft - estetyka
+	Musikwissenschaft - muzykologia 
+	Theaterwissenschaft - teatrologia
+Rechtswissenschaften - prawoznawstwo
+	Rechtswissenschaft (allg.)	-  prawoznawstwo ogolne
+	Amts- u. Gesetzesblätter -  Dzienniki urzędowe, dyienniki ustaw
+	Entscheidungssammlungen	  
+	Rechtsphilosophie, Rechtsgeschichte	- filoyofia prawa , historia prawa
+	Privat-, Arbeits- u. Wirtschaftsrecht / Prawo prywatne, prawo pracy, prawo gospodarcze  
+	Staats- u. Verwaltungsrecht	- Prawo państwowe i administracyjne
+	Strafrecht u. Kriminologie	- Prawo karne i kryminologia 
+	Internationales Recht, Völkerrecht	- Prawo międzynarodowe
+	Ausländisches Recht - Prawo zagraniczne
+Wirtschafts- u. Sozialwissenschaften - Nuaki ekonomiczne i społeczne  
+	Wirtschafts- u. Sozialwissenschaften (allg.) - Nauki ekonomiczne i społeczne (ogól.)  
+	Wirtschafts- u. Sozialstatistik	 - Statystyka ekonomiczna i społeczna
+	Wirtschafts- u. Sozialgeschichte - Historia gospodarcza i społeczna
+	Sozialwesen	 - AAAAAAAAAAAAAAA
+	Sozialwissenschaft	- Nauki społeczne
+	Wirtschaftswissenschaft	- Nauki ekonomiczne
+	Wirtschaftstheorie	- Teoria gospodarki
+	Wirtschafts- u. Sozialpolitik - Polityka gospodarcza i socjalna
+	Finanzwissenschaft	 - Nauka o finansach
+	Handel u. Verkehr  - Handel i komunikacja
+	Banken u. Versicherungen - Banki i ubeypieczenia
+	Wirtschaftsbiographie - AAAAAAAAAAAAAAAAA	  
+	Betriebswirtschaft	- Ekonomika przedsiębiorstwa
+	Land- u. Forstwirtschaft, Ernährungswiss.  - Gospodarstwo rolne, leśnictwo, dietetyka
+	Politikwissenschaft	  - Politologia
+	Parlamentaria - AAAAAAAAAAAAAAAAA
+	Sozialismusforschung - AAAAAAAAAAAA
+Naturwissenschaften	  - Nauki przyrodnicze
+	Naturwissenschaften Allg. - Nauki przyrodnicze (ogól.)
+	Naturkunde	- Przyroda
+	Geschichte der Naturwissenschaften - Historia nauk przyrodniczych
+	Astronomie	- Astronomia
+	Biologie - Biologia
+	Botanik	 - Botanika
+	Zoologie - Zoologia
+	Chemie	- Chemia
+	Geowissenschaften Allg.	- Nauki geograficzne (ogól.)
+	Geologie, Mineralogie, Paläntologie	  - Geologia, mineralogia, paleontologia
+	Geophysik, Meteorologie, Ozeanographie	- Geofizyka, meteorologia, oceanografia
+	Geographie - Geografia
+	Physik	- Fizyka
+	Mathematik	- Matematyka
+	Datenverarbeitung - Przetwarzanie danych
+	Kybernetik - Cybernetyka
+Medizin	  - Medycyna
+	Medizin (allg.)	  Medycyna (ogól.)
+	Geschichte der Medizin	 - Historia medycyny
+	Zahnheilkunde	- Stomatologia
+	Neurologie, Psychiatrie	  - Neurologia, psychiatria
+	Veterinärmedizin - Weterznaria 
+	Pharmazie, Pharmakologie - Farmacja, farmakologia
+Technik und Verschiedenes	- Technika i inne
+	Technik (allg.)	  - Technika (ogól.)
+	Geschichte der Technik	- Historia techniki
+	Maschinenbau - Budowa maszyn
+	Elektrotechnik	- Elektrotechnika
+	Verkehrswesen	- Komunikacja drogowa
+	Raumfahrt - lot w kosmos
+	Chemische Technik - Technika chemiczna
+	Bergbau u. Hüttenwesen	- Gornictwo i metalurgia
+	Fertigungstechnik, Werkstoffe, Handwerk	 - Technika produkcji, materiały, AAAAAAAAAAA
+	Architektur u. Bauingenieurwesen - Architektura i inżynierstwo budowlane  
+	Energietechnik	- Technika energetyczna
+	Sport u. Spiele	- Sport i zabawa
+	Unterhaltung u. Hobby - Rozrywka i hobby
+	Firmen u. Betriebszeitschriften	- Czasopisma firm i zakładów 
+	Vereinszeitschriften - Czasopisma stowarzyszeń
+	Astrologie u. Occulta - Astrologia i okultyzm
+	Kinderzeitschriften - Czasopisma dla dzieci
+---------------------------
+Bearbeitungsstatus - Status opracowania
+	A1 - Zeitschrift angelegt - Czasopismo sporządzane
+	B1 - Bandstruktur fertig erstellt und Digitalisate hochgeladen	  	   	
+	C1 - Zuordnung zu Projekten vorgenommen	- Przydzielono do projektów
+	D1 - Bandstruktur mit Digitalisaten fertig, UrMEL-AG informiert	  	   	
+	E1 - Inhaltliche Erschließung (EZB, ZDB) u.in Nachweißsystemen registriert	  	   	
+	F1 - Tiefenerschließung durch UrMEL-AG beendet	  	   	
+	Z - Zeitschrift komplett erschlossen und fertig
+---------------------------
+Erschließungstiefe
+	Blätterzeitschrift	  	   	
+	Vollständige Erschließung (inkl. Artikel)
+---------------------------
+Beteiligte Personen
+	Autor  - Autor 	
+	Mitautor - Współautor
+	Herausgeber	 - Wydawca
+	Mitherausgeber - Współwydawca   	
+	Übersetzer	- Tłumacz	
+	Fotograf - Fotograf
+	Illustrator, Kupferstecher	- Ilustrator, Miedziorytnik  	
+	Kommentator, Bearbeiter	  - Komentator, Adaptator  	
+	Komponist - Kompozytor
+	Maler - Malarz
+	Moderator - Moderator 	
+	Redakteur - Redaktor  	   	
+	Sponsor	 - Sponsor	
+	Veranstalter	  	   	
+	Rezensent	  	   	
+	Autor des rezensierten Werkes	  	   	
+	Herausgeber des rezensierten Werkes	  	   	
+	Erwähnte Institution	  	   	
+	Erwähnte Person	  	   	
+	Verlag des rezensierten Werkes	  	   	
+	Sonst. Mitarbeiter	  	   	
+	Autor	  	   	
+	Interviewer	  	   	
+	befragte Person / Interviewter	  	   	
+	Verlag	  	   	
+	Beitragender	  	   	
+	Regisseur	  	   	
+	vermuteter Autor	  	   	
+	Vermutete erwähnte Person	  	   	
+	Verleger / Drucker	  	   	
+	Verlagsort / Druckort	  	   	
+	Verfasser laut Titelblatt	  	   	
+	Widmungsempfänger
+---------------------------
+Titeltypen
+	Erwähntes Werk (bei Rezensionen)	  	   	
+	Hauptsachtitel	  	   	
+	Kurztitel	  	   	
+	Nebentitel	  	   	
+	Titel des rezensierten Werkes	  	   	
+	Titel laut Vorlage	  	   	
+	Sonst. Titel
+---------------------------
+Kollationstyp
+	Blattangaben
+---------------------------
+Sprachen
+	Afar	  	   	
+	Abchasisch	  	   	
+	Afrikaans	  	   	
+	Arabisch	  	   	
+	Assamesisch	  	   	
+	Aymara	  	   	
+	Aserbaidschanisch	  	   	
+	Baschkirisch	  	   	
+	Belorussisch	  	   	
+	Bulgarisch	  	   	
+	Biharisch	  	   	
+	Bislamisch	  	   	
+	Bengalisch	  	   	
+	Tibetanisch	  	   	
+	Bretonisch	  	   	
+	Katalanisch	  	   	
+	Korsisch	  	   	
+	Tschechisch	  	   	
+	Walisisch	  	   	
+	Daenisch	  	   	
+	Deutsch	  	   	
+	Dzongkha, Bhutani	  	   	
+	Griechisch	  	   	
+	Englisch	  	   	
+	Esperanto	  	   	
+	Spanisch	  	   	
+	Estnisch	  	   	
+	Baskisch	  	   	
+	Persisch	  	   	
+	Finnisch	  	   	
+	Fiji	  	   	
+	Faeroeiisch	  	   	
+	Franzoesisch	  	   	
+	Friesisch	  	   	
+	Irisch	  	   	
+	Schottisches Gaelisch	  	   	
+	Galizisch	  	   	
+	Guarani	  	   	
+	Gujaratisch	  	   	
+	Haussa	  	   	
+	Hebraeisch	  	   	
+	Hindi	  	   	
+	Kroatisch	  	   	
+	Ungarisch	  	   	
+	Armenisch	  	   	
+	Interlingua	  	   	
+	Indonesisch	  	   	
+	Interlingue	  	   	
+	Inupiak	  	   	
+	Isländisch	  	   	
+	Italienisch	  	   	
+	Inuktitut (Eskimo)	  	   	
+	Japanisch	  	   	
+	Javanisch	  	   	
+	Georgisch	  	   	
+	Kasachisch	  	   	
+	Kalaallisut (Groenlaendisch)	  	   	
+	Kambodschanisch	  	   	
+	Kannada	  	   	
+	Koreanisch	  	   	
+	Kaschmirisch	  	   	
+	Kurdisch	  	   	
+	Kirgisisch	  	   	
+	Lateinisch	  	   	
+	Lingala	  	   	
+	Laotisch	  	   	
+	Litauisch	  	   	
+	Lettisch	  	   	
+	Malagasisch	  	   	
+	Maorisch	  	   	
+	Mazedonisch	  	   	
+	Malajalam	  	   	
+	Mongolisch	  	   	
+	Moldavisch	  	   	
+	Marathi	  	   	
+	Malaysisch	  	   	
+	Maltesisch	  	   	
+	Burmesisch	  	   	
+	Nauruisch	  	   	
+	Nepalesisch	  	   	
+	Hollaendisch	  	   	
+	Norwegisch	  	   	
+	Okzitanisch	  	   	
+	Oromo	  	   	
+	Oriya	  	   	
+	Pundjabisch	  	   	
+	Polnisch	  	   	
+	Paschtu	  	   	
+	Portugiesisch	  	   	
+	Quechua	  	   	
+	Raetoromanisch	  	   	
+	Kirundisch	  	   	
+	Rumaenisch	  	   	
+	Russisch	  	   	
+	Kijarwanda	  	   	
+	Sanskrit	  	   	
+	Sinti	  	   	
+	Sango	  	   	
+	Serbokroatisch (veraltet)	  	   	
+	Singhalesisch	  	   	
+	Slowakisch	  	   	
+	Slowenisch	  	   	
+	Samoanisch	  	   	
+	Schonisch	  	   	
+	Somalisch	  	   	
+	Albanisch	  	   	
+	Serbisch	  	   	
+	Swasilaendisch	  	   	
+	Sesothisch	  	   	
+	Sudanesisch	  	   	
+	Schwedisch	  	   	
+	Suaheli	  	   	
+	Tamilisch	  	   	
+	Tegulu	  	   	
+	Tadschikisch	  	   	
+	Thai	  	   	
+	Tigrinja	  	   	
+	Turkmenisch	  	   	
+	Tagalog	  	   	
+	Sezuan	  	   	
+	Tongaisch	  	   	
+	Tuerkisch	  	   	
+	Tsongaisch	  	   	
+	Tatarisch	  	   	
+	Twi	  	   	
+	Uigur	  	   	
+	Ukrainisch	  	   	
+	Urdu	  	   	
+	Usbekisch	  	   	
+	Vietnamesisch	  	   	
+	Volapuek	  	   	
+	Wolof	  	   	
+	Xhosa	  	   	
+	Jiddish	  	   	
+	Joruba	  	   	
+	Zhuang	  	   	
+	Chinesisch	  	   	
+	Zulu
+---------------------------
+Format					(Buchformat)
