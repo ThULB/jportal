@@ -80,7 +80,7 @@ public class Rubric implements Iterable<Rubric.Label>{
         
     }
     
-    public static final String DESCRIPTION = "descriptionsen";
+    public static final String DESCRIPTION = "descriptions";
 
     public static final String TEXT = "text";
 

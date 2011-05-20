@@ -38,25 +38,24 @@ public class MCRCategoryDeserializer implements JsonDeserializer<MCRCategory> {
             labels.add(jsonLabelToMCRLabel(labelJsonObject));
         }
 
+        MCRCategoryID id = jsonCategIDToMCRCategID(idJsonObject);
+        
         if (parentIDJsonObject != null) {
             MCRCategoryID parentID = jsonCategIDToMCRCategID(parentIDJsonObject);
             MCRCategory parentCateg = categoryDAO.getCategory(parentID, 0);
-            MCRCategoryID id = jsonCategIDToMCRCategID(idJsonObject);
-            if (id == null) {
-                id = new MCRCategoryID(parentID.getRootID(), UUID.randomUUID().toString());
-            }
+           
 
             return MCRCategUtils.newCategory(id, labels, parentCateg);
         } else {
-            MCRCategoryID id = jsonCategIDToMCRCategID(idJsonObject);
-            if (id == null) {
-                id = MCRCategoryID.rootID(UUID.randomUUID().toString());
-            }
             return MCRCategUtils.newCategory(id, labels, null);
         }
     }
 
     private MCRCategoryID jsonCategIDToMCRCategID(JsonObject idJsonObject) {
+        if (idJsonObject == null){
+            return null;
+        }
+        
         String rootID = getID(idJsonObject.get(Rubric.ROOTID));
         String categID = getID(idJsonObject.get(Rubric.CATEGID));
 

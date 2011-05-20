@@ -1,5 +1,6 @@
 package fsu.jportal.json.test;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -55,9 +56,7 @@ public class MCRCategorySerializerTest {
 
     @Test
     public void rubricSerialization() throws Exception {
-        HashSet<MCRLabel> labels = new HashSet<MCRLabel>();
-        labels.add(new MCRLabel(TestRubric.DE.lang, TestRubric.DE.text, TestRubric.DE.description));
-        labels.add(new MCRLabel(TestRubric.EN.lang, TestRubric.EN.text, TestRubric.EN.description));
+        HashSet<MCRLabel> labels = categLabels();
         MCRCategoryID rootID = MCRCategoryID.rootID("rootID");
         MCRCategory category = MCRCategUtils.newCategory(rootID, labels, null);
 
@@ -68,6 +67,26 @@ public class MCRCategorySerializerTest {
         MCRCategory deserializedRubric = gson.fromJson(serializedRubric, MCRCategoryImpl.class);
         assertTrue("Expected ID " + rootID + " but was " + deserializedRubric.getId(), deserializedRubric.getId().equals(rootID));
         assertEquals(2, deserializedRubric.getLabels().size());
+    }
+    
+    @Test
+    public void serializationNoID() throws Exception {
+        HashSet<MCRLabel> labels = categLabels();
+        MCRCategory category = MCRCategUtils.newCategory(null, labels, null);
+
+        String serializedRubric = gson.toJson(category);
+        System.out.println(serializedRubric);
+//        assertEquals(jsonTestRubric.toString(), serializedRubric);
+
+        MCRCategory deserializedRubric = gson.fromJson(serializedRubric, MCRCategoryImpl.class);
+        assertEquals(2, deserializedRubric.getLabels().size());
+    }
+
+    private HashSet<MCRLabel> categLabels() {
+        HashSet<MCRLabel> labels = new HashSet<MCRLabel>();
+        labels.add(new MCRLabel(TestRubric.DE.lang, TestRubric.DE.text, TestRubric.DE.description));
+        labels.add(new MCRLabel(TestRubric.EN.lang, TestRubric.EN.text, TestRubric.EN.description));
+        return labels;
     }
 
     private JsonObject jsonTestRubric() {

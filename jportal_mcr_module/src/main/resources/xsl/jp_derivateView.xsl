@@ -210,9 +210,23 @@
               </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
-              <a href="{$href}">
-                <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-              </a>
+                <!-- important -->
+                <!-- when refactoring this please remember to check the read access -->
+                <xsl:variable name="readAccess">
+                    <xsl:call-template name="jp.derivate.readAccess">
+                        <xsl:with-param name="objectXML" select="$objectXML" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$readAccess = 'true'">
+                        <a href="{$href}">
+                            <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
+                        </a>
+                   </xsl:when>
+                   <xsl:otherwise>
+                       <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
+                   </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
           </xsl:choose>
           <br />
