@@ -2,13 +2,13 @@
   <parent>
     <artifactId>jportal</artifactId>
     <groupId>fsu.thulb</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>fsu.thulb</groupId>
   <artifactId>jportal_mcr_module</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
 
   <name>jportal_mcr_module</name>
