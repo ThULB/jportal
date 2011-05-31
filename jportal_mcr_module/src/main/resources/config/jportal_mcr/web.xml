@@ -106,3 +106,31 @@
     <servlet-name>OAIURNProvider</servlet-name>
     <url-pattern>/oai</url-pattern>
 </servlet-mapping>
+
+<servlet>
+    <servlet-name>MCRDFGServlet</servlet-name>
+    <servlet-class>org.mycore.iview2.frontend.MCRTileCombineServlet</servlet-class>
+    <init-param>
+        <param-name>org.mycore.iview2.frontend.MCRFooterInterface</param-name>
+        <param-value>fsu.jportal.iview2.UrmelFooter</param-value>
+    </init-param>
+</servlet>
+
+<servlet>
+    <servlet-name>MCRDFGThumbServlet</servlet-name>
+    <servlet-class>org.mycore.iview2.frontend.MCRThumbnailServlet</servlet-class>
+    <init-param>
+        <param-name>thumbnailSize</param-name>
+        <param-value>150</param-value>
+    </init-param>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>MCRDFGServlet</servlet-name>
+    <url-pattern>/servlets/MCRDFGServlet/*</url-pattern>
+</servlet-mapping>
+
+<servlet-mapping>
+    <servlet-name>MCRDFGThumbServlet</servlet-name>
+    <url-pattern>/servlets/MCRDFGThumbnail/*</url-pattern>
+</servlet-mapping>

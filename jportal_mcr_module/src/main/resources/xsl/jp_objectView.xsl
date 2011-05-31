@@ -1254,14 +1254,14 @@
                                                                 <xsl:with-param name="addQueryParamXML" select="xalan:nodeset($todoAddFile)" />
                                                             </xsl:call-template>
                                                         </xsl:attribute>
-                                                        <img src="{$WebApplicationBaseURL}images/icons/addFile_button_30x30.png" />
+                                                        <img src="{$WebApplicationBaseURL}images/icons/addFile_button_30x30.png" title="{i18n:translate('swf.derivate.addFile')}/>
                                                     </a>
 
                                                     <!-- add urn -->
                                                     <xsl:if test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
                                                         <a
                                                             href="{concat($WebApplicationBaseURL, 'servlets/MCRAddURNToObjectServlet?object=', @xlink:href)}">
-                                                            <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" />
+                                                            <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" title="{i18n:translate('swf.urn.addURN')}/>
                                                         </a>
                                                     </xsl:if>
                                                     <!-- create mets -->
@@ -1273,7 +1273,7 @@
                                                                 select="xalan:nodeset($startMETSEditorURL)" />
                                                                 </xsl:call-template>
                                                             </xsl:attribute>
-                                                            <img src="{$WebApplicationBaseURL}images/icons/METS_button_30x30.png" />
+                                                            <img src="{$WebApplicationBaseURL}images/icons/METS_button_30x30.png" title="Mets generieren"/>
                                                         </a>
                                                     </xsl:if>
                                                     <xsl:if test="mcrxml:isCurrentUserInRole('derDelgroup')">
@@ -1285,7 +1285,7 @@
                                                                     <xsl:with-param name="addQueryParamXML" select="xalan:nodeset($todoDelDeriv)" />
                                                                 </xsl:call-template>
                                                             </xsl:attribute>
-                                                            <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" />
+                                                            <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.derivate.delDerivate')}/>
                                                         </a>
                                                         <!-- hide derivate -->
                                                         <form method="get">
