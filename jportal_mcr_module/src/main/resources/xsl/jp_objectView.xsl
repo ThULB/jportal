@@ -1238,7 +1238,7 @@
                                                         <param name="todo" value="saddfile" />
                                                     </queryParam>
                                                 </xsl:variable>
-                                                
+
                                                 <xsl:variable name="todoDelDeriv">
                                                     <queryParam>
                                                         <param name="todo" value="sdelder" />
@@ -1246,7 +1246,7 @@
                                                 </xsl:variable>
                                                 <!-- Start ####################################################################### -->
                                                 <!-- add files to derivate -->
-                                                <td class="metavalue" valign="center" align="center">
+                                                <td class="metavalue" style="padding-top:5px" valign="center" align="center">
                                                     <a>
                                                         <xsl:attribute name="href">
                                                             <xsl:call-template name="buildURL">
@@ -1254,14 +1254,14 @@
                                                                 <xsl:with-param name="addQueryParamXML" select="xalan:nodeset($todoAddFile)" />
                                                             </xsl:call-template>
                                                         </xsl:attribute>
-                                                        <img src="{$WebApplicationBaseURL}images/icons/addFile_button_30x30.png" title="{i18n:translate('swf.derivate.addFile')}/>
+                                                        <img src="{$WebApplicationBaseURL}images/icons/addFile_button_30x30.png" title="{i18n:translate('component.swf.derivate.addFile')}" />
                                                     </a>
 
                                                     <!-- add urn -->
                                                     <xsl:if test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
                                                         <a
                                                             href="{concat($WebApplicationBaseURL, 'servlets/MCRAddURNToObjectServlet?object=', @xlink:href)}">
-                                                            <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" title="{i18n:translate('swf.urn.addURN')}/>
+                                                            <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" title="{i18n:translate('swf.urn.addURN')}" />
                                                         </a>
                                                     </xsl:if>
                                                     <!-- create mets -->
@@ -1273,7 +1273,7 @@
                                                                 select="xalan:nodeset($startMETSEditorURL)" />
                                                                 </xsl:call-template>
                                                             </xsl:attribute>
-                                                            <img src="{$WebApplicationBaseURL}images/icons/METS_button_30x30.png" title="Mets generieren"/>
+                                                            <img src="{$WebApplicationBaseURL}images/icons/METS_button_30x30.png" title="Mets generieren" />
                                                         </a>
                                                     </xsl:if>
                                                     <xsl:if test="mcrxml:isCurrentUserInRole('derDelgroup')">
@@ -1281,29 +1281,28 @@
                                                         <a>
                                                             <xsl:attribute name="href">
                                                                 <xsl:call-template name="buildURL">
-                                                                    <xsl:with-param name="urlXML" select="xalan:nodeset($startEditorServletURL)" />
+                                                                    <xsl:with-param name="urlXML"
+                                                                select="xalan:nodeset($startEditorServletURL)" />
                                                                     <xsl:with-param name="addQueryParamXML" select="xalan:nodeset($todoDelDeriv)" />
                                                                 </xsl:call-template>
                                                             </xsl:attribute>
-                                                            <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.derivate.delDerivate')}/>
+                                                            <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png"
+                                                                title="{i18n:translate('component.swf.derivate.delDerivate')}" />
                                                         </a>
                                                         <!-- hide derivate -->
-                                                        <form method="get">
-                                                            <xsl:attribute name="action">
-                                <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRDisplayHideDerivateServlet', $JSessionID)" />
-                              </xsl:attribute>
-                                                            <input name="derivate" type="hidden" value="{@xlink:href}" />
+                                                        <a
+                                                            href="{concat($WebApplicationBaseURL, 'servlets/MCRDisplayHideDerivateServlet?derivate=', @xlink:href)}">
                                                             <xsl:choose>
                                                                 <xsl:when test="$derivate/mycorederivate/derivate/@display = 'false'">
-                                                                    <input type="image" src="{$WebApplicationBaseURL}images/visible.gif"
+                                                                    <img src="{$WebApplicationBaseURL}images/icons/visible_button_30x30.png"
                                                                         title="Derivat einblenden" />
                                                                 </xsl:when>
                                                                 <xsl:otherwise>
-                                                                    <input type="image" src="{$WebApplicationBaseURL}images/invisible.gif"
+                                                                    <img src="{$WebApplicationBaseURL}images/icons/invisible_button_30x30.png"
                                                                         title="Derivat verstecken" />
                                                                 </xsl:otherwise>
                                                             </xsl:choose>
-                                                        </form>
+                                                        </a>
                                                     </xsl:if>
                                                 </td>
                                                 <!-- End ####################################################################### -->

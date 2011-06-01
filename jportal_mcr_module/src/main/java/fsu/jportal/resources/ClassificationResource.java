@@ -9,7 +9,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -23,15 +22,10 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
-import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.datamodel.metadata.MCRObjectID;
 
 import com.google.gson.Gson;
 
 import fsu.jportal.gson.GsonManager;
-import fsu.jportal.metadata.Rubric;
 
 @Path("classifications")
 public class ClassificationResource {
@@ -86,6 +80,11 @@ public class ClassificationResource {
     public String getClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
         MCRCategoryID id = toMCRCategID(rootID, categID);
         MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(id, 0);
+        
+        if(category == null){
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        
         Gson gson = GsonManager.instance().createGson();
         return gson.toJson(category);
     }
@@ -116,19 +115,15 @@ public class ClassificationResource {
     }
 
     @DELETE
-    @Path("{id}")
-    public Response deleteClassification(@PathParam("id") String id) {
-        MCRObjectID objId = MCRObjectID.getInstance(id);
+    public Response deleteClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        MCRCategoryID mcrCategID = toMCRCategID(rootID, categID);
 
         try {
-            MCRMetadataManager.deleteMCRObject(objId);
+            MCRCategoryDAOFactory.getInstance().deleteCategory(mcrCategID);
             return Response.status(Status.GONE).build();
         } catch (MCRPersistenceException e) {
             e.printStackTrace();
             return Response.status(Status.NOT_FOUND).build();
-        } catch (MCRActiveLinkException e) {
-            e.printStackTrace();
-            return Response.status(Status.CONFLICT).build();
         }
     }
 }

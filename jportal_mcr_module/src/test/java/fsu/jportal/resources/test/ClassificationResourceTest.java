@@ -1,6 +1,5 @@
 package fsu.jportal.resources.test;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.net.URI;
@@ -22,6 +21,7 @@ import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
@@ -82,8 +82,12 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
 
         @Override
         public void deleteCategory(MCRCategoryID id) {
-            // TODO Auto-generated method stub
+            MCRCategory mcrCategory = categMap.get(id);
+            for (MCRCategory child : mcrCategory.getChildren()) {
+                categMap.remove(child.getId());
+            }
             
+            categMap.remove(id);
         }
 
         @Override
@@ -105,8 +109,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
 
         @Override
         public List<MCRCategory> getChildren(MCRCategoryID id) {
-            // TODO Auto-generated method stub
-            return null;
+            return new ArrayList<MCRCategory>();
         }
 
         @Override
@@ -217,8 +220,8 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         
         assertGetRubric(rubricLocation, serializedRubric);
         assertUpdateRubric(rubricLocation);
-//        URI subRubricLocation = assertCreateSubRubric(rubricLocation);
-//        assertDeleteRubric(rubricLocation, subRubricLocation);
+        URI subRubricLocation = assertCreateSubRubric(rubricLocation);
+        assertDeleteRubric(rubricLocation, subRubricLocation);
     }
 
     private void assertDeleteRubric(URI rubricLocation, URI subRubricLocation) {
@@ -264,16 +267,6 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         return serializedRubric;
     }
     
-    private String subRubricJsonStr(String parentID) {
-        Rubric rubric = new Rubric();
-        rubric.setParentID(parentID);
-        rubric.addLabel("de", "Unterrubriken Test fuer MyCoRe", "untertest de");
-        rubric.addLabel("en", "Subrubric test for MyCoRe", "subtest en");
-        Gson gson = GsonManager.instance().createGson();
-        String serializedRubric = gson.toJson(rubric);
-        return serializedRubric;
-    }
-    
     private URI assertCreateRubric(String serializedRubric){
         ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, serializedRubric);
         assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
@@ -281,11 +274,38 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
     }
     
     private URI assertCreateSubRubric(URI parentURI){
-        String path = parentURI.getPath();
-        String parentID = path.substring(path.lastIndexOf("/")+1);
-        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, subRubricJsonStr(parentID));
+        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, subRubricStr(parentURI));
         assertEquals("could not create sub rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
         return response.getLocation();
+    }
+
+    private String subRubricStr(URI parentURI) {
+        Map<String, String> queryMap = getQueryMap(parentURI);
+        
+        String rootID = queryMap.get("rootID");
+        String categID = queryMap.get("categID");
+        
+        MCRCategory parentCateg = MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID(rootID, categID), 0);
+        
+        Set<MCRLabel> labels = new HashSet<MCRLabel>();
+        labels.add(new MCRLabel("de", "Unterrubriken Test fuer MyCoRe", "untertest de"));
+        labels.add(new MCRLabel("en", "Subrubric test for MyCoRe", "subtest en"));
+        MCRCategory subCateg = MCRCategUtils.newCategory(MCRCategoryID.rootID(rootID), labels, parentCateg);
+        Gson gson = GsonManager.instance().createGson();
+        String serializedRubric = gson.toJson(subCateg);
+        return serializedRubric;
+    }
+
+    private Map<String, String> getQueryMap(URI parentURI) {
+        HashMap<String, String> queryMap = new HashMap<String, String>();
+        String queryParams = parentURI.getQuery();
+        
+        for (String queryParam : queryParams.split("&")) {
+            String[] queryPair = queryParam.split("=");
+            queryMap.put(queryPair[0], queryPair[1]);
+        }
+        
+        return queryMap;
     }
 
     @Override
