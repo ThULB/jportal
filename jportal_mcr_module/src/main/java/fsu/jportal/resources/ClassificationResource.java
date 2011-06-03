@@ -20,6 +20,8 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -34,23 +36,31 @@ import fsu.jportal.gson.GsonManager;
  * This class is responsible for CRUD-operations of MCRCategories.
  * It accepts JSON objects of the form
  * <code>
- * {    "ID":{"rootID":"abcd","categID":"1234"}
+ * [{    "ID":{"rootID":"abcd","categID":"1234"}
  *      "label":[
  *          {"lang":"de","text":"Rubriken Test 2 fuer MyCoRe","descriptions":"test de"},
  *          {"lang":"en","text":"Rubric test 2 for MyCoRe","descriptions":"test en"}
- *      ]
+ *      ],
+ *      "parentID":{"rootID":"abcd","categID":"parent"}
+ *      "children:"URL"
  * 
  * }
+ * ...
+ * ]
  * </code>
  * @author chi
  *
  */
 @Path("classifications")
 public class ClassificationResource {
+    private MCRSession currentSession = null;
+    private boolean useSession = MCRConfiguration.instance().getBoolean("ClassificationResouce.useSession", true);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newClassification(String json) {
+        openSession();
+        
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
@@ -64,9 +74,25 @@ public class ClassificationResource {
         }
         getCategoryDAO().addCategory(parentID, category);
         URI uri = buildGetURI(categoryID.getRootID(), categoryID.getID());
+        closeSession();
         return Response.created(uri).build();
     }
 
+    private void openSession(){
+        if (useSession) {
+            currentSession = MCRSessionMgr.getCurrentSession();
+            currentSession.beginTransaction();
+        }
+    }
+    
+    private void closeSession(){
+        if (useSession) {
+            currentSession.commitTransaction();
+            currentSession.close();
+            currentSession = null;
+        }
+    }
+    
     private MCRCategoryDAO getCategoryDAO() {
         return MCRCategoryDAOFactory.getInstance();
     }
@@ -100,6 +126,7 @@ public class ClassificationResource {
     @Path("children")
     @Produces(MediaType.APPLICATION_JSON)
     public String getChildren(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        openSession();
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
         
@@ -109,16 +136,16 @@ public class ClassificationResource {
         
         MCRCategoryID id = toMCRCategID(rootID, categID);
         List<MCRCategory> children = mcrCategoryDAO.getChildren(id);
-        System.out.println("children size: " + children.size());
+        closeSession();
         return gson.toJson(children);
     }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        openSession();
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
-        
         if(rootID == null && categID == null){
             List<MCRCategory> rootCategories = mcrCategoryDAO.getRootCategories();
             return gson.toJson(rootCategories);
@@ -131,6 +158,7 @@ public class ClassificationResource {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
         
+        closeSession();
         return gson.toJson(category);
     }
 
@@ -146,14 +174,17 @@ public class ClassificationResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateClassification(String json) {
+        openSession();
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
         try {
             getCategoryDAO().replaceCategory(category);
+            closeSession();
             return Response.ok(json).build();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+            closeSession();
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -161,13 +192,16 @@ public class ClassificationResource {
 
     @DELETE
     public Response deleteClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        openSession();
         MCRCategoryID mcrCategID = toMCRCategID(rootID, categID);
 
         try {
             getCategoryDAO().deleteCategory(mcrCategID);
+            closeSession();
             return Response.status(Status.GONE).build();
         } catch (MCRPersistenceException e) {
             e.printStackTrace();
+            closeSession();
             return Response.status(Status.NOT_FOUND).build();
         }
     }

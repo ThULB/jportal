@@ -87,6 +87,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         mcrProperties.setProperty("MCR.EventHandler.MCRObject.2.Class", "org.mycore.datamodel.common.MCRXMLMetadataEventHandler");
         mcrProperties.setProperty("MCR.Persistence.LinkTable.Store.Class", FakeLinkTable.class.getName());
         mcrProperties.setProperty("MCR.Category.DAO", FakeCategoryDAO.class.getName());
+        mcrProperties.setProperty("ClassificationResouce.useSession", "false");
         
         try {
             MCRStoreManager.createStore("jportal_jpclassi", MCRMetadataStore.class);
@@ -116,7 +117,6 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         URI subRubricLocation = assertCreateSubRubric(rubricLocation);
         String rootID = getQueryMap(rubricLocation).get("rootID");
         String responseStr = resource().path("/classifications/children").queryParam("rootID", rootID).type(MediaType.APPLICATION_JSON).get(String.class);
-        System.out.println("Children: " + responseStr);
         assertDeleteRubric(rubricLocation, subRubricLocation);
     }
 
