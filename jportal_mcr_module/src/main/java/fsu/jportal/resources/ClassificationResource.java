@@ -1,6 +1,7 @@
 package fsu.jportal.resources;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -17,8 +18,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
+import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
@@ -27,6 +30,21 @@ import com.google.gson.Gson;
 
 import fsu.jportal.gson.GsonManager;
 
+/**
+ * This class is responsible for CRUD-operations of MCRCategories.
+ * It accepts JSON objects of the form
+ * <code>
+ * {    "ID":{"rootID":"abcd","categID":"1234"}
+ *      "label":[
+ *          {"lang":"de","text":"Rubriken Test 2 fuer MyCoRe","descriptions":"test de"},
+ *          {"lang":"en","text":"Rubric test 2 for MyCoRe","descriptions":"test en"}
+ *      ]
+ * 
+ * }
+ * </code>
+ * @author chi
+ *
+ */
 @Path("classifications")
 public class ClassificationResource {
 
@@ -44,10 +62,13 @@ public class ClassificationResource {
         if (parentCateg != null) {
             parentID = parentCateg.getId();
         }
-        
-        MCRCategoryDAOFactory.getInstance().addCategory(parentID, category);
+        getCategoryDAO().addCategory(parentID, category);
         URI uri = buildGetURI(categoryID.getRootID(), categoryID.getID());
         return Response.created(uri).build();
+    }
+
+    private MCRCategoryDAO getCategoryDAO() {
+        return MCRCategoryDAOFactory.getInstance();
     }
 
     private URI buildGetURI(String rootID, String categID) {
@@ -76,16 +97,40 @@ public class ClassificationResource {
     }
 
     @GET
+    @Path("children")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getChildren(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        Gson gson = GsonManager.instance().createGson();
+        MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
+        
+        if(rootID == null && categID == null){
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        
+        MCRCategoryID id = toMCRCategID(rootID, categID);
+        List<MCRCategory> children = mcrCategoryDAO.getChildren(id);
+        System.out.println("children size: " + children.size());
+        return gson.toJson(children);
+    }
+    
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+        Gson gson = GsonManager.instance().createGson();
+        MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
+        
+        if(rootID == null && categID == null){
+            List<MCRCategory> rootCategories = mcrCategoryDAO.getRootCategories();
+            return gson.toJson(rootCategories);
+        }
+        
         MCRCategoryID id = toMCRCategID(rootID, categID);
-        MCRCategory category = MCRCategoryDAOFactory.getInstance().getCategory(id, 0);
+        MCRCategory category = mcrCategoryDAO.getCategory(id, 0);
         
         if(category == null){
             throw new WebApplicationException(Status.NOT_FOUND);
         }
         
-        Gson gson = GsonManager.instance().createGson();
         return gson.toJson(category);
     }
 
@@ -105,7 +150,7 @@ public class ClassificationResource {
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
         try {
-            MCRCategoryDAOFactory.getInstance().replaceCategory(category);
+            getCategoryDAO().replaceCategory(category);
             return Response.ok(json).build();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -119,7 +164,7 @@ public class ClassificationResource {
         MCRCategoryID mcrCategID = toMCRCategID(rootID, categID);
 
         try {
-            MCRCategoryDAOFactory.getInstance().deleteCategory(mcrCategID);
+            getCategoryDAO().deleteCategory(mcrCategID);
             return Response.status(Status.GONE).build();
         } catch (MCRPersistenceException e) {
             e.printStackTrace();

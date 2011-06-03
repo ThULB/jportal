@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.After;
@@ -20,7 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategory;
-import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
@@ -31,9 +31,10 @@ import org.mycore.datamodel.ifs2.MCRStoreManager;
 
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 import fsu.jportal.gson.GsonManager;
-import fsu.jportal.metadata.Rubric;
+import fsu.jportal.mocks.FakeCategoryDAO;
 import fsu.jportal.resources.ClassificationResource;
 import fsu.jportal.utils.MCRCategUtils;
 import fsu.testcase.JerseyResourceTestCase;
@@ -72,116 +73,6 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
             return new ArrayList<String>();
         }}
     
-    public static class FakeCategoryDAO implements MCRCategoryDAO{
-        HashMap<MCRCategoryID, MCRCategory> categMap = new HashMap<MCRCategoryID, MCRCategory>();
-
-        @Override
-        public void addCategory(MCRCategoryID parentID, MCRCategory category) {
-            categMap.put(category.getId(), category);
-        }
-
-        @Override
-        public void deleteCategory(MCRCategoryID id) {
-            MCRCategory mcrCategory = categMap.get(id);
-            for (MCRCategory child : mcrCategory.getChildren()) {
-                categMap.remove(child.getId());
-            }
-            
-            categMap.remove(id);
-        }
-
-        @Override
-        public boolean exist(MCRCategoryID id) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public List<MCRCategory> getCategoriesByLabel(MCRCategoryID baseID, String lang, String text) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public MCRCategory getCategory(MCRCategoryID id, int childLevel) {
-            return categMap.get(id);
-        }
-
-        @Override
-        public List<MCRCategory> getChildren(MCRCategoryID id) {
-            return new ArrayList<MCRCategory>();
-        }
-
-        @Override
-        public List<MCRCategory> getParents(MCRCategoryID id) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<MCRCategoryID> getRootCategoryIDs() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public List<MCRCategory> getRootCategories() {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public MCRCategory getRootCategory(MCRCategoryID baseID, int childLevel) {
-            // TODO Auto-generated method stub
-            return null;
-        }
-
-        @Override
-        public boolean hasChildren(MCRCategoryID id) {
-            // TODO Auto-generated method stub
-            return false;
-        }
-
-        @Override
-        public void moveCategory(MCRCategoryID id, MCRCategoryID newParentID) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void moveCategory(MCRCategoryID id, MCRCategoryID newParentID, int index) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void removeLabel(MCRCategoryID id, String lang) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void replaceCategory(MCRCategory newCategory) throws IllegalArgumentException {
-            if(!categMap.containsKey(newCategory.getId())){
-                throw new IllegalArgumentException();
-            }
-            
-            categMap.put(newCategory.getId(), newCategory);
-        }
-
-        @Override
-        public void setLabel(MCRCategoryID id, MCRLabel label) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public long getLastModified() {
-            // TODO Auto-generated method stub
-            return 0;
-        }
-    }
-    
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
@@ -211,17 +102,37 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
     @After
     public void cleanUp(){
         MCRStoreManager.removeStore("jportal_jpclassi");
+        MCRConfiguration.instance().set("MCR.Category.DAO", null);
     }
     
     @Test
     public void createClassification() throws Exception {
         String serializedRubric = rubricJsonStr();
         URI rubricLocation = assertCreateRubric(serializedRubric);
+        assertRootCategs();
         
         assertGetRubric(rubricLocation, serializedRubric);
         assertUpdateRubric(rubricLocation);
         URI subRubricLocation = assertCreateSubRubric(rubricLocation);
+        String rootID = getQueryMap(rubricLocation).get("rootID");
+        String responseStr = resource().path("/classifications/children").queryParam("rootID", rootID).type(MediaType.APPLICATION_JSON).get(String.class);
+        System.out.println("Children: " + responseStr);
         assertDeleteRubric(rubricLocation, subRubricLocation);
+    }
+
+    private void assertRootCategs() {
+        Set<MCRLabel> labels = new HashSet<MCRLabel>();
+        labels.add(new MCRLabel("de", "Rubriken Test 2 fuer MyCoRe", "test de"));
+        labels.add(new MCRLabel("en", "Rubric test 2 for MyCoRe", "test en"));
+        MCRCategory category = MCRCategUtils.newCategory(null, labels, null);
+        Gson gson = GsonManager.instance().createGson();
+        String serializedRubric = gson.toJson(category);
+        ClientResponse response = resource().path("/classifications").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, serializedRubric);
+        assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
+        String responseStr = resource().path("/classifications").type(MediaType.APPLICATION_JSON).get(String.class);
+        List<MCRCategory> rootCategories = MCRCategoryDAOFactory.getInstance().getRootCategories();
+        String rootsCategsStr = gson.toJson(rootCategories);
+        assertEquals(rootsCategsStr, responseStr);
     }
 
     private void assertDeleteRubric(URI rubricLocation, URI subRubricLocation) {

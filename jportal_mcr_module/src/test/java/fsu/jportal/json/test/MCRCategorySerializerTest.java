@@ -5,9 +5,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
+import java.util.Properties;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
@@ -21,6 +24,7 @@ import com.google.gson.JsonObject;
 import fsu.jportal.gson.MCRCategoryDeserializer;
 import fsu.jportal.gson.MCRCategorySerializer;
 import fsu.jportal.metadata.Rubric;
+import fsu.jportal.mocks.FakeCategoryDAO;
 import fsu.jportal.utils.MCRCategUtils;
 
 public class MCRCategorySerializerTest {
@@ -47,6 +51,8 @@ public class MCRCategorySerializerTest {
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
+        Properties mcrProperties = MCRConfiguration.instance().getProperties();
+        mcrProperties.setProperty("MCR.Category.DAO", FakeCategoryDAO.class.getName());
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategorySerializer());
         gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryDeserializer());
@@ -54,6 +60,11 @@ public class MCRCategorySerializerTest {
         jsonTestRubric = jsonTestRubric();
     }
 
+    @After
+    public void cleanUp(){
+        MCRConfiguration.instance().set("MCR.Category.DAO", null);
+    }
+    
     @Test
     public void rubricSerialization() throws Exception {
         HashSet<MCRLabel> labels = categLabels();
