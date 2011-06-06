@@ -29,7 +29,7 @@ public class MCRCategorySerializer implements JsonSerializer<MCRCategory> {
             rubricJsonObject.add(Rubric.ID, idToJsonObj(id));
         }
 
-        JsonArray labelJsonArray = mcrMetaElementToJsonArray(category);
+        JsonArray labelJsonArray = labelsToJsonArray(category);
         rubricJsonObject.add(Rubric.LABEL, labelJsonArray);
         return rubricJsonObject;
     }
@@ -43,16 +43,16 @@ public class MCRCategorySerializer implements JsonSerializer<MCRCategory> {
         return idJsonObj;
     }
 
-    private JsonArray mcrMetaElementToJsonArray(MCRCategory category) {
+    private JsonArray labelsToJsonArray(MCRCategory category) {
         JsonArray labelJsonArray = new JsonArray();
         for (MCRLabel label : category.getLabels()) {
-            JsonObject labelJsonObj = labelXMLToJsonObj(label);
+            JsonObject labelJsonObj = labelToJsonObj(label);
             labelJsonArray.add(labelJsonObj);
         }
         return labelJsonArray;
     }
 
-    private JsonObject labelXMLToJsonObj(MCRLabel label) {
+    private JsonObject labelToJsonObj(MCRLabel label) {
         JsonObject labelJsonObj = new JsonObject();
         labelJsonObj.addProperty(Rubric.LANG, label.getLang());
         labelJsonObj.addProperty(Rubric.TEXT, label.getText());

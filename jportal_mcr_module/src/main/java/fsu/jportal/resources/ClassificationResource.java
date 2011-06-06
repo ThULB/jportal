@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
@@ -31,6 +32,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import com.google.gson.Gson;
 
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.wrapper.MCRCategoryListWrapper;
 
 /**
  * This class is responsible for CRUD-operations of MCRCategories.
@@ -121,6 +123,30 @@ public class ClassificationResource {
         }
         return categoryID;
     }
+    
+    /**
+     * @param idStr rootID|categID
+     * @return
+     */
+    @GET
+    @Path("id/{idStr}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String get(@PathParam("idStr") String idStr){
+        openSession();
+        String[] splittedID = idStr.split("\\.");
+        
+        String rootID = splittedID[0];
+        String categID = null;
+        if(splittedID.length > 1) {
+            categID = splittedID[1];
+        }
+        
+        MCRCategoryID id = toMCRCategID(rootID, categID);
+        MCRCategory category = getCategoryDAO().getCategory(id, 1);
+        Gson gson = GsonManager.instance().createGson();
+        closeSession();
+        return gson.toJson(category);
+    }
 
     @GET
     @Path("children")
@@ -142,24 +168,11 @@ public class ClassificationResource {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+    public String getClassification() {
         openSession();
         Gson gson = GsonManager.instance().createGson();
-        MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
-        if(rootID == null && categID == null){
-            List<MCRCategory> rootCategories = mcrCategoryDAO.getRootCategories();
-            return gson.toJson(rootCategories);
-        }
-        
-        MCRCategoryID id = toMCRCategID(rootID, categID);
-        MCRCategory category = mcrCategoryDAO.getCategory(id, 0);
-        
-        if(category == null){
-            throw new WebApplicationException(Status.NOT_FOUND);
-        }
-        
-        closeSession();
-        return gson.toJson(category);
+        List<MCRCategory> rootCategories = getCategoryDAO().getRootCategories();
+        return gson.toJson(new MCRCategoryListWrapper(rootCategories));
     }
 
     private MCRCategoryID toMCRCategID(String rootID, String categID) {

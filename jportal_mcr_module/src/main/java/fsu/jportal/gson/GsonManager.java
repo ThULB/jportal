@@ -6,6 +6,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import fsu.jportal.metadata.Rubric;
+import fsu.jportal.wrapper.MCRCategoryListWrapper;
+import fsu.jportal.wrapper.MCRLabelSetWrapper;
 
 public class GsonManager {
     private GsonBuilder gsonBuilder;
@@ -15,7 +17,9 @@ public class GsonManager {
         gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Rubric.class, new RubricSerializer());
         gsonBuilder.registerTypeAdapter(Rubric.class, new RubricDeserializer());
-        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategorySerializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryDoJoSerializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListDoJoSerializer());
+        gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetDoJoSerializer());
         gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryDeserializer());
     }
     

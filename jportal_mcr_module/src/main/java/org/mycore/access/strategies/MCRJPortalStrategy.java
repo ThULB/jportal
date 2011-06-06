@@ -27,7 +27,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     public boolean checkPermission(String id, String permission) {
         if (superUser())
             return true;
-        else if (permission.equals("read-derivates")) {
+        else if (permission.equals("read-derivates") || permission.equals("view-derivate")) {
             if (MCRAccessManager.getAccessImpl().hasRule(id, permission)) {
                 return ID_STRATEGY.checkPermission(id, permission);
             } else {

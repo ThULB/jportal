@@ -16,4 +16,11 @@ public class MCRCategUtils{
     
         return category;
     }
+
+    public static String maskCategID(MCRCategoryID categoryID) {
+        String rootID = categoryID.getRootID();
+        String id = categoryID.getID();
+        
+        return rootID + "." + (id == null? "" : id);
+    }
 }
