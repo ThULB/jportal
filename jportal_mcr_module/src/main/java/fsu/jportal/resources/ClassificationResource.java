@@ -129,7 +129,7 @@ public class ClassificationResource {
      * @return
      */
     @GET
-    @Path("id/{idStr}")
+    @Path("{idStr}")
     @Produces(MediaType.APPLICATION_JSON)
     public String get(@PathParam("idStr") String idStr){
         openSession();
@@ -148,24 +148,6 @@ public class ClassificationResource {
         return gson.toJson(category);
     }
 
-    @GET
-    @Path("children")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String getChildren(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
-        openSession();
-        Gson gson = GsonManager.instance().createGson();
-        MCRCategoryDAO mcrCategoryDAO = getCategoryDAO();
-        
-        if(rootID == null && categID == null){
-            throw new WebApplicationException(Status.NOT_FOUND);
-        }
-        
-        MCRCategoryID id = toMCRCategID(rootID, categID);
-        List<MCRCategory> children = mcrCategoryDAO.getChildren(id);
-        closeSession();
-        return gson.toJson(children);
-    }
-    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getClassification() {
