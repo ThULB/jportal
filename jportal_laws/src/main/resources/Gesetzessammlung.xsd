@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:xlink="http://www.w3.org/1999/xlink"
+           elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+  <xs:element name="gesetzessammlung">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="register" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="register">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="titel" type="xs:string" />
+        <xs:element ref="jahresangabe" />
+        <xs:element name="herzogtum" type="xs:string" />
+        <xs:element ref="gesetze" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="jahresangabe">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="von" type="xs:integer" />
+        <xs:element name="bis" type="xs:integer" minOccurs="0" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="gesetze">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="gesetz" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="gesetz">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nummer" type="xs:integer" minOccurs="0" />
+        <xs:element ref="inhalt" />
+        <xs:element ref="datum"/>
+        <xs:element ref="seite"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="inhalt">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="ol" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ol">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="li" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="type" type="orderType" default="numerical"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="li">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="ol" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="orderType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="alphabetical" />
+      <xs:enumeration value="numerical" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="datum">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="erlass" type="xs:date" maxOccurs="unbounded" />
+        <xs:element name="ausgabe" type="xs:date" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="seite">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="von" type="xs:integer" />
+        <xs:element name="bis" type="xs:integer" minOccurs="0" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>
