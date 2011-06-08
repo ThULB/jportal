@@ -14,8 +14,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
@@ -32,6 +34,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import com.google.gson.Gson;
 
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.gson.MCRCategoryIDJson;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
 
 /**
@@ -57,8 +60,11 @@ import fsu.jportal.wrapper.MCRCategoryListWrapper;
 public class ClassificationResource {
     private MCRSession currentSession = null;
     private boolean useSession = MCRConfiguration.instance().getBoolean("ClassificationResouce.useSession", true);
-
+    private MCRCategoryDAO categoryDAO = null;
+    @Context UriInfo uriInfo;
+    
     @POST
+    @Path("new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newClassification(String json) {
         openSession();
@@ -66,18 +72,24 @@ public class ClassificationResource {
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
-        MCRCategoryID categoryID = generateIDIfNeeded(category);
+        MCRCategoryID categoryID = newRootID();
         category.setId(categoryID);
 
-        MCRCategoryID parentID = null;
-        MCRCategory parentCateg = category.getParent();
-        if (parentCateg != null) {
-            parentID = parentCateg.getId();
-        }
-        getCategoryDAO().addCategory(parentID, category);
-        URI uri = buildGetURI(categoryID.getRootID(), categoryID.getID());
+        getCategoryDAO().addCategory(null, category);
+        URI uri = buildGetURI(categoryID);
         closeSession();
         return Response.created(uri).build();
+    }
+
+    private MCRCategoryID newRootID() {
+        return MCRCategoryID.rootID(UUID.randomUUID().toString());
+    }
+
+    private URI buildGetURI(MCRCategoryID categoryID) {
+        UriBuilder uriBuilder = UriBuilder.fromUri(uriInfo.getBaseUri());
+        uriBuilder.path(this.getClass());
+        uriBuilder.path(MCRCategoryIDJson.serialize(categoryID));
+        return uriBuilder.build();
     }
 
     private void openSession(){
@@ -96,22 +108,10 @@ public class ClassificationResource {
     }
     
     private MCRCategoryDAO getCategoryDAO() {
-        return MCRCategoryDAOFactory.getInstance();
-    }
-
-    private URI buildGetURI(String rootID, String categID) {
-        UriBuilder uriBuilder = UriBuilder.fromPath("");
-        addQueryParam("rootID", rootID, uriBuilder);
-        addQueryParam("categID", categID, uriBuilder);
-        
-        URI uri = uriBuilder.build();
-        return uri;
-    }
-
-    private void addQueryParam(String paramName, String paramStr, UriBuilder uriBuilder) {
-        if(paramStr != null && !"".equals(paramStr)){
-            uriBuilder.queryParam(paramName, paramStr);
+        if(categoryDAO == null){
+            categoryDAO = MCRCategoryDAOFactory.getInstance();
         }
+        return categoryDAO;
     }
 
     private MCRCategoryID generateIDIfNeeded(MCRCategory category) {
@@ -142,6 +142,10 @@ public class ClassificationResource {
         }
         
         MCRCategoryID id = toMCRCategID(rootID, categID);
+        if(!getCategoryDAO().exist(id)){
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        
         MCRCategory category = getCategoryDAO().getCategory(id, 1);
         Gson gson = GsonManager.instance().createGson();
         closeSession();

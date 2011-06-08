@@ -15,12 +15,12 @@ public class GsonManager {
     
     private GsonManager() {
         gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Rubric.class, new RubricSerializer());
-        gsonBuilder.registerTypeAdapter(Rubric.class, new RubricDeserializer());
-        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryDoJoSerializer());
-        gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListDoJoSerializer());
-        gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetDoJoSerializer());
-        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryDeserializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryJson.Serializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryJson.Deserializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListJson.Serializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListJson.Deserializer());
+        gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetJson.Serializer());
+        gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetJson.Deserializer());
     }
     
     public static GsonManager instance(){

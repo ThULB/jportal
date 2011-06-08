@@ -1,8 +1,10 @@
 package fsu.jportal.resources.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,9 +15,9 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response.Status;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,16 +33,20 @@ import org.mycore.datamodel.ifs2.MCRStoreManager;
 
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.core.util.MultivaluedMapImpl;
 
+import fsu.jportal.gson.CategJsonPropName;
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.gson.MCRCategoryIDJson;
 import fsu.jportal.mocks.FakeCategoryDAO;
 import fsu.jportal.resources.ClassificationResource;
 import fsu.jportal.utils.MCRCategUtils;
+import fsu.jportal.wrapper.MCRCategoryListWrapper;
 import fsu.testcase.JerseyResourceTestCase;
 
 
 public class ClassificationResourceTest extends JerseyResourceTestCase{
+    private FakeCategoryDAO categDAO;
+
     public static class FakeLinkTable implements MCRLinkTableInterface{
 
         @Override
@@ -98,12 +104,51 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        categDAO = (FakeCategoryDAO) MCRCategoryDAOFactory.getInstance();
+        categDAO.init();
     }
     
     @After
     public void cleanUp(){
         MCRStoreManager.removeStore("jportal_jpclassi");
         MCRConfiguration.instance().set("MCR.Category.DAO", null);
+    }
+    
+    @Test
+    public void getRootCategories() throws Exception {
+        ClientResponse jsonResponse = resource().path("/classifications").type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+        String categoryJsonStr = jsonResponse.getEntity(String.class);
+        MCRCategoryListWrapper categListWrapper = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryListWrapper.class);
+        List<MCRCategory> categList = categListWrapper.getList();
+        assertEquals("Wrong number of root categories.", 2, categList.size());
+    }
+    
+    @Test
+    public void getSingleCategory() throws Exception {
+        Set<MCRCategoryID> ids = categDAO.getIds();
+        Collection<MCRCategory> categs = categDAO.getCategs();
+        
+        for (MCRCategory mcrCategory : categs) {
+            MCRCategoryID id = mcrCategory.getId();
+            ClientResponse jsonResponse = resource().path("/classifications/" + MCRCategoryIDJson.serialize(id)).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+            String categoryJsonStr = jsonResponse.getEntity(String.class);
+            MCRCategoryImpl retrievedCateg = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryImpl.class);
+            String errorMsg = MessageFormat.format("We want to retrieve the category {0} but it was {1}", id, retrievedCateg.getId());
+            assertTrue(errorMsg, id.equals(retrievedCateg.getId()));
+        }
+    }
+    
+    @Test
+    public void newRootCategory() throws Exception {
+        String categJsonStr = categJsonStr();
+        ClientResponse response = resource().path("/classifications/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr);
+        assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
+        String jsonResponse = resource().uri(response.getLocation()).type(MediaType.APPLICATION_JSON).get(String.class);
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        jsonObject.remove(CategJsonPropName.ID);
+        
+        assertEquals(categJsonStr, jsonObject.toString());
     }
     
     @Test
@@ -168,7 +213,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         return responseBody;
     }
 
-    private String rubricJsonStr() {
+    private String categJsonStr() {
         Set<MCRLabel> labels = new HashSet<MCRLabel>();
         labels.add(new MCRLabel("de", "Rubriken Test fuer MyCoRe", "test de"));
         labels.add(new MCRLabel("en", "Rubric test for MyCoRe", "test en"));

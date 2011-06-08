@@ -15,6 +15,8 @@ import fsu.jportal.gson.GsonManager;
 
 
 public class MCRCategoryDoJoSerializerTest extends GsonSerializationTest{
+    
+    
     @Test
     public void serialize() throws Exception {
         MCRCategoryImpl mcrCategoryImpl = createCateg("rootID", "", "RootCateg");
@@ -28,6 +30,11 @@ public class MCRCategoryDoJoSerializerTest extends GsonSerializationTest{
         mcrCategoryImpl.setChildren(children);
         
         Gson gson = GsonManager.instance().createGson();
-        System.out.println(gson.toJson(mcrCategoryImpl));
+        
+        String json = gson.toJson(mcrCategoryImpl);
+        System.out.println(json);
+        MCRCategoryImpl fromJson = gson.fromJson(json, MCRCategoryImpl.class);
+        System.out.println("CategID: " + fromJson.getId());
+        System.out.println("Labels: " + fromJson.getLabel("de").getText());
     }
 }
