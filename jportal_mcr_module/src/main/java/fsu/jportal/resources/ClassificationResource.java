@@ -59,16 +59,20 @@ import fsu.jportal.wrapper.MCRCategoryListWrapper;
 @Path("classifications")
 public class ClassificationResource {
     private MCRSession currentSession = null;
+
     private boolean useSession = MCRConfiguration.instance().getBoolean("ClassificationResouce.useSession", true);
+
     private MCRCategoryDAO categoryDAO = null;
-    @Context UriInfo uriInfo;
-    
+
+    @Context
+    UriInfo uriInfo;
+
     @POST
     @Path("new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newClassification(String json) {
         openSession();
-        
+
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
@@ -79,6 +83,33 @@ public class ClassificationResource {
         URI uri = buildGetURI(categoryID);
         closeSession();
         return Response.created(uri).build();
+    }
+
+    @POST
+    @Path("{parentIdStr}/new")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newCategory(@PathParam("parentIdStr") String parentIdStr, String json) {
+        openSession();
+
+        MCRCategoryID parentID = MCRCategoryIDJson.deserialize(parentIdStr);
+        if(!getCategoryDAO().exist(parentID)){
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        
+        Gson gson = GsonManager.instance().createGson();
+        MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
+
+        MCRCategoryID categoryID = newID(parentID.getRootID());
+        category.setId(categoryID);
+        
+        getCategoryDAO().addCategory(parentID, category);
+        URI uri = buildGetURI(categoryID);
+        closeSession();
+        return Response.created(uri).build();
+    }
+
+    private MCRCategoryID newID(String rootID) {
+        return new MCRCategoryID(rootID, UUID.randomUUID().toString());
     }
 
     private MCRCategoryID newRootID() {
@@ -92,23 +123,23 @@ public class ClassificationResource {
         return uriBuilder.build();
     }
 
-    private void openSession(){
+    private void openSession() {
         if (useSession) {
             currentSession = MCRSessionMgr.getCurrentSession();
             currentSession.beginTransaction();
         }
     }
-    
-    private void closeSession(){
+
+    private void closeSession() {
         if (useSession) {
             currentSession.commitTransaction();
             currentSession.close();
             currentSession = null;
         }
     }
-    
+
     private MCRCategoryDAO getCategoryDAO() {
-        if(categoryDAO == null){
+        if (categoryDAO == null) {
             categoryDAO = MCRCategoryDAOFactory.getInstance();
         }
         return categoryDAO;
@@ -123,29 +154,29 @@ public class ClassificationResource {
         }
         return categoryID;
     }
-    
+
     /**
-     * @param idStr rootID|categID
+     * @param idStr rootID.categID
      * @return
      */
     @GET
     @Path("{idStr}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String get(@PathParam("idStr") String idStr){
+    public String get(@PathParam("idStr") String idStr) {
         openSession();
         String[] splittedID = idStr.split("\\.");
-        
+
         String rootID = splittedID[0];
         String categID = null;
-        if(splittedID.length > 1) {
+        if (splittedID.length > 1) {
             categID = splittedID[1];
         }
-        
+
         MCRCategoryID id = toMCRCategID(rootID, categID);
-        if(!getCategoryDAO().exist(id)){
+        if (!getCategoryDAO().exist(id)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-        
+
         MCRCategory category = getCategoryDAO().getCategory(id, 1);
         Gson gson = GsonManager.instance().createGson();
         closeSession();
@@ -162,10 +193,10 @@ public class ClassificationResource {
     }
 
     private MCRCategoryID toMCRCategID(String rootID, String categID) {
-        if(categID == null){
+        if (categID == null) {
             categID = "";
         }
-        
+
         MCRCategoryID id = new MCRCategoryID(rootID, categID);
         return id;
     }

@@ -1,6 +1,6 @@
 package fsu.jportal.gson;
 
-import static fsu.jportal.gson.CategJsonPropName.CHILDREN;
+import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
 import static fsu.jportal.gson.CategJsonPropName.REF;
 
@@ -50,7 +50,7 @@ public class MCRCategoryListJson {
             categRefJsonObject.addProperty(REF, MCRCategoryIDJson.serialize(categ.getId()));
             Set<MCRLabel> labels = categ.getLabels();
             categRefJsonObject.add(LABELS, contextSerializer.serialize(new MCRLabelSetWrapper(labels)));
-            categRefJsonObject.addProperty(CHILDREN, categ.hasChildren());
+            categRefJsonObject.addProperty(HASCHILDREN, categ.hasChildren());
             
             return categRefJsonObject;
         }

@@ -1,5 +1,6 @@
 package fsu.jportal.resources.test;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -141,14 +142,32 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
     
     @Test
     public void newRootCategory() throws Exception {
-        String categJsonStr = categJsonStr();
-        ClientResponse response = resource().path("/classifications/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr);
+        ClientResponse response = resource().path("/classifications/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr());
         assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
         String jsonResponse = resource().uri(response.getLocation()).type(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject jsonObject = new JSONObject(jsonResponse);
         jsonObject.remove(CategJsonPropName.ID);
         
-        assertEquals(categJsonStr, jsonObject.toString());
+        assertEquals(categJsonStr(), jsonObject.toString());
+    }
+    
+    @Test
+    public void newSubCategory() throws Exception {
+        Set<MCRCategoryID> ids = categDAO.getIds();
+        MCRCategoryID id = ids.iterator().next();
+        MCRCategory category = categDAO.getCategory(id, 1);
+        int childNum = category.getChildren().size();
+        
+        String idStr = MCRCategoryIDJson.serialize(id);
+        ClientResponse response = resource().path("/classifications/" + idStr + "/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr());
+        assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
+        assertEquals(childNum++, categDAO.getCategory(id, 1).getChildren().size());
+        
+        String jsonResponse = resource().uri(response.getLocation()).type(MediaType.APPLICATION_JSON).get(String.class);
+        JSONObject jsonObject = new JSONObject(jsonResponse);
+        jsonObject.remove(CategJsonPropName.ID);
+        
+        assertEquals(categJsonStr(), jsonObject.toString());
     }
     
     @Test

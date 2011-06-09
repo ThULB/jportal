@@ -1,6 +1,6 @@
 package fsu.jportal.gson;
 
-import static fsu.jportal.gson.CategJsonPropName.CHILDREN;
+import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.ID;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
 import static fsu.jportal.gson.CategJsonPropName.URI;
@@ -45,7 +45,7 @@ public class MCRCategoryJson {
 
             if (category.hasChildren()) {
                 List<MCRCategory> children = category.getChildren();
-                rubricJsonObject.add(CHILDREN, contextSerialization.serialize(new MCRCategoryListWrapper(children)));
+                rubricJsonObject.add(HASCHILDREN, contextSerialization.serialize(new MCRCategoryListWrapper(children)));
             }
 
             return rubricJsonObject;
