@@ -52,9 +52,9 @@ classification.CategoryEditor = function() {
 			var label = labels[internalCount];
 			if(internalCount < this.rowList.length) {
 				var row = this.rowList[internalCount];
-				row.update(label.lang, label.text, label.descriptions);
+				row.update(label.lang, label.text, label.description);
 			} else {
-				this.addRow(label.lang, label.text, label.descriptions);
+				this.addRow(label.lang, label.text, label.description);
 			}
 		}
 		// remove rows
@@ -76,7 +76,7 @@ classification.CategoryEditor = function() {
 				text: text
 			};
 			if(desc != null && desc != "") {
-				label.descriptions = desc;
+				label.description = desc;
 			}
 			labels.push(label);
 		}

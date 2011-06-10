@@ -37,16 +37,11 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 	function createTree(items) {
 		this.store = dojoclasses.SimpleRESTStore({
 			targetURL: this.targetURL + "/",
-			data: {
-				items: [
-			         {name: "root", $ref: "joman", children: items}
-			    ]
-			}
+			hierarchical: false,
+			data: {items: items}
 		});
 
-		// [{$ref: "a", hasChildren: [true], labels: [{lang: "de", text: "a"},{lang: "en", text: "b"} ]}   ]
-
-		this.treeModel = new dijit.tree.TreeStoreModel({
+		this.treeModel = new dijit.tree.ForestStoreModel({
 			store: this.store,
 			deferItemLoadingUntilExpand: false,
 			mayHaveChildren: function(item) {
@@ -61,7 +56,7 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 //			dndController: "dijit.tree.dndSource",
 //			betweenThreshold: "5",
 //			dragThreshold: "5",
-			persist: true,
+			persist: false,
 			getLabel: dojo.hitch(this, getLabel),
 			getIconClass: dojo.hitch(this, getIconClass),
 			checkItemAcceptance: dojo.hitch(this, checkItemAcceptance),
