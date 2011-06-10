@@ -70,6 +70,8 @@ classification.CategoryEditor = function() {
 			var row = this.rowList[i];
 			var lang = row.langSelect.get("value");
 			var text = row.textBox.get("value");
+			if(lang == null || lang == "" || text == null || text == "")
+				continue;
 			var desc = row.descBox.get("value");
 			var label = {
 				lang: lang,

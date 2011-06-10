@@ -39,9 +39,7 @@ classification.CategoryEditorPane = function() {
 	}
 
 	function update(/*dojo.data.item*/ treeItem) {
-//		console.log(treeItem);
 		this.currentItem = treeItem;
-//		var category = toCategory(treeItem);
 		this.categoryEditor.update(this.currentItem.labels);
 	}
 
@@ -55,15 +53,9 @@ classification.CategoryEditorPane = function() {
 			if(deepEquals(labels, this.currentItem.labels)) {
 				return;
 			}
-			console.log("changed");
-//			this.currentItem.labels = labels;
-//			var itemChangedFunc = dojo.hitch(this, fireItemChanged);
-//			itemChangedFunc(this.currentItem);
+			// fire event
+			this.eventHandler.notify({"type" : "labelChanged", "item": this.currentItem, "value": labels});
 		}
-	}
-
-	function fireItemChanged(/*dojo.data.item*/ treeItem) {
-		this.eventHandler.notify({"type" : "itemChanged", "item": treeItem});
 	}
 
 	classification.CategoryEditorPane.prototype.create = create;

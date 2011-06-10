@@ -39,6 +39,7 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 			targetURL: this.targetURL + "/",
 			hierarchical: false,
 			data: {items: items}
+
 		});
 
 		this.treeModel = new dijit.tree.ForestStoreModel({
@@ -98,6 +99,11 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 		this.eventHandler.notify({"type" : "itemSelected", "item": treeItem});
 	}
 
+	function update(/*dojo.data.item*/ item, /*String*/ attribute, /*Object*/ value) {
+		this.store.setValue(item, attribute, value);
+	}
+
 	classification.LazyLoadingTree.prototype.create = create;
+	classification.LazyLoadingTree.prototype.update = update;
 	
 })();

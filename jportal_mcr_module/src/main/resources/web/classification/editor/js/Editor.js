@@ -58,10 +58,10 @@ classification.Editor = function() {
 			this.categoryEditorPane.update(args.item);
 		}
 	}
-	
+
 	function handleCategoryEditorEvents(/*CategoryEditorPane*/ source, /*JSON*/ args) {
-		if(args.type == "itemChanged") {
-			console.log(args.item);
+		if(args.type == "labelChanged") {
+			this.treePane.tree.update(args.item, "labels", args.value);
 		}
 	}
 
