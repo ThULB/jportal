@@ -108,8 +108,22 @@ public class ClassificationResource {
         return Response.created(uri).build();
     }
 
+    @GET
+    @Path("newID/{rootID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String newIDJson(@PathParam("rootID") String rootID) {
+        return MCRCategoryIDJson.serialize(newID(rootID));
+    }
+    
     private MCRCategoryID newID(String rootID) {
         return new MCRCategoryID(rootID, UUID.randomUUID().toString());
+    }
+    
+    @GET
+    @Path("newID")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String newRootIDJson(){
+        return MCRCategoryIDJson.serialize(newRootID());
     }
 
     private MCRCategoryID newRootID() {
@@ -143,16 +157,6 @@ public class ClassificationResource {
             categoryDAO = MCRCategoryDAOFactory.getInstance();
         }
         return categoryDAO;
-    }
-
-    private MCRCategoryID generateIDIfNeeded(MCRCategory category) {
-        MCRCategoryID categoryID = category.getId();
-        if (categoryID == null) {
-            categoryID = MCRCategoryID.rootID(UUID.randomUUID().toString());
-        } else if (categoryID.isRootID() && category.getParent() != null) {
-            categoryID = new MCRCategoryID(categoryID.getRootID(), UUID.randomUUID().toString());
-        }
-        return categoryID;
     }
 
     /**
