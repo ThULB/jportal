@@ -39,7 +39,6 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 			targetURL: this.targetURL + "/",
 			hierarchical: false,
 			data: {items: items}
-
 		});
 
 		this.treeModel = new dijit.tree.ForestStoreModel({

@@ -9,30 +9,32 @@ dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 
 	getValues: function(/* item */ parent, /* attribute-name-string */ attribute) {
 		var array = this.inherited(arguments);
-
-		if(array[0] == true) {
-			var url = this.targetURL;
-			if(parent.$ref) {
-				url += parent.$ref[0];
-			}
-			var xhrArgs = {
-				url :  url,
-				sync: true,
-				handleAs : "json",
-				load : dojo.hitch(this, function(data) {
-					array = [];
-					var children = data.children;
-					dojo.forEach(children, function(child) {
-						var newItem = this.newItem(child, {parent: parent});
-						array.push(newItem);						
-					}, this);
-					this.save();
-				}),
-				error : function(error) {
-					console.log(error);
+		if(attribute == "children") {
+			if(parent[attribute] && parent[attribute][0] == true) {
+				delete(parent[attribute]);
+				var url = this.targetURL;
+				if(parent.$ref) {
+					url += parent.$ref[0];
 				}
-			};
-			dojo.xhrGet(xhrArgs);
+				var xhrArgs = {
+					url :  url,
+					sync: true,
+					handleAs : "json",
+					load : dojo.hitch(this, function(data) {
+						array = [];
+						var children = data.children;
+						dojo.forEach(children, function(child) {
+							var newItem = this.newItem(child, {parent: parent , attribute: attribute});
+							array.push(newItem);
+						}, this);
+						this.save();
+					}),
+					error : function(error) {
+						console.log(error);
+					}
+				};
+				dojo.xhrGet(xhrArgs);
+			}
 		}
 		return array;
 	},
