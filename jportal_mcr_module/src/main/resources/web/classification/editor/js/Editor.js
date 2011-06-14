@@ -6,12 +6,14 @@ var classification = classification || {};
 /**
  * 
  */
-classification.Editor = function() {
+classification.Editor = function(/*String*/ classBaseURL) {
 	// divs
 	this.domNode = null;
-	
-	// classURL
-	this.classURL = null;
+
+	// class base url
+	this.classBaseURL = classBaseURL;
+	// current loaded classification
+	this.classificationID = null;
 
 	// content
 	this.treePane = null;
@@ -26,9 +28,10 @@ classification.Editor = function() {
 	function create() {
 		// create tree & category editor
 		this.treePane = new classification.TreePane();
-		this.treePane.create("/rsc/classifications");
+		this.treePane.create(this.classBaseURL);
 		this.categoryEditorPane = new classification.CategoryEditorPane();
 		this.categoryEditorPane.create();
+		this.categoryEditorPane.setDisabled(true);
 
 		// create borderlayout in tab
 		var borderContainer = new dijit.layout.BorderContainer({
@@ -49,12 +52,20 @@ classification.Editor = function() {
 		this.categoryEditorPane.eventHandler.attach(dojo.hitch(this, handleCategoryEditorEvents));
 	}
 
-	function loadClassification(/*String*/ classURL) {
-		this.classURL = classURL;
+	/**
+	 * Loads a new classification - if this string is empty, all
+	 * classifications are loaded
+	 */
+	function loadClassification(/*String*/ classificationID) {
+		this.classificationID = classificationID;
+		this.treePane.loadClassification(classificationID);
 	}
 
 	function handleTreeEvents(/*LazyLoadingTree*/ source, /*JSON*/ args) {
 		if(args.type == "itemSelected") {
+			if(this.categoryEditorPane.disabled) {
+				this.categoryEditorPane.setDisabled(false);
+			}
 			this.categoryEditorPane.update(args.item);
 		}
 	}

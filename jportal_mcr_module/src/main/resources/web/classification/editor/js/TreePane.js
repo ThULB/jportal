@@ -25,26 +25,24 @@ classification.TreePane = function() {
 
 ( function() {
 
-	function create(/*String */ url) {
-		// add loading gif
-		var loading = dojo.create("div");
-		dojo.style(loading, {
-			"backgroundImage": "url('images/loading.gif')",
-			"backgroundPosition": "center center",
-			"backgroundRepeat": "no-repeat",
-			"height" : "100%"
-		});
-		this.mainPane.set("content", loading);
+	function create(/*String*/ classBaseURL) {
 		// create tree
-		this.tree = new classification.LazyLoadingTree(url);
+		this.tree = new classification.LazyLoadingTree(classBaseURL);
 		this.tree.eventHandler.attach(dojo.hitch(this, handleTreeEvents));
-		this.tree.create();
+
+		// create dom
+		var createDomFunc = dojo.hitch(this, createDom);
+		createDomFunc();
+	}
+
+	function loadClassification(/*String*/ classificationID) {
+		this.tree.create(classificationID);
 	}
 
 	function handleTreeEvents(/*LazyLoadingTree*/ source, /*JSON*/ args) {
 		if(args.type == "treeCreated") {
-			var createDomFunc = dojo.hitch(this, createDom);
-			createDomFunc();
+			var addTreeToDOMFunc = dojo.hitch(this, addTreeToDOM);
+			addTreeToDOMFunc();
 		}
 	}
 
@@ -77,6 +75,18 @@ classification.TreePane = function() {
 		treeContainer.addChild(this.treePane);
 		treeContainer.addChild(this.toolbar);
 
+		// add loading gif
+		var loading = dojo.create("div");
+		dojo.style(loading, {
+			"backgroundImage": "url('images/loading.gif')",
+			"backgroundPosition": "center center",
+			"backgroundRepeat": "no-repeat",
+			"height" : "100%"
+		});
+		this.treePane.set("content", loading);
+	}
+
+	function addTreeToDOM() {
 		// surrounding div fixes bug 10585 @see
 		// http://bugs.dojotoolkit.org/ticket/10585
 		// TODO: enable this for correct dnd support -> check scrollbars!!
@@ -106,5 +116,6 @@ classification.TreePane = function() {
 	}
 
 	classification.TreePane.prototype.create = create;
+	classification.TreePane.prototype.loadClassification = loadClassification;
 
 })();

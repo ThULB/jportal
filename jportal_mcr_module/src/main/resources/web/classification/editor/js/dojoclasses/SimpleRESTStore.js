@@ -4,7 +4,7 @@ dojo.require("dojo.data.ItemFileWriteStore");
 dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 
 	constructor: function(/* object */ keywordParameters){
-		this.targetURL = keywordParameters.targetURL;
+		this.classBaseURL = keywordParameters.classBaseURL;
 	},
 
 	getValues: function(/* item */ parent, /* attribute-name-string */ attribute) {
@@ -12,7 +12,7 @@ dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 		if(attribute == "children") {
 			if(parent[attribute] && parent[attribute][0] == true) {
 				delete(parent[attribute]);
-				var url = this.targetURL;
+				var url = this.classBaseURL;
 				if(parent.$ref) {
 					url += parent.$ref[0];
 				}

@@ -222,7 +222,8 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 		this.langSelect.set("disabled", value);
 		this.textBox.set("disabled", value);
 		this.descBox.set("disabled", value);
-		this.removeButton.set("disabled", value);
+		if(this.removeButton)
+			this.removeButton.set("disabled", value);
 	}
 	
 	classification.CategoryEditor.Row.prototype.update = update;

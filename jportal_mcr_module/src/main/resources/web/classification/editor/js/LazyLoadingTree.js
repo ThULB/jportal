@@ -6,22 +6,30 @@ var classification = classification || {};
 /**
  * 
  */
-classification.LazyLoadingTree = function(/*String*/ targetURL) {
-	this.targetURL = targetURL;
-
+classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	// tree
 	this.tree = null;
 	this.store = null;
 	this.treeModel = null;
 	// event
 	this.eventHandler = new classification.EventHandler(this);
+
+	// tree names
+	this.rootNodeName = null;
+
+	// url
+	this.classBaseURL = classBaseURL;
+	// id - current loaded classification
+	this.classificationID = null;
 };
 
 ( function() {
 
-	function create() {
+	function create(/*String*/ classificationID) {
+		this.classificationID = classificationID;
+
 		var xhrArgs = {
-			url :  this.targetURL,
+			url :  this.classBaseURL + this.classificationID,
 			handleAs : "json",
 			load : dojo.hitch(this, function(items) {
 				var createTreeFunc = dojo.hitch(this, createTree);
@@ -35,8 +43,25 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 	}
 
 	function createTree(items) {
+		var showRoot = true;
+		if(dojo.isArray(items)) {
+			// bunch of classifications
+			this.rootNodeName = "Klassifikationen";
+		} else {
+			// single classification/category
+			if(!items.children) {
+				// if a category is loaded without children
+				items = [items];
+				showRoot = false;
+			} else {
+				// single classification/category with children
+				this.rootNodeName = items.labels[0].text;
+				items = items.children;
+			}
+		}
+
 		this.store = dojoclasses.SimpleRESTStore({
-			targetURL: this.targetURL + "/",
+			classBaseURL: this.classBaseURL,
 			hierarchical: false,
 			data: {items: items}
 		});
@@ -57,6 +82,7 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 //			betweenThreshold: "5",
 //			dragThreshold: "5",
 			persist: false,
+			showRoot: showRoot,
 			getLabel: dojo.hitch(this, getLabel),
 			getIconClass: dojo.hitch(this, getIconClass),
 			checkItemAcceptance: dojo.hitch(this, checkItemAcceptance),
@@ -75,7 +101,7 @@ classification.LazyLoadingTree = function(/*String*/ targetURL) {
 		if(treeItem.labels)
 			return treeItem.labels[0].text;
 		if(treeItem.root)
-			return "Klassifikationen";
+			return this.rootNodeName;
 		return "undefined";
 	}
 	function getIconClass(/* TreeItem */ treeItem) {

@@ -21,6 +21,9 @@ classification.CategoryEditorPane = function() {
 	
 	// item
 	this.currentItem = null;
+	
+	// disabled
+	this.disabled = false;
 };
 
 ( function() {
@@ -58,7 +61,13 @@ classification.CategoryEditorPane = function() {
 		}
 	}
 
+	function setDisabled(/*boolean*/ value) {
+		this.disabled = value;
+		this.categoryEditor.setDisabled(value);
+	}
+
 	classification.CategoryEditorPane.prototype.create = create;
 	classification.CategoryEditorPane.prototype.update = update;
+	classification.CategoryEditorPane.prototype.setDisabled = setDisabled;
 
 })();
