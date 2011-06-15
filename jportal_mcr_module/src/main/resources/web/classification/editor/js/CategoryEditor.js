@@ -158,8 +158,16 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 			categEditor.categoryChanged(instance, "lang", newLang);
 		}
 	});
-	this.langSelect.addOption({value: "de", label: "de"});
-	this.langSelect.addOption({value: "en", label: "en"});
+
+	var im = SimpleI18nManager.getInstance();
+	if(!im.isSupportedLanguage(lang)) {
+		im.addSupportedLanguage(lang);
+	}
+	var supportedLanguages = im.getSupportedLanguages();
+	for(var i = 0; i < supportedLanguages.length; i++) {
+		var language = supportedLanguages[i];
+		this.langSelect.addOption({value: language, label: language});
+	}
 	this.langSelect.set("value", lang);
 
 	this.textBox = new dijit.form.TextBox({
@@ -213,6 +221,11 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 	}
 
 	function update(/*String*/ lang, /*String*/ text, /*String*/ desc) {
+		var im = SimpleI18nManager.getInstance();
+		if(!im.isSupportedLanguage(lang)) {
+			im.addSupportedLanguage(lang);
+			this.langSelect.addOption({value: lang, label: lang});
+		}
 		this.langSelect.set("value", lang);
 		this.textBox.set("value", text == undefined ? null : text);
 		this.descBox.set("value", desc == undefined ? null : desc);

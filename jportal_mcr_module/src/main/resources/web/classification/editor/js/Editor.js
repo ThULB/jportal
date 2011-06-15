@@ -6,12 +6,12 @@ var classification = classification || {};
 /**
  * 
  */
-classification.Editor = function(/*String*/ classBaseURL) {
+classification.Editor = function() {
 	// divs
 	this.domNode = null;
 
 	// class base url
-	this.classBaseURL = classBaseURL;
+	this.resourcePath = resourcePath;
 	// current loaded classification
 	this.classificationID = null;
 
@@ -25,10 +25,15 @@ classification.Editor = function(/*String*/ classBaseURL) {
 	/**
 	 * Creates all important instances and the dom structure.
 	 */
-	function create() {
+	function create(/*String*/ resourcePath, /*Array*/ supportedLanguages, /*String*/ currentLanguage) {
+		// set resource path
+		this.resourcePath = resourcePath;
+		// I18nManager
+		SimpleI18nManager.getInstance().initialize(supportedLanguages, currentLanguage);
+
 		// create tree & category editor
 		this.treePane = new classification.TreePane();
-		this.treePane.create(this.classBaseURL);
+		this.treePane.create(this.resourcePath);
 		this.categoryEditorPane = new classification.CategoryEditorPane();
 		this.categoryEditorPane.create();
 		this.categoryEditorPane.setDisabled(true);

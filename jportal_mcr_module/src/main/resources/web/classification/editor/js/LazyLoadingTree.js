@@ -14,8 +14,8 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	// event
 	this.eventHandler = new classification.EventHandler(this);
 
-	// tree names
-	this.rootNodeName = null;
+	// tree
+	this.rootItem = null;
 
 	// url
 	this.classBaseURL = classBaseURL;
@@ -46,16 +46,28 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		var showRoot = true;
 		if(dojo.isArray(items)) {
 			// bunch of classifications
-			this.rootNodeName = "Klassifikationen";
+			this.rootItem = {
+				root: true,
+				labels: [
+				    {lang: "de", text: "Klassifikationen"},
+				    {lang: "en", text: "Classifications"}
+				],
+				isItem: false
+			}
 		} else {
 			// single classification/category
 			if(!items.children) {
 				// if a category is loaded without children
-				items = [items];
-				showRoot = false;
+				this.rootItem = items;
+				this.rootItem.isItem = true;
+				this.rootItem.root = true;
+//				items = [items];
+//				showRoot = false;
 			} else {
 				// single classification/category with children
-				this.rootNodeName = items.labels[0].text;
+				this.rootItem = items;
+				this.rootItem.isItem = true;
+				this.rootItem.root = true;
 				items = items.children;
 			}
 		}
@@ -98,12 +110,24 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	}
 
 	function getLabel(/* TreeItem */ treeItem) {
-		if(treeItem.labels)
-			return treeItem.labels[0].text;
-		if(treeItem.root)
-			return this.rootNodeName;
+		var currentLang = SimpleI18nManager.getInstance().getCurrentLanguage();
+		if(treeItem.root && this.rootItem && this.rootItem.labels) {
+			return getLabelText(currentLang, this.rootItem.labels);
+		}
+		if(treeItem.labels) {
+			return getLabelText(currentLang, treeItem.labels);
+		}
 		return "undefined";
 	}
+
+	function getLabelText(/*String*/ currentLang, /*Array*/ labels) {
+		for(var i = 0; i < labels.length; i++) {
+			if(labels[i].lang == currentLang)
+				return labels[i].text;
+		}
+		return labels[0].text;
+	}
+
 	function getIconClass(/* TreeItem */ treeItem) {
 		// root
 		if(treeItem.root)
@@ -121,11 +145,24 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 
 	function itemFocused() {
 		var treeItem = this.tree.lastFocused.item;
+		if(treeItem.root && this.rootItem) {
+			if(this.rootItem.isItem) {
+				treeItem = this.rootItem;
+			} else {
+				treeItem = null;
+			}
+		}
 		this.eventHandler.notify({"type" : "itemSelected", "item": treeItem});
 	}
 
 	function update(/*dojo.data.item*/ item, /*String*/ attribute, /*Object*/ value) {
-		this.store.setValue(item, attribute, value);
+		if(item.root) {
+			this.rootItem = item;
+			this.rootItem[attribute] = value;
+			// TODO: update label of root node
+		} else {
+			this.store.setValue(item, attribute, value);
+		}
 	}
 
 	classification.LazyLoadingTree.prototype.create = create;

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-  <xsl:param name="classURL" />
+  <xsl:param name="resourcePath" select="'/rsc/classifications/'"/>
+  <!-- use this to set a specific class - if this is empty, all classifications are loaded-->
+  <!-- e.g. docportal_class_00000001 -->
+  <xsl:param name="class" select="''"/>
   <xsl:param name="CurrentLang" />
   <xsl:param name="WebApplicationBaseURL"/>
   <xsl:param name="returnUrl" select="$WebApplicationBaseURL"/>
 
   <xsl:template match="classificationEditor">
-  
+
     <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
     <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
     <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>
@@ -16,7 +19,8 @@
     <script type="text/javascript">
       var classification = classification || {};
       var webApplicationBaseURL = "<xsl:value-of select='$WebApplicationBaseURL' />";
-      var classURL = "<xsl:value-of select='$classURL' />";
+      var resourcePath = "<xsl:value-of select='$resourcePath' />"
+      var class = "<xsl:value-of select='$class' />";
       var webPath = "<xsl:value-of select='$webPath' />";
       var jsPath = "<xsl:value-of select='$jsPath' />";
       var imagePath = "<xsl:value-of select='$imgPath' />";
@@ -37,6 +41,7 @@
 
     <script type="text/javascript" src="{$jsPath}/dojoInclude.js"></script>
     <script type="text/javascript" src="{$jsPath}/ClassificationUtils.js"></script>
+    <script type="text/javascript" src="{$jsPath}/SimpleI18nManager.js"></script>
     <script type="text/javascript" src="{$jsPath}/EventHandler.js"></script>
     <script type="text/javascript" src="{$jsPath}/LazyLoadingTree.js"></script>
     <script type="text/javascript" src="{$jsPath}/CategoryEditor.js"></script>
@@ -49,10 +54,13 @@
 
     <script type="text/javascript">
       function setup() {
+        // TODO use mycore api to set this
+        var supportedLanguages = ["de", "en", "pl"];
+
         var classEditor = new classification.Editor();
-        classEditor.create();
+        classEditor.create(resourcePath, supportedLanguages, "de");
         dijit.byId("classMainContainer").set('content', classEditor.domNode);
-        classEditor.loadClassification(classURL);
+        classEditor.loadClassification(class);
       }
 
       dojo.ready(setup);
