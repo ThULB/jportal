@@ -1,4 +1,4 @@
-package org.mycore.access.strategies;
+package fsu.jportal.access;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -6,30 +6,49 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.access.strategies.MCRAccessCheckStrategy;
+import org.mycore.access.strategies.MCRObjectIDStrategy;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
-public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
+public class AccessStrategy implements MCRAccessCheckStrategy {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRParentRuleStrategy.class);
+    private Logger LOGGER;
 
     private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");
 
-    private final static MCRObjectIDStrategy ID_STRATEGY = new MCRObjectIDStrategy();
-
     private static MCRConfiguration CONFIG = MCRConfiguration.instance();
+
+    private MCRAccessInterface aclSytem = null;
+
+    private MCRAccessCheckStrategy idStrategy = null;
+
+    private MCRXMLMetadataManager xmlMetaDataMgr;
     
    
+    public AccessStrategy() {
+        this.LOGGER = Logger.getLogger(this.getClass());
+    }
+    
+    public AccessStrategy(MCRAccessInterface aclSystem, MCRAccessCheckStrategy idStrategy, MCRXMLMetadataManager xmlMetaDataMgr) {
+        this();
+        this.aclSytem = aclSystem;
+        this.idStrategy = idStrategy;
+        this.xmlMetaDataMgr = xmlMetaDataMgr;
+    }
+    
+    
     
     public boolean checkPermission(String id, String permission) {
         if (superUser())
             return true;
-        else if (permission.equals("read-derivates") || permission.equals("view-derivate")) {
-            if (MCRAccessManager.getAccessImpl().hasRule(id, permission)) {
-                return ID_STRATEGY.checkPermission(id, permission);
+        else if (permission.equals("read-derivates")) {
+            if (getACLSystem().hasRule(id, permission)) {
+                return getIDStrategy().checkPermission(id, permission);
             } else {
                 return true;
             }
@@ -40,10 +59,25 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
                 return true;
             }
         } else {
-            return MCRAccessManager.getAccessImpl().checkPermission(id, permission);
+            return getACLSystem().checkPermission(id, permission);
         }
 
         return false;
+    }
+
+    private MCRAccessCheckStrategy getIDStrategy() {
+        if(idStrategy == null){
+            idStrategy = new MCRObjectIDStrategy();
+        }
+        return idStrategy;
+    }
+
+    private MCRAccessInterface getACLSystem() {
+        if(this.aclSytem != null){
+            return this.aclSytem;
+        }
+        
+        return MCRAccessManager.getAccessImpl();
     }
 
     private boolean isJpID(String id) {
@@ -106,12 +140,12 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     public boolean checkPermissionOfType(String id, String permission) {
         String objectType = getObjectType(id);
 
-        if (MCRAccessManager.getAccessImpl().hasRule("default_" + objectType, permission)) {
+        if (getACLSystem().hasRule("default_" + objectType, permission)) {
             LOGGER.debug("using access rule defined for object type " + objectType);
-            return MCRAccessManager.getAccessImpl().checkPermission("default_" + objectType, permission);
+            return getACLSystem().checkPermission("default_" + objectType, permission);
         }
         LOGGER.debug("using system default access rule.");
-        return MCRAccessManager.getAccessImpl().checkPermission("default", permission);
+        return getACLSystem().checkPermission("default", permission);
     }
 
     private static String getObjectType(String id) {
@@ -125,7 +159,7 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
     public boolean checkPermissionOfTopObject(String id, String permission) {
         boolean allowed = false;
         if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
-            Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(id));
+            Document objXML = getXMLMetadataMgr().retrieveXML(MCRObjectID.getInstance(id));
             final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild(
                     "hidden_jpjournalID");
             String journalID = "";
@@ -133,11 +167,19 @@ public class MCRJPortalStrategy implements MCRAccessCheckStrategy {
                 journalID = journalElem.getText();
             if (!journalID.equals("")) {
                 LOGGER.debug("Using journal access rule defined for: " + journalID);
-                allowed = ID_STRATEGY.checkPermission(journalID, permission);
+                allowed = getIDStrategy().checkPermission(journalID, permission);
             } else
                 LOGGER.debug("No journal access rule found for: " + journalID);
         }
         return allowed;
+    }
+
+    private MCRXMLMetadataManager getXMLMetadataMgr() {
+        if(this.xmlMetaDataMgr == null){
+            this.xmlMetaDataMgr = MCRXMLMetadataManager.instance();
+        }
+        
+        return this.xmlMetaDataMgr;
     }
 
     private final static boolean superUser() {
