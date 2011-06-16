@@ -110,18 +110,18 @@ public class ClassificationResource {
 
     @GET
     @Path("newID/{rootID}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String newIDJson(@PathParam("rootID") String rootID) {
         return MCRCategoryIDJson.serialize(newID(rootID));
     }
-    
+
     private MCRCategoryID newID(String rootID) {
         return new MCRCategoryID(rootID, UUID.randomUUID().toString());
     }
     
     @GET
     @Path("newID")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String newRootIDJson(){
         return MCRCategoryIDJson.serialize(newRootID());
     }
