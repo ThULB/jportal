@@ -43,6 +43,9 @@ classification.TreePane = function() {
 		if(args.type == "treeCreated") {
 			var addTreeToDOMFunc = dojo.hitch(this, addTreeToDOM);
 			addTreeToDOMFunc();
+		} else if(args.type == "itemSelected") {
+			var item = args.item;
+			this.updateToolbar(item);
 		}
 	}
 
@@ -101,10 +104,8 @@ classification.TreePane = function() {
 
 	    // toolbar buttons
 		this.addTreeItemButton = new dijit.form.Button({
-			showLabel: false, iconClass: "icon16 addDisabledIcon16", disabled: true,
-			onClick: dojo.hitch(this, function() {
-				console.log("todo add on click");
-			})
+			showLabel: false, iconClass: "icon16 addIcon16", disabled: false,
+			onClick: dojo.hitch(this, add)
 		});
 		this.removeTreeItemButton = new dijit.form.Button({
 			showLabel: false, iconClass: "icon16 removeDisabledIcon16", disabled: true
@@ -115,7 +116,22 @@ classification.TreePane = function() {
 		this.toolbar.addChild(this.removeTreeItemButton);
 	}
 
+	function updateToolbar(/*dojo.data.item*/ item) {
+		if(item == null) {
+			this.removeTreeItemButton.set("disabled", true);
+			this.removeTreeItemButton.set("iconClass", "icon16 removeDisabledIcon16");
+		} else {
+			this.removeTreeItemButton.set("disabled", false);
+			this.removeTreeItemButton.set("iconClass", "icon16 removeIcon16");			
+		}
+	}
+
+	function add() {
+		this.tree.add();
+	}
+
 	classification.TreePane.prototype.create = create;
 	classification.TreePane.prototype.loadClassification = loadClassification;
+	classification.TreePane.prototype.updateToolbar = updateToolbar;
 
 })();

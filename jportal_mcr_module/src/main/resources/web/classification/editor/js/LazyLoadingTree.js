@@ -98,6 +98,10 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 			getLabel: dojo.hitch(this, getLabel),
 			getIconClass: dojo.hitch(this, getIconClass),
 			checkItemAcceptance: dojo.hitch(this, checkItemAcceptance),
+			expandNode: function(/*TreeNode*/ node) {
+				// TODO - maybe there is a better solution than calling a private method
+				this._expandNode(node, false);
+			},
 			getIconStyle: function () {
 				return {
 					height: "22px",
@@ -165,7 +169,63 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		}
 	}
 
+	function add() {
+		var selectedNode = this.tree.lastFocused;
+		var selectedItem = selectedNode.item;
+		// expand node if its not expanded yet
+		if(selectedNode.isExpandable && !selectedNode.isExpanded) {
+			this.tree.expandNode(selectedNode);
+		}
+		// get root id
+		var rootId = "";
+		if(selectedItem.root) {
+			if(this.rootItem && this.rootItem.isItem) {
+				rootId = getClassificationId(this.rootItem.id);
+			}
+		} else {
+			var ref = selectedItem.$ref[0];
+			rootId = getClassificationId(ref);
+		}
+		var rootIdRequestPath = rootId.length > 0 ? "/" + rootId : "";
+
+		var xhrArgs = {
+			url :  this.classBaseURL + "newID" + rootIdRequestPath,
+			handleAs : "text",
+			load : dojo.hitch(this, function(newId) {
+				var newItemFunc = dojo.hitch(this, newItem);
+				newItemFunc(selectedItem, newId);
+			}),
+			error : dojo.hitch(this, function(error) {
+				console.log("error while retrieving new id: " + error);
+			})
+		};
+		dojo.xhrGet(xhrArgs);
+	}
+
+	function getClassificationId(/*String*/ id) {
+		var i = id.indexOf(".");
+		if(i == -1) {
+			return id;
+		}
+		return id.substring(0, i);
+	}
+
+	function newItem(/*dojo.data.item*/ parent, /*String*/ newId) {
+		if(parent.children && parent.children[0] == false) {
+			delete(parent.children);
+		}
+		var newItem = this.treeModel.newItem({
+			$ref: newId,
+			labels: [
+			    {lang: "de", text: "undefined"}
+			],
+			children: false
+		}, parent);
+		this.eventHandler.notify({"type" : "itemAdded", "item": newItem});
+	}
+
 	classification.LazyLoadingTree.prototype.create = create;
 	classification.LazyLoadingTree.prototype.update = update;
+	classification.LazyLoadingTree.prototype.add = add;
 	
 })();
