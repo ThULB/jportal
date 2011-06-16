@@ -1,9 +1,9 @@
 package fsu.jportal.access.test;
 
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.text.MessageFormat;
 import java.util.Properties;
 
 import org.jdom.Document;
@@ -21,6 +21,7 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.access.AccessStrategy;
+import fsu.jportal.access.AccessStrategyConfig;
 
 public class AccessStrategyTest {
     private static final String ROOT = "root";
@@ -47,7 +48,12 @@ public class AccessStrategyTest {
         aclMock = createMock(MCRAccessInterface.class);
         idStrategyMock = createMock(MCRAccessCheckStrategy.class);
         xmlMetaDataMgr = createMock(MCRXMLMetadataManager.class);
-        accessStrategy = new AccessStrategy(aclMock, idStrategyMock, xmlMetaDataMgr);
+        AccessStrategyConfig strategyConfig = createMock(AccessStrategyConfig.class);
+        expect(strategyConfig.getAccessInterface()).andReturn(aclMock).anyTimes();
+        expect(strategyConfig.getXMLMetadataMgr()).andReturn(xmlMetaDataMgr).anyTimes();
+        expect(strategyConfig.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY)).andReturn(idStrategyMock);
+        accessStrategy = new AccessStrategy(strategyConfig);
+        replay(strategyConfig);
     }
 
     @After
@@ -74,6 +80,19 @@ public class AccessStrategyTest {
 
         assertTrue("Permission should be true if there is no such rule " + permission, accessStrategy.checkPermission(id, permission));
         verify(aclMock);
+    }
+    
+    @Test
+    public void readDerivateHasRule() throws Exception {
+        String id = "id";
+        String permission = "read-derivates";
+        
+        expect(aclMock.hasRule(id, permission)).andReturn(true);
+        expect(idStrategyMock.checkPermission(id, permission)).andReturn(false);
+        replay(aclMock,idStrategyMock);
+        
+        assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(id, permission));
+        verify(aclMock,idStrategyMock);
     }
 
     @Test
@@ -103,29 +122,29 @@ public class AccessStrategyTest {
     }
 
     @Test
-    public void validIDNoDefault() throws Exception {
+    public void isValidID_isJPID_NoPermission() throws Exception {
+        isValidID(true, false, true, false);
+        isValidID(true, true, true, true);
+        isValidID(true, false, false, false);
+        isValidID(true, true, false, true);
+        isValidID(false, false, true, true);
+        isValidID(false, true, true, true);
+        isValidID(false, false, false, false);
+        isValidID(false, true, false, false);
+    }
+
+    private void isValidID(boolean hasRule, boolean defaultIDPerm, boolean defaultPerm, boolean expectedPermission) {
+        reset(aclMock, idStrategyMock);
         String defaultID = "default_jpjournal";
         String defaultVal = "default";
         String permission = "write";
-
-        expect(aclMock.hasRule(defaultID, permission)).andReturn(false);
-        expect(aclMock.checkPermission(defaultVal, permission)).andReturn(false);
+        expect(aclMock.hasRule(defaultID, permission)).andReturn(hasRule);
+        expect(aclMock.checkPermission(defaultID, permission)).andReturn(defaultIDPerm).anyTimes();
+        expect(aclMock.checkPermission(defaultVal, permission)).andReturn(defaultPerm).anyTimes();
         replay(aclMock, idStrategyMock);
 
-        assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(JOURNALID, permission));
-        verify(aclMock, idStrategyMock);
-    }
-
-    @Test
-    public void validIDDefault() throws Exception {
-        String defaultID = "default_jpjournal";
-        String permission = "write";
-
-        expect(aclMock.hasRule(defaultID, permission)).andReturn(true);
-        expect(aclMock.checkPermission(defaultID, permission)).andReturn(false);
-        replay(aclMock, idStrategyMock);
-
-        assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(JOURNALID, permission));
+        String errMsg = MessageFormat.format("isValidID - isJPID case: hasRule = {0}, defaultIDPerm = {1}, defaultPerm = {2}, expected result {3}. ", hasRule, defaultIDPerm, defaultPerm, expectedPermission);
+        assertEquals(errMsg + permission, expectedPermission, accessStrategy.checkPermission(JOURNALID, permission));
         verify(aclMock, idStrategyMock);
     }
 
