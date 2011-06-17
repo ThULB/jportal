@@ -137,7 +137,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		if(treeItem.root)
 			return "icon24 classifications";
 		// klassifikation (ends with a point)
-		if(treeItem.$ref && treeItem.$ref[0].match(".$") == ".") 
+		if(treeItem.id && treeItem.id[0].match(".$") == ".") 
 			return "icon24 classification"; 
 		// category
 		return "icon24 category";
@@ -186,7 +186,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 				rootId = getClassificationId(this.rootItem.id);
 			}
 		} else {
-			var ref = selectedItem.$ref[0];
+			var ref = selectedItem.id[0];
 			rootId = getClassificationId(ref);
 		}
 		var rootIdRequestPath = rootId.length > 0 ? "/" + rootId : "";
@@ -246,7 +246,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 			delete(parent.children);
 		}
 		var newItem = this.treeModel.newItem({
-			$ref: newId,
+			id: newId,
 			labels: [
 			    {lang: "de", text: "neuer Eintrag"}
 			],
@@ -275,12 +275,12 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	 */
 	function isDescendant(/*dojo.data.item*/ item, /*dojo.data.item*/ ancestor) {
 		// same item
-		if(item.$ref == ancestor.$ref)
+		if(item.id == ancestor.id)
 			return false;
 		if(ancestor.children && (typeof ancestor.children[0]) != "boolean") {
 			for(var i = 0; i < ancestor.children.length; i++) {
 				var childItem = ancestor.children[i];
-				if(item.$ref == childItem.$ref || isDescendant(item, childItem)) {
+				if(item.id == childItem.id || isDescendant(item, childItem)) {
 					return true;
 				}
 			}

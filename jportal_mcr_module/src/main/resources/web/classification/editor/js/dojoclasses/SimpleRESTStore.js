@@ -16,8 +16,8 @@ dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 			if(attribute == "children" && parent[attribute] && parent[attribute][0] == true) {
 				delete(parent[attribute]);
 				var url = this.classBaseURL;
-				if(parent.$ref) {
-					url += parent.$ref[0];
+				if(parent.id) {
+					url += parent.id[0];
 				}
 				var xhrArgs = {
 					url :  url,

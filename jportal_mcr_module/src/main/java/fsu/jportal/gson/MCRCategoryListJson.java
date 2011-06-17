@@ -2,7 +2,7 @@ package fsu.jportal.gson;
 
 import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
-import static fsu.jportal.gson.CategJsonPropName.REF;
+import static fsu.jportal.gson.CategJsonPropName.ID;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class MCRCategoryListJson {
         
         private JsonElement createCategRefJSONObj(MCRCategory categ) {
             JsonObject categRefJsonObject = new JsonObject();
-            categRefJsonObject.addProperty(REF, MCRCategoryIDJson.serialize(categ.getId()));
+            categRefJsonObject.addProperty(ID, MCRCategoryIDJson.serialize(categ.getId()));
             Set<MCRLabel> labels = categ.getLabels();
             categRefJsonObject.add(LABELS, contextSerializer.serialize(new MCRLabelSetWrapper(labels)));
             categRefJsonObject.addProperty(HASCHILDREN, categ.hasChildren());
@@ -66,7 +66,7 @@ public class MCRCategoryListJson {
             for (JsonElement categRef : json.getAsJsonArray()) {
                 JsonObject categRefJsonObject = categRef.getAsJsonObject();
                 MCRCategoryImpl categ = new MCRCategoryImpl();
-                categ.setId(MCRCategoryIDJson.deserialize(categRefJsonObject.get(REF).getAsString()));
+                categ.setId(MCRCategoryIDJson.deserialize(categRefJsonObject.get(ID).getAsString()));
                 MCRLabelSetWrapper labelsWrapper = context.deserialize(categRefJsonObject.get(LABELS), MCRLabelSetWrapper.class);
                 categ.setLabels(labelsWrapper.getSet());
                 categList.add(categ);
