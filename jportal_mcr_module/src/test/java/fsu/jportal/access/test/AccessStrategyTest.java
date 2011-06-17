@@ -63,11 +63,13 @@ public class AccessStrategyTest {
 
     @Test
     public void checkRootUser() throws Exception {
-        replay(aclMock);
-        MCRUserInformation rootUser = new FakeUserInfo(ROOT, null, null);
+        MCRUserInformation userInfoMock = createMock(MCRUserInformation.class);
+        expect(userInfoMock.getCurrentUserID()).andReturn(ROOT);
+        replay(aclMock,userInfoMock);
 
-        MCRSessionMgr.getCurrentSession().setUserInformation(rootUser);
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
         assertTrue("Superuser should has access", accessStrategy.checkPermission("foo", "perm"));
+        verify(aclMock,userInfoMock);
     }
 
     @Test
@@ -122,32 +124,33 @@ public class AccessStrategyTest {
     }
 
     @Test
-    public void isValidID_isJPID_NoPermission() throws Exception {
-        isValidID(true, false, true, false);
-        isValidID(true, true, true, true);
-        isValidID(true, false, false, false);
-        isValidID(true, true, false, true);
-        isValidID(false, false, true, true);
-        isValidID(false, true, true, true);
-        isValidID(false, false, false, false);
-        isValidID(false, true, false, false);
+    public void isValidID() throws Exception {
+        String objid = JOURNALID;
+        isValidID(true, false, true, false,objid);
+        isValidID(true, true, true, true,objid);
+        isValidID(true, false, false, false,objid);
+        isValidID(true, true, false, true,objid);
+        isValidID(false, false, true, true,objid);
+        isValidID(false, true, true, true,objid);
+        isValidID(false, false, false, false,objid);
+        isValidID(false, true, false, false,objid);
     }
-
-    private void isValidID(boolean hasRule, boolean defaultIDPerm, boolean defaultPerm, boolean expectedPermission) {
+    
+    private void isValidID(boolean hasRule, boolean defaultIDPerm, boolean defaultPerm, boolean expectedPermission, String objid) {
         reset(aclMock, idStrategyMock);
         String defaultID = "default_jpjournal";
         String defaultVal = "default";
         String permission = "write";
-        expect(aclMock.hasRule(defaultID, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule(defaultID, permission)).andReturn(hasRule).anyTimes();
         expect(aclMock.checkPermission(defaultID, permission)).andReturn(defaultIDPerm).anyTimes();
         expect(aclMock.checkPermission(defaultVal, permission)).andReturn(defaultPerm).anyTimes();
         replay(aclMock, idStrategyMock);
 
         String errMsg = MessageFormat.format("isValidID - isJPID case: hasRule = {0}, defaultIDPerm = {1}, defaultPerm = {2}, expected result {3}. ", hasRule, defaultIDPerm, defaultPerm, expectedPermission);
-        assertEquals(errMsg + permission, expectedPermission, accessStrategy.checkPermission(JOURNALID, permission));
+        assertEquals(errMsg + permission, expectedPermission, accessStrategy.checkPermission(objid, permission));
         verify(aclMock, idStrategyMock);
     }
-
+    
     @Test
     public void notValidIDParentNoAccess() throws Exception {
         String id = "jportal_foo_000000001";

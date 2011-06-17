@@ -14,6 +14,7 @@ import org.mycore.access.strategies.MCRObjectIDStrategy;
 import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -27,10 +28,10 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
     private static MCRConfiguration CONFIG = MCRConfiguration.instance();
 
     private AccessStrategyConfig accessConfig;
-    
-    private static class DefaultConfig implements AccessStrategyConfig{
+
+    private static class DefaultConfig implements AccessStrategyConfig {
         private HashMap<String, MCRAccessCheckStrategy> strategies;
-        
+
         public DefaultConfig() {
             strategies = new HashMap<String, MCRAccessCheckStrategy>();
             strategies.put(OBJ_ID_STRATEGY, new MCRObjectIDStrategy());
@@ -52,18 +53,18 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         public MCRXMLMetadataManager getXMLMetadataMgr() {
             return MCRXMLMetadataManager.instance();
         }
-        
+
     }
-    
-    public static abstract class StrategieChain implements MCRAccessCheckStrategy{
+
+    public static abstract class StrategieChain implements MCRAccessCheckStrategy {
 
         private StrategieChain nextStrategy = null;
 
         @Override
         public boolean checkPermission(String id, String permission) {
-            if(isReponsibleFor(id,permission)){
-                return permissionStrategyFor(id,permission);
-            } else if(nextStrategy != null){
+            if (isReponsibleFor(id, permission)) {
+                return permissionStrategyFor(id, permission);
+            } else if (nextStrategy != null) {
                 return nextStrategy.checkPermission(id, permission);
             } else {
                 return false;
@@ -71,42 +72,62 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         }
 
         protected abstract boolean isReponsibleFor(String id, String permission);
-        
+
         protected abstract boolean permissionStrategyFor(String id, String permission);
-        
-        public StrategieChain setNextStrategy(StrategieChain next){
+
+        public StrategieChain setNextStrategy(StrategieChain next) {
             this.nextStrategy = next;
-            
+
             return next;
         }
     }
-    
-    public static class ReadDerivateStrategy extends StrategieChain{
+
+    public static class ReadDerivateStrategy extends StrategieChain {
 
         private AccessStrategyConfig config;
+
+        private boolean isValidID = false;
+
+        private boolean readDeriv = false;
 
         public ReadDerivateStrategy(AccessStrategyConfig config) {
             this.config = config;
         }
-        
+
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
-            return permission.equals("read-derivates");
+            readDeriv = permission.equals("read-derivates");
+            isValidID = isValidID(id);
+            return readDeriv || !isValidID;
         }
 
         @Override
         protected boolean permissionStrategyFor(String id, String permission) {
-            if (config.getAccessInterface().hasRule(id, permission)) {
+            if (config.getAccessInterface().hasRule(id, permission) || (!readDeriv && !isValidID)) {
                 return config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY).checkPermission(id, permission);
             } else {
                 return true;
             }
         }
-        
+
+        private boolean isValidID(String id) {
+            if (id.contains("_class_")) {
+                return false;
+            }
+
+            // this is an anti pattern, but I use it any way
+            try {
+                MCRObjectID.getInstance(id);
+                return true;
+            } catch (MCRException e) {
+                return false;
+            }
+        }
+
     }
-    
-    public static class ValidIDStrategy extends StrategieChain{
-        
+
+    public static class ValidIDStrategy extends StrategieChain {
+
         private AccessStrategyConfig config;
 
         public ValidIDStrategy(AccessStrategyConfig config) {
@@ -124,66 +145,34 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
                 return checkPermissionOfType(id, permission);
             } else {
                 return (checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission));
-            } 
+            }
         }
-        
+
         private boolean isJpID(String id) {
-            String[] jpIdTypes = {"_jpjournal_", "_person_", "_jpinst_", "_derivate_"};
+            String[] jpIdTypes = { "_jpjournal_", "_person_", "_jpinst_", "_derivate_" };
             for (String type : jpIdTypes) {
-                if(id.contains(type)){
+                if (id.contains(type)) {
                     return true;
                 }
             }
-            
+
             return false;
         }
-        
+
         private boolean isValidID(String id) {
-            if(id.contains("_class_")){
-                return false;
-            }
-            
-            if (id == null) {
+            if (id.contains("_class_")) {
                 return false;
             }
 
-            String mcr_id = id.trim();
-
-            int MAX_LENGTH = 64;
-            
-            if (mcr_id.length() > MAX_LENGTH  || mcr_id.length() == 0) {
-                return false;
-            }
-
-            String[] idParts = MCRObjectID.getIDParts(mcr_id);
-
-            if (idParts.length != 3) {
-                return false;
-            }
-
-            String mcr_project_id = idParts[0].intern();
-
-            String mcr_type_id = idParts[1].toLowerCase().intern();
-
-            if (!CONFIG.getBoolean("MCR.Metadata.Type." + mcr_type_id, false)) {
-                return false;
-            }
-
-            int mcr_number = -1;
-
+            // this is an anti pattern, but I use it any way
             try {
-                mcr_number = Integer.parseInt(idParts[2]);
-            } catch (NumberFormatException e) {
+                MCRObjectID.getInstance(id);
+                return true;
+            } catch (MCRException e) {
                 return false;
             }
-
-            if (mcr_number < 0) {
-                return false;
-            }
-
-            return true;
         }
-        
+
         public boolean checkPermissionOfType(String id, String permission) {
             String objectType = getObjectType(id);
 
@@ -206,8 +195,8 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             boolean allowed = false;
             if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
                 Document objXML = config.getXMLMetadataMgr().retrieveXML(MCRObjectID.getInstance(id));
-                final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID").getChild(
-                        "hidden_jpjournalID");
+                final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID")
+                        .getChild("hidden_jpjournalID");
                 String journalID = "";
                 if (journalElem != null)
                     journalID = journalElem.getText();
@@ -218,8 +207,8 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             return allowed;
         }
     }
-   
-    public static class SuperUser extends StrategieChain{
+
+    public static class SuperUser extends StrategieChain {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
@@ -230,62 +219,37 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         protected boolean permissionStrategyFor(String id, String permission) {
             return true;
         }
-        
+
         private final static boolean superUser() {
             String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
-            return currentUserID.equals(CONFIG.getString("MCR.Users.Superuser.UserName"));
+            return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
         }
     }
-    
-    public static class ACLSystemStrategy extends StrategieChain{
-        private AccessStrategyConfig config;
 
-        public ACLSystemStrategy(AccessStrategyConfig config) {
-            this.config = config;
-        }
-
-        @Override
-        protected boolean isReponsibleFor(String id, String permission) {
-            return true;
-        }
-
-        @Override
-        protected boolean permissionStrategyFor(String id, String permission) {
-            return config.getAccessInterface().checkPermission(id, permission);
-        }
-        
-    }
-    
     public AccessStrategy() {
         this(new DefaultConfig());
     }
 
-
     private void initLogger() {
         this.LOGGER = Logger.getLogger(this.getClass());
     }
-    
+
     public AccessStrategy(AccessStrategyConfig accessConfig) {
         initLogger();
         setAccessConfig(accessConfig);
     }
-    
-    
-    
+
     public boolean checkPermission(String id, String permission) {
         SuperUser superUserStr = new SuperUser();
         StrategieChain chain = superUserStr.setNextStrategy(new ReadDerivateStrategy(getAccessConfig()));
         chain = chain.setNextStrategy(new ValidIDStrategy(getAccessConfig()));
-        chain = chain.setNextStrategy(new ACLSystemStrategy(getAccessConfig()));
-        
+
         return superUserStr.checkPermission(id, permission);
     }
-    
 
     private void setAccessConfig(AccessStrategyConfig accessConfig) {
         this.accessConfig = accessConfig;
     }
-
 
     private AccessStrategyConfig getAccessConfig() {
         return accessConfig;
