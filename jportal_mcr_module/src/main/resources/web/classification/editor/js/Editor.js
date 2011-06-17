@@ -68,11 +68,16 @@ classification.Editor = function() {
 
 	function handleTreeEvents(/*LazyLoadingTree*/ source, /*JSON*/ args) {
 		if(args.type == "itemSelected") {
-			if(this.categoryEditorPane.disabled || args.item == null) {
-				this.categoryEditorPane.setDisabled(false);
+			if(args.item == null) {
+				this.categoryEditorPane.setDisabled(true);
 			} else {
+				if(this.categoryEditorPane.disabled) {
+					this.categoryEditorPane.setDisabled(false);
+				}
 				this.categoryEditorPane.update(args.item);
 			}
+		} else if(args.type == "itemsRemoved") {
+			this.categoryEditorPane.setDisabled(true);
 		}
 	}
 

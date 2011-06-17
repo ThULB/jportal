@@ -169,7 +169,10 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		}
 	}
 
-	function add() {
+	/**
+	 * Creates a new tree item and adds them to the last focused item.
+	 */
+	function addToSelected() {
 		var selectedNode = this.tree.lastFocused;
 		var selectedItem = selectedNode.item;
 		// expand node if its not expanded yet
@@ -187,7 +190,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 			rootId = getClassificationId(ref);
 		}
 		var rootIdRequestPath = rootId.length > 0 ? "/" + rootId : "";
-
+		// get new category id
 		var xhrArgs = {
 			url :  this.classBaseURL + "newID" + rootIdRequestPath,
 			handleAs : "text",
@@ -200,6 +203,34 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 			})
 		};
 		dojo.xhrGet(xhrArgs);
+	}
+
+	/**
+	 * Removes all selected tree items.
+	 */
+	function removeSelected() {
+		var selectedTreeItems = this.tree.selectedItems;
+		// add only items which are not a descendant of another selected
+		// its important to avoid side effects
+		var itemsToRemoveArray = [];
+		for(var i = 0; i < selectedTreeItems.length; i++) {
+			var descendant = false;
+			for(var j = 0; j < selectedTreeItems.length; j++) {
+				if(isDescendant(selectedTreeItems[i], selectedTreeItems[j])) {
+					descendant = true;
+					break;
+				}
+			}
+			if(!descendant) {
+				itemsToRemoveArray.push(selectedTreeItems[i]);
+			}
+		}
+		// remove from tree
+		var removeTreeItemFunc = dojo.hitch(this, removeTreeItem);
+		for(var i = 0; i < itemsToRemoveArray.length; i++) {
+			removeTreeItemFunc(itemsToRemoveArray[i]);
+		}
+		this.eventHandler.notify({"type" : "itemsRemoved", "items": itemsToRemoveArray});
 	}
 
 	function getClassificationId(/*String*/ id) {
@@ -217,15 +248,49 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		var newItem = this.treeModel.newItem({
 			$ref: newId,
 			labels: [
-			    {lang: "de", text: "undefined"}
+			    {lang: "de", text: "neuer Eintrag"}
 			],
 			children: false
 		}, parent);
 		this.eventHandler.notify({"type" : "itemAdded", "item": newItem});
 	}
 
+	/**
+	 * This method deletes an item and all its children from the store. That is
+	 * necessary because store.deleteItem() doesn't delete recursive.
+	 */
+	function removeTreeItem(/* dojo.data.item */ item) {
+		// delete children
+		var removeTreeItemFunc = dojo.hitch(this, removeTreeItem);
+		while(item.children && (typeof item.children[0]) != "boolean") {
+			removeTreeItemFunc(item.children[0]);
+		}
+		// delete tree item
+		this.store.deleteItem(item);
+		this.eventHandler.notify({"type" : "itemRemoved", "item": item});
+	}
+
+	/**
+	 * Checks if an item is an descendant of another item.
+	 */
+	function isDescendant(/*dojo.data.item*/ item, /*dojo.data.item*/ ancestor) {
+		// same item
+		if(item.$ref == ancestor.$ref)
+			return false;
+		if(ancestor.children && (typeof ancestor.children[0]) != "boolean") {
+			for(var i = 0; i < ancestor.children.length; i++) {
+				var childItem = ancestor.children[i];
+				if(item.$ref == childItem.$ref || isDescendant(item, childItem)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	classification.LazyLoadingTree.prototype.create = create;
 	classification.LazyLoadingTree.prototype.update = update;
-	classification.LazyLoadingTree.prototype.add = add;
-	
+	classification.LazyLoadingTree.prototype.addToSelected = addToSelected;
+	classification.LazyLoadingTree.prototype.removeSelected = removeSelected;
+
 })();

@@ -7,10 +7,13 @@ dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 		this.classBaseURL = keywordParameters.classBaseURL;
 	},
 
+	_fetchChildren: true,
+
 	getValues: function(/* item */ parent, /* attribute-name-string */ attribute) {
 		var array = this.inherited(arguments);
-		if(attribute == "children") {
-			if(parent[attribute] && parent[attribute][0] == true) {
+
+		if(this._fetchChildren) {
+			if(attribute == "children" && parent[attribute] && parent[attribute][0] == true) {
 				delete(parent[attribute]);
 				var url = this.classBaseURL;
 				if(parent.$ref) {
@@ -38,5 +41,12 @@ dojo.declare("dojoclasses.SimpleRESTStore", dojo.data.ItemFileWriteStore, {
 		}
 		return array;
 	},
+
+	deleteItem: function(/* item */ item){
+		this._fetchChildren = false;
+		var success = this.inherited(arguments);
+		this._fetchChildren = true;
+		return success;
+	}
 
 });

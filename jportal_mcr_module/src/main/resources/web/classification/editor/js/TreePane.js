@@ -108,7 +108,8 @@ classification.TreePane = function() {
 			onClick: dojo.hitch(this, add)
 		});
 		this.removeTreeItemButton = new dijit.form.Button({
-			showLabel: false, iconClass: "icon16 removeDisabledIcon16", disabled: true
+			showLabel: false, iconClass: "icon16 removeDisabledIcon16", disabled: true,
+			onClick: dojo.hitch(this, remove)
 		});
 
 		// hierarchy
@@ -121,13 +122,28 @@ classification.TreePane = function() {
 			this.removeTreeItemButton.set("disabled", true);
 			this.removeTreeItemButton.set("iconClass", "icon16 removeDisabledIcon16");
 		} else {
-			this.removeTreeItemButton.set("disabled", false);
-			this.removeTreeItemButton.set("iconClass", "icon16 removeIcon16");			
+			if(this.addTreeItemButton.get("disabled")) {
+				this.addTreeItemButton.set("disabled", false);
+				this.addTreeItemButton.set("iconClass", "icon16 addIcon16");
+			}
+			if(this.removeTreeItemButton.get("disabled")) {	
+				this.removeTreeItemButton.set("disabled", false);
+				this.removeTreeItemButton.set("iconClass", "icon16 removeIcon16");
+			}
 		}
 	}
 
 	function add() {
-		this.tree.add();
+		this.addTreeItemButton.set("disabled", true);
+		this.addTreeItemButton.set("iconClass", "icon16 addDisabledIcon16");
+		this.tree.addToSelected();
+		this.addTreeItemButton.set("disabled", false);
+		this.addTreeItemButton.set("iconClass", "icon16 addIcon16");	
+	}
+
+	function remove() {
+		this.updateToolbar(null);
+		this.tree.removeSelected();
 	}
 
 	classification.TreePane.prototype.create = create;
