@@ -117,8 +117,17 @@ classification.TreePane = function() {
 		this.toolbar.addChild(this.removeTreeItemButton);
 	}
 
-	function updateToolbar(/*dojo.data.item*/ item) {
-		if(item == null) {
+	function updateToolbar() {
+		var selectedItems = this.tree.getSelectedItems();
+		var deleteVisable = selectedItems.length > 0;
+		for(var i = 0; i < selectedItems.length; i++) {
+			if(selectedItems[i].root) {
+				deleteVisable = false;
+				break;
+			}
+		}
+
+		if(!deleteVisable) {
 			this.removeTreeItemButton.set("disabled", true);
 			this.removeTreeItemButton.set("iconClass", "icon16 removeDisabledIcon16");
 		} else {
@@ -142,7 +151,8 @@ classification.TreePane = function() {
 	}
 
 	function remove() {
-		this.updateToolbar(null);
+		this.removeTreeItemButton.set("disabled", true);
+		this.removeTreeItemButton.set("iconClass", "icon16 removeDisabledIcon16");
 		this.tree.removeSelected();
 	}
 

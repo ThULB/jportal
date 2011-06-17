@@ -209,7 +209,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	 * Removes all selected tree items.
 	 */
 	function removeSelected() {
-		var selectedTreeItems = this.tree.selectedItems;
+		var selectedTreeItems = this.getSelectedItems();
 		// add only items which are not a descendant of another selected
 		// its important to avoid side effects
 		var itemsToRemoveArray = [];
@@ -288,9 +288,17 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		return false;
 	}
 
+	/**
+	 * Get all items selected in tree.
+	 */
+	function getSelectedItems() {
+		return this.tree.selectedItems;
+	}
+	
 	classification.LazyLoadingTree.prototype.create = create;
 	classification.LazyLoadingTree.prototype.update = update;
 	classification.LazyLoadingTree.prototype.addToSelected = addToSelected;
 	classification.LazyLoadingTree.prototype.removeSelected = removeSelected;
+	classification.LazyLoadingTree.prototype.getSelectedItems = getSelectedItems;
 
 })();
