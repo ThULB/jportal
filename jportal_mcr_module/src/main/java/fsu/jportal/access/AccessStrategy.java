@@ -1,12 +1,8 @@
 package fsu.jportal.access;
 
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 import org.jdom.Document;
-import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.xpath.XPath;
@@ -23,12 +19,6 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
-
-    private Logger LOGGER;
-
-    private static final Pattern TYPE_PATTERN = Pattern.compile("[^_]*_([^_]*)_*");
-
-    private static MCRConfiguration CONFIG = MCRConfiguration.instance();
 
     private AccessStrategyConfig accessConfig;
 
@@ -65,6 +55,10 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         public boolean checkPermission(String id, String permission) {
+            if(id == null || permission == null || id.equals("") || permission.equals("")){
+                return false;
+            }
+            
             if (isReponsibleFor(id, permission)) {
                 return permissionStrategyFor(id, permission);
             } else if (nextStrategy != null) {
@@ -99,11 +93,6 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
-//            if(id == null || permission == null || id.equals("") || permission.equals("")){
-            if(id == null || permission == null ){
-                return false;
-            }
-            
             readDeriv = permission.equals("read-derivates");
             isValidID = isValidID(id);
             return readDeriv || !isValidID;
@@ -152,32 +141,28 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
-//            if(id == null || permission == null || id.equals("") || permission.equals("")){
-                if(id == null || permission == null){
-                return false;
-            }
-            
             return isValidID(id);
         }
 
         @Override
         protected boolean permissionStrategyFor(String id, String permission) {
             MCRAccessCheckStrategy objTypeStrategy = config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_TYPE_STRATEGY);
-            if (isJpID(id) || permission.equals("read")) {
-                return objTypeStrategy.checkPermission(id, permission);
+            boolean objTypeStrategyPerm = objTypeStrategy.checkPermission(id, permission);
+            
+            if(objectWithParents(id) && !"read".equals(permission)){
+                return objTypeStrategyPerm && objTypeStrategy.checkPermission(getParentID(id), permission);
             } else {
-                return (checkPermissionOfTopObject(id, permission)) && (objTypeStrategy.checkPermission(id, permission));
+                return objTypeStrategyPerm;
             }
         }
-
-        private boolean isJpID(String id) {
-            String[] jpIdTypes = { "_jpjournal_", "_person_", "_jpinst_", "_derivate_" };
-            for (String type : jpIdTypes) {
-                if (id.contains(type)) {
+        
+        private boolean objectWithParents(String id){
+            for (String idType : new String[] {"_jpvolume_","_jparticle_"}) {
+                if (id.contains(idType)) {
                     return true;
                 }
             }
-
+            
             return false;
         }
 
@@ -191,22 +176,8 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
                 MCRObjectID.getInstance(id);
                 return true;
             } catch (MCRException e) {
-                System.out.println("ValidIDStrategy exception");
                 return false;
             }
-        }
-
-        public boolean checkPermissionOfTopObject(String id, String permission) {
-            boolean allowed = false;
-
-            if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
-                String journalID = getParentID(id);
-                
-                if (!journalID.equals("")) {
-                    allowed = config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY).checkPermission(journalID, permission);
-                }
-            }
-            return allowed;
         }
 
         private String getParentID(String id) {
@@ -232,7 +203,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
-            return superUser();
+            return isSuperUser();
         }
 
         @Override
@@ -240,7 +211,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             return true;
         }
 
-        private final static boolean superUser() {
+        private final static boolean isSuperUser() {
             String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
             return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
         }
@@ -250,12 +221,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         this(new DefaultConfig());
     }
 
-    private void initLogger() {
-        this.LOGGER = Logger.getLogger(this.getClass());
-    }
-
     public AccessStrategy(AccessStrategyConfig accessConfig) {
-        initLogger();
         setAccessConfig(accessConfig);
     }
 

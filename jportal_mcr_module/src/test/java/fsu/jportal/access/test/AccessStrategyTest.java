@@ -47,6 +47,7 @@ public class AccessStrategyTest {
         mcrProperties.setProperty("MCR.Users.Superuser.UserName", ROOT);
         mcrProperties.setProperty("MCR.Access.Class", "fsu.jportal.access.test.FakeAccessImpl");
         mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
+        mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.foo", "true");
 
         aclMock = createMock("ACLMock",MCRAccessInterface.class);
@@ -129,33 +130,10 @@ public class AccessStrategyTest {
         assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(id, permission));
         verify(aclMock, idStrategyMock);
     }
-
-    @Test
-    public void isValidID() throws Exception {
-        String objid = JOURNALID;
-        String permission = "write";
-        isValidID(objid, permission, true, true);
-        isValidID(objid, permission, false, false);
-        isValidID(null, permission, false, false);
-        isValidID(objid, null, false, false);
-        isValidID(null, null, false, false);
-        isValidID("", permission, false, false);
-    }
-    
-    private void isValidID(String objid, String permission, boolean objTypePerm, boolean expectedPermission) {
-        reset(objTypeStrategyMock);
-        
-        expect(objTypeStrategyMock.checkPermission(objid, permission)).andReturn(objTypePerm).anyTimes();
-        replay(objTypeStrategyMock);
-
-        String errMsg = MessageFormat.format("isValidID - isJPID case: objTypePerm = {0}, expected result {1}. ", objTypePerm, expectedPermission);
-        assertEquals(errMsg + permission, expectedPermission, accessStrategy.checkPermission(objid, permission));
-        verify(objTypeStrategyMock);
-    }
     
     @Test
-    public void isValidIDNoJiID() throws Exception {
-        String id = "jportal_foo_000000001";
+    public void isValidIDJPArticleWrite() throws Exception {
+        String id = "jportal_jparticle_000000001";
         String permission = "write";
         
         isValidIDNoJpID(id, permission, true, false, false);
@@ -165,11 +143,43 @@ public class AccessStrategyTest {
         isValidIDNoJpID(null, permission, false, false, false);
         isValidIDNoJpID(id, null, false, false, false);
         isValidIDNoJpID(null, null, false, false, false);
+        isValidIDNoJpID("", permission, false, false, false);
+    }
+    
+    @Test
+    public void isValidIDJPArticleRead() throws Exception {
+        String id = "jportal_jparticle_000000001";
+        String permission = "read";
+        
+        isValidIDNoJpID(id, permission, true, false, false);
+        isValidIDNoJpID(id, permission, true, true, true);
+        isValidIDNoJpID(id, permission, false, true, true);
+        isValidIDNoJpID(id, permission, false, false, false);
+        isValidIDNoJpID(null, permission, false, false, false);
+        isValidIDNoJpID(id, null, false, false, false);
+        isValidIDNoJpID(null, null, false, false, false);
+        isValidIDNoJpID("", permission, false, false, false);
+    }
+    
+    @Test
+    public void isValidIDHasNoParent() throws Exception {
+        String id = "jportal_foo_000000001";
+        String permission = "write";
+        
+        isValidIDNoJpID(id, permission, true, false, false);
+        isValidIDNoJpID(id, permission, true, true, true);
+        isValidIDNoJpID(id, permission, false, true, true);
+        isValidIDNoJpID(id, permission, false, false, false);
+        isValidIDNoJpID(null, permission, false, false, false);
+        isValidIDNoJpID(id, null, false, false, false);
+        isValidIDNoJpID(null, null, false, false, false);
+        isValidIDNoJpID("", permission, false, false, false);
     }
 
     private void isValidIDNoJpID(String id, String permission, boolean parentPerm, boolean typePerm, boolean expectedPermission) {
         reset(idStrategyMock, xmlMetaDataMgr,objTypeStrategyMock);
         expect(idStrategyMock.checkPermission(JOURNALID, permission)).andReturn(parentPerm).anyTimes();
+        expect(objTypeStrategyMock.checkPermission(JOURNALID, permission)).andReturn(parentPerm).anyTimes();
         expect(objTypeStrategyMock.checkPermission(id, permission)).andReturn(typePerm).anyTimes();
         MCRObjectID mcrObjectID = null;
         
