@@ -2,6 +2,7 @@ package fsu.jportal.json.test;
 
 import static org.junit.Assert.*;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MCRCategoryDoJoSerializerTest extends GsonSerializationTest{
         children.add(categ1);
         children.add(createCateg("rootID", "categ2", "categ2"));
         mcrCategoryImpl.setChildren(children);
+        mcrCategoryImpl.setURI(URI.create("http://foo.de"));
         
         Gson gson = GsonManager.instance().createGson();
         

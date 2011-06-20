@@ -3,8 +3,10 @@ package fsu.jportal.gson;
 import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
 import static fsu.jportal.gson.CategJsonPropName.ID;
+import static fsu.jportal.gson.CategJsonPropName.URISTR;
 
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -50,6 +52,11 @@ public class MCRCategoryListJson {
             categRefJsonObject.addProperty(ID, MCRCategoryIDJson.serialize(categ.getId()));
             Set<MCRLabel> labels = categ.getLabels();
             categRefJsonObject.add(LABELS, contextSerializer.serialize(new MCRLabelSetWrapper(labels)));
+            URI uri = categ.getURI();
+            if(uri != null) {
+                categRefJsonObject.addProperty(URISTR, uri.toString());
+            }
+            
             categRefJsonObject.addProperty(HASCHILDREN, categ.hasChildren());
             
             return categRefJsonObject;
@@ -70,6 +77,12 @@ public class MCRCategoryListJson {
                 MCRLabelSetWrapper labelsWrapper = context.deserialize(categRefJsonObject.get(LABELS), MCRLabelSetWrapper.class);
                 categ.setLabels(labelsWrapper.getSet());
                 categList.add(categ);
+                
+                JsonElement uriJsonElement = categRefJsonObject.get(URISTR);
+                if(uriJsonElement != null){
+                    String uriStr = uriJsonElement.getAsString();
+                    categ.setURI(URI.create(uriStr));
+                }
             }
             
             return new MCRCategoryListWrapper(categList);

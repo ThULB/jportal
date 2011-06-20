@@ -3,7 +3,7 @@ package fsu.jportal.gson;
 import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.ID;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
-import static fsu.jportal.gson.CategJsonPropName.URI;
+import static fsu.jportal.gson.CategJsonPropName.URISTR;
 
 import java.lang.reflect.Type;
 import java.net.URI;
@@ -40,7 +40,7 @@ public class MCRCategoryJson {
             rubricJsonObject.add(LABELS, contextSerialization.serialize(new MCRLabelSetWrapper(labels)));
             URI uri = category.getURI();
             if (uri != null) {
-                rubricJsonObject.addProperty(URI, uri.toString());
+                rubricJsonObject.addProperty(URISTR, uri.toString());
             }
 
             if (category.hasChildren()) {
@@ -63,10 +63,17 @@ public class MCRCategoryJson {
                 String idStr = idJsonElement.getAsString();
                 id = MCRCategoryIDJson.deserialize(idStr);
             }
-
+            
             MCRLabelSetWrapper labelSetWrapper = context.deserialize(categJsonObject.get(LABELS), MCRLabelSetWrapper.class);
+            MCRCategory deserializedCateg = MCRCategUtils.newCategory(id, labelSetWrapper.getSet(), null);
+            
+            JsonElement uriJsonElement = categJsonObject.get(URISTR);
+            if(uriJsonElement != null){
+                String uriStr = uriJsonElement.getAsString();
+                deserializedCateg.setURI(URI.create(uriStr));
+            }
 
-            return MCRCategUtils.newCategory(id, labelSetWrapper.getSet(), null);
+            return deserializedCateg;
         }
     }
 }

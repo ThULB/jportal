@@ -3,7 +3,7 @@ package fsu.jportal.gson;
 public final class CategJsonPropName {
     public static String ID = "id";
     public static String LABELS = "labels";
-    public static String URI = "uri";
+    public static String URISTR = "uri";
     public static String HASCHILDREN = "children";
     public static String LANG = "lang";
     public static String TEXT = "text";

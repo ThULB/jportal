@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.Text;
+import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.access.strategies.MCRAccessCheckStrategy;
@@ -96,6 +99,11 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
+//            if(id == null || permission == null || id.equals("") || permission.equals("")){
+            if(id == null || permission == null ){
+                return false;
+            }
+            
             readDeriv = permission.equals("read-derivates");
             isValidID = isValidID(id);
             return readDeriv || !isValidID;
@@ -111,7 +119,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         }
 
         private boolean isValidID(String id) {
-            if (id.contains("_class_")) {
+            if (contains(id, "_class_")) {
                 return false;
             }
 
@@ -122,6 +130,14 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             } catch (MCRException e) {
                 return false;
             }
+        }
+
+        private boolean contains(String id, String str) {
+            if(id == null){
+                return false;
+            }
+            
+            return id.contains(str);
         }
 
     }
@@ -136,15 +152,21 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
+//            if(id == null || permission == null || id.equals("") || permission.equals("")){
+                if(id == null || permission == null){
+                return false;
+            }
+            
             return isValidID(id);
         }
 
         @Override
         protected boolean permissionStrategyFor(String id, String permission) {
+            MCRAccessCheckStrategy objTypeStrategy = config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_TYPE_STRATEGY);
             if (isJpID(id) || permission.equals("read")) {
-                return checkPermissionOfType(id, permission);
+                return objTypeStrategy.checkPermission(id, permission);
             } else {
-                return (checkPermissionOfTopObject(id, permission)) && (checkPermissionOfType(id, permission));
+                return (checkPermissionOfTopObject(id, permission)) && (objTypeStrategy.checkPermission(id, permission));
             }
         }
 
@@ -169,42 +191,40 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
                 MCRObjectID.getInstance(id);
                 return true;
             } catch (MCRException e) {
+                System.out.println("ValidIDStrategy exception");
                 return false;
             }
         }
 
-        public boolean checkPermissionOfType(String id, String permission) {
-            String objectType = getObjectType(id);
-
-            MCRAccessInterface aclSystem = config.getAccessInterface();
-            if (aclSystem.hasRule("default_" + objectType, permission)) {
-                return aclSystem.checkPermission("default_" + objectType, permission);
-            }
-            return aclSystem.checkPermission("default", permission);
-        }
-
-        private static String getObjectType(String id) {
-            Matcher m = TYPE_PATTERN.matcher(id);
-            if (m.find() && (m.groupCount() == 1)) {
-                return m.group(1);
-            }
-            return "";
-        }
-
         public boolean checkPermissionOfTopObject(String id, String permission) {
             boolean allowed = false;
+
             if (id != null && permission != null && !id.equals("") && !permission.equals("")) {
-                Document objXML = config.getXMLMetadataMgr().retrieveXML(MCRObjectID.getInstance(id));
-                final Element journalElem = objXML.getRootElement().getChild("metadata").getChild("hidden_jpjournalsID")
-                        .getChild("hidden_jpjournalID");
-                String journalID = "";
-                if (journalElem != null)
-                    journalID = journalElem.getText();
+                String journalID = getParentID(id);
+                
                 if (!journalID.equals("")) {
                     allowed = config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY).checkPermission(journalID, permission);
                 }
             }
             return allowed;
+        }
+
+        private String getParentID(String id) {
+            Document objXML = config.getXMLMetadataMgr().retrieveXML(MCRObjectID.getInstance(id));
+            try {
+                XPath pathToJournalID = XPath.newInstance("/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()");
+                Text idTextNode = (Text) pathToJournalID.selectSingleNode(objXML);
+                
+                if(idTextNode == null){
+                    return "";
+                }
+                
+                return idTextNode.getText();
+            } catch (JDOMException e) {
+                e.printStackTrace();
+            }
+            
+            return "";
         }
     }
 
