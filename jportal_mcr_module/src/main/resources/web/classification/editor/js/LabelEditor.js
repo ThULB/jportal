@@ -6,10 +6,10 @@ var classification = classification || {};
 /**
  * 
  */
-classification.CategoryEditor = function() {
+classification.LabelEditor = function() {
 	var instance = this;
 	this.domNode = dojo.create("div");
-	this.table = dojo.create("table");
+	this.table = dojo.create("table", {className: "labelEditorTable"});
 
 	this.disabled = false;
 	this.addRowButton = new dijit.form.Button({
@@ -29,17 +29,19 @@ classification.CategoryEditor = function() {
 	function create() {
 		this.domNode.appendChild(this.table);
 		// create table header
-		var tr = dojo.create("tr");
-		var langTH = dojo.create("th", {innerHTML: "Sprache"});
-		var textTH = dojo.create("th", {innerHTML: "Text"});
-		var descTH = dojo.create("th", {innerHTML: "Beschreibung"});
-		tr.appendChild(langTH);
-		tr.appendChild(textTH);
-		tr.appendChild(descTH);
-		this.table.appendChild(tr);
+		var tr = dojo.create("tr", {}, this.table);
+		dojo.create("td", {innerHTML: "Sprache"}, tr);
+		dojo.create("td", {innerHTML: "Text"}, tr);
+		dojo.create("td", {innerHTML: "Beschreibung"}, tr);
+		dojo.create("td", {}, tr);
 
 		// add add-button
-		this.domNode.appendChild(this.addRowButton.domNode);
+		tr = dojo.create("tr", {}, this.table);
+		dojo.create("td", {}, tr);
+		dojo.create("td", {}, tr);
+		dojo.create("td", {}, tr);
+		var addRowTD = dojo.create("td", {}, tr);
+		addRowTD.appendChild(this.addRowButton.domNode);
 
 		// add one row as default
 		this.addRow("de", "", "");
@@ -96,9 +98,9 @@ classification.CategoryEditor = function() {
 	function addRow(/*String*/ lang, /*String*/ text, /*String*/ desc) {
 		var removeable = this.rowList.length > 0;
 		this.updateLangSelect(lang);
-		var row = new classification.CategoryEditor.Row(lang, text, desc, removeable, this);
+		var row = new classification.LabelEditor.Row(lang, text, desc, removeable, this);
 		row.create();
-		dojo.place(row.domNode, this.table);
+		dojo.place(row.domNode, this.table, this.table.childNodes.length - 1);
 		this.rowList.push(row);
 		this.eventHandler.notify({"type" : "categoryAdded", "row": row});
 		return row;
@@ -153,26 +155,26 @@ classification.CategoryEditor = function() {
 		this.eventHandler.notify({"type" : "categoryChanged", "row": row, "editType" : editType, "value": value});
 	}
 
-	classification.CategoryEditor.prototype.create = create;
-	classification.CategoryEditor.prototype.addRow = addRow;
-	classification.CategoryEditor.prototype.removeRow = removeRow;
-	classification.CategoryEditor.prototype.update = update;
-	classification.CategoryEditor.prototype.getValues = getValues;
-	classification.CategoryEditor.prototype.reset = reset;
-	classification.CategoryEditor.prototype.setDisabled = setDisabled;
-	classification.CategoryEditor.prototype.categoryChanged = categoryChanged;
-	classification.CategoryEditor.prototype.updateLangSelect = updateLangSelect;
+	classification.LabelEditor.prototype.create = create;
+	classification.LabelEditor.prototype.addRow = addRow;
+	classification.LabelEditor.prototype.removeRow = removeRow;
+	classification.LabelEditor.prototype.update = update;
+	classification.LabelEditor.prototype.getValues = getValues;
+	classification.LabelEditor.prototype.reset = reset;
+	classification.LabelEditor.prototype.setDisabled = setDisabled;
+	classification.LabelEditor.prototype.categoryChanged = categoryChanged;
+	classification.LabelEditor.prototype.updateLangSelect = updateLangSelect;
 
 })();
 
-classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ text, /*String*/ desc, /*boolean*/ removeable,/*classification.CategoryEditor*/ categEditor) {
+classification.LabelEditor.Row = function Row(/*String*/ lang, /*String*/ text, /*String*/ desc, /*boolean*/ removeable,/*classification.LabelEditor*/ categEditor) {
 	this.domNode = dojo.create("tr");
 
 	this.lang = lang;
 	this.text = text;
 	this.desc = desc;
 	this.removeable = removeable;
-	this.categoryEditor = categEditor;
+	this.labelEditor = categEditor;
 	
 	this.langSelect = null;
 	this.textBox = null;
@@ -185,7 +187,7 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 	function create() {
 		this.langSelect = new dijit.form.Select({
 			onChange: dojo.hitch(this, function(/*String*/ newLang) {
-				this.categoryEditor.categoryChanged(this, "lang", newLang);
+				this.labelEditor.categoryChanged(this, "lang", newLang);
 			})
 		});
 		var im = SimpleI18nManager.getInstance();
@@ -199,7 +201,7 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 			value: this.text,
 			intermediateChanges: true,
 			onChange: dojo.hitch(this, function(/*String*/ newText) {
-				this.categoryEditor.categoryChanged(this, "text", newText);
+				this.labelEditor.categoryChanged(this, "text", newText);
 			})
 		});
 //		this.textBox.set("class", "i18nLang");
@@ -208,7 +210,7 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 			value: this.desc,
 			intermediateChanges: true,
 			onChange: dojo.hitch(this, function(/*String*/ newDesc) {
-				this.categoryEditor.categoryChanged(this, "description", newDesc);
+				this.labelEditor.categoryChanged(this, "description", newDesc);
 			})
 		});
 //		this.descBox.set("class", "i18nLabel");
@@ -225,7 +227,7 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 				iconClass: "icon12 removeIcon12",
 				showLabel: false,
 				onClick: dojo.hitch(this, function() {
-					this.categoryEditor.removeRow(instance);
+					this.labelEditor.removeRow(this);
 				})
 			});
 			var rmBtTD = dojo.create("td", {}, this.domNode);
@@ -257,8 +259,8 @@ classification.CategoryEditor.Row = function Row(/*String*/ lang, /*String*/ tex
 			this.removeButton.set("disabled", value);
 	}
 	
-	classification.CategoryEditor.Row.prototype.create = create;
-	classification.CategoryEditor.Row.prototype.update = update;
-	classification.CategoryEditor.Row.prototype.destroy = destroy;
-	classification.CategoryEditor.Row.prototype.setDisabled = setDisabled;
+	classification.LabelEditor.Row.prototype.create = create;
+	classification.LabelEditor.Row.prototype.update = update;
+	classification.LabelEditor.Row.prototype.destroy = destroy;
+	classification.LabelEditor.Row.prototype.setDisabled = setDisabled;
 })();

@@ -250,9 +250,10 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 			labels: [
 			    {lang: "de", text: "neuer Eintrag"}
 			],
-			children: false
+			children: false,
+			idEditable: true
 		}, parent);
-		this.eventHandler.notify({"type" : "itemAdded", "item": newItem});
+		this.eventHandler.notify({"type" : "itemAdded", "item": newItem, "parent": parent});
 	}
 
 	/**

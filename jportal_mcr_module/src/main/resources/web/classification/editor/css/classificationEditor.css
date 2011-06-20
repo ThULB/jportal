@@ -15,6 +15,30 @@
 	margin-top: 5px;
 }
 
+.categoryEditorMainTable {
+	padding: 5px;
+	width: 100%;
+}
+
+.categoryEditorDescription {
+	padding-top: 4px;
+	width: 70px;
+	vertical-align: top;
+	text-align: left;
+}
+
+.categoryEditorValue {
+	text-align: right;
+}
+
+.labelEditorTable {
+	text-align: center;
+	width: 100%;
+}
+
+.largeComponent {
+	width: 400px;
+}
 
 /*******************************************************
 * Icons
@@ -63,4 +87,10 @@
 }
 .category {
 	background-image: url(../images/category_22.png);
+}
+.saveIcon {
+	background-image: url(../images/save_16.png);
+}
+.saveDisabledIcon {
+	background-image: url(../images/saveDisabled_16.png);
 }

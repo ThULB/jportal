@@ -47,3 +47,17 @@ function deepEquals(a, b) {
 	}
 	return test(a, b);
 }
+
+function getClassificationId(/*String*/ id) {
+	var index = id.indexOf(".");
+	if(index == -1)
+		return id;
+	return id.substring(0, index);
+}
+
+function getCategoryId(/*String*/ id) {
+	var index = id.indexOf(".");
+	if(index == -1)
+		return "";
+	return id.substring(index + 1);
+}

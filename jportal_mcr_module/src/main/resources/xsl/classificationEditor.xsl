@@ -5,9 +5,10 @@
   <!-- use this to set a specific class - if this is empty, all classifications are loaded-->
   <!-- e.g. docportal_class_00000001 -->
   <xsl:param name="class" select="''"/>
-  <xsl:param name="CurrentLang" />
+  <xsl:param name="CurrentLang" select="'de'"/>
   <xsl:param name="WebApplicationBaseURL"/>
   <xsl:param name="returnUrl" select="$WebApplicationBaseURL"/>
+  <xsl:param name="showId" select="'false'" />
 
   <xsl:template match="classificationEditor">
 
@@ -25,6 +26,8 @@
       var jsPath = "<xsl:value-of select='$jsPath' />";
       var imagePath = "<xsl:value-of select='$imgPath' />";
       var returnUrl = "<xsl:value-of select='$returnUrl' />";
+      var showId = "<xsl:value-of select='$showId' />" === "true";
+      var currentLang = "<xsl:value-of select='$CurrentLang' />";
 
       djConfig = {
         isDebug: true,
@@ -45,7 +48,7 @@
     <script type="text/javascript" src="{$jsPath}/SimpleI18nManager.js"></script>
     <script type="text/javascript" src="{$jsPath}/EventHandler.js"></script>
     <script type="text/javascript" src="{$jsPath}/LazyLoadingTree.js"></script>
-    <script type="text/javascript" src="{$jsPath}/CategoryEditor.js"></script>
+    <script type="text/javascript" src="{$jsPath}/LabelEditor.js"></script>
     <script type="text/javascript" src="{$jsPath}/CategoryEditorPane.js"></script>
     <script type="text/javascript" src="{$jsPath}/TreePane.js"></script>
     <script type="text/javascript" src="{$jsPath}/Editor.js"></script>
@@ -60,7 +63,7 @@
         var supportedLanguages = ["de", "en", "pl"];
 
         var classEditor = new classification.Editor();
-        classEditor.create(resourcePath, supportedLanguages, "de");
+        classEditor.create(resourcePath, supportedLanguages, currentLang, showId);
         dijit.byId("classMainContainer").set('content', classEditor.domNode);
         classEditor.loadClassification(class);
       }
