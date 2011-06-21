@@ -69,7 +69,8 @@ classification.Editor = function() {
 			showLabel: false,
 			disabled: true,
 			iconClass: "icon16 saveDisabledIcon",
-			tooltip: "Änderungen speichern"
+			tooltip: "Änderungen speichern",
+			onClick: dojo.hitch(this, save)
 		});
 		this.navigationToolbar.addChild(this.saveButton);
 
@@ -99,24 +100,89 @@ classification.Editor = function() {
 			}
 		} else if(args.type == "itemsRemoved") {
 			this.categoryEditorPane.setDisabled(true);
+			this.updateToolbar(true);
 		} else if(args.type == "itemAdded") {
 			if(args.parent != null && args.parent.root != true) {
 				this.categoryEditorPane.update(args.parent);
 			}
+			this.updateToolbar(true);
 		}
 	}
 
 	function handleCategoryEditorEvents(/*CategoryEditorPane*/ source, /*JSON*/ args) {
+		console.log(args);
 		if(args.type == "labelChanged") {
 			this.treePane.tree.update(args.item, "labels", args.value);
+			this.updateToolbar(true);
 		} else if(args.type == "urlChanged") {
 			this.treePane.tree.update(args.item, "uri", args.value);
+			this.updateToolbar(true);
 		} else if(args.type == "idChanged") {
 			this.treePane.tree.update(args.item, "id", args.value);
+			this.updateToolbar(true);
 		}
+	}
+
+	function updateToolbar(/*boolean*/ dirty) {
+		if(dirty && this.saveButton.get("disabled")) {
+			this.saveButton.set("disabled", false);
+			this.saveButton.set("iconClass", "icon16 saveIcon");
+		}
+	}
+
+	function save() {
+		// get tree
+		var tree = this.treePane.tree;
+		// create arrays
+		var addedArray = [];
+		var modifiedArray = [];
+		var deletedArray = tree.deletedItemArray;
+		// go recursive through tree and get all added and modified items
+		if(tree.rootItem.isItem) {
+			fillArrays(addedArray, modifiedArray, tree.rootItem);
+		}
+		console.log(addedArray);
+		console.log(modifiedArray);
+		console.log(deletedArray);
+	}
+
+	function fillArrays(addedArray, modifiedArray, parent) {
+		dojo.forEach(parent.children, function(item, index) {
+			if(item.added) {
+				var cleanedItem = cloneAndCleanUp(item, true);
+				cleanedItem.parentId = parent.id[0];
+				cleanedItem.index = index;
+				addedArray.push(cleanedItem);
+			} else {
+				if(item.modified) {
+					var cleanedItem = cloneAndCleanUp(item, false);
+					modifiedArray.push(cleanedItem);
+				}
+				if(item.children && typeof(item.children[0]) != "boolean") {
+					// do recursive calls for children
+					fillArrays(addedArray, modifiedArray, item);
+				}
+			}
+		});
+	}
+
+	function cloneAndCleanUp(/*dojo.data.item*/ item, /*boolean*/ withChildren) {
+		var newItem = {
+			id: item.id[0],
+			labels: item.labels
+		};
+		if(withChildren && item.children && typeof(item.children[0]) != "boolean") {
+			newItem.children = [];
+			dojo.forEach(item.children, function(childItem) {
+				var newChildItem = cloneAndCleanUp(childItem, true);
+				newItem.children.push(newChildItem);
+			});
+		}
+		return newItem;
 	}
 
 	classification.Editor.prototype.create = create;
 	classification.Editor.prototype.loadClassification = loadClassification;
+	classification.Editor.prototype.updateToolbar = updateToolbar;
 
 })();
