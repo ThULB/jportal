@@ -10,14 +10,14 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
-import fsu.jportal.mocks.FakeCategoryDAO;
+import fsu.jportal.mocks.CategoryDAOMock;
 
 public class GsonSerializationTest {
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
         Properties mcrProperties = MCRConfiguration.instance().getProperties();
-        mcrProperties.setProperty("MCR.Category.DAO", FakeCategoryDAO.class.getName());
+        mcrProperties.setProperty("MCR.Category.DAO", CategoryDAOMock.class.getName());
     }
 
     protected MCRCategoryImpl createCateg(String rootID, String id2, String text) {

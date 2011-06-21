@@ -8,8 +8,13 @@ import static fsu.jportal.gson.CategJsonPropName.URISTR;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConfigurationException;
+import org.mycore.datamodel.classifications2.MCRCategLinkService;
+import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
@@ -28,12 +33,14 @@ import fsu.jportal.wrapper.MCRLabelSetWrapper;
 
 public class MCRCategoryJson {
     public static class Serializer implements JsonSerializer<MCRCategory> {
+        private MCRCategLinkService linkService;
+
         @Override
         public JsonElement serialize(MCRCategory category, Type arg1, JsonSerializationContext contextSerialization) {
             JsonObject rubricJsonObject = new JsonObject();
             MCRCategoryID id = category.getId();
             if (id != null) {
-                rubricJsonObject.addProperty(ID, MCRCategoryIDJson.serialize(id));
+                rubricJsonObject.add(ID, contextSerialization.serialize(id));
             }
 
             Set<MCRLabel> labels = category.getLabels();
@@ -45,13 +52,26 @@ public class MCRCategoryJson {
 
             if (category.hasChildren()) {
                 List<MCRCategory> children = category.getChildren();
-                rubricJsonObject.add(HASCHILDREN, contextSerialization.serialize(new MCRCategoryListWrapper(children)));
+                Map<MCRCategoryID, Boolean> linkMap = getLinkService().hasLinks(category);
+                rubricJsonObject.add(HASCHILDREN, contextSerialization.serialize(new MCRCategoryListWrapper(children, linkMap)));
             }
 
             return rubricJsonObject;
         }
+        
+        private MCRCategLinkService getLinkService() {
+            if (linkService == null) {
+                try {
+                    linkService = (MCRCategLinkService) MCRConfiguration.instance().getInstanceOf("Category.Link.Service");
+                } catch (MCRConfigurationException e) {
+                    linkService = MCRCategLinkServiceFactory.getInstance();
+                }
+            }
+            
+            return linkService;
+        }
     }
-
+    
     public static class Deserializer implements JsonDeserializer<MCRCategory> {
         @Override
         public MCRCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -60,8 +80,7 @@ public class MCRCategoryJson {
             MCRCategoryID id = null;
             JsonElement idJsonElement = categJsonObject.get(ID);
             if (idJsonElement != null) {
-                String idStr = idJsonElement.getAsString();
-                id = MCRCategoryIDJson.deserialize(idStr);
+                id = context.deserialize(idJsonElement, MCRCategoryID.class);
             }
             
             MCRLabelSetWrapper labelSetWrapper = context.deserialize(categJsonObject.get(LABELS), MCRLabelSetWrapper.class);

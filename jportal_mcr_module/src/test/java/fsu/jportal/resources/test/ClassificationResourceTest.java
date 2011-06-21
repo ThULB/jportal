@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.net.URI;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
-import org.mycore.datamodel.common.MCRLinkTableInterface;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 
@@ -38,7 +36,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import fsu.jportal.gson.CategJsonPropName;
 import fsu.jportal.gson.GsonManager;
 import fsu.jportal.gson.MCRCategoryIDJson;
-import fsu.jportal.mocks.FakeCategoryDAO;
+import fsu.jportal.mocks.CategoryDAOMock;
+import fsu.jportal.mocks.CategoryLinkServiceMock;
+import fsu.jportal.mocks.LinkTableStoreMock;
 import fsu.jportal.resources.ClassificationResource;
 import fsu.jportal.utils.MCRCategUtils;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
@@ -46,40 +46,8 @@ import fsu.testcase.JerseyResourceTestCase;
 
 
 public class ClassificationResourceTest extends JerseyResourceTestCase{
-    private FakeCategoryDAO categDAO;
+    private CategoryDAOMock categDAO;
 
-    public static class FakeLinkTable implements MCRLinkTableInterface{
-
-        @Override
-        public void create(String from, String to, String type, String attr) {
-            
-        }
-
-        @Override
-        public void delete(String from, String to, String type) {
-            
-        }
-
-        @Override
-        public int countTo(String fromtype, String to, String type, String restriction) {
-            return 0;
-        }
-
-        @Override
-        public Map<String, Number> getCountedMapOfMCRTO(String mcrtoPrefix) {
-            return new HashMap<String, Number>();
-        }
-
-        @Override
-        public Collection<String> getSourcesOf(String to, String type) {
-            return new ArrayList<String>();
-        }
-
-        @Override
-        public Collection<String> getDestinationsOf(String from, String type) {
-            return new ArrayList<String>();
-        }}
-    
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
@@ -92,9 +60,10 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         mcrProperties.setProperty("MCR.IFS2.Store.jportal_jpclassi.SlotLayout", "4-2-2");
         mcrProperties.setProperty("MCR.IFS2.Store.jportal_jpclassi.SVNRepositoryURL", "ram:///tmp");
         mcrProperties.setProperty("MCR.EventHandler.MCRObject.2.Class", "org.mycore.datamodel.common.MCRXMLMetadataEventHandler");
-        mcrProperties.setProperty("MCR.Persistence.LinkTable.Store.Class", FakeLinkTable.class.getName());
-        mcrProperties.setProperty("MCR.Category.DAO", FakeCategoryDAO.class.getName());
+        mcrProperties.setProperty("MCR.Persistence.LinkTable.Store.Class", LinkTableStoreMock.class.getName());
+        mcrProperties.setProperty("MCR.Category.DAO", CategoryDAOMock.class.getName());
         mcrProperties.setProperty("ClassificationResouce.useSession", "false");
+        mcrProperties.setProperty("Category.Link.Service", CategoryLinkServiceMock.class.getName());
         
         try {
             MCRStoreManager.createStore("jportal_jpclassi", MCRMetadataStore.class);
@@ -106,7 +75,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
             e.printStackTrace();
         }
         
-        categDAO = (FakeCategoryDAO) MCRCategoryDAOFactory.getInstance();
+        categDAO = (CategoryDAOMock) MCRCategoryDAOFactory.getInstance();
         categDAO.init();
     }
     
@@ -122,6 +91,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         String categoryJsonStr = jsonResponse.getEntity(String.class);
         MCRCategoryListWrapper categListWrapper = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryListWrapper.class);
         List<MCRCategory> categList = categListWrapper.getList();
+        
         assertEquals("Wrong number of root categories.", 2, categList.size());
     }
     
@@ -132,7 +102,13 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         
         for (MCRCategory mcrCategory : categs) {
             MCRCategoryID id = mcrCategory.getId();
-            ClientResponse jsonResponse = resource().path("/classifications/" + MCRCategoryIDJson.serialize(id)).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+            String path = id.getRootID();
+            String categID = id.getID();
+            if(categID != null && !"".equals(categID)){
+                path = path +"/" + categID;
+            }
+            
+            ClientResponse jsonResponse = resource().path("/classifications/" + path).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
             String categoryJsonStr = jsonResponse.getEntity(String.class);
             MCRCategoryImpl retrievedCateg = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryImpl.class);
             String errorMsg = MessageFormat.format("We want to retrieve the category {0} but it was {1}", id, retrievedCateg.getId());

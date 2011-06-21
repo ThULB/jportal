@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -22,9 +23,12 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.classifications2.MCRCategLinkService;
+import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
@@ -67,6 +71,8 @@ public class ClassificationResource {
     @Context
     UriInfo uriInfo;
 
+    private MCRCategLinkService linkService;
+
     @POST
     @Path("new")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -92,16 +98,16 @@ public class ClassificationResource {
         openSession();
 
         MCRCategoryID parentID = MCRCategoryIDJson.deserialize(parentIdStr);
-        if(!getCategoryDAO().exist(parentID)){
+        if (!getCategoryDAO().exist(parentID)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-        
+
         Gson gson = GsonManager.instance().createGson();
         MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
 
         MCRCategoryID categoryID = newID(parentID.getRootID());
         category.setId(categoryID);
-        
+
         getCategoryDAO().addCategory(parentID, category);
         URI uri = buildGetURI(categoryID);
         closeSession();
@@ -118,11 +124,11 @@ public class ClassificationResource {
     private MCRCategoryID newID(String rootID) {
         return new MCRCategoryID(rootID, UUID.randomUUID().toString());
     }
-    
+
     @GET
     @Path("newID")
     @Produces(MediaType.TEXT_PLAIN)
-    public String newRootIDJson(){
+    public String newRootIDJson() {
         return MCRCategoryIDJson.serialize(newRootID());
     }
 
@@ -133,7 +139,12 @@ public class ClassificationResource {
     private URI buildGetURI(MCRCategoryID categoryID) {
         UriBuilder uriBuilder = UriBuilder.fromUri(uriInfo.getBaseUri());
         uriBuilder.path(this.getClass());
-        uriBuilder.path(MCRCategoryIDJson.serialize(categoryID));
+        uriBuilder.path(categoryID.getRootID());
+        String categID = categoryID.getID();
+        if(categID != null && !"".equals(categID)) {
+            uriBuilder.path(categID);
+        }
+        
         return uriBuilder.build();
     }
 
@@ -160,23 +171,39 @@ public class ClassificationResource {
     }
 
     /**
-     * @param idStr rootID.categID
+     * @param rootidStr rootID.categID
      * @return
      */
     @GET
-    @Path("{idStr}")
+    @Path("{rootidStr}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String get(@PathParam("idStr") String idStr) {
-        openSession();
-        String[] splittedID = idStr.split("\\.");
-
-        String rootID = splittedID[0];
-        String categID = null;
-        if (splittedID.length > 1) {
-            categID = splittedID[1];
+    public String get(@PathParam("rootidStr") String rootidStr) {
+        if (rootidStr == null || "".equals(rootidStr)) {
+            throw new WebApplicationException(Status.NOT_FOUND);
         }
 
-        MCRCategoryID id = toMCRCategID(rootID, categID);
+        MCRCategoryID id = MCRCategoryID.rootID(rootidStr);
+        return getCategory(id);
+    }
+    
+    /**
+     * @param rootidStr rootID.categID
+     * @return
+     */
+    @GET
+    @Path("{rootidStr}/{categidStr}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String get(@PathParam("rootidStr") String rootidStr,@PathParam("categidStr") String categidStr) {
+        
+        if (rootidStr == null || "".equals(rootidStr) || categidStr == null || "".equals(categidStr)) {
+            throw new WebApplicationException(Status.NOT_FOUND);
+        }
+        
+        MCRCategoryID id = new MCRCategoryID(rootidStr, categidStr);
+        return getCategory(id);
+    }
+
+    private String getCategory(MCRCategoryID id) {
         if (!getCategoryDAO().exist(id)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
@@ -193,7 +220,20 @@ public class ClassificationResource {
         openSession();
         Gson gson = GsonManager.instance().createGson();
         List<MCRCategory> rootCategories = getCategoryDAO().getRootCategories();
-        return gson.toJson(new MCRCategoryListWrapper(rootCategories));
+        Map<MCRCategoryID, Boolean> linkMap = getLinkService().hasLinks(null);
+        return gson.toJson(new MCRCategoryListWrapper(rootCategories, linkMap));
+    }
+
+    private MCRCategLinkService getLinkService() {
+        if (linkService == null) {
+            try {
+                linkService = (MCRCategLinkService) MCRConfiguration.instance().getInstanceOf("Category.Link.Service");
+            } catch (MCRConfigurationException e) {
+                linkService = MCRCategLinkServiceFactory.getInstance();
+            }
+        }
+        
+        return linkService;
     }
 
     private MCRCategoryID toMCRCategID(String rootID, String categID) {

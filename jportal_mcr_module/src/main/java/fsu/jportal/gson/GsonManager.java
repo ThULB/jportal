@@ -1,5 +1,6 @@
 package fsu.jportal.gson;
 
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
 import com.google.gson.Gson;
@@ -21,6 +22,8 @@ public class GsonManager {
         gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListJson.Deserializer());
         gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetJson.Serializer());
         gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetJson.Deserializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryID.class, new MCRCategoryIDJson.Serializer());
+        gsonBuilder.registerTypeAdapter(MCRCategoryID.class, new MCRCategoryIDJson.Deserializer());
     }
     
     public static GsonManager instance(){

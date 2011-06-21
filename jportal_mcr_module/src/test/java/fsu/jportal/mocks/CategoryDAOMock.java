@@ -13,7 +13,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
-public class FakeCategoryDAO implements MCRCategoryDAO {
+public class CategoryDAOMock implements MCRCategoryDAO {
     HashMap<MCRCategoryID, MCRCategory> categMap = null;
     HashMap<MCRCategoryID, MCRCategory> rootCategMap = null;
 

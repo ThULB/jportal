@@ -1,6 +1,7 @@
 package fsu.jportal.gson;
 
 import static fsu.jportal.gson.CategJsonPropName.HASCHILDREN;
+import static fsu.jportal.gson.CategJsonPropName.HASLINK;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
 import static fsu.jportal.gson.CategJsonPropName.ID;
 import static fsu.jportal.gson.CategJsonPropName.URISTR;
@@ -9,9 +10,11 @@ import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
@@ -34,22 +37,29 @@ public class MCRCategoryListJson {
         @Override
         public JsonElement serialize(MCRCategoryListWrapper categListWrapper, Type arg1, JsonSerializationContext arg2) {
             this.contextSerializer = arg2;
-            return categListToJsonArray(categListWrapper.getList());
+            Map<MCRCategoryID, Boolean> linkMap = categListWrapper.getLinkMap();
+            
+            if(linkMap == null){
+                throw new RuntimeException("For serializing link map must not be null.");
+            }
+            
+            return categListToJsonArray(categListWrapper.getList(), linkMap);
         }
         
-        private JsonElement categListToJsonArray(List<MCRCategory> categList) {
+        private JsonElement categListToJsonArray(List<MCRCategory> categList, Map<MCRCategoryID, Boolean> linkMap) {
             JsonArray categJsonArray = new JsonArray();
             for (MCRCategory categ : categList) {
-                JsonElement element = createCategRefJSONObj(categ);
+                Boolean hasLink = linkMap.get(categ.getId());
+                JsonElement element = createCategRefJSONObj(categ, hasLink);
                 categJsonArray.add(element);
             }
             
             return categJsonArray;
         }
         
-        private JsonElement createCategRefJSONObj(MCRCategory categ) {
+        private JsonElement createCategRefJSONObj(MCRCategory categ, Boolean hasLink) {
             JsonObject categRefJsonObject = new JsonObject();
-            categRefJsonObject.addProperty(ID, MCRCategoryIDJson.serialize(categ.getId()));
+            categRefJsonObject.add(ID, contextSerializer.serialize(categ.getId()));
             Set<MCRLabel> labels = categ.getLabels();
             categRefJsonObject.add(LABELS, contextSerializer.serialize(new MCRLabelSetWrapper(labels)));
             URI uri = categ.getURI();
@@ -58,6 +68,7 @@ public class MCRCategoryListJson {
             }
             
             categRefJsonObject.addProperty(HASCHILDREN, categ.hasChildren());
+            categRefJsonObject.addProperty(HASLINK, hasLink);
             
             return categRefJsonObject;
         }
@@ -73,7 +84,14 @@ public class MCRCategoryListJson {
             for (JsonElement categRef : json.getAsJsonArray()) {
                 JsonObject categRefJsonObject = categRef.getAsJsonObject();
                 MCRCategoryImpl categ = new MCRCategoryImpl();
-                categ.setId(MCRCategoryIDJson.deserialize(categRefJsonObject.get(ID).getAsString()));
+                
+                MCRCategoryID id = null;
+                JsonElement idJsonElement = categRefJsonObject.get(ID);
+                if (idJsonElement != null) {
+                    id = context.deserialize(idJsonElement, MCRCategoryID.class);
+                    categ.setId(id);
+                }
+                
                 MCRLabelSetWrapper labelsWrapper = context.deserialize(categRefJsonObject.get(LABELS), MCRLabelSetWrapper.class);
                 categ.setLabels(labelsWrapper.getSet());
                 categList.add(categ);
