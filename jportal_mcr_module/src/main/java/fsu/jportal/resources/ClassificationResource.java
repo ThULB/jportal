@@ -204,14 +204,16 @@ public class ClassificationResource {
     }
 
     private String getCategory(MCRCategoryID id) {
+        openSession();
         if (!getCategoryDAO().exist(id)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
 
         MCRCategory category = getCategoryDAO().getCategory(id, 1);
         Gson gson = GsonManager.instance().createGson();
+        String json = gson.toJson(category);
         closeSession();
-        return gson.toJson(category);
+        return json;
     }
 
     @GET
@@ -221,7 +223,9 @@ public class ClassificationResource {
         Gson gson = GsonManager.instance().createGson();
         List<MCRCategory> rootCategories = getCategoryDAO().getRootCategories();
         Map<MCRCategoryID, Boolean> linkMap = getLinkService().hasLinks(null);
-        return gson.toJson(new MCRCategoryListWrapper(rootCategories, linkMap));
+        String json = gson.toJson(new MCRCategoryListWrapper(rootCategories, linkMap));
+        closeSession();
+        return json;
     }
 
     private MCRCategLinkService getLinkService() {
