@@ -85,25 +85,24 @@ classification.CategoryEditorPane = function() {
 
 	function update(/*dojo.data.item*/ treeItem) {
 		this.currentItem = treeItem;
+		// label editor
 		this.labelEditor.update(this.currentItem.labels);
+		// url editor
 		this.urlEditor.set("value", this.currentItem.uri != undefined ? this.currentItem.uri : null);
+		// id editors
 		if(this.classIdEditor != null && this.categIdEditor != null) {
 			// get id
-			var id = this.currentItem.id[0];
-			var classId = getClassificationId(id);
-			var categId = getCategoryId(id);
+			var classId = getClassificationId(this.currentItem);
+			var categId = getCategoryId(this.currentItem);
 			// set classification and category id
 			this.classIdEditor.set("value", classId);
 			this.categIdEditor.set("value", categId);
 			// set editable
-			var idEditable = this.currentItem.idEditable;
-			var isClassification = categId == "";
-			var hasChildren = false;
-			if(isClassification && this.currentItem.children) {
-				hasChildren = this.currentItem.children[0] != false
-			}
-			this.classIdEditor.set("disabled", this.disabled || !(idEditable && isClassification && !hasChildren));
-			this.categIdEditor.set("disabled", this.disabled || !(idEditable && !isClassification));
+			var isClass = isClassification(this.currentItem);
+			var hasChilds = hasChildren(this.currentItem);
+			var idEditable = this.currentItem.added;
+			this.classIdEditor.set("disabled", this.disabled || !(idEditable && isClass && !hasChilds));
+			this.categIdEditor.set("disabled", this.disabled || !(idEditable && !isClass));
 		}
 	}
 
@@ -123,26 +122,37 @@ classification.CategoryEditorPane = function() {
 	}
 
 	function handleURLChanged(/*String*/ newURL) {
-		if(newURL != this.currentItem.uri) {
+		if((newURL == null || newURL == "") && !this.currentItem.uri) {
+			return;
+		}
+		if(!this.currentItem.uri || newURL != this.currentItem.uri[0]) {
 			this.eventHandler.notify({"type" : "urlChanged", "item": this.currentItem, "value": newURL});
 		}
 	}
+
 	function handleIdChanged() {
-		// get id from editors
-		var classId = this.classIdEditor.get("value");
-		var categId = this.categIdEditor.get("value");
-		var newId = classId + "." + categId;
-		// check is valid
-		var isClassification = getCategoryId(this.currentItem.id[0]) == "";
-		if(!this.classIdEditor.isValid() || (!isClassification && !this.categIdEditor.isValid())) {
+		var newClassId = this.classIdEditor.get("value");
+		var newCategId = this.categIdEditor.get("value");
+		var isClass = isClassification(this.currentItem);
+		// check if editors are valid
+		if(!this.classIdEditor.isValid() || (!isClass && !this.categIdEditor.isValid())) {
 			return;
 		}
-		// check if new and fire event
-		if(this.currentItem.id != newId) {
-			this.eventHandler.notify({"type" : "idChanged", "item": this.currentItem, "value": newId});
+		// check if something has changed
+		var classId = getClassificationId(this.currentItem);
+		var categId = getCategoryId(this.currentItem);
+		if(classId != newClassId || categId != newCategId) {
+			this.eventHandler.notify({
+				"type" : "idChanged",
+				"item": this.currentItem,
+				"value": {
+					rootid: newClassId,
+					categid: newCategId
+				}
+			});
 		}
 	}
-	
+
 	function setDisabled(/*boolean*/ value) {
 		this.disabled = value;
 		this.labelEditor.setDisabled(value);

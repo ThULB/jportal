@@ -5,6 +5,7 @@
   <!-- use this to set a specific class - if this is empty, all classifications are loaded-->
   <!-- e.g. docportal_class_00000001 -->
   <xsl:param name="class" select="''"/>
+  <xsl:param name="categ" select="''"/>
   <xsl:param name="CurrentLang" select="'de'"/>
   <xsl:param name="WebApplicationBaseURL"/>
   <xsl:param name="returnUrl" select="$WebApplicationBaseURL"/>
@@ -22,6 +23,7 @@
       var webApplicationBaseURL = "<xsl:value-of select='$WebApplicationBaseURL' />";
       var resourcePath = "<xsl:value-of select='$resourcePath' />"
       var class = "<xsl:value-of select='$class' />";
+      var categ = "<xsl:value-of select='$categ' />";
       var webPath = "<xsl:value-of select='$webPath' />";
       var jsPath = "<xsl:value-of select='$jsPath' />";
       var imagePath = "<xsl:value-of select='$imgPath' />";
@@ -65,7 +67,7 @@
         var classEditor = new classification.Editor();
         classEditor.create(resourcePath, supportedLanguages, currentLang, showId);
         dijit.byId("classMainContainer").set('content', classEditor.domNode);
-        classEditor.loadClassification(class);
+        classEditor.loadClassification(class, categ);
       }
 
       dojo.ready(setup);

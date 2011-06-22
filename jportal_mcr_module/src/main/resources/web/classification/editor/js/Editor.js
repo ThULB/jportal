@@ -12,8 +12,9 @@ classification.Editor = function() {
 
 	// class base url
 	this.resourcePath = resourcePath;
-	// current loaded classification
-	this.classificationID = null;
+	// classification & category
+	this.classificationId = null;
+	this.categoryId = null;
 
 	// toolbar
 	this.toolbar = null;
@@ -81,11 +82,12 @@ classification.Editor = function() {
 
 	/**
 	 * Loads a new classification - if this string is empty, all
-	 * classifications are loaded
+	 * classifications are loaded.
 	 */
-	function loadClassification(/*String*/ classificationID) {
-		this.classificationID = classificationID;
-		this.treePane.loadClassification(classificationID);
+	function loadClassification(/*String*/ classificationId, /*String*/ categoryId) {
+		this.classificationId = classificationId;
+		this.categoryId = categoryId;
+		this.treePane.loadClassification(classificationId, categoryId);
 	}
 
 	function handleTreeEvents(/*LazyLoadingTree*/ source, /*JSON*/ args) {
@@ -158,7 +160,7 @@ classification.Editor = function() {
 					var cleanedItem = cloneAndCleanUp(item, false);
 					modifiedArray.push(cleanedItem);
 				}
-				if(item.children && typeof(item.children[0]) != "boolean") {
+				if(hasChildrenLoaded(item)) {
 					// do recursive calls for children
 					fillArrays(addedArray, modifiedArray, item);
 				}
@@ -171,7 +173,7 @@ classification.Editor = function() {
 			id: item.id[0],
 			labels: item.labels
 		};
-		if(withChildren && item.children && typeof(item.children[0]) != "boolean") {
+		if(withChildren && hasChildrenLoaded(item)) {
 			newItem.children = [];
 			dojo.forEach(item.children, function(childItem) {
 				var newChildItem = cloneAndCleanUp(childItem, true);

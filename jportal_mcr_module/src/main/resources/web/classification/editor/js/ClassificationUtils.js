@@ -48,16 +48,25 @@ function deepEquals(a, b) {
 	return test(a, b);
 }
 
-function getClassificationId(/*String*/ id) {
-	var index = id.indexOf(".");
-	if(index == -1)
-		return id;
-	return id.substring(0, index);
+function isClassification(/*dojo.data.item*/ item) {
+	var id = item.id[0];
+	return id.categid == null || id.categid == "";
 }
 
-function getCategoryId(/*String*/ id) {
-	var index = id.indexOf(".");
-	if(index == -1)
-		return "";
-	return id.substring(index + 1);
+function getClassificationId(/*dojo.data.item*/ item) {
+	var id = item.id[0];
+	return id.rootid != undefined ? id.rootid : "";
+}
+
+function getCategoryId(/*dojo.data.item*/ item) {
+	var id = item.id[0];
+	return id.categid != undefined ? id.categid : "";
+}
+
+function hasChildren(/*dojo.data.item*/ item) {
+	return item.children && item.children[0] != false;
+}
+
+function hasChildrenLoaded(/*dojo.data.item*/ item) {
+	return hasChildren(item) && typeof(item.children[0]) != "boolean";
 }

@@ -19,17 +19,26 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 
 	// url
 	this.classBaseURL = classBaseURL;
-	// id - current loaded classification
-	this.classificationID = null;
+	// id - current loaded classification & category
+	this.classificationId = null;
+	this.categoryId = null;
+
+	// deleted items
+	this.deletedItemArray = [];
 };
 
 ( function() {
 
-	function create(/*String*/ classificationID) {
-		this.classificationID = classificationID;
+	function create(/*String*/ classificationId, /*String*/ categoryId) {
+		this.classificationId = classificationId;
+		this.categoryId = categoryId;
+		var url = this.classBaseURL + this.classificationId;
+		if(categoryId != null && categoryId != "") {
+			url += "/" + categoryId;
+		}
 
 		var xhrArgs = {
-			url :  this.classBaseURL + this.classificationID,
+			url :  url,
 			handleAs : "json",
 			load : dojo.hitch(this, function(items) {
 				var createTreeFunc = dojo.hitch(this, createTree);
@@ -55,20 +64,16 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 				isItem: false
 			}
 		} else {
-			// single classification/category
-			if(!items.children) {
-				// if a category is loaded without children
-				this.rootItem = items;
-				this.rootItem.isItem = true;
-				this.rootItem.root = true;
-//				items = [items];
-//				showRoot = false;
-			} else {
+			this.rootItem = items;
+			this.rootItem.id = [items.id];
+			this.rootItem.isItem = true;
+			this.rootItem.root = true;
+			if(items.children) {
 				// single classification/category with children
-				this.rootItem = items;
-				this.rootItem.isItem = true;
-				this.rootItem.root = true;
 				items = items.children;
+			} else {
+				// single classification/category without children
+				items = [];
 			}
 		}
 
@@ -81,13 +86,9 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		this.treeModel = new dijit.tree.ForestStoreModel({
 			store: this.store,
 			deferItemLoadingUntilExpand: false,
-			mayHaveChildren: function(item) {
-				if(item.children)
-					if(item.children[0] == false)
-						return false;
-				return true;
-			}
+			mayHaveChildren: hasChildren
 		});
+
 		this.tree = new dijit.Tree({
 			model: this.treeModel,
 //			dndController: "dijit.tree.dndSource",
@@ -109,6 +110,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 				};
 			}
 		});
+
 		dojo.connect(this.tree, "focusNode", this, itemFocused);
 		this.eventHandler.notify({"type" : "treeCreated"});
 	}
@@ -133,14 +135,21 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	}
 
 	function getIconClass(/* TreeItem */ treeItem) {
+		// TODO
 		// root
-		if(treeItem.root)
-			return "icon24 classifications";
+		if(treeItem.root) {
+			return "icon22 root";
+		}
 		// klassifikation (ends with a point)
-		if(treeItem.id && treeItem.id[0].match(".$") == ".") 
-			return "icon24 classification"; 
-		// category
-		return "icon24 category";
+		if(isClassification(treeItem)) { 
+			return "icon22 classification";
+		} else {
+			if(hasChildren(treeItem)) {
+				return "icon22 category"
+			} else {
+				return "icon22 category2";
+			}
+		}
 	}
 	function checkItemAcceptance() {
 		// TODO
@@ -159,13 +168,19 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		this.eventHandler.notify({"type" : "itemSelected", "item": treeItem});
 	}
 
+	/**
+	 * Updates the attribute of item with value. The modified flag is also
+	 * set. 
+	 */
 	function update(/*dojo.data.item*/ item, /*String*/ attribute, /*Object*/ value) {
 		if(item.root) {
 			this.rootItem = item;
 			this.rootItem[attribute] = value;
+			this.rootItem["modified"] = true;
 			// TODO: update label of root node
 		} else {
 			this.store.setValue(item, attribute, value);
+			this.store.setValue(item, "modified", true);
 		}
 	}
 
@@ -183,17 +198,16 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		var rootId = "";
 		if(selectedItem.root) {
 			if(this.rootItem && this.rootItem.isItem) {
-				rootId = getClassificationId(this.rootItem.id);
+				rootId = getClassificationId(this.rootItem);
 			}
 		} else {
-			var ref = selectedItem.id[0];
-			rootId = getClassificationId(ref);
+			rootId = getClassificationId(selectedItem);
 		}
 		var rootIdRequestPath = rootId.length > 0 ? "/" + rootId : "";
 		// get new category id
 		var xhrArgs = {
 			url :  this.classBaseURL + "newID" + rootIdRequestPath,
-			handleAs : "text",
+			handleAs : "json",
 			load : dojo.hitch(this, function(newId) {
 				var newItemFunc = dojo.hitch(this, newItem);
 				newItemFunc(selectedItem, newId);
@@ -210,8 +224,8 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	 */
 	function removeSelected() {
 		var selectedTreeItems = this.getSelectedItems();
-		// add only items which are not a descendant of another selected
-		// its important to avoid side effects
+		// remove only items which are not a descendant of another selected
+		// this is important to avoid side effects
 		var itemsToRemoveArray = [];
 		for(var i = 0; i < selectedTreeItems.length; i++) {
 			var descendant = false;
@@ -233,26 +247,24 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		this.eventHandler.notify({"type" : "itemsRemoved", "items": itemsToRemoveArray});
 	}
 
-	function getClassificationId(/*String*/ id) {
-		var i = id.indexOf(".");
-		if(i == -1) {
-			return id;
-		}
-		return id.substring(0, i);
-	}
-
-	function newItem(/*dojo.data.item*/ parent, /*String*/ newId) {
+	function newItem(/*dojo.data.item*/ parent, /*JSON*/ newId) {
 		if(parent.children && parent.children[0] == false) {
 			delete(parent.children);
 		}
-		var newItem = this.treeModel.newItem({
+		var newItem = {
 			id: newId,
 			labels: [
 			    {lang: "de", text: "neuer Eintrag"}
 			],
 			children: false,
-			idEditable: true
-		}, parent);
+			added: true	
+		};
+		if(parent.root) {
+			newItem = this.store.newItem(newItem);
+		} else {
+			newItem = this.store.newItem(newItem, {parent: parent, attribute: "children"});
+		}
+		this.store.save();
 		this.eventHandler.notify({"type" : "itemAdded", "item": newItem, "parent": parent});
 	}
 
@@ -263,11 +275,18 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	function removeTreeItem(/* dojo.data.item */ item) {
 		// delete children
 		var removeTreeItemFunc = dojo.hitch(this, removeTreeItem);
-		while(item.children && (typeof item.children[0]) != "boolean") {
+		while(hasChildrenLoaded(item)) {
 			removeTreeItemFunc(item.children[0]);
 		}
 		// delete tree item
 		this.store.deleteItem(item);
+		// add item.id to deleteItemArray - use dojo.filter for unique list
+		var itemId = item.id[0];
+		this.deletedItemArray = dojo.filter(this.deletedItemArray, function(idInList) {
+			return idInList.rootid != itemId.rootid || idInList.categid != itemId.categid;
+		});
+		this.deletedItemArray.push(itemId);
+		// FIRE!!!!!
 		this.eventHandler.notify({"type" : "itemRemoved", "item": item});
 	}
 

@@ -35,8 +35,8 @@ classification.TreePane = function() {
 		createDomFunc();
 	}
 
-	function loadClassification(/*String*/ classificationID) {
-		this.tree.create(classificationID);
+	function loadClassification(/*String*/ classificationId, /*String*/ categoryId) {
+		this.tree.create(classificationId, categoryId);
 	}
 
 	function handleTreeEvents(/*LazyLoadingTree*/ source, /*JSON*/ args) {
@@ -121,7 +121,7 @@ classification.TreePane = function() {
 		var selectedItems = this.tree.getSelectedItems();
 		var deleteVisable = selectedItems.length > 0;
 		for(var i = 0; i < selectedItems.length; i++) {
-			if(selectedItems[i].root) {
+			if(selectedItems[i].root || (selectedItems[i].haslink && selectedItems[i].haslink[0] == true)) {
 				deleteVisable = false;
 				break;
 			}
