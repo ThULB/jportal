@@ -134,7 +134,11 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         MCRCategory category = categDAO.getCategory(id, 1);
         int childNum = category.getChildren().size();
         
-        String idStr = MCRCategoryIDJson.serialize(id);
+        String idStr = id.getRootID();
+        if(!id.isRootID()){
+            idStr = idStr + "/" + id.getID();
+        }
+        
         ClientResponse response = resource().path("/classifications/" + idStr + "/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr());
         assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
         assertEquals(childNum++, categDAO.getCategory(id, 1).getChildren().size());

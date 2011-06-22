@@ -207,4 +207,19 @@ public class AccessStrategyTest {
         rootElement.addContent(metadata);
         return new Document(rootElement);
     }
+    
+    @Test
+    public void isInEditorsgroup() throws Exception {
+        String id = JOURNALID;
+        String permission = "writedb";
+        
+        MCRUserInformation editGroupUser = createMock("editGroupUser", MCRUserInformation.class);
+        expect(editGroupUser.getCurrentUserID()).andReturn("user");
+        expect(editGroupUser.isUserInRole("editorsgroup")).andReturn(true);
+        replay(editGroupUser);
+        
+        MCRSessionMgr.getCurrentSession().setUserInformation(editGroupUser);
+        assertTrue("Editors should has access", accessStrategy.checkPermission(id, permission));
+        verify(editGroupUser);
+    }
 }

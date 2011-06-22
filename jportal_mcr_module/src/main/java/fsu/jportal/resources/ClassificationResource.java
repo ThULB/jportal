@@ -92,12 +92,25 @@ public class ClassificationResource {
     }
 
     @POST
-    @Path("{parentIdStr}/new")
+    @Path("{rootIdStr}/new")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newCategory(@PathParam("parentIdStr") String parentIdStr, String json) {
-        openSession();
+    public Response newCategory(@PathParam("rootIdStr") String rootIdStr, String json) {
 
-        MCRCategoryID parentID = MCRCategoryIDJson.deserialize(parentIdStr);
+        MCRCategoryID parentID = MCRCategoryID.rootID(rootIdStr);
+        return createCategory(json, parentID);
+    }
+    
+    @POST
+    @Path("{rootIdStr}/{parentIdStr}/new")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response newCategory(@PathParam("rootIdStr") String rootIdStr, @PathParam("parentIdStr") String parentIdStr, String json) {
+        
+        MCRCategoryID parentID = new MCRCategoryID(rootIdStr, parentIdStr);
+        return createCategory(json, parentID);
+    }
+
+    private Response createCategory(String json, MCRCategoryID parentID) {
+        openSession();
         if (!getCategoryDAO().exist(parentID)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
@@ -109,16 +122,18 @@ public class ClassificationResource {
         category.setId(categoryID);
 
         getCategoryDAO().addCategory(parentID, category);
-        URI uri = buildGetURI(categoryID);
         closeSession();
+        
+        URI uri = buildGetURI(categoryID);
         return Response.created(uri).build();
     }
 
     @GET
     @Path("newID/{rootID}")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String newIDJson(@PathParam("rootID") String rootID) {
-        return MCRCategoryIDJson.serialize(newID(rootID));
+        Gson gson = GsonManager.instance().createGson();
+        return gson.toJson(newID(rootID));
     }
 
     private MCRCategoryID newID(String rootID) {
@@ -127,9 +142,10 @@ public class ClassificationResource {
 
     @GET
     @Path("newID")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     public String newRootIDJson() {
-        return MCRCategoryIDJson.serialize(newRootID());
+        Gson gson = GsonManager.instance().createGson();
+        return gson.toJson(newRootID());
     }
 
     private MCRCategoryID newRootID() {
