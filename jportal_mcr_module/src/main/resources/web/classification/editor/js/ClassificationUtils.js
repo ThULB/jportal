@@ -70,3 +70,7 @@ function hasChildren(/*dojo.data.item*/ item) {
 function hasChildrenLoaded(/*dojo.data.item*/ item) {
 	return hasChildren(item) && typeof(item.children[0]) != "boolean";
 }
+
+function isIdEqual(/*JSON*/ id, /*JSON*/ id2) {
+	return id.rootid == id2.rootid && id.categid == id2.categid;
+}

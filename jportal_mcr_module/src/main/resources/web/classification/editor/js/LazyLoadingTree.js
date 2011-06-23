@@ -22,9 +22,6 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	// id - current loaded classification & category
 	this.classificationId = null;
 	this.categoryId = null;
-
-	// deleted items
-	this.deletedItemArray = [];
 };
 
 ( function() {
@@ -280,12 +277,6 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		}
 		// delete tree item
 		this.store.deleteItem(item);
-		// add item.id to deleteItemArray - use dojo.filter for unique list
-		var itemId = item.id[0];
-		this.deletedItemArray = dojo.filter(this.deletedItemArray, function(idInList) {
-			return idInList.rootid != itemId.rootid || idInList.categid != itemId.categid;
-		});
-		this.deletedItemArray.push(itemId);
 		// FIRE!!!!!
 		this.eventHandler.notify({"type" : "itemRemoved", "item": item});
 	}

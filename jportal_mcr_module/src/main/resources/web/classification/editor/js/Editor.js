@@ -21,6 +21,9 @@ classification.Editor = function() {
 	// content
 	this.treePane = null;
 	this.categoryEditorPane = null;
+
+	// deleted items
+	this.deletedItemArray = [];
 };
 
 ( function() {
@@ -100,6 +103,17 @@ classification.Editor = function() {
 				}
 				this.categoryEditorPane.update(args.item);
 			}
+		} else if(args.type == "itemRemoved") {
+			var item = args.item;
+			if(item.added) {
+				return;
+			}
+			// add item.id to deleteItemArray - use dojo.filter for unique list
+			var itemId = item.id[0];
+			this.deletedItemArray = dojo.filter(this.deletedItemArray, function(idInList) {
+				return !isIdEqual(itemId, idInList);
+			});
+			this.deletedItemArray.push(itemId);
 		} else if(args.type == "itemsRemoved") {
 			this.categoryEditorPane.setDisabled(true);
 			this.updateToolbar(true);
@@ -138,14 +152,17 @@ classification.Editor = function() {
 		// create arrays
 		var addedArray = [];
 		var modifiedArray = [];
-		var deletedArray = tree.deletedItemArray;
 		// go recursive through tree and get all added and modified items
-		if(tree.rootItem.isItem) {
-			fillArrays(addedArray, modifiedArray, tree.rootItem);
+		if(tree.rootItem.modified) {
+			var cleanedRootItem = cloneAndCleanUp(tree.rootItem);
+			modifiedArray.push(cleanedRootItem);
 		}
+		tree.treeModel.getRoot(function(treeRootItem) {
+			fillArrays(addedArray, modifiedArray, treeRootItem);
+		});
 		console.log(addedArray);
 		console.log(modifiedArray);
-		console.log(deletedArray);
+		console.log(this.deletedItemArray);
 	}
 
 	function fillArrays(addedArray, modifiedArray, parent) {
