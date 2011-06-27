@@ -2,19 +2,35 @@ package fsu.jportal.access;
 
 import java.util.HashMap;
 
+import org.jdom.Attribute;
+import org.jdom.Document;
+import org.jdom.JDOMException;
+import org.jdom.Text;
+import org.jdom.xpath.XPath;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.access.strategies.MCRAccessCheckStrategy;
 import org.mycore.access.strategies.MCRObjectIDStrategy;
 import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
-import org.mycore.common.MCRSession;
+import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
-
     private AccessStrategyConfig accessConfig;
+
+    //    private OldAccesStrategy oldStrategy = new OldAccesStrategy();
+    //
+    //    public boolean checkPermissionOfType(String id, String permission) {
+    //        return oldStrategy.checkPermissionOfType(id, permission);
+    //    }
+    //
+    //    public boolean checkPermissionOfTopObject(String id, String permission) {
+    //        return oldStrategy.checkPermissionOfTopObject(id, permission);
+    //    }
 
     private static class DefaultConfig implements AccessStrategyConfig {
         private HashMap<String, MCRAccessCheckStrategy> strategies;
@@ -50,7 +66,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         setAccessConfig(accessConfig);
     }
 
-    public static class EditorGroupStrategy extends StrategieChain{
+    public static class EditorGroupStrategy extends StrategieChain {
         @Override
         protected boolean isReponsibleFor(String id, String permission) {
             return isInEditorGroup();
@@ -58,31 +74,88 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 
         @Override
         protected boolean permissionStrategyFor(String id, String permission) {
-            if(!(AccessTools.isValidID(id) && isCRUDPerm(permission))){
+            if (!(AccessTools.isValidID(id) && allowedPermission(permission))) {
                 return getNextStrategy().checkPermission(id, permission);
             }
-            
+
             return true;
         }
-        
-        private boolean isCRUDPerm(String permission) {
-            return "writedb".equals(permission) || "deletedb".equals(permission);
+
+        private boolean allowedPermission(String permission) {
+            String allowedPermissions[] = { "create-jpvolume", "create-jparticle" };
+
+            for (String allowedPerm : allowedPermissions) {
+                if (allowedPerm.equals(permission)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private final boolean isInEditorGroup() {
             return MCRSessionMgr.getCurrentSession().getUserInformation().isUserInRole("editorsgroup");
         }
     }
-    
-    public boolean checkPermission(String id, String permission) {
-        StrategieChain strategyChainStart = new SuperUserStrategy();
-        StrategieChain strategyChain = strategyChainStart;
-        
-        strategyChain = strategyChain.setNextStrategy(new EditorGroupStrategy());
-        strategyChain = strategyChain.setNextStrategy(new ReadDerivateStrategy(getAccessConfig()));
-        strategyChain = strategyChain.setNextStrategy(new IDStrategy(getAccessConfig()));
 
-        return strategyChainStart.checkPermission(id, permission);
+    public boolean checkPermission(String id, String permission) {
+        MCRAccessInterface accessInterface = getAccessConfig().getAccessInterface();
+
+        if (id == null || "".equals(id) || permission == null || "".equals(permission)) {
+            return false;
+        }
+
+        if (isSuperUser()) {
+            return true;
+        }
+
+        if (accessInterface.hasRule(id, permission)) {
+            return accessInterface.checkPermission(id, permission);
+        }
+        
+        MCRObjectID objID = MCRObjectID.getInstance(id);
+        String typeId = objID.getTypeId();
+        
+        MCRObjectID parentID = getParentID(objID);
+        String permForType = permission + "_" + typeId;
+
+        if (accessInterface.hasRule(parentID.toString(), permForType)) {
+            return accessInterface.checkPermission(parentID.toString(), permForType);
+        }
+
+        MCRObjectID journalID = getParentID(parentID);
+        if (accessInterface.hasRule(journalID.toString(), permForType)) {
+            return accessInterface.checkPermission(journalID.toString(), permForType);
+        }
+
+        return accessInterface.checkPermission("default_" + typeId, permission);
+    }
+
+    private MCRObjectID getParentID(MCRObjectID objID) {
+        Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(objID);
+        try {
+            String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
+            if (objID.getTypeId().equals("derivate")) {
+                path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
+            }
+            XPath pathToJournalID = XPath.newInstance(path);
+            pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
+            Object idTextNode = pathToJournalID.selectSingleNode(objXML);
+
+            if (idTextNode instanceof Text) {
+                return MCRObjectID.getInstance(((Text) idTextNode).getText());
+            } else if (idTextNode instanceof Attribute) {
+                return MCRObjectID.getInstance(((Attribute) idTextNode).getValue());
+            }
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private boolean isSuperUser() {
+        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
+        return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
     }
 
     private void setAccessConfig(AccessStrategyConfig accessConfig) {

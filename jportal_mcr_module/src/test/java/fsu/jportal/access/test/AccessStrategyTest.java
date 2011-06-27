@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.strategies.MCRAccessCheckStrategy;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRUserInformation;
@@ -36,9 +37,11 @@ public class AccessStrategyTest {
 
     private MCRAccessCheckStrategy objTypeStrategyMock;
 
-    private static final String JOURNALID = "jportal_jpjournal_000000001";
+    private static final String JOURNALID = "jportal_jpjournal_0000000001";
 
     private AccessStrategyConfig strategyConfig;
+
+    private MCRUserInformation userInfoMock;
 
     @Before
     public void init() {
@@ -48,13 +51,14 @@ public class AccessStrategyTest {
         mcrProperties.setProperty("MCR.Access.Class", "fsu.jportal.access.test.FakeAccessImpl");
         mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
-        mcrProperties.setProperty("MCR.Metadata.Type.foo", "true");
+        mcrProperties.setProperty("MCR.Metadata.Type.derivate", "true");
 
-        aclMock = createMock("ACLMock",MCRAccessInterface.class);
-        idStrategyMock = createMock("IDStrat", MCRAccessCheckStrategy.class);
-        objTypeStrategyMock = createMock("ObjType",MCRAccessCheckStrategy.class);
-        xmlMetaDataMgr = createMock(MCRXMLMetadataManager.class);
-        strategyConfig = createMock(AccessStrategyConfig.class);
+        aclMock = createMock("aclMock", MCRAccessInterface.class);
+        idStrategyMock = createMock("idStrategyMock", MCRAccessCheckStrategy.class);
+        objTypeStrategyMock = createMock("objTypeStrategyMock", MCRAccessCheckStrategy.class);
+        xmlMetaDataMgr = createMock("xmlMetaDataMgr", MCRXMLMetadataManager.class);
+        strategyConfig = createMock("strategyConfig", AccessStrategyConfig.class);
+        userInfoMock = createMock("userInfoMock", MCRUserInformation.class);
         expect(strategyConfig.getAccessInterface()).andReturn(aclMock).anyTimes();
         expect(strategyConfig.getXMLMetadataMgr()).andReturn(xmlMetaDataMgr).anyTimes();
         expect(strategyConfig.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY)).andReturn(idStrategyMock).anyTimes();
@@ -66,121 +70,93 @@ public class AccessStrategyTest {
     @After
     public void cleanUp() {
         MCRSessionMgr.getCurrentSession().setUserInformation(MCRSystemUserInformation.getGuestInstance());
-        reset(aclMock,idStrategyMock,objTypeStrategyMock,xmlMetaDataMgr,strategyConfig);
+        reset(aclMock, idStrategyMock, objTypeStrategyMock, xmlMetaDataMgr, strategyConfig, userInfoMock);
     }
 
     @Test
-    public void checkRootUser() throws Exception {
-        MCRUserInformation userInfoMock = createMock(MCRUserInformation.class);
+    public void isSuperUser() throws Exception {
         expect(userInfoMock.getCurrentUserID()).andReturn(ROOT);
-        replay(aclMock,userInfoMock);
+        replay(aclMock, userInfoMock);
 
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
         assertTrue("Superuser should has access", accessStrategy.checkPermission("foo", "perm"));
-        verify(aclMock,userInfoMock);
+        verify(aclMock, userInfoMock);
     }
 
     @Test
-    public void readDerivateNoRule() throws Exception {
-        String id = "id";
-        String permission = "read-derivates";
-
-        expect(aclMock.hasRule(id, permission)).andReturn(false);
-        replay(aclMock);
-
-        assertTrue("Permission should be true if there is no such rule " + permission, accessStrategy.checkPermission(id, permission));
-        verify(aclMock);
-    }
-    
-    @Test
-    public void readDerivateHasRule() throws Exception {
-        String id = "id";
-        String permission = "read-derivates";
-        
-        expect(aclMock.hasRule(id, permission)).andReturn(true);
-        expect(idStrategyMock.checkPermission(id, permission)).andReturn(false);
-        replay(aclMock,idStrategyMock);
-        
-        assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(id, permission));
-        verify(aclMock,idStrategyMock);
+    public void noSuperUser_ObjHasOwnRule_access() throws Exception {
+        noSuperUser_ObjHasOwnRule("user", true, true, true);
     }
 
     @Test
-    public void readDerivatePermTrue() throws Exception {
-        String id = "id";
-        String permission = "read-derivates";
-
-        expect(aclMock.hasRule(id, permission)).andReturn(true);
-        expect(idStrategyMock.checkPermission(id, permission)).andReturn(true);
-        replay(aclMock, idStrategyMock);
-
-        assertTrue("Permission should be true " + permission, accessStrategy.checkPermission(id, permission));
-        verify(aclMock, idStrategyMock);
+    public void noSuperUser_ObjHasOwnRule_noaccess() throws Exception {
+        noSuperUser_ObjHasOwnRule("user", true, false, false);
     }
 
-    @Test
-    public void readDerivatePermFalse() throws Exception {
-        String id = "id";
-        String permission = "read-derivates";
-
-        expect(aclMock.hasRule(id, permission)).andReturn(true);
-        expect(idStrategyMock.checkPermission(id, permission)).andReturn(false);
-        replay(aclMock, idStrategyMock);
-
-        assertFalse("Permission should be false " + permission, accessStrategy.checkPermission(id, permission));
-        verify(aclMock, idStrategyMock);
-    }
-    
-    @Test
-    public void isValidIDJPArticleWrite() throws Exception {
-        String id = "jportal_jparticle_000000001";
-        String permission = "write";
-        
-        isValidIDNoJpID(id, permission, true, false, false);
-        isValidIDNoJpID(id, permission, true, true, true);
-        isValidIDNoJpID(id, permission, false, true, false);
-        isValidIDNoJpID(id, permission, false, false, false);
-        isValidIDNoJpID(null, permission, false, false, false);
-        isValidIDNoJpID(id, null, false, false, false);
-        isValidIDNoJpID(null, null, false, false, false);
-        isValidIDNoJpID("", permission, false, false, false);
-    }
-    
-    @Test
-    public void isValidIDJPArticleRead() throws Exception {
-        String id = "jportal_jparticle_000000001";
+    private void noSuperUser_ObjHasOwnRule(String userID, boolean hasRule, boolean hasAccess, boolean expectedAccess) {
+        String id = "POOLPRIVILEGE";
         String permission = "read";
-        
-        isValidIDNoJpID(id, permission, true, false, false);
-        isValidIDNoJpID(id, permission, true, true, true);
-        isValidIDNoJpID(id, permission, false, true, true);
-        isValidIDNoJpID(id, permission, false, false, false);
-        isValidIDNoJpID(null, permission, false, false, false);
-        isValidIDNoJpID(id, null, false, false, false);
-        isValidIDNoJpID(null, null, false, false, false);
-        isValidIDNoJpID("", permission, false, false, false);
+        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.checkPermission(id, permission)).andReturn(hasAccess);
+        replay(aclMock, userInfoMock);
+
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
+        String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, userInfoMock);
+    }
+
+    @Test
+    public void noSuperUser_parentHasRule_access() throws Exception {
+        String id = "jportal_derivate_0000000001";
+        String parentID = "jportal_jparticle_0000000001";
+        String permission = "read";
+        String userID = "user";
+        boolean hasRule = false;
+        boolean hasParentRule = true;
+        boolean hasAccess = true;
+        boolean expectedAccess = true;
+
+        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule(parentID, permission + "_derivate")).andReturn(hasParentRule);
+        expect(aclMock.checkPermission(parentID, permission + "_derivate")).andReturn(hasAccess);
+
+        MCRObjectID mcrObjectID = null;
+
+        try {
+            mcrObjectID = MCRObjectID.getInstance(id);
+        } catch (Exception e) {
+        }
+
+        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createderivateXML(parentID)).anyTimes();
+        replay(aclMock, userInfoMock, xmlMetaDataMgr);
+
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
+        String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, userInfoMock, xmlMetaDataMgr);
     }
     
     @Test
-    public void isValidIDHasNoParent() throws Exception {
-        String id = "jportal_foo_000000001";
-        String permission = "write";
+    public void noSuperUser_journalHasRule_access() throws Exception {
+        String id = "jportal_derivate_00000001";
+        String parentID = "jportal_jparticle_0000000001";
+        String permission = "read";
+        String userID = "user";
+        boolean hasRule = false;
+        boolean hasParentRule = false;
+        boolean hasJournalRule = true;
+        boolean hasAccess = true;
+        boolean expectedAccess = true;
         
-        isValidIDNoJpID(id, permission, true, false, false);
-        isValidIDNoJpID(id, permission, true, true, true);
-        isValidIDNoJpID(id, permission, false, true, true);
-        isValidIDNoJpID(id, permission, false, false, false);
-        isValidIDNoJpID(null, permission, false, false, false);
-        isValidIDNoJpID(id, null, false, false, false);
-        isValidIDNoJpID(null, null, false, false, false);
-        isValidIDNoJpID("", permission, false, false, false);
-    }
-
-    private void isValidIDNoJpID(String id, String permission, boolean parentPerm, boolean typePerm, boolean expectedPermission) {
-        reset(idStrategyMock, xmlMetaDataMgr,objTypeStrategyMock);
-        expect(idStrategyMock.checkPermission(JOURNALID, permission)).andReturn(parentPerm).anyTimes();
-        expect(objTypeStrategyMock.checkPermission(JOURNALID, permission)).andReturn(parentPerm).anyTimes();
-        expect(objTypeStrategyMock.checkPermission(id, permission)).andReturn(typePerm).anyTimes();
+        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule(parentID, permission + "_derivate")).andReturn(hasParentRule);
+        expect(aclMock.hasRule(JOURNALID, permission + "_derivate")).andReturn(hasJournalRule);
+        expect(aclMock.checkPermission(JOURNALID, permission + "_derivate")).andReturn(hasAccess);
+        
         MCRObjectID mcrObjectID = null;
         
         try {
@@ -188,38 +164,46 @@ public class AccessStrategyTest {
         } catch (Exception e) {
         }
         
-        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createObjectXML()).anyTimes();
-        replay(idStrategyMock, xmlMetaDataMgr,objTypeStrategyMock);
+        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createderivateXML(parentID)).anyTimes();
         
-        String errMsg = MessageFormat.format("isValidID - noJPID case: parentPerm = {0}, typePerm = {1}, expected result {2}. ", parentPerm, typePerm, expectedPermission);
-        assertEquals(errMsg + permission, expectedPermission, accessStrategy.checkPermission(id, permission));
-        verify(idStrategyMock, xmlMetaDataMgr,objTypeStrategyMock);
+        MCRObjectID mcrParentID = null;
+        
+        
+        try {
+            mcrParentID = MCRObjectID.getInstance(parentID);
+        } catch (Exception e) {
+        }
+        
+        expect(xmlMetaDataMgr.retrieveXML(mcrParentID)).andReturn(createObjectXML(JOURNALID)).anyTimes();
+        replay(aclMock, userInfoMock, xmlMetaDataMgr);
+        
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
+        String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, userInfoMock, xmlMetaDataMgr);
     }
 
-    private Document createObjectXML() {
-        Element rootElement = new Element("mycoreobject");
-        Element metadata = new Element("metadata");
-        Element hiddenIDs = new Element("hidden_jpjournalsID");
-        Element hiddenID = new Element("hidden_jpjournalID");
-        hiddenID.addContent(JOURNALID);
+    private Document createderivateXML(String id) {
+        Element rootElement = new Element("mycorederivate");
+        Element metadata = new Element("derivate");
+        Element hiddenIDs = new Element("linkmetas");
+        Element hiddenID = new Element("linkmeta");
+        hiddenID.setAttribute("href", id, MCRConstants.XLINK_NAMESPACE);
         hiddenIDs.addContent(hiddenID);
         metadata.addContent(hiddenIDs);
         rootElement.addContent(metadata);
         return new Document(rootElement);
     }
-    
-    @Test
-    public void isInEditorsgroup() throws Exception {
-        String id = JOURNALID;
-        String permission = "writedb";
-        
-        MCRUserInformation editGroupUser = createMock("editGroupUser", MCRUserInformation.class);
-        expect(editGroupUser.getCurrentUserID()).andReturn("user");
-        expect(editGroupUser.isUserInRole("editorsgroup")).andReturn(true);
-        replay(editGroupUser);
-        
-        MCRSessionMgr.getCurrentSession().setUserInformation(editGroupUser);
-        assertTrue("Editors should has access", accessStrategy.checkPermission(id, permission));
-        verify(editGroupUser);
+
+    private Document createObjectXML(String id) {
+        Element rootElement = new Element("mycoreobject");
+        Element metadata = new Element("metadata");
+        Element hiddenIDs = new Element("hidden_jpjournalsID");
+        Element hiddenID = new Element("hidden_jpjournalID");
+        hiddenID.addContent(id);
+        hiddenIDs.addContent(hiddenID);
+        metadata.addContent(hiddenIDs);
+        rootElement.addContent(metadata);
+        return new Document(rootElement);
     }
 }

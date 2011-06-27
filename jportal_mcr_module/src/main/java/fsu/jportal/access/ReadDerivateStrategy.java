@@ -9,6 +9,8 @@ public class ReadDerivateStrategy extends StrategieChain {
 
     private boolean readDeriv = false;
 
+    private boolean poolPrivilege;
+
     public ReadDerivateStrategy(AccessStrategyConfig config) {
         this.config = config;
     }
@@ -16,13 +18,14 @@ public class ReadDerivateStrategy extends StrategieChain {
     @Override
     protected boolean isReponsibleFor(String id, String permission) {
         readDeriv = permission.equals("read-derivates");
+        poolPrivilege = "POOLPRIVILEGE".equals(id);
         isValidID = AccessTools.isValidID(id);
-        return readDeriv || !isValidID;
+        return poolPrivilege || readDeriv || !isValidID;
     }
 
     @Override
     protected boolean permissionStrategyFor(String id, String permission) {
-        if (config.getAccessInterface().hasRule(id, permission) || (!readDeriv && !isValidID)) {
+        if (config.getAccessInterface().hasRule(id, permission) || (!readDeriv && !isValidID) || poolPrivilege) {
             return config.getAccessCheckStrategy(AccessStrategyConfig.OBJ_ID_STRATEGY).checkPermission(id, permission);
         } else {
             return true;
