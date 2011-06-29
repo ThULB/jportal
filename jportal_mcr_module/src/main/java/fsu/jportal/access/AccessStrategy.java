@@ -20,149 +20,140 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
-    private AccessStrategyConfig accessConfig;
+	private AccessStrategyConfig accessConfig;
 
-    //    private OldAccesStrategy oldStrategy = new OldAccesStrategy();
-    //
-    //    public boolean checkPermissionOfType(String id, String permission) {
-    //        return oldStrategy.checkPermissionOfType(id, permission);
-    //    }
-    //
-    //    public boolean checkPermissionOfTopObject(String id, String permission) {
-    //        return oldStrategy.checkPermissionOfTopObject(id, permission);
-    //    }
+	private static class DefaultConfig implements AccessStrategyConfig {
+		private HashMap<String, MCRAccessCheckStrategy> strategies;
 
-    private static class DefaultConfig implements AccessStrategyConfig {
-        private HashMap<String, MCRAccessCheckStrategy> strategies;
+		public DefaultConfig() {
+			strategies = new HashMap<String, MCRAccessCheckStrategy>();
+			strategies.put(OBJ_ID_STRATEGY, new MCRObjectIDStrategy());
+			strategies.put(OBJ_TYPE_STRATEGY, new MCRObjectTypeStrategy());
+			strategies.put(PARENT_STRATEGY, new MCRParentRuleStrategy());
+		}
 
-        public DefaultConfig() {
-            strategies = new HashMap<String, MCRAccessCheckStrategy>();
-            strategies.put(OBJ_ID_STRATEGY, new MCRObjectIDStrategy());
-            strategies.put(OBJ_TYPE_STRATEGY, new MCRObjectTypeStrategy());
-            strategies.put(PARENT_STRATEGY, new MCRParentRuleStrategy());
-        }
+		@Override
+		public MCRAccessInterface getAccessInterface() {
+			return MCRAccessManager.getAccessImpl();
+		}
 
-        @Override
-        public MCRAccessInterface getAccessInterface() {
-            return MCRAccessManager.getAccessImpl();
-        }
+		@Override
+		public MCRAccessCheckStrategy getAccessCheckStrategy(String strategyName) {
+			return strategies.get(strategyName);
+		}
 
-        @Override
-        public MCRAccessCheckStrategy getAccessCheckStrategy(String strategyName) {
-            return strategies.get(strategyName);
-        }
+		@Override
+		public MCRXMLMetadataManager getXMLMetadataMgr() {
+			return MCRXMLMetadataManager.instance();
+		}
+	}
 
-        @Override
-        public MCRXMLMetadataManager getXMLMetadataMgr() {
-            return MCRXMLMetadataManager.instance();
-        }
-    }
+	public AccessStrategy() {
+		this(new DefaultConfig());
+	}
 
-    public AccessStrategy() {
-        this(new DefaultConfig());
-    }
+	public AccessStrategy(AccessStrategyConfig accessConfig) {
+		setAccessConfig(accessConfig);
+	}
 
-    public AccessStrategy(AccessStrategyConfig accessConfig) {
-        setAccessConfig(accessConfig);
-    }
+	public boolean checkPermission(String id, String permission) {
+		MCRAccessInterface accessInterface = getAccessConfig()
+				.getAccessInterface();
 
-    public static class EditorGroupStrategy extends StrategieChain {
-        @Override
-        protected boolean isReponsibleFor(String id, String permission) {
-            return isInEditorGroup();
-        }
+		if (id == null || "".equals(id) || permission == null
+				|| "".equals(permission)) {
+			return false;
+		}
 
-        @Override
-        protected boolean permissionStrategyFor(String id, String permission) {
-            if (!(AccessTools.isValidID(id) && allowedPermission(permission))) {
-                return getNextStrategy().checkPermission(id, permission);
-            }
+		if (isSuperUser()) {
+			return true;
+		}
 
-            return true;
-        }
+		if (accessInterface.hasRule(id, permission)) {
+			return accessInterface.checkPermission(id, permission);
+		}
 
-        private boolean allowedPermission(String permission) {
-            String allowedPermissions[] = { "create-jpvolume", "create-jparticle" };
+		if (isCRUD_Operation(permission)) {
+			String crudid = "CRUD";
+			if (accessInterface.hasRule(crudid, permission)) {
+				return accessInterface.checkPermission(crudid, permission);
+			}
+		}
 
-            for (String allowedPerm : allowedPermissions) {
-                if (allowedPerm.equals(permission)) {
-                    return true;
-                }
-            }
-            return false;
-        }
+		MCRObjectID objID = MCRObjectID.getInstance(id);
+		String typeId = objID.getTypeId();
 
-        private final boolean isInEditorGroup() {
-            return MCRSessionMgr.getCurrentSession().getUserInformation().isUserInRole("editorsgroup");
-        }
-    }
+		MCRObjectID parentID = getParentID(objID);
+		String permForType = permission + "_" + typeId;
 
-    public boolean checkPermission(String id, String permission) {
-        MCRAccessInterface accessInterface = getAccessConfig().getAccessInterface();
+		if (parentID != null) {
+			if (accessInterface.hasRule(parentID.toString(), permForType)) {
+				return accessInterface.checkPermission(parentID.toString(),
+						permForType);
+			}
+			MCRObjectID journalID = getParentID(parentID);
+			if (accessInterface.hasRule(journalID.toString(), permForType)) {
+				return accessInterface.checkPermission(journalID.toString(),
+						permForType);
+			}
+		}
+		
+		if (accessInterface.hasRule("default_" + typeId, permission)) {
+			return accessInterface.checkPermission("default_" + typeId,
+					permission);
+		}
 
-        if (id == null || "".equals(id) || permission == null || "".equals(permission)) {
-            return false;
-        }
+		if (accessInterface.hasRule("default", permission)) {
+			return accessInterface.checkPermission("default", permission);
+		}
 
-        if (isSuperUser()) {
-            return true;
-        }
+		return false;
+	}
 
-        if (accessInterface.hasRule(id, permission)) {
-            return accessInterface.checkPermission(id, permission);
-        }
-        
-        MCRObjectID objID = MCRObjectID.getInstance(id);
-        String typeId = objID.getTypeId();
-        
-        MCRObjectID parentID = getParentID(objID);
-        String permForType = permission + "_" + typeId;
+	private boolean isCRUD_Operation(String permission) {
+		return permission.startsWith("create_")
+				|| permission.startsWith("read_")
+				|| permission.startsWith("update_")
+				|| permission.startsWith("delete_");
+	}
 
-        if (accessInterface.hasRule(parentID.toString(), permForType)) {
-            return accessInterface.checkPermission(parentID.toString(), permForType);
-        }
+	private MCRObjectID getParentID(MCRObjectID objID) {
+		Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(
+				objID);
+		try {
+			String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
+			if (objID.getTypeId().equals("derivate")) {
+				path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
+			}
+			XPath pathToJournalID = XPath.newInstance(path);
+			pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
+			Object idTextNode = pathToJournalID.selectSingleNode(objXML);
 
-        MCRObjectID journalID = getParentID(parentID);
-        if (accessInterface.hasRule(journalID.toString(), permForType)) {
-            return accessInterface.checkPermission(journalID.toString(), permForType);
-        }
+			if (idTextNode instanceof Text) {
+				return MCRObjectID.getInstance(((Text) idTextNode).getText());
+			} else if (idTextNode instanceof Attribute) {
+				return MCRObjectID.getInstance(((Attribute) idTextNode)
+						.getValue());
+			}
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		}
 
-        return accessInterface.checkPermission("default_" + typeId, permission);
-    }
+		return null;
+	}
 
-    private MCRObjectID getParentID(MCRObjectID objID) {
-        Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(objID);
-        try {
-            String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
-            if (objID.getTypeId().equals("derivate")) {
-                path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
-            }
-            XPath pathToJournalID = XPath.newInstance(path);
-            pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
-            Object idTextNode = pathToJournalID.selectSingleNode(objXML);
+	private boolean isSuperUser() {
+		String currentUserID = MCRSessionMgr.getCurrentSession()
+				.getUserInformation().getCurrentUserID();
+		return currentUserID.equals(MCRConfiguration.instance().getString(
+				"MCR.Users.Superuser.UserName"));
+	}
 
-            if (idTextNode instanceof Text) {
-                return MCRObjectID.getInstance(((Text) idTextNode).getText());
-            } else if (idTextNode instanceof Attribute) {
-                return MCRObjectID.getInstance(((Attribute) idTextNode).getValue());
-            }
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+	private void setAccessConfig(AccessStrategyConfig accessConfig) {
+		this.accessConfig = accessConfig;
+	}
 
-        return null;
-    }
-
-    private boolean isSuperUser() {
-        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
-        return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
-    }
-
-    private void setAccessConfig(AccessStrategyConfig accessConfig) {
-        this.accessConfig = accessConfig;
-    }
-
-    private AccessStrategyConfig getAccessConfig() {
-        return accessConfig;
-    }
+	private AccessStrategyConfig getAccessConfig() {
+		return accessConfig;
+	}
 }

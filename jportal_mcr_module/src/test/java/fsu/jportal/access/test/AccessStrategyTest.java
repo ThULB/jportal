@@ -183,6 +183,22 @@ public class AccessStrategyTest {
         verify(aclMock, userInfoMock, xmlMetaDataMgr);
     }
 
+    @Test
+	public void isInEditorsGroupHasAccess() throws Exception {
+    	String id = JOURNALID;
+        String permission = "create_volume";
+        
+    	expect(userInfoMock.getCurrentUserID()).andReturn("user");
+    	expect(aclMock.hasRule(id, permission)).andReturn(false);
+    	expect(aclMock.hasRule("CRUD", permission)).andReturn(true);
+    	expect(aclMock.checkPermission("CRUD", permission)).andReturn(true);
+        replay(aclMock, userInfoMock);
+
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
+        assertTrue("Superuser should has access", accessStrategy.checkPermission(id, permission));
+        verify(aclMock, userInfoMock);
+	}
+    
     private Document createderivateXML(String id) {
         Element rootElement = new Element("mycorederivate");
         Element metadata = new Element("derivate");

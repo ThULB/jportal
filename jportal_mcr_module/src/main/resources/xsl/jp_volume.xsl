@@ -544,17 +544,14 @@
                                 <xsl:with-param select="$accessedit" name="accessedit" />
                                 <xsl:with-param select="./@ID" name="id" />
                             </xsl:call-template>
-                            <xsl:if test="acl:checkPermission(./@ID,'writedb')">
+                            <xsl:if test="acl:checkPermission(./@ID,'create_volume')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jpvolume'" />
                                 </xsl:call-template>
                             </xsl:if>
-                            <xsl:variable name="journalID">
-                                <xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
-                            </xsl:variable>
                             <xsl:if
-                                test="acl:checkPermission($journalID,'writedb')">
+                                test="acl:checkPermission(./@ID,'create_article')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jparticle'" />

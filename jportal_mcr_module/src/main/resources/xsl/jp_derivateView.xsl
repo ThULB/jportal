@@ -188,50 +188,53 @@
     <xsl:param name="href" />
 
     <table cellpadding="0" cellspacing="0" id="detailed-contenttable">
-      <tr id="detailed-contentsimg1">
-        <td id="detailed-contentsimgpadd">
-          <xsl:choose>
-            <xsl:when test="$useIview = 'true'">
-              <xsl:choose>
-                <!-- links -->
-                <xsl:when test="name() = 'derivateLink'">
-                  <a href="{$href}">
-                    <xsl:call-template name="iview2.getImageElement">
-                      <xsl:with-param select="$derivID" name="derivate" />
-                      <xsl:with-param select="concat('/', $encodedMainFile)" name="imagePath" />
-                    </xsl:call-template>
-                  </a>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:call-template name="derivateView">
-                    <xsl:with-param name="derivateID" select="../../@ID" />
-                  </xsl:call-template>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- important -->
-                <!-- when refactoring this please remember to check the read access -->
-                <xsl:variable name="readAccess">
-                    <xsl:call-template name="jp.derivate.readAccess">
-                        <xsl:with-param name="objectXML" select="$objectXML" />
-                    </xsl:call-template>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="$readAccess = 'true'">
-                        <a href="{$href}">
-                            <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-                        </a>
-                   </xsl:when>
-                   <xsl:otherwise>
-                       <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-                   </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-          </xsl:choose>
-          <br />
-        </td>
-      </tr>
+    <tr id="detailed-contentsimg1">
+	<td id="detailed-contentsimgpadd">
+						<!-- important -->
+						<!-- when refactoring this please remember to check the read access -->
+						<xsl:variable name="readAccess">
+							<xsl:call-template name="jp.derivate.readAccess">
+								<xsl:with-param name="objectXML" select="$objectXML" />
+							</xsl:call-template>
+						</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="$readAccess = 'true'">
+				<xsl:choose>
+					<xsl:when test="$useIview = 'true'">
+						<xsl:choose>
+							<!-- links -->
+							<xsl:when test="name() = 'derivateLink'">
+								<a href="{$href}">
+									<xsl:call-template name="iview2.getImageElement">
+										<xsl:with-param select="$derivID" name="derivate" />
+										<xsl:with-param select="concat('/', $encodedMainFile)"
+											name="imagePath" />
+									</xsl:call-template>
+								</a>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:call-template name="derivateView">
+									<xsl:with-param name="derivateID" select="../../@ID" />
+								</xsl:call-template>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>
+						<a href="{$href}">
+							<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}"
+								border="0" />
+						</a>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}"
+					border="0" />
+			</xsl:otherwise>
+		</xsl:choose>
+		<br />
+	  </td>
+	  </tr>
       <tr id="detailed-contents">
         <td>
           <xsl:call-template name="jp.derivate.print.details">
@@ -368,7 +371,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:value-of select="acl:checkPermission($jID,'read-derivates')" />
+    <xsl:value-of select="acl:checkPermission($jID,'read_derivate')" />
   </xsl:template>
 
   <!-- ========================================================== -->

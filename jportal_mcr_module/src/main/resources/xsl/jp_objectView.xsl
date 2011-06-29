@@ -725,15 +725,25 @@
         </xsl:variable>
 
         <xsl:if test="$objectHost = 'local'">
+            <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+        	<xsl:variable name="accessPerm">
+        		<access>
+        			<xsl:attribute name="update">
+        				<xsl:value-of select="acl:checkPermission($id,concat('update_',$type))"/>
+        			</xsl:attribute>
+        			<xsl:attribute name="delete">
+        				<xsl:value-of select="acl:checkPermission($id,concat('delete_',$type))"/>
+        			</xsl:attribute>
+        		</access>
+        	</xsl:variable>
             <xsl:choose>
-                <xsl:when test="acl:checkPermission($id,'writedb') or acl:checkPermission($id,'deletedb')">
-                    <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+                <xsl:when test="xalan:nodeset($accessPerm)/access/@update = 'true' or xalan:nodeset($accessPerm)/access/@delete = 'true'">
                     <tr>
                         <td class="metaname">
                             <xsl:value-of select="concat(i18n:translate('metaData.edit'),' :')" />
                         </td>
                         <td class="metavalue">
-                            <xsl:if test="acl:checkPermission($id,'writedb')">
+                            <xsl:if test="xalan:nodeset($accessPerm)/access/@update = 'true'">
                                 <a
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}{$layoutparam}&amp;step=commit&amp;todo=seditobj">
                                     <img src="{$WebApplicationBaseURL}images/icons/edit_button_30x30.png" title="{i18n:translate('component.swf.object.editObject')}" />
@@ -753,7 +763,7 @@
                                     <xsl:call-template name="linkBookmarkedImage" />
                                 </xsl:if>
                             </xsl:if>
-                            <xsl:if test="acl:checkPermission($id,'deletedb')">
+                            <xsl:if test="xalan:nodeset($accessPerm)/access/@delete = 'true'">
                                 <a
                                     href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
                                     <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.object.delObject')}" />
@@ -1206,7 +1216,7 @@
                                         </tr>
                                         <!-- prints the editor buttons (add, edit, delete ...) -->
                                         <tr height="30px">
-                                            <xsl:if test="acl:checkPermission($obj_id,'writedb')">
+                                            <xsl:if test="acl:checkPermission($obj_id,'update')">
                                                 <!-- urn -->
                                                 <xsl:variable name="derivateWithURN" select="mcrxml:hasURNDefined($deriv)" />
                                                 <xsl:variable name="type">
