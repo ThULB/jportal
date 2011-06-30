@@ -121,7 +121,7 @@ classification.TreePane = function() {
 		var selectedItems = this.tree.getSelectedItems();
 		var deleteVisable = selectedItems.length > 0;
 		for(var i = 0; i < selectedItems.length; i++) {
-			if(selectedItems[i].root || (selectedItems[i].haslink && selectedItems[i].haslink[0] == true)) {
+			if(selectedItems[i]._RI || (selectedItems[i].haslink && selectedItems[i].haslink[0] == true)) {
 				deleteVisable = false;
 				break;
 			}

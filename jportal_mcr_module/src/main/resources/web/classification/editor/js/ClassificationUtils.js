@@ -64,11 +64,11 @@ function getCategoryId(/*dojo.data.item*/ item) {
 }
 
 function hasChildren(/*dojo.data.item*/ item) {
-	return item.children && item.children[0] != false;
+	return (item.haschildren && item.haschildren[0] == true) || item.children;
 }
 
 function hasChildrenLoaded(/*dojo.data.item*/ item) {
-	return hasChildren(item) && typeof(item.children[0]) != "boolean";
+	return hasChildren(item) && item.children;
 }
 
 function isIdEqual(/*JSON*/ id, /*JSON*/ id2) {

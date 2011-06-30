@@ -22,8 +22,8 @@
       var classification = classification || {};
       var webApplicationBaseURL = "<xsl:value-of select='$WebApplicationBaseURL' />";
       var resourcePath = "<xsl:value-of select='$resourcePath' />"
-      var class = "<xsl:value-of select='$class' />";
-      var categ = "<xsl:value-of select='$categ' />";
+      var classificationId = "<xsl:value-of select='$class' />";
+      var categoryId = "<xsl:value-of select='$categ' />";
       var webPath = "<xsl:value-of select='$webPath' />";
       var jsPath = "<xsl:value-of select='$jsPath' />";
       var imagePath = "<xsl:value-of select='$imgPath' />";
@@ -61,19 +61,25 @@
 
     <script type="text/javascript">
       function setup() {
+        // set theme to body tag to get css support
+        // (important for dnd)
+        dojo.query('body').forEach(function(node) {
+            dojo.attr(node, "class", "claro");
+        });
+
         // TODO use mycore api to set this
         var supportedLanguages = ["de", "en", "pl"];
 
         var classEditor = new classification.Editor();
         classEditor.create(resourcePath, supportedLanguages, currentLang, showId);
         dijit.byId("classMainContainer").set('content', classEditor.domNode);
-        classEditor.loadClassification(class, categ);
+        classEditor.loadClassification(classificationId, categoryId);
       }
 
       dojo.ready(setup);
     </script>
 
-    <div class="claro">
+    <div>
       <div dojoType="dijit.layout.ContentPane" id="classMainContainer" style="width: 900px; height: 600px;">
       </div>
     </div>

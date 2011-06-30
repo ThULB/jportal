@@ -22,8 +22,8 @@ classification.Editor = function() {
 	this.treePane = null;
 	this.categoryEditorPane = null;
 
-	// deleted items
-	this.deletedItemArray = [];
+	// save
+	this.saveArray = [];
 };
 
 ( function() {
@@ -103,38 +103,36 @@ classification.Editor = function() {
 				}
 				this.categoryEditorPane.update(args.item);
 			}
-		} else if(args.type == "itemRemoved") {
-			var item = args.item;
-			if(item.added) {
-				return;
-			}
-			// add item.id to deleteItemArray - use dojo.filter for unique list
-			var itemId = item.id[0];
-			this.deletedItemArray = dojo.filter(this.deletedItemArray, function(idInList) {
-				return !isIdEqual(itemId, idInList);
-			});
-			this.deletedItemArray.push(itemId);
-		} else if(args.type == "itemsRemoved") {
-			this.categoryEditorPane.setDisabled(true);
-			this.updateToolbar(true);
 		} else if(args.type == "itemAdded") {
-			if(args.parent != null && args.parent.root != true) {
+			this.updateSaveArray("update", args.item, args.parent);
+			if(args.parent != null) {
 				this.categoryEditorPane.update(args.parent);
 			}
+			this.updateToolbar(true);
+		} else if(args.type == "itemMoved") {
+			this.updateSaveArray("update", args.item, args.parent);
+			this.updateToolbar(true);
+		} else if(args.type == "itemsRemoved") {
+			for(var i = 0; i < args.items.length; i++) {
+				this.updateSaveArray("delete", args.items[i]);
+			}
+			this.categoryEditorPane.setDisabled(true);
 			this.updateToolbar(true);
 		}
 	}
 
 	function handleCategoryEditorEvents(/*CategoryEditorPane*/ source, /*JSON*/ args) {
-		console.log(args);
-		if(args.type == "labelChanged") {
-			this.treePane.tree.update(args.item, "labels", args.value);
-			this.updateToolbar(true);
-		} else if(args.type == "urlChanged") {
-			this.treePane.tree.update(args.item, "uri", args.value);
-			this.updateToolbar(true);
-		} else if(args.type == "idChanged") {
-			this.treePane.tree.update(args.item, "id", args.value);
+		if(args.type == "labelChanged" || args.type == "urlChanged" || args.type == "idChanged") {
+			var key = undefined;
+			if(args.type == "labelChanged") {
+				key = "labels";
+			} else if(args.type == "urlChanged") {
+				key = "uri";
+			} else if(args.type == "idChanged") {
+				key = "id";
+			}
+			this.treePane.tree.update(args.item, key, args.value);
+			this.updateSaveArray("update", args.item);
 			this.updateToolbar(true);
 		}
 	}
@@ -146,62 +144,77 @@ classification.Editor = function() {
 		}
 	}
 
-	function save() {
-		// get tree
-		var tree = this.treePane.tree;
-		// create arrays
-		var addedArray = [];
-		var modifiedArray = [];
-		// go recursive through tree and get all added and modified items
-		if(tree.rootItem.modified) {
-			var cleanedRootItem = cloneAndCleanUp(tree.rootItem);
-			modifiedArray.push(cleanedRootItem);
+	function updateSaveArray(/*String*/ state, /*dojo.data.item*/ item, /*dojo.data.item*/ parent) {
+		// get object from array
+		var saveObject = null;
+		for(var i = 0; i < this.saveArray.length; i++) {
+			if(isIdEqual(this.saveArray[i].item.id[0], item.id[0])) {
+				saveObject = this.saveArray[i];
+			}
 		}
-		tree.treeModel.getRoot(function(treeRootItem) {
-			fillArrays(addedArray, modifiedArray, treeRootItem);
-		});
-		console.log(addedArray);
-		console.log(modifiedArray);
-		console.log(this.deletedItemArray);
+		// if not defined -> create new and add to array
+		if(saveObject == null) {
+			saveObject = {};
+			this.saveArray.push(saveObject);
+		}
+		// set new data
+		saveObject.item = item;
+		saveObject.state = state;
+		if(parent != null) {
+			saveObject.parent = parent;
+		}
 	}
 
-	function fillArrays(addedArray, modifiedArray, parent) {
-		dojo.forEach(parent.children, function(item, index) {
-			if(item.added) {
-				var cleanedItem = cloneAndCleanUp(item, true);
-				cleanedItem.parentId = parent.id[0];
-				cleanedItem.index = index;
-				addedArray.push(cleanedItem);
-			} else {
-				if(item.modified) {
-					var cleanedItem = cloneAndCleanUp(item, false);
-					modifiedArray.push(cleanedItem);
-				}
-				if(hasChildrenLoaded(item)) {
-					// do recursive calls for children
-					fillArrays(addedArray, modifiedArray, item);
+	function save() {
+		var finalArray = [];
+		for(var i = 0; i < this.saveArray.length; i++) {
+			var saveObject = this.saveArray[i];
+			var cleanedSaveObject = {
+				item: cloneAndCleanUp(saveObject.item),
+				state: saveObject.state
+			}
+			if(saveObject.state == "update" && saveObject.parent) {
+				if(saveObject.parent.children) {
+					cleanedSaveObject.parentId = saveObject.parent.id[0];
+					var index = this.treePane.tree.indexAt(saveObject.parent, saveObject.item.id[0]);
+					cleanedSaveObject.index = index;
+				} else {
+					cleanedSaveObject.state = "delete";
 				}
 			}
-		});
+			finalArray.push(cleanedSaveObject);
+		}
+
+		var navXhrArgs = {
+			url :  this.resourcePath + "save",
+			postData : dojo.toJson(finalArray),
+			handleAs : "json",
+			headers: { "Content-Type": "application/json; charset=utf-8"},
+			error : dojo.hitch(this, function(error) {
+				console.log("error while saving");
+			}),
+			load : dojo.hitch(this, function(data) {
+				console.log("saving done");
+				console.log(data);
+			})
+		};
+		dojo.xhrPost(navXhrArgs);
 	}
 
-	function cloneAndCleanUp(/*dojo.data.item*/ item, /*boolean*/ withChildren) {
+	function cloneAndCleanUp(/*dojo.data.item*/ item) {
 		var newItem = {
 			id: item.id[0],
 			labels: item.labels
 		};
-		if(withChildren && hasChildrenLoaded(item)) {
-			newItem.children = [];
-			dojo.forEach(item.children, function(childItem) {
-				var newChildItem = cloneAndCleanUp(childItem, true);
-				newItem.children.push(newChildItem);
-			});
+		if(item.uri) {
+			newItem.uri = item.uri[0];
 		}
 		return newItem;
 	}
-
+	
 	classification.Editor.prototype.create = create;
 	classification.Editor.prototype.loadClassification = loadClassification;
 	classification.Editor.prototype.updateToolbar = updateToolbar;
+	classification.Editor.prototype.updateSaveArray = updateSaveArray;
 
 })();
