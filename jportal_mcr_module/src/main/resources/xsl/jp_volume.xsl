@@ -544,14 +544,14 @@
                                 <xsl:with-param select="$accessedit" name="accessedit" />
                                 <xsl:with-param select="./@ID" name="id" />
                             </xsl:call-template>
-                            <xsl:if test="acl:checkPermission(./@ID,'create_volume')">
+                            <xsl:if test="acl:checkPermission(./@ID,'create_jpvolume')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jpvolume'" />
                                 </xsl:call-template>
                             </xsl:if>
                             <xsl:if
-                                test="acl:checkPermission(./@ID,'create_article')">
+                                test="acl:checkPermission(./@ID,'create_jparticle')">
                                 <xsl:call-template name="addChild2">
                                     <xsl:with-param name="id" select="./@ID" />
                                     <xsl:with-param name="types" select="'jparticle'" />

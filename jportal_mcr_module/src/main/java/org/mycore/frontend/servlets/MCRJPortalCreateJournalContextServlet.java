@@ -103,21 +103,21 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
         }
 
         // setup user, groups and assign acl's
-        LOGGER.debug("start setting up user management");
-        MCRJPortalJournalContextForUserManagement uc = new MCRJPortalJournalContextForUserManagement(jid, shortCut);
-        String reqKeyUsersTOC = "jp.cjc.usersTOC";
-        String reqKeyUsersArt = "jp.cjc.usersART";
-        String reqKeyusersALL = "jp.cjc.usersALL";
-        String reqKeygroup = "jp.cjc.group";
-        if (req.getParameter(reqKeyUsersTOC) != null && req.getParameterValues(reqKeyUsersTOC).length > 0)
-            uc.setUserListTOC(req.getParameterValues(reqKeyUsersTOC));
-        if (req.getParameter(reqKeyUsersArt) != null && req.getParameterValues(reqKeyUsersArt).length > 0)
-            uc.setUserListArt(req.getParameterValues(reqKeyUsersArt));
-        if (req.getParameter(reqKeyusersALL) != null && req.getParameterValues(reqKeyusersALL).length > 0)
-            uc.setUserListTOCArt(req.getParameterValues(reqKeyusersALL));
-        if (req.getParameter(reqKeygroup) != null && req.getParameterValues(reqKeygroup).length > 0)
-            uc.setGroup(req.getParameterValues(reqKeygroup));
-        uc.setup();
+//        LOGGER.debug("start setting up user management");
+//        MCRJPortalJournalContextForUserManagement uc = new MCRJPortalJournalContextForUserManagement(jid, shortCut);
+//        String reqKeyUsersTOC = "jp.cjc.usersTOC";
+//        String reqKeyUsersArt = "jp.cjc.usersART";
+//        String reqKeyusersALL = "jp.cjc.usersALL";
+//        String reqKeygroup = "jp.cjc.group";
+//        if (req.getParameter(reqKeyUsersTOC) != null && req.getParameterValues(reqKeyUsersTOC).length > 0)
+//            uc.setUserListTOC(req.getParameterValues(reqKeyUsersTOC));
+//        if (req.getParameter(reqKeyUsersArt) != null && req.getParameterValues(reqKeyUsersArt).length > 0)
+//            uc.setUserListArt(req.getParameterValues(reqKeyUsersArt));
+//        if (req.getParameter(reqKeyusersALL) != null && req.getParameterValues(reqKeyusersALL).length > 0)
+//            uc.setUserListTOCArt(req.getParameterValues(reqKeyusersALL));
+//        if (req.getParameter(reqKeygroup) != null && req.getParameterValues(reqKeygroup).length > 0)
+//            uc.setGroup(req.getParameterValues(reqKeygroup));
+//        uc.setup();
 
         // forward to journal page
         try {
@@ -140,7 +140,7 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
 
     private boolean access() {
         String jid = getJournalID();
-        if (jid != null && MCRAccessManager.checkPermission(jid, "writedb"))
+        if (jid != null && MCRAccessManager.checkPermission(jid, "create_jpjournal"))
             return true;
         else
             return false;

@@ -652,7 +652,7 @@
         </xsl:variable>
 
         <!-- check if user has permission to add jpvoumes -->
-        <xsl:if test="acl:checkPermission($id,'create_volume')">
+        <xsl:if test="acl:checkPermission($id,'create_jpvolume')">
             <tr>
                 <td id="detailed-labels">
                     <xsl:value-of select="concat(i18n:translate('metaData.addChildObject'),':')" />
