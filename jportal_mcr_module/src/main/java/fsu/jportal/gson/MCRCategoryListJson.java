@@ -83,24 +83,25 @@ public class MCRCategoryListJson {
             
             for (JsonElement categRef : json.getAsJsonArray()) {
                 JsonObject categRefJsonObject = categRef.getAsJsonObject();
-                MCRCategoryImpl categ = new MCRCategoryImpl();
-                
-                MCRCategoryID id = null;
-                JsonElement idJsonElement = categRefJsonObject.get(ID);
-                if (idJsonElement != null) {
-                    id = context.deserialize(idJsonElement, MCRCategoryID.class);
-                    categ.setId(id);
-                }
-                
-                MCRLabelSetWrapper labelsWrapper = context.deserialize(categRefJsonObject.get(LABELS), MCRLabelSetWrapper.class);
-                categ.setLabels(labelsWrapper.getSet());
+//                MCRCategoryImpl categ = new MCRCategoryImpl();
+//                
+//                MCRCategoryID id = null;
+//                JsonElement idJsonElement = categRefJsonObject.get(ID);
+//                if (idJsonElement != null) {
+//                    id = context.deserialize(idJsonElement, MCRCategoryID.class);
+//                    categ.setId(id);
+//                }
+//                
+//                MCRLabelSetWrapper labelsWrapper = context.deserialize(categRefJsonObject.get(LABELS), MCRLabelSetWrapper.class);
+//                categ.setLabels(labelsWrapper.getSet());
+//                
+//                JsonElement uriJsonElement = categRefJsonObject.get(URISTR);
+//                if(uriJsonElement != null){
+//                    String uriStr = uriJsonElement.getAsString();
+//                    categ.setURI(URI.create(uriStr));
+//                }
+                MCRCategory categ = context.deserialize(categRefJsonObject, MCRCategoryImpl.class);
                 categList.add(categ);
-                
-                JsonElement uriJsonElement = categRefJsonObject.get(URISTR);
-                if(uriJsonElement != null){
-                    String uriStr = uriJsonElement.getAsString();
-                    categ.setURI(URI.create(uriStr));
-                }
             }
             
             return new MCRCategoryListWrapper(categList);

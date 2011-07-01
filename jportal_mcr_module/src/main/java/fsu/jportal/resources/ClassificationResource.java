@@ -299,4 +299,11 @@ public class ClassificationResource {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response save(String json){
+        
+        return null;
+    }
 }
