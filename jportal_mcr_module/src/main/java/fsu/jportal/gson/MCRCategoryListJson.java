@@ -100,7 +100,7 @@ public class MCRCategoryListJson {
 //                    String uriStr = uriJsonElement.getAsString();
 //                    categ.setURI(URI.create(uriStr));
 //                }
-                MCRCategory categ = context.deserialize(categRefJsonObject, MCRCategoryImpl.class);
+                MCRCategory categ = context.deserialize(categRefJsonObject, Category.class);
                 categList.add(categ);
             }
             

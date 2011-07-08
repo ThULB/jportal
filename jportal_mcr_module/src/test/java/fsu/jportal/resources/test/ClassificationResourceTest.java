@@ -1,6 +1,5 @@
 package fsu.jportal.resources.test;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -18,6 +17,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jettison.json.JSONObject;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,6 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 
@@ -34,8 +34,8 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.client.ClientResponse;
 
 import fsu.jportal.gson.CategJsonPropName;
+import fsu.jportal.gson.Category;
 import fsu.jportal.gson.GsonManager;
-import fsu.jportal.gson.MCRCategoryIDJson;
 import fsu.jportal.mocks.CategoryDAOMock;
 import fsu.jportal.mocks.CategoryLinkServiceMock;
 import fsu.jportal.mocks.LinkTableStoreMock;
@@ -110,7 +110,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
             
             ClientResponse jsonResponse = resource().path("/classifications/" + path).type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
             String categoryJsonStr = jsonResponse.getEntity(String.class);
-            MCRCategoryImpl retrievedCateg = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryImpl.class);
+            Category retrievedCateg = GsonManager.instance().createGson().fromJson(categoryJsonStr, Category.class);
             String errorMsg = MessageFormat.format("We want to retrieve the category {0} but it was {1}", id, retrievedCateg.getId());
             assertTrue(errorMsg, id.equals(retrievedCateg.getId()));
         }
@@ -123,7 +123,6 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         String jsonResponse = resource().uri(response.getLocation()).type(MediaType.APPLICATION_JSON).get(String.class);
         JSONObject jsonObject = new JSONObject(jsonResponse);
         jsonObject.remove(CategJsonPropName.ID);
-        
         assertEquals(categJsonStr(), jsonObject.toString());
     }
     
@@ -162,6 +161,42 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
 //        String rootID = getQueryMap(rubricLocation).get("rootID");
 //        String responseStr = resource().path("/classifications/children").queryParam("rootID", rootID).type(MediaType.APPLICATION_JSON).get(String.class);
 //        assertDeleteRubric(rubricLocation, subRubricLocation);
+    }
+    
+    @Test
+    public void saveClassification() throws Exception {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_OneClassification.xml"));
+        String json = doc.getRootElement().getText();
+        ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+    
+    @Test
+    public void saveClassiWithSub() throws Exception {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_ClassiSub.xml"));
+        String json = doc.getRootElement().getText();
+        ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+    
+    @Test
+    public void saveClass2ndSub() throws Exception {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub.xml"));
+        String json = doc.getRootElement().getText();
+        ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+    
+    @Test
+    public void saveClass2ndSubJsonErr() throws Exception {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub_JsonErr.xml"));
+        String json = doc.getRootElement().getText();
+        ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     private void assertRootCategs() {
@@ -206,7 +241,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
 
     private String removeCategID(String categoryJsonStr) {
         Gson gson = GsonManager.instance().createGson();
-        MCRCategoryImpl receivedCategory = gson.fromJson(categoryJsonStr, MCRCategoryImpl.class);
+        Category receivedCategory = gson.fromJson(categoryJsonStr, Category.class);
         receivedCategory.setId(null);
         String responseBody = gson.toJson(receivedCategory);
         return responseBody;
@@ -240,12 +275,10 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         String rootID = queryMap.get("rootID");
         String categID = queryMap.get("categID");
         
-        MCRCategory parentCateg = MCRCategoryDAOFactory.getInstance().getCategory(new MCRCategoryID(rootID, categID), 0);
-        
         Set<MCRLabel> labels = new HashSet<MCRLabel>();
         labels.add(new MCRLabel("de", "Unterrubriken Test fuer MyCoRe", "untertest de"));
         labels.add(new MCRLabel("en", "Subrubric test for MyCoRe", "subtest en"));
-        MCRCategory subCateg = MCRCategUtils.newCategory(MCRCategoryID.rootID(rootID), labels, parentCateg);
+        MCRCategory subCateg = MCRCategUtils.newCategory(MCRCategoryID.rootID(rootID), labels, new MCRCategoryID(rootID, categID));
         Gson gson = GsonManager.instance().createGson();
         String serializedRubric = gson.toJson(subCateg);
         return serializedRubric;

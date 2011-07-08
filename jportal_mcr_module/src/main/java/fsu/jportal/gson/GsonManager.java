@@ -16,8 +16,8 @@ public class GsonManager {
     
     private GsonManager() {
         gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryJson.Serializer());
-        gsonBuilder.registerTypeAdapter(MCRCategoryImpl.class, new MCRCategoryJson.Deserializer());
+        gsonBuilder.registerTypeAdapter(Category.class, new MCRCategoryJson.Serializer());
+        gsonBuilder.registerTypeAdapter(Category.class, new MCRCategoryJson.Deserializer());
         gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListJson.Serializer());
         gsonBuilder.registerTypeAdapter(MCRCategoryListWrapper.class, new MCRCategoryListJson.Deserializer());
         gsonBuilder.registerTypeAdapter(MCRLabelSetWrapper.class, new MCRLabelSetJson.Serializer());

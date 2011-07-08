@@ -5,14 +5,15 @@ import java.util.Set;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
+
+import fsu.jportal.gson.Category;
 
 public class MCRCategUtils{
-    public static MCRCategory newCategory(MCRCategoryID id, Set<MCRLabel> labels, MCRCategory parent) {
-        MCRCategoryImpl category = new MCRCategoryImpl();
+    public static MCRCategory newCategory(MCRCategoryID id, Set<MCRLabel> labels, MCRCategoryID mcrCategoryID) {
+        Category category = new Category();
         category.setId(id);
         category.setLabels(labels);
-        category.setParent(parent);
+        category.setParentID(mcrCategoryID);
     
         return category;
     }

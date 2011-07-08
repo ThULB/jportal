@@ -67,7 +67,11 @@ public class MCRLabelSetJson {
         private MCRLabel jsonLabelToMCRLabel(JsonObject labelJsonObject) {
             String lang = labelJsonObject.get(LANG).getAsString();
             String text = labelJsonObject.get(TEXT).getAsString();
-            String description = labelJsonObject.get(DESCRIPTION).getAsString();
+            JsonElement jsonElement = labelJsonObject.get(DESCRIPTION);
+            String description = null;
+            if(jsonElement != null){
+                description = jsonElement.getAsString();
+            }
             return new MCRLabel(lang, text, description);
         }
         

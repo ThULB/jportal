@@ -2,6 +2,8 @@ package fsu.jportal.gson;
 
 public final class CategJsonPropName {
     public static String ID = "id";
+    public static String PARENTID = "parentid";
+    public static String POSITION = "position";
     public static String ROOTID = "rootid";
     public static String CATEGID = "categid";
     public static String LABELS = "labels";

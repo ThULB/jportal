@@ -13,14 +13,13 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
@@ -33,12 +32,17 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonStreamParser;
 
+import fsu.jportal.gson.CategJsonPropName;
+import fsu.jportal.gson.Category;
 import fsu.jportal.gson.GsonManager;
-import fsu.jportal.gson.MCRCategoryIDJson;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
 
 /**
@@ -77,54 +81,91 @@ public class ClassificationResource {
     @Path("new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newClassification(String json) {
-        openSession();
-
-        Gson gson = GsonManager.instance().createGson();
-        MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
-
-        MCRCategoryID categoryID = newRootID();
-        category.setId(categoryID);
-
-        getCategoryDAO().addCategory(null, category);
-        URI uri = buildGetURI(categoryID);
-        closeSession();
-        return Response.created(uri).build();
+        return newCategoryFromJson(json, null, null);
     }
 
     @POST
     @Path("{rootIdStr}/new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newCategory(@PathParam("rootIdStr") String rootIdStr, String json) {
-
-        MCRCategoryID parentID = MCRCategoryID.rootID(rootIdStr);
-        return createCategory(json, parentID);
+        return newCategoryFromJson(json, rootIdStr, null);
     }
+
     
     @POST
     @Path("{rootIdStr}/{parentIdStr}/new")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response newCategory(@PathParam("rootIdStr") String rootIdStr, @PathParam("parentIdStr") String parentIdStr, String json) {
+        return newCategoryFromJson(json, rootIdStr, parentIdStr);
+    }
+    
+    private Response newCategoryFromJson(String json, String rootIdStr, String parentIdStr) {
+        Category category = parseJson(json);
+        MCRCategoryID parentID = createID(rootIdStr, parentIdStr); 
         
-        MCRCategoryID parentID = new MCRCategoryID(rootIdStr, parentIdStr);
-        return createCategory(json, parentID);
+        if(category.getId() == null) {
+            assignId(rootIdStr, category);
+        }
+        
+        return addCategory(category, parentID);
     }
 
-    private Response createCategory(String json, MCRCategoryID parentID) {
+    private void assignId(String rootIdStr, Category category) {
+        MCRCategoryID categoryID = newRandomUUID(rootIdStr);
+        category.setId(categoryID);
+    }
+
+    private MCRCategoryID createID(String rootIdStr, String parentIdStr) {
+        if(rootIdStr == null){
+            return null;
+        }
+        
+        if(parentIdStr == null || "".equals(parentIdStr)){
+            return MCRCategoryID.rootID(rootIdStr);
+        } else {
+            return new MCRCategoryID(rootIdStr, parentIdStr);
+        }
+    }
+    
+    private Category parseJson(String json) {
+        Gson gson = GsonManager.instance().createGson();
+        Category category = gson.fromJson(json, Category.class);
+        return category;
+    }
+
+    private Response addCategory(MCRCategory categ, MCRCategoryID parentID) {
         openSession();
-        if (!getCategoryDAO().exist(parentID)) {
+        if(getCategoryDAO().exist(categ.getId())){
+            return Response.status(Status.OK).build();
+        }
+        
+        if (parentID != null && !getCategoryDAO().exist(parentID)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-
-        Gson gson = GsonManager.instance().createGson();
-        MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
-
-        MCRCategoryID categoryID = newID(parentID.getRootID());
-        category.setId(categoryID);
-
-        getCategoryDAO().addCategory(parentID, category);
+        
+        getCategoryDAO().addCategory(parentID, categ);
         closeSession();
         
-        URI uri = buildGetURI(categoryID);
+        URI uri = buildGetURI(categ.getId());
+        return Response.created(uri).build();
+    }
+    
+    private Response createCategory(String json) {
+        openSession();
+        
+        Category category = parseJson(json);
+        
+        MCRCategoryID parentID = category.getParentID();
+        
+        
+        if (!getCategoryDAO().exist(parentID)) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+        
+        getCategoryDAO().addCategory(parentID, category.asMCRImpl());
+        closeSession();
+        
+        URI uri = buildGetURI(category.getId());
         return Response.created(uri).build();
     }
 
@@ -133,10 +174,14 @@ public class ClassificationResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String newIDJson(@PathParam("rootID") String rootID) {
         Gson gson = GsonManager.instance().createGson();
-        return gson.toJson(newID(rootID));
+        return gson.toJson(newRandomUUID(rootID));
     }
 
-    private MCRCategoryID newID(String rootID) {
+    private MCRCategoryID newRandomUUID(String rootID) {
+        if(rootID == null){
+            rootID = UUID.randomUUID().toString();
+        }
+        
         return new MCRCategoryID(rootID, UUID.randomUUID().toString());
     }
 
@@ -157,10 +202,10 @@ public class ClassificationResource {
         uriBuilder.path(this.getClass());
         uriBuilder.path(categoryID.getRootID());
         String categID = categoryID.getID();
-        if(categID != null && !"".equals(categID)) {
+        if (categID != null && !"".equals(categID)) {
             uriBuilder.path(categID);
         }
-        
+
         return uriBuilder.build();
     }
 
@@ -201,7 +246,7 @@ public class ClassificationResource {
         MCRCategoryID id = MCRCategoryID.rootID(rootidStr);
         return getCategory(id);
     }
-    
+
     /**
      * @param rootidStr rootID.categID
      * @return
@@ -209,12 +254,12 @@ public class ClassificationResource {
     @GET
     @Path("{rootidStr}/{categidStr}")
     @Produces(MediaType.APPLICATION_JSON)
-    public String get(@PathParam("rootidStr") String rootidStr,@PathParam("categidStr") String categidStr) {
-        
+    public String get(@PathParam("rootidStr") String rootidStr, @PathParam("categidStr") String categidStr) {
+
         if (rootidStr == null || "".equals(rootidStr) || categidStr == null || "".equals(categidStr)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
-        
+
         MCRCategoryID id = new MCRCategoryID(rootidStr, categidStr);
         return getCategory(id);
     }
@@ -226,7 +271,11 @@ public class ClassificationResource {
         }
 
         MCRCategory category = getCategoryDAO().getCategory(id, 1);
+        if(!(category instanceof Category)){
+            category = new Category(category);
+        }
         Gson gson = GsonManager.instance().createGson();
+        
         String json = gson.toJson(category);
         closeSession();
         return json;
@@ -252,45 +301,45 @@ public class ClassificationResource {
                 linkService = MCRCategLinkServiceFactory.getInstance();
             }
         }
-        
+
         return linkService;
-    }
-
-    private MCRCategoryID toMCRCategID(String rootID, String categID) {
-        if (categID == null) {
-            categID = "";
-        }
-
-        MCRCategoryID id = new MCRCategoryID(rootID, categID);
-        return id;
     }
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateClassification(String json) {
-        openSession();
-        Gson gson = GsonManager.instance().createGson();
-        MCRCategoryImpl category = gson.fromJson(json, MCRCategoryImpl.class);
-
-        try {
-            getCategoryDAO().replaceCategory(category);
-            closeSession();
-            return Response.ok(json).build();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            closeSession();
-            return Response.status(Status.NOT_FOUND).build();
-        }
+        Category category = parseJson(json);
+        return updateCategory(category);
 
     }
 
-    @DELETE
-    public Response deleteClassification(@QueryParam("rootID") String rootID, @QueryParam("categID") String categID) {
+    private Response updateCategory(Category newCategory) {
         openSession();
-        MCRCategoryID mcrCategID = toMCRCategID(rootID, categID);
+        if(!getCategoryDAO().exist(newCategory.getId())){
+            return Response.status(Status.NOT_FOUND).build();
+        } else {
+            MCRCategory oldCategory = getCategoryDAO().getCategory(newCategory.getId(), -1);
+//            newCategory.setChildren(oldCategory.getChildren());
+            getCategoryDAO().replaceCategory(oldCategory);
+            
+            MCRCategoryID newParentId = newCategory.getParentID();
+            if(!oldCategory.getParent().getId().equals(newParentId)){
+                getCategoryDAO().moveCategory(newCategory.getId(), newParentId, newCategory.getLevel());
+            }
+            
+            closeSession();
+            return Response.ok().build();
+        }
+    }
+
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteClassification(String json) {
+        openSession();
+        Category category = parseJson(json);
 
         try {
-            getCategoryDAO().deleteCategory(mcrCategID);
+            getCategoryDAO().deleteCategory(category.getId());
             closeSession();
             return Response.status(Status.GONE).build();
         } catch (MCRPersistenceException e) {
@@ -299,11 +348,81 @@ public class ClassificationResource {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
-    
+
     @POST
+    @Path("save")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(String json){
+    public Response save(String json) {
+        JsonStreamParser jsonStreamParser = new JsonStreamParser(json);
+        if(jsonStreamParser.hasNext()){
+            JsonArray saveObjArray = jsonStreamParser.next().getAsJsonArray();
+            
+            for (JsonElement jsonElement : saveObjArray) {
+                String status = getStatus(jsonElement);
+                SaveElement categ = getCateg(jsonElement);
+                Category parsedCateg = parseJson(categ.getJson());
+                
+                if ("update".equals(status)) {
+                    if(parsedCateg.getParentID() != null) {
+                        updateCategory(parsedCateg);
+                    }else{
+                        addCategory(parsedCateg, null);
+                    }
+                } else if ("deleted".equals(status)) {
+                    deleteClassification(categ.getJson());
+                } else {
+                    return Response.status(Status.BAD_REQUEST).build();
+                }
+            }
+            return Response.status(Status.OK).build();
+        } else{
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+    }
+
+    private SaveElement getCateg(JsonElement jsonElement) {
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        JsonObject categ = jsonObject.get("item").getAsJsonObject();
+        JsonElement parentID = jsonObject.get("parentId");
+        JsonElement position = jsonObject.get("index");
+        boolean hasParent = false;
         
-        return null;
+        if (parentID != null && !parentID.toString().contains("_placeboid_") && position != null) {
+            categ.add(CategJsonPropName.PARENTID, parentID);
+            categ.add(CategJsonPropName.POSITION, position);
+            hasParent = true;
+        }
+        
+        return new SaveElement(categ.toString(), hasParent);
+    }
+    
+    private class SaveElement{
+        private String categJson;
+        private boolean hasParent;
+        
+        public SaveElement(String categJson, boolean hasParent) {
+            this.setCategJson(categJson);
+            this.setHasParent(hasParent);
+        }
+
+        private void setHasParent(boolean hasParent) {
+            this.hasParent = hasParent;
+        }
+
+        public boolean hasParent() {
+            return hasParent;
+        }
+
+        private void setCategJson(String categJson) {
+            this.categJson = categJson;
+        }
+
+        public String getJson() {
+            return categJson;
+        }
+    }
+    
+    private String getStatus(JsonElement jsonElement) {
+        return jsonElement.getAsJsonObject().get("state").getAsString();
     }
 }

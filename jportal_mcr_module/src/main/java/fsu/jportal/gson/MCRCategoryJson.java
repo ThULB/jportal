@@ -3,6 +3,8 @@ package fsu.jportal.gson;
 import static fsu.jportal.gson.CategJsonPropName.CHILDREN;
 import static fsu.jportal.gson.CategJsonPropName.ID;
 import static fsu.jportal.gson.CategJsonPropName.LABELS;
+import static fsu.jportal.gson.CategJsonPropName.PARENTID;
+import static fsu.jportal.gson.CategJsonPropName.POSITION;
 import static fsu.jportal.gson.CategJsonPropName.URISTR;
 
 import java.lang.reflect.Type;
@@ -27,7 +29,6 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import fsu.jportal.utils.MCRCategUtils;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
 import fsu.jportal.wrapper.MCRLabelSetWrapper;
 
@@ -58,7 +59,7 @@ public class MCRCategoryJson {
 
             return rubricJsonObject;
         }
-        
+
         private MCRCategLinkService getLinkService() {
             if (linkService == null) {
                 try {
@@ -67,27 +68,42 @@ public class MCRCategoryJson {
                     linkService = MCRCategLinkServiceFactory.getInstance();
                 }
             }
-            
+
             return linkService;
         }
     }
-    
+
     public static class Deserializer implements JsonDeserializer<MCRCategory> {
         @Override
         public MCRCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject categJsonObject = json.getAsJsonObject();
+            Category deserializedCateg = new Category();
 
-            MCRCategoryID id = null;
             JsonElement idJsonElement = categJsonObject.get(ID);
             if (idJsonElement != null) {
-                id = context.deserialize(idJsonElement, MCRCategoryID.class);
+                MCRCategoryID id = context.deserialize(idJsonElement, MCRCategoryID.class);
+                deserializedCateg.setId(id);
+            }
+
+            JsonElement parentIdJsonElement = categJsonObject.get(PARENTID);
+            if (parentIdJsonElement != null) {
+                MCRCategoryID parentId = context.deserialize(parentIdJsonElement, MCRCategoryID.class);
+                deserializedCateg.setParentID(parentId);
             }
             
-            MCRLabelSetWrapper labelSetWrapper = context.deserialize(categJsonObject.get(LABELS), MCRLabelSetWrapper.class);
-            MCRCategory deserializedCateg = MCRCategUtils.newCategory(id, labelSetWrapper.getSet(), null);
-            
+            JsonElement positionJsonElem = categJsonObject.get(POSITION);
+            if(positionJsonElem != null){
+                deserializedCateg.setPositionInParent(positionJsonElem.getAsInt());
+            }
+
+            JsonElement labelSetWrapperElem = categJsonObject.get(LABELS);
+            if (labelSetWrapperElem != null) {
+                MCRLabelSetWrapper labelSetWrapper = context.deserialize(labelSetWrapperElem, MCRLabelSetWrapper.class);
+                deserializedCateg.setLabels(labelSetWrapper.getSet());
+            }
+
             JsonElement uriJsonElement = categJsonObject.get(URISTR);
-            if(uriJsonElement != null){
+            if (uriJsonElement != null) {
                 String uriStr = uriJsonElement.getAsString();
                 deserializedCateg.setURI(URI.create(uriStr));
             }

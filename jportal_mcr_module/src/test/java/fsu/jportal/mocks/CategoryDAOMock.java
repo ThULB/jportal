@@ -11,17 +11,18 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
+
+import fsu.jportal.gson.Category;
 
 public class CategoryDAOMock implements MCRCategoryDAO {
     HashMap<MCRCategoryID, MCRCategory> categMap = null;
     HashMap<MCRCategoryID, MCRCategory> rootCategMap = null;
 
     private void buildTestCategs() {
-        MCRCategoryImpl root_01 = createCategory("rootID_01", "", null);
-        MCRCategoryImpl root_02 = createCategory("rootID_02", "", null);
-        MCRCategoryImpl categ_01 = createCategory("rootID_01", "categ_01", null);
-        MCRCategoryImpl categ_02 = createCategory("rootID_01", "categ_02", null);
+        Category root_01 = createCategory("rootID_01", "", null);
+        Category root_02 = createCategory("rootID_02", "", null);
+        Category categ_01 = createCategory("rootID_01", "categ_01", null);
+        Category categ_02 = createCategory("rootID_01", "categ_02", null);
         
         List<MCRCategory> children = new ArrayList<MCRCategory>();
         children.add(categ_01);
@@ -50,15 +51,15 @@ public class CategoryDAOMock implements MCRCategoryDAO {
         return categMap.values();
     }
 
-    private MCRCategoryImpl createCategory(String rootID, String categID, MCRCategory parent) {
+    private Category createCategory(String rootID, String categID, MCRCategoryID parentID) {
         MCRCategoryID id = new MCRCategoryID(rootID, categID);
         Set<MCRLabel> labels = new HashSet<MCRLabel>();
         labels.add(new MCRLabel("de", id + "_text", id + "_descr"));
         labels.add(new MCRLabel("en", id + "_text", id + "_descr"));
-        MCRCategoryImpl newCategory = new MCRCategoryImpl();
+        Category newCategory = new Category();
         newCategory.setId(id);
         newCategory.setLabels(labels);
-        newCategory.setParent(parent);
+        newCategory.setParentID(parentID);
         return newCategory;
     }
 

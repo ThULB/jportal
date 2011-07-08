@@ -16,14 +16,15 @@ import com.google.gson.JsonParseException;
 
 public class CategoriesSaveListJson {
     public static class Deserializer implements JsonDeserializer<CategoriesSaveList>{
-
+        
         @Override
         public CategoriesSaveList deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonArray categSaveArray = json.getAsJsonArray();
+            CategoriesSaveList categoriesSaveList = new CategoriesSaveList();
             for (JsonElement toSavedObj : categSaveArray) {
                 JsonObject toSavedObjJson = toSavedObj.getAsJsonObject();
                 JsonElement jsonElement = toSavedObjJson.get("item");
-                MCRCategory categ = context.deserialize(jsonElement, MCRCategoryImpl.class);
+                MCRCategory categ = context.deserialize(jsonElement, Category.class);
                 
                 MCRCategoryID parentID = null;
                 JsonElement parentIdJson = toSavedObjJson.get("parentId");
@@ -31,13 +32,27 @@ public class CategoriesSaveListJson {
                     parentID = context.deserialize(parentIdJson, MCRCategoryID.class);
                 }
                 
+                int index = 0;
                 JsonElement indexJson = toSavedObjJson.get("index");
                 if(indexJson != null){
-                    
+                    index = indexJson.getAsInt();
                 }
                 
+                String status = null;
+                JsonElement statusJson = toSavedObjJson.get("status");
+                if(statusJson != null){
+                    status = statusJson.getAsString();
+                }
+                
+                try {
+                    categoriesSaveList.add(categ,parentID,index,status);
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
-            return null;
+            
+            return categoriesSaveList;
         }
         
     }
