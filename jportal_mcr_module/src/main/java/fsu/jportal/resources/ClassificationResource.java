@@ -144,7 +144,11 @@ public class ClassificationResource {
 		}
 
 		if (getCategoryDAO().exist(categ.getId())) {
-			// update
+			MCRCategory oldCategory = getCategoryDAO().getCategory(categ.getId(), -1);
+			categ.setChildren(oldCategory.getChildren());
+			MCRCategory parent = getCategoryDAO().getCategory(categ.getParentID(), 0);
+			categ.setParent(parent);
+			getCategoryDAO().replaceCategory(categ.asMCRImpl());
 			return Response.status(Status.OK).build();
 		} else {
 			getCategoryDAO().addCategory(parentID, categ.asMCRImpl());
