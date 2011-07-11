@@ -1216,7 +1216,7 @@
                                         </tr>
                                         <!-- prints the editor buttons (add, edit, delete ...) -->
                                         <tr height="30px">
-                                            <xsl:if test="acl:checkPermission($obj_id,'update')">
+                                            <xsl:if test="acl:checkPermission('CRUD','update_derivate')">
                                                 <!-- urn -->
                                                 <xsl:variable name="derivateWithURN" select="mcrxml:hasURNDefined($deriv)" />
                                                 <xsl:variable name="type">
@@ -1270,11 +1270,13 @@
                                                     </a>
 
                                                     <!-- add urn -->
+                                                    <xsl:if test="mcrxml:isCurrentUserInRole('URNEditGroup')">
                                                     <xsl:if test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
                                                         <a
                                                             href="{concat($WebApplicationBaseURL, 'servlets/MCRAddURNToObjectServlet?object=', @xlink:href)}">
                                                             <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" title="{i18n:translate('swf.urn.addURN')}" />
                                                         </a>
+                                                    </xsl:if>
                                                     </xsl:if>
                                                     <!-- create mets -->
                                                     <xsl:if test="mcrxml:isCurrentUserInRole('admingroup')">
