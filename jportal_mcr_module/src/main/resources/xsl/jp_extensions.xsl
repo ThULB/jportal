@@ -52,8 +52,91 @@
         2. RequestURL - $WebApplicationBaseURL - lang ?= @href - lang
         3. Root element ?= item//dynamicContentBinding/rootTag
     -->
-
     <xsl:template name="jp_getBrowserAddress">
+        <xsl:variable name="RequestURL.sessionRemoved">
+            <xsl:call-template name="UrlDeleteSession">
+                <xsl:with-param name="url" select="$RequestURL" />
+            </xsl:call-template>
+        </xsl:variable>
+        <!--remove $lastPage -->
+        <xsl:variable name="RequestURL.lastPageDel">
+            <xsl:call-template name="UrlDelParam">
+                <xsl:with-param name="url" select="$RequestURL.sessionRemoved" />
+                <xsl:with-param name="par" select="'XSL.lastPage.SESSION'" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="RequestURL.WebURLDel">
+            <xsl:value-of select="concat('/',substring-after($RequestURL.lastPageDel,$WebApplicationBaseURL))" />
+        </xsl:variable>
+        <!--remove $lang -->
+        <xsl:variable name="cleanURL">
+            <xsl:call-template name="UrlDelParam">
+                <xsl:with-param name="url" select="$RequestURL.lastPageDel" />
+                <xsl:with-param name="par" select="'lang'" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="cleanURL2">
+            <xsl:call-template name="UrlDelParam">
+                <xsl:with-param name="url" select="$RequestURL.WebURLDel" />
+                <xsl:with-param name="par" select="'lang'" />
+            </xsl:call-template>
+        </xsl:variable>
+
+        <!-- 1. case -->
+        <!-- test if navigation.xml contains the current browser address -->
+        <xsl:variable name="browserAddress_href">
+            <xsl:value-of select="$loaded_navigation_xml//item[(@href=$cleanURL2) or (@href=$cleanURL)]/@href" />
+        </xsl:variable>
+        <!-- 2. case -->
+        <!-- Don't remove needed in fastWCMS -->
+        <xsl:variable name="browserAddress_dynamicContentBinding">
+            <xsl:if test="  ($browserAddress_href = '') ">
+                <!-- assign name of rootTag -> $rootTag -->
+                <xsl:variable name="rootTag" select="name(*)" />
+                <xsl:for-each select="$loaded_navigation_xml//dynamicContentBinding/rootTag">
+                    <xsl:if test=" current() = $rootTag ">
+                        <xsl:for-each select="ancestor-or-self::*[@href]">
+                            <xsl:if test="position()=last()">
+                                <xsl:value-of select="@href" />
+                            </xsl:if>
+                        </xsl:for-each>
+                    </xsl:if>
+                </xsl:for-each>
+            </xsl:if>
+        </xsl:variable>
+        <!-- 3. case -->
+        <!-- nothing look for $lastPage -->
+        <xsl:variable name="browserAddress_lastPage">
+            <xsl:if test=" ($browserAddress_href = '') and ($browserAddress_dynamicContentBinding = '') ">
+                <xsl:call-template name="get.rightPage" />
+            </xsl:if>
+        </xsl:variable>
+
+        <!-- assign right browser address -->
+        <xsl:choose>
+            <xsl:when test=" $browserAddress_href != '' ">
+                <xsl:value-of select="$browserAddress_href" />
+                <!-- store in session -->
+                <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_href)" />
+            </xsl:when>
+            <xsl:when test=" $browserAddress_dynamicContentBinding != '' ">
+                <xsl:value-of select="$browserAddress_dynamicContentBinding" />
+                <!-- store in session -->
+                <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_dynamicContentBinding)" />
+            </xsl:when>
+            <xsl:when test=" $browserAddress_lastPage != '' ">
+                <xsl:value-of select="$browserAddress_lastPage" />
+                <xsl:variable name="dummy" select="layoutUtils:setLastValidPageID($browserAddress_lastPage)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$loaded_navigation_xml/@hrefStartingPage" />
+            </xsl:otherwise>
+        </xsl:choose>
+
+    </xsl:template>
+
+<!-- TODO: compare what really happens here -->
+    <xsl:template name="jp_getBrowserAddress1">
         <xsl:variable name="RequestURL.sessionRemoved">
             <xsl:call-template name="UrlDeleteSession">
                 <xsl:with-param name="url" select="$RequestURL" />
