@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -79,6 +80,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         com = new MCRCommand("add derivates {0} to object {1}",
                 "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String", "adds one ore more derivates to an object ");
+        command.add(com);
+        
+        com = new MCRCommand("merge derivates {0}",
+                "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String", "merge several derivates");
         command.add(com);
     }
 
@@ -173,6 +178,27 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         return cmd;
 
+    }
+    
+    
+    public static List<String> mergeDerivates(String derivateIDs) {
+        List<String> executeMoreCMDs = new ArrayList<String>();
+        String[] derivateIdArray = derivateIDs.split(",");
+        
+        if(derivateIdArray.length > 1){
+            MCRDirectory destDeriv = (MCRDirectory) MCRFilesystemNode.getRootNode(derivateIdArray[0]);
+            String[] subSetOfIds = Arrays.copyOfRange(derivateIdArray, 1, derivateIdArray.length);
+            
+            for (String derivID : subSetOfIds) {
+                MCRDirectory derivate = (MCRDirectory) MCRFilesystemNode.getRootNode(derivID);
+                for (MCRFilesystemNode child : derivate.getChildren()) {
+                    child.move(destDeriv);
+                }
+                MCRMetadataManager.deleteMCRDerivate(MCRObjectID.getInstance(derivID));
+            }
+            executeMoreCMDs.addAll(MCRIView2Commands.tileDerivate(destDeriv.getOwnerID()));
+        }
+        return executeMoreCMDs;
     }
     
     public static List<String> moveFile(String sourcePath, String destPath) {
@@ -275,13 +301,13 @@ public class MCRObjectTools extends MCRAbstractCommands {
     private static MCRFilesystemNode getFileSystemNode(String sourcePath) {
         String ownerID = getOwnerID(sourcePath);
         MCRFilesystemNode root = MCRFilesystemNode.getRootNode(ownerID);
-        int pos = ownerID.length() + 1;
-        StringBuffer path = new StringBuffer(sourcePath.substring(pos));
-        if (path.length() > 1 && (path.charAt(path.length() - 1) == '/')) {
-            path.deleteCharAt(path.length() - 1);
+        int beginIndex = sourcePath.indexOf('/', 1)+1;
+        String filename = sourcePath.substring(beginIndex).trim();
+        if(!"".equals(filename)) {
+            return ((MCRDirectory) root).getChildByPath(filename);
         }
-        MCRFilesystemNode node = ((MCRDirectory) root).getChildByPath(path.toString());
-        return node;
+        
+        return root;
     }
 
     private static String getOwnerID(String path) {
