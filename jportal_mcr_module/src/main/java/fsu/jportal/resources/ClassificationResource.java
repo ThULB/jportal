@@ -144,11 +144,18 @@ public class ClassificationResource {
 		}
 
 		if (getCategoryDAO().exist(categ.getId())) {
-			MCRCategory oldCategory = getCategoryDAO().getCategory(categ.getId(), -1);
-			categ.setChildren(oldCategory.getChildren());
-			MCRCategory parent = getCategoryDAO().getCategory(categ.getParentID(), 0);
-			categ.setParent(parent);
-			getCategoryDAO().replaceCategory(categ.asMCRImpl());
+		    List<MCRCategory> parents = getCategoryDAO().getParents(categ.getId());
+		    if(parents.size() > 0) {
+                MCRCategory oldParent = parents.get(0);
+                if(!oldParent.getId().equals(categ.getParentID())){
+                    getCategoryDAO().moveCategory(categ.getId(), parentID);
+                }
+            }
+//			MCRCategory oldCategory = getCategoryDAO().getCategory(categ.getId(), -1);
+//			categ.setChildren(oldCategory.getChildren());
+//			MCRCategory parent = getCategoryDAO().getCategory(categ.getParentID(), 0);
+//			categ.setParent(parent);
+//			getCategoryDAO().replaceCategory(categ.asMCRImpl());
 			return Response.status(Status.OK).build();
 		} else {
 			getCategoryDAO().addCategory(parentID, categ.asMCRImpl());
