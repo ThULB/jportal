@@ -774,6 +774,9 @@
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                                     <img src="{$WebApplicationBaseURL}images/icons/ACL_button_30x30.png" title="{i18n:translate('component.swf.object.editACL')}" />
                                 </a>
+                                <form action="{$WebApplicationBaseURL}rsc/cmd/mergeDerivIn/{$id}" method="post" target="_self">
+                                	<input type="image" src="absende.gif" alt="Absenden"/>
+                                </form>
                             </xsl:if>
                         </td>
                     </tr>
