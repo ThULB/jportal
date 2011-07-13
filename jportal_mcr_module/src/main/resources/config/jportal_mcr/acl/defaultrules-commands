@@ -25,9 +25,9 @@ update permission deletedb for id default_person with rulefile xml/grant-editors
 update permission deletedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by journal editors	
 update permission deletedb for id default_derivate with rulefile xml/grant-derivategroup.xml described by journal editors for derivates
 
-update permission create_jpjournal for id CRUD with rulefile xml/grant-admingroup.xml described by Create journal
-update permission update_jpjournal for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update journal
-update permission delete_jpjournal for id CRUD with rulefile xml/grant-admingroup.xml described by Delete journal
+update permission create_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Create journal
+update permission update_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Update journal
+update permission delete_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Delete journal
 
 update permission create_jpvolume for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create volume
 update permission update_jpvolume for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update volume
@@ -36,3 +36,6 @@ update permission delete_jpvolume for id CRUD with rulefile xml/grant-editorsgro
 update permission create_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
 update permission update_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
 update permission delete_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+
+update permission update_derivate for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update derivate
+update permission read_derivate for id default with rulefile xml/grant-all.xml described by Read derivate
