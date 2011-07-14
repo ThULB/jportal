@@ -726,16 +726,16 @@
 
         <xsl:if test="$objectHost = 'local'">
             <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
-        	<xsl:variable name="accessPerm">
-        		<access>
-        			<xsl:attribute name="update">
-        				<xsl:value-of select="acl:checkPermission($id,concat('update_',$type))"/>
+            <xsl:variable name="accessPerm">
+                <access>
+                    <xsl:attribute name="update">
+        				<xsl:value-of select="acl:checkPermission($id,concat('update_',$type))" />
         			</xsl:attribute>
-        			<xsl:attribute name="delete">
-        				<xsl:value-of select="acl:checkPermission($id,concat('delete_',$type))"/>
+                    <xsl:attribute name="delete">
+        				<xsl:value-of select="acl:checkPermission($id,concat('delete_',$type))" />
         			</xsl:attribute>
-        		</access>
-        	</xsl:variable>
+                </access>
+            </xsl:variable>
             <xsl:choose>
                 <xsl:when test="xalan:nodeset($accessPerm)/access/@update = 'true' or xalan:nodeset($accessPerm)/access/@delete = 'true'">
                     <tr>
@@ -774,9 +774,24 @@
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                                     <img src="{$WebApplicationBaseURL}images/icons/ACL_button_30x30.png" title="{i18n:translate('component.swf.object.editACL')}" />
                                 </a>
-                                <form action="{$WebApplicationBaseURL}rsc/cmd/mergeDerivIn/{$id}" method="post" target="_self">
-                                	<input type="image" src="absende.gif" alt="Absenden"/>
-                                </form>
+                                <xsl:variable name="mergeCMDUrl" select="concat($WebApplicationBaseURL,'rsc/cmd/mergeDerivIn/',$id)"/>
+                                <script type="text/javascript">
+                                    $(function() {
+                                        var mergeButton = $("#mergeButton");
+                                        mergeButton.click(
+                                            function(){
+                                                $.ajax({
+                                                type: "POST",
+                                                url: "<xsl:value-of select="$mergeCMDUrl"/>",
+                                                success: function(msg){location.reload()}
+                                                });
+                                            }
+                                        );
+                                        
+                                        mergeButton.css("margin-left", "10px")
+                                    });
+                                </script>
+                                <img id="mergeButton" src="{$WebApplicationBaseURL}images/icons/merge_button_30x30.png"/>
                             </xsl:if>
                         </td>
                     </tr>
@@ -1274,12 +1289,14 @@
 
                                                     <!-- add urn -->
                                                     <xsl:if test="mcrxml:isCurrentUserInRole('URNEditGroup')">
-                                                    <xsl:if test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
-                                                        <a
-                                                            href="{concat($WebApplicationBaseURL, 'servlets/MCRAddURNToObjectServlet?object=', @xlink:href)}">
-                                                            <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png" title="{i18n:translate('swf.urn.addURN')}" />
-                                                        </a>
-                                                    </xsl:if>
+                                                        <xsl:if
+                                                            test="$derivateWithURN=false() and mcrxml:isAllowedObjectForURNAssignment($obj_id)">
+                                                            <a
+                                                                href="{concat($WebApplicationBaseURL, 'servlets/MCRAddURNToObjectServlet?object=', @xlink:href)}">
+                                                                <img src="{$WebApplicationBaseURL}images/icons/URN_button_30x30.png"
+                                                                    title="{i18n:translate('swf.urn.addURN')}" />
+                                                            </a>
+                                                        </xsl:if>
                                                     </xsl:if>
                                                     <!-- create mets -->
                                                     <xsl:if test="mcrxml:isCurrentUserInRole('admingroup')">

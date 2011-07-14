@@ -1,25 +1,12 @@
 package fsu.jportal.resources;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
-import java.security.Principal;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletInputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,9 +24,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.webcli.servlets.MCRWebCLIServlet;
-
-import com.sun.jersey.api.view.Viewable;
 
 @Path("cmd")
 public class CMDCenterResource {
@@ -51,7 +35,7 @@ public class CMDCenterResource {
 	
 	@POST
 	@Path("mergeDerivIn/{objID}")
-	public Viewable mergeDerivates(@PathParam("objID") String objID){
+	public Response mergeDerivates(@PathParam("objID") String objID){
 	    openSession();
 		MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objID));
 		List<MCRMetaLinkID> derivates = mcrObject.getStructure().getDerivates();
@@ -77,10 +61,7 @@ public class CMDCenterResource {
 		    ImageTiling imageTiling = new ImageTiling(destDerivID);
 		    new Thread(imageTiling).start();
 		}
-		URI baseUri = uriinfo.getBaseUri();
-		URI redirectURI = UriBuilder.fromUri(baseUri).replacePath("receive/" + objID).build();
-//		return Response.temporaryRedirect(redirectURI).build();
-		return new Viewable("/receive/" + objID, "FOO");
+		return Response.ok().build();
 	}
 	
 	private class ImageTiling implements Runnable{
@@ -93,19 +74,6 @@ public class CMDCenterResource {
         }
 
         private void httpGetWebCLI(String queryName, Object queryValue) {
-            MCRWebCLIServlet mcrWebCLIServlet = new MCRWebCLIServlet();
-//            HttpServletRequest req = new Request();
-//            HttpServletResponse res;
-//            try {
-//                mcrWebCLIServlet.doGet(req, res);
-//            } catch (ServletException e1) {
-//                // TODO Auto-generated catch block
-//                e1.printStackTrace();
-//            } catch (IOException e1) {
-//                // TODO Auto-generated catch block
-//                e1.printStackTrace();
-//            }
-            
             URI baseUri = uriinfo.getBaseUri();
             URI requestURI = UriBuilder.fromUri(baseUri).replacePath("servlets/MCRWebCLIServlet").queryParam(queryName, queryValue).build();
             try {
@@ -113,7 +81,6 @@ public class CMDCenterResource {
                 HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setUseCaches(false);
-                System.out.println("####### " + requestURL.toString() + " : " + connection.getResponseCode());
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
