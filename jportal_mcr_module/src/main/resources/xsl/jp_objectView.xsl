@@ -787,11 +787,9 @@
                                                 });
                                             }
                                         );
-                                        
-                                        mergeButton.css("margin-left", "10px")
                                     });
                                 </script>
-                                <img id="mergeButton" src="{$WebApplicationBaseURL}images/icons/merge_button_30x30.png"/>
+                                <img style="margin-left:10px;cursor:hand;cursor:pointer" id="mergeButton" src="{$WebApplicationBaseURL}images/icons/merge_button_30x30.png"/>
                             </xsl:if>
                         </td>
                     </tr>

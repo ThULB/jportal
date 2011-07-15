@@ -12,9 +12,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -36,15 +38,13 @@ public class CMDCenterResource {
 	@POST
 	@Path("mergeDerivIn/{objID}")
 	public Response mergeDerivates(@PathParam("objID") String objID){
-	    openSession();
 		MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objID));
 		List<MCRMetaLinkID> derivates = mcrObject.getStructure().getDerivates();
-		closeSession();
 		
 		if(derivates.size() > 1){
-		    openSession();
 		    MCRMetaLinkID destDerivLink = derivates.remove(0);
 		    String destDerivID = destDerivLink.getXLinkHref();
+		    openSession();
             MCRDirectory destDeriv = (MCRDirectory) MCRFilesystemNode.getRootNode(destDerivID);
 		    
 		    for (MCRMetaLinkID mcrMetaLinkID : derivates) {
@@ -81,6 +81,11 @@ public class CMDCenterResource {
                 HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setUseCaches(false);
+                int responseCode = connection.getResponseCode();
+                if(responseCode != Status.OK.getStatusCode()){
+                    Logger logger = Logger.getLogger(this.getClass());
+                    logger.warn("Could not tile images in merged derivate " + derivID + ", we got response code " + responseCode +".");
+                }
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
