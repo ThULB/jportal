@@ -52,6 +52,7 @@ public class AccessStrategyTest {
         mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.derivate", "true");
+        mcrProperties.setProperty("MCR.Metadata.Type.class", "true");
 
         aclMock = createMock("aclMock", MCRAccessInterface.class);
         idStrategyMock = createMock("idStrategyMock", MCRAccessCheckStrategy.class);
@@ -122,6 +123,7 @@ public class AccessStrategyTest {
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule(parentID, permission + "_derivate")).andReturn(hasParentRule);
         expect(aclMock.checkPermission(parentID, permission + "_derivate")).andReturn(hasAccess);
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(true);
 
         MCRObjectID mcrObjectID = null;
 
@@ -138,7 +140,7 @@ public class AccessStrategyTest {
         assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
         verify(aclMock, userInfoMock, xmlMetaDataMgr);
     }
-    
+
     @Test
     public void noSuperUser_journalHasRule_access() throws Exception {
         String id = "jportal_derivate_00000001";
@@ -150,33 +152,34 @@ public class AccessStrategyTest {
         boolean hasJournalRule = true;
         boolean hasAccess = true;
         boolean expectedAccess = true;
-        
+
         expect(userInfoMock.getCurrentUserID()).andReturn(userID);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule(parentID, permission + "_derivate")).andReturn(hasParentRule);
         expect(aclMock.hasRule(JOURNALID, permission + "_derivate")).andReturn(hasJournalRule);
         expect(aclMock.checkPermission(JOURNALID, permission + "_derivate")).andReturn(hasAccess);
-        
+
         MCRObjectID mcrObjectID = null;
-        
+
         try {
             mcrObjectID = MCRObjectID.getInstance(id);
         } catch (Exception e) {
         }
-        
+
         expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createderivateXML(parentID)).anyTimes();
-        
+
         MCRObjectID mcrParentID = null;
-        
-        
+
         try {
             mcrParentID = MCRObjectID.getInstance(parentID);
         } catch (Exception e) {
         }
-        
+
         expect(xmlMetaDataMgr.retrieveXML(mcrParentID)).andReturn(createObjectXML(JOURNALID)).anyTimes();
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(true);
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(parentID))).andReturn(true);
         replay(aclMock, userInfoMock, xmlMetaDataMgr);
-        
+
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
         String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
         assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
@@ -184,21 +187,57 @@ public class AccessStrategyTest {
     }
 
     @Test
-	public void isInEditorsGroupHasAccess() throws Exception {
-    	String id = JOURNALID;
+    public void isInEditorsGroupHasAccess() throws Exception {
+        String id = JOURNALID;
         String permission = "create_volume";
-        
-    	expect(userInfoMock.getCurrentUserID()).andReturn("user");
-    	expect(aclMock.hasRule(id, permission)).andReturn(false);
-    	expect(aclMock.hasRule("CRUD", permission)).andReturn(true);
-    	expect(aclMock.checkPermission("CRUD", permission)).andReturn(true);
+
+        expect(userInfoMock.getCurrentUserID()).andReturn("user");
+        expect(aclMock.hasRule(id, permission)).andReturn(false);
+        expect(aclMock.hasRule("CRUD", permission)).andReturn(true);
+        expect(aclMock.checkPermission("CRUD", permission)).andReturn(true);
         replay(aclMock, userInfoMock);
 
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
         assertTrue("Superuser should has access", accessStrategy.checkPermission(id, permission));
         verify(aclMock, userInfoMock);
-	}
+    }
+
+    @Test
+    public void checkPermForClassificationHasRule() throws Exception {
+        String id = "jportal_class_00000083";
+        String permission = "writedb";
+        boolean hasRule = true;
+        boolean expectedAccess = false;
+        
+
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.checkPermission(id, permission)).andReturn(false);
+        replay(aclMock);
+
+        String errMsg = MessageFormat.format("Check perm classi, has rule: {0}, should has access: {1}.", hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock);
+    }
     
+    @Test
+    public void checkPermForClassificationNoRule() throws Exception {
+        String id = "jportal_class_00000083";
+        String permission = "writedb";
+        boolean hasRule = false;
+        boolean expectedAccess = false;
+        
+        
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default_class", permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(false);
+        replay(aclMock, xmlMetaDataMgr);
+        
+        String errMsg = MessageFormat.format("Check perm classi, has rule: {0}, should has access: {1}.", hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, xmlMetaDataMgr);
+    }
+
     private Document createderivateXML(String id) {
         Element rootElement = new Element("mycorederivate");
         Element metadata = new Element("derivate");

@@ -118,6 +118,10 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 	}
 
 	private MCRObjectID getParentID(MCRObjectID objID) {
+	    if(!getAccessConfig().getXMLMetadataMgr().exists(objID)){
+	        return null;
+	    }
+	    
 		Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(
 				objID);
 		try {
