@@ -31,7 +31,8 @@
 
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">google.load("jquery", "1");</script>
-        <xsl:if test="acl:checkPermission(/mycoreobject/@ID,'writedb')">
+        <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+        <xsl:if test="acl:checkPermission(/mycoreobject/@ID,concat('update_',$type))">
     	  <script type="text/javascript">
             var baseUrl = "<xsl:value-of select="$WebApplicationBaseURL" />";
             var runid = [];
