@@ -763,7 +763,7 @@
                                     <xsl:call-template name="linkBookmarkedImage" />
                                 </xsl:if>
                             </xsl:if>
-                            <xsl:if test="xalan:nodeset($accessPerm)/access/@delete = 'true'">
+                            <xsl:if test="xalan:nodeset($accessPerm)/access/@delete = 'true'  and not(/mycoreobject/structure/derobjects/derobject)">
                                 <a
                                     href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
                                     <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.object.delObject')}" />
