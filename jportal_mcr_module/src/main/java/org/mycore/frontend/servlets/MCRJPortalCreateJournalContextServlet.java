@@ -157,21 +157,3 @@ public class MCRJPortalCreateJournalContextServlet extends MCRServlet {
         return users;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
