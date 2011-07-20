@@ -805,7 +805,8 @@
         <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
         <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
 
-        <xsl:if test="acl:checkPermission(./@ID,'writedb') and $bookmarkedImage != '' and not($linkExist)">
+        <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+        <xsl:if test="acl:checkPermission(./@ID,concat('update_',$type)) and $bookmarkedImage != '' and not($linkExist)">
             <xsl:variable name="url">
                 <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=setLink&amp;from=',./@ID)" />
             </xsl:variable>
@@ -1359,7 +1360,7 @@
         <!-- links -->
         <xsl:for-each select="/mycoreobject/metadata/derivateLinks/derivateLink">
             <xsl:variable name="derivateID" select="substring-before(./@xlink:href,'/')" />
-            <xsl:variable name="hasPermission" select="acl:checkPermission($obj_id,'deletedb')" />
+            <xsl:variable name="hasPermission" select="acl:checkPermission($obj_id,'delete_derlink')" />
             <xsl:choose>
                 <xsl:when test="mcrxml:exists($derivateID)">
                     <xsl:variable name="derivateObj" select="document(concat('notnull:mcrobject:',$derivateID))" />
