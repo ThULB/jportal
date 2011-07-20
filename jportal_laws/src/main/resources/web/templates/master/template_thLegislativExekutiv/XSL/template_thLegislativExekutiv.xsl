@@ -67,7 +67,7 @@
                   <tr valign="left">
                     <td style="border-color:#a19794; border-style:solid; border-top-width: 1px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px;">
                       <div id="journal-title">
-                        <xsl:copy-of select="concat($journalMaintitle, ' ', $periodetitle, ' ', $additionalTitle)" />
+                        <xsl:copy-of select="concat($journalMaintitle, ' ', $periodetitle)" />
                       </div>
                     </td>
                   </tr>
