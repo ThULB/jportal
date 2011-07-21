@@ -1,10 +1,6 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.io.File;
 import java.util.List;
 
 import javax.ws.rs.POST;
@@ -12,11 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -26,6 +19,8 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.imagetiler.MCRImage;
+import org.mycore.iview2.services.MCRIView2Tools;
 
 @Path("cmd")
 public class CMDCenterResource {
@@ -46,60 +41,30 @@ public class CMDCenterResource {
 		    String destDerivID = destDerivLink.getXLinkHref();
 		    openSession();
             MCRDirectory destDeriv = (MCRDirectory) MCRFilesystemNode.getRootNode(destDerivID);
+            File dirOfDestDerivTiles = MCRImage.getTiledFile(MCRIView2Tools.getTileDir(), destDerivID, null);
 		    
 		    for (MCRMetaLinkID mcrMetaLinkID : derivates) {
-                mcrMetaLinkID.getXLinkHrefID();
-                String id = mcrMetaLinkID.getXLinkHref();
-                MCRDirectory derivate = (MCRDirectory) MCRFilesystemNode.getRootNode(id);
+                String derivId = mcrMetaLinkID.getXLinkHref();
+                MCRDirectory derivate = (MCRDirectory) MCRFilesystemNode.getRootNode(derivId);
                 for (MCRFilesystemNode child : derivate.getChildren()) {
                     child.move(destDeriv);
                 }
-                MCRMetadataManager.deleteMCRDerivate(MCRObjectID.getInstance(id));
+                File dirOfDerivTiles = MCRImage.getTiledFile(MCRIView2Tools.getTileDir(), derivId, null);
+                moveTiles(dirOfDerivTiles, dirOfDestDerivTiles);
+                MCRMetadataManager.deleteMCRDerivate(MCRObjectID.getInstance(derivId));
             }
 		    closeSession();
 		    
-		    ImageTiling imageTiling = new ImageTiling(destDerivID);
-		    new Thread(imageTiling).start();
 		}
 		return Response.ok().build();
 	}
-	
-	private class ImageTiling implements Runnable{
-        private String derivID;
-        
-        @Override
-        public void run() {
-            httpGetWebCLI("request", "getKnownCommands");
-            httpGetWebCLI("run", "tile images of derivate " + derivID);
-        }
 
-        private void httpGetWebCLI(String queryName, Object queryValue) {
-            URI baseUri = uriinfo.getBaseUri();
-            URI requestURI = UriBuilder.fromUri(baseUri).replacePath("servlets/MCRWebCLIServlet").queryParam(queryName, queryValue).build();
-            try {
-                URL requestURL = requestURI.toURL();
-                HttpURLConnection connection = (HttpURLConnection) requestURL.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setUseCaches(false);
-                int responseCode = connection.getResponseCode();
-                if(responseCode != Status.OK.getStatusCode()){
-                    Logger logger = Logger.getLogger(this.getClass());
-                    logger.warn("Could not tile images in merged derivate " + derivID + ", we got response code " + responseCode +".");
-                }
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+    private void moveTiles(File fromDir, File toDir) {
+        File[] iviewFiles = fromDir.listFiles();
+        for (File iviewFile : iviewFiles) {
+            iviewFile.renameTo(new File(toDir, iviewFile.getName()));
         }
-        
-        public ImageTiling(String derivID) {
-            this.derivID = derivID;
-        }
-	    
-	}
+    }
 	
 	private void openSession() {
         if (useSession) {
