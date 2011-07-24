@@ -6,7 +6,7 @@ var classification = classification || {};
 /**
  * Create a new instance of the classification editor.
  */
-classification.Editor = function() {
+classification.Editor = function(resourcePath) {
 	// divs
 	this.domNode = null;
 
@@ -56,7 +56,7 @@ classification.Editor = function() {
 
 		// create borderlayout in tab
 		var borderContainer = new dijit.layout.BorderContainer({
-			style: "border: none"
+			style: "border: none; width: 950px; height: 600px;"
 		});
 		this.domNode = borderContainer.domNode;
 		// create panes

@@ -327,12 +327,6 @@ public class ClassificationResource {
             newCategory.setChildren(oldCategory.getChildren());
             getCategoryDAO().replaceCategory(newCategory);
 
-            // MCRCategoryID newParentId = newCategory.getParentID();
-            // if(!oldCategory.getParent().getId().equals(newParentId)){
-            // getCategoryDAO().moveCategory(newCategory.getId(), newParentId,
-            // newCategory.getLevel());
-            // }
-
             closeSession();
             return Response.ok().build();
         }
