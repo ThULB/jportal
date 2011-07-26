@@ -83,6 +83,5 @@
       <div dojoType="dijit.layout.ContentPane" id="classMainContainer" style="width: 900px; height: 600px;">
       </div>
     </div>
-    
   </xsl:template>
 </xsl:stylesheet>
