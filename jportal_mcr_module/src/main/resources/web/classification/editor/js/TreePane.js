@@ -46,6 +46,9 @@ classification.TreePane = function() {
 		} else if(args.type == "itemSelected") {
 			var item = args.item;
 			this.updateToolbar(item);
+		} else if(args.type == "itemAdded") {
+			var item = args.item;
+			this.tree.focusItem(item);
 		}
 	}
 

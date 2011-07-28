@@ -6,7 +6,7 @@ var classification = classification || {};
 /**
  * Create a new instance of the classification editor.
  */
-classification.Editor = function(resourcePath) {
+classification.Editor = function() {
 	// divs
 	this.domNode = null;
 
@@ -56,7 +56,7 @@ classification.Editor = function(resourcePath) {
 
 		// create borderlayout in tab
 		var borderContainer = new dijit.layout.BorderContainer({
-			style: "border: none; width: 950px; height: 600px;"
+			style: "border: none"
 		});
 		this.domNode = borderContainer.domNode;
 		// create panes
@@ -105,9 +105,6 @@ classification.Editor = function(resourcePath) {
 			}
 		} else if(args.type == "itemAdded") {
 			this.updateSaveArray("update", args.item, args.parent);
-			if(args.parent != null) {
-				this.categoryEditorPane.update(args.parent);
-			}
 			this.updateToolbar(true);
 		} else if(args.type == "itemMoved") {
 			this.updateSaveArray("update", args.item, args.parent);

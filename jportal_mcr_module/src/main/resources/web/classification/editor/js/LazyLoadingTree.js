@@ -189,6 +189,20 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 		return true;
 	}
 
+	function focusItem(/*dojo.data.item*/ item) {
+		// select it
+		this.tree.set("selectedItem", item);
+		// try to focus
+		var treeNode = this.tree.getNodesByItem(item)[0];
+		var parentNode = treeNode.getParent();
+		// expand parent node if its not expanded yet
+		if(parentNode.isExpandable && !parentNode.isExpanded) {
+			this.tree.expandNode(parentNode);
+		}
+		// focus it!
+		this.tree.focusNode(treeNode);
+	}
+
 	function itemFocused() {
 		var treeItem = this.tree.lastFocused.item;
 		if(treeItem.notAnItem && treeItem.notAnItem[0] == true) {
@@ -321,6 +335,7 @@ classification.LazyLoadingTree = function(/*String*/ classBaseURL) {
 	
 	classification.LazyLoadingTree.prototype.create = create;
 	classification.LazyLoadingTree.prototype.update = update;
+	classification.LazyLoadingTree.prototype.focusItem = focusItem;
 	classification.LazyLoadingTree.prototype.addToSelected = addToSelected;
 	classification.LazyLoadingTree.prototype.removeSelected = removeSelected;
 	classification.LazyLoadingTree.prototype.getSelectedItems = getSelectedItems;
