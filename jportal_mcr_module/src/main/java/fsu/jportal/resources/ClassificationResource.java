@@ -212,14 +212,14 @@ public class ClassificationResource {
         return uriBuilder.build();
     }
 
-    private void openSession() {
+    protected void openSession() {
         if (useSession) {
             currentSession = MCRSessionMgr.getCurrentSession();
             currentSession.beginTransaction();
         }
     }
 
-    private void closeSession() {
+    protected void closeSession() {
         if (useSession) {
             currentSession.commitTransaction();
             currentSession.close();

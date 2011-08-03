@@ -12,10 +12,6 @@
   <xsl:param name="showId" select="'false'" />
   
   <xsl:template match="classificationEditorDiag">
-  <xsl:message>
-  		<xsl:value-of select="'##### Diaglog #####'"/>
-  	</xsl:message>
-
     <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
     <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
     <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>

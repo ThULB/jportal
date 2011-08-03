@@ -85,8 +85,10 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
             lastPage = MCRLayoutUtilities.getLastValidPageID();
             LOGGER.debug("Found lastPage= " + lastPage);
             if (WEBCONTEXTtwoJID_CACHE.get(lastPage) != null) {
-                cached = true;
                 journalID = (String) WEBCONTEXTtwoJID_CACHE.get(lastPage);
+                if (!"".equals(journalID)) {
+                    cached = true;
+                }
                 LOGGER.debug("Found id to lastPage in cache. lastpage= " + lastPage + " id=" + journalID);
             }
         }

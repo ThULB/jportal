@@ -27,6 +27,13 @@
     <xsl:param name="previousObjectHost" />
     <xsl:param name="nextObject" />
     <xsl:param name="nextObjectHost" />
+    
+    <xsl:param name="class" select="''"/>
+    <xsl:param name="categ" select="''"/>
+    <xsl:param name="CurrentLang" select="'de'"/>
+    <xsl:param name="WebApplicationBaseURL"/>
+    <xsl:param name="returnUrl" select="$WebApplicationBaseURL"/>
+    <xsl:param name="showId" select="'false'" />
 
     <xsl:variable name="allowHTMLInArticles">
         <xsl:call-template name="get.allowHTMLInArticles" />
@@ -708,6 +715,36 @@
             </xsl:choose>
         </xsl:if>
     </xsl:template>
+    
+     <xsl:template name="classificationEditor">
+        <xsl:param name="depth"/>
+        <xsl:param name="spaceBetweenMainLinks"/>
+        <xsl:param name="ImageBaseURL"/>
+        <xsl:param name="menuPointHeigth"/>
+        
+        <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
+        <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
+        <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>
+        <xsl:message>
+            <xsl:value-of select="concat('#######hiddenID: ',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)"></xsl:value-of>
+        </xsl:message>
+        <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
+        <script type="text/javascript">
+            startClassificationEditor({
+                baseUrl : "<xsl:value-of select='$webPath' />" + "/",
+                resourcePath : "<xsl:value-of select='$resourcePath' />",
+                //classificationId : "<xsl:value-of select='$class' />",
+                //classificationId : "jportal_class_00000083",
+                //categoryId : "<xsl:value-of select='$categ' />",
+                classificationId : "",
+                categoryId : "",
+                showId : "<xsl:value-of select='$showId' />" === "true",
+                currentLang : "<xsl:value-of select='$CurrentLang' />",
+                jsPath : "<xsl:value-of select='$jsPath' />",
+                buttonID : "diagButton"
+            });
+        </script>
+    </xsl:template>
 
     <!-- ===================================================================================================== -->
     <!-- prints the icon line to edit an object with derivates -->
@@ -755,6 +792,8 @@
                                         <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.object.addNBN')}" />
                                     </a>
                                 </xsl:if>
+                                <xsl:call-template name="classificationEditor"/>
+                                <img style="margin-left:10px;cursor:hand;cursor:pointer" id="diagButton" src="{$WebApplicationBaseURL}images/icons/rubric_button_30x30.png"/>
                                 <a
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
                                     <img src="{$WebApplicationBaseURL}images/icons/upload_button_30x30.png" title="{i18n:translate('component.swf.derivate.addDerivate')}" />
