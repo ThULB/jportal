@@ -47,7 +47,7 @@ import fsu.testcase.JerseyResourceTestCase;
 
 public class ClassificationResourceTest extends JerseyResourceTestCase{
     private CategoryDAOMock categDAO;
-
+    
     @Before
     public void init() {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
