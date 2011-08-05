@@ -4,62 +4,6 @@
 	ID="jportal_jpjournal_00000128" label="jportal_jpjournal_00000128"
 	version="2.0" xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd">
 	<structure>
-		<children class="MCRMetaLinkID">
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00071853"
-				xlink:title="jportal_jpvolume_00071853" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00071859"
-				xlink:title="jportal_jpvolume_00071859" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00077031"
-				xlink:title="jportal_jpvolume_00077031" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00077566"
-				xlink:title="jportal_jpvolume_00077566" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00078096"
-				xlink:title="jportal_jpvolume_00078096" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00078765"
-				xlink:title="jportal_jpvolume_00078765" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00078766"
-				xlink:title="jportal_jpvolume_00078766" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00079346"
-				xlink:title="jportal_jpvolume_00079346" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00079424"
-				xlink:title="jportal_jpvolume_00079424" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00079608"
-				xlink:title="jportal_jpvolume_00079608" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00079752"
-				xlink:title="jportal_jpvolume_00079752" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00079753"
-				xlink:title="jportal_jpvolume_00079753" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080237"
-				xlink:title="jportal_jpvolume_00080237" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080240"
-				xlink:title="jportal_jpvolume_00080240" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080735"
-				xlink:title="jportal_jpvolume_00080735" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080736"
-				xlink:title="jportal_jpvolume_00080736" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080737"
-				xlink:title="jportal_jpvolume_00080737" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00080738"
-				xlink:title="jportal_jpvolume_00080738" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082967"
-				xlink:title="jportal_jpvolume_00082967" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082968"
-				xlink:title="jportal_jpvolume_00082968" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082969"
-				xlink:title="jportal_jpvolume_00082969" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082970"
-				xlink:title="jportal_jpvolume_00082970" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082971"
-				xlink:title="jportal_jpvolume_00082971" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082972"
-				xlink:title="jportal_jpvolume_00082972" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082973"
-				xlink:title="jportal_jpvolume_00082973" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082974"
-				xlink:title="jportal_jpvolume_00082974" />
-			<child inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00082975"
-				xlink:title="jportal_jpvolume_00082975" />
-		</children>
 	</structure>
 	<metadata xml:lang="de">
 		<maintitles class="MCRMetaLangText" heritable="true"

@@ -227,7 +227,7 @@ public class ClassificationResource {
         }
     }
 
-    private MCRCategoryDAO getCategoryDAO() {
+    protected MCRCategoryDAO getCategoryDAO() {
         if (categoryDAO == null) {
             categoryDAO = MCRCategoryDAOFactory.getInstance();
         }
@@ -298,7 +298,7 @@ public class ClassificationResource {
         return json;
     }
 
-    private MCRCategLinkService getLinkService() {
+    protected MCRCategLinkService getLinkService() {
         if (linkService == null) {
             try {
                 linkService = (MCRCategLinkService) MCRConfiguration.instance().getInstanceOf("Category.Link.Service");

@@ -47,34 +47,15 @@ function startClassificationEditor(conf) {
 			$.getScript(conf.jsPath + '/CategoryEditorPane.js');
 			$.getScript(conf.jsPath + '/TreePane.js');
 			$.getScript(conf.jsPath + '/Editor.js');
-
 			var _interval2 = setInterval(function() {
 				// wait till classification is loaded
 				if (window.classification !== undefined) {
 					clearInterval(_interval2);
-					function setup() {
-						// set theme to body tag to get css support
-						// (important for dnd)
-
-						// TODO use mycore api to set this
-						var supportedLanguages = [ "de", "en", "pl" ];
-
-						var classEditor = new classification.Editor(
-								conf.resourcePath);
-						classEditor.create(conf.resourcePath,
-								supportedLanguages, conf.currentLang,
-								conf.showId);
-						dijit.byId("classMainContainer").set('content',
-								classEditor.domNode);
-						classEditor.loadClassification(conf.classificationId,
-								conf.categoryId);
-					}
-					;
-
 					dojo.require("dijit.Dialog");
 					// Show the dialog
 					function showDialog() {
-						var diag = dijit.byId('classiDiag');
+						var diagID = 'classiDiag';
+						var diag = dijit.byId(diagID);
 						if (diag !== undefined) {
 							diag.show();
 						} else {
@@ -83,14 +64,11 @@ function startClassificationEditor(conf) {
 							});
 							var supportedLanguages = [ "de", "en", "pl" ];
 
-							var classEditor = new classification.Editor(
-									conf.resourcePath);
-							classEditor.create(conf.resourcePath,
-									supportedLanguages, conf.currentLang,
-									conf.showId);
+							var classEditor = new classification.Editor(conf.resourcePath);
+							classEditor.create(conf.resourcePath, supportedLanguages, conf.currentLang, conf.showId);
 
 							diag = new dijit.Dialog({
-								id : 'classiDiag',
+								id : diagID,
 								// The dialog's title
 								title : "The Dojo Toolkit",
 								// The dialog's content
@@ -106,8 +84,10 @@ function startClassificationEditor(conf) {
 									conf.classificationId, conf.categoryId);
 						}
 					}
-					$("#"+conf.buttonID).click(showDialog)
 				}
+				dojo.ready(function(){
+					$('#'+conf.buttonID).click(showDialog)
+				});
 			}, 1000);
 		}
 	}, 1000);

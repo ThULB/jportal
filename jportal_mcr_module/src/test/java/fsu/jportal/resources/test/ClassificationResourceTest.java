@@ -96,16 +96,6 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
     }
     
     @Test
-    public void getRootCategoriesJP() throws Exception {
-        ClientResponse jsonResponse = resource().path("/classifications/100/journal").type(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-        String categoryJsonStr = jsonResponse.getEntity(String.class);
-        MCRCategoryListWrapper categListWrapper = GsonManager.instance().createGson().fromJson(categoryJsonStr, MCRCategoryListWrapper.class);
-        List<MCRCategory> categList = categListWrapper.getList();
-        System.out.println("JP: " + categoryJsonStr);
-        assertEquals("Wrong number of root categories.", 2, categList.size());
-    }
-    
-    @Test
     public void getSingleCategory() throws Exception {
         Set<MCRCategoryID> ids = categDAO.getIds();
         Collection<MCRCategory> categs = categDAO.getCategs();

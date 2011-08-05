@@ -28,6 +28,7 @@
     <xsl:param name="nextObject" />
     <xsl:param name="nextObjectHost" />
     
+    <xsl:param name="resourcePath" select="'/rsc/classifications/'"/>
     <xsl:param name="class" select="''"/>
     <xsl:param name="categ" select="''"/>
     <xsl:param name="CurrentLang" select="'de'"/>
@@ -725,18 +726,14 @@
         <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
         <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
         <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>
-        <xsl:message>
-            <xsl:value-of select="concat('#######hiddenID: ',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)"></xsl:value-of>
-        </xsl:message>
+        <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID"/>
+        <xsl:variable name="journalRecourcePath" select="concat($resourcePath,'jp/',$journalID,'/')"/>
         <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
         <script type="text/javascript">
             startClassificationEditor({
                 baseUrl : "<xsl:value-of select='$webPath' />" + "/",
-                resourcePath : "<xsl:value-of select='$resourcePath' />",
-                //classificationId : "<xsl:value-of select='$class' />",
-                //classificationId : "jportal_class_00000083",
-                //categoryId : "<xsl:value-of select='$categ' />",
-                classificationId : "",
+                resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
+                classificationId : "list",
                 categoryId : "",
                 showId : "<xsl:value-of select='$showId' />" === "true",
                 currentLang : "<xsl:value-of select='$CurrentLang' />",
