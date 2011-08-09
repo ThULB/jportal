@@ -1,448 +1,446 @@
 Deutsch							Polnisch					Bemerkungen
 ------------------------------------------------------------------------
-Suche
-nach Zeitschriften suchen
-Blättern in...   											(Zeitschrift)
-EZB-Fächerliste												(EZB - Elektronische Zeitschriftenbibliothek)
-ZDB-Fächerliste												(ZDB - Zeitschriftendatenbank)
-Zeitschriftentypen
-Projekte
-DDC-Projekte												(DDC - Dewey Decimal Classification/Dewey-Dezimalklassifikation)
-Bestandsnachweisen
-Expertensuche												(erweiterte Suche)
+Suche      					- szukaj
+nach Zeitschriften suchen 	- szukaj według czasopism
+Blättern in...   			- przeglądaj								(Zeitschrift)
+EZB-Fächerliste	 			- lista przedmiotów EZB								(EZB - Elektronische Zeitschriftenbibliothek)
+ZDB-Fächerliste  			- lista przedmiotów ZDB								(ZDB - Zeitschriftendatenbank)
+Zeitschriftentypen 			- typy czasopism
+Projekte 					- projekty
+DDC-Projekte	 			- projekty DDC									(DDC - Dewey Decimal Classification/Dewey-Dezimalklassifikation)
+Bestandsnachweise 			- lokalizacja
+Expertensuche	 			- szukanie zaawansowane										(erweiterte Suche)
 -----------------------
-| in Zeitschriften suchen									(zB. in Zeitschriften nach Artikeln suchen)
-|	nach Artikeln
-|	nach Institutionen
-|	nach Personen
-|	Expertensuche
+| in Zeitschriften suchen - szukaj wśród czasopism						(zB. in Zeitschriften nach Artikeln suchen)
+|	nach Artikeln		  - wg artykułów
+|	nach Institutionen	  - wg instytucji
+|	nach Personen		  - wg osób
+|	Expertensuche 		  - szukanie zaawansowane
 -----------------------
-in Webseiten suchen
-Kalender A - Z												(A-Z Liste von Kalender)
-Zeitschriften A - Z
+in Webseiten suchen - szukaj na stronach internetowych
+Kalender A - Z		- kalandarz A do Z								(A-Z Liste von Kalender)
+Zeitschriften A - Z - czasopisma A do Z
 
 -----------------------
-| Editoren													(Editor zum Anlegen eines neuen Datensatzes, zB. eine neue Zeitschrift)
-|	neue Zeitschrift
-|	neue Institution
-|	Klassifikationseditor
+| Editoren				- edytorzy									(Editor zum Anlegen eines neuen Datensatzes, zB. eine neue Zeitschrift)
+|	neue Zeitschrift	- nowe czasopismo
+|	neue Institution	- nowa instytucja
+|	Klassifikationseditor - edytor klasyfikujący
 -----------------------
 
-Nutzerverwaltung
-	Passwort ändern
-	Nutzerdaten anzeigen
-	Nutzer anlegen
-	Gruppe anlegen
-	Nutzer- Gruppenverwaltung
+Nutzerverwaltung 		 - zażądzanie kontem użytkownika
+	Passwort ändern 	 - zmień hasło
+	Nutzerdaten anzeigen - pokaż dane użytkownika
+	Nutzer anlegen 		 - załóż konto użytkownika
+	Gruppe anlegen       - załóż grupę
+	Nutzer-/ Gruppenverwaltung - zażądzanie kontem użytkownika / zażądzanie grupą
 	
-Kontakt
-Start
-Sitemap
-Anmelden
-Impressum
-Ein Projekt von
-Navigation
-Blättern
-Nutzerkennung wechseln
-Sie sind derzeit angemeldet als
-Benutzerkennung
-Passwort
-Bearbeiten
-Dokument bearbeiten
-Datenobjek hinzufügen
-Dokument löschen
-Zugriffsrechte bearbeiten
+Kontakt 			- kontakt
+Start				- start
+Sitemap 			- sidemap
+Anmelden 			- zarejestruj się
+Impressum 			- impressum
+Ein Projekt von 	- projekt opracowany przez
+Navigation 			- nawigacja
+Blättern 			- przeglądaj
+Sie sind derzeit angemeldet als - W tej chwili jesteś zalogowany(a) jako
+Benutzerkennung 	- nazwa użytkownika
+Passwort 			- hasło
+Bearbeiten 			- edytuj
+Dokument bearbeiten - edytuj dokument
+Datenobjek hinzufügen - dodaj objekt
+Dokument löschen 	- usuń dokument
+Zugriffsrechte bearbeiten - dostosuj prawa dostępu
 
 ---------------------------
-Zeitschriftentyp
-	Historische Zeitschrift
-	Online-Zeitschrift
-	Kalender
+Zeitschriftentyp  			- typ czasopisma
+	Historische Zeitschrift - czasopisma historyczne
+	Online-Zeitschrift		- czasopisma online
+	Kalender 				- kalendarz
 ---------------------------
-Projektbezeichnung
-	DFG-Projekte Ereignis Weimar-Jena
-	Religionspädagogik
-	Einzelprojekte
-	Projekte historische Kommission
-	Virtuelle Bibliothek des 18. Jh.
-	Regionalzeitschriften
-	SFB-482
+Projektbezeichnung 					 - nazwa projektu
+	DFG-Projekte Ereignis Weimar-Jena - projekty DFG Ereignis Weimar-Jena
+	Religionspädagogik				 - pedagogika religijna
+	Einzelprojekte					 - projekty pojedyńcze
+	Projekte historische Kommission	 - projekty komisji historycznej
+	Virtuelle Bibliothek des 18. Jh. - Wirtualna biblioteka XVIII wieku
+	Regionalzeitschriften			 - czasopisma regianalne
+	SFB-482						  	 - SFB-482	
 ---------------------------
 Bestandsnachweis
-	ThULB	  	   	
-	HAAB Weimar	  	   	
-	UFB Erfurt / Gotha	  	   	
-	Stadtarchiv Eisenberg	  	   	
-	Stadtarchiv Suhl	  	   	
-	Stadtbibliothek Suhl	  	   	
-	Stadtbibliothek Bad Langensalza	  	   	
-	TU Ilmenau	  	   	
-	ULB Halle	  	   	
-	Staatsarchiv Rudolstadt
+	ThULB	  	   					- ThULB
+	HAAB Weimar	  	   				- HAAB Weimar
+	UFB Erfurt / Gotha	  	   	    - UFB Erfurt / Gotha
+	Stadtarchiv Eisenberg	  	   	- Archiwum miejskie Eisenberg
+	Stadtarchiv Suhl	  	   		- Archiwum miejskie Suhl
+	Stadtbibliothek Suhl	  	   	- Biblioteka miejska Suhl
+	Stadtbibliothek Bad Langensalza	- Biblioteka miejska Bad Langensalza  	   	
+	TU Ilmenau	  	   				- TU Ilmenau
+	ULB Halle	  	   				- ULB Halle
+	Staatsarchiv Rudolstadt 		- Archiwum Państwowe Rudolstadt
 ---------------------------
 Kategorien EZB
 	Allgemeine und vergleichende Sprach- und Literaturwissenschaft.Indogermanistik.Aussereuropäische Sprachen und Literaturen. - Literaturo- i językoznawstwo ogólne i porównawcze. Indogermanistyka. Pozaeuropejskie języki i literatura
-	Allgemeines, Fachübergreifendes	- Teksty ogólne i interdyscyplinarne 	
-	Anglistik. Amerikanistik - Anglistyka. Amerykanistyka  	
-	Archäologie	 - Archeologia
-	Architektur, Bauingenieur- und Vermessungswesen	 - Architektura, Inżynierstwo budowy, Geodezja
-	Bildungsgeschichte - Historia nauki
-	Biologie - Biologia 	
-	Chemie und Pharmazie - Chemia i Farmacja  	   	
-	Elektrotechnik,Mess- und Regelungstechnik - Elektrotechnika, Miernictwo, Technika regulacji  	
-	Energie, Umweltschutz, Kerntechnik	- Energia, Ochrona środowiska, Technika jądrowa 	
-	Ethnologie (Volks- und Völkerkunde)	- Etnologia	   	
-	Geographie - Geografia
-	Geowissenschaften - Nauki geograficzne	   	
-	Germanistik. Niederländische Philologie. Skandinavistik	 - germanistyka, filologia niderlandzka, slawistyka  	
-	Geschichte	- historia
-	Informatik	- informatyka   	
-	Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde - instytucje informacyjne, księgoznawstwo, bibliotekarstwo, grafologia
+	Allgemeines, Fachübergreifendes					- teksty ogólne i interdyscyplinarne 	
+	Anglistik. Amerikanistik 						- Anglistyka. Amerykanistyka  	
+	Archäologie	 									- Archeologia
+	Architektur, Bauingenieur- und Vermessungswesen	- Architektura, Inżynierstwo budowy, Geodezja
+	Bildungsgeschichte 								- Historia nauki
+	Biologie 										- Biologia 	
+	Chemie und Pharmazie 							- Chemia i Farmacja  	   	
+	Elektrotechnik,Mess- und Regelungstechnik 		- Elektrotechnika, Miernictwo, Technika regulacji  	
+	Energie, Umweltschutz, Kerntechnik				- Energia, Ochrona środowiska, Technika jądrowa 	
+	Ethnologie (Volks- und Völkerkunde)				- Etnologia	   	
+	Geographie 										- Geografia
+	Geowissenschaften 								- Nauki geograficzne	   	
+	Germanistik. Niederländische Philologie. Skandinavistik	 - Germanistyka, Filologia niderlandzka, Slawistyka  	
+	Geschichte										- Historia
+	Informatik										- Informatyka   	
+	Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde - Nauka o informacji, Księgoznawstwo, Bibliotekarstwo, Grafologia
 	Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein - Filologia klasyczna. Bizantynistyka. Filologia średniołacińska i nowogrecka. Łacina nowożytna
-	Kunstgeschichte	- historia sztuki 	
-	Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung - rolnictwo, leśnictwo, ogrodnictwo, rybołówictwo, gospodarstwo domowe, dietetyka  	   	
-	Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik - Budowa maszyn, Technika produkcyjna, Górnictwo AAAAAAAAA
-	Mathematik	- matematyka
-	Medien- und Kommunikationswissenschaften, Publizistik - media, nauka o komunikowaniu, publicystyka
-	Medizin	- medycyna   	
-	Musikwissenschaft - muzykologia   	
-	Naturwissenschaft allgemein - nauki przyrodnicze	   	
-	Pädagogik - pedagogika
-	Philosophie	 - filozofia
-	Physik	  	 - fizyka	
-	Politologie	 - politologia
-	Psychologie	 - psychologia
-	Rechtswissenschaft - prawoznawstwo  	
-	Romanistik	 - romanistyka
-	Slavistik	 - slawistyka
-	Soziologie	 - socjologia   	
-	Sport	  	 - wychowanie fizyczne
-	Technik allgemein - technika ogolna
-	Theologie und Religionswissenschaft	- teologia i religioznawstwo
-	Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie	- technika procesów przetwórczych, biotechnologia, technologia spożywcza  	   	
-	Wirtschaftswissenschaften - nauki ekonomiczne   	
-	Wissenschaftskunde, Forschung, Hochschul-. Museumswesen - ekonomia, badania naukowe, szkolnictwo wyższe, muzealnictwo
+	Kunstgeschichte									- Historia sztuki 	
+	Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung - Rolnictwo, Leśnictwo, Ogrodnictwo, Rybołówictwo, Gospodarstwo domowe, Dietetyka  	   	
+	Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik - Budowa maszyn, Nauka o materiałach, Technika produkcyjna, Górnictwo, Inżynierstwo ruchu drogowego
+	Mathematik										- Matematyka
+	Medien- und Kommunikationswissenschaften, Publizistik - Media, Nauka o komunikowaniu się, Publicystyka
+	Medizin											- Medycyna   	
+	Musikwissenschaft 								- Muzykologia   	
+	Naturwissenschaft allgemein 					- Nauki przyrodnicze	   	
+	Pädagogik 										- Pedagogika
+	Philosophie	 									- Filozofia
+	Physik	  	 									- Fizyka	
+	Politologie	 									- Politologia
+	Psychologie	 									- Psychologia
+	Rechtswissenschaft 								- Prawoznawstwo  	
+	Romanistik	 									- Romanistyka
+	Slavistik	 									- Slawistyka
+	Soziologie	 									- Socjologia   	
+	Sport	  	 									- Wychowanie fizyczne
+	Technik allgemein 											- Technika ogólna
+	Theologie und Religionswissenschaft							- Teologia i Religioznawstwo
+	Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie	- Technika procesów przetwórczych, Biotechnologia, Technologia spożywcza  	   	
+	Wirtschaftswissenschaften 									- Nauki ekonomiczne   	
+	Wissenschaftskunde, Forschung, Hochschul-. Museumswesen 	- Ekonomia, Badania naukowe, Szkolnictwo wyższe, Muzealnictwo
 ---------------------------
 Kategorien ZDB
-Allgemeine, interdisziplinäre und fächerübergreifende Zeitschriften	  
-	Allgemeines	  
-	Allgemeine Bibliographien	  
-	Allgemeine Biographien	  
-	Wiss. Organisationen u. Institutionen	  
-	Publizistik, Medien, Informationswissenschaften	-   
-	Bibliotheks-, Dokumentations-, Verlagwesen	- Bibliotekarstwo, AAAAAAAAAAAA, działalność wydawnicza  
-	Museums- u. Archivwesen	 - muzealnictwo i AAAAAAAAAAAAAAAAAAAAAAAAA
-	Universitäten u. Hochschulen - Uniwersytety i szkoły wyższe
-	Umweltforschung u. Umweltschutz	 - Ekologia, ochrona środowiska
-	Orientalistik - orientalistyka
-	Judaica - Judaika
-Philosophie, Theologie, Psychologie, Pädagogik	- filozofia, teologia, psychologia, pedagogika
-	Philosophie	- filozofia 
-	Weltanschauungen - Światopoglądy  
-	Religionswissenschaft (nichtchristl. Rel.)	- Religioznawstwo (pozachsześciańskie)  
-	Religionswissenschaft (christl.), Theologie	 - Religioznawstwo (chsześciańskie), teologia
-	Bibelwissenschaft - Biblistyka
-	Kirchengeschichte - Historia kościoła
-	Kirchenverwaltung - Administracja kościelna
-	Praktische Theologie, Seelsorge	- Teologia praktyczna, duszpasterstwo
-	Psychologie	- psychologia 
-	Pädagogik - pedagogika
-Geschichte, Kulturgeschichte, Völkerkunde - Historia, historia kultury, etnologia
-	Geschichte u. Kulturgeschichte (allg.)	Historia i historia kultury (ogól.)
-	Historische Hilfswissenschaften	 - nauki pomocnicze historii
-	Vor- u. Frühgeschichte, Archäologie	 - Prehistoria, archeologia
-	Alte Geschichte	- Historia starożytna  
-	Mittelalterliche Geschichte	 - Historia średniowiecza 
-	Geschichte der Neuzeit	- Historia nowożytna 
-	Zeitgeschichte	- Historia współczesna
-	Deutsche Landesgeschichte - Niemiecka historia narodowa 
-	Landesgeschichte Baden-Württemberg	- Historia Badenii-Wirtembergii
-	Landesgeschichte und Landeskunde Bayern	  - Krajoznawstwo i historia Bawarii
-	Landesgeschichte und Landeskunde Hessen	  - Krajoznawstwo i historia hesji
+Allgemeine, interdisziplinäre und fächerübergreifende Zeitschriften	- czasopisma ogólne i interdyscyplinarne
+	Allgemeines	  			  						- Zagadnienia ogólne
+	Allgemeine Bibliographien 						- Bibliografie ogólne
+	Allgemeine Biographien	  						- Biografie ogólne
+	Wiss. Organisationen u. Institutionen 			- Organizacje i instytucje naukowe
+	Publizistik, Medien, Informationswissenschaften	- Publicystyka, Media, Nauka o informacji
+	Bibliotheks-, Dokumentations-, Verlagwesen		- Bibliotekarstwo, Dokumentalistyka, Edytorstwo 
+	Museums- u. Archivwesen	 						- Muzealnictwo i Archiwistyka
+	Universitäten u. Hochschulen 					- Uniwersytety i szkoły wyższe
+	Umweltforschung u. Umweltschutz	 				- Ekologia, Ochrona środowiska
+	Orientalistik 					 				- Orientalistyka
+	Judaica 						 				- Judaika
+Philosophie, Theologie, Psychologie, Pädagogik		- Filozofia, Teologia, Psychologia, Pedagogika
+	Philosophie										- Filozofia 
+	Weltanschauungen 								- Światopoglądy  
+	Religionswissenschaft (nichtchristl. Rel.)		- Religioznawstwo (pozachsześciańskie)  
+	Religionswissenschaft (christl.), Theologie	 	- Religioznawstwo (chsześciańskie), Teologia
+	Bibelwissenschaft 								- Biblistyka
+	Kirchengeschichte 								- Historia kościoła
+	Kirchenverwaltung 								- Administracja kościelna
+	Praktische Theologie, Seelsorge					- Teologia praktyczna, Duszpasterstwo
+	Psychologie										- Psychologia 
+	Pädagogik 										- Pedagogika
+Geschichte, Kulturgeschichte, Völkerkunde 			- Historia, Historia kultury, Etnologia
+	Geschichte u. Kulturgeschichte (allg.)			- Historia i historia kultury (ogóln.)
+	Historische Hilfswissenschaften	 				- Nauki pomocnicze historii
+	Vor- u. Frühgeschichte, Archäologie	 			- Prehistoria, Archeologia
+	Alte Geschichte									- Historia starożytna  
+	Mittelalterliche Geschichte	 					- Historia średniowiecza 
+	Geschichte der Neuzeit							- Historia nowożytna 
+	Zeitgeschichte	 								- Historia współczesna
+	Deutsche Landesgeschichte 						- Niemiecka historia narodowa 
+	Landesgeschichte Baden-Württemberg				- Historia Badenii-Wirtembergii
+	Landesgeschichte und Landeskunde Bayern	 	 	- Krajoznawstwo i historia Bawarii
+	Landesgeschichte und Landeskunde Hessen	  		- Krajoznawstwo i historia hesji
 	Österreichische Landesgeschichte und Landeskunde; Auslandsösterreicher	- Krajoynawstwo i historia Austrii; austriaki na obczyźnie
-	Landesgeschichte außerdeutscher Länder	 - historia krajów pozaniemieckich
-	Enthnologie, Völkerkunde - etnologia
-Philologie und Kunstwissenschaften  - filologie i estetyka
-	Allgemeine Sprachwissenschaft	- Językoznawstwo ogolne
-	Allgemeine Literaturwissenschaft - Literaturoznawstwo ogólne 
-	Anglistik - Anglistyka
-	Germanistik	  - Germanistyka
-	Klassische Altertumswissenschaften	- Nauka o starożytności
-	Romanistik	- Romanistyka
-	Slavistik	- Slawistyka
-	Sonstige Sprachen u. Literaturen - Pozostałe języki i literatura
-	Kunstwissenschaft - estetyka
-	Musikwissenschaft - muzykologia 
-	Theaterwissenschaft - teatrologia
-Rechtswissenschaften - prawoznawstwo
-	Rechtswissenschaft (allg.)	-  prawoznawstwo ogolne
-	Amts- u. Gesetzesblätter -  Dzienniki urzędowe, dyienniki ustaw
-	Entscheidungssammlungen	  
-	Rechtsphilosophie, Rechtsgeschichte	- filoyofia prawa , historia prawa
-	Privat-, Arbeits- u. Wirtschaftsrecht / Prawo prywatne, prawo pracy, prawo gospodarcze  
-	Staats- u. Verwaltungsrecht	- Prawo państwowe i administracyjne
-	Strafrecht u. Kriminologie	- Prawo karne i kryminologia 
-	Internationales Recht, Völkerrecht	- Prawo międzynarodowe
-	Ausländisches Recht - Prawo zagraniczne
-Wirtschafts- u. Sozialwissenschaften - Nuaki ekonomiczne i społeczne  
-	Wirtschafts- u. Sozialwissenschaften (allg.) - Nauki ekonomiczne i społeczne (ogól.)  
-	Wirtschafts- u. Sozialstatistik	 - Statystyka ekonomiczna i społeczna
-	Wirtschafts- u. Sozialgeschichte - Historia gospodarcza i społeczna
-	Sozialwesen	 - AAAAAAAAAAAAAAA
-	Sozialwissenschaft	- Nauki społeczne
-	Wirtschaftswissenschaft	- Nauki ekonomiczne
-	Wirtschaftstheorie	- Teoria gospodarki
-	Wirtschafts- u. Sozialpolitik - Polityka gospodarcza i socjalna
-	Finanzwissenschaft	 - Nauka o finansach
-	Handel u. Verkehr  - Handel i komunikacja
-	Banken u. Versicherungen - Banki i ubeypieczenia
-	Wirtschaftsbiographie - AAAAAAAAAAAAAAAAA	  
-	Betriebswirtschaft	- Ekonomika przedsiębiorstwa
-	Land- u. Forstwirtschaft, Ernährungswiss.  - Gospodarstwo rolne, leśnictwo, dietetyka
-	Politikwissenschaft	  - Politologia
-	Parlamentaria - AAAAAAAAAAAAAAAAA
-	Sozialismusforschung - AAAAAAAAAAAA
-Naturwissenschaften	  - Nauki przyrodnicze
-	Naturwissenschaften Allg. - Nauki przyrodnicze (ogól.)
-	Naturkunde	- Przyroda
-	Geschichte der Naturwissenschaften - Historia nauk przyrodniczych
-	Astronomie	- Astronomia
-	Biologie - Biologia
-	Botanik	 - Botanika
-	Zoologie - Zoologia
-	Chemie	- Chemia
-	Geowissenschaften Allg.	- Nauki geograficzne (ogól.)
-	Geologie, Mineralogie, Paläntologie	  - Geologia, mineralogia, paleontologia
-	Geophysik, Meteorologie, Ozeanographie	- Geofizyka, meteorologia, oceanografia
-	Geographie - Geografia
-	Physik	- Fizyka
-	Mathematik	- Matematyka
-	Datenverarbeitung - Przetwarzanie danych
-	Kybernetik - Cybernetyka
-Medizin	  - Medycyna
-	Medizin (allg.)	  Medycyna (ogól.)
-	Geschichte der Medizin	 - Historia medycyny
-	Zahnheilkunde	- Stomatologia
-	Neurologie, Psychiatrie	  - Neurologia, psychiatria
-	Veterinärmedizin - Weterznaria 
-	Pharmazie, Pharmakologie - Farmacja, farmakologia
-Technik und Verschiedenes	- Technika i inne
-	Technik (allg.)	  - Technika (ogól.)
-	Geschichte der Technik	- Historia techniki
-	Maschinenbau - Budowa maszyn
-	Elektrotechnik	- Elektrotechnika
-	Verkehrswesen	- Komunikacja drogowa
-	Raumfahrt - lot w kosmos
-	Chemische Technik - Technika chemiczna
-	Bergbau u. Hüttenwesen	- Gornictwo i metalurgia
-	Fertigungstechnik, Werkstoffe, Handwerk	 - Technika produkcji, materiały, AAAAAAAAAAA
-	Architektur u. Bauingenieurwesen - Architektura i inżynierstwo budowlane  
-	Energietechnik	- Technika energetyczna
-	Sport u. Spiele	- Sport i zabawa
-	Unterhaltung u. Hobby - Rozrywka i hobby
-	Firmen u. Betriebszeitschriften	- Czasopisma firm i zakładów 
-	Vereinszeitschriften - Czasopisma stowarzyszeń
-	Astrologie u. Occulta - Astrologia i okultyzm
-	Kinderzeitschriften - Czasopisma dla dzieci
+	Landesgeschichte außerdeutscher Länder	 		- Historia krajów pozaniemieckich
+	Enthnologie, Völkerkunde 						- Etnologia
+Philologie und Kunstwissenschaften  				- Filologia i Estetyka
+	Allgemeine Sprachwissenschaft					- Językoznawstwo ogólne
+	Allgemeine Literaturwissenschaft 				- Literaturoznawstwo ogólne 
+	Anglistik 										- Anglistyka
+	Germanistik	  									- Germanistyka
+	Klassische Altertumswissenschaften				- Nauka o starożytności
+	Romanistik										- Romanistyka
+	Slavistik										- Slawistyka
+	Sonstige Sprachen u. Literaturen 				- Pozostałe języki i literatura
+	Kunstwissenschaft 								- Estetyka
+	Musikwissenschaft 								- Muzykologia 
+	Theaterwissenschaft 							- Teatrologia
+Rechtswissenschaften 								- Prawoznawstwo
+	Rechtswissenschaft (allg.)						- Prawoznawstwo ogólne
+	Amts- u. Gesetzesblätter 						- Dzienniki urzędowe, dzienniki ustaw
+	Entscheidungssammlungen	 						- Raporty prawne
+	Rechtsphilosophie, Rechtsgeschichte				- Filozofia prawa, Historia prawa
+	Privat-, Arbeits- u. Wirtschaftsrecht 			- Prawo prywatne, prawo pracy, prawo gospodarcze  
+	Staats- u. Verwaltungsrecht						- Prawo państwowe i administracyjne
+	Strafrecht u. Kriminologie						- Prawo karne i kryminologia 
+	Internationales Recht, Völkerrecht				- Prawo międzynarodowe
+	Ausländisches Recht 							- Prawo zagraniczne
+Wirtschafts- u. Sozialwissenschaften 				- Nuaki ekonomiczne i społeczne  
+	Wirtschafts- u. Sozialwissenschaften (allg.) 	- Nauki ekonomiczne i społeczne (ogóln.)  
+	Wirtschafts- u. Sozialstatistik	 				- Statystyka ekonomiczna i społeczna
+	Wirtschafts- u. Sozialgeschichte 				- Historia gospodarcza i społeczna
+	Sozialwesen	 									- Polityka socjalna
+	Sozialwissenschaft								- Nauki społeczne
+	Wirtschaftswissenschaft							- Nauki ekonomiczne
+	Wirtschaftstheorie								- Teoria gospodarki
+	Wirtschafts- u. Sozialpolitik 					- Polityka gospodarcza i socjalna
+	Finanzwissenschaft	 							- Nauka o finansach
+	Handel u. Verkehr  								- Handel i komunikacja
+	Banken u. Versicherungen 						- Banki i ubezpieczenia
+	Wirtschaftsbiographie 							- Biografie pod względem działalności gospodarczej
+	Betriebswirtschaft								- Ekonomika przedsiębiorstwa
+	Land- u. Forstwirtschaft, Ernährungswiss.  		- Gospodarstwo rolne, leśnictwo, dietetyka
+	Politikwissenschaft	  							- Politologia
+	Parlamentaria 									- Wydawnictwa parlamentarne
+	Sozialismusforschung 							- Badania nad socjalizmem
+Naturwissenschaften	  								- Nauki przyrodnicze
+	Naturwissenschaften Allg. 						- Nauki przyrodnicze (ogóln.)
+	Naturkunde										- Przyroda
+	Geschichte der Naturwissenschaften 				- Historia nauk przyrodniczych
+	Astronomie										- Astronomia
+	Biologie 										- Biologia
+	Botanik	 										- Botanika
+	Zoologie 										- Zoologia
+	Chemie											- Chemia
+	Geowissenschaften Allg.							- Nauki geograficzne (ogól.)
+	Geologie, Mineralogie, Paläntologie	  			- Geologia, mineralogia, paleontologia
+	Geophysik, Meteorologie, Ozeanographie			- Geofizyka, meteorologia, oceanografia
+	Geographie 										- Geografia
+	Physik											- Fizyka
+	Mathematik										- Matematyka
+	Datenverarbeitung 								- Przetwarzanie danych
+	Kybernetik 										- Cybernetyka
+Medizin	  											- Medycyna
+	Medizin (allg.)	 								- Medycyna (ogóln.)
+	Geschichte der Medizin	 						- Historia medycyny
+	Zahnheilkunde									- Stomatologia
+	Neurologie, Psychiatrie	  						- Neurologia, psychiatria
+	Veterinärmedizin 								- Weterynaria 
+	Pharmazie, Pharmakologie 						- Farmacja, farmakologia
+Technik und Verschiedenes							- Technika i inne
+	Technik (allg.)	  								- Technika (ogóln.)
+	Geschichte der Technik							- Historia techniki
+	Maschinenbau 									- Budowa maszyn
+	Elektrotechnik									- Elektrotechnika
+	Verkehrswesen									- Komunikacja drogowa
+	Raumfahrt 										- lot w kosmos
+	Chemische Technik 								- Technika chemiczna
+	Bergbau u. Hüttenwesen							- Górnictwo i metalurgia
+	Fertigungstechnik, Werkstoffe, Handwerk	 		- Technika produkcji, materiały, rzemiosło
+	Architektur u. Bauingenieurwesen 				- Architektura i inżynierstwo budowlane  
+	Energietechnik									- Technika energetyczna
+	Sport u. Spiele									- Sport i zabawa
+	Unterhaltung u. Hobby 							- Rozrywka i hobby
+	Firmen u. Betriebszeitschriften					- Czasopisma firm i zakładów 
+	Vereinszeitschriften 							- Czasopisma stowarzyszeń
+	Astrologie u. Occulta 							- Astrologia i okultyzm
+	Kinderzeitschriften 							- Czasopisma dla dzieci
 ---------------------------
-Bearbeitungsstatus - Status opracowania
-	A1 - Zeitschrift angelegt - Czasopismo sporządzane
-	B1 - Bandstruktur fertig erstellt und Digitalisate hochgeladen	  	   	
-	C1 - Zuordnung zu Projekten vorgenommen	- Przydzielono do projektów
-	D1 - Bandstruktur mit Digitalisaten fertig, UrMEL-AG informiert	  	   	
-	E1 - Inhaltliche Erschließung (EZB, ZDB) u.in Nachweißsystemen registriert	  	   	
-	F1 - Tiefenerschließung durch UrMEL-AG beendet	  	   	
-	Z - Zeitschrift komplett erschlossen und fertig
+Bearbeitungsstatus 															- Status opracowania
+	A1 - Zeitschrift angelegt 													- Założono czasopismo
+	B1 - Bandstruktur fertig erstellt und Digitalisate hochgeladen	  	   		- Zakończono tworzenie tomów i wgrano na serwer
+	C1 - Zuordnung zu Projekten vorgenommen										- Przydzielono do projektów
+	D1 - Bandstruktur mit Digitalisaten fertig, UrMEL-AG informiert	  	   		- Utworzono tomy z plikami cyfrowymi i poinformowano UrMEL-AG
+	E1 - Inhaltliche Erschließung (EZB, ZDB) u.in Nachweißsystemen registriert	- udostępniono pod względem treści (EZB, ZDB) i zarejestrowano w systemie kontrolnym
+	F1 - Tiefenerschließung durch UrMEL-AG beendet	  	   						- zakończono szczegółowe udostępnienie przez UrMEL-AG
+	Z - Zeitschrift komplett erschlossen und fertig								- czasopismo całkowicie udostępnione i gotowe
 ---------------------------
-Erschließungstiefe
-	Blätterzeitschrift	  	   	
-	Vollständige Erschließung (inkl. Artikel)
+Erschließungstiefe										-	stopień udostępnienia
+	Blätterzeitschrift	  	   							-	czasopismo do kartkowania
+	Vollständige Erschließung (inkl. Artikel)			-	całkowite udostępnienie (łącznie z artykułami)
+--------------------------
+Beteiligte Personen						- osoby uczestniczące
+	Autor  								- autor 	
+	Mitautor 							- współautor
+	Herausgeber	 						- wydawca
+	Mitherausgeber 						- współwydawca   	
+	Übersetzer							- tłumacz	
+	Fotograf							- fotograf
+	Illustrator, Kupferstecher			- ilustrator, miedziorytnik  	
+	Kommentator, Bearbeiter	  			- komentator, adaptator  	
+	Komponist 							- kompozytor
+	Maler 								- malarz
+	Moderator 							- moderator 	
+	Redakteur							- redaktor  	   	
+	Sponsor	 							- sponsor	
+	Veranstalter 						- organizator	
+	Rezensent	 						- recenzent   	
+	Autor des rezensierten Werkes 		 - autor dzieła recenzowanego  	
+	Herausgeber des rezensierten Werkes	 - wydawca dzieła recenzowanego
+	Erwähnte Institution 				 - wspomniana instytucja  	
+	Erwähnte Person						 - wspomniana osoba   	
+	Verlag des rezensierten Werkes		 - wydawnictwo dzieła recenzowanego
+	Sonst. Mitarbeiter					- pozostałe współpracowniki   	
+	Autor	 							- autor  	
+	Interviewer	  						- osoba przeprowadzająca wywiad	   	
+	befragte Person / Interviewter 		- respondent 	
+	Verlag	 							- wydawnictwo
+	Beitragender 						- osoba przyczyniająca się
+	Regisseur	 						- reżyser  	
+	vermuteter Autor 					- autor domniemany
+	Vermutete erwähnte Person 			- domniemana osoba wspomniana
+	Verleger / Drucker					- wydawca / drukarz 	
+	Verlagsort / Druckort 				- miejsce wydania   	
+	Verfasser laut Titelblatt 			- autor według strony tytułowej	   	
+	Widmungsempfänger 					- adresat dedykacji
 ---------------------------
-Beteiligte Personen
-	Autor  - Autor 	
-	Mitautor - Współautor
-	Herausgeber	 - Wydawca
-	Mitherausgeber - Współwydawca   	
-	Übersetzer	- Tłumacz	
-	Fotograf - Fotograf
-	Illustrator, Kupferstecher	- Ilustrator, Miedziorytnik  	
-	Kommentator, Bearbeiter	  - Komentator, Adaptator  	
-	Komponist - Kompozytor
-	Maler - Malarz
-	Moderator - Moderator 	
-	Redakteur - Redaktor  	   	
-	Sponsor	 - Sponsor	
-	Veranstalter	  	   	
-	Rezensent	  	   	
-	Autor des rezensierten Werkes	  	   	
-	Herausgeber des rezensierten Werkes	  	   	
-	Erwähnte Institution	  	   	
-	Erwähnte Person	  	   	
-	Verlag des rezensierten Werkes	  	   	
-	Sonst. Mitarbeiter	  	   	
-	Autor	  	   	
-	Interviewer	  	   	
-	befragte Person / Interviewter	  	   	
-	Verlag	  	   	
-	Beitragender	  	   	
-	Regisseur	  	   	
-	vermuteter Autor	  	   	
-	Vermutete erwähnte Person	  	   	
-	Verleger / Drucker	  	   	
-	Verlagsort / Druckort	  	   	
-	Verfasser laut Titelblatt	  	   	
-	Widmungsempfänger
+Titeltypen 							 - forma tytułu
+	Erwähntes Werk (bei Rezensionen) - wspomniane dzieło (w recenzjach)
+	Hauptsachtitel  				 - tytuł główny 
+	Kurztitel	  	   				 - tytuł zwięzły
+	Nebentitel	  	   			 	 - podtytuł
+	Titel des rezensierten Werkes	 - tytuł dzieła recenzowanego
+	Titel laut Vorlage	  	   	 	 - tytuł według wzoru
+	Sonst. Titel				 	 - inne tytuły
 ---------------------------
-Titeltypen
-	Erwähntes Werk (bei Rezensionen)	  	   	
-	Hauptsachtitel	  	   	
-	Kurztitel	  	   	
-	Nebentitel	  	   	
-	Titel des rezensierten Werkes	  	   	
-	Titel laut Vorlage	  	   	
-	Sonst. Titel
----------------------------
-Kollationstyp
-	Blattangaben
+Kollationstyp 			- typ kolacjonowania
+	Blattangaben 		- liczba arkuszy
 ---------------------------
 Sprachen
-	Afar	  	   	
-	Abchasisch	  	   	
-	Afrikaans	  	   	
-	Arabisch	  	   	
-	Assamesisch	  	   	
-	Aymara	  	   	
-	Aserbaidschanisch	  	   	
-	Baschkirisch	  	   	
-	Belorussisch	  	   	
-	Bulgarisch	  	   	
-	Biharisch	  	   	
-	Bislamisch	  	   	
-	Bengalisch	  	   	
-	Tibetanisch	  	   	
-	Bretonisch	  	   	
-	Katalanisch	  	   	
-	Korsisch	  	   	
-	Tschechisch	  	   	
-	Walisisch	  	   	
-	Daenisch	  	   	
-	Deutsch	  	   	
-	Dzongkha, Bhutani	  	   	
-	Griechisch	  	   	
-	Englisch	  	   	
-	Esperanto	  	   	
-	Spanisch	  	   	
-	Estnisch	  	   	
-	Baskisch	  	   	
-	Persisch	  	   	
-	Finnisch	  	   	
-	Fiji	  	   	
-	Faeroeiisch	  	   	
-	Franzoesisch	  	   	
-	Friesisch	  	   	
-	Irisch	  	   	
-	Schottisches Gaelisch	  	   	
-	Galizisch	  	   	
-	Guarani	  	   	
-	Gujaratisch	  	   	
-	Haussa	  	   	
-	Hebraeisch	  	   	
-	Hindi	  	   	
-	Kroatisch	  	   	
-	Ungarisch	  	   	
-	Armenisch	  	   	
-	Interlingua	  	   	
-	Indonesisch	  	   	
-	Interlingue	  	   	
-	Inupiak	  	   	
-	Isländisch	  	   	
-	Italienisch	  	   	
-	Inuktitut (Eskimo)	  	   	
-	Japanisch	  	   	
-	Javanisch	  	   	
-	Georgisch	  	   	
-	Kasachisch	  	   	
-	Kalaallisut (Groenlaendisch)	  	   	
-	Kambodschanisch	  	   	
-	Kannada	  	   	
-	Koreanisch	  	   	
-	Kaschmirisch	  	   	
-	Kurdisch	  	   	
-	Kirgisisch	  	   	
-	Lateinisch	  	   	
-	Lingala	  	   	
-	Laotisch	  	   	
-	Litauisch	  	   	
-	Lettisch	  	   	
-	Malagasisch	  	   	
-	Maorisch	  	   	
-	Mazedonisch	  	   	
-	Malajalam	  	   	
-	Mongolisch	  	   	
-	Moldavisch	  	   	
-	Marathi	  	   	
-	Malaysisch	  	   	
-	Maltesisch	  	   	
-	Burmesisch	  	   	
-	Nauruisch	  	   	
-	Nepalesisch	  	   	
-	Hollaendisch	  	   	
-	Norwegisch	  	   	
-	Okzitanisch	  	   	
-	Oromo	  	   	
-	Oriya	  	   	
-	Pundjabisch	  	   	
-	Polnisch	  	   	
-	Paschtu	  	   	
-	Portugiesisch	  	   	
-	Quechua	  	   	
-	Raetoromanisch	  	   	
-	Kirundisch	  	   	
-	Rumaenisch	  	   	
-	Russisch	  	   	
-	Kijarwanda	  	   	
-	Sanskrit	  	   	
-	Sinti	  	   	
-	Sango	  	   	
-	Serbokroatisch (veraltet)	  	   	
-	Singhalesisch	  	   	
-	Slowakisch	  	   	
-	Slowenisch	  	   	
-	Samoanisch	  	   	
-	Schonisch	  	   	
-	Somalisch	  	   	
-	Albanisch	  	   	
-	Serbisch	  	   	
-	Swasilaendisch	  	   	
-	Sesothisch	  	   	
-	Sudanesisch	  	   	
-	Schwedisch	  	   	
-	Suaheli	  	   	
-	Tamilisch	  	   	
-	Tegulu	  	   	
-	Tadschikisch	  	   	
-	Thai	  	   	
-	Tigrinja	  	   	
-	Turkmenisch	  	   	
-	Tagalog	  	   	
-	Sezuan	  	   	
-	Tongaisch	  	   	
-	Tuerkisch	  	   	
-	Tsongaisch	  	   	
-	Tatarisch	  	   	
-	Twi	  	   	
-	Uigur	  	   	
-	Ukrainisch	  	   	
-	Urdu	  	   	
-	Usbekisch	  	   	
-	Vietnamesisch	  	   	
-	Volapuek	  	   	
-	Wolof	  	   	
-	Xhosa	  	   	
-	Jiddish	  	   	
-	Joruba	  	   	
-	Zhuang	  	   	
-	Chinesisch	  	   	
-	Zulu
+	Afar	  	   	  - afar
+	Abchasisch	  	  - abchaski 	
+	Afrikaans	  	  - afrikaans
+	Arabisch	  	  - arabski
+	Assamesisch	  	  - assamski	
+	Aymara	  	   	  - aymara
+	Aserbaidschanisch - azerski
+	Baschkirisch	  - baskijski
+	Belorussisch	  - beloruski
+	Bulgarisch	  	  - bułgarski	
+	Biharisch	  	  - biharski
+	Bislamisch	  	  -	bislamski
+	Bengalisch	  	  - bengalski
+	Tibetanisch	  	  - tibetański
+	Bretonisch	  	  - bretoński
+	Katalanisch	  	  - katalański
+	Korsisch	  	  - korsykański	
+	Tschechisch	  	  - czeski
+	Walisisch	  	  - walijski
+	Daenisch	  	  - duński
+	Deutsch	  	   	  - niemiecki
+	Dzongkha, Bhutani - dzongkha, bhutański
+	Griechisch	  	  - grecki 	
+	Englisch	  	  - angielski
+	Esperanto	  	  - esperanto
+	Spanisch	  	  - hiszpański
+	Estnisch	  	  - estoński
+	Baskisch	  	  - baskijski
+	Persisch	  	  - perski
+	Finnisch	  	  - fiński
+	Fiji	  	   	  - fidżyjski
+	Färöisch	  	  - farerski
+	Franzoesisch	  - francuski
+	Friesisch	  	  - fryzyjski
+	Irisch	  	   	  - irlandzki
+	Schottisches Gälisch - gaelicki szkocki
+	Galizisch	  	  - galicyjski
+	Guarani	  	   	  - guarani
+	Gujarati	  	  - gudżaracki
+	Hausa	  	   	  - hausa
+	Hebraeisch	  	  - hebrajski 	
+	Hindi	  	   	  - hindi
+	Kroatisch	  	  - chorwacki
+	Ungarisch	  	  - węgierski
+	Armenisch	  	  - armeński
+	Interlingua	  	  - Interlingua
+	Indonesisch	  	  - indonezyjski
+	Interlingue	  	  - occidental-interlingue
+	Inupiak	  	   	  - inupiak
+	Isländisch	  	  - islandzki
+	Italienisch	  	  - włoski
+	Inuktitut (Eskimo)	 - inuktitut
+	Japanisch	  	  - japoński
+	Javanisch	  	  - jawajski
+	Georgisch	  	  - gruziński
+	Kasachisch	  	  - kazachski
+	Kalaallisut (Groenlaendisch) - grenlandzki 	
+	Kambodschanisch   - kambodżański
+	Kannada	  	   	  - kannada
+	Koreanisch	  	  - koreański
+	Kaschmirisch	  - kaszmirski   	
+	Kurdisch	  	  - kurdyjski
+	Kirgisisch	  	  - kirgiski
+	Lateinisch	  	  - łaciński
+	Lingala	  	   	  - lingala
+	Laotisch	  	  - laotański
+	Litauisch	  	  - litewski
+	Lettisch	  	  - łotewski
+	Malagasisch	  	  - malaga
+	Maorisch	  	  - maoryski
+	Mazedonisch	  	  - macedoński
+	Malajalam	  	  - malajalam
+	Mongolisch	  	  - mongolski
+	Moldavisch	  	  - mołdawski 	   	
+	Malaysisch	  	  - malezyjski
+	Maltesisch	  	  - maltański
+	Burmesisch	  	  - birmański
+	Nauruisch	  	  - naurański
+	Nepalesisch	  	  - nepalski
+	Hollaendisch	  - holenderski   	
+	Norwegisch	  	  - norweski
+	Okzitanisch	  	  - oksytański
+	Oromo	  	   	  - oromo
+	Oriya	  	   	  - orija
+	Pundjabisch	  	  - pendżabski
+	Polnisch	  	  - polski 	
+	Paschtu	  	   	  - paszto
+	Portugiesisch	  - portugalski	
+	Quechua	  	   	  - keczua
+	Raetoromanisch	  - retoromański   	
+	Kirundisch	  	  - kirundi
+	Rumaenisch	  	  - rumuński
+	Russisch	  	  - rosyjski 	
+	Kijarwanda	  	  - kinyarwanda
+	Sanskrit	  	  - sanskryt 	
+	Sinti	  	   	  - sinti
+	Sango	  	   	  - sango
+	Serbokroatisch (veraltet) - serbsko-chorwacki
+	Singhalesisch	  - syngaleski
+	Slowakisch	  	  - słowacki
+	Slowenisch	  	  - słoweński
+	Samoanisch	  	  - samoański
+	Schonisch	  	  - skanska
+	Somalisch	  	  - somalijski
+	Albanisch	  	  - albański
+	Serbisch	  	  - serbski	
+	Swasilaendisch	  - suazi
+	Sesothisch	  	  - sotho
+	Sudanesisch	  	  - sudański
+	Schwedisch	  	  - szwedzki 	
+	Suaheli	  	   	  - suahili
+	Tamilisch	  	  - tamilski
+	Tegulu	  	   	  - tegulu
+	Tadschikisch	  - tadżycki
+	Thai	  	   	  - tajski 
+	Tigrinja	  	  - tigrinia	
+	Turkmenisch	  	  - turkmeński
+	Tagalog	  	   	  - tagalog
+	Sezuan	  	   	  - syczuan
+	Tongaisch	  	  - tonga
+	Tuerkisch	  	  - turecki
+	Tsongaisch	  	  - tsonga
+	Tatarisch	  	  - tatarski
+	Twi	  	   		  - twi
+	Uigur	  	   	  - uigur
+	Ukrainisch	  	  - ukraiński
+	Urdu	  	   	  - urdu
+	Usbekisch	  	  - uzbecki
+	Vietnamesisch	  - wietnamski 	
+	Volapuek	  	  - wolapik
+	Wolof	  	   	  - wolof
+	Xhosa	  	   	  - xhosa
+	Jiddish	  	   	  - jidysz
+	Joruba	  	   	  - joruba
+	Zhuang	  	   	  - zhuang
+	Chinesisch	  	  - chiński
+	Zulu			  - zulu
 ---------------------------
-Format					(Buchformat)
+Format		- format			(Buchformat)
