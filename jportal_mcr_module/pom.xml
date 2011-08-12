@@ -165,5 +165,11 @@
       <artifactId>mycore-complete</artifactId>
     </dependency>
 
+    <dependency>
+    	<groupId>com.sun.jersey</groupId>
+    	<artifactId>jersey-client</artifactId>
+    	<version>1.1.5.1</version>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -89,6 +89,10 @@
         <param-name>com.sun.jersey.config.feature.DisableXmlSecurity</param-name>
         <param-value>true</param-value>
     </init-param>
+    <init-param>
+         <param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+         <param-value>fsu.jportal.resources.filter.ContainerFilter</param-value>
+     </init-param>
     <load-on-startup>1</load-on-startup>
 </servlet>
 
