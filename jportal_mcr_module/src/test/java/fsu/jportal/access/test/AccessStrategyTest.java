@@ -48,7 +48,7 @@ public class AccessStrategyTest {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
         Properties mcrProperties = MCRConfiguration.instance().getProperties();
         mcrProperties.setProperty("MCR.Users.Superuser.UserName", ROOT);
-        mcrProperties.setProperty("MCR.Access.Class", "fsu.jportal.access.test.FakeAccessImpl");
+        //        mcrProperties.setProperty("MCR.Access.Class", "fsu.jportal.access.test.FakeAccessImpl");
         mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.derivate", "true");
@@ -208,7 +208,6 @@ public class AccessStrategyTest {
         String permission = "writedb";
         boolean hasRule = true;
         boolean expectedAccess = false;
-        
 
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.checkPermission(id, permission)).andReturn(false);
@@ -218,22 +217,38 @@ public class AccessStrategyTest {
         assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
         verify(aclMock);
     }
-    
+
     @Test
     public void checkPermForClassificationNoRule() throws Exception {
         String id = "jportal_class_00000083";
         String permission = "writedb";
         boolean hasRule = false;
         boolean expectedAccess = false;
-        
-        
+
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule("default_class", permission)).andReturn(hasRule);
         expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
         expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(false);
         replay(aclMock, xmlMetaDataMgr);
-        
+
         String errMsg = MessageFormat.format("Check perm classi, has rule: {0}, should has access: {1}.", hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, xmlMetaDataMgr);
+    }
+
+    @Test
+    public void checkAbitaryID() throws Exception {
+        String id = "fsu.jportal.resources.ClassificationResource";
+        String permission = "/auth_GET";
+        
+        boolean hasRule = false;
+        boolean expectedAccess = false;
+
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
+        replay(aclMock, xmlMetaDataMgr);
+
+        String errMsg = MessageFormat.format("Check perm no MCRObjectID, has rule: {0}, should has access: {1}.", hasRule, expectedAccess);
         assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
         verify(aclMock, xmlMetaDataMgr);
     }

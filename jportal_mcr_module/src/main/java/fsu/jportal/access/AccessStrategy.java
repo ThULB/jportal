@@ -15,6 +15,7 @@ import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -80,28 +81,32 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
 			}
 		}
 
-		MCRObjectID objID = MCRObjectID.getInstance(id);
-		String typeId = objID.getTypeId();
+		try {
+            MCRObjectID objID = MCRObjectID.getInstance(id);
+            String typeId = objID.getTypeId();
 
-		MCRObjectID parentID = getParentID(objID);
-		String permForType = permission + "_" + typeId;
+            MCRObjectID parentID = getParentID(objID);
+            String permForType = permission + "_" + typeId;
 
-		if (parentID != null) {
-			if (accessInterface.hasRule(parentID.toString(), permForType)) {
-				return accessInterface.checkPermission(parentID.toString(),
-						permForType);
-			}
-			MCRObjectID journalID = getParentID(parentID);
-			if (accessInterface.hasRule(journalID.toString(), permForType)) {
-				return accessInterface.checkPermission(journalID.toString(),
-						permForType);
-			}
-		}
-		
-		if (accessInterface.hasRule("default_" + typeId, permission)) {
-			return accessInterface.checkPermission("default_" + typeId,
-					permission);
-		}
+            if (parentID != null) {
+            	if (accessInterface.hasRule(parentID.toString(), permForType)) {
+            		return accessInterface.checkPermission(parentID.toString(),
+            				permForType);
+            	}
+            	MCRObjectID journalID = getParentID(parentID);
+            	if (accessInterface.hasRule(journalID.toString(), permForType)) {
+            		return accessInterface.checkPermission(journalID.toString(),
+            				permForType);
+            	}
+            }
+            
+            if (accessInterface.hasRule("default_" + typeId, permission)) {
+            	return accessInterface.checkPermission("default_" + typeId,
+            			permission);
+            }
+        } catch (MCRException e) {
+            // Maybe no valid MCRObjectID -> TODO add check method for valid ID into MCRObjectID
+        }
 
 		if (accessInterface.hasRule("default", permission)) {
 			return accessInterface.checkPermission("default", permission);
