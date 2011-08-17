@@ -76,7 +76,6 @@ public class CMDCenterResource {
     private void closeSession() {
         if (useSession) {
             currentSession.commitTransaction();
-            currentSession.close();
             currentSession = null;
         }
     }

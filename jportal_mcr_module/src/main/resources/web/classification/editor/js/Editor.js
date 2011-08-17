@@ -6,12 +6,12 @@ var classification = classification || {};
 /**
  * Create a new instance of the classification editor.
  */
-classification.Editor = function(resourcePath) {
+classification.Editor = function() {
 	// divs
 	this.domNode = null;
 
 	// class base url
-	this.resourcePath = resourcePath;
+	this.resourcePath = null;
 	// classification & category
 	this.classificationId = null;
 	this.categoryId = null;
@@ -39,6 +39,7 @@ classification.Editor = function(resourcePath) {
 	function create(/*String*/ resourcePath, /*Array*/ supportedLanguages, /*String*/ currentLanguage, /*boolean*/ showId) {
 		// set resource path
 		this.resourcePath = resourcePath;
+		
 		// I18nManager
 		SimpleI18nManager.getInstance().initialize(supportedLanguages, currentLanguage);
 

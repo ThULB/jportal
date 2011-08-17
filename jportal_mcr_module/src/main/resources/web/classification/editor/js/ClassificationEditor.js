@@ -70,7 +70,7 @@ function startClassificationEditor(conf) {
 							diag = new dijit.Dialog({
 								id : diagID,
 								// The dialog's title
-								title : "The Dojo Toolkit",
+								title : "Klassifikationseditor",
 								// The dialog's content
 								content : classEditor.domNode,
 								// Hard-code the dialog width

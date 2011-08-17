@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -222,7 +223,6 @@ public class ClassificationResource {
     protected void closeSession() {
         if (useSession) {
             currentSession.commitTransaction();
-            currentSession.close();
             currentSession = null;
         }
     }
@@ -355,6 +355,7 @@ public class ClassificationResource {
 
     @POST
     @Path("save")
+    @RolesAllowed("")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(String json) {
         JsonStreamParser jsonStreamParser = new JsonStreamParser(json);
