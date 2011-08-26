@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link type="text/css" href="jquery-ui-1.8.16.custom.css" rel="Stylesheet" />
+<style>
+	.ui-selecting { background: #FECA40; }
+	.ui-selected { background: #F39814; color: white; }
+	.ui-selectable { list-style-type: none; margin: 0; padding: 0;}
+	.ui-selectable li { margin: 3px; padding: 0.4em; height: 18px; }
+</style>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.js"></script>
+<script
+	src="aclEditor.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		console.log('Ready!');
+		var editorConfig = {
+				getRscClasses : function(url, target, callBack){
+					var data = {
+						'fsu.jportal.resources.FOOResource' : 'methods/FOOResource',
+						'fsu.jportal.resources.ACLResource' : 'methods/ACLResource',
+						'fsu.jportal.resources.JournalClassificationResource' : 'methods/JournalClassificationResource'
+						};
+					callBack(target, data);
+				},
+				getRscMethods : function(className, target, callBack){
+					switch(className){
+					case 'methods/FOOResource' : 
+						var data = { 
+						'/acl/rsc_GET' : className + '/acl/rsc_GET', 
+						'/acl/rsc_POST' : className + '/acl/rsc_POST'
+						};
+						callBack(target, data);
+						break;
+					case 'methods/ACLResource' :
+						var data = { '/classifications/jp/{id}/save_POST' : className + '/classifications/jp/{id}/save_POST'};
+						callBack(target, data);
+						break;
+					case 'methods/JournalClassificationResource' :
+						var data = {'/classifications/foo/save_POST' : className + '/classifications/foo/save_POST'};
+						callBack(target, data);
+						break;
+					}
+				},
+				
+				getRscPerm : function(url, target, callback){
+				    console.log('get: ' + url);
+				    switch(url){
+				    case 'methods/FOOResource/acl/rsc_GET' :
+				        var data = {
+				        	    rid: 'System000001',
+				        	    creator: 'admin',
+				        	    creationdate: 'heute',
+				        	    rule: 'true',
+				        	    description: 'fakerule'
+				    	};
+				        callback(target, data);
+				        break;
+				    default:
+				        var data = {};
+				        callback(target, data);
+				        break;
+				    }
+				},
+				
+				getACLRules: function(url, target, callBack){
+				  	var data = {
+				  	      'System000001' : 'http://System000001',
+				  	      'System000002' : 'http://System000002',
+				  	      'System000003' : 'http://System000003',
+				  	      'System000004' : 'http://System000004',
+				  	}; 
+				  	callBack(target, data);
+				}
+		};
+		
+		var editorConfig1 = {
+				baseURL : 'http://localhost:8291/rsc/acl/rsc'
+		};
+		
+		$('#aclEditor').aclEditor(editorConfig);
+	})
+</script>
+<title>ACL Editor</title>
+</head>
+<body>
+<div id="aclEditor"></div>
+</body>
+</html>

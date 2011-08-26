@@ -1,9 +1,9 @@
 package fsu.jportal.resources.test;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
+import java.net.URI;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
@@ -18,15 +19,23 @@ import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.spi.container.ResourceFilter;
 
 import fsu.jportal.config.ResourceSercurityConf;
+import fsu.jportal.gson.GsonManager;
+import fsu.jportal.gson.RegResourceCollection;
+import fsu.jportal.gson.RegResourceCollectionTypeAdapter;
+import fsu.jportal.resources.ClassificationResource;
 import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory;
 import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.AccesManagerConnector;
 import fsu.testcase.JerseyResourceTestCase;
 
-public class ResourceSecurityTest extends JerseyResourceTestCase{
+public class ACLResourceTest extends JerseyResourceTestCase{
     public static class MyAccessManagerConnector implements AccesManagerConnector{
         private HashMap<String, Boolean> permissions = new HashMap<String, Boolean>();
         
@@ -59,22 +68,35 @@ public class ResourceSecurityTest extends JerseyResourceTestCase{
     }
     
     @Test
-    public void testResourceSecurity() throws Exception {
-        ClientResponse response = resource().path("/auth").get(ClientResponse.class);
+    public void acl() throws Exception {
+        String response = resource().path("/acl/rsc").type(MediaType.APPLICATION_JSON).get(String.class);
+        System.out.println("response: " + response);
         
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        response = resource().path("/auth/logout/foo").get(ClientResponse.class);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
-        Map<String, List<String>> resourceRegister = ResourceSercurityConf.instance().getResourceRegister();
-//        assertEquals(1, resourceRegister.size());
-        List<String> testResourceEntry = ResourceSercurityConf.instance().getResourceRegister().get(TestResource.class.getName());
-        assertNotNull(TestResource.class.getName() + " should has been registered", testResourceEntry);
-//        assertEquals(2, testResourceEntry.size());
+        for (Entry<String, JsonElement> entry : parseJson(response).entrySet()) {
+            String uri = entry.getValue().getAsString();
+            System.out.println("URI: " + uri);
+            String uriresponse = resource().uri(URI.create(uri)).type(MediaType.APPLICATION_JSON).get(String.class);
+            System.out.println("URI: " + uriresponse);
+            for (Entry<String, JsonElement> entry2 : parseJson(uriresponse).entrySet()) {
+                String uri2 = entry2.getValue().getAsString();
+                System.out.println("URI2: " + uri2);
+                String uriresponse2 = resource().uri(URI.create(uri2)).type(MediaType.APPLICATION_JSON).get(String.class);
+                System.out.println("URI2: " + uriresponse2);
+            }
+        }
+        
     }
-    
+
+    protected JsonObject parseJson(String response) {
+        JsonParser jsonParser = new JsonParser();
+        JsonElement jsonElement = jsonParser.parse(response);
+        JsonObject asJsonObject = jsonElement.getAsJsonObject();
+        return asJsonObject;
+    }
+
     @Override
     protected String[] getPackageName() {
-        return new String[]{TestResource.class.getPackage().getName()};
+        return new String[]{ClassificationResource.class.getPackage().getName()};
     }
 
     @Override
