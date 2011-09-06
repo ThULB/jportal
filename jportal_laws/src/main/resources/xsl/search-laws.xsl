@@ -17,24 +17,27 @@
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js" djConfig="parseOnLoad: true"></script>
 	<script type="text/javascript" src="{$jsPath}/searchMask.js"></script>
+	<script type="text/javascript" src="{$jsPath}/fulltext.js"></script>
+	<script type="text/javascript" src="{$jsPath}/years.js"></script>
+	<script type="text/javascript" src="{$jsPath}/territories.js"></script>
 	
 	<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dijit/themes/claro/claro.css"/>
 
 	<div class="claro">
-		<form id="search_form" action="/servlets/SearchLawsServlet?mode=search" method="post">
+		<!-- <form id="search_form" action="/servlets/SearchLawsServlet" method="post"> -->
+		<form id="search_form">
 			<div id="searchWrap">
-
 			</div>
 
-			<div id="buttons">
-				<button type="submit" dojoType="dijit.form.Button" id="submitSearch">Search</button>
-			</div>
 		</form>
-		<div id="response"></div>
+		<div id="buttons">
+			<button type="button" dojoType="dijit.form.Button" onClick="submitForm">Search</button>
+		</div>
 		</div>
   </xsl:template>
-</xsl:stylesheet>
+  
 
-
-<!-- zugehöriges XSL integrieren: build/webapps/WEB-INF/classes/mycore.properties > include XSL
+<!-- zugehoeriges XSL integrieren: build/webapps/WEB-INF/classes/mycore.properties > include XSL
 -->
+  
+</xsl:stylesheet>
