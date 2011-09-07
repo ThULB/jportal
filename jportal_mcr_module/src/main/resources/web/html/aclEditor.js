@@ -1,5 +1,5 @@
 (function($) {
-    function AbstractView(/*{listeners : array}*/ spec) {
+    function AbstractView(/* {listeners : array} */spec) {
         var listeners = (spec && spec.listeners) || [];
         var controllReg = (spec && spec.controllReg) || [];
 
@@ -7,7 +7,7 @@
             addListener : function(list) {
                 listeners.push(list);
             },
-            
+
             addRegister : function(list) {
                 controllReg.push(list);
             },
@@ -21,7 +21,7 @@
                     listeners[i].loadData(url);
                 }
             },
-            
+
             register : function(view) {
                 for ( var i = 0; i < controllReg.length; i++) {
                     controllReg[i].register(view);
@@ -45,10 +45,11 @@
         function display(data) {
             var objIdView = ObjIdView({
                 parentTag : classList,
-                listeners : that.getListeners(),
                 id : data.id,
                 url : data.link
             });
+
+            that.register(objIdView);
         }
 
         function init() {
@@ -61,7 +62,7 @@
     }
 
     function ObjIdView(spec) {
-        var that = AbstractView({listeners: spec.listeners});
+        var that = AbstractView();
 
         var classListDiv = $('<div/>').appendTo(spec.parentTag);
         var h3 = $('<h3/>').html(spec.id).appendTo(classListDiv);
@@ -73,87 +74,75 @@
                     parentTag : classListDiv,
                     listeners : that.getListeners(),
                 });
+                that.register(accessView);
                 that.notify(spec.url);
             }
         });
 
-        function display(data) {
-            console.log('ObjIdView addData');
+        function display(/* {id: string, link: string} */data) {
+            console.log('ObjIdView addData ' + accessView);
             accessView.addData({
                 id : data.id,
                 link : data.link
             });
         }
 
-        /*-----------------------
-        var id = obj.id;
-        var link = obj.link;
-        var classListDiv = $('<div/>').appendTo(classList);
-        var ul = $('<ul/>');
-        var h3 = $('<h3/>').html(id).appendTo(classListDiv).after(ul)
-
-        h3.click(function() {
-            if (ul.children().size() < 1) {
-                ul.show();
-                notifyLoadAllAccess(link, ul);
-            } else {
-                if (ul.css('display') == 'none') {
-                    ul.show();
-                } else {
-                    ul.hide();
-                }
-            }
-        });
-        turnOffSelectable([ h3 ]);
-        -----------------------*/
-
         that.display = display;
         return that;
     }
 
     function AccessIdView(spec) {
-        var that = AbstractView({listeners: spec.listeners});
+        var that = AbstractView();
         var ul = $('<ul/>').appendTo(spec.parentTag);
-        
-        function addData(spec){
+
+        function addData(spec) {
             console.log('AccessIdView addData');
             spec.parentTag = ul;
             AccessIdEntryView(spec);
         }
-        
+
         that.addData = addData;
         return that;
     }
-    
-    function AccessIdEntryView(spec){
-        var that = AbstractView({listeners: spec.listeners});
-        
+
+    function AccessIdEntryView(spec) {
+        var that = AbstractView({
+            listeners : spec.listeners
+        });
+
         console.log('AccessIdEntryView ' + spec.parentTag);
         var li = $('<li/>').appendTo(spec.parentTag);
         var table = $('<table/>').appendTo(li);
         var tr = $('<tr/>').appendTo(table);
         var id = $('<td class="id"/>').html(spec.id).appendTo(tr);
-        
+
         return that;
     }
 
-    function ViewController(view, model) {
-        var ViewListener = function() {
-            return {
-                loadData : function(url) {
-                    console.log('URL: ' + url);
-                    var httpGET = model.getDataFromUrl(url);
-                    var data = httpGET[url];
-                    console.log('Data: ' + data.length);
+    function ViewController(model) {
+        return {
+            register : function(view) {
+                var viewListener = {
+                    loadData : function(url) {
+                        console.log('URL: ' + url);
+                        var httpGET = model.getDataFromUrl(url);
+                        var data = httpGET[url];
+                        console.log('Data: ' + data.length);
 
-                    for ( var i = 0; i < data.length; i++) {
-                        view.display(data[i]);
+                        for ( var i = 0; i < data.length; i++) {
+                            view.display(data[i]);
+                        }
                     }
+                };
+
+                view.addListener(viewListener);
+                view.addRegister(this);
+
+                if (typeof view.init == 'function') {
+                    view.init();
                 }
             }
         }
-
-        view.addListener(ViewListener());
     }
 
     function Model(httpGET) {
@@ -187,23 +176,13 @@
 
         _create : function() {
             var model = Model(this.options.httpGET);
-            var ControllReg = function(){
-                return {
-                    register : function(view){
-                        ViewController(view, model);
-                        view.addRegister(this);
-                    }
-                }
-            }
-            var controllReg = ControllReg();
+            var guiController = ViewController(model);
             var mainGUI = MainView({
                 mainTag : $(this.element[0]),
                 url : this.options.baseURL
             });
-            
-            ViewController(mainGUI, model);
-            //controllReg.register(mainGUI);
-            mainGUI.init();
+
+            guiController.register(mainGUI);
 
             /*
              * this.view = new this._view($(this.element[0])); this.model = new
