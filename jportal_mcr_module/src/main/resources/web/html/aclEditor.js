@@ -29,93 +29,153 @@
             }
         }
     }
-
-    function MainView(spec) {
+    
+    function MainGUI(spec){
         var that = AbstractView();
-
-        var editorID = spec.mainTag.attr('id');
-        var classListID = editorID + 'ClassList';
-        var permColID = editorID + 'permCol';
-        var dropDownID = editorID + 'ruleListDropdown';
-
-        var classList = $('<div/>').attr({
-            id : classListID
-        }).appendTo(spec.mainTag);
-
-        function display(data) {
-            var objIdView = ObjIdView({
-                parentTag : classList,
-                id : data.id,
-                url : data.link
-            });
-
-            that.register(objIdView);
-        }
-
-        function init() {
-            that.notify(spec.url);
-        }
-
-        that.display = display;
-        that.init = init;
+        var objIDs = ObjIDList({parentTag : spec.parentTag});
+        
+        that.init = function(){
+            that.register(objIDs);
+            objIDs.notify(spec.link);
+        };
+        
         return that;
     }
-
-    function ObjIdView(spec) {
-        var that = AbstractView();
-
-        var classListDiv = $('<div/>').appendTo(spec.parentTag);
-        var h3 = $('<h3/>').html(spec.id).appendTo(classListDiv);
-        var accessView = null;
-
-        h3.click(function() {
-            if (accessView == null) {
-                accessView = AccessIdView({
-                    parentTag : classListDiv,
-                    listeners : that.getListeners(),
-                });
-                that.register(accessView);
-                that.notify(spec.url);
+    
+    function ObjIDList(spec){
+        var that = UlListGUI({parentTag : spec.parentTag});
+        
+        that.addItem = function(item){
+            var h3 = $('<h3/>').appendTo(item.parentTag);
+            var accessIDs = null;
+            
+            h3.append(item.data.id);
+            h3.click(function(){
+                if(accessIDs == null){
+                    accessIDs = AccessIDList({parentTag : item.parentTag});
+                    that.register(accessIDs);
+                    accessIDs.notify(item.data.link);
+                }else{
+                    accessIDs.toggleView();
+                }
+            })
+        }
+        
+        return that;
+    }
+    
+    function AccessIDList(spec){
+        var that = UlListGUI({parentTag : spec.parentTag});
+        
+        function Button(spec){
+            var button = $('<span/>').addClass(spec.icon).click(function() {
+            });
+            var textTag = $('<span/>');
+            button.css({float : spec.float});
+            var td = $('<td/>').append(button).append(textTag);
+            
+            button.css({visibility : 'hidden'});
+            
+            td.getTextTag = function(){
+                return textTag;
             }
-        });
-
-        function display(/* {id: string, link: string} */data) {
-            console.log('ObjIdView addData ' + accessView);
-            accessView.addData({
-                id : data.id,
-                link : data.link
-            });
+            
+            td.toggleIcon = function(val){
+                button.css({visibility : val});
+            }
+            
+            return td;
         }
-
-        that.display = display;
+        
+        function Rule(spec){
+            var that = AbstractView();
+            
+            that.display = function(data){
+                var rid = data.rid === undefined ? '--/--' : data.rid;
+                var descr = data.description === undefined ? '--/--' : data.description;
+                var creator = data.creator === undefined ? '--/--' : data.creator;
+                
+                spec.rid.append(rid);
+                spec.descr.append(descr);
+                spec.creator.append(creator);
+            }
+            return that;
+        }
+        
+        function mouseHover(objs){
+            function colorAndToggle(spec){
+                for ( var i = 0; i < objs.length; i++) {
+                    objs[i].css({
+                        backgroundColor : spec.color 
+                    });
+                    
+                    if(typeof objs[i].toggleIcon == 'function'){
+                        objs[i].toggleIcon(spec.visibility);
+                    }
+                }
+            }
+            
+            for ( var i = 0; i < objs.length; i++) {
+                var currentObj = objs[i];
+                currentObj.mouseover(function(){
+                    colorAndToggle({color : '#cccccc', visibility: 'visible'})
+                }).mouseleave(function(){
+                    colorAndToggle({color : '', visibility: 'hidden'})
+                })
+            }
+        }
+        
+        that.addItem = function(item){
+            var entry = $('<table/>').appendTo(item.parentTag);
+            var tr = $('<tr/>').appendTo(entry);
+            var acId = $('<td/>').append(item.data.id);
+            
+            
+            var ruleID = Button({icon : 'ui-icon ui-icon-triangle-1-s', float:'left'});
+            var ruleDescrText = $('<span/>');
+            var ruleDescr = $('<td/>').append(ruleDescrText);
+            var ruleCreator = Button({icon : 'ui-icon ui-icon-gear', float: 'right'});
+            
+            var rule = Rule({
+                rid : ruleID.getTextTag(),
+                descr : ruleDescr,
+                creator : ruleCreator.getTextTag()
+            });
+            
+            entry.css({borderCollapse : 'collapse'});
+            tr.append(acId).append(ruleID).append(ruleDescr).append(ruleCreator);
+            mouseHover([ruleID, ruleDescr, ruleCreator]);
+            that.register(rule);
+            rule.notify(item.data.link);
+        };
+        
         return that;
     }
-
-    function AccessIdView(spec) {
+    
+    function UlListGUI(spec){
         var that = AbstractView();
         var ul = $('<ul/>').appendTo(spec.parentTag);
-
-        function addData(spec) {
-            console.log('AccessIdView addData');
-            spec.parentTag = ul;
-            AccessIdEntryView(spec);
+        
+        that.display = function(data){
+            var li = $('<li/>').appendTo(ul);
+            if(typeof that.addItem == 'function'){
+                that.addItem({
+                    parentTag : li,
+                    data : data
+                });
+            }else {
+                li.append(data.id);
+            }
+        };
+        
+        that.toggleView = function(){
+            if(ul.css('display') == 'none'){
+                ul.show();
+            }else{
+                ul.hide();
+            }
         }
-
-        that.addData = addData;
-        return that;
-    }
-
-    function AccessIdEntryView(spec) {
-        var that = AbstractView({
-            listeners : spec.listeners
-        });
-
-        console.log('AccessIdEntryView ' + spec.parentTag);
-        var li = $('<li/>').appendTo(spec.parentTag);
-        var table = $('<table/>').appendTo(li);
-        var tr = $('<tr/>').appendTo(table);
-        var id = $('<td class="id"/>').html(spec.id).appendTo(tr);
-
+        
         return that;
     }
 
@@ -124,10 +184,8 @@
             register : function(view) {
                 var viewListener = {
                     loadData : function(url) {
-                        console.log('URL: ' + url);
                         var httpGET = model.getDataFromUrl(url);
                         var data = httpGET[url];
-                        console.log('Data: ' + data.length);
 
                         for ( var i = 0; i < data.length; i++) {
                             view.display(data[i]);
@@ -177,9 +235,9 @@
         _create : function() {
             var model = Model(this.options.httpGET);
             var guiController = ViewController(model);
-            var mainGUI = MainView({
-                mainTag : $(this.element[0]),
-                url : this.options.baseURL
+            var mainGUI = MainGUI({
+                parentTag : $(this.element[0]),
+                link : this.options.baseURL
             });
 
             guiController.register(mainGUI);
