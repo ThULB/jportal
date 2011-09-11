@@ -1,399 +1,402 @@
 (function($) {
-    var AbstractGUI = function(){
+    var Controllable = function() {
         var listeners = [];
 
         return {
-            addListener : function(list) {
+            addListeners : function(list) {
                 listeners.push(list);
             },
 
             notify : function(msg) {
                 for ( var i = 0; i < listeners.length; i++) {
-                    listeners[i].loadData(msg);
-                }
-            },
-
-            handleEvent : function(event) {
-                for ( var i = 0; i < controllReg.length; i++) {
-                    controllReg[i].handleEvent(event);
-                }
-            }
-        }
-        
-    };
-
-    var AccessList = function(spec){
-        var accesList = $('<ul/>').appendTo(spec.parentTag);
-        
-        accesList.toggleView = function(){
-            if(accesList.css('display') == 'none'){
-                accesList.show();
-            }else{
-                accesList.hide();
-            }
-        };
-        
-        return accesList;
-    };
-    
-    var RuleInfo = function(spec){
-        var parentTag =  spec.ParentTag;
-        
-        
-    };
-    
-    var ACLEditorGUI = function(spec){
-        var that = AbstractGUI();
-        var objIdList = $('<ul/>').appendTo(spec.parentTag);
-        
-        
-        that.fillObjIdList = function(data){
-            var li = $('<li/>').appendTo(objIdList);
-            var h3 = $('<h3/>').append(data.id).appendTo(li);
-            var accessList = null;
-            
-            h3.click(function(){
-                if(accessList == null){
-                    accessList = AccessList({parentTag: li});
-                    that.notify({
-                        link : data.link,
-                        callback : 'fillAccessIdList',
-                        parentTag : accessList
-                    });
-                }else {
-                    accessList.toggleView();
-                }
-            })
-        }
-        
-        that.fillAccessIdList = function(data){
-            var access = $('<li/>').appendTo(data.parentTag);
-            var accessView = $('<tr/>').appendTo($('<table/>').appendTo(access));
-            var accessId = $('<td/>').append(data.id).appendTo(accessView);
-            
-            that.notify({
-                link : data.link,
-                callback : 'fillRuleInfo',
-                parentTag : accessView
-            });
-        }
-        
-        that.fillRuleInfo = function(data){
-            var ruleInfo = RuleInfo(data);
-        }
-        
-        that.init = function(){
-            that.notify({
-                link : spec.link,
-                callback : 'fillObjIdList'
-            });
-        }
-        
-        return that;
-    };
-    
-    var GUIController = function(model){
-        var views = [];
-        return {
-            register : function(view) {
-                var viewListener = {
-                    loadData : function(msg) {
-                        var httpGET = model.getDataFromUrl(msg.link);
-                        var data = httpGET[msg.link];
-
-                        for ( var i = 0; i < data.length; i++) {
-                            var callbackData = data[i];
-                            callbackData.parentTag = msg.parentTag;
-                            view[msg.callback](callbackData);
-                        }
+                    if (typeof listeners[i][msg.event] == 'function') {
+                        listeners[i][msg.event](msg.data);
                     }
-                };
-
-                view.addListener(viewListener);
-                views.push(view);
-
-                if (typeof view.init == 'function') {
-                    view.init();
-                }
-            },
-            
-            handleEvent : function(eventName){
-                for ( var i = 0; i < views.length; i++) {
-                    if(typeof views[i][eventName] == 'function'){
-                        views[i][eventName].apply(views[i]);
-                    }
-                }
-            }
-        }
-    };
-    
-    // ###############################################################
-    function AbstractView(/* {listeners : array} */spec) {
-        var listeners = (spec && spec.listeners) || [];
-        var controllReg = (spec && spec.controllReg) || [];
-
-        return {
-            addListener : function(list) {
-                listeners.push(list);
-            },
-
-            addRegister : function(list) {
-                controllReg.push(list);
-            },
-
-            getListeners : function() {
-                return listeners;
-            },
-
-            notify : function(url) {
-                for ( var i = 0; i < listeners.length; i++) {
-                    listeners[i].loadData(url);
-                }
-            },
-
-            register : function(view) {
-                for ( var i = 0; i < controllReg.length; i++) {
-                    controllReg[i].register(view);
-                }
-            },
-            
-            handleEvent : function(event) {
-                for ( var i = 0; i < controllReg.length; i++) {
-                    controllReg[i].handleEvent(event);
                 }
             }
         }
     }
-    
-    function MainGUI(spec){
-        var that = AbstractView();
-        var objIDs = ObjIDList({parentTag : spec.parentTag});
-        
-        spec.parentTag.selectable({
+
+    var ACLEditorMainWindow = function(conf) {
+        var that = Controllable();
+
+        that.init = function() {
+            that.notify({
+                event : 'loadObjId',
+                data : {
+                    url : conf.startUrl,
+                    parentTag : conf.parentTag
+                }
+            });
+        }
+
+        return that;
+    };
+
+    var ObjIdList = function(conf) {
+        var that = Controllable();
+
+        var ul = $('<ul/>').appendTo(conf.parentTag);
+        ul.selectable({
             filter : 'li.selFilter'
         });
-        
-        that.init = function(){
-            that.register(objIDs);
-            objIDs.notify(spec.link);
-        };
-        
-        that.eventSelectableOff = function(){
-            spec.parentTag.selectable('option', 'distance', 20);
-        };
-        
-        that.eventSelectableOn = function(){
-            spec.parentTag.selectable('option', 'distance', 0);
-        };
-        
-        return that;
-    }
-    
-    function ObjIDList(spec){
-        var that = UlListGUI({parentTag : spec.parentTag});
-        
-        that.addItem = function(item){
-            var h3 = $('<h3/>').appendTo(item.parentTag);
-            var accessIDs = null;
-            
-            h3.mouseover(function(){
-                that.handleEvent('eventSelectableOff');
-            }).mouseleave(function(){
-                that.handleEvent('eventSelectableOn');
-            });
-            h3.append(item.data.id);
-            h3.click(function(){
-                if(accessIDs == null){
-                    accessIDs = AccessIDList({parentTag : item.parentTag});
-                    that.register(accessIDs);
-                    accessIDs.notify(item.data.link);
-                }else{
-                    accessIDs.toggleView();
+
+        function selectableOff() {
+            ul.selectable('option', 'distance', 20);
+        }
+        ;
+
+        function selectableOn() {
+            ul.selectable('option', 'distance', 0);
+        }
+        ;
+
+        that.add = function(data) {
+            var li = $('<li/>').appendTo(ul);
+            var h3 = $('<h3/>').append(data.id).appendTo(li);
+            var accessList = null;
+            function setAccessList(list) {
+                accessList = list
+            }
+            ;
+
+            h3.click(function() {
+                if (accessList == null) {
+                    that.notify({
+                        event : 'loadAccessList',
+                        data : {
+                            url : data.link,
+                            parentTag : li,
+                            setAccessList : setAccessList
+                        }
+                    });
+                } else {
+                    accessList.toggleView();
                 }
+            }).mouseover(function() {
+                selectableOff();
+            }).mouseleave(function() {
+                selectableOn();
+            });
+        };
+
+        return that;
+    };
+
+    var AccessList = function(conf) {
+        var that = Controllable();
+
+        var ul = $('<ul/>').appendTo(conf.parentTag);
+
+        that.add = function(data) {
+            var li = $('<li class="selFilter"/>').appendTo(ul);
+            var table = $('<table/>').appendTo(li);
+            var tr = $('<tr/>').appendTo(table);
+            var accessId = $('<td/>').append(data.id).appendTo(tr);
+
+            table.css({
+                borderCollapse : 'collapse'
             })
         }
-        
-        return that;
-    }
-    
-    function AccessIDList(spec){
-        var that = UlListGUI({
-            parentTag : spec.parentTag,
-            liClass : 'selFilter'
-            });
-        
-        function Button(spec){
-            var button = $('<span/>').addClass(spec.icon).click(function() {
-                console.log('button click ' + spec.icon)
-            });
-            var textTag = $('<span/>');
-            button.css({float : spec.float});
-            var td = $('<td/>').append(button).append(textTag);
-            
-            button.css({visibility : 'hidden'});
-            
-            td.getTextTag = function(){
-                return textTag;
-            }
-            
-            td.toggleIcon = function(val){
-                button.css({visibility : val});
-            }
-            
-            return td;
-        }
-        
-        function Rule(spec){
-            var that = AbstractView();
-            
-            that.display = function(data){
-                var rid = data.rid === undefined ? '--/--' : data.rid;
-                var descr = data.description === undefined ? '--/--' : data.description;
-                var creator = data.creator === undefined ? '--/--' : data.creator;
-                
-                spec.rid.append(rid);
-                spec.descr.append(descr);
-                spec.creator.append(creator);
-            }
-            return that;
-        }
-        
-        function mouseHover(objs){
-            function colorAndToggle(spec){
-                for ( var i = 0; i < objs.length; i++) {
-                    objs[i].css({
-                        backgroundColor : spec.color 
-                    });
-                    
-                    if(typeof objs[i].toggleIcon == 'function'){
-                        objs[i].toggleIcon(spec.visibility);
-                    }
-                }
-            }
-            
-            for ( var i = 0; i < objs.length; i++) {
-                var currentObj = objs[i];
-                currentObj.mouseover(function(){
-                    that.handleEvent('eventSelectableOff');
-                    colorAndToggle({color : '#cccccc', visibility: 'visible'})
-                }).mouseleave(function(){
-                    that.handleEvent('eventSelectableOn');
-                    colorAndToggle({color : '', visibility: 'hidden'})
-                })
-            }
-        }
-        
-        that.addItem = function(item){
-            var entry = $('<table/>').appendTo(item.parentTag);
-            var tr = $('<tr/>').appendTo(entry);
-            var acId = $('<td/>').append(item.data.id);
-            
-            
-            var ruleID = Button({icon : 'ui-icon ui-icon-triangle-1-s', float:'left'});
-            var ruleDescrText = $('<span/>');
-            var ruleDescr = $('<td/>').append(ruleDescrText);
-            var ruleCreator = Button({icon : 'ui-icon ui-icon-gear', float: 'right'});
-            
-            var rule = Rule({
-                rid : ruleID.getTextTag(),
-                descr : ruleDescr,
-                creator : ruleCreator.getTextTag()
-            });
-            
-            entry.css({borderCollapse : 'collapse'});
-            tr.append(acId).append(ruleID).append(ruleDescr).append(ruleCreator);
-            mouseHover([ruleID, ruleDescr, ruleCreator]);
-            that.register(rule);
-            rule.notify(item.data.link);
-        };
-        
-        return that;
-    }
-    
-    function UlListGUI(spec){
-        var that = AbstractView();
-        var ul = $('<ul/>').appendTo(spec.parentTag);
-        
-        that.display = function(data){
-            var li = $('<li/>').appendTo(ul);
-            
-            if(spec.liClass !== undefined){
-                li.addClass(spec.liClass);
-            }
-            
-            if(typeof that.addItem == 'function'){
-                that.addItem({
-                    parentTag : li,
-                    data : data
-                });
-            }else {
-                li.append(data.id);
-            }
-        };
-        
-        that.toggleView = function(){
-            if(ul.css('display') == 'none'){
+
+        that.toggleView = function() {
+            if (ul.css('display') == 'none') {
                 ul.show();
-            }else{
+            } else {
                 ul.hide();
             }
         }
-        
+
         return that;
-    }
+    };
 
-    function ViewController(model) {
-        var views = [];
-        return {
-            register : function(view) {
-                var viewListener = {
-                    loadData : function(url) {
-                        var httpGET = model.getDataFromUrl(url);
-                        var data = httpGET[url];
+    var ACLEditorController = function(model, mainView) {
+        var ObjIdListener = function() {
+            return {
+                loadAccessList : function(data) {
+                    var access = model.getDataFromUrl(data.url);
+                    var accessList = AccessList({
+                        parentTag : data.parentTag
+                    });
 
-                        for ( var i = 0; i < data.length; i++) {
-                            view.display(data[i]);
-                        }
+                    for ( var i = 0; i < access.length; i++) {
+                        accessList.add(access[i]);
+                        //TODO: add rule --> rule listener
                     }
-                };
 
-                view.addListener(viewListener);
-                view.addRegister(this);
-                views.push(view);
-
-                if (typeof view.init == 'function') {
-                    view.init();
+                    data.setAccessList(accessList);
                 }
-            },
-            
-            handleEvent : function(eventName){
-                for ( var i = 0; i < views.length; i++) {
-                    if(typeof views[i][eventName] == 'function'){
-                        views[i][eventName].apply(views[i]);
+            };
+        };
+
+        var MainWindowListener = function() {
+            return {
+                loadObjId : function(data) {
+                    var objIds = model.getDataFromUrl(data.url);
+                    var objIdList = ObjIdList({
+                        parentTag : data.parentTag
+                    });
+                    objIdList.addListeners(ObjIdListener());
+
+                    for ( var i = 0; i < objIds.length; i++) {
+                        objIdList.add(objIds[i]);
                     }
                 }
             }
+        };
+        mainView.addListeners(MainWindowListener());
+        mainView.init();
+    };
+    
+    // ##############################################
+    var ObjIdListView = function(conf) {
+        var ul = $('<ul/>').appendTo(conf.parentTag);
+        ul.selectable({
+            filter : 'li.selFilter'
+        });
+
+        function selectableOff() {
+            ul.selectable('option', 'distance', 20);
         }
+        ;
+
+        function selectableOn() {
+            ul.selectable('option', 'distance', 0);
+        }
+        ;
+
+        function accessListFrom(data) {
+            var accessList = AccessListView({
+                parentTag : data.parentTag,
+                mouseover : selectableOff,
+                mouseleave : selectableOn
+            });
+
+            conf.getData({
+                url : data.url,
+                callback : accessList.addAccess
+            });
+
+            accessList.loadRules({
+                from : conf.getData
+            });
+            return accessList;
+        }
+
+        var ObjIdListEntry = function(data) {
+            var li = $('<li/>').appendTo(ul);
+            var h3 = $('<h3/>').append(data.id).appendTo(li);
+            var accessList = null;
+
+            h3.click(function() {
+                if (accessList == null) {
+                    accessList = accessListFrom({
+                        url : data.link,
+                        parentTag : li,
+                    });
+                } else {
+                    accessList.toggleView();
+                }
+            }).mouseover(function() {
+                selectableOff();
+            }).mouseleave(function() {
+                selectableOn();
+            });
+        };
+
+        return {
+            addId : function(data) {
+                ObjIdListEntry(data);
+                return this;
+            }
+        }
+    };
+
+    var IconText = function(prop) {
+        var td = $('<td/>');
+
+        var icon = null;
+        if (prop.icon !== undefined) {
+            icon = $('<span/>').appendTo(td).addClass(prop.icon).css({
+                float : prop.iconPos
+            });
+        }
+        var text = $('<span/>').appendTo(td);
+
+        function toggleIcon(visibility) {
+            if (icon != null) {
+                icon.css({
+                    visibility : visibility
+                });
+            }
+            return this;
+        }
+
+        toggleIcon('hidden');
+        td.mouseover(function() {
+            prop.eventHandler('mouseover');
+        }).mouseleave(function() {
+            prop.eventHandler('mouseleave');
+        });
+
+        return {
+            setText : function(val) {
+                text.html(val);
+                return this;
+            },
+
+            toggleIcon : toggleIcon,
+
+            mouseover : function() {
+                toggleIcon('visible');
+                td.css({
+                    backgroundColor : '#cccccc'
+                });
+            },
+
+            mouseleave : function() {
+                toggleIcon('hidden');
+                td.css({
+                    backgroundColor : ''
+                });
+            },
+
+            appendTo : function(tag) {
+                td.appendTo(tag);
+                return this;
+            }
+        }
+    };
+
+    var Rule = function(prop) {
+        var parentTag = prop.parentTag;
+        var objsUnderControll = [];
+        function eventHandler(event) {
+            for ( var i = 0; i < objsUnderControll.length; i++) {
+                objsUnderControll[i][event]();
+                prop.handleEvent(event);
+            }
+        }
+
+        var changeButton = IconText({
+            icon : 'ui-icon ui-icon-triangle-1-s',
+            iconPos : 'left',
+            eventHandler : eventHandler
+        }).appendTo(parentTag);
+        var decr = IconText({
+            eventHandler : eventHandler
+        }).appendTo(parentTag);
+        var editButton = IconText({
+            icon : 'ui-icon ui-icon-gear',
+            iconPos : 'right',
+            eventHandler : eventHandler
+        }).appendTo(parentTag);
+
+        objsUnderControll = [ changeButton, decr, editButton ];
+
+        return {
+            init : function(data) {
+                var rid = typeof data.rid == 'string' ? data.rid : '--/--';
+                var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
+                var creator = typeof data.creator == 'string' ? data.creator : '--/--';
+
+                changeButton.setText(rid);
+                decr.setText(descrTxt);
+                editButton.setText(creator);
+            }
+        }
+    };
+
+    var AccessListView = function(conf) {
+        var ul = $('<ul/>').appendTo(conf.parentTag);
+        var ruleContainers = [];
+
+        function handleEvent(event) {
+            conf[event]();
+        }
+
+        function addAccessListEntry(data) {
+            var li = $('<li class="selFilter"/>').appendTo(ul);
+            var table = $('<table/>').appendTo(li);
+            var tr = $('<tr/>').appendTo(table);
+            var accessId = $('<td/>').append(data.id).appendTo(tr);
+            ruleContainers.push({
+                parentTag : tr,
+                url : data.link
+            });
+            table.css({
+                borderCollapse : 'collapse'
+            })
+        }
+
+        function loadRules(data) {
+            for ( var i = 0; i < ruleContainers.length; i++) {
+                var parentTag = ruleContainers[i].parentTag;
+                var url = ruleContainers[i].url;
+                var rule = Rule({
+                    parentTag : parentTag,
+                    handleEvent : handleEvent
+                });
+
+                data.from({
+                    url : url,
+                    callback : rule.init
+                })
+            }
+        }
+
+        return {
+            addAccess : addAccessListEntry,
+            loadRules : loadRules,
+            toggleView : function() {
+                if (ul.css('display') == 'none') {
+                    ul.show();
+                } else {
+                    ul.hide();
+                }
+            }
+        }
+    };
+
+    var ACLEditorWindow = function(conf) {
+        function getData(spec) {
+            var data = conf.model.getDataFromUrl(spec.url);
+
+            for ( var i = 0; i < data.length; i++) {
+                data[i].prev = spec.url;
+                spec.callback(data[i]);
+            }
+        }
+
+        var startUrl = conf.startUrl;
+        var parentTag = conf.parentTag;
+        var objIdList = ObjIdListView({
+            parentTag : parentTag,
+            getData : getData
+        });
+
+        // init ObjIdList
+        getData({
+            url : startUrl,
+            callback : objIdList.addId
+        })
     }
 
-    function Model(httpGET) {
+    var Model = function(httpGET) {
         var dataPool = {};
 
         return {
             getDataFromUrl : function(url) {
-                var data = {};
-                var dataObj = $(dataPool).prop(url);
+                var dataObj = dataPool[url];
 
                 if (dataObj === undefined) {
-                    httpGET(url, {}, function(target, _data) {
-                        data = _data;
-                        $.extend(dataPool, data);
+                    httpGET(url, {}, function(target, data) {
+                        dataObj = data[url];
+                        dataPool[url] = dataObj;
                     });
-                } else {
-                    $(data).prop(url, dataObj);
                 }
 
-                return data;
+                return dataObj;
             }
         }
     }
@@ -406,23 +409,18 @@
         },
 
         _create : function() {
-            var model = Model(this.options.httpGET);
-            var guiController = GUIController(model);
-            var mainGUI = ACLEditorGUI({
-                parentTag : $(this.element[0]),
-                link : this.options.baseURL
-            });
-
-            guiController.register(mainGUI);
             /*
-            var guiController = ViewController(model);
-            var mainGUI = MainGUI({
-                parentTag : $(this.element[0]),
-                link : this.options.baseURL
-            });
+             * var model = Model(this.options.httpGET); var aclEditor =
+             * ACLEditorWindow({ startUrl : this.options.baseURL, model : model,
+             * parentTag : this.element[0] });
+             */
 
-            guiController.register(mainGUI);
-            */
+            var model = Model(this.options.httpGET);
+            var mainWindow = ACLEditorMainWindow({
+                startUrl : this.options.baseURL,
+                parentTag : this.element[0]
+            });
+            var mainWindowController = ACLEditorController(model, mainWindow);
         }
     });
 })(jQuery);
