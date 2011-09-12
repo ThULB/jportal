@@ -33,10 +33,10 @@
         return that;
     };
 
-    var ObjIdList = function(conf) {
+    var ObjIdList = function() {
         var that = Controllable();
 
-        var ul = $('<ul/>').appendTo(conf.parentTag);
+        var ul = $('<ul/>');
         ul.selectable({
             filter : 'li.selFilter'
         });
@@ -44,12 +44,10 @@
         function selectableOff() {
             ul.selectable('option', 'distance', 20);
         }
-        ;
 
         function selectableOn() {
             ul.selectable('option', 'distance', 0);
         }
-        ;
 
         that.add = function(data) {
             var li = $('<li/>').appendTo(ul);
@@ -58,7 +56,6 @@
             function setAccessList(list) {
                 accessList = list
             }
-            ;
 
             h3.click(function() {
                 if (accessList == null) {
@@ -80,6 +77,12 @@
             });
         };
 
+        that.selectableOff = selectableOff;
+        that.selectableOn = selectableOn;
+        that.appendTo = function(tag) {
+            ul.appendTo(tag);
+            return that;
+        }
         return that;
     };
 
@@ -89,10 +92,13 @@
         var ul = $('<ul/>').appendTo(conf.parentTag);
 
         that.add = function(data) {
+            var access = data.access;
+            var rule = data.rule;
             var li = $('<li class="selFilter"/>').appendTo(ul);
             var table = $('<table/>').appendTo(li);
             var tr = $('<tr/>').appendTo(table);
-            var accessId = $('<td/>').append(data.id).appendTo(tr);
+            var accessId = $('<td/>').append(access.id).appendTo(tr);
+            rule.appendTo(tr);
 
             table.css({
                 borderCollapse : 'collapse'
@@ -110,115 +116,15 @@
         return that;
     };
 
-    var ACLEditorController = function(model, mainView) {
-        var ObjIdListener = function() {
-            return {
-                loadAccessList : function(data) {
-                    var access = model.getDataFromUrl(data.url);
-                    var accessList = AccessList({
-                        parentTag : data.parentTag
-                    });
-
-                    for ( var i = 0; i < access.length; i++) {
-                        accessList.add(access[i]);
-                        //TODO: add rule --> rule listener
-                    }
-
-                    data.setAccessList(accessList);
-                }
-            };
-        };
-
-        var MainWindowListener = function() {
-            return {
-                loadObjId : function(data) {
-                    var objIds = model.getDataFromUrl(data.url);
-                    var objIdList = ObjIdList({
-                        parentTag : data.parentTag
-                    });
-                    objIdList.addListeners(ObjIdListener());
-
-                    for ( var i = 0; i < objIds.length; i++) {
-                        objIdList.add(objIds[i]);
-                    }
-                }
-            }
-        };
-        mainView.addListeners(MainWindowListener());
-        mainView.init();
-    };
-    
-    // ##############################################
-    var ObjIdListView = function(conf) {
-        var ul = $('<ul/>').appendTo(conf.parentTag);
-        ul.selectable({
-            filter : 'li.selFilter'
-        });
-
-        function selectableOff() {
-            ul.selectable('option', 'distance', 20);
-        }
-        ;
-
-        function selectableOn() {
-            ul.selectable('option', 'distance', 0);
-        }
-        ;
-
-        function accessListFrom(data) {
-            var accessList = AccessListView({
-                parentTag : data.parentTag,
-                mouseover : selectableOff,
-                mouseleave : selectableOn
-            });
-
-            conf.getData({
-                url : data.url,
-                callback : accessList.addAccess
-            });
-
-            accessList.loadRules({
-                from : conf.getData
-            });
-            return accessList;
-        }
-
-        var ObjIdListEntry = function(data) {
-            var li = $('<li/>').appendTo(ul);
-            var h3 = $('<h3/>').append(data.id).appendTo(li);
-            var accessList = null;
-
-            h3.click(function() {
-                if (accessList == null) {
-                    accessList = accessListFrom({
-                        url : data.link,
-                        parentTag : li,
-                    });
-                } else {
-                    accessList.toggleView();
-                }
-            }).mouseover(function() {
-                selectableOff();
-            }).mouseleave(function() {
-                selectableOn();
-            });
-        };
-
-        return {
-            addId : function(data) {
-                ObjIdListEntry(data);
-                return this;
-            }
-        }
-    };
-
-    var IconText = function(prop) {
+    var IconTextView = function(prop) {
         var td = $('<td/>');
 
         var icon = null;
         if (prop.icon !== undefined) {
             icon = $('<span/>').appendTo(td).addClass(prop.icon).css({
                 float : prop.iconPos
+            }).click(function() {
+                prop.click();
             });
         }
         var text = $('<span/>').appendTo(td);
@@ -234,9 +140,9 @@
 
         toggleIcon('hidden');
         td.mouseover(function() {
-            prop.eventHandler('mouseover');
+            prop.mouseEvents['mouseover']();
         }).mouseleave(function() {
-            prop.eventHandler('mouseleave');
+            prop.mouseEvents['mouseleave']();
         });
 
         return {
@@ -268,119 +174,181 @@
         }
     };
 
-    var Rule = function(prop) {
-        var parentTag = prop.parentTag;
-        var objsUnderControll = [];
-        function eventHandler(event) {
-            for ( var i = 0; i < objsUnderControll.length; i++) {
-                objsUnderControll[i][event]();
-                prop.handleEvent(event);
-            }
-        }
-
-        var changeButton = IconText({
-            icon : 'ui-icon ui-icon-triangle-1-s',
-            iconPos : 'left',
-            eventHandler : eventHandler
-        }).appendTo(parentTag);
-        var decr = IconText({
-            eventHandler : eventHandler
-        }).appendTo(parentTag);
-        var editButton = IconText({
-            icon : 'ui-icon ui-icon-gear',
-            iconPos : 'right',
-            eventHandler : eventHandler
-        }).appendTo(parentTag);
-
-        objsUnderControll = [ changeButton, decr, editButton ];
-
-        return {
-            init : function(data) {
-                var rid = typeof data.rid == 'string' ? data.rid : '--/--';
-                var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
-                var creator = typeof data.creator == 'string' ? data.creator : '--/--';
-
-                changeButton.setText(rid);
-                decr.setText(descrTxt);
-                editButton.setText(creator);
-            }
-        }
-    };
-
-    var AccessListView = function(conf) {
-        var ul = $('<ul/>').appendTo(conf.parentTag);
-        var ruleContainers = [];
-
-        function handleEvent(event) {
-            conf[event]();
-        }
-
-        function addAccessListEntry(data) {
-            var li = $('<li class="selFilter"/>').appendTo(ul);
-            var table = $('<table/>').appendTo(li);
-            var tr = $('<tr/>').appendTo(table);
-            var accessId = $('<td/>').append(data.id).appendTo(tr);
-            ruleContainers.push({
-                parentTag : tr,
-                url : data.link
-            });
-            table.css({
-                borderCollapse : 'collapse'
-            })
-        }
-
-        function loadRules(data) {
-            for ( var i = 0; i < ruleContainers.length; i++) {
-                var parentTag = ruleContainers[i].parentTag;
-                var url = ruleContainers[i].url;
-                var rule = Rule({
-                    parentTag : parentTag,
-                    handleEvent : handleEvent
-                });
-
-                data.from({
-                    url : url,
-                    callback : rule.init
-                })
-            }
-        }
-
-        return {
-            addAccess : addAccessListEntry,
-            loadRules : loadRules,
-            toggleView : function() {
-                if (ul.css('display') == 'none') {
-                    ul.show();
-                } else {
-                    ul.hide();
+    var Rule = function(conf){
+        var that = Controllable();
+        var data = conf.data;
+        var ridTxt = typeof data.rid == 'string' ? data.rid : '--/--';
+        var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
+        var creatorTxt = typeof data.creator == 'string' ? data.creator : '--/--';
+        
+        var tdFact = function(){
+            var tds = [];
+            function greyBackground(){
+                for ( var i = 0; i < tds.length; i++) {
+                    tds[i].css({
+                        backgroundColor : '#cccccc'
+                    });
                 }
             }
+            
+            function noBackground(){
+                for ( var i = 0; i < tds.length; i++) {
+                    tds[i].css({
+                        backgroundColor : ''
+                    });
+                }
+            }
+            
+            return {
+                create : function(){
+                    var td = $('<td/>').mouseover(function() {
+                        greyBackground();
+                    }).mouseleave(function() {
+                        noBackground();
+                    });
+                    tds.push(td);
+                    return td;
+                }
+            };
+        }();
+        
+        var rule = tdFact.create().append(ridTxt);
+        var descr = tdFact.create().append(descrTxt);
+        var creator = tdFact.create().append(creatorTxt);
+        
+        that.appendTo = function(tag){
+            rule.appendTo(tag);
+            descr.appendTo(tag);
+            creator.appendTo(tag);
+            return that;
         }
+        
+        return that;
     };
+    
+    var RuleView = function(prop) {
+        var that = Controllable();
+        var data = prop.data;
+        var rid = typeof data.rid == 'string' ? data.rid : '--/--';
+        var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
+        var creator = typeof data.creator == 'string' ? data.creator : '--/--';
 
-    var ACLEditorWindow = function(conf) {
-        function getData(spec) {
-            var data = conf.model.getDataFromUrl(spec.url);
-
-            for ( var i = 0; i < data.length; i++) {
-                data[i].prev = spec.url;
-                spec.callback(data[i]);
+        var mouseEvents = {
+            mouseover : function() {
+                changeButton.mouseover();
+                decr.mouseover();
+                editButton.mouseover();
+                that.notify({event : 'selectableOff'});
+            },
+            
+            mouseleave : function() {
+                changeButton.mouseleave();
+                decr.mouseleave();
+                editButton.mouseleave();
+                that.notify({event : 'selectableOn'});
             }
         }
 
-        var startUrl = conf.startUrl;
-        var parentTag = conf.parentTag;
-        var objIdList = ObjIdListView({
-            parentTag : parentTag,
-            getData : getData
-        });
+        var changeButton = IconTextView({
+            icon : 'ui-icon ui-icon-triangle-1-s',
+            iconPos : 'left',
+            mouseEvents : mouseEvents,
+            click : function(){
+                that.notify({event : 'changeRule'});
+            }
+        }).setText(rid);
+        var decr = IconTextView({
+            mouseEvents : mouseEvents
+        }).setText(descrTxt);
+        var editButton = IconTextView({
+            icon : 'ui-icon ui-icon-gear',
+            iconPos : 'right',
+            mouseEvents : mouseEvents,
+            click : function(){
+                that.notify({event : 'editRule'});
+            }
+        }).setText(creator);
 
-        // init ObjIdList
-        getData({
-            url : startUrl,
-            callback : objIdList.addId
-        })
-    }
+        function notify(msg) {
+            var buttonController = {
+
+            }
+            that.notify({
+                event : event,
+                data : [ changeButton, decr, editButton ]
+            });
+        }
+
+        that.appendTo = function(tag) {
+            changeButton.appendTo(tag);
+            decr.appendTo(tag);
+            editButton.appendTo(tag);
+            return that;
+        };
+
+        return that;
+    };
+
+    var ACLEditorController = function(model, mainView) {
+        var objIdList = ObjIdList();
+
+        var RuleListener = function() {
+            return {
+                selectableOff : function() {
+                    objIdList.selectableOff();
+                },
+
+                selectableOn : function() {
+                    objIdList.selectableOn();
+                },
+
+                changeRule : function(ruleElement) {
+                    console.log('change rule');
+                }
+            }
+        };
+
+        var ObjIdListener = function() {
+            return {
+                loadAccessList : function(data) {
+                    var access = model.getDataFromUrl(data.url);
+                    var accessList = AccessList({
+                        parentTag : data.parentTag
+                    });
+
+                    for ( var i = 0; i < access.length; i++) {
+                        // TODO: add rule --> rule listener
+                        var ruleData = model.getDataFromUrl(access[i].link);
+                        var rule = Rule({
+                            data : ruleData[0]
+                        });
+                        rule.addListeners(RuleListener());
+                        accessList.add({
+                            access : access[i],
+                            rule : rule
+                        });
+                    }
+
+                    data.setAccessList(accessList);
+                }
+            };
+        };
+
+        var MainWindowListener = function() {
+            return {
+                loadObjId : function(data) {
+                    var objIds = model.getDataFromUrl(data.url);
+                    objIdList.appendTo(data.parentTag).addListeners(ObjIdListener());
+
+                    for ( var i = 0; i < objIds.length; i++) {
+                        objIdList.add(objIds[i]);
+                    }
+                }
+            }
+        };
+        mainView.addListeners(MainWindowListener());
+        mainView.init();
+    };
 
     var Model = function(httpGET) {
         var dataPool = {};
