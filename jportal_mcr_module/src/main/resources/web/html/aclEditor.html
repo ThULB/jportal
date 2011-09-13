@@ -34,78 +34,13 @@
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.js"></script>
-<script src="aclEditor.js"></script> <script type="text/javascript">
-	$(document).ready(function() {
-		console.log('Ready!');
-		var editorConfig = {
-		        baseURL : 'http://localhost:8291/rsc/acl/rsc',
-		        rulesURL : 'http://localhost:8291/rsc/acl/rules',
-				rulesListURL: 'http://localhost:8291/rsc/acl/rules',
-		        httpGET: function(url, target, callBack){
-		            var data = {};
-		            switch(url){
-		            case 'http://localhost:8291/rsc/acl/rsc' :
-		                data = { 'http://localhost:8291/rsc/acl/rsc' : [
-							{id: 'fsu.jportal.resources.FOOResource', link: url + '/FOOResource'},
-							{id: 'fsu.jportal.resources.ACLResource', link: url + '/ACLResource'},
-							{id: 'fsu.jportal.resources.JournalClassificationResource', link : url + '/JournalClassificationResource'}
-		                      ]};
-		            	break;
-		            case 'http://localhost:8291/rsc/acl/rsc/FOOResource' : 
-						data = { 'http://localhost:8291/rsc/acl/rsc/FOOResource' : [
-						{id : '/acl/rsc_GET', link : url + '/acl/rsc_GET'}, 
-						{id : '/acl/rsc_POST', link : url + '/acl/rsc_POST'}
-						]};
-						break;
-		            case 'http://localhost:8291/rsc/acl/rsc/ACLResource' :
-						data = {'http://localhost:8291/rsc/acl/rsc/ACLResource' : [
-						    {id: '/classifications/jp/{id}/save_POST', link : url + '/classifications/jp/{id}/save_POST'}
-						    ]};
-						break;
-					case 'http://localhost:8291/rsc/acl/rsc/JournalClassificationResource' :
-						data = {'http://localhost:8291/rsc/acl/rsc/JournalClassificationResource' : [
-						    {id: '/classifications/foo/save_POST',link : url + '/classifications/foo/save_POST'}
-							]};
-						break;
-		            case 'http://localhost:8291/rsc/acl/rsc/FOOResource/acl/rsc_GET' :
-				        data = {'http://localhost:8291/rsc/acl/rsc/FOOResource/acl/rsc_GET' : [{
-				            
-				        	    rid: 'System000001',
-				        	    creator: 'admin',
-				        	    creationdate: 'heute',
-				        	    rule: 'true',
-				        	    description: 'fakerule',
-				        }
-				        ]};
-				        break;
-		            case 'http://localhost:8291/rsc/acl/rules' : 
-		                data = {'http://localhost:8291/rsc/acl/rules' : [
-					  	      {id: 'System000001', link : 'http://System000001'},
-					  	      {id: 'System000002', link : 'http://System000002'},
-					  	      {id: 'System000003', link : 'http://System000003'},
-					  	      {id: 'System000004', link : 'http://System000004'},
-		                      ]}; 
-		                break;
-		            default:
-				        console.log("default url: " + url);
-		            $(data).prop(url,[{}]);
-				        break;
-		            };
-					callBack(target, data);
-		        }
-		};
-		
-		var editorConfig1 = {
-				baseURL : 'http://localhost:8291/rsc/acl/rsc'
-		};
-		
-		$('#aclEditor').aclEditor(editorConfig);
-	})
-</script>
+<script src="aclEditor.js"></script> 
+<script src="aclEditorTest.js"></script> 
 <title>ACL Editor</title>
 </head>
 <body>
 <div id="aclEditor"
 	style="border: solid black 1px; width: 1024px; height: 633px; padding-left: 10px; padding-right: 10px"></div>
+
 </body>
 </html>

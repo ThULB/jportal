@@ -116,182 +116,130 @@
         return that;
     };
 
-    var IconTextView = function(prop) {
-        var td = $('<td/>');
-
-        var icon = null;
-        if (prop.icon !== undefined) {
-            icon = $('<span/>').appendTo(td).addClass(prop.icon).css({
-                float : prop.iconPos
-            }).click(function() {
-                prop.click();
-            });
-        }
-        var text = $('<span/>').appendTo(td);
-
-        function toggleIcon(visibility) {
-            if (icon != null) {
-                icon.css({
-                    visibility : visibility
-                });
-            }
-            return this;
-        }
-
-        toggleIcon('hidden');
-        td.mouseover(function() {
-            prop.mouseEvents['mouseover']();
-        }).mouseleave(function() {
-            prop.mouseEvents['mouseleave']();
-        });
-
-        return {
-            setText : function(val) {
-                text.html(val);
-                return this;
-            },
-
-            toggleIcon : toggleIcon,
-
-            mouseover : function() {
-                toggleIcon('visible');
-                td.css({
-                    backgroundColor : '#cccccc'
-                });
-            },
-
-            mouseleave : function() {
-                toggleIcon('hidden');
-                td.css({
-                    backgroundColor : ''
-                });
-            },
-
-            appendTo : function(tag) {
-                td.appendTo(tag);
-                return this;
-            }
-        }
-    };
-
-    var Rule = function(conf){
+    var Rule = function(conf) {
         var that = Controllable();
         var data = conf.data;
         var ridTxt = typeof data.rid == 'string' ? data.rid : '--/--';
         var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
         var creatorTxt = typeof data.creator == 'string' ? data.creator : '--/--';
-        
-        var tdFact = function(){
-            var tds = [];
-            function greyBackground(){
-                for ( var i = 0; i < tds.length; i++) {
-                    tds[i].css({
-                        backgroundColor : '#cccccc'
-                    });
-                }
+
+        var tds = [];
+
+        function setcss(event) {
+            for ( var i = 0; i < tds.length; i++) {
+                tds[i].css(tds[i]._css[event]);
             }
-            
-            function noBackground(){
-                for ( var i = 0; i < tds.length; i++) {
-                    tds[i].css({
-                        backgroundColor : ''
-                    });
-                }
-            }
-            
-            return {
-                create : function(){
-                    var td = $('<td/>').mouseover(function() {
-                        greyBackground();
-                    }).mouseleave(function() {
-                        noBackground();
-                    });
-                    tds.push(td);
-                    return td;
-                }
+        }
+
+        function create(conf) {
+            var fn = (conf && conf.fn !== undefined) ? conf.fn : {mouseover : function(){}, mouseleave : function(){}}
+            var td = $('<td/>').mouseover(function() {
+                setcss('mouseover');
+                fn.mouseover();
+            }).mouseleave(function() {
+                setcss('mouseleave');
+                fn.mouseleave();
+            });
+
+            td._css = (conf && conf.css !== undefined) ? conf.css : {
+                mouseover : {},
+                mouseleave : {}
             };
-        }();
-        
-        var rule = tdFact.create().append(ridTxt);
-        var descr = tdFact.create().append(descrTxt);
-        var creator = tdFact.create().append(creatorTxt);
-        
-        that.appendTo = function(tag){
+            td._css.mouseover.backgroundColor = '#cccccc';
+            td._css.mouseleave.backgroundColor = ''
+
+            if (td._css._default !== undefined) {
+                td.css(td._css._default);
+            }
+
+            tds.push(td);
+            return td;
+        }
+
+        var rule = create().append(ridTxt);
+        var descr = create().append(descrTxt);
+        var creator = create().append(creatorTxt);
+
+        that.appendTo = function(tag) {
             rule.appendTo(tag);
             descr.appendTo(tag);
             creator.appendTo(tag);
             return that;
         }
-        
+        that.createTd = create;
         return that;
+    };
+
+    var RuleWithButtons = function(conf) {
+        var rule = Rule(conf);
+        var setSelectable = {
+                mouseover : function(){
+                    rule.notify({event : 'selectableOff'});
+                },
+                
+                mouseleave : function(){
+                    rule.notify({event : 'selectableOn'});
+                },
+        };
+        
+        var changeButton = rule.createTd({
+            css : {
+                mouseover : {
+                    visibility : 'visible'
+                },
+                mouseleave : {
+                    visibility : 'hidden'
+                },
+                _default : {
+                    visibility : 'hidden'
+                }
+            },
+            fn : setSelectable
+        }).append($('<span/>').addClass('ui-icon ui-icon-triangle-1-s'));
+        var editButton = rule.createTd({
+            css : {
+                mouseover : {
+                    visibility : 'visible'
+                },
+                mouseleave : {
+                    visibility : 'hidden'
+                },
+                _default : {
+                    visibility : 'hidden'
+                }
+            },
+            fn : setSelectable
+        }).append($('<span/>').addClass('ui-icon ui-icon-gear'));
+        var ruleAppendTo = rule.appendTo;
+
+        changeButton.click(function(){
+            rule.notify({event : 'changeRule'});
+        });
+        
+        editButton.click(function(){
+            rule.notify({event : 'editRule'});
+        });
+        
+        
+        function appendTo(tag) {
+            changeButton.appendTo(tag);
+            ruleAppendTo(tag);
+            editButton.appendTo(tag);
+        }
+        rule.appendTo = appendTo;
+        return rule;
     };
     
-    var RuleView = function(prop) {
-        var that = Controllable();
-        var data = prop.data;
-        var rid = typeof data.rid == 'string' ? data.rid : '--/--';
-        var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
-        var creator = typeof data.creator == 'string' ? data.creator : '--/--';
-
-        var mouseEvents = {
-            mouseover : function() {
-                changeButton.mouseover();
-                decr.mouseover();
-                editButton.mouseover();
-                that.notify({event : 'selectableOff'});
-            },
-            
-            mouseleave : function() {
-                changeButton.mouseleave();
-                decr.mouseleave();
-                editButton.mouseleave();
-                that.notify({event : 'selectableOn'});
-            }
-        }
-
-        var changeButton = IconTextView({
-            icon : 'ui-icon ui-icon-triangle-1-s',
-            iconPos : 'left',
-            mouseEvents : mouseEvents,
-            click : function(){
-                that.notify({event : 'changeRule'});
-            }
-        }).setText(rid);
-        var decr = IconTextView({
-            mouseEvents : mouseEvents
-        }).setText(descrTxt);
-        var editButton = IconTextView({
-            icon : 'ui-icon ui-icon-gear',
-            iconPos : 'right',
-            mouseEvents : mouseEvents,
-            click : function(){
-                that.notify({event : 'editRule'});
-            }
-        }).setText(creator);
-
-        function notify(msg) {
-            var buttonController = {
-
-            }
-            that.notify({
-                event : event,
-                data : [ changeButton, decr, editButton ]
-            });
-        }
-
-        that.appendTo = function(tag) {
-            changeButton.appendTo(tag);
-            decr.appendTo(tag);
-            editButton.appendTo(tag);
-            return that;
-        };
-
-        return that;
-    };
+    var RuleSelectBox = function(conf){
+        var selectbox = Controllable();
+        
+        return selectbox;
+    }
 
     var ACLEditorController = function(model, mainView) {
         var objIdList = ObjIdList();
-
+        var ruleSelBox = RuleSelectBox();
+        
         var RuleListener = function() {
             return {
                 selectableOff : function() {
@@ -304,6 +252,10 @@
 
                 changeRule : function(ruleElement) {
                     console.log('change rule');
+                },
+                
+                editRule : function(ruleElement) {
+                    console.log('edit rule');
                 }
             }
         };
@@ -317,9 +269,8 @@
                     });
 
                     for ( var i = 0; i < access.length; i++) {
-                        // TODO: add rule --> rule listener
                         var ruleData = model.getDataFromUrl(access[i].link);
-                        var rule = Rule({
+                        var rule = RuleWithButtons({
                             data : ruleData[0]
                         });
                         rule.addListeners(RuleListener());
@@ -343,6 +294,10 @@
                     for ( var i = 0; i < objIds.length; i++) {
                         objIdList.add(objIds[i]);
                     }
+                },
+                
+                loadSelBox : function(data) {
+                    
                 }
             }
         };
@@ -377,12 +332,6 @@
         },
 
         _create : function() {
-            /*
-             * var model = Model(this.options.httpGET); var aclEditor =
-             * ACLEditorWindow({ startUrl : this.options.baseURL, model : model,
-             * parentTag : this.element[0] });
-             */
-
             var model = Model(this.options.httpGET);
             var mainWindow = ACLEditorMainWindow({
                 startUrl : this.options.baseURL,
