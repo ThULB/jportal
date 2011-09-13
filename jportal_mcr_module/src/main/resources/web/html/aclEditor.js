@@ -18,19 +18,27 @@
     }
 
     var ACLEditorMainWindow = function(conf) {
-        var that = Controllable();
+        var mainWindow = Controllable();
 
-        that.init = function() {
-            that.notify({
+        mainWindow.init = function() {
+            mainWindow.notify({
                 event : 'loadObjId',
                 data : {
                     url : conf.startUrl,
                     parentTag : conf.parentTag
                 }
             });
+            
+            mainWindow.notify({
+                event : 'loadSelBox',
+                data : {
+                    url : conf.rulesUrl,
+                    parentTag : conf.parentTag
+                }
+            })
         }
 
-        return that;
+        return mainWindow;
     };
 
     var ObjIdList = function() {
@@ -232,7 +240,17 @@
     
     var RuleSelectBox = function(conf){
         var selectbox = Controllable();
+        var selBoxWindow = $('<div/>');
+        var ul = $('<ul/>').appendTo(selBoxWindow);
         
+        selectbox.appendTo = function(tag){
+            selBoxWindow.appendTo(tag);
+            return selectbox;
+        };
+        
+        selectbox.add = function(data){
+            var li = $('<li/>').appendTo(ul).append(data.id);   
+        }
         return selectbox;
     }
 
@@ -297,7 +315,12 @@
                 },
                 
                 loadSelBox : function(data) {
+                    var rules = model.getDataFromUrl(data.url);
+                    ruleSelBox.appendTo(data.parentTag);
                     
+                    for ( var i = 0; i < rules.length; i++) {
+                        ruleSelBox.add(rules[i]);
+                    }
                 }
             }
         };
@@ -333,8 +356,10 @@
 
         _create : function() {
             var model = Model(this.options.httpGET);
+            console.log('rules url create ' + this.options.rulesURL)
             var mainWindow = ACLEditorMainWindow({
                 startUrl : this.options.baseURL,
+                rulesUrl : this.options.rulesURL,
                 parentTag : this.element[0]
             });
             var mainWindowController = ACLEditorController(model, mainWindow);
