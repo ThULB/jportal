@@ -1,332 +1,94 @@
 (function($) {
-    var Controllable = function() {
-        var listeners = [];
-
-        return {
-            addListeners : function(list) {
-                listeners.push(list);
-            },
-
-            notify : function(msg) {
-                for ( var i = 0; i < listeners.length; i++) {
-                    if (typeof listeners[i][msg.event] == 'function') {
-                        listeners[i][msg.event](msg.data);
-                    }
-                }
-            }
-        }
-    }
-
-    var ACLEditorMainWindow = function(conf) {
-        var mainWindow = Controllable();
-
-        mainWindow.init = function() {
-            mainWindow.notify({
-                event : 'loadObjId',
-                data : {
-                    url : conf.startUrl,
-                    parentTag : conf.parentTag
-                }
+    var Editor = function(conf){
+        var model = conf.model;
+        
+        var mainList = $('<ul/>').appendTo(conf.parentTag).selectable({filter : 'li.ui-selectee'})
+        .bind('selOff',function(e){
+            $(this).selectable({distance : '20'});
+        }).bind('selOn',function(e){
+            $(this).selectable({distance : '0'});
+        });
+        
+        var ruleSelBox = function(){
+            var selBox = $('<ul/>').appendTo(conf.parentTag).hide();
+            $.each(model.getDataFromUrl(conf.rulesUrl), function(i, data){
+                var li = $('<li/>').append(data.id).appendTo(selBox);
+            });
+            return selBox;
+        }();
+        
+        function loadAccess(url){
+            var ul = $('<ul/>');
+            $.each(model.getDataFromUrl(url), function(i, data){
+                var li = $('<li class="ui-acleditor-access ui-selectee"/>').appendTo(ul);
+                var tr = $('<tr/>')
+                var ruleData = model.getDataFromUrl(data.link)[0];
+                var ridTxt = typeof ruleData.rid == 'string' ? ruleData.rid : '--/--';
+                var descrTxt = typeof ruleData.description == 'string' ? ruleData.description : '--/--';
+                var creatorTxt = typeof ruleData.creator == 'string' ? ruleData.creator : '--/--';
+                
+                tr.append('<td class="acId">'+data.id+'</td>');
+                tr.append('<td class="rule button change"><span class="ui-icon ui-icon-triangle-1-s" style="visibility:hidden"/></td>');
+                tr.append('<td class="rule id">'+ ridTxt + '</td>');
+                tr.append('<td class="rule descr">'+ descrTxt + '</td>');
+                tr.append('<td class="rule creator">'+ creatorTxt + '</td>');
+                tr.append('<td class="rule button edit"><span class="ui-icon ui-icon-gear ui-rule-button"/></td>');
+                tr.appendTo($('<table/>').css({borderCollapse : 'collapse'}).appendTo(li));
+                
+                tr.delegate('.rule','mouseover', function(){
+                    $('.rule',tr).addClass('ui-rule-selected');
+                    $('.rule.button>span',tr).css({visibility:'visible'});
+                });
+                
+                tr.delegate('.rule','mouseleave', function(){
+                    $('.rule',tr).removeClass('ui-rule-selected');
+                    $('.rule.button>span',tr).css({visibility:'hidden'});
+                });
+                
+                tr.delegate('.rule.button','mouseover', function(){
+                    mainList.trigger('selOff');
+                });
+                
+                tr.delegate('.rule.button','mouseleave', function(){
+                    mainList.trigger('selOn');
+                });
+                
+                $('.rule.change.button',tr).click(function(){
+                    console.log('change rule');
+                    var position = $(this).position();
+                    ruleSelBox.show().css({
+                        position : 'absolute',
+                        top : position.top + $(this).height(),
+                        left : position.left
+                    })
+                })
+                
+                $('.rule.edit.button',tr).click(function(){
+                    console.log('edit rule');
+                })
             });
             
-            mainWindow.notify({
-                event : 'loadSelBox',
-                data : {
-                    url : conf.rulesUrl,
-                    parentTag : conf.parentTag
+            return ul;
+        }
+        
+        $.each(model.getDataFromUrl(conf.startUrl), function(i, data){
+            var li = $('<li class="ui-acleditor-objId"/>').appendTo(mainList);
+            
+            $('<h3 class="ui-acleditor-objId-txt"/>').append(data.id).appendTo(li)
+            .click(function(event){
+                var access = $(this).data('access')
+                if(access === undefined){
+                    $(this).data('access',loadAccess(data.link).appendTo(li));
+                }else{
+                    access.fadeToggle('fast');
                 }
-            })
-        }
-
-        return mainWindow;
-    };
-
-    var ObjIdList = function() {
-        var that = Controllable();
-
-        var ul = $('<ul/>');
-        ul.selectable({
-            filter : 'li.selFilter'
-        });
-
-        function selectableOff() {
-            ul.selectable('option', 'distance', 20);
-        }
-
-        function selectableOn() {
-            ul.selectable('option', 'distance', 0);
-        }
-
-        that.add = function(data) {
-            var li = $('<li/>').appendTo(ul);
-            var h3 = $('<h3/>').append(data.id).appendTo(li);
-            var accessList = null;
-            function setAccessList(list) {
-                accessList = list
-            }
-
-            h3.click(function() {
-                if (accessList == null) {
-                    that.notify({
-                        event : 'loadAccessList',
-                        data : {
-                            url : data.link,
-                            parentTag : li,
-                            setAccessList : setAccessList
-                        }
-                    });
-                } else {
-                    accessList.toggleView();
-                }
-            }).mouseover(function() {
-                selectableOff();
-            }).mouseleave(function() {
-                selectableOn();
+            }).mouseover(function(){
+                mainList.trigger('selOff');
+            }).mouseleave(function(){
+                mainList.trigger('selOn');
             });
-        };
-
-        that.selectableOff = selectableOff;
-        that.selectableOn = selectableOn;
-        that.appendTo = function(tag) {
-            ul.appendTo(tag);
-            return that;
-        }
-        return that;
-    };
-
-    var AccessList = function(conf) {
-        var that = Controllable();
-
-        var ul = $('<ul/>').appendTo(conf.parentTag);
-
-        that.add = function(data) {
-            var access = data.access;
-            var rule = data.rule;
-            var li = $('<li class="selFilter"/>').appendTo(ul);
-            var table = $('<table/>').appendTo(li);
-            var tr = $('<tr/>').appendTo(table);
-            var accessId = $('<td/>').append(access.id).appendTo(tr);
-            rule.appendTo(tr);
-
-            table.css({
-                borderCollapse : 'collapse'
-            })
-        }
-
-        that.toggleView = function() {
-            if (ul.css('display') == 'none') {
-                ul.show();
-            } else {
-                ul.hide();
-            }
-        }
-
-        return that;
-    };
-
-    var Rule = function(conf) {
-        var that = Controllable();
-        var data = conf.data;
-        var ridTxt = typeof data.rid == 'string' ? data.rid : '--/--';
-        var descrTxt = typeof data.description == 'string' ? data.description : '--/--';
-        var creatorTxt = typeof data.creator == 'string' ? data.creator : '--/--';
-
-        var tds = [];
-
-        function setcss(event) {
-            for ( var i = 0; i < tds.length; i++) {
-                tds[i].css(tds[i]._css[event]);
-            }
-        }
-
-        function create(conf) {
-            var fn = (conf && conf.fn !== undefined) ? conf.fn : {mouseover : function(){}, mouseleave : function(){}}
-            var td = $('<td/>').mouseover(function() {
-                setcss('mouseover');
-                fn.mouseover();
-            }).mouseleave(function() {
-                setcss('mouseleave');
-                fn.mouseleave();
-            });
-
-            td._css = (conf && conf.css !== undefined) ? conf.css : {
-                mouseover : {},
-                mouseleave : {}
-            };
-            td._css.mouseover.backgroundColor = '#cccccc';
-            td._css.mouseleave.backgroundColor = ''
-
-            if (td._css._default !== undefined) {
-                td.css(td._css._default);
-            }
-
-            tds.push(td);
-            return td;
-        }
-
-        var rule = create().append(ridTxt);
-        var descr = create().append(descrTxt);
-        var creator = create().append(creatorTxt);
-
-        that.appendTo = function(tag) {
-            rule.appendTo(tag);
-            descr.appendTo(tag);
-            creator.appendTo(tag);
-            return that;
-        }
-        that.createTd = create;
-        return that;
-    };
-
-    var RuleWithButtons = function(conf) {
-        var rule = Rule(conf);
-        var setSelectable = {
-                mouseover : function(){
-                    rule.notify({event : 'selectableOff'});
-                },
-                
-                mouseleave : function(){
-                    rule.notify({event : 'selectableOn'});
-                },
-        };
-        
-        var changeButton = rule.createTd({
-            css : {
-                mouseover : {
-                    visibility : 'visible'
-                },
-                mouseleave : {
-                    visibility : 'hidden'
-                },
-                _default : {
-                    visibility : 'hidden'
-                }
-            },
-            fn : setSelectable
-        }).append($('<span/>').addClass('ui-icon ui-icon-triangle-1-s'));
-        var editButton = rule.createTd({
-            css : {
-                mouseover : {
-                    visibility : 'visible'
-                },
-                mouseleave : {
-                    visibility : 'hidden'
-                },
-                _default : {
-                    visibility : 'hidden'
-                }
-            },
-            fn : setSelectable
-        }).append($('<span/>').addClass('ui-icon ui-icon-gear'));
-        var ruleAppendTo = rule.appendTo;
-
-        changeButton.click(function(){
-            rule.notify({event : 'changeRule'});
         });
-        
-        editButton.click(function(){
-            rule.notify({event : 'editRule'});
-        });
-        
-        
-        function appendTo(tag) {
-            changeButton.appendTo(tag);
-            ruleAppendTo(tag);
-            editButton.appendTo(tag);
-        }
-        rule.appendTo = appendTo;
-        return rule;
-    };
-    
-    var RuleSelectBox = function(conf){
-        var selectbox = Controllable();
-        var selBoxWindow = $('<div/>');
-        var ul = $('<ul/>').appendTo(selBoxWindow);
-        
-        selectbox.appendTo = function(tag){
-            selBoxWindow.appendTo(tag);
-            return selectbox;
-        };
-        
-        selectbox.add = function(data){
-            var li = $('<li/>').appendTo(ul).append(data.id);   
-        }
-        return selectbox;
     }
-
-    var ACLEditorController = function(model, mainView) {
-        var objIdList = ObjIdList();
-        var ruleSelBox = RuleSelectBox();
-        
-        var RuleListener = function() {
-            return {
-                selectableOff : function() {
-                    objIdList.selectableOff();
-                },
-
-                selectableOn : function() {
-                    objIdList.selectableOn();
-                },
-
-                changeRule : function(ruleElement) {
-                    console.log('change rule');
-                },
-                
-                editRule : function(ruleElement) {
-                    console.log('edit rule');
-                }
-            }
-        };
-
-        var ObjIdListener = function() {
-            return {
-                loadAccessList : function(data) {
-                    var access = model.getDataFromUrl(data.url);
-                    var accessList = AccessList({
-                        parentTag : data.parentTag
-                    });
-
-                    for ( var i = 0; i < access.length; i++) {
-                        var ruleData = model.getDataFromUrl(access[i].link);
-                        var rule = RuleWithButtons({
-                            data : ruleData[0]
-                        });
-                        rule.addListeners(RuleListener());
-                        accessList.add({
-                            access : access[i],
-                            rule : rule
-                        });
-                    }
-
-                    data.setAccessList(accessList);
-                }
-            };
-        };
-
-        var MainWindowListener = function() {
-            return {
-                loadObjId : function(data) {
-                    var objIds = model.getDataFromUrl(data.url);
-                    objIdList.appendTo(data.parentTag).addListeners(ObjIdListener());
-
-                    for ( var i = 0; i < objIds.length; i++) {
-                        objIdList.add(objIds[i]);
-                    }
-                },
-                
-                loadSelBox : function(data) {
-                    var rules = model.getDataFromUrl(data.url);
-                    ruleSelBox.appendTo(data.parentTag);
-                    
-                    for ( var i = 0; i < rules.length; i++) {
-                        ruleSelBox.add(rules[i]);
-                    }
-                }
-            }
-        };
-        mainView.addListeners(MainWindowListener());
-        mainView.init();
-    };
 
     var Model = function(httpGET) {
         var dataPool = {};
@@ -356,13 +118,19 @@
 
         _create : function() {
             var model = Model(this.options.httpGET);
-            console.log('rules url create ' + this.options.rulesURL)
-            var mainWindow = ACLEditorMainWindow({
+            /*
+             * console.log('rules url create ' + this.options.rulesURL) var
+             * mainWindow = ACLEditorMainWindow({ startUrl :
+             * this.options.baseURL, rulesUrl : this.options.rulesURL, parentTag :
+             * this.element[0] }); var mainWindowController =
+             * ACLEditorController(model, mainWindow);
+             */
+            Editor({
+                model : model,
                 startUrl : this.options.baseURL,
                 rulesUrl : this.options.rulesURL,
                 parentTag : this.element[0]
-            });
-            var mainWindowController = ACLEditorController(model, mainWindow);
+            })
         }
     });
 })(jQuery);

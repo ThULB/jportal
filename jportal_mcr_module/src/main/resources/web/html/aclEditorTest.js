@@ -67,4 +67,5 @@ $(document).ready(function() {
         };
         
         $('#aclEditor').aclEditor(editorConfig);
+        
  })
