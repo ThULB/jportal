@@ -45,6 +45,17 @@ $(document).ready(function() {
                         }
                         ]};
                         break;
+                    case 'http://System000002' :
+                        data = {'http://System000002' : [{
+                            
+                            rid: 'System000002',
+                            creator: 'chi',
+                            creationdate: 'morgen',
+                            rule: 'false',
+                            description: 'dummy',
+                        }
+                        ]};
+                        break;
                     case 'http://localhost:8291/rsc/acl/rules' : 
                         data = {'http://localhost:8291/rsc/acl/rules' : [
                               {id: 'System000001', link : 'http://System000001'},
@@ -66,6 +77,23 @@ $(document).ready(function() {
                 baseURL : 'http://localhost:8291/rsc/acl/rsc'
         };
         
+        var obj = function(){
+            return {
+                print : function(){
+                    console.log('hello');
+                }
+            }
+        }();
+         var extObj = function(){
+             var parent = obj
+             var superPrint = obj.print;
+             parent.print = function(){
+                 superPrint();
+                 
+             }
+             obj['print']()
+             return parent;
+         }
         $('#aclEditor').aclEditor(editorConfig);
         
  })
