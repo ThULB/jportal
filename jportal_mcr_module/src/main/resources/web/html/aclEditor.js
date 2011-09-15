@@ -40,7 +40,20 @@
                     $('.rule.button>span',tr).css({visibility:'visible'});
                 });
                 
+                var ruleMarkingOnMouseLeave = function(){
+                    var boolVal = false;
+                    return {
+                        visible : function(){
+                            return boolVal;
+                        },
+                        visibilityShouldBe : function(bool){
+                            boolVal = bool
+                        }
+                    }
+                }();
+                
                 tr.delegate('.rule','mouseleave', function(){
+                    if(ruleMarkingOnMouseLeave.visible)
                     $('.rule',tr).removeClass('ui-rule-selected');
                     $('.rule.button>span',tr).css({visibility:'hidden'});
                 });
