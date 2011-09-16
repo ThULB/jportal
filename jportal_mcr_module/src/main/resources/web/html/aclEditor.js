@@ -36,7 +36,6 @@
                         cursor: 'auto'
                     });
                 }).click(function(){
-                    console.log('url ' + data.link);
                     var ruleData = model.getDataFromUrl(data.link)[0];
                     connectedSelected(ruleData);
                 });
