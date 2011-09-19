@@ -1,4 +1,50 @@
 (function($) {
+    var AbstractView = function(){
+        var handlers = [];
+        
+        return {
+            addHandlers : function(list){
+                handlers.push(list);
+            },
+            
+            notify : function(msg){
+                for ( var i = 0; i < handlers.length; i++) {
+                    if(typeof handlers[i][msg.event] == 'function'){
+                        handlers[i][msg.event](msg.args);
+                    }
+                }
+            }
+        }
+    };
+    
+    var MainView = function(conf){
+        var mainView = AbstractView();
+        var ul = $('<ul/>').appendTo(conf.parentTag);
+        
+        mainView.create = function(){
+            mainView.notify({
+                event : 'loadObjIds',
+                link : conf.link
+            });
+        };
+        
+        mainView.addObjId = function(data){
+            $('<li/>').append(data.id).appendTo(ul).click(function(){
+                mainView.notify({
+                    event : 'loadAccess',
+                    link : data.link
+                });
+            });
+        };
+        return mainView;
+    }
+    
+    var Controller = function(view, model){
+        var MainViewHandler = function(){
+            
+        }
+    };
+    
     var Editor = function(conf) {
         var model = conf.model;
 
