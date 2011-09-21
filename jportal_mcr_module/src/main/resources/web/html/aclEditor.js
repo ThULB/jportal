@@ -17,6 +17,67 @@
         }
     };
     
+    var RuleSelectBox = function(conf){
+        var selectBox= AbstractView();
+        var select = $('<select/>').appendTo(conf.parentTag);
+        
+        var Option = function(data){
+            var val = data.descr === undefined ? data.rid : data.descr;
+            var option = $('<option/>').html(val);
+            
+            return {
+                appendTo : function(tag){
+                    option.appendTo(tag);
+                }
+            }
+        }
+        
+        selectBox.addOption = function(content){
+            var option = Option(content);
+            option.appendTo(select);
+        };
+        
+        selectBox.create = function(){
+            selectBox.notify({
+                event : 'loadSelBox'
+            })
+        };
+        
+        selectBox.appendTo = function(tag){
+            select.appendTo(tag);
+        };
+        
+        
+        return selectBox;
+    }
+    
+    var RuleCell = function(conf){
+        var ruleCell= AbstractView();
+        var buttonSet = $('<span/>').appendTo(conf.parentTag);
+        var ridButton = $('<span/>').html(conf.rid).appendTo(buttonSet);
+        var changeButton = $('<span/>').html('change rule').button({
+            text: false,
+            icons: {
+                primary: "ui-icon-triangle-1-s"
+            }
+        });
+        
+        function hoverOn(){
+            ridButton.button();
+            changeButton.appendTo(buttonSet);
+            buttonSet.buttonset()
+        }
+        
+        function hoverOff(){
+            ridButton.button('destroy');
+            changeButton.detach();
+        }
+        
+        buttonSet.hover(hoverOn,hoverOff);
+        
+        return ruleCell;
+    }
+    
     var MainView = function(conf){
         var mainView = AbstractView();
         var table = $('<table/>').appendTo(conf.parentTag);
@@ -51,7 +112,12 @@
             var tr = $('<tr/>').appendTo(table);
             $('<td/>').append(data.objid).appendTo(tr);
             $('<td/>').append(data.acpool).appendTo(tr);
-            $('<td/>').append(getRuleDescr(data.rid)).appendTo(tr);
+            var ruleCell = $('<td/>').appendTo(tr);
+            
+            RuleCell({
+                rid : getRuleDescr(data.rid),
+                parentTag : ruleCell
+            });
         };
         return mainView;
     }
@@ -72,7 +138,23 @@
             }
         }
         view.addHandlers(MainViewHandler());
-        view.create()
+        view.create();
+        
+        var ruleSelBox = RuleSelectBox({
+            parentTag : document.body
+        });
+        var SelectBoxHandler = function(){
+            return {
+                loadSelBox : function(){
+                    var rules = model.getRule();
+                    $.each(rules, function(name, data){
+                        ruleSelBox.addOption(data);
+                    })
+                }
+            }
+        }
+        ruleSelBox.addHandlers(SelectBoxHandler());
+        ruleSelBox.create();
     };
     
     var Model = function(conf) {
