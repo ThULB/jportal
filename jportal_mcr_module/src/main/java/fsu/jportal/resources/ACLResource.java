@@ -29,7 +29,7 @@ public class ACLResource {
         Set<String> keySet = resourceRegister.keySet();
         GsonManager gsonManager = GsonManager.instance();
         gsonManager.registerAdapter(new RegResourceCollectionTypeAdapter());
-        return gsonManager.createGson().toJson(new RegResourceCollection(keySet, info.getAbsolutePath()));
+        return gsonManager.createGson().toJson(new RegResourceCollection(resourceRegister, info.getAbsolutePath()));
     }
     
     @GET
@@ -39,7 +39,8 @@ public class ACLResource {
         List<String> resourceMethods = ResourceSercurityConf.instance().getResourceRegister().get(rscID);
         GsonManager gsonManager = GsonManager.instance();
         gsonManager.registerAdapter(new RegResourceCollectionTypeAdapter());
-        return gsonManager.createGson().toJson(new RegResourceCollection(resourceMethods, info.getAbsolutePath()));
+        //return gsonManager.createGson().toJson(new RegResourceCollection(resourceMethods, info.getAbsolutePath()));
+        return "";
     }
     
     @GET
