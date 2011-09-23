@@ -2,21 +2,19 @@ package fsu.jportal.gson;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class RegResourceCollection {
-    private Collection<String> regResources;
+    private Map<String, List<String>> regResources;
     private URI resourceURI;
 
-    public RegResourceCollection(Collection<String> regResources, URI resourceURI) {
-        this.setRegResources(regResources);
-        this.setResourceURI(resourceURI);
+    public RegResourceCollection(Map<String, List<String>> resourceRegister, URI absolutePath) {
+        this.regResources = resourceRegister;
+        setResourceURI(absolutePath);
     }
 
-    private void setRegResources(Collection<String> regResources2) {
-        this.regResources = regResources2;
-    }
-
-    public Collection<String> getRegResources() {
+    public Map<String, List<String>> getRegResources() {
         return regResources;
     }
 

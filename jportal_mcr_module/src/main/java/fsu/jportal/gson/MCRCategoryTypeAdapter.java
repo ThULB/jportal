@@ -34,11 +34,6 @@ public class MCRCategoryTypeAdapter extends GsonTypeAdapter<MCRCategory> {
     private MCRCategLinkService linkService;
 
     @Override
-    public Type bindTo() {
-        return Category.class;
-    }
-
-    @Override
     public MCRCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject categJsonObject = json.getAsJsonObject();
         Category deserializedCateg = new Category();

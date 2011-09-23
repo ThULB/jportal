@@ -38,9 +38,9 @@ public class ResourceRegisterTypeAdapter extends GsonTypeAdapter<ResourceRegiste
         return null;
     }
 
-    @Override
-    public Type bindTo() {
-        return ResourceRegister.class;
-    }
+//    @Override
+//    public Type bindTo() {
+//        return ResourceRegister.class;
+//    }
 
 }

@@ -39,10 +39,4 @@ public class MCRCategoryIDTypeAdapter extends GsonTypeAdapter<MCRCategoryID> {
         
         return idJsonObj;
     }
-
-    @Override
-    public Type bindTo() {
-        return MCRCategoryID.class;
-    }
-
 }

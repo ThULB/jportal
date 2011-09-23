@@ -70,9 +70,4 @@ public class MCRLabelSetTypeAdapter extends GsonTypeAdapter<MCRLabelSetWrapper>{
         }
         return new MCRLabel(lang, text, description);
     }
-    
-    @Override
-    public Type bindTo() {
-        return MCRLabelSetWrapper.class;
-    }
 }

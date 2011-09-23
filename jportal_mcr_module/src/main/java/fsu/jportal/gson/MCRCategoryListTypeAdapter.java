@@ -83,10 +83,4 @@ public class MCRCategoryListTypeAdapter extends GsonTypeAdapter<MCRCategoryListW
         
         return new MCRCategoryListWrapper(categList);
     }
-
-
-    @Override
-    public Type bindTo() {
-        return MCRCategoryListWrapper.class;
-    }
 }
