@@ -12,8 +12,17 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
+import org.hibernate.Session;
+import org.hibernate.tool.hbm2ddl.SchemaUpdate;
+import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+
 import fsu.jportal.config.ResourceSercurityConf;
+import fsu.jportal.gson.AccessRuleList;
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.gson.AccessRuleListTypeAdapter;
 import fsu.jportal.gson.RegResourceCollection;
 import fsu.jportal.gson.RegResourceCollectionTypeAdapter;
 
@@ -30,6 +39,22 @@ public class ACLResource {
         GsonManager gsonManager = GsonManager.instance();
         gsonManager.registerAdapter(new RegResourceCollectionTypeAdapter());
         return gsonManager.createGson().toJson(new RegResourceCollection(resourceRegister, info.getAbsolutePath()));
+    }
+    
+    @GET
+    @Path("rules")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getRules(){
+        MCRSession currentSession = MCRSessionMgr.getCurrentSession();
+        currentSession.beginTransaction();
+    	new SchemaUpdate(MCRHIBConnection.instance().getConfiguration()).execute(true, true);
+    	Session session = MCRHIBConnection.instance().getSession();
+        List<MCRACCESSRULE> ruleList = session.createCriteria(MCRACCESSRULE.class).list();
+        GsonManager gsonManager = GsonManager.instance();
+        gsonManager.registerAdapter(new AccessRuleListTypeAdapter());
+        String json = gsonManager.createGson().toJson(new AccessRuleList(ruleList, info.getAbsolutePath()));
+        currentSession.commitTransaction();
+        return json;
     }
     
     @GET

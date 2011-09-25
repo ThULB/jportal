@@ -31,7 +31,7 @@ public class RegResourceCollectionTypeAdapter extends GsonTypeAdapter<RegResourc
                 JsonObject accessJson = new JsonObject();
                 accessJson.addProperty("objid", objId);
                 accessJson.addProperty("acpool", acpool);
-                regResourcesJson.add(resourceURI.toString(), accessJson);
+                regResourcesJson.add(UriBuilder.fromUri(resourceURI).path(objId).path(acpool).build().toString(), accessJson);
             }
         }
         return regResourcesJson;
