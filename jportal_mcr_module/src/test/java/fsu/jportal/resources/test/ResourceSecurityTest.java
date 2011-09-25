@@ -56,6 +56,7 @@ public class ResourceSecurityTest extends JerseyResourceTestCase{
         System.setProperty("MCR.Configuration.File", "config/test.properties");
         Properties mcrProperties = MCRConfiguration.instance().getProperties();
         mcrProperties.setProperty("McrSessionSecurityFilter.MCRAccessManager.Connector", MyAccessManagerConnector.class.getName());
+        mcrProperties.setProperty("MCR.Persistence.Database.Enable", "false");
     }
     
     @Test

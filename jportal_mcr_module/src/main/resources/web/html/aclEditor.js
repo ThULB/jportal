@@ -15,7 +15,7 @@
             httpGET(rulesURL, function(data){
                 $.each(data, function(url, rule){
                     $('<option/>').attr('id', rule.rid).appendTo(selBox)
-                    .html(rule.descr === undefined ? rule.rid : rule.descr)
+                    .html(rule.descr === undefined || rule.descr === '' ? rule.rid : rule.descr)
                     .data('url', url).data('rule', rule.rule);
                     console.log('rule url ' +url);
                 })
