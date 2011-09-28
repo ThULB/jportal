@@ -1,15 +1,12 @@
 package fsu.jportal.resources.test;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -65,7 +62,7 @@ public class ResourceSecurityTest extends JerseyResourceTestCase{
         
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
         response = resource().path("/auth/logout/foo").get(ClientResponse.class);
-        assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
         Map<String, List<String>> resourceRegister = ResourceSercurityConf.instance().getResourceRegister();
 //        assertEquals(1, resourceRegister.size());
         List<String> testResourceEntry = ResourceSercurityConf.instance().getResourceRegister().get(TestResource.class.getName());

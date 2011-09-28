@@ -189,6 +189,11 @@ classification.Editor = function() {
 			handleAs : "json",
 			headers: { "Content-Type": "application/json; charset=utf-8"},
 			error : dojo.hitch(this, function(error) {
+			    if(error.status === 401){
+			        alert('Sie müssen angemeldet sein.')
+			    } else{
+			        alert('Es ist ein Fehler aufgetreten, Ihre Änderungen wurden nicht gespeichert.');
+			    }
 				console.log("error while saving");
 			}),
 			load : dojo.hitch(this, function(data) {

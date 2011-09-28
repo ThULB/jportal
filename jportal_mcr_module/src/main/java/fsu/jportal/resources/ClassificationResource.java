@@ -149,8 +149,8 @@ public class ClassificationResource {
             for (MCRLabel mcrLabel : labels) {
                 getCategoryDAO().setLabel(categ.getId(), mcrLabel);
             }
-            
-            if(newParentID != null) {
+
+            if (newParentID != null) {
                 getCategoryDAO().moveCategory(categ.getId(), newParentID, categ.getPositionInParent());
             }
             response = Response.status(Status.OK).build();

@@ -67,7 +67,7 @@ public class MyCoReSecurityFilterFactory implements ResourceFilterFactory {
             
             boolean hasPermission = getAccessManagerConnector().checkPermission(resourceName, resourceOperation, session);
             if (!hasPermission) {
-                throw new WebApplicationException(Response.Status.FORBIDDEN);
+                throw new WebApplicationException(Response.Status.UNAUTHORIZED);
             }
             return request;
         }

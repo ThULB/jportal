@@ -28,8 +28,20 @@ $(document).ready(function() {
                         console.log("default url: " + url);
                     }
                     callBack(retrievedData);
+                },
+                
+                ajax : function(options){
+                    console.log('-- ajax --');
+                    $.each(options, function(name,data){
+                        console.log(name + ': ' + data);
+                    })
                 }
         };
+        
+        var editorConfig1 = {
+                accessURL : 'http://localhost:8291/rsc/acl/rsc',
+                rulesURL : 'http://localhost:8291/rsc/acl/rules'
+        }
         
         $('#aclEditor').aclEditor(editorConfig);
  })

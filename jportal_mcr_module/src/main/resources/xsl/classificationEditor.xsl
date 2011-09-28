@@ -42,8 +42,8 @@
       };
     </script>
 
-    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js"></script>-->
-    <script type="text/javascript" src="http://yandex.st/dojo/1.6.1/dojo/dojo.xd.js"></script>
+     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js"></script>
+<!--    <script type="text/javascript" src="http://yandex.st/dojo/1.6.1/dojo/dojo.xd.js"></script>-->
 
     <script type="text/javascript" src="{$jsPath}/dojoInclude.js"></script>
     <script type="text/javascript" src="{$jsPath}/ClassificationUtils.js"></script>
@@ -55,8 +55,8 @@
     <script type="text/javascript" src="{$jsPath}/TreePane.js"></script>
     <script type="text/javascript" src="{$jsPath}/Editor.js"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css"></link>-->
-    <link rel="stylesheet" type="text/css" href="http://yandex.st/dojo/1.6.1/dijit/themes/claro/claro.css"></link>
+     <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/themes/claro/claro.css"></link>
+<!--    <link rel="stylesheet" type="text/css" href="http://yandex.st/dojo/1.6.1/dijit/themes/claro/claro.css"></link>-->
     <link rel="stylesheet" type="text/css" href="{$webPath}/css/classificationEditor.css"></link>
 
     <script type="text/javascript">

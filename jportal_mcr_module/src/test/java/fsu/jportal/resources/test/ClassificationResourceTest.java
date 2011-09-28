@@ -1,5 +1,6 @@
 package fsu.jportal.resources.test;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -10,10 +11,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 
 import org.codehaus.jettison.json.JSONObject;
@@ -95,7 +100,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         assertEquals("Wrong number of root categories.", 2, categList.size());
     }
     
-    //@Test
+    @Test
     public void getSingleCategory() throws Exception {
         Set<MCRCategoryID> ids = categDAO.getIds();
         Collection<MCRCategory> categs = categDAO.getCategs();
@@ -116,7 +121,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         }
     }
     
-    //@Test
+    @Test
     public void newRootCategory() throws Exception {
         ClientResponse response = resource().path("/classifications/new").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, categJsonStr());
         assertEquals("could not create rubric: ", Status.CREATED.getStatusCode(), response.getClientResponseStatus().getStatusCode());
@@ -126,7 +131,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         assertEquals(categJsonStr(), jsonObject.toString());
     }
     
-    //@Test
+    @Test
     public void newSubCategory() throws Exception {
         Set<MCRCategoryID> ids = categDAO.getIds();
         MCRCategoryID id = ids.iterator().next();
@@ -163,40 +168,40 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
 //        assertDeleteRubric(rubricLocation, subRubricLocation);
     }
     
-    //@Test
+    @Test
     public void saveClassification() throws Exception {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_OneClassification.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
     }
     
-    //@Test
+    @Test
     public void saveClassiWithSub() throws Exception {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_ClassiSub.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
     }
     
-    //@Test
+    @Test
     public void saveClass2ndSub() throws Exception {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
     }
     
-    //@Test
+    @Test
     public void saveClass2ndSubJsonErr() throws Exception {
         SAXBuilder saxBuilder = new SAXBuilder();
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub_JsonErr.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
     }
 
     private void assertRootCategs() {

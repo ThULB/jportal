@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -74,5 +76,11 @@ public class ACLResource {
     public String resourcePerm(@PathParam("rscID") String rscID, @PathParam("methodID") String methodID){
         
         return rscID + " # " + methodID;
+    }
+    
+    @PUT
+    @Path("rsc/{rscID}/{methodID: .+}")
+    public void updateAccess(String rid){
+        System.out.println("### new rid: " + rid);
     }
 }

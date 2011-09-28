@@ -3,13 +3,15 @@
         options : {
             accessURL : '',
             rulesURL : '',
-            httpGET : $.get
+            httpGET : $.get,
+            ajax : $.ajax
         },
 
         _create : function() {
             var accessURL = this.options.accessURL;
             var rulesURL = this.options.rulesURL;
             var httpGET = this.options.httpGET;
+            var ajax = this.options.ajax;
             
             var selBox = $('<select id="selBox"/>').append('<option id="undefined">------</option>');
             httpGET(rulesURL, function(data){
@@ -39,6 +41,7 @@
             $('body').click(function(event){
                 event.stopPropagation();
                 if(!$(event.target).is('#selBox')){
+                    selBox.unbind('change');
                     selBox.detach();
                     $('.ruleCell').trigger('redraw');
                 }
@@ -54,13 +57,19 @@
                 selBox.appendTo(ruleCell.parent());
                 selBox.fadeIn();
                 
+                selBox.unbind('change');
                 selBox.bind('change', function(){
                     var selected = $('option:selected')
-                    var rid = selected.attr('id');
+                    var newrid = selected.attr('id');
                     var txt = selected.html();
                     
                     ruleCell.html(txt);
-                    ruleCell.parent().data('access')['rid'] = rid;
+                    ruleCell.parent().data('access')['rid'] = newrid;
+                    ajax({
+                        type : 'PUT',
+                        url : ruleCell.parent().data('url'),
+                        data : newrid
+                    })
                     selBox.unbind('change');
                 })
             })

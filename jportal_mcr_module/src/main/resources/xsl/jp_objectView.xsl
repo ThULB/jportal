@@ -789,8 +789,10 @@
                                         <img src="{$WebApplicationBaseURL}images/workflow_addnbn.gif" title="{i18n:translate('swf.object.addNBN')}" />
                                     </a>
                                 </xsl:if>
-                                <xsl:call-template name="classificationEditor"/>
-                                <img style="margin-left:10px;cursor:hand;cursor:pointer" id="diagButton" src="{$WebApplicationBaseURL}images/icons/rubric_button_30x30.png"/>
+                                <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
+                                    <xsl:call-template name="classificationEditor"/>
+                                    <img style="margin-left:10px;cursor:hand;cursor:pointer" id="diagButton" src="{$WebApplicationBaseURL}images/icons/rubric_button_30x30.png"/>
+                                </xsl:if>
                                 <a
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
                                     <img src="{$WebApplicationBaseURL}images/icons/upload_button_30x30.png" title="{i18n:translate('component.swf.derivate.addDerivate')}" />

@@ -30,11 +30,11 @@ import com.google.gson.JsonSerializationContext;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
 import fsu.jportal.wrapper.MCRLabelSetWrapper;
 
-public class MCRCategoryTypeAdapter extends GsonTypeAdapter<MCRCategory> {
+public class MCRCategoryTypeAdapter extends GsonTypeAdapter<Category> {
     private MCRCategLinkService linkService;
 
     @Override
-    public MCRCategory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public Category deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject categJsonObject = json.getAsJsonObject();
         Category deserializedCateg = new Category();
 
@@ -71,7 +71,7 @@ public class MCRCategoryTypeAdapter extends GsonTypeAdapter<MCRCategory> {
     }
 
     @Override
-    public JsonElement serialize(MCRCategory category, Type arg1, JsonSerializationContext contextSerialization) {
+    public JsonElement serialize(Category category, Type arg1, JsonSerializationContext contextSerialization) {
         JsonObject rubricJsonObject = new JsonObject();
         MCRCategoryID id = category.getId();
         if (id != null) {
