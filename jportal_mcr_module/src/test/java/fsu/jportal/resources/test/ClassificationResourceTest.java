@@ -174,7 +174,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_OneClassification.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
     
     @Test
@@ -183,7 +183,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_ClassiSub.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
     
     @Test
@@ -192,7 +192,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
     
     @Test
@@ -201,7 +201,7 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
         Document doc = saxBuilder.build(getClass().getResourceAsStream("/classi/classiEditor_Classi2Sub_JsonErr.xml"));
         String json = doc.getRootElement().getText();
         ClientResponse response = resource().path("/classifications/save").type(MediaType.APPLICATION_JSON).post(ClientResponse.class, json);
-        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
     private void assertRootCategs() {

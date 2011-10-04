@@ -4,7 +4,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
 
   <xsl:include href="oai/object2record.xsl" />
-  <xsl:include href="oai/epicur.xsl" />
+  <xsl:include href="oai/mycoreobject-metsmods.xsl" />
 
   <xsl:template match="mycoreobject" mode="metadata">
     <xsl:apply-templates select="." />

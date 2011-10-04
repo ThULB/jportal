@@ -5,8 +5,7 @@
 <!-- ================================================ -->
 <xsl:stylesheet version="1.0" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:urn="http://www.ddb.de/standards/urn" xmlns="http://www.openarchives.org/OAI/2.0/"
-  xmlns:string="xalan://java.lang.String"
-  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder mcr string">
+  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder mcr">
 
   <xsl:param name="ServletsBaseURL" select="''" />
   <xsl:param name="JSessionID" select="''" />
@@ -17,15 +16,18 @@
       Start match="mycorederivate | mycoreobject (epicur.xsl)
     </xsl:comment>
     <xsl:if test="mcr:exists(@ID) = 'true'">
-      <xsl:text disable-output-escaping="yes">&lt;epicur xsi:schemaLocation="urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd" xmlns="urn:nbn:de:1111-2004033116" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;</xsl:text>
-      <xsl:variable name="epicurType" select="'urn_new'" />
-      <xsl:call-template name="administrative_data">
-        <xsl:with-param name="epicurType" select="$epicurType" />
-      </xsl:call-template>
-      <xsl:call-template name="recordDerivateObject">
-        <xsl:with-param name="epicurType" select="$epicurType" />
-      </xsl:call-template>
-      <xsl:text disable-output-escaping="yes">&lt;/epicur&gt;</xsl:text>
+      <xsl:element name="epicur" namespace="urn:nbn:de:1111-2004033116">
+        <xsl:attribute name="xsi:schemaLocation" namespace="http://www.w3.org/2001/XMLSchema-instance">
+          <xsl:value-of select="'urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd'" />
+        </xsl:attribute>
+        <xsl:variable name="epicurType" select="'urn_new'" />
+        <xsl:call-template name="administrative_data">
+          <xsl:with-param name="epicurType" select="$epicurType" />
+        </xsl:call-template>
+        <xsl:call-template name="recordDerivateObject">
+          <xsl:with-param name="epicurType" select="$epicurType" />
+        </xsl:call-template>
+      </xsl:element>
     </xsl:if>
     <xsl:comment>
       End match="mycorederivate | mycoreobject (epicur.xsl)
@@ -131,9 +133,7 @@
           <xsl:element name="isPartOf" namespace="urn:nbn:de:1111-2004033116">
             <xsl:element name="identifier" namespace="urn:nbn:de:1111-2004033116">
               <xsl:attribute name="scheme">urn:nbn:de</xsl:attribute>
-<!--              <xsl:value-of select="mcr:createAlternativeURN($mainURN,'dfg')" />-->
-              <xsl:variable name="mainURNStrObj" select="string:new($mainURN)"/>
-              <xsl:value-of select="string:replaceAll($mainURNStrObj,':urmel-',':urmel-dfg-')" />
+              <xsl:value-of select="mcr:createAlternativeURN($mainURN,'dfg')" />
             </xsl:element>
             <xsl:element name="resource" namespace="urn:nbn:de:1111-2004033116">
               <xsl:element name="identifier" namespace="urn:nbn:de:1111-2004033116">
