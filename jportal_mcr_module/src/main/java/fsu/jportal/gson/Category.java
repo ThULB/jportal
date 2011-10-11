@@ -10,6 +10,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryImpl;
 
 public class Category implements MCRCategory {
         private MCRCategoryImpl category;
+        private Boolean hasChildren = null;
         
         public void setParent(MCRCategory parent) {
             category.setParent(parent);
@@ -35,8 +36,15 @@ public class Category implements MCRCategory {
             return category.getLevel();
         }
 
+        public void setHasChildren(boolean hasChildren){
+            this.hasChildren = hasChildren;
+        }
+        
         public boolean hasChildren() {
-            return category.hasChildren();
+            if(hasChildren == null){
+                hasChildren = category.hasChildren();
+            }
+            return hasChildren;
         }
 
         public List<MCRCategory> getChildren() {

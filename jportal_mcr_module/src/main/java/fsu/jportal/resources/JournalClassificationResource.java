@@ -1,10 +1,8 @@
 package fsu.jportal.resources;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,48 +12,43 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRLabel;
 
 import com.google.gson.Gson;
 
+import fsu.jportal.gson.Category;
 import fsu.jportal.gson.GsonManager;
-import fsu.jportal.wrapper.MCRCategoryListWrapper;
-import fsu.jportal.xml.ClassificationIDExtractor;
+import fsu.jportal.xml.MCRObjConnector;
 
 @Path("classifications/jp/{id}")
 public class JournalClassificationResource extends ClassificationResource {
-   
+    
+    @PathParam("id")
+    String journalID;
+
     @GET
     @Path("list")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getClassification(@PathParam("id") String journalID) {
-        ClassificationIDExtractor classificationIDExtractor = new ClassificationIDExtractor();
-        List<String> classIDs = classificationIDExtractor.getClassIDs(journalID);
-        
+    public String list() {
+
+        MCRObjConnector objConnector = new MCRObjConnector(journalID);
         openSession();
-        Gson gson = GsonManager.instance().createGson();
-        ArrayList<MCRCategory> categList = new ArrayList<MCRCategory>();
-        Map<MCRCategoryID, Boolean> linkMap = new HashMap<MCRCategoryID, Boolean>();
-        for (String classId : classIDs) {
-            MCRCategory classification = getCategoryDAO().getCategory(MCRCategoryID.rootID(classId), 0);
-            categList.add(classification);
-            Map<MCRCategoryID, Boolean> hasLinks = getLinkService().hasLinks(classification);
-            linkMap.putAll(hasLinks);
+        String rubricID = objConnector.getRubric(journalID);
+        if(rubricID == null){
+            Category newRubricClassi = new Category();
+            MCRCategoryID newRubricID = newRootID();
+            newRubricClassi.setId(newRubricID);
+            Set<MCRLabel> labels = new HashSet<MCRLabel>();
+            MCRLabel label = new MCRLabel("de", "Rubrik für " + journalID, null);
+            labels.add(label);
+            newRubricClassi.setLabels(labels);
+            getCategoryDAO().addCategory(newRubricClassi.getParentID(), newRubricClassi.asMCRImpl());
+            objConnector.addRubric(newRubricID);
+            Gson gson = GsonManager.instance().createGson();
+            return gson.toJson(newRubricClassi);
         }
-        
-        String json = gson.toJson(new MCRCategoryListWrapper(categList, linkMap));
         closeSession();
-        return json;
-    }
-    
-    @Override
-    public Response save(String json) {
-        Response response = super.save(json);
-        if(response.getStatus() == Status.CREATED.getStatusCode()){
-            URI location = (URI) response.getMetadata().get("Location").get(0);
-            System.out.println("######## CREATED: " + location);
-        }
-        return response;
+        return get(rubricID);
     }
 }

@@ -136,7 +136,7 @@ public class ClassificationResource {
         return category;
     }
 
-    private Response updateCateg(Category categ) {
+    protected Response updateCateg(Category categ) {
         openSession();
         MCRCategoryID newParentID = categ.getParentID();
         if (newParentID != null && !getCategoryDAO().exist(newParentID)) {
@@ -197,7 +197,7 @@ public class ClassificationResource {
         return gson.toJson(newRootID());
     }
 
-    private MCRCategoryID newRootID() {
+    protected MCRCategoryID newRootID() {
         return MCRCategoryID.rootID(UUID.randomUUID().toString());
     }
 
