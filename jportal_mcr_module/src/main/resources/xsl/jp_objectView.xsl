@@ -730,16 +730,18 @@
         <xsl:variable name="journalRecourcePath" select="concat($resourcePath,'jp/',$journalID,'/')"/>
         <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
         <script type="text/javascript">
-            startClassificationEditor({
-                baseUrl : "<xsl:value-of select='$webPath' />" + "/",
-                resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
-                classificationId : "list",
-                categoryId : "",
-                showId : "<xsl:value-of select='$showId' />" === "true",
-                currentLang : "<xsl:value-of select='$CurrentLang' />",
-                jsPath : "<xsl:value-of select='$jsPath' />",
-                buttonID : "diagButton"
-            });
+            $(document).ready(function() {
+                startClassificationEditor($("#diagButton"), {
+                    baseUrl : "<xsl:value-of select='$webPath' />" + "/",
+                    resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
+                    classificationId : "list",
+                    categoryId : "",
+                    showId : "<xsl:value-of select='$showId' />" === "true",
+                    currentLang : "<xsl:value-of select='$CurrentLang' />",
+                    jsPath : "<xsl:value-of select='$jsPath' />",
+                    buttonID : "diagButton"
+                });
+            })
         </script>
     </xsl:template>
 

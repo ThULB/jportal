@@ -15,11 +15,11 @@
     <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
     <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
     <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>
-
     <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
 
     <script type="text/javascript">
-    startClassificationEditor({
+    $(document).ready(function() {
+    startClassificationEditor($("#diagButton"), {
     	baseUrl : "<xsl:value-of select='$webPath' />" + "/",
     	resourcePath : "<xsl:value-of select='$resourcePath' />",
     	//classificationId : "<xsl:value-of select='$class' />",
@@ -27,9 +27,10 @@
     	categoryId : "<xsl:value-of select='$categ' />",
     	showId : "<xsl:value-of select='$showId' />" === "true",
     	currentLang : "<xsl:value-of select='$CurrentLang' />",
-    	jsPath : "<xsl:value-of select='$jsPath' />",
-    	buttonID : "diagButton"
+    	jsPath : "<xsl:value-of select='$jsPath' />"
     });
+    })
+   
     </script>
     <button id="diagButton">View Terms and Conditions</button>
 
