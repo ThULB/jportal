@@ -14,6 +14,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
@@ -32,11 +33,16 @@ import com.sun.jersey.spi.container.ResourceFilterFactory;
 import fsu.jportal.config.ResourceSercurityConf;
 
 public class MyCoReSecurityFilterFactory implements ResourceFilterFactory {
+    private Logger logger;
     @Context
     HttpServletRequest httpRequest;
     
     public interface AccesManagerConnector {
         boolean checkPermission(String resourceName, String resourceOperation, MCRSession session);
+    }
+    
+    public MyCoReSecurityFilterFactory() {
+        logger = Logger.getLogger(this.getClass());
     }
 
     public static class DefaultAccesManagerConnector implements AccesManagerConnector {
@@ -66,6 +72,12 @@ public class MyCoReSecurityFilterFactory implements ResourceFilterFactory {
             MCRSessionMgr.setCurrentSession(session);
             
             boolean hasPermission = getAccessManagerConnector().checkPermission(resourceName, resourceOperation, session);
+            
+            logger.debug("current user ID: " + session.getUserInformation().getCurrentUserID());
+            logger.debug("resource name: " + resourceName);
+            logger.debug("resource operation: " + resourceOperation);
+            logger.debug("has permission: " + hasPermission);
+            
             if (!hasPermission) {
                 throw new WebApplicationException(Response.Status.UNAUTHORIZED);
             }

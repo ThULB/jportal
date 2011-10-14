@@ -199,6 +199,7 @@ classification.Editor = function() {
 			load : dojo.hitch(this, function(data) {
 				console.log("saving done");
 				console.log(data);
+				alert('Speichern erfolgreich.');
 			})
 		};
 		dojo.xhrPost(navXhrArgs);
