@@ -1,0 +1,45 @@
+DOCPORTAL
+mycore.properties - 15: MCR.navigationFile=%MCR.WebApplication.basedir%/config/navigation.xml
+
+build.xml
+575: <fileset file="${build.webapps}/config/navigation.xml"/> 
+
+JPortal
+MCRJPortalURIGetJournalID.java - 116: *            Address of static xml file in navigation.xml that has a 
+
+MCRContentTools.java (4 matches)
+43: String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml"; 
+53: // find journal entry in navigation.xml 
+70: // change label in navigation.xml 
+82: String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml"; 
+
+MCRJPortalJournalContextForWebpages.java (4 matches)
+94: String naviFile = deployedDir + "/config/navigation.xml"; 
+183: String naviSrcLoc = SRC_DIR + this.dataModelCoverage + "/navigation.xml"; 
+184: String naviFile = deployedDir + "/config/navigation.xml"; 
+313: String naviFileLocation = deployedDir + "/config/navigation.xml";
+
+generatePage.xsl (2 matches)
+16: <!-- load navigation.xml --> 
+80: <xsl:value-of select="'webapp:config/navigation.xml'" /> 
+
+getWebsiteContext.xsl
+8: <xsl:copy-of select="document(concat($basedir,'/build/webapps/config/navigation.xml'))" /> 
+
+jp_extensions.xsl (4 matches)
+86: <!-- test if navigation.xml contains the current browser address --> 
+170: <!-- test if navigation.xml contains the current browser address --> 
+202: navigation.xml and the hidden websitecontext --> 
+224: <!-- webcontext is not empty AND $navigation.xml contains webcontext --> 
+
+MyCore
+MCRLayoutUtilities.java (13 matches)
+45: + "build/webapps/config/navigation.xml".replace('/', File.separatorChar); 
+
+MCRWCMSActionServlet.java (3 matches)
+169: private String naviFileBackup = null; // Path for navigation.xml backup 
+623: if (inputFile.toString().endsWith(fs + "navigation.xml")) { 
+624: backupFile = new File(MCRConfiguration.instance().getString("MCR.WCMS.backupPath").replace('/', File.separatorChar) + fs + "navi" + fs + "navigation.xml"); 
+
+- 1. Schritt: WCMS umschreiben bzw. nicht mehr benutzen
+
