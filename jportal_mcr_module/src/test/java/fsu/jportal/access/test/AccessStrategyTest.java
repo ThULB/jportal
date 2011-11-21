@@ -50,6 +50,7 @@ public class AccessStrategyTest {
         mcrProperties.setProperty("MCR.Users.Superuser.UserName", ROOT);
         //        mcrProperties.setProperty("MCR.Access.Class", "fsu.jportal.access.test.FakeAccessImpl");
         mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
+        mcrProperties.setProperty("MCR.Metadata.Type.jpvolume", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.derivate", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.class", "true");
@@ -135,6 +136,40 @@ public class AccessStrategyTest {
         expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createderivateXML(parentID)).anyTimes();
         replay(aclMock, userInfoMock, xmlMetaDataMgr);
 
+        MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
+        String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
+        assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
+        verify(aclMock, userInfoMock, xmlMetaDataMgr);
+    }
+    
+    @Test
+    public void parentIsJournal_access() throws Exception {
+        String id = "jportal_jpvolume_00058034";
+        String parentID = "jportal_jpjournal_00000046";
+        String permission = "read";
+        String userID = "user";
+        boolean hasRule = false;
+        boolean hasParentRule = false;
+        boolean hasAccess = true;
+        boolean expectedAccess = true;
+        
+        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(true);
+        
+        MCRObjectID mcrObjectID = null;
+        
+        try {
+            mcrObjectID = MCRObjectID.getInstance(id);
+        } catch (Exception e) {
+        }
+        
+        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createJournalXML(parentID));
+        
+        expect(aclMock.hasRule(parentID, permission + "_jpvolume")).andReturn(hasParentRule);
+        
+        replay(aclMock, userInfoMock, xmlMetaDataMgr);
+        
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
         String errMsg = MessageFormat.format("User id: {0}, has rule: {1}, should has access: {2}.", userID, hasRule, expectedAccess);
         assertEquals(errMsg, expectedAccess, accessStrategy.checkPermission(id, permission));
@@ -266,6 +301,18 @@ public class AccessStrategyTest {
     }
 
     private Document createObjectXML(String id) {
+        Element rootElement = new Element("mycoreobject");
+        Element metadata = new Element("metadata");
+        Element hiddenIDs = new Element("hidden_jpjournalsID");
+        Element hiddenID = new Element("hidden_jpjournalID");
+        hiddenID.addContent(id);
+        hiddenIDs.addContent(hiddenID);
+        metadata.addContent(hiddenIDs);
+        rootElement.addContent(metadata);
+        return new Document(rootElement);
+    }
+    
+    private Document createJournalXML(String id) {
         Element rootElement = new Element("mycoreobject");
         Element metadata = new Element("metadata");
         Element hiddenIDs = new Element("hidden_jpjournalsID");

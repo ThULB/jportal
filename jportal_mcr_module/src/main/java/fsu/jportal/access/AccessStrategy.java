@@ -2,6 +2,7 @@ package fsu.jportal.access;
 
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.JDOMException;
@@ -15,154 +16,151 @@ import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
-	private AccessStrategyConfig accessConfig;
+    private AccessStrategyConfig accessConfig;
 
-	private static class DefaultConfig implements AccessStrategyConfig {
-		private HashMap<String, MCRAccessCheckStrategy> strategies;
+    private static Logger LOGGER = Logger.getLogger(AccessStrategy.class);
 
-		public DefaultConfig() {
-			strategies = new HashMap<String, MCRAccessCheckStrategy>();
-			strategies.put(OBJ_ID_STRATEGY, new MCRObjectIDStrategy());
-			strategies.put(OBJ_TYPE_STRATEGY, new MCRObjectTypeStrategy());
-			strategies.put(PARENT_STRATEGY, new MCRParentRuleStrategy());
-		}
+    private static class DefaultConfig implements AccessStrategyConfig {
+        private HashMap<String, MCRAccessCheckStrategy> strategies;
 
-		@Override
-		public MCRAccessInterface getAccessInterface() {
-			return MCRAccessManager.getAccessImpl();
-		}
+        public DefaultConfig() {
+            strategies = new HashMap<String, MCRAccessCheckStrategy>();
+            strategies.put(OBJ_ID_STRATEGY, new MCRObjectIDStrategy());
+            strategies.put(OBJ_TYPE_STRATEGY, new MCRObjectTypeStrategy());
+            strategies.put(PARENT_STRATEGY, new MCRParentRuleStrategy());
+        }
 
-		@Override
-		public MCRAccessCheckStrategy getAccessCheckStrategy(String strategyName) {
-			return strategies.get(strategyName);
-		}
+        @Override
+        public MCRAccessInterface getAccessInterface() {
+            return MCRAccessManager.getAccessImpl();
+        }
 
-		@Override
-		public MCRXMLMetadataManager getXMLMetadataMgr() {
-			return MCRXMLMetadataManager.instance();
-		}
-	}
+        @Override
+        public MCRAccessCheckStrategy getAccessCheckStrategy(String strategyName) {
+            return strategies.get(strategyName);
+        }
 
-	public AccessStrategy() {
-		this(new DefaultConfig());
-	}
+        @Override
+        public MCRXMLMetadataManager getXMLMetadataMgr() {
+            return MCRXMLMetadataManager.instance();
+        }
+    }
 
-	public AccessStrategy(AccessStrategyConfig accessConfig) {
-		setAccessConfig(accessConfig);
-	}
+    public AccessStrategy() {
+        this(new DefaultConfig());
+    }
 
-	public boolean checkPermission(String id, String permission) {
-		MCRAccessInterface accessInterface = getAccessConfig()
-				.getAccessInterface();
+    public AccessStrategy(AccessStrategyConfig accessConfig) {
+        setAccessConfig(accessConfig);
+    }
 
-		if (id == null || "".equals(id) || permission == null
-				|| "".equals(permission)) {
-			return false;
-		}
+    public boolean checkPermission(String id, String permission) {
+        MCRAccessInterface accessInterface = getAccessConfig().getAccessInterface();
 
-		if (isSuperUser()) {
-			return true;
-		}
+        if (id == null || "".equals(id) || permission == null || "".equals(permission)) {
+            return false;
+        }
 
-		if (accessInterface.hasRule(id, permission)) {
-			return accessInterface.checkPermission(id, permission);
-		}
+        if (isSuperUser()) {
+            return true;
+        }
 
-		if (isCRUD_Operation(permission)) {
-			String crudid = "CRUD";
-			if (accessInterface.hasRule(crudid, permission)) {
-				return accessInterface.checkPermission(crudid, permission);
-			}
-		}
+        if (accessInterface.hasRule(id, permission)) {
+            return accessInterface.checkPermission(id, permission);
+        }
 
-		try {
+        if (isCRUD_Operation(permission)) {
+            String crudid = "CRUD";
+            if (accessInterface.hasRule(crudid, permission)) {
+                return accessInterface.checkPermission(crudid, permission);
+            }
+        }
+
+        try {
             MCRObjectID objID = MCRObjectID.getInstance(id);
             String typeId = objID.getTypeId();
 
             MCRObjectID parentID = getParentID(objID);
             String permForType = permission + "_" + typeId;
 
+            LOGGER.info("parentId: " + parentID + " for id " + id);
             if (parentID != null) {
-            	if (accessInterface.hasRule(parentID.toString(), permForType)) {
-            		return accessInterface.checkPermission(parentID.toString(),
-            				permForType);
-            	}
-            	MCRObjectID journalID = getParentID(parentID);
-            	if (accessInterface.hasRule(journalID.toString(), permForType)) {
-            		return accessInterface.checkPermission(journalID.toString(),
-            				permForType);
-            	}
+                if (accessInterface.hasRule(parentID.toString(), permForType)) {
+                    return accessInterface.checkPermission(parentID.toString(), permForType);
+                }
+
+                MCRObjectID journalID = getParentID(parentID);
+               LOGGER.info("journalId: " + journalID);
+                if (accessInterface.hasRule(journalID.toString(), permForType)) {
+                    return accessInterface.checkPermission(journalID.toString(), permForType);
+                }
             }
-            
+
             if (accessInterface.hasRule("default_" + typeId, permission)) {
-            	return accessInterface.checkPermission("default_" + typeId,
-            			permission);
+                return accessInterface.checkPermission("default_" + typeId, permission);
             }
-        } catch (MCRException e) {
+        } catch (Exception e) {
             // Maybe no valid MCRObjectID -> TODO add check method for valid ID into MCRObjectID
+            LOGGER.error("Check permission failed for id " + id + " with permission " + permission);
+            e.printStackTrace();
         }
 
-		if (accessInterface.hasRule("default", permission)) {
-			return accessInterface.checkPermission("default", permission);
-		}
+        if (accessInterface.hasRule("default", permission)) {
+            return accessInterface.checkPermission("default", permission);
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	private boolean isCRUD_Operation(String permission) {
-		return permission.startsWith("create_")
-				|| permission.startsWith("read_")
-				|| permission.startsWith("update_")
-				|| permission.startsWith("delete_");
-	}
+    private boolean isCRUD_Operation(String permission) {
+        return permission.startsWith("create_") || permission.startsWith("read_") || permission.startsWith("update_")
+                || permission.startsWith("delete_");
+    }
 
-	private MCRObjectID getParentID(MCRObjectID objID) {
-	    if(!getAccessConfig().getXMLMetadataMgr().exists(objID)){
-	        return null;
-	    }
-	    
-		Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(
-				objID);
-		try {
-			String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
-			if (objID.getTypeId().equals("derivate")) {
-				path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
-			}
-			XPath pathToJournalID = XPath.newInstance(path);
-			pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
-			Object idTextNode = pathToJournalID.selectSingleNode(objXML);
+    private MCRObjectID getParentID(MCRObjectID objID) {
+        //LOGGER.info("getParentId: " + objID + " exists " + getAccessConfig().getXMLMetadataMgr().exists(objID));
+        if (!getAccessConfig().getXMLMetadataMgr().exists(objID)) {
+            return null;
+        }
 
-			if (idTextNode instanceof Text) {
-				return MCRObjectID.getInstance(((Text) idTextNode).getText());
-			} else if (idTextNode instanceof Attribute) {
-				return MCRObjectID.getInstance(((Attribute) idTextNode)
-						.getValue());
-			}
-		} catch (JDOMException e) {
-			e.printStackTrace();
-		}
+        Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(objID);
+        LOGGER.info("objXML: " + objXML);
+        try {
+            String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
+            if (objID.getTypeId().equals("derivate")) {
+                path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
+            }
+            XPath pathToJournalID = XPath.newInstance(path);
+            pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
+            Object idTextNode = pathToJournalID.selectSingleNode(objXML);
 
-		return null;
-	}
+            if (idTextNode instanceof Text) {
+                return MCRObjectID.getInstance(((Text) idTextNode).getText());
+            } else if (idTextNode instanceof Attribute) {
+                return MCRObjectID.getInstance(((Attribute) idTextNode).getValue());
+            }
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
 
-	private boolean isSuperUser() {
-		String currentUserID = MCRSessionMgr.getCurrentSession()
-				.getUserInformation().getCurrentUserID();
-		return currentUserID.equals(MCRConfiguration.instance().getString(
-				"MCR.Users.Superuser.UserName"));
-	}
+        return null;
+    }
 
-	private void setAccessConfig(AccessStrategyConfig accessConfig) {
-		this.accessConfig = accessConfig;
-	}
+    private boolean isSuperUser() {
+        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
+        return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
+    }
 
-	private AccessStrategyConfig getAccessConfig() {
-		return accessConfig;
-	}
+    private void setAccessConfig(AccessStrategyConfig accessConfig) {
+        this.accessConfig = accessConfig;
+    }
+
+    private AccessStrategyConfig getAccessConfig() {
+        return accessConfig;
+    }
 }
