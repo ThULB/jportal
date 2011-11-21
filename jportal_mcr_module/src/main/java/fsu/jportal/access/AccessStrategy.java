@@ -16,11 +16,16 @@ import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
+    private class InvalidIDException extends Exception {
+
+    }
+
     private AccessStrategyConfig accessConfig;
 
     private static Logger LOGGER = Logger.getLogger(AccessStrategy.class);
@@ -82,21 +87,20 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         }
 
         try {
-            MCRObjectID objID = MCRObjectID.getInstance(id);
+            // we check for valid id with this try-catch and getObjId
+            MCRObjectID objID = getObjId(id);
             String typeId = objID.getTypeId();
 
             MCRObjectID parentID = getParentID(objID);
             String permForType = permission + "_" + typeId;
 
-            LOGGER.info("parentId: " + parentID + " for id " + id);
             if (parentID != null) {
                 if (accessInterface.hasRule(parentID.toString(), permForType)) {
                     return accessInterface.checkPermission(parentID.toString(), permForType);
                 }
 
                 MCRObjectID journalID = getParentID(parentID);
-               LOGGER.info("journalId: " + journalID);
-                if (accessInterface.hasRule(journalID.toString(), permForType)) {
+                if (journalID != null && accessInterface.hasRule(journalID.toString(), permForType)) {
                     return accessInterface.checkPermission(journalID.toString(), permForType);
                 }
             }
@@ -104,17 +108,24 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             if (accessInterface.hasRule("default_" + typeId, permission)) {
                 return accessInterface.checkPermission("default_" + typeId, permission);
             }
-        } catch (Exception e) {
-            // Maybe no valid MCRObjectID -> TODO add check method for valid ID into MCRObjectID
-            LOGGER.error("Check permission failed for id " + id + " with permission " + permission);
-            e.printStackTrace();
-        }
+        } catch (InvalidIDException e) {
+            // This is an antipattern Maybe no valid MCRObjectID -> TODO add check method for valid ID into MCRObjectID
+        } 
 
         if (accessInterface.hasRule("default", permission)) {
             return accessInterface.checkPermission("default", permission);
         }
 
         return false;
+    }
+
+    protected MCRObjectID getObjId(String id) throws InvalidIDException {
+        try {
+            MCRObjectID objID = MCRObjectID.getInstance(id);
+            return objID;
+        } catch (MCRException e) {
+            throw new InvalidIDException();
+        }
     }
 
     private boolean isCRUD_Operation(String permission) {
@@ -129,7 +140,6 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         }
 
         Document objXML = getAccessConfig().getXMLMetadataMgr().retrieveXML(objID);
-        LOGGER.info("objXML: " + objXML);
         try {
             String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
             if (objID.getTypeId().equals("derivate")) {

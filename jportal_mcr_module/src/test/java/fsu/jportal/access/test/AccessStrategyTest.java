@@ -1,7 +1,13 @@
 package fsu.jportal.access.test;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.MessageFormat;
 import java.util.Properties;
@@ -37,7 +43,7 @@ public class AccessStrategyTest {
 
     private MCRAccessCheckStrategy objTypeStrategyMock;
 
-    private static final String JOURNALID = "jportal_jpjournal_0000000001";
+    private static final String JOURNALID = "jportal_jpjournal_00000001";
 
     private AccessStrategyConfig strategyConfig;
 
@@ -54,6 +60,7 @@ public class AccessStrategyTest {
         mcrProperties.setProperty("MCR.Metadata.Type.jparticle", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.derivate", "true");
         mcrProperties.setProperty("MCR.Metadata.Type.class", "true");
+        mcrProperties.setProperty("MCR.Metadata.ObjectID.NumberPattern", "00000000");
 
         aclMock = createMock("aclMock", MCRAccessInterface.class);
         idStrategyMock = createMock("idStrategyMock", MCRAccessCheckStrategy.class);
@@ -111,8 +118,8 @@ public class AccessStrategyTest {
 
     @Test
     public void noSuperUser_parentHasRule_access() throws Exception {
-        String id = "jportal_derivate_0000000001";
-        String parentID = "jportal_jparticle_0000000001";
+        String id = "jportal_derivate_00000001";
+        String parentID = "jportal_jparticle_00000001";
         String permission = "read";
         String userID = "user";
         boolean hasRule = false;
@@ -164,9 +171,20 @@ public class AccessStrategyTest {
         } catch (Exception e) {
         }
         
-        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createJournalXML(parentID));
+        expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createObjectXML(parentID));
         
         expect(aclMock.hasRule(parentID, permission + "_jpvolume")).andReturn(hasParentRule);
+        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(parentID))).andReturn(true);
+        
+        MCRObjectID journalID = null;
+        
+        try {
+            journalID = MCRObjectID.getInstance(parentID);
+        } catch (Exception e) {
+        }
+        expect(xmlMetaDataMgr.retrieveXML(journalID)).andReturn(createJournalXML(parentID));
+        expect(aclMock.hasRule("default_jpvolume", permission)).andReturn(true);
+        expect(aclMock.checkPermission("default_jpvolume", permission)).andReturn(true);
         
         replay(aclMock, userInfoMock, xmlMetaDataMgr);
         
@@ -179,7 +197,7 @@ public class AccessStrategyTest {
     @Test
     public void noSuperUser_journalHasRule_access() throws Exception {
         String id = "jportal_derivate_00000001";
-        String parentID = "jportal_jparticle_0000000001";
+        String parentID = "jportal_jparticle_00000001";
         String permission = "read";
         String userID = "user";
         boolean hasRule = false;
@@ -315,11 +333,6 @@ public class AccessStrategyTest {
     private Document createJournalXML(String id) {
         Element rootElement = new Element("mycoreobject");
         Element metadata = new Element("metadata");
-        Element hiddenIDs = new Element("hidden_jpjournalsID");
-        Element hiddenID = new Element("hidden_jpjournalID");
-        hiddenID.addContent(id);
-        hiddenIDs.addContent(hiddenID);
-        metadata.addContent(hiddenIDs);
         rootElement.addContent(metadata);
         return new Document(rootElement);
     }
