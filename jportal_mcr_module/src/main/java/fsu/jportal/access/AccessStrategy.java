@@ -25,7 +25,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
     private class InvalidIDException extends Exception {
 
     }
-
+    
     private AccessStrategyConfig accessConfig;
 
     private static Logger LOGGER = Logger.getLogger(AccessStrategy.class);
@@ -75,48 +75,20 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
             return true;
         }
 
-        if (accessInterface.hasRule(id, permission)) {
-            return accessInterface.checkPermission(id, permission);
-        }
-
-        if (isCRUD_Operation(permission)) {
-            String crudid = "CRUD";
-            if (accessInterface.hasRule(crudid, permission)) {
-                return accessInterface.checkPermission(crudid, permission);
-            }
-        }
-
-        try {
-            // we check for valid id with this try-catch and getObjId
-            MCRObjectID objID = getObjId(id);
-            String typeId = objID.getTypeId();
-
-            MCRObjectID parentID = getParentID(objID);
-            String permForType = permission + "_" + typeId;
-
-            if (parentID != null) {
-                if (accessInterface.hasRule(parentID.toString(), permForType)) {
-                    return accessInterface.checkPermission(parentID.toString(), permForType);
-                }
-
-                MCRObjectID journalID = getParentID(parentID);
-                if (journalID != null && accessInterface.hasRule(journalID.toString(), permForType)) {
-                    return accessInterface.checkPermission(journalID.toString(), permForType);
-                }
-            }
-
-            if (accessInterface.hasRule("default_" + typeId, permission)) {
-                return accessInterface.checkPermission("default_" + typeId, permission);
-            }
-        } catch (InvalidIDException e) {
-            // This is an antipattern Maybe no valid MCRObjectID -> TODO add check method for valid ID into MCRObjectID
-        } 
-
-        if (accessInterface.hasRule("default", permission)) {
-            return accessInterface.checkPermission("default", permission);
-        }
-
-        return false;
+        return checkPermForObj(id, permission, getAccessConfig());
+    }
+    
+    protected boolean checkPermForObj(String id, String permission, AccessStrategyConfig accessStrategyConfig) {
+        StrategyStep objIdCheck = new ObjIdCheck(accessStrategyConfig);
+        StrategyStep crudCheck = new CRUDCheck(accessStrategyConfig);
+        StrategyStep parentCheck = new ParentCheck(accessStrategyConfig);
+        StrategyStep defaultCheck = new DefaultCheck(accessStrategyConfig);
+        
+        parentCheck.addAlternative(defaultCheck);
+        crudCheck.addAlternative(parentCheck);
+        objIdCheck.addAlternative(crudCheck);
+        
+        return objIdCheck.checkPermission(id, permission);
     }
 
     protected MCRObjectID getObjId(String id) throws InvalidIDException {
