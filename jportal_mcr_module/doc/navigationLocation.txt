@@ -11,7 +11,7 @@ MCRContentTools.java (4 matches)
 43: String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml"; 
 53: // find journal entry in navigation.xml 
 70: // change label in navigation.xml 
-82: String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml"; 
+82: String naviFileLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml"; 
 
 MCRJPortalJournalContextForWebpages.java (4 matches)
 94: String naviFile = deployedDir + "/config/navigation.xml"; 
