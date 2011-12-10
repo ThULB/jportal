@@ -1,0 +1,85 @@
+@CHARSET "UTF-8";
+html {
+	background-color: #F2F2F2;
+}
+
+body {
+	margin: 0 auto;
+	width : 1024px;
+}
+
+a:link, a:visited, a:active {
+    text-decoration: none;
+}
+
+ul {
+    list-style: none outside none;
+    margin-bottom: 18px;
+}
+
+#globalheader {
+	font: 12px/1.5 "Lucida Grande",Geneva,Arial,Verdana,sans-serif;
+	width : 1024px;
+	position: relative;
+	z-index: 999;
+	margin: 18px auto 0;
+}
+
+#globalheader h1 a {
+	position: absolute;
+	margin-left: 0px;
+}
+
+#globalheader ul {
+	margin-left:0;
+	padding-left:0;
+}
+
+#globalheader ul#gh-nav li {
+    float: left;
+    padding-right:5px;
+}
+
+#globalheader #gh-login {
+	margin-left: 94%;
+}
+
+#container {
+	width : 1024px;
+	position: relative;
+	margin: 0 auto;
+}
+
+#container #content {
+	background-color: white;
+	margin-top: 10px;	
+}
+
+#globalfooter {
+	width : 1024px;
+}
+
+#header {
+	height: 40px;
+	margin-top: 5px;
+}
+
+#header span {
+	height: 40px;
+	margin: 0 auto;
+	padding-left: 9px;
+	display: table-cell;
+	vertical-align: middle;
+}
+
+.ui-widget {
+	font-size : 10pt;
+}
+
+.alignLeft {
+	margin-left: 0px;
+}
+
+.alignRight {
+	margin-right: 0px;
+}

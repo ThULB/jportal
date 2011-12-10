@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link type="text/css" href="/rsc/jquery/ui/css"
+	rel="Stylesheet" />
+<link type="text/css" href="editorCenter.css" rel="Stylesheet" />
+<title>Bearbeiter Werkzeuge</title>
+</head>
+<body>
+<div id="globalheader">
+	<h1>
+		<a href="/">
+			<img alt="Journals@UrMEL" src="img/journalsLogo.png"/>
+		</a>
+	</h1>
+	<div id="gh-login">
+		<a href="login.html" target="_blank">Anmelden</a>
+	</div>
+</div>
+<div id="container">
+<div id="header" class="ui-widget-header ui-corner-top">
+    <span>
+    	Bearbeiter Werkzeug: Dubletten-Check
+    </span>
+</div>
+<div id="content">
+<div id="tabs">
+	<ul>
+		<li><a href="#pers">Personen</a></li>
+		<li><a href="#inst">Institutionen</a></li>
+	</ul>
+	<div id="pers">
+		<p id="persDubInfoText">
+			Es wurden <span id="numDuplicatesPers">0</span> Personen als Dublette markiert.
+		</p>
+		<p>
+			<button id="removePerson">Entfernen</button></element>
+		</p>
+	</div>
+	<div id="inst">
+		<p id="instDubInfoText">
+			Es wurden <span id="numDuplicatesPers">0</span> Institutionen als Dublette markiert.
+		</p>
+		<p>
+			<button id="removeInst">Entfernen</button></element>
+		</p>
+	</div>
+</div>
+</div>
+</div>
+<!--<div id="globalfooter">-->
+<!--fooooter-->
+<!--oasdfoaosdfoasdfo-->
+<!--</div>-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.js"></script>
+<script src="editorCenter.js"></script>
+</body>
+</html>

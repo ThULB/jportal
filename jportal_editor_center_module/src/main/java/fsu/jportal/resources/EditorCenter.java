@@ -1,0 +1,16 @@
+package fsu.jportal.resources;
+
+import java.io.InputStream;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
+@Path("editorCenter")
+public class EditorCenter {
+    @GET
+    @Path("{filename:.*}")
+    public InputStream getResources(@PathParam("filename") String filename){
+        return this.getClass().getResourceAsStream("/editorCenter/" + filename);
+    }
+}
