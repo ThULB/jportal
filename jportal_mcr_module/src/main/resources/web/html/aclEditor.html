@@ -40,6 +40,14 @@
 .ui-rule-button-show {
 	visibility: visible;
 }
+
+.aclTable {
+	border: solid 1px black;
+}
+
+.aclTable td {
+	border: solid 1px black;
+}
 </style>
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
@@ -50,17 +58,16 @@
 <title>ACL Editor</title>
 </head>
 <body>
+<!-- 
 <div id="aclEditor"
 	style="border: solid black 1px; width: 1024px; height: 633px; padding-left: 10px; padding-right: 10px"></div>
-<div id="inhalt">
-foo
-<span>OOOOOOOO</span>
-</div>
-<select>
-	<option>123</option>
-	<option>asds</option>
-	<option>3453f</option>
-	<option>092i34o</option>
-</select>
+ -->
+<table id="rcsACLTable" class="aclTable">
+	<tr>
+		<th>Resources class</th>
+		<th>Resource Path</th>
+		<th>Rule</th>
+	</tr>
+</table>
 </body>
 </html>

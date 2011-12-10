@@ -86,3 +86,51 @@
         }
     });
 })(jQuery);
+
+
+(function($){
+    var AccessRow = function(access,selbox){
+        var row = $('<tr/>');
+        $('<td/>').append(access.objid).appendTo(row);
+        $('<td/>').append(access.acpool).appendTo(row);
+        $('<td/>').append(selbox).appendTo(row);
+        
+        return row;
+    }
+    
+    var SelBox = function(rulesURL, httpGET){
+        var selBox = $('<select id="selBox"/>').append('<option id="undefined">------</option>');
+        httpGET(rulesURL, function(data){
+            $.each(data, function(url, rule){
+                $('<option/>').attr('id', rule.rid).appendTo(selBox)
+                .html(rule.descr === undefined || rule.descr === '' ? rule.rid : rule.descr)
+                .data('url', url).data('rule', rule.rule);
+                console.log('rule url ' +url);
+            })
+        });
+        
+        return selBox;
+    }
+    
+    $.widget('fsu.aclTable',{
+        options : {
+            accessURL : '',
+            rulesURL : '',
+            httpGET : $.get,
+            ajax : $.ajax
+        },
+        _create : function(){
+            console.log('Widget');
+            var accessURL = this.options.accessURL;
+            var rulesURL = this.options.rulesURL;
+            var httpGET = this.options.httpGET;
+            
+            var table = this.element[0];
+            httpGET(accessURL, function(data){
+                $.each(data, function(url,access){
+                    AccessRow(access, SelBox(rulesURL,httpGET)).appendTo(table);
+                })
+            });
+        }
+    })
+})(jQuery);

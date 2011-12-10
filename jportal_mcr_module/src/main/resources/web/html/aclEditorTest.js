@@ -43,5 +43,6 @@ $(document).ready(function() {
                 rulesURL : 'http://localhost:8291/rsc/acl/rules'
         }
         
-        $('#aclEditor').aclEditor(editorConfig);
+        //$('#aclEditor').aclEditor(editorConfig);
+        $('#rcsACLTable').aclTable(editorConfig);
  })
