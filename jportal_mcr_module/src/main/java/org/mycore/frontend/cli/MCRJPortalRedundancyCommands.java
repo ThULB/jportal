@@ -27,14 +27,16 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
     public MCRJPortalRedundancyCommands() {
         super();
 
-        MCRCommand cleanUp = new MCRCommand("jp clean up {0}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.cleanUp String", 
+        MCRCommand cleanUp = new MCRCommand("jp clean up {0}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.cleanUp String",
                 "Deletes and relinks all doublets for a specific type.");
         command.add(cleanUp);
 
-        MCRCommand merge = new MCRCommand("merge file {1} of type {0} with redundancy map", "org.mycore.frontend.cli.command.MCRMergeOldRedundancyMap.merge String String", "");
+        MCRCommand merge = new MCRCommand("merge file {1} of type {0} with redundancy map",
+                "org.mycore.frontend.cli.command.MCRMergeOldRedundancyMap.merge String String", "");
         command.add(merge);
 
-        MCRCommand replRemove = new MCRCommand("internal replace links and remove {0} {1}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.replaceAndRemove String String",
+        MCRCommand replRemove = new MCRCommand("internal replace links and remove {0} {1}",
+                "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.replaceAndRemove String String",
                 "internal command for replacing links and removing the doublet");
         command.add(replRemove);
     }
@@ -48,13 +50,15 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
         MCRResults results = MCRQueryManager.search(new MCRQuery(andCond));
 
         Iterator<MCRHit> it = results.iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             MCRHit hit = it.next();
             String doublet = hit.getID();
             String doubletOf = getDoubletOf(hit);
-            StringBuffer replaceCommand = new StringBuffer("internal replace links and remove ");
-            replaceCommand.append(doublet).append(" ").append(doubletOf);
-            commandList.add(replaceCommand.toString());
+            if (!doublet.equals(doubletOf)) {
+                StringBuffer replaceCommand = new StringBuffer("internal replace links and remove ");
+                replaceCommand.append(doublet).append(" ").append(doubletOf);
+                commandList.add(replaceCommand.toString());
+            }
         }
 
         commandList.add(new StringBuffer("clean up redundancy in database for type ").append(type).toString());
@@ -63,14 +67,14 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
 
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
         ArrayList<String> commandList = new ArrayList<String>();
-        if(!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
-            String errorMsg ="'" + doublet + "' is defined as a doublet of the nonexistent object '" + doubletOf + "'!" +
-                " The doublet is not removed!";
+        if (!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
+            String errorMsg = "'" + doublet + "' is defined as a doublet of the nonexistent object '" + doubletOf + "'!"
+                    + " The doublet is not removed!";
             // print to console
             LOGGER.error(errorMsg);
             // write to file
-            BufferedWriter out = new BufferedWriter(new FileWriter("invalidDoublets.txt", true)); 
-            out.write(errorMsg + "\n"); 
+            BufferedWriter out = new BufferedWriter(new FileWriter("invalidDoublets.txt", true));
+            out.write(errorMsg + "\n");
             out.close();
             return commandList;
         }
@@ -87,10 +91,10 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
         commandList.add(new StringBuffer("delete object ").append(doublet).toString());
         return commandList;
     }
-    
+
     private static String getDoubletOf(MCRHit hit) {
-        for(MCRFieldValue fieldValue : hit.getMetaData()) {
-            if(fieldValue.getField().getName().equals("doubletOf"))
+        for (MCRFieldValue fieldValue : hit.getMetaData()) {
+            if (fieldValue.getField().getName().equals("doubletOf"))
                 return fieldValue.getValue();
         }
         return null;
