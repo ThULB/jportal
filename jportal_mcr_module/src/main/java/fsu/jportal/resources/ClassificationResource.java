@@ -23,12 +23,10 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.apache.poi.poifs.property.Parent;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.classifications2.MCRCategLinkService;
 import org.mycore.datamodel.classifications2.MCRCategLinkServiceFactory;
 import org.mycore.datamodel.classifications2.MCRCategory;
@@ -41,12 +39,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonStreamParser;
 
 import fsu.jportal.gson.CategJsonPropName;
 import fsu.jportal.gson.Category;
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
 import fsu.jportal.wrapper.MCRCategoryListWrapper;
 
 /**
@@ -68,11 +66,9 @@ import fsu.jportal.wrapper.MCRCategoryListWrapper;
  * @author chi
  * 
  */
+@MCRDBAccess
 @Path("classifications")
 public class ClassificationResource {
-    private MCRSession currentSession = null;
-
-    private boolean useSession = MCRConfiguration.instance().getBoolean("ClassificationResouce.useSession", true);
 
     private MCRCategoryDAO categoryDAO = null;
 
@@ -137,7 +133,6 @@ public class ClassificationResource {
     }
 
     protected Response updateCateg(Category categ) {
-        openSession();
         MCRCategoryID newParentID = categ.getParentID();
         if (newParentID != null && !getCategoryDAO().exist(newParentID)) {
             throw new WebApplicationException(Status.NOT_FOUND);
@@ -160,7 +155,6 @@ public class ClassificationResource {
             response = Response.created(uri).build();
         }
 
-        closeSession();
         return response;
     }
 
@@ -213,20 +207,6 @@ public class ClassificationResource {
         return uriBuilder.build();
     }
 
-    protected void openSession() {
-        if (useSession) {
-            currentSession = MCRSessionMgr.getCurrentSession();
-            currentSession.beginTransaction();
-        }
-    }
-
-    protected void closeSession() {
-        if (useSession) {
-            currentSession.commitTransaction();
-            currentSession = null;
-        }
-    }
-
     protected MCRCategoryDAO getCategoryDAO() {
         if (categoryDAO == null) {
             categoryDAO = MCRCategoryDAOFactory.getInstance();
@@ -270,7 +250,6 @@ public class ClassificationResource {
     }
 
     private String getCategory(MCRCategoryID id) {
-        openSession();
         if (!getCategoryDAO().exist(id)) {
             throw new WebApplicationException(Status.NOT_FOUND);
         }
@@ -282,19 +261,16 @@ public class ClassificationResource {
         Gson gson = GsonManager.instance().createGson();
 
         String json = gson.toJson(category);
-        closeSession();
         return json;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getClassification() {
-        openSession();
         Gson gson = GsonManager.instance().createGson();
         List<MCRCategory> rootCategories = getCategoryDAO().getRootCategories();
         Map<MCRCategoryID, Boolean> linkMap = getLinkService().hasLinks(null);
         String json = gson.toJson(new MCRCategoryListWrapper(rootCategories, linkMap));
-        closeSession();
         return json;
     }
 
@@ -319,7 +295,6 @@ public class ClassificationResource {
     }
 
     private Response updateCategory(Category newCategory) {
-        openSession();
         if (!getCategoryDAO().exist(newCategory.getId())) {
             return Response.status(Status.NOT_FOUND).build();
         } else {
@@ -327,7 +302,6 @@ public class ClassificationResource {
             newCategory.setChildren(oldCategory.getChildren());
             getCategoryDAO().replaceCategory(newCategory);
 
-            closeSession();
             return Response.ok().build();
         }
     }
@@ -335,20 +309,17 @@ public class ClassificationResource {
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteCateg(String json) {
-        openSession();
         Category category = parseJson(json);
 
         try {
             if (getCategoryDAO().exist(category.getId())) {
                 getCategoryDAO().deleteCategory(category.getId());
-                closeSession();
                 return Response.status(Status.GONE).build();
             } else {
                 return Response.notModified().build();
             }
         } catch (MCRPersistenceException e) {
             e.printStackTrace();
-            closeSession();
             return Response.status(Status.NOT_FOUND).build();
         }
     }

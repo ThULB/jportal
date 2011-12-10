@@ -1,6 +1,5 @@
 package fsu.jportal.resources;
 
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,8 +8,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
@@ -19,8 +16,10 @@ import com.google.gson.Gson;
 
 import fsu.jportal.gson.Category;
 import fsu.jportal.gson.GsonManager;
+import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
 import fsu.jportal.xml.MCRObjConnector;
 
+@MCRDBAccess
 @Path("classifications/jp/{id}")
 public class JournalClassificationResource extends ClassificationResource {
     
@@ -33,7 +32,6 @@ public class JournalClassificationResource extends ClassificationResource {
     public String list() {
 
         MCRObjConnector objConnector = new MCRObjConnector(journalID);
-        openSession();
         String rubricID = objConnector.getRubric(journalID);
         if(rubricID == null){
             Category newRubricClassi = new Category();
@@ -48,7 +46,6 @@ public class JournalClassificationResource extends ClassificationResource {
             Gson gson = GsonManager.instance().createGson();
             return gson.toJson(newRubricClassi);
         }
-        closeSession();
         return get(rubricID);
     }
 }
