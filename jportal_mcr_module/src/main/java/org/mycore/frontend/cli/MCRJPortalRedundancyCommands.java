@@ -42,13 +42,10 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
     }
 
     public static List<String> cleanUp(String type) {
-        ArrayList<String> commandList = new ArrayList<String>();
         // get all objects of specific type where doubletOf is not empty
-        MCRQueryCondition typeCond = new MCRQueryCondition(MCRFieldDef.getDef("objectType"), "=", type);
-        MCRQueryCondition doubletOfCond = new MCRQueryCondition(MCRFieldDef.getDef("doubletOf"), "like", "*");
-        MCRAndCondition andCond = new MCRAndCondition(typeCond, doubletOfCond);
-        MCRResults results = MCRQueryManager.search(new MCRQuery(andCond));
+        MCRResults results = getDoubletObjsOfType(type);
 
+        ArrayList<String> commandList = new ArrayList<String>();
         Iterator<MCRHit> it = results.iterator();
         while (it.hasNext()) {
             MCRHit hit = it.next();
@@ -63,6 +60,14 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
 
         commandList.add(new StringBuffer("clean up redundancy in database for type ").append(type).toString());
         return commandList;
+    }
+
+    public static MCRResults getDoubletObjsOfType(String type) {
+        MCRQueryCondition typeCond = new MCRQueryCondition(MCRFieldDef.getDef("objectType"), "=", type);
+        MCRQueryCondition doubletOfCond = new MCRQueryCondition(MCRFieldDef.getDef("doubletOf"), "like", "*");
+        MCRAndCondition andCond = new MCRAndCondition(typeCond, doubletOfCond);
+        MCRResults results = MCRQueryManager.search(new MCRQuery(andCond));
+        return results;
     }
 
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
