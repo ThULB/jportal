@@ -89,3 +89,11 @@ ul {
     margin: 0 auto;
     position: relative;
 }
+
+.ui-progressbar-value { 
+	background-image: url(/rsc/jquery/ui/images/pbar-ani_grey.gif); 
+}
+
+.ui-progressbar {
+	height: 22px;
+}
