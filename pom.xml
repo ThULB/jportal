@@ -18,6 +18,7 @@
         <module>jportal_editor_center_module</module>
         <module>jportal_jquery_cnd</module>
     <module>jportal_experiments</module>
+    <module>jportal_login_module</module>
   </modules>
 	<pluginRepositories>
 		<pluginRepository>
