@@ -10,7 +10,7 @@
   <artifactId>jportal_login_module</artifactId>
   <version>2.0.14</version>
   <packaging>jar</packaging>
-  <name>Jportal Editor Center</name>
+  <name>Jportal Login Module</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>

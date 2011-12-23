@@ -1,16 +1,17 @@
 package fsu.jportal.resources;
 
-import javax.annotation.security.RolesAllowed;
+import java.io.InputStream;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
-import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.user.MCRUserMgr;
 
 import com.google.gson.Gson;
@@ -18,7 +19,7 @@ import com.google.gson.GsonBuilder;
 
 import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
 
-@Path("/login")
+@Path("login")
 public class LoginResource extends JerseyResource{
     private class LoginData{
         private String userID;
@@ -33,6 +34,12 @@ public class LoginResource extends JerseyResource{
         }
         
         
+    }
+    
+    @GET
+    @Path("{filename:.*}")
+    public InputStream getResources(@PathParam("filename") String filename){
+        return this.getClass().getResourceAsStream("/fsu/jportal/login_module/" + filename);
     }
     
     @POST
