@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
 import org.mycore.common.MCRPersistenceException;
@@ -69,6 +70,7 @@ import fsu.jportal.wrapper.MCRCategoryListWrapper;
 @MCRDBAccess
 @Path("classifications")
 public class ClassificationResource {
+    static Logger LOGGER = Logger.getLogger(ClassificationResource.class);
 
     private MCRCategoryDAO categoryDAO = null;
 
@@ -192,7 +194,8 @@ public class ClassificationResource {
     }
 
     protected MCRCategoryID newRootID() {
-        return MCRCategoryID.rootID(UUID.randomUUID().toString());
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+        return MCRCategoryID.rootID(uuid);
     }
 
     private URI buildGetURI(MCRCategoryID categoryID) {
