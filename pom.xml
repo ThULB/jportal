@@ -19,7 +19,8 @@
         <module>jportal_jquery_cnd</module>
     <module>jportal_experiments</module>
     <module>jportal_login_module</module>
-  </modules>
+    <module>mcr-complete-fix-iview-trunk</module>
+	</modules>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>Maven Central</id>
