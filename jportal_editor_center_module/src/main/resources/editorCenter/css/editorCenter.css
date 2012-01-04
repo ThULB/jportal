@@ -97,3 +97,7 @@ ul {
 .ui-progressbar {
 	height: 22px;
 }
+
+.counter a:link, a:visited, a:active {
+    text-decoration: underline;
+}
