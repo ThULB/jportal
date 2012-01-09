@@ -3,12 +3,12 @@
 	<parent>
 		<artifactId>mycore-parent</artifactId>
 		<groupId>org.mycore</groupId>
-		<version>9-SNAPSHOT</version>
+		<version>10</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fsu.thulb</groupId>
 	<artifactId>jportal</artifactId>
-	<version>2.0.14</version>
+	<version>2.0.15</version>
 	<packaging>pom</packaging>
 	<name>jportal</name>
 	<description>JPortal project</description>
@@ -19,8 +19,7 @@
         <module>jportal_jquery_cnd</module>
     <module>jportal_experiments</module>
     <module>jportal_login_module</module>
-    <module>mcr-complete-fix-iview-trunk</module>
-	</modules>
+  </modules>
 	<pluginRepositories>
 		<pluginRepository>
 			<id>Maven Central</id>
