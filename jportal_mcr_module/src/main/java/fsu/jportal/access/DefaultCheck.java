@@ -1,5 +1,8 @@
 package fsu.jportal.access;
 
+import org.mycore.access.MCRAccessInterface;
+import org.mycore.common.MCRException;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class DefaultCheck extends AbstractStrategyStep{
 
@@ -9,11 +12,26 @@ public class DefaultCheck extends AbstractStrategyStep{
 
     @Override
     public boolean checkPermission(String id, String permission) {
-        if (getAccessStrategyConfig().getAccessInterface().hasRule("default", permission)) {
-            return getAccessStrategyConfig().getAccessInterface().checkPermission("default", permission);
+        MCRAccessInterface accessInterface = getAccessStrategyConfig().getAccessInterface();
+        String typeFromID = getTypeFromID(id);
+        if (typeFromID != null && accessInterface.hasRule("default_" + typeFromID, permission)) {
+            return accessInterface.checkPermission("default_" + typeFromID, permission);
+        }
+        
+        if (accessInterface.hasRule("default", permission)) {
+            return accessInterface.checkPermission("default", permission);
         }
 
-        return false;
+        return getAlternative().checkPermission(id, permission);
+    }
+
+    protected String getTypeFromID(String id) {
+        try {
+            MCRObjectID objID = MCRObjectID.getInstance(id);
+            return objID.getTypeId();
+        } catch (MCRException e) {
+            return null;
+        }
     }
 
 }

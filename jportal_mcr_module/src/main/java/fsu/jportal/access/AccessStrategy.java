@@ -69,8 +69,9 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         StrategyStep parentCheck = new ParentCheck(accessStrategyConfig);
         StrategyStep defaultCheck = new DefaultCheck(accessStrategyConfig);
         
-        parentCheck.addAlternative(defaultCheck);
-        crudCheck.addAlternative(parentCheck);
+        parentCheck.addAlternative(objIdCheck);
+        defaultCheck.addAlternative(parentCheck);
+        crudCheck.addAlternative(defaultCheck);
         objIdCheck.addAlternative(crudCheck);
         setStrategyChainStart(objIdCheck);
     }

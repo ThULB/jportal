@@ -20,19 +20,23 @@ public class ParentCheck extends AbstractStrategyStep {
         MCRObjectID objId = getObjId(id);
         
         if(objId == null ){
-             return getAlternative().checkPermission(id, permission);
+             return false;
         }
         
         MCRObjectID parentID = getParentID(objId);
-        if(parentID == null || parentID.equals(objId)){
-            return getAlternative().checkPermission(id, permission);
+        if(objId == null || parentID == null){
+            return false;
         }
         
-        if (getAccessStrategyConfig().getAccessInterface().hasRule(parentID.toString(), permission)) {
-            return getAccessStrategyConfig().getAccessInterface().checkPermission(parentID.toString(), permission);
-        } else {
-            return checkPermission(parentID.toString(), permission);
+        if(parentID.equals(objId)){
+            if (getAccessStrategyConfig().getAccessInterface().hasRule(parentID.toString(), permission)) {
+                return getAccessStrategyConfig().getAccessInterface().checkPermission(parentID.toString(), permission);
+            } else {
+                return false;
+            }
         }
+        
+        return getAlternative().checkPermission(parentID.toString(), permission);
     }
 
     private MCRObjectID getObjId(String id) {
@@ -45,7 +49,6 @@ public class ParentCheck extends AbstractStrategyStep {
     }
     
     private MCRObjectID getParentID(MCRObjectID objID) {
-        //LOGGER.info("getParentId: " + objID + " exists " + getAccessConfig().getXMLMetadataMgr().exists(objID));
         if (!getAccessStrategyConfig().getXMLMetadataMgr().exists(objID)) {
             return null;
         }

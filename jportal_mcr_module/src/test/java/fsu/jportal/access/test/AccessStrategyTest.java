@@ -128,6 +128,8 @@ public class AccessStrategyTest {
         boolean expectedAccess = true;
 
         expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule("default_derivate", permission)).andReturn(false);
+        expect(aclMock.hasRule("default", permission)).andReturn(false);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule(parentID, permission)).andReturn(hasParentRule);
         expect(aclMock.checkPermission(parentID, permission)).andReturn(hasAccess);
@@ -162,6 +164,8 @@ public class AccessStrategyTest {
         
         expect(userInfoMock.getCurrentUserID()).andReturn(userID);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default_jpvolume", permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
         expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(true);
         
         MCRObjectID mcrObjectID = null;
@@ -174,7 +178,7 @@ public class AccessStrategyTest {
         expect(xmlMetaDataMgr.retrieveXML(mcrObjectID)).andReturn(createObjectXML(parentID));
         
         expect(aclMock.hasRule(parentID, permission)).andReturn(hasParentRule);
-        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(parentID))).andReturn(true);
+//        expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(parentID))).andReturn(true);
         
         MCRObjectID journalID = null;
         
@@ -182,9 +186,10 @@ public class AccessStrategyTest {
             journalID = MCRObjectID.getInstance(parentID);
         } catch (Exception e) {
         }
-        expect(xmlMetaDataMgr.retrieveXML(journalID)).andReturn(createJournalXML(parentID));
-        expect(aclMock.hasRule("default", permission)).andReturn(true);
-        expect(aclMock.checkPermission("default", permission)).andReturn(true);
+//        expect(xmlMetaDataMgr.retrieveXML(journalID)).andReturn(createJournalXML(parentID));
+        // dont channge default_xxxxxx test still needed for editing objects
+        expect(aclMock.hasRule("default_jpjournal", permission)).andReturn(true);
+        expect(aclMock.checkPermission("default_jpjournal", permission)).andReturn(true);
         
         replay(aclMock, userInfoMock, xmlMetaDataMgr);
         
@@ -207,6 +212,9 @@ public class AccessStrategyTest {
         boolean expectedAccess = true;
 
         expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(aclMock.hasRule("default_jparticle", permission)).andReturn(false);
+        expect(aclMock.hasRule("default_derivate", permission)).andReturn(false);
+        expect(aclMock.hasRule("default", permission)).andReturn(false).times(2);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule(parentID, permission)).andReturn(hasParentRule);
         expect(aclMock.hasRule(JOURNALID, permission)).andReturn(hasJournalRule);
@@ -279,6 +287,7 @@ public class AccessStrategyTest {
         boolean expectedAccess = false;
 
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
+        expect(aclMock.hasRule("default_class", permission)).andReturn(hasRule);
         expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
         expect(xmlMetaDataMgr.exists(MCRObjectID.getInstance(id))).andReturn(false);
         replay(aclMock, xmlMetaDataMgr);
