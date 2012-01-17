@@ -1,0 +1,37 @@
+This readme describes how to add the jportal_laws module to jportal2 and create
+a sample volume.
+
+First of all you have to add the module to the docportal pom.xml.
+<dependency>
+  <groupId>fsu.thulb</groupId>
+  <artifactId>jportal_laws</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <type>jar</type>
+  <scope>compile</scope>      
+</dependency>
+
+Be aware that the version is probably wrong!
+
+Before you can create a new journal its important to add a new category 'register'
+to the 'ID types [jportal_class_00000010]' classification. Go to Editors ->
+Classification Editor -> ID types -> Insert new category. Add the category 'register'
+and save the classification.
+
+The laws module contains a new template called template_thLegislativeExecutiv. This
+template provides a view to show the register entrys of a volume. 
+
+Create a new journal and select the template_thLegislativeExecutiv as new template.
+Add a volume to this journal. In the editor you have to set the ID entry to 'register'
+and the value to '1821_Register.xml'. This is an example, all register xml files are
+stored under src/main/resources/web/register. You can easily select another one.
+
+Now the xml file is linked with the volume. You can see the entries by clicking on 
+'show table of contents'.
+
+Linking the nr. of each law with the imageviewer is very easy. Simply upload a
+derivate with the files inside. For example you can download the Herzogtum Altenburg
+1821 from the productive system
+(http://zs.thulb.uni-jena.de/servlets/MCRZipServlet?id=jportal_derivate_00199933) and
+upload on your test system. The links should appear automatic.
+
+This works because a METS file for the derivate is created by the system (LawsMETSGenerator). 
