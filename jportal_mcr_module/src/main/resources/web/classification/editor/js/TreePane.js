@@ -21,13 +21,16 @@ classification.TreePane = function() {
 
 	// tree
 	this.tree = null;
+	
+	this.resourcePath = null;
 };
 
 ( function() {
 
-	function create(/*String*/ classBaseURL) {
+	function create(/*String*/ resourcePath) {
+	    this.resourcePath = resourcePath;
 		// create tree
-		this.tree = new classification.LazyLoadingTree(classBaseURL);
+		this.tree = new classification.LazyLoadingTree(resourcePath);
 		this.tree.eventHandler.attach(dojo.hitch(this, handleTreeEvents));
 
 		// create dom
@@ -83,8 +86,9 @@ classification.TreePane = function() {
 
 		// add loading gif
 		var loading = dojo.create("div");
+		var _baseURL = (typeof dojoConfig == "undefined")? webApplicationBaseURL : dojoConfig.baseUrl;
 		dojo.style(loading, {
-			"backgroundImage": "url('images/loading.gif')",
+			"backgroundImage": "url('" + _baseURL + "images/loading.gif')",
 			"backgroundPosition": "center center",
 			"backgroundRepeat": "no-repeat",
 			"height" : "100%"
