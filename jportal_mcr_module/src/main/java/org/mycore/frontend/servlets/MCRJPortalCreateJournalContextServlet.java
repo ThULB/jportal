@@ -38,7 +38,6 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.frontend.MCRJPortalJournalContextForUserManagement;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
 import org.mycore.user.MCRUserMgr;
 

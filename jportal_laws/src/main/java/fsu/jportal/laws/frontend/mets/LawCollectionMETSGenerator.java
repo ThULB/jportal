@@ -21,6 +21,7 @@ import org.mycore.mets.model.files.FileSec;
 import org.mycore.mets.model.sections.AmdSec;
 import org.mycore.mets.model.sections.DmdSec;
 import org.mycore.mets.model.struct.Fptr;
+import org.mycore.mets.model.struct.LOCTYPE;
 import org.mycore.mets.model.struct.LogicalDiv;
 import org.mycore.mets.model.struct.LogicalStructMap;
 import org.mycore.mets.model.struct.LogicalSubDiv;
@@ -110,8 +111,9 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
     private File addFileToFileSection(String filename, Mets mets) {
         // create file ref
         UUID uuid = UUID.randomUUID();
-        File file = new File(FileGrp.PREFIX_MASTER + uuid, new MimetypesFileTypeMap().getContentType(filename));
-        FLocat fLoc = new FLocat(FLocat.LOCTYPE_URL, filename);
+        File file = new File(FileGrp.USE_MASTER + uuid, new MimetypesFileTypeMap().getContentType(filename));
+        
+        FLocat fLoc = new FLocat(LOCTYPE.URL, filename);
         file.setFLocat(fLoc);
         // add file to group
         mets.getFileSec().getFileGroup(FileGrp.USE_MASTER).addFile(file);

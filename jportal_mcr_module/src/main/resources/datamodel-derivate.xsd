@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema elementFormDefault="qualified" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml-2001.xsd"/>
-<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlinks-2001.xsd"/>
+<xsd:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink-2008-06.xsd"/>
 <xsd:simpleType name="mcrdefaulttype">
 <xsd:restriction base="xsd:string">
 <xsd:maxLength value="256"/>

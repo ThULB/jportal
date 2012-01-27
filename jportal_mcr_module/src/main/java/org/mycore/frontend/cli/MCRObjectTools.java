@@ -98,7 +98,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
     }
 
     private static void importObjects(ContentEntry contentEntries) throws URISyntaxException, MCRActiveLinkException, MCRException,
-            SAXParseException {
+            SAXParseException, IOException {
         for (AtomLink participantLink : contentEntries.getLink()) {
             MCRObject mcrObject = new MCRObject(new URI(participantLink.getHref()));
             MCRMetadataManager.update(mcrObject);

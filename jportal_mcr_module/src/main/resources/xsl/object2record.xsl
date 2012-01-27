@@ -3,7 +3,7 @@
 <xsl:stylesheet version="1.0" xmlns="http://www.openarchives.org/OAI/2.0/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions">
 
-  <xsl:include href="oai/object2header.xsl" />
+  <xsl:include href="object2header.xsl" />
 
   <xsl:param name="WebApplicationBaseURL" />
 

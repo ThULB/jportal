@@ -7,8 +7,8 @@
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
   exclude-result-prefixes="mcr xalan i18n acl">
   <xsl:param name="WebApplicationBaseURL" />
-  <xsl:include href="oai/metsmeta-dfg.xsl" />
-  <xsl:include href="oai/mets-amd.xsl" />
+  <xsl:include href="metsmeta-dfg.xsl" />
+  <xsl:include href="mets-amd.xsl" />
   
   <xsl:param name="MCR.OPAC.CATALOG"/>
 

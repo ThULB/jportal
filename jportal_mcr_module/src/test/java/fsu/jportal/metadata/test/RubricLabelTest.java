@@ -66,11 +66,11 @@ public class RubricLabelTest {
         MCRObject mcrObj = createMCRObj();
         mcrObj.getMetadata().setMetadataElement(rubric.toMCRMetaElement());
 
-        xmlOutput(mcrObj.createXML());        
-        
         String dataModelLocation = "/datamodel-jpclassi.xsd";
         try {
-            new SchemaValidator(dataModelLocation).validate(new JDOMSource(mcrObj.createXML()));
+            SchemaValidator schemaValidator = new SchemaValidator(dataModelLocation);
+            JDOMSource source = new JDOMSource(mcrObj.createXML());
+            schemaValidator.validate(source);
         } catch (SAXException e) {
             e.printStackTrace();
             fail("Schema validation failed for " + dataModelLocation);

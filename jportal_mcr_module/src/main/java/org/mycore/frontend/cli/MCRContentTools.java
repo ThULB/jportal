@@ -3,7 +3,13 @@ package org.mycore.frontend.cli;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.jdom.Document;
@@ -16,9 +22,12 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
+import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.xml.sax.SAXParseException;
+
+import fsu.jportal.xml.XMLTools;
 
 public class MCRContentTools extends MCRAbstractCommands {
     private static Logger LOGGER = Logger.getLogger(MCRContentTools.class.getName());
@@ -36,12 +45,29 @@ public class MCRContentTools extends MCRAbstractCommands {
         // remove journal entry in navigation XML which no longer exists in System
         com = new MCRCommand("clean navi", "org.mycore.frontend.cli.MCRContentTools.cleanNavi", "clean navi");
         command.add(com);
+        
+        com = new MCRCommand("xlink migration for base {0}", "org.mycore.frontend.cli.MCRContentTools.xlinkMigration String", "xlink migration");
+        command.add(com);
+    }
+    
+    public static void xlinkMigration(String base){
+        MCRXMLMetadataManager xmlMetadataManager = MCRXMLMetadataManager.instance();
+        List<String> idsForBase = xmlMetadataManager.listIDsForBase(base);
+        for (String id : idsForBase) {
+            MCRObjectID mcrid = MCRObjectID.getInstance(id);
+            Document mcrObjXML = xmlMetadataManager.retrieveXML(mcrid);
+            InputStream resourceAsStream = MCRContentTools.class.getResourceAsStream("/xsl/xlinkMigration.xsl");
+            Source stylesheet = new StreamSource(resourceAsStream);
+            Document migratedMcrObjXML = MCRXSLTransformation.transform(mcrObjXML, stylesheet, new HashMap());
+            
+            xmlMetadataManager.update(mcrid, migratedMcrObjXML, new Date());
+        }
     }
 
     public static void fixlabel(String pattern) throws JDOMException, IOException, MCRException, SAXParseException {
         String mcrBasedir = MCRConfiguration.instance().getString("MCR.basedir");
         String naviFileLocation = mcrBasedir + "/build/webapps/config/navigation.xml";
-        Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFileLocation), false);
+        Document naviJDOM = XMLTools.readXMLFromIS(new FileInputStream(naviFileLocation));
 
         List<Element> nodes = XPath.selectNodes(naviJDOM, "//item[contains(./label/text(),'" + pattern + "')]");
         XPath itemXpath = XPath.newInstance("./item[contains(@href,'/receive/')]");
@@ -80,7 +106,7 @@ public class MCRContentTools extends MCRAbstractCommands {
 
     public static void cleanNavi() throws JDOMException, MCRException, IOException, SAXParseException {
         String naviFielLocation = MCRConfiguration.instance().getString("MCR.basedir") + "/build/webapps/config/navigation.xml";
-        Document naviJDOM = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFielLocation), false);
+        Document naviJDOM = XMLTools.readXMLFromIS(new FileInputStream(naviFielLocation));
 
         List<Element> nodes = XPath.selectNodes(naviJDOM, "//item[contains(@href,'/receive/jportal_jpjournal')]");
 

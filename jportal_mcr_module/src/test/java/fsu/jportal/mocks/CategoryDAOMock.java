@@ -166,4 +166,10 @@ public class CategoryDAOMock implements MCRCategoryDAO {
         // TODO Auto-generated method stub
         return 0;
     }
+
+    @Override
+    public List<MCRCategory> getCategoriesByLabel(String lang, String text) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

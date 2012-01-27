@@ -66,7 +66,7 @@
     <panel id="getPersonAndInst">
         <!-- <cell row="1" col="1" colspan="2" anchor="NORTHWEST" ref="personInst_label" /> -->
         <cell anchor="NORTHWEST" row="1" col="1" colspan="2" width="100%">
-            <output var="@xlink:label" />
+            <output var="@xlink:title" />
             <text label=" (" />
             <output var="@xlink:href" />
             <text label=")" />
@@ -112,7 +112,8 @@
                     <hidden var="@xlink:type" default="locator" />
                     <hidden var="@xlink:label" />
                     <hidden var="@xlink:href" />
-                    <cell row="1" col="1" anchor="NORTHWEST" ref="participants_input_repeater_type" var="@xlink:title" />
+                    <hidden var="@xlink:title" />
+                    <cell row="1" col="1" anchor="NORTHWEST" ref="participants_input_repeater_type" var="@type" />
                     <cell row="2" col="1" anchor="NORTHWEST" ref="getPersonAndInst" />
                 </panel>
             </repeater>

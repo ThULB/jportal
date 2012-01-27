@@ -7,7 +7,7 @@
   <xsl:param name="WebApplicationBaseURL" />
 
   <xsl:include href="coreFunctions.xsl" />
-  <xsl:include href="oai/object2record.xsl" />
+  <xsl:include href="object2record.xsl" />
 
   <xsl:template match="mycoreobject" mode="metadata">
     <oai_dc:dc>

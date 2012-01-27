@@ -265,7 +265,7 @@
             </td>
             <td class="td1" valign="top" style="padding-right:5px;">
                 <a
-                    href="{$url}&amp;_var_@xlink:href={col[@name='id']}&amp;_var_@xlink:label={$beautiLabel}
+                    href="{$url}&amp;_var_@xlink:href={col[@name='id']}&amp;_var_@xlink:title={$beautiLabel}
             &amp;_var_@field=participants_art&amp;_var_@operator==&amp;_var_@value={col[@name='id']}">
                     <xsl:copy-of select="concat($beautiLabel,' (',col[@name='id'],')')" />
                 </a>

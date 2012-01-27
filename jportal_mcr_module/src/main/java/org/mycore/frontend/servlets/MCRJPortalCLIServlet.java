@@ -67,7 +67,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
         }
     }
 
-    private void executeCommand() throws SAXParseException {
+    private void executeCommand() throws SAXParseException, IOException {
 
         //MCRObjectCommands.repairMetadataSearch("person");
         //MCRObjectCommands.repairMetadataSearch("jpinst");

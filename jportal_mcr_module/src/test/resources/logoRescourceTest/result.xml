@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <urmel:entity xlink:title="Willkommen in der ThULB" xlink:type="extended" type="operator">
+        <urmel:logo xlink:href="http://localhost:8291/logos/test.svg" xlink:type="resource" />
+        <urmel:full-logo xlink:href="http://localhost:8291/logos/testPlusText.svg" xlink:type="resource" />
+    </urmel:entity>
+</urmel:entities>

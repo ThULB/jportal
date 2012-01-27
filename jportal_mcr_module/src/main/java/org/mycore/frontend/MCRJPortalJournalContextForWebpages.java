@@ -27,6 +27,9 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.xml.sax.SAXParseException;
 
+import fsu.jportal.xml.XMLTools;
+
+
 public class MCRJPortalJournalContextForWebpages {
 
     private String preceedingItemHref;
@@ -92,7 +95,7 @@ public class MCRJPortalJournalContextForWebpages {
             this.preceedingItemHref = this.currentItemHref.replaceAll(help[help.length-1], "dummy.xml");
             
             String naviFile = deployedDir + "/config/navigation.xml";
-            Document navi = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFile),false);
+            Document navi = XMLTools.readXMLFromIS(new FileInputStream(naviFile));
             String itemXPath = "//item[@href='" + this.currentItemHref + "']";
             LOGGER.debug("find item with xpath=" + itemXPath + " in " + naviFile);
             XPath xp = XPath.newInstance(itemXPath);
@@ -312,7 +315,7 @@ public class MCRJPortalJournalContextForWebpages {
         LOGGER.info("Removing navigation entry for journal \"" + journalID + "\" ...");
         String naviFileLocation = deployedDir + "/config/navigation.xml";
         try {
-            Document naviFileDoc = MCRXMLHelper.getParser().parseXML(new FileInputStream(naviFileLocation), false);
+            Document naviFileDoc = XMLTools.readXMLFromIS(new FileInputStream(naviFileLocation));
             String entryInNaviFileDoc = "//item[@href='" + this.currentItemHref + "']";
             Element jdomElemOfLocation = (Element) XPath.selectSingleNode(naviFileDoc, entryInNaviFileDoc);
 
@@ -376,7 +379,7 @@ public class MCRJPortalJournalContextForWebpages {
         String locationOfWebpageXML = deployedDir + currentItemHref;
         
         try {
-            return MCRXMLHelper.getParser().parseXML(new FileInputStream(locationOfWebpageXML), false);
+            return XMLTools.readXMLFromIS(new FileInputStream(locationOfWebpageXML));
         } catch (MCRException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

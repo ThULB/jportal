@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jpinst_00000030" label="jportal_jpinst_00000030" version="2.0"
+    xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd">
+    <structure />
+    <metadata>
+        <names class="MCRMetaInstitutionName" heritable="true" notinherit="false">
+            <name inherited="0">
+                <fullname>Willkommen in der ThULB</fullname>
+            </name>
+        </names>
+        <logo class="MCRMetaLangText" heritable="true" notinherit="false">
+            <url type="logoPlain" inherited="0" form="plain">http://localhost:8291/logos/test.svg</url>
+
+            <url type="logoPlusText" inherited="0" form="plain">http://localhost:8291/logos/testPlusText.svg</url>
+        </logo>
+    </metadata>
+    <service>
+        <servdates class="MCRMetaISO8601Date">
+            <servdate type="modifydate" inherited="0">2012-01-26T17:13:49.404Z</servdate>
+            <servdate type="createdate" inherited="0">2012-01-26T17:13:49.404Z</servdate>
+        </servdates>
+
+    </service>
+</mycoreobject>
