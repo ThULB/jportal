@@ -12,6 +12,9 @@ import javax.ws.rs.core.Context;
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 
 import com.sun.jersey.api.model.AbstractMethod;
 import com.sun.jersey.spi.container.ContainerRequest;
@@ -71,11 +74,12 @@ public class MyCoReSecurityFilterFactory implements ResourceFilterFactory {
         filters.add(new MCRSessionHookFilter(httpRequest));
         MCRDBAccess dbAccessMethod = am.getAnnotation(MCRDBAccess.class);
         MCRDBAccess dbAccessClass = am.getResource().getAnnotation(MCRDBAccess.class);
-        if(dbAccessMethod != null || dbAccessClass != null){
+        RolesAllowed ra = am.getAnnotation(RolesAllowed.class);
+        
+        if(dbAccessMethod != null || dbAccessClass != null || ra != null){
             filters.add(new MCRDBTransactionFilter());
         }
         
-        RolesAllowed ra = am.getAnnotation(RolesAllowed.class);
         if (ra != null) {
             filters.add(new MCRCheckAccessFilter(this, am));
         }
