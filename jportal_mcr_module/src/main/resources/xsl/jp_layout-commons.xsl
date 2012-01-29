@@ -53,9 +53,8 @@
                 jQuery(view).bind("press", function(sender, args) {
                   if (args.parentName == buttonSet.elementName) {
                     if (args.elementName == buttonSet.elementName) {
-                      var file = decodeURI(e.viewer.curImage);
-                      var chapterParent = e.viewer.chapterParent;
-                      var derivId = chapterParent.substring(16, chapterParent.length); 
+                      var file = decodeURI(e.viewer.currentImage.name);
+                      var derivId = e.viewer.properties.derivateId; 
                       var servletPath = baseUrl + "servlets/DerivateLinkServlet";
                       jQuery.post(servletPath, {mode: "setImage", derivateId: derivId, file: file});
                     }
