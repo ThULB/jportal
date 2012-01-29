@@ -20,7 +20,8 @@
     <module>jportal_experiments</module>
     <module>jportal_login_module</module>
     <module>jportal-commons</module>
-    <module>jportal_editor_GUI</module>
+
+    
 	</modules>
 	<pluginRepositories>
 		<pluginRepository>
