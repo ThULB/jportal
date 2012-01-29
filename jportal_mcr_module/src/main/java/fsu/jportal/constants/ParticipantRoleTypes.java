@@ -2,9 +2,8 @@ package fsu.jportal.constants;
 
 public enum ParticipantRoleTypes{
     operator,
-    ownerEntity,
-    sponsorEntity,
-    partnerEntity;
+    sponsor,
+    partner;
     
     public static boolean equals(String type){
         for (ParticipantRoleTypes participantType : ParticipantRoleTypes.values()) {
