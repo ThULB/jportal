@@ -42,13 +42,12 @@
           <mods:mods>
             <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject"/>
             <mods:extension>
-<!--                <xsl:apply-templates mode="operator" select="$sourcedoc/mycoreobject" />  -->
-<!--                <xsl:apply-templates mode="ownerEntity" select="$sourcedoc/mycoreobject" />  -->
-<!--                <xsl:apply-templates mode="sponsorEntity" select="$sourcedoc/mycoreobject" />  -->
-<!--                <xsl:apply-templates mode="partnerEntity" select="$sourcedoc/mycoreobject" /> -->
-                <xsl:comment>
-                    <xsl:value-of select="$sourcedoc/mycoreobject/@ID"/>
-                </xsl:comment>
+				<xsl:variable name="journalID" select="$sourcedoc/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID"></xsl:variable>
+                <xsl:variable name="entities" select="document(concat($WebApplicationBaseURL,'rsc/modslogos/',$journalID))"/>
+                
+                <xsl:if test="count($entities/child::node()) > 0">
+                	<xsl:copy-of select="$entities" />
+                </xsl:if>
             </mods:extension>
           </mods:mods>
         </mets:xmlData>
