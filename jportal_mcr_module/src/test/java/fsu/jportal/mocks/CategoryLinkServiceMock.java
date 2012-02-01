@@ -9,7 +9,7 @@ import org.mycore.datamodel.classifications2.MCRCategLinkService;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.MCRObjectReference;
+import org.mycore.datamodel.classifications2.MCRCategLinkReference;
 
 public class CategoryLinkServiceMock implements MCRCategLinkService{
 
@@ -54,28 +54,11 @@ public class CategoryLinkServiceMock implements MCRCategLinkService{
     }
 
     @Override
-    public void deleteLink(String id) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void deleteLinks(Collection<String> ids) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public Collection<String> getLinksFromCategory(MCRCategoryID id) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    @Override
-    public boolean isInCategory(String objectId, MCRCategoryID id) {
-        // TODO Auto-generated method stub
-        return false;
-    }
 
     @Override
     public Collection<String> getLinksFromCategoryForType(MCRCategoryID id, String type) {
@@ -84,15 +67,33 @@ public class CategoryLinkServiceMock implements MCRCategLinkService{
     }
 
     @Override
-    public Collection<MCRCategoryID> getLinksFromObject(String id) {
+    public void setLinks(MCRCategLinkReference objectReference, Collection<MCRCategoryID> categories) {
         // TODO Auto-generated method stub
-        return null;
+        
     }
 
     @Override
-    public void setLinks(MCRObjectReference objectReference, Collection<MCRCategoryID> categories) {
+    public void deleteLinks(Collection<MCRCategLinkReference> ids) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void deleteLink(MCRCategLinkReference id) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean isInCategory(MCRCategLinkReference reference, MCRCategoryID id) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public Collection<MCRCategoryID> getLinksFromReference(MCRCategLinkReference reference) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
