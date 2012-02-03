@@ -98,7 +98,7 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
     }
 
     private boolean isSuperUser() {
-        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getCurrentUserID();
+        String currentUserID = MCRSessionMgr.getCurrentSession().getUserInformation().getUserID();
         return currentUserID.equals(MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName"));
     }
 

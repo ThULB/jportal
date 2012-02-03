@@ -53,7 +53,7 @@ class MCRCheckAccessFilter implements ResourceFilter, ContainerRequestFilter, Co
         
         boolean hasPermission = getAccessManagerConnector().checkPermission(resourceName, resourceOperation, session );
 
-        this.myCoReSecurityFilterFactory.logger.debug("current user ID: " + session.getUserInformation().getCurrentUserID());
+        this.myCoReSecurityFilterFactory.logger.debug("current user ID: " + session.getUserInformation().getUserID());
         this.myCoReSecurityFilterFactory.logger.debug("resource name: " + resourceName);
         this.myCoReSecurityFilterFactory.logger.debug("resource operation: " + resourceOperation);
         this.myCoReSecurityFilterFactory.logger.debug("has permission: " + hasPermission);

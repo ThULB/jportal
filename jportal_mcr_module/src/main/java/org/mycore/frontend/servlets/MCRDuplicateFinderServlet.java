@@ -170,7 +170,7 @@ public class MCRDuplicateFinderServlet extends MCRServlet {
             count++;
         }
         // add some general infos to the redObjectsElements
-        String user = session.getUserInformation().getCurrentUserID();
+        String user = session.getUserInformation().getUserID();
         String userRealName = MCRUserMgr.instance().retrieveUser(user).getUserContact().getFirstName() + " "
                 + MCRUserMgr.instance().retrieveUser(user).getUserContact().getLastName();
         long time = System.currentTimeMillis();

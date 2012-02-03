@@ -84,7 +84,7 @@ public class AccessStrategyTest {
 
     @Test
     public void isSuperUser() throws Exception {
-        expect(userInfoMock.getCurrentUserID()).andReturn(ROOT);
+        expect(userInfoMock.getUserID()).andReturn(ROOT);
         replay(aclMock, userInfoMock);
 
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);
@@ -105,7 +105,7 @@ public class AccessStrategyTest {
     private void noSuperUser_ObjHasOwnRule(String userID, boolean hasRule, boolean hasAccess, boolean expectedAccess) {
         String id = "POOLPRIVILEGE";
         String permission = "read";
-        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(userInfoMock.getUserID()).andReturn(userID);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.checkPermission(id, permission)).andReturn(hasAccess);
         replay(aclMock, userInfoMock);
@@ -127,7 +127,7 @@ public class AccessStrategyTest {
         boolean hasAccess = true;
         boolean expectedAccess = true;
 
-        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(userInfoMock.getUserID()).andReturn(userID);
         expect(aclMock.hasRule("default_derivate", permission)).andReturn(false);
         expect(aclMock.hasRule("default", permission)).andReturn(false);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
@@ -162,7 +162,7 @@ public class AccessStrategyTest {
         boolean hasAccess = true;
         boolean expectedAccess = true;
         
-        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(userInfoMock.getUserID()).andReturn(userID);
         expect(aclMock.hasRule(id, permission)).andReturn(hasRule);
         expect(aclMock.hasRule("default_jpvolume", permission)).andReturn(hasRule);
         expect(aclMock.hasRule("default", permission)).andReturn(hasRule);
@@ -211,7 +211,7 @@ public class AccessStrategyTest {
         boolean hasAccess = true;
         boolean expectedAccess = true;
 
-        expect(userInfoMock.getCurrentUserID()).andReturn(userID);
+        expect(userInfoMock.getUserID()).andReturn(userID);
         expect(aclMock.hasRule("default_jparticle", permission)).andReturn(false);
         expect(aclMock.hasRule("default_derivate", permission)).andReturn(false);
         expect(aclMock.hasRule("default", permission)).andReturn(false).times(2);
@@ -252,7 +252,7 @@ public class AccessStrategyTest {
         String id = JOURNALID;
         String permission = "create_volume";
 
-        expect(userInfoMock.getCurrentUserID()).andReturn("user");
+        expect(userInfoMock.getUserID()).andReturn("user");
         expect(aclMock.hasRule(id, permission)).andReturn(false);
         expect(aclMock.hasRule("CRUD", permission)).andReturn(true);
         expect(aclMock.checkPermission("CRUD", permission)).andReturn(true);

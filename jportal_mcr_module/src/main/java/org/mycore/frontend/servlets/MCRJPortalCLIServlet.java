@@ -48,7 +48,7 @@ public class MCRJPortalCLIServlet extends MCRServlet {
 
     public void doGetPost(MCRServletJob job) throws IOException {
         MCRSession session = MCRSessionMgr.getCurrentSession();
-        String user = session.getUserInformation().getCurrentUserID();
+        String user = session.getUserInformation().getUserID();
         if (user.equals("root")) {
             LOGGER.info("#########################################################");
             LOGGER.info("'Started.");
