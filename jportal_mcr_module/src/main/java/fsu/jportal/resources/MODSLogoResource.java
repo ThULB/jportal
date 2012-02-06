@@ -36,21 +36,22 @@ public class MODSLogoResource {
     @Path("{hiddenJournalId}")
     @Produces(MediaType.APPLICATION_XML)
     public String getLogos(@PathParam("hiddenJournalId") String hiddenJournalId) throws IOException {
+        List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(hiddenJournalId));
         MCRMetaElement participants = mcrObject.getMetadata().getMetadataElement("participants");
-        List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
-        for (MCRMetaInterface retrievedElem : participants) {
-            if (retrievedElem instanceof MCRMetaLinkID) {
-                MCRMetaLinkID participant = (MCRMetaLinkID) retrievedElem;
-                String role = participant.getType();
-                if (ParticipantRoleTypes.equals(role)) {
-                    String participantID = participant.getXLinkHref();
-                    MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(participantID));
-                    entities.add(createLogoEntity(role, participantMcrObj));
+        if(participants != null) {
+            for (MCRMetaInterface retrievedElem : participants) {
+                if (retrievedElem instanceof MCRMetaLinkID) {
+                    MCRMetaLinkID participant = (MCRMetaLinkID) retrievedElem;
+                    String role = participant.getType();
+                    if (ParticipantRoleTypes.equals(role)) {
+                        String participantID = participant.getXLinkHref();
+                        MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(participantID));
+                        entities.add(createLogoEntity(role, participantMcrObj));
+                    }
                 }
             }
-        }
-        
+        }        
         return xmlToString(entities);
     }
 
