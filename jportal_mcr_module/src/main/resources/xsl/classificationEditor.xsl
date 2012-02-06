@@ -32,7 +32,7 @@
       var currentLang = "<xsl:value-of select='$CurrentLang' />";
 
       djConfig = {
-        isDebug: true,
+        isDebug: false,
         parseOnLoad: true,
         baseUrl: webPath + "/",
         modulePaths: {

@@ -11,7 +11,7 @@
  *        }
  */
 var dojoConfig = {
-        isDebug : true,
+        isDebug : false,
         parseOnLoad : true,
         modulePaths : {
             "dojoclasses" : "js/dojoclasses"
