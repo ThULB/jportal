@@ -28,9 +28,7 @@ class MCRSessionHookFilter implements ResourceFilter, ContainerRequestFilter, Co
     @Override
     public ContainerRequest filter(ContainerRequest request) {
         MCRSession session = MCRServlet.getSession(httpRequest);
-        if(!MCRSessionMgr.hasCurrentSession()){
-            MCRSessionMgr.setCurrentSession(session);
-        }
+        MCRSessionMgr.setCurrentSession(session);
         return request;
     }
 
