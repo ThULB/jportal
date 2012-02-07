@@ -7,14 +7,6 @@
     <xsl:param name="MCR.users_superuser_username" />
     <xsl:param name="MCR.JPortal.Create-JournalContext.ID" select="'null'" />
 
-    <xsl:variable name="userList">
-        <xsl:copy-of select="document('request:servlets/MCRJPortalCreateJournalContextServlet?mode=getUsers')" />
-    </xsl:variable>
-    
-    <xsl:variable name="groupList">
-        <xsl:copy-of select="document('request:servlets/MCRJPortalCreateJournalContextServlet?mode=getGroups')" />
-    </xsl:variable>
-
     <!-- =================================================================================================== -->
 
     <xsl:template match="/create-journalContext">
