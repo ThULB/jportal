@@ -73,6 +73,9 @@ public class MODSLogoResource {
 
     protected void getLogoURL(MCRObject participantMcrObj, MODSLogoEntity modsLogoEntity) {
         MCRMetaElement logo = participantMcrObj.getMetadata().getMetadataElement("logo");
+        if(logo == null) {
+            return;
+        }
         for (MCRMetaInterface logoElem : logo) {
             if(logoElem instanceof MCRMetaLangText){
                 MCRMetaLangText url = (MCRMetaLangText) logoElem;
