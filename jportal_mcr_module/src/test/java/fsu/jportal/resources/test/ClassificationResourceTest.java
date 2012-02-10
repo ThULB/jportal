@@ -74,11 +74,19 @@ public class ClassificationResourceTest extends JerseyResourceTestCase{
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
-        categDAO = (CategoryDAOMock) MCRCategoryDAOFactory.getInstance();
-        categDAO.init();
+
+        try {
+            /* its important to set the daomock via this method because the factory could be called
+             * by a previous test. In this case a class cast exception occur because MCRCategoryDAOImpl
+             * was loaded. */
+            MCRCategoryDAOFactory.set(CategoryDAOMock.class);
+            categDAO = (CategoryDAOMock)MCRCategoryDAOFactory.getInstance();
+            categDAO.init();
+        } catch(Exception exc) {
+            assertTrue(false);
+        }
     }
-    
+
     @After
     public void cleanUp(){
         MCRStoreManager.removeStore("jportal_jpclassi");
