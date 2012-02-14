@@ -26,9 +26,12 @@ public class MODSLogoEntityXMLMapper {
         for (MODSLogoEntity entity : entities) {
             Element entityTag = createEntityTag(entity);
             createSiteTag(entity, entitiesTag);
-            entityTag.addContent(createLogoTag("logo", entity.getLogoPlainURL()));
-            entityTag.addContent(createLogoTag("full-logo", entity.getLogoPlusTextURL()));
-            
+            if(entity.getLogoPlainURL() != null) {
+                entityTag.addContent(createLogoTag("logo", entity.getLogoPlainURL()));
+            }
+            if(entity.getLogoPlusTextURL() != null) {
+                entityTag.addContent(createLogoTag("full-logo", entity.getLogoPlusTextURL()));
+            }
             entitiesTag.addContent(entityTag);
         }
         
