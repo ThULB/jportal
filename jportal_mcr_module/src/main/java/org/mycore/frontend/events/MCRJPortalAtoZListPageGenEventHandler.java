@@ -61,11 +61,7 @@ public class MCRJPortalAtoZListPageGenEventHandler extends MCREventHandlerBase {
      * @return true if the MCRObject an journal, otherwise false
      */
     public boolean isJournal(MCRObject obj) {
-        Document doc = obj.createXML();
-        String id = doc.getRootElement().getAttributeValue("ID");
-        if(id.contains("journal"))
-            return true;
-        return false;
+        return obj.getId().getTypeId().equals("jpjournal");
     }
 
 }
