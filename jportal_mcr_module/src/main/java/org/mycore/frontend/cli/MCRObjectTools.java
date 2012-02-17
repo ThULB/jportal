@@ -7,8 +7,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
@@ -33,6 +35,7 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
+import org.mycore.frontend.util.DerivateLinkUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.xml.sax.SAXParseException;
 
@@ -85,6 +88,21 @@ public class MCRObjectTools extends MCRAbstractCommands {
         com = new MCRCommand("merge derivates {0}",
                 "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String", "merge several derivates");
         command.add(com);
+
+        com = new MCRCommand("collapse {0}",
+                "org.mycore.frontend.cli.MCRObjectTools.collapse String",
+                "merges all descendants derivates to the given object (a new derivate is created)");
+        command.add(com);
+
+        com = new MCRCommand("layer collapse {0} {1}",
+                "org.mycore.frontend.cli.MCRObjectTools.layerCollapse String String",
+                "merges all descendants derivates of the given object to the given layer. @see collapse command");
+        command.add(com);
+
+        com = new MCRCommand("set derivate link to {0} with path {1}",
+                "org.mycore.frontend.cli.MCRObjectTools.setDerivateLink String String",
+                "creates a new derivate link");
+        command.add(com);        
     }
 
     public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRActiveLinkException, MCRException,
@@ -371,4 +389,98 @@ public class MCRObjectTools extends MCRAbstractCommands {
             MCRMetadataManager.update(der);
         }
     }
+
+    public static List<String> layerCollapse(String objectId, String layerAsString) {
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
+        List<String> layerIds = getLayerIds(mcrObj, Integer.valueOf(layerAsString));
+        
+        List<String> cmdList = new ArrayList<String>();
+        for(String id : layerIds) {
+            cmdList.add("collapse " + id);
+        }
+        return cmdList;
+    }
+
+    private static List<String> getLayerIds(MCRObject mcrObj, int layer) {
+        if(layer < 0) {
+            throw new IllegalArgumentException("Layer cannot be lower than zero. " + layer);
+        }
+        List<String> ids = new ArrayList<String>();
+        if(layer == 0) {
+            ids.add(mcrObj.getId().toString());
+            return ids;
+        }
+        List<MCRMetaLinkID> childrenLinks = mcrObj.getStructure().getChildren();
+        for(MCRMetaLinkID metaLinkId : childrenLinks) {
+            String childId = metaLinkId.getXLinkHref();
+            if(layer == 1) {
+                ids.add(childId);
+            } else {
+                MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(childId));
+                ids.addAll(getLayerIds(mcrChild, layer - 1));
+            }
+        }
+        return ids;
+    }
+
+    public static List<String> collapse(String objectId) {
+        MCRObjectID mcrObjId = MCRObjectID.getInstance(objectId);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
+
+        // get all derivates in descendants
+        Map<MCRDerivate, MCRObject> derivateMap = getDescendants(mcrObj);
+
+        List<String> cmdList = new ArrayList<String>();
+        if(derivateMap.isEmpty()) {
+            return cmdList;
+        }
+
+        // 1. merge with new derivate of objectId
+        MCRDerivate mvDerivate = null;
+        StringBuilder mergeDerivateCmd = new StringBuilder("merge derivates ");
+        Iterator<MCRDerivate> it = derivateMap.keySet().iterator();
+        while(it.hasNext()) {
+            MCRDerivate mcrChildDer = it.next();
+            mergeDerivateCmd.append(mcrChildDer.getId());
+            if(it.hasNext()) {
+                mergeDerivateCmd.append(",");
+            }
+            if(mvDerivate == null) {
+                mvDerivate = mcrChildDer;
+            }
+        }
+        cmdList.add(mergeDerivateCmd.toString());
+
+        // 2. move derivate to object
+        cmdList.add("link derivate " + mvDerivate.getId() + " to " + objectId);
+
+        // 3. create derivate link
+        for(Map.Entry<MCRDerivate, MCRObject> entry : derivateMap.entrySet()) {
+            MCRDerivate mcrChildDer = entry.getKey();
+            MCRObject mcrChildObj = entry.getValue();
+            String mainDoc = mcrChildDer.getDerivate().getInternals().getMainDoc();
+            cmdList.add("set derivate link to " + mcrChildObj.getId().toString() + " with path " + mvDerivate.getId() + "/" + mainDoc);
+        }
+        return cmdList;
+    }
+
+    public static void setDerivateLink(String objectId, String path) throws MCRActiveLinkException {
+        DerivateLinkUtil.setLink(MCRObjectID.getInstance(objectId), path);
+    }
+
+    private static Map<MCRDerivate, MCRObject> getDescendants(MCRObject mcrObj) {
+        Map<MCRDerivate, MCRObject> idMap = new HashMap<MCRDerivate, MCRObject>();
+        List<MCRMetaLinkID> linkList = mcrObj.getStructure().getChildren();
+        for(MCRMetaLinkID link : linkList) {
+            MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
+            List<MCRMetaLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
+            for(MCRMetaLinkID derivateLink : derivateLinkList) {
+                MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateLink.getXLinkHref()));
+                idMap.put(mcrDer, mcrChild);
+            }
+            idMap.putAll(getDescendants(mcrChild));
+        }
+        return idMap;
+    }
+
 }
