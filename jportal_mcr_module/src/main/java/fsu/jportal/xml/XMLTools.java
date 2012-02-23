@@ -10,7 +10,7 @@ import org.xml.sax.SAXParseException;
 public class XMLTools {
 
     public static Document readXMLFromIS(FileInputStream in) throws SAXParseException {
-        return MCRXMLParserFactory.getParser().parseXML(MCRContent.readFrom(in));
+        return MCRXMLParserFactory.getNonValidatingParser().parseXML(MCRContent.readFrom(in));
     }
 
 }
