@@ -3,12 +3,12 @@
     <xsl:include href="copynodes.xsl" />
     <xsl:template match="participant/@xlink:label">
         <xsl:attribute name="xlink:title">
-            <xsl:value-of select="."/>
+            <xsl:value-of select="." />
         </xsl:attribute>
     </xsl:template>
     <xsl:template match="participant/@xlink:title">
         <xsl:attribute name="type">
-            <xsl:value-of select="."/>
+            <xsl:value-of select="." />
         </xsl:attribute>
     </xsl:template>
 </xsl:stylesheet>

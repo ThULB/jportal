@@ -4,11 +4,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -17,14 +22,19 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import org.jdom.transform.JDOMResult;
+import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
+import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.common.xml.MCRXSLTransformation;
+import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.MCRLayoutUtilities;
 import org.xml.sax.SAXParseException;
 
 import fsu.jportal.xml.XMLTools;
@@ -45,22 +55,35 @@ public class MCRContentTools extends MCRAbstractCommands {
         // remove journal entry in navigation XML which no longer exists in System
         com = new MCRCommand("clean navi", "org.mycore.frontend.cli.MCRContentTools.cleanNavi", "clean navi");
         command.add(com);
-        
-        com = new MCRCommand("xlink migration for base {0}", "org.mycore.frontend.cli.MCRContentTools.xlinkMigration String", "xlink migration");
+
+        com = new MCRCommand("xlink migration for base {0}", "org.mycore.frontend.cli.MCRContentTools.xlinkMigration String",
+                "xlink migration");
         command.add(com);
     }
-    
-    public static void xlinkMigration(String base){
+
+    public static void xlinkMigration(String base) throws TransformerException, JDOMException {
         MCRXMLMetadataManager xmlMetadataManager = MCRXMLMetadataManager.instance();
         List<String> idsForBase = xmlMetadataManager.listIDsForBase(base);
+        InputStream resourceAsStream = MCRContentTools.class.getResourceAsStream("/xsl/xlinkMigration.xsl");
+        Source stylesheet = new StreamSource(resourceAsStream);
+        Transformer xsltTransformer = MCRXSLTransformation.getInstance().getStylesheet(stylesheet).newTransformer();
+
+        XPath xlinkLabel = XPath.newInstance("/mycoreobject/metadata/participants/participant/@xlink:label");
+        LOGGER.info(MessageFormat.format("There are {0} objects for base {1}.", idsForBase, base));
         for (String id : idsForBase) {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
             Document mcrObjXML = xmlMetadataManager.retrieveXML(mcrid);
-            InputStream resourceAsStream = MCRContentTools.class.getResourceAsStream("/xsl/xlinkMigration.xsl");
-            Source stylesheet = new StreamSource(resourceAsStream);
-            Document migratedMcrObjXML = MCRXSLTransformation.transform(mcrObjXML, stylesheet, new HashMap());
-            
-            xmlMetadataManager.update(mcrid, migratedMcrObjXML, new Date());
+            if (!xlinkLabel.selectNodes(mcrObjXML).isEmpty()) {
+                Source xmlSource = new JDOMSource(mcrObjXML);
+                JDOMResult jdomResult = new JDOMResult();
+                xsltTransformer.transform(xmlSource, jdomResult);
+                Document migratedMcrObjXML = jdomResult.getDocument();
+
+                xmlMetadataManager.update(mcrid, migratedMcrObjXML, new Date());
+                LOGGER.info("Migrated xlink for " + mcrid);
+            } else {
+                LOGGER.info("No xlink migration for " + mcrid);
+            }
         }
     }
 
@@ -91,7 +114,7 @@ public class MCRContentTools extends MCRAbstractCommands {
                 Element webPageXML = MCRURIResolver.instance().resolve("webapp:" + webPageXmlLocation);
                 Element section = webPageXML.getChild("section");
                 section.setAttribute("title", label);
-                xo.output(webPageXML, new FileOutputStream(mcrBasedir + "/build/webapps" +webPageXmlLocation));
+                xo.output(webPageXML, new FileOutputStream(mcrBasedir + "/build/webapps" + webPageXmlLocation));
 
                 // change label in navigation.xml
                 String oldLabel = node.getChildText("label");
