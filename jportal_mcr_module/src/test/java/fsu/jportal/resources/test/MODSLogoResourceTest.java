@@ -44,7 +44,12 @@ public class MODSLogoResourceTest extends JerseyResourceTestCase{
             MCRStoredMetadata journalMetadataMock = createMock(objID + "MetadataMock", MCRStoredMetadata.class);
             MCRContent contentMock = createMock(objID + "ContentMock", MCRContent.class);
             expect(journalMetadataMock.getMetadata()).andReturn(contentMock);
-            expect(contentMock.asXML()).andReturn(createObjXML(objID));
+            try {
+                expect(contentMock.asXML()).andReturn(createObjXML(objID));
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             replay(journalMetadataMock, contentMock);
             
             storedMetadata.put(id, journalMetadataMock);
