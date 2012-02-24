@@ -4,7 +4,8 @@
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-    exclude-result-prefixes="xlink i18n" xmlns:xalan="http://xml.apache.org/xalan">
+    xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions"
+    exclude-result-prefixes="xlink i18n laws" xmlns:xalan="http://xml.apache.org/xalan">
 
     <xsl:variable name="nameOfTemplate" select="'template_thLegislativExekutiv'" />
 
@@ -218,12 +219,11 @@
         </xsl:when>
         <!-- inhaltsverzeichnis -->
         <xsl:otherwise>
-          <xsl:variable name="register" select="metadata/identis/identi[@type='Register' or @type='register']" />
+          <xsl:variable name="register" select="laws:getRegister(@ID)" />
           <xsl:if test="$register">
-            <xsl:variable name="registerUrl" select="concat($WebApplicationBaseURL, 'register/', $register)"/>
-            <xsl:variable name="derivateId" select="structure/derobjects/derobject/@xlink:href" />
-            <!-- this works only if the first derivate in object is the laws one -->
-            <xsl:apply-templates select="document($registerUrl)/gesetzessammlung">
+            <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
+
+            <xsl:apply-templates select="$register/gesetzessammlung">
               <xsl:with-param name="objId" select="@ID" />
               <xsl:with-param name="derivateId" select="$derivateId" />
             </xsl:apply-templates>
