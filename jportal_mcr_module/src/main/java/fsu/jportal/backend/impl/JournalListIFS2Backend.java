@@ -12,7 +12,9 @@ import javax.xml.bind.Marshaller;
 
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRConfigurationException;
-import org.mycore.datamodel.ifs2.MCRContent;
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.MCRStringContent;
 import org.mycore.datamodel.ifs2.MCRFile;
 import org.mycore.datamodel.ifs2.MCRFileCollection;
 import org.mycore.datamodel.ifs2.MCRFileStore;
@@ -121,7 +123,7 @@ public class JournalListIFS2Backend implements JournalListBackend {
     private void writeJournalListToBackend(String listFileName, String journalListAsString) throws IOException,
             UnsupportedEncodingException, Exception {
 
-        MCRContent source = MCRContent.readFrom(journalListAsString);
+        MCRContent source = new MCRStringContent(journalListAsString);
         MCRFile listFile = getOrCreateFileInBackend(listFileName);
         listFile.setContent(source);
     }

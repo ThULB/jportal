@@ -20,7 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.datamodel.ifs2.MCRContent;
+import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 import org.mycore.datamodel.ifs2.MCRStoredMetadata;
