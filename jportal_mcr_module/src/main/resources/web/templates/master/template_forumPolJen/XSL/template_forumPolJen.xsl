@@ -64,20 +64,9 @@
                           <tr valign="top">
                               <td width="200" valign="top">
                                   <div id="div_navi_main">
-                                    <xsl:call-template name="navigation.tree">
-                                      <xsl:with-param name="rootNode" select="'navi-main'"/>
-                                      <xsl:with-param name="CSSLayoutClass" select="'navi_main'"/>
-                                      <xsl:with-param name="menuPointHeigth" select="'17'"/>
-                                      <!-- use pixel values -->
-                                      <xsl:with-param name="columnWidthIcon" select="'9'"/>
-                                      <!-- use percent values -->
-                                      <xsl:with-param name="spaceBetweenMainLinks" select="'10'"/>
+                                    <xsl:call-template name="Navigation_main">
                                       <!-- use pixel values -->
                                       <xsl:with-param name="borderWidthTopDown" select="'3'"/>
-                                      <!-- use pixel values -->
-                                      <xsl:with-param name="borderWidthSides" select="'0'"/>
-                                      <!-- use percent values -->
-                                      <xsl:with-param name="textIndent" select="'8px'"/>
                                     </xsl:call-template>
                                   </div>
                               </td>
