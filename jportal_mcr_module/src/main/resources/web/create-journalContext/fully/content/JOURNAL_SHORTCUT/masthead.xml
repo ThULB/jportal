@@ -2,10 +2,10 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
     <section xml:lang="de" title="Impressum">
-        <toc />
+        <toc> </toc>
     </section>
     <section xml:lang="en" title="Imprint">
-        <toc />
+        <toc> </toc>
     </section>
 </MyCoReWebPage>
 

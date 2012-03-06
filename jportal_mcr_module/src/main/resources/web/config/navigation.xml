@@ -14,7 +14,7 @@
                     <label xml:lang="de">A - Z</label>
                 </item>
                 <item href="/content/main/search/forJournals/byDisciplines.xml" type="intern" target="_self" style="normal" replaceMenu="false"
-                    constrainPopUp="false">
+                    constrainPopUp="true">
                     <label xml:lang="de">Blättern in...</label>
                     <item href="/browse/categoriesEZB" type="extern" target="_self" style="normal" replaceMenu="false" constrainPopUp="false">
                         <label xml:lang="de">EZB-Fächerliste</label>

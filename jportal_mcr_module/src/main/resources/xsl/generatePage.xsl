@@ -59,7 +59,7 @@
 
     <xsl:include href="chooseTemplate.xsl" />
     <xsl:include href="pagetitle.xsl" />
-    <xsl:include href="jp_navi_main.xsl" />
+    <xsl:include href="jp_navigation.xsl" />
     <xsl:include href="footer.xsl" />
     <xsl:include href="navigation.xsl" />
     <xsl:include href="wcms_common.xsl" />

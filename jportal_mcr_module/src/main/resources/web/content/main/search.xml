@@ -5,7 +5,7 @@
   <p>Es stehen Ihnen folgende weitere Suchmöglichkeiten zur
   Verfügung</p>
   <p>
-    <toc />
+    <toc> </toc>
   </p>
   <p>Bitte beachten Sie auch, dass die Einträge in den einzelnen
   Eingabe- und Auswahlfelder der Suchmasken bei der Ausführung der
@@ -33,7 +33,7 @@
     <section xml:lang="en" title="Saerch">
         <P>You have the following opportunities</P>
         <P>
-            <TOC />
+            <toc> </toc>
         </P>
         <P>
             Attention, each fields of the search masks are connectet for search with boolean AND. The number of results is unlimited. If you get to much results

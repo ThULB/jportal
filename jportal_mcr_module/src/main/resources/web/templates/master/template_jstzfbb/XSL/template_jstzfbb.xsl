@@ -90,7 +90,7 @@
                         <td width="20" bgcolor="#DBDFE7">&#160;</td>
                         <td width="217" valign="top">
                             <div class="navi_main">
-                                <xsl:call-template name="Navigation_main" />
+                                <xsl:call-template name="navigation.tree" />
                             </div>
                         </td>
                         <td colspan="2" valign="top" id="contentArea">

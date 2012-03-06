@@ -61,7 +61,7 @@
                     <tr>
                         <td width="200px" valign="top" rowspan="2">
                             <div id="div_navi_main">
-                                <xsl:call-template name="Navigation_main" />
+                                <xsl:call-template name="navigation.tree" />
                             </div>
                             <xsl:choose>
                                 <xsl:when test="$CurrentLang = 'de'">

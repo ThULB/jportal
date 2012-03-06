@@ -33,7 +33,7 @@
                     <div class="mainSite_MenuArea">
 
                         <div class="mainMenu">
-                            <xsl:call-template name="Navigation_main" />
+                            <xsl:call-template name="navigation.tree" />
                         </div>
 
                     </div>

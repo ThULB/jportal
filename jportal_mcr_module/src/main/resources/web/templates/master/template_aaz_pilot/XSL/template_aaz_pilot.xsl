@@ -38,7 +38,7 @@
                             <!--<a href="{$WebApplicationBaseURL}templates/master/template_aaz_pilot/XSL/template_aaz_pilot.xsl">aaz</a>
                                 <br />	
                                 <a href="{$WebApplicationBaseURL}templates/master/template_aaz_pilot/XSL/template_aaz_pilot_pilot.xsl">aaz_pilot</a>-->
-                            <xsl:call-template name="Navigation_main" />
+                            <xsl:call-template name="navigation.tree" />
                             <a href="http://www.thulb.uni-jena.de" target="_blank" id="thulb_logo">
                                 <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb.png" />
                             </a>

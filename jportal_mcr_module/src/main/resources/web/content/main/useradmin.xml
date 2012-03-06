@@ -17,7 +17,7 @@
         <p style="TEXT-ALIGN: justify">Sofern Ihre Benutzerkennung über die notwendigen
         Privilegien verfügt, können Sie auch administrative Aufgaben im Bereich der
         Benutzerverwaltung durchführen. </p>
-        <toc />	
+        <toc> </toc>
     </section>
     <section xml:lang="en" title="User management">
         <p style="TEXT-ALIGN: justify">The default login when first visiting
@@ -34,7 +34,7 @@
         about the current user etc. If your account has the necessary privileges
         you will also be able to perform administrative tasks like creating new
         user accounts etc. </p>
-        <toc />	
+        <toc> </toc>
     </section>
     <meta>
         <log date="2005-05-10" time="09:06" labelPath="Hauptmenü links &gt; Nutzerverwaltung" lastEditor="Administrator" />

@@ -3,12 +3,12 @@
 <MyCoReWebPage>
 	<section xml:lang="de" title="J-Portal Editoren">
 		<p>
-			<TOC/>
+			<toc> </toc>
 		</p>
 	</section>
 	<section xml:lang="en" title="J-Portal Editors">
 		<p>
-			<TOC/>
+			<toc> </toc>
 		</p>
 	</section>
 </MyCoReWebPage>

@@ -50,7 +50,7 @@
                                 <td
                                     style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_enb_navi_top.gif) no-repeat; width: 250px; height: max;">
                                     <br />
-                                    <xsl:call-template name="Navigation_main" />
+                                    <xsl:call-template name="navigation.tree" />
                                     <div id="thulb_logo">
                                         <a href="http://www.thulb.uni-jena.de" target="_blank">
                                             <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/thulb_logo.gif" border="0" />

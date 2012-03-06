@@ -55,7 +55,7 @@
                     <div id="div_navi_main"
                         style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_dkp_navi_top.gif) no-repeat;">
                         <br />
-                        <xsl:call-template name="Navigation_main" />
+                        <xsl:call-template name="navigation.tree" />
                     </div>
                     <div id="navi_history">
                         <div id="navi_history_inside">

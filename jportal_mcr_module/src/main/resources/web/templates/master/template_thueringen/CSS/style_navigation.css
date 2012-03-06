@@ -188,7 +188,7 @@ div.main_menu {
 
 #navi_history a
 {
-    color: #12265F;
+    color: #646567;
     font-weight : normal;
     text-decoration: none;
 }
@@ -205,6 +205,29 @@ div.main_menu {
 /* =================================================================== */
 /* Main navigation menu                                                */
 /* =================================================================== */
+#div_navi_main > ul {
+    padding-left: 0px;
+}
+#div_navi_main > ul.topList > li > a {
+	border: none;
+	color: #646567;
+	background-color: #ebebec;
+    margin-top: 2px;
+    padding: 5px 14px;
+    width: 158px;
+}
+#div_navi_main > ul.topList > li > a:hover {
+    background-color: #00abf0;
+    color: white;
+}
+#div_navi_main ul li a {
+	color: #646567;
+	font-weight: normal;
+}
+#div_navi_main ul li a:hover {
+	color: #00abf0;
+}
+
 .navi_main
 {
     /*background-color: #EADFA5;*/

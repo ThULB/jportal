@@ -46,7 +46,7 @@
                     <!--Main Navigation-->
                     <div id="nav">
                         <div id="nav_main">
-                            <xsl:call-template name="Navigation_main" />
+                            <xsl:call-template name="navigation.tree" />
                         </div>
                     </div>
                     <div id="navu"></div>

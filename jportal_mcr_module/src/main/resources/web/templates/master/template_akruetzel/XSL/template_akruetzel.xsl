@@ -96,7 +96,7 @@
                             <div id="area_left">
                                 <div id="left_space" style="width:256px; height: 42px; background-color:#C25454;"></div>
                                 <div id="div_navi_main">
-                                    <xsl:call-template name="Navigation_main" />
+                                    <xsl:call-template name="navigation.tree" />
                                 </div>
                                 <div id="footer_bottom">
                                     <a href="http://www.akruetzel.de">

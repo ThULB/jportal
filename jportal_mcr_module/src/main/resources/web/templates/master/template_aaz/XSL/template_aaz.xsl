@@ -37,7 +37,7 @@
 
 
 							<!--<a href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz.xsl">aaz</a> <br /> <a href="{$WebApplicationBaseURL}templates/master/template_aaz/XSL/template_aaz_pilot.xsl">aaz_pilot</a> -->
-							<xsl:call-template name="Navigation_main" />
+							<xsl:call-template name="navigation.tree" />
 
 							<!-- are special logos for current used journal available ? -> if yes, get them -->
 							<xsl:call-template name="template_logos.getLogos">

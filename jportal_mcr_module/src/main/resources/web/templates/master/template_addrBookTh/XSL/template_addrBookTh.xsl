@@ -122,7 +122,7 @@
 					<div class="naviContent">
 						<div class="naviColumn">
 							<div id="div_navi_main">
-								<xsl:call-template name="Navigation_main" />
+								<xsl:call-template name="navigation.tree" />
 							</div>
 							<!--
 								are special logos for current used journal available ? -> if

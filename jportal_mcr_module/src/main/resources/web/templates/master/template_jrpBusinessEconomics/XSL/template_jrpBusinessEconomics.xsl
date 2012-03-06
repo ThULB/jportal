@@ -71,7 +71,7 @@
                             <div id="div_navi_main"
                                 style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_jrpbe_left.jpg) no-repeat;">
                                 <br />
-                                <xsl:call-template name="Navigation_main" />
+                                <xsl:call-template name="navigation.tree" />
                             </div>
                         </td>
                         <td style="vertical-align: top; text-align: left; height: 100%;">

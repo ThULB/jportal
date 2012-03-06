@@ -62,7 +62,12 @@
                                         <td width="200px" valign="top"
                                             style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-top.png) no-repeat;">
                                             <div id="div_navi_main">
-                                                <xsl:call-template name="Navigation_main" />
+                                                <xsl:call-template name="navigation.tree" />
+                                            </div>
+                                            <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.MCRCoreVersion">
+                                                <a href="http://www.mycore.de">
+                                                    <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="powered by &lt;MyCoRe&gt;"/>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>

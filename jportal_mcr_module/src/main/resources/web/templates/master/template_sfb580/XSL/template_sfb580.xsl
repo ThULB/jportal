@@ -47,7 +47,7 @@
                         <td id="menu-width">
                             <div id="leftmenu">
                                 <div id="navmain">
-                                    <xsl:call-template name="Navigation_main" />
+                                    <xsl:call-template name="navigation.tree" />
                                 </div>
                                 <div id="sponsor-line" />
                                 <a href="http://www.thulb.uni-jena.de" target="_blank" id="logos">

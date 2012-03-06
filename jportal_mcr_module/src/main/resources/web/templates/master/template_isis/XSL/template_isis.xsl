@@ -37,7 +37,7 @@
                             <div id="leftmenu">
                                 <img id="blueimg" src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/muh.jpg" alt="Kasten"></img>
                                 <div id="navmain">
-                                    <xsl:call-template name="Navigation_main" />
+                                    <xsl:call-template name="navigation.tree" />
                                 </div>
                                 <a href="http://www.dfg.de" target="_blank" id="logos">
                                     <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/dfg.png" alt="Logo DFG"></img>

@@ -2,10 +2,10 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
     <section xml:lang="de" title="Intern">
-        <toc />
+        <toc> </toc>
     </section>
     <section xml:lang="en" title="Internal">
-        <toc />
+        <toc> </toc>
     </section>
 </MyCoReWebPage>
 

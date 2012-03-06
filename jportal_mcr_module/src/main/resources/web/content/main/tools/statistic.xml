@@ -17,6 +17,6 @@
   <a href="/journalStatistic.xml">
     <span style="color: rgb(0, 0, 0);">Statistik anzeigen</span>
   </a></span>
-  <toc />
+  <toc> </toc>
 </section>
 <meta><log date="2008-05-22" time="15:09" labelPath=" » Tools » Statistik" lastEditor="Administrator" /></meta></MyCoReWebPage>

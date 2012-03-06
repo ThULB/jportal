@@ -64,7 +64,7 @@
                           <tr valign="top">
                               <td width="200" valign="top">
                                   <div id="div_navi_main">
-                                    <xsl:call-template name="Navigation_main">
+                                    <xsl:call-template name="navigation.tree">
                                       <!-- use pixel values -->
                                       <xsl:with-param name="borderWidthTopDown" select="'3'"/>
                                     </xsl:call-template>

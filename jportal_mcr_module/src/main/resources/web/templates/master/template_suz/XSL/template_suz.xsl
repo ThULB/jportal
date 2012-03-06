@@ -42,7 +42,7 @@
                             <td id="footer2_left">
                                 <div id="div_navi_main"
                                     style="background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/suz_bg_nav2.gif); background-repeat: repeat-y;">
-                                    <xsl:call-template name="Navigation_main" />
+                                    <xsl:call-template name="navigation.tree" />
                                 </div>
                                 <div id="footer_bottom"
                                     style="background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/suz_bg_nav3.gif); background-repeat: repeat-x;">

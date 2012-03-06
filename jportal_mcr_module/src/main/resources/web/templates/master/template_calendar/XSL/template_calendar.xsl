@@ -77,7 +77,7 @@
                         <div class="naviColumn">
                             <div class="ornamentDown" />
                             <div id="div_navi_main">
-                                <xsl:call-template name="Navigation_main" />
+                                <xsl:call-template name="navigation.tree" />
                             </div>
                             <div class="sponsorLogo" usemap="#logos">
                                 <img src="../../../images/emtyDot1Pix.gif" width="112px" height="125px" border="0" usemap="#logos">

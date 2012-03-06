@@ -52,7 +52,7 @@
                             <td valign="top" id="footer2-left">
                                 <div id="navi_all">
                                     <div id="div_navi_main">
-                                        <xsl:call-template name="Navigation_main" />
+                                        <xsl:call-template name="navigation.tree" />
                                     </div>
                                     <div id="navi_under"
                                         style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_below.gif) repeat-y;">

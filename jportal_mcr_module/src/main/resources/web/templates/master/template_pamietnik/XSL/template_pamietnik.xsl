@@ -53,7 +53,7 @@
                                 </tr>
                             </table>
                             <div class="navi_main">
-                                <xsl:call-template name="Navigation_main" />
+                                <xsl:call-template name="navigation.tree" />
                                 <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/project.gif" alt="Projektbeteiligte:" id="project" />
                             </div>
                         </td>

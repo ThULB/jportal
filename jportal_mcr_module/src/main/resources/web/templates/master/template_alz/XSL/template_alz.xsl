@@ -128,7 +128,7 @@
                                 <table border="0" cellspacing="0" cellpadding="0">
                                     <tr>
                                         <td>
-                                            <xsl:call-template name="Navigation_main" />
+                                            <xsl:call-template name="navigation.tree" />
                                         </td>
                                     </tr>
                                     <tr>

@@ -251,35 +251,6 @@ td.empty_box { /*height: 31px;*/
 	margin: -5px;
 }
 
-#div_navi_main ul{
-	list-style-type: none;
-}
-
-#div_navi_main > ul{
-	list-style-type: none;
-	padding-left: 13px;
-}
-
-#div_navi_main > ul.topList > li a{
-	border-top: 1px dotted #4B4B4D;
-	padding-top: 10px;
-	font-weight: bold;
-	padding-left: 3px;
-	display: block;
-	width: 180px;
-	height: 18px;
-	color: #4B4B4D;
-	text-decoration: none;
-}
-
-#div_navi_main > ul > ul li a{
-	border-top: none;
-	color: #000000;
-	font-weight: normal;
-	text-decoration: none;
-	font-size: 11px;
-}
-
 .navi_main th a {
 	border-top: 1px dotted #4B4B4D;
 	padding-top: 10px;

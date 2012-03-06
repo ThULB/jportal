@@ -19,13 +19,13 @@
         <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation,Andreas Trappe" lang="en"
             name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
+        <link href="{$WebApplicationBaseURL}common.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_general.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_content.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/content/template_logos/CSS/sponsoredlogos.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}common.css" rel="stylesheet" type="text/css" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
 

@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
                                         <br />
-                                        <xsl:call-template name="Navigation_main" />
+                                        <xsl:call-template name="navigation.tree" />
                                     </td>
                                 </tr>
                                 <tr>
