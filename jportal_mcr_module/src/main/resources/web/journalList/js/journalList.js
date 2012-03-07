@@ -48,9 +48,9 @@ $(document).ready(function(){
                 resultListEntry.append(title);
                 
                 if(metaData.published_from){
-                    var publishedStr = 'Erscheinungsverlauf: ' + metaData.published_from;
+                    var publishedStr = 'Erscheinungsverlauf: ' + metaData.published_from + ' - ';
                     if(metaData.published_until){
-                        publishedStr = publishedStr + ' - ' + metaData.published_until;
+                        publishedStr = publishedStr + metaData.published_until;
                     }
                     var published = $('<div class="journal-published"/>').html(publishedStr);
                     
