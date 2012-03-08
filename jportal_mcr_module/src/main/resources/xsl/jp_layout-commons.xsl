@@ -24,6 +24,7 @@
         <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_navigation.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_content.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/content/template_logos/CSS/sponsoredlogos.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
