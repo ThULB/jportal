@@ -1,0 +1,32 @@
+@CHARSET "UTF-8";
+#navigation_box ul a {
+    color: white;
+    text-decoration: none;
+}
+#navigation_box ul a:hover {
+    text-decoration: underline;
+}
+#navigation_box ul li {
+    padding-right: 5px;
+}
+#div_navi_main > ul.topList > li > a {
+    background-color: #EBEBEC;
+    border: 0 none;
+    color: #646567;
+    display: block;
+    font-family: verdana;
+    font-weight: bold;
+    height: 20px;
+    margin-top: 2px;
+    padding-left: 15px;
+    padding-top: 5px;
+    text-decoration: none;
+    width: 168px;
+}
+#div_navi_main > ul.topList > li > a:hover {
+    background-color: #3737FA;
+    color: white;
+}
+#div_navi_main > ul {
+    padding-left: 0;
+}

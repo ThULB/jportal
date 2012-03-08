@@ -1,0 +1,30 @@
+@CHARSET "UTF-8";
+#navigation_box ul a {
+    color: white;
+    text-decoration: none;
+}
+#navigation_box ul a:hover {
+    text-decoration: underline;
+}
+#navigation_box ul li {
+    padding-right: 5px;
+}
+#navigation_box {
+    right: 0;
+}
+#div_navi_main > ul.topList > li > a {
+    border-top: 1px dotted #4B4B4D;
+    color: #4B4B4D;
+    display: block;
+    font-weight: bold;
+    height: 18px;
+    margin-top: 7px;
+    padding-left: 3px;
+    padding-top: 10px;
+    text-decoration: none;
+    width: 180px;
+}
+#div_navi_main > ul.topList > li > a:hover {
+    color: #0086CB;
+    text-decoration: underline;
+}

@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+#navigation_box ul a {
+    color: white;
+    text-decoration: none;
+}
+#navigation_box ul a:hover {
+    text-decoration: underline;
+}
+#navigation_box {
+    top: 0px;
+}
+#navigation_box ul li {
+    padding-right: 5px;
+}
+#div_navi_main > ul.topList > li > a {
+    border: 0 none;
+    color: #FFFFFF;
+    display: block;
+    font-weight: bold;
+    height: 18px;
+    padding-left: 3px;
+    padding-top: 3px;
+    text-decoration: none;
+    width: 180px;
+}
+#div_navi_main > ul.topList > li > a:hover {
+    color: #FABA04;
+    text-decoration: underline;
+}
