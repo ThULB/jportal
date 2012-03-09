@@ -75,12 +75,17 @@ $(document).ready(function(){
         })
     })
     
-    var link = $('<link>').attr({
-        type: 'text/css',
-        rel: 'stylesheet',
-        href: '/journalList/css/journalList.css'
-    });
-    $('head').append(link);
+    if (document.createStyleSheet){
+        document.createStyleSheet('/journalList/css/journalList.css');
+    }else{
+        var link = $('<link>').attr({
+            type: 'text/css',
+            rel: 'stylesheet',
+            href: '/journalList/css/journalList.css',
+            'class': 'myStyle'
+        });
+        $('head').append(link);
+    }
     
     $('div.headline:contains("Blättern A - Z")').remove();
     
