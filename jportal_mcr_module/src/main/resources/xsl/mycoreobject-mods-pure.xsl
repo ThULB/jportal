@@ -6,7 +6,7 @@
   xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mets="http://www.loc.gov/METS/"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:iview2="iview2://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="mcr xalan i18n acl mcrxml">
+  exclude-result-prefixes="mcr xalan i18n acl mcrxml iview2">
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:include href="metsmeta-dfg.xsl" />
   <xsl:include href="mets-amd.xsl" />
@@ -44,19 +44,37 @@
       <xsl:call-template name="amdSec">
         <xsl:with-param name="mcrobject" select="@ID" />
       </xsl:call-template>
-      <mets:fileSec>
-        <mets:fileGrp USE="DEFAULT">
-          <xsl:variable name="supportedMainFile" select="iview2:getSupportedMainFileByOwner(@ID)" />
-          <mets:file ID="FILE_0000_DEFAULT" MIMETYPE="{mcrxml:getMimeType($supportedMainFile)}">
-            <xsl:element name="mets:FLocat">
-              <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
-              <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
-              <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRTileCombineServlet/MID/', $supportedMainFile)" />
-            </xsl:attribute>
-            </xsl:element>
-          </mets:file>
-        </mets:fileGrp>
-      </mets:fileSec>
+      <xsl:if test="./structure/derobjects/derobject">
+        <mets:fileSec>
+          <mets:fileGrp USE="DEFAULT">
+            <xsl:variable name="derivateID" select="./structure/derobjects/derobject/@xlink:href" />
+            <xsl:choose>
+              <xsl:when test="iview2:getSupportedMainFile($derivateID) != ''">
+                <xsl:variable name="supportedMainFile" select="iview2:getSupportedMainFileByOwner(@ID)" />
+                <mets:file ID="FILE_0000_DEFAULT" MIMETYPE="{mcrxml:getMimeType($supportedMainFile)}">
+                  <xsl:element name="mets:FLocat">
+                    <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
+                    <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
+                    <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRTileCombineServlet/MID/', $supportedMainFile)" />
+                  </xsl:attribute>
+                  </xsl:element>
+                </mets:file>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:variable name="file" select="document(concat('mcrobject:',$derivateID))/mycorederivate/derivate/internals/internal/@maindoc" />
+                <mets:file ID="FILE_0000_DEFAULT">
+                  <xsl:element name="mets:FLocat">
+                    <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
+                    <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
+                      <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivateID, '/',$file)" />
+                    </xsl:attribute>
+                  </xsl:element>
+                </mets:file>
+              </xsl:otherwise>
+            </xsl:choose>
+          </mets:fileGrp>
+        </mets:fileSec>
+      </xsl:if>
     </mets:mets>
     <xsl:comment>
       End mycoreobject (mycoreobject-mods-pure.xsl)

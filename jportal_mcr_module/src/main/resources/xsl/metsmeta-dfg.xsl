@@ -1,6 +1,6 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xalan mcrxml encoder" version="1.0">
+  exclude-result-prefixes="xsi xalan mcrxml encoder" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-4.xsd" version="1.0">
   <xsl:output method="xml" encoding="utf-8" />
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="MCR.OPAC.CATALOG" />
@@ -54,20 +54,60 @@
       </mods:titleInfo>
     </xsl:for-each>
 
-    <!-- Origin date -->
-    <xsl:if test="./metadata/dates/date[@type='published']">
+    <!-- Origin Info -->
+    <xsl:if test="./metadata/dates/date">
       <mods:originInfo>
-        <mods:dateIssued>
-          <xsl:value-of select="./metadata/dates/date[@type='published']" />
-        </mods:dateIssued>
+        <xsl:for-each select="./metadata/dates/date">
+            <mods:dateIssued>
+              <xsl:if test="@type='published_from'">
+                <xsl:attribute name="point"><xsl:value-of select="'start'" /></xsl:attribute>
+              </xsl:if>
+              <xsl:if test="@type='published_until'">
+                <xsl:attribute name="point"><xsl:value-of select="'end'" /></xsl:attribute>
+              </xsl:if>
+              <xsl:value-of select="text()" />
+            </mods:dateIssued>
+        </xsl:for-each>
       </mods:originInfo>
+    </xsl:if>
+    
+    <!-- journal type extension -->
+    <xsl:if test="./metadata/contentClassis1/contentClassi1">
+      <mods:extension>
+        <jportal>
+          <journalType><xsl:value-of select="./metadata/contentClassis1/contentClassi1/@categid" /></journalType>
+        </jportal>
+      </mods:extension>
     </xsl:if>
 
     <!-- Note -->
-    <xsl:if test="./metadata/notes/note">
+    <xsl:for-each select="./metadata/notes/note[@type='annotation']">
       <mods:note>
-        <xsl:value-of select="./metadata/notes/note" />
+        <xsl:value-of select="text()" />
       </mods:note>
+    </xsl:for-each>
+
+    <!-- Language -->
+    <xsl:if test="./metadata/languages/language">
+      <mods:language>
+        <xsl:for-each select="./metadata/languages/language">
+          <mods:languageTerm authority="rfc3066"><xsl:value-of select="@categid" /></mods:languageTerm>
+        </xsl:for-each>
+      </mods:language>
+    </xsl:if>
+
+    <!-- physical location -->
+    <xsl:if test="./metadata/contentClassis3/contentClassi3">
+      <mods:location>
+        <mods:physicalLocation><xsl:value-of select="./metadata/contentClassis3/contentClassi3/@categid" /></mods:physicalLocation>
+      </mods:location>
+    </xsl:if>
+
+    <!-- related item -> parent journal id -->
+    <xsl:if test="./metadata/hidden_jpjournalsID/hidden_jpjournalID and not(contains(@ID,'_jpjournal_'))">
+      <mods:relatedItem type="host">
+        <mods:identifier><xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" /></mods:identifier>
+      </mods:relatedItem>
     </xsl:if>
 
     <xsl:apply-templates select="metadata/participants/participant" mode="personal" />
