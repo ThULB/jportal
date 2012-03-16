@@ -57,7 +57,7 @@
     <!-- Origin Info -->
     <xsl:if test="./metadata/dates/date">
       <mods:originInfo>
-        <xsl:for-each select="./metadata/dates/date">
+        <xsl:for-each select="./metadata/dates/date[@inherited=0]">
             <mods:dateIssued>
               <xsl:if test="@type='published_from'">
                 <xsl:attribute name="point"><xsl:value-of select="'start'" /></xsl:attribute>
@@ -81,7 +81,7 @@
     </xsl:if>
 
     <!-- Note -->
-    <xsl:for-each select="./metadata/notes/note[@type='annotation']">
+    <xsl:for-each select="./metadata/notes/note[@type='annotation' and @inherited=0]">
       <mods:note>
         <xsl:value-of select="text()" />
       </mods:note>
@@ -90,7 +90,7 @@
     <!-- Language -->
     <xsl:if test="./metadata/languages/language">
       <mods:language>
-        <xsl:for-each select="./metadata/languages/language">
+        <xsl:for-each select="./metadata/languages/language[@inherited=0]">
           <mods:languageTerm authority="rfc3066"><xsl:value-of select="@categid" /></mods:languageTerm>
         </xsl:for-each>
       </mods:language>
