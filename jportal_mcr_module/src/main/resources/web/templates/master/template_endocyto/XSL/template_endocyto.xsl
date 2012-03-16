@@ -6,7 +6,7 @@
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n">
 
     <!-- ============================================== -->
-    <!-- the template                                   -->
+    <!-- the template -->
     <!-- ============================================== -->
     <xsl:template name="template_endocyto">
         <html>
@@ -14,51 +14,25 @@
                 <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
-
-                <div id="footer1">
-                    <table style="width: 100%;" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <td id="banner-top" colspan="2">
-                                <div id="navigation">
-                                    <xsl:call-template name="navigation.row" />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td id="banner" style="background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top.gif) no-repeat;">
-                                <div id="login_div">
-                                    <xsl:call-template name="template_endocyto.userInfo" />
-                                </div>
-                                <div id="navi_history">
-                                    <xsl:call-template name="navigation.history" />
-                                </div>
-                            </td>
-                            <td
-                                style="background: url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top_bg.gif); width: max; height: 139px;">
-                                <br />
-                            </td>
-                        </tr>
-                    </table>
-                    <!--<div id="banner"
-                        style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top.gif) no-repeat;">
-                        <div id="login_div">
-                        <xsl:call-template name="template_endocyto.userInfo"/>
+                <div id="header" class="header">
+                    <div class="navi_horiz">
+                        <div>
+                            <xsl:call-template name="navigation.row" />
                         </div>
-                        
-                        <div style="background: url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/banner_top_bg.gif); width: 100%; height: 139px; float:right;" />	
-                        </div>-->
-                    <div id="navi_all">
-                        <div id="div_navi_main" style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_bg.gif) repeat-y;">
-                            <xsl:call-template name="navigation.tree" />
-                        </div>
-                        <div id="navi_under" style="	background : url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/navi_under.gif);"></div>
                     </div>
-                    <br />
-                    <div id="contentArea">
-                        
-                        <xsl:call-template name="template_endocyto.write.content" />
+                    <div class="navi_history">
+                        <xsl:call-template name="navigation.history" />
                     </div>
                 </div>
+                <div id="navi_left" class="navi_left">
+                    <xsl:call-template name="navigation.tree" />
+                </div>
+                <div id="content_area" class="content_area">
+                    <xsl:call-template name="template_endocyto.write.content" />
+                </div>
+                <div id="footer" class="footer"></div>
+
+                <!-- ############## -->
             </body>
         </html>
 

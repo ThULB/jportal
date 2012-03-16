@@ -606,48 +606,65 @@ h1.section {
 	text-decoration: none;
 }
 
-#navigation_box #languageSelect {
+.languageMenu {
+	position: relative;
+	top: 2px;
+}
+
+.languageMenu a {
 	cursor: pointer;
-    display: inline-block;
+	display: inline-block;
 	padding: 7px 4px 2px;
 }
 
-#navigation_box #languageMenu {
-    display: none;
-    margin: 0px;
-    padding: 0px;
-    position: absolute;
-    right: 0;
-    top: 30px;
-    z-index: 5;
-
-	background: #7d7e7d; /* Old browsers */
-	background: -moz-linear-gradient(top,  #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%); /* IE10+ */
-	background: linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 ); /* IE6-9 */
+.languageMenu ul {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	right: 0px;
+	left: 0px;
+	top: 15px;
+	width: 47px;
 }
 
-#navigation_box #languageMenu li {
+.languageMenu ul li {
 	display: block;
-	padding: 0px;
+	padding: 0;
 }
 
-#navigation_box #languageMenu a {
-	padding: 5px 11px 4px 12px;
+.languageMenu ul a {
 	display: inline-block;
+	padding: 5px 11px 4px 12px;
 }
 
-#navigation_box #languageMenu a:hover {
-	background: #c2c2c2; /* Old browsers */
-	background: -moz-linear-gradient(top,  #c2c2c2 0%, #bcbcbc 50%, #b4b4b4 51%, #dadada 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c2c2c2), color-stop(50%,#bcbcbc), color-stop(51%,#b4b4b4), color-stop(100%,#dadada)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%); /* IE10+ */
-	background: linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%); /* W3C */
+.languageMenu ul a:hover {
+	background: #c2c2c2;  /* Old browsers */ 
+	background: -moz-linear-gradient(top,  #c2c2c2 0%, #bcbcbc 50%, #b4b4b4 51%, #dadada 100%);  /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#c2c2c2), color-stop(50%,#bcbcbc), color-stop(51%,#b4b4b4), color-stop(100%,#dadada))*/;  /* Chrome,Safari4+ */ 
+	background: -webkit-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%);  /* Chrome10+,Safari5.1+ */ 
+	background: -o-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%);  /* Opera 11.10+ */ 
+	background: -ms-linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%);  /* IE10+ */ 
+	background: linear-gradient(top,  #c2c2c2 0%,#bcbcbc 50%,#b4b4b4 51%,#dadada 100%);  /* W3C */ 
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c2c2c2', endColorstr='#dadada',GradientType=0 ); /* IE6-9 */
+}
+
+.languageList_show{
+	display: block;
+	
+	background: #7d7e7d;  /* Old browsers */ 
+	background: -moz-linear-gradient(top,  #7d7e7d 0%, #0e0e0e 100%);  /* FF3.6+ */ 
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e));  /* Chrome,Safari4+ */ 
+	background: -webkit-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);  /* Chrome10+,Safari5.1+ */ 
+	background: -o-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);  /* Opera 11.10+ */ 
+	background: -ms-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);  /* IE10+ */ 
+	background: linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);  /* W3C */ 
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 );  /* IE6-9 */
+}
+
+.languageList_hidden{
+	display: none;
+}
+
+.languageSelect{
+	background: #7D7E7D;
 }

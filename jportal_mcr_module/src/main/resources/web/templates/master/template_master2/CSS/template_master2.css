@@ -1,30 +1,209 @@
 @CHARSET "UTF-8";
-#navigation_box ul a {
-    color: white;
-    text-decoration: none;
+html{
+	background-color: white;
+    font-family: Helvetica, Verdana, Arial,  sans-serif;
+    font-size: 0.75em;
+	height: 100%;
 }
-#navigation_box ul a:hover {
-    text-decoration: underline;
+
+body{
+	margin: 0px;
+	min-width: 1024px;
+	height: 100%;
+	background-color: white;
 }
-#navigation_box ul li {
-    padding-right: 5px;
+
+/* Color group definition */
+.navi_horiz a, .home_link, .home_link a{
+	color: white;
 }
-#navigation_box {
-    right: 0;
+
+.navi_left a, .content_area, .navi_history {
+	color: #4B4B4D;
 }
-#div_navi_main > ul.topList > li > a {
-    border-top: 1px dotted #4B4B4D;
-    color: #4B4B4D;
-    display: block;
-    font-weight: bold;
-    height: 18px;
-    margin-top: 7px;
-    padding-left: 3px;
-    padding-top: 10px;
-    text-decoration: none;
-    width: 180px;
+
+/* Font group definition*/
+.navi_horiz li.navi_below, .home_link, .navi_history, .navi_left a, .headline, .information_box .title, .information_box .greeting, .search_box .title, .new_articles .title, .new_articles p {
+	font-weight: bold;
 }
-#div_navi_main > ul.topList > li > a:hover {
-    color: #0086CB;
-    text-decoration: underline;
+
+.navi_horiz a, .home_link a, .navi_history a, .navi_left a {
+	text-decoration: none;
+}
+
+.navi_left a, .navi_history {
+	font-size: 11px;
+}
+
+/************************/
+.header {
+	background-image: url("../IMAGES/master_new-topleft-logo.png"), url("../IMAGES/master_new-header-bg.png");
+	background-repeat: no-repeat, repeat-x;
+	background-position: left bottom, left 30px;
+	height: 129px;
+}
+
+.logo{
+	background: url("../IMAGES/master_new-logo.png"), url("../IMAGES/master_new-topright-logo.png");
+	background-repeat: no-repeat;
+	background-position: left top, right top;
+	width: 655px;
+	height: 115px;
+	clear: both;
+	float: right;
+}
+.home_link{
+	margin: 7px 10px;
+}
+
+
+.navi_horiz{
+	height: 30px;
+	background-color: #646466;
+}
+
+.navi_horiz div:FIRST-CHILD {
+	float: left;
+}
+
+.navi_horiz div:FIRST-CHILD + div {
+	float: right;
+}
+
+.navi_horiz > div > ul {
+	margin-top: 8px;
+	margin-bottom: 0px;
+}
+
+.navi_horiz ul {
+	float: left;
+}
+
+.navi_horiz li {
+	display: inline;
+	padding-right: 12px;
+}
+
+.navi_history {
+	position: absolute;
+	top: 100px;
+	padding-left: 265px;
+}
+
+.navi_history a {
+	font-weight: normal;
+	color: #0086CB;
+}
+
+.navi_left{
+	height: 80%;
+	background-color: #c4c5c7;
+	width: 195px;
+	float: left;
+}
+.navi_left > div {
+	position: relative;
+	top: 20px;
+	background-color: white;
+	padding: 1px 0px 1px 12px;
+}
+.navi_left > div > ul {
+	margin: 0px;
+	padding: 15px 0px 15px 5px;
+	border-top: 4px solid #0086CB;
+	border-bottom: 4px solid #0086CB;
+}
+
+.navi_left > div > ul > li {
+	list-style-type: none;
+	padding: 7px 0px 7px 0px;
+	border-top: 1px dotted #4B4B4D;
+}
+
+.navi_left > div > ul ul{
+	padding-left: 20px;
+}
+
+.navi_left > div > ul ul a {
+	font-weight: normal;
+}
+
+.navi_left li{
+	list-style-type: none;
+}
+
+.content_area {
+	padding-left: 265px;
+	padding-right: 50px;
+	width: 709px;
+}
+
+.headline {
+	border-bottom: 1px solid;
+	margin-top: 20px;
+	margin-bottom: 18px;
+}
+
+.information_box, .search_box, .new_articles{
+	border: 1px solid #0086CB;
+	width: 350px;
+	height: 228px;
+	background-color: #EEF2F8;
+	float: left;
+}
+
+.search_box {
+	margin-left: 5px;
+}
+
+.information_box .title, .search_box .title, .search_box .info_text, .new_articles .title{
+	background-color: #0086CB;
+}
+
+.information_box .title, .search_box .title, .search_box .info_text, .new_articles .title{
+	color: white;
+}
+
+.information_box .title, .search_box .title, .new_articles .title{
+	width: 75px;
+	height: 14px;
+	padding: 3px 10px 3px 3px;
+}
+
+.new_articles .title {
+	width: 25px;
+	padding: 3px;
+}
+
+.new_articles p{
+	font-size: 14px;
+}
+
+.information_box .info_text, .search_box .info_text, .new_articles .info_text{
+	padding: 10px;
+}
+
+.search_box .info_text{
+	width: 263px;
+	height: 80px;
+	margin: 20px 15px 15px;
+	padding: 10px 27px 10px 28px;
+	
+}
+
+.search_box .info_text > p {
+	margin-top: 6px;
+}
+
+.new_articles{
+	width: 707px;
+	margin-top: 5px;
+}
+
+.footer {
+	clear: both;
+}
+
+.languageMenu > a {
+    padding: 4px 4px 2px;
 }

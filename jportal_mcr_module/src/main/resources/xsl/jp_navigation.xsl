@@ -23,23 +23,19 @@
         <xsl:with-param name="CSSLayoutClass" select="'navi_below'" />
       </xsl:call-template>
       <!-- show languages -->
-      <span>
         <xsl:call-template name="navigation.language" />
-      </span>
   </xsl:template>
 
   <xsl:template name="navigation.language">
-    <xsl:call-template name="navigation.js" />
-
     <xsl:variable name="languages" select="i18n:getAvailableLanguagesAsXML()" />
 
-    <span class="language">
+    <span id="languageMenu" class="languageMenu">
       <a id="languageSelect">
         <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" />
         <img src="{$WebApplicationBaseURL}images/naviMenu/dropdown.png" style="padding: 0 3px 6px;" />
       </a>
   
-      <ul id="languageMenu">
+      <ul id="languageList" class="languageList_hidden">
         <xsl:for-each select="$languages/i18n/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
@@ -59,22 +55,17 @@
         </xsl:for-each>
       </ul>
     </span>
+    <xsl:call-template name="navigation.js" />
   </xsl:template>
 
   <xsl:template name="navigation.js">
     <script type="text/javascript">
       $(document).ready(function() {
-        var languageSelect = $('#languageSelect');
-        var languageMenu = $('#languageMenu');
-        languageSelect.click(function() {
-          var display = languageMenu.css('display');
-          if(display == 'none') {
-            languageMenu.css('display', 'block')
-            languageSelect.css('background', '#7D7E7D');
-          } else {
-            languageMenu.css('display', 'none')
-            languageSelect.css('background', '');
-          }
+        var languageList = $('#languageList');
+        $('#languageSelect').click(function() {
+            $(this).toggleClass('languageSelect');
+            languageList.toggleClass('languageList_hidden');
+            languageList.toggleClass('languageList_show');
         });
       });
     </script>

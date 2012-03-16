@@ -13,94 +13,32 @@
                 <xsl:call-template name="jp.layout.getHTMLHeader" />
             </head>
             <body>
-                <div id="navi_history">
-                    <xsl:call-template name="navigation.history" />
+                <div id="header" class="header">
+                    <div class="navi_horiz">
+                        <div class="home_link">
+                            <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
+                            <xsl:copy-of select="'     |     '" />
+                            <a href="/content/below/index.xml" target="_self">Journals@UrMEL</a>
+                        </div>
+                        <div>
+                            <xsl:call-template name="navigation.row" />
+                        </div>
+                    </div>
+                    <div class="logo">
+                    </div>
+                    <div class="navi_history">
+                        <xsl:call-template name="navigation.history" />
+                    </div>
                 </div>
-                <div id="navigation_box">
-                    <xsl:call-template name="navigation.row" />
+                <div id="navi_left" class="navi_left">
+                    <div>
+                        <xsl:call-template name="navigation.tree" />
+                    </div>
                 </div>
-                <a id="transparent-logo" href="{$WebApplicationBaseURL}">
-                    <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-logo.png" />
-                </a>
-                <!-- a id="whatsnew-logo" href="{$WebApplicationBaseURL}content/main/whatsnew.xml">
-                    <img src="{$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-button.png" />
-                </a-->
-                <div id="topleft-logo" />
-                <div id="topright-logo" />
-                <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #646466;">
-                    <tr valign="top">
-                        <td width="100%">
-                            <div id="whitespace"></div>
-                            <span id="headline">
-                                <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
-                                <xsl:copy-of select="'     |     '" />
-                                <a href="http://zs.thulb.uni-jena.de/content/below/index.xml" target="_self">Journals@UrMEL</a>
-                            </span>
-                        </td>
-                    </tr>
-                </table>
-                <table width="100%" height="57" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;">
-                    <tr valign="top">
-                        <td rowspan="2" width="1200"
-                            style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-header-left.jpg) no-repeat;">
-
-                        </td>
-                        <td colspan="2" width="max" height="57"
-                            style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-header-right.jpg);">
-                            <p>
-                                <br />
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-                <table width="100%" height="max" border="0" cellspacing="0" cellpadding="0" style="padding-right: 10px; padding-bottom: 10px;" valign="top">
-                    <tr valign="top">
-                        <td width="200px" height="100%">
-                            <table height="100%" cellspacing="0" cellpadding="0">
-                                <xsl:if test="($browserAddress != '/content/main/journalList.xml') and ($browserAddress != '/content/main/calendarList.xml')">
-                                    <tr valign="top">
-                                        <td width="200px" valign="top"
-                                            style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-top.png) no-repeat;">
-                                            <div id="div_navi_main">
-                                                <xsl:call-template name="navigation.tree" />
-                                            </div>
-                                            <div id="poweredByMycore" xmlns:mcrver="xalan://org.mycore.MCRCoreVersion">
-                                                <a href="http://www.mycore.de">
-                                                    <img src="{$WebApplicationBaseURL}images/poweredby.gif" alt="powered by &lt;MyCoRe&gt;"/>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </xsl:if>
-                                <tr valign="top" style="height: max;">
-                                    <td width="200px" valign="top"
-                                        style="height: 100%; background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-below.jpg) no-repeat;">
-                                        <!-- are special logos for current used journal available ? -> if yes, get them -->
-                                        <xsl:call-template name="template_logos.getLogos">
-                                            <xsl:with-param name="journalsID" select="$journalID" />
-                                        </xsl:call-template>
-                                        <br />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td
-                                        style="background:url({$WebApplicationBaseURL}templates/master/{$template}/IMAGES/master_new-navi-filler.jpg); background-repeat: repeat-y; height: 500px;">
-                                        <br />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td width="max" valign="top">
-                            <div id="content-whitespace">
-                                <div id="contentArea">
-                                    <div id="contentWrapper">
-                                        <xsl:call-template name="template_master2.write.content" />
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <div id="content_area" class="content_area">
+                    <xsl:call-template name="template_master2.write.content" />
+                </div>
+                <div id="footer" class="footer"></div>
             </body>
         </html>
 
