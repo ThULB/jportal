@@ -10,6 +10,7 @@
     <field name="subtitles_type"    type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />
     <field name="participants"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href"/>
     <field name="participants_type" type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@type"/>     
+    <field name="journal_xlinkTitle" type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>     
     <field name="publisher"         type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant[@type = 'mainPublisher']" value="@xlink:title" addable="true"/>     
     <field name="publisherID"       type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant[@type = 'mainPublisher']" value="@xlink:href" addable="true"/>     
     <field name="dates"             type="date"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date[0]" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />
@@ -43,7 +44,7 @@
     <field name="subtitles_vol"         type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
     <field name="subtitles__vol_type"   type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />   
     <field name="participants_vol"      type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
-    <field name="participants_vol_type" type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" />          
+    <field name="vol_xlinkTitle" type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>          
     <field name="dates_vol"             type="date"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date[0]" value="text()" sortable="true" i18n="editor.search.document.date" />
     <field name="notes_vol"             type="text"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/notes/note" value="text()" i18n="editor.search.document.note" />
     <field name="identis_vol"           type="identifier"       source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editormask.labels.identi" addable="true"/>
@@ -62,6 +63,7 @@
     <field name="subtitles__art_type"   type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />     
     <field name="participants_art"      type="identifier" source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href" />
     <field name="participants_artQuick" type="name"      source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:label" />             
+    <field name="art_xlinkTitle" type="name"      source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>             
     <field name="dates_art"             type="date"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/dates/date[0]" value="text()" sortable="true" i18n="editormask.labels.date_label" />
     <field name="keywords_art"          type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editormask.labels.keyword" />
     <field name="abstracts_art"         type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/abstracts/abstract" value="text()" i18n="editormask.labels.abstract" />
