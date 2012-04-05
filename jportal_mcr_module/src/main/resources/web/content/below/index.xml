@@ -13,93 +13,17 @@
             <div class="title">Schnellsuche</div>
             <div class="info_text">
                 <p>Suche im Gesamtbestand:</p>
-                <editor id="search-all-de">
-                    <include uri="webapp:editor/editor-search-all.xml"></include>
-                </editor>
+                <div id="search" class="search_container">
+                    <input id="search_input" class="search_input" type="text"></input>
+                </div>
             </div>
         </div>
         <div id="new_articles" class="new_articles">
             <div class="title">Neu</div>
             <div class="info_text">
                 <p>Aktuelle Artikel:</p>
-                <printlatestobjects sortfield="created" maxresults="3" objecttype="jparticle" start="true" overwritelayout="true"></printlatestobjects>
+                <printLatestArticles></printLatestArticles>
             </div>
         </div>
-    </section>
-    <section xml:lang="en" title="JPortal 2 - Das Zeitschriften-Portal">
-        <table id="home_maintable">
-            <tr>
-                <td width="50%" height="230">
-                    <table id="home_table" cellspacing="0" cellpadding="0">
-                        <tr id="home_headlinerow">
-                            <td id="home_headlinerow_left">Informations</td>
-
-                            <td id="home_headlinerow_right">
-                                <br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="home_table_content">
-                                <b>Welcome to Journals@UrMEL.</b>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-                <td height="230">
-                    <table id="home_table" cellspacing="0" cellpadding="0">
-                        <tr id="home_headlinerow">
-                            <td id="home_headlinerow_left">Quick search</td>
-                            <td id="home_headlinerow_right">
-                                <br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="home_table_content">
-                                <div id="home_fastsearch">
-                                    Search in all data:
-                                    <div style="padding: 10px; float: left;">
-                                        <editor id="search-all-de">
-                                            <include uri="webapp:editor/editor-search-all.xml"></include>
-                                        </editor>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <table id="home_table" cellspacing="0" cellpadding="0">
-                        <tr id="home_headlinerow">
-
-                            <td id="home_headlinerow_left">New</td>
-                            <td id="home_headlinerow_right">
-                                <br />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" id="home_table_content">
-                                <h3>
-                                    <span style="font-weight: bold;">Latest artikels:</span>
-                                </h3>
-                                <div class="horizontal-leafs">
-                                    <table cellspacing="0" cellpadding="0" id="resultList">
-                                        <tr>
-                                            <td>
-                                                <printlatestobjects sortfield="created" maxresults="3" objecttype="jparticle" start="true"
-                                                    overwritelayout="true">
-                                                </printlatestobjects>
-
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
     </section>
 </MyCoReWebPage>

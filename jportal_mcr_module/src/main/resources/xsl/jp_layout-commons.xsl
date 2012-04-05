@@ -29,6 +29,7 @@
 
         <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<script type="text/javascript">google.load("jquery", "1.6.2");</script>
+        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/JS/{$nameOfTemplate}.js" type="text/javascript" />
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
         <xsl:if test="acl:checkPermission(/mycoreobject/@ID,concat('update_',$type))">
     	  <script type="text/javascript">

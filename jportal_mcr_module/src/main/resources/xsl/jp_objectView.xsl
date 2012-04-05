@@ -6,7 +6,7 @@
     xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xalan="http://xml.apache.org/xalan"
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
     xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
-    xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxml derivateLinkUtil encoder">
+    xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="xlink mcr i18n acl xalan layoutUtils mcrxml derivateLinkUtil encoder">
 
     <xsl:param name="MCR.Module-iview.SupportedContentTypes" />
 
@@ -27,50 +27,67 @@
     <xsl:param name="previousObjectHost" />
     <xsl:param name="nextObject" />
     <xsl:param name="nextObjectHost" />
-    
-    <xsl:param name="resourcePath" select="'/rsc/classifications/'"/>
-    <xsl:param name="class" select="''"/>
-    <xsl:param name="categ" select="''"/>
-    <xsl:param name="CurrentLang" select="'de'"/>
-    <xsl:param name="WebApplicationBaseURL"/>
-    <xsl:param name="returnUrl" select="$WebApplicationBaseURL"/>
+
+    <xsl:param name="resourcePath" select="'/rsc/classifications/'" />
+    <xsl:param name="class" select="''" />
+    <xsl:param name="categ" select="''" />
+    <xsl:param name="CurrentLang" select="'de'" />
+    <xsl:param name="WebApplicationBaseURL" />
+    <xsl:param name="returnUrl" select="$WebApplicationBaseURL" />
     <xsl:param name="showId" select="'false'" />
 
     <xsl:variable name="allowHTMLInArticles">
         <xsl:call-template name="get.allowHTMLInArticles" />
     </xsl:variable>
 
-    <!-- =================================================== -->
-    <!-- shows the journal, volume and article view -->
-    <!-- =================================================== -->
-    <xsl:template
-        match="/mycoreobject[contains(@ID,'_jpjournal_')] | 
-                       /mycoreobject[contains(@ID,'_jpvolume_')] |
-                       /mycoreobject[contains(@ID,'_jparticle_')]"
-        priority="2">
+    <!-- =============================================================== -->
+    <!-- shows the journal, volume, article, person and institution view -->
+    <!-- =============================================================== -->
+    <xsl:template match="/mycoreobject" priority="2">
+        <xsl:variable name="currentObjType" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+        <xsl:variable name="objTypeXML">
+            <contains type="datamodel-jpjournal.xsd">
+                <hasChildren />
+                <hasSwitchViewBar />
+            </contains>
+            <contains type="datamodel-jpvolume.xsd">
+                <hasChildren />
+                <hasSwitchViewBar />
+            </contains>
+            <contains type="datamodel-jparticle.xsd">
+                <hasSwitchViewBar />
+            </contains>
+        </xsl:variable>
+        <xsl:variable name="objType" select="xalan:nodeset($objTypeXML)" />
+
         <xsl:call-template name="jp_objectView_initJS" />
-        <xsl:call-template name="printMetadataHead" />
+        <table class="metadataHead">
+            <tr>
+                <xsl:if test="$objType/contains[@type = $currentObjType]/hasSwitchViewBar">
+                    <td>
+                        <xsl:call-template name="printSwitchViewBar" />
+                    </td>
+                </xsl:if>
+                <td>
+                    <xsl:call-template name="browseCtrlJP" />
+                </td>
+                <td style="padding-left: 20px;">
+                    <xsl:call-template name="switchToXMLview" />
+                </td>
+                <td style="padding-left: 10px;">
+                    <xsl:call-template name="switchToHistory" />
+                </td>
+            </tr>
+        </table>
+
         <xsl:choose>
-            <!-- metadata -->
-            <xsl:when test="$view.objectmetadata = 'false'">
-                <xsl:call-template name="printMetadata" />
-            </xsl:when>
-            <!-- children -->
-            <xsl:otherwise>
+            <xsl:when test="$objType/contains[@type = $currentObjType]/hasChildren and $view.objectmetadata = 'true'">
                 <xsl:call-template name="printChildren" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="printMetadata" />
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
-
-    <!-- =================================================== -->
-    <!-- shows the person and institution view -->
-    <!-- =================================================== -->
-    <xsl:template match="/mycoreobject[contains(@ID,'_person_')] | 
-                       /mycoreobject[contains(@ID,'_jpinst_')]"
-        priority="2">
-        <xsl:call-template name="jp_objectView_initJS" />
-        <xsl:call-template name="printMetadataHead" />
-        <xsl:call-template name="printMetadata" />
     </xsl:template>
 
     <!-- =================================================== -->
@@ -87,33 +104,6 @@
                 <xsl:value-of select="i18n:translate('metaData.accessDenied')" />
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
-
-    <!-- ================================================================== -->
-    <!-- prints the head of the metadata - contains browse, xml and history -->
-    <!-- ================================================================== -->
-    <xsl:template name="printMetadataHead">
-        <table>
-            <tr>
-                <xsl:if
-                    test="/mycoreobject[contains(@ID,'_jpjournal_')] | 
-                      /mycoreobject[contains(@ID,'_jpvolume_')]  |
-                      /mycoreobject[contains(@ID,'_jparticle_')]">
-                    <td>
-                        <xsl:call-template name="printSwitchViewBar" />
-                    </td>
-                </xsl:if>
-                <td>
-                    <xsl:call-template name="browseCtrlJP" />
-                </td>
-                <td style="padding-left: 20px;">
-                    <xsl:call-template name="switchToXMLview" />
-                </td>
-                <td style="padding-left: 10px;">
-                    <xsl:call-template name="switchToHistory" />
-                </td>
-            </tr>
-        </table>
     </xsl:template>
 
     <!-- ================================================================== -->
@@ -178,6 +168,18 @@
     <!-- ========================================================================== -->
     <!-- Prints a switch bar which contains the children and the detailed view. Called by article, volume and journal. -->
     <!-- ========================================================================== -->
+    <xsl:template name="detailBrowseButton">
+        <xsl:param name="id" />
+        <xsl:param name="i18nLabel" />
+        <xsl:param name="iconName" />
+
+        <td class="detail-browse-button">
+            <a href="{concat($WebApplicationBaseURL,'receive/',$id,$HttpSession)}?XSL.toc.pos.SESSION=1" alt="{$i18nLabel}" title="{$i18nLabel}">
+                <img src="{$WebApplicationBaseURL}{$iconName}" />
+            </a>
+        </td>
+    </xsl:template>
+
     <xsl:template name="printSwitchViewBar">
         <table id="switch" cellspacing="0" cellpadding="0" border="0">
             <tr>
@@ -194,6 +196,8 @@
                     <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
                         <xsl:value-of select="encoder:encode(concat('parent = ',/mycoreobject/structure/parents/parent/@xlink:href))" />
                     </xsl:variable>
+
+                    <!-- simplify sort with real searchfields name -->
                     <xsl:variable name="sort">
                         <xsl:call-template name="get.sortKey">
                             <xsl:with-param name="kindOfChildren" select="$OID" />
@@ -204,117 +208,85 @@
                             <xsl:with-param name="kindOfChildren" select="$OID" />
                         </xsl:call-template>
                     </xsl:variable>
+                    <!-- ########################################## -->
+
                     <xsl:variable name="siblings" select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
                     <xsl:variable name="currentNode">
                         <xsl:copy-of select="$siblings/mcr:results/mcr:hit[@id=$currentID]" />
                     </xsl:variable>
 
-                    <xsl:for-each select="$siblings/mcr:results/mcr:hit">
-                        <xsl:variable name="pos">
-                            <xsl:value-of select="position()" />
-                        </xsl:variable>
-                        <xsl:if test="@id=$currentID">
-                            <xsl:variable name="pred">
-                                <xsl:value-of select="$siblings/mcr:results/mcr:hit[position()=number($pos)-1]/@id" />
-                            </xsl:variable>
-                            <xsl:variable name="suc">
-                                <xsl:value-of select="$siblings/mcr:results/mcr:hit[position()=number($pos)+1]/@id" />
-                            </xsl:variable>
+                    <xsl:variable name="i18nLabel-switchleft">
+                        <xsl:value-of select="i18n:translate(concat('metaData.',$OID,'.switchleft'))" />
+                    </xsl:variable>
+                    <xsl:variable name="i18nLabel-switchright">
+                        <xsl:value-of select="i18n:translate(concat('metaData.',$OID,'.switchright'))" />
+                    </xsl:variable>
 
-                            <xsl:choose>
-                                <xsl:when test="$OID='jparticle'">
-                                    <xsl:if test="$pred!=''">
-                                        <td id="detailed-browse">
-                                            <a href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
-                                                alt="{i18n:translate('metaData.jparticle.switchleft')}" title="{i18n:translate('metaData.jparticle.switchleft')}">
-                                                <img src="{$WebApplicationBaseURL}left.gif" />
-                                            </a>
-                                        </td>
-                                    </xsl:if>
-                                    <xsl:if test="$suc!=''">
-                                        <td id="detailed-browse">
-                                            <a href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
-                                                alt="{i18n:translate('metaData.jparticle.switchright')}" title="{i18n:translate('metaData.jparticle.switchright')}">
-                                                <img src="{$WebApplicationBaseURL}right.gif" />
-                                            </a>
-                                        </td>
-                                    </xsl:if>
-                                    <td width="20"></td>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:if test="$pred!=''">
-                                        <td id="detailed-browse">
-                                            <a href="{concat($WebApplicationBaseURL,'receive/',$pred,$HttpSession)}?XSL.toc.pos.SESSION=1"
-                                                alt="{i18n:translate('metaData.jpvolume.switchleft')}" title="{i18n:translate('metaData.jpvolume.switchleft')}">
-                                                <img src="{$WebApplicationBaseURL}left.gif" />
-                                            </a>
-                                        </td>
-                                    </xsl:if>
-                                    <xsl:if test="$suc!=''">
-                                        <td id="detailed-browse">
-                                            <a href="{concat($WebApplicationBaseURL,'receive/',$suc,$HttpSession)}?XSL.toc.pos.SESSION=1"
-                                                alt="{i18n:translate('metaData.jpvolume.switchright')}" title="{i18n:translate('metaData.jpvolume.switchright')}">
-                                                <img src="{$WebApplicationBaseURL}right.gif" />
-                                            </a>
-                                        </td>
-                                    </xsl:if>
-                                    <td width="20"></td>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:if>
-                    </xsl:for-each>
+                    <xsl:if test="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]">
+                        <xsl:call-template name="detailBrowseButton">
+                            <xsl:with-param name="id" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]/@id" />
+                            <xsl:with-param name="i18nLabel" select="$i18nLabel-switchleft" />
+                            <xsl:with-param name="iconName" select="'left.gif'" />
+                        </xsl:call-template>
+                    </xsl:if>
+                    <xsl:if test="$siblings/mcr:results/mcr:hit[@id=$currentID]/following-sibling::mcr:hit[1]">
+                        <xsl:call-template name="detailBrowseButton">
+                            <xsl:with-param name="id" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/following-sibling::mcr:hit[1]/@id" />
+                            <xsl:with-param name="i18nLabel" select="$i18nLabel-switchright" />
+                            <xsl:with-param name="iconName" select="'right.gif'" />
+                        </xsl:call-template>
+                    </xsl:if>
+                    <td width="20"></td>
                 </xsl:if>
 
                 <!-- detailview & children view -->
                 <xsl:if test="contains(/mycoreobject/@ID,'jpvolume') or contains(/mycoreobject/@ID,'jpjournal')">
+                    <xsl:variable name="buttonURL">
+                        <xsl:call-template name="UrlSetParam">
+                            <xsl:with-param name="url" select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)" />
+                            <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
+                            <xsl:with-param name="value" select="not($view.objectmetadata='true')" />
+                        </xsl:call-template>
+                    </xsl:variable>
+
+                    <xsl:variable name="buttonXML">
+                        <detail>
+                            <state view="false">
+                                <xsl:value-of select="i18n:translate('metadata.navi.detailact')" />
+                            </state>
+                            <state view="true">
+                                <a href="{$buttonURL}">
+                                    <xsl:value-of select="i18n:translate('metadata.navi.showdetail')" />
+                                </a>
+                            </state>
+                            <css view="true">jp-layout-button-inactiv</css>
+                            <css view="false">jp-layout-button-activ</css>
+                        </detail>
+                        <index>
+                            <state view="false">
+                                <a href="{$buttonURL}">
+                                    <xsl:value-of select="i18n:translate('metadata.navi.showcontent')" />
+                                </a>
+                            </state>
+                            <state view="true">
+                                <xsl:value-of select="i18n:translate('metadata.navi.contentact')" />
+                            </state>
+                            <css view="false">jp-layout-button-inactiv</css>
+                            <css view="true">jp-layout-button-activ</css>
+                        </index>
+                    </xsl:variable>
+                    <xsl:variable name="button" select="xalan:nodeset($buttonXML)" />
+
                     <td>
-                        <xsl:choose>
-                            <xsl:when test="$view.objectmetadata='false'">
-                                <div id="switch-current">
-                                    <xsl:value-of select="i18n:translate('metadata.navi.detailact')" />
-                                </div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <div id="switch-notcurrent">
-                                    <xsl:variable name="URLDetails">
-                                        <xsl:call-template name="UrlSetParam">
-                                            <xsl:with-param name="url"
-                                                select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)" />
-                                            <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
-                                            <xsl:with-param name="value" select="'false'" />
-                                        </xsl:call-template>
-                                    </xsl:variable>
-                                    <a href="{$URLDetails}">
-                                        <xsl:value-of select="i18n:translate('metadata.navi.showdetail')" />
-                                    </a>
-                                </div>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <div id="showDetailButton" class="{$button/detail/css[@view=$view.objectmetadata]}">
+                            <xsl:copy-of select="$button/detail/state[@view=$view.objectmetadata]" />
+                        </div>
                     </td>
                     <td width="20"></td>
                     <td>
-                        <xsl:choose>
-                            <xsl:when test="$view.objectmetadata='true'">
-                                <div id="switch-current">
-                                    <xsl:value-of select="i18n:translate('metadata.navi.contentact')" />
-                                </div>
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <div id="switch-notcurrent">
-                                    <xsl:variable name="URLDetails">
-                                        <xsl:call-template name="UrlSetParam">
-                                            <xsl:with-param name="url"
-                                                select="concat($WebApplicationBaseURL,'receive/',/mycoreobject/@ID,$HttpSession)" />
-                                            <xsl:with-param name="par" select="'XSL.view.objectmetadata.SESSION'" />
-                                            <xsl:with-param name="value" select="'true'" />
-                                        </xsl:call-template>
-                                    </xsl:variable>
-                                    <a href="{$URLDetails}">
-                                        <xsl:value-of select="i18n:translate('metadata.navi.showcontent')" />
-                                    </a>
-                                </div>
-                            </xsl:otherwise>
-                        </xsl:choose>
+                        <div id="showIndexButton" class="{$button/index/css[@view=$view.objectmetadata]}">
+                            <xsl:copy-of select="$button/index/state[@view=$view.objectmetadata]" />
+                        </div>
                     </td>
                 </xsl:if>
             </tr>
@@ -716,31 +688,41 @@
             </xsl:choose>
         </xsl:if>
     </xsl:template>
-    
-     <xsl:template name="classificationEditor">
-        <xsl:param name="depth"/>
-        <xsl:param name="spaceBetweenMainLinks"/>
-        <xsl:param name="ImageBaseURL"/>
-        <xsl:param name="menuPointHeigth"/>
-        
-        <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')"/>
-        <xsl:variable name="jsPath" select="concat($webPath, '/js')"/>
-        <xsl:variable name="imgPath" select="concat($webPath, '/images')"/>
-        <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID"/>
-        <xsl:variable name="journalRecourcePath" select="concat($resourcePath,'jp/',$journalID,'/')"/>
+
+    <xsl:template name="classificationEditor">
+        <xsl:param name="depth" />
+        <xsl:param name="spaceBetweenMainLinks" />
+        <xsl:param name="ImageBaseURL" />
+        <xsl:param name="menuPointHeigth" />
+
+        <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')" />
+        <xsl:variable name="jsPath" select="concat($webPath, '/js')" />
+        <xsl:variable name="imgPath" select="concat($webPath, '/images')" />
+        <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+        <xsl:variable name="journalRecourcePath" select="concat($resourcePath,'jp/',$journalID,'/')" />
         <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                startClassificationEditor($("#diagButton"), {
-                    baseUrl : "<xsl:value-of select='$webPath' />" + "/",
-                    resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
-                    classificationId : "list",
-                    categoryId : "",
-                    showId : "<xsl:value-of select='$showId' />" === "true",
-                    currentLang : "<xsl:value-of select='$CurrentLang' />",
-                    jsPath : "<xsl:value-of select='$jsPath' />",
-                    buttonID : "diagButton"
-                });
+            startClassificationEditor($("#diagButton"), {
+            baseUrl : "
+            <xsl:value-of select='$webPath' />
+            " + "/",
+            resourcePath : "
+            <xsl:value-of select='$journalRecourcePath' />
+            ",
+            classificationId : "list",
+            categoryId : "",
+            showId : "
+            <xsl:value-of select='$showId' />
+            " === "true",
+            currentLang : "
+            <xsl:value-of select='$CurrentLang' />
+            ",
+            jsPath : "
+            <xsl:value-of select='$jsPath' />
+            ",
+            buttonID : "diagButton"
+            });
             })
         </script>
     </xsl:template>
@@ -792,8 +774,9 @@
                                     </a>
                                 </xsl:if>
                                 <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
-                                    <xsl:call-template name="classificationEditor"/>
-                                    <img style="margin-left:10px;cursor:hand;cursor:pointer" id="diagButton" src="{$WebApplicationBaseURL}images/icons/rubric_button_30x30.png"/>
+                                    <xsl:call-template name="classificationEditor" />
+                                    <img style="margin-left:10px;cursor:hand;cursor:pointer" id="diagButton"
+                                        src="{$WebApplicationBaseURL}images/icons/rubric_button_30x30.png" />
                                 </xsl:if>
                                 <a
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
@@ -803,7 +786,8 @@
                                     <xsl:call-template name="linkBookmarkedImage" />
                                 </xsl:if>
                             </xsl:if>
-                            <xsl:if test="xalan:nodeset($accessPerm)/access/@delete = 'true'  and not(/mycoreobject/structure/derobjects/derobject)">
+                            <xsl:if
+                                test="xalan:nodeset($accessPerm)/access/@delete = 'true'  and not(/mycoreobject/structure/derobjects/derobject)">
                                 <a
                                     href="javascript:confirmDelete('{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=sdelobj')">
                                     <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.object.delObject')}" />
@@ -814,22 +798,25 @@
                                     href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                                     <img src="{$WebApplicationBaseURL}images/icons/ACL_button_30x30.png" title="{i18n:translate('component.swf.object.editACL')}" />
                                 </a>
-                                <xsl:variable name="mergeCMDUrl" select="concat($WebApplicationBaseURL,'rsc/cmd/mergeDerivIn/',$id)"/>
+                                <xsl:variable name="mergeCMDUrl" select="concat($WebApplicationBaseURL,'rsc/cmd/mergeDerivIn/',$id)" />
                                 <script type="text/javascript">
                                     $(function() {
-                                        var mergeButton = $("#mergeButton");
-                                        mergeButton.click(
-                                            function(){
-                                                $.ajax({
-                                                type: "POST",
-                                                url: "<xsl:value-of select="$mergeCMDUrl"/>",
-                                                success: function(msg){location.reload()}
-                                                });
-                                            }
-                                        );
+                                    var mergeButton = $("#mergeButton");
+                                    mergeButton.click(
+                                    function(){
+                                    $.ajax({
+                                    type: "POST",
+                                    url: "
+                                    <xsl:value-of select="$mergeCMDUrl" />
+                                    ",
+                                    success: function(msg){location.reload()}
+                                    });
+                                    }
+                                    );
                                     });
                                 </script>
-                                <img style="margin-left:10px;cursor:hand;cursor:pointer" id="mergeButton" src="{$WebApplicationBaseURL}images/icons/merge_button_30x30.png"/>
+                                <img style="margin-left:10px;cursor:hand;cursor:pointer" id="mergeButton"
+                                    src="{$WebApplicationBaseURL}images/icons/merge_button_30x30.png" />
                             </xsl:if>
                         </td>
                     </tr>

@@ -57,7 +57,7 @@
         </xsl:choose>
     </xsl:variable>
 
-    <xsl:include href="chooseTemplate.xsl" />
+    <xsl:include href="generic_template.xsl" />
     <xsl:include href="pagetitle.xsl" />
     <xsl:include href="jp_navigation.xsl" />
     <xsl:include href="footer.xsl" />
@@ -71,7 +71,7 @@
     <!-- =================================================================================================== -->
     <xsl:template name="generatePage">
         <!-- call the appropriate template -->
-        <xsl:call-template name="chooseTemplate" />
+        <xsl:call-template name="renderLayout" />
     </xsl:template>
     <!-- ================================================================================= -->
     <xsl:template name="get.naviBase">

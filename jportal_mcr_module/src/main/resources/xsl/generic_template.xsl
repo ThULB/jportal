@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- ============================================== -->
-<!-- $Revision: 529 $ $Date: 2008-07-02 16:01:39 +0200 (Mi, 02 Jul 2008) $ -->
-<!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<!-- ============================================== -->
+    <!-- the template                                   -->
     <!-- ============================================== -->
-    <!-- the template -->
-    <!-- ============================================== -->
-    <xsl:template name="template_endocyto">
+    <xsl:template name="renderLayout">
+        <xsl:param name="journalID" />
         <html>
             <head>
                 <xsl:call-template name="jp.layout.getHTMLHeader" />
@@ -42,5 +38,10 @@
                 <div id="footer" class="footer"></div>
             </body>
         </html>
+
+    </xsl:template>
+    
+    <xsl:template match="printLatestArticles">
+        <ul id="latestArticles" class="latestArticles"></ul>
     </xsl:template>
 </xsl:stylesheet>
