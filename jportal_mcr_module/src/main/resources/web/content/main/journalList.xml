@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <journalList mode="javascript">
     <listTitle>Zeitschriften</listTitle>
-    <additionalQuery>and not (contentClassi1 = "calendar")</additionalQuery>
+    <additionalQuery>and (objectType = "jpjournal") and not (contentClassi1 = "calendar")</additionalQuery>
 </journalList>
