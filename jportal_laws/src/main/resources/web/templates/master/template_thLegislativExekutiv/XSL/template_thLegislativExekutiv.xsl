@@ -97,7 +97,7 @@
                   <tr>
                     <td>
                       <div id="th-logo">
-                        <a href="http://www.urmel-dl.de/">
+                        <a href="http://www.urmel-dl.de/Projekte/LegislativeundExekutive.html">
                           <img src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/thLogo.png" width="117" height="49" border="0" />
                         </a>
                       </div>
