@@ -142,27 +142,71 @@ body{
 	background-color: #7BAA89;
 }
 
-.jp-layout-button-inactiv, .jp-layout-button-activ {
+.jp-layout-button-inactive, .jp-layout-button-active {
     height: 20px;
     padding-left: 8px;
     padding-right: 8px;
     padding-top: 3px;
+    padding-bottom: 3px;
     text-align: center;
     color: white;
 }
 
-.jp-layout-button-inactiv a {
+.jp-layout-button-inactive a {
 	color: grey;
 }
 
-.jp-layout-button-inactiv a:hover {
+.jp-layout-button-inactive a:hover {
 	color: white;
 }
 
-.jp-layout-button-inactiv{
+.jp-layout-button-inactive{
 	background-color: #003100;
 }
 
-.jp-layout-button-activ {
+.jp-layout-button-active {
 	background-color: #7BAA89;
+}
+.prevObjButton.jp-layout-button-inactive{
+	background-image: url("/left.gif");
+}
+.nextObjButton.jp-layout-button-inactive{
+	background-image: url("/right.gif");
+}
+.prevObjButton, .nextObjButton {
+	border: 1px solid #003100;
+	height: 20px;
+    width: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    display: inline-block;
+}
+
+.switch-view-button{
+	width: 166px;
+	height: 20px;
+/*	display: inline-block;*/
+}
+
+.jp-layout-button-active .label-inactive{
+	display: none;
+}
+
+.jp-layout-button-inactive .label-active{
+	display: none;
+}
+
+.jp-layout-url-hidden a{
+	visibility: hidden;
+}
+
+.jp-layout-horiz-menu {
+	list-style-type: none;
+}
+
+.jp-layout-horiz-menu li{
+/*	display: inline-block;*/
+	float: left;
 }

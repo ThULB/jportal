@@ -88,9 +88,6 @@
         <xsl:call-template name="print.writeProtectionMessage" />
         <xsl:choose>
             <xsl:when test="$readAccess='true'">
-                <div class="headline">
-                    <xsl:copy-of select="$PageTitle" />
-                </div>
                 <xsl:call-template name="getFastWCMS" />
                 <xsl:apply-templates />
             </xsl:when>
