@@ -117,7 +117,7 @@
             document.location = delUrl;
             }
             }
-    </script>
+        </script>
         <script type="text/javascript">
             function confirmFormDelete() {
             if (confirm("Objekt wirklich löschen?")) {
@@ -125,7 +125,7 @@
             }
             return false;
             }
-    </script>
+        </script>
     </xsl:template>
 
     <!-- ========================================================================== -->
@@ -209,25 +209,33 @@
             </xsl:call-template>
         </xsl:variable>
         <!-- ########################################## -->
-        <xsl:variable name="siblings" select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
+        
 
         <xsl:variable name="switchViewBarXml">
             <prevObjButton icon="{$WebApplicationBaseURL}left.gif">
                 <xsl:call-template name="detailButtonClassAndUrl">
                     <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]" />
                 </xsl:call-template>
-                <label type="datamodel-jpjournal.xsd" value="metaData.jpjournal.switchleft" />
-                <label type="datamodel-jpvolume.xsd" value="metaData.jpvolume.switchleft" />
-                <label type="datamodel-jparticle.xsd" value="metaData.jparticle.switchleft" />
             </prevObjButton>
             <nextObjButton icon="{$WebApplicationBaseURL}right.gif">
                 <xsl:call-template name="detailButtonClassAndUrl">
                     <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/following-sibling::mcr:hit[1]" />
                 </xsl:call-template>
-                <label type="datamodel-jpjournal.xsd" value="metaData.jpjournal.switchright" />
-                <label type="datamodel-jpvolume.xsd" value="metaData.jpvolume.switchright" />
-                <label type="datamodel-jparticle.xsd" value="metaData.jparticle.switchright" />
             </nextObjButton>
+            <objButton>
+                <prev icon="{$WebApplicationBaseURL}left.gif">
+                    <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchleft</label>
+                    <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchleft</label>
+                    <label type="datamodel-jparticle.xsd">metaData.jparticle.switchleft</label>
+                </prev>
+                <next icon="{$WebApplicationBaseURL}right.gif">
+                    <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchright</label>
+                    <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchright</label>
+                    <label type="datamodel-jparticle.xsd">metaData.jparticle.switchright</label>
+                </next>
+                <css status="active">jp-layout-button-active</css>
+                <css status="inactive">jp-layout-url-hidden jp-layout-button-inactive</css>
+            </objButton>
             <viewButton>
                 <label view="false">
                     <detail>metadata.navi.detailact</detail>
@@ -253,8 +261,10 @@
 
         <menu id="contentMenu" class="jp-layout-horiz-menu">
             <xsl:if test="/mycoreobject/structure/parents/parent/@xlink:href">
-                <xsl:variable name="prevObjButtonLabel" select="i18n:translate($switchViewBar/prevObjButton/label[@type=$currentObjType]/@value)" />
-                <xsl:variable name="nextObjButtonLabel" select="i18n:translate($switchViewBar/nextObjButton/label[@type=$currentObjType]/@value)" />
+                <xsl:variable name="siblings" select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
+                <xsl:variable name="prevID" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]"/>
+                <xsl:variable name="prevObjButtonLabel" select="i18n:translate($switchViewBar/objButton/prev/label[@type=$currentObjType])" />
+                <xsl:variable name="nextObjButtonLabel" select="i18n:translate($switchViewBar/objButton/next/label[@type=$currentObjType])" />
                 <li class="prevObjButton {$switchViewBar/prevObjButton/@class}">
                     <a href="{$switchViewBar/prevObjButton/@url}" alt="{$prevObjButtonLabel}" title="{$prevObjButtonLabel}">
                         <img src="{$switchViewBar/prevObjButton/@icon}" />
