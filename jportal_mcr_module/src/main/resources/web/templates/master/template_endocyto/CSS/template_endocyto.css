@@ -199,7 +199,7 @@ body{
 }
 
 .jp-layout-url-hidden a{
-	visibility: hidden;
+	display: none;
 }
 
 .jp-layout-horiz-menu {

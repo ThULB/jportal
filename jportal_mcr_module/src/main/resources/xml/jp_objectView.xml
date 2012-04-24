@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jp_objectView>
+    <menuBar>
+        <option type="datamodel-jpjournal.xsd">
+            <hasChildren />
+            <hasSwitchViewBar />
+        </option>
+        <option type="datamodel-jpvolume.xsd">
+            <hasChildren />
+            <hasSwitchViewBar />
+        </option>
+    </menuBar>
+    <sort>
+        <set type="datamodel-jpjournal.xsd">
+            <key sortBy="title" i18n="metaData.sortbuttons.aftertitles" queryParam="&amp;sortby=maintitles" />
+            <key sortBy="position" i18n="metaData.sortbuttons.position" queryParam="&amp;sortby=position_vol" />
+            <key sortBy="date" i18n="metaData.sortbuttons.chronological" queryParam="&amp;sortby=dates_vol" />
+        </set>
+        <set type="datamodel-jpvolume.xsd">
+            <key sortBy="title" i18n="metaData.sortbuttons.aftertitles" queryParam="&amp;sortby=maintitles" />
+            <key sortBy="size" i18n="metaData.sortbuttons.afterpages" queryParam="&amp;sortby=sizes_art" />
+            <key sortBy="position" i18n="metaData.sortbuttons.position" queryParam="&amp;sortby=dates_art" />
+        </set>
+        <order position="false">ascending</order>
+        <order position="true">descending</order>
+    </sort>
+    <objButton>
+        <prev icon="left.gif">
+            <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchleft</label>
+            <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchleft</label>
+            <label type="datamodel-jparticle.xsd">metaData.jparticle.switchleft</label>
+        </prev>
+        <next icon="right.gif">
+            <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchright</label>
+            <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchright</label>
+            <label type="datamodel-jparticle.xsd">metaData.jparticle.switchright</label>
+        </next>
+        <css view="true">jp-layout-button-active</css>
+        <css view="false">jp-layout-url-hidden jp-layout-button-inactive</css>
+    </objButton>
+    <viewButton>
+        <label view="false">
+            <detail>metadata.navi.detailact</detail>
+            <index>metadata.navi.showcontent</index>
+        </label>
+        <label view="true">
+            <detail>metadata.navi.showdetail</detail>
+            <index>metadata.navi.contentact</index>
+        </label>
+        <css view="false">jp-layout-button-inactive</css>
+        <css view="true">jp-layout-button-active</css>
+    </viewButton>
+</jp_objectView>

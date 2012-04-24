@@ -15,7 +15,7 @@
     <xsl:param name="toc.pageSize" select="25" />
     <xsl:param name="toc.pos" />
 
-    <xsl:param name="toc.sortBy.jpvolume" select="'position'" />
+    <xsl:param name="toc.sortBy" />
     <xsl:param name="toc.sortBy.jparticle" select="'size'" />
     <xsl:param select="5" name="maxLinkedArts" />
     <xsl:param select="5" name="maxLinkedCals" />
@@ -41,48 +41,24 @@
     </xsl:variable>
 
     <xsl:variable name="currentObjType" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+    <xsl:variable name="objectView" select="document('../xml/jp_objectView.xml')/jp_objectView" />
     <!-- =============================================================== -->
     <!-- shows the journal, volume, article, person and institution view -->
     <!-- =============================================================== -->
     <xsl:template match="/mycoreobject" priority="2">
-        <xsl:variable name="objTypeXML">
-            <contains type="datamodel-jpjournal.xsd">
-                <hasChildren />
-                <hasSwitchViewBar />
-            </contains>
-            <contains type="datamodel-jpvolume.xsd">
-                <hasChildren />
-                <hasSwitchViewBar />
-            </contains>
-            <contains type="datamodel-jparticle.xsd">
-                <hasSwitchViewBar />
-            </contains>
-        </xsl:variable>
-        <xsl:variable name="objType" select="xalan:nodeset($objTypeXML)" />
-
         <xsl:call-template name="jp_objectView_initJS" />
         <div class="headline">
             <xsl:copy-of select="$PageTitle" />
         </div>
         <div class="metadataHead">
-            <xsl:if test="$objType/contains[@type = $currentObjType]/hasSwitchViewBar">
-                <span>
-                    <xsl:call-template name="printSwitchViewBar" />
-                </span>
-            </xsl:if>
-            <span>
-                <xsl:call-template name="browseCtrlJP" />
-            </span>
-            <span style="padding-left: 20px;">
-                <xsl:call-template name="switchToXMLview" />
-            </span>
-            <span style="padding-left: 10px;">
-                <xsl:call-template name="switchToHistory" />
-            </span>
+            <xsl:call-template name="printSwitchViewBar" />
+            <xsl:call-template name="browseCtrlJP" />
+            <xsl:call-template name="switchToXMLview" />
+            <xsl:call-template name="switchToHistory" />
         </div>
 
         <xsl:choose>
-            <xsl:when test="$objType/contains[@type = $currentObjType]/hasChildren and $view.objectmetadata = 'true'">
+            <xsl:when test="$objectView/menuBar/option[@type = $currentObjType]/hasChildren and $view.objectmetadata = 'true'">
                 <xsl:call-template name="printChildren" />
             </xsl:when>
             <xsl:otherwise>
@@ -141,11 +117,9 @@
                     <xsl:with-param name="value" select="'xml'" />
                 </xsl:call-template>
             </xsl:variable>
-            <td id="detailed-xmlbutton">
-                <a href="{$newurl}" alt="{i18n:translate('metaData.xmlView')}" title="{i18n:translate('metaData.xmlView')}">
-                    <img src="{$WebApplicationBaseURL}images/xml.png" />
-                </a>
-            </td>
+            <a href="{$newurl}" alt="{i18n:translate('metaData.xmlView')}" title="{i18n:translate('metaData.xmlView')}">
+                <img src="{$WebApplicationBaseURL}images/xml.png" />
+            </a>
         </xsl:if>
     </xsl:template>
 
@@ -158,30 +132,20 @@
             <!-- sets the XSL.Style parameter of the browser address to xmlexport -->
             <xsl:variable name="newurl" select="concat($WebApplicationBaseURL, 'history.xml?XSL.id=', @ID)" />
 
-            <td id="detailed-xmlbutton">
-                <a href="{$newurl}" alt="{i18n:translate('metaData.history')}" title="{i18n:translate('metaData.history')}">
-                    <img src="{$WebApplicationBaseURL}images/history.png" />
-                </a>
-            </td>
+            <a href="{$newurl}" alt="{i18n:translate('metaData.history')}" title="{i18n:translate('metaData.history')}">
+                <img src="{$WebApplicationBaseURL}images/history.png" />
+            </a>
         </xsl:if>
     </xsl:template>
 
     <!-- ========================================================================== -->
     <!-- Prints a switch bar which contains the children and the detailed view. Called by article, volume and journal. -->
     <!-- ========================================================================== -->
-    <xsl:template name="detailButtonClassAndUrl">
+    <xsl:template name="objButtonUrl">
         <xsl:param name="idPath" />
-        <xsl:choose>
-            <xsl:when test="$idPath">
-                <xsl:attribute name="class">jp-layout-button-active</xsl:attribute>
-                <xsl:attribute name="url">
-                    <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$idPath/@id,$HttpSession, '?XSL.toc.pos.SESSION=1')" />
-                </xsl:attribute>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:attribute name="class">jp-layout-url-hidden jp-layout-button-inactive</xsl:attribute>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:if test="$idPath">
+            <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$idPath/@id,$HttpSession, '?XSL.toc.pos.SESSION=1')" />
+        </xsl:if>
     </xsl:template>
 
     <xsl:template name="printSwitchViewBar">
@@ -191,65 +155,6 @@
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
             <xsl:value-of select="encoder:encode(concat('parent = ',/mycoreobject/structure/parents/parent/@xlink:href))" />
         </xsl:variable>
-        <xsl:variable name="OID">
-            <xsl:call-template name="typeOfObjectID">
-                <xsl:with-param name="id" select="/mycoreobject/@ID" />
-            </xsl:call-template>
-        </xsl:variable>
-
-        <!-- simplify sort with real searchfields name -->
-        <xsl:variable name="sort">
-            <xsl:call-template name="get.sortKey">
-                <xsl:with-param name="kindOfChildren" select="$OID" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="sortOrder">
-            <xsl:call-template name="get.sortOrder">
-                <xsl:with-param name="kindOfChildren" select="$OID" />
-            </xsl:call-template>
-        </xsl:variable>
-        <!-- ########################################## -->
-        
-
-        <xsl:variable name="switchViewBarXml">
-            <prevObjButton icon="{$WebApplicationBaseURL}left.gif">
-                <xsl:call-template name="detailButtonClassAndUrl">
-                    <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]" />
-                </xsl:call-template>
-            </prevObjButton>
-            <nextObjButton icon="{$WebApplicationBaseURL}right.gif">
-                <xsl:call-template name="detailButtonClassAndUrl">
-                    <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/following-sibling::mcr:hit[1]" />
-                </xsl:call-template>
-            </nextObjButton>
-            <objButton>
-                <prev icon="{$WebApplicationBaseURL}left.gif">
-                    <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchleft</label>
-                    <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchleft</label>
-                    <label type="datamodel-jparticle.xsd">metaData.jparticle.switchleft</label>
-                </prev>
-                <next icon="{$WebApplicationBaseURL}right.gif">
-                    <label type="datamodel-jpjournal.xsd">metaData.jpjournal.switchright</label>
-                    <label type="datamodel-jpvolume.xsd">metaData.jpvolume.switchright</label>
-                    <label type="datamodel-jparticle.xsd">metaData.jparticle.switchright</label>
-                </next>
-                <css status="active">jp-layout-button-active</css>
-                <css status="inactive">jp-layout-url-hidden jp-layout-button-inactive</css>
-            </objButton>
-            <viewButton>
-                <label view="false">
-                    <detail>metadata.navi.detailact</detail>
-                    <index>metadata.navi.showcontent</index>
-                </label>
-                <label view="true">
-                    <detail>metadata.navi.showdetail</detail>
-                    <index>metadata.navi.contentact</index>
-                </label>
-                <css view="false">jp-layout-button-inactive</css>
-                <css view="true">jp-layout-button-active</css>
-            </viewButton>
-        </xsl:variable>
-        <xsl:variable name="switchViewBar" select="xalan:nodeset($switchViewBarXml)" />
 
         <xsl:variable name="buttonURL">
             <xsl:call-template name="UrlSetParam">
@@ -261,54 +166,54 @@
 
         <menu id="contentMenu" class="jp-layout-horiz-menu">
             <xsl:if test="/mycoreobject/structure/parents/parent/@xlink:href">
+                <xsl:variable name="sort" select="$objectView/sort/set[@type=$currentObjType]/key[@sortBy=$toc.sortBy]" />
+                <xsl:variable name="sortOrder" select="$objectView/sort/order[@position=string($toc.sortBy='position')]" />
                 <xsl:variable name="siblings" select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
-                <xsl:variable name="prevID" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]"/>
-                <xsl:variable name="prevObjButtonLabel" select="i18n:translate($switchViewBar/objButton/prev/label[@type=$currentObjType])" />
-                <xsl:variable name="nextObjButtonLabel" select="i18n:translate($switchViewBar/objButton/next/label[@type=$currentObjType])" />
-                <li class="prevObjButton {$switchViewBar/prevObjButton/@class}">
-                    <a href="{$switchViewBar/prevObjButton/@url}" alt="{$prevObjButtonLabel}" title="{$prevObjButtonLabel}">
-                        <img src="{$switchViewBar/prevObjButton/@icon}" />
+                <xsl:variable name="prevObjURL">
+                    <xsl:call-template name="objButtonUrl">
+                        <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/preceding-sibling::mcr:hit[1]" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="nextObjURL">
+                    <xsl:call-template name="objButtonUrl">
+                        <xsl:with-param name="idPath" select="$siblings/mcr:results/mcr:hit[@id=$currentID]/following-sibling::mcr:hit[1]" />
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="prevObjButtonLabel" select="i18n:translate($objectView/objButton/prev/label[@type=$currentObjType])" />
+                <xsl:variable name="nextObjButtonLabel" select="i18n:translate($objectView/objButton/next/label[@type=$currentObjType])" />
+                <li class="prevObjButton {$objectView/objButton/css[@view=string($prevObjURL!='')]}">
+                    <a href="{$prevObjURL}" alt="{$prevObjButtonLabel}" title="{$prevObjButtonLabel}">
+                        <img src="{$WebApplicationBaseURL}{$objectView/objButton/prev/@icon}" />
                     </a>
                 </li>
-                <li class="nextObjButton {$switchViewBar/nextObjButton/@class}">
-                    <a href="{$switchViewBar/nextObjButton/@url}" alt="{$nextObjButtonLabel}" title="{$nextObjButtonLabel}">
-                        <img src="{$switchViewBar/nextObjButton/@icon}" />
+                <li class="nextObjButton {$objectView/objButton/css[@view=string($nextObjURL!='')]}">
+                    <a href="{$nextObjURL}" alt="{$nextObjButtonLabel}" title="{$nextObjButtonLabel}">
+                        <img src="{$WebApplicationBaseURL}{$objectView/objButton/next/@icon}" />
                     </a>
                 </li>
             </xsl:if>
 
-            <xsl:variable name="detailButtonLabel" select="i18n:translate($switchViewBar/viewButton/label[@view=$view.objectmetadata]/detail)" />
-            <xsl:variable name="indexViewButtonLabel" select="i18n:translate($switchViewBar/viewButton/label[@view=$view.objectmetadata]/index)" />
-            <li class="switch-view-button {$switchViewBar/viewButton/css[@view=$view.objectmetadata]}">
-                <span class="label-active">
-                    <xsl:value-of select="$detailButtonLabel" />
-                </span>
-                <a href="{$buttonURL}" class="label-inactive">
-                    <xsl:value-of select="$detailButtonLabel" />
-                </a>
-            </li>
-            <li class="switch-view-button {$switchViewBar/viewButton/css[@view!=$view.objectmetadata]}">
-                <span class="label-active">
-                    <xsl:value-of select="$indexViewButtonLabel" />
-                </span>
-                <a href="{$buttonURL}" class="label-inactive">
-                    <xsl:value-of select="$indexViewButtonLabel" />
-                </a>
-            </li>
+            <xsl:if test="$objectView/menuBar/option[@type = $currentObjType]/hasSwitchViewBar">
+                <xsl:variable name="detailButtonLabel" select="i18n:translate($objectView/viewButton/label[@view=$view.objectmetadata]/detail)" />
+                <xsl:variable name="indexViewButtonLabel" select="i18n:translate($objectView/viewButton/label[@view=$view.objectmetadata]/index)" />
+                <li class="switch-view-button {$objectView/viewButton/css[@view!=$view.objectmetadata]}">
+                    <span class="label-active">
+                        <xsl:value-of select="$detailButtonLabel" />
+                    </span>
+                    <a href="{$buttonURL}" class="label-inactive">
+                        <xsl:value-of select="$detailButtonLabel" />
+                    </a>
+                </li>
+                <li class="switch-view-button {$objectView/viewButton/css[@view=$view.objectmetadata]}">
+                    <span class="label-active">
+                        <xsl:value-of select="$indexViewButtonLabel" />
+                    </span>
+                    <a href="{$buttonURL}" class="label-inactive">
+                        <xsl:value-of select="$indexViewButtonLabel" />
+                    </a>
+                </li>
+            </xsl:if>
         </menu>
-
-        <!-- <div id="switchViewBar"> <xsl:if test="/mycoreobject/structure/parents/parent/@xlink:href"> <xsl:variable name="prevObjButtonLabel" 
-            select="i18n:translate($switchViewBar/prevObjButton/label[@type=$currentObjType]/@value)" /> <xsl:variable name="nextObjButtonLabel" select="i18n:translate($switchViewBar/nextObjButton/label[@type=$currentObjType]/@value)" 
-            /> <span id="prevObjButton" class="prevObjButton {$switchViewBar/prevObjButton/@class}"> <a href="{$switchViewBar/prevObjButton/@url}" alt="{$prevObjButtonLabel}" 
-            title="{$prevObjButtonLabel}"> <img src="{$switchViewBar/prevObjButton/@icon}" /> </a> </span> <span id="nextObjButton" class="nextObjButton 
-            {$switchViewBar/nextObjButton/@class}"> <a href="{$switchViewBar/nextObjButton/@url}" alt="{$nextObjButtonLabel}" title="{$nextObjButtonLabel}"> 
-            <img src="{$switchViewBar/nextObjButton/@icon}" /> </a> </span> </xsl:if> <xsl:variable name="detailButtonLabel" select="i18n:translate($switchViewBar/viewButton/label[@view=$view.objectmetadata]/detail)" 
-            /> <xsl:variable name="indexViewButtonLabel" select="i18n:translate($switchViewBar/viewButton/label[@view=$view.objectmetadata]/index)" /> <span 
-            id="detailViewButton" class="switch-view-button {$switchViewBar/viewButton/css[@view=$view.objectmetadata]}"> <span class="label-active"> <xsl:value-of 
-            select="$detailButtonLabel" /> </span> <a href="{$buttonURL}" class="label-inactive"> <xsl:value-of select="$detailButtonLabel" /> </a> </span> 
-            <span id="indexViewButton" class="switch-view-button {$switchViewBar/viewButton/css[@view!=$view.objectmetadata]}"> <span class="label-active"> 
-            <xsl:value-of select="$indexViewButtonLabel" /> </span> <a href="{$buttonURL}" class="label-inactive"> <xsl:value-of select="$indexViewButtonLabel" 
-            /> </a> </span> </div> -->
     </xsl:template>
 
     <!-- ===================================================================================================== -->
@@ -377,16 +282,8 @@
         <xsl:variable name="mcrSql" xmlns:encoder="xalan://java.net.URLEncoder">
             <xsl:value-of select="encoder:encode(concat('parent = ',./@ID))" />
         </xsl:variable>
-        <xsl:variable name="sort">
-            <xsl:call-template name="get.sortKey">
-                <xsl:with-param name="kindOfChildren" select="$kindOfChildren2" />
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="sortOrder">
-            <xsl:call-template name="get.sortOrder">
-                <xsl:with-param name="kindOfChildren" select="$kindOfChildren2" />
-            </xsl:call-template>
-        </xsl:variable>
+        <xsl:variable name="sort" select="$objectView/sort/set[@type=$currentObjType]/key[@sortBy=$toc.sortBy]" />
+        <xsl:variable name="sortOrder" select="$objectView/sort/order[@position=string($toc.sortBy='position')]" />
 
         <xsl:variable name="children" select="document(concat('query:term=',$mcrSql,$sort,'&amp;order=',$sortOrder))" />
         <xsl:call-template name="printTOCNavi">
@@ -430,50 +327,7 @@
         </table>
     </xsl:template>
 
-    <!-- ===================================================================================================== -->
-    <!-- returns the sortkey of a given children (used by printSwitchViewBar and printChildren) -->
-    <!-- ===================================================================================================== -->
-    <xsl:template name="get.sortKey">
-        <xsl:param name="kindOfChildren" />
-        <xsl:choose>
-            <xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='title')">
-                <xsl:value-of select="'&amp;sortby=maintitles_vol'" />
-            </xsl:when>
-            <xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='position')">
-                <xsl:value-of select="'&amp;sortby=position_vol'" />
-            </xsl:when>
-            <xsl:when test="($kindOfChildren='jpvolume') and ($toc.sortBy.jpvolume='date')">
-                <xsl:value-of select="'&amp;sortby=dates_vol'" />
-            </xsl:when>
-            <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='title')">
-                <xsl:value-of select="'&amp;sortby=maintitles_art'" />
-            </xsl:when>
-            <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='size')">
-                <xsl:value-of select="'&amp;sortby=sizes_art'" />
-            </xsl:when>
-            <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='position')">
-                <xsl:value-of select="'&amp;sortby=dates_art'" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="''" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
 
-    <!-- ===================================================================================================== -->
-    <!-- returns the sort order of a given children (used by printSwitchViewBar and printChildren) -->
-    <!-- ===================================================================================================== -->
-    <xsl:template name="get.sortOrder">
-        <xsl:param name="kindOfChildren" />
-        <xsl:choose>
-            <xsl:when test="($kindOfChildren='jparticle') and ($toc.sortBy.jparticle='position')">
-                <xsl:value-of select="'descending'" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="'ascending'" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
 
     <!-- ===================================================================================================== -->
     <!-- prints the number of children, a result pages navigation and a form to sort them -->
@@ -510,60 +364,18 @@
                             <form id="sort" target="_self" action="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}{$HttpSession}"
                                 method="post">
                                 <p>
-                                    <xsl:choose>
-                                        <xsl:when test="$childrenKinds='jparticle'">
-                                            <select onChange="document.getElementById('sort').submit()" name="XSL.toc.sortBy.jparticle.SESSION"
-                                                size="1">
-                                                <option value="title">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle" />
-                                                        <xsl:with-param name="compVal2" select="'title'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.aftertitles')" />
-                                                </option>
-                                                <option value="size">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle" />
-                                                        <xsl:with-param name="compVal2" select="'size'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.afterpages')" />
-                                                </option>
-                                                <option value="position">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jparticle" />
-                                                        <xsl:with-param name="compVal2" select="'position'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.position')" />
-                                                </option>
-                                            </select>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <select onChange="document.getElementById('sort').submit()" name="XSL.toc.sortBy.jpvolume.SESSION"
-                                                size="1">
-                                                <option value="title">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume" />
-                                                        <xsl:with-param name="compVal2" select="'title'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.aftertitles')" />
-                                                </option>
-                                                <option value="position">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume" />
-                                                        <xsl:with-param name="compVal2" select="'position'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.position')" />
-                                                </option>
-                                                <option value="date">
-                                                    <xsl:call-template name="checkSelection">
-                                                        <xsl:with-param name="compVal1" select="$toc.sortBy.jpvolume" />
-                                                        <xsl:with-param name="compVal2" select="'date'" />
-                                                    </xsl:call-template>
-                                                    <xsl:value-of select="i18n:translate('metaData.sortbuttons.chronological')" />
-                                                </option>
-                                            </select>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                                    <select onChange="document.getElementById('sort').submit()" name="XSL.toc.sortBy.SESSION" size="1">
+                                        <xsl:for-each select="$objectView/sort/set[@type=$currentObjType]/key">
+                                            <option value="{@sortBy}">
+                                                <xsl:if test="@sortBy=$toc.sortBy">
+                                                    <xsl:attribute name="selected">
+                                                        <xsl:value-of select="selected" />
+                                                    </xsl:attribute>
+                                                </xsl:if>
+                                                <xsl:value-of select="i18n:translate(@i18n)" />
+                                            </option>
+                                        </xsl:for-each>
+                                    </select>
                                 </p>
                             </form>
                         </td>
@@ -619,48 +431,39 @@
     <!-- shows a navigation control to browse through the result list of a search -->
     <!-- =========================================================================== -->
     <xsl:template name="browseCtrlJP">
-        <xsl:variable name="hasPrev" select="string-length($previousObject)>0" />
-        <xsl:variable name="hasNext" select="string-length($nextObject)>0" />
-        <table>
-            <tr>
-                <xsl:if test="$hasPrev">
-                    <xsl:variable name="hostParam">
-                        <xsl:if test="$previousObjectHost != 'local'">
-                            <xsl:value-of select="concat('?host=',$previousObjectHost)" />
-                        </xsl:if>
-                    </xsl:variable>
-                    <td id="detailed-browse">
-                        <a href="{$WebApplicationBaseURL}receive/{$previousObject}{$HttpSession}{$hostParam}" alt="{i18n:translate('metaData.resultlist.prev')}"
-                            title="{i18n:translate('metaData.resultlist.prev')}">
-                            <img src="{$WebApplicationBaseURL}left.gif" />
-                        </a>
-                    </td>
-                </xsl:if>
-                <xsl:if test="$hasPrev or $hasNext">
-                    <td>
-                        <div id="switch-notcurrent">
-                            <a
-                                href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
-                                <xsl:value-of select="i18n:translate('metaData.resultlist')" />
-                            </a>
-                        </div>
-                    </td>
-                </xsl:if>
-                <xsl:if test="$hasNext">
-                    <xsl:variable name="hostParam">
-                        <xsl:if test="$nextObjectHost != 'local'">
-                            <xsl:value-of select="concat('?host=',$nextObjectHost)" />
-                        </xsl:if>
-                    </xsl:variable>
-                    <td id="detailed-browse">
-                        <a href="{$WebApplicationBaseURL}receive/{$nextObject}{$HttpSession}{$hostParam}" alt="{i18n:translate('metaData.resultlist.next')}"
-                            title="{i18n:translate('metaData.resultlist.next')}">
-                            <img src="{$WebApplicationBaseURL}right.gif" />
-                        </a>
-                    </td>
-                </xsl:if>
-            </tr>
-        </table>
+        <xsl:if test="$previousObject or $nextObject">
+            <menu id="searchResultsBrowse" class="jp-layout-horiz-menu">
+                <xsl:variable name="prevHostParam">
+                    <xsl:if test="$previousObjectHost">
+                        <xsl:value-of select="concat('?host=',$previousObjectHost)" />
+                    </xsl:if>
+                </xsl:variable>
+                <xsl:variable name="prevButtonLabel" select="i18n:translate('metaData.resultlist.prev')" />
+                <li class="prevObjButton {$objectView/objButton/css[@view=string($previousObject!='')]}">
+                    <a href="{$WebApplicationBaseURL}receive/{$previousObject}{$HttpSession}{$prevHostParam}" alt="{$prevButtonLabel}"
+                        title="{$prevButtonLabel}">
+                        <img src="{$WebApplicationBaseURL}left.gif" />
+                    </a>
+                </li>
+                <li>
+                    <a
+                        href="{$ServletsBaseURL}MCRSearchServlet{$HttpSession}?mode=results&amp;id={$resultListEditorID}&amp;page={$page}&amp;numPerPage={$numPerPage}">
+                        <xsl:value-of select="i18n:translate('metaData.resultlist')" />
+                    </a>
+                </li>
+                <xsl:variable name="nextHostParam">
+                    <xsl:if test="$nextObjectHost">
+                        <xsl:value-of select="concat('?host=',$nextObjectHost)" />
+                    </xsl:if>
+                </xsl:variable>
+                <xsl:variable name="nextButtonLabel" select="i18n:translate('metaData.resultlist.next')" />
+                <li class="nextObjButton {$objectView/objButton/css[@view=string($nextObject!='')]}">
+                    <a href="{$WebApplicationBaseURL}receive/{$nextObject}{$HttpSession}{$nextHostParam}" alt="{$nextButtonLabel}" title="{$nextButtonLabel}">
+                        <img src="{$WebApplicationBaseURL}right.gif" />
+                    </a>
+                </li>
+            </menu>
+        </xsl:if>
     </xsl:template>
 
     <!-- ===================================================================================================== -->
