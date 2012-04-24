@@ -111,15 +111,8 @@
                             <td width="200px" valign="top" rowspan="2">
                                 <div id="div_navi_main">
                                   <xsl:call-template name="navigation.tree">
-                                    <xsl:with-param name="rootNode" select="'navi-main'"/>
-                                    <xsl:with-param name="CSSLayoutClass" select="'navi_main'"/>
-                                    <xsl:with-param name="menuPointHeigth" select="'17'"/>
-                                    <!-- use pixel values -->
-                                    <xsl:with-param name="columnWidthIcon" select="'9'"/>
                                     <!-- use percent values -->
                                     <xsl:with-param name="spaceBetweenMainLinks" select="'4'"/>
-                                    <!-- use pixel values -->
-                                    <xsl:with-param name="borderWidthTopDown" select="'15'"/>
                                     <!-- use pixel values -->
                                     <xsl:with-param name="borderWidthSides" select="'0'"/>
                                     <!-- use percent values -->
@@ -211,7 +204,6 @@
 
     <xsl:template name="jp_printVolumeData">
       <xsl:call-template name="jp_objectView_initJS" />
-      <xsl:call-template name="printMetadataHead" />
       <xsl:choose>
         <!-- metadaten -->
         <xsl:when test="$view.objectmetadata = 'false'">
