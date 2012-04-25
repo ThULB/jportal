@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom.Content;
 import org.jdom.Element;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRMetaElement;
@@ -33,6 +34,10 @@ public class PersonFixServlet extends MCRServlet {
 
     @Override
     protected void doGetPost(MCRServletJob job) throws Exception {
+        if(!MCRAccessManager.checkPermission("administrate-user")) {
+            getLayoutService().doLayout(job.getRequest(), job.getResponse(), new MCRJDOMContent(new Element("notAllowed")));
+            return;
+        }
         String mode = job.getRequest().getParameter("mode");
         if(mode.equals("count")) {
             int hits = find().getNumHits();
