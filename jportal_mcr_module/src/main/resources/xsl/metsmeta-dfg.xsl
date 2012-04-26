@@ -217,6 +217,11 @@
             <xsl:value-of select="$personObj/mycoreobject/metadata/def.unittitle/unittitle" />
           </mods:displayForm>
         </xsl:when>
+        <xsl:when test="$personObj/mycoreobject/metadata/names/name/fullname">
+          <mods:displayForm>
+            <xsl:value-of select="$personObj/mycoreobject/metadata/names/name/fullname" />
+          </mods:displayForm>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="lastName" select="$personObj/mycoreobject/metadata/def.heading/heading/lastName" />
           <xsl:variable name="firstName" select="$personObj/mycoreobject/metadata/def.heading/heading/firstName" />
