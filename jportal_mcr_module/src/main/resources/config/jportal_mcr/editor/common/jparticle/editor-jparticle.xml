@@ -84,7 +84,6 @@
             </text>
         </cell>
         <!-- parent -->
-        <cell class="editorMandatory" row="300" col="1" anchor="NORTHWEST" ref="parent_label" />
         <cell row="300" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
         <cell row="350" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
