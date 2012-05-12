@@ -3,6 +3,7 @@
     xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xlink xalan">
 
     <xsl:include href="MyCoReLayout.xsl" />
+    <xsl:include href="chooseTemplate.xsl" />
     <xsl:param name="PageTitle" select="'Zeitschriften-Kontext anlegen'" />
     <xsl:param name="MCR.users_superuser_username" />
     <xsl:param name="MCR.JPortal.Create-JournalContext.ID" select="'null'" />

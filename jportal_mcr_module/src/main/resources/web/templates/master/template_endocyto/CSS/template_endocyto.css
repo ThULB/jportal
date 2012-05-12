@@ -210,3 +210,25 @@ body{
 /*	display: inline-block;*/
 	float: left;
 }
+
+.jp-layout-breadcrumb{
+	padding: 0px;
+}
+
+.jp-layout-breadcrumb li{
+	display: inline-block;
+}
+.jp-layout-metadata {
+	color: black;
+}
+
+.jp-layout-metadata h3{
+	color: #115C11;
+	text-decoration: underline;
+	font-size: 1.8em;
+}
+
+.jp-layout-metadata dt{
+	font-style: italic;
+	margin-top: 5px;
+}

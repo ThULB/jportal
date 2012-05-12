@@ -4,7 +4,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xlink mcr i18n acl" version="1.0">
   <xsl:param select="'local'" name="objectHost" />
   <!-- =============================================================================================== -->
-  <!--Template for result list hit: see results.xsl-->
+  <!--Template for result list hit: see results.xsl -->
   <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]">
     <xsl:param name="mcrobjlink" />
     <xsl:param name="overwriteLayout" />
@@ -163,8 +163,7 @@
             </xsl:variable>
             <xsl:for-each select="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']">
               <xsl:call-template name="formatISODate">
-                <xsl:with-param name="date"
-                  select="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']/text()" />
+                <xsl:with-param name="date" select="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']/text()" />
                 <xsl:with-param name="format" select="$format" />
               </xsl:call-template>
             </xsl:for-each>
@@ -229,8 +228,8 @@
 
   <!-- =============================================================================================== -->
   <xsl:template match="mcr:hit[contains(@id,'_jparticle_')]" mode="toc">
-        <xsl:param name="mcrobj" select="document(concat('mcrobject:',@id))"/>
-        <xsl:apply-templates select="$mcrobj" mode="toc" />
+    <xsl:param name="mcrobj" select="document(concat('mcrobject:',@id))" />
+    <xsl:apply-templates select="$mcrobj" mode="toc" />
   </xsl:template>
 
   <!-- ================================================================================================================= -->
@@ -344,12 +343,85 @@
   </xsl:template>
 
   <!-- =============================================================================================== -->
+  <xsl:key name="subtitles" match="subtitle" use="@type" />
+  <xsl:key name="identis" match="identi" use="@type" />
+  <xsl:key name="notes" match="note" use="@type" />
+  <xsl:key name="participants" match="participant" use="@type" />
+  <xsl:variable name="classificationXML">
+    <class tag="participants">jportal_class_00000007</class>
+    <class tag="subtitles">jportal_class_00000006</class>
+    <class tag="identis">jportal_class_00000010</class>
+    <class tag="notes">jportal_class_00000060</class>
+  </xsl:variable>
+  <xsl:variable name="classification" select="xalan:nodeset($classificationXML)" />
 
-  <!--Template for metadata view: see mycoreobject.xsl-->
+  <xsl:template mode="metadataDisplay" match="metadata/child::node()[@class='MCRMetaLangText' and child::node()[@type!='']]">
+    <xsl:variable name="currentTagName" select="name()" />
+    <xsl:variable name="classID" select="$classification/class[@tag=$currentTagName]" />
+    <xsl:variable name="mcrClass" select="@class" />
+    <dl>
+      <xsl:for-each select="child::node()[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
+        <xsl:variable name="categID" select="@type" />
+        <xsl:variable name="label"
+          select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+
+        <dt>
+          <xsl:value-of select="concat($label, ': ')" />
+        </dt>
+        <dd>
+          <xsl:for-each select="key($currentTagName, @type)">
+            <xsl:sort select="./text()" />
+            <xsl:value-of select="text()" />
+            <xsl:if test="position() != last()">
+              <xsl:value-of select="'; '" />
+            </xsl:if>
+            <!-- <xsl:call-template name="$mcrClass" select="."/> -->
+          </xsl:for-each>
+        </dd>
+      </xsl:for-each>
+    </dl>
+  </xsl:template>
+
+  <xsl:template name="MCRMetaLangText">
+    <xsl:value-of select="text()" />
+    <xsl:if test="position() != last()">
+      <xsl:value-of select="'; '" />
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="metadataDisplay" match="metadata/child::node()[@class='MCRMetaLinkID' and child::node()[@type!='']]">
+    <xsl:variable name="currentTagName" select="name()" />
+    <xsl:variable name="classID" select="$classification/class[@tag=$currentTagName]" />
+    <dl>
+      <xsl:for-each select="child::node()[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
+        <xsl:variable name="categID" select="@type" />
+        <xsl:variable name="label"
+          select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+
+        <dt>
+          <xsl:value-of select="concat($label, ': ')" />
+        </dt>
+        <dd>
+          <xsl:for-each select="key($currentTagName, @type)">
+            <xsl:sort select="./@xlink:title" />
+            <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
+              <xsl:value-of select="@xlink:title" />
+            </a>
+            <xsl:if test="position() != last()">
+              <xsl:value-of select="'; '" />
+            </xsl:if>
+          </xsl:for-each>
+        </dd>
+      </xsl:for-each>
+    </dl>
+  </xsl:template>
+
+  <!--Template for metadata view: see mycoreobject.xsl -->
   <xsl:template priority="1" mode="present" match="/mycoreobject[contains(@ID,'_jparticle_')]">
     <xsl:param select="$objectHost" name="obj_host" />
     <xsl:param name="accessedit" />
     <xsl:param name="accessdelete" />
+
     <xsl:variable name="objectBaseURL">
       <xsl:if test="$objectHost != 'local'">
         <xsl:value-of select="document('webapp:hosts.xml')/mcr:hosts/mcr:host[@alias=$objectHost]/mcr:url[@type='object']/@href" />
@@ -361,7 +433,26 @@
     <xsl:variable name="staticURL">
       <xsl:value-of select="concat($objectBaseURL,@ID)" />
     </xsl:variable>
-    <div id="detailed-frame">
+
+    <xsl:message>
+      maintitles:
+      <xsl:value-of select="count(/mycoreobject[contains(@ID,'_jparticle_')]/metadata/child::node()[@class='MCRMetaLangText'])" />
+    </xsl:message>
+    <div id="detailed-frame" class="jp-layout-metadata">
+      <h3>
+        <xsl:choose>
+          <xsl:when test="$allowHTMLInArticles = 'true'">
+            <xsl:value-of disable-output-escaping="yes" select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="./metadata/maintitles/maintitle[@inherited='0']/text()" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </h3>
+
+      <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[name() != 'maintitles' and not(contains(name(), 'hidden_'))]" />
+
+      <!-- #################################### -->
       <xsl:variable name="mainTitle">
         <xsl:choose>
           <xsl:when test="$allowHTMLInArticles = 'true'">
@@ -440,7 +531,7 @@
                 </table>
               </xsl:when>
             </xsl:choose>
-            <!--1***maintitle*************************************-->
+            <!--1***maintitle************************************* -->
             <!-- only if headline cut -->
             <xsl:if test="string-length($mainTitle)>150">
               <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
@@ -465,7 +556,7 @@
                 </tr>
               </table>
             </xsl:if>
-            <!--2***subtitle*************************************-->
+            <!--2***subtitle************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDate_typeSensitive">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -475,7 +566,7 @@
                 <xsl:with-param name="mode" select="'text'" />
               </xsl:call-template>
             </table>
-            <!--3***participant*************************************-->
+            <!--3***participant************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDate_typeSensitive">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -485,7 +576,7 @@
                 <xsl:with-param name="mode" select="'xlink'" />
               </xsl:call-template>
             </table>
-            <!--4***date*************************************-->
+            <!--4***date************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDate_typeSensitive">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -495,7 +586,7 @@
                 <xsl:with-param name="mode" select="'date'" />
               </xsl:call-template>
             </table>
-            <!--5***size*************************************-->
+            <!--5***size************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -503,7 +594,7 @@
                 <xsl:with-param select="i18n:translate('editormask.labels.size')" name="label" />
               </xsl:call-template>
             </table>
-            <!--6***identi*************************************-->
+            <!--6***identi************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDate_typeSensitive">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -543,7 +634,7 @@
                 </tr>
               </table>
             </xsl:if>
-            <!--7***keyword*************************************-->
+            <!--7***keyword************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -551,7 +642,7 @@
                 <xsl:with-param select="i18n:translate('editormask.labels.keyword')" name="label" />
               </xsl:call-template>
             </table>
-            <!--8***abstract*************************************-->
+            <!--8***abstract************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -559,7 +650,7 @@
                 <xsl:with-param select="i18n:translate('editormask.labels.abstract')" name="label" />
               </xsl:call-template>
             </table>
-            <!--9***note*************************************-->
+            <!--9***note************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDate_typeSensitive">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -581,7 +672,7 @@
               </table>
             </xsl:if>
 
-            <!--11***rubric*************************************-->
+            <!--11***rubric************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -589,11 +680,10 @@
                 <xsl:with-param select="i18n:translate('editormask.labels.rubric')" name="label" />
               </xsl:call-template>
             </table>
-            <!--12***classipub*************************************-->
+            <!--12***classipub************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:variable name="label_classipub">
-                <xsl:value-of
-                  select="document('jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub')//label/text()" />
+                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub/hidden_classipub')//label/text()" />
               </xsl:variable>
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -601,11 +691,10 @@
                 <xsl:with-param select="$label_classipub" name="label" />
               </xsl:call-template>
             </table>
-            <!--13***classipub2*************************************-->
+            <!--13***classipub2************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:variable name="label_classipub2">
-                <xsl:value-of
-                  select="document('jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2')//label/text()" />
+                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub2/hidden_classipub2')//label/text()" />
               </xsl:variable>
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -613,11 +702,10 @@
                 <xsl:with-param select="$label_classipub2" name="label" />
               </xsl:call-template>
             </table>
-            <!--14***classipub3*************************************-->
+            <!--14***classipub3************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:variable name="label_classipub3">
-                <xsl:value-of
-                  select="document('jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3')//label/text()" />
+                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub3/hidden_classipub3')//label/text()" />
               </xsl:variable>
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -625,11 +713,10 @@
                 <xsl:with-param select="$label_classipub3" name="label" />
               </xsl:call-template>
             </table>
-            <!--15***classipub4*************************************-->
+            <!--15***classipub4************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:variable name="label_classipub4">
-                <xsl:value-of
-                  select="document('jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4')//label/text()" />
+                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_classispub4/hidden_classipub4')//label/text()" />
               </xsl:variable>
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -637,11 +724,10 @@
                 <xsl:with-param select="$label_classipub4" name="label" />
               </xsl:call-template>
             </table>
-            <!--10***type*************************************-->
+            <!--10***type************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:variable name="label_type">
-                <xsl:value-of
-                  select="document('jportal_getClassLabel:getFromJournal:hidden_pubTypesID/hidden_pubTypeID')//label/text()" />
+                <xsl:value-of select="document('jportal_getClassLabel:getFromJournal:hidden_pubTypesID/hidden_pubTypeID')//label/text()" />
               </xsl:variable>
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -649,7 +735,7 @@
                 <xsl:with-param select="$label_type" name="label" />
               </xsl:call-template>
             </table>
-            <!--16***ref*************************************-->
+            <!--16***ref************************************* -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
               <xsl:call-template name="printMetaDates">
                 <xsl:with-param select="'right'" name="textalign" />
@@ -688,10 +774,8 @@
             <!-- Administration ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
             <xsl:call-template name="showAdminHead" />
             <!--*** Editor Buttons ************************************* -->
-            <!--
-              <xsl:call-template name="jp_editobject_with_der"> <xsl:with-param select="$accessedit" name="accessedit"/>
-              <xsl:with-param select="./@ID" name="id"/> </xsl:call-template>
-            -->
+            <!-- <xsl:call-template name="jp_editobject_with_der"> <xsl:with-param select="$accessedit" name="accessedit"/> <xsl:with-param select="./@ID" 
+              name="id"/> </xsl:call-template> -->
             <table border="0" cellspacing="0" cellpadding="0" id="detailed-view">
 
               <xsl:call-template name="jp_editobject_with_der">
