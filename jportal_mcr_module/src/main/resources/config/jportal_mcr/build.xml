@@ -60,6 +60,14 @@
 			</patternset>
 			<regexpmapper from="^(xsl/)(.*)" to="\2" />
 		</unjar>
+		
+		<unjar dest="${build.webapps}/WEB-INF/classes/xml" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xml/**" />
+			</patternset>
+			<regexpmapper from="^(xml/)(.*)" to="\2" />
+		</unjar>
 
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
