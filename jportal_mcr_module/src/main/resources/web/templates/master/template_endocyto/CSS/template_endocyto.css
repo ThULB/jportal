@@ -1,31 +1,34 @@
 @CHARSET "UTF-8";
-html{
-	background-color: white;
-    font-family: Verdana,Helvetica,sans-serif;
-    font-size: 12px;
+
+html {
+	background-color: #DBDBDB;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12px;
 }
 
-html, a{
+html,a {
 	color: #115C11;
 	text-decoration: none;
 }
 
-body{
-	margin: 0px;
-	min-width: 1024px;
+body {
+	background-color: white;
+	margin: 0 auto;
+	width: 1024px;
+	border: solid 1px #DBDBDB;
 }
 
 /* Color group definition */
-.navi_history, .navi_history a, .jp-layout-left-navi a {
+.navi_history,.navi_history a,.jp-layout-left-navi a {
 	color: #003100;
 }
 
 /* Font group definition*/
-.login_link, .navi_history a, .jp-layout-left-navi a, .headline {
+.login_link,.navi_history a,.jp-layout-left-navi a,.headline {
 	font-weight: bold;
 }
 
-.jp-layout-left-navi a, .navi_history {
+.jp-layout-left-navi a,.navi_history {
 	font-size: 11px;
 }
 
@@ -38,7 +41,7 @@ body{
 	height: 30px;
 }
 
-.jp-top-navigation-bar a{
+.jp-top-navigation-bar a {
 	color: #115C11;
 	text-decoration: none;
 }
@@ -49,8 +52,8 @@ body{
 
 .jp-top-navigation-bar .jp-home-link {
 	margin: 7px 10px;
-    float: left;
-    font-weight: bold;
+	float: left;
+	font-weight: bold;
 }
 
 .jp-top-navigation-bar ul {
@@ -62,22 +65,20 @@ body{
 	padding-right: 12px;
 }
 
-
 .jp-layout-header {
-	background-image:
-		url("../IMAGES/banner_top.gif"),
-		url("../IMAGES/banner_top_bg.gif");
+	background-image: url("../IMAGES/banner_top_clean.gif");
 	background-repeat: no-repeat, repeat-x;
 	background-position: left bottom;
 	height: 180px;
 }
 
 .navi_history {
-	position: relative;
 	padding: 0px;
-	top: 120px;
-	padding-left: 270px;
+	padding-left: 35px;
 	clear: both;
+	height: 20px;
+	padding-top: 5px;
+	border-bottom: solid 2px #DBDBDB;
 }
 
 .navi_history li {
@@ -94,7 +95,6 @@ body{
 	background-position: bottom;
 	float: left;
 }
-
 
 .jp-layout-left-navi ul {
 	margin: 0px;
@@ -114,14 +114,15 @@ body{
 }
 
 .jp-layout-content-area {
-	padding-left: 290px;
-	padding-right: 40px;
+	padding-left: 35px;
+	padding-right: 35px;
 }
 
-.jp-layout-content-area a{
+.jp-layout-content-area a {
 	font-weight: normal;
 }
-.jp-layout-content-area a:hover{
+
+.jp-layout-content-area a:hover {
 	text-decoration: underline;
 }
 
@@ -129,27 +130,27 @@ body{
 	clear: both;
 }
 
-.languageSelect{
+.languageSelect {
 	background: white;
 }
 
-.languageList_show{
+.languageList_show {
 	background: white;
 }
 
-.detail-browse-button{
+.detail-browse-button {
 	border: 1px solid #003100;
 	background-color: #7BAA89;
 }
 
-.jp-layout-button-inactive, .jp-layout-button-active {
-    height: 20px;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    text-align: center;
-    color: white;
+.jp-layout-button-inactive,.jp-layout-button-active {
+	height: 20px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	text-align: center;
+	color: white;
 }
 
 .jp-layout-button-inactive a {
@@ -160,75 +161,165 @@ body{
 	color: white;
 }
 
-.jp-layout-button-inactive{
+.jp-layout-button-inactive {
 	background-color: #003100;
 }
 
 .jp-layout-button-active {
 	background-color: #7BAA89;
 }
-.prevObjButton.jp-layout-button-inactive{
+
+.prevObjButton.jp-layout-button-inactive {
 	background-image: url("/left.gif");
 }
-.nextObjButton.jp-layout-button-inactive{
+
+.nextObjButton.jp-layout-button-inactive {
 	background-image: url("/right.gif");
 }
-.prevObjButton, .nextObjButton {
+
+.prevObjButton,.nextObjButton {
 	border: 1px solid #003100;
 	height: 20px;
-    width: 20px;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    display: inline-block;
+	width: 20px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	display: inline-block;
 }
 
-.switch-view-button{
+.switch-view-button {
 	width: 166px;
 	height: 20px;
-/*	display: inline-block;*/
+	/*	display: inline-block;*/
 }
 
-.jp-layout-button-active .label-inactive{
+.jp-layout-button-active .label-inactive {
 	display: none;
 }
 
-.jp-layout-button-inactive .label-active{
+.jp-layout-button-inactive .label-active {
 	display: none;
 }
 
-.jp-layout-url-hidden a{
+.jp-layout-url-hidden a {
 	display: none;
+}
+
+.jp-layout-horiz-menu a {
+	color: #003100;
 }
 
 .jp-layout-horiz-menu {
+	position: relative;
+	top: 130px;
+	left: 10px;
+	font-weight: bold;
+}
+
+.jp-layout-horiz-menu ul{
+	margin: 0px;
+	padding: 0px;
 	list-style-type: none;
 }
 
-.jp-layout-horiz-menu li{
-/*	display: inline-block;*/
+.jp-layout-horiz-menu li {
+	margin-left: 20px;
+	margin-right: 20px;
 	float: left;
 }
 
-.jp-layout-breadcrumb{
+.jp-layout-breadcrumb {
 	padding: 0px;
+	margin: 0px;
 }
 
-.jp-layout-breadcrumb li{
+.jp-layout-breadcrumb li {
 	display: inline-block;
 }
+
 .jp-layout-metadata {
 	color: black;
+	float: left;
+	width: 670px;
+	padding-left: 20px;
 }
 
-.jp-layout-metadata h3{
+.jp-layout-maintitle {
 	color: #115C11;
 	text-decoration: underline;
 	font-size: 1.8em;
+	margin-top: 20px;
+	margin-bottom: 50px;
 }
 
-.jp-layout-metadata dt{
+.jp-layout-metadata dt {
 	font-style: italic;
-	margin-top: 5px;
+	margin-bottom: 10px;
+	clear: left;
+	float: left;
+	text-align: right;
+	width: 250px;
+}
+
+.jp-layout-metadata dd {
+	float: left;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	width: 400px;
+}
+
+.jp-layout-derivates {
+	float: left;
+	width: 256px;
+	border: solid 1px #9A9899;
+	overflow: hidden;
+	background-color: #CFC9CA;
+}
+
+.jp-layout-derivates > p{
+	margin: 0px;
+	background-color: #9A9899;
+	font-weight: bold;
+	padding: 5px;
+	border-bottom: solid 1px #6D6D6D;
+}
+
+.jp-layout-derivates > div {
+	max-height: 414px;
+	overflow: auto;
+}
+
+.jp-layout-derivates ul{
+	margin: 0px;
+}
+
+.jp-layout-derivates img{
+	width: 192px;
+	margin-left: 30px;
+}
+
+.jp-layout-derivateLinks {
+	list-style: none;
+	padding: 0px;
+}
+
+.jp-layout-editing {
+	clear: both;
+}
+
+.jp-layout-metadataList {
+	list-style: none;
+	padding: 0px;
+}
+
+.jp-layout-metadataList li span {
+	font-style: italic;
+	float: left;
+	padding-right: 10px;
+	text-decoration: underline;
+}
+
+.jp-layout-metadataList li p {
+	padding-left: 20px;
 }

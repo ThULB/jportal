@@ -301,7 +301,8 @@
       </xsl:choose>
     </xsl:variable>
     <table id="resultList" cellpadding="0" cellspacing="0">
-      <xsl:for-each select="$children/mcr:results/mcr:hit[(position()>=$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
+      <xsl:for-each select="$children/mcr:results/mcr:hit[(position()>
+        =$toc.pos.verif) and ($toc.pos.verif+$toc.pageSize>position())]">
         <xsl:choose>
           <xsl:when test="mcrxml:exists(@id)">
             <xsl:variable name="mcrobj" select="document(concat('mcrobject:',@id))/mycoreobject" />
@@ -392,7 +393,7 @@
     <xsl:if test="number($numberOfChildren)>number($toc.pageSize)">
       <xsl:value-of select="concat(', ',i18n:translate('metaData.resultpage'))" />
       <xsl:for-each select="./structure/children/child[number($numberOfHitPages)>
-                =position()]">
+        =position()]">
         <xsl:variable name="jumpToPos">
           <xsl:value-of select="(position()*number($toc.pageSize))-number($toc.pageSize)" />
         </xsl:variable>
@@ -543,6 +544,58 @@
     </script>
   </xsl:template>
 
+  <xsl:template name="setImageLink">
+    <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
+    <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
+
+    <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+    <xsl:if test="acl:checkPermission(./@ID,concat('update_',$type)) and $bookmarkedImage != '' and not($linkExist)">
+      <xsl:variable name="url">
+        <xsl:value-of select="concat($ServletsBaseURL,'DerivateLinkServlet?mode=setLink&amp;from=',./@ID)" />
+      </xsl:variable>
+      <li>
+        <a href="{$url}">
+          Bild verlinken
+        </a>
+      </li>
+    </xsl:if>
+  </xsl:template>
+  
+  <xsl:template name="objectEditing">
+    <xsl:param name="id" />
+    <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
+    <xsl:variable name="accessPermXML">
+      <access>
+        <xsl:attribute name="update">
+                <xsl:value-of select="acl:checkPermission($id,concat('update_',$type))" />
+              </xsl:attribute>
+        <xsl:attribute name="delete">
+                <xsl:value-of select="acl:checkPermission($id,concat('delete_',$type))" />
+              </xsl:attribute>
+      </access>
+    </xsl:variable>
+    <xsl:variable name="accessPerm" select="xalan:nodeset($accessPermXML)" />
+
+    <menu>
+      <xsl:choose>
+        <xsl:when test="$accessPerm/access/@update = 'true' or $accessPerm/access/@delete = 'true'">
+          <li>
+            <a
+              href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=seditobj">
+              Dokument bearbeiten
+            </a>
+          </li>
+          <li>
+            <a
+              href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
+              Datei hochladen
+            </a>
+          </li>
+          <xsl:call-template name="setImageLink"/>
+        </xsl:when>
+      </xsl:choose>
+    </menu>
+  </xsl:template>
   <!-- ===================================================================================================== -->
   <!-- prints the icon line to edit an object with derivates -->
   <!-- ===================================================================================================== -->

@@ -25,31 +25,41 @@
           </div>
           <div class="logo">
           </div>
-          <div class="navi_history">
-            <xsl:if test="/mycoreobject/@ID!=''">
-              <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents/parent" />
-              <menu class="jp-layout-breadcrumb">
-                <xsl:for-each select="$parents">
-                  <xsl:sort select="@inherited" order="descending" />
-                  <li>
-                    <b>\ </b>
-                    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
-                      <xsl:value-of select="@xlink:title" />
-                    </a>
-                  </li>
-                </xsl:for-each>
-                <li>
-                  <b>\ </b>
-                  <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" />
-                </li>
-              </menu>
-            </xsl:if>
-          </div>
-        </div>
-        <div id="navi_left" class="jp-layout-left-navi">
-          <div>
+
+          <div class="jp-layout-horiz-menu">
             <xsl:call-template name="navigation.tree" />
           </div>
+        </div>
+        <div class="navi_history">
+          <xsl:if test="/mycoreobject/@ID!=''">
+            <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents/parent" />
+            <menu class="jp-layout-breadcrumb">
+              <xsl:for-each select="$parents">
+                <xsl:sort select="@inherited" order="descending" />
+                <li>
+                  <b>\ </b>
+                  <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
+                    <xsl:value-of select="@xlink:title" />
+                  </a>
+                </li>
+              </xsl:for-each>
+              <li>
+                <b>\ </b>
+                <xsl:variable name="maintitle">
+                  <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" />
+                </xsl:variable>
+
+                <xsl:choose>
+                  <xsl:when test="string-length($maintitle) > 20">
+                    <xsl:value-of select="concat(substring($maintitle,0,20), '...')"></xsl:value-of>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="$maintitle" />
+                  </xsl:otherwise>
+                </xsl:choose>
+              </li>
+            </menu>
+          </xsl:if>
         </div>
         <div id="content_area" class="jp-layout-content-area">
           <xsl:call-template name="jp.layout.getHTMLContent" />

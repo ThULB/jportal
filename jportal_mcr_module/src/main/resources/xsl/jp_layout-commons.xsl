@@ -31,7 +31,7 @@
 		<script type="text/javascript">google.load("jquery", "1.6.2");</script>
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/JS/{$nameOfTemplate}.js" type="text/javascript" />
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
-        <xsl:if test="acl:checkPermission(/mycoreobject/@ID,concat('update_',$type))">
+        <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">
     	  <script type="text/javascript">
             var baseUrl = "<xsl:value-of select="$WebApplicationBaseURL" />";
             var runid = [];
@@ -88,7 +88,6 @@
         <xsl:call-template name="print.writeProtectionMessage" />
         <xsl:choose>
             <xsl:when test="$readAccess='true'">
-                <xsl:call-template name="getFastWCMS" />
                 <xsl:apply-templates />
             </xsl:when>
             <xsl:otherwise>
