@@ -56,12 +56,14 @@
         <xsl:call-template name="printMetadata" />
       </xsl:otherwise>
     </xsl:choose>
+    <!-- 
     <div class="metadataHead">
       <xsl:call-template name="printSwitchViewBar" />
       <xsl:call-template name="browseCtrlJP" />
       <xsl:call-template name="switchToXMLview" />
       <xsl:call-template name="switchToHistory" />
     </div>
+     -->
   </xsl:template>
 
   <!-- =================================================== -->

@@ -37,7 +37,9 @@
               <xsl:for-each select="$parents">
                 <xsl:sort select="@inherited" order="descending" />
                 <li>
-                  <b>\ </b>
+                  <xsl:if test="position() != 1">
+                    <b>\ </b>
+                  </xsl:if>
                   <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
                     <xsl:value-of select="@xlink:title" />
                   </a>
@@ -63,6 +65,11 @@
         </div>
         <div id="content_area" class="jp-layout-content-area">
           <xsl:call-template name="jp.layout.getHTMLContent" />
+        </div>
+        <div id="editing-frame" class="jp-layout-editing">
+          <xsl:call-template name="objectEditing">
+            <xsl:with-param select="/mycoreobject/@ID" name="id" />
+          </xsl:call-template>
         </div>
         <div id="footer" class="footer"></div>
       </body>

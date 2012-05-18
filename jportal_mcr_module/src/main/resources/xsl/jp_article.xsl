@@ -364,20 +364,18 @@
 
   <xsl:template mode="metadataDisplay" match="metadata/*[@class='MCRMetaLangText']">
     <xsl:variable name="currentTagName" select="name()" />
-    <dl class="jp-layout-metadataList">
-      <dt>
-        <xsl:value-of select="concat(i18n:translate($classification/i18n[@tag=$currentTagName]), ': ')" />
-      </dt>
-      <dd>
-        <xsl:for-each select="*">
-          <xsl:sort select="./text()" />
-          <xsl:value-of select="text()" />
-          <xsl:if test="position() != last()">
-            <xsl:value-of select="'; '" />
-          </xsl:if>
-        </xsl:for-each>
-      </dd>
-    </dl>
+    <dt>
+      <xsl:value-of select="concat(i18n:translate($classification/i18n[@tag=$currentTagName]), ': ')" />
+    </dt>
+    <dd>
+      <xsl:for-each select="*">
+        <xsl:sort select="./text()" />
+        <xsl:value-of select="text()" />
+        <xsl:if test="position() != last()">
+          <xsl:value-of select="'; '" />
+        </xsl:if>
+      </xsl:for-each>
+    </dd>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]">
@@ -385,24 +383,22 @@
     <xsl:variable name="classID" select="$classification/class[@tag=$currentTagName]" />
     <xsl:variable name="mcrClass" select="@class" />
 
-    <dl class="jp-layout-metadataList">
-      <xsl:for-each select="*[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
-        <xsl:variable name="categID" select="@type" />
+    <xsl:for-each select="*[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
+      <xsl:variable name="categID" select="@type" />
 
-        <xsl:variable name="label"
-          select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
-          <dt>
-            <xsl:value-of select="concat($label, ': ')" />
-          </dt>
-          <dd>
-            <xsl:call-template name="displayForType">
-              <xsl:with-param name="class" select="$mcrClass" />
-              <xsl:with-param name="tagName" select="$currentTagName" />
-              <xsl:with-param name="type" select="@type" />
-            </xsl:call-template>
-          </dd>
-      </xsl:for-each>
-    </dl>
+      <xsl:variable name="label"
+        select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+      <dt>
+        <xsl:value-of select="concat($label, ': ')" />
+      </dt>
+      <dd>
+        <xsl:call-template name="displayForType">
+          <xsl:with-param name="class" select="$mcrClass" />
+          <xsl:with-param name="tagName" select="$currentTagName" />
+          <xsl:with-param name="type" select="@type" />
+        </xsl:call-template>
+      </dd>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="displayForType">
@@ -489,12 +485,9 @@
       </div>
     </div>
     <div id="metadata-frame" class="jp-layout-metadata">
-      <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[name() != 'maintitles' and not(contains(name(), 'hidden_'))]" />
-    </div>
-    <div id="editing-frame" class="jp-layout-editing">
-      <xsl:call-template name="objectEditing">
-        <xsl:with-param select="./@ID" name="id" />
-      </xsl:call-template>
+      <dl class="jp-layout-metadataList">
+        <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[name() != 'maintitles' and not(contains(name(), 'hidden_'))]" />
+      </dl>
     </div>
   </xsl:template>
 

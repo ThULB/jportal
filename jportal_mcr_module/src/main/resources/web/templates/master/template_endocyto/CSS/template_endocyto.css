@@ -12,10 +12,10 @@ html,a {
 }
 
 body {
-	background-color: white;
 	margin: 0 auto;
 	width: 1024px;
 	border: solid 1px #DBDBDB;
+	background-color: white;
 }
 
 /* Color group definition */
@@ -114,8 +114,10 @@ body {
 }
 
 .jp-layout-content-area {
+	overflow: hidden;
 	padding-left: 35px;
 	padding-right: 35px;
+	padding-bottom: 20px;
 }
 
 .jp-layout-content-area a {
@@ -305,7 +307,13 @@ body {
 }
 
 .jp-layout-editing {
+	border-top: solid 5px #DBDBDB;
+	border-bottom: solid 5px #DBDBDB;
 	clear: both;
+}
+
+.jp-layout-editing menu{
+	margin: 0px;
 }
 
 .jp-layout-metadataList {
