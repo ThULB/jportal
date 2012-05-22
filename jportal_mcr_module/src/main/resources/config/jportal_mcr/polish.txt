@@ -1,0 +1,298 @@
+Alle Felder verknüpfen mit
+(bitte wählen)
+aufsteigend
+absteigend 
+und - i
+enthält - zawiera
+szukaj - suchen
+nach Artikeln - wg. artykółów
+nach Institutionen
+nach Personen
+Blättern
+Intern
+Institution anlegen
+Person anlegen
+Impressum
+ein Projekt von
+Bitte Suchbegriff eingeben! - proszę wpisać słowo kluczowe!
+Institution anlegen
+Person anlegen
+in Zeitschriften suchen - szukaj wśród czasopism
+nach Artikeln
+nach Institutionen
+nach Personen
+Expertensuche - szukanie zaawansowane 
+nach Zeitschriften suchen - szukaj wg. czasopism
+A - Z
+Blättern in...
+EZB-Fächerliste
+	Allgemeine und vergleichende Sprach- und Literaturwissenschaft.Indogermanistik.Aussereuropäische Sprachen und Literaturen.	  
+	Allgemeines, Fachübergreifendes	  
+	Anglistik. Amerikanistik	  
+	Archäologie	  
+	Architektur, Bauingenieur- und Vermessungswesen	  
+	Bildungsgeschichte	  
+	Biologie	  
+	Chemie und Pharmazie	  
+	Elektrotechnik,Mess- und Regelungstechnik	  
+	Energie, Umweltschutz, Kerntechnik	  
+	Ethnologie (Volks- und Völkerkunde)	  
+	Geographie	  
+	Geowissenschaften	  
+	Germanistik. Niederländische Philologie. Skandinavistik	  
+	Geschichte	  
+	Informatik	  
+	Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde	  
+	Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein	  
+	Kunstgeschichte	  
+	Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung	  
+	Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik	  
+	Mathematik	  
+	Medien- und Kommunikationswissenschaften, Publizistik	  
+	Medizin	  
+	Musikwissenschaft	  
+	Naturwissenschaft allgemein	  
+	Pädagogik	  
+	Philosophie	  
+	Physik	  
+	Politologie	  
+	Psychologie	  
+	Rechtswissenschaft	  
+	Romanistik	  
+	Slavistik	  
+	Soziologie	  
+	Sport	  
+	Technik allgemein	  
+	Theologie und Religionswissenschaft	  
+	Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie	  
+	Wirtschaftswissenschaften	  
+	Wissenschaftskunde, Forschung, Hochschul-. Museumswesen
+
+ZDB-Fächerliste
+Allgemeine, interdisziplinäre und fächerübergreifende Zeitschriften	  
+	Allgemeines	  
+	Allgemeine Bibliographien	  
+	Allgemeine Biographien	  
+	Wiss. Organisationen u. Institutionen	  
+	Publizistik, Medien, Informationswissenschaften	  
+	Bibliotheks-, Dokumentations-, Verlagwesen	  
+	Museums- u. Archivwesen	  
+	Universitäten u. Hochschulen	  
+	Umweltforschung u. Umweltschutz	  
+	Orientalistik	  
+	Judaica
+Philosophie, Theologie, Psychologie, Pädagogik	  
+	Philosophie	  
+	Weltanschauungen	  
+	Religionswissenschaft (nichtchristl. Rel.)	  
+	Religionswissenschaft (christl.), Theologie	  
+	Bibelwissenschaft	  
+	Kirchengeschichte	  
+	Kirchenverwaltung	  
+	Praktische Theologie, Seelsorge	  
+	Psychologie	  
+	Pädagogik
+Geschichte, Kultirgeschichte, Völkerkunde	  
+	Geschichte u. Kulturgeschichte (allg.)	  
+	Historische Hilfswissenschaften	  
+	Vor- u. Frühgeschichte, Archäologie	  
+	Alte Geschichte	  
+	Mittelalterliche Geschichte	  
+	Geschichte der Neuzeit	  
+	Zeitgeschichte	  
+	Deutsche Landesgeschichte	  
+	Landesgeschichte Baden-Württemberg	  
+	Landesgeschichte und Landeskunde Bayern	  
+	Landesgeschichte und Landeskunde Hessen	  
+	Österreichische Landesgeschichte und Landeskunde; Auslandsösterreicher	  
+	Landesgeschichte außerdeutscher Länder	  
+	Enthnologie, Völkerkunde
+Philologie und Kunstwissenschaften	  
+	Allgemeine Sprachwissenschaft	  
+	Allgemeine Literaturwissenschaft	  
+	Anglistik	  
+	Germanistik	  
+	Klassische Altertumswissenschaften	  
+	Romanistik	  
+	Slavistik	  
+	Sonstige Sprachen u. Literaturen	  
+	Kunstwissenschaft	  
+	Musikwissenschaft	  
+	Theaterwissenschaft
+Rechtswissenschaften	  
+	Rechtswissenschaft (allg.)	  
+	Amts- u. Gesetzesblätter	  
+	Entscheidungssammlungen	  
+	Rechtsphilosophie, Rechtsgeschichte	  
+	Privat-, Arbeits- u. Wirtschaftsrecht	  
+	Staats- u. Verwaltungsrecht	  
+	Strafrecht u. Kriminologie	  
+	Internationales REcht, Völkerrecht	  
+	Ausländisches Recht
+Wirtschafts- u. Sozialwissenschaften	  
+	Wirtschafts- u. Sozialwissenschaften (allg.)	  
+	Wirtschafts- u. Sozialstatistik	  
+	Wirtschafts- u. Sozialgeschichte	  
+	Sozialwesen	  
+	Sozialwissenschaft	  
+	Wirtschaftswissenschaft	  
+	Wirtschaftstheorie	  
+	Wirtschafts- u. Sozialpolitik	  
+	Finanzwissenschaft	  
+	Handel u. Verkehr	  
+	Banken u. Versicherungen	  
+	Wirtschaftsbiographie	  
+	Betriebswirtschaft	  
+	Land- u. Forstwirtschaft, Ernährungswiss.	  
+	Politikwissenschaft	  
+	Parlamentaria	  
+	Sozialismusforschung
+Naturwissenschaften	  
+	Naturwissenschaften Allg.	  
+	Naturkunde	  
+	Geschichte der Naturwissenschaften	  
+	Astronomie	  
+	Biologie	  
+	Botanik	  
+	Zoologie	  
+	Chemie	  
+	Geowissenschaften Allg.	  
+	Geologie, Mineralogie, Paläntologie	  
+	Geophysik, Meteorologie, Ozeanographie	  
+	Geographie	  
+	Physik	  
+	Mathematik	  
+	Datenverarbeitung	  
+	Kybernetik
+Medizin	  
+	Medizin (allg.)	  
+	Geschichte der Medizin	  
+	Zahnheilkunde	  
+	Neurologie, Psychiatrie	  
+	Veterinärmedizin	  
+	Pharmazie, Pharmakologie
+Technik und Verschiedenes	  
+	Technik (allg.)	  
+	Geschichte der Technik	  
+	Maschinenbau	  
+	Elektrotechnik	  
+	Verkehrswesen	  
+	Raumfahrt	  
+	Chemische Technik	  
+	Bergbau u. Hüttenwesen	  
+	Fertigungstechnik, Werkstoffe, Handwerk	  
+	Architektur u. Bauingenieurwesen	  
+	Energietechnik	  
+	Sport u. Spiele	  
+	Unterhaltung u. Hobby	  
+	Firmen u. Betriebszeitschriften	  
+	Vereinszeitschriften	  
+	Astrologie u. Occulta	  
+	Kinderzeitschriften
+Zeitschriftentypen
+	Historische Zeitschrift	  
+	Online-Zeitschrift	  
+	Kalender	   
+Projekten
+Projektbezeichnung
+	DFG-Projekte Ereignis Weimar-Jena	  
+	Religionspädagogik	  
+	Einzelprojekte	  
+	Projekte historische Kommission	  
+	Virtuelle Bibliothek des 18. Jh.	  
+	Regionalzeitschriften	  
+	SFB-482
+	
+DDC-Projekten
+ (ddc...)
+Bestandsnachweisen
+    Bestandsnachweis
+Expertensuche - szukanie zaawansowane 
+in Webseiten suchen - szukaj na stronach internetowych
+Kalender A - Z
+Platzhalter
+Zeitschriften A - Z
+Editoren
+neue Zeitschrift
+neue Person
+neue Institution
+Klassifikationseditor
+Nutzerverwaltung
+Passwort ändern
+Nutzerdaten anzeigen
+Nutzer anlegen
+Gruppe anlegen
+Nutzer- Gruppenverwaltung
+Dublettenfinder
+Personenindex
+Institutionsindex
+Statistik
+Aktive Sitzungen anzeigen
+Module - Broadcasting
+ACL-Editor
+WebCLI
+Papierkorb
+Expertensuche
+Kontakt - kontakt
+Fragen zu dieser Software bitte per E-Mail an: 
+Zeitschriftentyp	
+				
+Projektbezeichnung			
+Bestandsnachweis		
+Kategorien EZB					
+Kategorien ZDB			
+Bearbeitungsstatus			
+Format
+
+Suchergebnisse
+Suche verfeinern
+Neue Suche
+keine Objekte gefunden
+Anzahl der Trefferseiten
+Nebentitel - tytół dodatkowy
+Hauptsachtitel - tytół główny
+Kurztitel - tytół skrócony
+Sonst. Titel - inny tytół
+Erwähntes Werk (bei Rezensionen)
+Titel laut Vorlage
+Titel des rezensierten Werkes
+
+Autor - autor
+Autor der rezensierten Werks
+befragte Person / Interviewter
+Herausgeber - wydawca
+Mitherausgeber - współwydawca
+Beitragender
+Regisseur - reżyser
+Redakteure - redaktor
+Herausgeber des rezensierte Werks
+Erwähnte Institution
+Fotograf
+Interviewer
+Erwähnte Person - wspominana osoba
+Moderator 
+Verlagsort/Druckort
+Widmungsempfänger - adresat dedykacji
+Rezensent - recenzent
+Übersetzer  - tłómacz
+Veranstalter - organizator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
