@@ -35,16 +35,16 @@
     <field name="predeces"          type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/predeces/predece" value="text()" i18n="editor.search.document.predece" />
     <field name="successors"        type="text"       source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/successors/successor" value="text()" i18n="editor.search.document.successor" />
     <field name="webcontext"        type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext" value="text()" addable="true"/>
-    <field name="contentClassi1"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis1/contentClassi1" value="@ID"/>
-    <field name="contentClassi2"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis2/contentClassi2" value="@ID"/>
-    <field name="contentClassi3"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis3/contentClassi3" value="@ID"/>
-    <field name="contentClassi4"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis4/contentClassi4" value="@ID"/>
-    <field name="contentClassi5"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis5/contentClassi5" value="@ID"/>
-    <field name="contentClassi6"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis6/contentClassi6" value="@ID"/>
-    <field name="contentClassi7"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis7/contentClassi7" value="@ID"/>
-    <field name="contentClassi8"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis8/contentClassi8" value="@ID"/>
-    <field name="contentClassi9"     type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis9/contentClassi9" value="@ID"/>
-    <field name="contentClassi10"    type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/contentClassis10/contentClassi10" value="@ID"/>  
+    <field name="contentClassi1"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis1/contentClassi1" value="@ID"/>
+    <field name="contentClassi2"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis2/contentClassi2" value="@ID"/>
+    <field name="contentClassi3"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis3/contentClassi3" value="@ID"/>
+    <field name="contentClassi4"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis4/contentClassi4" value="@ID"/>
+    <field name="contentClassi5"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis5/contentClassi5" value="@ID"/>
+    <field name="contentClassi6"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis6/contentClassi6" value="@ID"/>
+    <field name="contentClassi7"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis7/contentClassi7" value="@ID"/>
+    <field name="contentClassi8"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis8/contentClassi8" value="@ID"/>
+    <field name="contentClassi9"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis9/contentClassi9" value="@ID"/>
+    <field name="contentClassi10"    type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis10/contentClassi10" value="@ID"/>  
 	
     <!-- Search in volumes metadata -->  
     <field name="position_vol"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />
