@@ -172,4 +172,10 @@ public class CategoryDAOMock implements MCRCategoryDAO {
         // TODO Auto-generated method stub
         return null;
     }
+
+	@Override
+	public long getLastModified(String root) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
