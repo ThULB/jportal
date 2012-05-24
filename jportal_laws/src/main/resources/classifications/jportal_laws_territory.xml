@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+  xmlns:xml="http://www.w3.org/XML/1998/namespace" ID="jportal_laws_territory">
+  <label xml:lang="en" text="Territory" />
+  <label xml:lang="de" text="Territorium" />
+  <categories>
+    <category ID="a7595b7b-e9e1-4f4f-b907-c3c0ecb32404">
+      <label xml:lang="de" text="Schwarzburg-Sondershausen" />
+    </category>
+    <category ID="307a0f8e-1542-46e2-8274-e24d4e4a7424">
+      <label xml:lang="de" text="Schwarzburg-Rudolstadt" />
+    </category>
+    <category ID="145bed3d-4449-42af-a738-e847f6b6a9e7">
+      <label xml:lang="de" text="Sachsen-Weimar-Eisenach" />
+    </category>
+    <category ID="46c3ba19-ac14-4fd8-97c1-9ecfdef30ae0">
+      <label xml:lang="de" text="Sachsen-Meiningen" />
+    </category>
+    <category ID="1703c336-b96f-4744-8599-effdf83df5a7">
+      <label xml:lang="de" text="Sachsen-Hildburghausen" />
+    </category>
+    <category ID="88154eaf-8903-4294-bae6-9a9b8f937375">
+      <label xml:lang="de" text="Sachsen-Coburg-Saalfeld" />
+    </category>
+    <category ID="23d36cf5-9acb-46c8-9379-3a7ba23e9f20">
+      <label xml:lang="de" text="Sachsen-Coburg und Gotha" />
+    </category>
+    <category ID="9eea406c-c6b3-4fbb-8b2e-a4aad910e253">
+      <label xml:lang="de" text="Sachsen-Altenburg" />
+    </category>
+    <category ID="874a55d8-691e-4687-accc-e676a1777b58">
+      <label xml:lang="de" text="Reuß jüngerer Linie" />
+    </category>
+    <category ID="b28dca22-2184-4cda-888b-7a366605a5a7">
+      <label xml:lang="de" text="Reuß älterer Linie" />
+    </category>
+    <category ID="68267562-ba0a-4718-977a-f9a4adb68f4f">
+      <label xml:lang="de" text="Land Thüringen" />
+    </category>
+  </categories>
+</mycoreclass>

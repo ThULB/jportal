@@ -12,6 +12,10 @@
         <echo>JPortal Laws webapp</echo>
         <echo>Copy JPortal Laws Stuff</echo>
 
+		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
+			<fileset dir="${module.directory}/editor" includes="**/*.xml" />
+		</copy>
+
         <unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
             <fileset file="${module.jar}" />
             <patternset>

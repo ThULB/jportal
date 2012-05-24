@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+    <section xml:lang="de" title="Suche nach Personen">
+        <p>
+            Bitte beachten Sie, dass sich die Suche auf alle Gesetzesblätter in Journals@UrMEL bezieht.
+            <br />
+            Nutzen Sie bitte auch die Möglichkeit der Trunkierung mit „*“
+            <br/>
+        </p>
+        <laws_search></laws_search>
+    </section>
+    <section xml:lang="en" title="Search for persons">
+        <p>
+            Please consider, that the search is related to all laws of Journals@UrMEL.
+            <br />
+        </p>
+        <laws_search></laws_search>
+    </section>
+</MyCoReWebPage>
+
