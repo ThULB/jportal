@@ -10,7 +10,7 @@
       <table>
         <tr>
           <th><xsl:value-of select="i18n:translate('jp.laws.search.text')" /></th>
-          <td><input type="text" id="allMeta" size="30" /></td>
+          <td><input type="text" id="searchTerm" size="30" /></td>
         </tr>
         <tr>
           <th><xsl:value-of select="i18n:translate('jp.laws.search.territory')" /></th>
@@ -64,13 +64,16 @@
         
       });*/
       function buildQuery() {
-        var allMeta = $("#allMeta").val();
+        var searchTerm = $("#searchTerm").val();
         var territory = $("#territory").val();
         var from = $("#published_from").val();
         var until = $("#published_until").val();
 
         // input conditions
-        var query = addCondition("", "allMeta", "contains", allMeta);
+        var query = addCondition("", "allMeta", "contains", searchTerm);
+        if(query != "") {
+          query = "(" + addCondition(query, "content", "contains", searchTerm, "OR") + ")";
+        }
         query = addCondition(query, "volContentClassi1", "=", territory);
         query = addCondition(query, "published", "&gt;=", from);
         query = addCondition(query, "published", "&lt;=", until);
