@@ -26,7 +26,7 @@
     <field name="publisher"         type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant[@type = 'mainPublisher']" value="@xlink:title" addable="true"/>     
     <field name="publisherID"       type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant[@type = 'mainPublisher']" value="@xlink:href" addable="true"/>     
     <field name="published_from"    type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date[@type = 'published_from']" value="text()" addable="true"/>      
-    <field name="published_until"    type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date[@type = 'published_until']" value="text()" addable="true"/>      
+    <field name="published_until"   type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/dates/date[@type = 'published_until']" value="text()" addable="true"/>      
     <field name="classis"           type="identifier" source="objectCategory" objects="jpjournal" xpath="/mycoreobject/metadata/classis/classi" value="@ID" i18n="editor.search.document.classi" />
     <field name="identis_type"      type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/identis/identi" value="@type" />      
     <field name="ddc_type"      	type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/ddcs/ddc" value="@categid" />      
@@ -45,8 +45,9 @@
     <field name="contentClassi8"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis8/contentClassi8" value="@ID"/>
     <field name="contentClassi9"     type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis9/contentClassi9" value="@ID"/>
     <field name="contentClassi10"    type="identifier" source="objectCategory" objects="jpjournal jpvolume jparticle" xpath="/mycoreobject/metadata/contentClassis10/contentClassi10" value="@ID"/>  
-	
-    <!-- Search in volumes metadata -->  
+
+    <!-- Search in volumes metadata -->
+    <field name="published"             type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/dates/date[@type = 'published']" value="text()" addable="true"/>
     <field name="position_vol"          type="identifier" source="objectMetadata" objects="jpvolume" xpath="/mycoreobject/metadata/hidden_positions/hidden_position" value="text()" />
     <field name="volContentClassi1"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis1/volContentClassi1" value="@ID"/>
     <field name="volContentClassi2"     type="identifier" source="objectCategory" objects="jpvolume" xpath="/mycoreobject/metadata/volContentClassis2/volContentClassi2" value="@ID"/>
