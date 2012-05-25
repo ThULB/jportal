@@ -17,7 +17,7 @@
           <td>
             <xsl:variable name="selectBox" select="document('classification:editor:-1:children:jportal_laws_territory')" />
             <select id="territory">
-              <option><xsl:value-of select="i18n:translate('editor.search.choose')" /></option>
+              <option value=""><xsl:value-of select="i18n:translate('editor.search.choose')" /></option>
               <xsl:for-each select="$selectBox/items/item">
                 <option value="{@value}"><xsl:value-of select="label" /></option>
               </xsl:for-each>
@@ -69,12 +69,11 @@
         var from = $("#published_from").val();
         var until = $("#published_until").val();
 
-        var query = "";
         // input conditions
-        query = addCondition(query, "allMeta", "contains", allMeta);
-        query = addCondition(query, "hidden_classiVol1", "=", territory);
-        query = addCondition(query, "published_from", "&gt;=", from);
-        query = addCondition(query, "published_until", "&lt;=", until);
+        var query = addCondition("", "allMeta", "contains", allMeta);
+        query = addCondition(query, "volContentClassi1", "=", territory);
+        query = addCondition(query, "published", "&gt;=", from);
+        query = addCondition(query, "published", "&lt;=", until);
 
         // hidden conditions
         query = addCondition(query, "contentClassi2", "=", "Gesetzesblaetter");
@@ -82,7 +81,7 @@
 
         $("#query").attr("value", query);
       }
-      function addCondition(/*String*/ query, /*String*/ field, /*String*/ operation, /*String*/ value) {
+      function addCondition(/*String*/ query, /*String*/ field, /*String*/ operation, /*String*/ value, /*String*/ bool) {
         if(value.length &lt;= 0) {
           return query;
         }
@@ -90,7 +89,10 @@
         if(query.length == 0) {
           return condition;
         } else {
-          return query + " AND " + condition;
+          if(!bool) {
+            bool = "AND";
+          }
+          return query + " " + bool + " " + condition;
         }
       }
     </script>
