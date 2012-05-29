@@ -95,8 +95,7 @@
     </script>
     <script type="text/javascript">
       function confirmFormDelete() {
-      if (confirm("Objekt
-      wirklich löschen?")) {
+      if (confirm("Objekt wirklich löschen?")) {
       return true;
       }
       return false;
@@ -522,26 +521,16 @@
     <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
-      startClassificationEditor($("#diagButton"), {
-      baseUrl : "
-      <xsl:value-of select='$webPath' />
-      " + "/",
-      resourcePath : "
-      <xsl:value-of select='$journalRecourcePath' />
-      ",
-      classificationId : "list",
-      categoryId : "",
-      showId : "
-      <xsl:value-of select='$showId' />
-      " === "true",
-      currentLang : "
-      <xsl:value-of select='$CurrentLang' />
-      ",
-      jsPath : "
-      <xsl:value-of select='$jsPath' />
-      ",
-      buttonID : "diagButton"
-      });
+        startClassificationEditor($("#diagButton"), {
+          baseUrl : "<xsl:value-of select='$webPath' />" + "/",
+          resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
+          classificationId : "list",
+          categoryId : "",
+          showId : "<xsl:value-of select='$showId' />" === "true",
+          currentLang : "<xsl:value-of select='$CurrentLang' />",
+          jsPath : "<xsl:value-of select='$jsPath' />",
+          buttonID : "diagButton"
+        });
       })
     </script>
   </xsl:template>
@@ -671,18 +660,14 @@
                 <xsl:variable name="mergeCMDUrl" select="concat($WebApplicationBaseURL,'rsc/cmd/mergeDerivIn/',$id)" />
                 <script type="text/javascript">
                   $(function() {
-                  var mergeButton = $("#mergeButton");
-                  mergeButton.click(
-                  function(){
-                  $.ajax({
-                  type: "POST",
-                  url: "
-                  <xsl:value-of select="$mergeCMDUrl" />
-                  ",
-                  success: function(msg){location.reload()}
-                  });
-                  }
-                  );
+                    var mergeButton = $("#mergeButton");
+                    mergeButton.click(function(){
+                      $.ajax({
+                        type: "POST",
+                        url: "<xsl:value-of select="$mergeCMDUrl" />",
+                        success: function(msg){location.reload()}
+                      });
+                    });
                   });
                 </script>
                 <img style="margin-left:10px;cursor:hand;cursor:pointer" id="mergeButton"
