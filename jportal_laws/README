@@ -5,7 +5,7 @@ First of all you have to add the module to the docportal pom.xml.
 <dependency>
   <groupId>fsu.thulb</groupId>
   <artifactId>jportal_laws</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>2.0.17-SNAPSHOT</version>
   <type>jar</type>
   <scope>compile</scope>      
 </dependency>
@@ -26,6 +26,23 @@ derivate with the files inside. For example you can download the Herzogtum Alten
 (http://zs.thulb.uni-jena.de/servlets/MCRZipServlet?id=jportal_derivate_00199933) and
 upload on your test system. The links should appear automatic.
 
-Its important that the register and the images are in two seperate derivates. You can now
+Its important that the register and the images are in two separate derivates. You can now
 hide the register by clicking at "Derivat verstecken".
 
+
+----------------------------
+
+Suchmaske in Prodkuktivsystem integrieren:
+
+-contentClassi2 (Zeitschriftentyp -> 'Gesetzesblaetter') muss für Bände vererbt werden (um danach suchen zu können):
+  select objects with query objectType = 'jpjournal' (alle Zeitschriften selektieren, weil es eh für alle gemacht werden sollte)
+  transform selected with file /home/matthias/Dokumente/fix_contentClassi.xsl (setzt contentClassi heritable für alle bände und artikel auf true)
+-Klassifikation jportal_laws_territory importieren
+-jportal_laws_territory muss für alle Gesetzesblaetterzeitschriften gesetzt werden (evt. wieder xsl transformation)
+-jportal_laws_territory in die entsprechenden Bände eintragen
+
+Die letzten beiden Punkte sind etwas unsauber gelöst, weil jportal_laws_territory schon für eine Zeitschrift einddeutig ist und sich
+in den Bänden nicht mehr ändert. Eigentlich müsste das Territorium für eine Zeitschrift fix gesetzt werden was sich dann auf die Bände
+vererbt.
+
+-laws_search.xml in die navigation.xml eintragen
