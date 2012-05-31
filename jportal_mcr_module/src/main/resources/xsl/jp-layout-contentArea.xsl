@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="encoder">
+
+  <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="RequestURL" />
+
+  <xsl:include href="jp-layout-contentArea-breadcrumb.xsl" />
+  <xsl:include href="jp-layout-contentArea-tableOfContent.xsl" />
+  <xsl:include href="jp-layout-contentArea-derivates.xsl" />
+  <xsl:include href="jp-layout-contentArea-metadata.xsl" />
+
+  <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
+
+  <xsl:template priority="9" match="/mycoreobject">
+    <!-- Refactoring with more apply-templates -->
+
+    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']">
+      <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
+    </xsl:apply-templates>
+
+    <xsl:call-template name="breadcrumb" />
+
+    <xsl:call-template name="tableOfContent">
+      <xsl:with-param name="id" select="./@ID" />
+    </xsl:call-template>
+
+    <!-- End Refactoring with more apply-templates -->
+
+    <div id="deriv-meta-frame" class="jp-layout-marginLR">
+      <xsl:if test="structure/derobjects|metadata/derivateLinks">
+        <div id="derivate-frame" class="jp-layout-derivates">
+          <p>Digitalisate</p>
+          <div>
+            <xsl:apply-templates mode="derivateDisplay" select="structure/derobjects|metadata/derivateLinks" />
+          </div>
+        </div>
+      </xsl:if>
+      <div id="metadata-frame" class="jp-layout-metadata">
+        <dl class="jp-layout-metadataList">
+          <xsl:apply-templates mode="metadataDisplay"
+            select="metadata/child::node()[name() != 'maintitles' and not(contains(name(), 'hidden_'))]" />
+        </dl>
+      </div>
+    </div>
+  </xsl:template>
+
+  <xsl:template mode="printTitle" match="maintitle[@inherited='0']">
+    <xsl:param name="allowHTML" select="$settings/title/@allowHTML" />
+
+    <div class="jp-layout-maintitle jp-layout-marginLR">
+      <xsl:choose>
+        <xsl:when test="$allowHTML='true'">
+          <xsl:value-of disable-output-escaping="yes" select="." />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="." />
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="printLatestArticles">
+    <ul id="latestArticles" class="latestArticles"></ul>
+  </xsl:template>
+</xsl:stylesheet>

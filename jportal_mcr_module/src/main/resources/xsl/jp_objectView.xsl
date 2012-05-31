@@ -45,31 +45,33 @@
   <!-- =============================================================== -->
   <!-- shows the journal, volume, article, person and institution view -->
   <!-- =============================================================== -->
+  <!-- 
+   -->
   <xsl:template match="/mycoreobject" priority="2">
-    <xsl:call-template name="jp_objectView_initJS" />
-
+<!--     <xsl:call-template name="jp_objectView_initJS" /> -->
+  <xsl:message>
+    match priority="2"
+  </xsl:message>
     <xsl:choose>
       <xsl:when test="$objectView/menuBar/option[@type = $currentObjType]/hasChildren and $view.objectmetadata = 'true'">
         <xsl:call-template name="printChildren" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="printMetadata" />
+<!--         <xsl:call-template name="printMetadata" /> -->
+        <xsl:apply-templates select="." mode="present"/>
       </xsl:otherwise>
     </xsl:choose>
-    <!-- 
-    <div class="metadataHead">
-      <xsl:call-template name="printSwitchViewBar" />
-      <xsl:call-template name="browseCtrlJP" />
-      <xsl:call-template name="switchToXMLview" />
-      <xsl:call-template name="switchToHistory" />
-    </div>
-     -->
+    <!-- <div class="metadataHead"> <xsl:call-template name="printSwitchViewBar" /> <xsl:call-template name="browseCtrlJP" /> <xsl:call-template 
+      name="switchToXMLview" /> <xsl:call-template name="switchToHistory" /> </div> -->
   </xsl:template>
 
   <!-- =================================================== -->
   <!-- prints the metadata of an object -->
   <!-- =================================================== -->
   <xsl:template name="printMetadata">
+    <xsl:message>
+      printMetadata
+    </xsl:message>
     <xsl:choose>
       <xsl:when test="($objectHost != 'local') or acl:checkPermission(/mycoreobject/@ID,'read')">
         <xsl:apply-templates select="." mode="present">
@@ -551,42 +553,7 @@
       </li>
     </xsl:if>
   </xsl:template>
-  
-  <xsl:template name="objectEditing">
-    <xsl:param name="id" />
-    <xsl:variable name="type" select="substring-before(substring-after($id,'_'),'_')" />
-    <xsl:variable name="accessPermXML">
-      <access>
-        <xsl:attribute name="update">
-                <xsl:value-of select="acl:checkPermission($id,concat('update_',$type))" />
-              </xsl:attribute>
-        <xsl:attribute name="delete">
-                <xsl:value-of select="acl:checkPermission($id,concat('delete_',$type))" />
-              </xsl:attribute>
-      </access>
-    </xsl:variable>
-    <xsl:variable name="accessPerm" select="xalan:nodeset($accessPermXML)" />
 
-    <menu>
-      <xsl:choose>
-        <xsl:when test="$accessPerm/access/@update = 'true' or $accessPerm/access/@delete = 'true'">
-          <li>
-            <a
-              href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=seditobj">
-              Dokument bearbeiten
-            </a>
-          </li>
-          <li>
-            <a
-              href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type={$type}&amp;step=commit&amp;todo=snewder">
-              Datei hochladen
-            </a>
-          </li>
-          <xsl:call-template name="setImageLink"/>
-        </xsl:when>
-      </xsl:choose>
-    </menu>
-  </xsl:template>
   <!-- ===================================================================================================== -->
   <!-- prints the icon line to edit an object with derivates -->
   <!-- ===================================================================================================== -->

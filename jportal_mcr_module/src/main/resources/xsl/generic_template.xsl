@@ -1,12 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <!-- <xsl:param name="WebApplicationBaseURL" /> -->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcr="http://www.mycore.org/"
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  exclude-result-prefixes="encoder">
+
+  <xsl:include href="jp-layout-tools.xsl" />
+  <xsl:include href="jp-layout-contentArea.xsl" />
+  <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
+
   <!-- ============================================== -->
   <!-- the template -->
   <!-- ============================================== -->
+  <xsl:variable name="objSettingXML">
+    <title allowHTML="true" />
+  </xsl:variable>
+  <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
+
   <xsl:template name="renderLayout">
-    <xsl:param name="journalID" />
-    <!-- -->
     <html>
       <head>
         <xsl:call-template name="jp.layout.getHTMLHeader" />
@@ -23,61 +33,24 @@
               <xsl:call-template name="navigation.row" />
             </div>
           </div>
-          <div class="logo">
-          </div>
 
-          <div class="jp-layout-horiz-menu">
+          <div id="main_navi">
             <xsl:call-template name="navigation.tree" />
+
+            <xsl:call-template name="objectEditing">
+              <xsl:with-param name="id" select="/mycoreobject/@ID" />
+              <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+            </xsl:call-template>
           </div>
         </div>
-        <div class="navi_history">
-          <xsl:if test="/mycoreobject/@ID!=''">
-            <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents/parent" />
-            <menu class="jp-layout-breadcrumb">
-              <xsl:for-each select="$parents">
-                <xsl:sort select="@inherited" order="descending" />
-                <li>
-                  <xsl:if test="position() != 1">
-                    <b>\ </b>
-                  </xsl:if>
-                  <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
-                    <xsl:value-of select="@xlink:title" />
-                  </a>
-                </li>
-              </xsl:for-each>
-              <li>
-                <b>\ </b>
-                <xsl:variable name="maintitle">
-                  <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" />
-                </xsl:variable>
 
-                <xsl:choose>
-                  <xsl:when test="string-length($maintitle) > 20">
-                    <xsl:value-of select="concat(substring($maintitle,0,20), '...')"></xsl:value-of>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="$maintitle" />
-                  </xsl:otherwise>
-                </xsl:choose>
-              </li>
-            </menu>
-          </xsl:if>
-        </div>
         <div id="content_area" class="jp-layout-content-area">
-          <xsl:call-template name="jp.layout.getHTMLContent" />
+          <xsl:apply-templates />
         </div>
-        <div id="editing-frame" class="jp-layout-editing">
-          <xsl:call-template name="objectEditing">
-            <xsl:with-param select="/mycoreobject/@ID" name="id" />
-          </xsl:call-template>
-        </div>
+
         <div id="footer" class="footer"></div>
       </body>
     </html>
 
-  </xsl:template>
-
-  <xsl:template match="printLatestArticles">
-    <ul id="latestArticles" class="latestArticles"></ul>
   </xsl:template>
 </xsl:stylesheet>

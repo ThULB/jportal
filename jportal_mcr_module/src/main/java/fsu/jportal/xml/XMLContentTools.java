@@ -23,7 +23,7 @@ public class XMLContentTools{
 					Text parentTitle = (Text) titleXpath.selectSingleNode(childXML);
 					parent.setAttribute("inherited", String.valueOf(parents.getContentSize()));
 					parent.setAttribute("title", shortenText(parentTitle.getText()),MCRConstants.XLINK_NAMESPACE);
-					parents.addContent(parent.detach());
+					parents.addContent(0, parent.detach());
 					childXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(parent.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE)));
 				}else{
 					break;

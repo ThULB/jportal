@@ -84,18 +84,6 @@
 
     <!-- ================================================================================== -->
 
-    <xsl:template name="jp.layout.getHTMLContent">
-        <xsl:call-template name="print.writeProtectionMessage" />
-        <xsl:choose>
-            <xsl:when test="$readAccess='true'">
-                <xsl:apply-templates />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="printNotLoggedIn" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <!-- ================================================================================== -->
 
 </xsl:stylesheet>

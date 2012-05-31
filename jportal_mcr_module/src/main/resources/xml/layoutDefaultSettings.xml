@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layoutSettings>
+  <datamodel type="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd">
+    <class tag="participant">jportal_class_00000007</class>
+    <class tag="subtitle">jportal_class_00000006</class>
+    <class tag="identi">jportal_class_00000010</class>
+    <class tag="note">jportal_class_00000060</class>
+    <class tag="tradition">jportal_class_00000080</class>
+    <class tag="collationNote">jportal_class_00000082</class>
+  </datamodel>
+  <datamodel type="datamodel-jparticle.xsd">
+    <class tag="date">jportal_class_00000008</class>
+  </datamodel>
+  <datamodel type="datamodel-jpjournal.xsd datamodel-jpvolume.xsd">
+    <class tag="date">jportal_class_00000009</class>
+  </datamodel>
+  <i18n tag="ref">editormask.labels.pub_reference</i18n>
+  <i18n tag="size">editormask.labels.size</i18n>
+  <i18n tag="keyword">editormask.labels.keyword</i18n>
+  <i18n tag="abstract">editormask.labels.abstract</i18n>
+  <i18n tag="note">editormask.labels.note</i18n>
+  <i18n tag="person">editormask.labels.person_label</i18n>
+  <i18n tag="publicationNote">editormask.labels.publicationNote</i18n>
+  <i18n tag="normedPubLocation">editormask.labels.normedPubLocation</i18n>
+  <i18n tag="footNote">editormask.labels.footNote</i18n>
+  <i18n tag="bibEvidence">editormask.labels.bibEvidence</i18n>
+  <i18n tag="indexField">editormask.labels.indexField</i18n>
+  <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd">jpvolume</newObj>
+  <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
+  <numPerPage>10</numPerPage>
+  <title allowHTML="false" />
+</layoutSettings>
