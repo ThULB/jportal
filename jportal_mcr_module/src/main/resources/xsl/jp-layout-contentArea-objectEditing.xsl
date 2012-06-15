@@ -24,7 +24,7 @@
     <xsl:variable name="editProp" select="xalan:nodeset($editPropXML)" />
 
     <xsl:if test="$editProp/access/@update = 'true' or $editProp/access/@delete = 'true'">
-      <menu class="jp-layout-horiz-menu">
+      <menu id="jp-object-editing" class="jp-layout-horiz-menu">
         <xsl:apply-templates mode="editLink" select="$editProp/link" />
 
         <xsl:apply-templates mode="newObjLink" select="$settings/newObj[contains(@parent, $dataModel)]">

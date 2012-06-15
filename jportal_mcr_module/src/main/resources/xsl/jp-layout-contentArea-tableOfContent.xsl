@@ -11,7 +11,7 @@
     <xsl:variable name="childrenObjs"
       select="document(concat('query:term=', $mcrsql, '&amp;sortby=maintitles&amp;order=ascending&amp;numPerPage=', $numPerPage,'&amp;page=', $toc.page))" />
     <xsl:if test="$childrenObjs/mcr:results/@numHits &gt; 0">
-      <div id="childrenList" class="jp-layout-childrenList">
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent jp-layout-marginLR">
         <h3>Inhaltsverzeichnis</h3>
         <ul>
           <xsl:apply-templates mode="printListEntry" select="$childrenObjs/mcr:results/mcr:hit" />

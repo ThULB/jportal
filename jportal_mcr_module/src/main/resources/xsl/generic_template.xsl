@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcr="http://www.mycore.org/"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  exclude-result-prefixes="encoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
 
-  <!-- ============================================== -->
-  <!-- the template -->
-  <!-- ============================================== -->
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
 
   <xsl:template name="renderLayout">
+    <xsl:param name="nameOfTemplate" select="$template" />
     <html>
       <head>
-        <xsl:call-template name="jp.layout.getHTMLHeader" />
+        <title>
+          <xsl:call-template name="HTMLPageTitle" />
+        </title>
+        <meta content="Zeitschriften-Portal" lang="de" name="description" />
+        <meta content="Journal-Portal" lang="en" name="description" />
+        <meta content="Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung" lang="de" name="keywords" />
+        <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation" lang="en"
+          name="keywords" />
+        <meta content="MyCoRe" lang="de" name="generator" />
+        <link href="{$WebApplicationBaseURL}jp-layout-default.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}templates/content/template_logos/CSS/sponsoredlogos.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
+        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
+        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
+        <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
+
+        <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+        <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">
+          <script type="text/javascript" src="{$WebApplicationBaseURL}iview/js/iview2DerivLink.js" />
+        </xsl:if>
+
+        <xsl:call-template name="module-broadcasting.getHeader" />
+
+        <!-- add IE CSS to head -->
+        <xsl:variable name="cssLinked">
+          &lt;link href="
+          <xsl:value-of select="concat($WebApplicationBaseURL,'templates/master/',$nameOfTemplate,'/CSS/',$nameOfTemplate,'_IE.css')" />"
+          rel="stylesheet" type="text/css"/&gt;
+        </xsl:variable>
+        <xsl:comment>
+          <xsl:value-of select="'[if lte IE 8]&gt;'" />
+          <xsl:value-of select="$cssLinked" />
+          <xsl:value-of select="'&lt;![endif]'" />
+        </xsl:comment>
       </head>
       <body>
-        <div id="header" class="jp-layout-header">
-          <div class="jp-top-navigation-bar">
+        <div id="jp-header" class="jp-layout-header">
+          <div id="jp-global-navigation" class="jp-global-navigation-bar">
             <div class="jp-home-link">
               <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
               <xsl:copy-of select="'     |     '" />
@@ -34,7 +65,7 @@
             </div>
           </div>
 
-          <div id="main_navi">
+          <div id="jp-journal-navigation">
             <xsl:call-template name="navigation.tree" />
 
             <xsl:call-template name="objectEditing">
@@ -44,11 +75,11 @@
           </div>
         </div>
 
-        <div id="content_area" class="jp-layout-content-area">
+        <div id="jp-main" class="jp-layout-content-area">
           <xsl:apply-templates />
         </div>
 
-        <div id="footer" class="footer"></div>
+        <div id="jp-footer" class="footer"></div>
       </body>
     </html>
 

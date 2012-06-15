@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
   <xsl:template name="breadcrumb">
-    <div class="navi_history jp-layout-marginLR">
+    <div id="jp-breadcrumb-container" class="jp-layout-marginLR">
       <menu class="jp-layout-breadcrumb">
         <li>
           <a href="foo.de">Start</a>

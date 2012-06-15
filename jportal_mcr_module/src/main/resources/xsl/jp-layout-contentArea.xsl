@@ -27,16 +27,16 @@
 
     <!-- End Refactoring with more apply-templates -->
 
-    <div id="deriv-meta-frame" class="jp-layout-marginLR">
+    <div id="jp-content-container" class="jp-layout-marginLR">
       <xsl:if test="structure/derobjects|metadata/derivateLinks">
-        <div id="derivate-frame" class="jp-layout-derivates">
+        <div id="jp-derivate-container" class="jp-layout-derivates">
           <p>Digitalisate</p>
           <div>
             <xsl:apply-templates mode="derivateDisplay" select="structure/derobjects|metadata/derivateLinks" />
           </div>
         </div>
       </xsl:if>
-      <div id="metadata-frame" class="jp-layout-metadata">
+      <div id="jp-metadata-container" class="jp-layout-metadata">
         <dl class="jp-layout-metadataList">
           <xsl:apply-templates mode="metadataDisplay"
             select="metadata/child::node()[name() != 'maintitles' and not(contains(name(), 'hidden_'))]" />
@@ -48,7 +48,7 @@
   <xsl:template mode="printTitle" match="maintitle[@inherited='0']">
     <xsl:param name="allowHTML" select="$settings/title/@allowHTML" />
 
-    <div class="jp-layout-maintitle jp-layout-marginLR">
+    <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-marginLR">
       <xsl:choose>
         <xsl:when test="$allowHTML='true'">
           <xsl:value-of disable-output-escaping="yes" select="." />
