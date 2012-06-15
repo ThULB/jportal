@@ -30,6 +30,11 @@
         <xsl:apply-templates mode="newObjLink" select="$settings/newObj[contains(@parent, $dataModel)]">
           <xsl:with-param name="parentID" select="$id" />
         </xsl:apply-templates>
+
+        <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
+          <li><span id="diagButton">Rubrik bearbeiten</span></li>
+          <xsl:call-template name="classificationEditor" />
+        </xsl:if>
       </menu>
     </xsl:if>
   </xsl:template>
