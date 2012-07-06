@@ -12,15 +12,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.Logger;
+import org.mycore.frontend.jersey.resources.MCRJerseyResource;
 import org.mycore.user.MCRUserMgr;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
-
 @Path("login")
-public class LoginResource extends JerseyResource{
+public class LoginResource extends MCRJerseyResource {
+
     private class LoginData{
         private String userID;
         private String password;
@@ -32,18 +32,15 @@ public class LoginResource extends JerseyResource{
         public String getPassword() {
             return password;
         }
-        
-        
     }
-    
+
     @GET
     @Path("{filename:.*}")
     public InputStream getResources(@PathParam("filename") String filename){
         return this.getClass().getResourceAsStream("/fsu/jportal/login_module/" + filename);
     }
-    
+
     @POST
-    @MCRDBAccess
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(String json){
         Logger logger = Logger.getLogger(LoginResource.class);
