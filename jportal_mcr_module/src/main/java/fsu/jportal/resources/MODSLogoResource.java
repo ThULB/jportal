@@ -26,10 +26,8 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.constants.ParticipantRoleTypes;
 import fsu.jportal.mods.MODSLogoEntity;
-import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
 import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 
-@MCRDBAccess
 @Path("modslogos")
 public class MODSLogoResource {
     @GET

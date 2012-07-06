@@ -2,7 +2,6 @@ package fsu.jportal.gson;
 
 import java.lang.reflect.Type;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,13 +10,15 @@ import java.util.Set;
 
 import javax.ws.rs.core.UriBuilder;
 
+import org.mycore.common.MCRJSONTypeAdapter;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
-public class RegResourceCollectionTypeAdapter extends GsonTypeAdapter<RegResourceCollection> {
+public class RegResourceCollectionTypeAdapter extends MCRJSONTypeAdapter<RegResourceCollection> {
 
     @Override
     public JsonElement serialize(RegResourceCollection src, Type typeOfSrc, JsonSerializationContext context) {

@@ -1,47 +1,34 @@
 package fsu.jportal.resources.test;
 
-import static org.junit.Assert.*;
-
 import java.net.URI;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
+import org.mycore.frontend.classeditor.resources.MCRClassificationEditorResource;
+import org.mycore.frontend.jersey.MCRJerseyResourceTest;
+import org.mycore.frontend.jersey.filter.MCRSecurityFilterFactory;
+import org.mycore.frontend.jersey.filter.MCRSecurityFilterFactory.AccesManagerConnector;
+import org.mycore.frontend.jersey.resources.MCRTestResource;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.spi.container.ResourceFilter;
 
-import fsu.jportal.config.ResourceSercurityConf;
-import fsu.jportal.gson.GsonManager;
-import fsu.jportal.gson.RegResourceCollection;
-import fsu.jportal.gson.RegResourceCollectionTypeAdapter;
-import fsu.jportal.resources.ClassificationResource;
-import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory;
-import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.AccesManagerConnector;
-import fsu.testcase.JerseyResourceTestCase;
-
-public class ACLResourceTest extends JerseyResourceTestCase{
+public class ACLResourceTest extends MCRJerseyResourceTest {
     public static class MyAccessManagerConnector implements AccesManagerConnector{
         private HashMap<String, Boolean> permissions = new HashMap<String, Boolean>();
         
         public MyAccessManagerConnector() {
-            permissions.put(decodeRule(TestResource.class.getName(), "/auth_GET"), true);
-            permissions.put(decodeRule(TestResource.class.getName(), "/auth/logout/{id}_GET"), false);
+            permissions.put(decodeRule(MCRTestResource.class.getName(), "/auth_GET"), true);
+            permissions.put(decodeRule(MCRTestResource.class.getName(), "/auth/logout/{id}_GET"), false);
         }
         
         private String decodeRule(String id, String permission){
@@ -97,13 +84,13 @@ public class ACLResourceTest extends JerseyResourceTestCase{
 
     @Override
     protected String[] getPackageName() {
-        return new String[]{ClassificationResource.class.getPackage().getName()};
+        return new String[]{MCRClassificationEditorResource.class.getPackage().getName()};
     }
 
     @Override
     protected Map<String, String> getInitParams() {
         Map<String, String> initParams = new HashMap<String, String>();
-        initParams.put(ResourceFilter.class.getName() + "s", MyCoReSecurityFilterFactory.class.getName());
+        initParams.put(ResourceFilter.class.getName() + "s", MCRSecurityFilterFactory.class.getName());
         return initParams;
     }
 

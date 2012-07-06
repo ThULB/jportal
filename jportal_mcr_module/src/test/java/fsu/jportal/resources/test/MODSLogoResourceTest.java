@@ -24,13 +24,13 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
 import org.mycore.datamodel.ifs2.MCRStoredMetadata;
+import org.mycore.frontend.jersey.MCRJerseyResourceTest;
 
 import fsu.jportal.mocks.LinkTableStoreMock;
 import fsu.jportal.resources.MODSLogoResource;
-import fsu.testcase.JerseyResourceTestCase;
 
 
-public class MODSLogoResourceTest extends JerseyResourceTestCase{
+public class MODSLogoResourceTest extends MCRJerseyResourceTest {
     public static class MyDataStore extends MCRMetadataStore{
         private HashMap<Integer, MCRStoredMetadata> storedMetadata;
         public MyDataStore() throws IOException, JDOMException {

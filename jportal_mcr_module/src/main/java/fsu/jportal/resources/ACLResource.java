@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -18,12 +17,12 @@ import org.hibernate.Session;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
+import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.frontend.jersey.config.MCRResourceSercurityConf;
 
-import fsu.jportal.config.ResourceSercurityConf;
 import fsu.jportal.gson.AccessRuleList;
-import fsu.jportal.gson.GsonManager;
 import fsu.jportal.gson.AccessRuleListTypeAdapter;
 import fsu.jportal.gson.RegResourceCollection;
 import fsu.jportal.gson.RegResourceCollectionTypeAdapter;
@@ -36,9 +35,9 @@ public class ACLResource {
     @Path("rsc")
     @Produces(MediaType.APPLICATION_JSON)
     public String resourceClasses(){
-        Map<String, List<String>> resourceRegister = ResourceSercurityConf.instance().getResourceRegister();
+        Map<String, List<String>> resourceRegister = MCRResourceSercurityConf.instance().getResourceRegister();
         Set<String> keySet = resourceRegister.keySet();
-        GsonManager gsonManager = GsonManager.instance();
+        MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new RegResourceCollectionTypeAdapter());
         return gsonManager.createGson().toJson(new RegResourceCollection(resourceRegister, info.getAbsolutePath()));
     }
@@ -52,7 +51,7 @@ public class ACLResource {
     	new SchemaUpdate(MCRHIBConnection.instance().getConfiguration()).execute(true, true);
     	Session session = MCRHIBConnection.instance().getSession();
         List<MCRACCESSRULE> ruleList = session.createCriteria(MCRACCESSRULE.class).list();
-        GsonManager gsonManager = GsonManager.instance();
+        MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new AccessRuleListTypeAdapter());
         String json = gsonManager.createGson().toJson(new AccessRuleList(ruleList, info.getAbsolutePath()));
         currentSession.commitTransaction();
@@ -63,8 +62,8 @@ public class ACLResource {
     @Path("rsc/{rscID}")
     @Produces(MediaType.APPLICATION_JSON)
     public String resourceMethods(@PathParam("rscID") String rscID){
-        List<String> resourceMethods = ResourceSercurityConf.instance().getResourceRegister().get(rscID);
-        GsonManager gsonManager = GsonManager.instance();
+        List<String> resourceMethods = MCRResourceSercurityConf.instance().getResourceRegister().get(rscID);
+        MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new RegResourceCollectionTypeAdapter());
         //return gsonManager.createGson().toJson(new RegResourceCollection(resourceMethods, info.getAbsolutePath()));
         return "";

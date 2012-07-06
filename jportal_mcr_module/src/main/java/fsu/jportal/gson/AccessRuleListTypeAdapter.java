@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.core.UriBuilder;
 
 import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
+import org.mycore.common.MCRJSONTypeAdapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -14,7 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
-public class AccessRuleListTypeAdapter extends GsonTypeAdapter<AccessRuleList> {
+public class AccessRuleListTypeAdapter extends MCRJSONTypeAdapter<AccessRuleList> {
 
     @Override
     public JsonElement serialize(AccessRuleList src, Type typeOfSrc, JsonSerializationContext context) {

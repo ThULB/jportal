@@ -2,6 +2,7 @@ package fsu.jportal.gson;
 
 import java.lang.reflect.Type;
 
+import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRResults;
 
@@ -12,7 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 
-public class MCRResultsTypeAdapter extends GsonTypeAdapter<MCRResultsWrapper>{
+public class MCRResultsTypeAdapter extends MCRJSONTypeAdapter<MCRResultsWrapper>{
 
     @Override
     public JsonElement serialize(MCRResultsWrapper resultsWrapper, Type typeOfSrc, JsonSerializationContext context) {

@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRJSONManager;
 import org.mycore.parsers.bool.MCRBooleanClauseParser;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;
@@ -21,7 +22,6 @@ import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
 import org.mycore.services.fieldquery.MCRSortBy;
 
-import fsu.jportal.gson.GsonManager;
 import fsu.jportal.gson.MCRHitTypeAdapter;
 import fsu.jportal.gson.MCRResultsTypeAdapter;
 import fsu.jportal.gson.MCRResultsWrapper;
@@ -62,7 +62,7 @@ public class SearchResource {
     }
 
     protected String toJson(MCRResults mcrResults) {
-        GsonManager gsonManager = GsonManager.instance();
+        MCRJSONManager gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new MCRResultsTypeAdapter());
         gsonManager.registerAdapter(new MCRHitTypeAdapter());
         String json = gsonManager.createGson().toJson(new MCRResultsWrapper(mcrResults));

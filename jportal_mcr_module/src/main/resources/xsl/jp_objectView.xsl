@@ -510,28 +510,29 @@
   </xsl:template>
 
   <xsl:template name="classificationEditor">
-    <xsl:param name="depth" />
-    <xsl:param name="spaceBetweenMainLinks" />
-    <xsl:param name="ImageBaseURL" />
-    <xsl:param name="menuPointHeigth" />
-
-    <xsl:variable name="webPath" select="concat($WebApplicationBaseURL, 'classification/editor')" />
-    <xsl:variable name="jsPath" select="concat($webPath, '/js')" />
-    <xsl:variable name="imgPath" select="concat($webPath, '/images')" />
     <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-    <xsl:variable name="journalRecourcePath" select="concat($resourcePath,'jp/',$journalID,'/')" />
-    <script type="text/javascript" src="{$jsPath}/ClassificationEditor.js"></script>
+    <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
+
+    <xsl:call-template name="classeditor.loadSettings" />
+ 
+    <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
+
     <script type="text/javascript">
       $(document).ready(function() {
-        startClassificationEditor($("#diagButton"), {
-          baseUrl : "<xsl:value-of select='$webPath' />" + "/",
-          resourcePath : "<xsl:value-of select='$journalRecourcePath' />",
-          classificationId : "list",
-          categoryId : "",
-          showId : "<xsl:value-of select='$showId' />" === "true",
-          currentLang : "<xsl:value-of select='$CurrentLang' />",
-          jsPath : "<xsl:value-of select='$jsPath' />",
-          buttonID : "diagButton"
+        $("#diagButton").click(function() {
+          if(typeof dojo == 'undefined') {
+            classeditor.settings.resourceURL = "<xsl:value-of select='$journalRecourceURL' />";
+            classeditor.classId = "list";
+            classeditor.categoryId = "";
+            loadClassificationEditor(classeditor.settings, function() {
+              startClassificationEditor(classeditor.settings);
+            }, function(jqxhr, settings, exception) {
+              console.log(exception);
+              alert(exception);
+            });
+          } else {
+            startClassificationEditor(classeditor.settings);
+          }
         });
       })
     </script>

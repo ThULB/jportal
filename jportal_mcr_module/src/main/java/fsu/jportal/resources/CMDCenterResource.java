@@ -19,9 +19,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.imagetiler.MCRImage;
 import org.mycore.iview2.services.MCRIView2Tools;
 
-import fsu.jportal.resources.filter.MyCoReSecurityFilterFactory.MCRDBAccess;
-
-@MCRDBAccess
 @Path("cmd")
 public class CMDCenterResource {
 

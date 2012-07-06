@@ -15,6 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.frontend.jersey.MCRJerseyResourceTest;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
@@ -24,10 +25,9 @@ import fsu.jportal.jaxb.JournalList;
 import fsu.jportal.jaxb.JournalList.Journal;
 import fsu.jportal.jaxb.JournalList.Section;
 import fsu.jportal.resources.JournalListResource;
-import fsu.testcase.JerseyResourceTestCase;
 import fsu.thulb.jaxb.JaxbTools;
 
-public class JournalListResourceTest extends JerseyResourceTestCase {
+public class JournalListResourceTest extends MCRJerseyResourceTest {
     public static class FakeJournalListBackend implements JournalListBackend{
         public static HashMap<String, JournalList> journals;
         

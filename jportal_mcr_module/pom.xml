@@ -94,6 +94,18 @@
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-test-framework</artifactId>
+            <version>1.1.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-apache-client</artifactId>
+            <version>1.1.5.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-json</artifactId>
             <version>1.1.5.1</version>
             <scope>compile</scope>
@@ -134,13 +146,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>de.uni-jena.thulb</groupId>
-            <artifactId>JPTestCases</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.4</version>
@@ -170,6 +175,18 @@
         <dependency>
         	<groupId>org.mycore</groupId>
         	<artifactId>mycore-complete</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-base</artifactId>
+          <scope>test</scope>
+          <type>test-jar</type>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-jersey</artifactId>
+          <scope>test</scope>
+          <type>test-jar</type>
         </dependency>
         <dependency>
         	<groupId>fsu.thulb</groupId>

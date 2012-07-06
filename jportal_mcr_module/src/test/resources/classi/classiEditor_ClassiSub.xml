@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<json>
-    [{"item":{"id":{"rootid":"2a98df7a-7b39-44bf-891d-debe2f0db61e"},"labels":[{"lang":"de","text":"Test Klassifikation","description":"Test"}],"uri":"http://localhost:8291/classification/editor/classificationEditor.xml"},"state":"update","parentId":"_placeboid_","index":44},{"item":{"id":{"rootid":"2a98df7a-7b39-44bf-891d-debe2f0db61e","categid":"b578c47b-f353-469d-adc6-4c1bea0ccce6"},"labels":[{"lang":"de","text":"Kategorie","description":"Test Kategorie"},{"lang":"en","text":"Category","description":"Test category"}],"uri":"http://localhost:8291/classification/editor/classificationEditor.xml"},"state":"update","parentId":{"rootid":"2a98df7a-7b39-44bf-891d-debe2f0db61e"},"index":0}]
-</json>

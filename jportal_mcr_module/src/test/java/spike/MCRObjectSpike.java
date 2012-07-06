@@ -3,29 +3,17 @@ package spike;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
-import org.jdom.Content;
 import org.jdom.Document;
-import org.jdom.Text;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.datamodel.metadata.MCRMetaElement;
-import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import fsu.jportal.metadata.RubricLabel;
-import fsu.jportal.metadata.XMLMetaElement;
-import fsu.jportal.metadata.XMLMetaElementEntry;
 
 public class MCRObjectSpike {
 
@@ -44,54 +32,6 @@ public class MCRObjectSpike {
         assertNotNull(metadata);
 
         xmlOutput(mcrObject.createXML());
-    }
-
-    @Test
-    public void createPersonObjWithMCRAPI() throws Exception {
-        MCRObject mcrPersonObj = createPersonObj();
-
-        XMLMetaElement<PersonName> nameMetaElement = new XMLMetaElement<PersonName>("def.heading");
-        nameMetaElement.addMetaElemEntry(new PersonName("Bud", "Spencer"));
-        nameMetaElement.addMetaElemEntry(new PersonName("Homer", "Simpson"));
-        
-        xmlOutput(mcrPersonObj.createXML());
-        
-        Gson gson = new Gson();
-        Type rubricType = new TypeToken<XMLMetaElement<PersonName>>() {}.getType();
-        System.out.println(gson.toJson(rubricType));
-    }
-    
-    @Test
-    public void createRubricWithAPI() throws Exception {
-        MCRObject mcrObject = createPersonObj();
-
-        XMLMetaElement<RubricLabel> rubric = new XMLMetaElement<RubricLabel>("rubric");
-        rubric.addMetaElemEntry(new RubricLabel("de", "Rubriken Test fuer MyCoRe", "test de"));
-        rubric.addMetaElemEntry(new RubricLabel("de", "Rubric test for MyCoRe", "test en"));
-        
-        mcrObject.getMetadata().setMetadataElement(rubric.toMCRMetaElement());
-
-        xmlOutput(mcrObject.createXML());
-    }
-    
-    public class PersonName extends XMLMetaElementEntry{
-        final String FIRSTNAME = "firstname";
-        final String LASTNAME = "lastname";
-        
-        public PersonName(String firstname, String lastname) {
-            getTagValueMap().put(FIRSTNAME, firstname);
-            getTagValueMap().put(LASTNAME, lastname);
-        }
-
-        @Override
-        public String getLang() {
-            return "de";
-        }
-
-        @Override
-        public String getMetaElemName() {
-            return "heading";
-        }
     }
 
     private void xmlOutput(Document mcrObjXML) throws IOException {
