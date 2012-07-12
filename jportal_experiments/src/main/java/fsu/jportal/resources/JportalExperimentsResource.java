@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -47,9 +46,6 @@ public class JportalExperimentsResource {
             } catch (MCRPersistenceException e) {
                 e.printStackTrace();
                 return Response.serverError().build();
-            } catch (MCRActiveLinkException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         }
         
