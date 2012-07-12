@@ -138,6 +138,7 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        <!-- 
         <dependency>
             <groupId>org.mycore.sru</groupId>
             <artifactId>pica-query-parser</artifactId>
@@ -145,6 +146,7 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+         -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -179,12 +181,6 @@
         <dependency>
           <groupId>org.mycore</groupId>
           <artifactId>mycore-base</artifactId>
-          <scope>test</scope>
-          <type>test-jar</type>
-        </dependency>
-        <dependency>
-          <groupId>org.mycore</groupId>
-          <artifactId>mycore-jersey</artifactId>
           <scope>test</scope>
           <type>test-jar</type>
         </dependency>
