@@ -20,7 +20,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.xpath.XPath;
-import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -49,60 +48,46 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
     public MCRObjectTools() {
         super();
-        MCRCommand com = null;
+        addCommand(new MCRCommand("cp {0} {1} {2} {3}", "org.mycore.frontend.cli.MCRObjectTools.cp String int String String",
+                "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]"));
 
-        com = new MCRCommand("cp {0} {1} {2} {3}", "org.mycore.frontend.cli.MCRObjectTools.cp String int String String",
-                "cp [source ID] [n times] [layoutTemplate] [dataModelCoverage]");
-        command.add(com);
+        addCommand(new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String",
+                "cp [sourceID] [layoutTemplate] [dataModelCoverage]."));
 
-        com = new MCRCommand("cp {0} {1} {2}", "org.mycore.frontend.cli.MCRObjectTools.cp String String String",
-                "cp [sourceID] [layoutTemplate] [dataModelCoverage].");
-        command.add(com);
+        addCommand(new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String",
+                "export import [objectID]."));
 
-        com = new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String",
-                "export import [objectID].");
-        command.add(com);
+//      addCommand(new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
+//                "repair-cp [sourceObjectID] to [destinationObjectID]."));
 
-        com = new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
-                "repair-cp [sourceObjectID] to [destinationObjectID].");
+        addCommand(new MCRCommand("update context of journal {0}", "org.mycore.frontend.cli.MCRObjectTools.updateJournalContext String",
+                "update context of journal [journalID]."));
 
-        com = new MCRCommand("update context of journal {0}", "org.mycore.frontend.cli.MCRObjectTools.updateJournalContext String",
-                "update context of journal [journalID].");
-        command.add(com);
+        addCommand(new MCRCommand("move file {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.moveFile String String",
+                "move file abs. path to abs. path"));
 
-        com = new MCRCommand("move file {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.moveFile String String",
-                "move file abs. path to abs. path");
-        command.add(com);
+//      addCommand(new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
+//                "converts a volume to an article"));
 
-        com = new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
-                "converts a volume to an article");
+        addCommand(new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String", "vd17Import url"));
 
-        com = new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String", "vd17Import url");
-
-        command.add(com);
-
-        com = new MCRCommand("add derivates {0} to object {1}",
-                "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String", "adds one ore more derivates to an object ");
-        command.add(com);
+        addCommand(new MCRCommand("add derivates {0} to object {1}",
+                "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String", "adds one ore more derivates to an object "));
         
-        com = new MCRCommand("merge derivates {0}",
-                "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String", "merge several derivates");
-        command.add(com);
+        addCommand(new MCRCommand("merge derivates {0}",
+                "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String", "merge several derivates"));
 
-        com = new MCRCommand("collapse {0}",
+        addCommand(new MCRCommand("collapse {0}",
                 "org.mycore.frontend.cli.MCRObjectTools.collapse String",
-                "merges all descendants derivates to the given object (a new derivate is created)");
-        command.add(com);
+                "merges all descendants derivates to the given object (a new derivate is created)"));
 
-        com = new MCRCommand("layer collapse {0} {1}",
+        addCommand(new MCRCommand("layer collapse {0} {1}",
                 "org.mycore.frontend.cli.MCRObjectTools.layerCollapse String String",
-                "merges all descendants derivates of the given object to the given layer. @see collapse command");
-        command.add(com);
+                "merges all descendants derivates of the given object to the given layer. @see collapse command"));
 
-        com = new MCRCommand("set derivate link to {0} with path {1}",
+        addCommand(new MCRCommand("set derivate link to {0} with path {1}",
                 "org.mycore.frontend.cli.MCRObjectTools.setDerivateLink String String",
-                "creates a new derivate link");
-        command.add(com);        
+                "creates a new derivate link"));
     }
 
     public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRActiveLinkException, MCRException,
@@ -290,8 +275,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
             // creating ACL for copy
             // retrieve ACL from source Object
             Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrIdStr);
+            @SuppressWarnings("unchecked")
             List<Element> permissions = servAcl.getChildren("servacl");
-            MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
 
             for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
                 Element perm = (Element) iterator.next();
@@ -309,8 +294,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
             XPath xpath = XPath.newInstance(xpathExpression);
             return (Element) xpath.selectSingleNode(xmlDoc);
         } catch (JDOMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("while select node", e);
         }
 
         return null;

@@ -55,15 +55,9 @@ public class MCRJournalSummary extends MCRAbstractCommands {
 
     public MCRJournalSummary() {
         super();
-
-        MCRCommand com = null;
-
-        com = new MCRCommand("check journal {0} for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt String", "");
-        command.add(com);
-        com = new MCRCommand("check all journals for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt", "");
-        command.add(com);
-        com = new MCRCommand("create ActivityIndex-CSV-file for Statistic Tool", "org.mycore.frontend.cli.MCRJournalSummary.createCSV", "");
-        command.add(com);
+        addCommand(new MCRCommand("check journal {0} for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt String", ""));
+        addCommand(new MCRCommand("check all journals for incomplete objects", "org.mycore.frontend.cli.MCRJournalSummary.DoIt", ""));
+        addCommand(new MCRCommand("create ActivityIndex-CSV-file for Statistic Tool", "org.mycore.frontend.cli.MCRJournalSummary.createCSV", ""));
     }
 
     private static MCRObject getActualObject(String type, int ID) {

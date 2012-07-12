@@ -26,19 +26,15 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
 
     public MCRJPortalRedundancyCommands() {
         super();
+        addCommand(new MCRCommand("jp clean up {0}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.cleanUp String",
+                "Deletes and relinks all doublets for a specific type."));
 
-        MCRCommand cleanUp = new MCRCommand("jp clean up {0}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.cleanUp String",
-                "Deletes and relinks all doublets for a specific type.");
-        command.add(cleanUp);
+        addCommand(new MCRCommand("merge file {1} of type {0} with redundancy map",
+                "org.mycore.frontend.cli.command.MCRMergeOldRedundancyMap.merge String String", ""));
 
-        MCRCommand merge = new MCRCommand("merge file {1} of type {0} with redundancy map",
-                "org.mycore.frontend.cli.command.MCRMergeOldRedundancyMap.merge String String", "");
-        command.add(merge);
-
-        MCRCommand replRemove = new MCRCommand("internal replace links and remove {0} {1}",
+        addCommand(new MCRCommand("internal replace links and remove {0} {1}",
                 "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.replaceAndRemove String String",
-                "internal command for replacing links and removing the doublet");
-        command.add(replRemove);
+                "internal command for replacing links and removing the doublet"));
     }
 
     public static List<String> cleanUp(String type) {

@@ -10,12 +10,8 @@ public class MCRUsersGroupsTools extends MCRAbstractCommands {
 
     public MCRUsersGroupsTools() {
         super();
-
-        MCRCommand com = null;
-
-        com = new MCRCommand("add {0} to {1}", "org.mycore.frontend.cli.MCRUsersGroupsTools.addUsers String String",
-                "add [userIDs] to [groupIDs]\n usersIDs: user1,user2,...\n groupIDs: group1, group2,...");
-        command.add(com);
+        addCommand(new MCRCommand("add {0} to {1}", "org.mycore.frontend.cli.MCRUsersGroupsTools.addUsers String String",
+                "add [userIDs] to [groupIDs]\n usersIDs: user1,user2,...\n groupIDs: group1, group2,..."));
     }
 
     public static List<String> addUsers(String userIDs, String groupIDS) {

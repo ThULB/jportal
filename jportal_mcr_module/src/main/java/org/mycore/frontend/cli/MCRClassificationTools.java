@@ -15,21 +15,15 @@ public class MCRClassificationTools extends MCRAbstractCommands {
 
     public MCRClassificationTools() {
         super();
-        MCRCommand com = null;
 
-        com = new MCRCommand("repair category with empty labels", "org.mycore.frontend.cli.MCRClassificationTools.repairEmptyLabels", "");
-        command.add(com);
+        addCommand(new MCRCommand("repair category with empty labels", "org.mycore.frontend.cli.MCRClassificationTools.repairEmptyLabels", ""));
 
-        com = new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", "");
-        command.add(com);
+        addCommand(new MCRCommand("repair position in parent", "org.mycore.frontend.cli.MCRClassificationTools.repairPositionInParent", ""));
 
-        com = new MCRCommand("import export classification {0} {1}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String int", "");
-        command.add(com);
+        addCommand(new MCRCommand("import export classification {0} {1}", "org.mycore.frontend.cli.MCRClassificationTools.importExportClassification String int", ""));
 
-        com = new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.repairLeftRightValue String",
-                "fixes all left and right values in the given classification");
-        command.add(com);
-
+        addCommand(new MCRCommand("repair left right values for classification {0}", "org.mycore.frontend.cli.MCRClassificationTools.repairLeftRightValue String",
+                "fixes all left and right values in the given classification"));
     }
 
     // - get category without labels via SQL-query

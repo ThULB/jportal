@@ -13,7 +13,6 @@ import org.jdom.Namespace;
 import org.jdom.filter.Filter;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRDeadLinkFinder extends MCRAbstractCommands {
@@ -22,10 +21,7 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
 
     public MCRDeadLinkFinder() {
         super();
-        MCRCommand com = null;
-
-        com = new MCRCommand("remove dead links", "org.mycore.frontend.cli.MCRDeadLinkFinder.findDeadLinks", "The command remove dead links.");
-        command.add(com);
+        addCommand(new MCRCommand("remove dead links", "org.mycore.frontend.cli.MCRDeadLinkFinder.findDeadLinks", "The command remove dead links."));
     }
 
     public static void findDeadLinks() {
@@ -33,22 +29,23 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
         Session session = MCRHIBConnection.instance().getSession();
 
         // the SQL query check, if there are references to non existing objects
-        List list = session.createQuery("select key.mcrfrom,key.mcrto from MCRLINKHREF where key.mcrto not in (select key.id from MCRXMLTABLE)").list();
-        
-        if (list.isEmpty())
-            LOGGER.info("No dead links found.");
-        
-        HashMap objectXMLs = new HashMap();
-        for (Iterator iter = list.iterator(); iter.hasNext();) {
-            Object[] resultArray = (Object[]) iter.next();
-            String keyMCRFrom = (String) resultArray[0];
-            String keyMCRTo = (String) resultArray[1];
+        @SuppressWarnings("unchecked")
+        List<String[]> list = session.createQuery("select key.mcrfrom,key.mcrto from MCRLINKHREF where key.mcrto not in (select key.id from MCRXMLTABLE)").list();
 
-            MCRObject faultyObj = new MCRObject();
+        if (list.isEmpty()) {
+            LOGGER.info("No dead links found.");
+        }
+
+        HashMap<String, Document> objectXMLs = new HashMap<String, Document>();
+        for (Iterator<String[]> iter = list.iterator(); iter.hasNext();) {
+            String[] resultArray = iter.next();
+            String keyMCRFrom = resultArray[0];
+            String keyMCRTo = resultArray[1];
+
             Document faultyObjDoc = null;
 
             if (objectXMLs.containsKey(keyMCRFrom)) {
-                faultyObjDoc = (Document) objectXMLs.get(keyMCRFrom);
+                faultyObjDoc = objectXMLs.get(keyMCRFrom);
             } else {
                 // retrieve the object with the faulty reference
                 // LOGGER.info("object: " + keyMCRFrom);

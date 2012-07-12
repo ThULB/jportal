@@ -6,14 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -27,14 +24,10 @@ import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
-import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xml.MCRURIResolver;
-import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.common.xml.MCRXSLTransformation;
-import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.MCRLayoutUtilities;
 import org.xml.sax.SAXParseException;
 
 import fsu.jportal.xml.XMLTools;
@@ -44,21 +37,15 @@ public class MCRContentTools extends MCRAbstractCommands {
 
     public MCRContentTools() {
         super();
-
-        MCRCommand com = null;
-
         // sync the journal label in navigation XML with object XML
-        com = new MCRCommand("fix journal label {0} in navi", "org.mycore.frontend.cli.MCRContentTools.fixlabel String",
-                "fix fix journal label [pattern in label] in navi");
-        command.add(com);
+        addCommand(new MCRCommand("fix journal label {0} in navi", "org.mycore.frontend.cli.MCRContentTools.fixlabel String",
+                "fix fix journal label [pattern in label] in navi"));
 
         // remove journal entry in navigation XML which no longer exists in System
-        com = new MCRCommand("clean navi", "org.mycore.frontend.cli.MCRContentTools.cleanNavi", "clean navi");
-        command.add(com);
+        addCommand(new MCRCommand("clean navi", "org.mycore.frontend.cli.MCRContentTools.cleanNavi", "clean navi"));
 
-        com = new MCRCommand("xlink migration for base {0}", "org.mycore.frontend.cli.MCRContentTools.xlinkMigration String",
-                "xlink migration");
-        command.add(com);
+        addCommand(new MCRCommand("xlink migration for base {0}", "org.mycore.frontend.cli.MCRContentTools.xlinkMigration String",
+                "xlink migration"));
     }
 
     public static void xlinkMigration(String base) throws TransformerException, JDOMException {
