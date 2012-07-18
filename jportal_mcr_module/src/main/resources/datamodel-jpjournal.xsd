@@ -365,6 +365,27 @@
 <xsd:attribute use="optional" type="xsd:boolean" name="notinherit"/>
 </xsd:complexType>
 </xsd:element>
+<xsd:element maxOccurs="1" minOccurs="1" name="hidden_templates">
+<xsd:complexType>
+<xsd:sequence>
+<xsd:element maxOccurs="1" minOccurs="1" name="hidden_template">
+<xsd:complexType>
+<xsd:simpleContent>
+<xsd:extension base="xsd:string">
+<xsd:attribute type="mcrdefaulttype" use="optional" name="type"/>
+<xsd:attribute type="mcrdefaultform" use="optional" name="form"/>
+<xsd:attribute type="xsd:integer" use="optional" name="inherited"/>
+<xsd:attribute ref="xml:lang"/>
+</xsd:extension>
+</xsd:simpleContent>
+</xsd:complexType>
+</xsd:element>
+</xsd:sequence>
+<xsd:attribute fixed="MCRMetaLangText" use="required" type="xsd:string" name="class"/>
+<xsd:attribute use="optional" type="xsd:boolean" name="heritable"/>
+<xsd:attribute use="optional" type="xsd:boolean" name="notinherit"/>
+</xsd:complexType>
+</xsd:element>
 <xsd:element maxOccurs="1" minOccurs="1" name="dataModelCoverages">
 <xsd:complexType>
 <xsd:sequence>
