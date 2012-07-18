@@ -99,6 +99,12 @@
             </text>
         </cell>
         <!-- datamodel coverage -->
+        <cell class="editorMandatory" row="304" col="1" anchor="NORTHWEST" >
+          <text>
+            <label>Template: </label>
+          </text>
+        </cell>
+        <cell row="304" col="2" anchor="NORTHWEST" ref="template_chooser" />
         <cell class="editorMandatory" row="305" col="1" anchor="NORTHWEST" ref="datamodelCoverage_label" />
         <cell row="305" col="2" anchor="NORTHWEST" ref="datamodelCoverage_input" />
         <cell class="editorLabel" row="310" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label" />
@@ -363,6 +369,17 @@
         </item>
         <include uri="classification:editor:-1:children:jportal_class_00000067" />
     </list>
+    <!-- ================================================================== -->
+    <panel id="template_chooser">
+        <hidden var="metadata/hidden_templates/@class" default="MCRMetaLangText" />
+        <hidden var="metadata/hidden_templates/@notinherit" default="false" />
+        <hidden var="metadata/hidden_templates/@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/hidden_templates/hidden_template" ref="template_chooser_list"/>
+    </panel>
+    <!-- category list -->
+    <list id="template_chooser_list" width="300" type="dropdown">
+        <include uri="templates:prop:templates.folder" />
+    </list>
 
     <!-- ================================================================== -->
 
@@ -497,6 +514,7 @@
         <hidden var="metadata/hidden_genhiddenfields3/@heritable" default="false" />
         <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_genhiddenfields3/hidden_genhiddenfield3" />
     </panel>
+    
     <!--  =================================================================================================== -->
     <list type="dropdown" id="classiIDs">
         <item value="">
