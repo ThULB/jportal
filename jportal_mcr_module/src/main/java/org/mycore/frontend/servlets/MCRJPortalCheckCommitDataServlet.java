@@ -1,7 +1,12 @@
 package org.mycore.frontend.servlets;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
@@ -14,7 +19,8 @@ import org.mycore.frontend.editor.MCREditorSubmission;
 import org.mycore.frontend.editor.MCRRequestParameters;
 
 public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
-	private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
+    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
+
     private static Logger LOGGER = Logger.getLogger(MCRJPortalCheckCommitDataServlet.class);
 
     private static final long serialVersionUID = 1L;
@@ -75,30 +81,52 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
             indoc.getRootElement().setAttribute("ID", ID.toString());
         }
 
+        if (ID.getTypeId().equals("jpjournal")) {
+            setHiddenID(indoc, ID);
+        }
+
         // create a metadata object and prepare it
         Document preparedMetadataDocument = prepareMetadata((Document) indoc.clone(), ID, job, lang);
         MCRObject mcrObj = new MCRObject(preparedMetadataDocument);
 
         // update or create in datastore
-        if(MCRMetadataManager.exists(ID)) {
+        if (MCRMetadataManager.exists(ID)) {
             MCRObjectID parentID = mcrObj.getStructure().getParentID();
-            if( parentID != null && 
-                (!MCRMetadataManager.exists(parentID) || ID.equals(parentID)))
-                throw new MCRException("Error while updating MCRObject '" + ID +  "'!" +
-                        " Parent id '" + parentID + "' doesnt exists or is equal to the object!");
+            if (parentID != null && (!MCRMetadataManager.exists(parentID) || ID.equals(parentID)))
+                throw new MCRException("Error while updating MCRObject '" + ID + "'!" + " Parent id '" + parentID
+                        + "' doesnt exists or is equal to the object!");
             MCRMetadataManager.update(mcrObj);
         } else {
             MCRMetadataManager.create(mcrObj);
         }
-        
 
         // try to go to the returnUrl, otherwise to the edited object
         String url = parms.getParameter("returnUrl");
-        if(url == null)
-            url = getBaseURL() +  getNextURL(ID, true);
+        if (url == null)
+            url = getBaseURL() + getNextURL(ID, true);
 
         if (!job.getResponse().isCommitted())
             job.getResponse().sendRedirect(job.getResponse().encodeRedirectURL(url));
+    }
+
+    private void setHiddenID(Document indoc, MCRObjectID ID) {
+        Element metadata = indoc.getRootElement().getChild("metadata");
+        Element hiddenJournalsID = metadata.getChild("hidden_jpjournalsID");
+
+        if (hiddenJournalsID == null) {
+            hiddenJournalsID = new Element("hidden_jpjournalsID");
+            hiddenJournalsID.setAttribute("class", "MCRMetaLangText");
+            hiddenJournalsID.setAttribute("heritable", "true");
+            hiddenJournalsID.setAttribute("notinherit", "false");
+        }
+
+        if (hiddenJournalsID.getChildren().size() == 0) {
+            Element hiddenID = new Element("hidden_jpjournalID");
+            hiddenID.setAttribute("inherited", "0");
+            hiddenID.setAttribute("form", "plain");
+            hiddenID.setText(ID.toString());
+            hiddenJournalsID.addContent(hiddenID);
+        }
     }
 
     @Override
@@ -117,5 +145,6 @@ public class MCRJPortalCheckCommitDataServlet extends MCRCheckDataBase {
      * not used
      */
     @Override
-    protected void sendMail(MCRObjectID ID) {}
+    protected void sendMail(MCRObjectID ID) {
+    }
 }
