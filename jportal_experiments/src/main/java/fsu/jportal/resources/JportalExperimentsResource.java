@@ -1,6 +1,5 @@
 package fsu.jportal.resources;
 
-
 import java.io.InputStream;
 
 import javax.ws.rs.GET;
@@ -22,33 +21,32 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 public class JportalExperimentsResource {
     @GET
     @Path("{filename:.*}")
-    public InputStream getResources(@PathParam("filename") String filename){
+    public InputStream getResources(@PathParam("filename") String filename) {
         return this.getClass().getResourceAsStream("/html/" + filename);
     }
 
     @POST
     @Path("cp/{id}")
-    public Response copy(@PathParam("id") String id, @QueryParam("numCopy") int numCopy){
+    public Response copy(@PathParam("id") String id, @QueryParam("numCopy") int numCopy) throws MCRActiveLinkException {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         String base = mcrId.getBase();
         Document origObjXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
         Element origObjXMLRootTag = origObjXML.getRootElement();
-        
+
         for (int i = 0; i < numCopy; i++) {
             MCRObjectID nextFreeId = MCRObjectID.getNextFreeId(base);
             origObjXMLRootTag.setAttribute("ID", nextFreeId.toString());
             origObjXMLRootTag.setAttribute("label", nextFreeId.toString());
-            
-            
+
             try {
                 MCRMetadataManager.create(new MCRObject(origObjXML));
-//                MCRXMLMetadataManager.instance().create(nextFreeId, origObjXML, new Date());
+                //                MCRXMLMetadataManager.instance().create(nextFreeId, origObjXML, new Date());
             } catch (MCRPersistenceException e) {
                 e.printStackTrace();
                 return Response.serverError().build();
             }
         }
-        
+
         return Response.ok().build();
     }
 }
