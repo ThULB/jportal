@@ -9,3 +9,18 @@
 .languageList_show {
 	background: white;
 }
+
+.jp-layout-header {
+	background-image: url("../IMAGES/banner_top_clean.gif");
+	background-repeat: no-repeat, repeat-x;
+	background-position: left bottom;
+	height: 169px;
+}
+
+.jp-layout-border-light {
+	border-color: #DBDBDB;	
+}
+
+#jp-journal-navigation {
+	top: 108px;
+}

@@ -1,163 +1,28 @@
 @CHARSET "UTF-8";
-html{
-	background-color: white;
-    font-family: Helvetica, Verdana, Arial,  sans-serif;
-    font-size: 0.75em;
-	height: 100%;
+
+#information_box {
+	width: 500px;
+	padding: 40px 0px;
+	border-bottom: 1px solid #DBDBDB;
 }
 
-body{
-	margin: 0px;
-	min-width: 1024px;
-	height: 100%;
-	background-color: white;
+#latestArticles_box {
+	margin-top: 30px;
 }
 
-/* Color group definition */
-.jp-top-navigation-bar a, .jp-home-link, .jp-home-link a{
-	color: white;
+#latestArticlesList {
+	padding-left: 15px;
 }
 
-.jp-layout-left-navi a, .jp-layout-content-area, .navi_history {
-	color: #4B4B4D;
+#latestArticlesList li {
+	margin-bottom: 20px;
 }
 
-/* Font group definition*/
-.jp-top-navigation-bar li.navi_below, .jp-home-link, .navi_history, .jp-layout-left-navi a, .headline, .information_box .title, .information_box .greeting, .search_box .title, .new_articles .title, .new_articles p {
-	font-weight: bold;
-}
-
-.jp-top-navigation-bar a, .jp-home-link a, .navi_history a, .jp-layout-left-navi a {
-	text-decoration: none;
-}
-
-.jp-layout-left-navi a, .navi_history {
-	font-size: 11px;
-}
-
-/************************/
-.jp-layout-header {
-	background-image: url("../IMAGES/master_new-topleft-logo.png"), url("../IMAGES/master_new-header-bg.png");
-	background-repeat: no-repeat, repeat-x;
-	background-position: left bottom, left 30px;
-	height: 129px;
-}
-
-.logo{
-	background: url("../IMAGES/master_new-logo.png"), url("../IMAGES/master_new-topright-logo.png");
-	background-repeat: no-repeat;
-	background-position: left top, right top;
-	width: 655px;
-	height: 115px;
-	clear: both;
-	float: right;
-}
-.jp-home-link{
-	margin: 7px 10px;
-}
-
-/* top horizontal navigation bar*/
-.jp-top-navigation-bar{
-	height: 30px;
-	background-color: #646466;
-}
-
-.jp-top-navigation-bar .jp-home-link {
-	float: left;
-}
-
-.jp-top-navigation-bar .jp-login {
-	float: right;
-}
-
-.jp-top-navigation-bar > div > ul {
-	margin-top: 8px;
-	margin-bottom: 0px;
-}
-
-.jp-top-navigation-bar ul {
-	float: left;
-}
-
-.jp-top-navigation-bar li {
-	display: inline;
-	padding-right: 12px;
-}
-
-.navi_history {
-	position: absolute;
-	top: 100px;
-	padding-left: 265px;
-}
-
-.navi_history a {
-	font-weight: normal;
-	color: #0086CB;
-}
-
-.jp-layout-left-navi{
-	height: 80%;
-	background-color: #c4c5c7;
-	width: 195px;
-	float: left;
-}
-.jp-layout-left-navi > div {
-	position: relative;
-	top: 20px;
-	background-color: white;
-	padding: 1px 0px 1px 12px;
-}
-.jp-layout-left-navi > div > ul {
-	margin: 0px;
-	padding: 15px 0px 15px 5px;
-	border-top: 4px solid #0086CB;
-	border-bottom: 4px solid #0086CB;
-}
-
-.jp-layout-left-navi > div > ul > li {
-	list-style-type: none;
-	padding: 7px 0px 7px 0px;
-	border-top: 1px dotted #4B4B4D;
-}
-
-.jp-layout-left-navi > div > ul ul{
-	padding-left: 20px;
-}
-
-.jp-layout-left-navi > div > ul ul a {
-	font-weight: normal;
-}
-
-.jp-layout-left-navi li, .latestArticles li{
-	list-style-type: none;
-}
-
-.latestArticles {
-	padding-left: 20px;
-}
-
-.latestArticles li{
-	padding-bottom: 5px;
-}
-
-.latestArticles h3{
+#latestArticlesList h3 {
 	margin-bottom: 5px;
 }
 
-.jp-layout-content-area {
-	float: left;
-	padding-left: 70px;
-	padding-right: 50px;
-	width: 709px;
-}
-
-.headline {
-	border-bottom: 1px solid;
-	margin-top: 20px;
-	margin-bottom: 18px;
-}
-
-.information_box, .search_box, .new_articles{
+.search_box, .new_articles{
 	border: 1px solid #0086CB;
 	width: 350px;
 	height: 228px;
@@ -169,15 +34,15 @@ body{
 	margin-left: 5px;
 }
 
-.information_box .title, .search_box .title, .search_box .info_text, .new_articles .title{
+.search_box .title, .search_box .info_text, .new_articles .title{
 	background-color: #0086CB;
 }
 
-.information_box .title, .search_box .title, .search_box .info_text, .new_articles .title{
+.search_box .title, .search_box .info_text, .new_articles .title{
 	color: white;
 }
 
-.information_box .title, .search_box .title, .new_articles .title{
+.search_box .title, .new_articles .title{
 	width: 75px;
 	height: 14px;
 	padding: 3px 10px 3px 3px;
@@ -192,7 +57,7 @@ body{
 	font-size: 14px;
 }
 
-.information_box .info_text, .search_box .info_text, .new_articles .info_text{
+.search_box .info_text, .new_articles .info_text{
 	padding: 10px;
 }
 

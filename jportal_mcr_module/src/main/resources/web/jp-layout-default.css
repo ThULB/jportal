@@ -33,13 +33,14 @@ div {
 	padding-top: 4px;
 	margin: 0px;
 	font-size: 11px;
-	border-bottom: solid 1px #DBDBDB;
+	border-bottom: solid 1px;
 }
 
 .jp-layout-breadcrumb li {
 	display: inline-block;
 	padding: 0px 5px;
-	border-left: solid 1px #DBDBDB;
+	border-left: solid 1px;
+	border-color: inherit;
 }
 
 .jp-layout-breadcrumb li:FIRST-CHILD {
@@ -127,6 +128,16 @@ div {
 .jp-layout-horiz-menu li,.topList li {
 	margin-left: 20px;
 	float: left;
+}
+
+.jp-layout-intro {
+	padding: 10px;
+	padding-top: 0px;
+	padding-bottom: 20px;
+	margin-left: 40px;
+	margin-bottom: 20px;
+	width: 610px;
+	border-bottom: solid 1px;
 }
 
 .jp-layout-metadata {
@@ -260,19 +271,17 @@ div {
 	padding-top: 5px;
 	margin-top: 5px;
 	margin-bottom: 10px;
-	/* 	border-top: solid 1px #DBDBDB; */
-	border-bottom: solid 1px #DBDBDB;
+	border-bottom: solid 1px;
 }
 
 .jp-layout-tableOfContent {
 	overflow: hidden;
 	clear: both;
 	padding-bottom: 20px;
-	border-bottom: 1px solid #DBDBDB;
+	border-bottom: 1px solid;
 }
 
-#jp-content-container { /* 	border-top: solid 1px #DBDBDB; */
-	/* 	margin-top: 20px; */
+#jp-content-container {
 	padding-top: 20px;
 }
 
@@ -365,4 +374,24 @@ div {
 .jp-layout-marginLR {
 	margin-left: 29px;
 	margin-right: 29px;
+}
+
+.jp-layout-footer{
+	padding-top: 50px;	
+}
+#jp-footer-menu {
+	padding-top: 3px;
+	height: 22px;
+}
+
+.jp-layout-menubar{
+	border-top: solid 1px #9A9899;
+}
+
+#jp-delete-objects {
+	margin: 0px;
+}
+
+#jp-delete-objects a:HOVER{
+	text-decoration: underline;
 }

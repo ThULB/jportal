@@ -75,12 +75,12 @@ function jpInitIview2() {
 
         var iviewObj = new iview.IViewInstance(container, containerOptions);
         iview.addInstance(iviewObj);
-        iviewObj.startViewer(derivInfo.file);
-        setTimeout(function() {
-            iviewObj.toggleViewerMode();
-        }, 50)
+        iviewObj.startViewer(derivInfo.file, "true");
+//        setTimeout(function() {
+//            iviewObj.toggleViewerMode();
+//        }, 50)
     }
-
+/*
     $('.viewerContainer.min').each(function(i, container) {
         var derivID = $(container).attr('id');
         var startFile = $(container).attr('file');
@@ -89,7 +89,7 @@ function jpInitIview2() {
         iview.addInstance(iviewObj);
         iviewObj.startViewer(startFile);
     });
-
+*/
     $('ul.jp-layout-derivateLinks').delegate('div.jp-layout-derivateWrapper', 'mouseenter', function() {
         $(this).find('div.jp-layout-hidden-Button').show();
     }).delegate('div.jp-layout-derivateWrapper', 'mouseleave click', function() {

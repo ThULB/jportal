@@ -5,14 +5,31 @@
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
+  <xsl:include href="jp-layout-mcrwebpage.xsl" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
+  
+  <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
+    <xsl:value-of select="metadata/hidden_templates/hidden_template"/>
+  </xsl:template>
+  
+  <xsl:template mode="nameOfTemplate" match="mycoreobject">
+    <xsl:variable name="journalXML" select="document(concat('mcrobject:',metadata/hidden_jpjournalsID/hidden_jpjournalID))"/>
+    <xsl:value-of select="$journalXML/mycoreobject/metadata/hidden_templates/hidden_template"/>
+  </xsl:template>
+  
+  <xsl:template mode="nameOfTemplate" match="var[@name='/mycoreobject/@ID']">
+    <xsl:variable name="objXML" select="document(concat('mcrobject:',@value))"/>
+    <xsl:apply-templates mode="nameOfTemplate" select="$objXML/mycoreobject"/>
+  </xsl:template>
 
   <xsl:template name="renderLayout">
-    <xsl:param name="nameOfTemplate" select="$template" />
+    <xsl:variable name="nameOfTemplate" >
+      <xsl:apply-templates mode="nameOfTemplate" select="/mycoreobject|/MyCoReWebPage//var"/>
+    </xsl:variable>
     <html>
       <head>
         <title>
@@ -82,6 +99,5 @@
         <div id="jp-footer" class="footer"></div>
       </body>
     </html>
-
   </xsl:template>
 </xsl:stylesheet>

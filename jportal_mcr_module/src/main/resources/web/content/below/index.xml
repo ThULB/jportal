@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-    <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
-        <div id="information_box" class="information_box">
-            <div class="title">Informationen</div>
-            <div class="info_text">
-            <p class="greeting">Herzlichen Glückwunsch, Sie haben JPortal erfolgreich installiert!</p>
-            Melden Sie sich als "administrator" mit "alleswirdgut" an und nutzen Sie die erweiterteten Funktionalitäten.
-            </div>
-        </div>
-        <div id="search_box" class="search_box">
-            <div class="title">Schnellsuche</div>
-            <div class="info_text">
-                <p>Suche im Gesamtbestand:</p>
-                <div id="search" class="search_container">
-                    <input id="search_input" class="search_input" type="text"></input>
-                </div>
-            </div>
-        </div>
-        <div id="new_articles" class="new_articles">
-            <div class="title">Neu</div>
-            <div class="info_text">
-                <p>Aktuelle Artikel:</p>
-                <printLatestArticles></printLatestArticles>
-            </div>
-        </div>
-    </section>
+  <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
+    <div class="jp-layout-marginLR">
+      <div id="information_box">
+        <h2>Informationen</h2>
+        <p class="greeting">Journals@UrMEL bietet Ihnen den Zugang zu Zeitschriften in digitaler Form.</p>
+        Durch Digitalisierung werden historische Zeitschriften leichter zugänglich gemacht und damit gleichzeitig auch vor dem Verfall
+        bewahrt. In Zusammenarbeit mit wissenschaftlichen Verlagen und Fachgesellschaften gibt die ThULB in zunehmendem Maße selbst
+        Online-Zeitschriften heraus.
+        Darüber hinaus werden auch Online-Zeitschriften von Verlagen erworben und auf den Servern der ThULB abgespeichert und zugänglich gemacht.
+      </div>
+      <div id="latestArticles_box">
+        <h2>Neueste Artikel</h2>
+        <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
+      </div>
+    </div>
+  </section>
 </MyCoReWebPage>

@@ -23,7 +23,7 @@
     </xsl:variable>
     <xsl:variable name="editProp" select="xalan:nodeset($editPropXML)" />
 
-    <xsl:if test="$editProp/access/@update = 'true' or $editProp/access/@delete = 'true'">
+    <xsl:if test="$editProp/access/@update = 'true'">
       <menu id="jp-object-editing" class="jp-layout-horiz-menu">
         <xsl:apply-templates mode="editLink" select="$editProp/link" />
 
@@ -32,9 +32,22 @@
         </xsl:apply-templates>
 
         <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
-          <li><span id="diagButton">Rubrik bearbeiten</span></li>
+          <li>
+            <span id="diagButton">Rubrik bearbeiten</span>
+          </li>
           <xsl:call-template name="classificationEditor" />
         </xsl:if>
+      </menu>
+    </xsl:if>
+
+    <xsl:if test="$editProp/access/@delete = 'true'">
+      <menu id="jp-delete-objects" class="jp-layout-horiz-menu">
+        <li>
+          <a href="">Zeitschrift Löschen</a>
+        </li>
+        <li>
+          <a href="">Bilder Löschen</a>
+        </li>
       </menu>
     </xsl:if>
   </xsl:template>

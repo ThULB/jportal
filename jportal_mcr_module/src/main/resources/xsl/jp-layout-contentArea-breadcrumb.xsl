@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
   <xsl:template name="breadcrumb">
     <div id="jp-breadcrumb-container" class="jp-layout-marginLR">
-      <menu class="jp-layout-breadcrumb">
+      <menu class="jp-layout-breadcrumb jp-layout-border-light">
         <li>
           <a href="foo.de">Start</a>
         </li>
