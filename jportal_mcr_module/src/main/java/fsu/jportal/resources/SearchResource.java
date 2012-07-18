@@ -3,17 +3,20 @@ package fsu.jportal.resources;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
-import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRJSONManager;
-import org.mycore.parsers.bool.MCRBooleanClauseParser;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.parsers.bool.MCRCondition;
 import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRQuery;
@@ -29,10 +32,17 @@ import fsu.jportal.gson.MCRResultsWrapper;
 @Path("search")
 public class SearchResource {
     static Logger LOGGER = Logger.getLogger(SearchResource.class);
+    @Context
+    HttpServletResponse httpResponse;
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String search(@QueryParam("q") String query, @QueryParam("s") String sortBy, @QueryParam("m") int maxResults, @QueryParam("o") String sortOrder) throws IOException{
+        MCRResults mcrResults = mcrQuery(query, sortBy, maxResults, sortOrder);
+        return toJson(mcrResults);
+    }
+
+    private MCRResults mcrQuery(String query, String sortBy, int maxResults, String sortOrder) {
         MCRQuery mcrQuery = parseQuery(query);
         boolean boolSortOrder = ("descending".equals(sortOrder)) ? MCRSortBy.DESCENDING : MCRSortBy.ASCENDING;
         
@@ -44,7 +54,14 @@ public class SearchResource {
         mcrQuery.setMaxResults(maxResults);
         
         MCRResults mcrResults =  MCRQueryManager.search(mcrQuery);
-        return toJson(mcrResults);
+        return mcrResults;
+    }
+    
+    @POST
+    @Path("all")
+    public void searchAllForm(@FormParam("q") String query, @FormParam("s") String sortBy, @FormParam("m") int maxResults, @FormParam("o") String sortOrder) throws IOException{
+        MCRResults mcrResults = mcrQuery(query, sortBy, maxResults, sortOrder);
+        MCRLayoutService.instance().doLayout(null, httpResponse, new MCRJDOMContent(mcrResults.buildXML()));
     }
     
     @GET
