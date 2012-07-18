@@ -11,25 +11,34 @@
     <title allowHTML="true" />
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
-  
+
   <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
-    <xsl:value-of select="metadata/hidden_templates/hidden_template"/>
+    <xsl:value-of select="metadata/hidden_templates/hidden_template" />
   </xsl:template>
-  
+
   <xsl:template mode="nameOfTemplate" match="mycoreobject">
-    <xsl:variable name="journalXML" select="document(concat('mcrobject:',metadata/hidden_jpjournalsID/hidden_jpjournalID))"/>
-    <xsl:value-of select="$journalXML/mycoreobject/metadata/hidden_templates/hidden_template"/>
+    <xsl:variable name="journalXML" select="document(concat('notnull:mcrobject:',metadata/hidden_jpjournalsID/hidden_jpjournalID))" />
+    <xsl:value-of select="$journalXML/mycoreobject/metadata/hidden_templates/hidden_template" />
   </xsl:template>
-  
+
   <xsl:template mode="nameOfTemplate" match="var[@name='/mycoreobject/@ID']">
-    <xsl:variable name="objXML" select="document(concat('mcrobject:',@value))"/>
-    <xsl:apply-templates mode="nameOfTemplate" select="$objXML/mycoreobject"/>
+    <xsl:variable name="objXML" select="document(concat('mcrobject:',@value))" />
+    <xsl:apply-templates mode="nameOfTemplate" select="$objXML/mycoreobject" />
   </xsl:template>
 
   <xsl:template name="renderLayout">
-    <xsl:variable name="nameOfTemplate" >
-      <xsl:apply-templates mode="nameOfTemplate" select="/mycoreobject|/MyCoReWebPage//var"/>
+    <xsl:variable name="nameOfTemplate">
+      <xsl:apply-templates mode="nameOfTemplate" select="/mycoreobject|/MyCoReWebPage//var" />
     </xsl:variable>
+    <xsl:variable name="objectEditingHTML">
+      <editing>
+        <xsl:call-template name="objectEditing">
+          <xsl:with-param name="id" select="/mycoreobject/@ID" />
+          <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+        </xsl:call-template>
+      </editing>
+    </xsl:variable>
+    <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
     <html>
       <head>
         <title>
@@ -84,11 +93,7 @@
 
           <div id="jp-journal-navigation">
             <xsl:call-template name="navigation.tree" />
-
-            <xsl:call-template name="objectEditing">
-              <xsl:with-param name="id" select="/mycoreobject/@ID" />
-              <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-            </xsl:call-template>
+            <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing']" />
           </div>
         </div>
 
@@ -96,7 +101,11 @@
           <xsl:apply-templates />
         </div>
 
-        <div id="jp-footer" class="footer"></div>
+        <div id="jp-footer" class="jp-layout-footer">
+          <div id="jp-footer-menu" class="jp-layout-marginLR jp-layout-menubar">
+            <xsl:copy-of select="$objectEditing/menu[@id='jp-delete-objects']" />
+          </div>
+        </div>
       </body>
     </html>
   </xsl:template>
