@@ -12,6 +12,13 @@
     </div>
   </xsl:template>
 
+  <xsl:template name="searchBreadcrumb">
+    <xsl:param name="objID" />
+    <menu class="jp-layout-searchBreadcrumb">
+      <xsl:apply-templates mode="printListEntry" select="document(concat('parents:',$objID))/parents/parent" />
+    </menu>
+  </xsl:template>
+
   <xsl:template mode="printListEntryContent" match="parent">
     <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
       <xsl:value-of select="@xlink:title" />

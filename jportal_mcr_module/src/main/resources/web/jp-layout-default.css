@@ -47,6 +47,21 @@ div {
 	border: none;
 }
 
+.jp-layout-searchBreadcrumb{
+	display: inline;
+	margin: 0px;
+	padding-left: 0px;
+}
+
+.jp-layout-searchBreadcrumb li{
+	display: inline-block;
+	border-left: solid 1px;
+	padding: 0px 5px;
+}
+
+.jp-layout-searchBreadcrumb li:FIRST-CHILD {
+	border: none;
+}
 /*
 * Layout Header
 */
@@ -107,9 +122,15 @@ div {
 
 #jp-journal-navigation {
 	position: relative;
-	top: 120px;
-	left: 29px;
+/* 	top: 120px; */
+/* 	left: 29px; */
+	top: 103px;
+	left: 824px;
+	width: 200px;
 	font-weight: bold;
+}
+#jp-journal-navigation menu{
+	clear: both;
 }
 
 #jp-journal-navigation menu.jp-layout-horiz-menu>li:FIRST-CHILD {
@@ -120,14 +141,57 @@ div {
 	padding: 0px;
 	list-style-type: none;
 }
+.jp-layout-menu-dropdown{
+	display: inline-block;
+	height: 19px;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
 
-.jp-layout-horiz-menu li:FIRST-CHILD,.topList li:FIRST-CHILD {
+.jp-layout-menu-dropdown:HOVER{
+	background-color: #DBDBDB;	
+}
+
+.jp-layout-menu-dropdown:HOVER > menu.jp-layout-submenu-dropdown{
+	display: block;
+	position: absolute;
+	background-color: #9A9899;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	padding-right: 10px;
+	margin-left: -5px;
+	top: 24px;
+}
+
+.jp-layout-menu-dropdown:NTH-LAST-CHILD(4):HOVER > menu.jp-layout-submenu-dropdown{
+	right: 28px;
+}
+
+.jp-layout-submenu-dropdown{
+	display: none;
+	padding: 0px;
+	list-style: none;
+	
+}
+
+.jp-layout-submenu-dropdown > li{
+	float: none;
+	margin: 0px;
+	margin-top: 8px;
+}
+
+#jp-journal-navigation a:HOVER{
+	color: white;
+}
+
+.jp-layout-horiz-menu > li:FIRST-CHILD,.topList li:FIRST-CHILD {
 	margin-left: 0px;
 }
 
-.jp-layout-horiz-menu li,.topList li {
-	margin-left: 20px;
-	float: left;
+.jp-layout-horiz-menu > li,.topList li {
+	margin-left: 10px;
+	display: inline-block;
 }
 
 .jp-layout-intro {
@@ -394,4 +458,147 @@ div {
 
 #jp-delete-objects a:HOVER{
 	text-decoration: underline;
+}
+
+.jp-layout-message-background{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-color: black;
+	opacity: 0.5;
+	z-index: 100;
+}
+
+.jp-layout-message{
+	position: fixed;
+	margin: 0 auto;
+	top: 50%;
+	left: 50%;
+	margin-left: -150px;
+	margin-top: -92px;
+	width: 300px;
+	height: 185px;
+	z-index: 200;
+	border: solid 2px black;
+}
+
+.jp-layout-message-icon{
+	float: left;
+	margin-left: 20px;
+	margin-top: 30px;
+}
+
+.jp-layout-message-text{
+	margin-left: 20px;
+	margin-top: 30px;
+	font-size: 11pt;
+	float: left;
+	width: 168px; 
+}
+
+.jp-layout-message-button {
+	cursor: pointer;
+	border: 1px solid #9A9899;
+    height: 20px;
+    padding: 4px 6px 0;
+    text-align: center;
+    width: 66px;
+    background-color: #E5E5E5;
+    display: inline-block;
+}
+
+.jp-layout-message-button:HOVER {
+    background-color: #CFCFCF;
+}
+
+#deleteFail #okButton{
+	clear: both;
+	margin-top: 40px;
+	margin-left: 107px;
+}
+
+#deleteCheck #delCheckButtons{
+	clear: both;
+	padding-top: 40px;
+	padding-left: 86px;
+}
+
+.paperClip-icon {
+	background-image: url(images/paperClip.png) !important/*{iconsContent}*/;
+    height: 24px !important;
+    width: 24px !important;
+}
+
+.jp-layout-inline {
+	display: inline;
+}
+
+.jp-layout-selected-underline {
+	font-weight: bold;
+}
+
+.jp-layout-selected-underline a{
+	font-weight: bold;
+	color: black;
+	cursor: default;
+}
+
+.jp-layout-selected-underline a:HOVER{
+	text-decoration: none;
+}
+
+.jp-layout-label {
+	margin-right: 10px;
+}
+
+.jp-layout-list-nodecoration {
+	list-style: none;
+	padding-left: 0px;
+	color: #4E494E;
+}
+
+.jp-layout-list-nodecoration > li{
+	margin-bottom: 23px;
+}
+
+.jp-layout-clickLabel {
+	margin: 2px 0px 2px 0px;
+}
+
+.jp-layout-clickLabel a{
+	font-weight: bold;
+	color: #4B4E49;
+}
+
+.jp-layout-bottomline {
+	border-bottom: 1px solid;
+}
+
+.jp-layout-paginator li {
+	margin: 0px;
+}
+
+.jp-layout-paginator li a {
+	border: 1px solid;
+	padding: 3px;
+}
+
+.jp-layout-paginator li.jp-layout-selected-underline a {
+	border: none;
+	padding: 5px;
+}
+
+#resultListHeader {
+	margin-bottom: 25px;
+}
+
+#resultPaginator {
+	padding-top: 20px;
+	margin-top: 25px;
+}
+
+.jp-layout-topline {
+	border-top: 1px solid; 
 }

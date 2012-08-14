@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  exclude-result-prefixes="encoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="encoder">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -38,10 +38,12 @@
       </xsl:if>
       <div id="jp-metadata-container" class="jp-layout-metadata">
         <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-          <div id="intro" class="jp-layout-intro jp-layout-border-light">
-            <xsl:variable name="journalIntroText" select="document(concat('notnull:webapp:/journalContext/',@ID,'/intro.xml'))/intro" />
-            <xsl:copy-of select="$journalIntroText/*" />
-          </div>
+          <xsl:variable name="journalIntroText" select="document(concat('notnull:webapp:/journalContext/',@ID,'/intro.xml'))/intro" />
+          <xsl:if test="$journalIntroText">
+            <div id="intro" class="jp-layout-intro jp-layout-border-light">
+              <xsl:copy-of select="$journalIntroText/*" />
+            </div>
+          </xsl:if>
         </xsl:if>
         <dl class="jp-layout-metadataList">
           <xsl:apply-templates mode="metadataDisplay"

@@ -2,6 +2,26 @@
     <field name="deletedFlag"   type="boolean"    source="objectMetadata" xpath="/mycoreobject/service" value="count(servflags/servflag[text() = 'deleted'])>0" />
 	<field addable="true" name="linkDerivExist" source="objectMetadata" type="boolean" value="@xlink:href != ''" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" />
 	<field name="derCount" type="integer" source="objectMetadata" xpath="/mycoreobject" value="count(structure/derobjects/derobject)" />
+  
+    <field i18n="editor.search.metadata" name="allMetaNotInherited" source="objectMetadata" type="text">
+      <mcr:allMetaNotInherited xmlns:mcr="http://www.mycore.org/">
+
+        <xsl:for-each select="/mycoreobject/metadata/*//*[@inherited='0']">
+          <xsl:value-of select="text()|@xlink:title"/>
+          <xsl:text>          </xsl:text>
+        </xsl:for-each>
+
+        <xsl:for-each select="/mycoreobject/metadata/*/*[@classid and @categid]">
+          <xsl:variable name="uri" select="concat('classification:metadata:0:parents:',@classid,':',@categid)"/>
+
+          <xsl:for-each select="document($uri)//category/label">
+            <xsl:value-of select="@text"/>
+            <xsl:text>          </xsl:text>
+          </xsl:for-each>
+        </xsl:for-each>
+
+      </mcr:allMetaNotInherited>
+    </field>
 
     <!-- Searchfields for all kind jp metadata (jpjournal, jpvolume, jparticle) -->
     <field name="maintitles"        type="name"       source="objectMetadata" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" addable="true"/>

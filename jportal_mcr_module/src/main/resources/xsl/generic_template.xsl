@@ -3,32 +3,22 @@
   xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <xsl:include href="jp-layout-tools.xsl" />
+  <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
+  <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
+
+  <xsl:param name="object" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
 
-  <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
-    <xsl:value-of select="metadata/hidden_templates/hidden_template" />
-  </xsl:template>
-
-  <xsl:template mode="nameOfTemplate" match="mycoreobject">
-    <xsl:variable name="journalXML" select="document(concat('notnull:mcrobject:',metadata/hidden_jpjournalsID/hidden_jpjournalID))" />
-    <xsl:value-of select="$journalXML/mycoreobject/metadata/hidden_templates/hidden_template" />
-  </xsl:template>
-
-  <xsl:template mode="nameOfTemplate" match="var[@name='/mycoreobject/@ID']">
-    <xsl:variable name="objXML" select="document(concat('mcrobject:',@value))" />
-    <xsl:apply-templates mode="nameOfTemplate" select="$objXML/mycoreobject" />
-  </xsl:template>
-
   <xsl:template name="renderLayout">
     <xsl:variable name="nameOfTemplate">
-      <xsl:apply-templates mode="nameOfTemplate" select="/mycoreobject|/MyCoReWebPage//var" />
+      <xsl:call-template name="nameOfTemplate" />
     </xsl:variable>
     <xsl:variable name="objectEditingHTML">
       <editing>
@@ -51,7 +41,9 @@
           name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
         <link href="{$WebApplicationBaseURL}jp-layout-default.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
+        <xsl:if test="$nameOfTemplate != ''">
+          <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
+        </xsl:if>
         <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}templates/content/template_logos/CSS/sponsoredlogos.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
@@ -92,7 +84,15 @@
           </div>
 
           <div id="jp-journal-navigation">
-            <xsl:call-template name="navigation.tree" />
+            <form action="/jp-search.xml">
+              <input name="XSL.qt"></input>
+              <xsl:variable name="journalID">
+                <xsl:call-template name="getJournalID" />
+              </xsl:variable>
+              <xsl:if test="$journalID != ''">
+                <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
+              </xsl:if>
+            </form>
             <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing']" />
           </div>
         </div>
@@ -102,10 +102,12 @@
         </div>
 
         <div id="jp-footer" class="jp-layout-footer">
-          <div id="jp-footer-menu" class="jp-layout-marginLR jp-layout-menubar">
-            <xsl:copy-of select="$objectEditing/menu[@id='jp-delete-objects']" />
-          </div>
+          <!-- <div id="jp-footer-menu" class="jp-layout-marginLR jp-layout-menubar"> <xsl:copy-of select="$objectEditing/menu[@id='jp-delete-objects']" 
+            /> </div> -->
         </div>
+        <xsl:if test="$object='delete'">
+          <xsl:copy-of select="$objectEditing/deleteMsg" />
+        </xsl:if>
       </body>
     </html>
   </xsl:template>
