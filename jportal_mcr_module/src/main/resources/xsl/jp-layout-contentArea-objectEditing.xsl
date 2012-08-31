@@ -31,7 +31,7 @@
         <param name="step" value="commit" />
       </params>
       <item class="jp-layout-menu-dropdown">
-        <label name="Bearbeiten" />
+<!--         <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <item>
           <label name="Dokument bearbeiten" ref="editorServlet">
@@ -80,7 +80,7 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <label name="Löschen" />
+<!--         <label name="Löschen" /> -->
         <restriction name="deletePerm" value="true" />
         <item>
           <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
@@ -95,16 +95,57 @@
     </menu>
   </xsl:variable>
   <xsl:variable name="menu" select="xalan:nodeset($menuXML)/menu" />
+  
+  
+  <xsl:template name="classificationEditorDiag">
+    <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+    <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
+
+    <xsl:call-template name="classeditor.loadSettings" />
+    
+    <!-- JS -->
+    <xsl:call-template name="classeditor.includeDojoJS" />
+    <xsl:call-template name="classeditor.includeJS" />
+    <!-- CSS -->
+    <xsl:call-template name="classeditor.includeDojoCSS" />
+    <xsl:call-template name="classeditor.includeCSS" />
+ 
+    <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("#diagButton").click(function() {
+          console.log('type: ');
+          console.log(typeof dojo);
+          
+          classeditor.settings.resourceURL = "<xsl:value-of select='$journalRecourceURL' />";
+          classeditor.classId = "list";
+          classeditor.categoryId = "";
+            
+          if(typeof dojo == 'undefined') {
+            loadClassificationEditor(classeditor.settings, function() {
+              startClassificationEditor(classeditor.settings);
+            }, function(jqxhr, settings, exception) {
+              console.log(exception);
+              alert(exception);
+            });
+          } else {
+            startClassificationEditor(classeditor.settings);
+          }
+        });
+      })
+    </script>
+  </xsl:template>
 
   <xsl:template name="objectEditing">
     <xsl:param name="id" />
     <xsl:param name="dataModel" />
 
-    <menu id="jp-object-editing" class="jp-layout-horiz-menu">
+    <menu id="jp-object-editing" class="jp-layout-object-editing">
       <xsl:apply-templates mode="menuItem" select="$menu/item" />
 
       <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
-        <xsl:call-template name="classificationEditor" />
+        <xsl:call-template name="classificationEditorDiag" />
       </xsl:if>
     </menu>
 

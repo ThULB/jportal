@@ -14,7 +14,7 @@
 	background-image: url("../IMAGES/banner_top_clean.gif");
 	background-repeat: no-repeat, repeat-x;
 	background-position: left bottom;
-	height: 169px;
+	height: 145px;
 }
 
 .jp-layout-border-light {
@@ -22,5 +22,22 @@
 }
 
 #jp-journal-navigation {
-	top: 108px;
+	top: 114px;
+	background-color: #9A9899;
+}
+
+#artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
+	border-color: #DBDBDB;	
+}
+
+/***************************/
+#logo {
+	background-image: url("../IMAGES/banner_top_clean.gif");
+	background-repeat: no-repeat, repeat-x;
+	background-position: left bottom;
+	height: 115px;
+}
+
+#searchBar {
+	background-color: #9A9899;
 }

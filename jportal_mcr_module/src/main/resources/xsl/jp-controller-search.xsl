@@ -17,7 +17,7 @@
 
     <xsl:variable name="qt_lowerCase" select="translate($qt,$uppercase, $lowercase)"/>
     <xsl:variable name="queryTerm" select="encoder:encode(concat('(allMetaNotInherited ', $op,' &quot;', $qt_lowerCase,'&quot;)'))" />
-    <xsl:variable name="searchResults" select="document(concat('query:term=',$queryTerm, $journalIDTerm, '&amp;numPerPage=2&amp;page=',$resultpage))"></xsl:variable>
+    <xsl:variable name="searchResults" select="document(concat('query:term=',$queryTerm, $journalIDTerm, '&amp;numPerPage=3&amp;page=',$resultpage))"></xsl:variable>
     <xsl:apply-templates mode="searchResults" select="$searchResults" />
   </xsl:template>
 </xsl:stylesheet>

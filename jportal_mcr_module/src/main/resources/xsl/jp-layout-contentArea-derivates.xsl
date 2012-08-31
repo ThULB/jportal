@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions">
+  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/">
 
   <xsl:param name="iview2.debug" select="'false'" />
 
-  <xsl:template mode="derivateDisplay" match="metadata/derivateLinks|structure/derobjects">
-    <ul class="jp-layout-derivateLinks">
-      <xsl:apply-templates mode="derivateDisplay" select="*" />
-    </ul>
-    <div id="viewerContainerWrapper" />
-    <xsl:call-template name="initIview2JS" />
+  <xsl:template name="derivateDisplay">
+    <xsl:param name="nodes" />
+    <xsl:if test="count($nodes) &gt; 0">
+    <!-- 
+      <ul class="jp-layout-derivateLinks jp-layout-derivateList">
+      </ul>
+     -->
+     <div class="jp-layout-derivateList">
+        <xsl:apply-templates mode="derivateDisplay" select="$nodes" />
+     </div>
+      <xsl:call-template name="initIview2JS" />
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="tocDerivates">
+    <xsl:param name="derivates"/>
+    
+  </xsl:template>
+  <xsl:template mode="derivateDisplay" match="mcr:field[@name='linkDeriv']">
+    <xsl:call-template name="derivListEntry">
+      <xsl:with-param name="derivID" select="substring-before(., '/')" />
+      <xsl:with-param name="file" select="concat('/',substring-after(., '/'))" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derivateLink">
@@ -29,13 +46,14 @@
   <xsl:template name="derivListEntry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-
+<!-- 
     <li>
+    </li>
+ -->
       <div class="jp-layout-derivateWrapper">
         <div class="jp-layout-hidden-Button"></div>
         <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
       </div>
-    </li>
   </xsl:template>
 
   <xsl:template name="initIview2JS">

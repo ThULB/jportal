@@ -38,7 +38,9 @@
     <field name="journalTitle"      type="identifier" source="objectMetadata" xpath="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" value="text()" addable="true"/>
 	<field  name="linkDeriv"        type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" value="@xlink:href"  addable="true"/>
     <field name="participants_xlinkTitle" type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>          
-    <field name="objectType" source="objectMetadata" type="identifier" value="substring-before(substring-after(@ID,'_'),'_')" xpath="/mycoreobject" addable="true"/>
+    <field name="objectType"        source="objectMetadata" type="identifier" value="substring-before(substring-after(@ID,'_'),'_')" xpath="/mycoreobject" source="objectMetadata" />
+    <field name="derivate"          type="identifier" addable="true" value="@xlink:href" xpath="/mycoreobject/structure/derobjects/derobject"/>
+    <field name="participants_withName" addable="true" source="objectMetadata" type="identifier" value="concat(@xlink:href,'#',@xlink:title)" xpath="/mycoreobject/metadata/participants/participant[@inherited='0']"/>
     
     <!-- Search in journals metadata -->
     <field name="participants_type" type="identifier" source="objectMetadata" objects="jpjournal" xpath="/mycoreobject/metadata/participants/participant" value="@type"/>     
@@ -81,6 +83,11 @@
     <field name="keywords_art"          type="text"       source="objectMetadata" objects="jparticle" xpath="/mycoreobject/metadata/keywords/keyword" value="text()" i18n="editormask.labels.keyword" />
     <field name="types_art"         type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/types/type" value="@ID" />
     <field name="rubrics_art"           type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/rubrics/rubric" value="@ID"/>
+    <field  addable="true" name="rubrics_id" objects="jparticle" source="objectMetadata" type="identifier" value="concat(@classid,'#',@categid)" xpath="/mycoreobject/metadata/rubrics/rubric"/>
+    <field  addable="true" name="published_orig_from_art" objects="jparticle" source="objectMetadata" type="identifier" value="text()" xpath="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_Original_From']"/>
+    <field  addable="true" name="published_orig_till_art" objects="jparticle" source="objectMetadata" type="identifier" value="text()" xpath="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_Original_Till']"/>
+    <field  addable="true" name="published_orig_art" objects="jparticle" source="objectMetadata" type="identifier" value="text()" xpath="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published_Original']"/>
+    <field  addable="true" name="published_art" objects="jparticle" source="objectMetadata" type="identifier" value="text()" xpath="/mycoreobject/metadata/dates/date[@inherited='0' and @type='published']"/>
     <field name="classispub"            type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub/classipub" value="@ID"/>
     <field name="classispub2"           type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub2/classipub2" value="@ID" />
     <field name="classispub3"           type="identifier" source="objectCategory" objects="jparticle" xpath="/mycoreobject/metadata/classispub3/classipub3" value="@ID" />

@@ -57,7 +57,7 @@
         </xsl:choose>
     </xsl:variable>
 
-    <xsl:include href="generic_template.xsl" />
+    <xsl:include href="jp-layout-main.xsl" />
     <xsl:include href="pagetitle.xsl" />
     <xsl:include href="jp_navigation.xsl" />
     <xsl:include href="footer.xsl" />

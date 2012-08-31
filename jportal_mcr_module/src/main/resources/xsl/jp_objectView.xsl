@@ -514,7 +514,7 @@
     <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
 
     <xsl:call-template name="classeditor.loadSettings" />
- 
+    
     <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
 
     <script type="text/javascript">

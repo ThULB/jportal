@@ -25,6 +25,8 @@
   <i18n tag="footNote">editormask.labels.footNote</i18n>
   <i18n tag="bibEvidence">editormask.labels.bibEvidence</i18n>
   <i18n tag="indexField">editormask.labels.indexField</i18n>
+  <i18n tag="maintitle">editormask.labels.maintitle</i18n>
+  <i18n tag="rubric">editormask.labels.rubric</i18n>
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neues Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
   <numPerPage>10</numPerPage>
