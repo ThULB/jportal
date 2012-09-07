@@ -14,7 +14,6 @@
      <div class="jp-layout-derivateList">
         <xsl:apply-templates mode="derivateDisplay" select="$nodes" />
      </div>
-      <xsl:call-template name="initIview2JS" />
     </xsl:if>
   </xsl:template>
 

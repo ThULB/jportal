@@ -9,7 +9,7 @@
         $.getJSON(searchURL, function(searchResults) {
             for (i = 0; i < searchResults.numHits; i++) {
                 var resultListEntry = $('<li/>');
-                fill(resultListEntry, searchResults.hits[i].metaData);
+                fill(resultListEntry, searchResults.hits[i]);
                 resultList.append(resultListEntry);
             }
 
@@ -56,10 +56,11 @@ $(document).ready(function() {
         }
         var searchUrl = host + '/rsc/search?s=maintitles_plain&q=' + searchQuery;
 
-        $('#resultList').jpResultList(searchUrl, function(resultListEntry, metaData) {
+        $('#resultList').jpResultList(searchUrl, function(resultListEntry, hit) {
+            var metaData = hit.metaData;
             console.log('yeah Title: ' + metaData.maintitles);
 
-            var titleLink = $('<a/>').html(metaData.maintitles).attr('href', host + metaData.webcontext);
+            var titleLink = $('<a/>').html(metaData.maintitles).attr('href', '/receive/' + hit.id);
             var title = $('<h3 class="journal-title"/>').append(titleLink);
             resultListEntry.append(title);
 

@@ -7,7 +7,7 @@
           <a href="foo.de">Start</a>
         </li>
         <xsl:apply-templates mode="printListEntry"
-          select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0']" />
+          select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
     </div>
   </xsl:template>
@@ -47,6 +47,12 @@
         <xsl:with-param name="string" select="." />
         <xsl:with-param name="length" select="20" />
       </xsl:call-template>
+    </span>
+  </xsl:template>
+  
+  <xsl:template mode="printListEntryContent" match="heading">
+    <span>
+      <xsl:apply-templates mode="metadataPersName" select="."/> 
     </span>
   </xsl:template>
 </xsl:stylesheet>

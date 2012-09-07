@@ -38,7 +38,7 @@
     </xsl:variable>
     <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
 
-    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']">
+    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading">
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
     </xsl:apply-templates>
 
@@ -79,8 +79,12 @@
         </div>
       </xsl:if>
     </div>
+  </xsl:template>
 
-    <div id="viewerContainerWrapper" />
+  <xsl:template mode="printTitle" match="heading[@inherited='0']">
+    <div id="jp-maintitle" class="jp-layout-maintitle">
+      <xsl:apply-templates mode="metadataPersName" select="." />
+    </div>
   </xsl:template>
 
   <xsl:template mode="printTitle" match="maintitle[@inherited='0']">

@@ -8,6 +8,8 @@
   <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />
   <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update_',$currentType))" />
   <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
+  <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_journal')" />
+  <xsl:variable name="isAdmin" select="acl:checkPermission('POOLPRIVILEGE','administrate-user')" />
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
   <xsl:variable name="hasSourceOfLink" select="/mycoreobject/structure/derobjects/derobject[@xlink:href = substring-before($bookmarkedImage,'/')]" />
@@ -20,6 +22,8 @@
       <var name="currentObjID" value="{$currentObjID}" />
       <var name="updatePerm" value="{$updatePerm}" />
       <var name="deletePerm" value="{$deletePerm}" />
+      <var name="createJournal" value="{$createJournal}" />
+      <var name="isAdmin" value="{$isAdmin}" />
       <var name="linkImgAllowed" value="{$linkImgAllowed}" />
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
@@ -31,7 +35,7 @@
         <param name="step" value="commit" />
       </params>
       <item class="jp-layout-menu-dropdown">
-<!--         <label name="Bearbeiten" /> -->
+        <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <item>
           <label name="Dokument bearbeiten" ref="editorServlet">
@@ -50,6 +54,34 @@
           </label>
         </item>
         <item>
+          <label name="Neue Person" ref="editorServlet">
+            <params>
+              <param name="type" value="person" />
+              <param name="step" value="author" />
+              <param name="todo" value="wnewobj" />
+            </params>
+          </label>
+        </item>
+        <item>
+          <label name="Neue Institution" ref="editorServlet">
+            <params>
+              <param name="type" value="jpinst" />
+              <param name="step" value="author" />
+              <param name="todo" value="wnewobj" />
+            </params>
+          </label>
+        </item>
+        <item>
+          <label name="Neue Zeitschrift" ref="editorServlet">
+            <params>
+              <param name="type" value="jpjournal" />
+              <param name="step" value="author" />
+              <param name="todo" value="wnewobj" />
+            </params>
+          </label>
+          <restriction name="createJournal" value="true" />
+        </item>
+        <item>
           <label name="Neues Band" ref="editorServlet">
             <params>
               <param name="type" value="jpvolume" />
@@ -58,6 +90,7 @@
               <param name="parentID" select="currentObjID" />
             </params>
           </label>
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
           <label name="Neuer Artikel" ref="editorServlet">
@@ -71,7 +104,7 @@
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>
         <item>
-          <label name="Bild verlinken" ref="linkImgUrl"/>
+          <label name="Bild verlinken" ref="linkImgUrl" />
           <restriction name="linkImgAllowed" value="true" />
         </item>
         <item id="diagButton">
@@ -80,7 +113,35 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-<!--         <label name="Löschen" /> -->
+        <item>
+          <label name="Passwort ändern" href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=CreatePwdDialog" />
+        </item>
+        <item>
+          <label name="Nutzerdaten anzeigen" href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=ShowUser" />
+        </item>
+        <item>
+          <label name="Nutzer anlegen" href="/servlets/MCRUserAdminServlet?mode=newuser" />
+        </item>
+        <item>
+          <label name="Gruppe anlegen" href="/servlets/MCRUserAdminServlet?mode=newgroup" />
+        </item>
+        <item>
+          <label name="Nutzer- Gruppenverwaltung" href="/servlets/MCRUserAjaxServlet" />
+        </item>
+        <restriction name="isAdmin" value="true" />
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <!-- Administration -->
+        <item>
+          <label name="WebCLI" href="/modules/webcli/launchpad.xml" />
+        </item>
+        <item>
+          <label name="ACL Editor" href="/servlets/MCRACLEditorServlet_v2?mode=getACLEditor" />
+        </item>
+        <restriction name="isAdmin" value="true" />
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <!-- <label name="Löschen" /> -->
         <restriction name="deletePerm" value="true" />
         <item>
           <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
@@ -95,44 +156,45 @@
     </menu>
   </xsl:variable>
   <xsl:variable name="menu" select="xalan:nodeset($menuXML)/menu" />
-  
-  
+
+
   <xsl:template name="classificationEditorDiag">
     <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
 
     <xsl:call-template name="classeditor.loadSettings" />
-    
+
     <!-- JS -->
     <xsl:call-template name="classeditor.includeDojoJS" />
     <xsl:call-template name="classeditor.includeJS" />
     <!-- CSS -->
     <xsl:call-template name="classeditor.includeDojoCSS" />
     <xsl:call-template name="classeditor.includeCSS" />
- 
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function() {
-        $("#diagButton").click(function() {
-          console.log('type: ');
-          console.log(typeof dojo);
-          
-          classeditor.settings.resourceURL = "<xsl:value-of select='$journalRecourceURL' />";
-          classeditor.classId = "list";
-          classeditor.categoryId = "";
-            
-          if(typeof dojo == 'undefined') {
-            loadClassificationEditor(classeditor.settings, function() {
-              startClassificationEditor(classeditor.settings);
-            }, function(jqxhr, settings, exception) {
-              console.log(exception);
-              alert(exception);
-            });
-          } else {
-            startClassificationEditor(classeditor.settings);
-          }
-        });
+      $("#diagButton").click(function() {
+      console.log('type: ');
+      console.log(typeof dojo);
+
+      <xsl:value-of select="concat('classeditor.settings.resourceURL = &quot;',$journalRecourceURL,'&quot;')"/>;
+      classeditor.classId = "list";
+      classeditor.categoryId = "";
+
+      if(typeof dojo == 'undefined') {
+      loadClassificationEditor(classeditor.settings, function() {
+      startClassificationEditor(classeditor.settings);
+      }, function(jqxhr,
+      settings, exception) {
+      console.log(exception);
+      alert(exception);
+      });
+      } else {
+      startClassificationEditor(classeditor.settings);
+      }
+      });
       })
     </script>
   </xsl:template>
@@ -173,7 +235,7 @@
 
   <xsl:template mode="menuItem" match="item[restriction]">
     <xsl:variable name="name" select="restriction/@name" />
-    <xsl:if test="$menu/var[@name=$name]/@value = restriction/@value">
+    <xsl:if test="contains(restriction/@value,$menu/var[@name=$name]/@value)">
       <xsl:call-template name="createMenuItem" />
     </xsl:if>
   </xsl:template>

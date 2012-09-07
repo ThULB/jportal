@@ -14,6 +14,9 @@
   <datamodel type="datamodel-jpjournal.xsd datamodel-jpvolume.xsd">
     <class tag="date">jportal_class_00000009</class>
   </datamodel>
+  <datamodel type="datamodel-person.xsd">
+    <class tag="contact">urmel_class_00000002</class>
+  </datamodel>
   <i18n tag="ref">editormask.labels.pub_reference</i18n>
   <i18n tag="size">editormask.labels.size</i18n>
   <i18n tag="keyword">editormask.labels.keyword</i18n>
@@ -27,8 +30,22 @@
   <i18n tag="indexField">editormask.labels.indexField</i18n>
   <i18n tag="maintitle">editormask.labels.maintitle</i18n>
   <i18n tag="rubric">editormask.labels.rubric</i18n>
+  <i18n tag="language">editormask.labels.pub_lang</i18n>
+  <i18n tag="right">editormask.labels.right</i18n>
+  <i18n tag="ddc">editormask.labels.classi</i18n>
+  <i18n tag="alternative">metaData.person.alternative</i18n>
+  <i18n tag="heading">metaData.person.heading</i18n>
+  <i18n tag="peerage">metaData.person.peerage</i18n>
+  <i18n tag="role">metaData.person.role</i18n>
+  <i18n tag="placeOfActivity">metaData.person.placeOfActivity</i18n>
+  <i18n tag="dateOfBirth">metaData.person.dateOfBirth</i18n>
+  <i18n tag="dateOfDeath">metaData.person.dateOfDeath</i18n>
+  <i18n tag="placeOfBirth">metaData.person.placeOfBirth</i18n>
+  <i18n tag="placeOfDeath">metaData.person.placeOfDeath</i18n>
+  <i18n tag="gender">metaData.author.gender</i18n>
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neues Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
-  <numPerPage>10</numPerPage>
+  <numPerPage for="volume">10</numPerPage>
+  <numPerPage for="article">5</numPerPage>
   <title allowHTML="false" />
 </layoutSettings>

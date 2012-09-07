@@ -90,7 +90,7 @@ function jpInitIview2() {
         iviewObj.startViewer(startFile);
     });
 */
-    $('ul.jp-layout-derivateLinks').delegate('div.jp-layout-derivateWrapper', 'mouseenter', function() {
+    $('.jp-layout-derivateList').delegate('div.jp-layout-derivateWrapper', 'mouseenter', function() {
         $(this).find('div.jp-layout-hidden-Button').show();
     }).delegate('div.jp-layout-derivateWrapper', 'mouseleave click', function() {
         $(this).find('div.jp-layout-hidden-Button').hide();

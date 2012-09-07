@@ -26,7 +26,7 @@
 	background-color: #9A9899;
 }
 
-#artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
+#searchRightNavi, #resultList, #artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
 	border-color: #DBDBDB;	
 }
 
@@ -41,3 +41,4 @@
 #searchBar {
 	background-color: #9A9899;
 }
+

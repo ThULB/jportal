@@ -3,8 +3,8 @@
 	<field addable="true" name="linkDerivExist" source="objectMetadata" type="boolean" value="@xlink:href != ''" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" />
 	<field name="derCount" type="integer" source="objectMetadata" xpath="/mycoreobject" value="count(structure/derobjects/derobject)" />
   
-    <field i18n="editor.search.metadata" name="allMetaNotInherited" source="objectMetadata" type="text">
-      <mcr:allMetaNotInherited xmlns:mcr="http://www.mycore.org/">
+    <field i18n="editor.search.metadata" name="allMetaNotInherited" source="objectMetadata" type="text" xmlns:mcr="http://www.mycore.org/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+      <mcr:allMetaNotInherited>
 
         <xsl:for-each select="/mycoreobject/metadata/*//*[@inherited='0']">
           <xsl:value-of select="text()|@xlink:title"/>
@@ -38,8 +38,8 @@
     <field name="journalTitle"      type="identifier" source="objectMetadata" xpath="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" value="text()" addable="true"/>
 	<field  name="linkDeriv"        type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" value="@xlink:href"  addable="true"/>
     <field name="participants_xlinkTitle" type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>          
-    <field name="objectType"        source="objectMetadata" type="identifier" value="substring-before(substring-after(@ID,'_'),'_')" xpath="/mycoreobject" source="objectMetadata" />
-    <field name="derivate"          type="identifier" addable="true" value="@xlink:href" xpath="/mycoreobject/structure/derobjects/derobject"/>
+    <field name="objectType"        source="objectMetadata" type="identifier" value="substring-before(substring-after(@ID,'_'),'_')" xpath="/mycoreobject"/>
+    <field name="derivate"          type="identifier" addable="true" source="objectMetadata" value="@xlink:href" xpath="/mycoreobject/structure/derobjects/derobject"/>
     <field name="participants_withName" addable="true" source="objectMetadata" type="identifier" value="concat(@xlink:href,'#',@xlink:title)" xpath="/mycoreobject/metadata/participants/participant[@inherited='0']"/>
     
     <!-- Search in journals metadata -->
