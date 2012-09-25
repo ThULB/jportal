@@ -27,7 +27,7 @@ public class JportalExperimentsResource {
 
     @POST
     @Path("cp/{id}")
-    public Response copy(@PathParam("id") String id, @QueryParam("numCopy") int numCopy) throws MCRActiveLinkException {
+    public Response copy(@PathParam("id") String id, @QueryParam("numCopy") int numCopy) {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         String base = mcrId.getBase();
         Document origObjXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
