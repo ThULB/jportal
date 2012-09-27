@@ -2,6 +2,10 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder">
 
+  <!-- TODO: maintitles should not be required here, but a exception
+  is thrown if missing: because key('maintitles', @type) fires if not exist in 
+  <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]"> -->
+  <xsl:key name="maintitles" match="maintitle[@inherited='0']" use="@type" />
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
   <xsl:key name="notes" match="note[@inherited='0']" use="@type" />
@@ -12,6 +16,7 @@
   <xsl:key name="def.alternative" match="alternative[@inherited='0']" use="@type" />
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
+  <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
   <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaISO8601Date'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
@@ -52,9 +57,14 @@
     <xsl:variable name="datamodel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
     <xsl:variable name="classID" select="$settings/datamodel[contains(@type, $datamodel)]/class[@tag=$currentTagName]" />
     <xsl:variable name="categID" select="@type" />
-    <xsl:variable name="label"
-      select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
-    <xsl:value-of select="$label" />
+    <xsl:choose>
+      <xsl:when test="$classID and $categID">
+        <xsl:value-of select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat('could not be resolved (', name(), ')')" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText']">
@@ -117,7 +127,7 @@
   <xsl:template mode="metadataPersName" match="heading">
     <xsl:value-of select="concat(firstName,' ', lastName)" />
   </xsl:template>
-  
+
   <xsl:template mode="metadataPersName" match="alternative">
     <xsl:choose>
       <xsl:when test="@type='complete'">
