@@ -734,7 +734,6 @@ div {
 }
 
 #globalHeader {
-	overflow: hidden;
 }
 
 #globalHeader a {
@@ -742,7 +741,7 @@ div {
 }
 
 #globalHomeLink {
-	float: left;
+	display: inline-block;
 	width: 185px;
 }
 
