@@ -24,10 +24,12 @@
 
 $(document).ready(function() {
     var tabNav = $('#tabNav');
+    var charListHTML = "";
     for ( var charCode = 65; charCode <= 90; charCode++) {
-        tabNav.append($('<li class="default-tab"/>').html(String.fromCharCode(charCode)));
+    	charListHTML += "<li class='default-tab'>" + String.fromCharCode(charCode) + "</li>";
     }
-    tabNav.append($('<li class="default-tab"/>').html('#'));
+    charListHTML += "<li class='default-tab'>#</li>"
+    tabNav.append(charListHTML);
 
     var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
 
