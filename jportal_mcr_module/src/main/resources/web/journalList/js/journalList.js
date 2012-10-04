@@ -39,6 +39,7 @@ $(document).ready(function() {
 
         var host = 'http://' + $(location).attr('host');
         var selectedChar = $(this).html();
+        $(location).attr('hash', selectedChar);
 
         var searchQuery = '';
         if (selectedChar == '#') {
@@ -98,5 +99,10 @@ $(document).ready(function() {
 
     $('div.headline:contains("Blättern A - Z")').remove();
 
-    $('#tabNav li:first-child').click();
+    var hash = $(location).attr('hash').substring(1).toUpperCase();
+    if(hash.length == 1) {
+    	$("#tabNav li:contains('" + hash + "')").click();
+    } else {
+    	$('#tabNav li:first-child').click();
+    }
 })
