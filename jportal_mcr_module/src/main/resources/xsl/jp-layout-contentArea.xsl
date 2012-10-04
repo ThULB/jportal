@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/"
-  exclude-result-prefixes="encoder">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="encoder">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -12,6 +12,11 @@
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
 
   <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
+  <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />
+  <xsl:variable name="currentType" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
+  <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update_',$currentType))" />
+  <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
+  <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
 
   <xsl:template priority="9" match="/mycoreobject">
     <xsl:variable name="objectEditingHTML">
@@ -64,21 +69,23 @@
     </xsl:if>
 
     <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
-    <div id="jp-content-Bottom">
-      <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
-        <dl class="jp-layout-metadataList">
-          <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
-        </dl>
-      </xsl:if>
-      <xsl:if test="structure/derobjects or metadata/derivateLinks">
-        <div id="derivCol">
-          <h4>Digitalisate</h4>
-          <xsl:call-template name="derivateDisplay">
-            <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
-          </xsl:call-template>
-        </div>
-      </xsl:if>
-    </div>
+    <xsl:if test="$updatePerm = 'true' or $deletePerm = 'true' or $dataModel != 'datamodel-jpvolume.xsd'">
+      <div id="jp-content-Bottom">
+        <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
+          <dl class="jp-layout-metadataList">
+            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
+          </dl>
+        </xsl:if>
+        <xsl:if test="structure/derobjects or metadata/derivateLinks">
+          <div id="derivCol">
+            <h4>Digitalisate</h4>
+            <xsl:call-template name="derivateDisplay">
+              <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
+            </xsl:call-template>
+          </div>
+        </xsl:if>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">

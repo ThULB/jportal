@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+  xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-  <xsl:variable name="currentType" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
-  <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />
-  <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update_',$currentType))" />
-  <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
   <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_journal')" />
   <xsl:variable name="isAdmin" select="acl:checkPermission('POOLPRIVILEGE','administrate-user')" />
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
