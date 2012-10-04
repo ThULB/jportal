@@ -3,9 +3,14 @@
   <xsl:template name="breadcrumb">
     <div id="jp-breadcrumb-container">
       <menu class="jp-layout-breadcrumb">
-        <li>
-          <a href="foo.de">Start</a>
-        </li>
+        <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
+          <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
+          <li>
+            <a href="{$WebApplicationBaseURL}content/main/journalList.xml#{$hash}">
+              <xsl:value-of select="'A-Z'"/>
+            </a>
+          </li>
+        </xsl:if>
         <xsl:apply-templates mode="printListEntry"
           select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
