@@ -379,6 +379,7 @@ div {
 	right: 0;
 	top: 15px;
 	width: 47px;
+	box-shadow: 0 3px 2px #999999;
 }
 
 .languageMenu ul li {
@@ -392,13 +393,11 @@ div {
 }
 
 .languageMenu ul a:hover {
-	background: -moz-linear-gradient(center top, #C2C2C2 0%, #BCBCBC 50%, #B4B4B4 51%,
-		#DADADA 100%) repeat scroll 0 0 transparent;
+	background:  -moz-linear-gradient(top, rgba(174,188,191,1) 0%, rgba(110,119,116,1) 50%, rgba(10,14,10,1) 51%, rgba(10,8,9,1) 100%);
 }
 
 .languageList_show {
-	background: -moz-linear-gradient(center top, #7D7E7D 0%, #0E0E0E 100%)
-		repeat scroll 0 0 transparent;
+	background: -moz-linear-gradient(center top , #EDEDED 0%, #B1B1B1 100%) repeat scroll 0 0 transparent;
 	display: block;
 }
 
@@ -407,7 +406,8 @@ div {
 }
 
 .languageSelect {
-	background: none repeat scroll 0 0 #7D7E7D;
+	background: none repeat scroll 0 0 #EDEDED;
+	box-shadow: 0 2px 2px;
 }
 
 .jp-layout-marginLR {
