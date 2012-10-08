@@ -5,8 +5,18 @@
       <menu class="jp-layout-breadcrumb">
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
           <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
+          <xsl:variable name="listType">
+            <xsl:choose>
+              <xsl:when test="/mycoreobject/metadata/contentClassis1/contentClassi1/@categid ='calendar'">
+                <xsl:value-of select="'calendar'" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'journal'" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <li>
-            <a href="{$WebApplicationBaseURL}content/main/journalList.xml#{$hash}">
+            <a href="{$WebApplicationBaseURL}content/main/{$listType}List.xml#{$hash}">
               <xsl:value-of select="'A-Z'"/>
             </a>
           </li>
