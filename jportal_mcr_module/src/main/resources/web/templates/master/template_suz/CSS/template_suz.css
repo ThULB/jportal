@@ -1,40 +1,7 @@
 @CHARSET "UTF-8";
-#navigation_box ul a {
-    color: white;
-    text-decoration: none;
-}
-#navigation_box ul a:hover {
-    text-decoration: underline;
-}
-#navigation_box ul li {
-    padding-right: 5px;
-}
-#navigation_box {
-    position: static;
-    margin-top: 5px;
-}
-
-#div_navi_main > ul.topList > li > a {
-    margin-top: 3px;
-    border: 0 none;
-    color: #4064AB;
-    display: block;
-    font-family: verdana;
-    font-weight: bold;
-    height: 20px;
-    padding-left: 15px;
-    padding-top: 5px;
-    text-decoration: none;
-    width: 168px;
-}
-#div_navi_main > ul.topList > li > a:hover {
-
-}
-#navigation_box #languageMenu {
-    left: 1153px;
-    width: 47px;
-    top: 35px;
-}
-#div_navi_main > ul {
-    padding-left: 0;
+#logo {
+	background-image: url("../IMAGES/logo.png");
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 115px;
 }

@@ -1,44 +1,7 @@
 @CHARSET "UTF-8";
-#navigation_box ul a {
-    color: white;
-    text-decoration: none;
-}
-#navigation_box ul a:hover {
-    text-decoration: underline;
-}
-
-#navigation_box ul li {
-    padding-right: 5px;
-}
-
-#navigation_box {
-    position: static;
-}
-
-#div_navi_main > ul.topList > li > a {
-    background-color: #EBEBEC;
-    margin-top: 3px;
-    border: 0 none;
-    color: #646567;
-    display: block;
-    font-family: verdana;
-    font-weight: bold;
-    height: 20px;
-    padding-left: 15px;
-    padding-top: 5px;
-    text-decoration: none;
-    width: 168px;
-}
-#div_navi_main > ul.topList > li > a:hover {
-    background-color: #4A6B65;
-    color: #FFFFFF;
-}
-
-#navigation_box #languageMenu {
-    left: 977px;
-    width: 47px;
-}
-
-#div_navi_main > ul {
-    padding-left: 0;
+#logo {
+	background-image: url("../IMAGES/logo.png");
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 115px;
 }
