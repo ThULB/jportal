@@ -11,6 +11,8 @@
 
   <xsl:param name="object" />
   <xsl:param name="layout" />
+  <xsl:param name="MCR.Piwik.baseurl" />
+  <xsl:param name="MCR.Piwik.enable" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
@@ -53,6 +55,28 @@
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
+        
+		<!-- Piwik -->
+		<script type="text/javascript">
+			if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){
+				var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
+				document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+			}
+		</script>
+		<script type="text/javascript">
+			if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true'){
+				var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
+				try {
+					var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+					if(myvar != ""){
+						piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");				
+					}			
+					piwikTracker.trackPageView();
+					piwikTracker.enableLinkTracking();
+				} catch( err ) {}
+			}
+		</script>
+		<!-- End Piwik Tracking Code -->
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
         <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">
