@@ -1,50 +1,41 @@
-/**
- * Load scripts for classification editor.
- * @param conf
- *  cssURL - url to css
- *  jsUR - url to js
- *  debug - is debug enabled
- */
-function loadClassificationEditor(conf, /*function*/ onSuccess, /*function*/ onError) {
-	console.log("load classification editor");
-	$.getScript('http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dojo/dojo.xd.js')
-	.done(function(data, status) {
-		// css
-		$("head").append('<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/dojo/1.6.1/dijit/themes/claro/claro.css"></link>');
-		$("head").append('<link rel="stylesheet" type="text/css" href="' + conf.cssURL + '/classificationEditor.css"></link>');
-		// classeditor js
-		var classEditorJS = "classificationEditor.min.js";
-		if(conf.debug) {
-			classEditorJS = "classificationEditor.js";
-		}
-		$.getScript(conf.jsURL + '/' + "dojoInclude.js").fail(onError);
-		$.getScript(conf.jsURL + '/' + classEditorJS).fail(onError);
-		dojo.ready(function() {
-			console.log("classification editor successfully loaded");
-			onSuccess();
-		});
-	})
-	.fail(onError);
+function startClassificationEditor() {
+    var diagID = 'classiDiag';
+    var diag = typeof(dijit) !== "undefined" ? dijit.byId(diagID) : undefined;
+    if (diag === undefined) {
+      includeClassificationEditor(function(classEditor) {
+    	  diag = dijit.byId(diagID);
+    	  diag.show();
+    	  classEditor.startup();
+      });
+    } else {
+    	diag.show();
+    }
 }
 
-/**
- * Shows the classification editor.
- * @param conf see classeditor.Editor documentation
- */
-function startClassificationEditor(conf) {
-	var diagID = 'classiDiag';
-	var diag = dijit.byId(diagID);
-	if (diag === undefined) {
-        updateBodyTheme();
-        var classEditor = new classeditor.Editor(classeditor.settings);
-        var diag = new dijit.Dialog({
-            id : "classiDiag",
-            content : classEditor.domNode
+function includeClassificationEditor(onReady) {
+  require(["dojo/ready", "dojo/promise/all", "mycore/util/DOMUtil"], function(ready, all, domUtil) {
+    ready(function() {
+      all([domUtil.loadCSS("http://ajax.googleapis.com/ajax/libs/dojo/"+classeditor.dojoVersion +"/dijit/themes/claro/claro.css"),
+           domUtil.loadCSS(classeditor.settings.cssURL + "/classificationEditor.css"),
+           domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css"),
+           domUtil.loadCSS(classeditor.settings.cssURL + "/modern-pictograms.css")]).then(function() {
+        require([
+          "dijit/registry", "dojo/dom-construct", "dojo/on", "dojo/parser",
+          "dijit/form/Button", "dijit/Dialog", "mycore/classification/Editor"
+        ], function(registry, domConstruct, on) {
+          ready(function() {
+            domUtil.updateBodyTheme();
+            var classEditor = new mycore.classification.Editor({settings: classeditor.settings});
+            diag = new dijit.Dialog({
+              id : "classiDiag",
+              content : classEditor
+            });
+            dojo.addClass(diag.domNode, "classeditorDialog");
+            classEditor.loadClassification(classeditor.classId, classeditor.categoryId);
+            onReady(classEditor);
+          });
         });
-        dojo.addClass(diag.domNode, "classeditorDialog");
-        classEditor.create();
-        diag.set("title", SimpleI18nManager.getInstance().get("component.classeditor"));
-        classEditor.loadClassification(classeditor.classId, classeditor.categoryId);
-	}
-	diag.show();
+      });
+    });
+  });
 }

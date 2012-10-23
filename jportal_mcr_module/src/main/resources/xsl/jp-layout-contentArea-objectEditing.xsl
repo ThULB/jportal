@@ -158,40 +158,30 @@
     <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
 
-    <xsl:call-template name="classeditor.loadSettings" />
-
-    <!-- JS -->
+    <xsl:call-template name="classeditor.loadSettings">
+      <xsl:with-param name="classeditor.class" select="@classId"/>
+      <xsl:with-param name="classeditor.categ" select="@categId"/>
+      <xsl:with-param name="classeditor.showId" select="@showId='true'"/>
+    </xsl:call-template>
     <xsl:call-template name="classeditor.includeDojoJS" />
     <xsl:call-template name="classeditor.includeJS" />
-    <!-- CSS -->
-    <xsl:call-template name="classeditor.includeDojoCSS" />
-    <xsl:call-template name="classeditor.includeCSS" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
 
     <script type="text/javascript">
-      $(document).ready(function() {
-      $("#diagButton").click(function() {
-      console.log('type: ');
-      console.log(typeof dojo);
-
-      <xsl:value-of select="concat('classeditor.settings.resourceURL = &quot;',$journalRecourceURL,'&quot;')"/>;
-      classeditor.classId = "list";
-      classeditor.categoryId = "";
-
-      if(typeof dojo == 'undefined') {
-      loadClassificationEditor(classeditor.settings, function() {
-      startClassificationEditor(classeditor.settings);
-      }, function(jqxhr,
-      settings, exception) {
-      console.log(exception);
-      alert(exception);
-      });
-      } else {
-      startClassificationEditor(classeditor.settings);
+      function loadError(jqxhr, settings, exception) {
+        console.log(exception);
+        alert(exception);
       }
+
+      $(document).ready(function() {
+        $("#diagButton").click(function() {
+          classeditor.settings.resourceURL = '<xsl:value-of select="$journalRecourceURL"/>';
+          classeditor.classId = "list";
+          classeditor.categoryId = "";
+          startClassificationEditor();
+        });
       });
-      })
     </script>
   </xsl:template>
 
