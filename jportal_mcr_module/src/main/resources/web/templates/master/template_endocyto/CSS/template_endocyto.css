@@ -1,14 +1,4 @@
 @CHARSET "UTF-8";
-/*
-* Language select box
-*/
-.languageSelect {
-	background: white;
-}
-
-.languageList_show {
-	background: white;
-}
 
 .jp-layout-header {
 	background-image: url("../IMAGES/banner_top_clean.gif");
@@ -24,10 +14,6 @@
 #jp-journal-navigation {
 	top: 114px;
 	background-color: #9A9899;
-}
-
-#searchRightNavi, #resultList, #artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
-	border-color: #DBDBDB;	
 }
 
 /***************************/

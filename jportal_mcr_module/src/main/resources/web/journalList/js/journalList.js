@@ -61,7 +61,6 @@ $(document).ready(function() {
 
         $('#resultList').jpResultList(searchUrl, function(resultListEntry, hit) {
             var metaData = hit.metaData;
-            console.log('yeah Title: ' + metaData.maintitles);
 
             var titleLink = $('<a/>').html(metaData.maintitles).attr('href', '/receive/' + hit.id);
             var title = $('<h3 class="journal-title"/>').append(titleLink);

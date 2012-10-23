@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xsl:variable name="editorForm" select="'editor-jpjournal editor-jpvolume editor-jparticle'"></xsl:variable>
   <xsl:template name="nameOfTemplate">
-    <xsl:apply-templates mode="nameOfTemplate" select="/mycoreobject|/MyCoReWebPage//var|/MyCoReWebPage/section/jpsearch" />
+    <xsl:apply-templates mode="nameOfTemplate"
+      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch" />
   </xsl:template>
 
   <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
@@ -10,23 +13,46 @@
 
   <xsl:template mode="nameOfTemplate" match="*">
     <xsl:variable name="journalID">
-      <xsl:call-template name="getJournalID"/>
+      <xsl:call-template name="getJournalID" />
     </xsl:variable>
+    
     <xsl:if test="$journalID != ''">
+      
       <xsl:apply-templates mode="nameOfTemplate" select="document(concat('notnull:mcrobject:',$journalID))/mycoreobject" />
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template name="getJournalID">
-      <xsl:apply-templates mode="journalID" select="/mycoreobject|/MyCoReWebPage//var|/MyCoReWebPage/section/jpsearch" />
+    <xsl:apply-templates mode="journalID"
+      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch" />
   </xsl:template>
 
   <xsl:template mode="journalID" match="mycoreobject">
     <xsl:value-of select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
   </xsl:template>
 
-  <xsl:template mode="journalID" match="var[@name='/mycoreobject/@ID']">
-    <xsl:value-of select="@value" />
+  <xsl:template mode="journalID" match="editor[contains($editorForm, @id)]">
+    <xsl:variable name="parentID">
+      <xsl:choose>
+        <xsl:when test="target-parameters/target-parameter[@name='parentID']">
+          <xsl:value-of select="target-parameters/target-parameter[@name='parentID']" />
+        </xsl:when>
+        <xsl:when test="target-parameters/target-parameter[@name='mcrid']">
+          <xsl:value-of select="target-parameters/target-parameter[@name='mcrid']" />
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="journalID">
+      <xsl:value-of select="document(concat('parents:',$parentID))/parents/parent[1]/@xlink:href"></xsl:value-of>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$journalID != ''">
+        <xsl:value-of select="$journalID" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$parentID" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="journalID" match="jpsearch">

@@ -16,5 +16,16 @@
         <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
       </div>
     </div>
+    <div>
+        <h2>Bestände</h2>
+        <ul>
+          <li>
+            <a href="/content/main/journalList.xml">Zeitschriften</a>
+          </li>
+          <li>
+            <a href="/content/main/calendarList.xml">Altenburger Kalenderblätter</a>
+          </li>
+        </ul>
+      </div>
   </section>
 </MyCoReWebPage>

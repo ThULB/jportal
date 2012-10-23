@@ -55,8 +55,11 @@
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
         <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/ckeditor.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         
-		<!-- Piwik -->
+        <!-- Piwik -->
 		<script type="text/javascript">
 			if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){
 				var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
@@ -129,6 +132,12 @@
           <xsl:copy-of select="$objectEditing/deleteMsg" />
         </xsl:if>
         <div id="viewerContainerWrapper" />
+        <div id="ckeditorContainer">
+          <div class="jp-layout-message-background"></div>
+          <div id="ckeditorframe">
+            <textarea id="ckeditor"></textarea>
+          </div>
+        </div>
         <!-- TODO: don't init iview2 if no image is available -->
         <xsl:call-template name="initIview2JS" />
       </body>

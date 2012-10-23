@@ -35,7 +35,7 @@
     <field name="identis"           type="text"       source="objectMetadata" xpath="/mycoreobject/metadata/identis/identi" value="text()" i18n="editor.search.document.identi" />
     <field name="subtitles_type"    type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/subtitles/subtitle" value="@type" />
     <field name="journalID"         type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" value="text()" />
-    <field name="journalTitle"      type="identifier" source="objectMetadata" xpath="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" value="text()" addable="true"/>
+    <field name="journalTitle"      type="identifier" source="objectMetadata" objects="jpjournal jpvolume jparticle" xpath="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" value="text()" addable="true"/>
 	<field  name="linkDeriv"        type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/derivateLinks/derivateLink" value="@xlink:href"  addable="true"/>
     <field name="participants_xlinkTitle" type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:title" addable="true"/>          
     <field name="objectType"        source="objectMetadata" type="identifier" value="substring-before(substring-after(@ID,'_'),'_')" xpath="/mycoreobject"/>

@@ -43,19 +43,22 @@
     </xsl:variable>
     <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
 
+    <xsl:call-template name="breadcrumb" />
+
     <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading">
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
     </xsl:apply-templates>
-
-    <xsl:call-template name="breadcrumb" />
-    <xsl:if test="structure/children">
+    <xsl:variable name="LColumnHTML">
       <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
         <ul>
-          <xsl:call-template name="tableOfContent">
-            <xsl:with-param name="id" select="./@ID" />
-          </xsl:call-template>
+          <xsl:if test="structure/children">
+            <xsl:call-template name="tableOfContent">
+              <xsl:with-param name="id" select="./@ID" />
+            </xsl:call-template>
+          </xsl:if>
           <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-            <xsl:variable name="journalIntroText" select="document(concat('notnull:webapp:/journalContext/',@ID,'/intro.xml'))/intro" />
+            <xsl:variable name="journalIntroText"
+              select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
             <xsl:if test="$journalIntroText">
               <li>
                 <div id="intro" class="jp-layout-intro">
@@ -66,6 +69,10 @@
           </xsl:if>
         </ul>
       </div>
+    </xsl:variable>
+    <xsl:variable name="LColumn" select="xalan:nodeset($LColumnHTML)"/>
+    <xsl:if test="$LColumn/div/ul/li">
+      <xsl:copy-of select="$LColumn/*" />
     </xsl:if>
 
     <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
@@ -89,7 +96,7 @@
   </xsl:template>
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
-    <div id="jp-maintitle" class="jp-layout-maintitle">
+    <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
       <xsl:apply-templates mode="metadataPersName" select="." />
     </div>
   </xsl:template>
@@ -97,7 +104,7 @@
   <xsl:template mode="printTitle" match="maintitle[@inherited='0']">
     <xsl:param name="allowHTML" select="$settings/title/@allowHTML" />
 
-    <div id="jp-maintitle" class="jp-layout-maintitle">
+    <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
       <xsl:choose>
         <xsl:when test="$allowHTML='true'">
           <xsl:value-of disable-output-escaping="yes" select="." />

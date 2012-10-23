@@ -196,8 +196,10 @@ div {
 }
 
 .jp-layout-maintitle {
-	font-size: 1.8em;
-	margin: 15px 0;
+	font-size: 13pt;
+	margin-top: 15px;
+	padding-bottom: 15px;
+	border-bottom: solid 1px;
 }
 
 .jp-layout-metadataList dt {
@@ -700,12 +702,12 @@ div {
 	padding-top: 10px;
 }
 
-#diagButton {
+#diagButton,#ckeditorButton {
 	color: #494949;
 	cursor: pointer;
 }
 
-#diagButton:hover {
+#diagButton:hover,#ckeditorButton:hover {
 	text-decoration: underline;
 }
 
@@ -923,3 +925,32 @@ div {
 	max-width: 420px;
 }
 
+#ckeditorContainer {
+	display: none;
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 100;
+}
+
+.ckeditorButtons{
+	list-style-type: none;
+	margin-top: 15px;
+	float: right;
+}
+
+.ckeditorButtons li{
+	display: inline-block;
+}
+
+#ckeditorCancelButton {
+	margin-right: 10px;
+}
+
+#ckeditorCancelButton {
+	margin-left: 10px;
+}
+
+.jp-layout-maintitle, #searchRightNavi, #resultList, #artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
+	border-color: #DBDBDB;	
+}

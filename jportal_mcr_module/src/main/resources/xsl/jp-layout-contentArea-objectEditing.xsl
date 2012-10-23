@@ -41,6 +41,10 @@
             </params>
           </label>
         </item>
+        <item id="ckeditorButton">
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Beschreibung bearbeiten" />
+        </item>
         <item>
           <label name="Datei hochladen" ref="editorServlet">
             <params>
@@ -184,6 +188,16 @@
       });
     </script>
   </xsl:template>
+  
+  <xsl:template name="introEditorDiag">
+    <script type="text/javascript">
+      $(document).ready(function() {
+      $("#ckeditorButton").click(function(){
+      introEditor('<xsl:value-of select="$currentObjID"/>')
+      })
+      })
+    </script>
+  </xsl:template>
 
   <xsl:template name="objectEditing">
     <xsl:param name="id" />
@@ -194,6 +208,7 @@
 
       <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <xsl:call-template name="classificationEditorDiag" />
+        <xsl:call-template name="introEditorDiag" />
       </xsl:if>
     </menu>
 

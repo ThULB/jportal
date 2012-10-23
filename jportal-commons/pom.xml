@@ -13,7 +13,7 @@
   <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+    <!-- 
     <repositories>
         <repository>
             <id>maven2-repository.dev.java.net</id>
@@ -52,6 +52,7 @@
             </snapshots>
         </repository>
     </repositories>
+     -->
 
     <dependencies>
         <dependency>
@@ -89,6 +90,7 @@
             </plugin>
         </plugins>
     </build>
+    <!-- 
      <distributionManagement>
     <repository>
       <id>MyCoRe HQ</id>
@@ -100,11 +102,11 @@
       <name>MyCoRe HQ-snapshots</name>
       <url>http://www.mycore.de/artifactory/libs-snapshots-local</url>
     </snapshotRepository>
-    <!-- mycore site -->
     <site>
       <id>MyCoRe HQ</id>
       <name>MyCoRe HQ-sites</name>
       <url>scp://server.mycore.de/mcr/mycore.de/generated/</url>
     </site>
   </distributionManagement>
+     -->
 </project>
