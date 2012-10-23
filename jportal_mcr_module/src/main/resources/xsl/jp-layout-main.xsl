@@ -129,6 +129,7 @@
           <xsl:copy-of select="$objectEditing/deleteMsg" />
         </xsl:if>
         <div id="viewerContainerWrapper" />
+        <!-- TODO: don't init iview2 if no image is available -->
         <xsl:call-template name="initIview2JS" />
       </body>
     </html>

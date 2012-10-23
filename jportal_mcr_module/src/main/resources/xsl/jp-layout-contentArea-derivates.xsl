@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/">
+  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="xlink iview2 mcr">
 
   <xsl:param name="iview2.debug" select="'false'" />
 
@@ -45,14 +45,17 @@
   <xsl:template name="derivListEntry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
+    <!-- TODO: handle PDF -->
 <!-- 
     <li>
     </li>
  -->
+    <xsl:if test="string-length($file) &gt; 0">
       <div class="jp-layout-derivateWrapper">
         <div class="jp-layout-hidden-Button"></div>
         <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
       </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="initIview2JS">
