@@ -21,10 +21,6 @@ body {
 	width: 1024px;
 }
 
-div {
-	background-color: white;
-}
-
 .jp-layout-breadcrumb {
 	border-bottom: 1px solid;
 	font-size: 11px;
@@ -736,6 +732,7 @@ div {
 }
 
 #globalHeader {
+	background-color: white;
 }
 
 #globalHeader a {
