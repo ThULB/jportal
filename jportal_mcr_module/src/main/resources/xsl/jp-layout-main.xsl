@@ -46,6 +46,7 @@
           name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
         <link href="{$WebApplicationBaseURL}jp-layout-default.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}jp-layout-editor.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$nameOfTemplate != ''">
           <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
         </xsl:if>

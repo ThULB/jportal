@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+
+.editorHeadlines{
+	font-weight: bold;
+	text-align: center;
+	height: 36px;
+}
+
+.editorHeadlines label{
+	border-bottom: 1px solid;
+	display: block;
+	margin-bottom: 5px;
+	padding-bottom: 5px;
+}
+
+.editorSubHeadlines{
+	font-weight: bold;
+}
+
+.editorLabel{
+	width: 200px;
+	display: block;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.editorMandatory{
+	width: 200px;
+	display: block;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.editorCell{
+	text-align: left;
+}
+
+.editorList{
+	width: 690px;
+}
+
+.editorTextfield{
+	width: 51em;
+}
+
+.editorTextarea{
+	width: 57em;
+}
+
+.editorRepeater .editorTextfield{
+	width: 48em;
+	padding-left: 4px;
+}
+
+.editorRepeater .editorPanel{
+	margin-left: -6px;
+}
+
+.editorRepeater .editorCell .editorCell{
+	padding-left: 6px;
+}
