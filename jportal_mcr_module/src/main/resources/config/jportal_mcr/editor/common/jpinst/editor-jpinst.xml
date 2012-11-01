@@ -137,8 +137,10 @@
         </cell>
 
         <!-- save / cancel button -->
-        <cell row="190" col="1" anchor="EAST" />
-        <cell row="190" col="2" anchor="EAST" ref="save" />
+        <cell col="1" row="190">
+            <br />
+        </cell>
+        <cell row="191" col="1" anchor="WEST" ref="save" colspan="4" class="editorButtons"/>
     </panel>
     <!-- ========================================================================================================================= -->
     <panel id="DFullName">
@@ -161,7 +163,7 @@
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/alternatives/alternative">
             <repeater min="0" max="1024">
                 <panel>
-                    <cell col="1" row="1" var="name">
+                    <cell col="1" row="2" var="name">
                         <textfield width="35" maxlength="128" />
                     </cell>
                 </panel>
@@ -241,13 +243,13 @@
             <repeater min="0" max="10" anchor="NORTHWEST">
                 <panel>
                     <hidden var="@inherited" default="0" />
-                    <cell anchor="WEST" col="1" var="@type">
+                    <cell anchor="WEST" col="1" row="1" var="@type">
                         <list type="dropdown">
                             <item value="pnd" i18n="metaData.person.pnd" />
                             <item value="ppn" i18n="metaData.person.ppn" />
                         </list>
                     </cell>
-                    <cell anchor="WEST" col="2">
+                    <cell anchor="WEST" col="1" row="2">
                         <textfield width="35" maxlength="128" />
                     </cell>
                 </panel>
@@ -265,7 +267,7 @@
             <repeater min="0" max="10" anchor="NORTHWEST">
                 <panel>
                     <hidden var="@inherited" default="0" />
-                    <cell anchor="WEST" col="1" var="@type">
+                    <cell anchor="WEST" col="1" row="1" var="@type">
                         <list type="dropdown">
                             <item value="logoPlain">
                                 <label xml:lang="de">Einfaches Logo</label>
@@ -275,7 +277,7 @@
                             </item>
                         </list>
                     </cell>
-                    <cell anchor="WEST" col="2">
+                    <cell anchor="WEST" col="1" row="2">
                         <textfield width="35" maxlength="128" />
                     </cell>
                 </panel>

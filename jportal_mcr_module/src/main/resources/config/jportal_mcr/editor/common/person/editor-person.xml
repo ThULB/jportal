@@ -41,12 +41,14 @@
                 <cell col="1" row="130" anchor="NORTHWEST">
                     <text i18n="jportal.editor.required" />
                 </cell>
-                <cell col="1" colspan="2" row="140" anchor="EAST" ref="TwoButtons" />
-                <cell col="2" row="140" />
+                <cell col="1" row="140">
+            		<br />
+        		</cell>
+       			<cell row="141" col="1" anchor="WEST" ref="TwoButtons" colspan="4" class="editorButtons" />
             </panel>
         </cell>
     </panel>
-    <panel id="personName_required">
+    <panel id="personName_required" class="editorPersonNameR">
 	  <!-- lastname -->
         <cell col="1" row="1" anchor="NORTHWEST">
             <text i18n="editor.search.lastName" />
@@ -62,7 +64,7 @@
             <textfield width="16" maxlength="128" />
         </cell>
     </panel>
-    <panel id="personName">
+    <panel id="personName" class="editorPersonName">
 	  <!-- lastname -->
         <cell col="1" row="1" anchor="NORTHWEST">
             <text i18n="editor.search.person.lastName" />
@@ -99,7 +101,7 @@
         </cell>
         <cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
             <repeater min="0" max="1024">
-                <panel>
+                <panel class="editorPersonFreeText">
                     <cell col="1" row="1" anchor="NORTHWEST">
                         <text i18n="editor.search.person.freetext" />
                     </cell>
@@ -248,14 +250,14 @@
       <repeater min="0" max="10" anchor="NORTHWEST">
         <panel>
           <hidden var="@inherited" default="0" />
-          <cell anchor="WEST" col="1" var="@type">
+          <cell anchor="WEST" col="1" row="1" var="@type">
 
             <list type="dropdown">
               <item value="pnd" i18n="metaData.person.pnd" />
               <item value="ppn" i18n="metaData.person.ppn" />
             </list>
           </cell>
-          <cell anchor="WEST" col="2">
+          <cell anchor="WEST" col="1" row="2">
             <textfield width="35" maxlength="128" />
           </cell>
         </panel>

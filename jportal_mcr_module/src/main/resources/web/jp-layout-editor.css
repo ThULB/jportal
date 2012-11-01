@@ -45,11 +45,11 @@
 
 .editorTextarea{
 	width: 630px;
+	resize: none;
 }
 
 .editorRepeater .editorTextfield{
-	width: 47em;
-	padding-left: 4px;
+	width: 630px;
 }
 
 .editorRepeater .editorPanel{
@@ -62,4 +62,48 @@
 
 label.editorText {
 	font-weight: bold;
+}
+
+.editorRepeater .editorCell label.editorText {
+	font-weight: normal;
+}
+
+.editorButtons{
+	border-top: 1px solid;
+	padding-top: 10px;
+}
+
+.editorButtons .editorPanel{
+    float: right;
+    margin-right: 63px;
+}
+
+.editorButtons .editorButton{
+	margin-left: 10px;
+}
+
+/*journal*/
+.editorPredece .editorTextfield{
+	width: 588px;
+}
+
+.editorSuccessor .editorTextfield{
+	width: 588px;
+}
+
+/*person*/
+.editorPersonNameR .editorTextfield{
+	width: 545px;
+}
+
+.editorPersonNameR label.editorText{
+	font-weight: normal;
+}
+
+.editorPersonName .editorTextfield{
+	width: 560px;
+}
+
+.editorPersonFreeText .editorTextfield{
+	width: 580px;
 }

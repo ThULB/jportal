@@ -108,9 +108,8 @@
             <!-- ================================================================================================= -->
         <cell col="1" row="300">
             <br />
-            <br />
         </cell>
-        <cell row="300" col="2" anchor="EAST" ref="save" />
+        <cell row="301" col="1" anchor="WEST" ref="save" colspan="4" class="editorButtons"/>
     </panel>
     <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
         <text>

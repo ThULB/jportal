@@ -164,8 +164,10 @@
 
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
-        <cell row="500" col="1" anchor="EAST" />
-        <cell row="500" col="2" anchor="EAST" ref="save" />
+        <cell col="1" row="500">
+            <br />
+        </cell>
+        <cell row="501" col="1" anchor="WEST" ref="save" colspan="4" class="editorButtons"/>
     </panel>
     <!-- panel definitions -->
     <!-- MainTitle ================================================================== -->
@@ -306,7 +308,7 @@
             <repeater min="0" max="10" anchor="NORTHWEST" ref="predece_input_repeater" />
         </cell>
     </panel>
-    <panel id="predece_input_repeater">
+    <panel id="predece_input_repeater" class="editorPredece">
         <hidden var="@inherited" default="0" />
         <hidden var="@type" default="locator" />
         <cell col="1" row="1" anchor="NORTHEAST">
@@ -332,7 +334,7 @@
             <repeater min="0" max="10" anchor="NORTHWEST" ref="successor_input_repeater" />
         </cell>
     </panel>
-    <panel id="successor_input_repeater">
+    <panel id="successor_input_repeater" class="editorSuccessor">
         <hidden var="@inherited" default="0" />
         <hidden var="@xlink:type" default="locator" />
         <cell col="1" row="1" anchor="NORTHEAST">
