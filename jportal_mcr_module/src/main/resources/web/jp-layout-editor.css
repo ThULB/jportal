@@ -36,19 +36,19 @@
 }
 
 .editorList{
-	width: 690px;
+	width: 636px;
 }
 
 .editorTextfield{
-	width: 51em;
+	width: 630px;
 }
 
 .editorTextarea{
-	width: 57em;
+	width: 630px;
 }
 
 .editorRepeater .editorTextfield{
-	width: 48em;
+	width: 47em;
 	padding-left: 4px;
 }
 
@@ -58,4 +58,8 @@
 
 .editorRepeater .editorCell .editorCell{
 	padding-left: 6px;
+}
+
+label.editorText {
+	font-weight: bold;
 }
