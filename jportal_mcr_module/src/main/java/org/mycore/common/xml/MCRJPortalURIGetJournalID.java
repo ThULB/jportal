@@ -89,13 +89,11 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
         // set in the session. The method name "getLastValidPageID" is miss leading.
         // It was used for another reason. Should be changed in the next version.
         String currentObjID = MCRLayoutUtilities.getLastValidPageID();
-        if (currentObjID != null && !currentObjID.equals("")) {
+        if (MCRObjectID.isValid(currentObjID) && !currentObjID.equals("")) {
             String[] oldJournalID = (String[]) MCRSessionMgr.getCurrentSession().get("journalIDForObj");
-            
             if(oldJournalID != null && oldJournalID.length == 2 && currentObjID.equals(oldJournalID[0])){
                 return oldJournalID[1];
             }
-            
             Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(currentObjID));
             try {
                 XPath hiddenJournalIDXpath = XPath.newInstance("/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID");
