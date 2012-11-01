@@ -107,20 +107,9 @@
     <xsl:param name="objId" />
     <xsl:param name="derivateId" />
 
-    <td class="nr">
-      <xsl:variable name="image" select="laws:getImageByLaw(nummer, $derivateId)" />
-      <xsl:choose>
-        <xsl:when test="$image">
-          <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?derivate=', $derivateId, '&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
-          <a href="{$href}">
-            <b><xsl:value-of select="nummer" /></b>
-          </a>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="nummer" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </td>
+    <xsl:variable name="image" select="laws:getImageByLaw(nummer, $derivateId)" />
+
+    <td class="nr"><xsl:value-of select="nummer" /></td>
     <td class="page">
       <xsl:choose>
         <xsl:when test="seite/bis != seite/von">
@@ -133,8 +122,17 @@
     </td>
     <td class="decree"><xsl:value-of select="datum/erlass" /></td>
     <td class="issuedate"><xsl:value-of select="datum/ausgabe" /></td>
-    <td class="content"><xsl:value-of select="inhalt" /></td>
+    <td class="content">
+      <xsl:choose>
+        <xsl:when test="$image">
+          <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?derivate=', $derivateId, '&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
+          <a href="{$href}"><xsl:value-of select="inhalt" /></a>    
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="inhalt" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
   </xsl:template>
-
 
 </xsl:stylesheet>
