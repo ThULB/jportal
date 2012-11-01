@@ -1,15 +1,23 @@
 @CHARSET "UTF-8";
+#logo {
+	background-image: url("../IMAGES/logo.png");
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 115px;
+}
 
-.register {
+@CHARSET "UTF-8";
+
+.jp-content-laws .register {
 	padding-bottom: 12px;
 }
 
-.register td {
+.jp-content-laws .register td {
 	padding-bottom: 2px;
 	padding-right: 12px;
 }
 
-.laws th {
+.jp-content-laws .laws th {
 	text-align: left;
 	vertical-align: top;
 	padding-left: 4px;
@@ -17,17 +25,17 @@
 	background-color: #ccc;
 }
 
-.laws td {
+.jp-content-laws .laws td {
 	text-align: left;
 	vertical-align: top;
 	padding-right: 24px;
 	padding-left: 4px;
 }
 
-.page {
+.jp-content-laws .page {
 	white-space: nowrap;
 }
 
-.laws tr:nth-child(odd) {
+.jp-content-laws .laws tr:nth-child(odd) {
 	background-color: #eee;
 }

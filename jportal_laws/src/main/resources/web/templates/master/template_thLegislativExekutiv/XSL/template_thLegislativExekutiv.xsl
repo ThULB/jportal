@@ -2,228 +2,139 @@
 <!-- ============================================== -->
 <!-- $Revision: 575 $ $Date: 2008-09-04 14:26:32 +0200 (Do, 04 Sep 2008) $ -->
 <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-    xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions"
-    exclude-result-prefixes="xlink i18n laws" xmlns:xalan="http://xml.apache.org/xalan">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="i18n laws mcr">
 
-    <xsl:variable name="nameOfTemplate" select="'template_thLegislativExekutiv'" />
+  <xsl:template match="/template[@id='template_thLegislativExekutiv']" mode="template">
+    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_thLegislativExekutiv" />
+  </xsl:template>
 
-    <xsl:include href="jp_laws.xsl"/>
+  <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
+  </xsl:template>
 
-    <!-- ============================================== -->
-    <!-- the template                                   -->
-    <!-- ============================================== -->
-    <xsl:template name="template_thLegislativExekutiv">
-        <xsl:variable name="journalsID">
-          <xsl:value-of select="document('jportal_getJournalID:XPathDoesNotExist')/dummyRoot/hidden/@default" />
-        </xsl:variable>
-        <xsl:variable name="journalXML">
-          <xsl:copy-of select="document(concat('mcrobject:',$journalsID))" />
-        </xsl:variable>
-        <xsl:variable name="journalMaintitle">
-          <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/maintitles/maintitle/text()" />
-        </xsl:variable>
-        <xsl:variable name="periodetitle">
-          <xsl:variable name="dates" select="xalan:nodeset($journalXML)/mycoreobject/metadata/dates"/>
+  <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
+    <xsl:variable name="register" select="laws:getRegister(@ID)" />
+    <xsl:if test="$register">
+      <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
+      <xsl:apply-templates select="$register/gesetzessammlung" mode="template_thLegislativExekutiv">
+        <xsl:with-param name="objId" select="@ID" />
+        <xsl:with-param name="derivateId" select="$derivateId" />
+      </xsl:apply-templates>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- Entry point to print all laws of a register -->
+  <xsl:template match="/gesetzessammlung" mode="template_thLegislativExekutiv">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
+    <div id="jp-content-laws" class="jp-content-laws">
+      <xsl:apply-templates select="register" mode="template_thLegislativExekutiv">
+        <xsl:with-param name="objId" select="$objId"/>
+        <xsl:with-param name="derivateId" select="$derivateId"/>
+      </xsl:apply-templates>
+    </div>
+  </xsl:template>
+
+  <!-- ================================================================================= -->
+
+  <!-- Print the head of the register and prints the laws -->
+  <xsl:template match="register" mode="template_thLegislativExekutiv">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
+
+    <!-- Print head -->
+    <table class="register">
+      <tr>
+        <td><b><xsl:value-of select="i18n:translate('jp.laws.register.titel')" />:</b></td>
+        <td><xsl:value-of select="titel" /></td>
+      </tr>
+      <tr>
+        <td><b><xsl:value-of select="i18n:translate('jp.laws.register.year')" />:</b></td>
+        <td>
           <xsl:choose>
-            <xsl:when test="$dates/date[@type='published']">
-               <xsl:copy-of select="$dates/date[@type='published']/text()" />
+            <xsl:when test="jahresangabe/bis">
+              <xsl:value-of select="concat(jahresangabe/von, ' - ', jahresangabe/von)" />
             </xsl:when>
-            <xsl:when test="dates/date[@type='published_from']">
-              <xsl:copy-of select="concat($dates/date[@type='published_from']/text(), ' - ', $dates/date[@type='published_until']/text())" />
-            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="jahresangabe/von" />
+            </xsl:otherwise>
           </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="additionalTitle">
-          <xsl:value-of select="xalan:nodeset($journalXML)/mycoreobject/metadata/subtitles/subtitle/text()" />
-        </xsl:variable>
+        </td>
+      </tr>
+      <xsl:if test="herzogtum">
+        <tr>
+          <td><b><xsl:value-of select="i18n:translate('jp.laws.register.duchy')" />:</b></td>
+          <td><xsl:value-of select="herzogtum" /></td>
+        </tr>
+      </xsl:if>
+    </table>
 
-        <html>
-            <head>
-                <xsl:call-template name="jp.layout.getHTMLHeader">
-                    <xsl:with-param name="nameOfTemplate" select="$nameOfTemplate" />
-                </xsl:call-template>
-                <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/style_laws.css" rel="stylesheet" type="text/css" />
-            </head>
-            <body>
-                <table width="100%" height="34px" border="0" cellspacing="0" cellpadding="0" style="background-color: #858688;">
-                    <tr valign="center">
-                        <td style="padding-left: 10px;">
-                            <div id="headline">
-                                <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
-                                <xsl:copy-of select="'     |     '" />
-                                <a href="http://zs.thulb.uni-jena.de/content/below/index.xml" target="_self">Journals@UrMEL</a>
-                            </div>
-                        </td>
-                        <td align="right">
-                          <div id="navigation_box">
-                            <xsl:call-template name="navigation.row" />
-                          </div>
-                        </td>
-                    </tr>
-                </table>
+    <!-- Print laws -->
+    <xsl:apply-templates select="gesetze" mode="template_thLegislativExekutiv">
+        <xsl:with-param name="objId" select="$objId"/>
+        <xsl:with-param name="derivateId" select="$derivateId"/>
+    </xsl:apply-templates>
 
-                <table width="100%" height="30px" border="0" cellspacing="0" cellpadding="0" style="background-color: #bd1220;">
-                  <tr valign="left">
-                    <td style="border-color:#a19794; border-style:solid; border-top-width: 1px; border-bottom-width: 0px; border-left-width: 0px; border-right-width: 0px;">
-                      <div id="journal-title">
-                        <xsl:copy-of select="concat($journalMaintitle, ' ', $periodetitle)" />
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+  </xsl:template>
+  
+  <!-- ================================================================================= -->
 
-                <table height="112" width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:transparent;background:#44352e;">
-                  <tr>
-                    <td style="background-image:url({$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/header.png);
-                               background-repeat:no-repeat; width:1024px; 
-                               border-color:#a19794; border-style:solid; border-bottom-width: 1px; border-top-width: 0px;
-                               border-left-width: 0px; border-right-width: 0px;">
-                        <div id="headerBorder">
-                        </div>
-                    </td>
-                  </tr>
-                </table>
+  <xsl:template match="gesetze" mode="template_thLegislativExekutiv">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
 
-                <table height="60" width="100%" border="0" cellspacing="0" cellpadding="0">
-                  <tr>
-                    <td>
-                      <div id="navi_history">
-                        <xsl:call-template name="navigation.history" />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div id="th-logo">
-                        <a href="http://www.urmel-dl.de/Projekte/LegislativeundExekutive.html">
-                          <img src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/thLogo.png" width="117" height="49" border="0" />
-                        </a>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
+    <table class="laws">
+      <tr>
+        <th><xsl:value-of select="i18n:translate('jp.laws.register.nr')" /></th>
+        <th><xsl:value-of select="i18n:translate('jp.laws.register.page')" /></th>
+        <th><xsl:value-of select="i18n:translate('jp.laws.register.decree')" /></th>
+        <th><xsl:value-of select="i18n:translate('jp.laws.register.dateofissue')" /></th>
+        <th><xsl:value-of select="i18n:translate('jp.laws.register.content')" /></th>
+      </tr>
+      <xsl:for-each select="gesetz">
+        <tr>
+          <xsl:apply-templates select="." mode="template_thLegislativExekutiv">
+            <xsl:with-param name="objId" select="$objId"/>
+            <xsl:with-param name="derivateId" select="$derivateId"/>
+          </xsl:apply-templates>
+        </tr>
+      </xsl:for-each>    
+    </table>
+  </xsl:template>
 
-                <table width="100%" height="max" border="0" cellspacing="0" cellpadding="0" style="padding-bottom: 10px;"
-                        valign="top">
-                        <tr valign="top">
-                            <td width="200px" valign="top" rowspan="2">
-                                <div id="div_navi_main">
-                                  <xsl:call-template name="navigation.tree">
-                                    <!-- use percent values -->
-                                    <xsl:with-param name="spaceBetweenMainLinks" select="'4'"/>
-                                    <!-- use pixel values -->
-                                    <xsl:with-param name="borderWidthSides" select="'0'"/>
-                                    <!-- use percent values -->
-                                  </xsl:call-template>
-                                </div>
+  <xsl:template match="gesetz" mode="template_thLegislativExekutiv">
+    <xsl:param name="objId" />
+    <xsl:param name="derivateId" />
 
-                                <div id="logo-thulb">
-                                    <a href="http://www.thulb.uni-jena.de/" 
-                                       onmouseover="hover1.src='{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/thulb_logo_hover.png'"
-                                       onmouseout="hover1.src='{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/thulb_logo.png'" >
-                                       <img name="hover1" src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/thulb_logo.png"
-                                            width="85" height="30" border="0">
-                                       </img>
-                                    </a>
-                                </div>
-                                <div id="logo-archive">
-                                    <a href="http://www.thueringen.de/de/staatsarchive/" 
-                                       onmouseover="hover2.src='{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/archive_logo.png'"
-                                       onmouseout="hover2.src='{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/archive_logo.png'" >
-                                       <img name="hover2" src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/archive_logo.png"
-                                            width="106" height="30" border="0">
-                                       </img>
-                                    </a>
-                                </div>
-                            </td>
-                            <td width="max" valign="top" style="height: 12px">
-                                <xsl:text> </xsl:text>
-                            </td>
-                            <td width="135px" rowspan="2" valign="top" style="height: 500px;">
-                                <xsl:text> </xsl:text>
-                            </td>
-                        </tr>
-                        <tr valign="top">
-                            <td width="max" valign="top" style="height: 500px;">
-                                <div id="contentArea">
-                                    <div id="contentWrapper">
-                                        <xsl:call-template name="template_thLegislativExekutiv.write.content" />
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                </table>
-            </body>
-        </html>
-
-    </xsl:template>
-
-    <!-- Template for Content ================================================================================== -->
-    <xsl:template name="template_thLegislativExekutiv.write.content">
-        <xsl:call-template name="jp.layout.getHTMLContent" />
-    </xsl:template>
-
-    <!-- Template for User info ================================================================================ -->
-    <xsl:template name="template_thLegislativExekutiv.userInfo">
-
-        <!-- BEGIN: login values -->
-        <xsl:variable xmlns:encoder="xalan://java.net.URLEncoder" name="LoginURL"
-            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?lang=',$CurrentLang,'&amp;amp;url=', encoder:encode( string( $RequestURL ) ) )" />
-        <!-- END OF: login values -->
-        <table class="login_window" border="0" cellspacing="0" cellpadding="0">
-            <tr>
-                <td class="login_space"></td>
-                <td class="login_window">
-                    <!-- Login-Button / 2 Pfeile =================================== -->
-                    <a href="{$LoginURL}">
-                        <img src="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/IMAGES/login-switch.gif" border="0" />
-                    </a>
-                </td>
-                <td class="login_text">
-                    <text i18n="editor.start.LoginText.label" />
-                    :
-                </td>
-                <td class="user_id">
-                    <p class="whitebox">
-                        <xsl:value-of select="$CurrentUser" />
-                    </p>
-                </td>
-            </tr>
-        </table>
-    </xsl:template>
-
-    <!-- ====================================================================-->
-    <!-- Special handling for volumes to print laws in table form -->
-    <xsl:template match="/mycoreobject[contains(@ID,'_jpvolume_')]" priority="3">
-      <xsl:call-template name="jp_printVolumeData" />
-    </xsl:template>
-
-    <!-- ====================================================================-->
-
-    <xsl:template name="jp_printVolumeData">
-      <xsl:call-template name="jp_objectView_initJS" />
+    <td class="nr">
+      <xsl:variable name="image" select="laws:getImageByLaw(nummer, $derivateId)" />
       <xsl:choose>
-        <!-- metadaten -->
-        <xsl:when test="$view.objectmetadata = 'false'">
-          <xsl:call-template name="printMetadata" />
+        <xsl:when test="$image">
+          <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?XSL.view.objectmetadata=false&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
+          <a href="{$href}">
+            <b><xsl:value-of select="nummer" /></b>
+          </a>
         </xsl:when>
-        <!-- inhaltsverzeichnis -->
         <xsl:otherwise>
-          <xsl:variable name="register" select="laws:getRegister(@ID)" />
-          <xsl:if test="$register">
-            <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
-
-            <xsl:apply-templates select="$register/gesetzessammlung">
-              <xsl:with-param name="objId" select="@ID" />
-              <xsl:with-param name="derivateId" select="$derivateId" />
-            </xsl:apply-templates>
-          </xsl:if>
-          <!-- Print children at the end -->
-          <xsl:call-template name="printChildren" />
+          <xsl:value-of select="nummer" />
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:template>
+    </td>
+    <td class="page">
+      <xsl:choose>
+        <xsl:when test="seite/bis != seite/von">
+          <xsl:value-of select="concat(seite/von, ' - ', seite/bis)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="seite/von" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </td>
+    <td class="decree"><xsl:value-of select="datum/erlass" /></td>
+    <td class="issuedate"><xsl:value-of select="datum/ausgabe" /></td>
+    <td class="content"><xsl:value-of select="inhalt" /></td>
+  </xsl:template>
+
 
 </xsl:stylesheet>

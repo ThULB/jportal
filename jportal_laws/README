@@ -13,14 +13,14 @@ First of all you have to add the module to the docportal pom.xml.
 Be aware that the version is probably wrong!
 
 The laws module contains a new template called template_thLegislativeExecutiv. This
-template provides a view to show the register entrys of a volume. 
+template provides a view to show the register entries of a volume. 
 
 Create a new journal and select template_thLegislativeExecutiv as new template.
 Add a volume to this journal. Now you can upload your Register_*.xml as a new
-derivate to the volume. If successfull you can see the entries by clicking on 
+derivate to the volume. If successful you can see the entries by clicking on 
 'show table of contents'.
 
-Linking the nr. of each law with the imageviewer is very easy. Simply upload a
+Linking the number of each law with the image viewer is very easy. Simply upload a
 derivate with the files inside. For example you can download the Herzogtum Altenburg
 1821 from the productive system
 (http://zs.thulb.uni-jena.de/servlets/MCRZipServlet?id=jportal_derivate_00199933) and
