@@ -2,10 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder">
 
-  <!-- TODO: maintitles should not be required here, but a exception
-  is thrown if missing: because key('maintitles', @type) fires if not exist in 
-  <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]"> -->
-  <xsl:key name="maintitles" match="maintitle[@inherited='0']" use="@type" />
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
   <xsl:key name="notes" match="note[@inherited='0']" use="@type" />
@@ -18,11 +14,15 @@
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
   <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaISO8601Date'" />
+  
+  <xsl:variable name="ignoreMetadata" select="'maintitles'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
-    <xsl:call-template name="metadataField">
-      <xsl:with-param name="fields" select="*" />
-    </xsl:call-template>
+    <xsl:if test="not(contains($ignoreMetadata, name()))">
+      <xsl:call-template name="metadataField">
+        <xsl:with-param name="fields" select="*" />
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]">
@@ -142,4 +142,3 @@
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
-

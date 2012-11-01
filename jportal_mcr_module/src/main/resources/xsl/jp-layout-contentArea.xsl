@@ -17,6 +17,7 @@
   <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update_',$currentType))" />
   <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+  <xsl:variable name="hasChildren" select="count(/mycoreobject/structure/children) > 0" />
 
   <xsl:template priority="9" match="/mycoreobject">
     <xsl:variable name="objectEditingHTML">
@@ -75,8 +76,11 @@
       <xsl:copy-of select="$LColumn/*" />
     </xsl:if>
 
+    <!-- Edit -->
     <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
-    <xsl:if test="$updatePerm = 'true' or $deletePerm = 'true' or $dataModel != 'datamodel-jpvolume.xsd'">
+
+    <!-- metadata & derivate -->
+    <xsl:if test="not($hasChildren) or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'">
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
