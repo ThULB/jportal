@@ -1,6 +1,10 @@
 package org.mycore.common.xml;
 
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -12,11 +16,16 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.transform.JDOMSource;
+import org.jdom.xpath.XPath;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRLayoutUtilities;
 import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryManager;
@@ -73,44 +82,39 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
 
     /**
      * @return The Journal-ID as String or "" if no Journal-ID can be found.
+     * @throws JDOMException 
      */
     public static String getID() {
-        String journalID = "";
-        Boolean cached = false;
-
-        // try to get jid from cache
-        String lastPage = "";
-
-        if (MCRLayoutUtilities.getLastValidPageID() != null) {
-            lastPage = MCRLayoutUtilities.getLastValidPageID();
-            LOGGER.debug("Found lastPage= " + lastPage);
-            if (WEBCONTEXTtwoJID_CACHE.get(lastPage) != null) {
-                journalID = (String) WEBCONTEXTtwoJID_CACHE.get(lastPage);
-                if (!"".equals(journalID)) {
-                    cached = true;
+        // in jp-layout-main.xsl - renderLayout the current object ID will be
+        // set in the session. The method name "getLastValidPageID" is miss leading.
+        // It was used for another reason. Should be changed in the next version.
+        String currentObjID = MCRLayoutUtilities.getLastValidPageID();
+        if (currentObjID != null && !currentObjID.equals("")) {
+            String[] oldJournalID = (String[]) MCRSessionMgr.getCurrentSession().get("journalIDForObj");
+            
+            if(oldJournalID != null && oldJournalID.length == 2 && currentObjID.equals(oldJournalID[0])){
+                return oldJournalID[1];
+            }
+            
+            Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(currentObjID));
+            try {
+                XPath hiddenJournalIDXpath = XPath.newInstance("/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID");
+                String journalID = hiddenJournalIDXpath.valueOf(objXML);
+                
+                if(journalID != null && !journalID.equals("")){
+                    String[] journalIDForObj = {currentObjID, journalID};
+                    MCRSessionMgr.getCurrentSession().put("journalIDForObj", journalIDForObj);
                 }
-                LOGGER.debug("Found id to lastPage in cache. lastpage= " + lastPage + " id=" + journalID);
+                
+                return journalID;
+            } catch (JDOMException e) {
+                e.printStackTrace();
             }
         }
 
-        if (!cached) {
-            String webSiteContext = getWebSiteContext(lastPage);
-            journalID = getJournalID(webSiteContext);
-        }
-
-        // store in cache
-        if (!cached && !lastPage.equals("")) {
-            WEBCONTEXTtwoJID_CACHE.put(lastPage, journalID);
-            LOGGER.debug("Put id to lastPage in cache. lastpage= " + lastPage + " id=" + journalID);
-        }
-
-        LOGGER.debug("#############################################");
-        LOGGER.debug("getJournalID: ermittelte ID=" + journalID);
-        LOGGER.debug("#############################################");
-
-        return journalID;
+        return "";
     }
-
+    
     /**
      * @param webSiteContext:
      *            Address of static xml file in navigation.xml that has a

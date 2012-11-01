@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" exclude-result-prefixes="xsi mcr acl xalan layoutUtils">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
@@ -24,6 +25,9 @@
   </xsl:variable>
 
   <xsl:template name="renderLayout">
+    <xsl:if test="/mycoreobject/@ID">
+      <xsl:variable name="setObjIDInSession" select="layoutUtils:setLastValidPageID(/mycoreobject/@ID)" />
+    </xsl:if>
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">
@@ -59,7 +63,7 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
-        
+
         <!-- Piwik -->
 		<script type="text/javascript">
 			if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){

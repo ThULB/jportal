@@ -51,7 +51,7 @@ $(document).ready(function() {
                 }
             }
         } else {
-            searchQuery = 'maintitles_plain like "' + selectedChar + '*"'
+            searchQuery = 'maintitles_plain like "' + selectedChar.toLowerCase() + '*"'
         }
 
         if (additionalQuery != '') {

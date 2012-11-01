@@ -10,6 +10,11 @@
           <xsl:value-of select="text()|@xlink:title"/>
           <xsl:text>          </xsl:text>
         </xsl:for-each>
+        
+        <xsl:for-each select="/mycoreobject/metadata/*[@class='MCRMetaXML']//*[@inherited='0']:descendant">
+          <xsl:value-of select="text()|@xlink:title"/>
+          <xsl:text>          </xsl:text>
+        </xsl:for-each>
 
         <xsl:for-each select="/mycoreobject/metadata/*/*[@classid and @categid]">
           <xsl:variable name="uri" select="concat('classification:metadata:0:parents:',@classid,':',@categid)"/>
@@ -25,7 +30,7 @@
 
     <!-- Searchfields for all kind jp metadata (jpjournal, jpvolume, jparticle) -->
     <field name="maintitles"        type="name"       source="objectMetadata" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" addable="true"/>
-    <field name="maintitles_plain"  type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="text()" sortable="true" i18n="editor.search.document.maintitle" addable="true"/>
+    <field name="maintitles_plain"  type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" value="translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')" sortable="true" i18n="editor.search.document.maintitle" addable="true"/>
     <field name="subtitles"         type="text"       source="objectMetadata" xpath="/mycoreobject/metadata/subtitles/subtitle" value="text()" i18n="editor.search.document.subtitle" />
     <field name="participants"      type="identifier" source="objectMetadata" xpath="/mycoreobject/metadata/participants/participant" value="@xlink:href"/>
     <field name="dates"             type="date"       source="objectMetadata" xpath="/mycoreobject/metadata/dates/date[0]" value="ext:normalizeDate(string(text()))" sortable="true" i18n="editor.search.document.date" />

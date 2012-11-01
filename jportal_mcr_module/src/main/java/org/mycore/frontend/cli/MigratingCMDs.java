@@ -4,17 +4,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.jdom.transform.JDOMResult;
+import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRUtils;
+import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
@@ -112,5 +124,35 @@ public class MigratingCMDs {
                 }
             }
         }        
+    }
+    
+    @MCRCommand(help="Replace ':' in categID with '_'", syntax="fix colone in categID")
+    public static void fixCategID() throws JDOMException, TransformerException{
+        Session dbSession = MCRHIBConnection.instance().getSession();
+        dbSession.createSQLQuery("update MCRCATEGORY set CATEGID=replace(categid,':','-') where CATEGID like '%:%'").executeUpdate();
+        
+        MCRXMLMetadataManager xmlMetaManager = MCRXMLMetadataManager.instance();
+        List<String> listIDs = xmlMetaManager.listIDs();
+        
+        InputStream resourceAsStream = MigratingCMDs.class.getResourceAsStream("/xsl/replaceColoneInCategID.xsl");
+        Source stylesheet = new StreamSource(resourceAsStream);
+        Transformer xsltTransformer = MCRXSLTransformation.getInstance().getStylesheet(stylesheet).newTransformer();
+
+        XPath xlinkLabel = XPath.newInstance("/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]");
+        for (String ID : listIDs) {
+            MCRObjectID mcrid = MCRObjectID.getInstance(ID);
+            Document mcrObjXML = xmlMetaManager.retrieveXML(mcrid);
+            if (!xlinkLabel.selectNodes(mcrObjXML).isEmpty()) {
+                Source xmlSource = new JDOMSource(mcrObjXML);
+                JDOMResult jdomResult = new JDOMResult();
+                xsltTransformer.transform(xmlSource, jdomResult);
+                Document migratedMcrObjXML = jdomResult.getDocument();
+
+                xmlMetaManager.update(mcrid, migratedMcrObjXML, new Date());
+                LOGGER.info("Replace ':' in categID for " + mcrid);
+            } else {
+                LOGGER.info("Nothing to replace for " + mcrid);
+            }
+        }
     }
 }

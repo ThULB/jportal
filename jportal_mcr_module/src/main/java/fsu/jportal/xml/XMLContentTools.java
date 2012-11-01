@@ -11,8 +11,13 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class XMLContentTools{
 	public Element getParents(String childID) {
-		Document childXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(childID));
-		Element parents = new Element("parents");
+	    Element parents = new Element("parents");
+		MCRObjectID mcrObjectID = MCRObjectID.getInstance(childID);
+		if(!MCRXMLMetadataManager.instance().exists(mcrObjectID)){
+		    return parents;
+		}
+		
+        Document childXML = MCRXMLMetadataManager.instance().retrieveXML(mcrObjectID);
 		try {
 			XPath parentIdXpath = XPath.newInstance("/mycoreobject/structure/parents/parent[@inherited='0']");
 			XPath titleXpath = XPath.newInstance("/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text()");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xlink="http://www.w3.org/1999/xlink">
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan">
   <xsl:variable name="editorForm" select="'editor-jpjournal editor-jpvolume editor-jparticle'"></xsl:variable>
   <xsl:template name="nameOfTemplate">
     <xsl:apply-templates mode="nameOfTemplate"
@@ -42,12 +42,10 @@
         </xsl:when>
       </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="journalID">
-      <xsl:value-of select="document(concat('parents:',$parentID))/parents/parent[1]/@xlink:href"></xsl:value-of>
-    </xsl:variable>
+    <xsl:variable name="parentDoc" select="document(concat('parents:',$parentID))"/>
     <xsl:choose>
-      <xsl:when test="$journalID != ''">
-        <xsl:value-of select="$journalID" />
+      <xsl:when test="$parentDoc/parents/parent[1]">
+        <xsl:value-of select="$parentDoc/parents/parent[1]/@xlink:href" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$parentID" />
