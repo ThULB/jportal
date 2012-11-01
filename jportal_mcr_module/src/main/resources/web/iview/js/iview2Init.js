@@ -3,6 +3,7 @@ var chapterEmbedded = 'false';
 var chapDynResize = 'false';
 var DampInViewer = 'true';
 var i18n;
+var loadOnStartup = false;
 
 function jpInitIview2() {
     var Tools = {
@@ -36,6 +37,7 @@ function jpInitIview2() {
     var ServletsBaseURL = Tools.getServletBaseURL();
     var CurrentLang = Tools.getCurrentLang();
     var jqueryUIVersion = '1.8.17';
+    var loadOnStartup = Tools.getParam("page") != "";
 
     i18n = i18n || new iview.i18n(WebApplicationBaseURL, CurrentLang, 'component.iview2');
 
@@ -59,11 +61,20 @@ function jpInitIview2() {
     }
 
     function clickToEnlarge(that) {
-        that.find('div.jp-layout-hidden-Button').hide();
-        initIviewContainer();
-        
+        var hiddenButton = that.find('div.jp-layout-hidden-Button');
+        if(hiddenButton) {
+        	hiddenButton.hide();        	
+        }
         var image = that.find('img');
         var derivInfo = Tools.getDerivInfo(image.attr('src'));
+        showIview(derivInfo);
+//        setTimeout(function() {
+//            iviewObj.toggleViewerMode();
+//        }, 50)
+    }
+
+    function showIview(derivInfo) {
+    	initIviewContainer();
         var container = $('#viewerContainer');
         var containerOptions = {
             derivateId : derivInfo.ID,
@@ -72,14 +83,11 @@ function jpInitIview2() {
             startWidth : 192,
             startHeight : 192
         };
-
         var iviewObj = new iview.IViewInstance(container, containerOptions);
         iview.addInstance(iviewObj);
         iviewObj.startViewer(derivInfo.file, "true");
-//        setTimeout(function() {
-//            iviewObj.toggleViewerMode();
-//        }, 50)
     }
+    
 /*
     $('.viewerContainer.min').each(function(i, container) {
         var derivID = $(container).attr('id');
@@ -96,7 +104,14 @@ function jpInitIview2() {
         $(this).find('div.jp-layout-hidden-Button').hide();
     }).delegate('div.jp-layout-derivateWrapper', 'click', function() {
         clickToEnlarge($(this));
-    })
+    });
+
+    if(loadOnStartup) {
+    	showIview({
+    		ID: Tools.getParam("derivate"),
+    		file: Tools.getParam("page")
+    	});
+    }
 }
 
 $(document).ready(jpInitIview2());
