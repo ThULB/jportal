@@ -19,11 +19,11 @@
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
 
-  <xsl:template name="renderLayout">
-    <xsl:variable name="nameOfTemplate">
-      <xsl:call-template name="nameOfTemplate" />
-    </xsl:variable>
+  <xsl:variable name="nameOfTemplate">
+    <xsl:call-template name="nameOfTemplate" />
+  </xsl:variable>
 
+  <xsl:template name="renderLayout">
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">

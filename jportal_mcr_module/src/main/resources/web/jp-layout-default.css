@@ -452,6 +452,7 @@ body {
 	position: fixed;
 	top: 50%;
 	width: 300px;
+	background-color: white;
 	z-index: 200;
 }
 

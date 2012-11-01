@@ -93,6 +93,13 @@
         </xsl:if>
       </div>
     </xsl:if>
+
+    <!-- call dynamic template_*.xsl -->
+    <xsl:variable name="template">
+      <template id="{$nameOfTemplate}" mcrID="{@ID}"></template>
+    </xsl:variable>
+    <xsl:apply-templates select="xalan:nodeset($template)" mode="template" />
+
   </xsl:template>
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
