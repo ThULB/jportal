@@ -67,6 +67,7 @@
     <!-- includes the stylesheets which are set in the mycore.properties file -->
     <xsl:include href="xslInclude:components" />
     <xsl:include href="xslInclude:modules" />
+    <xsl:include href="xslInclude:templates" />
 
     <!-- =================================================================================================== -->
     <xsl:template name="generatePage">

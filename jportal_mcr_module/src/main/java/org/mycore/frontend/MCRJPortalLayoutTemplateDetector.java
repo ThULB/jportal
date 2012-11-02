@@ -1,7 +1,5 @@
 package org.mycore.frontend;
 
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -16,8 +14,6 @@ public class MCRJPortalLayoutTemplateDetector {
 
     private final static String KEY_PREFIX = "MCR.Module-JPortal.DynamicLayoutTemplates.";
 
-    private static HashMap<String, String> CACHE = new HashMap<String, String>();
-
     public static String getTemplateID() {
 
         // get id of current watched journal
@@ -28,29 +24,20 @@ public class MCRJPortalLayoutTemplateDetector {
             return "";
         }
 
-        // exist in cache ?
-        String cacheKey = getCacheKey(journalID);
-        if (!CACHE.isEmpty() && CACHE.containsKey(cacheKey)) {
-            String template = (String) CACHE.get(cacheKey);
-            LOGGER.debug("Calculated template=" + template + " for journal=" + journalID + ", taken from CACHE");
-            return template;
-        }
-
         // get "date-from" of journal
         Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
         org.jdom.xpath.XPath xpath = null;
         Integer dateOfJournal = 0;
         Element dateNode = null;
         try {
-            xpath = org.jdom.xpath.XPath.newInstance("/mycoreobject/metadata/dates/date[@type='published_from']");
+            xpath = org.jdom.xpath.XPath.newInstance("/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']");
             dateNode = (Element) xpath.selectSingleNode(objXML);
             dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
         } catch (Exception e) {
-            LOGGER.debug("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return ''");
-            e.printStackTrace();
+            LOGGER.error("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return ''", e);
             return "";
         }
-        
+
         // get template
         MCRConfiguration mcrConfig = MCRConfiguration.instance();
         String template = "";
@@ -67,17 +54,13 @@ public class MCRJPortalLayoutTemplateDetector {
             // date with template found ?
             if ((dateOfJournal >= dateFrom) && (dateOfJournal <= dateUntil)) {
                 template = mcrConfig.getString(KEY_PREFIX + "name." + Integer.toString(pos));
-                // put to cache
-                CACHE.put(journalID, template);
             }
             pos++;
         }
-
-        LOGGER.debug("Calculated template=" + template + " for date=" + dateOfJournal);
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calculated template=" + template + " for date=" + dateOfJournal);
+        }
         return template;
     }
 
-    private static String getCacheKey(String journalID) {
-        return journalID.trim();
-    }
 }

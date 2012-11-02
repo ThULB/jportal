@@ -102,7 +102,7 @@
     <xsl:variable name="template">
       <template id="{$nameOfTemplate}" mcrID="{@ID}"></template>
     </xsl:variable>
-    <xsl:apply-templates select="xalan:nodeset($template)" mode="template" />
+    <xsl:apply-templates select="xalan:nodeset($template)/template" mode="template" />
 
   </xsl:template>
 
