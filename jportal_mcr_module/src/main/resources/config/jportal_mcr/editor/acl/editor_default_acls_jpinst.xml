@@ -19,7 +19,7 @@
     <boolean operator="and">
      <!-- USER OR GROUP -->
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
      </boolean>
 	 <!-- DATE -->
      <boolean operator="and" />
@@ -34,7 +34,7 @@
     <boolean operator="and">
      <!-- USER OR GROUP -->
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
      </boolean>
 	 <!-- DATE -->
      <boolean operator="and" />
@@ -49,7 +49,7 @@
     <boolean operator="and">
      <!-- USER OR GROUP -->
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
      </boolean>
 	 <!-- DATE -->
      <boolean operator="and" />
@@ -63,7 +63,7 @@
    <condition format="xml">
     <boolean operator="and">
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
      </boolean>
 	 <!-- DATE -->
      <boolean operator="and" />

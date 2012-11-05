@@ -7,7 +7,7 @@
 		description="Create rights for JP-Journals">
 		<condition format="xml">
 			<boolean operator="or">
-				<condition value="admingroup" operator="=" field="group"/>
+				<condition value="admin" operator="=" field="group"/>
 			</boolean>
 		</condition>
 	</mcrpermission>	
@@ -32,7 +32,7 @@
 		<condition format="xml">
 			<boolean operator="or">
 				<condition value="editorsgroup" operator="=" field="group"/>
-				<condition value="admingroup" operator="=" field="group"/>
+				<condition value="admin" operator="=" field="group"/>
 			</boolean>
 		</condition>
 	</mcrpermission>		
@@ -41,7 +41,7 @@
 		<condition format="xml">
 			<boolean operator="or">
 				<condition value="editorsgroup" operator="=" field="group"/>
-				<condition value="admingroup" operator="=" field="group"/>
+				<condition value="admin" operator="=" field="group"/>
 			</boolean>
 		</condition>
 	</mcrpermission>		

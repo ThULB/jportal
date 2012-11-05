@@ -4,7 +4,7 @@
   <servacl permission="writewf">
    <condition format="xml">
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
       <condition value="editors" operator="=" field="group"/>
      </boolean>
    </condition>
@@ -12,14 +12,14 @@
   <servacl permission="deletewf">
    <condition format="xml">
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
      </boolean>
    </condition>
   </servacl>
   <servacl permission="writedb">
    <condition format="xml">
      <boolean operator="or">
-      <condition value="admingroup" operator="=" field="group"/>
+      <condition value="admin" operator="=" field="group"/>
       <condition value="editors" operator="=" field="group"/>
      </boolean>
    </condition>

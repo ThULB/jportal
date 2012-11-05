@@ -150,7 +150,7 @@ Following groups will created by default:
     -- edit
     -- delete
 
-    4. "admingroup"
+    4. "admin"
     - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
     - add, edit, delete users and groups
     - 

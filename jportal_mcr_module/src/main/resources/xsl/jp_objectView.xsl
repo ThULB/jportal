@@ -620,7 +620,7 @@
                   <img src="{$WebApplicationBaseURL}images/icons/delete_button_30x30.png" title="{i18n:translate('component.swf.object.delObject')}" />
                 </a>
               </xsl:if>
-              <xsl:if test="mcrxml:isCurrentUserInRole('admingroup')">
+              <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
                 <a
                   href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}?tf_mcrid={$id}&amp;re_mcrid={$id}&amp;se_mcrid={$id}&amp;type=acl&amp;step=commit&amp;todo=seditacl">
                   <img src="{$WebApplicationBaseURL}images/icons/ACL_button_30x30.png" title="{i18n:translate('component.swf.object.editACL')}" />
@@ -1142,7 +1142,7 @@
                             </xsl:if>
                           </xsl:if>
                           <!-- create mets -->
-                          <xsl:if test="mcrxml:isCurrentUserInRole('admingroup')">
+                          <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
                             <a target="_blank">
                               <xsl:attribute name="href">
                                                                 <xsl:call-template name="buildURL">
