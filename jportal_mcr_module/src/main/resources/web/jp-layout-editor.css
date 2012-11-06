@@ -1,5 +1,15 @@
 @CHARSET "UTF-8";
 
+table.editor{
+	table-layout: fixed;
+	max-width: 966px;
+}
+
+.editorPanel{
+	table-layout: fixed;
+	max-width: 966px;
+}
+
 .editorHeadlines{
 	font-weight: bold;
 	text-align: center;
@@ -33,10 +43,17 @@
 
 .editorCell{
 	text-align: left;
+	table-layout: fixed;
+	max-width: 966px;
 }
 
 .editorList{
 	width: 636px;
+	table-layout: fixed;
+}
+
+input.editorList{
+	width: auto;
 }
 
 .editorTextfield{
