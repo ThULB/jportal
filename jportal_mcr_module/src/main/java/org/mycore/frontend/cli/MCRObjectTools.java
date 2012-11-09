@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -233,7 +234,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
         Document mcrOrigObjXMLDoc = MCRXMLMetadataManager.instance().retrieveXML(sourceMcrId);
 
         // we don't want to adopt children
-        mcrOrigObjXMLDoc.getRootElement().getChild("structure").getChild("children").detach();
+        Element children = mcrOrigObjXMLDoc.getRootElement().getChild("structure").getChild("children");
+        if(children != null) {
+            children.detach();
+        }
 
         Element maintitleElem = null;
         String mainTitlePath = "/mycoreobject/metadata/maintitles/maintitle";
@@ -247,7 +251,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
             Element dataModelCoverageElem = null;
             String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
             dataModelCoverageElem = getElementWithXpath(mcrOrigObjXMLDoc, dataModelCoverageLocation);
-            dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
+            if(dataModelCoverageElem != null) {
+                dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
+            }
         }
 
         Element hiddenWebContextsElem = null;
@@ -255,9 +261,13 @@ public class MCRObjectTools extends MCRAbstractCommands {
         hiddenWebContextsElem = getElementWithXpath(mcrOrigObjXMLDoc, hiddenWebContextsPath);
 
         MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
-        maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
-        hidden_jpjournalIDElem.setText(newMcrID.toString());
-
+        if(maintitleElem != null) {
+            maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
+        }
+        if(hidden_jpjournalIDElem != null) {
+            hidden_jpjournalIDElem.setText(newMcrID.toString());
+        }
+        mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
         MCRXMLMetadataManager.instance().create(newMcrID, mcrOrigObjXMLDoc, new Date());
 
         if (newMcrID.getTypeId().equals("jpjournal")) {
