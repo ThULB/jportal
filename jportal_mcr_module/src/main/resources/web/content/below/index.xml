@@ -7,14 +7,44 @@
         <h2>Informationen</h2>
         <p class="greeting">Journals@UrMEL bietet Ihnen den Zugang zu Zeitschriften in digitaler Form.</p>
         Durch Digitalisierung werden historische Zeitschriften leichter zugänglich gemacht und damit gleichzeitig auch vor dem Verfall
-        bewahrt. In Zusammenarbeit mit wissenschaftlichen Verlagen und Fachgesellschaften gibt die ThULB in zunehmendem Maße selbst
+        bewahrt. In Zusammenarbeit
+        mit wissenschaftlichen Verlagen und Fachgesellschaften gibt die ThULB in zunehmendem Maße selbst
         Online-Zeitschriften heraus.
-        Darüber hinaus werden auch Online-Zeitschriften von Verlagen erworben und auf den Servern der ThULB abgespeichert und zugänglich gemacht.
+        Darüber hinaus werden auch
+        Online-Zeitschriften von Verlagen erworben und auf den Servern der ThULB abgespeichert und zugänglich gemacht.
       </div>
       <div id="latestArticles_box">
         <h2>Neueste Artikel</h2>
         <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
       </div>
+
+      <div>
+        <h2>Bestände</h2>
+        <ul>
+          <li>
+            <a href="/content/main/journalList.xml">Zeitschriften</a>
+          </li>
+          <li>
+            <a href="/content/main/calendarList.xml">Altenburger Kalenderblätter</a>
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Anlegen</h2>
+        <ul>
+          <li>
+            <a href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj">Person</a>
+          </li>
+          <li>
+            <a href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj">Institution</a>
+          </li>
+          <li>
+            <a href="/servlets/MCRStartEditorServlet?type=jpjournal&amp;step=author&amp;todo=wnewobj">Zeitschrift</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
     <div>
         <h2>Bestände</h2>

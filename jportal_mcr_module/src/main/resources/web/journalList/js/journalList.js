@@ -6,14 +6,15 @@
         var resultList = $('<ul/>');
         var resultListContainer = $(this);
 
-        $.getJSON(searchURL, function(searchResults) {
-            for (i = 0; i < searchResults.numHits; i++) {
+        $.getJSON(searchURL, function(searchResult) {
+        	var response = searchResult.response;
+            for (i = 0; i < response.numFound; i++) {
                 var resultListEntry = $('<li/>');
-                fill(resultListEntry, searchResults.hits[i]);
+                fill(resultListEntry, response.docs[i]);
                 resultList.append(resultListEntry);
             }
 
-            if (searchResults.numHits == 0) {
+            if (response.numFound == 0) {
                 resultList.html('<span class="ui-msg">Keine Einträge unter dieser Katgorie.</span>')
             }
 
@@ -43,46 +44,41 @@ $(document).ready(function() {
 
         var searchQuery = '';
         if (selectedChar == '#') {
-            for ( var charCode = 48; charCode <= 57; charCode++) {
-                searchQuery = searchQuery + '(maintitles_plain like "' + String.fromCharCode(charCode) + '*")';
-
-                if (charCode < 57) {
-                    searchQuery = searchQuery + " or "
-                }
+            for (var charCode = 48; charCode <= 57; charCode++) {
+                searchQuery = searchQuery + ' %2Bmaintitle_lowercase:' + String.fromCharCode(charCode) + '*';
             }
         } else {
-            searchQuery = 'maintitles_plain like "' + selectedChar.toLowerCase() + '*"'
+            searchQuery = '%2Bmaintitle_lowercase:' + selectedChar.toLowerCase() + '*'
         }
 
         if (additionalQuery != '') {
-            searchQuery = '(' + searchQuery + ') ' + additionalQuery;
+            searchQuery = searchQuery + ' ' + additionalQuery;
         }
-        var searchUrl = host + '/rsc/search?s=maintitles_plain&q=' + searchQuery;
+        var searchUrl = host + '/rsc/search?s=maintitle_lowercase&q=' + searchQuery;
 
-        $('#resultList').jpResultList(searchUrl, function(resultListEntry, hit) {
-            var metaData = hit.metaData;
-
-            var titleLink = $('<a/>').html(metaData.maintitles).attr('href', '/receive/' + hit.id);
+        $('#resultList').jpResultList(searchUrl, function(resultListEntry, metadata) {
+            var titleLink = $('<a/>').html(metadata.maintitle).attr('href', '/receive/' + metadata.id);
             var title = $('<h3 class="journal-title"/>').append(titleLink);
             resultListEntry.append(title);
 
-            if (metaData.published_from) {
-                var publishedStr = 'Erscheinungsverlauf: ' + metaData.published_from + ' - ';
-                if (metaData.published_until) {
-                    publishedStr = publishedStr + metaData.published_until;
+            var publishedStr = 'Erscheinungsverlauf: ';
+            if(metadata["date.published"]) {
+            	publishedStr += metadata["date.published"];
+                resultListEntry.append($('<div class="journal-published"/>').html(publishedStr));
+            } else if(metadata["date.published_from"]) {
+            	publishedStr += metadata["date.published_from"] + ' - ';
+                if (metadata["date.published_until"]) {
+                    publishedStr = publishedStr + metadata["date.published_until"];
                 }
-                var published = $('<div class="journal-published"/>').html(publishedStr);
-
-                resultListEntry.append(published);
+                resultListEntry.append($('<div class="journal-published"/>').html(publishedStr));
             }
-
-            if (metaData.publisher && metaData.publisherID) {
-                var publisherLink = $('<a/>').html(metaData.publisher).attr('href', host + '/receive/' + metaData.publisherID);
+            if (metadata.publisher && metadata.publisherID) {
+                var publisherLink = $('<a/>').html(metadata.publisher).attr('href', host + '/receive/' + metadata.publisherID);
                 var publisher = $('<div class="journal-author"/>').html('Herausgeber: ').append(publisherLink);
                 resultListEntry.append(publisher);
             }
         });
-    })
+    });
 
     if (document.createStyleSheet) {
         document.createStyleSheet('/journalList/css/journalList.css');

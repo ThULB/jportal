@@ -198,5 +198,10 @@
         	<type>jar</type>
         	<scope>test</scope>
         </dependency>
+        <dependency>
+          <groupId>org.apache.solr</groupId>
+          <artifactId>solr-solrj</artifactId>
+          <version>3.6.0</version>
+        </dependency>
     </dependencies>
 </project>

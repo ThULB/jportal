@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/">
-  <xsl:param name="vol.page" select="'1'" />
-  <xsl:param name="art.page" select="'1'" />
+  <xsl:param name="vol.start" select="'0'" />
+  <xsl:param name="art.start" select="'0'" />
 
   <xsl:template name="tableOfContent">
     <xsl:param name="id" />
 
-    <xsl:variable name="findVolQuery" select="encoder:encode(concat('parent = ', $id, ' and objectType = jpvolume'))" />
+    <xsl:variable name="findVolQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jpvolume'))" />
     <xsl:variable name="numPerPage_vol" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="volumes"
-      select="document(concat('query:term=', $findVolQuery, '&amp;sortby=maintitles&amp;order=ascending&amp;numPerPage=', $numPerPage_vol,'&amp;page=', $vol.page))" />
-    <xsl:if test="$volumes/mcr:results/@numHits &gt; 0">
+      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=maintitle asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
+    <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
           <h3>Inhaltsverzeichnis</h3>
           <ul>
-            <xsl:apply-templates mode="printListEntryContent" select="$volumes/mcr:results/mcr:hit" />
+            <xsl:apply-templates mode="printListEntryContent" select="$volumes/response/result/doc" />
           </ul>
 
-          <xsl:if test="$volumes/mcr:results/@numHits &gt; $numPerPage_vol">
+          <xsl:if test="$volumes/response/result/@numFound &gt; $numPerPage_vol">
             <div class="resultPaginator">
               <span>Seite: </span>
               <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-                <xsl:apply-templates mode="tableOfContentNavi" select="$volumes/mcr:results" >
-                  <xsl:with-param name="tocName" select="'XSL.vol.page'"/>
+                <xsl:apply-templates mode="tableOfContentNavi" select="$volumes/response" >
+                  <xsl:with-param name="tocName" select="'XSL.vol.start'"/>
                 </xsl:apply-templates>
               </menu>
             </div>
@@ -32,25 +32,25 @@
         </div>
       </li>
     </xsl:if>
-    <xsl:variable name="findArtQuery" select="encoder:encode(concat('parent = ', $id, ' and objectType = jparticle'))" />
+    <xsl:variable name="findArtQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
     <xsl:variable name="numPerPage_art" select="$settings/numPerPage[@for='article']" />
     <xsl:variable name="articles"
-      select="document(concat('query:term=', $findArtQuery, '&amp;sortby=maintitles&amp;order=ascending&amp;numPerPage=', $numPerPage_art,'&amp;page=', $art.page))" />
-    <xsl:if test="$articles/mcr:results/@numHits &gt; 0">
+      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=maintitle asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
+    <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
           <h3>Artikel</h3>
           <ul id="artList">
-            <xsl:apply-templates mode="artList" select="$articles/mcr:results/mcr:hit" />
+            <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
             <!-- <xsl:apply-templates mode="artListEntry" select="$articles/mcr:results/mcr:hit" /> -->
           </ul>
 
-          <xsl:if test="$articles/mcr:results/@numHits &gt; $numPerPage_art">
+          <xsl:if test="$articles/response/result/@numFound &gt; $numPerPage_art">
             <div class="resultPaginator">
               <span>Seite: </span>
               <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-                <xsl:apply-templates mode="tableOfContentNavi" select="$articles/mcr:results" >
-                  <xsl:with-param name="tocName" select="'XSL.art.page'"/>
+                <xsl:apply-templates mode="tableOfContentNavi" select="$articles/response" >
+                  <xsl:with-param name="tocName" select="'XSL.art.start'"/>
                 </xsl:apply-templates>
               </menu>
             </div>
@@ -60,37 +60,37 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template mode="artList" match="mcr:hit">
+  <xsl:template mode="artList" match="doc">
     <xsl:variable name="fields">
       <field name="participants_withName" label="Autor" />
-      <field name="published_art" label="Erschienen" />
-      <field name="published_orig_art" label="Erscheinungsjahr des rez. Werkes" />
-      <field name="published_orig_from_art" label="Erscheinungsbeginn der rez. Werke" />
-      <field name="published_orig_till_art" label="Erscheinungsende der rez. Werke" />
-      <field name="sizes_art" label="Seitenbereich" />
-      <field name="rubrics_id" label="Rubrik" />
+      <field name="date.published" label="Erschienen" />
+      <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
+      <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
+      <field name="date.published_Original_Till" label="Erscheinungsende der rez. Werke" />
+      <field name="size" label="Seitenbereich" />
+      <field name="rubric" label="Rubrik" />
     </xsl:variable>
-    <xsl:variable name="mcrHit" select="." />
-
+    <xsl:variable name="doc" select="." />
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{@id}">
-        <xsl:value-of select="mcr:metaData/mcr:field[@name='maintitles_plain']" />
+      <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+        <xsl:value-of select="str[@name='maintitle']" />
       </a>
       <p>
         <ul class="jp-layout-metadaInSearchResults">
           <xsl:for-each select="xalan:nodeset($fields)/field">
             <xsl:variable name="fieldName" select="@name" />
-            <xsl:if test="$mcrHit/mcr:metaData/mcr:field[@name = $fieldName]">
+            <xsl:if test="$doc/*[@name = $fieldName]">
               <li>
                 <span class="jp-layout-label">
                   <xsl:value-of select="@label" />
                 </span>
-                <xsl:apply-templates mode="artEntryFields" select="$mcrHit/mcr:metaData/mcr:field[@name = $fieldName]" />
+                <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
               </li>
             </xsl:if>
           </xsl:for-each>
         </ul>
-        
+
+        <!-- TODO: link derivate -->
         <xsl:call-template name="derivateDisplay">
           <xsl:with-param name="nodes" select="mcr:metaData/mcr:field[@name='linkDeriv']" />
         </xsl:call-template>
@@ -98,11 +98,11 @@
     </li>
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="mcr:field">
+  <xsl:template mode="artEntryFields" match="str">
     <xsl:value-of select="." />
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="mcr:field[@name='rubrics_id']">
+  <xsl:template mode="artEntryFields" match="arr[@name='rubric']/str">
     <xsl:variable name="category">
       <categ classid="{substring-before(.,'#')}" categid="{substring-after(.,'#')}" />
     </xsl:variable>
@@ -115,36 +115,42 @@
     </span>
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="mcr:field[@name='participants_withName']">
+  <xsl:template mode="artEntryFields" match="str[@name='participant']">
     <span class="jp-layout-inList">
-      <a href="{$WebApplicationBaseURL}receive/{substring-before(.,'#')}">
-        <xsl:value-of select="substring-after(.,'#')" />
+      <a href="{$WebApplicationBaseURL}receive/{../str[@name='participantID']}">
+        <xsl:value-of select="text()" />
       </a>
     </span>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="mcr:hit">
+  <xsl:template mode="printListEntryContent" match="doc">
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{@id}">
-        <xsl:value-of select="mcr:metaData/mcr:field[@name='maintitles_plain']" />
+      <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+        <xsl:value-of select="str[@name='maintitle']" />
       </a>
     </li>
   </xsl:template>
 
-  <xsl:template mode="tableOfContentNavi" match="mcr:results">
+  <xsl:template mode="tableOfContentNavi" match="response">
     <xsl:param name="i" select="1" />
     <xsl:param name="tocName"/>
+
+    <xsl:variable name="start" select="result/@start" />
+    <xsl:variable name="rows" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
+    <xsl:variable name="numFound" select="result/@numFound" />
+    <xsl:variable name="page" select="round(($start div $rows) + 0.5)" />
+    <xsl:variable name="pages" select="round(($numFound div $rows) + 0.5)" />
 
     <xsl:variable name="url">
       <xsl:call-template name="UrlSetParam">
         <xsl:with-param name="url" select="$RequestURL" />
         <xsl:with-param name="par" select="$tocName" />
-        <xsl:with-param name="value" select="$i" />
+        <xsl:with-param name="value" select="($i - 1) * $rows" />
       </xsl:call-template>
     </xsl:variable>
 
     <li>
-      <xsl:if test="$i = /mcr:results/@page">
+      <xsl:if test="$i = $page">
         <xsl:attribute name="class">
             <xsl:value-of select="'jp-layout-selected-underline'" />
           </xsl:attribute>
@@ -154,7 +160,7 @@
       </a>
     </li>
 
-    <xsl:if test="$i &lt; @numPages">
+    <xsl:if test="$i &lt; $pages">
       <xsl:apply-templates mode="tableOfContentNavi" select=".">
         <xsl:with-param name="i" select="$i +1" />
         <xsl:with-param name="tocName" select="$tocName" />

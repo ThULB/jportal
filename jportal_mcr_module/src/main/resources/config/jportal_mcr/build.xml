@@ -53,6 +53,10 @@
 			<fileset dir="${module.directory}/" includes="**/messages_*.properties" />
 		</copy>
 
+		<copy todir="${basedir}/config/solr-home">
+			<fileset dir="${module.directory}/solr" />
+		</copy>
+
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>

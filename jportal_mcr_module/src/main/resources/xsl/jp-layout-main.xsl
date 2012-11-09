@@ -120,7 +120,12 @@
         <div id="logo"></div>
         <div id="searchBar">
           <form id="searchForm" action="/jp-search.xml">
-            <input id="inputField" name="XSL.qt"></input>
+            <xsl:variable name="queryterm">
+              <xsl:if test="$qt != '*'">
+                <xsl:value-of select="$qt" />
+              </xsl:if>
+            </xsl:variable>
+            <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
             <input id="submitButton" type="submit" value="Suche" />
             <xsl:variable name="journalID">
               <xsl:call-template name="getJournalID" />
