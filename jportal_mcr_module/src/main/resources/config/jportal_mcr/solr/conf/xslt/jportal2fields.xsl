@@ -24,6 +24,13 @@
     </add>
   </xsl:template>
 
+  <!-- journalID -->
+  <xsl:template match="/solr-document-container/source/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" priority="1">
+    <field name="journalID">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
   <!-- maintitle -->
   <xsl:template match="/solr-document-container/source/mycoreobject/metadata/maintitles/maintitle" priority="1">
     <!-- extra if is necessary, otherwise the default object2fields template will match for all inherited > 0  -->

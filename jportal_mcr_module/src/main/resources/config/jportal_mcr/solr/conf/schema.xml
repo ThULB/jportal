@@ -147,6 +147,7 @@
     <field name="search_result_description" type="text_general" indexed="true" multiValued="true" stored="true" />
 
     <!-- person -->
+    <field name="journalID" type="string" indexed="true" stored="true" />
     <field name="heading" type="text_general" indexed="true" stored="true" />
     <field name="alternative.name" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="indexBrowsePerson" type="text_general" indexed="true" />
