@@ -168,8 +168,8 @@
     <field name="date.published_Original_From" type="string" index="false" stored="true" />
     <field name="date.published_Original_Till" type="string" index="false" stored="true" />
 
-    <field name="publisher" type="string" index="false" stored="true" />
-    <field name="publisherID" type="string" index="false" stored="true" />
+    <!-- id#text -->
+    <field name="publisher" type="string" index="false" stored="true" multiValued="true"/>
 
     <field name="participant" type="string" index="false" stored="true" />
     <field name="participantID" type="string" index="false" stored="true" />

@@ -42,16 +42,23 @@ public class SearchResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String search(@QueryParam("q") String query, @QueryParam("s") String sortBy, @QueryParam("m") Integer maxResults,
-            @QueryParam("o") String sortOrder) throws IOException {
+    public String search(@QueryParam("q") String query, @QueryParam("sort") String sort, @QueryParam("start") Integer start,
+            @QueryParam("rows") Integer rows) throws IOException {
         SolrURL solrURL = new SolrURL(SolrServerFactory.getSolrServer());
         solrURL.setQueryParamter(query);
-        if(maxResults != null) {
-            solrURL.setRows(maxResults);
+        if (start != null) {
+            solrURL.setStart(start);
         }
-        if(sortBy != null) {
-            solrURL.addSortOption(sortBy, sortOrder);
+        if (rows != null) {
+            solrURL.setRows(rows);
         }
+        if (sort != null) {
+            solrURL.addSortOption(sort);
+        }
+        return search(solrURL);
+    }
+
+    protected String search(SolrURL solrURL) throws IOException  {
         solrURL.setWriterType("json");
         StringWriter writer = new StringWriter();
         IOUtils.copy(solrURL.openStream(), writer, "UTF-8");
@@ -83,10 +90,10 @@ public class SearchResource {
 
     @GET
     @Path("all")
-    public String searchAll(@QueryParam("q") String query, @QueryParam("s") String sortBy, @QueryParam("m") int maxResults,
-            @QueryParam("o") String sortOrder) throws IOException {
+    public String searchAll(@QueryParam("q") String query, @QueryParam("sort") String sort, @QueryParam("start") Integer start,
+            @QueryParam("rows") Integer rows) throws IOException {
         query = MessageFormat.format("(allMeta like \"{0}\") or (content like \"{0}\")", query.toLowerCase());
-        return search(query, sortBy, maxResults, sortOrder);
+        return search(query, sort, start, rows);
     }
 
     protected MCRQuery parseQuery(String query) {

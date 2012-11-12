@@ -52,10 +52,7 @@
   <xsl:template match="/solr-document-container/source/mycoreobject/metadata/participants/participant" mode="jportal.metadata">
     <xsl:if test="@type='mainPublisher'">
       <field name="publisher">
-        <xsl:value-of select="@xlink:title" />
-      </field>
-      <field name="publisherID">
-        <xsl:value-of select="@xlink:href" />
+        <xsl:value-of select="concat(@xlink:href, '#', @xlink:title)" />
       </field>
     </xsl:if>
     <xsl:if test="position() = 1">

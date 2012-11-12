@@ -54,7 +54,8 @@ $(document).ready(function() {
         if (additionalQuery != '') {
             searchQuery = searchQuery + ' ' + additionalQuery;
         }
-        var searchUrl = host + '/rsc/search?s=maintitle_lowercase&q=' + searchQuery;
+        // set rows to 1000 here because otherwise solr returns only 10 entries
+        var searchUrl = host + '/rsc/search?sort=maintitle_lowercase%20desc&rows=1000&q=' + searchQuery;
 
         $('#resultList').jpResultList(searchUrl, function(resultListEntry, metadata) {
             var titleLink = $('<a/>').html(metadata.maintitle).attr('href', '/receive/' + metadata.id);
@@ -72,10 +73,18 @@ $(document).ready(function() {
                 }
                 resultListEntry.append($('<div class="journal-published"/>').html(publishedStr));
             }
-            if (metadata.publisher && metadata.publisherID) {
-                var publisherLink = $('<a/>').html(metadata.publisher).attr('href', host + '/receive/' + metadata.publisherID);
-                var publisher = $('<div class="journal-author"/>').html('Herausgeber: ').append(publisherLink);
-                resultListEntry.append(publisher);
+            if (metadata.publisher) {
+            	for(var i = 0; i < metadata.publisher.length; i++) {
+            		if(metadata.publisher[i].indexOf('#') == -1) {
+            			console.log("Invalid publisher format for '" + metadata.publisher[i] + "'.");
+            			continue;
+            		}
+            		var publisherID = metadata.publisher[i].substring(0, metadata.publisher[i].indexOf('#'));
+            		var publisherText = metadata.publisher[i].substring(metadata.publisher[i].indexOf('#') + 1);
+                    var publisherLink = $('<a/>').html(publisherText).attr('href', host + '/receive/' + publisherID);
+                    var publisher = $('<div class="journal-author"/>').html('Herausgeber: ').append(publisherLink);
+                    resultListEntry.append(publisher);
+            	}
             }
         });
     });
