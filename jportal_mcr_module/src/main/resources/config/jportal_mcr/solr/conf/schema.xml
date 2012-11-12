@@ -198,7 +198,6 @@
     <field name="derCount" type="long" indexed="true" stored="true" />
     <copyField source="derivate.count" dest="derCount" />
 
-
     <field name="typeOfUnit" type="string" indexed="true" stored="true" multiValued="true" />
     <copyField source="cbuUnitTypes" dest="typeOfUnit" />
 
@@ -212,7 +211,7 @@
 
   <uniqueKey>id</uniqueKey>
 
-  <defaultSearchField>content</defaultSearchField>
+  <defaultSearchField>allMeta</defaultSearchField>
 
   <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
   <solrQueryParser defaultOperator="OR" />

@@ -55,7 +55,7 @@ $(document).ready(function() {
             searchQuery = searchQuery + ' ' + additionalQuery;
         }
         // set rows to 1000 here because otherwise solr returns only 10 entries
-        var searchUrl = host + '/rsc/search?sort=maintitle_lowercase%20desc&rows=1000&q=' + searchQuery;
+        var searchUrl = host + '/rsc/search?sort=maintitle_lowercase%20asc&rows=1000&q=' + searchQuery;
 
         $('#resultList').jpResultList(searchUrl, function(resultListEntry, metadata) {
             var titleLink = $('<a/>').html(metadata.maintitle).attr('href', '/receive/' + metadata.id);

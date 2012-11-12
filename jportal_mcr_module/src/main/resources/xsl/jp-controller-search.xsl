@@ -13,8 +13,8 @@
       </xsl:if>
     </xsl:variable>
 
-    <xsl:variable name="queryTerm" select="encoder:encode(concat('+allMeta:', $qt))" />
-    <xsl:variable name="searchResults" select="document(concat('solr:q=',$queryTerm, $journalIDTerm,'&amp;rows=',$rows,'&amp;start=',$start))"></xsl:variable>
+    <!-- <xsl:variable name="queryTerm" select="encoder:encode(concat('allMeta:', $qt))" />-->
+    <xsl:variable name="searchResults" select="document(concat('solr:q=', encoder:encode($qt), $journalIDTerm,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))"></xsl:variable>
     <xsl:apply-templates mode="searchResults" select="$searchResults" />
   </xsl:template>
 </xsl:stylesheet>
