@@ -25,7 +25,7 @@
   </xsl:template>
 
   <!-- journalID -->
-  <xsl:template match="/solr-document-container/source/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" priority="1">
+  <xsl:template match="/solr-document-container/source/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID[position() = 1]" priority="1">
     <field name="journalID">
       <xsl:value-of select="text()" />
     </field>
@@ -33,9 +33,22 @@
 
   <!-- maintitle -->
   <xsl:template match="/solr-document-container/source/mycoreobject/metadata/maintitles/maintitle" priority="1">
-    <!-- extra if is necessary, otherwise the default object2fields template will match for all inherited > 0  -->
     <xsl:if test="@inherited='0'">
       <field name="maintitle">
+        <xsl:value-of select="text()" />
+      </field>
+    </xsl:if>
+    <!-- journalTitle -->
+    <xsl:variable name="inheritedMax">
+      <xsl:for-each select="../maintitle/@inherited">
+        <xsl:sort data-type="number" />
+        <xsl:if test="position() = last()">
+          <xsl:value-of select="." />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:if test="@inherited = $inheritedMax">
+      <field name="journalTitle">
         <xsl:value-of select="text()" />
       </field>
     </xsl:if>

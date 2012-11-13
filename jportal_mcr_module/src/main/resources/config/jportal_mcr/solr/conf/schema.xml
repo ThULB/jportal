@@ -78,8 +78,8 @@
     <field name="id" type="string" indexed="true" stored="true" required="true" />
     <field name="objectType" type="string" indexed="true" stored="true" />
     <field name="objectProject" type="string" indexed="true" stored="true" />
-    <field name="modifydate" type="date" indexed="true" stored="true" multiValued="false" />
-    <field name="createdate" type="date" indexed="true" stored="true" multiValued="false" />
+    <field name="created" type="date" indexed="true" stored="true" />
+    <field name="modified" type="date" indexed="true" stored="true" />
 
     <!-- parent handling -->
     <field name="parent.href" type="string" indexed="false" stored="false" />
@@ -147,7 +147,6 @@
     <field name="search_result_description" type="text_general" indexed="true" multiValued="true" stored="true" />
 
     <!-- person -->
-    <field name="journalID" type="string" indexed="true" stored="true" />
     <field name="heading" type="text_general" indexed="true" stored="true" />
     <field name="alternative.name" type="text_general" indexed="true" stored="true" multiValued="true" />
     <field name="indexBrowsePerson" type="text_general" indexed="true" />
@@ -158,6 +157,9 @@
 
     <!-- JPORTAL specific fields -->
     <field name="allMeta" type="text_de" index="true" stored="false" multiValued="true" />
+
+    <field name="journalID" type="string" indexed="true" stored="true" />
+    <field name="journalTitle" type="string" indexed="true" stored="true" />
 
     <field name="maintitle" type="string" index="true" stored="true" />
     <field name="maintitle_lowercase" type="lowercase" index="true" stored="false" />
@@ -202,11 +204,11 @@
     <field name="typeOfUnit" type="string" indexed="true" stored="true" multiValued="true" />
     <copyField source="cbuUnitTypes" dest="typeOfUnit" />
 
-    <field name="created" type="date" indexed="true" stored="true" multiValued="false" />
-    <copyField source="createdate" dest="created" />
+    <field name="servdate.type.createdate" type="date" indexed="true" stored="true" />
+    <copyField source="servdate.type.createdate" dest="created" />
 
-    <field name="modified" type="date" indexed="true" stored="true" multiValued="false" />
-    <copyField source="modifydate" dest="modified" />
+    <field name="servdate.type.modifydate" type="date" indexed="true" stored="true" />
+    <copyField source="servdate.type.modifydate" dest="modified" />
 
   </fields>
 
