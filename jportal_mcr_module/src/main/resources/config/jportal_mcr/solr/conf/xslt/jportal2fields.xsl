@@ -56,6 +56,9 @@
 
   <!-- dates -->
   <xsl:template match="/solr-document-container/source/mycoreobject/metadata/dates/date[@inherited='0']" priority="1">
+    <field name="date">
+      <xsl:value-of select="text()" />
+    </field>
     <field name="date.{@type}">
       <xsl:value-of select="text()" />
     </field>
