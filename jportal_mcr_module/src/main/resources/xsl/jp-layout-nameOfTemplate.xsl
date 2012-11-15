@@ -4,7 +4,7 @@
   <xsl:variable name="editorForm" select="'editor-jpjournal editor-jpvolume editor-jparticle'"></xsl:variable>
   <xsl:template name="nameOfTemplate">
     <xsl:apply-templates mode="nameOfTemplate"
-      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch" />
+      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch|/MyCoReWebPage/section/jpadvancedsearch" />
   </xsl:template>
 
   <xsl:template mode="nameOfTemplate" match="mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd']">
@@ -24,7 +24,7 @@
 
   <xsl:template name="getJournalID">
     <xsl:apply-templates mode="journalID"
-      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch" />
+      select="/mycoreobject|/MyCoReWebPage//editor[contains($editorForm, @id)]|/MyCoReWebPage/section/jpsearch|/MyCoReWebPage/section/jpadvancedsearch" />
   </xsl:template>
 
   <xsl:template mode="journalID" match="mycoreobject">
@@ -53,7 +53,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template mode="journalID" match="jpsearch">
+  <xsl:template mode="journalID" match="jpsearch | jpadvancedsearch">
     <xsl:value-of select="$searchjournalID" />
   </xsl:template>
 

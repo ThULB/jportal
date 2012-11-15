@@ -26,8 +26,8 @@ import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRQueryParser;
 import org.mycore.services.fieldquery.MCRResults;
 import org.mycore.services.fieldquery.MCRSortBy;
-import org.mycore.solr.SolrServerFactory;
-import org.mycore.solr.search.SolrURL;
+import org.mycore.solr.MCRSolrServerFactory;
+import org.mycore.solr.search.MCRSolrURL;
 
 import fsu.jportal.gson.MCRHitTypeAdapter;
 import fsu.jportal.gson.MCRResultsTypeAdapter;
@@ -44,7 +44,7 @@ public class SearchResource {
     @Produces(MediaType.APPLICATION_JSON)
     public String search(@QueryParam("q") String query, @QueryParam("sort") String sort, @QueryParam("start") Integer start,
             @QueryParam("rows") Integer rows) throws IOException {
-        SolrURL solrURL = new SolrURL(SolrServerFactory.getSolrServer());
+        MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer());
         solrURL.setQueryParamter(query);
         if (start != null) {
             solrURL.setStart(start);
@@ -58,7 +58,7 @@ public class SearchResource {
         return search(solrURL);
     }
 
-    protected String search(SolrURL solrURL) throws IOException  {
+    protected String search(MCRSolrURL solrURL) throws IOException  {
         solrURL.setWriterType("json");
         StringWriter writer = new StringWriter();
         IOUtils.copy(solrURL.openStream(), writer, "UTF-8");

@@ -1,5 +1,7 @@
 package org.mycore.common.xml;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,5 +39,36 @@ public class MCRJPortalXMLFunctions {
             }
         }
         return MCRTranslation.translate("metaData.date");
+    }
+
+    public static String toSolrQuery(String input) throws UnsupportedEncodingException {
+        String[] queries = input.split("#");
+        String solrQuery = null;
+        for(String query : queries) {
+            SolrFieldQuery solrFieldQuery = new SolrFieldQuery(query);
+            if(solrFieldQuery.isValueSet()) {
+                solrQuery = solrQuery == null ? solrFieldQuery.toString() : solrQuery + " " + solrFieldQuery.toString();
+            }
+        }
+        return solrQuery == null ? "*" : URLEncoder.encode(solrQuery, "UTF-8");
+    }
+
+    private static class SolrFieldQuery {
+        public String field;
+        public String value;
+
+        public SolrFieldQuery(String base) {
+            this.field = base.substring(0, base.indexOf("="));
+            this.value = base.substring(base.indexOf("=") + 1);
+        }
+
+        public boolean isValueSet() {
+            return this.value != null && !this.value.equals("");
+        }
+
+        @Override
+        public String toString() {
+            return this.field + ":" + this.value;
+        }
     }
 }

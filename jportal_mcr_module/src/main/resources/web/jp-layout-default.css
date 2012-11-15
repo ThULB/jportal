@@ -107,40 +107,6 @@ body {
 	text-decoration: underline;
 }
 
-#jp-journal-navigation {
-	background-color: #859198;
-	font-weight: bold;
-	height: 30px;
-	padding-top: 5px;
-}
-
-#jp-journal-navigation .jp-layout-marginLR {
-	background-color: transparent;
-}
-
-#jp-journal-navigation .jp-layout-marginLR>* {
-	display: inline;
-	left: 954px;
-	top: 138px;
-}
-
-#jp-journal-navigation #searchForm #inputField {
-	width: 555px;
-}
-
-#jp-journal-navigation #searchForm #submitButton {
-	margin-left: 10px;
-}
-
-#jp-journal-navigation menu {
-	clear: both;
-	position: absolute;
-}
-
-#jp-journal-navigation menu.jp-layout-horiz-menu>li:first-child {
-	margin-left: 20px;
-}
-
 .jp-layout-horiz-menu,.topList {
 	list-style-type: none;
 	padding: 0;
@@ -167,10 +133,6 @@ body {
 .jp-layout-submenu-dropdown>li {
 	float: none;
 	margin: 8px 0 0;
-}
-
-#jp-journal-navigation a:hover {
-	color: white;
 }
 
 .jp-layout-horiz-menu>li:first-child,.topList li:first-child {
@@ -575,13 +537,32 @@ body {
 	border-bottom-width: 2px;
 }
 
+#resultListHeader .navigation {
+    display: inline-block;
+    float: right;
+    margin: 0;
+    padding: 0;
+}
+
+#resultListHeader .navigation li {
+	display: inline-block;
+	padding: 0 10px;
+	border-left: 1px solid;
+}
+#resultListHeader .navigation li:first-child {
+	border: medium none;
+}
+#resultListHeader .navigation li:last-child {
+	padding-right: 0px;
+}
+
 #resultPaginator {
 	margin-top: 25px;
 	padding-top: 20px;
 }
 
 .jp-layout-topline {
-	border-top: 1px solid;
+	/*border-top: 1px solid;*/
 }
 
 #searchResults .jp-layout-list-nodecoration>.jp-layout-topline:first-child
@@ -591,7 +572,7 @@ body {
 }
 
 #searchResults .jp-layout-list-nodecoration>.jp-layout-topline {
-	padding-top: 20px;
+	padding-top: 6px;
 }
 
 #resultPaginator {
@@ -603,11 +584,12 @@ body {
 }
 
 #resultList {
-	border-right: 1px solid;
+/*	border-right: 1px solid;
 	float: left;
-	padding-bottom: 49px;
 	padding-right: 29px;
+	*/
 	width: 700px;
+	padding-bottom: 49px;
 }
 
 #searchRightNavi {
@@ -810,6 +792,19 @@ body {
 	width: auto;
 }
 
+#advancedSearchForm .row {
+	padding-bottom: 5px;
+}
+#advancedSearchForm .row .field {
+	margin-right: 12px;
+}
+#advancedSearchForm .row .value {
+	width: 400px;
+}
+#advancedSearchForm .submit {
+	margin-top: 12px;
+}
+
 #resultList .jp-layout-derivateWrapper, #jp-tableOfContent .jp-layout-derivateWrapper {
 	width: auto;
 }
@@ -920,7 +915,6 @@ body {
 	padding-left: 0px;
 	font-style: italic;
 	float: left;
-	max-width: 420px;
 }
 
 #ckeditorContainer {

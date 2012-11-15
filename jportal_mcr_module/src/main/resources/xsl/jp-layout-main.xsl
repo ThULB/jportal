@@ -118,23 +118,25 @@
           </div>
         </div>
         <div id="logo"></div>
-        <div id="searchBar">
-          <form id="searchForm" action="/jp-search.xml">
-            <xsl:variable name="queryterm">
-              <xsl:if test="$qt != '*'">
-                <xsl:value-of select="$qt" />
+        <xsl:if test="not(contains($RequestURL, 'jp-advancedsearch.xml'))">
+          <div id="searchBar">
+            <form id="searchForm" action="/jp-search.xml">
+              <xsl:variable name="queryterm">
+                <xsl:if test="$qt != '*'">
+                  <xsl:value-of select="$qt" />
+                </xsl:if>
+              </xsl:variable>
+              <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
+              <input id="submitButton" type="submit" value="Suche" />
+              <xsl:variable name="journalID">
+                <xsl:call-template name="getJournalID" />
+              </xsl:variable>
+              <xsl:if test="$journalID != ''">
+                <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
               </xsl:if>
-            </xsl:variable>
-            <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
-            <input id="submitButton" type="submit" value="Suche" />
-            <xsl:variable name="journalID">
-              <xsl:call-template name="getJournalID" />
-            </xsl:variable>
-            <xsl:if test="$journalID != ''">
-              <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
-            </xsl:if>
-          </form>
-        </div>
+            </form>
+          </div>
+        </xsl:if>
         <div id="main">
           <xsl:apply-templates />
         </div>
