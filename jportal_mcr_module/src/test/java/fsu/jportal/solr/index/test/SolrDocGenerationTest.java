@@ -53,6 +53,10 @@ public class SolrDocGenerationTest {
         Document resultXML = jdomResult.getDocument();
         
         xmlOutputter.output(resultXML, System.out);
+        
+        assertSolrFiled(resultXML, "journalID", 1);
+        assertSolrFiled(resultXML, "maintitle", 1);
+        assertSolrFiled(resultXML, "journalTitle", 1);
     }
     
     @Test

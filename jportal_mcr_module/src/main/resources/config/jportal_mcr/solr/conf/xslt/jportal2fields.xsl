@@ -17,6 +17,7 @@
   </xsl:template>
 
   <xsl:template match="mycoreobject|mycorederivate">
+    <xsl:apply-templates select="structure"/>
     <xsl:apply-templates mode="jportal.metadata" select="metadata" />
     <xsl:apply-templates mode="jportal.allMeta" select="metadata/*//*" />
   </xsl:template>
