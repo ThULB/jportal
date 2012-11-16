@@ -46,11 +46,21 @@
     <field name="maintitle">
       <xsl:value-of select="text()" />
     </field>
+    <field name="titles">
+      <xsl:value-of select="text()" />
+    </field>
   </xsl:template>
 
   <xsl:template mode="jportal.metadata.journalTitle"
     match="maintitle[not(preceding-sibling::maintitle/@inherited &gt;= @inherited) and not(following-sibling::maintitle/@inherited &gt; @inherited)]">
     <field name="journalTitle">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <!-- titles -->
+  <xsl:template match="subtitles/subtitle[@inherited='0']" mode="jportal.metadata">
+    <field name="titles">
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
