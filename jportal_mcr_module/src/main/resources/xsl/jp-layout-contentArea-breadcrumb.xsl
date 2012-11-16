@@ -56,6 +56,12 @@
     </a>
   </xsl:template>
 
+  <xsl:template mode="printListEntryContent" match="parent[@error!='']">
+    <span style="color: red">
+      <xsl:value-of select="concat(@error, '( ', @xlink:href, ')')" />
+    </span>
+  </xsl:template>
+
   <xsl:template mode="printListEntryContent" match="maintitle[@inherited='0']">
     <span>
       <xsl:call-template name="shortenString">

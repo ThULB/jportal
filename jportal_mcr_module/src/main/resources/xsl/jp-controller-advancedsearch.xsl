@@ -19,7 +19,6 @@
     <entry label="Titel" field="titles" />
     <entry label="Name (Person/Institution)" field="heading" />
     <entry label="Jahr" field="date" />
-    <entry label="Ort" field="place" />
   </xsl:variable>
 
   <xsl:template match="jpadvancedsearch">

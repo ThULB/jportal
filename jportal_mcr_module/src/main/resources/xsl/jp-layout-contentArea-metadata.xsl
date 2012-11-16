@@ -14,15 +14,14 @@
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
   <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaISO8601Date'" />
-  
-  <xsl:variable name="ignoreMetadata" select="'maintitles'" />
+
+  <xsl:template mode="metadataDisplay" match="metadata/maintitles">
+  </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
-    <xsl:if test="not(contains($ignoreMetadata, name()))">
-      <xsl:call-template name="metadataField">
-        <xsl:with-param name="fields" select="*" />
-      </xsl:call-template>
-    </xsl:if>
+    <xsl:call-template name="metadataField">
+      <xsl:with-param name="fields" select="*" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]">

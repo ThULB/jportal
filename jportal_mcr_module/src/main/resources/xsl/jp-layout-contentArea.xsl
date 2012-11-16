@@ -84,7 +84,7 @@
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
-            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
+            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'maintitles')) and not(contains(name(), 'hidden_')) and */@inherited='0']" />
           </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
