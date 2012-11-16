@@ -5,6 +5,12 @@
   <xsl:param name="start" select="'0'" />
   <xsl:param name="rows" select="'10'" />
 
+  <!-- For Subselect -->
+  <xsl:param name="subselect.type" select="''" />
+  <xsl:param name="subselect.session" select="''"/>
+  <xsl:param name="subselect.varpath" select="''"/>
+  <xsl:param name="subselect.webpage" select="''"/>
+  
   <xsl:template match="jpsearch">
     <xsl:variable name="journalIDTerm">
       <xsl:if test="$searchjournalID != ''">

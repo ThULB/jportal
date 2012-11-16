@@ -14,6 +14,12 @@
   <xsl:param name="layout" />
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
+  
+  <!-- For Subselect -->
+  <xsl:param name="subselect.type" select="''" />
+  <xsl:param name="subselect.session" select="''"/>
+  <xsl:param name="subselect.varpath" select="''"/>
+  <xsl:param name="subselect.webpage" select="''"/>
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
@@ -118,6 +124,16 @@
           </div>
         </div>
         <div id="logo"></div>
+        <xsl:variable name="searchURL">
+          <xsl:value-of select="'/jp-search.xml'"/>
+          <xsl:if test="$subselect.type != ''">
+            <xsl:value-of select="concat('?XSL.subselect.type=',$subselect.type)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.session.SESSION=',$subselect.session)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESSION=',$subselect.varpath)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESSION=',$subselect.webpage)"/>
+          </xsl:if>
+        </xsl:variable>
+        
         <xsl:if test="not(contains($RequestURL, 'jp-advancedsearch.xml'))">
           <div id="searchBar">
             <form id="searchForm" action="/jp-search.xml">

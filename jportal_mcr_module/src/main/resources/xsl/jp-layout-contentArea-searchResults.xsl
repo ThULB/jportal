@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
   xmlns:xalan="http://xml.apache.org/xalan">
+  
+  <!-- For Subselect -->
+  <xsl:param name="subselect.type" select="''" />
+  <xsl:param name="subselect.session" select="''"/>
+  <xsl:param name="subselect.varpath" select="''"/>
+  <xsl:param name="subselect.webpage" select="''"/>
 
   <xsl:template name="jpsearch.getResultInfo">
     <xsl:param name="response" />
@@ -157,7 +163,16 @@
             <xsl:value-of select="'jp-layout-selected-underline'" />
           </xsl:attribute>
         </xsl:if>
-        <a href="/jp-search.xml?XSL.qt={$qt}&amp;XSL.searchjournalID={$searchjournalID}&amp;XSL.start={($i - 1) * $rows}">
+        <xsl:variable name="subSelectParam">
+          <xsl:if test="$subselect.type != ''">
+            <xsl:value-of select="concat('&amp;XSL.subselect.type=',$subselect.type)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.session.SESION=',$subselect.session)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESION=',$subselect.varpath)"/>
+            <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESION=',$subselect.webpage)"/>
+          </xsl:if>
+        </xsl:variable>
+        
+        <a href="/jp-search.xml?XSL.qt={$qt}&amp;XSL.searchjournalID={$searchjournalID}&amp;XSL.start={($i - 1) * $rows}{$subSelectParam}">
           <xsl:value-of select="$i" />
         </a>
       </li>

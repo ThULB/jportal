@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <source>
+    <mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+      xsi:noNamespaceSchemaLocation="datamodel-jpjournal.xsd" ID="jportal_jpjournal_00000024" label="jportal_jpjournal_00000024" version="2.0">
+      <structure>
+        <children class="MCRMetaLinkID">
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031061" xlink:href="jportal_jpvolume_00031061" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031260" xlink:href="jportal_jpvolume_00031260" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031274" xlink:href="jportal_jpvolume_00031274" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031288" xlink:href="jportal_jpvolume_00031288" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031302" xlink:href="jportal_jpvolume_00031302" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031316" xlink:href="jportal_jpvolume_00031316" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031330" xlink:href="jportal_jpvolume_00031330" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031344" xlink:href="jportal_jpvolume_00031344" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031358" xlink:href="jportal_jpvolume_00031358" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031372" xlink:href="jportal_jpvolume_00031372" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031386" xlink:href="jportal_jpvolume_00031386" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031400" xlink:href="jportal_jpvolume_00031400" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031414" xlink:href="jportal_jpvolume_00031414" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031428" xlink:href="jportal_jpvolume_00031428" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031442" xlink:href="jportal_jpvolume_00031442" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031456" xlink:href="jportal_jpvolume_00031456" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031470" xlink:href="jportal_jpvolume_00031470" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031484" xlink:href="jportal_jpvolume_00031484" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031498" xlink:href="jportal_jpvolume_00031498" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031512" xlink:href="jportal_jpvolume_00031512" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031526" xlink:href="jportal_jpvolume_00031526" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031540" xlink:href="jportal_jpvolume_00031540" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031554" xlink:href="jportal_jpvolume_00031554" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031568" xlink:href="jportal_jpvolume_00031568" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031582" xlink:href="jportal_jpvolume_00031582" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031596" xlink:href="jportal_jpvolume_00031596" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031610" xlink:href="jportal_jpvolume_00031610" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031624" xlink:href="jportal_jpvolume_00031624" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031638" xlink:href="jportal_jpvolume_00031638" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031652" xlink:href="jportal_jpvolume_00031652" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031666" xlink:href="jportal_jpvolume_00031666" />
+          <child inherited="0" xlink:type="locator" xlink:title="jportal_jpvolume_00031680" xlink:href="jportal_jpvolume_00031680" />
+        </children>
+      </structure>
+      <metadata>
+        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+          <maintitle inherited="0" form="plain">ISIS</maintitle>
+        </maintitles>
+        <participants class="MCRMetaLinkID" heritable="false" notinherit="false">
+          <participant type="mainPublisher" inherited="0" xlink:type="locator"
+            xlink:title="Oken, Lorenz (1779-08-01 - 1851-08-11, Dt. Naturforscher; Philosoph; Physiologe; Zoologe; Professor)" xlink:href="jportal_person_00029866" />
+          <participant type="partner" inherited="0" xlink:type="locator"
+            xlink:title="Thüringer Universitäts- und Landesbibliothek &lt;Jena&gt; (Jena)" xlink:href="jportal_jpinst_00000001" />
+          <participant type="partner" inherited="0" xlink:type="locator"
+            xlink:title="Universitätsbibliothek Johann Christian Senckenberg &lt;Frankfurt, Main&gt; (Frankfurt / Main)" xlink:href="jportal_jpinst_00019123" />
+          <participant type="partner" inherited="0" xlink:type="locator"
+            xlink:title="Institut für Geschichte der Medizin, Naturwissenschaft und Technik &lt;Jena&gt; (Jena)" xlink:href="jportal_jpinst_00019124" />
+        </participants>
+        <dates class="MCRMetaISO8601Date" heritable="true" notinherit="false">
+          <date type="published_from" inherited="0">1817</date>
+          <date type="published_until" inherited="0">1848</date>
+        </dates>
+        <languages class="MCRMetaClassification" heritable="false" notinherit="false">
+          <language inherited="0" classid="jportal_class_00000004" categid="de" />
+        </languages>
+        <ddcs class="MCRMetaClassification" heritable="false" notinherit="false">
+          <ddc inherited="0" classid="jportal_class_00000003" categid="07" />
+          <ddc inherited="0" classid="jportal_class_00000003" categid="50" />
+        </ddcs>
+        <contentClassis1 class="MCRMetaClassification" heritable="false" notinherit="false">
+          <contentClassi1 inherited="0" classid="jportal_class_00000061" categid="historical" />
+        </contentClassis1>
+        <contentClassis2 class="MCRMetaClassification" heritable="false" notinherit="false">
+          <contentClassi2 inherited="0" classid="jportal_class_00000062" categid="sfb-482" />
+        </contentClassis2>
+        <contentClassis3 class="MCRMetaClassification" heritable="false" notinherit="false">
+          <contentClassi3 inherited="0" classid="jportal_class_00000063" categid="thulb" />
+        </contentClassis3>
+        <contentClassis6 class="MCRMetaClassification" heritable="false" notinherit="false">
+          <contentClassi6 inherited="0" classid="jportal_class_00000064" categid="d1" />
+        </contentClassis6>
+        <hidden_templates class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_template inherited="0" form="plain">template_isis</hidden_template>
+        </hidden_templates>
+        <dataModelCoverages class="MCRMetaClassification" heritable="false" notinherit="false">
+          <dataModelCoverage inherited="0" classid="jportal_class_00000067" categid="fully" />
+        </dataModelCoverages>
+        <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+          <hidden_jpjournalID inherited="0" form="plain">jportal_jpjournal_00000024</hidden_jpjournalID>
+        </hidden_jpjournalsID>
+        <hidden_websitecontexts class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_websitecontext inherited="0" form="plain">/content/main/journals/isis.xml</hidden_websitecontext>
+        </hidden_websitecontexts>
+        <hidden_pubTypesID class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_pubTypeID inherited="0" form="plain">jportal_class_00000046</hidden_pubTypeID>
+        </hidden_pubTypesID>
+        <hidden_classispub class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_classipub inherited="0" form="plain">jportal_class_00000051</hidden_classipub>
+        </hidden_classispub>
+        <hidden_classispub2 class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_classipub2 inherited="0" form="plain">jportal_class_00000050</hidden_classipub2>
+        </hidden_classispub2>
+        <hidden_classispub3 class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_classipub3 inherited="0" form="plain">jportal_class_00000049</hidden_classipub3>
+        </hidden_classispub3>
+        <hidden_classispub4 class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_classipub4 inherited="0" form="plain">jportal_class_00000048</hidden_classipub4>
+        </hidden_classispub4>
+        <hidden_rubricsID class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_rubricID inherited="0" form="plain">jportal_class_00000047</hidden_rubricID>
+        </hidden_rubricsID>
+      </metadata>
+      <service>
+        <servdates class="MCRMetaISO8601Date">
+          <servdate type="createdate" inherited="0">2007-06-25T12:46:21.863Z</servdate>
+          <servdate type="modifydate" inherited="0">2012-10-22T12:18:02.842Z</servdate>
+        </servdates>
+      </service>
+    </mycoreobject>
+    <user>
+    </user>
+  </source>
+</solr-document-container>

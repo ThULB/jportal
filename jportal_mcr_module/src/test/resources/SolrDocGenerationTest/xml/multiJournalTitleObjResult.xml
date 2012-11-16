@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <source>
+    <mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+      xsi:noNamespaceSchemaLocation="datamodel-jpvolume.xsd" ID="jportal_jpvolume_00067898" label="jportal_jpvolume_00067898" version="2.0">
+      <structure>
+        <parents class="MCRMetaLinkID">
+          <parent inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00066951" />
+        </parents>
+      </structure>
+      <metadata>
+        <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+          <maintitle inherited="0" form="plain">Bl. A1 recto</maintitle>
+          <maintitle inherited="1" form="plain">Ander Theil. Coniectura Astrologica, Nach der Alten Zeit Astrologische Muhtmassung/ Auff
+            das Jahr nach der Gnadenreichen Geburt unsers lieben Herren und Erlösers Jesu Christi MDCLVII. \ ... abgefasset durch
+            Christophorum Richtern/ Görlic. p.t. Diaconum zu Kohren in Meissen</maintitle>
+          <maintitle inherited="2" form="plain">1657</maintitle>
+          <maintitle inherited="3" form="plain">Jahres-Zeiger Schreib-Kalender (Druckort: Leipzig)</maintitle>
+          <maintitle inherited="2" form="plain">1657</maintitle>
+          <maintitle inherited="3" form="plain">Jahres-Zeiger Schreib-Kalender (Druckort: Leipzig)</maintitle>
+        </maintitles>
+        <volContentClassis1 class="MCRMetaClassification" heritable="false" notinherit="false">
+          <volContentClassi1 inherited="0" classid="jportal_class_00000083" categid="Exodus_2. Mose, Kap. 23" />
+        </volContentClassis1>
+        <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
+          <hidden_position inherited="0" form="plain">01</hidden_position>
+        </hidden_positions>
+        <derivateLinks class="MCRMetaDerivateLink" heritable="false" notinherit="false">
+          <derivateLink inherited="0" xlink:type="locator" xlink:href="jportal_derivate_00167993/K_1657_0119_re.tif" />
+        </derivateLinks>
+        <dates class="MCRMetaISO8601Date" heritable="true" notinherit="false">
+          <date type="published_from" inherited="3">1655</date>
+          <date type="published_until" inherited="3">1699</date>
+        </dates>
+        <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+          <hidden_jpjournalID inherited="3" form="plain">jportal_jpjournal_00000107</hidden_jpjournalID>
+        </hidden_jpjournalsID>
+      </metadata>
+      <service>
+        <servdates class="MCRMetaISO8601Date">
+          <servdate type="createdate" inherited="0">2008-12-16T10:43:12.745Z</servdate>
+          <servdate type="modifydate" inherited="0">2011-03-09T12:12:38.134Z</servdate>
+        </servdates>
+      </service>
+    </mycoreobject>
+    <user>
+    </user>
+  </source>
+</solr-document-container>
