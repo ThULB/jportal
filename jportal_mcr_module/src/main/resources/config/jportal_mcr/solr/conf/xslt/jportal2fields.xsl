@@ -17,7 +17,10 @@
   </xsl:template>
 
   <xsl:template match="mycoreobject|mycorederivate">
-    <xsl:apply-templates select="structure"/>
+    <xsl:apply-templates select="structure" />
+    <xsl:if test="contains(@ID, '_jpinst_')">
+      <xsl:apply-templates mode="jportal.jpinst.metadata" select="metadata" />
+    </xsl:if>
     <xsl:apply-templates mode="jportal.metadata" select="metadata" />
     <xsl:apply-templates mode="jportal.allMeta" select="metadata/*//*" />
   </xsl:template>
@@ -87,9 +90,9 @@
   </xsl:template>
 
   <!-- jpinst heading -->
-  <xsl:template match="/solr-document-container/source/mycoreobject[contains(@ID, '_jpinst_')]" mode="jportal.metadata">
+  <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
     <field name="heading">
-      <xsl:value-of select="metadata/names/name/fullname" />
+      <xsl:value-of select="." />
     </field>
   </xsl:template>
 
