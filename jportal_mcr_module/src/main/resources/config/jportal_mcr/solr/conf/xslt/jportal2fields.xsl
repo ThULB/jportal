@@ -32,26 +32,23 @@
   </xsl:template>
 
   <!-- maintitle -->
-  <xsl:template match="maintitles/maintitle" mode="jportal.metadata">
-    <xsl:if test="@inherited='0'">
-      <field name="maintitle">
-        <xsl:value-of select="text()" />
-      </field>
-    </xsl:if>
-    <!-- journalTitle -->
-    <xsl:variable name="inheritedMax">
-      <xsl:for-each select="../maintitle/@inherited">
-        <xsl:sort data-type="number" />
-        <xsl:if test="position() = last()">
-          <xsl:value-of select="." />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
-    <xsl:if test="@inherited = $inheritedMax">
-      <field name="journalTitle">
-        <xsl:value-of select="text()" />
-      </field>
-    </xsl:if>
+  <xsl:template match="maintitles" mode="jportal.metadata">
+    <xsl:apply-templates mode="jportal.metadata.maintitle" select="maintitle[@inherited='0']" />
+    <xsl:apply-templates mode="jportal.metadata.journalTitle"
+      select="maintitle[not(preceding-sibling::maintitle/@inherited &gt;= @inherited) and not(following-sibling::maintitle/@inherited &gt; @inherited)]" />
+  </xsl:template>
+
+  <xsl:template mode="jportal.metadata.maintitle" match="maintitle[@inherited='0']">
+    <field name="maintitle">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <xsl:template mode="jportal.metadata.journalTitle"
+    match="maintitle[not(preceding-sibling::maintitle/@inherited &gt;= @inherited) and not(following-sibling::maintitle/@inherited &gt; @inherited)]">
+    <field name="journalTitle">
+      <xsl:value-of select="text()" />
+    </field>
   </xsl:template>
 
   <!-- dates -->
@@ -87,7 +84,7 @@
       </field>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- jpinst heading -->
   <xsl:template match="/solr-document-container/source/mycoreobject[contains(@ID, '_jpinst_')]" mode="jportal.metadata">
     <field name="heading">
@@ -96,13 +93,12 @@
   </xsl:template>
 
   <!-- allMeta -->
-  <xsl:variable name="ignore" select="'servdates'" />
   <xsl:template match="*[translate(normalize-space(text()), ' ', '')!='']" mode="jportal.allMeta">
     <field name="allMeta">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
-  
+
   <xsl:template match="*[@xlink:title!='']" mode="jportal.allMeta">
     <field name="allMeta">
       <xsl:value-of select="@xlink:title" />
