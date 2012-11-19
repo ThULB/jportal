@@ -61,7 +61,7 @@
         <xsl:with-param name="repsonse" select="." />
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="resultInfo" select="$resultInfoXML" />
+    <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
 
     <div id="searchResults">
       <div id="resultListHeader" class="jp-layout-bottomline jp-layout-border-light">
