@@ -8,6 +8,16 @@
   <xsl:param name="subselect.varpath" select="''" />
   <xsl:param name="subselect.webpage" select="''" />
 
+  <xsl:variable name="baseSearchURL">
+    <xsl:value-of select="concat('/jp-search.xml?XSL.qt=',$qt,'&amp;XSL.searchjournalID=',$searchjournalID)" />
+    <xsl:if test="$subselect.type != ''">
+      <xsl:value-of select="concat('&amp;XSL.subselect.type=',$subselect.type)" />
+      <xsl:value-of select="concat('&amp;XSL.subselect.session.SESION=',$subselect.session)" />
+      <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESION=',$subselect.varpath)" />
+      <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESION=',$subselect.webpage)" />
+    </xsl:if>
+  </xsl:variable>
+
   <xsl:template name="jpsearch.getResultInfo">
     <xsl:param name="response" />
     <xsl:variable name="start" select="result/@start" />
@@ -180,7 +190,7 @@
     <xsl:param name="resultInfo" />
     <xsl:param name="pageEnd" />
     <xsl:param name="i" />
-    
+
     <xsl:if test="$i &lt;= $resultInfo/pages and $i &lt;= $pageEnd">
       <li>
         <xsl:if test="$i = $resultInfo/page + 1">
@@ -188,15 +198,7 @@
             <xsl:value-of select="'jp-layout-selected-underline'" />
           </xsl:attribute>
         </xsl:if>
-        <xsl:variable name="subSelectParam">
-          <xsl:if test="$subselect.type != ''">
-            <xsl:value-of select="concat('&amp;XSL.subselect.type=',$subselect.type)" />
-            <xsl:value-of select="concat('&amp;XSL.subselect.session.SESION=',$subselect.session)" />
-            <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESION=',$subselect.varpath)" />
-            <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESION=',$subselect.webpage)" />
-          </xsl:if>
-        </xsl:variable>
-        <a href="/jp-search.xml?XSL.qt={$qt}&amp;XSL.searchjournalID={$searchjournalID}&amp;XSL.start={($i - 1) * $rows}{$subSelectParam}">
+        <a href="{$baseSearchURL}&amp;XSL.start={($i - 1) * $rows}">
           <xsl:value-of select="$i" />
         </a>
       </li>
@@ -234,7 +236,7 @@
         <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
           <xsl:if test="($start - $rows) &gt;= 0">
             <li>
-              <a href="/jp-search.xml?XSL.qt={$qt}&amp;XSL.searchjournalID={$searchjournalID}&amp;XSL.start={$start - $rows}">&lt; Zurück</a>
+              <a href="{$baseSearchURL}&amp;XSL.start={$start - $rows}">&lt; Zurück</a>
             </li>
           </xsl:if>
 
@@ -266,7 +268,7 @@
           </xsl:call-template>
           <xsl:if test="($start + $rows) &lt; $numFound">
             <li>
-              <a href="/jp-search.xml?XSL.qt={$qt}&amp;XSL.searchjournalID={$searchjournalID}&amp;XSL.start={$start + $rows}">Weiter &gt;</a>
+              <a href="{$baseSearchURL}&amp;XSL.start={$start + $rows}">Weiter &gt;</a>
             </li>
           </xsl:if>
         </menu>
