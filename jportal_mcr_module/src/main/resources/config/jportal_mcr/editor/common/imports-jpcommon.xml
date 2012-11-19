@@ -80,6 +80,9 @@
         <cell anchor="NORTHWEST" row="2" col="2">
             <subselect id="sub.select2" type="webpage" href="indexpage?searchclass=jpinst_sub&amp;mode=prefix&amp;init=true" i18n="editormask.common.sub.select2" />
         </cell>
+        <cell anchor="NORTHWEST" row="2" col="2">
+            <subselect id="sub.select3" type="webpage" href="jp-subselect.xml?XSL.subselect.type=person" i18n="editormask.common.sub.select3" />
+        </cell>
     </panel>
 
     <!-- *** Derivate linking -->

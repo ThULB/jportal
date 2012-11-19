@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+    <section xml:lang="all" title="Subselect">
+      <div class="">
+        Bitte benutzen Sie das Suchfeld, um eine <jpsubselect op="selType"/> auszuwählen.
+      </div>
+    </section>
+</MyCoReWebPage>
