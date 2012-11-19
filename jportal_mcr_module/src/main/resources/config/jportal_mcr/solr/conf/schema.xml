@@ -167,6 +167,7 @@
     <field name="contentClassi4" type="string" index="true" stored="true" />
     <field name="contentClassi5" type="string" index="true" stored="true" />
     <field name="contentClassi6" type="string" index="true" stored="true" />
+    <field name="contentClassi7" type="string" index="true" stored="true" />
 
     <!-- article -->
     <field name="size" type="string" index="false" stored="true" />
