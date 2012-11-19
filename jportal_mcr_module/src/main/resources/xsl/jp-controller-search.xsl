@@ -10,8 +10,8 @@
   <xsl:param name="subselect.session" select="''"/>
   <xsl:param name="subselect.varpath" select="''"/>
   <xsl:param name="subselect.webpage" select="''"/>
-  
-  <xsl:template match="jpsearch">
+
+  <xsl:template match="jpsearch" mode="default">
     <xsl:variable name="journalIDTerm">
       <xsl:if test="$searchjournalID != ''">
         <xsl:value-of select="concat(' journalID:', $searchjournalID)" />

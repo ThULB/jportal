@@ -21,18 +21,7 @@
     <entry label="Jahr" field="date" />
   </xsl:variable>
 
-  <xsl:template match="jpadvancedsearch">
-    <xsl:choose>
-      <xsl:when test="$mode = 'result'">
-        <xsl:apply-templates select="." mode="result" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:apply-templates select="." mode="form" />
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template match="jpadvancedsearch" mode="form">
+  <xsl:template match="jpsearch" mode="advanced.form">
     <xsl:variable name="journalIDTerm">
       <xsl:if test="$searchjournalID != ''">
         <xsl:value-of select="concat(' journalID:', $searchjournalID)" />
@@ -41,7 +30,7 @@
 
     <div>
       <h2>Erweiterte Suche</h2>
-      <form id="advancedSearchForm" action="/jp-advancedsearch.xml">
+      <form id="advancedSearchForm" action="/jp-search.xml">
         <xsl:call-template name="jpadvancedsearch.printSearchRow">
           <xsl:with-param name="row" select="'1'" />
           <xsl:with-param name="field" select="$field1" />
@@ -61,7 +50,7 @@
         <xsl:if test="$searchjournalID != ''">
           <input type="hidden" name="XSL.searchjournalID" value="{$searchjournalID}" />
         </xsl:if>
-        <input type="hidden" name="XSL.mode" value="result"/>
+        <input type="hidden" name="XSL.mode" value="advanced.result"/>
       </form>
     </div>
   </xsl:template>
@@ -91,7 +80,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="jpadvancedsearch" mode="result">
+  <xsl:template match="jpsearch" mode="advanced.result">
     <xsl:variable name="journalIDTerm">
       <xsl:if test="$searchjournalID != ''">
         <xsl:value-of select="encoder:encode(concat(' journalID:', $searchjournalID), 'UTF-8')" />

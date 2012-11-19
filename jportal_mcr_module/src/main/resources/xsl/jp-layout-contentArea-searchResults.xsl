@@ -2,22 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
   xmlns:xalan="http://xml.apache.org/xalan">
 
-  <!-- For Subselect -->
-  <xsl:param name="subselect.type" select="''" />
-  <xsl:param name="subselect.session" select="''" />
-  <xsl:param name="subselect.varpath" select="''" />
-  <xsl:param name="subselect.webpage" select="''" />
-
-  <xsl:variable name="baseSearchURL">
-    <xsl:value-of select="concat('/jp-search.xml?XSL.qt=',$qt,'&amp;XSL.searchjournalID=',$searchjournalID)" />
-    <xsl:if test="$subselect.type != ''">
-      <xsl:value-of select="concat('&amp;XSL.subselect.type=',$subselect.type)" />
-      <xsl:value-of select="concat('&amp;XSL.subselect.session.SESION=',$subselect.session)" />
-      <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESION=',$subselect.varpath)" />
-      <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESION=',$subselect.webpage)" />
-    </xsl:if>
-  </xsl:variable>
-
   <xsl:template name="jpsearch.getResultInfo">
     <xsl:param name="response" />
     <xsl:variable name="start" select="result/@start" />
@@ -142,7 +126,7 @@
     <span>
       <xsl:value-of select="concat($resultInfo/numFound, ' Ergebnisse gefunden.')" />
       <xsl:if test="$resultInfo/page > 1">
-        <xsl:value-of select="concat(' (Seite ', $resultInfo/page, ')')" />
+        <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
       </xsl:if>
     </span>
     <xsl:call-template name="jpsearch.printNavigation">
@@ -155,32 +139,37 @@
     <ul class="navigation">
       <xsl:if test="not($adv)">
         <li>
-          <a href="{concat($WebApplicationBaseURL, 'jp-advancedsearch.xml?XSL.searchjournalID=', $searchjournalID)}">Erweiterte Suche</a>
+          <a href="{concat($WebApplicationBaseURL, 'jp-search.xml?XSL.searchjournalID=', $searchjournalID, '&amp;XSL.mode=advanced.form')}">Erweiterte Suche</a>
         </li>
       </xsl:if>
       <xsl:if test="$adv">
-        <xsl:variable name="editAdvSearchURL">
-          <xsl:call-template name="UrlDelParam">
-            <xsl:with-param name="url" select="$RequestURL" />
-            <xsl:with-param name="par" select="'XSL.mode'" />
-          </xsl:call-template>
-        </xsl:variable>
         <li>
-          <a href="{$editAdvSearchURL}">Erweiterte Suche bearbeiten</a>
+          <a>
+            <xsl:attribute name="href">
+              <xsl:call-template name="UrlSetParam">
+                <xsl:with-param name="url" select="$RequestURL" />
+                <xsl:with-param name="par" select="'XSL.mode'" />
+                <xsl:with-param name="value" select="'advanced.form'" />
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:value-of select="'Erweiterte Suche bearbeiten'" />
+          </a>
         </li>
       </xsl:if>
       <xsl:if test="$searchjournalID != ''">
         <li>
           <a href="/receive/{$searchjournalID}">Zurück zur Zeitschrift</a>
         </li>
-        <xsl:variable name="searchAll">
-          <xsl:call-template name="UrlDelParam">
-            <xsl:with-param name="url" select="$RequestURL" />
-            <xsl:with-param name="par" select="'XSL.searchjournalID'" />
-          </xsl:call-template>
-        </xsl:variable>
         <li>
-          <a href="{$searchAll}">Im Gesamtbestand suchen</a>
+          <a>
+            <xsl:attribute name="href">
+              <xsl:call-template name="UrlDelParam">
+                <xsl:with-param name="url" select="$RequestURL" />
+                <xsl:with-param name="par" select="'XSL.searchjournalID'" />
+              </xsl:call-template>
+            </xsl:attribute>
+            <xsl:value-of select="'Im Gesamtbestand suchen'" />
+          </a>
         </li>
       </xsl:if>
     </ul>
@@ -198,7 +187,14 @@
             <xsl:value-of select="'jp-layout-selected-underline'" />
           </xsl:attribute>
         </xsl:if>
-        <a href="{$baseSearchURL}&amp;XSL.start={($i - 1) * $rows}">
+        <a>
+          <xsl:attribute name="href">
+             <xsl:call-template name="UrlSetParam">
+              <xsl:with-param name="url" select="$RequestURL" />
+              <xsl:with-param name="par" select="'XSL.start'" />
+              <xsl:with-param name="value" select="($i - 1) * $rows" />
+            </xsl:call-template> 
+          </xsl:attribute>
           <xsl:value-of select="$i" />
         </a>
       </li>
@@ -236,7 +232,16 @@
         <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
           <xsl:if test="($start - $rows) &gt;= 0">
             <li>
-              <a href="{$baseSearchURL}&amp;XSL.start={$start - $rows}">&lt; Zurück</a>
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:call-template name="UrlSetParam">
+                    <xsl:with-param name="url" select="$RequestURL" />
+                    <xsl:with-param name="par" select="'XSL.start'" />
+                    <xsl:with-param name="value" select="$start - $rows" />
+                  </xsl:call-template> 
+                </xsl:attribute>
+                <xsl:value-of select="'&lt; Zurück'" />
+              </a>
             </li>
           </xsl:if>
 
@@ -268,7 +273,16 @@
           </xsl:call-template>
           <xsl:if test="($start + $rows) &lt; $numFound">
             <li>
-              <a href="{$baseSearchURL}&amp;XSL.start={$start + $rows}">Weiter &gt;</a>
+              <a>
+                <xsl:attribute name="href">
+                  <xsl:call-template name="UrlSetParam">
+                    <xsl:with-param name="url" select="$RequestURL" />
+                    <xsl:with-param name="par" select="'XSL.start'" />
+                    <xsl:with-param name="value" select="$start + $rows" />
+                  </xsl:call-template>
+                </xsl:attribute>
+                <xsl:value-of select="'Weiter &gt;'" />
+              </a>
             </li>
           </xsl:if>
         </menu>
