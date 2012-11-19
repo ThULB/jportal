@@ -20,6 +20,9 @@
   <xsl:param name="subselect.session" select="''"/>
   <xsl:param name="subselect.varpath" select="''"/>
   <xsl:param name="subselect.webpage" select="''"/>
+  
+  <!-- Search modes -->
+  <xsl:param name="mode" select="''"/>
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
@@ -28,6 +31,10 @@
 
   <xsl:variable name="nameOfTemplate">
     <xsl:call-template name="nameOfTemplate" />
+  </xsl:variable>
+  
+  <xsl:variable name="showSearchBar">
+    <xsl:value-of select="contains('advanced.form', $mode)"/>
   </xsl:variable>
 
   <xsl:template name="renderLayout">
@@ -134,7 +141,7 @@
           </xsl:if>
         </xsl:variable>
         
-        <xsl:if test="not(contains($RequestURL, 'jp-advancedsearch.xml'))">
+        <xsl:if test="$showSearchBar = true()">
           <div id="searchBar">
             <form id="searchForm" action="/jp-search.xml">
               <xsl:variable name="queryterm">
