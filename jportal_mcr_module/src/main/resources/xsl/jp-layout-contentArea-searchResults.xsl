@@ -104,8 +104,8 @@
     <xsl:param name="resultInfo" />
     <span>
       <xsl:value-of select="concat('Etwa ', $resultInfo/numFound, ' Ergebnisse für &quot;', $qt, '&quot; gefunden.')" />
-      <xsl:if test="$resultInfo/page > 1">
-        <xsl:value-of select="concat(' (Seite ', $resultInfo/page, ')')" />
+      <xsl:if test="$resultInfo/page > 0">
+        <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
       </xsl:if>
     </span>
     <xsl:call-template name="jpsearch.printNavigation" />
