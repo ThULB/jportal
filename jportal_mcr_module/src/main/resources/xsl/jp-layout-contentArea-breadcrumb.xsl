@@ -7,7 +7,7 @@
           <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
           <xsl:variable name="listType">
             <xsl:choose>
-              <xsl:when test="/mycoreobject/metadata/contentClassis1/contentClassi1/@categid ='calendar'">
+              <xsl:when test="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/contentClassis1/contentClassi1/@categid ='calendar'">
                 <xsl:value-of select="'calendar'" />
               </xsl:when>
               <xsl:otherwise>
