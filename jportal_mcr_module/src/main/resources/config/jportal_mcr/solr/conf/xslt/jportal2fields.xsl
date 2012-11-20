@@ -4,16 +4,22 @@
   <xsl:include href="object2fields.xsl" />
   <xsl:include href="entity2fields.xsl" />
 
-  <xsl:template mode="objValues" match="obj[@name='type']">
+  <xsl:template mode="objValues" match="obj[@name='type']" priority="1">
     <field name="objectType">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
 
-  <xsl:template mode="objValues" match="obj[@name='project']">
+  <xsl:template mode="objValues" match="obj[@name='project']" priority="1">
     <field name="objectProject">
       <xsl:value-of select="." />
     </field>
+  </xsl:template>
+
+  <xsl:template match="/solr-document-container/source/user"  priority="1">
+    <xsl:copy-of select="field" />
+    <xsl:apply-templates mode="jportal.metadata" select="field" />
+    <xsl:apply-templates mode="jportal.allMeta" select="field" />
   </xsl:template>
 
   <xsl:template match="mycoreobject|mycorederivate">
@@ -102,6 +108,25 @@
   <!-- jpinst heading -->
   <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
     <field name="heading">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+
+  <!-- keywords -->
+  <xsl:template match="keywords/keyword" mode="jportal.metadata">
+    <field name="keywords">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+  <xsl:template match="field[@name='jportal_class_00000083.top']" mode="jportal.metadata">
+    <field name="keywords">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+
+  <!-- position -->
+  <xsl:template match="hidden_positions/hidden_position" mode="jportal.metadata">
+    <field name="position">
       <xsl:value-of select="." />
     </field>
   </xsl:template>

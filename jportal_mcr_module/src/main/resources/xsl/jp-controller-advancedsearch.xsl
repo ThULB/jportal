@@ -19,6 +19,7 @@
     <entry label="Titel" field="titles" />
     <entry label="Name (Person/Institution)" field="heading" />
     <entry label="Jahr" field="date" />
+    <entry label="Schlagwörter" field="keywords" />
   </xsl:variable>
 
   <xsl:template match="jpsearch" mode="advanced.form">

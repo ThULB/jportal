@@ -10,7 +10,7 @@
     <xsl:variable name="findVolQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jpvolume'))" />
     <xsl:variable name="numPerPage_vol" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="volumes"
-      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=maintitle%20asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
+      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=position%20asc,maintitle%20asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
@@ -35,7 +35,7 @@
     <xsl:variable name="findArtQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
     <xsl:variable name="numPerPage_art" select="$settings/numPerPage[@for='article']" />
     <xsl:variable name="articles"
-      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=maintitle%20asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
+      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=position%20asc,maintitle%20asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
