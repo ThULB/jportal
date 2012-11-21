@@ -31,6 +31,7 @@
     </xsl:if>
     <xsl:apply-templates mode="jportal.metadata" select="metadata" />
     <xsl:apply-templates mode="jportal.allMeta" select="metadata/*//*" />
+    <xsl:apply-templates mode="jportal.link" select="*/*/*[@xlink:href]" />
   </xsl:template>
 
   <xsl:template mode="jportal.metadata" match="text()">
@@ -40,6 +41,13 @@
   <xsl:template match="hidden_jpjournalsID/hidden_jpjournalID[position() = 1]" mode="jportal.metadata">
     <field name="journalID">
       <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
+
+  <!-- link -->
+  <xsl:template match="*[@xlink:href]" mode="jportal.link">
+    <field name="link">
+      <xsl:value-of select="@xlink:href" />
     </field>
   </xsl:template>
 
@@ -156,13 +164,13 @@
       <xsl:apply-templates mode="jportal.person.heading" select="*" />
     </field>
   </xsl:template>
-  
+
   <xsl:template mode="jportal.person.name" match="alternative">
     <field name="alternative.name">
       <xsl:apply-templates mode="jportal.person.heading" select="*" />
     </field>
   </xsl:template>
-  
+
   <xsl:template mode="jportal.person.heading" match="lastName|personalName">
     <xsl:value-of select="."/>
   </xsl:template>

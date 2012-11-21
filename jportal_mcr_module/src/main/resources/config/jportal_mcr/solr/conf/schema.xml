@@ -10,7 +10,7 @@
     <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0" />
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
 
-    <fieldtype name="payloads" stored="false" indexed="true" class="solr.TextField">
+    <fieldtype name="payloads" stored="false" class="solr.TextField">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
         <!-- The DelimitedPayloadTokenFilter can put payloads on tokens... for example, a token of "foo|1.4" would be indexed as "foo" with a 
@@ -58,112 +58,101 @@
 
   <fields>
     <!-- kind of mcrobjectid, mcrderivateid, fileid -->
-    <field name="id" type="string" indexed="true" stored="true" required="true" />
-    <field name="objectType" type="string" indexed="true" stored="true" />
-    <field name="objectProject" type="string" indexed="true" stored="true" />
-    <field name="created" type="date" indexed="true" stored="true" />
-    <field name="modified" type="date" indexed="true" stored="true" />
+    <field name="id" type="string" required="true" />
+    <field name="objectType" type="string" />
+    <field name="objectProject" type="string" />
+    <field name="created" type="date" />
+    <field name="modified" type="date" />
 
     <!-- parent handling -->
     <field name="parent.href" type="string" indexed="false" stored="false" />
-    <field name="parent" type="string" indexed="true" stored="true" />
+    <field name="parent" type="string" />
     <copyField source="parent.href" dest="parent" />
 
     <!-- MCRObject structure -->
-    <field name="derivates" type="string" indexed="true" stored="true" multiValued="true" />
-    <field name="derivate.count" type="long" indexed="true" stored="true" />
-    <field name="derivate_owner" type="string" stored="true" />
+    <field name="derivates" type="string" multiValued="true" />
+    <field name="derivate.count" type="long" />
+    <field name="derivate_owner" type="string" />
 
     <!-- ignore all undefined fields -->
     <dynamicField name="*" type="ignored" />
 
     <!-- MCRDerivate related metadata -->
-    <field name="urn" type="string" stored="true" multiValued="true" />
-    <field name="maindoc" type="string" stored="true" multiValued="true" />
+    <field name="urn" type="string" multiValued="true" />
+    <field name="maindoc" type="string" multiValued="true" />
 
     <!-- MCRFile related fields -->
-    <field name="file_owner" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="file_path" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="file_name" type="string" indexed="true" stored="true" multiValued="false" />
+    <field name="file_owner" type="string" />
+    <field name="file_path" type="string" />
+    <field name="file_name" type="string" />
 
-    <field name="stream_name" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="stream_size" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="stream_content_type" type="string" indexed="true" stored="true" multiValued="false" />
-    <field name="stream_source_info" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <!-- preview in search results -->
-    <field name="search_result_link_text" type="string" stored="true" multiValued="true" />
-    <field name="search_result_description" type="text_de" indexed="true" multiValued="true" stored="true" />
+    <field name="stream_name" type="string"  />
+    <field name="stream_size" type="string" />
+    <field name="stream_content_type" type="string" />
+    <field name="stream_source_info" type="string" />
 
     <!-- person -->
-    <field name="heading" type="text_de" indexed="true" stored="true" />
-    <field name="alternative.name" type="text_de" indexed="true" stored="true" multiValued="true" />
-    <field name="indexBrowsePerson" type="text_de" indexed="true" />
-    <field name="indexBrowseCorporation" type="text_de" indexed="true" />
-    <field name="placeOfActivity" type="text_de" indexed="true" stored="true" multiValued="true" />
+    <field name="heading" type="text_de"  />
+    <field name="alternative.name" type="text_de" multiValued="true" />
+    <field name="indexBrowsePerson" type="text_de" />
+    <field name="indexBrowseCorporation" type="text_de" />
+    <field name="placeOfActivity" type="text_de" multiValued="true" />
 
-    <field name="payload" type="payloads" indexed="true" />
+    <field name="payload" type="payloads" />
 
     <!-- JPORTAL specific fields -->
-    <field name="allMeta" type="text_de" index="true" stored="false" multiValued="true" />
+    <field name="allMeta" type="text_de"  multiValued="true" stored="false" />
 
-    <field name="journalID" type="string" indexed="true" stored="true" />
-    <field name="journalTitle" type="string" indexed="true" stored="true" />
+    <field name="journalID" type="string" />
+    <field name="journalTitle" type="string" />
 
-    <field name="titles" type="text_de" index="true" stored="false" multiValued="true" />
-    <field name="maintitle" type="string" index="true" stored="true" />
-    <field name="maintitle_lowercase" type="lowercase" index="true" stored="false" />
+    <field name="titles" type="text_de"  multiValued="true" stored="false"/>
+    <field name="maintitle" type="string" />
+    <field name="maintitle_lowercase" type="lowercase" stored="false" />
 
-    <field name="date" type="string" indexed="true" multiValued="true" />
-    <field name="date.published" type="string" index="true" stored="true" />
-    <field name="date.published_from" type="string" index="true" stored="true" />
-    <field name="date.published_until" type="string" index="true" stored="true" />
-    <field name="date.published_Original" type="string" index="false" stored="true" />
-    <field name="date.published_Original_From" type="string" index="false" stored="true" />
-    <field name="date.published_Original_Till" type="string" index="false" stored="true" />
+    <field name="date" type="string" multiValued="true" stored="false" />
+    <field name="date.published" type="string" />
+    <field name="date.published_from" type="string" />
+    <field name="date.published_until" type="string" />
+    <field name="date.published_Original" type="string" indexed="false" />
+    <field name="date.published_Original_From" type="string" indexed="false" />
+    <field name="date.published_Original_Till" type="string" indexed="false" />
+
+    <field name="link" type="string" multiValued="true" stored="false" />
 
     <!-- id#text -->
-    <field name="publisher" type="string" index="false" stored="true" multiValued="true"/>
+    <field name="publisher" type="string" indexed="false" multiValued="true"/>
 
-    <field name="participant" type="string" index="false" stored="true" />
-    <field name="participantID" type="string" index="false" stored="true" />
+    <field name="participant" type="string" indexed="false" />
+    <field name="participantID" type="string" indexed="false" />
 
-    <field name="contentClassi1" type="string" index="true" stored="true" />
-    <field name="contentClassi2" type="string" index="true" stored="true" />
-    <field name="contentClassi3" type="string" index="true" stored="true" />
-    <field name="contentClassi4" type="string" index="true" stored="true" />
-    <field name="contentClassi5" type="string" index="true" stored="true" />
-    <field name="contentClassi6" type="string" index="true" stored="true" />
-    <field name="contentClassi7" type="string" index="true" stored="true" />
+    <field name="contentClassi1" type="string" />
+    <field name="contentClassi2" type="string" />
+    <field name="contentClassi3" type="string" />
+    <field name="contentClassi4" type="string" />
+    <field name="contentClassi5" type="string" />
+    <field name="contentClassi6" type="string" />
+    <field name="contentClassi7" type="string" />
 
-    <field name="keywords" type="text_de" index="true" multiValued="true" />
+    <field name="keywords" type="text_de" multiValued="true" stored="false" />
 
     <!-- volume & article -->
-    <field name="position" type="string" index="true" stored="true" />
-    <field name="size" type="string" index="false" stored="true" />
-    <field name="rubric" type="string" index="false" stored="true" multiValued="true" />
-    <field name="rubricText" type="text_de" index="true" stored="true" multiValued="true" />
+    <field name="position" type="string" />
+    <field name="size" type="string" indexed="false" />
+    <field name="rubric" type="string" indexed="false" multiValued="true" />
+    <field name="rubricText" type="text_de" multiValued="true" />
 
     <!-- JPortal copy fields -->
     <copyField source="maintitle" dest="maintitle_lowercase" />
 
     <!-- copied fields -->
-    <copyField source="unitid" dest="identifier" stored="true" multiValued="false" />
-    <copyField source="unittitle" dest="title" />
-    <copyField source="unittitle" dest="search_result_link_text" />
-    <copyField source="title" dest="search_result_link_text" />
-    <copyField source="heading" dest="search_result_link_text" />
-
-    <field name="derCount" type="long" indexed="true" stored="true" />
+    <field name="derCount" type="long" />
     <copyField source="derivate.count" dest="derCount" />
 
-    <field name="typeOfUnit" type="string" indexed="true" stored="true" multiValued="true" />
-    <copyField source="cbuUnitTypes" dest="typeOfUnit" />
-
-    <field name="servdate.type.createdate" type="date" indexed="true" stored="true" />
+    <field name="servdate.type.createdate" type="date" />
     <copyField source="servdate.type.createdate" dest="created" />
 
-    <field name="servdate.type.modifydate" type="date" indexed="true" stored="true" />
+    <field name="servdate.type.modifydate" type="date" />
     <copyField source="servdate.type.modifydate" dest="modified" />
 
   </fields>
