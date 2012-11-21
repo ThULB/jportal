@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0">
 
   <xsl:include href="object2fields.xsl" />
-  <xsl:include href="entity2fields.xsl" />
 
   <xsl:template mode="objValues" match="obj[@name='type']" priority="1">
     <field name="objectType">
@@ -16,7 +15,7 @@
     </field>
   </xsl:template>
 
-  <xsl:template match="/solr-document-container/source/user"  priority="1">
+  <xsl:template match="/solr-document-container/source/user" priority="1">
     <xsl:copy-of select="field" />
     <xsl:apply-templates mode="jportal.metadata" select="field" />
     <xsl:apply-templates mode="jportal.allMeta" select="field" />
@@ -26,6 +25,9 @@
     <xsl:apply-templates select="structure" />
     <xsl:if test="contains(@ID, '_jpinst_')">
       <xsl:apply-templates mode="jportal.jpinst.metadata" select="metadata" />
+    </xsl:if>
+    <xsl:if test="contains(@ID, '_person_')">
+      <xsl:apply-templates mode="jportal.person.metadata" select="metadata" />
     </xsl:if>
     <xsl:apply-templates mode="jportal.metadata" select="metadata" />
     <xsl:apply-templates mode="jportal.allMeta" select="metadata/*//*" />
@@ -142,5 +144,41 @@
     <field name="allMeta">
       <xsl:value-of select="@xlink:title" />
     </field>
+  </xsl:template>
+
+  <!-- person metadata -->
+  <xsl:template mode="jportal.person.metadata" match="metadata" >
+    <xsl:apply-templates mode="jportal.person.name" select="def.heading/heading|def.alternative/alternative"/>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.name" match="heading">
+    <field name="heading">
+      <xsl:apply-templates mode="jportal.person.heading" select="*" />
+    </field>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.name" match="alternative">
+    <field name="alternative.name">
+      <xsl:apply-templates mode="jportal.person.heading" select="*" />
+    </field>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.heading" match="lastName|personalName">
+    <xsl:value-of select="."/>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.heading" match="firstName">
+    <xsl:if test="preceding-sibling::lastName">
+      <xsl:value-of select="', '"/>
+    </xsl:if>
+    <xsl:value-of select="."/>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.heading" match="collocation">
+    <xsl:value-of select="concat(' &lt;',.,'&gt;')"/>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.person.heading" match="nameAffix">
+    <xsl:value-of select="concat(' ',.)"/>
   </xsl:template>
 </xsl:stylesheet>
