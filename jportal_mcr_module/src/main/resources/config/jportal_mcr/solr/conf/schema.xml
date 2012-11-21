@@ -142,6 +142,7 @@
     <field name="position" type="string" index="true" stored="true" />
     <field name="size" type="string" index="false" stored="true" />
     <field name="rubric" type="string" index="false" stored="true" multiValued="true" />
+    <field name="rubricText" type="text_de" index="true" stored="true" multiValued="true" />
 
     <!-- JPortal copy fields -->
     <copyField source="maintitle" dest="maintitle_lowercase" />

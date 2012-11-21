@@ -20,6 +20,7 @@
     <entry label="Name (Person/Institution)" field="heading" />
     <entry label="Jahr" field="date" />
     <entry label="Schlagwörter" field="keywords" />
+    <entry label="Rubrik" field="rubricText" />
   </xsl:variable>
 
   <xsl:template match="jpsearch" mode="advanced.form">

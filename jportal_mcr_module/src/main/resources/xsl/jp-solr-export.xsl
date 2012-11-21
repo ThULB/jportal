@@ -18,4 +18,19 @@
     </field>
   </xsl:template>
 
+  <!-- text of rubric -->
+  <xsl:template match="rubrics" mode="user-application" priority="1">
+    <xsl:apply-templates select="rubric" mode="user-application" />
+  </xsl:template>
+
+  <xsl:template match="rubric" mode="user-application" priority="1">
+    <xsl:apply-templates mode="rubric2fields" select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category/label" />
+  </xsl:template>
+
+  <xsl:template match="label" mode="rubric2fields">
+    <field name="rubricText">
+      <xsl:value-of select="@text" />
+    </field>
+  </xsl:template>
+
 </xsl:stylesheet>
