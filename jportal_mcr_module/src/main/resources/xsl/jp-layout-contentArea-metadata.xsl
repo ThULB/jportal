@@ -13,18 +13,19 @@
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
-  <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaISO8601Date'" />
+  <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date'" />
+  <xsl:variable name="ignore" select="'maintitles def.heading'" />
 
-  <xsl:template mode="metadataDisplay" match="metadata/maintitles">
+  <xsl:template mode="metadataDisplay" match="metadata/*[contains($ignore, name())]">
   </xsl:template>
 
-  <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
+  <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class) and not(contains($ignore, name()))]">
     <xsl:call-template name="metadataField">
       <xsl:with-param name="fields" select="*" />
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template mode="metadataDisplay" match="metadata/*[*/@type]">
+  <xsl:template mode="metadataDisplay" match="metadata/*[*/@type and not(contains($ignore, name()))]">
     <xsl:variable name="currentTagName" select="name()" />
     <xsl:for-each select="*[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
       <xsl:call-template name="metadataField">
@@ -49,6 +50,21 @@
   <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date']">
     <xsl:variable name="tagName" select="name()" />
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldLabel" match="names[@class='MCRMetaInstitutionName']/name/*">
+  </xsl:template>
+  <xsl:template mode="metadataFieldLabel" match="names[@class='MCRMetaInstitutionName']/name/*[name() != 'fullname']">
+    <xsl:variable name="tagName" select="name()" />
+    <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
+    
+    <xsl:message><xsl:value-of select="position()" /></xsl:message>
+    <xsl:message><xsl:value-of select="last()" /></xsl:message>
+    <xsl:message><xsl:value-of select="'--------------------'" /></xsl:message>
+    
+    <xsl:if test="position() != (last() - 1)">
+      <xsl:value-of select="' &amp; '" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="*[@type and not(../@class='MCRMetaXML') and name()!='identifier']">
@@ -119,6 +135,16 @@
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaXML']">
     <xsl:apply-templates mode="metadataPersName" select="." />
     <xsl:if test="position() != last()">
+      <xsl:value-of select="'; '" />
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="names[@class='MCRMetaInstitutionName']/name/fullname">
+  </xsl:template>
+  <xsl:template mode="metadataFieldValue" match="names[@class='MCRMetaInstitutionName']/name/*[not(name() = 'fullname')]">
+    <xsl:variable name="tagName" select="name()" />
+    <xsl:value-of select="." />
+    <xsl:if test="position() != (last() - 1)">
       <xsl:value-of select="'; '" />
     </xsl:if>
   </xsl:template>

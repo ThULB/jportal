@@ -46,7 +46,7 @@
 
     <xsl:call-template name="breadcrumb" />
 
-    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading">
+    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
     </xsl:apply-templates>
     <xsl:variable name="LColumnHTML">
@@ -84,7 +84,7 @@
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
-            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'maintitles')) and not(contains(name(), 'hidden_')) and */@inherited='0']" />
+            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
           </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
@@ -109,6 +109,12 @@
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
     <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
       <xsl:apply-templates mode="metadataPersName" select="." />
+    </div>
+  </xsl:template>
+
+  <xsl:template mode="printTitle" match="name">
+    <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
+      <xsl:value-of select="fullname" />
     </div>
   </xsl:template>
 

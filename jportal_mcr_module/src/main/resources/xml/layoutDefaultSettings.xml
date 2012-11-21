@@ -43,6 +43,9 @@
   <i18n tag="placeOfBirth">metaData.person.placeOfBirth</i18n>
   <i18n tag="placeOfDeath">metaData.person.placeOfDeath</i18n>
   <i18n tag="gender">metaData.author.gender</i18n>
+  <i18n tag="property">metaData.jpinst.property</i18n>
+  <i18n tag="nickname">metaData.jpinst.nickname</i18n>
+
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neues Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
   <numPerPage for="volume">10</numPerPage>
