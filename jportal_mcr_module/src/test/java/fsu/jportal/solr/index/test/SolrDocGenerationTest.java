@@ -60,6 +60,42 @@ public class SolrDocGenerationTest {
     }
     
     @Test
+    public void person() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+        String testFilePath = "/" + getClass().getSimpleName() + "/xml/personObjResult.xml";
+        InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+//        SAXBuilder saxBuilder = new SAXBuilder();
+//        Document doc = saxBuilder.build(testXMLAsStream);
+//        xmlOutputter.output(doc, System.out);
+        
+        JDOMResult jdomResult = xslTransformation(testXMLAsStream);
+        Document resultXML = jdomResult.getDocument();
+        
+//        xmlOutputter.output(resultXML, System.out);
+        
+        assertSolrFiled(resultXML, "heading", 1);
+        assertSolrFiled(resultXML, "alternative.name", 3);
+    }
+    
+    @Test
+    public void derivate() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+        String testFilePath = "/" + getClass().getSimpleName() + "/xml/derivObjResult.xml";
+        InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
+        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+//        SAXBuilder saxBuilder = new SAXBuilder();
+//        Document doc = saxBuilder.build(testXMLAsStream);
+//        xmlOutputter.output(doc, System.out);
+        
+        JDOMResult jdomResult = xslTransformation(testXMLAsStream);
+        Document resultXML = jdomResult.getDocument();
+        
+        xmlOutputter.output(resultXML, System.out);
+        
+//        assertSolrFiled(resultXML, "heading", 1);
+//        assertSolrFiled(resultXML, "alternative.name", 3);
+    }
+    
+    @Test
     public void jportal2fieldstest() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/isisObjResult.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solr-document-container xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <source>
+    <mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-person.xsd"
+      ID="jportal_person_00070583" label="jportal_person_00070583" version="2.0">
+      <structure />
+      <metadata xml:lang="de">
+        <def.heading class="MCRMetaXML" heritable="true" notinherit="true">
+          <heading xml:lang="de" inherited="0">
+            <lastName>Lilje</lastName>
+            <firstName>Hanns</firstName>
+          </heading>
+        </def.heading>
+        <def.alternative class="MCRMetaXML" heritable="true" notinherit="true">
+          <alternative xml:lang="de" inherited="0" type="complete">
+            <lastName>Lilje</lastName>
+            <firstName>Johannes</firstName>
+          </alternative>
+          <alternative xml:lang="de" inherited="0" type="complete">
+            <lastName>Lilje</lastName>
+            <firstName>Hans</firstName>
+          </alternative>
+          <alternative xml:lang="de" inherited="0" type="complete">
+            <lastName>Lilje</lastName>
+            <firstName>Johannes &lt;XI.&gt;</firstName>
+          </alternative>
+        </def.alternative>
+        <def.gender class="MCRMetaClassification" heritable="true" notinherit="true">
+          <gender inherited="0" classid="urmel_class_00000001" categid="male" />
+        </def.gender>
+        <def.role class="MCRMetaLangText" heritable="true" notinherit="true">
+          <role xml:lang="de" inherited="0" form="plain">Dt. ev. Theologe, Bischof d. ev.-luth. Kirche Hannovers, Leitender Bischof d. VELKD</role>
+        </def.role>
+        <def.dateOfBirth class="MCRMetaISO8601Date" heritable="true" notinherit="true">
+          <dateOfBirth inherited="0">1899</dateOfBirth>
+        </def.dateOfBirth>
+        <def.dateOfDeath class="MCRMetaISO8601Date" heritable="true" notinherit="true">
+          <dateOfDeath inherited="0">1977</dateOfDeath>
+        </def.dateOfDeath>
+        <def.identifier class="MCRMetaLangText" heritable="true" notinherit="true">
+          <identifier xml:lang="de" inherited="0" form="plain" type="pnd">11872827X</identifier>
+        </def.identifier>
+      </metadata>
+      <service>
+        <servdates class="MCRMetaISO8601Date">
+          <servdate inherited="0" type="createdate">2010-07-05T14:34:08.252Z</servdate>
+          <servdate inherited="0" type="modifydate">2010-07-05T14:34:08.252Z</servdate>
+        </servdates>
+      </service>
+    </mycoreobject>
+    <user>
+      <field name="urmel_class_00000001">male</field>
+      <field name="content">male</field>
+      <field name="content">männlich</field>
+      <field name="urmel_class_00000001.top">male</field>
+    </user>
+  </source>
+</solr-document-container>
