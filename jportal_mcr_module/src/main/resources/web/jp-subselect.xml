@@ -3,7 +3,7 @@
 <MyCoReWebPage>
     <section xml:lang="all" title="Subselect">
       <div class="">
-        Bitte benutzen Sie das Suchfeld, um eine <jpsubselect op="selType"/> auszuwählen.
+        <jpsubselect />
       </div>
     </section>
 </MyCoReWebPage>

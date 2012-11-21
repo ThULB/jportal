@@ -14,15 +14,15 @@
   <xsl:param name="layout" />
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
-  
+
   <!-- For Subselect -->
   <xsl:param name="subselect.type" select="''" />
-  <xsl:param name="subselect.session" select="''"/>
-  <xsl:param name="subselect.varpath" select="''"/>
-  <xsl:param name="subselect.webpage" select="''"/>
-  
+  <xsl:param name="subselect.session" select="''" />
+  <xsl:param name="subselect.varpath" select="''" />
+  <xsl:param name="subselect.webpage" select="''" />
+
   <!-- Search modes -->
-  <xsl:param name="mode" select="''"/>
+  <xsl:param name="mode" select="''" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
@@ -32,10 +32,8 @@
   <xsl:variable name="nameOfTemplate">
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
-  
-  <xsl:variable name="showSearchBar">
-    <xsl:value-of select="contains('advanced.form', $mode)"/>
-  </xsl:variable>
+
+  <xsl:variable name="showSearchBar" select="not(contains('advanced.form', $mode))" />
 
   <xsl:template name="renderLayout">
     <xsl:if test="/mycoreobject/@ID">
@@ -78,26 +76,26 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
 
         <!-- Piwik -->
-		<script type="text/javascript">
-			if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){
-				var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-				document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-			}
-		</script>
-		<script type="text/javascript">
-			if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true'){
-				var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
-				try {
-					var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-					if(myvar != ""){
-						piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");				
-					}			
-					piwikTracker.trackPageView();
-					piwikTracker.enableLinkTracking();
-				} catch( err ) {}
-			}
-		</script>
-		<!-- End Piwik Tracking Code -->
+        <script type="text/javascript">
+          if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){
+          var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
+          document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+          }
+        </script>
+        <script type="text/javascript">
+          if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true'){
+          var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
+          try {
+          var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+          if(myvar != ""){
+            piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");
+          }
+          piwikTracker.trackPageView();
+          piwikTracker.enableLinkTracking();
+          } catch( err ) {}
+          }
+        </script>
+        <!-- End Piwik Tracking Code -->
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
         <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">
@@ -131,17 +129,8 @@
           </div>
         </div>
         <div id="logo"></div>
-        <xsl:variable name="searchURL">
-          <xsl:value-of select="'/jp-search.xml'"/>
-          <xsl:if test="$subselect.type != ''">
-            <xsl:value-of select="concat('?XSL.subselect.type=',$subselect.type)"/>
-            <xsl:value-of select="concat('&amp;XSL.subselect.session.SESSION=',$subselect.session)"/>
-            <xsl:value-of select="concat('&amp;XSL.subselect.varpath.SESSION=',$subselect.varpath)"/>
-            <xsl:value-of select="concat('&amp;XSL.subselect.webpage.SESSION=',$subselect.webpage)"/>
-          </xsl:if>
-        </xsl:variable>
-        
-        <xsl:if test="$showSearchBar = true()">
+
+        <xsl:if test="$showSearchBar">
           <div id="searchBar">
             <form id="searchForm" action="/jp-search.xml">
               <xsl:variable name="queryterm">
@@ -151,6 +140,12 @@
               </xsl:variable>
               <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
               <input id="submitButton" type="submit" value="Suche" />
+              <xsl:if test="$subselect.type != ''">
+                <input type="hidden" name="XSL.subselect.type" value="{$subselect.type}" />
+                <input type="hidden" name="XSL.subselect.session.SESSION" value="{$subselect.session}" />
+                <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{$subselect.varpath}" />
+                <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{$subselect.webpage}" />
+              </xsl:if>
               <xsl:variable name="journalID">
                 <xsl:call-template name="getJournalID" />
               </xsl:variable>
