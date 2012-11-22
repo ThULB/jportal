@@ -26,7 +26,7 @@
         xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-        <include uri="webapp:editor/imports-common-classhandler.xml" />
+        <include uri="webapp:editor/editor-commons.xml" />
 
         <headline anchor="CENTER">
           <text i18n="component.classhandler.headline.modcateg" />
@@ -42,30 +42,29 @@
           <cell col="1" row="4" colspan="2" anchor="NORTHWEST">
             <space width="1px" height="10px" />
           </cell>
-          <cell col="1" row="6" colspan="2" anchor="EAST" ref="TwoButtons" />
+          <cell col="1" row="6" colspan="2" anchor="EAST" ref="TwoButtons" class="editorButtons"/>
         </panel>
 
         <panel id="Class">
           <hidden var="@ID" />
           <hidden var="label" descendants="true" />
-          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" />
-          <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.id" class="editorlabel" />
+          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" class="editorHeadlines"/>
+          <cell col="1" row="2" anchor="NORTHWEST" class="editorLabel">
+            <text i18n="component.classhandler.label.id" class="editorText" />
           </cell>
-          <cell col="2" row="2" anchor="NORTHWEST">
+          <cell col="2" row="2" anchor="NORTHWEST" class="editorOutputCell">
             <output var="@ID" />
           </cell>
-          <cell col="1" row="3" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.label" class="editorlabel" />
+          <cell col="1" row="3" anchor="NORTHWEST" class="editorLabel">
+            <text i18n="component.classhandler.label.label" class="editorText" />
           </cell>
-          <cell col="2" row="3" anchor="NORTHWEST">
+          <cell col="2" row="3" anchor="NORTHWEST" class="editorOutputCell">
             <output var="label/@text" />
           </cell>
-          <cell col="1" row="4" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.description"
-              class="editorlabel" />
+          <cell col="1" row="4" anchor="NORTHWEST" class="editorLabel">
+            <text i18n="component.classhandler.label.description" class="editorText" />
           </cell>
-          <cell col="2" row="4" anchor="NORTHWEST">
+          <cell col="2" row="4" anchor="NORTHWEST" class="editorOutputCell">
             <output var="label/@description" />
           </cell>
         </panel>
@@ -73,23 +72,23 @@
         <panel id="NewCateg">
           <hidden var="category/@counter" default="0" />
           <hidden var="category/@ID" default="0" />
-          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="BClid" />
-          <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.id.p" class="editorlabel" />
+          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="BClid" class="editorHeadlines"/>
+          <cell col="1" row="2" anchor="NORTHWEST" class="editorLabel">
+            <text i18n="component.classhandler.label.id.p" class="editorText" />
           </cell>
           <cell col="2" row="2" anchor="NORTHWEST">
             <output var="category/@ID" default=" " />
           </cell>
 
-          <cell col="1" row="3" anchor="NORTHWEST">
+          <cell col="1" row="3" anchor="NORTHWEST" class="editorLabel">
             <text i18n="component.classhandler.label.label.p"
-              class="editorlabel" />
+              class="editorText" />
           </cell>
           <cell col="2" row="3" var="category/label" anchor="NORTHWEST">
             <repeater min="1" max="10" ref="RLabel" />
           </cell>
-          <cell col="1" row="4" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.url" class="editorlabel" />
+          <cell col="1" row="4" anchor="NORTHWEST" class="editorLabel">
+            <text i18n="component.classhandler.label.url" class="editorText" />
           </cell>
           <cell col="2" row="4" anchor="NORTHWEST" ref="TFzeile1024"
             var="category/url/@xlink:href" default="de" />

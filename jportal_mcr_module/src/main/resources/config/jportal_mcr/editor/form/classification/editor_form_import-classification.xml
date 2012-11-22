@@ -25,16 +25,20 @@
 
         <headline anchor="CENTER">
           <text i18n="component.classhandler.headline.impclass" />
+          <br />
         </headline>
 
         <panel id="import-classification">
-          <cell row="1" col="1" anchor="NORTHWEST">
+          <cell class="editorLabel" row="1" col="1" anchor="NORTHWEST">
             <text i18n="component.classhandler.label.impclass.file" />
           </cell>
           <cell row="1" col="2" anchor="NORTHWEST" var="pathes/path">
             <file width="60" maxlength="50000000" />
           </cell>
-          <cell col="1" row="4" anchor="EAST" ref="TwoButtons" />
+          <cell col="1" row="4">
+            <br />
+          </cell>
+          <cell col="1" row="5" colspan="2" anchor="EAST" ref="TwoButtons" class="editorCButtons"/>
         </panel>
 
         <panel id="DFileUploadDoc" lines="on">

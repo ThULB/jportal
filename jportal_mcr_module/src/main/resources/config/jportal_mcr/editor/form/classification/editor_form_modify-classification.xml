@@ -26,10 +26,11 @@
         xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-        <include uri="webapp:editor/imports-common-classhandler.xml" />
+        <include uri="webapp:editor/editor-commons.xml" />
 
         <headline anchor="CENTER">
           <text i18n="component.classhandler.headline.modclass" />
+          <br />
         </headline>
 
         <panel id="modify-classification">
@@ -37,7 +38,7 @@
           <cell col="1" row="2" anchor="NORTHWEST">
             <space width="1px" height="10px" />
           </cell>
-          <cell col="1" row="3" anchor="EAST" ref="TwoButtons" />
+          <cell col="1" row="3" anchor="EAST" ref="TwoButtons" class="editorButtons"/>
           <cell col="1" row="4" anchor="NORTHWEST">
             <space width="1px" height="10px" />
           </cell>
@@ -45,17 +46,17 @@
 
         <panel id="ModifyClass">
           <hidden var="@ID" />
-          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" />
-          <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="component.classhandler.label.id.p" class="editorlabel" />
+          <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" class="editorHeadlines"/>
+          <cell class="editorLabel" col="1" row="2" anchor="NORTHWEST">
+            <text i18n="component.classhandler.label.id.p" class="editorText" />
           </cell>
           <cell col="2" row="2" anchor="NORTHWEST">
             <output var="@ID" />
           </cell>
 
-          <cell col="1" row="3" anchor="NORTHWEST">
+          <cell class="editorLabel" col="1" row="3" anchor="NORTHWEST">
             <text i18n="component.classhandler.label.label.p"
-              class="editorlabel" />
+              class="editorText" />
           </cell>
           <cell col="2" row="3" var="label" anchor="NORTHWEST">
             <repeater min="1" max="10" ref="RLabel" />

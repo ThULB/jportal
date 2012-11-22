@@ -4,13 +4,7 @@
 <MyCoReWebPage>
 
 <section i18n="component.useradmin.page.modify.user.title" direction="ltr">
-  <editor id="modifyuser-ltr"><include uri="webapp:editor/editor-modifyuser-ltr.xml" /></editor>
-</section>
-
-<section i18n="component.useradmin.page.modify.user.title" direction="rtl">
-	<div class="editorForm-rtl">
-		<editor id="modifyuser-rtl"><include uri="webapp:editor/editor-modifyuser-rtl.xml" /></editor>
-	</div>	
+  <editor id="modifyuser"><include uri="webapp:editor/editor-modify-user.xml" /></editor>
 </section>
 
 </MyCoReWebPage>

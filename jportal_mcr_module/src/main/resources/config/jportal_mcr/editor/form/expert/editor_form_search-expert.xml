@@ -20,7 +20,7 @@
   <components root="root" var="/query">
 	  
     <headline anchor="LEFT">
-      <text i18n="editor.search.document.labele"/>
+      <text i18n="editor.search.document.label"/>
     </headline>
 
     <panel id="root">
@@ -41,7 +41,7 @@
             <text  i18n="editor.search.max" />
           </cell>
           <cell row="1" col="2" anchor="WEST" var="@maxResults">
-            <list type="dropdown" default="100">
+            <list type="dropdown" default="100" class="editorListSearch">
               <item value="20"  label="20"  />
               <item value="100" label="100" />
               <item value="500" label="500" />            
@@ -52,7 +52,7 @@
             <text i18n="editor.search.label" />
           </cell>
           <cell row="1" col="4" anchor="WEST" var="@numPerPage">
-            <list type="dropdown" default="10">
+            <list type="dropdown" default="10" class="editorListSearch">
               <item value="10" label="10" />
               <item value="20" label="20" />
               <item value="50" label="50" />
@@ -66,7 +66,7 @@
       </cell>
       
       <cell row="3" col="1" anchor="EAST">
-        <submitButton i18n="editor.search.search" width="150px" />
+        <submitButton i18n="editor.search.search" width="150px" class="editorButtonSearch" />
       </cell>
       
       <cell row="4" col="1" anchor="SOUTHWEST" height="50px">
@@ -93,5 +93,3 @@
 </section>
 
 </MyCoReWebPage>
-
-

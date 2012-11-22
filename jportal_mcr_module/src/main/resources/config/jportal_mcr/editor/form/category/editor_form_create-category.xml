@@ -16,7 +16,7 @@
  
  <components root="create-category" var="/mycoreclass">
 
-  <include uri="webapp:editor/imports-common-classhandler.xml" />
+  <include uri="webapp:editor/editor-commons.xml" />
 
   <headline anchor="CENTER" >	  
     <text i18n="component.classhandler.headline.addcateg" />
@@ -27,43 +27,43 @@
 	<cell col="1" row="2" colspan="2" anchor="NORTHWEST"><space width="1px" height="10px" /></cell>		  
 	<cell col="1" row="3" colspan="2" anchor="NORTHWEST" var="categories" ref="NewCateg" />	  	  	    	  
 	<cell col="1" row="4" colspan="2" anchor="NORTHWEST"><space width="1px" height="10px" /></cell>		  
-    <cell col="1" row="5" colspan="2" anchor="EAST"      ref="TwoButtons"  />
+    <cell col="1" row="5" colspan="2" anchor="EAST" ref="TwoButtons" class="editorButtons"/>
   </panel>
 	 	 
   <panel id="Class">
     <hidden var="@ID" />
     <hidden var="label" descendants="true"/>
-    <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" />	  
-    <cell col="1" row="2" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.id" class="editorlabel"/>		
+    <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="AClid" class="editorHeadlines" />	  
+    <cell col="1" row="2" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.id" class="editorText"/>		
 	</cell>	
-    <cell col="2" row="2" anchor="NORTHWEST" ><output var="@ID"/></cell>  
-    <cell col="1" row="3" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.label" class="editorlabel"/>		
+    <cell col="2" row="2" anchor="NORTHWEST" class="editorOutputCell" ><output var="@ID"/></cell>  
+    <cell col="1" row="3" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.label" class="editorText"/>		
 	</cell>	
-    <cell col="2" row="3" anchor="NORTHWEST" ><output var="label/@text"/></cell>    
-    <cell col="1" row="4" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.description" class="editorlabel"/>
+    <cell col="2" row="3" anchor="NORTHWEST" class="editorOutputCell" ><output var="label/@text"/></cell>    
+    <cell col="1" row="4" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.description" class="editorText"/>
 	</cell>	
-    <cell col="2" row="4" anchor="NORTHWEST" ><output var="label/@description"/></cell>  	  
+    <cell col="2" row="4" anchor="NORTHWEST" class="editorOutputCell" ><output var="label/@description"/></cell>  	  
   </panel>
 	 	 
   <panel id="NewCateg">
     <hidden var="category/@counter" default="0" />
-    <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="BClid" />	  	  	  
-    <cell col="1" row="2" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.id.p" class="editorlabel" />
+    <cell col="1" row="1" colspan="2" anchor="NORTHWEST" ref="BClid" class="editorHeadlines" />	  	  	  
+    <cell col="1" row="2" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.id.p" class="editorText" />
 	</cell>	
     <cell col="2" row="2" anchor="NORTHWEST" ref="TFzeile128" var="category/@ID" />
 	  	  
-    <cell col="1" row="3" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.label.p" class="editorlabel"/>
+    <cell col="1" row="3" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.label.p" class="editorText"/>
 	</cell>		  
     <cell col="2" row="3" var="category/label" anchor="NORTHWEST" >
 		   <repeater min="1" max="10" ref="RLabel" />      
 	</cell>	      	  	
-    <cell col="1" row="4" anchor="NORTHWEST">	  
-	  <text i18n="component.classhandler.label.url" class="editorlabel"/>
+    <cell col="1" row="4" anchor="NORTHWEST" class="editorLabel">	  
+	  <text i18n="component.classhandler.label.url" class="editorText"/>
 	</cell>		  	  
     <cell col="2" row="4" anchor="NORTHWEST" ref="TFzeile1024" var="category/url/@xlink:href" default="de" />   
 	   	 	  	    	  	  

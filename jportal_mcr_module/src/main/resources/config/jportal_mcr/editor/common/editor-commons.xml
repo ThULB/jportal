@@ -121,5 +121,26 @@
       </subselect>
     </cell>
   </panel>
+
+	<panel id="RLabel" class="editorClassLabel">
+		<cell col="1" row="1" anchor="NORTHWEST">
+			<text i18n="component.classhandler.label.lang" class="editorlabel" />
+		</cell>
+		<cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang"
+			default="de" />
+		<cell col="1" row="2" anchor="NORTHWEST">
+			<text i18n="component.classhandler.label.text.p" class="editorlabel" />
+		</cell>
+		<cell col="2" row="2" anchor="NORTHWEST" var="@text">
+			<textfield width="48" maxlength="1024" id="classCategLabel">
+				<condition id="cond.label.required" required="true"
+					i18n="component.classhandler.condition.labelText" />
+			</textfield>
+		</cell>
+		<cell col="1" row="3" anchor="NORTHWEST">
+			<text i18n="component.classhandler.label.description" class="editorlabel" />
+		</cell>
+		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile1024" var="@description" />
+	</panel>
   <!-- *** End *** -->
 </imports>

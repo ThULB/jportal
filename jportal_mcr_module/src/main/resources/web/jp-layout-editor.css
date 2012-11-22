@@ -95,6 +95,10 @@ label.editorText {
     margin-right: 63px;
 }
 
+.editorOutputCell{
+	min-width: 700px;
+}
+
 .editorButtons .editorButton{
 	margin-left: 10px;
 }
@@ -123,4 +127,81 @@ label.editorText {
 
 .editorPersonFreeText .editorTextfield{
 	width: 580px;
+}
+
+/*user*/
+.editorUButtons{
+	border-top: 1px solid;
+	padding-top: 10px;
+}
+
+.editorUButtons .editorPanel{
+    float: right;
+    margin-right: 33px;
+}
+
+.editorUButtons .editorButton{
+	margin-left: 10px;
+}
+
+.editorPassword{
+	width: 630px;
+}
+
+/*contact*/
+.editorCButtons{
+	border-top: 1px solid;
+	padding-top: 10px;
+}
+
+.editorCButtons .editorPanel{
+    float: right;
+}
+
+.editorCButtons .editorButton{
+	margin-left: 10px;
+}
+
+/*classification*/
+.editorClassLabel .editorTextfield{
+	width: 545px;
+}
+
+.editorClassLabel .editorList{
+	width: 550px;
+}
+
+/*acl*/
+.editorLabelACL{
+	width: 100px;
+	display: block;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.editorRepeater .editorCell .editorRepeaterACL .editorCell{
+	padding-left: 26px;
+}
+
+.editorRepeater .editorCell .editorRepeaterACL .editorCell .editorList{
+	width: 610px;
+}
+
+.editorRepeater .editorCell .editorRepeaterACL .editorCell .editorTextfield{
+	width: 604px;
+}
+
+.editorButtonsACL{
+	border-top: 1px solid;
+	padding-top: 10px;
+}
+
+.editorButtonsACL .editorPanel{
+    float: right;
+    margin-right: 126px;
+}
+
+/*search-expert*/
+.editorButtonSearch{
+	float: right;
 }

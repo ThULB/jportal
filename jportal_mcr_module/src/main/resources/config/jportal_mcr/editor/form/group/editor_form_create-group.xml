@@ -4,13 +4,7 @@
 <MyCoReWebPage>
 	
 <section i18n="component.useradmin.page.create.group.title" direction="ltr">
-  <editor id="creategroup-ltr"><include uri="webapp:editor/editor-creategroup-ltr.xml" /></editor>
-</section>
-
-<section i18n="component.useradmin.page.create.group.title" direction="rtl">
-	<div class="editorForm-rtl">
-		<editor id="creategroup-rtl"><include uri="webapp:editor/editor-creategroup-rtl.xml" /></editor>
-	</div>
+  <editor id="creategroup"><include uri="webapp:editor/editor-create-group.xml" /></editor>
 </section>
 
 </MyCoReWebPage>
