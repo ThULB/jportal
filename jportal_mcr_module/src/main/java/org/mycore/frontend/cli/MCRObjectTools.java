@@ -1,9 +1,15 @@
 package org.mycore.frontend.cli;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -89,6 +95,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
         addCommand(new MCRCommand("set derivate link to {0} with path {1}",
                 "org.mycore.frontend.cli.MCRObjectTools.setDerivateLink String String",
                 "creates a new derivate link"));
+        
+        addCommand(new MCRCommand("select from file {0}",
+                "org.mycore.frontend.cli.MCRObjectTools.selectFromFile String",
+                "selects all mcr objects in the given file. every object should be in a new line"));
     }
 
     public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRActiveLinkException, MCRException,
@@ -475,6 +485,20 @@ public class MCRObjectTools extends MCRAbstractCommands {
             idMap.putAll(getDescendants(mcrChild));
         }
         return idMap;
+    }
+
+    public static void selectFromFile(String filename) throws FileNotFoundException, IOException {
+        List<String> selectedList = new ArrayList<String>();
+        InputStream fis;
+        BufferedReader br;
+        String line;
+
+        fis = new FileInputStream(filename);
+        br = new BufferedReader(new InputStreamReader(fis, Charset.forName("UTF-8")));
+        while ((line = br.readLine()) != null) {
+            selectedList.add(line);
+        }
+        MCRObjectCommands.setSelectedObjectIDs(selectedList);
     }
 
 }
