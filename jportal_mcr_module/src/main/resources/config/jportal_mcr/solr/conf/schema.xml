@@ -110,7 +110,7 @@
     <field name="maintitle" type="string" />
     <field name="maintitle_lowercase" type="lowercase" stored="false" />
 
-    <field name="date" type="string" multiValued="true" stored="false" />
+    <field name="date" type="text_de" multiValued="true" stored="false" />
     <field name="date.published" type="string" />
     <field name="date.published_from" type="string" />
     <field name="date.published_until" type="string" />

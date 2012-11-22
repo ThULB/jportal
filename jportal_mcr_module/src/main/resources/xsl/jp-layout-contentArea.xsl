@@ -85,6 +85,10 @@
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
             <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
+            <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
+              <xsl:apply-templates mode="linkedArticles" select="." />
+              <xsl:apply-templates mode="linkedCalendar" select="." />
+            </xsl:if>
           </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
