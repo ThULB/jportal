@@ -69,13 +69,13 @@
     <xsl:variable name="encodedMaindoc" select="mcrservlet:encodeURL($maindoc)" />
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />
     <div class="jp-layout-derivateWrapper">
-      <div class="jp-layout-hidden-Button"></div>
       <a href="{$derivbase}{$encodedMaindoc}">
+        <div class="jp-layout-hidden-Button"></div>
         <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
+        <span style="display: inline-block; text-align: center; width: 100%; text-transform: uppercase;">
+          <xsl:value-of select="substring-after($maindoc, '.')" />
+        </span>
       </a>
-      <span style="display: inline-block; text-align: center; width: 100%; text-transform: uppercase;">
-        <xsl:value-of select="substring-after($maindoc, '.')" />
-      </span>
     </div>
   </xsl:template>
 
