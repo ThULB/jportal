@@ -3,7 +3,6 @@
                 xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
                 xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xlink i18n xalan encoder">
 
-  <xsl:param name="mode" />
   <xsl:param name="qt" select="'*'" />
   <xsl:param name="start" select="'0'" />
   <xsl:param name="rows" select="'10'" />
@@ -51,7 +50,7 @@
 
  <xsl:template match="jpsearch" mode="laws.result">
     <xsl:variable name="q" select="encoder:encode($qt, 'UTF-8')" />
-    <xsl:variable name="searchResults" select="document(concat('solr:q=', $q ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))"></xsl:variable>
+    <xsl:variable name="searchResults" select="document(concat('solr:q=', $q ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))/response"></xsl:variable>
     <xsl:apply-templates mode="searchResults" select="$searchResults" />
  </xsl:template>
 
