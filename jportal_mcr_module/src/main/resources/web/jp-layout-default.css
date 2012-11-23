@@ -773,6 +773,11 @@ body {
 	width: 555px;
 }
 
+#searchBar #searchForm a {
+	color: white;
+	margin-left: 12px;
+}
+
 #main {
 	background-color: white;
 	overflow: hidden;

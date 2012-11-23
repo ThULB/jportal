@@ -54,6 +54,9 @@
             </params>
           </label>
         </item>
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <restriction name="updatePerm" value="true" />
         <item>
           <label name="Neue Person" ref="editorServlet">
             <params>
