@@ -34,7 +34,7 @@
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
 
-  <xsl:variable name="showSearchBar" select="not(contains('advanced.form', $mode))" />
+  <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
 
   <xsl:template name="renderLayout">
     <xsl:if test="/mycoreobject/@ID">
