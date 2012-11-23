@@ -10,9 +10,11 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
+    <xsl:call-template name="jp.laws.addAdvSearch"></xsl:call-template>
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
+    <xsl:call-template name="jp.laws.addAdvSearch"></xsl:call-template>
     <xsl:variable name="register" select="laws:getRegister(@ID)" />
     <xsl:if test="$register">
       <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
@@ -34,6 +36,16 @@
         <xsl:with-param name="derivateId" select="$derivateId"/>
       </xsl:apply-templates>
     </div>
+  </xsl:template>
+
+  <!-- ================================================================================= -->
+  <xsl:template name="jp.laws.addAdvSearch">
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var href = '<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-search.xml?XSL.mode=laws.form')" />';
+        $('#searchForm').append('&lt;a href="' + href +'"&gt;Expertensuche in Gesetzesblättern&lt;a/&gt;');
+      });
+    </script>
   </xsl:template>
 
   <!-- ================================================================================= -->

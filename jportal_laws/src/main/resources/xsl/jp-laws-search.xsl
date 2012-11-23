@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="i18n xalan">
+                xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xlink i18n xalan encoder">
 
-  <xsl:template match="laws_search">
-    <xsl:call-template name="laws_search.css" />
-    <xsl:call-template name="laws_search.js" />
-    <form class="searchbox" action="servlets/MCRSearchServlet" method="post" accept-charset="utf-8" onSubmit="return buildQuery()">
-      <input id="query" type="hidden" name="query" />
+  <xsl:param name="mode" />
+  <xsl:param name="qt" select="'*'" />
+  <xsl:param name="start" select="'0'" />
+  <xsl:param name="rows" select="'10'" />
+
+  <xsl:template match="jpsearch" mode="laws.form">
+    <xsl:call-template name="jp.laws.search.css" />
+    <xsl:call-template name="jp.laws.search.js" />
+
+    <p>
+      <xsl:value-of select="i18n:translate('jp.laws.search.intro')" />
+    </p>
+
+    <form id="advancedSearchForm" action="/jp-search.xml" onSubmit="return buildQuery()">
+      <input type="hidden" name="XSL.mode" value="laws.result"/>
+      <input type="hidden" id="qt" name="XSL.qt" />
       <table>
         <tr>
           <th><xsl:value-of select="i18n:translate('jp.laws.search.text')" /></th>
@@ -37,7 +49,13 @@
     </form>
   </xsl:template>
 
-  <xsl:template name="laws_search.css">
+ <xsl:template match="jpsearch" mode="laws.result">
+    <xsl:variable name="q" select="encoder:encode($qt, 'UTF-8')" />
+    <xsl:variable name="searchResults" select="document(concat('solr:q=', $q ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))"></xsl:variable>
+    <xsl:apply-templates mode="searchResults" select="$searchResults" />
+ </xsl:template>
+
+  <xsl:template name="jp.laws.search.css">
     <style type="text/css">
       .searchbox {
       }
@@ -58,11 +76,8 @@
     </style>
   </xsl:template>
 
-  <xsl:template name="laws_search.js">
+  <xsl:template name="jp.laws.search.js">
     <script type="text/javascript">
-      /*$(document).ready(function() {
-        
-      });*/
       function buildQuery() {
         var searchTerm = $("#searchTerm").val();
         var territory = $("#territory").val();
@@ -70,33 +85,20 @@
         var until = $("#published_until").val();
 
         // input conditions
-        var query = addCondition("", "allMeta", "contains", searchTerm);
-        if(query != "") {
-          query = "(" + addCondition(query, "content", "contains", searchTerm, "OR") + ")";
+        var query = searchTerm;
+        if(territory.length &gt; 0) {
+          query += " +volContentClassi1:" + territory;
         }
-        query = addCondition(query, "volContentClassi1", "=", territory);
-        query = addCondition(query, "published", "&gt;=", from);
-        query = addCondition(query, "published", "&lt;=", until);
-
-        // hidden conditions
-        query = addCondition(query, "contentClassi2", "=", "Gesetzesblaetter");
-        query = addCondition(query, "objectType", "=", "jpvolume");
-
-        $("#query").attr("value", query);
-      }
-      function addCondition(/*String*/ query, /*String*/ field, /*String*/ operation, /*String*/ value, /*String*/ bool) {
-        if(value.length &lt;= 0) {
-          return query;
+        if(from.length &gt; 0 &amp; until.length &gt; 0) {
+          query += " +published:[" + from + " TO " + until + "]";
+        } else if(from.length &gt; 0) {
+          query += " +published:[" + from + " TO *]";
+        } else if(until.length &gt; 0) {
+          query += " +published:[* TO " + until + "]";
         }
-        var condition = field + " " + operation + " " + value;
-        if(query.length == 0) {
-          return condition;
-        } else {
-          if(!bool) {
-            bool = "AND";
-          }
-          return query + " " + bool + " " + condition;
-        }
+        query += " +contentClassi2:Gesetzesblaetter";
+        query += " +objectType:jpvolume";
+        $("#qt").attr("value", query);
       }
     </script>
   </xsl:template>

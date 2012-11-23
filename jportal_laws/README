@@ -45,4 +45,4 @@ Die letzten beiden Punkte sind etwas unsauber gelöst, weil jportal_laws_territo
 in den Bänden nicht mehr ändert. Eigentlich müsste das Territorium für eine Zeitschrift fix gesetzt werden was sich dann auf die Bände
 vererbt.
 
--laws_search.xml in die navigation.xml eintragen
+-jp-laws-search.xml in die navigation.xml eintragen
