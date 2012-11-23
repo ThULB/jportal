@@ -23,8 +23,12 @@
       <xsl:value-of select="ceiling($numFound div $rows)" />
     </pages>
   </xsl:template>
+  
+  <xsl:template mode="searchResults" match="/">
+    <xsl:apply-templates mode="searchResults" select="solrSearch/response" />
+  </xsl:template>
 
-  <xsl:template mode="searchResults" match="/response">
+  <xsl:template mode="searchResults" match="response">
     <xsl:variable name="resultInfoXML">
       <xsl:call-template name="jpsearch.getResultInfo">
         <xsl:with-param name="repsonse" select="." />
@@ -333,11 +337,53 @@
   </xsl:template>
 
   <xsl:template mode="searchHitLabel" match="doc">
+    <xsl:message>
+      subselect
+      <xsl:value-of select="count(ancestor::solrSearch/subselect)"></xsl:value-of>
+      query
+      <xsl:value-of select="count(ancestor::solrSearch/query)"></xsl:value-of>
+    </xsl:message>
+    <xsl:variable name="url">
+      <searchHitLabelURL>
+        <default value="/receive/{str[@name='id']}" />
+        <xsl:if test="ancestor::solrSearch/subselect/param[@name='subselect.type']/@value != ''">
+          <subselectEnd value="/servlets/XMLEditor" />
+          <param name="_action" value="end.subselect" />
+          <xsl:copy-of select="ancestor::solrSearch/subselect/param" />
+          <param name="mode" value="prefix" />
+          <param name="_var_@xlink:href" value="{str[@name='id']}" />
+          <param name="_var_@xlink:title" value="{.}" />
+        </xsl:if>
+      </searchHitLabelURL>
+    </xsl:variable>
+    <xsl:variable name="href">
+      <xsl:apply-templates mode="searchHitLabelURL" select="xalan:nodeset($url)/searchHitLabelURL" />
+    </xsl:variable>
+    <xsl:message>
+      href
+      <xsl:value-of select="$href"/>
+    </xsl:message>
     <h3 class="jp-layout-clickLabel">
       <a href="/receive/{str[@name='id']}">
         <xsl:apply-templates mode="searchHitLabelText" select="." />
       </a>
     </h3>
+  </xsl:template>
+
+  <xsl:template mode="searchHitLabelURL" match="searchHitLabelURL[subselectEnd]">
+    <xsl:value-of select="subselectEnd/@value" />
+    <xsl:apply-templates mode="urlParam" select="param" />
+  </xsl:template>
+  <xsl:template mode="urlParam" match="param" >
+    <xsl:choose>
+      <xsl:when test="position()=1">
+        <xsl:value-of select="'?'"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'&amp;'"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:value-of select="concat(@name,'=',@value)"/>
   </xsl:template>
 
   <xsl:template mode="searchHitLabelText" match="doc[contains('jpjournal jpvolume jparticle', str[@name='objectType'])]">

@@ -1,95 +1,67 @@
 package fsu.jportal.solr.index.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.List;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.URIResolver;
-import javax.xml.transform.stream.StreamSource;
 
 import org.jdom.Document;
 import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
 import org.jdom.transform.JDOMResult;
 import org.jdom.xpath.XPath;
 import org.junit.Test;
 
-public class SolrDocGenerationTest {
+import fsu.jportal.test.framework.xsl.XSLTransformTest;
 
-    public class IncludeResolver implements URIResolver {
-
-        @Override
-        public Source resolve(String href, String base) throws TransformerException {
-            String styleSheetPath = "/"+SolrDocGenerationTest.class.getSimpleName() + "/xsl/" + href;
-            InputStream stylesheetAsStream = getClass().getResourceAsStream(styleSheetPath);
-            return new StreamSource(stylesheetAsStream);
-        }
-
-    }
+public class SolrDocGenerationTest extends XSLTransformTest{
 
     @Test
     public void test() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/oneObjResult.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
-        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        Document doc = saxBuilder.build(testXMLAsStream);
-//        xmlOutputter.output(doc, System.out);
+//        xmlOutput(testXMLAsStream);
         
         JDOMResult jdomResult = xslTransformation(testXMLAsStream);
-        Document resultXML = jdomResult.getDocument();
         
-        xmlOutputter.output(resultXML, System.out);
+//        xmlOutput(jdomResult);
         
-        assertSolrFiled(resultXML, "journalID", 1);
-        assertSolrFiled(resultXML, "maintitle", 1);
-        assertSolrFiled(resultXML, "journalTitle", 1);
+        assertSolrFiled(jdomResult, "journalID", 1);
+        assertSolrFiled(jdomResult, "maintitle", 1);
+        assertSolrFiled(jdomResult, "journalTitle", 1);
     }
     
+    private JDOMResult xslTransformation(InputStream testXMLAsStream) throws TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
+        return xslTransformation(testXMLAsStream,"/config/jportal_mcr/solr/conf/xslt/jportal2fields.xsl");
+    }
+
     @Test
     public void person() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/personObjResult.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
-        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        Document doc = saxBuilder.build(testXMLAsStream);
-//        xmlOutputter.output(doc, System.out);
+//        xmlOutput(testXMLAsStream);
         
         JDOMResult jdomResult = xslTransformation(testXMLAsStream);
-        Document resultXML = jdomResult.getDocument();
         
-//        xmlOutputter.output(resultXML, System.out);
+//        xmlOutput(jdomResult);
         
-        assertSolrFiled(resultXML, "heading", 1);
-        assertSolrFiled(resultXML, "alternative.name", 3);
+        assertSolrFiled(jdomResult, "heading", 1);
+        assertSolrFiled(jdomResult, "alternative.name", 3);
     }
     
     @Test
     public void derivate() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/derivObjResult.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
-        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        Document doc = saxBuilder.build(testXMLAsStream);
-//        xmlOutputter.output(doc, System.out);
+//        xmlOutput(testXMLAsStream);
         
         JDOMResult jdomResult = xslTransformation(testXMLAsStream);
-        Document resultXML = jdomResult.getDocument();
         
-        xmlOutputter.output(resultXML, System.out);
+        xmlOutput(jdomResult);
         
 //        assertSolrFiled(resultXML, "heading", 1);
 //        assertSolrFiled(resultXML, "alternative.name", 3);
@@ -99,46 +71,31 @@ public class SolrDocGenerationTest {
     public void jportal2fieldstest() throws JDOMException, IOException, TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/isisObjResult.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
-        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        Document doc = saxBuilder.build(testXMLAsStream);
-//        xmlOutputter.output(doc, System.out);
+//        xmlOutput(testXMLAsStream);
         
         JDOMResult jdomResult = xslTransformation(testXMLAsStream);
-        Document resultXML = jdomResult.getDocument();
         
-        xmlOutputter.output(resultXML, System.out);
+//        xmlOutput(jdomResult);
         
-        assertSolrFiled(resultXML, "journalID", 1);
-        assertSolrFiled(resultXML, "maintitle", 1);
-        assertSolrFiled(resultXML, "journalTitle", 1);
-        assertSolrFiled(resultXML, "allMeta", 16);
-        assertSolrFiled(resultXML, "date", 2);
-        assertSolrFiled(resultXML, "date.published_from", 1);
-        assertSolrFiled(resultXML, "date.published_until", 1);
-//        assertSolrFiled(resultXML, "rubric", 1);
-        assertSolrFiled(resultXML, "publisher", 1);
-//        assertSolrFiled(resultXML, "participant", 1);
+        assertSolrFiled(jdomResult, "journalID", 1);
+        assertSolrFiled(jdomResult, "maintitle", 1);
+        assertSolrFiled(jdomResult, "journalTitle", 1);
+        assertSolrFiled(jdomResult, "allMeta", 16);
+        assertSolrFiled(jdomResult, "date", 2);
+        assertSolrFiled(jdomResult, "date.published_from", 1);
+        assertSolrFiled(jdomResult, "date.published_until", 1);
+//        assertSolrFiled(jdomResult, "rubric", 1);
+        assertSolrFiled(jdomResult, "publisher", 1);
+//        assertSolrFiled(jdomResult, "participant", 1);
+    }
+    
+    private void assertSolrFiled(JDOMResult resultXML, String fieldName, int count) throws JDOMException {
+        assertSolrFiled(resultXML.getDocument(), fieldName, count);
     }
     
     private void assertSolrFiled(Document resultXML, String fieldName, int count) throws JDOMException {
         List mycoreojectTags = XPath.selectNodes(resultXML, "/add/doc/field[@name='" + fieldName + "']");
         assertEquals("Wrong count for " + fieldName + ", ", count, mycoreojectTags.size());
-    }
-
-    private JDOMResult xslTransformation(InputStream testXMLAsStream) throws TransformerConfigurationException,
-            TransformerFactoryConfigurationError, TransformerException {
-        String styleSheetPath = MessageFormat.format("/config/jportal_mcr/solr/conf/xslt/jportal2fields.xsl", File.separator);
-        InputStream stylesheetAsStream = getClass().getResourceAsStream(styleSheetPath);
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        URIResolver resolver = new IncludeResolver();
-        transformerFactory.setURIResolver(resolver);
-        Templates templates = transformerFactory.newTemplates(new StreamSource(stylesheetAsStream));
-        Transformer transformer = templates.newTransformer();
-        JDOMResult jdomResult = new JDOMResult();
-        transformer.transform(new StreamSource(testXMLAsStream), jdomResult);
-        return jdomResult;
     }
 
 }

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solrSearch>
+  <query>
+    <queryTerm value="{$qt}" />
+    <queryTermField name="+journalID" value="{$searchjournalID}" />
+    <queryTermField name="+objectType" value="{$subselect.type}" />
+    <param name="qf" value="titles^10 heading^10 dates^5 allMeta^1" />
+    <param name="rows" value="{$rows}" />
+    <param name="start" value="{$start}" />
+    <param name="defType" value="edismax" />
+  </query>
+  <subselect>
+    <param name="subselect.type" value="person" />
+    <param name="subselect.session" value="3RXSDFT" />
+    <param name="subselect.varpath" value="/fooo/dooo" />
+    <param name="subselect.webpage" value="zeitungSeite" />
+  </subselect>
+  <response>
+    <lst name="responseHeader">
+      <int name="status">0</int>
+      <int name="QTime">0</int>
+      <lst name="params">
+        <str name="indent">on</str>
+        <str name="start">0</str>
+        <str name="q">allMeta:Schiller +objectType:person</str>
+        <str name="version">2.2</str>
+        <str name="rows">10</str>
+      </lst>
+    </lst>
+    <result name="response" numFound="74784" start="0">
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Müller, Johann Adam</str>
+        <str name="id">jportal_person_00070520</str>
+        <str name="indexBrowsePerson">Müller, Johann Adam</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Müller, Johann Adam</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Austin, Gilbert</str>
+        <str name="id">jportal_person_00070521</str>
+        <str name="indexBrowsePerson">Austin, Gilbert</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Austin, Gilbert</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Haacke, Christoph Friedrich Ferdinand</str>
+        <str name="id">jportal_person_00070522</str>
+        <str name="indexBrowsePerson">Haacke, Christoph Friedrich Ferdinand</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Haacke, Christoph Friedrich Ferdinand</str>
+        </arr>
+      </doc>
+      <doc>
+        <arr name="alternative.name">
+          <str>Strachwiz, Johann A. von</str>
+        </arr>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Strachwitz, Johann A. von</str>
+        <str name="id">jportal_person_00070523</str>
+        <str name="indexBrowsePerson">Strachwitz, Johann A. von</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Strachwitz, Johann A. von</str>
+        </arr>
+      </doc>
+      <doc>
+        <arr name="alternative.name">
+          <str>Heden, Gottlob</str>
+          <str>Hedenus, Gottlieb</str>
+        </arr>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Hedenus, Gottlob</str>
+        <str name="id">jportal_person_00070524</str>
+        <str name="indexBrowsePerson">Hedenus, Gottlob</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Hedenus, Gottlob</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">J. C. R.</str>
+        <str name="id">jportal_person_00070525</str>
+        <str name="indexBrowsePerson">J. C. R.</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>J. C. R.</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Chesterfould, Eduard</str>
+        <str name="id">jportal_person_00070526</str>
+        <str name="indexBrowsePerson">Chesterfould, Eduard</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Chesterfould, Eduard</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Munz, G. L.</str>
+        <str name="id">jportal_person_00070527</str>
+        <str name="indexBrowsePerson">Munz, G. L.</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Munz, G. L.</str>
+        </arr>
+      </doc>
+      <doc>
+        <arr name="alternative.name">
+          <str>Kortüm, Friederich</str>
+          <str>FriderichFriderich</str>
+          <str>Johann F.Johann F.</str>
+        </arr>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Kortüm, Johann Friedrich Christoph</str>
+        <str name="id">jportal_person_00070528</str>
+        <str name="indexBrowsePerson">Kortüm, Johann Friedrich Christoph</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Kortüm, Johann Friedrich Christoph</str>
+        </arr>
+      </doc>
+      <doc>
+        <long name="derCount">0</long>
+        <long name="derivate.count">0</long>
+        <str name="heading">Nordmann, Gottlob</str>
+        <str name="id">jportal_person_00070530</str>
+        <str name="indexBrowsePerson">Nordmann, Gottlob</str>
+        <str name="objectProject">jportal</str>
+        <str name="objectType">person</str>
+        <arr name="search_result_link_text">
+          <str>Nordmann, Gottlob</str>
+        </arr>
+      </doc>
+    </result>
+  </response>
+</solrSearch>
