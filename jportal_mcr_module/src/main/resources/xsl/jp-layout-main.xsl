@@ -9,6 +9,7 @@
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
   <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
+  <xsl:include href="jp-navigation-top.xsl" />
 
   <xsl:param name="object" />
   <xsl:param name="layout" />
@@ -125,7 +126,7 @@
             </li>
           </ul>
           <div id="globalMenu">
-            <xsl:call-template name="navigation.row" />
+            <xsl:call-template name="jp.navigation.top" />
           </div>
         </div>
         <div id="logo"></div>

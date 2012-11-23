@@ -114,34 +114,6 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <item>
-          <label name="Passwort ändern" href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=CreatePwdDialog" />
-        </item>
-        <item>
-          <label name="Nutzerdaten anzeigen" href="/servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=ShowUser" />
-        </item>
-        <item>
-          <label name="Nutzer anlegen" href="/servlets/MCRUserAdminServlet?mode=newuser" />
-        </item>
-        <item>
-          <label name="Gruppe anlegen" href="/servlets/MCRUserAdminServlet?mode=newgroup" />
-        </item>
-        <item>
-          <label name="Nutzer- Gruppenverwaltung" href="/servlets/MCRUserAjaxServlet" />
-        </item>
-        <restriction name="isAdmin" value="true" />
-      </item>
-      <item class="jp-layout-menu-dropdown">
-        <!-- Administration -->
-        <item>
-          <label name="WebCLI" href="/modules/webcli/launchpad.xml" />
-        </item>
-        <item>
-          <label name="ACL Editor" href="/servlets/MCRACLEditorServlet_v2?mode=getACLEditor" />
-        </item>
-        <restriction name="isAdmin" value="true" />
-      </item>
-      <item class="jp-layout-menu-dropdown">
         <!-- <label name="Löschen" /> -->
         <restriction name="deletePerm" value="true" />
         <item>
