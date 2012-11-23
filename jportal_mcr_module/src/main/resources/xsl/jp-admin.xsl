@@ -21,7 +21,7 @@
         <a href="{$WebApplicationBaseURL}servlets/MCRACLEditorServlet_v2?mode=getACLEditor">ACL Editor</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}jp-classeditor.xml?XSL.classeditor.showId=true">Klassifikations Editor</a>
+        <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
       </li>
     </ul>
     <h2>WebCLI</h2>
