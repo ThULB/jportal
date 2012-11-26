@@ -30,32 +30,6 @@
         </ul>
       </div>
 
-      <div>
-        <h2>Anlegen</h2>
-        <ul>
-          <li>
-            <a href="/servlets/MCRStartEditorServlet?type=person&amp;step=author&amp;todo=wnewobj">Person</a>
-          </li>
-          <li>
-            <a href="/servlets/MCRStartEditorServlet?type=jpinst&amp;step=author&amp;todo=wnewobj">Institution</a>
-          </li>
-          <li>
-            <a href="/servlets/MCRStartEditorServlet?type=jpjournal&amp;step=author&amp;todo=wnewobj">Zeitschrift</a>
-          </li>
-        </ul>
-      </div>
-
     </div>
-    <div>
-        <h2>Bestände</h2>
-        <ul>
-          <li>
-            <a href="/content/main/journalList.xml">Zeitschriften</a>
-          </li>
-          <li>
-            <a href="/content/main/calendarList.xml">Altenburger Kalenderblätter</a>
-          </li>
-        </ul>
-      </div>
   </section>
 </MyCoReWebPage>
