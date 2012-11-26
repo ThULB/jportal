@@ -17,7 +17,7 @@ import fsu.jportal.test.framework.xsl.XSLTransformTest;
 
 public class SearchResultsListTest extends XSLTransformTest{
 
-    @Test
+//    @Test
     public void test() throws TransformerConfigurationException, TransformerFactoryConfigurationError, TransformerException, IOException, JDOMException {
         String testFilePath = "/" + getClass().getSimpleName() + "/xml/searchPersonResults.xml";
         InputStream testXMLAsStream = getClass().getResourceAsStream(testFilePath);
