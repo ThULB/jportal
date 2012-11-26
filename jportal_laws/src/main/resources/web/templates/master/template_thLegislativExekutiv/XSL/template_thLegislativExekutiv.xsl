@@ -10,11 +10,11 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
-    <xsl:call-template name="jp.laws.addAdvSearch"></xsl:call-template>
+  <!--     <xsl:call-template name="jp.laws.addAdvSearch" />  -->
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
-    <xsl:call-template name="jp.laws.addAdvSearch"></xsl:call-template>
+    <!-- <xsl:call-template name="jp.laws.addAdvSearch" />  -->
     <xsl:variable name="register" select="laws:getRegister(@ID)" />
     <xsl:if test="$register">
       <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />

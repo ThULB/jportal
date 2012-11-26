@@ -93,11 +93,11 @@
           query += " +volContentClassi1:" + territory;
         }
         if(from.length &gt; 0 &amp; until.length &gt; 0) {
-          query += " +published:[" + from + " TO " + until + "]";
+          query += " +date.published:[" + from + " TO " + until + "]";
         } else if(from.length &gt; 0) {
-          query += " +published:[" + from + " TO *]";
+          query += " +date.published:[" + from + " TO *]";
         } else if(until.length &gt; 0) {
-          query += " +published:[* TO " + until + "]";
+          query += " +date.published:[* TO " + until + "]";
         }
         query += " +contentClassi2:Gesetzesblaetter";
         query += " +objectType:jpvolume";
