@@ -3,20 +3,20 @@
   <!-- commonly used template for searching -->
   
   <xsl:template mode="createSolrQuery" match="query">
-    <xsl:value-of select="concat('solr:q=', queryTerm/@value)" />
+    <xsl:value-of select="concat('solr:q=', encoder:encode(queryTerm/@value), 'UTF-8')" />
     <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />
     <xsl:apply-templates mode="createParam" select="param" />
   </xsl:template>
 
   <xsl:template mode="createQueryTermField" match="queryTermField">
     <xsl:if test="@value != ''">
-      <xsl:value-of select="encoder:encode(concat(' ', @name, ':', @value))" />
+      <xsl:value-of select="encoder:encode(concat(' ', @name, ':', @value), 'UTF-8')" />
     </xsl:if>
   </xsl:template>
 
   <xsl:template mode="createParam" match="param">
     <xsl:if test="@value != ''">
-      <xsl:value-of select="concat('&amp;', @name, '=', encoder:encode(@value))" />
+      <xsl:value-of select="concat('&amp;', @name, '=', encoder:encode(@value, 'UTF-8'))" />
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
