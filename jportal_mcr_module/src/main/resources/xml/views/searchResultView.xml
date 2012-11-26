@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="searchResult">
+  <component name="resultList">
+    <div id="searchResults">
+      <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
+        <h2>Suchergebnisse</h2>
+        <div>
+          <span>Etwa <getData id="search.numFound"/> Ergebnisse für "<getData id="search.query"/>" gefunden.</span>
+          <ul class="navigation">
+            <li>
+              <a href="http://localhost:8291/jp-search.xml?XSL.searchjournalID=&amp;XSL.mode=advanced.form">Erweiterte Suche</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+<!--       <div id="resultList"> -->
+<!--         <ul class="jp-layout-list-nodecoration"> -->
+<!--           <li class="jp-layout-topline jp-layout-border-light"> -->
+<!--             <h3 class="jp-layout-clickLabel"> -->
+<!--               <a href="/receive/jportal_person_00000001">Berta, Bert</a> -->
+<!--             </h3> -->
+<!--             <ul class="jp-layout-metadaInSearchResults"> -->
+<!--               <li>Person</li> -->
+<!--             </ul> -->
+<!--           </li> -->
+<!--           <li class="jp-layout-topline jp-layout-border-light"> -->
+<!--             <h3 class="jp-layout-clickLabel"> -->
+<!--               <a href="/receive/jportal_person_00000002">Berthold, Brams</a> -->
+<!--             </h3> -->
+<!--             <ul class="jp-layout-metadaInSearchResults"> -->
+<!--               <li>Person</li> -->
+<!--             </ul> -->
+<!--           </li> -->
+<!--         </ul> -->
+<!--       </div> -->
+    </div>
+  </component>
+</view>

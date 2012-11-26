@@ -37,5 +37,13 @@ update permission create_jparticle for id CRUD with rulefile xml/grant-editorsgr
 update permission update_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
 update permission delete_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
 
+update permission create_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
+update permission update_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
+update permission delete_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+
+update permission create_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
+update permission update_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
+update permission delete_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+
 update permission update_derivate for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update derivate
 update permission read_derivate for id default with rulefile xml/grant-all.xml described by Read derivate

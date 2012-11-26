@@ -147,6 +147,9 @@
                 <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{$subselect.varpath}" />
                 <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{$subselect.webpage}" />
               </xsl:if>
+              <xsl:if test="$mode != ''">
+                <input type="hidden" name="XSL.mode" value="{$mode}" />
+              </xsl:if>
               <xsl:variable name="journalID">
                 <xsl:call-template name="getJournalID" />
               </xsl:variable>
@@ -157,7 +160,42 @@
           </div>
         </xsl:if>
         <div id="main">
-          <xsl:apply-templates />
+          <xsl:choose>
+            <xsl:when test="/MyCoReWebPage[not(//editor) and not(//jpsearch)]">
+              
+              <xsl:variable name="objectEditingHTML">
+                <editing>
+                  <xsl:call-template name="objectEditing">
+                    <xsl:with-param name="id" select="/mycoreobject/@ID" />
+                    <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
+                  </xsl:call-template>
+                </editing>
+              </xsl:variable>
+              <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
+              <xsl:variable name="contentRColHtml">
+                <xsl:choose>
+                  <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
+                    <div id="jp-content-RColumn" class="jp-layout-content-RCol">
+                      <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing' and li]" />
+                    </div>
+                    <class for="jp-content-LColumn">jp-layout-content-LCol-RCol</class>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <class for="jp-content-LColumn">jp-layout-content-LCol-noRCol</class>
+                  </xsl:otherwise>
+                </xsl:choose>
+              </xsl:variable>
+              <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
+              <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
+                <xsl:apply-templates />
+              </div>
+              <!-- Edit -->
+              <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates />
+            </xsl:otherwise>
+          </xsl:choose>   
         </div>
         <xsl:if test="$object='delete'">
           <xsl:copy-of select="$objectEditing/deleteMsg" />

@@ -6,6 +6,8 @@
 
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
   <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_journal')" />
+  <xsl:variable name="createPerson" select="acl:checkPermission('CRUD','create_journal')" />
+  <xsl:variable name="createInst" select="acl:checkPermission('CRUD','create_journal')" />
   <xsl:variable name="isAdmin" select="acl:checkPermission('POOLPRIVILEGE','administrate-user')" />
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
@@ -20,6 +22,8 @@
       <var name="updatePerm" value="{$updatePerm}" />
       <var name="deletePerm" value="{$deletePerm}" />
       <var name="createJournal" value="{$createJournal}" />
+      <var name="createPerson" value="{$createPerson}" />
+      <var name="createInst" value="{$createInst}" />
       <var name="isAdmin" value="{$isAdmin}" />
       <var name="linkImgAllowed" value="{$linkImgAllowed}" />
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
@@ -56,7 +60,6 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <restriction name="updatePerm" value="true" />
         <item>
           <label name="Neue Person" ref="editorServlet">
             <params>
@@ -65,6 +68,7 @@
               <param name="todo" value="wnewobj" />
             </params>
           </label>
+          <restriction name="createPerson" value="true" />
         </item>
         <item>
           <label name="Neue Institution" ref="editorServlet">
@@ -74,6 +78,7 @@
               <param name="todo" value="wnewobj" />
             </params>
           </label>
+          <restriction name="createInst" value="true" />
         </item>
         <item>
           <label name="Neue Zeitschrift" ref="editorServlet">
@@ -85,6 +90,9 @@
           </label>
           <restriction name="createJournal" value="true" />
         </item>
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <restriction name="updatePerm" value="true" />
         <item>
           <label name="Neues Band" ref="editorServlet">
             <params>
@@ -178,7 +186,7 @@
   <xsl:template name="objectEditing">
     <xsl:param name="id" />
     <xsl:param name="dataModel" />
-
+    
     <menu id="jp-object-editing" class="jp-layout-object-editing">
       <xsl:apply-templates mode="menuItem" select="$menu/item" />
 
