@@ -959,3 +959,55 @@ body {
 .jp-layout-maintitle, #searchRightNavi, #resultList, #artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
 	border-color: #DBDBDB;	
 }
+
+
+#metaData, #files {
+    padding: 10px 0px;
+    width: 100%;
+}
+#metaData td, #files td {
+	padding: 2px 0px;
+}
+#metaData .metaname, #files .metaname {
+    width: 20%;
+    font-weight: bold;
+    background-color: transparent;
+    color: black;
+    text-align: right;
+    padding-right: 10px;
+    vertical-align: top;
+}
+#metaData .metavalue, #files .metavalue {
+    width: 80%;
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+}
+#files .metaname, #files .metavalue{
+    width: auto;
+}
+#metaData .metahead, #files .metahead{
+    color: #15516E;
+    font-weight: bold;
+    background-color: transparent;
+}
+#files .metahead {
+	text-align: left;
+}
+
+#metaData .adressBox{
+}
+#metaData .addressType{
+    font-weight: bold;
+}
+#metaData .address{
+    padding-left: 2em;
+}
+#metaData .derivateBox{
+}
+#metaData .derivateHeading{
+    font-weight: bold;
+}
+#metaData .derivate{
+    padding-left: 2em;
+}
