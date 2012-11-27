@@ -130,34 +130,49 @@
           </div>
         </div>
         <div id="logo"></div>
-
+        
+        <xsl:variable name="searchBarMode">
+          <xsl:variable name="controllerHook">
+            <jpsearchBar mode="{$mode}"/>
+          </xsl:variable>   
+          <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar"/>
+        </xsl:variable>
+        
         <xsl:if test="$showSearchBar">
-          <div id="searchBar">
-            <form id="searchForm" action="/jp-search.xml">
-              <xsl:variable name="queryterm">
-                <xsl:if test="$qt != '*'">
-                  <xsl:value-of select="$qt" />
+          <xsl:variable name="searchBar" select="xalan:nodeset($searchBarMode)"/>
+          <xsl:choose>
+          <xsl:when test="$searchBar/div[@id='searchBar']">
+            <xsl:copy-of select="$searchBar/div[@id='searchBar']"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <div id="searchBar">
+              <form id="searchForm" action="/jp-search.xml">
+                <xsl:variable name="queryterm">
+                  <xsl:if test="$qt != '*'">
+                    <xsl:value-of select="$qt" />
+                  </xsl:if>
+                </xsl:variable>
+                <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
+                <input id="submitButton" type="submit" value="Suche" />
+                <xsl:if test="$subselect.type != ''">
+                  <input type="hidden" name="XSL.subselect.type" value="{$subselect.type}" />
+                  <input type="hidden" name="XSL.subselect.session.SESSION" value="{$subselect.session}" />
+                  <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{$subselect.varpath}" />
+                  <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{$subselect.webpage}" />
                 </xsl:if>
-              </xsl:variable>
-              <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
-              <input id="submitButton" type="submit" value="Suche" />
-              <xsl:if test="$subselect.type != ''">
-                <input type="hidden" name="XSL.subselect.type" value="{$subselect.type}" />
-                <input type="hidden" name="XSL.subselect.session.SESSION" value="{$subselect.session}" />
-                <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{$subselect.varpath}" />
-                <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{$subselect.webpage}" />
-              </xsl:if>
-              <xsl:if test="$mode != ''">
-                <input type="hidden" name="XSL.mode" value="{$mode}" />
-              </xsl:if>
-              <xsl:variable name="journalID">
-                <xsl:call-template name="getJournalID" />
-              </xsl:variable>
-              <xsl:if test="$journalID != ''">
-                <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
-              </xsl:if>
-            </form>
-          </div>
+                <xsl:if test="$mode != ''">
+                  <input type="hidden" name="XSL.mode" value="{$mode}" />
+                </xsl:if>
+                <xsl:variable name="journalID">
+                  <xsl:call-template name="getJournalID" />
+                </xsl:variable>
+                <xsl:if test="$journalID != ''">
+                  <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
+                </xsl:if>
+              </form>
+            </div>
+          </xsl:otherwise>
+          </xsl:choose>
         </xsl:if>
         <div id="main">
           <xsl:choose>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view name="subselect">
+  <component name="subelectFormInput">
+    <div id="searchBar">
+      <form id="searchForm" action="/jp-search.xml">
+        <input id="inputField" name="XSL.qt" value="{subselect.type.label} eingeben" />
+        <input id="submitButton" type="submit" value="Suche" />
+        <input type="hidden" name="XSL.subselect.type" value="{subselect.type}" />
+        <input type="hidden" name="XSL.subselect.session.SESSION" value="{subselect.session}" />
+        <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{subselect.varpath}" />
+        <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{subselect.webpage}" />
+        <input type="hidden" name="XSL.mode" value="subselect.result" />
+      </form>
+    </div>
+  </component>
+  <component name="subelectForm">
+    <div id="subselectForm">
+      <div class="jp-layout-bottomline jp-layout-border-light" id="subselectFormHeader">
+        <h2>{subselect.type.label}</h2>
+      </div>
+      <div id="subselectFormInfoText">
+        Bitte benutzen Sie das Suchfeld, um Personen ....
+      </div>
+    </div>
+  </component>
+  <component name="resultList">
+    <div id="searchResults">
+      <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
+        <h2>Suchergebnisse</h2>
+        <div>
+          <span>
+            Etwa
+            <getData id="search.numFound" />
+            Personen mit Namen "
+            <getData id="search.query" />
+            " gefunden.
+          </span>
+        </div>
+      </div>
+      <div id="resultList">
+        <ul class="jp-layout-list-nodecoration">
+          <component id="resultListEntry">
+            <li class="resultListEntry jp-layout-topline jp-layout-border-light">
+              <h3 class="jp-layout-clickLabel">
+                <a href="/receive/{result.hit.id}">
+                  <getData id="result.hit.heading" />
+                </a>
+              </h3>
+              <ul class="jp-layout-metadaInSearchResults">
+                <li>Person</li>
+              </ul>
+            </li>
+          </component>
+        </ul>
+        <div class="jp-layout-topline jp-layout-border-light" id="resultPaginator">
+          <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
+            <component id="resultPaginator">
+              <li class="{resultpage} jp-layout-selected-underline">
+                <a href="{link.to.resultpage}">
+                  <getData id="resultpage.label" />
+                </a>
+              </li>
+            </component>
+          </menu>
+        </div>
+      </div>
+    </div>
+  </component>
+</view>

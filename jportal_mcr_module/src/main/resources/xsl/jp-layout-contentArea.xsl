@@ -31,7 +31,7 @@
     <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
     <xsl:variable name="contentRColHtml">
       <xsl:choose>
-        <xsl:when test="$objectEditing/menu[@id='jp-object-editing']/li">
+        <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
           <div id="jp-content-RColumn" class="jp-layout-content-RCol">
             <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing' and li]" />
           </div>
@@ -43,8 +43,10 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
-
-    <xsl:call-template name="breadcrumb" />
+    
+    <xsl:if test="not($currentType='person' or $currentType='jpinst')">
+      <xsl:call-template name="breadcrumb" />
+    </xsl:if>
 
     <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />

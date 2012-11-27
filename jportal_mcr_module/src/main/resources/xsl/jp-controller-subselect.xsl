@@ -5,14 +5,92 @@
   <xsl:param name="searchjournalID" select="''" />
   <xsl:param name="start" select="'0'" />
   <xsl:param name="rows" select="'10'" />
-  
+
   <!-- subselect param -->
   <xsl:param name="subselect.type" select="''" />
   <xsl:param name="subselect.session" />
   <xsl:param name="subselect.varpath" />
   <xsl:param name="subselect.webpage" />
+
+  <xsl:variable name="subselectXML">
+    <subselect>
+      <param name="subselect.type" value="{$subselect.type}" />
+      <param name="subselect.session" value="{$subselect.session}" />
+      <param name="subselect.varpath" value="{$subselect.varpath}" />
+      <param name="subselect.webpage" value="{$subselect.webpage}" />
+    </subselect>
+  </xsl:variable>
+  <xsl:variable name="subselectParam" select="xalan:nodeset($subselectXML)" />
+
+  <xsl:variable name="subselectTypeLabel">
+    <xsl:choose>
+      <xsl:when test="$subselect.type = 'person'">
+        <xsl:value-of select="'Personen'" />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="subselectView" select="document('../xml/views/subselectView.xml')/view" />
+
+  <xsl:template mode="renderView" match="@*|node()">
+    <xsl:param name="data" />
+    <xsl:copy>
+      <xsl:apply-templates mode="renderView" select="@*|node()">
+        <xsl:with-param name="data" select="$data" />
+      </xsl:apply-templates>
+    </xsl:copy>
+  </xsl:template>
   
   <xsl:template match="jpsearch" mode="subselect.form">
+    <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='subelectForm']/*" />
+  </xsl:template>
+
+  <xsl:template mode="controllerHook" match="/jpsearchBar[@mode='subselect.form']">
+    <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='subelectFormInput']/*">
+      <xsl:with-param name="data" select="$subselectParam/subselect" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <!-- Rendering search form view in subselect -->
+  <xsl:template mode="renderView" match="@value[contains(.,'{subselect.type.label}')]">
+    <xsl:attribute name="value">
+      <xsl:value-of select="concat($subselectTypeLabel,'name', substring-after(.,'{subselect.type.label}'))" />
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="h2[.='{subselect.type.label}']">
+    <xsl:copy>
+      <xsl:value-of select="concat($subselectTypeLabel, 'auswahl')" />
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@value[contains(.,'{subselect.type}')]">
+    <xsl:attribute name="value">
+      <xsl:value-of select="$subselect.type" />
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@value[contains(.,'{subselect.session}')]">
+    <xsl:attribute name="value">
+      <xsl:value-of select="$subselect.session" />
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@value[contains(.,'{subselect.varpath}')]">
+    <xsl:attribute name="value">
+      <xsl:value-of select="$subselect.varpath" />
+    </xsl:attribute>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@value[contains(.,'{subselect.webpage}')]">
+    <xsl:attribute name="value">
+      <xsl:value-of select="$subselect.webpage" />
+    </xsl:attribute>
+  </xsl:template>
+  <!-- ############################################################################## -->
+
+  <!-- create search query -->
+  <xsl:template match="jpsearch" mode="subselect.result">
     <xsl:variable name="queryXML">
       <query>
         <queryTerm value="{$qt}" />
@@ -27,81 +105,174 @@
       <xsl:apply-templates mode="createSolrQuery" select="xalan:nodeset($queryXML)/query" />
     </xsl:variable>
 
-    <xsl:variable name="subselectXML">
-      <subselect>
-        <param name="subselect.type" value="$subselect.type"/>
-        <param name="subselect.session" value="$subselect.session"/>
-        <param name="subselect.varpath" value="$subselect.varpath"/>
-        <param name="subselect.webpage" value="$subselect.webpage"/>
-      </subselect>
-    </xsl:variable>
-    
     <xsl:variable name="searchResults">
       <solrSearch>
-        <xsl:copy-of select="$subselectXML"/>
-        <xsl:copy-of select="$queryXML"/>
-        <xsl:copy-of select="document($query)"/>
+        <xsl:copy-of select="$subselectXML" />
+        <xsl:copy-of select="$queryXML" />
+        <xsl:copy-of select="document($query)" />
       </solrSearch>
     </xsl:variable>
 
-    <xsl:variable name="searchResultView" select="document('../xml/views/searchResultView.xml')/view" />
-    <!-- 
-    <xsl:apply-templates mode="searchResults.subselect" select="document($query)/response/result/doc" />
-     -->
-    <xsl:apply-templates mode="renderView" select="$searchResultView/component[@name='resultList']/*">
-      <xsl:with-param name="data" select="document($query)"/>
+    <!-- <xsl:apply-templates mode="searchResults.subselect" select="document($query)/response/result/doc" /> -->
+    <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='resultList']/*">
+      <xsl:with-param name="data" select="document($query)/response" />
     </xsl:apply-templates>
-    
-  </xsl:template>
-  
-  <xsl:template mode="renderView" match="@*|node()">
-    <xsl:param name="data"/>
-    <xsl:copy>
-        <xsl:apply-templates mode="renderView" select="@*|node()">
-          <xsl:with-param name="data" select="$data"/>
-        </xsl:apply-templates>
-    </xsl:copy>
-  </xsl:template>
-  
-  <xsl:template mode="renderView" match="getData[@id='search.numFound']">
-    <xsl:param name="data"/>
-    <xsl:value-of select="$data/response/result/@numFound"/>    
-  </xsl:template>
-  
-  <xsl:template mode="renderView" match="getData[@id='search.query']">
-    <xsl:param name="data"/>
-    <xsl:value-of select="substring-before($data/response/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],' +')"/>    
-  </xsl:template>
-  
-  <xsl:template mode="searchResults.subselect" match="doc">
-      <li>
-        <xsl:value-of select="str[@name='id']"/>
-      </li>
   </xsl:template>
 
-  <xsl:template match="jpsubselect">
-    <xsl:variable name="type">
-      <xsl:choose>
-        <xsl:when test="$subselect.type = 'person'">
-          <xsl:value-of select="'Person'" />
-        </xsl:when>
-        <xsl:when test="$subselect.type = 'institution'">
-          <xsl:value-of select="'Institution'" />
-        </xsl:when>
-      </xsl:choose>
+  <!-- Rendering view for result list -->
+  <xsl:template mode="renderView" match="getData[@id='search.numFound']">
+    <xsl:param name="data" />
+    <xsl:value-of select="$data/result/@numFound" />
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="getData[@id='search.query']">
+    <xsl:param name="data" />
+    <xsl:value-of select="substring-before($data/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],' +')" />
+  </xsl:template>
+
+  <!-- Rendering view for result list entry -->
+  <xsl:template mode="renderView" match="component[@id='resultListEntry']">
+    <xsl:param name="data" />
+    <xsl:apply-templates mode="listEntryView" select="$data/result/doc">
+      <xsl:with-param name="view" select="li[contains(@class,'resultListEntry')]" />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template mode="listEntryView" match="doc">
+    <xsl:param name="view" />
+
+    <xsl:apply-templates mode="renderView" select="$view">
+      <xsl:with-param name="data" select="." />
+    </xsl:apply-templates>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="getData[@id='result.hit.heading']">
+    <xsl:param name="data" />
+    <xsl:value-of select="$data/str[@name='heading']" />
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@href[contains(.,'{result.hit.id}')]">
+    <xsl:param name="data" />
+    <xsl:variable name="url">
+      <url>
+        <base>/servlets/XMLEditor</base>
+        <param name="_action" value="end.subselect"/>
+        <xsl:copy-of select="$subselectParam/subselect/param"/>
+        <param name="mode" value="prefix"/>
+        <param name="_var_@xlink:href" value="{$data/str[@name='id']}"/>
+        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}"/>
+      </url>
     </xsl:variable>
     
-    <xsl:value-of select="concat('Bitte benutzen Sie das Suchfeld, um eine ', $type, ' auszuwählen.')"></xsl:value-of>
-    <!-- http://localhost:18101/servlets/XMLEditor?
-    _action=end.subselect
-    &subselect.session=9xvpggvoyi
-    &subselect.varpath=/mycoreobject/metadata/participants/participant
-    &subselect.webpage=editor_form_commit-jpjournal.xml%3Ftype%3Djpjournal%26step%3Dcommit%26cancelUrl%3Dhttp%253A%252F%252Flocalhost%253A18101%252Freceive%252Fjportal_jpjournal_00000761%26sourceUri%3DxslStyle%253Amycoreobject-editor%253Amcrobject%253Ajportal_jpjournal_00000761%26mcrid%3Djportal_jpjournal_00000761%26
-    &mode=prefix
-    &_var_@xlink:href=jportal_person_00061171
-    &_var_@xlink:title=Gleichen-Ru%C3%9Fwurm,%20Alexander%20von%20(1865-11-06%20-%201947-10-25,%20Schriftsteller;%20Herausgeber;%20%C3%9Cbersetzer;%20Kulturphilosoph)%20%20%20%20%20%20%20%20%20%20%20%20%20
-    &_var_@field=participants_art
-    &_var_@operator==
-    &_var_@value=jportal_person_00061171 -->
+    <xsl:attribute name="href">
+      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url"/>
+    </xsl:attribute>
   </xsl:template>
+
+  <!-- Rendering view for result list paginator -->
+  <xsl:template mode="renderView" match="component[@id='resultPaginator']">
+    <xsl:param name="data" />
+
+    <xsl:variable name="resultPaginatorParam">
+      <result>
+        <rows>
+          <xsl:value-of select="$data/lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
+        </rows>
+        <numFound>
+          <xsl:value-of select="$data/result[@name='response']/@numFound" />
+        </numFound>
+        <start>
+          <xsl:value-of select="$data/result[@name='response']/@start" />
+        </start>
+      </result>
+    </xsl:variable>
+
+    <xsl:variable name="paginatorStart">
+      <xsl:choose>
+        <xsl:when test="($start - 4*$rows) &gt; $rows">
+          <xsl:value-of select="$start - 4*$rows" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="0" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:call-template name="createResultPaginator">
+      <xsl:with-param name="numEntry" select="$rows" />
+      <xsl:with-param name="numFound" select="$data/result[@name='response']/@numFound" />
+      <xsl:with-param name="startPage" select="$paginatorStart" />
+      <xsl:with-param name="loopCount" select="10" />
+      <xsl:with-param name="view" select="li[contains(@class,'{resultpage}')]" />
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="createResultPaginator">
+    <xsl:param name="numEntry" />
+    <xsl:param name="numFound" />
+    <xsl:param name="startPage" />
+    <xsl:param name="loopCount" />
+    <xsl:param name="view" />
+    
+    <xsl:variable name="viewData">
+      <label>
+        <xsl:value-of select="ceiling($startPage div $rows) + 1" />
+      </label>
+      <href>
+        <xsl:call-template name="UrlSetParam">
+          <xsl:with-param name="url" select="$RequestURL" />
+          <xsl:with-param name="par" select="'XSL.start'" />
+          <xsl:with-param name="value" select="$startPage" />
+        </xsl:call-template>
+      </href>
+      <xsl:if test="$startPage = $start">
+        <selected />
+      </xsl:if>
+    </xsl:variable>
+
+    <xsl:apply-templates mode="renderView" select="$view">
+      <xsl:with-param name="data" select="xalan:nodeset($viewData)" />
+    </xsl:apply-templates>
+
+    <xsl:if test="$loopCount &gt; 1 and $start + $rows &lt; $numFound">
+      <xsl:call-template name="createResultPaginator">
+        <xsl:with-param name="numEntry" select="$numEntry" />
+        <xsl:with-param name="numFound" select="$numFound" />
+        <xsl:with-param name="startPage" select="$startPage + $rows" />
+        <xsl:with-param name="loopCount" select="$loopCount - 1" />
+        <xsl:with-param name="view" select="$view" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@class[contains(.,'{resultpage}')]">
+    <xsl:param name="data" />
+
+    <xsl:if test="$data/selected">
+      <xsl:attribute name="class">
+        <xsl:value-of select="substring-after(.,'{resultpage} ')" />
+      </xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="getData[@id='resultpage.label']">
+    <xsl:param name="data" />
+
+    <xsl:value-of select="$data/label" />
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@href[.='{link.to.resultpage}']">
+    <xsl:param name="data" />
+
+    <xsl:attribute name="href">
+        <xsl:value-of select="$data/href" />
+    </xsl:attribute>
+  </xsl:template>
+
+
+  <!-- ###################################################### -->
+    <!-- http://localhost:18101/servlets/XMLEditor? _action=end.subselect &subselect.session=9xvpggvoyi &subselect.varpath=/mycoreobject/metadata/participants/participant 
+      &subselect.webpage=editor_form_commit-jpjournal.xml%3Ftype%3Djpjournal%26step%3Dcommit%26cancelUrl%3Dhttp%253A%252F%252Flocalhost%253A18101%252Freceive%252Fjportal_jpjournal_00000761%26sourceUri%3DxslStyle%253Amycoreobject-editor%253Amcrobject%253Ajportal_jpjournal_00000761%26mcrid%3Djportal_jpjournal_00000761%26 
+      &mode=prefix &_var_@xlink:href=jportal_person_00061171 &_var_@xlink:title=Gleichen-Ru%C3%9Fwurm,%20Alexander%20von%20(1865-11-06%20-%201947-10-25,%20Schriftsteller;%20Herausgeber;%20%C3%9Cbersetzer;%20Kulturphilosoph)%20%20%20%20%20%20%20%20%20%20%20%20%20 
+      &_var_@field=participants_art &_var_@operator== &_var_@value=jportal_person_00061171 -->
 </xsl:stylesheet>
