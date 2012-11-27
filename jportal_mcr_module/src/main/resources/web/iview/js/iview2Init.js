@@ -98,11 +98,11 @@ function jpInitIview2() {
         iviewObj.startViewer(startFile);
     });
 */
-    $('.jp-layout-derivateList').delegate('div.jp-layout-derivateWrapper', 'mouseenter', function() {
+    $('.jp-layout-derivateList').delegate('div.jp-layout-derivateWrapper .image', 'mouseenter', function() {
         $(this).find('div.jp-layout-hidden-Button').show();
-    }).delegate('div.jp-layout-derivateWrapper', 'mouseleave click', function() {
+    }).delegate('div.jp-layout-derivateWrapper .image', 'mouseleave click', function() {
         $(this).find('div.jp-layout-hidden-Button').hide();
-    }).delegate('div.jp-layout-derivateWrapper', 'click', function() {
+    }).delegate('div.jp-layout-derivateWrapper .image', 'click', function() {
         clickToEnlarge($(this));
     });
 

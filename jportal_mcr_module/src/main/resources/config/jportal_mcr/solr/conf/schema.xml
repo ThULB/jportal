@@ -133,6 +133,7 @@
     <field name="contentClassi5" type="string" />
     <field name="contentClassi6" type="string" />
     <field name="contentClassi7" type="string" />
+    <field name="volContentClassi1" type="string" />
 
     <field name="keywords" type="text_de" multiValued="true" stored="false" />
 

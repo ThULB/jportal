@@ -79,3 +79,25 @@ function introEditor(journalID) {
         }
     }
 }
+
+function showDeleteDerivateDialog(/*String*/ id) {
+	if (!confirm('Das Derivat wirklich löschen?')) {
+	    return;
+	}
+	jQuery.ajax({
+		type: 'DELETE',
+		url: '/rsc/object/' + id
+	}).done(function(msg) {
+		location.reload(true);
+	}).fail(function(error) {
+		if(error.status == 400) {
+			alert('Bad request: ' + error.responseText);
+		} else if(error.status == 401) {
+			alert('Unauthorized: You have no permission to delete this object!');
+		} else if(error.status == 403) {
+			alert('Forbidden: ' + error.responseText);
+		} else if(error.status == 404) {
+			alert('Unknown MyCoRe object id ' + id);
+		}
+	});
+}

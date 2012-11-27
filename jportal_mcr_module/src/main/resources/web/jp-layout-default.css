@@ -882,12 +882,20 @@ body {
 	float: left;
 	margin-right: 10px;
 	margin-bottom: 8px;
-	position: relative;
 	vertical-align: top;
 	width: 93px;
 }
 
-.jp-layout-derivateList .jp-layout-derivateWrapper:hover {
+.jp-layout-derivateList .jp-layout-derivateWrapper .edit {
+	margin: 0px;
+	padding: 0px;
+}
+
+.jp-layout-derivateList .jp-layout-derivateWrapper .image {
+	position: relative;
+}
+
+.jp-layout-derivateList .jp-layout-derivateWrapper .image:hover {
 	cursor: pointer;
 }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/"
-  xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" exclude-result-prefixes="xlink iview2 mcr mcrservlet">
+  xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl">
 
   <xsl:param name="iview2.debug" select="'false'" />
 
@@ -30,36 +31,58 @@
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derivateLink">
-    <xsl:call-template name="iview2Entry">
-      <xsl:with-param name="derivID" select="substring-before(@xlink:href, '/')" />
-      <xsl:with-param name="file" select="concat('/',substring-after(@xlink:href, '/'))" />
-    </xsl:call-template>
+    <xsl:variable name="objID" select="/mycoreobject/@ID" />  
+    <div class="jp-layout-derivateWrapper">
+      <div class="image">
+        <xsl:call-template name="iview2Entry">
+          <xsl:with-param name="derivID" select="substring-before(@xlink:href, '/')" />
+          <xsl:with-param name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
+        </xsl:call-template>
+      </div>
+      <xsl:if test="acl:checkPermission($objID, 'delete_derlink')">
+        <ul class="edit">
+          <li>
+            <a href="{$WebApplicationBaseURL}servlets/DerivateLinkServlet?mode=removeLink&amp;from={$objID}&amp;to={@xlink:href}">
+              <xsl:value-of select="'Verlinkung löschen'" />
+             </a>
+          </li>
+        </ul>
+      </xsl:if>
+    </div>
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derobject">
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
-    <xsl:choose>
-      <xsl:when test="$iviewFile != ''">
-        <xsl:call-template name="iview2Entry">
-          <xsl:with-param name="derivID" select="@xlink:href" />
-          <xsl:with-param name="file" select="$iviewFile" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="derivEntry">
-          <xsl:with-param name="derivID" select="@xlink:href" />
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <div class="jp-layout-derivateWrapper">
+      <div class="image">
+        <xsl:choose>
+          <xsl:when test="$iviewFile != ''">
+            <xsl:call-template name="iview2Entry">
+              <xsl:with-param name="derivID" select="@xlink:href" />
+              <xsl:with-param name="file" select="$iviewFile" />
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="derivEntry">
+              <xsl:with-param name="derivID" select="@xlink:href" />
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </div>
+      <xsl:if test="mcrxml:isCurrentUserInRole('admin') or mcrxml:isCurrentUserInRole('admingroup')">
+        <ul class="edit">
+          <li><a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a></li>
+          <!-- <li><a href="">URN vergeben</a></li>-->
+        </ul>
+      </xsl:if>
+    </div>
   </xsl:template>
 
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <div class="jp-layout-derivateWrapper">
-      <div class="jp-layout-hidden-Button"></div>
-      <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
-    </div>
+    <div class="jp-layout-hidden-Button"></div>
+    <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
   </xsl:template>
 
   <xsl:template name="derivEntry">
@@ -68,15 +91,13 @@
     <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
     <xsl:variable name="encodedMaindoc" select="mcrservlet:encodeURL($maindoc)" />
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />
-    <div class="jp-layout-derivateWrapper">
-      <a href="{$derivbase}{$encodedMaindoc}">
-        <div class="jp-layout-hidden-Button"></div>
-        <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-        <span style="display: inline-block; text-align: center; width: 100%; text-transform: uppercase;">
-          <xsl:value-of select="substring-after($maindoc, '.')" />
-        </span>
-      </a>
-    </div>
+    <a href="{$derivbase}{$encodedMaindoc}">
+      <div class="jp-layout-hidden-Button"></div>
+      <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
+      <span style="display: inline-block; text-align: center; width: 100%; text-transform: uppercase;">
+        <xsl:value-of select="substring-after($maindoc, '.')" />
+      </span>
+    </a>
   </xsl:template>
 
   <xsl:template name="initIview2JS">
