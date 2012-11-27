@@ -39,25 +39,29 @@ public abstract class LawsXMLFunctions {
         }
     };
 
-    public static Document getRegister(String objectId) throws SAXParseException, SAXException, IOException {
+    public static Document getRegister(String objectId) {
         if(objectId == null) {
             return null;
         }
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
-        List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
-        for(MCRMetaLinkID derLink : metaLinkList) {
-            String derId = derLink.getXLinkHref();
-            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derId));
-            MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
-            String mainDoc = metaIFS.getMainDoc();
-            // assume that a xml file is always the register xml
-            if(mainDoc.toLowerCase().endsWith(".xml")) {
-                MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
-                if(xmlFile instanceof MCRFile) {
-                    InputStream is = ((MCRFile)xmlFile).getContentAsInputStream();
-                    return BUILDER_LOCAL.get().parse(is);
+        try {
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
+            List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
+            for(MCRMetaLinkID derLink : metaLinkList) {
+                String derId = derLink.getXLinkHref();
+                MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derId));
+                MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
+                String mainDoc = metaIFS.getMainDoc();
+                // assume that a xml file is always the register xml
+                if(mainDoc.toLowerCase().endsWith(".xml")) {
+                    MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
+                    if(xmlFile instanceof MCRFile) {
+                        InputStream is = ((MCRFile)xmlFile).getContentAsInputStream();
+                        return BUILDER_LOCAL.get().parse(is);
+                    }
                 }
             }
+        } catch(Exception exc) {
+            LOGGER.error("while retrieving register", exc);
         }
         return null;
     }
