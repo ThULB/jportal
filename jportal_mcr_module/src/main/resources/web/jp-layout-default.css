@@ -883,7 +883,6 @@ body {
 	margin-right: 10px;
 	margin-bottom: 8px;
 	vertical-align: top;
-	width: 93px;
 }
 
 .jp-layout-derivateList .jp-layout-derivateWrapper .edit {
@@ -893,6 +892,7 @@ body {
 
 .jp-layout-derivateList .jp-layout-derivateWrapper .image {
 	position: relative;
+	width: 93px;
 }
 
 .jp-layout-derivateList .jp-layout-derivateWrapper .image:hover {

@@ -53,6 +53,8 @@
 
   <xsl:template mode="derivateDisplay" match="derobject">
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
+    <xsl:variable name="objID" select="/mycoreobject/@ID" />
+    
     <div class="jp-layout-derivateWrapper">
       <div class="image">
         <xsl:choose>
@@ -71,8 +73,12 @@
       </div>
       <xsl:if test="mcrxml:isCurrentUserInRole('admin') or mcrxml:isCurrentUserInRole('admingroup')">
         <ul class="edit">
+          <li><a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a></li>
+          <li><a href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a></li>
+          <li><a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a></li>
+          <li><a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a></li>
+          <li><a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">Derivat verstecken</a></li>
           <li><a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a></li>
-          <!-- <li><a href="">URN vergeben</a></li>-->
         </ul>
       </xsl:if>
     </div>
