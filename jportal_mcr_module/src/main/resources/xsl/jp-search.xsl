@@ -26,6 +26,9 @@
       <xsl:when test="$mode = 'subselect.form'">
         <xsl:apply-templates select="." mode="subselect.form" />
       </xsl:when>
+      <xsl:when test="$mode = 'subselect.result'">
+        <xsl:apply-templates select="." mode="subselect.result" />
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
