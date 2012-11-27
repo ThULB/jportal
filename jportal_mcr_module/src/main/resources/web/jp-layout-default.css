@@ -58,9 +58,9 @@ body {
 }
 
 .jp-layout-header {
-	background: url("templates/master/template_default/IMAGES/header.png")
+	background: url("templates/master/template_master2/IMAGES/logo.png")
 		repeat-x scroll 0 0 transparent;
-	height: 136px;
+	height: 115px;
 }
 
 .jp-global-navigation-bar {
@@ -757,10 +757,10 @@ body {
 }
 
 #logo {
-	background: url("templates/master/template_default/IMAGES/header.png")
+	background: url("templates/master/template_master2/IMAGES/logo.png")
 		repeat-x scroll 0 0 transparent;
 	clear: both;
-	height: 136px;
+	height: 115px;
 }
 
 #searchBar {
