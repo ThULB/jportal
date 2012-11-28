@@ -71,14 +71,18 @@
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <xsl:if test="mcrxml:isCurrentUserInRole('admin') or mcrxml:isCurrentUserInRole('admingroup')">
+      <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
         <ul class="edit">
           <li><a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a></li>
           <li><a href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a></li>
-          <li><a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a></li>
-          <li><a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a></li>
-          <li><a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">Derivat verstecken</a></li>
-          <li><a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a></li>
+          <xsl:if test="acl:checkPermission(@xlink:href, 'update_derivate')">
+            <li><a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a></li>
+            <li><a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a></li>
+          </xsl:if>
+          <xsl:if test="acl:checkPermission(@xlink:href, 'deletedb')">
+            <li><a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">Derivat verstecken</a></li>
+            <li><a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a></li>
+          </xsl:if>
         </ul>
       </xsl:if>
     </div>

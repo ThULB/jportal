@@ -7,7 +7,7 @@
       <li>
         <a href="{$WebApplicationBaseURL}content/below/index.xml">Start</a>
       </li>
-      <xsl:if test="mcrxml:isCurrentUserInRole('admin') or mcrxml:isCurrentUserInRole('admingroup')">
+      <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
         </li>

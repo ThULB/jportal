@@ -5,7 +5,7 @@
   <xsl:template match="jpadmin">
     <h1>Administration</h1>
     <xsl:choose>
-      <xsl:when test="mcrxml:isCurrentUserInRole('admin') or mcrxml:isCurrentUserInRole('admingroup')">
+      <xsl:when test="mcrxml:isCurrentUserInRole('admin')">
         <xsl:call-template name="jp.admin.show" />
       </xsl:when>
       <xsl:otherwise>
