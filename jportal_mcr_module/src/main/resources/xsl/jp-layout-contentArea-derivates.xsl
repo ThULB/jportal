@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/"
   xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl">
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
 
   <xsl:param name="iview2.debug" select="'false'" />
 
@@ -92,7 +93,7 @@
     <xsl:param name="derivID" />
     <xsl:param name="file" />
     <div class="jp-layout-hidden-Button"></div>
-    <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
+    <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, encoder:encode($file, 'UTF-8'),'?centerThumb=no')}" />
   </xsl:template>
 
   <xsl:template name="derivEntry">
