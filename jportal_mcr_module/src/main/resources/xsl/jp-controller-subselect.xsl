@@ -25,7 +25,10 @@
   <xsl:variable name="subselectTypeLabel">
     <xsl:choose>
       <xsl:when test="$subselect.type = 'person'">
-        <xsl:value-of select="'Personen'" />
+        <xsl:value-of select="'Person'" />
+      </xsl:when>
+      <xsl:when test="$subselect.type = 'jpinst'">
+        <xsl:value-of select="'Institution'" />
       </xsl:when>
     </xsl:choose>
   </xsl:variable>
@@ -40,7 +43,7 @@
       </xsl:apply-templates>
     </xsl:copy>
   </xsl:template>
-  
+
   <xsl:template match="jpsearch" mode="subselect.form">
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='subelectForm']/*" />
   </xsl:template>
@@ -60,7 +63,7 @@
 
   <xsl:template mode="renderView" match="h2[.='{subselect.type.label}']">
     <xsl:copy>
-      <xsl:value-of select="concat($subselectTypeLabel, 'auswahl')" />
+      <xsl:value-of select="concat($subselectTypeLabel, 'enauswahl')" />
     </xsl:copy>
   </xsl:template>
 
@@ -125,9 +128,13 @@
     <xsl:value-of select="$data/result/@numFound" />
   </xsl:template>
 
+  <xsl:template mode="renderView" match="getData[@id='subselect.type.label']">
+    <xsl:value-of select="concat($subselectTypeLabel, @concat)" />
+  </xsl:template>
+
   <xsl:template mode="renderView" match="getData[@id='search.query']">
     <xsl:param name="data" />
-    <xsl:value-of select="substring-before($data/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],' +')" />
+    <xsl:value-of select="concat(@pre,substring-before($data/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],' +'),@post)" />
   </xsl:template>
 
   <!-- Rendering view for result list entry -->
@@ -156,16 +163,16 @@
     <xsl:variable name="url">
       <url>
         <base>/servlets/XMLEditor</base>
-        <param name="_action" value="end.subselect"/>
-        <xsl:copy-of select="$subselectParam/subselect/param"/>
-        <param name="mode" value="prefix"/>
-        <param name="_var_@xlink:href" value="{$data/str[@name='id']}"/>
-        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}"/>
+        <param name="_action" value="end.subselect" />
+        <xsl:copy-of select="$subselectParam/subselect/param" />
+        <param name="mode" value="prefix" />
+        <param name="_var_@xlink:href" value="{$data/str[@name='id']}" />
+        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" />
       </url>
     </xsl:variable>
-    
+
     <xsl:attribute name="href">
-      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url"/>
+      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url" />
     </xsl:attribute>
   </xsl:template>
 
@@ -198,6 +205,24 @@
       </xsl:choose>
     </xsl:variable>
 
+    <xsl:if test="($start - $rows) &gt;= 0">
+      <xsl:variable name="viewData">
+        <label>
+          <xsl:value-of select="'&lt; Zurück'" />
+        </label>
+        <href>
+          <xsl:call-template name="UrlSetParam">
+            <xsl:with-param name="url" select="$RequestURL" />
+            <xsl:with-param name="par" select="'XSL.start'" />
+            <xsl:with-param name="value" select="$start - $rows" />
+          </xsl:call-template>
+        </href>
+      </xsl:variable>
+      <xsl:apply-templates mode="renderView" select="li[contains(@class,'{resultpage}')]">
+        <xsl:with-param name="data" select="xalan:nodeset($viewData)" />
+      </xsl:apply-templates>
+    </xsl:if>
+
     <xsl:call-template name="createResultPaginator">
       <xsl:with-param name="numEntry" select="$rows" />
       <xsl:with-param name="numFound" select="$data/result[@name='response']/@numFound" />
@@ -205,6 +230,24 @@
       <xsl:with-param name="loopCount" select="10" />
       <xsl:with-param name="view" select="li[contains(@class,'{resultpage}')]" />
     </xsl:call-template>
+
+    <xsl:if test="($start + $rows) &lt; $data/result[@name='response']/@numFound">
+      <xsl:variable name="viewData">
+        <label>
+          <xsl:value-of select="'Weiter &gt;'" />
+        </label>
+        <href>
+          <xsl:call-template name="UrlSetParam">
+            <xsl:with-param name="url" select="$RequestURL" />
+            <xsl:with-param name="par" select="'XSL.start'" />
+            <xsl:with-param name="value" select="$start + $rows" />
+          </xsl:call-template>
+        </href>
+      </xsl:variable>
+      <xsl:apply-templates mode="renderView" select="li[contains(@class,'{resultpage}')]">
+        <xsl:with-param name="data" select="xalan:nodeset($viewData)" />
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="createResultPaginator">
@@ -213,7 +256,7 @@
     <xsl:param name="startPage" />
     <xsl:param name="loopCount" />
     <xsl:param name="view" />
-    
+
     <xsl:variable name="viewData">
       <label>
         <xsl:value-of select="ceiling($startPage div $rows) + 1" />
@@ -268,11 +311,12 @@
         <xsl:value-of select="$data/href" />
     </xsl:attribute>
   </xsl:template>
+  
+  <xsl:template mode="renderView" match="@href[.='{subselect.cancel.link}']">
+    <xsl:param name="data" />
 
-
-  <!-- ###################################################### -->
-    <!-- http://localhost:18101/servlets/XMLEditor? _action=end.subselect &subselect.session=9xvpggvoyi &subselect.varpath=/mycoreobject/metadata/participants/participant 
-      &subselect.webpage=editor_form_commit-jpjournal.xml%3Ftype%3Djpjournal%26step%3Dcommit%26cancelUrl%3Dhttp%253A%252F%252Flocalhost%253A18101%252Freceive%252Fjportal_jpjournal_00000761%26sourceUri%3DxslStyle%253Amycoreobject-editor%253Amcrobject%253Ajportal_jpjournal_00000761%26mcrid%3Djportal_jpjournal_00000761%26 
-      &mode=prefix &_var_@xlink:href=jportal_person_00061171 &_var_@xlink:title=Gleichen-Ru%C3%9Fwurm,%20Alexander%20von%20(1865-11-06%20-%201947-10-25,%20Schriftsteller;%20Herausgeber;%20%C3%9Cbersetzer;%20Kulturphilosoph)%20%20%20%20%20%20%20%20%20%20%20%20%20 
-      &_var_@field=participants_art &_var_@operator== &_var_@value=jportal_person_00061171 -->
+    <xsl:attribute name="href">
+        <xsl:value-of select="concat('/',$subselect.webpage,'&amp;',$subselect.session)" />
+    </xsl:attribute>
+  </xsl:template>
 </xsl:stylesheet>

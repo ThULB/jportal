@@ -782,6 +782,7 @@ body {
 	background-color: white;
 	overflow: hidden;
 	padding: 1px 29px 49px;
+	min-height: 580px;
 }
 
 #main a:hover {

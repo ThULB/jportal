@@ -15,26 +15,42 @@
   </component>
   <component name="subelectForm">
     <div id="subselectForm">
-      <div class="jp-layout-bottomline jp-layout-border-light" id="subselectFormHeader">
+      <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
         <h2>{subselect.type.label}</h2>
-      </div>
-      <div id="subselectFormInfoText">
-        Bitte benutzen Sie das Suchfeld, um Personen ....
+        <div>
+          <span id="subselectFormInfoText">
+            Bitte benutzen Sie das Suchfeld, um
+            <getData id="subselect.type.label" concat="en" />
+            zu finden und hinzuzufügen.
+          </span>
+          <ul class="navigation">
+            <li>
+              <a href="{subselect.cancel.link}">Auswahl abbrechen</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </component>
   <component name="resultList">
     <div id="searchResults">
       <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
-        <h2>Suchergebnisse</h2>
+        <h2>{subselect.type.label}</h2>
         <div>
           <span>
             Etwa
             <getData id="search.numFound" />
-            Personen mit Namen "
-            <getData id="search.query" />
-            " gefunden.
+            <getData id="subselect.type.label" concat="(en)" />
+            mit Namen
+            <!-- "Schiller*" -->
+            <getData id="search.query" pre="&quot;" post="&quot;" />
+            gefunden.
           </span>
+          <ul class="navigation">
+            <li>
+              <a href="{subselect.cancel.link}">Auswahl abbrechen</a>
+            </li>
+          </ul>
         </div>
       </div>
       <div id="resultList">
@@ -47,7 +63,9 @@
                 </a>
               </h3>
               <ul class="jp-layout-metadaInSearchResults">
-                <li>Person</li>
+                <li>
+                  <getData id="subselect.type.label" />
+                </li>
               </ul>
             </li>
           </component>
