@@ -7,7 +7,7 @@
       <li>
         <a href="{$WebApplicationBaseURL}content/below/index.xml">Start</a>
       </li>
-      <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
+      <xsl:if test="acl:checkPermission('CRUD', 'admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
         </li>
