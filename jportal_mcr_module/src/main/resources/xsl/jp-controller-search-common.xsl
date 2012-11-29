@@ -3,7 +3,7 @@
   <!-- commonly used template for searching -->
   
   <xsl:template mode="createSolrQuery" match="query">
-    <xsl:value-of select="concat('solr:q=', encoder:encode(queryTerm/@value, 'UTF-8'))" />
+    <xsl:value-of select="concat('solr:q=', encoder:encode(concat('+(', queryTerm/@value, ')'), 'UTF-8'))" />
     <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />
     <xsl:apply-templates mode="createParam" select="param" >
       <xsl:with-param name="sign" select="'&amp;'"/>
