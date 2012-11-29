@@ -1,1 +1,18 @@
 @CHARSET "UTF-8";
+
+#logoDate{
+	position: absolute;
+	left: 340px;
+    top: 36px;
+    font-size: large;
+    margin-top: 5px;
+}
+
+#logoTitle{
+	position: absolute;
+	left: 340px;
+    top: 76px;
+    font-size: x-large;
+    margin-top: 5px;
+    width: 450px; 
+}

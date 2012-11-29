@@ -5,3 +5,21 @@
 	background-position: left top;
 	height: 115px;
 }
+
+#logoDate{
+	position: absolute;
+	left: 715px;
+    top: 58px;
+    width: 100px;
+    font-size: medium;
+    text-align: center;
+}
+
+#logoTitle{
+	position: absolute;
+	left: 540px;
+    top: 65px;
+    width: 145px;
+    font-size: x-large;
+    text-align: center;
+}
