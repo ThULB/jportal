@@ -154,15 +154,6 @@
                 </xsl:variable>
                 <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
                 <input id="submitButton" type="submit" value="Suche" />
-                <xsl:if test="$subselect.type != ''">
-                  <input type="hidden" name="XSL.subselect.type" value="{$subselect.type}" />
-                  <input type="hidden" name="XSL.subselect.session.SESSION" value="{$subselect.session}" />
-                  <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{$subselect.varpath}" />
-                  <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{$subselect.webpage}" />
-                </xsl:if>
-                <xsl:if test="$mode != ''">
-                  <input type="hidden" name="XSL.mode" value="{$mode}" />
-                </xsl:if>
                 <xsl:variable name="journalID">
                   <xsl:call-template name="getJournalID" />
                 </xsl:variable>
