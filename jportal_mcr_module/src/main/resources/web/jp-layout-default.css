@@ -931,6 +931,17 @@ body {
 	float: left;
 }
 
+.jp-layout-admin ul {
+	margin: 0px;
+	padding: 0px;
+}
+.jp-layout-admin ul li {
+	border: none;
+	padding: 0px;
+	margin: 0px;
+	list-style-type: none;
+}
+
 #ckeditorContainer {
 	display: none;
 	position: fixed;
