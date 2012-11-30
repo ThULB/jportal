@@ -14,8 +14,8 @@
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
-  <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date'" />
-  <xsl:variable name="ignore" select="'maintitles def.heading'" />
+  <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
+  <xsl:variable name="ignore" select="'maintitles def.heading names'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($ignore, name())]">
   </xsl:template>
@@ -58,14 +58,13 @@
   <xsl:template mode="metadataFieldLabel" match="names[@class='MCRMetaInstitutionName']/name/*[name() != 'fullname']">
     <xsl:variable name="tagName" select="name()" />
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
-    
-    <xsl:message><xsl:value-of select="position()" /></xsl:message>
-    <xsl:message><xsl:value-of select="last()" /></xsl:message>
-    <xsl:message><xsl:value-of select="'--------------------'" /></xsl:message>
-    
     <xsl:if test="position() != (last() - 1)">
       <xsl:value-of select="' &amp; '" />
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldLabel" match="addresses[@class='MCRMetaAddress']/address">
+    <xsl:value-of select="i18n:translate($settings/i18n[@tag='address'])" />
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="*[@type and not(../@class='MCRMetaXML') and name()!='identifier']">
@@ -149,6 +148,17 @@
       <xsl:value-of select="'; '" />
     </xsl:if>
   </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="addresses[@class='MCRMetaAddress']/address">
+    <dl class="address">
+      <xsl:apply-templates select="*" mode="addressValue"/>
+    </dl>
+  </xsl:template>
+  <xsl:template match="*" mode="addressValue">
+    <xsl:variable name="tagName" select="name()" />
+    <dt><xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" /></dt>
+    <dd><xsl:value-of select="." /></dd>
+  </xsl:template> 
 
   <xsl:template mode="metadataPersName" match="heading">
     <xsl:value-of select="concat(firstName,' ', lastName)" />

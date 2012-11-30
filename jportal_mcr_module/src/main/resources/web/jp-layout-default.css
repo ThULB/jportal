@@ -179,6 +179,14 @@ body {
 	margin-left: 10px;
 	width: 350px;
 }
+.jp-layout-metadataList .address dt {
+	width: 90px;
+	margin-bottom: 2px;
+}
+.jp-layout-metadataList .address dd {
+	width: 250px;
+	margin-bottom: 2px;
+}
 
 .jp-layout-derivates {
 	float: left;

@@ -45,6 +45,12 @@
   <i18n tag="gender">metaData.author.gender</i18n>
   <i18n tag="property">metaData.jpinst.property</i18n>
   <i18n tag="nickname">metaData.jpinst.nickname</i18n>
+  <i18n tag="address">metaData.headlines.jpinst.address</i18n>
+  <i18n tag="country">editormask.labels.AAddressCountry</i18n>
+  <i18n tag="city">editormask.labels.AAddressCity</i18n>
+  <i18n tag="zipcode">editormask.labels.AAddressZIP</i18n>
+  <i18n tag="street">editormask.labels.AAddressStreet</i18n>
+  <i18n tag="number">editormask.labels.AAddressNumber</i18n>
 
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
