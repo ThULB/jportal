@@ -167,8 +167,7 @@
         </xsl:if>
         <div id="main">
           <xsl:choose>
-            <xsl:when test="/MyCoReWebPage[not(//editor) and not(//jpsearch)]">
-              
+            <xsl:when test="/MyCoReWebPage[not(//editor) and not(//jpsearch) and not(//jpadmin)]">
               <xsl:variable name="objectEditingHTML">
                 <editing>
                   <xsl:call-template name="objectEditing">

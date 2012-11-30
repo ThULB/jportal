@@ -4,15 +4,17 @@
   exclude-result-prefixes="mcrxml i18n acl">
 
   <xsl:template match="jpadmin">
-    <h1>Administration</h1>
-    <xsl:choose>
-      <xsl:when test="acl:checkPermission('CRUD', 'admin')">
-        <xsl:call-template name="jp.admin.show" />
-      </xsl:when>
-      <xsl:otherwise>
-        <p>Sie haben keine Berechtigung für diesen Bereich.</p>
-      </xsl:otherwise>
-    </xsl:choose>
+    <div class="jp-layout-admin">
+      <h1>Administration</h1>
+      <xsl:choose>
+        <xsl:when test="acl:checkPermission('CRUD', 'admin')">
+          <xsl:call-template name="jp.admin.show" />
+        </xsl:when>
+        <xsl:otherwise>
+          <p>Sie haben keine Berechtigung für diesen Bereich.</p>
+        </xsl:otherwise>
+      </xsl:choose>
+    </div>
   </xsl:template>
 
   <xsl:template name="jp.admin.show">
