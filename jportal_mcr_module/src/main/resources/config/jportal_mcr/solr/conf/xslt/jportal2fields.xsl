@@ -98,7 +98,7 @@
     </field>
   </xsl:template>
 
-  <!-- publisher & first participant -->
+  <!-- participant -->
   <xsl:template match="participants/participant" mode="jportal.metadata">
     <xsl:if test="@type='mainPublisher'">
       <field name="publisher">
@@ -113,11 +113,17 @@
         <xsl:value-of select="@xlink:href" />
       </field>
     </xsl:if>
+    <field name="names">
+      <xsl:value-of select="@xlink:title" />
+    </field>
   </xsl:template>
 
   <!-- jpinst heading -->
   <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
     <field name="heading">
+      <xsl:value-of select="." />
+    </field>
+    <field name="names">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
@@ -158,16 +164,28 @@
   <xsl:template mode="jportal.person.metadata" match="metadata" >
     <xsl:apply-templates mode="jportal.person.name" select="def.heading/heading|def.alternative/alternative"/>
   </xsl:template>
-  
+
   <xsl:template mode="jportal.person.name" match="heading">
-    <field name="heading">
+    <xsl:variable name="heading">
       <xsl:apply-templates mode="jportal.person.heading" select="*" />
+    </xsl:variable>
+    <field name="heading">
+      <xsl:value-of select="$heading" />      
+    </field>
+    <field name="names">
+      <xsl:value-of select="$heading" />
     </field>
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="alternative">
-    <field name="alternative.name">
+    <xsl:variable name="alternative">
       <xsl:apply-templates mode="jportal.person.heading" select="*" />
+    </xsl:variable>
+    <field name="alternative.name">
+      <xsl:value-of select="$alternative" />
+    </field>
+    <field name="names">
+      <xsl:value-of select="$alternative" />
     </field>
   </xsl:template>
 

@@ -107,6 +107,7 @@
     <field name="journalTitle" type="string" />
 
     <field name="titles" type="text_de"  multiValued="true" stored="false"/>
+    <field name="names" type="text_de" multiValued="true" stored="false" />
     <field name="maintitle" type="string" />
     <field name="maintitle_lowercase" type="lowercase" stored="false" />
 

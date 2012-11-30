@@ -17,7 +17,7 @@
   <xsl:variable name="searchfields">
     <entry label="alle Wörter" field="allMeta" />
     <entry label="Titel" field="titles" />
-    <entry label="Name (Person/Institution)" field="heading" />
+    <entry label="Name (Person/Institution)" field="names" />
     <entry label="Jahr" field="date" />
     <entry label="Schlagwörter" field="keywords" />
     <entry label="Rubrik" field="rubricText" />
