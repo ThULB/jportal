@@ -46,7 +46,7 @@
   <i18n tag="property">metaData.jpinst.property</i18n>
   <i18n tag="nickname">metaData.jpinst.nickname</i18n>
 
-  <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neues Band">jpvolume</newObj>
+  <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>
   <numPerPage for="volume">10</numPerPage>
   <numPerPage for="article">5</numPerPage>

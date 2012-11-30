@@ -94,7 +94,7 @@
       <item class="jp-layout-menu-dropdown">
         <restriction name="updatePerm" value="true" />
         <item>
-          <label name="Neues Band" ref="editorServlet">
+          <label name="Neuer Band" ref="editorServlet">
             <params>
               <param name="type" value="jpvolume" />
               <param name="step" value="author" />
