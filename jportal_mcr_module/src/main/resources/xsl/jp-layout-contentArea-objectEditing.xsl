@@ -93,6 +93,7 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <restriction name="updatePerm" value="true" />
+        <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         <item>
           <label name="Neuer Band" ref="editorServlet">
             <params>
@@ -129,6 +130,16 @@
         <restriction name="deletePerm" value="true" />
         <item>
           <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
+        </item>
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <restriction name="isAdmin" value="true" />
+        <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd datamodel-person.xsd datamodel-jpinst.xsd" />
+        <item>
+          <label name="XML" href="/receive/{/mycoreobject/@ID}?XSL.Style=xml" />
+        </item>
+        <item>
+          <label name="Versionsgeschichte" href="/history.xml?XSL.id={/mycoreobject/@ID}" />
         </item>
       </item>
       <link id="delObj" class="jp-layout-message-button" name="Löschen" ref="editorServlet">
@@ -219,10 +230,18 @@
   </xsl:template>
 
   <xsl:template mode="menuItem" match="item[restriction]">
-    <xsl:variable name="name" select="restriction/@name" />
-    <xsl:if test="contains(restriction/@value,$menu/var[@name=$name]/@value)">
+    <xsl:variable name="access">
+      <xsl:apply-templates select="restriction" mode="menuItem" />
+    </xsl:variable>
+    <xsl:if test="not(contains($access, 'false'))">
       <xsl:call-template name="createMenuItem" />
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="restriction" mode="menuItem">
+    <xsl:variable name="name" select="@name" />
+    <xsl:variable name="permission" select="$menu/var[@name=$name]/@value" />
+    <xsl:value-of select="$permission != '' and contains(@value, $permission)" />
   </xsl:template>
 
   <xsl:template name="createMenuItem">
