@@ -196,7 +196,7 @@
     <dt>
       <xsl:apply-templates mode="linkedObjects.result.label"  select="lst[@name = 'responseHeader']/lst[@name = 'params']" />
     </dt>
-    <dd>
+    <dd class="linked">
       <ul>
         <xsl:apply-templates mode="linkedObjects.result.list" select="result/doc" />
         <xsl:apply-templates mode="linkedObjects.result.more" select="." />
@@ -215,12 +215,15 @@
   <xsl:template mode="linkedObjects.result.list" match="doc">
     <xsl:variable name="objID" select="str[@name='id']" />
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{$objID}">
+      <a href="{$WebApplicationBaseURL}receive/{$objID}" class="jp-layout-clickLabel">
         <xsl:call-template name="shortenString">
           <xsl:with-param name="string" select="str[@name='maintitle']" />
           <xsl:with-param name="length" select="50" />
         </xsl:call-template>
       </a>
+      <xsl:call-template name="resultListBreadcrumb">
+        <xsl:with-param name="objID" select="$objID" />
+      </xsl:call-template>
     </li>
   </xsl:template>
 

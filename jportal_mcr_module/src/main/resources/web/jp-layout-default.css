@@ -55,6 +55,7 @@ body {
 
 .jp-layout-searchBreadcrumb li:first-child {
 	border: medium none;
+	padding-left: 0px;
 }
 
 .jp-layout-header {
@@ -186,6 +187,18 @@ body {
 .jp-layout-metadataList .address dd {
 	width: 250px;
 	margin-bottom: 2px;
+}
+
+.jp-layout-metadataList .linked ul {
+	padding-left: 15px;
+}
+
+.jp-layout-metadataList .linked ul .jp-layout-clickLabel {
+	font-weight: bold;
+}
+
+.jp-layout-metadataList .linked ul .jp-layout-searchBreadcrumb {
+	display: block;
 }
 
 .jp-layout-derivates {
