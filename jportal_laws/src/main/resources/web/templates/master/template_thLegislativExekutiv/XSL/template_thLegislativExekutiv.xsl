@@ -11,10 +11,12 @@
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
   <!--     <xsl:call-template name="jp.laws.addAdvSearch" />  -->
+  	<xsl:call-template name="jp.laws.title" /> 
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
     <!-- <xsl:call-template name="jp.laws.addAdvSearch" />  -->
+    <xsl:call-template name="jp.laws.title" /> 
     <xsl:variable name="register" select="laws:getRegister(@ID)" />
     <xsl:if test="$register">
       <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
@@ -30,6 +32,7 @@
     <xsl:param name="objId" />
     <xsl:param name="derivateId" />
 
+	<xsl:call-template name="jp.laws.title" /> 
     <div id="jp-content-laws" class="jp-content-laws">
       <xsl:apply-templates select="register" mode="template_thLegislativExekutiv">
         <xsl:with-param name="objId" select="$objId"/>
@@ -44,6 +47,18 @@
       $(document).ready(function() {
         var href = '<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-search.xml?XSL.mode=laws.form')" />';
         $('#searchForm').append('&lt;a href="' + href +'"&gt;Expertensuche in Gesetzesblättern&lt;a/&gt;');
+      });
+    </script>
+  </xsl:template>
+
+  <!-- ================================================================================= -->
+  <xsl:template name="jp.laws.title">
+	<script type="text/javascript">
+      $(document).ready(function() {
+        var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
+        $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/template_thLegislativExekutiv/IMAGES/logo.png)');
+        var name = '<xsl:value-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" />';
+        $('#logo').prepend('<div id="logoTitle">' + name  + '</div>');
       });
     </script>
   </xsl:template>
