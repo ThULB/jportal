@@ -89,7 +89,6 @@
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
           <div id="derivCol">
-            <h4>Digitalisate</h4>
             <xsl:call-template name="derivateDisplay">
               <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
             </xsl:call-template>
