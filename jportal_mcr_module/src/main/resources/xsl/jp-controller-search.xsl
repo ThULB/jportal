@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:xalan="http://xml.apache.org/xalan">
-  <xsl:param name="qt" select="'*'" />
-  <xsl:param name="searchjournalID" select="''" />
-  <xsl:param name="start" select="'0'" />
-  <xsl:param name="rows" select="'10'" />
 
   <xsl:template match="jpsearch" mode="default">
     <xsl:variable name="queryXML">

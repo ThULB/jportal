@@ -172,6 +172,11 @@
           </a>
         </li>
       </xsl:if>
+      <xsl:if test="$returnURL">
+        <li>
+          <a href="{$returnURL}">Zurück</a>
+        </li>
+      </xsl:if>
     </ul>
   </xsl:template>
 

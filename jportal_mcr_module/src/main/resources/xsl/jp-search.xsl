@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:param name="qt" select="'*'" />
+  <xsl:param name="hiddenQt" select="''" />
+  <xsl:param name="searchjournalID" select="''" />
+  <xsl:param name="start" select="'0'" />
+  <xsl:param name="rows" select="'10'" />
+  <xsl:param name="returnURL" />
+
+  <xsl:include href="jp-controller-search-common.xsl" />
   <xsl:include href="jp-controller-search.xsl" />
   <xsl:include href="jp-controller-advancedsearch.xsl" />
+  <xsl:include href="jp-controller-subselect.xsl" />
+  <xsl:include href="jp-controller-hidden.xsl" />
 
   <xsl:param name="mode" select="'default'"/>
 
@@ -10,6 +20,9 @@
     <xsl:choose>
       <xsl:when test="$mode = 'default'">
         <xsl:apply-templates select="." mode="default" />
+      </xsl:when>
+      <xsl:when test="$mode = 'hidden'">
+        <xsl:apply-templates select="." mode="hidden" />
       </xsl:when>
       <xsl:when test="$mode = 'advanced.form'">
         <xsl:apply-templates select="." mode="advanced.form" />

@@ -233,7 +233,7 @@
   <xsl:template mode="linkedObjects.result.more" match="response[result/@numFound &gt; lst[@name = 'responseHeader']/lst[@name = 'params']/str[@name='rows']]">
     <li>
       <xsl:variable name="q" select="encoder:encode(lst[@name = 'responseHeader']/lst[@name = 'params']/str[@name='q'])" />
-      <a href="{$WebApplicationBaseURL}jp-search.xml?XSL.qt={$q}">
+      <a href="{$WebApplicationBaseURL}jp-search.xml?XSL.hiddenQt={$q}&amp;XSL.mode=hidden&amp;XSL.returnURL={$RequestURL}">
         <xsl:value-of select="i18n:translate('metaData.person.linked.showAll')" />
         <xsl:value-of select="concat(' (', result/@numFound, ')')" />
       </a>
