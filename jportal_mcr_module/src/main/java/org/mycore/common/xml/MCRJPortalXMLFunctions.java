@@ -10,6 +10,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.services.i18n.MCRTranslation;
+import org.mycore.user.MCRUserMgr;
 
 public class MCRJPortalXMLFunctions {
 
@@ -28,7 +29,11 @@ public class MCRJPortalXMLFunctions {
         Date date = mcrdate.getDate();
         return (date == null) ? "?" + isoDate + "?" : df.format(date);
     }
-    
+
+    public static String getUserID() {
+        return MCRUserMgr.instance().getCurrentUser().getID();
+    }
+
     public static String getFormat(String date) {
         if(date != null && !date.equals("")) {
             String split[] = date.split("-");

@@ -4,6 +4,7 @@
   exclude-result-prefixes="mcrxml i18n acl">
 
   <xsl:template name="jp.navigation.top">
+    <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
     <ul>
       <li>
         <a href="{$WebApplicationBaseURL}content/below/index.xml">Start</a>
@@ -13,8 +14,14 @@
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
         </li>
       </xsl:if>
+      <xsl:if test="not($isGuest)">
+        <li>
+          <a href="{$WebApplicationBaseURL}jp-account.xml">
+            <xsl:value-of select="i18n:translate('jportal.navigation.top.account')" />
+          </a>
+        </li>
+      </xsl:if>
       <li>
-        <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
         <a>
           <xsl:attribute name="href">
             <xsl:if test="$isGuest">

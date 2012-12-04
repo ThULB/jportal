@@ -32,12 +32,6 @@
     <h2>Benutzer</h2>
     <ul>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=CreatePwdDialog">Passwort ändern</a>
-      </li>
-      <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?url=/content/below/index.xml&amp;mode=ShowUser">Nutzerdaten anzeigen</a>
-      </li>
-      <li>
         <a href="{$WebApplicationBaseURL}servlets/MCRUserAdminServlet?mode=newuser">Nutzer anlegen</a>
       </li>
       <li>
