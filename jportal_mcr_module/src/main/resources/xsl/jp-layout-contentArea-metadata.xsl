@@ -14,6 +14,7 @@
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
+  <xsl:key name="identifiers" match="identifier[@inherited='0']" use="@type" />
   <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
   <xsl:variable name="ignore" select="'maintitles def.heading names'" />
 
