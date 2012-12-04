@@ -52,7 +52,7 @@
 
   <xsl:template name="getPersonName">
     <xsl:param name="id" />
-    <xsl:variable name="person" select="xalan:nodeset(document(concat('mcrobject:', $id))/mycoreobject)" />
+    <xsl:variable name="person" select="document(concat('mcrobject:', $id))/mycoreobject" />
     <xsl:variable name="lastName" select="$person/metadata/def.heading/heading/lastName" />
     <xsl:variable name="firstName" select="$person/metadata/def.heading/heading/firstName" />
     <xsl:choose>
@@ -67,7 +67,7 @@
 
   <!-- institution: handle wrong type -->
   <xsl:template match="participants/participant[@xlink:title != '' and contains(@xlink:href, '_jpinst_') and contains($typesOfParticipants, @xlink:title)]">
-    <xsl:variable name="jpinst" select="xalan:nodeset(document(concat('mcrobject:', @xlink:href))/mycoreobject)" />
+    <xsl:variable name="jpinst" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
     <xsl:apply-templates select="." mode="copyParticipant">
       <xsl:with-param name="title" select="$jpinst/metadata/names/name/fullname" />
       <xsl:with-param name="type" select="@xlink:title"></xsl:with-param>
@@ -76,7 +76,7 @@
   
   <!-- institution: handle empty xlink:title -->
   <xsl:template match="participants/participant[(not(@xlink:title) or @xlink:title = '') and contains(@xlink:href, '_jpinst_')]">
-    <xsl:variable name="jpinst" select="xalan:nodeset(document(concat('mcrobject:', @xlink:href))/mycoreobject)" />
+    <xsl:variable name="jpinst" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
     <xsl:apply-templates select="." mode="copyParticipant">
       <xsl:with-param name="title" select="$jpinst/metadata/names/name/fullname" />
     </xsl:apply-templates>
