@@ -6,9 +6,6 @@
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
     <ul>
-      <li>
-        <a href="{$WebApplicationBaseURL}content/below/index.xml">Start</a>
-      </li>
       <xsl:if test="acl:checkPermission('CRUD', 'admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>
