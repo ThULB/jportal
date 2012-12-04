@@ -43,12 +43,13 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
-    
+
     <xsl:if test="not($currentType='person' or $currentType='jpinst')">
       <xsl:call-template name="breadcrumb" />
     </xsl:if>
 
-    <xsl:apply-templates mode="printTitle" select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
+    <xsl:apply-templates mode="printTitle"
+      select="metadata/maintitles/maintitle[@inherited='0']|metadata/def.heading/heading|metadata/names[@class='MCRMetaInstitutionName']/name">
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
     </xsl:apply-templates>
     <xsl:variable name="LColumnHTML">
@@ -60,20 +61,13 @@
             </xsl:call-template>
           </xsl:if>
           <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-            <xsl:variable name="journalIntroText"
+            <xsl:apply-templates mode="renderIntroTxt"
               select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
-            <xsl:if test="$journalIntroText">
-              <li>
-                <div id="intro" class="jp-layout-intro">
-                  <xsl:copy-of select="$journalIntroText/*" />
-                </div>
-              </li>
-            </xsl:if>
           </xsl:if>
         </ul>
       </div>
     </xsl:variable>
-    <xsl:variable name="LColumn" select="xalan:nodeset($LColumnHTML)"/>
+    <xsl:variable name="LColumn" select="xalan:nodeset($LColumnHTML)" />
     <xsl:if test="$LColumn/div/ul/li">
       <xsl:copy-of select="$LColumn/*" />
     </xsl:if>
@@ -110,6 +104,14 @@
     </xsl:variable>
     <xsl:apply-templates select="xalan:nodeset($template)/template" mode="template" />
 
+  </xsl:template>
+
+  <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
+    <li>
+      <div id="intro" class="jp-layout-intro">
+        <xsl:apply-templates mode="renderView" select="*|text()" />
+      </div>
+    </li>
   </xsl:template>
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
