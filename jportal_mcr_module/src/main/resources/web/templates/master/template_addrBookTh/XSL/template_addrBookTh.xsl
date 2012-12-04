@@ -31,9 +31,9 @@
 
     <script type="text/javascript">
       $(document).ready(function() {		
-        var name = '<xsl:value-of select="/mycoreobject/metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />';
-        $('#logo').after('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');
-        $('#logoDate').after('<div id="logoTitle">' + name  + '</div>');
+        var name = '<xsl:value-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/hidden_genhiddenfields1/hidden_genhiddenfield1" />';
+        $('#logo').prepend('<div id="logoTitle">' + name  + '</div>');
+        $('#logoTitle').after('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');
       });
     </script>
   </xsl:template>  

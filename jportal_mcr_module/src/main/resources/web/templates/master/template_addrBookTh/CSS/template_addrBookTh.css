@@ -7,18 +7,18 @@
 }
 
 #logoDate{
-	position: absolute;
-	left: 715px;
-    top: 58px;
+	position: relative;
+	left: 595px;
+    top: -8px;
     width: 100px;
     font-size: medium;
     text-align: center;
 }
 
 #logoTitle{
-	position: absolute;
-	left: 540px;
-    top: 65px;
+	position: relative;
+	left: 420px;
+    top: 28px;
     width: 145px;
     font-size: x-large;
     text-align: center;

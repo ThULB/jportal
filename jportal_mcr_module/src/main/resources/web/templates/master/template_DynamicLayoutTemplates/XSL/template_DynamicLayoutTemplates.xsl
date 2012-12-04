@@ -39,13 +39,13 @@
         var template = '<xsl:value-of select="$template_DynamicLayoutTemplates" />';
         $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/' + template + '/IMAGES/logo.png)');
         var name = '<xsl:value-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" />';
-        $('#logo').after('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');
+        $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');
         $('#logoDate').after('<div id="logoTitle">' + name  + '</div>');
         if (name.length > 40){
         	$('#logoTitle').css('font-size', 'large');
         }
         if (name.length > 80){
-        	$('#logoTitle').css('top', '66px');
+        	$('#logoTitle').css('top', '8px');
         	$('#logoTitle').css('height', '69px');
         	$('#logoTitle').css('overflow', 'hidden');
         	$('#logoTitle').css('text-overflow', 'ellipsis');
