@@ -46,7 +46,8 @@
         }
         if (name.length > 80){
         	$('#logoTitle').css('top', '8px');
-        	$('#logoTitle').css('height', '69px');
+        	$('#logoTitle').css('height', '70px');
+        	$('#logoTitle').css('line-height', '24px');
         	$('#logoTitle').css('overflow', 'hidden');
         	$('#logoTitle').css('text-overflow', 'ellipsis');
         }
