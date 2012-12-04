@@ -12,6 +12,7 @@
   
   <xsl:template mode="createURL" match="url">
     <xsl:value-of select="base" />
+    <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />
     <xsl:apply-templates mode="createParam" select="param" />
   </xsl:template>
 
