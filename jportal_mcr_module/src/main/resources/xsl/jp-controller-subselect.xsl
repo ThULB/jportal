@@ -43,7 +43,7 @@
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='subelectForm']/*" />
   </xsl:template>
 
-  <xsl:template mode="controllerHook" match="/jpsearchBar[@mode='subselect.form']">
+  <xsl:template mode="controllerHook" match="/jpsearchBar[@mode='subselect.form' or @mode='subselect.result']">
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='subelectFormInput']/*">
       <xsl:with-param name="data" select="$subselectParam/subselect" />
     </xsl:apply-templates>
