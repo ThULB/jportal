@@ -6,6 +6,10 @@ import org.jdom.Element;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRJPortalURIGetJournalID;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class MCRJPortalLayoutTemplateDetector {
@@ -14,8 +18,18 @@ public class MCRJPortalLayoutTemplateDetector {
 
     private final static String KEY_PREFIX = "MCR.Module-JPortal.DynamicLayoutTemplates.";
 
-    public static String getTemplateID() {
+    public static String getTemplateID(String id) {
+        MCRObjectID mcrId = MCRObjectID.getInstance(id);
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRMetaElement me = obj.getMetadata().getMetadataElement("hidden_jpjournalsID");
+        if(me != null && me.size() == 1) {
+            MCRMetaLangText metaText = (MCRMetaLangText)me.getElement(0);
+            return getJournalTemplateID(metaText.getText());
+        }
+        return getTemplateID();
+    }
 
+    public static String getTemplateID() {
         // get id of current watched journal
         String journalID = MCRJPortalURIGetJournalID.getID();
 
@@ -23,7 +37,10 @@ public class MCRJPortalLayoutTemplateDetector {
             LOGGER.debug("Journal-ID cannot be calculated, return ''");
             return "";
         }
+        return getJournalTemplateID(journalID);
+    }
 
+    private static String getJournalTemplateID(String journalID) {
         // get "date-from" of journal
         Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
         org.jdom.xpath.XPath xpath = null;

@@ -8,10 +8,8 @@
 
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
     <!-- get template ID from java -->
-    <xsl:variable name="template_DynamicLayoutTemplates">
-      <xsl:value-of select="layoutDetector:getTemplateID()" />
-    </xsl:variable>
-    
+    <xsl:variable name="template_DynamicLayoutTemplates" select="layoutDetector:getTemplateID(@ID)" />
+
     <xsl:variable name="published">
 		<xsl:value-of select="xalan:nodeset($journalXML)//date[@type='published']" />
 	</xsl:variable>

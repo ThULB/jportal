@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan">
 
   <xsl:param name="qt" select="'*'" />
   <xsl:param name="hiddenQt" select="''" />
@@ -43,6 +43,14 @@
         <xsl:apply-templates select="." mode="subselect.result" />
       </xsl:when>
     </xsl:choose>
+
+    <!-- call dynamic template_*.xsl -->
+    <xsl:if test="$searchjournalID != ''">
+      <xsl:variable name="template">
+        <template id="{$nameOfTemplate}" mcrID="{$searchjournalID}"></template>
+      </xsl:variable>
+      <xsl:apply-templates select="xalan:nodeset($template)/template" mode="template" />
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
