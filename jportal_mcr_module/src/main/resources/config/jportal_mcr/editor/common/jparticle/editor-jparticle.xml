@@ -78,15 +78,17 @@
         </cell>
 
         <!-- ########################## misc ################################## -->
+        <!-- 
         <cell anchor="WEST" colspan="4" col="1" row="291" class="editorHeadlines">
             <text>
                 <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
             </text>
         </cell>
+         -->
         <!-- parent -->
-        <cell row="300" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
+<!--         <cell row="300" col="2" anchor="NORTHWEST" ref="parent_input_hided" /> -->
         <!-- Hidden information to be used in heritated objects (volumes, articles) -->
-        <cell row="350" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" />
+<!--         <cell row="350" col="2" anchor="NORTHWEST" ref="jpjournalID_input_hidden" /> -->
         <!-- ================================================================================================= -->
         <!-- save / cancel button -->
         <cell col="1" row="400">
