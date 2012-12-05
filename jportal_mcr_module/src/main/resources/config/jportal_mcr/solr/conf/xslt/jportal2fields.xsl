@@ -144,6 +144,13 @@
     </field>
   </xsl:template>
 
+  <!-- size -->
+  <xsl:template match="sizes/size" mode="jportal.metadata">
+    <field name="size">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+
   <!-- allMeta -->
   <xsl:template match="*[translate(normalize-space(text()), ' ', '')!='']" mode="jportal.allMeta">
     <field name="allMeta">

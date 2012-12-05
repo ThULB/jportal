@@ -73,7 +73,7 @@ public class MCRJPortalXMLFunctions {
 
         @Override
         public String toString() {
-            return this.field + ":" + this.value;
+            return "+" + this.field + ":" + this.value;
         }
     }
 }

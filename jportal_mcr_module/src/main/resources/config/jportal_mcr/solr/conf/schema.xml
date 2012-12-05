@@ -110,8 +110,6 @@
     <field name="stream_content_type" type="string" />
     <field name="stream_source_info" type="string" />
 
-    <!-- person -->
-
     <field name="payload" type="payloads" />
 
     <!-- jportal search -->
@@ -131,6 +129,12 @@
     <copyField source="heading" dest="heading_de" />
     <copyField source="alternatives" dest="alternatives_de" />
     <copyField source="participants" dest="participants_de" />
+
+    <!-- names for advanced search -->
+    <field name="names_de" type="text_de" multiValued="true" stored="false" />
+    <copyField source="heading" dest="names_de" />
+    <copyField source="alternatives" dest="names_de" />
+    <copyField source="participants" dest="names_de" />
 
     <!-- jportal core -->
     <field name="journalID" type="string" />
@@ -167,7 +171,7 @@
 
     <!-- volume & article -->
     <field name="position" type="string" />
-    <field name="size" type="string" indexed="false" />
+    <field name="size" type="string" />
     <field name="rubric" type="string" indexed="false" multiValued="true" />
     <field name="rubricText" type="text_de" multiValued="true" />
 

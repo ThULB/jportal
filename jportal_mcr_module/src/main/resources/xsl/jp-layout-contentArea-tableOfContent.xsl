@@ -35,7 +35,7 @@
     <xsl:variable name="findArtQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
     <xsl:variable name="numPerPage_art" select="$settings/numPerPage[@for='article']" />
     <xsl:variable name="articles"
-      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=position%20asc,maintitle%20asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
+      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=size%20asc,maintitle%20asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
