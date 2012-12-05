@@ -100,7 +100,7 @@
                 <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
             </text>
         </cell>  
-<!--         <cell row="260" col="2" anchor="NORTHWEST" ref="parent_input_hided" /> -->
+        <cell row="260" col="2" anchor="NORTHWEST" ref="parent_input_hided" />
             <!-- position -->
         <cell class="editorLabel" row="270" col="1" anchor="NORTHWEST" ref="position_label" />
         <cell row="270" col="2" anchor="NORTHWEST" ref="position_input" />
