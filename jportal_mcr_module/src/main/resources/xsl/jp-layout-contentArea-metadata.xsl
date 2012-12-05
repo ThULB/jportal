@@ -14,8 +14,8 @@
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
-  <xsl:key name="identifiers" match="identifier[@inherited='0']" use="@type" />
-  <xsl:variable name="simpleType" select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
+  <xsl:variable name="simpleType"
+    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
   <xsl:variable name="ignore" select="'maintitles def.heading names'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($ignore, name())]">
@@ -75,7 +75,8 @@
     <xsl:variable name="categID" select="@type" />
     <xsl:choose>
       <xsl:when test="$classID and $categID">
-        <xsl:value-of select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
+        <xsl:value-of
+          select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="concat('could not be resolved (', name(), ')')" />
@@ -85,20 +86,18 @@
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText']">
     <xsl:if test="@inherited='0'">
-      <xsl:value-of select="text()" />
-      <xsl:if test="position() != last()">
-        <xsl:value-of select="'; '" />
-      </xsl:if>
+      <p class="jp-layout-metadata-list">
+        <xsl:value-of select="text()" />
+      </p>
     </xsl:if>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLinkID']">
-    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
-      <xsl:value-of select="@xlink:title" />
-    </a>
-    <xsl:if test="position() != last()">
-      <xsl:value-of select="'; '" />
-    </xsl:if>
+    <p class="jp-layout-metadata-list">
+      <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
+        <xsl:value-of select="@xlink:title" />
+      </a>
+    </p>
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="identifier[@type]">
@@ -152,14 +151,18 @@
 
   <xsl:template mode="metadataFieldValue" match="addresses[@class='MCRMetaAddress']/address">
     <dl class="address">
-      <xsl:apply-templates select="*" mode="addressValue"/>
+      <xsl:apply-templates select="*" mode="addressValue" />
     </dl>
   </xsl:template>
   <xsl:template match="*" mode="addressValue">
     <xsl:variable name="tagName" select="name()" />
-    <dt><xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" /></dt>
-    <dd><xsl:value-of select="." /></dd>
-  </xsl:template> 
+    <dt>
+      <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
+    </dt>
+    <dd>
+      <xsl:value-of select="." />
+    </dd>
+  </xsl:template>
 
   <xsl:template mode="metadataPersName" match="heading">
     <xsl:value-of select="concat(firstName,' ', lastName)" />
@@ -182,12 +185,14 @@
   <!-- Linked metadata -->
   <xsl:template mode="linkedArticles" match="mycoreobject">
     <xsl:variable name="q" select="encoder:encode(concat('+objectType:jparticle +link:', @ID))" />
-    <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=article'))/response" mode="linkedObjects.result" />
+    <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=article'))/response"
+      mode="linkedObjects.result" />
   </xsl:template>
 
   <xsl:template mode="linkedCalendar" match="mycoreobject">
     <xsl:variable name="q" select="encoder:encode(concat('+objectType:jpjournal +contentClassi1:calendar +link:', @ID))" />
-    <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=calendar'))/response" mode="linkedObjects.result" />
+    <xsl:apply-templates select="document(concat('solr:q=',$q,'&amp;rows=6&amp;ref=', @ID, '&amp;mode=calendar'))/response"
+      mode="linkedObjects.result" />
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result" match="/response[result/@numFound = 0]">
@@ -195,7 +200,7 @@
 
   <xsl:template mode="linkedObjects.result" match="/response[result/@numFound &gt; 0]">
     <dt>
-      <xsl:apply-templates mode="linkedObjects.result.label"  select="lst[@name = 'responseHeader']/lst[@name = 'params']" />
+      <xsl:apply-templates mode="linkedObjects.result.label" select="lst[@name = 'responseHeader']/lst[@name = 'params']" />
     </dt>
     <dd class="linked">
       <ul>
@@ -234,7 +239,7 @@
   <xsl:template mode="linkedObjects.result.more" match="response[result/@numFound &gt; lst[@name = 'responseHeader']/lst[@name = 'params']/str[@name='rows']]">
     <li>
       <xsl:variable name="q" select="encoder:encode(lst[@name = 'responseHeader']/lst[@name = 'params']/str[@name='q'])" />
-      <a href="{$WebApplicationBaseURL}jp-search.xml?XSL.hiddenQt={$q}&amp;XSL.mode=hidden&amp;XSL.returnURL={$RequestURL}">
+      <a href="{$WebApplicationBaseURL}jp-search.xml?XSL.qt={$q}">
         <xsl:value-of select="i18n:translate('metaData.person.linked.showAll')" />
         <xsl:value-of select="concat(' (', result/@numFound, ')')" />
       </a>

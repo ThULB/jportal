@@ -1040,3 +1040,7 @@ body {
 #metaData .derivate{
     padding-left: 2em;
 }
+
+p.jp-layout-metadata-list{
+	margin-top: 0px;
+}
