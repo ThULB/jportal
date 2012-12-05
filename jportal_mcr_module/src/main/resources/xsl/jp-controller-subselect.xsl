@@ -93,7 +93,7 @@
       <query>
         <queryTerm value="{$qt}" />
         <queryTermField name="+objectType" value="{$subselect.type}" />
-        <param name="qf" value="titles^10 heading^10 dates^5 allMeta^1" />
+        <param name="qf" value="heading^20 dates^10 alternatives^5 heading_de^5 alternatives_de^3 allMeta^1" />
         <param name="rows" value="{$rows}" />
         <param name="start" value="{$start}" />
         <param name="defType" value="edismax" />

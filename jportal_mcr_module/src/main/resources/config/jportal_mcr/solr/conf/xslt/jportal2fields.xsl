@@ -83,7 +83,7 @@
 
   <!-- dates -->
   <xsl:template match="dates/date[@inherited='0']" mode="jportal.metadata">
-    <field name="date">
+    <field name="dates">
       <xsl:value-of select="text()" />
     </field>
     <field name="date.{@type}">
@@ -113,7 +113,7 @@
         <xsl:value-of select="@xlink:href" />
       </field>
     </xsl:if>
-    <field name="names">
+    <field name="participants">
       <xsl:value-of select="@xlink:title" />
     </field>
   </xsl:template>
@@ -121,9 +121,6 @@
   <!-- jpinst heading -->
   <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
     <field name="heading">
-      <xsl:value-of select="." />
-    </field>
-    <field name="names">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
@@ -166,26 +163,14 @@
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="heading">
-    <xsl:variable name="heading">
-      <xsl:apply-templates mode="jportal.person.heading" select="*" />
-    </xsl:variable>
     <field name="heading">
-      <xsl:value-of select="$heading" />      
-    </field>
-    <field name="names">
-      <xsl:value-of select="$heading" />
+      <xsl:apply-templates mode="jportal.person.heading" select="*" />     
     </field>
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="alternative">
-    <xsl:variable name="alternative">
+    <field name="alternatives">
       <xsl:apply-templates mode="jportal.person.heading" select="*" />
-    </xsl:variable>
-    <field name="alternative.name">
-      <xsl:value-of select="$alternative" />
-    </field>
-    <field name="names">
-      <xsl:value-of select="$alternative" />
     </field>
   </xsl:template>
 
