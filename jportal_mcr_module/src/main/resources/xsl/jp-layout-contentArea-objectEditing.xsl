@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="i18n derivateLinkUtil xlink acl xalan xsi">
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi">
 
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-  <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_journal')" />
-  <xsl:variable name="createPerson" select="acl:checkPermission('CRUD','create_journal')" />
-  <xsl:variable name="createInst" select="acl:checkPermission('CRUD','create_journal')" />
+  <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_jpjournal')" />
+  <xsl:variable name="createPerson" select="acl:checkPermission('POOLPRIVILEGE','create-person')" />
+  <xsl:variable name="createInst" select="acl:checkPermission('POOLPRIVILEGE','create-jpinst')" />
   <xsl:variable name="isAdmin" select="acl:checkPermission('POOLPRIVILEGE','administrate-user')" />
+  <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
   <xsl:variable name="hasSourceOfLink" select="/mycoreobject/structure/derobjects/derobject[@xlink:href = substring-before($bookmarkedImage,'/')]" />
@@ -25,6 +27,7 @@
       <var name="createPerson" value="{$createPerson}" />
       <var name="createInst" value="{$createInst}" />
       <var name="isAdmin" value="{$isAdmin}" />
+      <var name="isGuest" value="{$isGuest}" />
       <var name="linkImgAllowed" value="{$linkImgAllowed}" />
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
@@ -133,7 +136,7 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <restriction name="isAdmin" value="true" />
+        <restriction name="isGuest" value="false" />
         <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd datamodel-person.xsd datamodel-jpinst.xsd" />
         <item>
           <label name="XML" href="/receive/{/mycoreobject/@ID}?XSL.Style=xml" />
