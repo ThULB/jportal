@@ -20,6 +20,66 @@ body {
 	margin: 0 auto;
 	width: 1024px;
 }
+.jp-layout-index h1 {
+	font-size: 1.2em;
+}
+.jp-layout-index-intro {
+}
+.jp-layout-index-splitter {
+	width: 100%;
+	height: 2px;
+	background-color: #999898;
+	margin-top: 35px;
+	margin-bottom: 50px;
+}
+.jp-layout-index-list {
+	margin-bottom: 35px;
+}
+.jp-layout-index-list ul {
+	list-style: none;
+	padding: 0px;
+	white-space: nowrap;
+}
+.jp-layout-index-list ul li {
+	display: inline-block;
+	width: 50%;
+	text-align: center;
+}
+.jp-layout-index-list .journal {
+	margin-left: 154px;
+}
+.jp-layout-index-list .calendar {
+	margin-right: 154px;
+}
+.jp-layout-index-latestArticles h1 {
+	margin-left: 20px;
+}
+.jp-layout-index-latestArticles ul {
+    height: 150px;
+    padding: 0;
+    white-space: nowrap;
+}
+.jp-layout-index-latestArticles ul > li {
+    display: inline-block;
+    height: 100%;
+    text-align: left;
+    vertical-align: bottom;
+    white-space: normal;
+    width: 33.3%;
+    border-right: 1px solid #999898;
+}
+.jp-layout-index-latestArticles ul > li:last-child {
+	border-right: none;
+}
+.jp-layout-index-latestArticles ul > li .wrapper {
+    margin: 0 20px;
+}
+.jp-layout-index-latestArticles ul > li .wrapper p {
+    display: list-item;
+    list-style-position: inside;
+    list-style-type: circle;
+    margin: 0 0 20px;
+}
 
 .jp-layout-breadcrumb {
 	border-bottom: 1px solid;

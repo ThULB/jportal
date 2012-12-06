@@ -4,20 +4,24 @@
   <xsl:template priority="3" match="printLatestArticles">
     <xsl:variable name="searchTerm" select="concat('objectType:', @objectType)" />
     <xsl:variable name="queryURI" select="concat('solr:q=',$searchTerm,'&amp;sort=',@sortField, '%20desc&amp;rows=',@maxResults)" />
-    <ul id="latestArticlesList">
+    <ul>
       <xsl:apply-templates mode="searchResultsList" select="document($queryURI)/response/result/doc" />
     </ul>
   </xsl:template>
   <xsl:template mode="searchResultsList" match="doc">
     <li>
-      <h3>
-        <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
-          <xsl:value-of select="str[@name='maintitle']" />
-        </a>
-      </h3>
-      <span>Erschienen in <a href="{$WebApplicationBaseURL}receive/{str[@name='journalID']}">
-        <xsl:value-of select="str[@name='journalTitle']" />
-      </a></span>
+      <div class="wrapper">
+        <p class="title">
+          <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+            <xsl:value-of select="str[@name='maintitle']" />
+          </a>
+        </p>
+        <div class="journal">Erschienen in
+          <a href="{$WebApplicationBaseURL}receive/{str[@name='journalID']}">
+            <xsl:value-of select="str[@name='journalTitle']" />
+          </a>
+        </div>
+      </div>
     </li>
   </xsl:template>
 </xsl:stylesheet>

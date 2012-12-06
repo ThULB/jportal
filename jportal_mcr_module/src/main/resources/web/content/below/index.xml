@@ -2,9 +2,9 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
-    <div class="jp-layout-marginLR">
-      <div id="information_box">
-        <h2>Informationen</h2>
+    <div class="jp-layout-marginLR jp-layout-index">
+      <div class="jp-layout-index-intro">
+        <h1>Informationen</h1>
         <p class="greeting">Journals@UrMEL bietet Ihnen den Zugang zu Zeitschriften in digitaler Form.</p>
         Durch Digitalisierung werden historische Zeitschriften leichter zugänglich gemacht und damit gleichzeitig auch vor dem Verfall
         bewahrt. In Zusammenarbeit
@@ -13,21 +13,27 @@
         Darüber hinaus werden auch
         Online-Zeitschriften von Verlagen erworben und auf den Servern der ThULB abgespeichert und zugänglich gemacht.
       </div>
-      <div id="latestArticles_box">
-        <h2>Neueste Artikel</h2>
-        <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
-      </div>
+      
+      <div class="jp-layout-index-splitter" />
 
-      <div>
-        <h2>Bestände</h2>
+      <div class="jp-layout-index-list">
         <ul>
           <li>
-            <a href="/content/main/journalList.xml">Zeitschriften</a>
+            <a href="/content/main/journalList.xml" class="journal">
+              <img src="/images/journal.png"/>
+            </a>
           </li>
           <li>
-            <a href="/content/main/calendarList.xml">Altenburger Kalenderblätter</a>
+            <a href="/content/main/calendarList.xml" class="calendar">
+              <img src="/images/calendar.png"/>
+            </a>
           </li>
         </ul>
+      </div>
+
+      <div class="jp-layout-index-latestArticles">
+        <h1>Neueste Artikel</h1>
+        <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
       </div>
 
     </div>
