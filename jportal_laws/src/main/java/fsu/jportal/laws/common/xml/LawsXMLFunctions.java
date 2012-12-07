@@ -1,6 +1,5 @@
 package fsu.jportal.laws.common.xml;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -20,8 +19,6 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 public abstract class LawsXMLFunctions {
 
