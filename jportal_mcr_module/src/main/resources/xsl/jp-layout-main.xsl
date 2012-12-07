@@ -157,11 +157,11 @@
                 </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="$journalID != ''">
-                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift"></input>
+                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift"></input>
                     <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
                   </xsl:when>
                   <xsl:otherwise>
-                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche im Gesamtbestand"></input>
+                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand"></input>
                   </xsl:otherwise>
                 </xsl:choose>
                 <input id="submitButton" type="submit" value="Suche" />
