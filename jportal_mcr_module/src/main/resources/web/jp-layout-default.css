@@ -84,6 +84,23 @@ body {
     min-height: 112px;
 }
 
+.jp-layout-footer {
+	text-align: center;
+	margin-top: 15px;
+}
+.jp-layout-footer .thulb {
+    background-image: url("images/thulb.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 30px;
+    text-align: center;
+    width: 320px;
+}
+.jp-layout-footer .thulb:hover {
+	background-image: url("images/thulb_hover.png");
+}
+
 .jp-layout-breadcrumb {
 	border-bottom: 1px solid;
 	font-size: 11px;
