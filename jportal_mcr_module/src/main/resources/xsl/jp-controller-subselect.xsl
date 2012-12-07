@@ -52,7 +52,7 @@
   <!-- Rendering search form view in subselect -->
   <xsl:template mode="renderView" match="@value[contains(.,'{subselect.type.label}')]">
     <xsl:attribute name="value">
-      <xsl:value-of select="concat($subselectTypeLabel,'name', substring-after(.,'{subselect.type.label}'))" />
+      <xsl:value-of select="concat($subselectTypeLabel,'enname', substring-after(.,'{subselect.type.label}'))" />
     </xsl:attribute>
   </xsl:template>
 

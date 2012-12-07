@@ -152,14 +152,19 @@
                     <xsl:value-of select="$qt" />
                   </xsl:if>
                 </xsl:variable>
-                <input id="inputField" name="XSL.qt" value="{$queryterm}"></input>
-                <input id="submitButton" type="submit" value="Suche" />
                 <xsl:variable name="journalID">
                   <xsl:call-template name="getJournalID" />
                 </xsl:variable>
-                <xsl:if test="$journalID != ''">
-                  <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
-                </xsl:if>
+                <xsl:choose>
+                  <xsl:when test="$journalID != ''">
+                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift"></input>
+                    <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche im Gesamtbestand"></input>
+                  </xsl:otherwise>
+                </xsl:choose>
+                <input id="submitButton" type="submit" value="Suche" />
               </form>
             </div>
           </xsl:otherwise>
