@@ -6,20 +6,9 @@
 	height: 115px;
 }
 
-#logoDate{
-	position: relative;
-	left: 595px;
-    top: -8px;
-    width: 100px;
-    font-size: medium;
-    text-align: center;
-}
-
-#logoTitle{
-	position: relative;
-	left: 420px;
-    top: 28px;
-    width: 145px;
-    font-size: x-large;
-    text-align: center;
+#logo .logoTitle {
+    color: white;
+    font-size: 1.2em;
+    margin: 0px;
+    padding: 93px 0 0 115px;
 }
