@@ -13,10 +13,14 @@
       <div class="wrapper">
         <p class="title">
           <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
-            <xsl:value-of select="str[@name='maintitle']" />
+            <xsl:call-template name="shortenString">
+              <xsl:with-param name="string" select="str[@name='maintitle']" />
+              <xsl:with-param name="length" select="300" />
+            </xsl:call-template>
           </a>
         </p>
-        <div class="journal">Erschienen in
+        <div class="journal">
+          Erschienen in
           <a href="{$WebApplicationBaseURL}receive/{str[@name='journalID']}">
             <xsl:value-of select="str[@name='journalTitle']" />
           </a>

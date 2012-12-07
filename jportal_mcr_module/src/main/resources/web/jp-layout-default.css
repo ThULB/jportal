@@ -24,6 +24,7 @@ body {
 	font-size: 1.2em;
 }
 .jp-layout-index-intro {
+	margin-top: 30px;
 }
 .jp-layout-index-splitter {
 	width: 100%;
@@ -33,7 +34,7 @@ body {
 	margin-bottom: 50px;
 }
 .jp-layout-index-list {
-	margin-bottom: 35px;
+	margin-bottom: 55px;
 }
 .jp-layout-index-list ul {
 	list-style: none;
@@ -77,8 +78,10 @@ body {
 .jp-layout-index-latestArticles ul > li .wrapper p {
     display: list-item;
     list-style-position: inside;
-    list-style-type: circle;
+    list-style-type: none;
     margin: 0 0 20px;
+    font-style: italic;
+    min-height: 112px;
 }
 
 .jp-layout-breadcrumb {
