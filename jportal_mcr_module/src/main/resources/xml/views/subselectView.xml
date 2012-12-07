@@ -3,7 +3,7 @@
   <component name="subelectFormInput">
     <div id="searchBar">
       <form id="searchForm" action="/jp-search.xml">
-        <input id="inputField" name="XSL.qt" value="{subselect.type.label} eingeben" />
+        <input id="inputField" name="XSL.qt" getData="subselect.search.form.placeholder"/>
         <input id="submitButton" type="submit" value="Suche" />
         <input type="hidden" name="XSL.subselect.type" value="{subselect.type}" />
         <input type="hidden" name="XSL.subselect.session.SESSION" value="{subselect.session}" />

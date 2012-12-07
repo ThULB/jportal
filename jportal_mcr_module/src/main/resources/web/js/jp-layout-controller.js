@@ -81,23 +81,50 @@ function introEditor(journalID) {
 }
 
 function showDeleteDerivateDialog(/*String*/ id) {
-	if (!confirm('Das Derivat wirklich löschen?')) {
-	    return;
-	}
-	jQuery.ajax({
-		type: 'DELETE',
-		url: '/rsc/object/' + id
-	}).done(function(msg) {
-		location.reload(true);
-	}).fail(function(error) {
-		if(error.status == 400) {
-			alert('Bad request: ' + error.responseText);
-		} else if(error.status == 401) {
-			alert('Unauthorized: You have no permission to delete this object!');
-		} else if(error.status == 403) {
-			alert('Forbidden: ' + error.responseText);
-		} else if(error.status == 404) {
-			alert('Unknown MyCoRe object id ' + id);
-		}
-	});
+    if (!confirm('Das Derivat wirklich löschen?')) {
+        return;
+    }
+    jQuery.ajax({
+        type: 'DELETE',
+        url: '/rsc/object/' + id
+    }).done(function(msg) {
+        location.reload(true);
+    }).fail(function(error) {
+        if(error.status == 400) {
+            alert('Bad request: ' + error.responseText);
+        } else if(error.status == 401) {
+            alert('Unauthorized: You have no permission to delete this object!');
+        } else if(error.status == 403) {
+            alert('Forbidden: ' + error.responseText);
+        } else if(error.status == 404) {
+            alert('Unknown MyCoRe object id ' + id);
+        }
+    });
 }
+
+$(document).ready(function(){
+    function supportHTML5(){
+        return !!document.createElement('canvas').getContext;
+    }
+    
+    if(!supportHTML5()){
+        var searchInput = $('#searchForm #inputField');
+        var placeholderTxt = searchInput.attr('placeholder');
+        searchInput.attr('value', placeholderTxt);
+        searchInput.focus(function(){
+            searchInput.removeAttr('value');
+        });
+        
+        var inputChanged = false;
+        searchInput.change(function(){
+            inputChanged = true;
+        })
+        
+        searchInput.blur(function(){
+            var currentInputVal = searchInput.attr('value');
+            if(!inputChanged || $.trim(currentInputVal)==''){
+                searchInput.attr('value', placeholderTxt);
+            }
+        })
+    }
+})

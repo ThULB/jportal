@@ -52,6 +52,10 @@ body {
 .jp-layout-index-list .calendar {
 	margin-right: 154px;
 }
+.jp-layout-index-list .linkButton{
+	border: none;
+	
+}
 .jp-layout-index-latestArticles h1 {
 	margin-left: 20px;
 }

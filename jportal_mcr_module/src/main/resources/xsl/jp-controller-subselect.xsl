@@ -56,6 +56,20 @@
     </xsl:attribute>
   </xsl:template>
 
+  <xsl:template mode="renderView" match="@getData[.='subselect.search.form.placeholder']">
+    <xsl:attribute name="placeholder">
+      <xsl:choose>
+        <xsl:when test="$subselect.type = 'person'">
+          <xsl:value-of select="'Personenname'" />
+        </xsl:when>
+        <xsl:when test="$subselect.type = 'jpinst'">
+          <xsl:value-of select="'Institutionsname'" />
+        </xsl:when>
+      </xsl:choose>
+      <xsl:value-of select="' eingeben'" />
+    </xsl:attribute>
+  </xsl:template>
+
   <xsl:template mode="renderView" match="h2[.='{subselect.type.label}']">
     <xsl:copy>
       <xsl:value-of select="concat($subselectTypeLabel, 'enauswahl')" />
@@ -306,7 +320,7 @@
         <xsl:value-of select="$data/href" />
     </xsl:attribute>
   </xsl:template>
-  
+
   <xsl:template mode="renderView" match="@href[.='{subselect.cancel.link}']">
     <xsl:param name="data" />
 
