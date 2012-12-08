@@ -8,11 +8,13 @@
 
   <xsl:template name="derivateDisplay">
     <xsl:param name="nodes" />
-    <xsl:if test="count($nodes) &gt; 0">
-      <!-- <ul class="jp-layout-derivateLinks jp-layout-derivateList"> </ul> -->
-      <div class="jp-layout-derivateList">
-        <xsl:apply-templates mode="derivateDisplay" select="$nodes" />
-      </div>
+    <xsl:if test="acl:checkPermission(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID,'read_derivate')">
+      <xsl:if test="count($nodes) &gt; 0">
+        <!-- <ul class="jp-layout-derivateLinks jp-layout-derivateList"> </ul> -->
+        <div class="jp-layout-derivateList">
+          <xsl:apply-templates mode="derivateDisplay" select="$nodes" />
+        </div>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
