@@ -82,7 +82,9 @@
 		</unjar>
 
 		<!-- restore webcontent -->
+		<!--
 		<antcall target="restore.web-content" />
+		-->
 
 	</target>
 	
