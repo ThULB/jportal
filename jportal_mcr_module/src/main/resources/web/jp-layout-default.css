@@ -799,6 +799,10 @@ body {
 	display: block;
 }
 
+.jp-layout-tableOfContent>ul li{
+	margin-bottom: 12px;
+}
+
 .resultPaginator {
 	margin-top: 20px;
 }
