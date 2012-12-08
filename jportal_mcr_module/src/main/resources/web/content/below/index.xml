@@ -2,7 +2,7 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
-    <div class="jp-layout-marginLR jp-layout-index">
+    <div class="jp-layout-index">
       <div class="jp-layout-index-intro">
         <h1>Informationen</h1>
         <p class="greeting">Journals@UrMEL bietet Ihnen den Zugang zu Zeitschriften in digitaler Form.</p>
