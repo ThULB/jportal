@@ -124,6 +124,14 @@
             <li>
               <a href="/content/below/index.xml" target="_self">Journals@UrMEL</a>
             </li>
+            <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
+              <li>
+                <span style="color:#FF0000;">
+                  <xsl:value-of select="websiteWriteProtection:getMessage()" />
+                </span>
+              </li>
+            </xsl:if>
+            
           </ul>
           <div id="globalMenu">
             <xsl:call-template name="jp.navigation.top" />
