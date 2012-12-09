@@ -15,7 +15,7 @@
           <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
             <xsl:call-template name="shortenString">
               <xsl:with-param name="string" select="str[@name='maintitle']" />
-              <xsl:with-param name="length" select="300" />
+              <xsl:with-param name="length" select="250" />
             </xsl:call-template>
           </a>
         </p>
