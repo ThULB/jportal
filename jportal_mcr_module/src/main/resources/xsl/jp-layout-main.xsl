@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" exclude-result-prefixes="xsi mcr acl xalan layoutUtils">
+  xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
+  exclude-result-prefixes="xsi mcr acl xalan layoutUtils websiteWriteProtection">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
