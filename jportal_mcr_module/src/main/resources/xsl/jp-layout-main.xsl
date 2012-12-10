@@ -217,7 +217,7 @@
           </xsl:choose>   
         </div>
         <div class="jp-layout-footer">
-          <a href="http://thulb.uni-jena.de" class="thulb"></a>
+          <a href="http://www.thulb.uni-jena.de" class="thulb"></a>
         </div>
         <xsl:if test="$object='delete'">
           <xsl:copy-of select="$objectEditing/deleteMsg" />
