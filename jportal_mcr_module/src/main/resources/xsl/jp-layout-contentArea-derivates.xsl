@@ -24,7 +24,7 @@
   </xsl:template>
   <xsl:template mode="derivateDisplay" match="mcr:field[@name='linkDeriv']">
     <xsl:variable name="derivID" select="substring-before(., '/')" />
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[@display!='false']">
+    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
       <xsl:call-template name="iview2Entry">
         <xsl:with-param name="derivID" select="$derivID" />
         <xsl:with-param name="file" select="concat('/',substring-after(., '/'))" />
@@ -35,7 +35,7 @@
   <xsl:template mode="derivateDisplay" match="derivateLink">
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[@display!='false']">
+    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
       <div class="jp-layout-derivateWrapper">
         <div class="image">
           <xsl:call-template name="iview2Entry">
@@ -61,7 +61,7 @@
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="@xlink:href" />
     
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[@display!='false']">
+    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
     <div class="jp-layout-derivateWrapper">
       <div class="image">
         <xsl:choose>
