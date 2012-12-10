@@ -50,7 +50,6 @@ public class SolrDocGenerationTest extends XSLTransformTest{
 //        xmlOutput(jdomResult);
         
         assertSolrFiled(jdomResult, "heading", 1);
-        assertSolrFiled(jdomResult, "alternative.name", 3);
     }
     
     @Test
@@ -81,7 +80,7 @@ public class SolrDocGenerationTest extends XSLTransformTest{
         assertSolrFiled(jdomResult, "maintitle", 1);
         assertSolrFiled(jdomResult, "journalTitle", 1);
         assertSolrFiled(jdomResult, "allMeta", 16);
-        assertSolrFiled(jdomResult, "date", 2);
+//        assertSolrFiled(jdomResult, "date", 2);
         assertSolrFiled(jdomResult, "date.published_from", 1);
         assertSolrFiled(jdomResult, "date.published_until", 1);
 //        assertSolrFiled(jdomResult, "rubric", 1);
