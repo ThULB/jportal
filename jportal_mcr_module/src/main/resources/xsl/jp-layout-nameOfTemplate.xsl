@@ -17,8 +17,9 @@
     </xsl:variable>
     
     <xsl:if test="$journalID != ''">
-      
-      <xsl:apply-templates mode="nameOfTemplate" select="document(concat('notnull:mcrobject:',$journalID))/mycoreobject" />
+      <!-- using URI resolver nameOfTemplate: is pretty ugly, should find a better solution -->
+      <!-- stream will not close while using URI resolver notnull:mcrobject: which leads to "Too many open files" exception -->
+      <xsl:value-of select="document(concat('nameOfTemplate:',$journalID))/nameOfTemplate"/>
     </xsl:if>
   </xsl:template>
 
