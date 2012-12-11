@@ -24,7 +24,7 @@
   </xsl:template>
   <xsl:template mode="derivateDisplay" match="mcr:field[@name='linkDeriv']">
     <xsl:variable name="derivID" select="substring-before(., '/')" />
-    <xsl:if test="acl:checkPermission('CRUD', 'admin') or layoutTools:getDerivateDisplay($derivID) = 'true'">
+    <xsl:if test="layoutTools:getDerivateDisplay($derivID) = 'true'">
       <xsl:call-template name="iview2Entry">
         <xsl:with-param name="derivID" select="$derivID" />
         <xsl:with-param name="file" select="concat('/',substring-after(., '/'))" />
@@ -35,7 +35,9 @@
   <xsl:template mode="derivateDisplay" match="derivateLink">
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
-    <xsl:if test="acl:checkPermission('CRUD', 'admin') or layoutTools:getDerivateDisplay($derivID) = 'true'">
+    <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'delete_derlink')" />
+
+    <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
         <div class="image">
           <xsl:call-template name="iview2Entry">
@@ -43,7 +45,7 @@
             <xsl:with-param name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
           </xsl:call-template>
         </div>
-        <xsl:if test="acl:checkPermission($objID, 'delete_derlink')">
+        <xsl:if test="$deleteLink">
           <ul class="edit">
             <li>
               <a href="{$WebApplicationBaseURL}servlets/DerivateLinkServlet?mode=removeLink&amp;from={$objID}&amp;to={@xlink:href}">
@@ -60,10 +62,10 @@
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="@xlink:href" />
-    <xsl:variable name="isAdmin" select="acl:checkPermission('CRUD', 'admin')" />
+    <xsl:variable name="deleteDB" select="acl:checkPermission(@xlink:href, 'deletedb')" />
     <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay($derivID) = 'true'" />
 
-    <xsl:if test="$isAdmin or $showDerivate">
+    <xsl:if test="$deleteDB or $showDerivate">
     <div class="jp-layout-derivateWrapper">
       <div class="image">
         <xsl:choose>
@@ -97,7 +99,7 @@
               <a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a>
             </li>
           </xsl:if>
-          <xsl:if test="acl:checkPermission(@xlink:href, 'deletedb')">
+          <xsl:if test="$deleteDB">
             <li>
               <a href="{$WebApplicationBaseURL}servlets/MCRDisplayHideDerivateServlet?derivate={@xlink:href}">
                 <xsl:choose>
