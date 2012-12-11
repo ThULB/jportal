@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+#logo {
+	background-image: url("../IMAGES/logo.png");
+	background-repeat: no-repeat;
+	background-position: left top;
+	height: 115px;
+}
+
+.LogoS{
+	height: 109px;
+	width: 180px;
+}
+
+#LogoLink1{
+	display: inline-block;
+    margin-left: 293px;
+    margin-top: 6px;
+}
+
+#LogoLink2{
+	display: inline-block;
+    margin-left: 4px;
+    margin-top: 6px;
+}
+
+#LogoLink3{
+	display: inline-block;
+    margin-left: 5px;
+    margin-top: 6px;
+}
+
+#LogoLink4{
+	display: inline-block;
+    margin-left: 2px;
+    margin-top: 6px;
+}
