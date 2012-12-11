@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+<xsl:stylesheet version="1.0" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
   <xsl:template name="breadcrumb">
     <div id="jp-breadcrumb-container">
       <menu class="jp-layout-breadcrumb">
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
           <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
-          <xsl:variable name="listType" select="document(concat('listType:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/listType"/>
+          <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)"/>
           <li>
             <a href="{$WebApplicationBaseURL}content/main/{$listType}List.xml#{$hash}">
               <xsl:value-of select="'A-Z'"/>

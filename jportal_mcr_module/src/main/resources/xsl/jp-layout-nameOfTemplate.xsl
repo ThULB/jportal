@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan">
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan">
   <xsl:variable name="editorForm" select="'editor-jpjournal editor-jpvolume editor-jparticle'"></xsl:variable>
   <xsl:template name="nameOfTemplate">
     <xsl:apply-templates mode="nameOfTemplate"
@@ -19,7 +19,7 @@
     <xsl:if test="$journalID != ''">
       <!-- using URI resolver nameOfTemplate: is pretty ugly, should find a better solution -->
       <!-- stream will not close while using URI resolver notnull:mcrobject: which leads to "Too many open files" exception -->
-      <xsl:value-of select="document(concat('nameOfTemplate:',$journalID))/nameOfTemplate"/>
+      <xsl:value-of select="layoutTools:getNameOfTemplate($journalID)"/>
     </xsl:if>
   </xsl:template>
 
