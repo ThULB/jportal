@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
 
   <xsl:param name="iview2.debug" select="'false'" />
@@ -24,7 +24,7 @@
   </xsl:template>
   <xsl:template mode="derivateDisplay" match="mcr:field[@name='linkDeriv']">
     <xsl:variable name="derivID" select="substring-before(., '/')" />
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
+    <xsl:if test="layoutTools:getDerivateDisplay($derivID) = 'true'">
       <xsl:call-template name="iview2Entry">
         <xsl:with-param name="derivID" select="$derivID" />
         <xsl:with-param name="file" select="concat('/',substring-after(., '/'))" />
@@ -35,7 +35,7 @@
   <xsl:template mode="derivateDisplay" match="derivateLink">
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
+    <xsl:if test="layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
         <div class="image">
           <xsl:call-template name="iview2Entry">
@@ -61,7 +61,7 @@
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="@xlink:href" />
     
-    <xsl:if test="document(concat('mcrobject:', $derivID))/mycorederivate/derivate[not(@display) or @display!='false']">
+    <xsl:if test="layoutTools:getDerivateDisplay($derivID) = 'true'">
     <div class="jp-layout-derivateWrapper">
       <div class="image">
         <xsl:choose>
