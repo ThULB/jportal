@@ -10,20 +10,8 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class LayoutTools {
-    public class DerivateDisplay implements MCRObjectInfo {
 
-        @Override
-        public String getInfo(Object node) {
-            if (node == null) {
-                return "false";
-            } else {
-                return "true";
-            }
-        }
-
-    }
-    
-    public class InfoProvider {
+    private static class InfoProvider {
         private String id;
         private String xpath;
         
@@ -40,18 +28,17 @@ public class LayoutTools {
         }
     }
 
-    public class TemplateName implements MCRObjectInfo {
+    private static class SimpleText implements MCRObjectInfo {
         public String getInfo(Object selectSingleNode) {
             Text hiddenTemplate = (Text) selectSingleNode;
             if (hiddenTemplate != null) {
                 return hiddenTemplate.getText();
             }
-
             return "";
         }
     }
-    
-    public class ListType implements MCRObjectInfo{
+
+    private static class ListType implements MCRObjectInfo{
         @Override
         public String getInfo(Object node) {
             if (node == null) {
@@ -63,15 +50,32 @@ public class LayoutTools {
         
     }
 
-    public interface MCRObjectInfo {
+    private static class DerivateDisplay implements MCRObjectInfo {
+        @Override
+        public String getInfo(Object node) {
+            if (node == null) {
+                return "false";
+            } else {
+                return "true";
+            }
+        }
+
+    }
+
+    private static interface MCRObjectInfo {
         public String getInfo(Object node);
     }
 
     public String getNameOfTemplate(String journalID) throws TransformerException, JDOMException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/hidden_templates/hidden_template/text()");
-        return infoProvider.get(new TemplateName());
+        return infoProvider.get(new SimpleText());
     }
-    
+
+    public String getMaintitle(String journalID) throws TransformerException, JDOMException {
+        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/maintitles/maintitle/text()");
+        return infoProvider.get(new SimpleText());
+    }
+
     public String getListType(String journalID) throws TransformerException, JDOMException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/contentClassis1/contentClassi1[@categid = 'calendar']");
         return infoProvider.get(new ListType());
