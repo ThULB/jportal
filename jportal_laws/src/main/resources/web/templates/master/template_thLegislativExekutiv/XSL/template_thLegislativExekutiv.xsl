@@ -3,7 +3,8 @@
 <!-- $Revision: 575 $ $Date: 2008-09-04 14:26:32 +0200 (Do, 04 Sep 2008) $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="i18n laws mcr">
+  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
+  xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="i18n laws layoutTools mcr">
 
   <xsl:template match="/template[@id='template_thLegislativExekutiv']" mode="template">
     <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_thLegislativExekutiv" />
@@ -32,7 +33,6 @@
     <xsl:param name="objId" />
     <xsl:param name="derivateId" />
 
-	<xsl:call-template name="jp.laws.title" /> 
     <div id="jp-content-laws" class="jp-content-laws">
       <xsl:apply-templates select="register" mode="template_thLegislativExekutiv">
         <xsl:with-param name="objId" select="$objId"/>
@@ -57,7 +57,7 @@
       $(document).ready(function() {
         var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
         $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/template_thLegislativExekutiv/IMAGES/logo.png)');
-        var name = '<xsl:value-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/metadata/maintitles/maintitle" />';
+        var name = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
         $('#logo').prepend('<div id="logoTitle">' + name  + '</div>');
       });
     </script>
