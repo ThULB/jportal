@@ -99,10 +99,21 @@
 
     <!-- call dynamic template_*.xsl -->
     <xsl:variable name="template">
-      <template id="{$nameOfTemplate}" mcrID="{@ID}"></template>
+      <template id="{$nameOfTemplate}" mcrID="{@ID}">
+      </template>
     </xsl:variable>
-    <xsl:apply-templates select="xalan:nodeset($template)/template" mode="template" />
+    <xsl:apply-templates select="xalan:nodeset($template)" mode="template" >
+      <!-- mcrObj is node mycoreobject root -->
+      <xsl:with-param name="mcrObj" select="."/>
+    </xsl:apply-templates>
 
+  </xsl:template>
+  
+  <xsl:template match="/" mode="template">
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates mode="template" select="*">
+      <xsl:with-param name="mcrObj" select="$mcrObj"/>
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
