@@ -32,6 +32,7 @@
     <xsl:apply-templates mode="jportal.metadata" select="metadata" />
     <xsl:apply-templates mode="jportal.allMeta" select="metadata/*//*" />
     <xsl:apply-templates mode="jportal.link" select="*/*/*[@xlink:href]" />
+    <xsl:apply-templates select="service" />
   </xsl:template>
 
   <xsl:template mode="jportal.metadata" match="text()">
