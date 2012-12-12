@@ -13,32 +13,39 @@ public class LayoutTools {
 
     private static class InfoProvider {
         private String id;
+
         private String xpath;
-        
+
         public InfoProvider(String id, String xpath) {
             this.id = id;
             this.xpath = xpath;
         }
-        
-        public String get(MCRObjectInfo fromObj) throws JDOMException {
-            Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(id));
-            XPath hiddenTemplateXpath = XPath.newInstance(xpath);
-            Object node = hiddenTemplateXpath.selectSingleNode(journalXML);
-            return fromObj.getInfo(node);
-        }
-    }
 
-    private static class SimpleText implements MCRObjectInfo {
-        public String getInfo(Object selectSingleNode) {
-            Text hiddenTemplate = (Text) selectSingleNode;
-            if (hiddenTemplate != null) {
-                return hiddenTemplate.getText();
+        public String get(MCRObjectInfo fromObj) throws JDOMException {
+            MCRObjectID mcrid = MCRObjectID.getInstance(id);
+            MCRXMLMetadataManager metadataManager = MCRXMLMetadataManager.instance();
+            if (metadataManager.exists(mcrid)) {
+
+                Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(mcrid);
+                XPath hiddenTemplateXpath = XPath.newInstance(xpath);
+                Object node = hiddenTemplateXpath.selectSingleNode(journalXML);
+                return fromObj.getInfo(node);
             }
             return "";
         }
     }
 
-    private static class ListType implements MCRObjectInfo{
+    private static class SimpleText implements MCRObjectInfo {
+        public String getInfo(Object node) {
+            Text textNode = (Text) node;
+            if (textNode != null) {
+                return textNode.getText();
+            }
+            return "";
+        }
+    }
+
+    private static class ListType implements MCRObjectInfo {
         @Override
         public String getInfo(Object node) {
             if (node == null) {
@@ -47,7 +54,7 @@ public class LayoutTools {
                 return "calendar";
             }
         }
-        
+
     }
 
     private static class DerivateDisplay implements MCRObjectInfo {
@@ -77,10 +84,11 @@ public class LayoutTools {
     }
 
     public String getListType(String journalID) throws TransformerException, JDOMException {
-        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/contentClassis1/contentClassi1[@categid = 'calendar']");
+        InfoProvider infoProvider = new InfoProvider(journalID,
+                "/mycoreobject/metadata/contentClassis1/contentClassi1[@categid = 'calendar']");
         return infoProvider.get(new ListType());
     }
-    
+
     public String getDerivateDisplay(String derivateID) throws TransformerException, JDOMException {
         InfoProvider infoProvider = new InfoProvider(derivateID, "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay());
