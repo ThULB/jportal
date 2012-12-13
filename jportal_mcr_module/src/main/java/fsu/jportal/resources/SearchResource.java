@@ -2,7 +2,7 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -16,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.mycore.common.MCRURLParamEncoder;
 import org.mycore.solr.MCRSolrServerFactory;
 import org.mycore.solr.search.MCRSolrURL;
 
@@ -40,7 +39,7 @@ public class SearchResource {
     public String search(@Context UriInfo uriInfo) throws IOException {
         String encodedQuery = "";
         for(Entry<String, List<String>> e : uriInfo.getQueryParameters().entrySet()) {
-            encodedQuery += "&" + e.getKey() + "=" + MCRURLParamEncoder.encode(e.getValue().get(0));
+            encodedQuery += "&" + e.getKey() + "=" + URLEncoder.encode(e.getValue().get(0), "UTF-8");
         }
         encodedQuery = encodedQuery.substring(1);
         MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), encodedQuery);
