@@ -1,54 +1,72 @@
 package fsu.jportal.xsl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.transform.TransformerException;
 
+import org.apache.log4j.Logger;
 import org.jdom.Document;
+import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
+import org.jdom.output.DOMOutputter;
 import org.jdom.xpath.XPath;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.w3c.dom.Node;
 
 public class LayoutTools {
-
     private static class InfoProvider {
         private String id;
-
-        private String xpath;
+        
+        private String[] xpathList;
 
         public InfoProvider(String id, String xpath) {
+            this(id, new String[]{xpath});
+        }
+        
+        public InfoProvider(String id, String... xpath) {
             this.id = id;
-            this.xpath = xpath;
+            this.xpathList = xpath;
         }
 
-        public String get(MCRObjectInfo fromObj) throws JDOMException {
+        public <T> T get(MCRObjectInfo<T> fromObj) throws JDOMException {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
             MCRXMLMetadataManager metadataManager = MCRXMLMetadataManager.instance();
             if (metadataManager.exists(mcrid)) {
-
+                List<Object> nodes = new ArrayList<Object>();
                 Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(mcrid);
-                XPath hiddenTemplateXpath = XPath.newInstance(xpath);
-                Object node = hiddenTemplateXpath.selectSingleNode(journalXML);
-                return fromObj.getInfo(node);
+                
+                for (String xpath : xpathList) {
+                    XPath hiddenTemplateXpath = XPath.newInstance(xpath);
+                    Object node = hiddenTemplateXpath.selectSingleNode(journalXML);
+                    
+                    if(node != null) {
+                        nodes.add(node);
+                    }
+                }
+                
+                return fromObj.getInfo(nodes);
             }
-            return "";
+            return null;
         }
     }
 
-    private static class SimpleText implements MCRObjectInfo {
-        public String getInfo(Object node) {
-            Text textNode = (Text) node;
-            if (textNode != null) {
+    private static class SimpleText implements MCRObjectInfo<String> {
+        public String getInfo(List<Object> node) {
+            if (node.size() == 1) {
+                Text textNode = (Text) node.get(0);
                 return textNode.getText();
             }
             return "";
         }
     }
 
-    private static class ListType implements MCRObjectInfo {
+    private static class ListType implements MCRObjectInfo<String> {
         @Override
-        public String getInfo(Object node) {
-            if (node == null) {
+        public String getInfo(List<Object> node) {
+            if (node.size() == 0) {
                 return "journal";
             } else {
                 return "calendar";
@@ -57,10 +75,10 @@ public class LayoutTools {
 
     }
 
-    private static class DerivateDisplay implements MCRObjectInfo {
+    private static class DerivateDisplay implements MCRObjectInfo<String> {
         @Override
-        public String getInfo(Object node) {
-            if (node == null) {
+        public String getInfo(List<Object> node) {
+            if (node.size() == 0) {
                 return "false";
             } else {
                 return "true";
@@ -69,8 +87,32 @@ public class LayoutTools {
 
     }
 
-    private static interface MCRObjectInfo {
-        public String getInfo(Object node);
+    private static class DatesInfo implements MCRObjectInfo<Node> {
+        @Override
+        public Node getInfo(List<Object> nodes) {
+            Element root = new Element("datesInfo");
+            Document datesDoc = new Document(root);
+            
+            for (Object node : nodes) {
+                node.getClass().getCanonicalName();
+                if(node instanceof Element){
+                    root.addContent(((Element) node).detach());
+                }
+            }
+            
+            DOMOutputter domOutputter = new DOMOutputter();
+            try {
+                return domOutputter.output(datesDoc).getFirstChild();
+            } catch (JDOMException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private static interface MCRObjectInfo<T> {
+        public T getInfo(List<Object> node);
     }
 
     public String getNameOfTemplate(String journalID) throws TransformerException, JDOMException {
@@ -92,5 +134,10 @@ public class LayoutTools {
     public String getDerivateDisplay(String derivateID) throws TransformerException, JDOMException {
         InfoProvider infoProvider = new InfoProvider(derivateID, "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay());
+    }
+    
+    public Node getDatesInfo(String journalID) throws TransformerException, JDOMException {
+        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/dates","/mycoreobject/metadata/hidden_genhiddenfields1");
+        return infoProvider.get(new DatesInfo());
     }
 }
