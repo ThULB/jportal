@@ -2,36 +2,23 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.text.MessageFormat;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.mycore.common.MCRJSONManager;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.xml.MCRLayoutService;
-import org.mycore.parsers.bool.MCRCondition;
-import org.mycore.services.fieldquery.MCRFieldDef;
-import org.mycore.services.fieldquery.MCRQuery;
-import org.mycore.services.fieldquery.MCRQueryManager;
-import org.mycore.services.fieldquery.MCRQueryParser;
-import org.mycore.services.fieldquery.MCRResults;
-import org.mycore.services.fieldquery.MCRSortBy;
+import org.mycore.common.MCRURLParamEncoder;
 import org.mycore.solr.MCRSolrServerFactory;
 import org.mycore.solr.search.MCRSolrURL;
-
-import fsu.jportal.gson.MCRHitTypeAdapter;
-import fsu.jportal.gson.MCRResultsTypeAdapter;
-import fsu.jportal.gson.MCRResultsWrapper;
 
 @Path("search")
 public class SearchResource {
@@ -40,74 +27,30 @@ public class SearchResource {
     @Context
     HttpServletResponse httpResponse;
 
+    /**
+     * Search solr. Its important to set the wt parameter to json.
+     * 
+     * @param uriInfo
+     * @return json result
+     * 
+     * @throws IOException
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String search(@QueryParam("q") String query, @QueryParam("sort") String sort, @QueryParam("start") Integer start,
-            @QueryParam("rows") Integer rows) throws IOException {
-        MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer());
-        solrURL.setQueryParamter(query);
-        if (start != null) {
-            solrURL.setStart(start);
+    public String search(@Context UriInfo uriInfo) throws IOException {
+        String encodedQuery = "";
+        for(Entry<String, List<String>> e : uriInfo.getQueryParameters().entrySet()) {
+            encodedQuery += "&" + e.getKey() + "=" + MCRURLParamEncoder.encode(e.getValue().get(0));
         }
-        if (rows != null) {
-            solrURL.setRows(rows);
-        }
-        if (sort != null) {
-            solrURL.addSortOption(sort);
-        }
+        encodedQuery = encodedQuery.substring(1);
+        MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), encodedQuery);
         return search(solrURL);
     }
 
     protected String search(MCRSolrURL solrURL) throws IOException  {
-        solrURL.setWriterType("json");
         StringWriter writer = new StringWriter();
         IOUtils.copy(solrURL.openStream(), writer, "UTF-8");
         return writer.toString();
     }
 
-    private MCRResults mcrQuery(String query, String sortBy, int maxResults, String sortOrder) {
-        MCRQuery mcrQuery = parseQuery(query);
-        boolean boolSortOrder = ("descending".equals(sortOrder)) ? MCRSortBy.DESCENDING : MCRSortBy.ASCENDING;
-
-        if (sortBy != null) {
-            MCRSortBy mcrSortBy = new MCRSortBy(MCRFieldDef.getDef(sortBy), boolSortOrder);
-            mcrQuery.setSortBy(mcrSortBy);
-        }
-
-        mcrQuery.setMaxResults(maxResults);
-
-        MCRResults mcrResults = MCRQueryManager.search(mcrQuery);
-        return mcrResults;
-    }
-
-    @POST
-    @Path("all")
-    public void searchAllForm(@FormParam("q") String query, @FormParam("s") String sortBy, @FormParam("m") int maxResults,
-            @FormParam("o") String sortOrder) throws IOException {
-        MCRResults mcrResults = mcrQuery(query, sortBy, maxResults, sortOrder);
-        MCRLayoutService.instance().doLayout(null, httpResponse, new MCRJDOMContent(mcrResults.buildXML()));
-    }
-
-    @GET
-    @Path("all")
-    public String searchAll(@QueryParam("q") String query, @QueryParam("sort") String sort, @QueryParam("start") Integer start,
-            @QueryParam("rows") Integer rows) throws IOException {
-        query = MessageFormat.format("(allMeta like \"{0}\") or (content like \"{0}\")", query.toLowerCase());
-        return search(query, sort, start, rows);
-    }
-
-    protected MCRQuery parseQuery(String query) {
-        MCRQueryParser mcrQueryParser = new MCRQueryParser();
-        MCRCondition mcrCondition = mcrQueryParser.parse(query);
-        MCRQuery mcrQuery = new MCRQuery(mcrCondition);
-        return mcrQuery;
-    }
-
-    protected String toJson(MCRResults mcrResults) {
-        MCRJSONManager gsonManager = MCRJSONManager.instance();
-        gsonManager.registerAdapter(new MCRResultsTypeAdapter());
-        gsonManager.registerAdapter(new MCRHitTypeAdapter());
-        String json = gsonManager.createGson().toJson(new MCRResultsWrapper(mcrResults));
-        return json;
-    }
 }
