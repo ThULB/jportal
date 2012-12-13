@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="encoder">
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="encoder layoutTools acl mcr">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -18,6 +18,7 @@
   <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
   <xsl:variable name="hasChildren" select="count(/mycoreobject/structure/children) > 0" />
+  <xsl:variable name="isCalendar" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID) = 'calendar'" />
 
   <xsl:template priority="9" match="/mycoreobject">
     <xsl:variable name="objectEditingHTML">
@@ -76,7 +77,7 @@
     <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
 
     <!-- metadata & derivate -->
-    <xsl:if test="not($hasChildren) or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'">
+    <xsl:if test="not($hasChildren) or $isCalendar or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'">
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
