@@ -40,6 +40,12 @@
       <li>
         <a href="{$WebApplicationBaseURL}servlets/MCRUserAjaxServlet">Nutzer- Gruppenverwaltung</a>
       </li>
-    </ul>    
+    </ul>
+    <h2>Sitzungen</h2>
+    <ul>
+      <li>
+        <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
+      </li>
+    </ul>
   </xsl:template>
 </xsl:stylesheet>
