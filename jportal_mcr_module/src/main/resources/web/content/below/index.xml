@@ -4,16 +4,16 @@
   <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
     <div class="jp-layout-index">
       <div class="jp-layout-index-intro">
-        <h1>Informationen</h1>
-        <p class="greeting">Journals@UrMEL bietet Ihnen den Zugang zu Zeitschriften in digitaler Form.</p>
-        Durch Digitalisierung werden historische Zeitschriften leichter zugänglich gemacht und damit gleichzeitig auch vor dem Verfall
-        bewahrt. In Zusammenarbeit
-        mit wissenschaftlichen Verlagen und Fachgesellschaften gibt die ThULB in zunehmendem Maße selbst
-        Online-Zeitschriften heraus.
-        Darüber hinaus werden auch
-        Online-Zeitschriften von Verlagen erworben und auf den Servern der ThULB abgespeichert und zugänglich gemacht.
+        <h1>Willkommen bei journals@UrMEL</h1>
+        <p class="greeting">Das von der <a href="http://www.thulb.uni-jena.de">Thüringer Universitäts- und Landesbibliothek Jena</a>
+        (ThULB) betriebene Internetportal journals@UrMEL bietet Zugang zu wissenschaftlichen Zeitschriften in digitaler Form.</p>
+        <p>Zur Verfügung stehen rund 700 Zeitschriften mit mehr als 230.000 Artikeln und weiteren Periodika, welche durch die ThULB
+        Jena in Kooperation mit zahlreichen Bibliotheken, Archiven, Verlagen und wissenschaftlichen Fachgesellschaften bereitgestellt
+        werden. Zugänglich sind sowohl retrodigitalisierte historische Zeitschriften, als auch Materialien, welche in originär digitaler
+        Gestalt („born digital“) im Rahmen von journals@UrMEL publiziert werden. Das Angebot wird ständig erweitert. journal@UrMEL ist
+        Bestandteil der <a href="http://www.urmel-dl.de">Universal Multimedia Electronic Library</a> (UrMEL).</p>
       </div>
-      
+
       <div class="jp-layout-index-splitter" />
 
       <div class="jp-layout-index-list">
