@@ -1,25 +1,7 @@
 @CHARSET "UTF-8";
-
-.jp-layout-header {
-	background-image: url("../IMAGES/banner_top_clean.gif");
-	background-repeat: no-repeat, repeat-x;
-	background-position: left bottom;
-	height: 145px;
-}
-
-.jp-layout-border-light {
-	border-color: #DBDBDB;	
-}
-
-/***************************/
 #logo {
-	background-image: url("../IMAGES/banner_top_clean.gif");
-	background-repeat: no-repeat, repeat-x;
-	background-position: left bottom;
+	background-image: url("../IMAGES/logo.png");
+	background-repeat: no-repeat;
+	background-position: left top;
 	height: 115px;
 }
-
-#searchBar {
-	background-color: #9A9899;
-}
-
