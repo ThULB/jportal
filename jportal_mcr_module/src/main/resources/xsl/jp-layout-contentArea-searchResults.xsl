@@ -299,7 +299,8 @@
     <field name="objectType" />
     <field name="published" label="Erschienen" />
     <field name="published_from" label="Erschienen" />
-    <!-- <field name="participants_xlinkTitle" label="Autor" /> -->
+    <field name="dateOfBirth" label="Geburtsdatum" />
+    <field name="dateOfDeath" label="Sterbedatum" />
     <field name="participant" label="Autor" />
     <field name="date.published" label="Erschienen" />
     <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />

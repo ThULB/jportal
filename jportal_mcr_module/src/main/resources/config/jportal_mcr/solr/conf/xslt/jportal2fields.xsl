@@ -168,6 +168,7 @@
   <!-- person metadata -->
   <xsl:template mode="jportal.person.metadata" match="metadata" >
     <xsl:apply-templates mode="jportal.person.name" select="def.heading/heading|def.alternative/alternative"/>
+    <xsl:apply-templates mode="jportal.person.datesOfBirthAndDeath" select="def.dateOfBirth/dateOfBirth|def.dateOfDeath/dateOfDeath"/>
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="heading">
@@ -200,4 +201,11 @@
   <xsl:template mode="jportal.person.heading" match="nameAffix">
     <xsl:value-of select="concat(' ',.)"/>
   </xsl:template>
+
+  <xsl:template mode="jportal.person.datesOfBirthAndDeath" match="dateOfBirth|dateOfDeath">
+    <field name="{name()}">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
 </xsl:stylesheet>
+

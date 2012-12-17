@@ -175,6 +175,10 @@
     <field name="rubric" type="string" indexed="false" multiValued="true" />
     <field name="rubricText" type="text_de" multiValued="true" />
 
+    <!-- person -->
+    <field name="dateOfBirth" type="string" />
+    <field name="dateOfDeath" type="string" />
+
     <!-- JPortal copy fields -->
     <copyField source="maintitle" dest="maintitle_lowercase" />
 
