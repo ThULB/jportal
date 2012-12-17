@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
-import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Text;
 import org.jdom.output.DOMOutputter;
 import org.jdom.xpath.XPath;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Node;
@@ -139,5 +140,15 @@ public class LayoutTools {
     public Node getDatesInfo(String journalID) throws TransformerException, JDOMException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/dates","/mycoreobject/metadata/hidden_genhiddenfields1");
         return infoProvider.get(new DatesInfo());
+    }
+    
+    public String getUserName(){
+        MCRUserInformation userInformation = MCRSessionMgr.getCurrentSession().getUserInformation();
+        String realname = userInformation.getUserAttribute(MCRUserInformation.ATT_REAL_NAME);
+        if(realname != null && !"".equals(realname.trim())){
+            return realname;
+        }else{
+            return userInformation.getUserID();
+        }
     }
 }

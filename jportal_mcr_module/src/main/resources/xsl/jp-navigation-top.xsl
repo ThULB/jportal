@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
   exclude-result-prefixes="mcrxml i18n acl">
 
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
     <ul>
+      <xsl:if test="not($isGuest)">
+        <li class="userName">
+          <xsl:value-of select="layoutTools:getUserName()"/>
+        </li>
+      </xsl:if>
       <xsl:if test="acl:checkPermission('CRUD', 'admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>

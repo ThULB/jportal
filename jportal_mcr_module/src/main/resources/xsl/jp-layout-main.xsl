@@ -127,14 +127,13 @@
             </li>
             <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
               <li>
-                <span style="color:#FF0000;">
+                <span class="webWriteProtection">
                   <xsl:value-of select="websiteWriteProtection:getMessage()" />
                 </span>
               </li>
             </xsl:if>
-            
           </ul>
-          <div id="globalMenu">
+          <div id="globalMenu" class="globalMenu">
             <xsl:call-template name="jp.navigation.top" />
           </div>
         </div>

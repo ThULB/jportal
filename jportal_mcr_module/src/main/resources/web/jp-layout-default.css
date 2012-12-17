@@ -836,6 +836,12 @@ body {
 	padding: 10px 0;
 }
 
+#globalHomeLink .webWriteProtection{
+	color:#FF0000;
+	text-decoration: blink;
+	font-weight: bold;
+}
+
 #globalHomeLink li {
 	border-left: 2px solid;
 }
@@ -859,6 +865,10 @@ body {
 #globalMenu>ul li {
 	display: inline-block;
 	padding: 0 5px;
+}
+
+#globalMenu>ul li.userName {
+	border-right: solid 2px;
 }
 
 #logo {
