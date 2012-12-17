@@ -5,6 +5,7 @@
   exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
 
   <xsl:param name="iview2.debug" select="'false'" />
+  <xsl:param name="CurrentLang" select="'de'"/>
 
   <xsl:template name="derivateDisplay">
     <xsl:param name="nodes" />
@@ -151,5 +152,8 @@
       </xsl:otherwise>
     </xsl:choose>
     <script type="text/javascript" src="{$WebApplicationBaseURL}iview/js/iview2Init.js" />
+    <script type="text/javascript">
+          $(document).ready(jpInitIview2('<xsl:value-of select="$CurrentLang"/>'));
+     </script>
   </xsl:template>
 </xsl:stylesheet>

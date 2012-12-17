@@ -5,7 +5,7 @@ var DampInViewer = 'true';
 var i18n;
 var loadOnStartup = false;
 
-function jpInitIview2() {
+function jpInitIview2(currentLang) {
     var Tools = {
         getBaseURL : function() {
             return location.protocol + '//' + location.host + '/';
@@ -16,7 +16,9 @@ function jpInitIview2() {
         },
 
         getCurrentLang : function() {
-            return navigator.language.split("-")[0];
+            //return navigator.language.split("-")[0];
+            console.log('CurrentLang: ' + currentLang);
+            return currentLang;
         },
 
         getParam : function(name) {
@@ -100,5 +102,3 @@ function jpInitIview2() {
     	});
     }
 }
-
-$(document).ready(jpInitIview2());
