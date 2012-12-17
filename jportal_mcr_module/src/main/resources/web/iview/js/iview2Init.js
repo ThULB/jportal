@@ -68,9 +68,6 @@ function jpInitIview2() {
         var image = that.find('img');
         var derivInfo = Tools.getDerivInfo(image.attr('src'));
         showIview(derivInfo);
-//        setTimeout(function() {
-//            iviewObj.toggleViewerMode();
-//        }, 50)
     }
 
     function showIview(derivInfo) {
@@ -87,17 +84,7 @@ function jpInitIview2() {
         iview.addInstance(iviewObj);
         iviewObj.startViewer(derivInfo.file, "true");
     }
-    
-/*
-    $('.viewerContainer.min').each(function(i, container) {
-        var derivID = $(container).attr('id');
-        var startFile = $(container).attr('file');
-        var containerOptions = createOptions(derivID);
-        var iviewObj = new iview.IViewInstance($(container), containerOptions);
-        iview.addInstance(iviewObj);
-        iviewObj.startViewer(startFile);
-    });
-*/
+
     $('.jp-layout-derivateList').delegate('div.jp-layout-derivateWrapper .image', 'mouseenter', function() {
         $(this).find('div.jp-layout-hidden-Button').show();
     }).delegate('div.jp-layout-derivateWrapper .image', 'mouseleave click', function() {

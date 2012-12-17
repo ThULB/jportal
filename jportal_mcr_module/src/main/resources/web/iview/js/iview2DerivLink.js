@@ -2,7 +2,7 @@ var baseUrl = location.protocol + '//' + location.host + '/';
 var runid = [];
 jQuery(document).bind("toolbarloaded", function(e) {
     // just run if a given viewType is created
-    if (e.model.id != "mainTb" || runid[e.viewer.viewID]) {
+    if (e.model.id != "mainTb" || (e.viewer.viewID != null && runid[e.viewer.viewID])) {
         return;
     }
     runid[e.viewer.viewID] = true;

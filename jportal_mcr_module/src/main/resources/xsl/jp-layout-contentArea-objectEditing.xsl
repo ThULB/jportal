@@ -119,17 +119,19 @@
           </label>
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>
-        <item>
-          <label name="Bild verlinken" ref="linkImgUrl" />
-          <restriction name="linkImgAllowed" value="true" />
-        </item>
         <item id="diagButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <!-- <label name="Löschen" /> -->
+        <restriction name="updatePerm" value="true" />
+        <restriction name="linkImgAllowed" value="true" />
+        <item>
+          <label name="Bild verlinken" ref="linkImgUrl" />
+        </item>
+      </item>
+      <item class="jp-layout-menu-dropdown">
         <restriction name="deletePerm" value="true" />
         <item>
           <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
