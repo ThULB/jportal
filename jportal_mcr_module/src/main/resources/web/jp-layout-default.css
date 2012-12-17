@@ -1122,23 +1122,35 @@ body {
 	text-align: left;
 }
 
-#metaData .adressBox{
+#metaData .adressBox {
 }
-#metaData .addressType{
+#metaData .addressType {
     font-weight: bold;
 }
-#metaData .address{
+#metaData .address {
     padding-left: 2em;
 }
-#metaData .derivateBox{
+#metaData .derivateBox {
 }
-#metaData .derivateHeading{
+#metaData .derivateHeading {
     font-weight: bold;
 }
-#metaData .derivate{
+#metaData .derivate {
     padding-left: 2em;
+}
+#files td .inputDeleteFile {
+	display: block;
+	background-image: url("images/button_delete.gif");
+	width: 16px;
+	height: 16px;
+}
+#files td img.inputAddUrn {
+	display: block;
+	background-image: url("images/addnbn.gif");
+	width: 29px;
+	height: 22px;
 }
 
-p.jp-layout-metadata-list{
+p.jp-layout-metadata-list {
 	margin-top: 0px;
 }

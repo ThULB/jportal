@@ -93,9 +93,11 @@
               href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a>
           </li>
           <xsl:if test="acl:checkPermission(@xlink:href, 'update_derivate')">
-            <li>
-              <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
-            </li>
+            <xsl:if test="not(mcrxml:hasURNDefined(@xlink:href))">
+              <li>
+                <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
+              </li>
+            </xsl:if>
             <li>
               <a href="{$WebApplicationBaseURL}metseditor/start_mets_editor.xml?derivate={@xlink:href}&amp;useExistingMets=true">Mets Editor</a>
             </li>
