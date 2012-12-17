@@ -127,6 +127,9 @@
     <li>
       <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
         <xsl:value-of select="str[@name='maintitle']" />
+        <xsl:if test="str[@name='date.published']">
+          <xsl:value-of select="concat(' (', str[@name='date.published'], ')')" />
+        </xsl:if>
       </a>
     </li>
   </xsl:template>
