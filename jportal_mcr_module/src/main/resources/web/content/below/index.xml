@@ -18,7 +18,7 @@
         <ul>
           <li>
             <a href="/content/main/journalList.xml" class="entry journal">
-              <img src="/images/journal.png"/>
+              <img class="linkButton" src="/images/journal.png"/>
               <p>
                 Zugang zu digitalisierten Zeitschriften und Zeitungen sowie weiteren online verfügbaren
                 Periodika...
@@ -27,7 +27,7 @@
           </li>
           <li>
             <a href="/content/main/calendarList.xml" class="entry calendar">
-              <img src="/images/calendar.png"/>
+              <img class="linkButton" src="/images/calendar.png"/>
               <p>
                 Zugang zu digitalisierten Schreibkalendern des Stadtarchivs Altenburg...
               </p>

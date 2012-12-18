@@ -55,6 +55,8 @@ body {
 .jp-layout-index-list .calendar {
 	margin-left: 78px;
 }
+
+/* IE need this */
 .jp-layout-index-list .linkButton{
 	border: none;
 }
