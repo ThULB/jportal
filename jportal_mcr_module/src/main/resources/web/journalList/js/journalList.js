@@ -64,7 +64,7 @@ jp.az = {
 	    $(location).attr('hash', selectedChar);
 	    var searchQuery = '';
 	    if (selectedChar == '#') {
-	        searchQuery = '-maintitle_lowercase:[a TO z]';
+	        searchQuery = '-maintitle_lowercase:[a TO z] -maintitle_lowercase:z*';
 	    } else {
 	        searchQuery = '%2Bmaintitle_lowercase:' + selectedChar.toLowerCase() + '*';
 	    }
