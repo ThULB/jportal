@@ -96,9 +96,6 @@
           </label>
           <restriction name="createJournal" value="true" />
         </item>
-      </item>
-      <item class="jp-layout-menu-dropdown">
-        <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         <item>
           <label name="Neuer Band" ref="editorServlet">
             <params>
