@@ -80,6 +80,9 @@ body {
 .jp-layout-index-latestArticles ul > li:last-child {
 	border-right: none;
 }
+.jp-layout-index-latestArticles ul > li:first-child .wrapper {
+	margin: 0 20px 0 0;
+}
 .jp-layout-index-latestArticles ul > li:not(:first-child) .wrapper {
 	margin: 0 20px;
 }
