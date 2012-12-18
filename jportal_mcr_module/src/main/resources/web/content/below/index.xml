@@ -36,6 +36,8 @@
         </ul>
       </div>
 
+      <printObjectEditing />
+
       <div class="jp-layout-index-latestArticles">
         <h1>Neueste Artikel</h1>
         <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />

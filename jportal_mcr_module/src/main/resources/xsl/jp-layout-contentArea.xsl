@@ -152,7 +152,4 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="printLatestArticles">
-    <ul id="latestArticles" class="latestArticles"></ul>
-  </xsl:template>
 </xsl:stylesheet>
