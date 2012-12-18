@@ -16,8 +16,6 @@ function jpInitIview2(currentLang) {
         },
 
         getCurrentLang : function() {
-            //return navigator.language.split("-")[0];
-            console.log('CurrentLang: ' + currentLang);
             return currentLang;
         },
 
