@@ -5,30 +5,29 @@
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi">
 
-  <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-  <xsl:variable name="createJournal" select="acl:checkPermission('CRUD','create_jpjournal')" />
-  <xsl:variable name="createPerson" select="acl:checkPermission('POOLPRIVILEGE','create-person')" />
-  <xsl:variable name="createInst" select="acl:checkPermission('POOLPRIVILEGE','create-jpinst')" />
-  <xsl:variable name="isAdmin" select="acl:checkPermission('POOLPRIVILEGE','administrate-user')" />
-  <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
   <xsl:variable name="hasSourceOfLink" select="/mycoreobject/structure/derobjects/derobject[@xlink:href = substring-before($bookmarkedImage,'/')]" />
-  <xsl:variable name="linkImgAllowed" select="$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)" />
+  
+  <xsl:variable name="menuVarXML">
+    <var name="dataModel" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation}" />
+    <var name="createJournal" value="{acl:checkPermission('CRUD','create_jpjournal')}" />
+    <var name="createPerson" value="{acl:checkPermission('POOLPRIVILEGE','create-person')}" />
+    <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE','create-jpinst')}" />
+    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE','create-jpvolume')}" />
+    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE','create-jparticle')}" />
+    <var name="currentType" value="{$currentType}" />
+    <var name="currentObjID" value="{$currentObjID}" />
+    <var name="updatePerm" value="{$updatePerm}" />
+    <var name="deletePerm" value="{$deletePerm}" />
+    <var name="isAdmin" value="{acl:checkPermission('POOLPRIVILEGE','administrate-user')}" />
+    <var name="isGuest" value="{mcrxml:isCurrentUserGuestUser()}" />
+    <var name="linkImgAllowed" value="{$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)}" />
+  </xsl:variable>
+  <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)"/>
 
   <xsl:variable name="menuXML">
     <menu>
-      <var name="dataModel" value="{$dataModel}" />
-      <var name="currentType" value="{$currentType}" />
-      <var name="currentObjID" value="{$currentObjID}" />
-      <var name="updatePerm" value="{$updatePerm}" />
-      <var name="deletePerm" value="{$deletePerm}" />
-      <var name="createJournal" value="{$createJournal}" />
-      <var name="createPerson" value="{$createPerson}" />
-      <var name="createInst" value="{$createInst}" />
-      <var name="isAdmin" value="{$isAdmin}" />
-      <var name="isGuest" value="{$isGuest}" />
-      <var name="linkImgAllowed" value="{$linkImgAllowed}" />
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
       <params id="editorServlet-editParam">
@@ -52,6 +51,10 @@
         <item id="ckeditorButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Beschreibung bearbeiten" />
+        </item>
+        <item id="diagButton">
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Rubrik bearbeiten" />
         </item>
         <item>
           <label name="Datei hochladen" ref="editorServlet">
@@ -95,7 +98,6 @@
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
-        <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         <item>
           <label name="Neuer Band" ref="editorServlet">
@@ -106,6 +108,7 @@
               <param name="parentID" select="currentObjID" />
             </params>
           </label>
+          <restriction name="createVol" value="true" />
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
@@ -117,11 +120,8 @@
               <param name="parentID" select="currentObjID" />
             </params>
           </label>
+          <restriction name="createArt" value="true" />
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
-        </item>
-        <item id="diagButton">
-          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Rubrik bearbeiten" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
@@ -245,7 +245,7 @@
 
   <xsl:template match="restriction" mode="menuItem">
     <xsl:variable name="name" select="@name" />
-    <xsl:variable name="permission" select="$menu/var[@name=$name]/@value" />
+    <xsl:variable name="permission" select="$menuVar/var[@name=$name]/@value" />
     <xsl:value-of select="$permission != '' and contains(@value, $permission)" />
   </xsl:template>
 
