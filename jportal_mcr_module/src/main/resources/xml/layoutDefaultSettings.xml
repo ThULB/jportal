@@ -51,6 +51,12 @@
   <i18n tag="zipcode">editormask.labels.AAddressZIP</i18n>
   <i18n tag="street">editormask.labels.AAddressStreet</i18n>
   <i18n tag="number">editormask.labels.AAddressNumber</i18n>
+  <i18n tag="phone.Telefon">editormask.labels.SphoneTelefon</i18n>
+  <i18n tag="phone.Fax">editormask.labels.SphoneFax</i18n>
+  <i18n tag="phone.Mobil">editormask.labels.SphoneMobil</i18n>
+  <i18n tag="email">metaData.jpinst.email</i18n>
+  <i18n tag="identifier.pnd">metaData.person.identifier.pnd</i18n>
+  <i18n tag="identifier.ppn">metaData.person.identifier.ppn</i18n>
 
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>

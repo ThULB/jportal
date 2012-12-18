@@ -14,6 +14,9 @@
   <xsl:key name="def.contact" match="contact[@inherited='0']" use="@type" />
   <xsl:key name="def.identifier" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="def.note" match="note[@inherited='0']" use="@type" />
+  <xsl:key name="phones" match="phone[@inherited='0']" use="@type" />
+  <xsl:key name="identifiers" match="identifier[@inherited='0']" use="@type" />
+
   <xsl:variable name="simpleType"
     select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
   <xsl:variable name="ignore" select="'maintitles def.heading names'" />
@@ -47,6 +50,11 @@
         <xsl:sort select="@xlink:title" />
       </xsl:apply-templates>
     </dd>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldLabel" match="*[@type and ../@class='MCRMetaLangText']" priority="1">
+    <xsl:variable name="tagName" select="concat(name(), '.', @type)" />
+    <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date']">
