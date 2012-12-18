@@ -67,11 +67,6 @@
         <xsl:if test="$nameOfTemplate != ''">
           <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
         </xsl:if>
-        <link href="{$WebApplicationBaseURL}templates/master/template_wcms/CSS/style_admin.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}templates/content/template_logos/CSS/sponsoredlogos.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}style_userManagement.css" rel="stylesheet" type="text/css" />
-        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/menu.js" type="text/javascript" />
-        <script language="JavaScript" src="{$WebApplicationBaseURL}templates/master/template_wcms/JAVASCRIPT/WCMSJavaScript.js" type="text/javascript" />
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
@@ -79,22 +74,24 @@
 
         <!-- Piwik -->
         <script type="text/javascript">
-          if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true'){
-          var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-          document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+          if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true') {
+            var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
+            document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
           }
         </script>
         <script type="text/javascript">
-          if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true'){
-          var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
-          try {
-          var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-          if(myvar != ""){
-            piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");
-          }
-          piwikTracker.trackPageView();
-          piwikTracker.enableLinkTracking();
-          } catch( err ) {}
+          if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true')  {
+            var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
+            try {
+              var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+              if(myvar != "") {
+                piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");
+              }
+              piwikTracker.trackPageView();
+              piwikTracker.enableLinkTracking();
+            } catch( err ) {
+              console.log(err);
+            }
           }
         </script>
         <!-- End Piwik Tracking Code -->
