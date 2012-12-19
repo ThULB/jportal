@@ -316,7 +316,7 @@
 
   <xsl:template mode="menuLinkParamCreate" match="param[@select]">
     <xsl:variable name="selectID" select="@select" />
-    <xsl:value-of select="concat(@name,'=', $menu/var[@name=$selectID]/@value)" />
+    <xsl:value-of select="concat(@name,'=', $menuVar/var[@name=$selectID]/@value)" />
   </xsl:template>
   <!-- END MENU ##################################################################### -->
 
