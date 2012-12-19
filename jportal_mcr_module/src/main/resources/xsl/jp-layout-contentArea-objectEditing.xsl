@@ -15,7 +15,7 @@
     <var name="createPerson" value="{acl:checkPermission('POOLPRIVILEGE','create-person')}" />
     <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE','create-jpinst')}" />
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE','create-jpvolume')}" />
-    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE','create-jparticle')}" />
+    <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE','create-jparticle')}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
     <var name="updatePerm" value="{$updatePerm}" />
