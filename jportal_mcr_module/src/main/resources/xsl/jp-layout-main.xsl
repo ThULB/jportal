@@ -73,27 +73,23 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
 
         <!-- Piwik -->
-        <script type="text/javascript">
-          if('<xsl:value-of select="$MCR.Piwik.enable" />' == 'true') {
+        <xsl:if test="$MCR.Piwik.enable = 'true' and $MCR.Piwik.baseurl != ''">
+          <script type="text/javascript" src="{$MCR.Piwik.baseurl}piwik.js" />
+          <script type="text/javascript">
             var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-            document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
-          }
-        </script>
-        <script type="text/javascript">
-          if('<xsl:value-of select="$MCR.Piwik.enable" />'== 'true')  {
-            var myvar = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
+            var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
             try {
               var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-              if(myvar != "") {
-                piwikTracker.setCustomVariable (1, "journal", myvar, scope = "page");
+              if(journalID != "") {
+                piwikTracker.setCustomVariable (1, "journal", journalID, scope = "page");
               }
               piwikTracker.trackPageView();
               piwikTracker.enableLinkTracking();
             } catch( err ) {
               console.log(err);
             }
-          }
-        </script>
+          </script>
+        </xsl:if>
         <!-- End Piwik Tracking Code -->
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
