@@ -19,7 +19,7 @@
 
   <xsl:variable name="simpleType"
     select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
-  <xsl:variable name="ignore" select="'maintitles def.heading names'" />
+  <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($ignore, name())]">
   </xsl:template>
