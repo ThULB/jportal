@@ -18,7 +18,7 @@
   <xsl:key name="identifiers" match="identifier[@inherited='0']" use="@type" />
 
   <xsl:variable name="simpleType"
-    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress'" />
+    select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink'" />
   <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($ignore, name())]">
@@ -57,7 +57,7 @@
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
   </xsl:template>
 
-  <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date']">
+  <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or ../@class='MCRMetaLink']">
     <xsl:variable name="tagName" select="name()" />
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
   </xsl:template>
@@ -138,6 +138,12 @@
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaISO8601Date']">
     <xsl:value-of select="ext:normalizeDate(string(text()))" />
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink']">
+    <a href="{@xlink:href}">
+      <xsl:value-of select="concat(@xlink:href, ' (', @xlink:title, ')')" />
+    </a>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaXML']">

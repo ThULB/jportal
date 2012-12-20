@@ -153,7 +153,7 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}modules/iview2/js/iview2.min.js" />
       </xsl:otherwise>
     </xsl:choose>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}iview/js/iview2Init.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2.js" />
     <script type="text/javascript">
           $(document).ready(jpInitIview2('<xsl:value-of select="$CurrentLang"/>'));
      </script>

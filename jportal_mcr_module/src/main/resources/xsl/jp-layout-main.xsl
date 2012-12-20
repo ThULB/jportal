@@ -10,6 +10,7 @@
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
   <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
+  <xsl:include href="jp-layout-footer.xsl" />
   <xsl:include href="jp-navigation-top.xsl" />
 
   <xsl:param name="object" />
@@ -94,7 +95,7 @@
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
         <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">
-          <script type="text/javascript" src="{$WebApplicationBaseURL}iview/js/iview2DerivLink.js" />
+          <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2-derivLink.js" />
         </xsl:if>
 
         <!-- add IE CSS to head -->
@@ -208,9 +209,9 @@
             </xsl:otherwise>
           </xsl:choose>   
         </div>
-        <div class="jp-layout-footer">
-          <a href="http://www.thulb.uni-jena.de" class="thulb"></a>
-        </div>
+        <!-- footer -->
+        <xsl:call-template name="jp-layout-footer" />
+        <!-- delete messages -->
         <xsl:if test="$object='delete'">
           <xsl:copy-of select="$objectEditing/deleteMsg" />
         </xsl:if>

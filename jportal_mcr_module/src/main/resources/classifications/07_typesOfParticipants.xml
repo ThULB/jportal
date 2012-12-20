@@ -153,5 +153,8 @@
             <label text="Widmungsempfänger" xml:lang="de" />
             <label text="Receiver of devotement" xml:lang="en" />
         </category>
+        <category ID="partner">
+            <label text="Partner" xml:lang="de" />
+        </category>
     </categories>
 </mycoreclass>

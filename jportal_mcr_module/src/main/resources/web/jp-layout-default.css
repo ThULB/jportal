@@ -99,17 +99,39 @@ body {
 	text-align: center;
 	margin-top: 15px;
 }
-.jp-layout-footer .thulb {
-    background-image: url("images/thulb.png");
+.jp-layout-footer .logo {
+	height: 30px;
     background-position: center center;
     background-repeat: no-repeat;
     display: inline-block;
-    height: 30px;
     text-align: center;
+}
+.jp-layout-footer .thulb-text {
+    background-image: url("images/thulb-text-grey.png");
     width: 320px;
 }
+.jp-layout-footer .thulb-text:hover {
+	background-image: url("images/thulb-text-blue.png");
+}
+.jp-layout-footer .thulb {
+    background-image: url("images/thulb-grey.png");
+    width: 88px;
+}
 .jp-layout-footer .thulb:hover {
-	background-image: url("images/thulb_hover.png");
+	background-image: url("images/thulb-blue.png");
+}
+
+
+.jp-layout-footer ul {
+	list-style: none;
+	padding: 0px;
+}
+.jp-layout-footer ul li {
+	display: inline-block;
+	margin: 0 20px;
+}
+.jp-layout-footer ul li img {
+	height: 30px;
 }
 
 .jp-layout-breadcrumb {
@@ -485,10 +507,6 @@ body {
 .jp-layout-marginLR {
 	margin-left: 29px;
 	margin-right: 29px;
-}
-
-.jp-layout-footer {
-	
 }
 
 #jp-footer-menu {
