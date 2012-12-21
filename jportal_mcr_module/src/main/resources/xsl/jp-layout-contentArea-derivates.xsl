@@ -126,6 +126,14 @@
     <xsl:param name="file" />
     <div class="jp-layout-hidden-Button"></div>
     <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
+    <script type="text/javascript">
+      $(document).ready(function() {
+        jpAddDefaultOptions({
+          id: '<xsl:value-of select="$derivID"/>',
+          options: <xsl:value-of select="iview2:getOptions($derivID, '')" />
+        });
+      });
+    </script>
   </xsl:template>
 
   <xsl:template name="derivEntry">
@@ -144,7 +152,6 @@
   </xsl:template>
 
   <xsl:template name="initIview2JS">
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
     <xsl:choose>
       <xsl:when test="$iview2.debug ='true'">
         <script type="text/javascript" src="{$WebApplicationBaseURL}modules/iview2/js/iview2.js" />
@@ -155,7 +162,11 @@
     </xsl:choose>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2.js" />
     <script type="text/javascript">
-          $(document).ready(jpInitIview2('<xsl:value-of select="$CurrentLang"/>'));
-     </script>
+      $(document).ready(function() {
+        jpInitIview2({
+          lang: '<xsl:value-of select="$CurrentLang"/>'
+        });
+      });
+    </script>
   </xsl:template>
 </xsl:stylesheet>

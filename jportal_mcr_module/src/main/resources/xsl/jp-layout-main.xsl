@@ -69,9 +69,12 @@
           <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
+        <!-- TODO: don't init iview2 if no image is available -->
+        <xsl:call-template name="initIview2JS" />
 
         <!-- Piwik -->
         <xsl:if test="$MCR.Piwik.enable = 'true' and $MCR.Piwik.baseurl != ''">
@@ -222,8 +225,6 @@
             <textarea id="ckeditor"></textarea>
           </div>
         </div>
-        <!-- TODO: don't init iview2 if no image is available -->
-        <xsl:call-template name="initIview2JS" />
       </body>
     </html>
   </xsl:template>

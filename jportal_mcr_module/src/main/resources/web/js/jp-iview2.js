@@ -4,8 +4,14 @@ var chapDynResize = 'false';
 var DampInViewer = 'true';
 var i18n;
 var loadOnStartup = false;
+var defaultOptions = {};
 
-function jpInitIview2(currentLang) {
+function jpAddDefaultOptions(option) {
+	defaultOptions[option.id] = option.options;
+	console.log("test");
+}
+
+function jpInitIview2(settings) {
     var Tools = {
         getBaseURL : function() {
             return location.protocol + '//' + location.host + '/';
@@ -16,7 +22,7 @@ function jpInitIview2(currentLang) {
         },
 
         getCurrentLang : function() {
-            return currentLang;
+            return settings.currentLang;
         },
 
         getParam : function(name) {
@@ -73,6 +79,7 @@ function jpInitIview2(currentLang) {
     function showIview(derivInfo) {
     	initIviewContainer();
         var container = $('#viewerContainer');
+        var finalOptions = {};
         var containerOptions = {
             derivateId : derivInfo.ID,
             webappBaseUri : WebApplicationBaseURL,
@@ -80,17 +87,23 @@ function jpInitIview2(currentLang) {
             startWidth : 192,
             startHeight : 192
         };
-        var iviewObj = new iview.IViewInstance(container, containerOptions);
+        jQuery.extend(finalOptions, defaultOptions[derivInfo.ID], containerOptions);
+        var iviewObj = new iview.IViewInstance(container, finalOptions);
         iview.addInstance(iviewObj);
         iviewObj.startViewer(derivInfo.file, "true");
     }
 
-    $('.jp-layout-derivateList').delegate('div.jp-layout-derivateWrapper .image', 'mouseenter', function() {
-        $(this).find('div.jp-layout-hidden-Button').show();
-    }).delegate('div.jp-layout-derivateWrapper .image', 'mouseleave click', function() {
-        $(this).find('div.jp-layout-hidden-Button').hide();
-    }).delegate('div.jp-layout-derivateWrapper .image', 'click', function() {
-        clickToEnlarge($(this));
+    $('div.jp-layout-derivateWrapper .image').on({
+    	mouseenter: function() {
+    		$(this).find('div.jp-layout-hidden-Button').show();
+    	},
+    	mouseleave: function() {
+    		$(this).find('div.jp-layout-hidden-Button').hide();
+    	},
+    	click: function() {
+    		$(this).find('div.jp-layout-hidden-Button').hide();
+    		clickToEnlarge($(this));
+    	}
     });
 
     if(loadOnStartup) {
