@@ -8,7 +8,6 @@ var defaultOptions = {};
 
 function jpAddDefaultOptions(option) {
 	defaultOptions[option.id] = option.options;
-	console.log("test");
 }
 
 function jpInitIview2(settings) {

@@ -31,12 +31,14 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -74,9 +76,16 @@ public class UrmelFooter implements MCRFooterInterface {
 
     private void loadLogos() throws IOException {
         //TODO get logos from classification
-        for (String logo : new String[] { "dfg", "thulb" }) {
-            InputStream input = UrmelFooter.class.getResourceAsStream("/logos/" + logo + "-logo.png");
-            logos.put(logo, readImage(input));
+        HashMap<String, String> logoMap = new HashMap<String, String>();
+        logoMap.put("dfg", "/web/images/dfg-logo.png");
+        logoMap.put("thulb", "/web/images/thulb-blue.png");
+        for (Map.Entry<String, String> entry : logoMap.entrySet()) {
+            InputStream input = UrmelFooter.class.getResourceAsStream(entry.getValue());
+            if(input == null) {
+                LOGGER.error("Unable to load resource", new IOException(entry.getValue() + " not found"));
+                continue;
+            }
+            logos.put(entry.getKey(), readImage(input));
         }
     }
 
