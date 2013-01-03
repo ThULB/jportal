@@ -92,16 +92,16 @@ function jpInitIview2(settings) {
         iviewObj.startViewer(derivInfo.file, "true");
     }
 
-    $('div.jp-layout-derivateWrapper .image').on({
+    jQuery('div.jp-layout-derivateWrapper .image').on({
     	mouseenter: function() {
-    		$(this).find('div.jp-layout-hidden-Button').show();
+    		jQuery(this).find('div.jp-layout-hidden-Button').show();
     	},
     	mouseleave: function() {
-    		$(this).find('div.jp-layout-hidden-Button').hide();
+    		jQuery(this).find('div.jp-layout-hidden-Button').hide();
     	},
     	click: function() {
-    		$(this).find('div.jp-layout-hidden-Button').hide();
-    		clickToEnlarge($(this));
+    		jQuery(this).find('div.jp-layout-hidden-Button').hide();
+    		clickToEnlarge(jQuery(this));
     	}
     });
 

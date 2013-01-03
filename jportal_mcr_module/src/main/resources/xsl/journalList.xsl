@@ -19,10 +19,6 @@
             </ul>
             <div id="resultList" class="tab-panel"></div>
         </div>
-
-        <!-- javascript import, leave it here for performance reason -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.js"></script>
         <script src="/journalList/js/journalList.js"></script>
     </xsl:template>
 

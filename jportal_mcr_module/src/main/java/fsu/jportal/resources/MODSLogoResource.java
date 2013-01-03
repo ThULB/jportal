@@ -106,7 +106,7 @@ public class MODSLogoResource {
                 }
             }
         }
-        return "";
+        return null;
     }
 
 }
