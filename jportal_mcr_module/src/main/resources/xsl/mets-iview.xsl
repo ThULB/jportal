@@ -3,10 +3,13 @@
   exclude-result-prefixes="mcr" version="1.0">
   <xsl:output method="xml" encoding="utf-8" />
   <xsl:param name="MCR.Module-iview2.SupportedContentTypes" />
-  <xsl:param name="ServletsBaseURL" />
   <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="ServletsBaseURL" />
+
   <xsl:param name="derivateID" select="substring-after(/mets:mets/mets:dmdSec/@ID,'_')" />
   <xsl:param name="objectID" />
+  <xsl:param name="ThumbnailBaseURL" select="concat($ServletsBaseURL,'MCRDFGThumbnail/')" />
+  <xsl:param name="ImageBaseURL" select="concat($ServletsBaseURL,'MCRDFGServlet/')" />
 
   <!-- this is where the master file group is located (files that are referenced by a relative URL) -->
   <xsl:variable name="masterFileGrp"
@@ -66,13 +69,12 @@
         <xsl:choose>
           <xsl:when test="$use='THUMBS'">
             <mets:file ID="{concat($use,'_',$ncName)}" MIMETYPE="image/png">
-              <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ServletsBaseURL,'MCRDFGThumbnail/',$derivateID,'/',mets:FLocat/@xlink:href)}" />
+              <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ThumbnailBaseURL,$derivateID,'/',mets:FLocat/@xlink:href)}" />
             </mets:file>
           </xsl:when>
           <xsl:otherwise>
             <mets:file ID="{concat($use,'_',$ncName)}" MIMETYPE="image/jpeg">
-              <mets:FLocat LOCTYPE="URL"
-                xlink:href="{concat($ServletsBaseURL,'MCRDFGServlet/',$zoom,'/',$derivateID,'/',mets:FLocat/@xlink:href)}" />
+              <mets:FLocat LOCTYPE="URL" xlink:href="{concat($ImageBaseURL,$zoom,'/',$derivateID,'/',mets:FLocat/@xlink:href)}" />
             </mets:file>
           </xsl:otherwise>
         </xsl:choose>

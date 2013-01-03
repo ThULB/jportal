@@ -19,6 +19,7 @@ import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
+import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -49,7 +50,7 @@ public class MODSLogoResource {
                     }
                 }
             }
-        }        
+        }
         return xmlToString(entities);
     }
 
@@ -57,6 +58,7 @@ public class MODSLogoResource {
         MODSLogoEntity modsLogoEntity = new MODSLogoEntity();
         modsLogoEntity.setName(getFullname(participantMcrObj));
         modsLogoEntity.setRole(role);
+        modsLogoEntity.setSiteURL(getSite(participantMcrObj));
         getLogoURL(participantMcrObj, modsLogoEntity);
         return modsLogoEntity;
     }
@@ -84,13 +86,27 @@ public class MODSLogoResource {
 
     protected String getFullname(MCRObject participantMcrObj) {
         MCRMetaElement names = participantMcrObj.getMetadata().getMetadataElement("names");
-        for (MCRMetaInterface nameElem : names) {
-            if (nameElem instanceof MCRMetaInstitutionName) {
-                MCRMetaInstitutionName name = (MCRMetaInstitutionName) nameElem;
-                return name.getFullName();
+        if(names != null) {
+            for (MCRMetaInterface nameElem : names) {
+                if (nameElem instanceof MCRMetaInstitutionName) {
+                    MCRMetaInstitutionName name = (MCRMetaInstitutionName) nameElem;
+                    return name.getFullName();
+                }
             }
         }
-        
         return "No Name";
     }
+
+    protected String getSite(MCRObject participantMcrObj) {
+        MCRMetaElement urls = participantMcrObj.getMetadata().getMetadataElement("urls");
+        if(urls != null) {
+            for (MCRMetaInterface url : urls) {
+                if (url instanceof MCRMetaLink) {
+                    return ((MCRMetaLink) url).getXLinkHref();
+                }
+            }
+        }
+        return "";
+    }
+
 }

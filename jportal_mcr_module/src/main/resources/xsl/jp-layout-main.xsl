@@ -12,6 +12,7 @@
   <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
   <xsl:include href="jp-navigation-top.xsl" />
+  <xsl:include href="jp-globalmessage.xsl" />
 
   <xsl:param name="object" />
   <xsl:param name="layout" />
@@ -134,8 +135,9 @@
             <xsl:call-template name="jp.navigation.top" />
           </div>
         </div>
+        <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
         <div id="logo"></div>
-        
+
         <xsl:variable name="searchBarMode">
           <xsl:variable name="controllerHook">
             <jpsearchBar mode="{$mode}"/>

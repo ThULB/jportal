@@ -321,4 +321,14 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- Entities -->
+  <xsl:template match="/mycoreobject" mode="entities" priority="1">
+    <xsl:variable name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+    <!-- TODO: don't do http calls via xsl -->
+    <xsl:variable name="entities" select="document(concat($WebApplicationBaseURL,'rsc/modslogos/',$journalID))"/>
+    <xsl:for-each select="$entities/*">
+      <xsl:copy-of select="*" />
+    </xsl:for-each>
+  </xsl:template>
+
 </xsl:stylesheet>

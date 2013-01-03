@@ -12,29 +12,32 @@ import fsu.jportal.mods.MODSLogoEntity;
 
 public class MODSLogoEntityXMLMapper {
     private List<MODSLogoEntity> entities;
+
     private Namespace urmelNamespace = Namespace.getNamespace("urmel", "http://www.urmel-dl.de/ns/mods-entities");
 
     public MODSLogoEntityXMLMapper(List<MODSLogoEntity> entities) {
         this.entities = entities;
     }
-    
-    public Document getXML(){
+
+    public Document getXML() {
         Document modsLogoEntities = new Document();
         Element entitiesTag = createUrmelTag("entities");
         entitiesTag.addNamespaceDeclaration(MCRConstants.XLINK_NAMESPACE);
-        
+
         for (MODSLogoEntity entity : entities) {
             Element entityTag = createEntityTag(entity);
-            createSiteTag(entity, entitiesTag);
-            if(entity.getLogoPlainURL() != null) {
+            if (entity.getSiteURL() != null) {
+                entityTag.addContent(createSiteTag(entity.getSiteURL()));
+            }
+            if (entity.getLogoPlainURL() != null) {
                 entityTag.addContent(createLogoTag("logo", entity.getLogoPlainURL()));
             }
-            if(entity.getLogoPlusTextURL() != null) {
+            if (entity.getLogoPlusTextURL() != null) {
                 entityTag.addContent(createLogoTag("full-logo", entity.getLogoPlusTextURL()));
             }
             entitiesTag.addContent(entityTag);
         }
-        
+
         modsLogoEntities.setRootElement(entitiesTag);
         return modsLogoEntities;
     }
@@ -46,14 +49,11 @@ public class MODSLogoEntityXMLMapper {
         return logoTag;
     }
 
-    protected void createSiteTag(MODSLogoEntity entity, Element entityTag) {
-        String siteURL = entity.getSiteURL();
-        if(siteURL != null){
-            Element siteTag = createUrmelTag("site");
-            siteTag.setAttribute(createXlinkAttr("href", siteURL));
-            siteTag.setAttribute(createXlinkAttr("type", "locator"));
-            entityTag.addContent(siteTag);
-        }
+    protected Element createSiteTag(String url) {
+        Element siteTag = createUrmelTag("site");
+        siteTag.setAttribute(createXlinkAttr("href", url));
+        siteTag.setAttribute(createXlinkAttr("type", "locator"));
+        return siteTag;
     }
 
     protected Element createEntityTag(MODSLogoEntity entity) {
