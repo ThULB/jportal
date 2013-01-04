@@ -236,7 +236,7 @@ public class MCRJPortalURIIncludeEditorCode implements URIResolver {
             }
 //            if (!cacheKey.equals(""))
 //                CACHE.put(cacheKey, answer);
-            return answer;
+            return (Element) answer.detach();
         } catch (JDOMException e) {
             e.printStackTrace();
         }

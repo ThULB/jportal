@@ -47,5 +47,11 @@
         <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
       </li>
     </ul>
+    <h2>Einstellungen</h2>
+    <ul>
+      <li>
+        <a href="{$WebApplicationBaseURL}jp-globalmessage-editor.xml">Globale Nachricht Bearbeiten</a>
+      </li>
+    </ul>
   </xsl:template>
 </xsl:stylesheet>

@@ -33,26 +33,5 @@
             <include uri="classification:editor:-1:children:#REPLACE_WITH_CLASSIFICATION-ID#" />
         </list>
     </includeMyChildren>
-    <!-- search -->
-    <includeMyChildren id="include_dynamicClassiForJournal_search">
-        <cell row="2#REPLACE_WITH_RUNNING_NUMBER#" col="1" anchor="WEST" var="conditions/boolean/condition1#REPLACE_WITH_RUNNING_NUMBER#" colspan="2">
-            <repeater min="1" max="10">
-                <panel lines="off">
-                    <cell width="230" anchor="EAST" col="1" row="1" class="editorLabels">
-                        <text>
-                            <include cacheable="false" uri="jportal_getClassLabel:getDirectely:#REPLACE_WITH_CLASSIFICATION-ID#" />
-                        </text>
-                    </cell>
-                    <hidden var="@field" default="contentClassi#REPLACE_WITH_RUNNING_NUMBER#" />
-                    <hidden var="@operator" default="=" />
-                    <cell row="1" col="2" anchor="WEST" var="@value">
-                        <list type="dropdown">
-                            <item value="" i18n="editor.search.choose" />
-                            <include cacheable="false" uri="classification:editor[TextCounter]:-1:children:#REPLACE_WITH_CLASSIFICATION-ID#" />
-                        </list>
-                    </cell>
-                </panel>
-            </repeater>
-        </cell>
-    </includeMyChildren>
+
 </root>

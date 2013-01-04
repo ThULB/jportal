@@ -1081,6 +1081,13 @@ body {
 	margin: 0px;
 	list-style-type: none;
 }
+.jp-layout-globalmessage-editor table {
+	width: 650px;
+}
+.jp-layout-globalmessage-editor table tr td textarea {
+	width: 100%;
+	height: 150px;
+}
 
 #ckeditorContainer {
 	display: none;
