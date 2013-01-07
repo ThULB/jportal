@@ -9,7 +9,6 @@
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:include href="metsmeta-dfg.xsl" />
   <xsl:include href="mets-amd.xsl" />
-  <xsl:include href="mets-iview.xsl" />
   
   <xsl:param name="MCR.OPAC.CATALOG"/>
 
@@ -25,6 +24,7 @@
   </xsl:variable>
 
   <xsl:template match="mycoreobject">
+    <xsl:variable name="derMets" select="document(concat('xslStyle:mets-dfg?objectID=',@ID,':mets:',@ID))" />
     <xsl:comment>Start mycoreobject - mycoreobject-metsmods.xsl</xsl:comment>
     <mets:mets xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema"
       xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:zvdd="http://zvdd.gdz-cms.de/"
@@ -43,11 +43,9 @@
         <xsl:with-param name="mcrobject" select="@ID"/>
       </xsl:call-template>
 
-      <xsl:variable name="derMets" select="document(concat('xslStyle:mets-iview:mets:',@ID))" />
       <xsl:copy-of select="$derMets/mets:mets/mets:fileSec" />
       <xsl:copy-of select="$derMets/mets:mets/mets:structMap" />
       <xsl:copy-of select="$derMets/mets:mets/mets:structLink" />
-
     </mets:mets>
     <xsl:comment>End mycoreobject - mycoreobject-metsmods.xsl</xsl:comment>
   </xsl:template>
