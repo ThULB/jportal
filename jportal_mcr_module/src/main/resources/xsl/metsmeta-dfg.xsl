@@ -321,7 +321,8 @@
     </xsl:if>
   </xsl:template>
 
-  <!-- Entities -->
+  <!-- PDF Stuff -->
+
   <xsl:template match="/mycoreobject" mode="entities" priority="1">
     <xsl:variable name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <!-- TODO: don't do http calls via xsl -->
@@ -329,6 +330,32 @@
     <xsl:for-each select="$entities/*">
       <xsl:copy-of select="*" />
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="mets:dmdSec" priority="1">
+    <mets:dmdSec ID="dmd_{$derivateID}">
+      <mets:mdWrap MDTYPE="MODS">
+        <mets:xmlData>
+          <mods:mods>
+            <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
+            <mods:extension>
+              <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
+                <!-- Top Logo (don't show) -->
+                <urmel:entity type="owner">
+                </urmel:entity>
+                <!-- Small Logo -->
+                <urmel:entity type="operator" xlink:type="extended" xlink:title="Thüringer Universitäts- und Landesbibliothek Jena">
+                  <urmel:site xlink:type="locator" xlink:href="http://www.thulb.uni-jena.de" />
+                  <urmel:logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb.svg" />
+                  <urmel:full-logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb+text.svg" />
+                </urmel:entity>
+                <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
+              </urmel:entities>
+            </mods:extension>
+          </mods:mods>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:dmdSec>
   </xsl:template>
 
 </xsl:stylesheet>
