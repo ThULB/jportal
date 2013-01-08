@@ -12,6 +12,11 @@
     <xsl:apply-templates select="*" mode="content-classification" />
   </xsl:template>
 
+  <!-- add volContentClassi -->
+  <xsl:template match="*[contains(name(), 'volContentClassis')]" mode="user-application" priority="1">
+    <xsl:apply-templates select="*" mode="content-classification" />
+  </xsl:template>
+
   <xsl:template match="*[position()=1]" mode="content-classification">
     <field name="{name()}">
       <xsl:value-of select="@categid" />

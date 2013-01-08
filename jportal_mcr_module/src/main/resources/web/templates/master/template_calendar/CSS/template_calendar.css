@@ -5,3 +5,38 @@
 	background-position: left top;
 	height: 115px;
 }
+
+#keywords{
+	margin-bottom: 5px;
+}
+
+#keywords:hover{
+	cursor: pointer;
+}
+
+#keywords h3{
+	text-decoration: underline;
+	display: inline;
+}
+
+.dropDownArrow{
+	height: 7px;
+    width: 15px;
+	margin: 0px 7px 0px 2px;
+}
+
+#jp-content-LColumn > ul > ul{
+	list-style-type: none;
+}
+
+#jp-content-LColumn > ul > ul ul{
+	list-style-type: none;
+}
+
+.keyWordDiv{
+    display: inline;
+}
+
+.keyWordDiv:hover{
+	cursor: pointer;
+}
