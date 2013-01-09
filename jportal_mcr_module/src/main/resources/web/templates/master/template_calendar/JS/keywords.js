@@ -1,6 +1,6 @@
 var journalID;
 var dropDown = $('<img class="dropDownArrow" src="http://localhost:8291/images/naviMenu/dropdown.png">');
-function load(jID) {
+function loadKeywords(jID) {
     journalID = jID;
 	var mainDiv = $('<div id="keywords"></div>');
 	mainDiv.append("<h3>Schlagwörter</h3>")
@@ -11,13 +11,13 @@ function load(jID) {
 		}
 		else{
 			$(this).parent().addClass("open");
-			loadKeyWords($(this).parent(), "");
+			loadKeyword($(this).parent(), "");
 		}
 	});
 	mainDiv.appendTo($("#jp-content-LColumn > ul"));
 }
 
-function loadKeyWords(element, keyword) {
+function loadKeyword(element, keyword) {
 	if(keyword == ""){
 		$.get("http://localhost:8291/rsc/classifications/jportal_class_00000083/", function(data){attachToElement(element, data)});
 	}
@@ -44,7 +44,7 @@ function attachToElement(element, keywords) {
 				}
 				else{
 					$(this).parent().addClass("open");
-					loadKeyWords($(this).parent(), $(this).attr("id"));
+					loadKeyword($(this).parent(), $(this).attr("id"));
 				}
 			});
 		}

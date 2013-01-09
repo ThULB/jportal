@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../templates/master/template_calendar/JS/keywords.js" />
     <script>
 		$(document).ready(function() {
-			load('<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />');		
+			loadKeywords('<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />');		
 		});
     </script>
    </xsl:if>
