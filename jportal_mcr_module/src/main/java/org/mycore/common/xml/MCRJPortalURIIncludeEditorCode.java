@@ -225,27 +225,18 @@ public class MCRJPortalURIIncludeEditorCode implements URIResolver {
         String sourceLoc = "webapp:" + fileContainingEditorCode;
         Element sourceCode = MCRURIResolver.instance().resolve(sourceLoc);
         try {
-            String xpathEx = "/*/includeMyChildren[@id='" + idOfPieceOfCode + "']";
-            XPath xpath = XPath.newInstance(xpathEx);
-            Element answer = (Element) xpath.selectSingleNode(sourceCode);
+            String xpathEx = "includeMyChildren[@id='" + idOfPieceOfCode + "']";
+            Element answer = (Element) XPath.selectSingleNode(sourceCode, xpathEx);
             if (answer == null) {
-                LOGGER.debug("piece of code with xpath=" + xpathEx + " NOT found");
-//                if (!cacheKey.equals(""))
-//                    CACHE.put(cacheKey, getEmptyAnswer());
+                LOGGER.warn("piece of code with xpath=" + xpathEx + " NOT found");
                 return null;
             }
-//            if (!cacheKey.equals(""))
-//                CACHE.put(cacheKey, answer);
             return (Element) answer.detach();
         } catch (JDOMException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-//    private String getCacheKey(String prefix, String uri) {
-//        return prefix + SEP + uri;
-//    }
 
     private static Element getEmptyAnswer() {
         return (new Element("root"));
