@@ -128,21 +128,24 @@ body {
 }
 .jp-layout-footer ul li {
 	display: inline-block;
-	margin: 0 20px;
+	padding: 0 20px;
 }
 .jp-layout-footer ul li img {
 	height: 30px;
 }
 
-.jp-layout-breadcrumb {
+#jp-breadcrumb-container {
 	border-bottom: 1px solid;
 	font-size: 11px;
-	margin: 0;
-	padding-left: 0;
-	padding-top: 4px;
 }
 
-.jp-layout-breadcrumb li {
+#jp-breadcrumb-container menu {
+	margin: 0;
+	padding: 2px 0;
+	display: inline-block;
+}
+
+#jp-breadcrumb-container menu li {
 	border-color: inherit;
 	border-left-style: solid;
 	border-left-width: 1px;
@@ -150,8 +153,17 @@ body {
 	padding: 0 5px;
 }
 
-.jp-layout-breadcrumb li:first-child {
+#jp-breadcrumb-container menu li:first-child {
 	border: medium none;
+	padding-left: 1px;
+}
+#jp-breadcrumb-container menu li:last-child {
+	padding-right: 1px;
+}
+
+#jp-breadcrumb-container .jp-layout-scroller {
+	float: right;
+	clear: right;
 }
 
 .jp-layout-searchBreadcrumb {
@@ -1115,7 +1127,7 @@ body {
 	margin-left: 10px;
 }
 
-.jp-layout-maintitle, #searchRightNavi, #resultList, #artList>li, .jp-layout-breadcrumb, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
+.jp-layout-maintitle, #searchRightNavi, #resultList, #artList>li, #jp-breadcrumb-container, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{
 	border-color: #DBDBDB;	
 }
 

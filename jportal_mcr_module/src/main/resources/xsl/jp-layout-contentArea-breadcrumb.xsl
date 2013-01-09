@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+<xsl:stylesheet version="1.0" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <xsl:param name="previousObject" />
+  <xsl:param name="nextObject" />
+
   <xsl:template name="breadcrumb">
     <div id="jp-breadcrumb-container">
       <menu class="jp-layout-breadcrumb">
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
           <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
-          <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)"/>
+          <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
           <li>
             <a href="{$WebApplicationBaseURL}content/main/{$listType}List.xml#{$hash}">
-              <xsl:value-of select="'A-Z'"/>
+              <xsl:value-of select="'A-Z'" />
             </a>
           </li>
         </xsl:if>
         <xsl:apply-templates mode="printListEntry"
           select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
+      <xsl:call-template name="jp-layout-breadcrumb-scroller" />
     </div>
   </xsl:template>
 
@@ -61,10 +67,30 @@
       </xsl:call-template>
     </span>
   </xsl:template>
-  
+
   <xsl:template mode="printListEntryContent" match="heading">
     <span>
-      <xsl:apply-templates mode="metadataPersName" select="."/> 
+      <xsl:apply-templates mode="metadataPersName" select="." />
     </span>
+  </xsl:template>
+
+  <xsl:template name="jp-layout-breadcrumb-scroller">
+    <xsl:variable name="objectScroll" select="document(concat('objectScroll:', /mycoreobject/@ID))/scroll" />
+    <menu class="jp-layout-scroller">
+      <xsl:if test="$objectScroll/previous/@id">
+        <li>
+          <a href="{$objectScroll/previous/@id}">
+            <xsl:value-of select="'&#171; Zurück'" />
+          </a>
+        </li>
+      </xsl:if>
+      <xsl:if test="$objectScroll/next/@id">
+        <li>
+          <a href="{$objectScroll/next/@id}">
+            <xsl:value-of select="'Weiter &#187; '" />
+          </a>
+        </li>
+      </xsl:if>
+    </menu>
   </xsl:template>
 </xsl:stylesheet>
