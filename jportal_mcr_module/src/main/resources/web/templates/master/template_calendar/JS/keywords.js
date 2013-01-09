@@ -1,5 +1,5 @@
 var journalID;
-var dropDown = $('<img class="dropDownArrow" src="http://localhost:8291/images/naviMenu/dropdown.png">');
+var dropDown = $('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
 function loadKeywords(jID) {
     journalID = jID;
 	var mainDiv = $('<div id="keywords"></div>');
@@ -19,10 +19,10 @@ function loadKeywords(jID) {
 
 function loadKeyword(element, keyword) {
 	if(keyword == ""){
-		$.get("http://localhost:8291/rsc/classifications/jportal_class_00000083/", function(data){attachToElement(element, data)});
+		$.get("/rsc/classifications/jportal_class_00000083/", function(data){attachToElement(element, data)});
 	}
 	else{
-		$.get("http://localhost:8291/rsc/classifications/jportal_class_00000083/" + keyword, function(data){attachToElement(element, data)});
+		$.get("/rsc/classifications/jportal_class_00000083/" + keyword, function(data){attachToElement(element, data)});
 	}
 }
 
@@ -34,7 +34,7 @@ function attachToElement(element, keywords) {
 		li.appendTo(ul);
 		if (keywords.children[i].haschildren == true){
 			var div = $("<div></div>");
-			div.append('<img class="dropDownArrow" src="http://localhost:8291/images/naviMenu/dropdown.png">');
+			div.append('<img class="dropDownArrow" src=/images/naviMenu/dropdown.png">');
 			div.attr("id", keywords.children[i].id.categid);
 			div.addClass("keyWordDiv");
 			div.appendTo(li);
