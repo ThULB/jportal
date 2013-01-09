@@ -23,6 +23,7 @@ import org.jdom.transform.JDOMSource;
 import org.jdom.xpath.XPath;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -89,25 +90,30 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
         // set in the session. The method name "getLastValidPageID" is miss leading.
         // It was used for another reason. Should be changed in the next version.
         String currentObjID = MCRLayoutUtilities.getLastValidPageID();
-        if (MCRObjectID.isValid(currentObjID) && !currentObjID.equals("")) {
+
+        // TODO: fix this
+        try {
+            MCRObjectID.getInstance(currentObjID);
             String[] oldJournalID = (String[]) MCRSessionMgr.getCurrentSession().get("journalIDForObj");
-            if(oldJournalID != null && oldJournalID.length == 2 && currentObjID.equals(oldJournalID[0])){
+            if (oldJournalID != null && oldJournalID.length == 2 && currentObjID.equals(oldJournalID[0])) {
                 return oldJournalID[1];
             }
             Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(currentObjID));
             try {
                 XPath hiddenJournalIDXpath = XPath.newInstance("/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID");
                 String journalID = hiddenJournalIDXpath.valueOf(objXML);
-                
-                if(journalID != null && !journalID.equals("")){
-                    String[] journalIDForObj = {currentObjID, journalID};
+    
+                if (journalID != null && !journalID.equals("")) {
+                    String[] journalIDForObj = { currentObjID, journalID };
                     MCRSessionMgr.getCurrentSession().put("journalIDForObj", journalIDForObj);
                 }
-                
+    
                 return journalID;
             } catch (JDOMException e) {
                 e.printStackTrace();
             }
+        } catch(MCRException exc) {
+            exc.printStackTrace();
         }
 
         return "";
