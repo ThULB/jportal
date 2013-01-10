@@ -143,12 +143,27 @@
     <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
     <xsl:variable name="encodedMaindoc" select="mcrservlet:encodeURL($maindoc)" />
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />
+    <xsl:variable name="fileType">
+      <xsl:call-template name="uppercase">
+        <xsl:with-param name="string" select="substring-after($maindoc, '.')" />
+      </xsl:call-template>
+    </xsl:variable>
     <a href="{$derivbase}{$encodedMaindoc}">
       <div class="jp-layout-hidden-Button"></div>
-      <img src="{concat($WebApplicationBaseURL,'images/dummyPreview.png')}" border="0" />
-      <span style="display: inline-block; text-align: center; width: 100%; text-transform: uppercase;">
-        <xsl:value-of select="substring-after($maindoc, '.')" />
-      </span>
+      <xsl:choose>
+        <xsl:when test="$fileType = 'PDF'">
+          <img src="{concat($WebApplicationBaseURL,'images/adobe-logo.svg')}" border="0" class="logo" />  
+        </xsl:when>
+        <xsl:when test="$fileType = 'XML'">
+          <img src="{concat($WebApplicationBaseURL,'images/xml-logo.svg')}" border="0" class="logo" />  
+        </xsl:when>
+        <xsl:otherwise>
+          <img src="{concat($WebApplicationBaseURL,'images/file-logo.svg')}" border="0" class="logo" />
+          <span style="display: inline-block; text-align: center; width: 100%;">
+            <xsl:value-of select="$fileType" />
+          </span>
+        </xsl:otherwise>
+      </xsl:choose>
     </a>
   </xsl:template>
 

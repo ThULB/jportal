@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+  <xsl:variable name="lcletters" select="'abcdefghijklmnopqrstuvwxyz'" />
+  <xsl:variable name="ucletters" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'" />
+
   <xsl:template mode="printListEntry" match="*">
     <li>
       <xsl:apply-templates mode="printListEntryContent" select="." />
@@ -20,4 +24,15 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:template name="uppercase">
+    <xsl:param name="string" />
+    <xsl:value-of select="translate($string,$lcletters,$ucletters)" />
+  </xsl:template>
+
+  <xsl:template name="lowercase">
+    <xsl:param name="string" />
+    <xsl:value-of select="translate($string,$ucletters, $lcletters)" />
+  </xsl:template>
+
 </xsl:stylesheet>
