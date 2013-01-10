@@ -30,30 +30,32 @@ function attachToElement(element, keywords) {
 	var ul = $("<ul></ul>");
 	ul.appendTo(element);
 	for ( var i = 0; i < keywords.children.length; i++) {
-		var li = $("<li></li>");
-		li.appendTo(ul);
-		if (keywords.children[i].haschildren == true){
-			var div = $("<div></div>");
-			div.append('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
-			div.attr("id", keywords.children[i].id.categid);
-			div.addClass("keyWordDiv");
-			div.appendTo(li);
-			div.click(function() {
-				if($(this).parent().hasClass("open")){
-					$(this).nextAll("ul").toggle();
-				}
-				else{
-					$(this).parent().addClass("open");
-					loadKeyword($(this).parent(), $(this).attr("id"));
-				}
-			});
+		if (keywords.children[i].haslink == true){
+			var li = $("<li></li>");
+			li.appendTo(ul);
+			if (keywords.children[i].haschildren == true){
+				var div = $("<div></div>");
+				div.append('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
+				div.attr("id", keywords.children[i].id.categid);
+				div.addClass("keyWordDiv");
+				div.appendTo(li);
+				div.click(function() {
+					if($(this).parent().hasClass("open")){
+						$(this).nextAll("ul").toggle();
+					}
+					else{
+						$(this).parent().addClass("open");
+						loadKeyword($(this).parent(), $(this).attr("id"));
+					}
+				});
+			}
+			var a = $("<a></a>");
+			a.text(keywords.children[i].labels[0].text);
+			var categID = keywords.children[i].id.categid;
+			categID = categID.replace(/ /g, "\\ ");
+			a.attr("href", "../jp-search.xml?XSL.hiddenQt=+volContentClassi1:" + categID + "+journalID:" + journalID  + "&XSL.mode=hidden");
+			a.addClass("keyWordA");
+			a.appendTo(li);
 		}
-		var a = $("<a></a>");
-		a.text(keywords.children[i].labels[0].text);
-		var categID = keywords.children[i].id.categid;
-		categID = categID.replace(/ /g, "\\ ");
-		a.attr("href", "../jp-search.xml?XSL.hiddenQt=+volContentClassi1:" + categID + "+journalID:" + journalID  + "&XSL.mode=hidden");
-		a.addClass("keyWordA");
-		a.appendTo(li);
 	}
 }
