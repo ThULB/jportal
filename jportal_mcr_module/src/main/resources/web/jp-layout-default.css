@@ -1031,6 +1031,14 @@ body {
 	width: 206px;
 }
 
+#artList .jp-layout-derivateList {
+	margin-top: -28px;
+}
+
+#resultList .jp-layout-derivateList {
+	margin-top: -23px;
+}
+
 .jp-layout-derivateList .jp-layout-derivateWrapper {
 	float: left;
 	margin-right: 10px;

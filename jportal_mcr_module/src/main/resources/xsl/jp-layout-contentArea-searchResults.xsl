@@ -332,8 +332,12 @@
       </ul>
 
       <!-- TODO: Derivate Linking -->
+      <xsl:variable name="mcrId" select="str[@name='id']" />
+      <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+      
       <xsl:call-template name="derivateDisplay">
-        <xsl:with-param name="nodes" select="mcr:metaData/mcr:field[@name='linkDeriv']" />
+        <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+        <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
       </xsl:call-template>
     </li>
   </xsl:template>

@@ -71,8 +71,9 @@
       <field name="rubric" label="Rubrik" />
     </xsl:variable>
     <xsl:variable name="doc" select="." />
+    <xsl:variable name="mcrId" select="str[@name='id']" />
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
+      <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
         <xsl:value-of select="str[@name='maintitle']" />
       </a>
       <p>
@@ -89,10 +90,14 @@
             </xsl:if>
           </xsl:for-each>
         </ul>
-
+        
         <!-- TODO: link derivate -->
+        <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+        
         <xsl:call-template name="derivateDisplay">
-          <xsl:with-param name="nodes" select="mcr:metaData/mcr:field[@name='linkDeriv']" />
+<!--         <xsl:with-param name="nodes" select="mcr:metaData/mcr:field[@name='linkDeriv']" />   --> 
+         <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+         <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
         </xsl:call-template>
       </p>
     </li>

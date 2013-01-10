@@ -92,6 +92,7 @@
           <div id="derivCol">
             <xsl:call-template name="derivateDisplay">
               <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
+              <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
             </xsl:call-template>
           </div>
         </xsl:if>
