@@ -34,7 +34,7 @@ function attachToElement(element, keywords) {
 		li.appendTo(ul);
 		if (keywords.children[i].haschildren == true){
 			var div = $("<div></div>");
-			div.append('<img class="dropDownArrow" src=/images/naviMenu/dropdown.png">');
+			div.append('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
 			div.attr("id", keywords.children[i].id.categid);
 			div.addClass("keyWordDiv");
 			div.appendTo(li);
