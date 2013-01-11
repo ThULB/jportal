@@ -312,29 +312,27 @@
 
   <xsl:template mode="searchResults" match="doc">
     <li class="jp-layout-topline jp-layout-border-light">
-      <xsl:apply-templates mode="searchHitLabel" select="." />
-
-      <ul class="jp-layout-metadaInSearchResults">
-        <xsl:variable name="doc" select="." />
-        <xsl:for-each select="xalan:nodeset($searchResultsFields)/field">
-          <xsl:variable name="fieldName" select="@name" />
-          <xsl:if test="$doc/*[@name = $fieldName]">
-            <li>
-              <xsl:if test="@label">
-                <span class="jp-layout-label">
-                  <xsl:value-of select="@label" />
-                </span>
-              </xsl:if>
-              <xsl:apply-templates mode="searchHitDataField" select="$doc/*[@name = $fieldName]" />
-            </li>
-          </xsl:if>
-        </xsl:for-each>
-      </ul>
-
-      <!-- TODO: Derivate Linking -->
+      <div class="metadata">
+        <xsl:apply-templates mode="searchHitLabel" select="." />
+        <ul class="jp-layout-metadaInSearchResults">
+          <xsl:variable name="doc" select="." />
+          <xsl:for-each select="xalan:nodeset($searchResultsFields)/field">
+            <xsl:variable name="fieldName" select="@name" />
+            <xsl:if test="$doc/*[@name = $fieldName]">
+              <li>
+                <xsl:if test="@label">
+                  <span class="jp-layout-label">
+                    <xsl:value-of select="@label" />
+                  </span>
+                </xsl:if>
+                <xsl:apply-templates mode="searchHitDataField" select="$doc/*[@name = $fieldName]" />
+              </li>
+            </xsl:if>
+          </xsl:for-each>
+        </ul>
+      </div>
       <xsl:variable name="mcrId" select="str[@name='id']" />
       <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-      
       <xsl:call-template name="derivateDisplay">
         <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
         <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />

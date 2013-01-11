@@ -50,7 +50,6 @@ public class DerivateLinkServlet extends MCRServlet {
         String from = request.getParameter(Parameter.from.name());
         String to = getTo(request);
         MCRObjectID mcrObjId = MCRObjectID.getInstance(from);
-
         if(mode.equals(Mode.setLink)) {
             LOGGER.debug("set link from " + from + " to " + to);
             DerivateLinkUtil.setLink(mcrObjId, to);
@@ -58,7 +57,8 @@ public class DerivateLinkServlet extends MCRServlet {
             LOGGER.debug("remove link from " + from + " to " + to);
             DerivateLinkUtil.removeLink(mcrObjId, to);
         }
-        job.getResponse().sendRedirect(super.getBaseURL() + "receive/" + from);
+        String referrer = ((HttpServletRequest) request).getHeader("referer");
+        job.getResponse().sendRedirect(referrer != null ? referrer : super.getBaseURL() + "receive/" + from);
     }
 
     private void handleBookmarkImage(MCRServletJob job) {

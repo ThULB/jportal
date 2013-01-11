@@ -31,10 +31,10 @@ function jpInitIview2(settings) {
         getDerivInfo : function(srcString) {
             var matchResult = srcString.match(new RegExp('[^&#]*MCRThumbnailServlet/([^&#]*_derivate_[^&#]*)(/[^&#]*)\\?[^&#]*')
                     || [ , "" ]);
-            return {
+            return matchResult == null ? null : {
                 ID : matchResult[1],
                 file : matchResult[2]
-            }
+            };
         }
     }
 
@@ -75,7 +75,10 @@ function jpInitIview2(settings) {
         showIview(derivInfo);
     }
 
-    function showIview(derivInfo) {
+	function showIview(derivInfo) {
+		if(derivInfo == null) {
+			return;
+		}
     	initIviewContainer();
         var container = $('#viewerContainer');
         var finalOptions = {};

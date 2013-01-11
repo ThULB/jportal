@@ -726,11 +726,7 @@ body {
 }
 
 #resultList {
-/*	border-right: 1px solid;
-	float: left;
-	padding-right: 29px;
-	*/
-	width: 700px;
+	width: 900px;
 	padding-bottom: 49px;
 }
 
@@ -974,13 +970,14 @@ body {
 	padding-right: 25px;
 }
 
-#resultList .jp-layout-derivateList, #artList .jp-layout-derivateList{
-	float: right;
-	width: auto;
-	min-width: 63px;
+#artList li .metadata, #resultList .metadata {
+	float: left;
+	width: 70%;
 }
-	
 
+#resultList .jp-layout-derivateList, #artList .jp-layout-derivateList {
+	float: right;
+}
 #artList>li>a:first-child {
 	font-weight: bold;
 }
@@ -1028,15 +1025,6 @@ body {
 
 .jp-layout-derivateList {
 	overflow: hidden;
-	width: 206px;
-}
-
-#artList .jp-layout-derivateList {
-	margin-top: -28px;
-}
-
-#resultList .jp-layout-derivateList {
-	margin-top: -23px;
 }
 
 .jp-layout-derivateList .jp-layout-derivateWrapper {
@@ -1059,7 +1047,7 @@ body {
 	cursor: pointer;
 }
 
-#artList .jp-layout-derivateList .jp-layout-derivateWrapper img {
+#resultList .jp-layout-derivateList .jp-layout-derivateWrapper img, #artList .jp-layout-derivateList .jp-layout-derivateWrapper img, #resultList .jp-layout-derivateList .jp-layout-derivateWrapper .image, #artList .jp-layout-derivateList .jp-layout-derivateWrapper .image {
 	width: 80px;
 }
 .jp-layout-derivateList .jp-layout-derivateWrapper img {

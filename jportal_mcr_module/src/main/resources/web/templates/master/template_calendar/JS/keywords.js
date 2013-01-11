@@ -1,7 +1,5 @@
-var journalID;
 var dropDown = $('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
-function loadKeywords(jID) {
-    journalID = jID;
+function loadKeywords() {
 	var mainDiv = $('<div id="keywords"></div>');
 	mainDiv.append("<h3>Schlagwörter</h3>")
 	mainDiv.append(dropDown);
@@ -53,7 +51,7 @@ function attachToElement(element, keywords) {
 			a.text(keywords.children[i].labels[0].text);
 			var categID = keywords.children[i].id.categid;
 			categID = categID.replace(/ /g, "\\ ");
-			a.attr("href", "../jp-search.xml?XSL.hiddenQt=+volContentClassi1:" + categID + "+journalID:" + journalID  + "&XSL.mode=hidden");
+			a.attr("href", "../jp-search.xml?XSL.hiddenQt=+volContentClassi1:" + categID + "&XSL.mode=hidden");
 			a.addClass("keyWordA");
 			a.appendTo(li);
 		}

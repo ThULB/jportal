@@ -42,9 +42,7 @@
           <h3>Artikel</h3>
           <ul id="artList">
             <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
-            <!-- <xsl:apply-templates mode="artListEntry" select="$articles/mcr:results/mcr:hit" /> -->
           </ul>
-
           <xsl:if test="$articles/response/result/@numFound &gt; $numPerPage_art">
             <div class="resultPaginator">
               <span>Seite: </span>
@@ -73,33 +71,32 @@
     <xsl:variable name="doc" select="." />
     <xsl:variable name="mcrId" select="str[@name='id']" />
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
-        <xsl:value-of select="str[@name='maintitle']" />
-      </a>
-      <p>
-        <ul class="jp-layout-metadaInSearchResults">
-          <xsl:for-each select="xalan:nodeset($fields)/field">
-            <xsl:variable name="fieldName" select="@name" />
-            <xsl:if test="$doc/*[@name = $fieldName]">
-              <li>
-                <span class="jp-layout-label">
-                  <xsl:value-of select="@label" />
-                </span>
-                <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
-              </li>
-            </xsl:if>
-          </xsl:for-each>
-        </ul>
-        
-        <!-- TODO: link derivate -->
-        <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-        
-        <xsl:call-template name="derivateDisplay">
-<!--         <xsl:with-param name="nodes" select="mcr:metaData/mcr:field[@name='linkDeriv']" />   --> 
-         <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
-         <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-        </xsl:call-template>
-      </p>
+      <div class="metadata">
+        <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
+          <xsl:value-of select="str[@name='maintitle']" />
+        </a>
+        <p>
+          <ul class="jp-layout-metadaInSearchResults">
+            <xsl:for-each select="xalan:nodeset($fields)/field">
+              <xsl:variable name="fieldName" select="@name" />
+              <xsl:if test="$doc/*[@name = $fieldName]">
+                <li>
+                  <span class="jp-layout-label">
+                    <xsl:value-of select="@label" />
+                  </span>
+                  <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
+                </li>
+              </xsl:if>
+            </xsl:for-each>
+          </ul>
+        </p>
+      </div>
+      <!-- TODO: link derivate -->
+      <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+      <xsl:call-template name="derivateDisplay">
+        <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+        <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+      </xsl:call-template>
     </li>
   </xsl:template>
 

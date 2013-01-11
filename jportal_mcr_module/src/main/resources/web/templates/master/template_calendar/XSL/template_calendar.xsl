@@ -7,16 +7,12 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_calendar">
-  <xsl:variable name="jID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID"/>
-  <xsl:variable name="ID" select="/mycoreobject/@ID"/>
-  <xsl:if test="$jID = $ID">
     <script type="text/javascript" src="../templates/master/template_calendar/JS/keywords.js" />
     <script>
 		$(document).ready(function() {
-			loadKeywords('<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />');		
+			loadKeywords();		
 		});
     </script>
-   </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
 
