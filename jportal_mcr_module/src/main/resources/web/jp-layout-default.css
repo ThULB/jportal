@@ -1059,10 +1059,12 @@ body {
 	cursor: pointer;
 }
 
+#artList .jp-layout-derivateList .jp-layout-derivateWrapper img {
+	width: 110px;
+}
 .jp-layout-derivateList .jp-layout-derivateWrapper img {
 	width: 200px;
 }
-
 .jp-layout-derivateList .jp-layout-derivateWrapper img.logo {
 	width: 100px;
 }
