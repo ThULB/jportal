@@ -66,11 +66,14 @@ public abstract class DerivateLinkUtil {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
         MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
         MCRMetaDerivateLink linkToRemove = getLink(derLinks, pathOfImage);
-        if(linkToRemove == null)
+        if(linkToRemove == null) {
             return;
-
+        }
         // remove link
         derLinks.removeMetaObject(linkToRemove);
+        if(derLinks.size() <= 0) {
+            mcrObj.getMetadata().removeMetadataElement(DERIVATE_LINKS);
+        }
         LOGGER.debug("link in object " + mcrObjId + " removed " + pathOfImage);
         MCRMetadataManager.update(mcrObj);
     }
