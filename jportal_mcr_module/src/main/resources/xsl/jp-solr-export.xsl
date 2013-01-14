@@ -17,7 +17,7 @@
     <xsl:apply-templates select="*" mode="content-classification" />
   </xsl:template>
 
-  <xsl:template match="*[position()=1]" mode="content-classification">
+  <xsl:template match="*" mode="content-classification">
     <field name="{name()}">
       <xsl:value-of select="@categid" />
     </field>

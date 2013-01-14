@@ -158,14 +158,14 @@
     <field name="participant" type="string" indexed="false" />
     <field name="participantID" type="string" indexed="false" />
 
-    <field name="contentClassi1" type="string" />
-    <field name="contentClassi2" type="string" />
-    <field name="contentClassi3" type="string" />
-    <field name="contentClassi4" type="string" />
-    <field name="contentClassi5" type="string" />
-    <field name="contentClassi6" type="string" />
-    <field name="contentClassi7" type="string" />
-    <field name="volContentClassi1" type="string" />
+    <field name="contentClassi1" type="string" multiValued="true" />
+    <field name="contentClassi2" type="string" multiValued="true" />
+    <field name="contentClassi3" type="string" multiValued="true" />
+    <field name="contentClassi4" type="string" multiValued="true" />
+    <field name="contentClassi5" type="string" multiValued="true" />
+    <field name="contentClassi6" type="string" multiValued="true" />
+    <field name="contentClassi7" type="string" multiValued="true" />
+    <field name="volContentClassi1" type="string" multiValued="true" />
 
     <field name="keywords" type="text_de" multiValued="true" stored="false" />
 
