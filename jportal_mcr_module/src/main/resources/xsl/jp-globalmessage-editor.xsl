@@ -55,7 +55,7 @@
         $('#submit').on('click', function () {
           var visibility = $('#visibility').attr("value");
           var head = $('#head').attr("value");
-          var message = $('#message').text();
+          var message = $('#message').attr("value");
           $.ajax({
             url: "/rsc/globalMessage/save",
             type:"POST",
