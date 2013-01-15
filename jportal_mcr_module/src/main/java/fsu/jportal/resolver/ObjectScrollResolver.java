@@ -167,7 +167,9 @@ public class ObjectScrollResolver implements URIResolver {
                 MCRMetaInterface metaInterface = it.next();
                 if(metaInterface.getInherited() == 0) {
                     try {
-                        return URLEncoder.encode(((MCRMetaLangText) metaInterface).getText(), "UTF-8");
+                        String text = ((MCRMetaLangText) metaInterface).getText();
+                        text = text.replaceAll("\"", "\\\\\"");
+                        return URLEncoder.encode(text, "UTF-8");
                     } catch(UnsupportedEncodingException uee) {
                         LOGGER.error(uee);
                         break;
