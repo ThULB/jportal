@@ -7,7 +7,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>fsu.thulb</groupId>
     <artifactId>jportal_mcr_module</artifactId>
     <version>2.0.17-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -197,11 +196,6 @@
         	<version>1.3</version>
         	<type>jar</type>
         	<scope>test</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.solr</groupId>
-          <artifactId>solr-solrj</artifactId>
-          <version>3.6.0</version>
         </dependency>
     </dependencies>
 </project>
