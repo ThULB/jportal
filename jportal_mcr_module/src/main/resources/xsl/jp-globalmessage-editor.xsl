@@ -3,7 +3,7 @@
   xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="xalan acl">
 
   <xsl:template match="globalmessage-editor">
-    <div class="jp-layout-globalmessage-editor">
+    <div id="jp-layout-globalmessage-editor" class="jp-layout-globalmessage-editor">
       <h1>Globale Nachricht bearbeiten</h1>
       <xsl:choose>
         <xsl:when test="acl:checkPermission('CRUD', 'admin')">
@@ -56,14 +56,21 @@
           var visibility = $('#visibility').attr("value");
           var head = $('#head').attr("value");
           var message = $('#message').text();
-          $.post("/rsc/globalMessage/save", {
-            visibility: visibility,
-            head: head,
-            message: message
-          }).success(function() {
-            console.log("success");
-          }).error(function() {
-            console.log("error");
+          $.ajax({
+            url: "/rsc/globalMessage/save",
+            type:"POST",
+            data: JSON.stringify({
+              visibility: visibility,
+              head: head,
+              message: message
+            }),
+            contentType: "application/json; charset=utf-8",
+            success: function() {
+              $('<div style="font-size:120%;color:green;text-align:center">Speichern erfolgreich</div>').appendTo('#jp-layout-globalmessage-editor').fadeOut(2500);
+            },
+            error: function(error) {
+              alert(error);
+            }
           });
         });
       });
