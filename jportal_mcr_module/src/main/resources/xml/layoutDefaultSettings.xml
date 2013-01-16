@@ -58,6 +58,11 @@
   <i18n tag="identifier.pnd">metaData.person.identifier.pnd</i18n>
   <i18n tag="identifier.ppn">metaData.person.identifier.ppn</i18n>
   <i18n tag="url">metaData.jpinst.url</i18n>
+  <i18n tag="maintitleForSorting">editormask.labels.bibdescriptForSorting</i18n>
+  <i18n tag="note.visible">metaData.person.note</i18n>
+  <i18n tag="note.hidden">metaData.person.note.hidden</i18n> 
+  <i18n tag="link">metaData.person.link</i18n> 
+  <i18n tag="doubletOf">editormask.labels.LdoubletOf</i18n>
 
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>

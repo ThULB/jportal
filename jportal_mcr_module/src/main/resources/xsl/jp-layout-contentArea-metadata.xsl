@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder"
-  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="i18n xsi xlink ext encoder">
+  xmlns:encoder="xalan://java.net.URLEncoder" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="i18n xsi xlink ext encoder mcrxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -32,10 +32,13 @@
 
   <xsl:template mode="metadataDisplay" match="metadata/*[*/@type and not(contains($ignore, name()))]">
     <xsl:variable name="currentTagName" select="name()" />
+    <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
     <xsl:for-each select="*[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
-      <xsl:call-template name="metadataField">
-        <xsl:with-param name="fields" select="key($currentTagName, @type)" />
-      </xsl:call-template>
+      	<xsl:if test="not($currentTagName='def.note' and @type='hidden' and $isGuest)">
+	    	<xsl:call-template name="metadataField">
+        		<xsl:with-param name="fields" select="key($currentTagName, @type)" />
+        	</xsl:call-template>
+    	</xsl:if>
     </xsl:for-each>
   </xsl:template>
 
@@ -50,11 +53,6 @@
         <xsl:sort select="@xlink:title" />
       </xsl:apply-templates>
     </dd>
-  </xsl:template>
-
-  <xsl:template mode="metadataFieldLabel" match="*[@type and ../@class='MCRMetaLangText']" priority="1">
-    <xsl:variable name="tagName" select="concat(name(), '.', @type)" />
-    <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
   </xsl:template>
 
   <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or ../@class='MCRMetaLink']">
@@ -87,7 +85,8 @@
           select="document(concat('classification:metadata:all:children:',$classID,':',$categID))/mycoreclass/categories/category[@ID=$categID]/label[@xml:lang=$CurrentLang]/@text" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="concat('could not be resolved (', name(), ')')" />
+        <xsl:variable name="tagName" select="concat(name(), '.', @type)" />
+    	<xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
