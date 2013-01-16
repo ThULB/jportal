@@ -137,10 +137,6 @@
     <xsl:value-of select="$data/result/@numFound" />
   </xsl:template>
 
-  <xsl:template mode="renderView" match="getData[@id='subselect.type.label']">
-    <xsl:value-of select="concat($subselectTypeLabel, @concat)" />
-  </xsl:template>
-
   <xsl:template mode="renderView" match="getData[@id='search.query']">
     <xsl:param name="data" />
     <xsl:value-of select="concat(@pre,substring-before($data/lst[@name='responseHeader']/lst[@name='params']/str[@name='q'],' +'),@post)" />
@@ -165,6 +161,20 @@
   <xsl:template mode="renderView" match="getData[@id='result.hit.heading']">
     <xsl:param name="data" />
     <xsl:value-of select="$data/str[@name='heading']" />
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="getData[@id='result.hit.dateOfBirth']">
+    <xsl:param name="data" />
+    <xsl:if test="$data/str[@name='dateOfBirth']">
+      <xsl:value-of select="concat('Geburtsdatum: ', $data/str[@name='dateOfBirth'])" />
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="getData[@id='result.hit.dateOfDeath']">
+    <xsl:param name="data" />
+    <xsl:if test="$data/str[@name='dateOfDeath']">
+      <xsl:value-of select="concat('Sterbedatum: ', $data/str[@name='dateOfDeath'])" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="renderView" match="@href[contains(.,'{result.hit.id}')]">

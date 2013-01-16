@@ -64,7 +64,10 @@
               </h3>
               <ul class="jp-layout-metadaInSearchResults">
                 <li>
-                  <getData id="subselect.type.label" />
+                  <getData id="result.hit.dateOfBirth" />
+                </li>
+                <li>
+                  <getData id="result.hit.dateOfDeath" />
                 </li>
               </ul>
             </li>
