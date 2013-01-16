@@ -10,9 +10,19 @@
       <menu class="jp-layout-breadcrumb">
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
           <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
-          <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
+          <xsl:variable name="azList">
+            <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
+            <xsl:choose>
+              <xsl:when test="$listType = 'calender'">
+                <xsl:value-of select="'calender'" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="'journal'" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
           <li>
-            <a href="{$WebApplicationBaseURL}content/main/{$listType}List.xml#{$hash}">
+            <a href="{$WebApplicationBaseURL}content/main/{$azList}List.xml#{$hash}">
               <xsl:value-of select="'A-Z'" />
             </a>
           </li>

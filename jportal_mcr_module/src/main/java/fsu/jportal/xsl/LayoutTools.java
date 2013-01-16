@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
+import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -64,16 +65,14 @@ public class LayoutTools {
         }
     }
 
-    private static class ListType implements MCRObjectInfo<String> {
-        @Override
+    private static class SimpleAttribute implements MCRObjectInfo<String> {
         public String getInfo(List<Object> node) {
-            if (node.size() == 0) {
-                return "journal";
-            } else {
-                return "calendar";
+            if (node.size() == 1) {
+                Attribute attrNode = (Attribute) node.get(0);
+                return attrNode.getValue();
             }
+            return "";
         }
-
     }
 
     private static class DerivateDisplay implements MCRObjectInfo<String> {
@@ -127,9 +126,8 @@ public class LayoutTools {
     }
 
     public String getListType(String journalID) throws TransformerException, JDOMException {
-        InfoProvider infoProvider = new InfoProvider(journalID,
-                "/mycoreobject/metadata/contentClassis1/contentClassi1[@categid = 'calendar']");
-        return infoProvider.get(new ListType());
+        InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
+        return infoProvider.get(new SimpleAttribute());
     }
 
     public String getDerivateDisplay(String derivateID) throws TransformerException, JDOMException {

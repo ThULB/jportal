@@ -18,9 +18,14 @@
   <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
   <xsl:variable name="hasChildren" select="count(/mycoreobject/structure/children) > 0" />
-  <xsl:variable name="isCalendar" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID) = 'calendar'" />
+  <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
+  <xsl:variable name="isCalendar" select="$listType = 'calendar'" />
+  <xsl:variable name="isOnlineJournal" select="$listType = 'online'" />
+
+  <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or $isCalendar or $isOnlineJournal or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'" />
 
   <xsl:template priority="9" match="/mycoreobject">
+  
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">
@@ -77,7 +82,7 @@
     <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
 
     <!-- metadata & derivate -->
-    <xsl:if test="not($hasChildren) or $isCalendar or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'">
+    <xsl:if test="$showMetadataAndDerivate">
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
           <dl class="jp-layout-metadataList">
