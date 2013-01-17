@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
-  xmlns:xalan="http://xml.apache.org/xalan">
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan mcrxml solrxml">
 
   <xsl:template name="jpsearch.getResultInfo">
     <xsl:param name="response" />
@@ -311,33 +312,41 @@
   </xsl:variable>
 
   <xsl:template mode="searchResults" match="doc">
-    <li class="jp-layout-topline jp-layout-border-light">
-      <div class="metadata">
-        <xsl:apply-templates mode="searchHitLabel" select="." />
-        <ul class="jp-layout-metadaInSearchResults">
-          <xsl:variable name="doc" select="." />
-          <xsl:for-each select="xalan:nodeset($searchResultsFields)/field">
-            <xsl:variable name="fieldName" select="@name" />
-            <xsl:if test="$doc/*[@name = $fieldName]">
-              <li>
-                <xsl:if test="@label">
-                  <span class="jp-layout-label">
-                    <xsl:value-of select="@label" />
-                  </span>
+    <xsl:variable name="mcrId" select="str[@name='id']" />
+    <xsl:choose>
+      <xsl:when test="mcrxml:exists($mcrId)">
+        <li class="jp-layout-topline jp-layout-border-light">
+          <div class="metadata">
+            <xsl:apply-templates mode="searchHitLabel" select="." />
+            <ul class="jp-layout-metadaInSearchResults">
+              <xsl:variable name="doc" select="." />
+              <xsl:for-each select="xalan:nodeset($searchResultsFields)/field">
+                <xsl:variable name="fieldName" select="@name" />
+                <xsl:if test="$doc/*[@name = $fieldName]">
+                  <li>
+                    <xsl:if test="@label">
+                      <span class="jp-layout-label">
+                        <xsl:value-of select="@label" />
+                      </span>
+                    </xsl:if>
+                    <xsl:apply-templates mode="searchHitDataField" select="$doc/*[@name = $fieldName]" />
+                  </li>
                 </xsl:if>
-                <xsl:apply-templates mode="searchHitDataField" select="$doc/*[@name = $fieldName]" />
-              </li>
-            </xsl:if>
-          </xsl:for-each>
-        </ul>
-      </div>
-      <xsl:variable name="mcrId" select="str[@name='id']" />
-      <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-      <xsl:call-template name="derivateDisplay">
-        <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
-        <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-      </xsl:call-template>
-    </li>
+              </xsl:for-each>
+            </ul>
+          </div>
+          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+          <xsl:call-template name="derivateDisplay">
+            <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+            <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+          </xsl:call-template>
+        </li>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- object doesn't exist in mycore -> delete it in solr -->
+        <xsl:value-of select="solrxml:delete($mcrId)" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="searchHitLabel" match="doc">

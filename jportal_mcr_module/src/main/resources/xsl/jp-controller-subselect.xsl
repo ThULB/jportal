@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xalan mcrxml solrxml">
 
   <!-- subselect param -->
   <xsl:param name="subselect.type" select="''" />
@@ -152,10 +154,18 @@
 
   <xsl:template mode="listEntryView" match="doc">
     <xsl:param name="view" />
-
-    <xsl:apply-templates mode="renderView" select="$view">
-      <xsl:with-param name="data" select="." />
-    </xsl:apply-templates>
+    <xsl:variable name="mcrId" select="str[@name='id']" />
+    <xsl:choose>
+      <xsl:when test="mcrxml:exists($mcrId)">
+        <xsl:apply-templates mode="renderView" select="$view">
+          <xsl:with-param name="data" select="." />
+        </xsl:apply-templates>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- object doesn't exist in mycore -> delete it in solr -->
+        <xsl:value-of select="solrxml:delete($mcrId)" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="renderView" match="getData[@id='result.hit.heading']">

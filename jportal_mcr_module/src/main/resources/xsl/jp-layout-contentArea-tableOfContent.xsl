@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/">
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan encoder mcr mcrxml solrxml">
   <xsl:param name="vol.start" select="'0'" />
   <xsl:param name="art.start" select="'0'" />
 
@@ -59,45 +60,53 @@
   </xsl:template>
 
   <xsl:template mode="artList" match="doc">
-    <xsl:variable name="fields">
-      <field name="participants_withName" label="Autor" />
-      <field name="date.published" label="Erschienen" />
-      <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
-      <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
-      <field name="date.published_Original_Till" label="Erscheinungsende der rez. Werke" />
-      <field name="size" label="Seitenbereich" />
-      <field name="rubric" label="Rubrik" />
-    </xsl:variable>
-    <xsl:variable name="doc" select="." />
     <xsl:variable name="mcrId" select="str[@name='id']" />
-    <li>
-      <div class="metadata">
-        <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
-          <xsl:value-of select="str[@name='maintitle']" />
-        </a>
-        <p>
-          <ul class="jp-layout-metadaInSearchResults">
-            <xsl:for-each select="xalan:nodeset($fields)/field">
-              <xsl:variable name="fieldName" select="@name" />
-              <xsl:if test="$doc/*[@name = $fieldName]">
-                <li>
-                  <span class="jp-layout-label">
-                    <xsl:value-of select="@label" />
-                  </span>
-                  <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
-                </li>
-              </xsl:if>
-            </xsl:for-each>
-          </ul>
-        </p>
-      </div>
-      <!-- TODO: link derivate -->
-      <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-      <xsl:call-template name="derivateDisplay">
-        <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
-        <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-      </xsl:call-template>
-    </li>
+    <xsl:choose>
+      <xsl:when test="mcrxml:exists($mcrId)">
+        <xsl:variable name="fields">
+          <field name="participants_withName" label="Autor" />
+          <field name="date.published" label="Erschienen" />
+          <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
+          <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
+          <field name="date.published_Original_Till" label="Erscheinungsende der rez. Werke" />
+          <field name="size" label="Seitenbereich" />
+          <field name="rubric" label="Rubrik" />
+        </xsl:variable>
+        <xsl:variable name="doc" select="." />
+        <li>
+          <div class="metadata">
+            <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
+              <xsl:value-of select="str[@name='maintitle']" />
+            </a>
+            <p>
+              <ul class="jp-layout-metadaInSearchResults">
+                <xsl:for-each select="xalan:nodeset($fields)/field">
+                  <xsl:variable name="fieldName" select="@name" />
+                  <xsl:if test="$doc/*[@name = $fieldName]">
+                    <li>
+                      <span class="jp-layout-label">
+                        <xsl:value-of select="@label" />
+                      </span>
+                      <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
+                    </li>
+                  </xsl:if>
+                </xsl:for-each>
+              </ul>
+            </p>
+          </div>
+          <!-- TODO: link derivate -->
+          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+          <xsl:call-template name="derivateDisplay">
+            <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+            <xsl:with-param name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+          </xsl:call-template>
+        </li>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- object doesn't exist in mycore -> delete it in solr -->
+        <xsl:value-of select="solrxml:delete($mcrId)" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="artEntryFields" match="str">
@@ -126,14 +135,23 @@
   </xsl:template>
 
   <xsl:template mode="printListEntryContent" match="doc">
-    <li>
-      <a href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
-        <xsl:value-of select="str[@name='maintitle']" />
-        <xsl:if test="str[@name='date.published']">
-          <xsl:value-of select="concat(' (', str[@name='date.published'], ')')" />
-        </xsl:if>
-      </a>
-    </li>
+    <xsl:variable name="mcrId" select="str[@name='id']" />
+    <xsl:choose>
+      <xsl:when test="mcrxml:exists($mcrId)">
+        <li>
+          <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
+            <xsl:value-of select="str[@name='maintitle']" />
+            <xsl:if test="str[@name='date.published']">
+              <xsl:value-of select="concat(' (', str[@name='date.published'], ')')" />
+            </xsl:if>
+          </a>
+        </li>
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- object doesn't exist in mycore -> delete it in solr -->
+        <xsl:value-of select="solrxml:delete($mcrId)" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template mode="tableOfContentNavi" match="response">
