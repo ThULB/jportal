@@ -5,3 +5,9 @@
 	background-position: left top;
 	height: 115px;
 }
+
+#logo .logoTitle {
+	color: white;
+	margin: 0 30px;
+	padding-top: 28px;
+}

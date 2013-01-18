@@ -10,6 +10,7 @@
   <xsl:include href="jp-layout-contentArea-tableOfContent.xsl" />
   <xsl:include href="jp-layout-contentArea-derivates.xsl" />
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
+  <xsl:include href="jp-history.xsl" />
 
   <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
   <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />

@@ -141,7 +141,7 @@
           <label name="XML" href="/receive/{/mycoreobject/@ID}?XSL.Style=xml" />
         </item>
         <item>
-          <label name="Versionsgeschichte" href="/history.xml?XSL.id={/mycoreobject/@ID}" />
+          <label name="Versionsgeschichte" href="/jp-history.xml?XSL.id={/mycoreobject/@ID}" />
         </item>
       </item>
       <link id="delObj" class="jp-layout-message-button" name="Löschen" ref="editorServlet">
