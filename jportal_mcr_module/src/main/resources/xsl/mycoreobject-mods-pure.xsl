@@ -8,10 +8,11 @@
   xmlns:iview2="iview2://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
   exclude-result-prefixes="mcr xalan i18n acl mcrxml iview2">
   <xsl:param name="WebApplicationBaseURL" />
-  <xsl:include href="metsmeta-dfg.xsl" />
-  <xsl:include href="mets-amd.xsl" />
-
+  <xsl:param name="ThumbnailBaseURL" select="concat($ServletsBaseURL,'MCRDFGThumbnail/')" />
+  <xsl:param name="ImageBaseURL" select="concat($ServletsBaseURL,'MCRDFGServlet/')"/>
   <xsl:param name="MCR.OPAC.CATALOG" />
+
+  <xsl:include href="mets-dfgProfile.xsl" />
 
   <xsl:variable name="ACTUAL.OPAC.CATALOG">
     <xsl:choose>
