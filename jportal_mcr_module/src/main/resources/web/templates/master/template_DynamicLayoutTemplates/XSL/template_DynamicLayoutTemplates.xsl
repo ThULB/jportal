@@ -9,17 +9,17 @@
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
     <!-- get template ID from java -->
     <xsl:variable name="template_DynamicLayoutTemplates" select="layoutDetector:getTemplateID(@ID)" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject" />
 
     <xsl:variable name="published">
-		<xsl:value-of select="xalan:nodeset($journalXML)//date[@type='published']" />
+		<xsl:value-of select="$journal//date[@type='published']" />
 	</xsl:variable>
 	<xsl:variable name="published_from">
-		<xsl:value-of select="xalan:nodeset($journalXML)//date[@type='published_from']" />
+		<xsl:value-of select="$journal//date[@type='published_from']" />
 	</xsl:variable>
 	<xsl:variable name="published_until">
-		<xsl:value-of
-			select="xalan:nodeset($journalXML)//date[@type='published_until']" />
-	</xsl:variable>		
+		<xsl:value-of select="$journal//date[@type='published_until']" />
+	</xsl:variable>
 	<xsl:variable name="pubYear">
 		<xsl:choose>
 			<xsl:when test="$published != ''">

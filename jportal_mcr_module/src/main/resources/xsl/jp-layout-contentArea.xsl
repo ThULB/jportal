@@ -106,17 +106,17 @@
     </xsl:if>
 
     <!-- call dynamic template_*.xsl -->
-    <xsl:variable name="template">
-      <template id="{$nameOfTemplate}" mcrID="{@ID}">
+    <xsl:variable name="templateXML">
+      <template id="{$template}" mcrID="{@ID}">
       </template>
     </xsl:variable>
-    <xsl:apply-templates select="xalan:nodeset($template)" mode="template" >
+    <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template" >
       <!-- mcrObj is node mycoreobject root -->
       <xsl:with-param name="mcrObj" select="."/>
     </xsl:apply-templates>
 
   </xsl:template>
-  
+
   <xsl:template match="/" mode="template">
     <xsl:param name="mcrObj"/>
     <xsl:apply-templates mode="template" select="*">

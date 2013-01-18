@@ -46,10 +46,10 @@
 
     <!-- call dynamic template_*.xsl -->
     <xsl:if test="$searchjournalID != ''">
-      <xsl:variable name="template">
-        <template id="{$nameOfTemplate}" mcrID="{$searchjournalID}"></template>
+      <xsl:variable name="templateXML">
+        <template id="{$template}" mcrID="{$searchjournalID}"></template>
       </xsl:variable>
-      <xsl:apply-templates select="xalan:nodeset($template)/template" mode="template" />
+      <xsl:apply-templates select="xalan:nodeset($templateXML)/template" mode="template" />
     </xsl:if>
   </xsl:template>
 

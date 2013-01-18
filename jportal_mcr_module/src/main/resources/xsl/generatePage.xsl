@@ -7,6 +7,16 @@
     <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" xalan:indent-amount="2" doctype-public="-//W3C//DTD HTML 4.01//EN"
         doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
 
+    <xsl:include href="jp-layout-main.xsl" />
+    <xsl:include href="pagetitle.xsl" />
+    <xsl:include href="jp_navigation.xsl" />
+    <xsl:include href="footer.xsl" />
+    <xsl:include href="navigation.xsl" />
+
+    <!-- includes the stylesheets which are set in the mycore.properties file -->
+    <xsl:include href="xslInclude:modules" />
+    <xsl:include href="xslInclude:templates" />
+
     <!-- ================== get some wcms required global variables ===================================== -->
     <!-- location of navigation base -->
     <xsl:param name="navi" />
@@ -23,51 +33,13 @@
     <xsl:variable name="MainTitle">
         <xsl:value-of select="$MCR.NameOfProject" />
     </xsl:variable>
-    <!-- assign right browser address -->
-    <xsl:variable name="browserAddress">
-        <xsl:call-template name="jp_getBrowserAddress" />
+
+    <xsl:variable name="template">
+      <xsl:call-template name="nameOfTemplate" />
     </xsl:variable>
 
-    <!-- look for appropriate template entry and assign -> $template -->
-    <xsl:param name="template">
-        <xsl:call-template name="getTemplate">
-            <xsl:with-param name="browserAddress" select="$browserAddress" />
-            <xsl:with-param name="navigationBase" select="$navigationBase" />
-        </xsl:call-template>
-    </xsl:param>
-    <!-- set useTarget to 'yes' if you want the target attribute to appear in links
-        the wcms controls. This would break HTML 4.01 strict compatiblity but allows
-        the browser to open new windows when clicking on certain links.
-        To keep standard compliance it's default turned of, as it may annoy some
-        people, too.
-    -->
-    <xsl:variable name="wcms.useTargets" select="'yes'" />
-
-    <xsl:variable name="whiteList">
-        <xsl:call-template name="get.whiteList" />
-    </xsl:variable>
-    <xsl:variable name="readAccess">
-        <xsl:choose>
-            <xsl:when test="starts-with($RequestURL, $whiteList)">
-                <xsl:value-of select="'true'" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:copy-of select="layoutUtils:readAccess($browserAddress)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-
-    <xsl:include href="jp-layout-main.xsl" />
-    <xsl:include href="pagetitle.xsl" />
-    <xsl:include href="jp_navigation.xsl" />
-    <xsl:include href="footer.xsl" />
-    <xsl:include href="navigation.xsl" />
-    <xsl:include href="wcms_common.xsl" />
-
-    <!-- includes the stylesheets which are set in the mycore.properties file -->
-    <xsl:include href="xslInclude:components" />
-    <xsl:include href="xslInclude:modules" />
-    <xsl:include href="xslInclude:templates" />
+    <!-- TODO: remove this -->
+    <xsl:variable name="wcms.useTargets" select="'no'" />
 
     <!-- =================================================================================================== -->
     <xsl:template name="generatePage">

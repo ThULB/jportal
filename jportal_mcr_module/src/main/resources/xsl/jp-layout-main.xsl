@@ -33,10 +33,6 @@
   </xsl:variable>
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
 
-  <xsl:variable name="nameOfTemplate">
-    <xsl:call-template name="nameOfTemplate" />
-  </xsl:variable>
-
   <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
 
   <xsl:template name="renderLayout">
@@ -66,8 +62,8 @@
         <meta content="MyCoRe" lang="de" name="generator" />
         <link href="{$WebApplicationBaseURL}jp-layout-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}jp-layout-editor.css" rel="stylesheet" type="text/css" />
-        <xsl:if test="$nameOfTemplate != ''">
-          <link href="{$WebApplicationBaseURL}templates/master/{$nameOfTemplate}/CSS/{$nameOfTemplate}.css" rel="stylesheet" type="text/css" />
+        <xsl:if test="$template != ''">
+          <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
@@ -105,7 +101,7 @@
         <!-- add IE CSS to head -->
         <xsl:variable name="cssLinked">
           &lt;link href="
-          <xsl:value-of select="concat($WebApplicationBaseURL,'templates/master/',$nameOfTemplate,'/CSS/',$nameOfTemplate,'_IE.css')" />"
+          <xsl:value-of select="concat($WebApplicationBaseURL,'templates/master/',$template,'/CSS/',$template,'_IE.css')" />"
           rel="stylesheet" type="text/css"/&gt;
         </xsl:variable>
         <xsl:comment>
@@ -229,5 +225,28 @@
         </div>
       </body>
     </html>
+  </xsl:template>
+
+  <xsl:template name="HTMLPageTitle">
+    <xsl:variable name="titleFront">
+      <xsl:choose>
+        <xsl:when test="contains(/mycoreobject/@ID,'_jpjournal_') or contains(/mycoreobject/@ID,'_jpvolume_') or contains(/mycoreobject/@ID,'_jparticle_')  ">
+          <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()" />
+        </xsl:when>
+        <xsl:when test="contains(/mycoreobject/@ID,'_jpinst_') ">
+          <xsl:copy-of select="/mycoreobject/metadata/names/name/fullname/text()" />
+        </xsl:when>
+        <xsl:when test="contains(/mycoreobject/@ID,'_person_') ">
+          <xsl:copy-of select="/mycoreobject/metadata/def.heading/heading/lastName/text()" />
+          <xsl:if test="/mycoreobject/metadata/def.heading/heading/firstName/text()">
+            <xsl:copy-of select="concat(', ',/mycoreobject/metadata/def.heading/heading/firstName/text())" />
+          </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:copy-of select="$PageTitle" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:value-of select="concat($titleFront,' - ',$MainTitle)" />
   </xsl:template>
 </xsl:stylesheet>
