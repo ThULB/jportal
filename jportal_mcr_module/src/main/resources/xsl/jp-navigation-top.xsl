@@ -58,18 +58,22 @@
         <xsl:for-each select="$languages/i18n/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
-              <xsl:variable name="flag">
-                <img
-                  src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png"
-                  alt="{text()}" />
-              </xsl:variable>
-              <xsl:call-template name="FlagPrinter">
-                <xsl:with-param name="flag" select="$flag" />
-                <xsl:with-param name="lang" select="text()" />
-                <xsl:with-param name="url" select="$RequestURL" />
-                <xsl:with-param name="alternative" select="concat($RequestURL, '?lang=', text())" />
-              </xsl:call-template>
-            </li>  
+              <a class="changeLang">
+                <xsl:attribute name="href">
+                  <xsl:variable name="newurl">
+                    <xsl:call-template name="UrlSetParam">
+                      <xsl:with-param name="url" select="$RequestURL" />
+                      <xsl:with-param name="par" select="'lang'" />
+                      <xsl:with-param name="value" select="text()" />
+                    </xsl:call-template>
+                  </xsl:variable>
+                  <xsl:call-template name="UrlAddSession">
+                    <xsl:with-param name="url" select="$newurl" />
+                   </xsl:call-template>
+                </xsl:attribute>
+                <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{text()}.png" alt="{text()}" />
+              </a>
+            </li>
           </xsl:if>
         </xsl:for-each>
       </ul>

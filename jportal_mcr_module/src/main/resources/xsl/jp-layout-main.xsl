@@ -13,6 +13,8 @@
   <xsl:include href="jp-layout-footer.xsl" />
   <xsl:include href="jp-navigation-top.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
+  <xsl:include href="xslInclude:modules" />
+  <xsl:include href="xslInclude:templates" />
 
   <xsl:param name="object" />
   <xsl:param name="layout" />
@@ -34,6 +36,21 @@
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
 
   <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
+
+  <!-- base image path -->
+  <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
+  <!-- main title configured in mycore.properties -->
+  <xsl:param name="MCR.NameOfProject" />
+  <xsl:variable name="MainTitle">
+    <xsl:value-of select="$MCR.NameOfProject" />
+  </xsl:variable>
+
+  <xsl:variable name="template">
+    <xsl:call-template name="nameOfTemplate" />
+  </xsl:variable>
+
+  <!-- TODO: remove this -->
+  <xsl:variable name="wcms.useTargets" select="'no'" />
 
   <xsl:template name="renderLayout">
     <xsl:if test="/mycoreobject/@ID">
