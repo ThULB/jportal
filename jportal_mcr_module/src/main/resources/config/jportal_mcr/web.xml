@@ -6,10 +6,6 @@
     <servlet-name>MCRDuplicateFinderServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.MCRDuplicateFinderServlet</servlet-class>
 </servlet>
-<servlet id="MCRJPortalCreateContext">
-    <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCreateJournalContextServlet</servlet-class>
-</servlet>
 <servlet id="DerivateLinkServlet">
     <servlet-name>DerivateLinkServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.DerivateLinkServlet</servlet-class>
@@ -52,10 +48,6 @@
 <servlet-mapping>
     <servlet-name>MCRDuplicateFinderServlet</servlet-name>
     <url-pattern>/servlets/MCRDuplicateFinderServlet/*</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>MCRJPortalCreateJournalContextServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalCreateJournalContextServlet/*</url-pattern>
 </servlet-mapping>
 <servlet-mapping>
     <servlet-name>DerivateLinkServlet</servlet-name>

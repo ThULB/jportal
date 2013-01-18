@@ -40,7 +40,6 @@ import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.MCRJPortalJournalContextForWebpages;
 import org.mycore.frontend.util.DerivateLinkUtil;
 import org.mycore.iview2.frontend.MCRIView2Commands;
 import org.xml.sax.SAXParseException;
@@ -66,9 +65,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
 //      addCommand(new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
 //                "repair-cp [sourceObjectID] to [destinationObjectID]."));
-
-        addCommand(new MCRCommand("update context of journal {0}", "org.mycore.frontend.cli.MCRObjectTools.updateJournalContext String",
-                "update context of journal [journalID]."));
 
         addCommand(new MCRCommand("move file {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.moveFile String String",
                 "move file abs. path to abs. path"));
@@ -116,19 +112,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
         for (AtomLink participantLink : contentEntries.getLink()) {
             MCRObject mcrObject = new MCRObject(new URI(participantLink.getHref()));
             MCRMetadataManager.update(mcrObject);
-        }
-    }
-
-    public static void updateJournalContext(String journalID) {
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
-
-        String objType = mcrObj.getId().getTypeId();
-
-        if (objType.equals("jpjournal")) {
-            MCRJPortalJournalContextForWebpages.updateContext(mcrObj);
-            LOGGER.info("Updated context for \"" + journalID + "\".");
-        } else {
-            LOGGER.info(journalID + " in no journal!");
         }
     }
 
@@ -265,11 +248,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
                 dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
             }
         }
-
-        Element hiddenWebContextsElem = null;
-        String hiddenWebContextsPath = "/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext";
-        hiddenWebContextsElem = getElementWithXpath(mcrOrigObjXMLDoc, hiddenWebContextsPath);
-
         MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
         if(maintitleElem != null) {
             maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
@@ -279,19 +257,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
         mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
         MCRXMLMetadataManager.instance().create(newMcrID, mcrOrigObjXMLDoc, new Date());
-
         if (newMcrID.getTypeId().equals("jpjournal")) {
-            // creating website context
-            String precHref = "/content/main/journalList/dummy.xml";
-            if (hiddenWebContextsElem != null)
-                precHref = hiddenWebContextsElem.getText();
-
-            String[] splitPrecHref = precHref.split("/");
-            String shortCut = splitPrecHref[splitPrecHref.length - 1].replaceAll(".xml", "") + "_" + newMcrID.getNumberAsInteger();
-            MCRJPortalJournalContextForWebpages webContext = new MCRJPortalJournalContextForWebpages(newMcrID.toString(), precHref,
-                    layoutTemp, shortCut);
-            webContext.create();
-
             // creating ACL for copy
             // retrieve ACL from source Object
             Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrIdStr);
@@ -305,18 +271,15 @@ public class MCRObjectTools extends MCRAbstractCommands {
                         + newMcrID.toString());
             }
         }
-
     }
 
     private static Element getElementWithXpath(Document xmlDoc, String xpathExpression) {
-
         try {
             XPath xpath = XPath.newInstance(xpathExpression);
             return (Element) xpath.selectSingleNode(xmlDoc);
         } catch (JDOMException e) {
             LOGGER.error("while select node", e);
         }
-
         return null;
     }
 
@@ -328,7 +291,6 @@ public class MCRObjectTools extends MCRAbstractCommands {
         if(!"".equals(filename)) {
             return ((MCRDirectory) root).getChildByPath(filename);
         }
-        
         return root;
     }
 
