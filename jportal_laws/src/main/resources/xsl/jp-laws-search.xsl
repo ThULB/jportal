@@ -76,38 +76,11 @@
   </xsl:template>
 
   <xsl:template name="jp.laws.search.js">
+    <script type="text/javascript" src="../templates/master/template_calendar/JS/jp-laws.js" />
     <script type="text/javascript">
       $(document).ready(function() {
-        setLawsLogo();
+        setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
       });
-
-      function buildQuery() {
-        var searchTerm = $("#searchTerm").val();
-        var territory = $("#territory").val();
-        var from = $("#published_from").val();
-        var until = $("#published_until").val();
-
-        // input conditions
-        var query = searchTerm;
-        if(territory.length &gt; 0) {
-          query += " +volContentClassi1:" + territory;
-        }
-        if(from.length &gt; 0 &amp; until.length &gt; 0) {
-          query += " +date.published:[" + from + " TO " + until + "]";
-        } else if(from.length &gt; 0) {
-          query += " +date.published:[" + from + " TO *]";
-        } else if(until.length &gt; 0) {
-          query += " +date.published:[* TO " + until + "]";
-        }
-        query += " +contentClassi2:Gesetzesblaetter";
-        query += " +objectType:jpvolume";
-        $("#qt").attr("value", query);
-      }
-
-      function setLawsLogo() {
-        var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
-        $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/template_thLegislativExekutiv/IMAGES/logo.png)');
-      }
     </script>
   </xsl:template>
 

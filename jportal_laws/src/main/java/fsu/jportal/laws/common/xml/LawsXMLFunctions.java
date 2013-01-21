@@ -82,7 +82,6 @@ public abstract class LawsXMLFunctions {
         return null;
     }
 
-
     public static String getImageByLaw(String numberOfLaw, String derivateId) {
         // check null and empty
         if(numberOfLaw == null || numberOfLaw.equals("")) {
@@ -111,8 +110,8 @@ public abstract class LawsXMLFunctions {
     }
 
     /**
-     * Internal method to get a image by number. Number is always the first
-     * part of the image name e.g. <b>004</b>_HZA_1821_T_001.tif.
+     * Internal method to get a image by number. Number is always the fourth
+     * part of the image name e.g. 009_HZA_1821_<b>GSN03</b>_003.tif.
      * 
      * @param parent parent directory
      * @param number number to find

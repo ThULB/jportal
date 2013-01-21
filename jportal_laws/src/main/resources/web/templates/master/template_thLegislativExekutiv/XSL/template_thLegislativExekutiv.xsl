@@ -11,13 +11,12 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
-  <!--     <xsl:call-template name="jp.laws.addAdvSearch" />  -->
-  	<xsl:call-template name="jp.laws.title" /> 
+    <xsl:call-template name="jp.laws.js" /> 
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
+    <xsl:call-template name="jp.laws.js" /> 
     <!-- <xsl:call-template name="jp.laws.addAdvSearch" />  -->
-    <xsl:call-template name="jp.laws.title" /> 
     <xsl:variable name="register" select="laws:getRegister(@ID)" />
     <xsl:if test="$register">
       <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
@@ -45,20 +44,19 @@
   <xsl:template name="jp.laws.addAdvSearch">
     <script type="text/javascript">
       $(document).ready(function() {
-        var href = '<xsl:value-of select="concat($WebApplicationBaseURL, 'jp-search.xml?XSL.mode=laws.form')" />';
-        $('#searchForm').append('&lt;a href="' + href +'"&gt;Expertensuche in Gesetzesblättern&lt;a/&gt;');
+        setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
       });
     </script>
   </xsl:template>
 
   <!-- ================================================================================= -->
-  <xsl:template name="jp.laws.title">
+  <xsl:template name="jp.laws.js">
+    <script type="text/javascript" src="../templates/master/template_thLegislativExekutiv/JS/jp-laws.js" />
 	<script type="text/javascript">
       $(document).ready(function() {
-        var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
-        $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/template_thLegislativExekutiv/IMAGES/logo.png)');
-        var name = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
-        $('#logo').prepend('<div id="logoTitle">' + name  + '</div>');
+        setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
+        setMaintitle('<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />');
+        linkLawsToIview();
       });
     </script>
   </xsl:template>
@@ -152,8 +150,9 @@
     <td class="content">
       <xsl:choose>
         <xsl:when test="$image">
-          <xsl:variable name="href" select="concat($WebApplicationBaseURL,'receive/',$objId,'?derivate=', $derivateId, '&amp;jumpback=true&amp;maximized=true&amp;page=',$image)" />
-          <a href="{$href}"><xsl:value-of select="inhalt" /></a>    
+          <a href="javascript:void(0)" data-jp-laws-derivateId="{$derivateId}" data-jp-laws-image="{$image}">
+            <xsl:value-of select="inhalt" />
+          </a>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="inhalt" />
