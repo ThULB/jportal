@@ -33,7 +33,7 @@ function jpInitIview2(settings) {
                     || [ , "" ]);
             return matchResult == null ? null : {
                 ID : matchResult[1],
-                file : matchResult[2]
+                file : decodeURIComponent(matchResult[2])
             };
         }
     }
