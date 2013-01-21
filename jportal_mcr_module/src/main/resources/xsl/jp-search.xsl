@@ -14,8 +14,6 @@
   <xsl:include href="jp-controller-subselect.xsl" />
   <xsl:include href="jp-controller-hidden.xsl" />
 
-  <xsl:param name="mode" select="'default'"/>
-
   <xsl:template match="jpsearch">
     <xsl:choose>
       <xsl:when test="$mode = 'default'">

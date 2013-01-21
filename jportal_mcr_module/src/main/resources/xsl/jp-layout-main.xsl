@@ -28,7 +28,7 @@
   <xsl:param name="subselect.webpage" select="''" />
 
   <!-- Search modes -->
-  <xsl:param name="mode" select="''" />
+  <xsl:param name="mode" select="'default'" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
@@ -157,7 +157,7 @@
           </xsl:variable>   
           <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar"/>
         </xsl:variable>
-        
+
         <xsl:if test="$showSearchBar">
           <xsl:variable name="searchBar" select="xalan:nodeset($searchBarMode)"/>
           <xsl:choose>

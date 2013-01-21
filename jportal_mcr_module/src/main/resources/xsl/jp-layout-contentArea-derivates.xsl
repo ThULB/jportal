@@ -7,34 +7,43 @@
   <xsl:param name="iview2.debug" select="'false'" />
   <xsl:param name="CurrentLang" select="'de'"/>
 
+  <xsl:template name="derivatePreview">
+    <xsl:param name="mcrObj" />
+    <xsl:variable name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+    <xsl:choose>
+      <xsl:when test="$mcrObj/metadata/derivateLinks/derivateLink[1]">
+        <xsl:call-template name="derivateDisplay">
+          <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
+          <xsl:with-param name="journalID" select="$journalID" />
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="$mcrObj/structure/derobjects/derobject">
+        <xsl:call-template name="derivateDisplay">
+          <xsl:with-param name="nodes" select="$mcrObj/structure/derobjects/derobject[1]" />
+          <xsl:with-param name="journalID" select="$journalID" />
+          <xsl:with-param name="editable" select="'false'" />
+        </xsl:call-template>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template name="derivateDisplay">
     <xsl:param name="nodes" />
     <xsl:param name="journalID" />
-     <xsl:if test="acl:checkPermission($journalID,'read_derivate')">
+    <xsl:param name="editable" select="'true'" />
+    <xsl:if test="acl:checkPermission($journalID,'read_derivate')">
       <xsl:if test="count($nodes) &gt; 0">
-        <!-- <ul class="jp-layout-derivateLinks jp-layout-derivateList"> </ul> -->
         <div class="jp-layout-derivateList">
-          <xsl:apply-templates mode="derivateDisplay" select="$nodes" />
+          <xsl:apply-templates mode="derivateDisplay" select="$nodes">
+            <xsl:with-param name="editable" select="$editable" />
+          </xsl:apply-templates>
         </div>
       </xsl:if>
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="tocDerivates">
-    <xsl:param name="derivates" />
-
-  </xsl:template>
-  <xsl:template mode="derivateDisplay" match="mcr:field[@name='linkDeriv']">
-    <xsl:variable name="derivID" select="substring-before(., '/')" />
-    <xsl:if test="layoutTools:getDerivateDisplay($derivID) = 'true'">
-      <xsl:call-template name="iview2Entry">
-        <xsl:with-param name="derivID" select="$derivID" />
-        <xsl:with-param name="file" select="concat('/',substring-after(., '/'))" />
-      </xsl:call-template>
-    </xsl:if>
-  </xsl:template>
-
   <xsl:template mode="derivateDisplay" match="derivateLink">
+    <xsl:param name="editable" select="'true'" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
     <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'delete_derlink')" />
@@ -47,7 +56,7 @@
             <xsl:with-param name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
           </xsl:call-template>
         </div>
-        <xsl:if test="$deleteLink">
+        <xsl:if test="$editable = 'true' and $deleteLink">
           <ul class="edit">
             <li>
               <a href="{$WebApplicationBaseURL}servlets/DerivateLinkServlet?mode=removeLink&amp;from={$objID}&amp;to={@xlink:href}">
@@ -61,6 +70,7 @@
   </xsl:template>
 
   <xsl:template mode="derivateDisplay" match="derobject">
+    <xsl:param name="editable" select="'true'" />
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="@xlink:href" />
@@ -84,7 +94,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+      <xsl:if test="$editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
         <ul class="edit">
           <li>
             <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a>
