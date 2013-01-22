@@ -35,6 +35,10 @@
       $(document).ready(function() {
         var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
         var template = '<xsl:value-of select="$template_DynamicLayoutTemplates" />';
+        if(template == '') {
+          console.error("Unable to find template. Maybe there is no valid published or published_from metadata field set.");
+          return;
+        }
         $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/' + template + '/IMAGES/logo.png)');
         var maintitle = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
         $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');

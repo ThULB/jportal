@@ -905,10 +905,17 @@ body {
 }
 
 #logo {
-	background: url("templates/master/template_master2/IMAGES/logo.png")
-		repeat-x scroll 0 0 transparent;
+	background-image: url("templates/master/template_master2/IMAGES/logo.png");
+	background-position: left top;
+	background-repeat: no-repeat;
 	clear: both;
 	height: 115px;
+}
+
+#logo .logoTitle {
+    color: white;
+    margin: 0 30px;
+    padding-top: 44px;
 }
 
 #searchBar {

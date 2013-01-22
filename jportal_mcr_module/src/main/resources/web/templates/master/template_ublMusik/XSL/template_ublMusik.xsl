@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n layoutTools" xmlns:xalan="http://xml.apache.org/xalan">
 
-  <xsl:template match="template[@id='template_thueringen']" mode="template">
+  <xsl:template match="template[@id='template_ublMusik']" mode="template">
     <xsl:param name="mcrObj"/>
     <script type="text/javascript">
       $(document).ready(function() {
@@ -14,4 +14,5 @@
       });
     </script>
   </xsl:template>
+
 </xsl:stylesheet>

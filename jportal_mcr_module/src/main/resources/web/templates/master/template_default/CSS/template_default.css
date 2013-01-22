@@ -1,12 +1,5 @@
 @CHARSET "UTF-8";
 #logo {
 	background: #a8bdcb;
-	height: 115px;
 	width: 100%;
-}
-
-#logo .logoTitle {
-	color: white;
-	margin: 0 30px;
-	padding-top: 44px;
 }
