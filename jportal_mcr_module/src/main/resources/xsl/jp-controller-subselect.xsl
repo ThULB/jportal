@@ -58,7 +58,7 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template mode="renderView" match="@getData[.='subselect.search.form.placeholder']">
+  <xsl:template mode="renderView" match="@getData[.='subselect.search.form.qt']">
     <xsl:attribute name="placeholder">
       <xsl:choose>
         <xsl:when test="$subselect.type = 'person'">
@@ -70,6 +70,19 @@
       </xsl:choose>
       <xsl:value-of select="' eingeben'" />
     </xsl:attribute>
+    <xsl:if test="$qt != '' and $qt != '*'">
+      <xsl:attribute name="value">
+        <xsl:value-of select="$qt" />
+      </xsl:attribute>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@getData[.='subselect.search.form.sort']">
+    <xsl:if test="../@value = $sort">
+      <xsl:attribute name="selected">
+        <xsl:value-of select="'selected'" />
+      </xsl:attribute>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="renderView" match="h2[.='{subselect.type.label}']">
@@ -113,6 +126,9 @@
         <param name="rows" value="{$rows}" />
         <param name="start" value="{$start}" />
         <param name="defType" value="edismax" />
+        <xsl:if test="$sort != 'relevance'">
+          <param name="sort" value="heading asc" />
+        </xsl:if>
       </query>
     </xsl:variable>
     <xsl:variable name="query">

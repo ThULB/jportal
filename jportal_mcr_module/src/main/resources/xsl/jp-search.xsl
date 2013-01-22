@@ -2,6 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan">
 
   <xsl:param name="qt" select="'*'" />
+  <xsl:param name="sort" />
   <xsl:param name="hiddenQt" select="''" />
   <xsl:param name="searchjournalID" select="''" />
   <xsl:param name="start" select="'0'" />
