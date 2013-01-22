@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
-  exclude-result-prefixes="mcrxml i18n acl jpxml">
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" exclude-result-prefixes="mcrxml i18n acl">
 
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
@@ -46,8 +46,6 @@
   </xsl:template>
 
   <xsl:template name="jp.navigation.top.language">
-    <xsl:variable name="languages" select="jpxml:getLanguages()" />
-
     <span id="languageMenu" class="languageMenu">
       <a id="languageSelect">
         <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" />
@@ -55,7 +53,7 @@
       </a>
   
       <ul id="languageList" class="languageList_hidden">
-        <xsl:for-each select="$languages/languages/lang">
+        <xsl:for-each select="$languages/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
               <a class="changeLang">

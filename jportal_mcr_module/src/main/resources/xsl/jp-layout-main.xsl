@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
-  exclude-result-prefixes="xsi mcr acl xalan layoutUtils websiteWriteProtection">
+  xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
+  exclude-result-prefixes="xsi mcr acl xalan layoutUtils websiteWriteProtection jpxml">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
@@ -20,31 +21,24 @@
   <xsl:param name="layout" />
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
-
+  <xsl:param name="MCR.NameOfProject" />
   <!-- For Subselect -->
   <xsl:param name="subselect.type" select="''" />
   <xsl:param name="subselect.session" select="''" />
   <xsl:param name="subselect.varpath" select="''" />
   <xsl:param name="subselect.webpage" select="''" />
-
   <!-- Search modes -->
   <xsl:param name="mode" select="'default'" />
+
+  <xsl:variable name="languages" select="jpxml:getLanguages()/languages" />
+  <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
+  <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
+  <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
+  <xsl:variable name="MainTitle" select="$MCR.NameOfProject" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
-  <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
-
-  <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
-
-  <!-- base image path -->
-  <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
-  <!-- main title configured in mycore.properties -->
-  <xsl:param name="MCR.NameOfProject" />
-  <xsl:variable name="MainTitle">
-    <xsl:value-of select="$MCR.NameOfProject" />
-  </xsl:variable>
-
   <xsl:variable name="template">
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
