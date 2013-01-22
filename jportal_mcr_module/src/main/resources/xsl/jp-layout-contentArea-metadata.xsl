@@ -125,11 +125,14 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaClassification']">
-    <xsl:call-template name="printClass">
-      <xsl:with-param name="nodes" select="." />
-      <xsl:with-param name="host" select="'local'" />
-      <xsl:with-param name="next" select="', '" />
-    </xsl:call-template>
+    <xsl:variable name="classlink">
+		<xsl:value-of select="concat('classification:metadata:0:children:',@classid,':',@categid)" />
+    </xsl:variable>
+    
+    <xsl:call-template name="printJPClassification">
+     	<xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
+   	</xsl:call-template>
+   	
     <xsl:if test="position() != last()">
       <xsl:value-of select="'; '" />
     </xsl:if>

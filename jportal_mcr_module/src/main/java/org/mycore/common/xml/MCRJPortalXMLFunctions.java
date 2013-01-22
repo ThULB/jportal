@@ -7,14 +7,32 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user.MCRUserMgr;
+import org.mycore.common.MCRConfiguration;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class MCRJPortalXMLFunctions {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalXMLFunctions.class);
+    private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
+        @Override
+        protected DocumentBuilder initialValue() {
+            try {
+                return DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            } catch (ParserConfigurationException pce) {
+                LOGGER.error("Unable to create document builder", pce);
+                return null;
+            }
+        }
+    };
 
     public static String formatISODate(String isoDate, String iso639Language) throws ParseException {
         if (LOGGER.isDebugEnabled()) {
@@ -56,6 +74,21 @@ public class MCRJPortalXMLFunctions {
             }
         }
         return solrQuery == null ? "*" : URLEncoder.encode(solrQuery, "UTF-8");
+    }
+    
+    public static Document getLanguages(){
+        String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
+        String[] languagesArray = languagesString.split(",");
+        LOGGER.debug(languagesArray);
+        Document document = BUILDER_LOCAL.get().newDocument();
+        Element languages = document.createElement("languages");
+        document.appendChild(languages);
+        for (String lang : languagesArray) {
+            Element langElement = document.createElement("lang");
+            langElement.setTextContent(lang);
+            languages.appendChild(langElement);
+        }
+        return document;
     }
 
     private static class SolrFieldQuery {
