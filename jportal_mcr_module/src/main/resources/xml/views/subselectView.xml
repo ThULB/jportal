@@ -5,8 +5,8 @@
       <form id="searchForm" action="/jp-search.xml">
         <input id="inputField" name="XSL.qt" getData="subselect.search.form.qt" />
         <select name="XSL.sort">
-          <option value="alphabetical" getData="subselect.search.form.sort">Alphabetisch</option>
           <option value="relevance" getData="subselect.search.form.sort">Relevanz</option>
+          <option value="alphabetical" getData="subselect.search.form.sort">Alphabetisch</option>
         </select>
         <input id="submitButton" type="submit" value="Suche" />
         <input type="hidden" name="XSL.subselect.type" value="{subselect.type}" />

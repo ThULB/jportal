@@ -126,7 +126,7 @@
         <param name="rows" value="{$rows}" />
         <param name="start" value="{$start}" />
         <param name="defType" value="edismax" />
-        <xsl:if test="$sort != 'relevance'">
+        <xsl:if test="$sort = 'alphabetical'">
           <param name="sort" value="heading asc" />
         </xsl:if>
       </query>
