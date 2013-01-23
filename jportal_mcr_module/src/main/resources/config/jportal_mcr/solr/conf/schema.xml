@@ -61,7 +61,6 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="100" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory" />
@@ -69,7 +68,6 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="100" />
       </analyzer>
     </fieldType>
 
