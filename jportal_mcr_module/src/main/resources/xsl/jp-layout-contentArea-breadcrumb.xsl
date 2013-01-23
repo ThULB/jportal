@@ -13,8 +13,8 @@
           <xsl:variable name="azList">
             <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
             <xsl:choose>
-              <xsl:when test="$listType = 'calender'">
-                <xsl:value-of select="'calender'" />
+              <xsl:when test="$listType = 'calendar'">
+                <xsl:value-of select="'calendar'" />
               </xsl:when>
               <xsl:otherwise>
                 <xsl:value-of select="'journal'" />
