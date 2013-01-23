@@ -9,7 +9,12 @@
     <div id="jp-breadcrumb-container">
       <menu class="jp-layout-breadcrumb">
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
-          <xsl:variable name="hash" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
+          <xsl:variable name="hash">
+            <xsl:variable name="char" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
+            <xsl:if test="contains(concat($lcletters, $ucletters), $char)">
+              <xsl:value-of select="$char" />
+            </xsl:if>
+          </xsl:variable>
           <xsl:variable name="azList">
             <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
             <xsl:choose>
