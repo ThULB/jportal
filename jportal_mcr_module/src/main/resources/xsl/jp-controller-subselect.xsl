@@ -120,7 +120,8 @@
   <xsl:template match="jpsearch" mode="subselect.result">
     <xsl:variable name="queryXML">
       <query>
-        <queryTerm value="{$qt}" />
+        <localParams value="{{!q.op=AND}}" />
+        <queryTerm value="+({$qt})" />
         <queryTermField name="+objectType" value="{$subselect.type}" />
         <param name="qf" value="heading^10 dates^10 alternatives^5 heading_de^5 alternatives_de^3 allMeta^1" />
         <param name="rows" value="{$rows}" />

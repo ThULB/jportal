@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder">
   <!-- commonly used template for searching -->
-  
+
   <xsl:template mode="createSolrQuery" match="query">
-    <xsl:value-of select="concat('solr:q=', encoder:encode(concat('+(', queryTerm/@value, ')'), 'UTF-8'))" />
+    <xsl:apply-templates mode="createQueryTerm" select="queryTerm" />
     <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />
     <xsl:apply-templates mode="createParam" select="param" >
       <xsl:with-param name="sign" select="'&amp;'"/>
     </xsl:apply-templates>
   </xsl:template>
-  
+
+  <xsl:template mode="createQueryTerm" match="queryTerm">
+    <xsl:value-of select="'solr:q='" />
+    <xsl:apply-templates mode="createLocalParams" select="../localParams" />
+    <xsl:value-of select="encoder:encode(@value, 'UTF-8')" />
+  </xsl:template>
+
+  <xsl:template mode="createLocalParams" match="localParams">
+    <xsl:if test="@value != ''">
+      <xsl:value-of select="encoder:encode(@value, 'UTF-8')" />
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template mode="createURL" match="url">
     <xsl:value-of select="base" />
     <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />

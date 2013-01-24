@@ -5,7 +5,7 @@
   <xsl:template match="jpsearch" mode="default">
     <xsl:variable name="queryXML">
       <query>
-        <queryTerm value="{$qt}" />
+        <queryTerm value="+({$qt})" />
         <queryTermField name="+journalID" value="{$searchjournalID}" />
         <param name="qf" value="heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 allMeta^1" />
         <param name="rows" value="{$rows}" />
