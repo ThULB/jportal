@@ -49,7 +49,7 @@ public class SolrDocGenerationTest extends XSLTransformTest{
         
 //        xmlOutput(jdomResult);
         
-        assertSolrFiled(jdomResult, "heading", 1);
+        assertSolrFiled(jdomResult, "heading_base", 1);
     }
     
     @Test
