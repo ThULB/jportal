@@ -110,7 +110,50 @@
 
     <field name="payload" type="payloads" />
 
-    <!-- jportal search -->
+    <!-- copied fields -->
+    <field name="derCount" type="long" />
+    <copyField source="derivate.count" dest="derCount" />
+
+    <field name="servdate.type.createdate" type="date" />
+    <copyField source="servdate.type.createdate" dest="created" />
+
+    <field name="servdate.type.modifydate" type="date" />
+    <copyField source="servdate.type.modifydate" dest="modified" />
+
+
+    <!-- ******************************************** -->
+    <!-- * METADATA -->
+    <!-- ******************************************** -->
+
+    <!-- journal, volume, article -->
+    <field name="journalID" type="string" />
+    <field name="journalTitle" type="string" />
+    <field name="maintitle" type="string" />
+    <field name="rubric" type="string" indexed="false" multiValued="true" />
+    <field name="rubricText" type="text_de" multiValued="true" />
+
+    <field name="date.published" type="string" />
+    <field name="date.published_from" type="string" />
+    <field name="date.published_until" type="string" />
+    <field name="date.published_Original" type="string" indexed="false" />
+    <field name="date.published_Original_From" type="string" indexed="false" />
+    <field name="date.published_Original_Till" type="string" indexed="false" />
+
+    <field name="publisher" type="string" indexed="false" multiValued="true"/>
+    <field name="participant" type="string" indexed="false" />
+    <field name="participantID" type="string" indexed="false" />
+
+    <!-- person & jpinst -->
+    <field name="heading_base" type="string" />
+    <field name="dateOfBirth" type="string" />
+    <field name="dateOfDeath" type="string" />
+
+
+    <!-- ******************************************** -->
+    <!-- * SEARCH -->
+    <!-- ******************************************** -->
+
+    <!-- default search fields -->
     <field name="allMeta" type="text_de"  multiValued="true" stored="false" />
     <field name="titles" type="text" multiValued="true" stored="false" />
     <field name="heading" type="text" />
@@ -124,38 +167,18 @@
     <field name="participants_de" type="text_de" multiValued="true" stored="false" />
 
     <copyField source="titles" dest="titles_de" />
-    <copyField source="heading" dest="heading_de" />
+    <copyField source="heading_base" dest="heading" />
+    <copyField source="heading_base" dest="heading_de" />
     <copyField source="alternatives" dest="alternatives_de" />
     <copyField source="participants" dest="participants_de" />
 
-    <!-- names for advanced search -->
+    <!-- advanced search fields -->
     <field name="names_de" type="text_de" multiValued="true" stored="false" />
-    <copyField source="heading" dest="names_de" />
+    <copyField source="heading_base" dest="names_de" />
     <copyField source="alternatives" dest="names_de" />
     <copyField source="participants" dest="names_de" />
 
-    <!-- jportal core -->
-    <field name="journalID" type="string" />
-    <field name="journalTitle" type="string" />
-
-    <field name="maintitle" type="string" />
-    <field name="maintitle_lowercase" type="lowercase" stored="false" />
-
-    <field name="date.published" type="string" />
-    <field name="date.published_from" type="string" />
-    <field name="date.published_until" type="string" />
-    <field name="date.published_Original" type="string" indexed="false" />
-    <field name="date.published_Original_From" type="string" indexed="false" />
-    <field name="date.published_Original_Till" type="string" indexed="false" />
-
-    <field name="link" type="string" multiValued="true" stored="false" />
-
-    <!-- id#text -->
-    <field name="publisher" type="string" indexed="false" multiValued="true"/>
-
-    <field name="participant" type="string" indexed="false" />
-    <field name="participantID" type="string" indexed="false" />
-
+    <!-- special search fields -->
     <field name="contentClassi1" type="string" multiValued="true" />
     <field name="contentClassi2" type="string" multiValued="true" />
     <field name="contentClassi3" type="string" multiValued="true" />
@@ -166,29 +189,20 @@
     <field name="volContentClassi1" type="string" multiValued="true" />
 
     <field name="keywords" type="text_de" multiValued="true" stored="false" />
+    <field name="link" type="string" multiValued="true" stored="false" />
 
-    <!-- volume & article -->
+
+    <!-- ******************************************** -->
+    <!-- * SORT -->
+    <!-- ******************************************** -->
+
+    <field name="maintitle_lowercase" type="lowercase" stored="false" />
+    <field name="heading_lowercase" type="lowercase" stored="false" />
     <field name="position" type="string" />
     <field name="size" type="string" />
-    <field name="rubric" type="string" indexed="false" multiValued="true" />
-    <field name="rubricText" type="text_de" multiValued="true" />
 
-    <!-- person -->
-    <field name="dateOfBirth" type="string" />
-    <field name="dateOfDeath" type="string" />
-
-    <!-- JPortal copy fields -->
     <copyField source="maintitle" dest="maintitle_lowercase" />
-
-    <!-- copied fields -->
-    <field name="derCount" type="long" />
-    <copyField source="derivate.count" dest="derCount" />
-
-    <field name="servdate.type.createdate" type="date" />
-    <copyField source="servdate.type.createdate" dest="created" />
-
-    <field name="servdate.type.modifydate" type="date" />
-    <copyField source="servdate.type.modifydate" dest="modified" />
+    <copyField source="heading_base" dest="heading_lowercase" />
 
   </fields>
 

@@ -127,23 +127,13 @@
         <param name="start" value="{$start}" />
         <param name="defType" value="edismax" />
         <xsl:if test="$sort = 'alphabetical'">
-          <param name="sort" value="heading asc" />
+          <param name="sort" value="heading_lowercase asc" />
         </xsl:if>
       </query>
     </xsl:variable>
     <xsl:variable name="query">
       <xsl:apply-templates mode="createSolrQuery" select="xalan:nodeset($queryXML)/query" />
     </xsl:variable>
-
-    <xsl:variable name="searchResults">
-      <solrSearch>
-        <xsl:copy-of select="$subselectXML" />
-        <xsl:copy-of select="$queryXML" />
-        <xsl:copy-of select="document($query)" />
-      </solrSearch>
-    </xsl:variable>
-
-    <!-- <xsl:apply-templates mode="searchResults.subselect" select="document($query)/response/result/doc" /> -->
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='resultList']/*">
       <xsl:with-param name="data" select="document($query)/response" />
     </xsl:apply-templates>

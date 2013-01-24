@@ -121,7 +121,7 @@
 
   <!-- jpinst heading -->
   <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
-    <field name="heading">
+    <field name="heading_base">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
@@ -172,7 +172,7 @@
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="heading">
-    <field name="heading">
+    <field name="heading_base">
       <xsl:apply-templates mode="jportal.person.heading" select="*" />     
     </field>
   </xsl:template>
@@ -208,4 +208,3 @@
     </field>
   </xsl:template>
 </xsl:stylesheet>
-
