@@ -155,7 +155,7 @@
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />
     <xsl:variable name="fileType">
       <xsl:call-template name="uppercase">
-        <xsl:with-param name="string" select="substring-after($maindoc, '.')" />
+        <xsl:with-param name="string" select="mcrxml:regexp($maindoc, '.*\.', '')" />
       </xsl:call-template>
     </xsl:variable>
     <a href="{$derivbase}{$encodedMaindoc}">
