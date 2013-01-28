@@ -21,7 +21,6 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -36,6 +35,8 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetaElement;
+import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -63,38 +64,40 @@ public class MCRObjectTools extends MCRAbstractCommands {
         addCommand(new MCRCommand("export import object {0}", "org.mycore.frontend.cli.MCRObjectTools.exportImport String",
                 "export import [objectID]."));
 
-//      addCommand(new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
-//                "repair-cp [sourceObjectID] to [destinationObjectID]."));
+        //      addCommand(new MCRCommand("repair-cp {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.repairCopy String String",
+        //                "repair-cp [sourceObjectID] to [destinationObjectID]."));
 
         addCommand(new MCRCommand("move file {0} to {1}", "org.mycore.frontend.cli.MCRObjectTools.moveFile String String",
                 "move file abs. path to abs. path"));
 
-//      addCommand(new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
-//                "converts a volume to an article"));
+        //      addCommand(new MCRCommand("convert volumes {0} to articles", "org.mycore.frontend.cli.MCRObjectTools.convertVolumesToArticles String",
+        //                "converts a volume to an article"));
 
         addCommand(new MCRCommand("vd17Import {0}", "org.mycore.frontend.cli.MCRObjectTools.vd17Import String", "vd17Import url"));
 
         addCommand(new MCRCommand("add derivates {0} to object {1}",
                 "org.mycore.frontend.cli.MCRObjectTools.addDerivatesToObject String String", "adds one ore more derivates to an object "));
-        
-        addCommand(new MCRCommand("merge derivates {0}",
-                "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String", "merge several derivates"));
 
-        addCommand(new MCRCommand("collapse {0}",
-                "org.mycore.frontend.cli.MCRObjectTools.collapse String",
+        addCommand(new MCRCommand("merge derivates {0}", "org.mycore.frontend.cli.MCRObjectTools.mergeDerivates String",
+                "merge several derivates"));
+
+        addCommand(new MCRCommand("collapse {0}", "org.mycore.frontend.cli.MCRObjectTools.collapse String",
                 "merges all descendants derivates to the given object (a new derivate is created)"));
 
-        addCommand(new MCRCommand("layer collapse {0} {1}",
-                "org.mycore.frontend.cli.MCRObjectTools.layerCollapse String String",
+        addCommand(new MCRCommand("layer collapse {0} {1}", "org.mycore.frontend.cli.MCRObjectTools.layerCollapse String String",
                 "merges all descendants derivates of the given object to the given layer. @see collapse command"));
 
         addCommand(new MCRCommand("set derivate link to {0} with path {1}",
-                "org.mycore.frontend.cli.MCRObjectTools.setDerivateLink String String",
-                "creates a new derivate link"));
-        
-        addCommand(new MCRCommand("select from file {0}",
-                "org.mycore.frontend.cli.MCRObjectTools.selectFromFile String",
+                "org.mycore.frontend.cli.MCRObjectTools.setDerivateLink String String", "creates a new derivate link"));
+
+        addCommand(new MCRCommand("select from file {0}", "org.mycore.frontend.cli.MCRObjectTools.selectFromFile String",
                 "selects all mcr objects in the given file. every object should be in a new line"));
+
+        addCommand(new MCRCommand("fix hidden journal id for {0}", "org.mycore.frontend.cli.MCRObjectTools.fixHiddenJournalId String",
+                "goes through the hierarchy and rewrites the hidden journal id of every object"));
+
+        addCommand(new MCRCommand("internal fix hidden journal id for {0} {1}", "org.mycore.frontend.cli.MCRObjectTools.fixHiddenJournalId String String",
+                "goes through the hierarchy and rewrites the hidden journal id of every object"));
     }
 
     public static void vd17Import(String url) throws IOException, JAXBException, URISyntaxException, MCRActiveLinkException, MCRException,
@@ -176,16 +179,15 @@ public class MCRObjectTools extends MCRAbstractCommands {
         return cmd;
 
     }
-    
-    
+
     public static List<String> mergeDerivates(String derivateIDs) {
         List<String> executeMoreCMDs = new ArrayList<String>();
         String[] derivateIdArray = derivateIDs.split(",");
-        
-        if(derivateIdArray.length > 1){
+
+        if (derivateIdArray.length > 1) {
             MCRDirectory destDeriv = (MCRDirectory) MCRFilesystemNode.getRootNode(derivateIdArray[0]);
             String[] subSetOfIds = Arrays.copyOfRange(derivateIdArray, 1, derivateIdArray.length);
-            
+
             for (String derivID : subSetOfIds) {
                 MCRDirectory derivate = (MCRDirectory) MCRFilesystemNode.getRootNode(derivID);
                 for (MCRFilesystemNode child : derivate.getChildren()) {
@@ -197,11 +199,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
         return executeMoreCMDs;
     }
-    
+
     public static List<String> moveFile(String sourcePath, String destPath) {
         List<String> executeMoreCMDs = new ArrayList<String>();
         MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
-        
 
         MCRFilesystemNode destNode;
         if (destPath.startsWith("..")) {
@@ -211,14 +212,14 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
 
         if (destNode instanceof MCRDirectory) {
-            sourceNode.move((MCRDirectory)destNode);
-            
+            sourceNode.move((MCRDirectory) destNode);
+
             executeMoreCMDs.addAll(MCRIView2Commands.tileDerivate(sourceNode.getOwnerID()));
             executeMoreCMDs.addAll(MCRIView2Commands.tileDerivate(destNode.getOwnerID()));
         } else {
             LOGGER.info(destPath + " is not a directory");
         }
-        
+
         return executeMoreCMDs;
     }
 
@@ -228,7 +229,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
 
         // we don't want to adopt children
         Element children = mcrOrigObjXMLDoc.getRootElement().getChild("structure").getChild("children");
-        if(children != null) {
+        if (children != null) {
             children.detach();
         }
 
@@ -244,15 +245,15 @@ public class MCRObjectTools extends MCRAbstractCommands {
             Element dataModelCoverageElem = null;
             String dataModelCoverageLocation = "/mycoreobject/metadata/dataModelCoverages/dataModelCoverage";
             dataModelCoverageElem = getElementWithXpath(mcrOrigObjXMLDoc, dataModelCoverageLocation);
-            if(dataModelCoverageElem != null) {
+            if (dataModelCoverageElem != null) {
                 dataModelCoverageElem.setAttribute("categid", dataModelCoverage);
             }
         }
         MCRObjectID newMcrID = MCRObjectID.getNextFreeId(sourceMcrId.getBase());
-        if(maintitleElem != null) {
+        if (maintitleElem != null) {
             maintitleElem.setText(maintitleElem.getText() + "[Copy] " + newMcrID.getNumberAsInteger());
         }
-        if(hidden_jpjournalIDElem != null) {
+        if (hidden_jpjournalIDElem != null) {
             hidden_jpjournalIDElem.setText(newMcrID.toString());
         }
         mcrOrigObjXMLDoc.getRootElement().setAttribute("ID", newMcrID.toString());
@@ -267,8 +268,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
             for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
                 Element perm = (Element) iterator.next();
                 String permName = perm.getAttributeValue("permission");
-                MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"), permName + " permission for "
-                        + newMcrID.toString());
+                MCRAccessManager.addRule(newMcrID, permName, perm.getChild("condition"),
+                        permName + " permission for " + newMcrID.toString());
             }
         }
     }
@@ -286,9 +287,9 @@ public class MCRObjectTools extends MCRAbstractCommands {
     private static MCRFilesystemNode getFileSystemNode(String sourcePath) {
         String ownerID = getOwnerID(sourcePath);
         MCRFilesystemNode root = MCRFilesystemNode.getRootNode(ownerID);
-        int beginIndex = sourcePath.indexOf('/', 1)+1;
+        int beginIndex = sourcePath.indexOf('/', 1) + 1;
         String filename = sourcePath.substring(beginIndex).trim();
-        if(!"".equals(filename)) {
+        if (!"".equals(filename)) {
             return ((MCRDirectory) root).getChildByPath(filename);
         }
         return root;
@@ -351,7 +352,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
             objLink.setSubTag("linkmeta");
             objLink.setReference(objectId, null, null);
             der.getDerivate().setLinkMeta(objLink);
-            
+
             MCRMetadataManager.update(der);
         }
     }
@@ -359,27 +360,27 @@ public class MCRObjectTools extends MCRAbstractCommands {
     public static List<String> layerCollapse(String objectId, String layerAsString) {
         MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
         List<String> layerIds = getLayerIds(mcrObj, Integer.valueOf(layerAsString));
-        
+
         List<String> cmdList = new ArrayList<String>();
-        for(String id : layerIds) {
+        for (String id : layerIds) {
             cmdList.add("collapse " + id);
         }
         return cmdList;
     }
 
     private static List<String> getLayerIds(MCRObject mcrObj, int layer) {
-        if(layer < 0) {
+        if (layer < 0) {
             throw new IllegalArgumentException("Layer cannot be lower than zero. " + layer);
         }
         List<String> ids = new ArrayList<String>();
-        if(layer == 0) {
+        if (layer == 0) {
             ids.add(mcrObj.getId().toString());
             return ids;
         }
         List<MCRMetaLinkID> childrenLinks = mcrObj.getStructure().getChildren();
-        for(MCRMetaLinkID metaLinkId : childrenLinks) {
+        for (MCRMetaLinkID metaLinkId : childrenLinks) {
             String childId = metaLinkId.getXLinkHref();
-            if(layer == 1) {
+            if (layer == 1) {
                 ids.add(childId);
             } else {
                 MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(childId));
@@ -397,7 +398,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         Map<MCRDerivate, MCRObject> derivateMap = getDescendants(mcrObj);
 
         List<String> cmdList = new ArrayList<String>();
-        if(derivateMap.isEmpty()) {
+        if (derivateMap.isEmpty()) {
             return cmdList;
         }
 
@@ -405,13 +406,13 @@ public class MCRObjectTools extends MCRAbstractCommands {
         MCRDerivate mvDerivate = null;
         StringBuilder mergeDerivateCmd = new StringBuilder("merge derivates ");
         Iterator<MCRDerivate> it = derivateMap.keySet().iterator();
-        while(it.hasNext()) {
+        while (it.hasNext()) {
             MCRDerivate mcrChildDer = it.next();
             mergeDerivateCmd.append(mcrChildDer.getId());
-            if(it.hasNext()) {
+            if (it.hasNext()) {
                 mergeDerivateCmd.append(",");
             }
-            if(mvDerivate == null) {
+            if (mvDerivate == null) {
                 mvDerivate = mcrChildDer;
             }
         }
@@ -421,7 +422,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         cmdList.add("link derivate " + mvDerivate.getId() + " to " + objectId);
 
         // 3. create derivate link
-        for(Map.Entry<MCRDerivate, MCRObject> entry : derivateMap.entrySet()) {
+        for (Map.Entry<MCRDerivate, MCRObject> entry : derivateMap.entrySet()) {
             MCRDerivate mcrChildDer = entry.getKey();
             MCRObject mcrChildObj = entry.getValue();
             String mainDoc = mcrChildDer.getDerivate().getInternals().getMainDoc();
@@ -437,10 +438,10 @@ public class MCRObjectTools extends MCRAbstractCommands {
     private static Map<MCRDerivate, MCRObject> getDescendants(MCRObject mcrObj) {
         Map<MCRDerivate, MCRObject> idMap = new HashMap<MCRDerivate, MCRObject>();
         List<MCRMetaLinkID> linkList = mcrObj.getStructure().getChildren();
-        for(MCRMetaLinkID link : linkList) {
+        for (MCRMetaLinkID link : linkList) {
             MCRObject mcrChild = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(link.getXLinkHref()));
             List<MCRMetaLinkID> derivateLinkList = mcrChild.getStructure().getDerivates();
-            for(MCRMetaLinkID derivateLink : derivateLinkList) {
+            for (MCRMetaLinkID derivateLink : derivateLinkList) {
                 MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateLink.getXLinkHref()));
                 idMap.put(mcrDer, mcrChild);
             }
@@ -463,4 +464,73 @@ public class MCRObjectTools extends MCRAbstractCommands {
         MCRObjectCommands.setSelectedObjectIDs(selectedList);
     }
 
+    public static List<String> fixHiddenJournalId(String objectId) throws MCRActiveLinkException {
+        MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
+        if (!MCRMetadataManager.exists(mcrId)) {
+            LOGGER.error(objectId + " does not exist!");
+            return null;
+        }
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRObject journal = mcrObj;
+        if(!journal.getId().getTypeId().equals("jpjournal")) {
+            journal = getRoot(mcrObj);
+            if (!journal.getId().getTypeId().equals("jpjournal")) {
+                LOGGER.error("root object is not a journal " + journal.getId());
+                return null;
+            }
+        }
+        return fixHiddenJournalId(objectId, journal.getId().toString());
+    }
+
+    public static List<String> fixHiddenJournalId(String objectId, String hiddenJournalID) throws MCRActiveLinkException {
+        MCRObjectID mcrId = MCRObjectID.getInstance(objectId);
+        if (!MCRMetadataManager.exists(mcrId)) {
+            LOGGER.error(objectId + " does not exist!");
+            return null;
+        }
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        setHiddenJournalID(mcrObj, hiddenJournalID);
+        List<String> commandList = new ArrayList<String>();
+        for(MCRMetaLinkID childID : mcrObj.getStructure().getChildren()) {
+            commandList.add("internal fix hidden journal id for " + childID.getXLinkHref() + " " + hiddenJournalID);
+        }
+        return commandList;
+    }
+
+    private static void setHiddenJournalID(MCRObject obj, String hiddenJournalID) throws MCRActiveLinkException {
+        MCRMetaElement journalIDElement = obj.getMetadata().getMetadataElement("hidden_jpjournalsID");
+        if (journalIDElement == null) {
+            MCRMetaElement me = new MCRMetaElement();
+            me.setTag("hidden_jpjournalsID");
+            me.setHeritable(true);
+            me.setNotInherit(false);
+            me.setClass(org.mycore.datamodel.metadata.MCRMetaLangText.class);
+            me.addMetaObject(new MCRMetaLangText("hidden_jpjournalID", null, null, 0, "plain", hiddenJournalID));
+            obj.getMetadata().setMetadataElement(me);
+        } else {
+            MCRMetaLangText mlt = (MCRMetaLangText)journalIDElement.getElementByName("hidden_jpjournalID");
+            if(mlt.getText().equals(hiddenJournalID)) {
+                return;
+            }
+            mlt.setText(hiddenJournalID);
+        }
+        MCRMetadataManager.update(obj);
+    }
+
+    
+    public static List<MCRObject> getAncestors(MCRObject mcrObject) {
+        List<MCRObject> ancestorList = new ArrayList<MCRObject>();
+        while (mcrObject.hasParent()) {
+            MCRObjectID parentID = mcrObject.getStructure().getParentID();
+            MCRObject parent = MCRMetadataManager.retrieveMCRObject(parentID);
+            ancestorList.add(parent);
+            mcrObject = parent;
+        }
+        return ancestorList;
+    }
+
+    public static MCRObject getRoot(MCRObject mcrObject) {
+        List<MCRObject> ancestorList = getAncestors(mcrObject);
+        return ancestorList.isEmpty() ? null : ancestorList.get(ancestorList.size() - 1);
+    }
 }
