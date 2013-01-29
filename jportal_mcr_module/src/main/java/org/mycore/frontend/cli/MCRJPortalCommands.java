@@ -27,25 +27,6 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
 
         addCommand(new MCRCommand("import dbblob from {0}", "org.mycore.frontend.cli.MCRJPortalCommands.importBlob String", ""));
 
-        addCommand(new MCRCommand("convert datamodel1 to datamodel2 from file {0}", "org.mycore.frontend.cli.command.MCRDatamodelToDatamodel2Command.convert String",
-        "converts a datamodel 1 file to a new datamodel 2 one"));
-
-        addCommand(new MCRCommand("convert ifs linking to derivate linking", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.convert",
-        "converts the old ifs linking of articles and journals to the new derivate linking"));
-
-        addCommand(new MCRCommand("internal replace ifs link {0}", "org.mycore.frontend.cli.command.MCRLinkConvertCommand.replaceLink String", ""));
-
-        addCommand(new MCRCommand("start gbv sru pica import", "org.mycore.dataimport.pica.MCRGbvSruImportCommand.gbcSruImport", ""));
-
-        addCommand(new MCRCommand("import journals with mapping file {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.importJournals String", ""));
-
-        addCommand(new MCRCommand("internal create default context {0}", "org.mycore.frontend.cli.MCRImportJournalCommands.createContext String", ""));
-
-        addCommand(new MCRCommand("delete xml:lang", "org.mycore.frontend.cli.DeleteLangCommand.delete",
-        "deletes all xml:lang attributes in all journals, volumes and articles"));
-
-        addCommand(new MCRCommand("internal delete xml:lang {0}", "org.mycore.frontend.cli.DeleteLangCommand.deleteXmlLang String", ""));
-        
         addCommand(new MCRCommand("add derivate link {0} to {1}", "org.mycore.frontend.cli.MCRJPortalCommands.addDerivateLink String String", ""));
     }
 
@@ -81,4 +62,5 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         DerivateLinkUtil.setLink(mcrId, link);
     }
+
 }
