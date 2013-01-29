@@ -87,7 +87,7 @@ jp.az = {
 	        var link = $('<link>').attr({
 	            type : 'text/css',
 	            rel : 'stylesheet',
-	            href : '/journalList/css/journalList.css',
+	            href : '/css/journalList.css',
 	            'class' : 'myStyle'
 	        });
 	        $('head').append(link);

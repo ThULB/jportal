@@ -19,7 +19,7 @@
             </ul>
             <div id="resultList" class="tab-panel"></div>
         </div>
-        <script src="/journalList/js/journalList.js"></script>
+        <script src="/js/jp-journalList.js"></script>
     </xsl:template>
 
     <!-- =================================================================== -->
