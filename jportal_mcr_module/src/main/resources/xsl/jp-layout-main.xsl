@@ -71,8 +71,8 @@
         <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation" lang="en"
           name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
-        <link href="{$WebApplicationBaseURL}jp-layout-default.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}jp-layout-editor.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$template != ''">
           <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
         </xsl:if>

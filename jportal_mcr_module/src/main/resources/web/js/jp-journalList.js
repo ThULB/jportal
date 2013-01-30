@@ -82,12 +82,12 @@ jp.az = {
 	    $('.tab-nav').delegate('li', 'click', jp.az.onTabClick);
 
 	    if (document.createStyleSheet) {
-	        document.createStyleSheet('/journalList/css/journalList.css');
+	        document.createStyleSheet('/journalList/css/jp-journalList.css');
 	    } else {
 	        var link = $('<link>').attr({
 	            type : 'text/css',
 	            rel : 'stylesheet',
-	            href : '/css/journalList.css',
+	            href : '/css/jp-journalList.css',
 	            'class' : 'myStyle'
 	        });
 	        $('head').append(link);

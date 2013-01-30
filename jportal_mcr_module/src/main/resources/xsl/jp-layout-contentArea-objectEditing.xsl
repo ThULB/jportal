@@ -167,7 +167,7 @@
     <xsl:call-template name="classeditor.includeDojoJS" />
     <xsl:call-template name="classeditor.includeJS" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}classification/ClassificationEditor.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-classificationEditor.js"></script>
 
     <script type="text/javascript">
       function loadError(jqxhr, settings, exception) {

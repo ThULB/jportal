@@ -107,18 +107,18 @@ body {
     text-align: center;
 }
 .jp-layout-footer .thulb-text {
-    background-image: url("images/thulb-text-grey.png");
+    background-image: url("/images/thulb-text-grey.png");
     width: 320px;
 }
 .jp-layout-footer .thulb-text:hover {
-	background-image: url("images/thulb-text-blue.png");
+	background-image: url("/images/thulb-text-blue.png");
 }
 .jp-layout-footer .thulb {
-    background-image: url("images/thulb-grey.png");
+    background-image: url("/images/thulb-grey.png");
     width: 88px;
 }
 .jp-layout-footer .thulb:hover {
-	background-image: url("images/thulb-blue.png");
+	background-image: url("/images/thulb-blue.png");
 }
 
 
@@ -184,7 +184,7 @@ body {
 }
 
 .jp-layout-header {
-	background: url("templates/master/template_master2/IMAGES/logo.png")
+	background: url("/templates/master/template_master2/IMAGES/logo.png")
 		repeat-x scroll 0 0 transparent;
 	height: 115px;
 }
@@ -602,7 +602,7 @@ body {
 }
 
 .paperClip-icon {
-	background-image: url("images/paperClip.png") !important;
+	background-image: url("/images/paperClip.png") !important;
 	height: 24px !important;
 	width: 24px !important;
 }
@@ -905,7 +905,7 @@ body {
 }
 
 #logo {
-	background-image: url("templates/master/template_master2/IMAGES/logo.png");
+	background-image: url("/templates/master/template_master2/IMAGES/logo.png");
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
@@ -1192,13 +1192,13 @@ body {
 }
 #files td .inputDeleteFile {
 	display: block;
-	background-image: url("images/button_delete.gif");
+	background-image: url("/images/button_delete.gif");
 	width: 16px;
 	height: 16px;
 }
 #files td img.inputAddUrn {
 	display: block;
-	background-image: url("images/addnbn.gif");
+	background-image: url("/images/addnbn.gif");
 	width: 29px;
 	height: 22px;
 }

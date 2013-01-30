@@ -24,6 +24,7 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 - Subversion-Client
 - JAVA 6 JDK
+- ANT
 - MAVEN
 
 3. GETTING SOURCES
@@ -48,16 +49,17 @@ Setting properties in mycore.private.properties
   - MCR.basedir=<$DOCPORTAL_HOME>
   - MCR.Modules.Application=common,maven
   - MCR.Components.Exclude=migration20-21,iview
+  - MCR.Module-solr.ServerURL=http\://localhost:8296/jportal
 
 Add in pom.xml below the <dependencies> element
   <dependency>
     <groupId>fsu.thulb</groupId>
     <artifactId>jportal_mcr_module</artifactId>
-    <version>2.0.13</version>
+    <version>2.0.17-SNAPSHOT</version>
     <type>jar</type>
     <scope>compile</scope>
   </dependency>
-  
+
 For DB2 users, the driver and licence jar have to be installed, eG.
   mvn install:install-file -Dfile=$PATH_TO_LIB/db2jcc.jar -DgroupId=com.ibm.db2 
   	-DartifactId=db2jcc -Dversion=9.1 -Dpackaging=jar
@@ -89,6 +91,7 @@ mvn install
 cd $DOCPORTAL_HOME 
 ant clean clean.data
 ant resolve create.jar create.scripts
+build/bin/solrstart.sh &
 build/bin/hsqldbstart.sh &
 ant create.users create.default-rules create.class create.webapp
 

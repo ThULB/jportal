@@ -1,6 +1,0 @@
-TODO:
-
-1) getBrowserAddress in coreFunctions.xsl in Java auslagern, in der aktuellen Version heißt es jp_getBrowserAddress
-2) jp_navi_main.xsl muß wieder normale navi_main.xsl von docportal werden
-3) chooseTemplate muß überarbeitet werden
-4) die Navigation innerhalb der Zeitschrift, Bänden etc. nicht mehr auf Lucene aufbauen
