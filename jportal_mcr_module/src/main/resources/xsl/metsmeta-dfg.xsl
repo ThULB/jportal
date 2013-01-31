@@ -340,11 +340,11 @@
             <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
             <mods:extension>
               <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-                <!-- Top Logo (don't show) -->
                 <urmel:entity type="owner">
                 </urmel:entity>
-                <!-- Small Logo -->
-                <xsl:call-template name="ownerEntity" />
+                <xsl:call-template name="ownerEntity">
+                  <xsl:with-param name="type" select="'operator'" />
+                </xsl:call-template>
                 <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
               </urmel:entities>
             </mods:extension>
