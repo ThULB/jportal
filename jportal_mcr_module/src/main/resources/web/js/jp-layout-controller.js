@@ -14,7 +14,7 @@ function introEditor(journalID) {
                 fillEmptyBlocks: false,
                 height : '500px',
                 toolbar : [ ['Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
-                        'Link', 'Unlink' ] ]
+                        'Link', 'Unlink', 'Source' ] ]
             });
 
             function cancelNoSave() {
@@ -56,7 +56,7 @@ function introEditor(journalID) {
 
                 $('#ckeditorButtons').remove();
                 if (introFrame.ckeditorGet().checkDirty()) {
-                    $('<div/>').load('/jpCkeditor/GUI.html #ckEditorCancelMsgContainer', cancelMsgButtonCtr).appendTo('#main');
+                    $('<div/>').load('/ckeditor/GUI.html #ckEditorCancelMsgContainer', cancelMsgButtonCtr).appendTo('#main');
                 } else {
                     cancelNoSave();
                 }
