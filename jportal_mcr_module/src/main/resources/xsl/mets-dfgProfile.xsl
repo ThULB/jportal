@@ -13,7 +13,10 @@
   <xsl:param name="objectID" />
   <xsl:param name="MCR.OPAC.CATALOG" />
 
-  <xsl:variable name="logoBaseUrl" select="'http://wrackdm17.thulb.uni-jena.de/logos/'" />
+  <xsl:param name="JP.Site.Owner.label" />
+  <xsl:param name="JP.Site.Owner.url" />
+  <xsl:param name="JP.Site.Owner.logo" />
+  <xsl:param name="JP.Site.Owner.fullLogo" />
 
   <xsl:variable name="ACTUAL.OPAC.CATALOG">
     <xsl:choose>
@@ -41,12 +44,16 @@
     </mets:mdWrap>
   </xsl:template>
 
-  <xsl:template match="mycoreobject" priority="0" mode="ownerEntity" xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-    <urmel:entity type="owner" xlink:type="extended" xlink:title="Thüringer Universitäts- und Landesbibliothek Jena">
-      <urmel:site xlink:type="locator" xlink:href="http://www.thulb.uni-jena.de" />
-      <urmel:logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb.svg" />
-      <urmel:full-logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb+text.svg" />
+  <xsl:template name="ownerEntity" xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
+    <urmel:entity type="owner" xlink:type="extended" xlink:title="{$JP.Site.Owner.label}">
+      <urmel:site xlink:type="locator" xlink:href="{$JP.Site.Owner.url}" />
+      <urmel:logo xlink:type="resource" xlink:href="{$JP.Site.Owner.logo}" />
+      <urmel:full-logo xlink:type="resource" xlink:href="{$JP.Site.Owner.fullLogo}" />
     </urmel:entity>
+  </xsl:template>
+
+  <xsl:template match="mycoreobject" priority="0" mode="ownerEntity" xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
+    <xsl:call-template name="ownerEntity" />
   </xsl:template>
 
   <xsl:template match="mycoreobject" priority="0" mode="sponsorEntity">
@@ -75,11 +82,7 @@
             <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
             <mods:extension>
               <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-                <urmel:entity type="operator" xlink:type="extended" xlink:title="Thüringer Universitäts- und Landesbibliothek Jena">
-                  <urmel:site xlink:type="locator" xlink:href="http://www.thulb.uni-jena.de" />
-                  <urmel:logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb.svg" />
-                  <urmel:full-logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb+text.svg" />
-                </urmel:entity>
+                <xsl:call-template name="ownerEntity" />
                 <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
               </urmel:entities>
             </mods:extension>

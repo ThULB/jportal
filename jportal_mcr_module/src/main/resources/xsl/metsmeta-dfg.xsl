@@ -344,11 +344,7 @@
                 <urmel:entity type="owner">
                 </urmel:entity>
                 <!-- Small Logo -->
-                <urmel:entity type="operator" xlink:type="extended" xlink:title="Thüringer Universitäts- und Landesbibliothek Jena">
-                  <urmel:site xlink:type="locator" xlink:href="http://www.thulb.uni-jena.de" />
-                  <urmel:logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb.svg" />
-                  <urmel:full-logo xlink:type="resource" xlink:href="{$logoBaseUrl}thulb+text.svg" />
-                </urmel:entity>
+                <xsl:call-template name="ownerEntity" />
                 <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
               </urmel:entities>
             </mods:extension>

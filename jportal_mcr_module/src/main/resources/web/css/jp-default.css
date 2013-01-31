@@ -106,22 +106,6 @@ body {
     display: inline-block;
     text-align: center;
 }
-.jp-layout-footer .thulb-text {
-    background-image: url("/images/thulb-text-grey.png");
-    width: 320px;
-}
-.jp-layout-footer .thulb-text:hover {
-	background-image: url("/images/thulb-text-blue.png");
-}
-.jp-layout-footer .thulb {
-    background-image: url("/images/thulb-grey.png");
-    width: 88px;
-}
-.jp-layout-footer .thulb:hover {
-	background-image: url("/images/thulb-blue.png");
-}
-
-
 .jp-layout-footer ul {
 	list-style: none;
 	padding: 0px;
@@ -129,9 +113,6 @@ body {
 .jp-layout-footer ul li {
 	display: inline-block;
 	padding: 0 20px;
-}
-.jp-layout-footer ul li img {
-	height: 30px;
 }
 
 #jp-breadcrumb-container {
@@ -181,43 +162,6 @@ body {
 .jp-layout-searchBreadcrumb li:first-child {
 	border: medium none;
 	padding-left: 0px;
-}
-
-.jp-layout-header {
-	background: url("/templates/master/template_master2/IMAGES/logo.png")
-		repeat-x scroll 0 0 transparent;
-	height: 115px;
-}
-
-.jp-global-navigation-bar {
-	height: 30px;
-}
-
-.jp-global-navigation-bar div {
-	background-color: transparent;
-}
-
-.jp-global-navigation-bar li.navi_below {
-	font-weight: bold;
-}
-
-.jp-global-navigation-bar .jp-login {
-	float: right;
-}
-
-.jp-global-navigation-bar .jp-home-link {
-	float: left;
-	font-weight: bold;
-	margin: 7px 10px;
-}
-
-.jp-global-navigation-bar ul {
-	float: left;
-}
-
-.jp-global-navigation-bar li {
-	display: inline;
-	padding-right: 12px;
 }
 
 .jp-layout-content-area {

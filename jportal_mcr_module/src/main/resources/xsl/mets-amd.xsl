@@ -11,6 +11,9 @@
   <xsl:param name="MCR.OPAC.CATALOG" />
   <xsl:param name="objectID" />
 
+  <xsl:param name="JP.Site.adminMail" />
+  <xsl:param name="JP.Site.Parent.logo" />
+
   <xsl:variable name="ACTUAL.OPAC.CATALOG">
     <xsl:choose>
       <xsl:when test="$MCR.OPAC.CATALOG = '%MCROpacCatalog%'">
@@ -58,12 +61,18 @@
         <mets:mdWrap MIMETYPE="text/xml" MDTYPE="OTHER" OTHERMDTYPE="DVRIGHTS">
           <mets:xmlData>
             <dv:rights xmlns:dv="http://dfg-viewer.de/">
-              <dv:owner>Thüringer Universitäts- und Landesbibliothek</dv:owner>
-              <dv:ownerContact>mailto:huu.chi.vu[at]uni-jena.de</dv:ownerContact>
+              <dv:owner>
+                <xsl:value-of select="$JP.Site.Owner.label" />
+              </dv:owner>
+              <dv:ownerContact>
+                <xsl:value-of select="concat('mailto:', $JP.Site.adminMail)" />
+              </dv:ownerContact>
               <dv:ownerLogo>
-                <xsl:value-of select="concat($WebApplicationBaseURL,'images/logo-dfg-viewer.png')" />
+                <xsl:value-of select="$JP.Site.Parent.logo" />
               </dv:ownerLogo>
-              <dv:ownerSiteURL>http://www.thulb.uni-jena.de/</dv:ownerSiteURL>
+              <dv:ownerSiteURL>
+                <xsl:value-of select="$JP.Site.Owner.url" />
+              </dv:ownerSiteURL>
             </dv:rights>
           </mets:xmlData>
         </mets:mdWrap>

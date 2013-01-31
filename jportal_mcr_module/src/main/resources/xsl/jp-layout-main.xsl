@@ -17,6 +17,12 @@
   <xsl:include href="xslInclude:modules" />
   <xsl:include href="xslInclude:templates" />
 
+  <xsl:param name="JP.Site.label" />
+  <xsl:param name="JP.Site.Parent.label" />
+  <xsl:param name="JP.Site.Parent.url" />
+  <xsl:param name="JP.Site.HTML.Head.Meta.Keywords.de" />
+  <xsl:param name="JP.Site.HTML.Head.Meta.Keywords.en" />
+
   <xsl:param name="object" />
   <xsl:param name="layout" />
   <xsl:param name="MCR.Piwik.baseurl" />
@@ -67,9 +73,8 @@
         </title>
         <meta content="Zeitschriften-Portal" lang="de" name="description" />
         <meta content="Journal-Portal" lang="en" name="description" />
-        <meta content="Zeitschriften,historisch,aktuell,Paper,Forschung,UrMEL,ThULB, FSU Jena,Langzeitarchivierung" lang="de" name="keywords" />
-        <meta content="Journals,EJournals,historical,currently,paper,research,UrMEL,ThULB, FSU Jena,long term preservation" lang="en"
-          name="keywords" />
+        <meta content="{$JP.Site.HTML.Head.Meta.Keywords.de}" lang="de" name="keywords" />
+        <meta content="{$JP.Site.HTML.Head.Meta.Keywords.en}" lang="en" name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
@@ -125,10 +130,14 @@
         <div id="globalHeader">
           <ul id="globalHomeLink" class="jp-layout-hMenu">
             <li>
-              <a href="http://www.urmel-dl.de/" target="_blank">UrMEL</a>
+              <a href="{$JP.Site.Parent.url}" target="_blank">
+                <xsl:value-of select="$JP.Site.Parent.label" />
+              </a>
             </li>
             <li>
-              <a href="/content/below/index.xml" target="_self">Journals@UrMEL</a>
+              <a href="/content/below/index.xml" target="_self">
+                <xsl:value-of select="$JP.Site.label" />
+              </a>
             </li>
             <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
               <li>
@@ -222,7 +231,7 @@
           </xsl:choose>   
         </div>
         <!-- footer -->
-        <xsl:call-template name="jp-layout-footer" />
+        <xsl:call-template name="jp.layout.footer" />
         <!-- delete messages -->
         <xsl:if test="$object='delete'">
           <xsl:copy-of select="$objectEditing/deleteMsg" />
