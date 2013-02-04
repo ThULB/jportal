@@ -7,10 +7,10 @@ TOC
 5. INSTALLATION
     5.1 NEW INSTALLATION
     5.2 REINSTALLATION
-6. RUNNING    
-7. DEFAULT USERS
-8. RIGHTS MANAGEMENT
-9. CREATE NEW JOURNAL
+6. RUNNING
+7. SOLR IN TOMCAT
+8. DEFAULT USERS
+9. RIGHTS MANAGEMENT
 ===========================================================================================================================
 
 1. LICENSE
@@ -102,9 +102,32 @@ mvn clean install
 cd $DOCPORTAL_HOME
 ant resolve create.jar create.webapp
 
-6. RUNNING
+6. SOLR IN TOMCAT
 ======================================
-======================================          
+======================================
+Its required that JPortal is deployed in docportal. Go to $DOCPORTAL_HOME/config/solr-home and
+check if the solr.xml contains a core named 'jportal'. If not, you have to install jportal as
+described above.
+cd $DOCPORTAL_HOME/config
+mvn clean install -f solr-pom.xml
+
+A new target directory is created in the config folder which contains a solr-*.war. Copy this
+war to your webapps folder in tomcat and rename it to solr.war.
+
+Now we need to create a solr-home directory where the configuration of solr is set. It should be
+outside of tomcat, maybe the home directory. Copy all content of $DOCPORTAL_HOME/config/solr-home
+to that directory. Then create a new file 'setenv.sh' in your tomcat/bin directory and paste the
+following code (set correct path to solr-home directory):
+
+#!/bin/sh
+export CATALINA_OPTS="-Xms2G -Xmx2G -Dsolr.solr.home={PATH TO solr-home directory}"
+
+Start tomcat and look if solr is running at localhost:8080/solr
+
+
+7. RUNNING
+======================================
+======================================
 Once you have followed all steps from chapter 5 you can run the server and watch JPortal in action
 All you have to do is 
 - make sure RDBMS is running ($DOCPORTAL_HOME/build/bin/hsqldbstart.sh)
@@ -112,14 +135,14 @@ All you have to do is
 - Go to web browser and visit http://localhost:8291
 
 
-7. DEFAULT USERS
+8. DEFAULT USERS
 ======================================
 ======================================
 By default the installation creates a super user called "administrator" with password "alleswirdgut", that is member of group "rootgroup". Watch chapter "RIGHTS MANAGEMENT" to
 see what this user is allowed to do. 
 
 
-8. RIGHTS MANAGEMENT
+9. RIGHTS MANAGEMENT
 ======================================
 ======================================          
 Following groups will created by default:
@@ -157,16 +180,3 @@ Following groups will created by default:
     - Allowed to do all actions on JPJournal, JPVolumes, JPArticles, Persons, JPinst
     - add, edit, delete users and groups
     - 
-
-         
-9. CREATE NEW JOURNAL
-======================================
-======================================
-   1. Go to JPortal web application in your browser
-   2. Log in as "administrator"
-   3. Click on "Editors" in menu left
-   4. Create a new journal
-   5. Create a new Journal-Context, by 
-      - go to created journals metadata page
-      - click on "Ja, Zeitschriften-Kontext jetzt einrichten!"
-      - follow form and submit
