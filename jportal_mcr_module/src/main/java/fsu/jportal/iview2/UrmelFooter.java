@@ -51,6 +51,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRURN;
+import org.mycore.common.MCRConfiguration;
 import org.mycore.iview2.frontend.MCRFooterInterface;
 
 /**
@@ -78,7 +79,7 @@ public class UrmelFooter implements MCRFooterInterface {
         //TODO get logos from classification
         HashMap<String, String> logoMap = new HashMap<String, String>();
         logoMap.put("dfg", "/web/images/dfg-logo.png");
-        logoMap.put("thulb", "/web/images/thulb-blue.png");
+        logoMap.put("thulb", MCRConfiguration.instance().getString("JP.Site.Owner.logo"));
         for (Map.Entry<String, String> entry : logoMap.entrySet()) {
             InputStream input = UrmelFooter.class.getResourceAsStream(entry.getValue());
             if(input == null) {
