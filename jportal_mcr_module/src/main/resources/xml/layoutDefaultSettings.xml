@@ -55,6 +55,7 @@
   <i18n tag="phone.Fax">editormask.labels.SphoneFax</i18n>
   <i18n tag="phone.Mobil">editormask.labels.SphoneMobil</i18n>
   <i18n tag="email">metaData.jpinst.email</i18n>
+  <i18n tag="identifier.gnd">metaData.person.identifier.gnd</i18n>
   <i18n tag="identifier.pnd">metaData.person.identifier.pnd</i18n>
   <i18n tag="identifier.ppn">metaData.person.identifier.ppn</i18n>
   <i18n tag="url">metaData.jpinst.url</i18n>

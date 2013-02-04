@@ -253,6 +253,7 @@
           <cell anchor="WEST" col="1" row="1" var="@type">
 
             <list type="dropdown">
+              <item value="pnd" i18n="metaData.person.gnd" />
               <item value="pnd" i18n="metaData.person.pnd" />
               <item value="ppn" i18n="metaData.person.ppn" />
             </list>

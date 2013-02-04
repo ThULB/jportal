@@ -159,6 +159,17 @@
       </xsl:attribute>
       <xsl:variable name="personObj" select="document(concat('mcrobject:',@xlink:href))" />
       <xsl:choose>
+        <xsl:when test="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='gnd']">
+          <xsl:attribute name="authority">
+            <xsl:value-of select="'gnd'" />
+          </xsl:attribute>
+          <xsl:attribute name="authorityURI">
+            <xsl:value-of select="'http://d-nb.info/gnd/'" />
+          </xsl:attribute>
+          <xsl:attribute name="valueURI">
+            <xsl:value-of select="concat('http://d-nb.info/gnd/',$personObj/mycoreobject/metadata/def.identifier/identifier[@type='gnd'])" />
+          </xsl:attribute>
+        </xsl:when>
         <xsl:when test="$personObj/mycoreobject/metadata/def.identifier/identifier[@type='pnd']">
           <xsl:attribute name="authority">
             <xsl:value-of select="'pnd'" />
