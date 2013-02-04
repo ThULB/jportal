@@ -78,6 +78,7 @@
         <meta content="MyCoRe" lang="de" name="generator" />
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$template != ''">
           <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
         </xsl:if>
