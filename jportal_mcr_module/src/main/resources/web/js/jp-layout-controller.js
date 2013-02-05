@@ -127,4 +127,10 @@ $(document).ready(function(){
             }
         })
     }
-})
+});
+
+function truncate(/* String */string, /* int */maxCharacters) {
+	return string.length > maxCharacters ? jQuery.trim(string).substring(0,
+			maxCharacters).split(" ").slice(0, -1).join(" ")
+			+ "..." : string;
+}
