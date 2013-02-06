@@ -17,7 +17,7 @@
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
           <h3>Inhaltsverzeichnis</h3>
           <ul>
-            <xsl:apply-templates mode="printListEntryContent" select="$volumes/response/result/doc" />
+            <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
           </ul>
 
           <xsl:if test="$volumes/response/result/@numFound &gt; $numPerPage_vol">
@@ -132,7 +132,7 @@
     </span>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="doc">
+  <xsl:template mode="jp.printListEntryContent" match="doc">
     <xsl:variable name="mcrId" select="str[@name='id']" />
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">

@@ -6,6 +6,7 @@
   exclude-result-prefixes="xsi mcr acl xalan layoutUtils websiteWriteProtection jpxml">
 
   <xsl:include href="jp-layout-tools.xsl" />
+  <xsl:include href="jp-layout-functions.xsl" />
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
@@ -25,8 +26,6 @@
 
   <xsl:param name="object" />
   <xsl:param name="layout" />
-  <xsl:param name="MCR.Piwik.baseurl" />
-  <xsl:param name="MCR.Piwik.enable" />
   <xsl:param name="MCR.NameOfProject" />
   <!-- For Subselect -->
   <xsl:param name="subselect.type" select="''" />
@@ -55,9 +54,6 @@
   <xsl:variable name="wcms.useTargets" select="'no'" />
 
   <xsl:template name="renderLayout">
-    <xsl:if test="/mycoreobject/@ID">
-      <xsl:variable name="setObjIDInSession" select="layoutUtils:setLastValidPageID(/mycoreobject/@ID)" />
-    </xsl:if>
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">
@@ -102,24 +98,7 @@
         <xsl:call-template name="initIview2JS" />
 
         <!-- Piwik -->
-        <xsl:if test="$MCR.Piwik.enable = 'true' and $MCR.Piwik.baseurl != ''">
-          <script type="text/javascript" src="{$MCR.Piwik.baseurl}piwik.js" />
-          <script type="text/javascript">
-            var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-            var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
-            try {
-              var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
-              if(journalID != "") {
-                piwikTracker.setCustomVariable (1, "journal", journalID, scope = "page");
-              }
-              piwikTracker.trackPageView();
-              piwikTracker.enableLinkTracking();
-            } catch( err ) {
-              console.log(err);
-            }
-          </script>
-        </xsl:if>
-        <!-- End Piwik Tracking Code -->
+        <xsl:call-template name="jp.piwik" />
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
         <xsl:if test="acl:checkPermission('CRUD',concat('update_',$type))">

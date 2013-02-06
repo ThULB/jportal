@@ -32,7 +32,7 @@
             </a>
           </li>
         </xsl:if>
-        <xsl:apply-templates mode="printListEntry"
+        <xsl:apply-templates mode="jp.printListEntry"
           select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
       <xsl:call-template name="jp-layout-breadcrumb-scroller" />
@@ -42,7 +42,7 @@
   <xsl:template name="resultListBreadcrumb">
     <xsl:param name="objID" />
     <menu class="jp-layout-searchBreadcrumb">
-      <xsl:apply-templates mode="printListEntry" select="document(concat('parents:',$objID))/parents/parent" />
+      <xsl:apply-templates mode="jp.printListEntry" select="document(concat('parents:',$objID))/parents/parent" />
     </menu>
   </xsl:template>
 
@@ -53,7 +53,7 @@
     <ul class="jp-layout-searchBreadcrumb">
       <li>
         <a href="{$WebApplicationBaseURL}receive/$objID">
-          <xsl:apply-templates mode="printListEntryContent" select="document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle" />
+          <xsl:apply-templates mode="jp.printListEntryContent" select="document(concat('mcrobject:',$objID))/mycoreobject/metadata/maintitles/maintitle" />
         </a>
       </li>
       <li>
@@ -62,19 +62,19 @@
     </ul>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="parent">
+  <xsl:template mode="jp.printListEntryContent" match="parent">
     <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
       <xsl:value-of select="@xlink:title" />
     </a>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="parent[@error!='']">
+  <xsl:template mode="jp.printListEntryContent" match="parent[@error!='']">
     <span style="color: red">
       <xsl:value-of select="concat(@error, '( ', @xlink:href, ')')" />
     </span>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="maintitle[@inherited='0']">
+  <xsl:template mode="jp.printListEntryContent" match="maintitle[@inherited='0']">
     <span>
       <xsl:call-template name="shortenString">
         <xsl:with-param name="string" select="." />
@@ -83,7 +83,7 @@
     </span>
   </xsl:template>
 
-  <xsl:template mode="printListEntryContent" match="heading">
+  <xsl:template mode="jp.printListEntryContent" match="heading">
     <span>
       <xsl:apply-templates mode="metadataPersName" select="." />
     </span>
