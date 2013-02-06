@@ -13,6 +13,7 @@
 	<name>jportal</name>
 	<description>JPortal project</description>
 	<modules>
+        <module>jportal_gbv</module>
 		<module>jportal_mcr_module</module>
         <module>jportal_laws</module>
         <module>jportal_editor_center_module</module>
@@ -21,7 +22,6 @@
         <module>jportal_login_module</module>
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
-        <module>jportal_gbv</module>
     </modules>
 
     <properties>
