@@ -37,7 +37,7 @@
     -->
     <target name="create.webapp">
         <echo>Merging JPortal-GBV properties</echo>
-        <mcr:config propertyfile="${build.config}/mycore.properties" mergeFile="${application.config}/mycore.private.properties"/>
+        <mcr:config propertyfile="${build.config}/mycore.properties" mergeFile="${module.directory}/mycore.properties"/>
     </target>
 
 </project>
