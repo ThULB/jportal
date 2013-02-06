@@ -2,20 +2,20 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
     xmlns:xalan="http://xml.apache.org/xalan">
 
-  <xsl:template match="/template[@id='template_addrBookTh']" mode="template">
-    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_addrBookTh" />
+  <xsl:template match="template[@id='template_addrBookTh']" mode="template">
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj" mode="template_addrBookTh" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_addrBookTh">
     <xsl:variable name="datesInfo" select="layoutTools:getDatesInfo(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
-
     <script type="text/javascript">
       $(document).ready(function() {		
         $('#logo').prepend('<xsl:apply-templates mode="logoTitle" select="$datesInfo"/>');
       });
     </script>
   </xsl:template>
-  
+
   <xsl:template mode="logoTitle" match="datesInfo">
     <xsl:variable name="cityName">
     	<xsl:apply-templates mode="logoTitle" select="hidden_genhiddenfields1/hidden_genhiddenfield1"/>

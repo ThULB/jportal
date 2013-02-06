@@ -42,7 +42,7 @@
         $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/' + template + '/IMAGES/logo.png)');
         var maintitle = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
         $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear"/></div>');
-        $('#logoDate').after('<div id="logoTitle">' + maintitle  + '</div>');
+        $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 72)  + '</div>');
         if (name.length > 40){
         	$('#logoTitle').css('font-size', 'large');
         }

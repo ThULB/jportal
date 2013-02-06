@@ -1,9 +1,7 @@
 @CHARSET "UTF-8";
-#logo {
-	background-image: url("../IMAGES/logo.png");
-}
 
 #logo .logoTitle {
-    margin: 0 135px;
     color: #062F51;
+    padding-left: 140px;
+    width: 620px;
 }

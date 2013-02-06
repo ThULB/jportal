@@ -1,5 +1,6 @@
 package org.mycore.common.xml;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -76,7 +77,7 @@ public class MCRJPortalXMLFunctions {
         return solrQuery == null ? "*" : URLEncoder.encode(solrQuery, "UTF-8");
     }
     
-    public static Document getLanguages(){
+    public static Document getLanguages() {
         String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
         String[] languagesArray = languagesString.split(",");
         LOGGER.debug(languagesArray);
@@ -89,6 +90,18 @@ public class MCRJPortalXMLFunctions {
             languages.appendChild(langElement);
         }
         return document;
+    }
+
+    /**
+     * Checks if the given path exists.
+     * 
+     * @param path
+     * @return
+     */
+    public static boolean resourceExist(String webResource) {
+        String webDir = MCRConfiguration.instance().getString("MCR.webappsDir");
+        File f = new File(new File(webDir), webResource);
+        return f.exists();
     }
 
     private static class SolrFieldQuery {
@@ -109,4 +122,5 @@ public class MCRJPortalXMLFunctions {
             return "+" + this.field + ":" + this.value;
         }
     }
+
 }

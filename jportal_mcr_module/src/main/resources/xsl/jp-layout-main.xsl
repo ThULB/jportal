@@ -48,6 +48,8 @@
   <xsl:variable name="template">
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
+  <xsl:variable name="templateResourcePath" select="concat('templates/master/', $template, '/')" />
+  <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/master/', $template, '/')" />
 
   <!-- TODO: remove this -->
   <xsl:variable name="wcms.useTargets" select="'no'" />
@@ -80,7 +82,16 @@
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$template != ''">
-          <link href="{$WebApplicationBaseURL}templates/master/{$template}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
+            <style type="text/css">
+              #logo {
+                background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')" />);
+              }
+            </style>
+          </xsl:if>
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, '/CSS/', $template, '.css'))">
+            <link href="{$templateWebURL}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
+          </xsl:if>
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />

@@ -3,14 +3,15 @@
     xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder">
 
   <xsl:template match="/template[@id='template_calendar']" mode="template">
-    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_calendar" />
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj" mode="template_calendar" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_calendar">
     <script type="text/javascript" src="../templates/master/template_calendar/JS/keywords.js" />
     <script>
 		$(document).ready(function() {
-			loadKeywords();		
+			loadKeywords();
 		});
     </script>
   </xsl:template>

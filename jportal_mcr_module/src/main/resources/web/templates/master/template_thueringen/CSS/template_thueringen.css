@@ -4,10 +4,8 @@
 }
 
 #logo .logoTitle {
-    display: table-cell;
     height: 72px;
     padding-left: 30px;
     padding-top: 5px;
-    vertical-align: middle;
     width: 800px;
 }

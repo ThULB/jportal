@@ -858,8 +858,10 @@ body {
 
 #logo .logoTitle {
     color: white;
-    margin: 0 30px;
-    padding-top: 44px;
+    display: table-cell;
+    height: 115px;
+    padding: 0 30px;
+    vertical-align: middle;
 }
 
 #searchBar {
