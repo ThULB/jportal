@@ -54,6 +54,9 @@
   <xsl:variable name="wcms.useTargets" select="'no'" />
 
   <xsl:template name="renderLayout">
+    <xsl:if test="/mycoreobject/@ID">
+      <xsl:variable name="setObjIDInSession" select="layoutUtils:setLastValidPageID(/mycoreobject/@ID)" />
+    </xsl:if>
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">
