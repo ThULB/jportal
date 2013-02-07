@@ -6,7 +6,6 @@
 	<property name="module.directory" location="${ant.file}/.." />
 	<property file="${module.directory}/build.properties" />
 	<property name="module.jar" location="${build.lib}/${module.jar.name}" />
-	<property name="jp.save.directory" location="${basedir}/webcontent" />
 
 	<target name="create.default-rules" description="loads default acl rules for archive application">
 		<echo>Default rules</echo>
@@ -32,7 +31,6 @@
 	<!-- CREATE WEB APPLICATION -->
 	<target name="create.webapp">
 		<echo>JPortal webapp</echo>
-
 		<echo>Copy JPortal Stuff</echo>
 		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.directory}/editor/form" includes="**/*.xml" />
@@ -64,7 +62,7 @@
 			</patternset>
 			<regexpmapper from="^(xsl/)(.*)" to="\2" />
 		</unjar>
-		
+
 		<unjar dest="${build.webapps}/WEB-INF/classes/xml" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
@@ -80,11 +78,6 @@
 			</patternset>
 			<regexpmapper from="^(web/)(.*)" to="\2" />
 		</unjar>
-
-		<!-- restore webcontent -->
-		<!--
-		<antcall target="restore.web-content" />
-		-->
 
 	</target>
 	

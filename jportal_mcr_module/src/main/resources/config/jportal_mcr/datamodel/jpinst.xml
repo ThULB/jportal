@@ -33,6 +33,7 @@
         <!-- 08 - PND & PPN -->
         <element name="identifiers" minOccurs='0' maxOccurs='1'>
             <mcrmetalangtext name="identifier" class="MCRMetaLangText" minOccurs="1" maxOccurs="unbounded" length="128">
+                <type name="gnd" />
                 <type name="pnd" />
                 <type name="ppn" />
             </mcrmetalangtext>
