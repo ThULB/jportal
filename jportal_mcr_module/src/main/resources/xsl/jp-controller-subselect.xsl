@@ -313,7 +313,7 @@
       <xsl:with-param name="data" select="xalan:nodeset($viewData)" />
     </xsl:apply-templates>
 
-    <xsl:if test="$loopCount &gt; 1 and $start + $rows &lt; $numFound">
+    <xsl:if test="$loopCount &gt; 1 and $startPage + $rows &lt; $numFound">
       <xsl:call-template name="createResultPaginator">
         <xsl:with-param name="numEntry" select="$numEntry" />
         <xsl:with-param name="numFound" select="$numFound" />
