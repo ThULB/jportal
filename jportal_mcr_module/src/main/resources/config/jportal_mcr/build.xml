@@ -80,7 +80,7 @@
 		</unjar>
 
 	</target>
-	
+
 	 <target name="config">
 	    <mcr:config action="addInclude"
 	                propertyfile="${build.config}/mycore.properties"

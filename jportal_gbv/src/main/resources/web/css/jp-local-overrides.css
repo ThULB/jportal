@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+body {
+    width: 1000px;
+}
+
+#globalHeader {
+    background-color: #fcefa1;
+}
+
+#logo {
+    height: 150px;
+}
