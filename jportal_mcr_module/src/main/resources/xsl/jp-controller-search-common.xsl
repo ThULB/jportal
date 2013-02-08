@@ -12,14 +12,7 @@
 
   <xsl:template mode="createQueryTerm" match="queryTerm">
     <xsl:value-of select="'solr:q='" />
-    <xsl:apply-templates mode="createLocalParams" select="../localParams" />
     <xsl:value-of select="encoder:encode(@value, 'UTF-8')" />
-  </xsl:template>
-
-  <xsl:template mode="createLocalParams" match="localParams">
-    <xsl:if test="@value != ''">
-      <xsl:value-of select="encoder:encode(@value, 'UTF-8')" />
-    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="createURL" match="url">

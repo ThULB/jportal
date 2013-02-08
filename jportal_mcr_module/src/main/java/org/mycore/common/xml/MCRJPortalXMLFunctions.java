@@ -6,7 +6,9 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +19,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user.MCRUserMgr;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRTextResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -67,16 +70,23 @@ public class MCRJPortalXMLFunctions {
 
     public static String toSolrQuery(String input) throws UnsupportedEncodingException {
         String[] queries = input.split("#");
+        String contentQuery = null;
         String solrQuery = null;
-        for(String query : queries) {
+        for (String query : queries) {
             SolrFieldQuery solrFieldQuery = new SolrFieldQuery(query);
-            if(solrFieldQuery.isValueSet()) {
-                solrQuery = solrQuery == null ? solrFieldQuery.toString() : solrQuery + " " + solrFieldQuery.toString();
+            if (solrFieldQuery.isValueSet()) {
+                if (solrFieldQuery.field.equals("content")) {
+                    contentQuery = contentQuery == null ? solrFieldQuery.value : contentQuery + " " + solrFieldQuery.value;
+                } else {
+                    solrQuery = solrQuery == null ? solrFieldQuery.toString() : solrQuery + " " + solrFieldQuery.toString();
+                }
             }
         }
-        return solrQuery == null ? "*" : URLEncoder.encode(solrQuery, "UTF-8");
+        contentQuery = contentQuery == null ? null : "({!join from=returnId to=id}" + contentQuery + ")";
+        return solrQuery == null && contentQuery == null ? "*" : contentQuery == null ? solrQuery : solrQuery == null ? contentQuery
+                : contentQuery + " AND " + solrQuery;
     }
-    
+
     public static Document getLanguages() {
         String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
         String[] languagesArray = languagesString.split(",");
@@ -102,6 +112,19 @@ public class MCRJPortalXMLFunctions {
         String webDir = MCRConfiguration.instance().getString("MCR.webappsDir");
         File f = new File(new File(webDir), webResource);
         return f.exists();
+    }
+
+    public String resolveText(String text, String varList) {
+        String[] vars = varList.split(",");
+        Map<String, String> varMap = new HashMap<String, String>();
+        for(String var : vars) {
+            String[] split = var.split("=");
+            if(split.length == 2) {
+                varMap.put(split[0], split[1]);
+            }
+        }
+        MCRTextResolver r = new MCRTextResolver(varMap);
+        return r.resolve(text);
     }
 
     private static class SolrFieldQuery {

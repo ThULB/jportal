@@ -20,6 +20,7 @@
     <entry label="Jahr" field="dates" />
     <entry label="Schlagwörter" field="keywords" />
     <entry label="Rubrik" field="rubricText" />
+    <entry label="Volltext" field="content" />
   </xsl:variable>
 
   <xsl:template match="jpsearch" mode="advanced.form">
@@ -82,16 +83,24 @@
   </xsl:template>
 
   <xsl:template match="jpsearch" mode="advanced.result">
-    <xsl:variable name="journalIDTerm">
-      <xsl:if test="$searchjournalID != ''">
-        <xsl:value-of select="encoder:encode(concat(' journalID:', $searchjournalID), 'UTF-8')" />
-      </xsl:if>
+    <xsl:variable name="qt" select="jpxml:toSolrQuery(concat($field1, '=', $value1, '#', $field2, '=', $value2, '#', $field3, '=', $value3))" />
+    <xsl:variable name="fq">
+      <xsl:value-of select="'-objectType:data_file'" />
+      <xsl:value-of select="jpxml:resolveText('[ journalID:{journalID}]', concat('journalID=', $searchjournalID))" />
     </xsl:variable>
-  
-    <xsl:variable name="buildQuery" select="jpxml:toSolrQuery(concat($field1, '=', $value1, '#', $field2, '=', $value2, '#', $field3, '=', $value3))" />
-    <xsl:variable name="query" select="concat($buildQuery, $journalIDTerm)" />    
-    <xsl:variable name="searchResults" select="document(concat('solr:q=', $query ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))"></xsl:variable>
-    <xsl:apply-templates mode="advancedSearchResults" select="$searchResults" />
+    <xsl:variable name="queryXML">
+      <query>
+        <queryTerm value="{$qt}" />
+        <param name="fq" value="{$fq}" />
+        <param name="rows" value="{$rows}" />
+        <param name="start" value="{$start}" />
+        <param name="defType" value="edismax" />
+      </query>
+    </xsl:variable>
+    <xsl:variable name="query">
+      <xsl:apply-templates mode="createSolrQuery" select="xalan:nodeset($queryXML)/query" />
+    </xsl:variable>
+    <xsl:apply-templates mode="advancedSearchResults" select="document($query)" />
   </xsl:template>
 
 </xsl:stylesheet>

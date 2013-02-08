@@ -78,6 +78,8 @@
     <field name="id" type="string" required="true" />
     <field name="objectType" type="string" />
     <field name="objectProject" type="string" />
+    <field name="returnId" type="string" />
+
     <field name="created" type="date" />
     <field name="modified" type="date" />
 
@@ -99,14 +101,17 @@
     <field name="maindoc" type="string" multiValued="true" />
 
     <!-- MCRFile related fields -->
-    <field name="file_owner" type="string" />
-    <field name="file_path" type="string" />
-    <field name="file_name" type="string" />
+    <field name="DerivateID" type="string" />
+    <field name="fileOwner" type="string" />
+    <field name="filePath" type="string" />
+    <field name="fileName" type="string" />
 
-    <field name="stream_name" type="string"  />
-    <field name="stream_size" type="string" />
+    <field name="stream_name" type="string" indexed="true" stored="true" />
+    <field name="stream_size" type="string" indexed="true" stored="true" />
     <field name="stream_content_type" type="string" />
     <field name="stream_source_info" type="string" />
+    <field name="content" type="text" multiValued="true" stored="false" />
+    <copyField source="content" dest="allMeta" />
 
     <field name="payload" type="payloads" />
 
