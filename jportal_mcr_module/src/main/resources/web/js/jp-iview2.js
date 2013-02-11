@@ -19,7 +19,7 @@ var jpIviewSettings = {
         return (location.search.match(new RegExp('[\\?&]' + name + '=([^&#]*)')) || [ , "" ])[1];
     },
     getDerivInfo : function(srcString) {
-        var matchResult = srcString.match(new RegExp('[^&#]*MCRThumbnailServlet/([^&#]*_derivate_[^&#]*)(/[^&#]*)\\?[^&#]*') || [ , "" ]);
+        var matchResult = srcString.match(new RegExp('[^&#]*MCRThumbnailServlet/([^&#]*_derivate_[^&#/]*)(/[^&#]*)\\?[^&#]*') || [ , "" ]);
         return matchResult == null ? null : {
             ID : matchResult[1],
             file : decodeURIComponent(matchResult[2])
