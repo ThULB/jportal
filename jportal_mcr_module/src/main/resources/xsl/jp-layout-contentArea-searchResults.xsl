@@ -37,34 +37,12 @@
       <div id="resultListHeader" class="jp-layout-bottomline jp-layout-border-light">
         <h2>Suchergebnisse</h2>
         <div>
-          <xsl:apply-templates mode="searchResultText" select=".">
-            <xsl:with-param name="resultInfo" select="$resultInfo" />
-          </xsl:apply-templates>
-        </div>
-      </div>
-      <div id="resultList">
-        <xsl:apply-templates mode="resultList" select=".">
-          <xsl:with-param name="resultInfo" select="$resultInfo" />
-        </xsl:apply-templates>
-      </div>
-    </div>
-  </xsl:template>
-
-  <xsl:template mode="advancedSearchResults" match="/response">
-    <xsl:variable name="resultInfoXML">
-      <xsl:call-template name="jpsearch.getResultInfo">
-        <xsl:with-param name="repsonse" select="." />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
-
-    <div id="searchResults">
-      <div id="resultListHeader" class="jp-layout-bottomline jp-layout-border-light">
-        <h2>Suchergebnisse</h2>
-        <div>
-          <xsl:apply-templates mode="advancedSearchResultText" select=".">
-            <xsl:with-param name="resultInfo" select="$resultInfo" />
-          </xsl:apply-templates>
+          <span>
+            <xsl:apply-templates mode="searchResultText" select=".">
+              <xsl:with-param name="resultInfo" select="$resultInfo" />
+            </xsl:apply-templates>
+          </span>
+          <xsl:call-template name="jpsearch.printNavigation" />
         </div>
       </div>
       <div id="resultList">
@@ -76,87 +54,44 @@
   </xsl:template>
 
   <xsl:template mode="searchResultText" match="response">
-    <span>
-      Ihre Suche für
-      <b>
-        &quot;
-        <xsl:value-of select="$qt" />
-        &quot;
-      </b>
-      ergab keine Treffer.
-    </span>
-    <xsl:call-template name="jpsearch.printNavigation" />
+    <xsl:value-of select="'Ihre Suche ergab keine Treffer.'" />
   </xsl:template>
 
   <xsl:template mode="searchResultText" match="response[result/@numFound = 1]">
-    <span>
-      <xsl:value-of select="concat('Ein Ergebnis für &quot;', $qt, '&quot; gefunden.')" />
-    </span>
-    <xsl:call-template name="jpsearch.printNavigation" />
+    <xsl:value-of select="'Ein Ergebnis gefunden.'" />
   </xsl:template>
 
   <xsl:template mode="searchResultText" match="response[result/@numFound &gt; 1]">
     <xsl:param name="resultInfo" />
-    <span>
-      <xsl:value-of select="concat('Etwa ', $resultInfo/numFound, ' Ergebnisse für &quot;', $qt, '&quot; gefunden.')" />
-      <xsl:if test="$resultInfo/page > 0">
-        <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
-      </xsl:if>
-    </span>
-    <xsl:call-template name="jpsearch.printNavigation" />
-  </xsl:template>
-
-  <xsl:template mode="advancedSearchResultText" match="response">
-    <span>Ihre Suche ergab keine Treffer.</span>
-    <xsl:call-template name="jpsearch.printNavigation">
-      <xsl:with-param name="adv" select="true()" />
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template mode="advancedSearchResultText" match="response[result/@numFound = 1]">
-    <span>
-      <xsl:value-of select="'Ein Ergebnis gefunden.'" />
-    </span>
-    <xsl:call-template name="jpsearch.printNavigation">
-      <xsl:with-param name="adv" select="true()" />
-    </xsl:call-template>
-  </xsl:template>
-
-  <xsl:template mode="advancedSearchResultText" match="response[result/@numFound &gt; 1]">
-    <xsl:param name="resultInfo" />
-    <span>
-      <xsl:value-of select="concat($resultInfo/numFound, ' Ergebnisse gefunden.')" />
-      <xsl:if test="$resultInfo/page > 1">
-        <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
-      </xsl:if>
-    </span>
-    <xsl:call-template name="jpsearch.printNavigation">
-      <xsl:with-param name="adv" select="true()" />
-    </xsl:call-template>
+    <xsl:value-of select="concat($resultInfo/numFound, ' Ergebnisse gefunden.')" />
+    <xsl:if test="$resultInfo/page > 0">
+      <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="jpsearch.printNavigation">
-    <xsl:param name="adv" select="false()" />
     <ul class="navigation">
-      <xsl:if test="not($adv)">
-        <li>
-          <a href="{concat($WebApplicationBaseURL, 'jp-search.xml?XSL.searchjournalID=', $searchjournalID, '&amp;XSL.mode=advanced.form')}">Erweiterte Suche</a>
-        </li>
-      </xsl:if>
-      <xsl:if test="$adv">
-        <li>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:call-template name="UrlSetParam">
-                <xsl:with-param name="url" select="$RequestURL" />
-                <xsl:with-param name="par" select="'XSL.mode'" />
-                <xsl:with-param name="value" select="'advanced.form'" />
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:value-of select="'Erweiterte Suche bearbeiten'" />
-          </a>
-        </li>
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="$mode != 'advanced.result'">
+          <li>
+            <a href="{concat($WebApplicationBaseURL, 'jp-search.xml?XSL.searchjournalID=', $searchjournalID, '&amp;XSL.mode=advanced.form')}">Erweiterte Suche</a>
+          </li>
+        </xsl:when>
+        <xsl:otherwise>
+          <li>
+            <a>
+              <xsl:attribute name="href">
+                <xsl:call-template name="UrlSetParam">
+                  <xsl:with-param name="url" select="$RequestURL" />
+                  <xsl:with-param name="par" select="'XSL.mode'" />
+                  <xsl:with-param name="value" select="'advanced.form'" />
+                </xsl:call-template>
+              </xsl:attribute>
+              <xsl:value-of select="'Erweiterte Suche bearbeiten'" />
+            </a>
+          </li>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="$searchjournalID != ''">
         <li>
           <a href="/receive/{$searchjournalID}">Zurück zur Zeitschrift</a>

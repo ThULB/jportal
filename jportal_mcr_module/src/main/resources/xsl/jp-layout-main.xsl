@@ -165,7 +165,7 @@
             <div id="searchBar">
               <form id="searchForm" action="/jp-search.xml">
                 <xsl:variable name="queryterm">
-                  <xsl:if test="$qt != '*'">
+                  <xsl:if test="$qt != '*' and $mode != 'hidden'">
                     <xsl:value-of select="$qt" />
                   </xsl:if>
                 </xsl:variable>

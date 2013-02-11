@@ -100,7 +100,7 @@
     <xsl:variable name="query">
       <xsl:apply-templates mode="createSolrQuery" select="xalan:nodeset($queryXML)/query" />
     </xsl:variable>
-    <xsl:apply-templates mode="advancedSearchResults" select="document($query)" />
+    <xsl:apply-templates mode="searchResults" select="document($query)" />
   </xsl:template>
 
 </xsl:stylesheet>

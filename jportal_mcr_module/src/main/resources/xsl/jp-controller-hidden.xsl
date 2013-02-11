@@ -3,9 +3,22 @@
   xmlns:xalan="http://xml.apache.org/xalan">
 
   <xsl:template match="jpsearch" mode="hidden">
-    <xsl:variable name="query" select="encoder:encode($hiddenQt, 'UTF-8')" />
-    <xsl:variable name="searchResults" select="document(concat('solr:q=', $query ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))"></xsl:variable>
-    <xsl:apply-templates mode="searchResults" select="$searchResults" />
+    <xsl:variable name="queryXML">
+      <query>
+        <queryTerm value="{$qt}" />
+        <xsl:if test="$fq">
+          <param name="fq" value="{$fq}" />
+        </xsl:if>
+        <param name="rows" value="{$rows}" />
+        <param name="start" value="{$start}" />
+        <param name="defType" value="edismax" />
+      </query>
+    </xsl:variable>
+    <xsl:variable name="query">
+      <xsl:apply-templates mode="createSolrQuery" select="xalan:nodeset($queryXML)/query" />
+    </xsl:variable>
+    <xsl:apply-templates mode="searchResults" select="document($query)" />
+
   </xsl:template>
 
 </xsl:stylesheet>
