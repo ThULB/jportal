@@ -192,6 +192,14 @@
     <field name="contentClassi6" type="string" multiValued="true" />
     <field name="contentClassi7" type="string" multiValued="true" />
     <field name="volContentClassi1" type="string" multiValued="true" />
+    <field name="volContentClassi2" type="string" multiValued="true" />
+    <field name="volContentClassi3" type="string" multiValued="true" />
+    <field name="volContentClassi4" type="string" multiValued="true" />
+    <field name="volContentClassi5" type="string" multiValued="true" />
+    <field name="volContentClassi6" type="string" multiValued="true" />
+    <field name="hidden_genhiddenfield1" type="string" />
+    <field name="hidden_genhiddenfield2" type="string" />
+    <field name="hidden_genhiddenfield3" type="string" />
 
     <field name="keywords" type="text_de" multiValued="true" stored="false" />
     <field name="link" type="string" multiValued="true" stored="false" />

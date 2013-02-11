@@ -15,7 +15,7 @@
         <panel id="include_dynamicClassiForJournal#REPLACE_WITH_RUNNING_NUMBER#">
             <hidden var="metadata/contentClassis#REPLACE_WITH_RUNNING_NUMBER#/@class" default="MCRMetaClassification" />
             <hidden var="metadata/contentClassis#REPLACE_WITH_RUNNING_NUMBER#/@notinherit" default="false" />
-            <hidden var="metadata/contentClassis#REPLACE_WITH_RUNNING_NUMBER#/@heritable" default="true" />
+            <hidden var="metadata/contentClassis#REPLACE_WITH_RUNNING_NUMBER#/@heritable" default="false" />
             <cell col="1" row="1" anchor="NORTHWEST" var="metadata/contentClassis#REPLACE_WITH_RUNNING_NUMBER#/contentClassi#REPLACE_WITH_RUNNING_NUMBER#">
                 <repeater min="0" max="10" anchor="NORTHWEST" ref="classisjournal_input_repeater#REPLACE_WITH_RUNNING_NUMBER#" />
             </cell>
