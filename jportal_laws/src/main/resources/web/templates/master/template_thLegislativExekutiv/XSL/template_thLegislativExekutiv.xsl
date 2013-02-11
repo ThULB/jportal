@@ -7,24 +7,22 @@
   xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="i18n laws layoutTools mcr">
 
   <xsl:template match="/template[@id='template_thLegislativExekutiv']" mode="template">
-    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_thLegislativExekutiv" />
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj" mode="template_thLegislativExekutiv" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
-    <xsl:call-template name="jp.laws.js" /> 
-  </xsl:template>
-
-  <xsl:template match="/mycoreobject[contains(@ID, 'jpvolume')]" mode="template_thLegislativExekutiv">
-    <xsl:call-template name="jp.laws.js" /> 
-    <!-- <xsl:call-template name="jp.laws.addAdvSearch" />  -->
-    <xsl:variable name="register" select="laws:getRegister(@ID)" />
-    <xsl:if test="$register">
-      <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
-      <xsl:apply-templates select="$register/gesetzessammlung" mode="template_thLegislativExekutiv">
-        <xsl:with-param name="objId" select="@ID" />
-        <xsl:with-param name="derivateId" select="$derivateId" />
-      </xsl:apply-templates>
-    </xsl:if>
+    <xsl:call-template name="jp.laws.js" />
+    <xsl:if test="contains(@ID, 'jpvolume')">
+      <xsl:variable name="register" select="laws:getRegister(@ID)" />
+      <xsl:if test="$register">
+        <xsl:variable name="derivateId" select="laws:getImageDerivate(@ID)" />
+        <xsl:apply-templates select="$register/gesetzessammlung" mode="template_thLegislativExekutiv">
+          <xsl:with-param name="objId" select="@ID" />
+          <xsl:with-param name="derivateId" select="$derivateId" />
+        </xsl:apply-templates>
+      </xsl:if>
+    </xsl:if> 
   </xsl:template>
 
   <!-- Entry point to print all laws of a register -->
@@ -41,21 +39,13 @@
   </xsl:template>
 
   <!-- ================================================================================= -->
-  <xsl:template name="jp.laws.addAdvSearch">
-    <script type="text/javascript">
-      $(document).ready(function() {
-        setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
-      });
-    </script>
-  </xsl:template>
-
-  <!-- ================================================================================= -->
   <xsl:template name="jp.laws.js">
-    <script type="text/javascript" src="../templates/master/template_thLegislativExekutiv/JS/jp-laws.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/JS/jp-laws.js" />
 	<script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
         setMaintitle('<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />');
+        setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
         linkLawsToIview();
       });
     </script>

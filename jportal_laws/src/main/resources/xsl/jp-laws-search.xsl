@@ -16,8 +16,10 @@
     </p>
 
     <form id="advancedSearchForm" action="/jp-search.xml" onSubmit="return buildQuery()">
-      <input type="hidden" name="XSL.mode" value="laws.result"/>
-      <input type="hidden" id="qt" name="XSL.qt" />
+      <input type="hidden" name="XSL.mode" value="hidden"/>
+      <input type="hidden" name="XSL.returnURL" value="{$RequestURL}" />
+      <input type="hidden" name="XSL.qt" id="qt" />
+      <input type="hidden" name="XSL.fq" id="fq" />
       <table>
         <tr>
           <th><xsl:value-of select="i18n:translate('jp.laws.search.text')" /></th>
@@ -48,12 +50,6 @@
     </form>
   </xsl:template>
 
- <xsl:template match="jpsearch" mode="laws.result">
-    <xsl:variable name="q" select="encoder:encode($qt, 'UTF-8')" />
-    <xsl:variable name="searchResults" select="document(concat('solr:q=', $q ,'&amp;rows=',$rows,'&amp;start=',$start,'&amp;defType=edismax'))/response"></xsl:variable>
-    <xsl:apply-templates mode="searchResults" select="$searchResults" />
- </xsl:template>
-
   <xsl:template name="jp.laws.search.css">
     <style type="text/css">
       .searchbox {
@@ -76,7 +72,7 @@
   </xsl:template>
 
   <xsl:template name="jp.laws.search.js">
-    <script type="text/javascript" src="../templates/master/template_calendar/JS/jp-laws.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/JS/jp-laws.js" />
     <script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');

@@ -13,21 +13,25 @@ function buildQuery() {
     var from = $("#published_from").val();
     var until = $("#published_until").val();
 
+    var fq = "";
     // input conditions
-    var query = searchTerm;
+    if(searchTerm.length > 0) {
+    	$("#qt").attr("value", "({!join from=returnId to=id}" + searchTerm + ") OR" + searchTerm);
+    	fq = '-objectType:data_file';
+    }
     if(territory.length > 0) {
-      query += " +volContentClassi1:" + territory;
+    	fq += " +hidden_genhiddenfield1:" + territory;
     }
     if(from.length > 0 && until.length > 0) {
-      query += " +date.published:[" + from + " TO " + until + "]";
+    	fq += " +date.published:[" + from + " TO " + until + "]";
     } else if(from.length > 0) {
-      query += " +date.published:[" + from + " TO *]";
+    	fq += " +date.published:[" + from + " TO *]";
     } else if(until.length > 0) {
-      query += " +date.published:[* TO " + until + "]";
+    	fq += " +date.published:[* TO " + until + "]";
     }
-    query += " +contentClassi2:Gesetzesblaetter";
-    query += " +objectType:jpvolume";
-    $("#qt").attr("value", query);
+    fq += " +contentClassi2:Gesetzesblaetter";
+    fq += " +objectType:jpvolume";
+    $("#fq").attr("value", fq);
 }
 
 function setLogo(baseURL) {
