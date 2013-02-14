@@ -20,10 +20,10 @@
   <xsl:template name="jp.account.show">
     <ul>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?mode=CreatePwdDialog">Passwort ändern</a>
+        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?action=changeMyPassword">Passwort ändern</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?mode=ShowUser">Nutzerdaten anzeigen</a>
+        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?mode=show">Nutzerdaten anzeigen</a>
       </li>
     </ul>
   </xsl:template>

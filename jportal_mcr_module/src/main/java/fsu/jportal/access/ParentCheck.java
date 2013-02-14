@@ -52,21 +52,25 @@ public class ParentCheck extends AbstractStrategyStep {
         if (!getAccessStrategyConfig().getXMLMetadataMgr().exists(objID)) {
             return null;
         }
-        Document objXML = getAccessStrategyConfig().getXMLMetadataMgr().retrieveXML(objID);
-        if (objID.getTypeId().equals("derivate")) {
-            XPathExpression<Attribute> xpath = XPathFactory.instance().compile("/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href",
-                    Filters.attribute(), null, MCRConstants.XLINK_NAMESPACE);
-            Attribute attr = xpath.evaluateFirst(objXML);
-            if (attr != null) {
-                return MCRObjectID.getInstance(attr.getValue());
+        try {
+            Document objXML = getAccessStrategyConfig().getXMLMetadataMgr().retrieveXML(objID);
+            if (objID.getTypeId().equals("derivate")) {
+                XPathExpression<Attribute> xpath = XPathFactory.instance().compile("/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href",
+                        Filters.attribute(), null, MCRConstants.XLINK_NAMESPACE);
+                Attribute attr = xpath.evaluateFirst(objXML);
+                if (attr != null) {
+                    return MCRObjectID.getInstance(attr.getValue());
+                }
+            } else {
+                XPathExpression<Text> xpath = XPathFactory.instance().compile(
+                        "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()", Filters.text());
+                Text text = xpath.evaluateFirst(objXML);
+                if (text != null) {
+                    return MCRObjectID.getInstance(text.getText());
+                }
             }
-        } else {
-            XPathExpression<Text> xpath = XPathFactory.instance().compile(
-                    "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()", Filters.text());
-            Text text = xpath.evaluateFirst(objXML);
-            if (text != null) {
-                return MCRObjectID.getInstance(text.getText());
-            }
+        } catch(Exception exc) {
+            
         }
         return null;
     }

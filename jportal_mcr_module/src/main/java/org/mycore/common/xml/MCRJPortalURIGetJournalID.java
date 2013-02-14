@@ -78,7 +78,13 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
         if (oldJournalID != null && oldJournalID.length == 2 && currentObjID.equals(oldJournalID[0])) {
             return oldJournalID[1];
         }
-        Document objXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
+        Document objXML;
+        try {
+            objXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
+        } catch(Exception exc) {
+            LOGGER.error("Unable to retrieve object " + mcrId, exc);
+            return "";
+        }
         XPathExpression<Element> hiddenJournalIDXpath = XPathFactory.instance().compile(
                 "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID", Filters.element());
         Element hiddenJournalIDElement = hiddenJournalIDXpath.evaluateFirst(objXML);

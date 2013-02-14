@@ -68,8 +68,13 @@ public class MCRJPortalURIGetClassID implements URIResolver {
 
         // TODO: use cache
         LOGGER.debug("getClassID => journalID=" + journalID);
-
-        Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+        Document journalXML;
+        try {
+            journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+        } catch(Exception exc) {
+            LOGGER.error("unable to retrieve journal " + journalID, exc);
+            return null;
+        }
         int sepPos = XPathWhereToFindClassIDInJournalXML.indexOf("/");
         String tag1 = XPathWhereToFindClassIDInJournalXML.substring(0, sepPos);
         String tag2 = XPathWhereToFindClassIDInJournalXML.substring(sepPos + 1, XPathWhereToFindClassIDInJournalXML.length());

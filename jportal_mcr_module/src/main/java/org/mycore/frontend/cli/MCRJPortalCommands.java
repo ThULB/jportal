@@ -16,6 +16,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.util.DerivateLinkUtil;
+import org.xml.sax.SAXException;
 
 public class MCRJPortalCommands extends MCRAbstractCommands {
 
@@ -30,7 +31,7 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         addCommand(new MCRCommand("add derivate link {0} to {1}", "org.mycore.frontend.cli.MCRJPortalCommands.addDerivateLink String String", ""));
     }
 
-    public static void exportBlob(String objectID, String file) {
+    public static void exportBlob(String objectID, String file) throws SAXException, JDOMException, IOException {
         Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(objectID));
         XMLOutputter xo = new XMLOutputter(Format.getPrettyFormat());
         try {
@@ -41,7 +42,6 @@ public class MCRJPortalCommands extends MCRAbstractCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void importBlob(String file) {

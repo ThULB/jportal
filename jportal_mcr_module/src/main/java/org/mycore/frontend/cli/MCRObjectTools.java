@@ -121,7 +121,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         }
     }
 
-    public static void repairCopy(String sourceObjectID, String destinationObjectID) {
+    public static void repairCopy(String sourceObjectID, String destinationObjectID) throws Exception {
         // find if there the destination object allready has children
         // when yes, add them to the destination object
         String querystring = "parent = \"" + destinationObjectID + "\"";
@@ -226,7 +226,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
         return executeMoreCMDs;
     }
 
-    public static void cp(String sourceMcrIdStr, String layoutTemp, String dataModelCoverage) {
+    public static void cp(String sourceMcrIdStr, String layoutTemp, String dataModelCoverage) throws Exception {
         MCRObjectID sourceMcrId = MCRObjectID.getInstance(sourceMcrIdStr);
         Document mcrOrigObjXMLDoc = MCRXMLMetadataManager.instance().retrieveXML(sourceMcrId);
 

@@ -1,5 +1,6 @@
 package fsu.jportal.xsl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,7 @@ import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 public class LayoutTools {
     private static class InfoProvider {
@@ -34,7 +36,7 @@ public class LayoutTools {
             this.xpathList = xpath;
         }
 
-        public <T> T get(MCRObjectInfo<T> fromObj) throws JDOMException {
+        public <T> T get(MCRObjectInfo<T> fromObj) throws JDOMException, IOException, SAXException {
             MCRObjectID mcrid = MCRObjectID.getInstance(id);
             MCRXMLMetadataManager metadataManager = MCRXMLMetadataManager.instance();
             if (metadataManager.exists(mcrid)) {
@@ -113,27 +115,27 @@ public class LayoutTools {
         public T getInfo(List<Object> node);
     }
 
-    public String getNameOfTemplate(String journalID) throws TransformerException, JDOMException {
+    public String getNameOfTemplate(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/hidden_templates/hidden_template/text()");
         return infoProvider.get(new SimpleText());
     }
 
-    public String getMaintitle(String journalID) throws TransformerException, JDOMException {
+    public String getMaintitle(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/maintitles/maintitle/text()");
         return infoProvider.get(new SimpleText());
     }
 
-    public String getListType(String journalID) throws TransformerException, JDOMException {
+    public String getListType(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/contentClassis1/contentClassi1/@categid");
         return infoProvider.get(new SimpleAttribute());
     }
 
-    public String getDerivateDisplay(String derivateID) throws TransformerException, JDOMException {
+    public String getDerivateDisplay(String derivateID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(derivateID, "/mycorederivate/derivate[not(@display) or @display!='false']");
         return infoProvider.get(new DerivateDisplay());
     }
     
-    public Node getDatesInfo(String journalID) throws TransformerException, JDOMException {
+    public Node getDatesInfo(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/dates","/mycoreobject/metadata/hidden_genhiddenfields1");
         return infoProvider.get(new DatesInfo());
     }

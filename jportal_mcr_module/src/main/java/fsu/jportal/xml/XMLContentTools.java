@@ -1,47 +1,38 @@
 package fsu.jportal.xml;
 
+import java.util.List;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRConstants;
+import org.mycore.common.MCRObjectUtils;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class XMLContentTools {
 
     public Element getParents(String childID) {
-        Element parents = new Element("parents");
-        MCRObjectID mcrObjectID = MCRObjectID.getInstance(childID);
-        if (!MCRXMLMetadataManager.instance().exists(mcrObjectID)) {
-            return parents;
-        }
-        Document childXML = MCRXMLMetadataManager.instance().retrieveXML(mcrObjectID);
-        XPathExpression<Element> parentIdXpath = XPathFactory.instance().compile(
-                "/mycoreobject/structure/parents/parent[@inherited='0']", Filters.element());
-        XPathExpression<Text> titleXpath = XPathFactory.instance().compile(
-                "/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text()", Filters.text());
-        while (true) {
-            Element parent = parentIdXpath.evaluateFirst(childXML);
-            if (parent != null) {
-                Text parentTitle = titleXpath.evaluateFirst(childXML);
-                parent.setAttribute("inherited", String.valueOf(parents.getContentSize()));
-                parent.setAttribute("title", shortenText(parentTitle.getText()), MCRConstants.XLINK_NAMESPACE);
-                parents.addContent(0, parent.detach());
-                MCRObjectID parentId = MCRObjectID.getInstance(parent.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE));
-                if (!MCRMetadataManager.exists(parentId)) {
-                    parent.setAttribute("error", "not found"); 
-                    break;
-                }
-                childXML = MCRXMLMetadataManager.instance().retrieveXML(parentId);
-            } else {
-                break;
+        Element parentsElement = new Element("parents");
+        MCRObjectID mcrChildID = MCRObjectID.getInstance(childID);
+        if (MCRXMLMetadataManager.instance().exists(mcrChildID)) {
+            XPathExpression<Text> titleXpath = XPathFactory.instance().compile(
+                    "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()", Filters.text());
+            List<MCRObject> parents = MCRObjectUtils.getAncestors(MCRMetadataManager.retrieveMCRObject(mcrChildID));
+            for(int i = 0; i < parents.size(); i++) {
+                MCRObject parent = parents.get(i);
+                Document parentXML = parent.createXML();
+                Element parentElement = new Element("parent");
+                parentElement.setAttribute("inherited", String.valueOf(i + 1));
+                parentElement.setAttribute("title", shortenText(titleXpath.evaluateFirst(parentXML).getText()));
+                parentsElement.addContent(parentElement);
             }
         }
-        return parents;
+        return parentsElement;
     }
 
     private String shortenText(String text) {

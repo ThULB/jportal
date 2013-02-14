@@ -45,7 +45,13 @@ public class MCRJPortalLayoutTemplateDetector {
 
     private static String getJournalTemplateID(String journalID) {
         // get "date-from" of journal
-        Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+        Document objXML;
+        try {
+            objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+        } catch(Exception exc) {
+            LOGGER.error("Unable to get journal " + journalID, exc);
+            return "";
+        }
         Integer dateOfJournal = 0;
         Element dateNode = null;
         XPathExpression<Element> xpath =

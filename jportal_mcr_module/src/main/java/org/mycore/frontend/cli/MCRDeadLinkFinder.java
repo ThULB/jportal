@@ -50,10 +50,13 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
             } else {
                 // retrieve the object with the faulty reference
                 // LOGGER.info("object: " + keyMCRFrom);
-                faultyObjDoc = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(keyMCRFrom));
-                objectXMLs.put(keyMCRFrom, faultyObjDoc);
+                try {
+                    faultyObjDoc = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(keyMCRFrom));
+                    objectXMLs.put(keyMCRFrom, faultyObjDoc);
+                } catch(Exception exc) {
+                    LOGGER.error("Unable to retrieve object " + keyMCRFrom, exc);
+                }
             }
-
             Filter<Element> hrefFilter = new AbstractFilter<Element>() {
                 @Override
                 public Element filter(Object content) {

@@ -50,7 +50,13 @@ public class MigratingCMDs {
         String journalFileBase = MCRConfiguration.instance().getString("JournalFileFolder");
 
         for (String journalID : journalIDs) {
-            Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+            Document journalXML;
+            try {
+                journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+            } catch(Exception exc) {
+                LOGGER.error("Unable to retrieve journal " + journalID, exc);
+                continue;
+            }
             Element journalContextElement = hiddenWebContextXpath.evaluateFirst(journalXML);
             if (journalContextElement != null) {
                 String pathToJournalXML = webappDir + journalContextElement.getText();
@@ -92,7 +98,13 @@ public class MigratingCMDs {
         Document navigationXML = (Document) builder.build(navigationXMLFile);
 
         for (String journalID : journalIDs) {
-            Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+            Document journalXML;
+            try {
+                journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
+            } catch(Exception exc) {
+                LOGGER.error("Unable to retrieve journal " + journalID, exc);
+                continue;
+            }
             String journalContextPath = hiddenWebContextXpath.evaluateFirst(journalXML).getText().trim();
             
             if(journalContextPath!= null && !journalContextPath.equals("")){
@@ -146,7 +158,13 @@ public class MigratingCMDs {
 
         for (String ID : listIDs) {
             MCRObjectID mcrid = MCRObjectID.getInstance(ID);
-            Document mcrObjXML = xmlMetaManager.retrieveXML(mcrid);
+            Document mcrObjXML;
+            try {
+                mcrObjXML = xmlMetaManager.retrieveXML(mcrid);
+            } catch(Exception exc) {
+                LOGGER.error("Unable to retrieve mcr object " + mcrid, exc);
+                continue;
+            }
             if (!xlinkLabel.evaluate(mcrObjXML).isEmpty()) {
                 Source xmlSource = new JDOMSource(mcrObjXML);
                 JDOMResult jdomResult = new JDOMResult();
