@@ -8,6 +8,7 @@ import org.jdom2.Text;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRObjectUtils;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -23,13 +24,15 @@ public class XMLContentTools {
             XPathExpression<Text> titleXpath = XPathFactory.instance().compile(
                     "/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()", Filters.text());
             List<MCRObject> parents = MCRObjectUtils.getAncestors(MCRMetadataManager.retrieveMCRObject(mcrChildID));
-            for(int i = 0; i < parents.size(); i++) {
+            for (int i = 0; i < parents.size(); i++) {
                 MCRObject parent = parents.get(i);
                 Document parentXML = parent.createXML();
                 Element parentElement = new Element("parent");
                 parentElement.setAttribute("inherited", String.valueOf(i + 1));
-                parentElement.setAttribute("title", shortenText(titleXpath.evaluateFirst(parentXML).getText()));
-                parentsElement.addContent(parentElement);
+                parentElement.setAttribute("title", shortenText(titleXpath.evaluateFirst(parentXML).getText()),
+                        MCRConstants.XLINK_NAMESPACE);
+                parentElement.setAttribute("href", parent.getId().toString(), MCRConstants.XLINK_NAMESPACE);
+                parentsElement.addContent(0, parentElement);
             }
         }
         return parentsElement;
