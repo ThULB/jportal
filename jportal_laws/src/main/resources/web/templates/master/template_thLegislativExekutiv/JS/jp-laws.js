@@ -16,7 +16,7 @@ function buildQuery() {
     var fq = "";
     // input conditions
     if(searchTerm.length > 0) {
-    	$("#qt").attr("value", "({!join from=returnId to=id}" + searchTerm + ") OR" + searchTerm);
+    	$("#qt").attr("value", "({!join from=returnId to=id}" + searchTerm + ") OR " + searchTerm);
     	fq = '-objectType:data_file';
     }
     if(territory.length > 0) {
