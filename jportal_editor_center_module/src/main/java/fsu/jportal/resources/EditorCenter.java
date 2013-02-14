@@ -23,7 +23,7 @@ public class EditorCenter {
     public InputStream getResources(@PathParam("filename") String filename){
         return this.getClass().getResourceAsStream("/editorCenter/" + filename);
     }
-    
+
     @GET
     @Path("numDoubletsOf/{type}")
     public String getNumOfDoublets(@PathParam("type") String type){
@@ -33,7 +33,7 @@ public class EditorCenter {
         numDubletJson.addProperty("num", numOfDoublets);
         return gson.toJson(numDubletJson);
     }
-    
+
     @POST
     @Path("rmDuplicates/{type}")
     @RolesAllowed("")

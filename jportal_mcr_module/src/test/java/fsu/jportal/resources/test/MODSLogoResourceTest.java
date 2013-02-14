@@ -13,9 +13,9 @@ import java.util.HashMap;
 import java.util.Properties;
 
 import org.custommonkey.xmlunit.XMLUnit;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

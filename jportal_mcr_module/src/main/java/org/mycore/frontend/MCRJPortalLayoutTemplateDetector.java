@@ -1,8 +1,11 @@
 package org.mycore.frontend;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRJPortalURIGetJournalID;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -43,17 +46,16 @@ public class MCRJPortalLayoutTemplateDetector {
     private static String getJournalTemplateID(String journalID) {
         // get "date-from" of journal
         Document objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-        org.jdom.xpath.XPath xpath = null;
         Integer dateOfJournal = 0;
         Element dateNode = null;
-        try {
-            xpath = org.jdom.xpath.XPath.newInstance("/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']");
-            dateNode = (Element) xpath.selectSingleNode(objXML);
-            dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
-        } catch (Exception e) {
-            LOGGER.error("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return ''", e);
+        XPathExpression<Element> xpath =
+                XPathFactory.instance().compile("/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
+        dateNode = xpath.evaluateFirst(objXML);
+        if (dateNode == null) {
+            LOGGER.error("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
             return "";
         }
+        dateOfJournal = Integer.valueOf(dateNode.getTextTrim());
 
         // get template
         MCRConfiguration mcrConfig = MCRConfiguration.instance();

@@ -5,11 +5,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.transform.JDOMSource;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.transform.JDOMSource;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -77,20 +79,19 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
             return oldJournalID[1];
         }
         Document objXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
-        try {
-            XPath hiddenJournalIDXpath = XPath.newInstance("/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID");
-            String journalID = hiddenJournalIDXpath.valueOf(objXML);
-
-            if (journalID != null && !journalID.equals("")) {
-                String[] journalIDForObj = { currentObjID, journalID };
-                MCRSessionMgr.getCurrentSession().put("journalIDForObj", journalIDForObj);
-            }
-
-            return journalID;
-        } catch (JDOMException e) {
-            LOGGER.error("unable to parse  object " + currentObjID, e);
+        XPathExpression<Element> hiddenJournalIDXpath = XPathFactory.instance().compile(
+                "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID", Filters.element());
+        Element hiddenJournalIDElement = hiddenJournalIDXpath.evaluateFirst(objXML);
+        if(hiddenJournalIDElement == null) {
+            LOGGER.error("unable to parse  object " + currentObjID);
+            return "";
         }
-        return "";
+        String journalID = hiddenJournalIDElement.getText();
+        if (journalID != null && !journalID.equals("")) {
+            String[] journalIDForObj = { currentObjID, journalID };
+            MCRSessionMgr.getCurrentSession().put("journalIDForObj", journalIDForObj);
+        }
+        return journalID;
     }
 
     private boolean wellURI(String uri) {

@@ -21,11 +21,14 @@ import java.util.Map;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Namespace;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
+import org.jdom2.xpath.XPathHelper;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -262,9 +265,7 @@ public class MCRObjectTools extends MCRAbstractCommands {
             // creating ACL for copy
             // retrieve ACL from source Object
             Element servAcl = MCRURIResolver.instance().resolve("access:action=all&object=" + sourceMcrIdStr);
-            @SuppressWarnings("unchecked")
             List<Element> permissions = servAcl.getChildren("servacl");
-
             for (Iterator<Element> iterator = permissions.iterator(); iterator.hasNext();) {
                 Element perm = (Element) iterator.next();
                 String permName = perm.getAttributeValue("permission");
@@ -275,13 +276,8 @@ public class MCRObjectTools extends MCRAbstractCommands {
     }
 
     private static Element getElementWithXpath(Document xmlDoc, String xpathExpression) {
-        try {
-            XPath xpath = XPath.newInstance(xpathExpression);
-            return (Element) xpath.selectSingleNode(xmlDoc);
-        } catch (JDOMException e) {
-            LOGGER.error("while select node", e);
-        }
-        return null;
+        XPathExpression<Element> xpath = XPathFactory.instance().compile(xpathExpression, Filters.element());
+        return xpath.evaluateFirst(xmlDoc);
     }
 
     private static MCRFilesystemNode getFileSystemNode(String sourcePath) {

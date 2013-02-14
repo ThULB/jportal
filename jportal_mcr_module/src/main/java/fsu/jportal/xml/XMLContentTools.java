@@ -1,10 +1,11 @@
 package fsu.jportal.xml;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -19,30 +20,26 @@ public class XMLContentTools {
             return parents;
         }
         Document childXML = MCRXMLMetadataManager.instance().retrieveXML(mcrObjectID);
-        try {
-            XPath parentIdXpath = XPath.newInstance("/mycoreobject/structure/parents/parent[@inherited='0']");
-            XPath titleXpath = XPath.newInstance("/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text()");
-
-            while (true) {
-                Element parent = (Element) parentIdXpath.selectSingleNode(childXML);
-                if (parent != null) {
-                    Text parentTitle = (Text) titleXpath.selectSingleNode(childXML);
-                    parent.setAttribute("inherited", String.valueOf(parents.getContentSize()));
-                    parent.setAttribute("title", shortenText(parentTitle.getText()), MCRConstants.XLINK_NAMESPACE);
-                    parents.addContent(0, parent.detach());
-                    MCRObjectID parentId = MCRObjectID.getInstance(parent.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE));
-                    if (!MCRMetadataManager.exists(parentId)) {
-                        parent.setAttribute("error", "not found"); 
-                        break;
-                    }
-                    childXML = MCRXMLMetadataManager.instance().retrieveXML(parentId);
-                } else {
+        XPathExpression<Element> parentIdXpath = XPathFactory.instance().compile(
+                "/mycoreobject/structure/parents/parent[@inherited='0']", Filters.element());
+        XPathExpression<Text> titleXpath = XPathFactory.instance().compile(
+                "/mycoreobject/metadata/maintitles/maintitle[@inherited='1']/text()", Filters.text());
+        while (true) {
+            Element parent = parentIdXpath.evaluateFirst(childXML);
+            if (parent != null) {
+                Text parentTitle = titleXpath.evaluateFirst(childXML);
+                parent.setAttribute("inherited", String.valueOf(parents.getContentSize()));
+                parent.setAttribute("title", shortenText(parentTitle.getText()), MCRConstants.XLINK_NAMESPACE);
+                parents.addContent(0, parent.detach());
+                MCRObjectID parentId = MCRObjectID.getInstance(parent.getAttributeValue("href", MCRConstants.XLINK_NAMESPACE));
+                if (!MCRMetadataManager.exists(parentId)) {
+                    parent.setAttribute("error", "not found"); 
                     break;
                 }
+                childXML = MCRXMLMetadataManager.instance().retrieveXML(parentId);
+            } else {
+                break;
             }
-        } catch (JDOMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         return parents;
     }

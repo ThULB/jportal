@@ -11,9 +11,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
 import org.mycore.frontend.jersey.resources.MCRJerseyResource;
-import org.mycore.user.MCRUserMgr;
+import org.mycore.user2.MCRUserManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -43,18 +42,18 @@ public class LoginResource extends MCRJerseyResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(String json){
-        Logger logger = Logger.getLogger(LoginResource.class);
         Gson gson = new GsonBuilder().create();
         LoginData loginData = gson.fromJson(json, LoginData.class);
         Response response = null;
         
         if(loginData.getUserID() != null){
-            if (!MCRUserMgr.instance().existUser(loginData.getUserID())) {
+            if (!MCRUserManager.exists(loginData.getUserID())) {
                 response = Response.status(Status.CONFLICT).build();
-            } else if (MCRUserMgr.instance().login(loginData.getUserID(), loginData.getPassword())) {
+            } else if(MCRUserManager.login(loginData.getUserID(), loginData.getPassword()) != null){
                 response = Response.ok().build();
             }
         }
         return response;
     }
+
 }

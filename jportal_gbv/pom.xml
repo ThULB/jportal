@@ -1,36 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>jportal</artifactId>
     <groupId>fsu.thulb</groupId>
-    <version>2.0.15</version>
+    <version>2.0.18-SNAPSHOT</version>
   </parent>
-
   <modelVersion>4.0.0</modelVersion>
-
   <artifactId>jportal_gbv</artifactId>
-  <version>2.0.17-SNAPSHOT</version>
-
-  <packaging>jar</packaging>
-
   <name>jportal_gbv</name>
-  <url>http://maven.apache.org</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.resources.overwrite>true</maven.resources.overwrite>
   </properties>
 
   <build>
     <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ant-plugin</artifactId>
@@ -54,7 +38,7 @@
                 <artifactItem>
                   <groupId>fsu.thulb</groupId>
                   <artifactId>jportal_mcr_module</artifactId>
-                  <version>2.0.17-SNAPSHOT</version>
+                  <version>2.0.18-SNAPSHOT</version>
                   <type>jar</type>
                   <outputDirectory>${project.build.directory}/classes</outputDirectory>
                   <excludes>**/jportal_mcr/build.xml</excludes>
@@ -71,7 +55,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addExtensions/>
+              <addExtensions />
             </manifest>
             <manifestEntries>
               <MCR-Application-Module>${project.name}</MCR-Application-Module>
@@ -86,20 +70,16 @@
     <dependency>
       <groupId>fsu.thulb</groupId>
       <artifactId>jportal_mcr_module</artifactId>
+      <version>2.0.18-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
-      <type>pom</type>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -113,4 +93,3 @@
     </dependency>
   </dependencies>
 </project>
-

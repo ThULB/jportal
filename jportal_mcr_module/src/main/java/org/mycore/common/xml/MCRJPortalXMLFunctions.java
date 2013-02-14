@@ -17,7 +17,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.user.MCRUserMgr;
+import org.mycore.user2.MCRUserManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRTextResolver;
 import org.w3c.dom.Document;
@@ -53,7 +53,7 @@ public class MCRJPortalXMLFunctions {
     }
 
     public static String getUserID() {
-        return MCRUserMgr.instance().getCurrentUser().getID();
+        return MCRUserManager.getCurrentUser().getUserID();
     }
 
     public static String getFormat(String date) {

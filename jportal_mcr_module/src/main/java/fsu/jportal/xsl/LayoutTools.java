@@ -5,13 +5,14 @@ import java.util.List;
 
 import javax.xml.transform.TransformerException;
 
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.output.DOMOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -39,16 +40,13 @@ public class LayoutTools {
             if (metadataManager.exists(mcrid)) {
                 List<Object> nodes = new ArrayList<Object>();
                 Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(mcrid);
-                
                 for (String xpath : xpathList) {
-                    XPath hiddenTemplateXpath = XPath.newInstance(xpath);
-                    Object node = hiddenTemplateXpath.selectSingleNode(journalXML);
-                    
-                    if(node != null) {
+                    XPathExpression<Object> hiddenTemplateXpath = XPathFactory.instance().compile(xpath);
+                    Object node = hiddenTemplateXpath.evaluateFirst(journalXML);
+                    if (node != null) {
                         nodes.add(node);
                     }
                 }
-                
                 return fromObj.getInfo(nodes);
             }
             return null;

@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jdom.Content;
-import org.jdom.Element;
+import org.jdom2.Content;
+import org.jdom2.Element;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.common.MCRActiveLinkException;

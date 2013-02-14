@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.ws.rs.core.MediaType;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSession;
 import org.mycore.frontend.classeditor.resources.MCRClassificationEditorResource;
@@ -20,7 +21,6 @@ import org.mycore.frontend.jersey.resources.MCRTestResource;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.jersey.spi.container.ResourceFilter;
 
 public class ACLResourceTest extends MCRJerseyResourceTest {
     public static class MyAccessManagerConnector implements AccesManagerConnector{
@@ -90,7 +90,7 @@ public class ACLResourceTest extends MCRJerseyResourceTest {
     @Override
     protected Map<String, String> getInitParams() {
         Map<String, String> initParams = new HashMap<String, String>();
-        initParams.put(ResourceFilter.class.getName() + "s", MCRSecurityFilterFactory.class.getName());
+//        initParams.put(ResourceFilter.class.getName() + "s", MCRSecurityFilterFactory.class.getName());
         return initParams;
     }
 

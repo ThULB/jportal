@@ -5,7 +5,7 @@ First of all you have to add the module to the docportal pom.xml.
 <dependency>
   <groupId>fsu.thulb</groupId>
   <artifactId>jportal_laws</artifactId>
-  <version>2.0.17-SNAPSHOT</version>
+  <version>2.0.18-SNAPSHOT</version>
   <type>jar</type>
   <scope>compile</scope>      
 </dependency>

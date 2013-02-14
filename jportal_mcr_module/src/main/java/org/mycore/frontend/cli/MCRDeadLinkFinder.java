@@ -7,10 +7,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.filter.Filter;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.filter.AbstractFilter;
+import org.jdom2.filter.Filter;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -53,53 +54,44 @@ public class MCRDeadLinkFinder extends MCRAbstractCommands {
                 objectXMLs.put(keyMCRFrom, faultyObjDoc);
             }
 
-            // filter for tags with an xlink:href
-            Filter elementFilter = new Filter() {
-                public boolean matches(Object obj) {
-                    if (obj instanceof Element) {
-                        Element elem = (Element) obj;
-                        String attributeValue = elem.getAttributeValue("href", xlink);
-
-                        if (attributeValue != null) {
-                            return true;
-                        }
+            Filter<Element> hrefFilter = new AbstractFilter<Element>() {
+                @Override
+                public Element filter(Object content) {
+                    if(content instanceof Element) {
+                        if(((Element) content).getAttribute("href", xlink) != null)
+                            return (Element)content;
                     }
-                    return false;
+                    return null;
                 }
             };
-
-            HashMap deleteMap = new HashMap();
-
-            for (Iterator iterator = faultyObjDoc.getDescendants(elementFilter); iterator.hasNext();) {
-                Element elem = (Element) iterator.next();
+            // filter for tags with an xlink:href
+            HashMap<Element, Element> deleteMap = new HashMap<Element, Element>();
+            for (Iterator<Element> iterator = faultyObjDoc.getDescendants(hrefFilter); iterator.hasNext();) {
+                Element elem = iterator.next();
                 String attributeValue = elem.getAttributeValue("href", xlink);
 
                 if (attributeValue.equals(keyMCRTo)) {
-                    deleteMap.put(elem.getParent(), elem);
+                    deleteMap.put(elem.getParentElement(), elem);
                 }
             }
-
-            for (Iterator iterator = deleteMap.keySet().iterator(); iterator.hasNext();) {
-                Element key = (Element) iterator.next();
+            for (Iterator<Element> iterator = deleteMap.keySet().iterator(); iterator.hasNext();) {
+                Element key = iterator.next();
                 key.removeContent((Element) deleteMap.get(key));
-
-                if (key.getChildren().isEmpty())
+                if (key.getChildren().isEmpty()) {
                     key.getParent().removeContent(key);
+                }
             }
 
             Element maintitlesElem = faultyObjDoc.getRootElement().getChild("metadata").getChild("maintitles");
             StringBuilder maintitle = new StringBuilder();
 
-            for (Iterator iterator = maintitlesElem.getChildren().iterator(); iterator.hasNext();) {
-                Element partOfTitle = (Element) iterator.next();
-
+            for (Iterator<Element> iterator = maintitlesElem.getChildren().iterator(); iterator.hasNext();) {
+                Element partOfTitle = iterator.next();
                 maintitle.append(partOfTitle.getText());
-
                 if (iterator.hasNext()) {
                     maintitle.append(" | ");
                 }
             }
-
             MCRXMLMetadataManager.instance().update(MCRObjectID.getInstance(keyMCRFrom), faultyObjDoc, new Date());
 
             // XML holen, fehlerhafte Links löschen

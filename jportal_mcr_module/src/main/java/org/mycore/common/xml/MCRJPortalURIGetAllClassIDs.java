@@ -8,9 +8,9 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.Namespace;
-import org.jdom.transform.JDOMSource;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.transform.JDOMSource;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;

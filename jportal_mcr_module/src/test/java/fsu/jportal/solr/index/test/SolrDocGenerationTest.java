@@ -10,10 +10,13 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.transform.JDOMResult;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.transform.JDOMResult;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.junit.Test;
 
 import fsu.jportal.test.framework.xsl.XSLTransformTest;
@@ -93,7 +96,8 @@ public class SolrDocGenerationTest extends XSLTransformTest{
     }
     
     private void assertSolrFiled(Document resultXML, String fieldName, int count) throws JDOMException {
-        List mycoreojectTags = XPath.selectNodes(resultXML, "/add/doc/field[@name='" + fieldName + "']");
+        XPathExpression<Element> xpath = XPathFactory.instance().compile("/add/doc/field[@name='" + fieldName + "']", Filters.element());
+        List<Element> mycoreojectTags = xpath.evaluate(resultXML);
         assertEquals("Wrong count for " + fieldName + ", ", count, mycoreojectTags.size());
     }
 

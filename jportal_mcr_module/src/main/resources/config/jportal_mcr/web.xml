@@ -1,7 +1,3 @@
-<servlet id="MCRJPortalCLIServlet">
-    <servlet-name>MCRJPortalCLIServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalCLIServlet</servlet-class>
-</servlet>
 <servlet id="DerivateLinkServlet">
     <servlet-name>DerivateLinkServlet</servlet-name>
     <servlet-class>org.mycore.frontend.servlets.DerivateLinkServlet</servlet-class>
@@ -15,28 +11,6 @@
     <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
 </servlet>
 
-<servlet id="MCRRecycleBinPageGenerationServlet">
-    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinPageGenerationServlet</servlet-class>
-</servlet>
-<servlet id="MCRRecycleBinServlet">
-    <servlet-name>MCRRecycleBinServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRRecycleBinServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-    <servlet-name>MCRRecycleBinPageGenerationServlet</servlet-name>
-    <url-pattern>/recycleBin.xml</url-pattern>
-</servlet-mapping>
-<servlet-mapping>
-    <servlet-name>MCRRecycleBinServlet</servlet-name>
-    <url-pattern>/servlets/MCRRecycleBinServlet/*</url-pattern>
-</servlet-mapping>
-
-
-<servlet-mapping>
-    <servlet-name>MCRJPortalCLIServlet</servlet-name>
-    <url-pattern>/cli</url-pattern>
-</servlet-mapping>
 <servlet-mapping>
     <servlet-name>DerivateLinkServlet</servlet-name>
     <url-pattern>/servlets/DerivateLinkServlet/*</url-pattern>

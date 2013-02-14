@@ -5,8 +5,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
-import org.jdom.Element;
-import org.jdom.transform.JDOMSource;
+import org.jdom2.Element;
+import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;

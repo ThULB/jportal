@@ -10,14 +10,16 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.input.SAXBuilder;
-import org.jdom.transform.JDOMSource;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.transform.JDOMSource;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -108,12 +110,15 @@ public class ObjectScrollResolver implements URIResolver {
     }
 
     protected final String getElementText(Element e, String xpath) throws JDOMException {
-        Text text = (Text) XPath.selectSingleNode(e, xpath);
-        return text != null ? text.getText() : null;
+        XPathExpression<Text> path = XPathFactory.instance().compile(xpath, Filters.text());
+        Text text = path.evaluateFirst(e);
+        return text == null ? null : text.getText();
     }
+
     protected final String getElementAttr(Element e, String xpath) throws JDOMException {
-        Attribute attr = (Attribute) XPath.selectSingleNode(e, xpath);
-        return attr != null ? attr.getValue() : null;
+        XPathExpression<Attribute> path = XPathFactory.instance().compile(xpath, Filters.attribute());
+        Attribute attr = path.evaluateFirst(e);
+        return attr == null ? null : attr.getValue();
     }
 
     // sort=maintitle+desc&q=%2Bparent:jportal_jpvolume_00000001+%2BobjectType:jparticle+%2Bmaintitle:{* TO "abc"}&rows=1

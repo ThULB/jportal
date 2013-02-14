@@ -7,16 +7,14 @@ import java.util.Properties;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.xpath.XPath;
-import org.jdom.Document;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.xml.MCRXSLTransformation;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
 
 public class XlinkMigrationTest {
     @Before

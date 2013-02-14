@@ -10,13 +10,15 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.XMLOutputter;
-import org.jdom.transform.JDOMSource;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import org.jdom2.transform.JDOMSource;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConfiguration;
 
 public class MCRJPortalURIIncludeEditorCode implements URIResolver {
@@ -224,18 +226,14 @@ public class MCRJPortalURIIncludeEditorCode implements URIResolver {
         // get piece of code and return it
         String sourceLoc = "webapp:" + fileContainingEditorCode;
         Element sourceCode = MCRURIResolver.instance().resolve(sourceLoc);
-        try {
-            String xpathEx = "includeMyChildren[@id='" + idOfPieceOfCode + "']";
-            Element answer = (Element) XPath.selectSingleNode(sourceCode, xpathEx);
-            if (answer == null) {
-                LOGGER.warn("piece of code with xpath=" + xpathEx + " NOT found");
-                return null;
-            }
-            return (Element) answer.detach();
-        } catch (JDOMException e) {
-            e.printStackTrace();
+        String xpathEx = "includeMyChildren[@id='" + idOfPieceOfCode + "']";
+        XPathExpression<Element> xpath = XPathFactory.instance().compile(xpathEx, Filters.element());
+        Element answer = xpath.evaluateFirst(sourceCode);
+        if (answer == null) {
+            LOGGER.warn("piece of code with xpath=" + xpathEx + " NOT found");
+            return null;
         }
-        return null;
+        return (Element) answer.detach();
     }
 
     private static Element getEmptyAnswer() {

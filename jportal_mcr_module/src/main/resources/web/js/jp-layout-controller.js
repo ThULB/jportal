@@ -27,7 +27,7 @@ function introEditor(journalID) {
                 var editor = introFrame.ckeditorGet();
                 var editorData = editor.getData();
                 $.ajax({
-                    url : '/rsc/journaFile/'+journalID+'/intro.xml',
+                    url : '/rsc/journalFile/'+journalID+'/intro.xml',
                     type : 'POST',
                     data : editorData,
                     contentType : 'application/xhtml+xml'

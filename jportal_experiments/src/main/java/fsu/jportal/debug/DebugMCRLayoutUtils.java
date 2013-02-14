@@ -5,19 +5,18 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
-import org.jdom.xpath.XPath;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.access.mcrimpl.MCRAccessStore;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.frontend.MCRLayoutUtilities;
 
 public class DebugMCRLayoutUtils {
     private static Logger LOGGER = Logger.getLogger(DebugMCRLayoutUtils.class);
@@ -109,24 +108,15 @@ public class DebugMCRLayoutUtils {
     public static final String getAncestorLabels(Element item) {
         String label = "";
         String lang = MCRSessionMgr.getCurrentSession().getCurrentLanguage().trim();
-        XPath xpath;
         Element ic = null;
-        try {
-            xpath = XPath.newInstance("//.[@href='" + getWebpageID(item) + "']");
-            ic = (Element) xpath.selectSingleNode(getNavi());
-        } catch (JDOMException e) {
-            e.printStackTrace();
-        }
+        XPathExpression<Element> xpath = XPathFactory.instance().compile("//.[@href='" + getWebpageID(item) + "']", Filters.element());
+        ic = xpath.evaluateFirst(getNavi());
         while (ic.getName().equals("item")) {
             ic = ic.getParentElement();
             String webpageID = getWebpageID(ic);
             Element labelEl = null;
-            try {
-                xpath = XPath.newInstance("//.[@href='" + webpageID + "']/label[@xml:lang='" + lang + "']");
-                labelEl = (Element) xpath.selectSingleNode(getNavi());
-            } catch (JDOMException e) {
-                e.printStackTrace();
-            }
+            xpath = XPathFactory.instance().compile("//.[@href='" + webpageID + "']/label[@xml:lang='" + lang + "']", Filters.element());
+            labelEl = xpath.evaluateFirst(getNavi());
             if (labelEl != null) {
                 if (label.equals("")) {
                     label = labelEl.getTextTrim();
@@ -213,16 +203,13 @@ public class DebugMCRLayoutUtils {
         Element item = itemStore.get(webpageID);
         Document navi = getNavi();
         if (item == null) {
-            XPath xpath;
-            try {
-                xpath = XPath.newInstance("//.[@href='" + webpageID + "']");
-                item = (Element) xpath.selectSingleNode(navi);
-            } catch (JDOMException e) {
-                e.printStackTrace();
+            XPathExpression<Element> xpath = XPathFactory.instance().compile("//.[@href='" + webpageID + "']", Filters.element());
+            item = xpath.evaluateFirst(navi);
+            if(item != null) {
+                itemStore.put(webpageID, item);    
             }
-            itemStore.put(webpageID, item);
         }
-        
+
         if(item == null){
             LOGGER.info("Navi file: " + NAVI_LOC);
             LOGGER.info("Null item for: " + webpageID);

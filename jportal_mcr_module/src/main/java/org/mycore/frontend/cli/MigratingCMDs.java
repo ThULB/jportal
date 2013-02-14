@@ -10,19 +10,22 @@ import java.util.List;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.jdom.transform.JDOMResult;
-import org.jdom.transform.JDOMSource;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.transform.JDOMResult;
+import org.jdom2.transform.JDOMSource;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRUtils;
@@ -39,17 +42,18 @@ public class MigratingCMDs {
     @MCRCommand(helpKey = "Move intro xml from webapp into data folder.", syntax = "migrate intro xml")
     public static void migrateIntroXML() throws JDOMException, IOException {
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
-        XPath hiddenWebContextXpath = XPath.newInstance("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext");
+        XPathExpression<Element> hiddenWebContextXpath =
+                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext", Filters.element());
+        
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String webappDir = mcrBaseDir + "/build/webapps";
         String journalFileBase = MCRConfiguration.instance().getString("JournalFileFolder");
 
         for (String journalID : journalIDs) {
             Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-            String journalContextPath = hiddenWebContextXpath.valueOf(journalXML);
-
-            if (!journalContextPath.equals("") && journalContextPath != null) {
-                String pathToJournalXML = webappDir + journalContextPath;
+            Element journalContextElement = hiddenWebContextXpath.evaluateFirst(journalXML);
+            if (journalContextElement != null) {
+                String pathToJournalXML = webappDir + journalContextElement.getText();
                 File journalXMLFile = new File(pathToJournalXML);
                 LOGGER.info("Move " + pathToJournalXML + " for journal " + journalID);
 
@@ -78,8 +82,8 @@ public class MigratingCMDs {
     @MCRCommand(helpKey="Migrate template name from navigation.xml", syntax="migrate template")
     public static void migrateTemplate() throws JDOMException, IOException{
         List<String> journalIDs = (List<String>) MCRXMLMetadataManager.instance().listIDsOfType("jpjournal");
-        XPath hiddenWebContextXpath = XPath.newInstance("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()");
-        
+        XPathExpression<Text> hiddenWebContextXpath =
+                XPathFactory.instance().compile("/mycoreobject/metadata/hidden_websitecontexts/hidden_websitecontext/text()", Filters.text());
         //load navigation.xml
         String mcrBaseDir = MCRConfiguration.instance().getString("MCR.basedir");
         String navigationDir = mcrBaseDir + "/build/webapps/config/navigation.xml";
@@ -89,23 +93,22 @@ public class MigratingCMDs {
 
         for (String journalID : journalIDs) {
             Document journalXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-            String journalContextPath = hiddenWebContextXpath.valueOf(journalXML).trim();
+            String journalContextPath = hiddenWebContextXpath.evaluateFirst(journalXML).getText().trim();
             
             if(journalContextPath!= null && !journalContextPath.equals("")){
                 LOGGER.info("Add Termplate a Template  to " + journalContextPath);
-                XPath templateXpath = XPath.newInstance("/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='" + journalContextPath +  "']/@template");
-                String journalTemplate = templateXpath.valueOf(navigationXML);
-                
+                XPathExpression<Attribute> templateXpath =
+                        XPathFactory.instance().compile("/navigation/navi-main/item[@href='/content/main/journalList.xml']/item[@href='" + journalContextPath +  "']/@template", Filters.attribute());
+                String journalTemplate = templateXpath.evaluateFirst(navigationXML).getValue();
                 if (journalTemplate != null && !journalTemplate.equals("")){
                     LOGGER.info("Template: " + journalTemplate);
-                    Element journalMetadata = (Element) XPath.selectSingleNode(journalXML, "/mycoreobject/metadata");
-                    
+                    Element journalMetadata = journalXML.getRootElement().getChild("metadata");
                     //create hidden_template            
                     Element template = new Element("hidden_template");
                     template.setText(journalTemplate);
                     template.setAttribute("inherited", "0");
                     template.setAttribute("form", "plain");
-                    
+
                     //create hidden_templates  
                     Element templates = new Element("hidden_templates");
                     templates.setAttribute("class", "MCRMetaLangText");
@@ -138,16 +141,17 @@ public class MigratingCMDs {
         Source stylesheet = new StreamSource(resourceAsStream);
         Transformer xsltTransformer = MCRXSLTransformation.getInstance().getStylesheet(stylesheet).newTransformer();
 
-        XPath xlinkLabel = XPath.newInstance("/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]");
+        XPathExpression<Element> xlinkLabel =
+                XPathFactory.instance().compile("/mycoreobject/metadata/*[@class='MCRMetaClassification']/*[contains(@categid,':')]", Filters.element());
+
         for (String ID : listIDs) {
             MCRObjectID mcrid = MCRObjectID.getInstance(ID);
             Document mcrObjXML = xmlMetaManager.retrieveXML(mcrid);
-            if (!xlinkLabel.selectNodes(mcrObjXML).isEmpty()) {
+            if (!xlinkLabel.evaluate(mcrObjXML).isEmpty()) {
                 Source xmlSource = new JDOMSource(mcrObjXML);
                 JDOMResult jdomResult = new JDOMResult();
                 xsltTransformer.transform(xmlSource, jdomResult);
                 Document migratedMcrObjXML = jdomResult.getDocument();
-
                 xmlMetaManager.update(mcrid, migratedMcrObjXML, new Date());
                 LOGGER.info("Replace ':' in categID for " + mcrid);
             } else {

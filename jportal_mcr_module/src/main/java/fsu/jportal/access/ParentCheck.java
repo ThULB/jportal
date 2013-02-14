@@ -1,11 +1,11 @@
 package fsu.jportal.access;
 
-import org.apache.log4j.Logger;
-import org.jdom.Attribute;
-import org.jdom.Document;
-import org.jdom.JDOMException;
-import org.jdom.Text;
-import org.jdom.xpath.XPath;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Text;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -18,24 +18,24 @@ public class ParentCheck extends AbstractStrategyStep {
     @Override
     public boolean checkPermission(String id, String permission) {
         MCRObjectID objId = getObjId(id);
-        
-        if(objId == null ){
-             return false;
-        }
-        
-        MCRObjectID parentID = getParentID(objId);
-        if(objId == null || parentID == null){
+
+        if (objId == null) {
             return false;
         }
-        
-        if(parentID.equals(objId)){
+
+        MCRObjectID parentID = getParentID(objId);
+        if (objId == null || parentID == null) {
+            return false;
+        }
+
+        if (parentID.equals(objId)) {
             if (getAccessStrategyConfig().getAccessInterface().hasRule(parentID.toString(), permission)) {
                 return getAccessStrategyConfig().getAccessInterface().checkPermission(parentID.toString(), permission);
             } else {
                 return false;
             }
         }
-        
+
         return getAlternative().checkPermission(parentID.toString(), permission);
     }
 
@@ -47,31 +47,28 @@ public class ParentCheck extends AbstractStrategyStep {
             return null;
         }
     }
-    
+
     private MCRObjectID getParentID(MCRObjectID objID) {
         if (!getAccessStrategyConfig().getXMLMetadataMgr().exists(objID)) {
             return null;
         }
-
         Document objXML = getAccessStrategyConfig().getXMLMetadataMgr().retrieveXML(objID);
-        try {
-            String path = "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()";
-            if (objID.getTypeId().equals("derivate")) {
-                path = "/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href";
+        if (objID.getTypeId().equals("derivate")) {
+            XPathExpression<Attribute> xpath = XPathFactory.instance().compile("/mycorederivate/derivate/linkmetas/linkmeta/@xlink:href",
+                    Filters.attribute(), null, MCRConstants.XLINK_NAMESPACE);
+            Attribute attr = xpath.evaluateFirst(objXML);
+            if (attr != null) {
+                return MCRObjectID.getInstance(attr.getValue());
             }
-            XPath pathToJournalID = XPath.newInstance(path);
-            pathToJournalID.addNamespace(MCRConstants.XLINK_NAMESPACE);
-            Object idTextNode = pathToJournalID.selectSingleNode(objXML);
-
-            if (idTextNode instanceof Text) {
-                return MCRObjectID.getInstance(((Text) idTextNode).getText());
-            } else if (idTextNode instanceof Attribute) {
-                return MCRObjectID.getInstance(((Attribute) idTextNode).getValue());
+        } else {
+            XPathExpression<Text> xpath = XPathFactory.instance().compile(
+                    "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()", Filters.text());
+            Text text = xpath.evaluateFirst(objXML);
+            if (text != null) {
+                return MCRObjectID.getInstance(text.getText());
             }
-        } catch (JDOMException e) {
-            e.printStackTrace();
         }
-
         return null;
     }
+
 }

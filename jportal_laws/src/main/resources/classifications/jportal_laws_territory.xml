@@ -37,5 +37,11 @@
     <category ID="land-thueringen">
       <label xml:lang="de" text="Land Thüringen" />
     </category>
+    <category ID="sachsen-coburg">
+      <label xml:lang="de" text="Sachsen-Coburg" />
+    </category>
+    <category ID="sachsen-gotha">
+      <label xml:lang="de" text="Sachsen-Gotha" />
+    </category>
   </categories>
 </mycoreclass>
