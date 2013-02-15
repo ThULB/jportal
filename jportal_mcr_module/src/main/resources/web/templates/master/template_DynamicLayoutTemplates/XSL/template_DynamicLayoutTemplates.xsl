@@ -3,7 +3,8 @@
     xmlns:layoutDetector="xalan://org.mycore.frontend.MCRJPortalLayoutTemplateDetector" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xalan="http://xml.apache.org/xalan">
 
   <xsl:template match="/template[@id='template_DynamicLayoutTemplates']" mode="template">
-    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_DynamicLayoutTemplates" />
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj" mode="template_DynamicLayoutTemplates" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
