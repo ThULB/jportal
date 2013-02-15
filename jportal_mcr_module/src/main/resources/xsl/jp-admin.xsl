@@ -32,13 +32,13 @@
     <h2>Benutzer</h2>
     <ul>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserAdminServlet?mode=newuser">Nutzer anlegen</a>
+        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet">Suchen und verwalten</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserAdminServlet?mode=newgroup">Gruppe anlegen</a>
+        <a href="{$WebApplicationBaseURL}authorization/new-user.xml?action=save">Nutzer anlegen</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserAjaxServlet">Nutzer- Gruppenverwaltung</a>
+        <a href="{$WebApplicationBaseURL}authorization/roles-editor.xml">Gruppen verwalten</a>
       </li>
     </ul>
     <h2>Sitzungen</h2>

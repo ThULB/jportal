@@ -41,10 +41,11 @@ table.editor{
 	text-align: right;
 }
 
-.editorCell{
+.editorCell {
 	text-align: left;
 	table-layout: fixed;
-	max-width: 966px;
+	max-width: 956px;
+	padding-right: 10px;
 }
 
 .editorList{

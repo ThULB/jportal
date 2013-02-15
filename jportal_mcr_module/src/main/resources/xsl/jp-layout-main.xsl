@@ -34,6 +34,8 @@
   <xsl:param name="subselect.webpage" select="''" />
   <!-- Search modes -->
   <xsl:param name="mode" select="'default'" />
+  <!-- user -->
+  <xsl:variable name="user" select="jpxml:getUserID()" />
 
   <xsl:variable name="languages" select="jpxml:getLanguages()/languages" />
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />

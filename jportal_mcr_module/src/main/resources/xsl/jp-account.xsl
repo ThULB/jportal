@@ -8,7 +8,7 @@
       <h1>Konto</h1>
       <xsl:choose>
         <xsl:when test="not(mcrxml:isCurrentUserGuestUser())">
-          <p>Sie sind angemeldet als <xsl:value-of select="jpxml:getUserID()" />.</p>
+          <p>Sie sind angemeldet als <xsl:value-of select="$user" />.</p>
           <xsl:call-template name="jp.account.show" />
         </xsl:when>
         <xsl:otherwise>
@@ -17,13 +17,14 @@
       </xsl:choose>
     </div>
   </xsl:template>
+
   <xsl:template name="jp.account.show">
     <ul>
       <li>
         <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?action=changeMyPassword">Passwort ändern</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?mode=show">Nutzerdaten anzeigen</a>
+        <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet?action=show&amp;id={$user}">Nutzerdaten anzeigen</a>
       </li>
     </ul>
   </xsl:template>
