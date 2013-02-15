@@ -1,7 +1,4 @@
 @CHARSET "UTF-8";
-#logo {
-	background-image: url("../IMAGES/logo.png");
-}
 
 #logo .logoTitle {
     height: 72px;

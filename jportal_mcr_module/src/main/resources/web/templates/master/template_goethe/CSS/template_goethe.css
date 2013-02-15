@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+#logo .logoTitle {
+	width: 426px;
+	padding-left: 205px;
+	height: 90px;
+	font-size: x-large;
+	color: #444;
+}
+
+#logo .logoDate {
+	padding: 3px 205px;
+	font-size: 12pt;
+	color: #444;
+}
