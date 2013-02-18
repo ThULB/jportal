@@ -1,58 +1,48 @@
-var dropDown = $('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
 function loadKeywords() {
-	var mainDiv = $('<div id="keywords"></div>');
-	mainDiv.append("<h3>Schlagwörter</h3>")
-	mainDiv.append(dropDown);
-	mainDiv.click(function() {
-		if($(this).parent().hasClass("open")){
-			$(this).nextAll("ul").toggle();
-		}
-		else{
-			$(this).parent().addClass("open");
-			loadKeyword($(this).parent(), "");
-		}
+	var mainDiv = $('<div class="keywords"></div>');
+	$("<h3 class='expander expand'>Gesamtschlagwortregister</h3>").appendTo(mainDiv).one("click", function() {
+		loadKeyword(mainDiv, "");
+	}).click(function() {
+		toggleKeyword($(this));
 	});
 	mainDiv.appendTo($("#jp-content-LColumn > ul"));
 }
 
+function toggleKeyword(element) {
+	element.nextAll("ul").toggle();
+	var toggle = element.hasClass("expand");
+	element.removeClass(toggle ? "expand" : "collapse");
+	element.addClass(toggle ? "collapse" : "expand");
+}
+
 function loadKeyword(element, keyword) {
-	if(keyword == ""){
-		$.get("/rsc/classifications/jportal_class_00000083/", function(data){attachToElement(element, data)});
-	}
-	else{
-		$.get("/rsc/classifications/jportal_class_00000083/" + keyword, function(data){attachToElement(element, data)});
+	if(keyword == "") {
+		$.get("/rsc/classifications/jportal_class_00000083/", function(data) {
+			attachToElement(element, data);
+		});
+	} else{
+		$.get("/rsc/classifications/jportal_class_00000083/" + keyword, function(data) {
+			attachToElement(element, data);
+		});
 	}
 }
 
 function attachToElement(element, keywords) {
-	var ul = $("<ul></ul>");
-	ul.appendTo(element);
+	var ul = $("<ul></ul>").appendTo(element);
 	for ( var i = 0; i < keywords.children.length; i++) {
-		if (keywords.children[i].haslink == true){
-			var li = $("<li></li>");
-			li.appendTo(ul);
-			if (keywords.children[i].haschildren == true){
-				var div = $("<div></div>");
-				div.append('<img class="dropDownArrow" src="/images/naviMenu/dropdown.png">');
-				div.attr("id", keywords.children[i].id.categid);
-				div.addClass("keyWordDiv");
-				div.appendTo(li);
-				div.click(function() {
-					if($(this).parent().hasClass("open")){
-						$(this).nextAll("ul").toggle();
-					}
-					else{
-						$(this).parent().addClass("open");
-						loadKeyword($(this).parent(), $(this).attr("id"));
-					}
+		var keyword = keywords.children[i];
+		if (keyword.haslink == true){
+			var li = $("<li></li>").appendTo(ul);
+			if (keyword.haschildren == true){
+				$("<span class='expander expand' id='" + keyword.id.categid + "' />").appendTo(li).click(function() {
+					toggleKeyword($(this));
+				}).one("click", function() {
+					loadKeyword($(this).parent(), $(this).attr("id"));
 				});
 			}
-			var a = $("<a></a>");
-			a.text(keywords.children[i].labels[0].text);
-			var categID = keywords.children[i].id.categid;
-			categID = categID.replace(/ /g, "\\ ");
+			var a = $("<a>" + keyword.labels[0].text + "</a>");
+			var categID = keyword.id.categid.replace(/ /g, "\\ ");
 			a.attr("href", "../jp-search.xml?XSL.qt=+volContentClassi1:" + categID + "&XSL.mode=hidden");
-			a.addClass("keyWordA");
 			a.appendTo(li);
 		}
 	}
