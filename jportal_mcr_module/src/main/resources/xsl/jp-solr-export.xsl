@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  This stylesheets handles jportal specific stuff of XSL.Style=solr
+-->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-  <!-- This stylesheets handles jportal specific stuff of XSL.Style=solr -->
+  <!-- Overwrite mycoreobject-solr.xsl behaviour -->
+  <xsl:template match="*[@class='MCRMetaClassification']/*" priority="1">
+  </xsl:template>
 
   <xsl:template match="metadata" mode="user-application" priority="1">
     <xsl:apply-templates select="*" mode="jp-solr-export" />
@@ -10,14 +15,14 @@
   <xsl:template match="node()" mode="jp-solr-export">
   </xsl:template>
 
-  <!-- add contentClassi to the user generated variable -->
-  <xsl:template match="*[contains(name(), 'contentClassis')]" mode="jp-solr-export">
-    <xsl:apply-templates select="*" mode="jp-solr-export-classification" />
-  </xsl:template>
-
-  <!-- add volContentClassi -->
-  <xsl:template match="*[contains(name(), 'volContentClassis')]" mode="jp-solr-export">
-    <xsl:apply-templates select="*" mode="jp-solr-export-classification" />
+  <!-- add contentClassi and volContentClassi to the user generated variable -->
+  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]" mode="jp-solr-export">
+    <xsl:for-each select="*">
+      <xsl:apply-templates mode="jp-solr-export-classification"
+          select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category">
+        <xsl:with-param name="name" select="name()" />
+      </xsl:apply-templates>
+    </xsl:for-each>
   </xsl:template>
 
   <!-- add hidden_genhiddenfields -->
@@ -26,8 +31,9 @@
   </xsl:template>
 
   <xsl:template match="*" mode="jp-solr-export-classification">
-    <field name="{name()}">
-      <xsl:value-of select="@categid" />
+    <xsl:param name="name" />
+    <field name="{$name}">
+      <xsl:value-of select="@ID" />
     </field>
   </xsl:template>
 
