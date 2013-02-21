@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.mycore.common.MCRJSONManager;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.MCRLabel;
 import org.mycore.frontend.classeditor.json.MCRJSONCategory;
@@ -21,7 +24,9 @@ import fsu.jportal.xml.MCRObjConnector;
 
 @Path("classifications/jp/{id}")
 public class JournalClassificationResource extends MCRClassificationEditorResource {
-    
+
+    private static final MCRCategoryDAO CATEGORY_DAO = MCRCategoryDAOFactory.getInstance();
+
     @PathParam("id")
     String journalID;
 
@@ -40,7 +45,7 @@ public class JournalClassificationResource extends MCRClassificationEditorResour
             MCRLabel label = new MCRLabel("de", "Rubrik für " + journalID, null);
             labels.add(label);
             newRubricClassi.setLabels(labels);
-            getCategoryDAO().addCategory(newRubricClassi.getParentID(), newRubricClassi.asMCRImpl());
+            CATEGORY_DAO.addCategory(newRubricClassi.getParentID(), newRubricClassi.asMCRImpl());
             objConnector.addRubric(newRubricID);
             Gson gson = MCRJSONManager.instance().createGson();
             return gson.toJson(newRubricClassi);
