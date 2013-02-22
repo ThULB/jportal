@@ -7,7 +7,7 @@
     <xsl:output method="html" indent="yes" encoding="UTF-8" media-type="text/html" xalan:indent-amount="2" doctype-public="-//W3C//DTD HTML 4.01//EN"
         doctype-system="http://www.w3.org/TR/html4/strict.dtd" />
 
-    <xsl:include href="jp-layout-main.xsl" />
+    <xsl:include href="gbv-layout-main.xsl" />
 
     <xsl:template name="generatePage">
         <xsl:call-template name="renderLayout" />

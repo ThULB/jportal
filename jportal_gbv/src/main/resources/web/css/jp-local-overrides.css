@@ -1,12 +1,29 @@
 @CHARSET "UTF-8";
+
 body {
     width: 1000px;
 }
 
 #globalHeader {
-    background-color: #fcefa1;
+    background-color: #557fbb;
+}
+
+#globalHeader * {
+    color: white;
 }
 
 #logo {
     height: 150px;
 }
+
+/*
+#globalHomeLink {
+    color: white;
+}
+  */
+
+/*
+#globalHomeLink * {
+    color: white;
+}
+*/
