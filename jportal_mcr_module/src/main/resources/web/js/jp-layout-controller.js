@@ -67,15 +67,15 @@ function introEditor(journalID) {
 
     if ($('#intro').length) {
         var tmpElem = $('<div id="#ckEditorTmp"/>')
-        tmpElem.load('/jpCkeditor/GUI.html #ckeditorButtons', ckEditorMainButtonCtr(tmpElem)).insertAfter('#intro');
+        tmpElem.load('/ckeditor/GUI.html #ckeditorButtons', ckEditorMainButtonCtr(tmpElem)).insertAfter('#intro');
     } else {
         var Lcolum = $('#jp-content-LColumn>ul');
         if (Lcolum.length == 0) {
             var tmpElem = $('<div id="#ckEditorTmp"/>')
-            tmpElem.load('/jpCkeditor/GUI.html #jp-content-LColumn', ckEditorMainButtonCtr(tmpElem)).insertAfter('#jp-maintitle');
+            tmpElem.load('/ckeditor/GUI.html #jp-content-LColumn', ckEditorMainButtonCtr(tmpElem)).insertAfter('#jp-maintitle');
         } else {
             var tmpElem = $('<li id="#ckEditorTmp"/>')
-            tmpElem.load('/jpCkeditor/GUI.html #jp-content-LColumn-List .ckGUI', ckEditorMainButtonCtr(tmpElem)).appendTo(Lcolum);
+            tmpElem.load('/ckeditor/GUI.html #jp-content-LColumn-List .ckGUI', ckEditorMainButtonCtr(tmpElem)).appendTo(Lcolum);
         }
     }
 }
