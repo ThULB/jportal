@@ -1,6 +1,6 @@
 function loadKeywords() {
 	var mainDiv = $('<div class="keywords"></div>');
-	$("<h3 class='expander expand'>Gesamtschlagwortregister</h3>").appendTo(mainDiv).one("click", function() {
+	$("<h3 class='placeholder expander expand'>Gesamtschlagwortregister</h3>").appendTo(mainDiv).one("click", function() {
 		loadKeyword(mainDiv, "");
 	}).click(function() {
 		toggleKeyword($(this));
@@ -34,11 +34,13 @@ function attachToElement(element, keywords) {
 		if (keyword.haslink == true){
 			var li = $("<li></li>").appendTo(ul);
 			if (keyword.haschildren == true){
-				$("<span class='expander expand' id='" + keyword.id.categid + "' />").appendTo(li).click(function() {
+				$("<span class='placeholder expander expand' id='" + keyword.id.categid + "' />").appendTo(li).click(function() {
 					toggleKeyword($(this));
 				}).one("click", function() {
 					loadKeyword($(this).parent(), $(this).attr("id"));
 				});
+			} else {
+				$("<span class='placeholder' id='" + keyword.id.categid + "' />").appendTo(li);
 			}
 			var a = $("<a>" + keyword.labels[0].text + "</a>");
 			var categID = keyword.id.categid.replace(/ /g, "\\ ");

@@ -8,14 +8,22 @@
 }
 .keywords h3 {
 	text-decoration: underline;
-	display: inline;
+    display: inline-block;
+    margin: 5px 0;
 }
-
-.keywords .expander {
+.keywords > ul {
+    padding-left: 0px !important;
+}
+.keywords ul {
+    padding-left: 20px;
+}
+.keywords .placeholder {
 	background-position: left;
 	background-repeat: no-repeat;
-	cursor: pointer;
 	padding-left: 15px;
+}
+.keywords .expander {
+	cursor: pointer;
 }
 .keywords .expand {
 	background-image: url("../IMAGES/plus.png");
