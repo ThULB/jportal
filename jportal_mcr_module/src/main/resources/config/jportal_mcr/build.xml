@@ -13,11 +13,6 @@
 			<param name="cli.directory" value="${module.directory}/acl" />
 			<param name="cli.command" value="process defaultrules-commands" />
 		</antcall>
-		<echo>Web ACL</echo>
-		<antcall target="invoke.cli">
-			<param name="cli.directory" value="${module.directory}/acl" />
-			<param name="cli.command" value="process webacl-commands" />
-		</antcall>
 	</target>
 
 	<target name="create.users">

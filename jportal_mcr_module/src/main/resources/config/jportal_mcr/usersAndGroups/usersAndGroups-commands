@@ -1,4 +1,3 @@
-create group data from file xml/journalgroup.xml
-create group data from file xml/volumegroup.xml
-create group data from file xml/editorsgroup.xml
-create group data from file xml/derivategroup.xml
+import role from file xml/journalrole.xml
+import role from file xml/editorsrole.xml
+import role from file xml/derivaterole.xml

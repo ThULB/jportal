@@ -45,5 +45,6 @@ update permission create_jpinst for id CRUD with rulefile xml/grant-editorsgroup
 update permission update_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
 update permission delete_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
 
+update permission delete_derivate for id CRUD with rulefile xml/grant-derivategroup.xml described by Delete derivate
 update permission update_derivate for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update derivate
 update permission read_derivate for id default with rulefile xml/grant-all.xml described by Read derivate
