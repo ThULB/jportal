@@ -11,16 +11,15 @@
   
   <xsl:variable name="menuVarXML">
     <var name="dataModel" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation}" />
-    <var name="createJournal" value="{acl:checkPermission('CRUD','create_jpjournal')}" />
-    <var name="createPerson" value="{acl:checkPermission('POOLPRIVILEGE','create-person')}" />
-    <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE','create-jpinst')}" />
-    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE','create-jpvolume')}" />
-    <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE','create-jparticle')}" />
+    <var name="createJournal" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpjournal')}" />
+    <var name="createPerson" value="{acl:checkPermission('POOLPRIVILEGE', 'create-person')}" />
+    <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')}" />
+    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
+    <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
     <var name="updatePerm" value="{$updatePerm}" />
     <var name="deletePerm" value="{$deletePerm}" />
-    <var name="isAdmin" value="{acl:checkPermission('POOLPRIVILEGE','administrate-user')}" />
     <var name="isGuest" value="{mcrxml:isCurrentUserGuestUser()}" />
     <var name="linkImgAllowed" value="{$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)}" />
   </xsl:variable>

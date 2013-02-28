@@ -1,8 +1,6 @@
-load permissions data from file xml/system_permissions.xml
-
 update permission read for id default with rulefile xml/grant-all.xml described by always allowed
-update permission writedb for id default with rulefile xml/grant-admin.xml described by admins
-update permission deletedb for id default with rulefile xml/grant-admin.xml described by admins
+update permission writedb for id default with rulefile xml/grant-admin.xml described by For administrators only
+update permission deletedb for id default with rulefile xml/grant-admin.xml described by For administrators only
 
 update permission read for id default_jpjournal with rulefile xml/grant-all.xml described by always allowed
 update permission read for id default_jpvolume with rulefile xml/grant-all.xml described by always allowed
@@ -11,40 +9,41 @@ update permission read for id default_person with rulefile xml/grant-all.xml des
 update permission read for id default_jpinst with rulefile xml/grant-all.xml described by always allowed
 update permission read for id default_derivate with rulefile xml/grant-all.xml described by always allowed
 
-update permission writedb for id default_jpjournal with rulefile xml/grant-journalgroup.xml described by journal admins
-update permission writedb for id default_jpvolume with rulefile xml/grant-volumegroup.xml described by journal editors for TOC
-update permission writedb for id default_jparticle with rulefile xml/grant-editorsgroup.xml described by journal editors
-update permission writedb for id default_person with rulefile xml/grant-editorsgroup.xml described by journal editors
-update permission writedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by journal editors
-update permission writedb for id default_derivate with rulefile xml/grant-derivategroup.xml described by journal editors for derivates
+update permission writedb for id default_jpjournal with rulefile xml/grant-journalgroup.xml described by journalgroup
+update permission writedb for id default_jpvolume with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission writedb for id default_jparticle with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission writedb for id default_person with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission writedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission writedb for id default_derivate with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 
-update permission deletedb for id default_jpjournal with rulefile xml/grant-admin.xml described by admins
-update permission deletedb for id default_jpvolume with rulefile xml/grant-admin.xml described by admins
-update permission deletedb for id default_jparticle with rulefile xml/grant-editorsgroup.xml described by journal editors
-update permission deletedb for id default_person with rulefile xml/grant-editorsgroup.xml described by journal editors
-update permission deletedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by journal editors	
-update permission deletedb for id default_derivate with rulefile xml/grant-derivategroup.xml described by journal editors for derivates
+update permission deletedb for id default_jpjournal with rulefile xml/grant-admin.xml described by journalgroup
+update permission deletedb for id default_jpvolume with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission deletedb for id default_jparticle with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission deletedb for id default_person with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission deletedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission deletedb for id default_derivate with rulefile xml/grant-derivategroup.xml described by derivategroup
 
-update permission create_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Create journal
-update permission update_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Update journal
-update permission delete_jpjournal for id CRUD with rulefile xml/grant-journalgroup.xml described by Delete journal
+update permission create-jpjournal for id POOLPRIVILEGE with rulefile xml/grant-journalgroup.xml described by journalgroup
+update permission update-jpjournal for id POOLPRIVILEGE with rulefile xml/grant-journalgroup.xml described by journalgroup
+update permission delete-jpjournal for id POOLPRIVILEGE with rulefile xml/grant-journalgroup.xml described by journalgroup
 
-update permission create_jpvolume for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create volume
-update permission update_jpvolume for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update volume
-update permission delete_jpvolume for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete volume
+update permission create-jpvolume for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission update-jpvolume for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission delete-jpvolume for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 
-update permission create_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
-update permission update_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
-update permission delete_jparticle for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+update permission create-jparticle for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission update-jparticle for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission delete-jparticle for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 
-update permission create_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
-update permission update_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
-update permission delete_person for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+update permission create-person for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission update-person for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission delete-person for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 
-update permission create_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Create article
-update permission update_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update article
-update permission delete_jpinst for id CRUD with rulefile xml/grant-editorsgroup.xml described by Delete article
+update permission create-jpinst for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission update-jpinst for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission delete-jpinst for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 
-update permission delete_derivate for id CRUD with rulefile xml/grant-derivategroup.xml described by Delete derivate
-update permission update_derivate for id CRUD with rulefile xml/grant-editorsgroup.xml described by Update derivate
-update permission read_derivate for id default with rulefile xml/grant-all.xml described by Read derivate
+update permission read-derivate for id default with rulefile xml/grant-all.xml described by always allowed
+update permission create-derivate for id POOLPRIVILEGE with rulefile xml/grant-derivategroup.xml described by editorsgroup
+update permission update-derivate for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission delete-derivate for id POOLPRIVILEGE with rulefile xml/grant-derivategroup.xml described by derivategroup

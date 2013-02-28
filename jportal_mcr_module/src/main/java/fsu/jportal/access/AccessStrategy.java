@@ -2,7 +2,6 @@ package fsu.jportal.access;
 
 import java.util.HashMap;
 
-import org.apache.log4j.Logger;
 import org.mycore.access.MCRAccessInterface;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.access.strategies.MCRAccessCheckStrategy;
@@ -10,21 +9,13 @@ import org.mycore.access.strategies.MCRObjectIDStrategy;
 import org.mycore.access.strategies.MCRObjectTypeStrategy;
 import org.mycore.access.strategies.MCRParentRuleStrategy;
 import org.mycore.common.MCRConfiguration;
-import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 
 public class AccessStrategy implements MCRAccessCheckStrategy {
     private StrategyStep strategyChainStart;
     
-    private class InvalidIDException extends Exception {
-
-    }
-    
     private AccessStrategyConfig accessConfig;
-
-    private static Logger LOGGER = Logger.getLogger(AccessStrategy.class);
 
     private static class DefaultConfig implements AccessStrategyConfig {
         private HashMap<String, MCRAccessCheckStrategy> strategies;
@@ -68,11 +59,11 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         StrategyStep crudCheck = new CRUDCheck(accessStrategyConfig);
         StrategyStep parentCheck = new ParentCheck(accessStrategyConfig);
         StrategyStep defaultCheck = new DefaultCheck(accessStrategyConfig);
-        
-        parentCheck.addAlternative(objIdCheck);
-        defaultCheck.addAlternative(parentCheck);
-        crudCheck.addAlternative(defaultCheck);
-        objIdCheck.addAlternative(crudCheck);
+
+        parentCheck.setAlternative(objIdCheck);
+        defaultCheck.setAlternative(parentCheck);
+        crudCheck.setAlternative(defaultCheck);
+        objIdCheck.setAlternative(crudCheck);
         setStrategyChainStart(objIdCheck);
     }
     
@@ -86,15 +77,6 @@ public class AccessStrategy implements MCRAccessCheckStrategy {
         }
 
         return getStrategyChainStart().checkPermission(id, permission);
-    }
-    
-    protected MCRObjectID getObjId(String id) throws InvalidIDException {
-        try {
-            MCRObjectID objID = MCRObjectID.getInstance(id);
-            return objID;
-        } catch (MCRException e) {
-            throw new InvalidIDException();
-        }
     }
 
     private boolean isSuperUser() {

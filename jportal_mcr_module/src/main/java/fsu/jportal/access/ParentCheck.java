@@ -35,8 +35,7 @@ public class ParentCheck extends AbstractStrategyStep {
                 return false;
             }
         }
-
-        return getAlternative().checkPermission(parentID.toString(), permission);
+        return getAlternative() != null ? getAlternative().checkPermission(parentID.toString(), permission) : false;
     }
 
     private MCRObjectID getObjId(String id) {

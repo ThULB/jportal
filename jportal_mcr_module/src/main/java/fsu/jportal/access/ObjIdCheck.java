@@ -1,6 +1,6 @@
 package fsu.jportal.access;
 
-class ObjIdCheck extends AbstractStrategyStep{
+class ObjIdCheck extends AbstractStrategyStep {
 
     public ObjIdCheck(AccessStrategyConfig accessStrategyConfig) {
         super(accessStrategyConfig);
@@ -11,7 +11,7 @@ class ObjIdCheck extends AbstractStrategyStep{
         if (getAccessStrategyConfig().getAccessInterface().hasRule(id, permission)) {
             return getAccessStrategyConfig().getAccessInterface().checkPermission(id, permission);
         }
-        
-        return getAlternative().checkPermission(id, permission);
+        return getAlternative() != null ? getAlternative().checkPermission(id, permission) : false;
     }
+
 }

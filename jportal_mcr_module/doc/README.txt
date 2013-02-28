@@ -89,8 +89,7 @@ For DB2 users, the driver and licence jar have to be installed, eG.
 cd $JPORTAL_HOME
 mvn install
 cd $DOCPORTAL_HOME 
-ant clean clean.data
-ant resolve create.jar create.scripts
+ant clean clean.data; rm -rf save; ant resolve create.jar create.scripts
 build/bin/solrstart.sh &
 build/bin/hsqldbstart.sh &
 ant create.users create.default-rules create.class create.webapp

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <role name="derivategroup">
-  <label lang="en" text="derivategroup" description="Delete derivates" />
+  <label xml:lang="en" text="derivategroup" description="Delete derivates" />
 </role>

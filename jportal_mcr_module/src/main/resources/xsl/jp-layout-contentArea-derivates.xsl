@@ -30,7 +30,7 @@
     <xsl:param name="nodes" />
     <xsl:param name="journalID" />
     <xsl:param name="editable" select="'true'" />
-    <xsl:if test="acl:checkPermission($journalID,'read_derivate')">
+    <xsl:if test="acl:checkPermission($journalID,'read-derivate')">
       <xsl:if test="count($nodes) &gt; 0">
         <div class="jp-layout-derivateList">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
@@ -45,7 +45,7 @@
     <xsl:param name="editable" select="'true'" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
-    <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'delete_derlink')" />
+    <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'update-jparticle')" />
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
@@ -102,7 +102,7 @@
             <a
               href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a>
           </li>
-          <xsl:if test="acl:checkPermission(@xlink:href, 'update_derivate')">
+          <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
             <xsl:if test="not(mcrxml:hasURNDefined(@xlink:href))">
               <li>
                 <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>

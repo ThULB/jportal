@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <role name="editorsgroup">
-  <label lang="en" text="editorsgroup" description="Create, edit, delete: articles, persons, institutions and manage derivates for articles" />
+  <label xml:lang="en" text="editorsgroup" description="Create, edit, delete: articles, persons, institutions and manage derivates for articles" />
 </role>

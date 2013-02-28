@@ -159,7 +159,6 @@ public class AccessStrategyTest {
         String userID = "user";
         boolean hasRule = false;
         boolean hasParentRule = false;
-        boolean hasAccess = true;
         boolean expectedAccess = true;
         
         expect(userInfoMock.getUserID()).andReturn(userID);
@@ -250,12 +249,12 @@ public class AccessStrategyTest {
     @Test
     public void isInEditorsGroupHasAccess() throws Exception {
         String id = JOURNALID;
-        String permission = "create_volume";
+        String permission = "create-volume";
 
         expect(userInfoMock.getUserID()).andReturn("user");
         expect(aclMock.hasRule(id, permission)).andReturn(false);
-        expect(aclMock.hasRule("CRUD", permission)).andReturn(true);
-        expect(aclMock.checkPermission("CRUD", permission)).andReturn(true);
+        expect(aclMock.hasRule("POOLPRIVILEGE", permission)).andReturn(true);
+        expect(aclMock.checkPermission("POOLPRIVILEGE", permission)).andReturn(true);
         replay(aclMock, userInfoMock);
 
         MCRSessionMgr.getCurrentSession().setUserInformation(userInfoMock);

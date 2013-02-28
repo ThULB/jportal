@@ -15,8 +15,8 @@
   <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
   <xsl:variable name="currentObjID" select="/mycoreobject/@ID" />
   <xsl:variable name="currentType" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
-  <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update_',$currentType))" />
-  <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete_',$currentType))" />
+  <xsl:variable name="updatePerm" select="acl:checkPermission($currentObjID,concat('update-',$currentType))" />
+  <xsl:variable name="deletePerm" select="acl:checkPermission($currentObjID,concat('delete-',$currentType))" />
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
   <xsl:variable name="hasChildren" select="count(/mycoreobject/structure/children) > 0" />
   <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />

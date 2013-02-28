@@ -21,8 +21,7 @@ public class DefaultCheck extends AbstractStrategyStep{
         if (accessInterface.hasRule("default", permission)) {
             return accessInterface.checkPermission("default", permission);
         }
-
-        return getAlternative().checkPermission(id, permission);
+        return getAlternative() != null ? getAlternative().checkPermission(id, permission) : false;
     }
 
     protected String getTypeFromID(String id) {
