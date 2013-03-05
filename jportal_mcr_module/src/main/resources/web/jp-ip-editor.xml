@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section xml:lang="all" title="IP Editor">
+    <jp-ip-editor ruleId="SYSTEMRULE0000000023" defRule="(group = klostermann)" objId="CRUD" perm="admin"/>
+  </section>
+</MyCoReWebPage>
