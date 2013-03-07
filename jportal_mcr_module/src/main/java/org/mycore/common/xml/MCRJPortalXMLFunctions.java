@@ -2,7 +2,6 @@ package org.mycore.common.xml;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +18,7 @@ import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.mycore.common.MCRConfiguration;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -144,6 +144,16 @@ public class MCRJPortalXMLFunctions {
         public String toString() {
             return "+" + this.field + ":" + this.value;
         }
+    }
+
+    public static String getLastValidPageID() {
+        String page = (String) MCRSessionMgr.getCurrentSession().get("lastPageID");
+        return page == null ? "" : page;
+    }
+
+    public static String setLastValidPageID(String pageID) {
+        MCRSessionMgr.getCurrentSession().put("lastPageID", pageID);
+        return "";
     }
 
 }

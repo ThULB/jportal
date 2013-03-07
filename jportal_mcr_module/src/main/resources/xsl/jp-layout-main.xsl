@@ -57,7 +57,7 @@
 
   <xsl:template name="renderLayout">
     <xsl:if test="/mycoreobject/@ID">
-      <xsl:variable name="setObjIDInSession" select="layoutUtils:setLastValidPageID(/mycoreobject/@ID)" />
+      <xsl:variable name="setObjIDInSession" select="jpxml:setLastValidPageID(/mycoreobject/@ID)" />
     </xsl:if>
     <xsl:variable name="objectEditingHTML">
       <editing>

@@ -16,7 +16,6 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.MCRLayoutUtilities;
 
 public class MCRJPortalURIGetJournalID implements URIResolver {
 
@@ -63,7 +62,9 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
         // in jp-layout-main.xsl - renderLayout the current object ID will be
         // set in the session. The method name "getLastValidPageID" is miss leading.
         // It was used for another reason. Should be changed in the next version.
-        String currentObjID = MCRLayoutUtilities.getLastValidPageID();
+//        String currentObjID = MCRLayoutUtilities.getLastValidPageID();
+        
+        String currentObjID = MCRJPortalXMLFunctions.getLastValidPageID();
         if(currentObjID.equals("")) {
             return "";
         }
