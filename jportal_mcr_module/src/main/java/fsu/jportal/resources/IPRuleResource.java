@@ -14,13 +14,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
 import org.mycore.common.MCRCache;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 @Path("IPRule")
 public class IPRuleResource {
@@ -36,13 +36,13 @@ public class IPRuleResource {
 
     @GET
     @Path("list")
-    public JSONArray list(@QueryParam("ruleId") String ruleid) throws JSONException {
+    public JsonArray list(@QueryParam("ruleId") String ruleid) {
         //get the ruleString
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule accessRule = ruleStore.getRule(ruleid);
         String ruleString = accessRule.getRuleString();
         
-        JSONArray jsonA = new JSONArray();
+        JsonArray jsonA = new JsonArray();
         if (!ruleString.equals("")){
             String[] ruleArray = ruleString.split("\\s*OR\\s*");
                    
@@ -56,14 +56,14 @@ public class IPRuleResource {
             }
             Collections.sort(ipList);
             for (IpAdress ip : ipList){
-                JSONObject jsonO = new JSONObject();
-                jsonO.put("ip", ip.getIpWithMask());
-                jsonA.put(jsonO);
+                JsonObject jsonO = new JsonObject();
+                jsonO.addProperty("ip", ip.getIpWithMask());
+                jsonA.add(jsonO);
             }
-        }        
+        }
         return jsonA;
     }
-    
+
     @GET
     @Path("add")
     public Response add(@QueryParam("ruleId") String ruleid, @QueryParam("ip") String ip, @QueryParam("defRule") String defRule) {
@@ -74,7 +74,7 @@ public class IPRuleResource {
             return Response.status(409).build();
         }
     }
-    
+
     @GET
     @Path("remove")
     public Response remove(@QueryParam("ruleId") String ruleid, @QueryParam("ip") String ip) {
@@ -85,24 +85,24 @@ public class IPRuleResource {
             return Response.status(409).build();
         }
     }
-    
+
     @POST
     @Path("removeList")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JSONArray removeList(JSONObject json) throws JSONException {
-        JSONArray ipsAsJSONArray = json.getJSONArray("ips");
-        for(int i = 0; i < ipsAsJSONArray.length(); i++){
-            String ip = ipsAsJSONArray.getJSONObject(i).getString("ip");
-            if(removeIp(json.getString("ruleid"), ip)){
-                ipsAsJSONArray.getJSONObject(i).put("success", "1");
+    public JsonArray removeList(JsonObject json) {
+        JsonArray ipsAsJSONArray = json.getAsJsonArray("ips");
+        for(int i = 0; i < ipsAsJSONArray.size(); i++){
+            String ip = ipsAsJSONArray.get(i).getAsJsonObject().getAsJsonPrimitive("ip").getAsString();
+            if(removeIp(json.getAsJsonPrimitive("ruleid").getAsString(), ip)){
+                ipsAsJSONArray.get(i).getAsJsonObject().addProperty("success", "1");
             }
             else{
-                ipsAsJSONArray.getJSONObject(i).put("success", "0");
+                ipsAsJSONArray.get(i).getAsJsonObject().addProperty("success", "0");
             }
         }
         return ipsAsJSONArray;
     }
-    
+
     @GET
     @Path("edit")
     public Response edit(@QueryParam("ruleId") String ruleid, @QueryParam("newIp") String newIp, @QueryParam("oldIp") String oldIp, @QueryParam("defRule") String defRule) {
