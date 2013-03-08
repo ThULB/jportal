@@ -22,14 +22,14 @@ var jp = jp || {};
     }
 })(jQuery);
 
-$(document).ready(function() {
-    $.getJSON(jp.az.getSearchURL() + '&fl=maintitle', function(searchResult) {
-    	var azList = jp.az.getList(searchResult.response);
-    	jp.az.print(azList);
-    });
-});
-
 jp.az = {
+
+	load: function() {
+	    $.getJSON(jp.az.getSearchURL() + '&fl=maintitle', function(searchResult) {
+	    	var azList = jp.az.getList(searchResult.response);
+	    	jp.az.print(azList);
+	    });
+	},
 
 	getHost: function() {
 		return 'http://' + $(location).attr('host');
@@ -107,30 +107,44 @@ jp.az = {
 	    var titleLink = $('<a/>').html(metadata.maintitle).attr('href', '/receive/' + metadata.id);
 	    var title = $('<h3 class="journal-title"/>').append(titleLink);
 	    resultListEntry.append(title);
-	
+	    jp.az.printPublished(resultListEntry, metadata);
+	    jp.az.printPublisher(resultListEntry, metadata);
+	},
+
+	printPublished: function(node, journal) {
 	    var publishedStr = 'Erscheinungsverlauf: ';
-	    if(metadata["date.published"]) {
-	    	publishedStr += metadata["date.published"];
-	        resultListEntry.append($('<div class="journal-published"/>').html(publishedStr));
-	    } else if(metadata["date.published_from"]) {
-	    	publishedStr += metadata["date.published_from"] + ' - ';
-	        if (metadata["date.published_until"]) {
-	            publishedStr = publishedStr + metadata["date.published_until"];
+	    if(journal["date.published"]) {
+	    	publishedStr += journal["date.published"];
+	    	node.append($('<div class="journal-published"/>').html(publishedStr));
+	    } else if(journal["date.published_from"]) {
+	    	publishedStr += journal["date.published_from"] + ' - ';
+	        if (journal["date.published_until"]) {
+	            publishedStr = publishedStr + journal["date.published_until"];
 	        }
-	        resultListEntry.append($('<div class="journal-published"/>').html(publishedStr));
-	    }
-	    if (metadata.publisher) {
-	    	for(var i = 0; i < metadata.publisher.length; i++) {
-	    		if(metadata.publisher[i].indexOf('#') == -1) {
-	    			console.log("Invalid publisher format for '" + metadata.publisher[i] + "'.");
-	    			continue;
-	    		}
-	    		var publisherID = metadata.publisher[i].substring(0, metadata.publisher[i].indexOf('#'));
-	    		var publisherText = metadata.publisher[i].substring(metadata.publisher[i].indexOf('#') + 1);
-	            var publisherLink = $('<a/>').html(publisherText).attr('href', jp.az.getHost() + '/receive/' + publisherID);
-	            var publisher = $('<div class="journal-author"/>').html('Herausgeber: ').append(publisherLink);
-	            resultListEntry.append(publisher);
-	    	}
+	        node.append($('<div class="journal-published"/>').html(publishedStr));
 	    }
 	},
+
+	printPublisher: function(node, journal) {
+		var publisherList = journal.publisher;
+		if(publisherList) {
+			var pusblisherStr = '<div class="publisher">Herausgeber: ';
+	    	for(var i = 0; i < publisherList.length; i++) {
+	    		var publisher = publisherList[i];
+	    		if(publisher.indexOf('#') == -1) {
+	    			console.log("Invalid publisher format for '" + publisher + "'.");
+	    			continue;
+	    		}
+	    		var publisherID = publisher.substring(0, publisher.indexOf('#'));
+	    		var publisherText = publisher.substring(publisher.indexOf('#') + 1);
+	            var publisherLink = "<a href='" + jp.az.getHost() + '/receive/' + publisherID + "'>" + publisherText + "</a>";
+	            pusblisherStr += publisherLink;
+	            if(i + 1 < publisherList.length) {
+	            	pusblisherStr += "; ";
+	            }
+	    	}
+	    	node.append(pusblisherStr + "</div>");
+		}
+	}
+
 }
