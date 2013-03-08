@@ -15,6 +15,13 @@
     <xsl:include href="jp-layout-footer.xsl" />
     <xsl:include href="jp-navigation-top.xsl" />
     <xsl:include href="jp-globalmessage.xsl" />
+
+    <xsl:include href="gbv-searchbar.xsl" />
+    <xsl:include href="gbv-journalList.xsl" />
+    <xsl:include href="gbv-breadcrumb.xsl" />
+    <xsl:include href="gbv-editMenu.xsl" />
+    <xsl:include href="gbv-latestArticles.xsl" />
+
     <xsl:include href="xslInclude:modules" />
     <xsl:include href="xslInclude:templates" />
 
@@ -55,9 +62,31 @@
     <!-- TODO: remove this -->
     <xsl:variable name="wcms.useTargets" select="'no'" />
 
+    <xsl:variable name="webPath" select="substring-after($RequestURL, $WebApplicationBaseURL)" />
+
+    <xsl:variable name="pageListXML">
+      <page name="content/below/index.xml" />
+      <page name="gbv-journalList.xml" />
+    </xsl:variable>
+    <xsl:variable name="pageList" select="xalan:nodeset($pageListXML)" />
+    
+    <xsl:variable name="maxWidthPageListXML">
+      <page name="servlets/MCRACLEditorServlet" />
+      <page name="jp-classeditor.xml" />
+      <page name="authorization/roles-editor.xml" />
+      <page name="editor_form_" />
+      <page name="fileupload_commit.xml" />
+      <page name="servlets/MCRFileNodeServlet" />
+    </xsl:variable>
+    <xsl:variable name="maxWidthPageList" select="xalan:nodeset($maxWidthPageListXML)" />
+
+    <xsl:variable name="pageTitle">
+      <xsl:call-template name="HTMLPageTitle" />
+    </xsl:variable>
+
     <xsl:template name="renderLayout">
         <xsl:if test="/mycoreobject/@ID">
-            <xsl:variable name="setObjIDInSession" select="layoutUtils:setLastValidPageID(/mycoreobject/@ID)" />
+            <xsl:variable name="setObjIDInSession" select="jpxml:setLastValidPageID(/mycoreobject/@ID)" />
         </xsl:if>
         <xsl:variable name="objectEditingHTML">
             <editing>
@@ -72,7 +101,7 @@
         <html>
             <head>
                 <title>
-                    <xsl:call-template name="HTMLPageTitle" />
+                  <xsl:value-of select="$pageTitle" />
                 </title>
                 <meta content="Zeitschriften-Portal" lang="de" name="description" />
                 <meta content="Journal-Portal" lang="en" name="description" />
@@ -80,25 +109,15 @@
                 <meta content="{$JP.Site.HTML.Head.Meta.Keywords.en}" lang="en" name="keywords" />
                 <meta content="MyCoRe" lang="de" name="generator" />
                 <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
+                <link href="{$WebApplicationBaseURL}css/jp-gbv.less" rel="stylesheet/less" type="text/css" />
                 <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
-                <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
-                <xsl:if test="$template != ''">
-                    <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
-                        <style type="text/css">
-                            #logo {
-                            background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')" />);
-                            }
-                        </style>
-                    </xsl:if>
-                    <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, '/CSS/', $template, '.css'))">
-                        <link href="{$templateWebURL}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
-                    </xsl:if>
-                </xsl:if>
+                <link href="{$WebApplicationBaseURL}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
                 <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
                 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
-                <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
+                <script type="text/javascript" src="{$WebApplicationBaseURL}js/ckeditor-4.0.1.js" />
                 <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
                 <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
+                <script type="text/javascript" src="{$WebApplicationBaseURL}js/less-1.3.3.min.js" />
                 <!-- TODO: don't init iview2 if no image is available -->
                 <xsl:call-template name="initIview2JS" />
 
@@ -109,20 +128,78 @@
                 <xsl:if test="acl:checkPermission('POOLPRIVILEGE',concat('update-',$type))">
                     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2-derivLink.js" />
                 </xsl:if>
-
-                <!-- add IE CSS to head -->
-                <xsl:variable name="cssLinked">
-                    &lt;link href="
-                    <xsl:value-of select="concat($WebApplicationBaseURL,'templates/master/',$template,'/CSS/',$template,'_IE.css')" />"
-                    rel="stylesheet" type="text/css"/&gt;
-                </xsl:variable>
-                <xsl:comment>
-                    <xsl:value-of select="'[if lte IE 8]&gt;'" />
-                    <xsl:value-of select="$cssLinked" />
-                    <xsl:value-of select="'&lt;![endif]'" />
-                </xsl:comment>
             </head>
             <body>
+              <div class="pageHolder">
+                <div class="header">
+                  <div class="topBlock">
+                    <div id="globalMenu" class="globalMenu">
+                      <xsl:call-template name="jp.navigation.top" />
+                    </div>
+                    <a href="http://www.gbv.de" class="gbv-logo" />
+                    <a href="{$WebApplicationBaseURL}" class="title">Digitale Bibliothek</a>
+                  </div>
+                  <div class="bottomBlock">
+                    <xsl:if test="/mycoreobject/@ID">
+                      <xsl:call-template name="gbv-breadcrumb" />
+                    </xsl:if>
+                    <xsl:if test="$objectEditing/menu[@id='jp-object-editing']//li/a">
+                      <xsl:call-template name="gbv-editMenu" />
+                    </xsl:if>
+                  </div>
+                </div>
+                <div class="content">
+                  <xsl:choose>
+                    <xsl:when test="$pageList/page[starts-with($webPath, @name)]">
+                      <xsl:apply-templates />
+                    </xsl:when>
+                    <xsl:when test="$maxWidthPageList/page[starts-with($webPath, @name)]">
+                      <div class="maxWidthBlock">
+                        <xsl:apply-templates />
+                      </div>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <div class="unknownContent">
+                        <div class="horizontalContainer">
+                          <div class="leftBlock">
+                            <div class="contentBlock">
+                              <xsl:call-template name="gbv-searchbar" />
+                              <div class="caption">
+                                <xsl:value-of select="$pageTitle" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="rightBlock">
+                            <div class="contentBlock">
+                              <xsl:apply-templates />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </div>
+                <div class="footer">
+                  <xsl:if test="not($maxWidthPageList/page[starts-with($webPath, @name)])">
+                    <div class="horizontalContainer topBlock">
+                      <div class="leftBlock" />
+                      <div class="rightBlock" />
+                    </div>
+                  </xsl:if>
+                </div>
+              </div>
+              <xsl:if test="$object='delete'">
+                <xsl:copy-of select="$objectEditing/deleteMsg" />
+              </xsl:if>
+              <div id="viewerContainerWrapper" />
+              <div id="ckeditorContainer">
+                <div class="jp-layout-message-background"></div>
+                <div id="ckeditorframe">
+                  <textarea id="ckeditor"></textarea>
+                </div>
+              </div>
+
+            <!-- 
                 <div id="globalHeader">
                     <ul id="globalHomeLink" class="jp-layout-hMenu">
                         <li>
@@ -218,7 +295,6 @@
                             <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
                                 <xsl:apply-templates />
                             </div>
-                            <!-- Edit -->
                             <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
                         </xsl:when>
                         <xsl:otherwise>
@@ -226,9 +302,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </div>
-                <!-- footer -->
                 <xsl:call-template name="jp.layout.footer" />
-                <!-- delete messages -->
                 <xsl:if test="$object='delete'">
                     <xsl:copy-of select="$objectEditing/deleteMsg" />
                 </xsl:if>
@@ -238,7 +312,7 @@
                     <div id="ckeditorframe">
                         <textarea id="ckeditor"></textarea>
                     </div>
-                </div>
+                </div> -->
             </body>
         </html>
     </xsl:template>
@@ -263,6 +337,6 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:value-of select="concat($titleFront,' - ',$MainTitle)" />
+        <xsl:value-of select="$titleFront" />
     </xsl:template>
 </xsl:stylesheet>

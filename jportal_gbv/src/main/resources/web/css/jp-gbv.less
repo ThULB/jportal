@@ -1,0 +1,440 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300,600,700);
+
+@white: #FAFAFA;
+@blue: #557FBB;
+@blue-highlight: lighten(@blue, 30%);
+@light-grey: #EEE;
+@grey: #999;
+@grey-highlight: #d4d6db;
+@dark-grey: #808080;
+
+@page-background-color: @white;
+@text-color: #666;
+@text-color-dark: #333;
+
+@font-weight-default: 300;
+@font-weight-bold: 600;
+@font-weight-bolder: 700;
+
+@border-color-light: #ccc;
+@border-color-dark: #898989;
+
+/*********************************************************************
+* DEFAULT
+**********************************************************************/
+
+html {
+	background-color: @page-background-color;
+	color: @text-color;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1em;
+	font-weight: @font-weight-default;
+}
+
+body {
+	margin: auto;
+	width: auto;
+}
+
+.pageHolder {
+	width: 1000px;
+	margin: 0 auto;
+	padding-top: 4px;
+}
+.horizontalContainer {
+	display: table;
+}
+.horizontalBlock {
+	display: table-cell;
+}
+.contentBlock {
+	padding: 20px;
+}
+.leftBlockCaption(@text-color: @text-color-dark, @font-size: 2.8rem) {
+	font-size: @font-size;
+	color: @text-color;
+}
+.leftBlockGradient {
+	background-image: url("/images/gradient.png");
+	background-repeat: repeat;
+}
+
+.verticalGradient (@bottom: white, @top: black) {
+	background: @bottom; /* Old browsers */
+	background: -moz-linear-gradient(top,  @bottom 0%, @top 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @bottom), color-stop(100%, @top)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  @bottom 0%,@top 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  @bottom 0%,@top 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  @bottom 0%,@top 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  @bottom 0%,@top 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@bottom', endColorstr='@top',GradientType=0 ); /* IE6-9 */
+}
+.hidden {
+	display: none;
+}
+
+/*********************************************************************
+* HEADER
+**********************************************************************/
+.pageHolder > .header {
+	height: 200px;
+	background-color: @blue;
+	color: @white;
+	a {
+		color: @white;
+	}
+	.topBlock {
+		height: 164px;
+		background-image: url("/templates/master/template_gbv/IMAGES/logo.png");
+		background-repeat: no-repeat;
+		background-position: center top;
+		position: relative;
+		font-weight: @font-weight-bold;
+		#globalMenu {
+		    display: block;
+		    float: right;
+		    height: 24px;
+		    margin-right: 36px;
+		    .languageMenu {
+				z-index: 999;
+				a {
+					padding: 3px 4px 2px;
+				}
+			}
+		}
+		#globalMenu > ul {
+		    font-size: 0.8rem;
+		    padding: 5px 0;
+		}
+		.gbv-logo {
+		    background-image: url("/templates/master/template_gbv/IMAGES/gbv.png");
+		    background-repeat: no-repeat;
+		    height: 48px;
+		    left: 44px;
+		    position: absolute;
+		    top: 24px;
+		    width: 98px;
+		}
+		.title {
+		    color: @white;
+		    font-size: 1.5rem;
+		    position: absolute;
+		    right: 44px;
+		    top: 35px;
+		}	
+	}
+	.bottomBlock {
+		height: 35px;
+	    box-shadow: 0 2px 3px #777;
+	    position: relative;
+	    text-align: right;
+	}
+}
+
+/*********************************************************************
+* DEFAULT CONTENT
+**********************************************************************/
+.contentContainer {
+	width: 675px;
+	background-color: @light-grey;
+	border-top: 1px solid @white;
+	border-bottom: 1px solid @border-color-light;
+	vertical-align: middle;
+}
+
+.pageHolder {
+	.leftBlock {
+		width: 325px;
+		background-color: @grey;
+		border-bottom: 1px solid @border-color-dark;
+		vertical-align: middle;
+		.horizontalBlock;
+	}
+	.rightBlock {
+		.contentContainer;
+		.horizontalBlock;
+	}
+	.maxWidthBlock {
+		padding: 20px;
+		background-color: @light-grey; 
+	}
+}
+
+/*********************************************************************
+* UNKNOWN CONTENT
+**********************************************************************/
+.pageHolder .content .unknownContent {
+	.leftBlock { 
+		vertical-align: top;
+		.leftBlockGradient;
+		.contentBlock .caption {
+			.leftBlockCaption(@text-color-dark, 1.6rem);
+			padding-top: 22px;
+		}
+	}
+}
+
+/*********************************************************************
+* HOME
+**********************************************************************/
+.pageHolder > .content .home {
+	.welcomeBlock {
+		height: 288px;
+		.leftBlock {
+			.leftBlockGradient;
+			vertical-align: top;
+			.welcome {
+				.leftBlockCaption(@text-color-dark, 2.2rem);
+				padding-top: 31px;
+			}
+		}
+		.rightBlock {
+			border-top: none;
+			padding-top: 66px;
+		}
+	}
+	.journalBlock {
+		height: 160px;
+		.leftBlock {
+			.verticalGradient(@blue, #5b88c6);
+			.leftBlockCaption(@white);
+		}
+		.rightBlock {
+			background-color: @grey-highlight;
+			&:hover {
+				background-color: @blue-highlight;
+			}
+		}
+	}
+	.latestArticles {
+		.leftBlock {
+			.leftBlockCaption;
+		}
+		.horizontalContainer:not(:first-child) .leftBlock {
+			border: none;
+		}
+		a.rightBlock {
+			&:hover {
+				background-color: @blue-highlight;
+			}
+		}
+	}
+}
+
+
+/*********************************************************************
+* A-Z
+**********************************************************************/
+.pageHolder .content .gbv-journalList {
+	background-color: @light-grey;
+	vertical-align: top;
+	.horizontalBlock;
+	.leftBlock {
+		.leftBlockGradient;
+		.caption {
+			.leftBlockCaption(@text-color-dark, 1.6rem);
+			padding-top: 22px;
+		}
+	}
+	.journal {
+		.contentContainer;
+		display: block;
+		padding: 20px 30px 20px 20px;
+	    width: 625px;
+	    &:hover {
+	    	background-color: @grey-highlight;
+	    }
+	    .title {
+	    	font-weight: @font-weight-bold;
+	    	font-size: 1.3rem;
+	    	padding-bottom: 6px;
+	    }
+	    .publisher a:hover {
+	    	text-decoration: underline;
+	    }
+	}
+}
+
+/*********************************************************************
+* User
+**********************************************************************/
+.pageHolder .content .user-list-users .user {
+	width: 640px;
+}
+.pageHolder .content {
+	.editorTextfield {
+		width: 300px;
+	}
+	.pageHolder .content  .editorPassword {
+		width: 300px;
+	}
+}
+
+/*********************************************************************
+* Classeditor
+**********************************************************************/
+.pageHolder .content .classeditor {
+	font-size: 0.8rem;
+}
+
+/*********************************************************************
+* FOOTER
+**********************************************************************/
+.pageHolder .footer .topBlock {
+	height: 72px;
+}
+
+/*********************************************************************
+* METADATA
+**********************************************************************/
+.pageHolder .content .contentBlock {
+	.jp-layout-content-RCol {
+		display: none;
+	}
+	#jp-breadcrumb-container {
+		display: none;
+	}
+	#jp-maintitle {
+		display: none;
+	}
+	.jp-layout-content-LCol-RCol {
+		border: none;
+		width: 600px;
+	}
+	.jp-layout-metadataList {
+		width: 490px;
+		dt {
+			width: 170px;
+		}
+		dd {
+			width: 300px;
+		}
+	}
+	#derivCol {
+		padding-left: 0px;
+		.jp-layout-derivateList .jp-layout-derivateWrapper img {
+			width: 140px;
+		}
+	}
+	#jp-content-Bottom {
+		border: none;
+		position: relative;
+	}
+}
+
+/*********************************************************************
+* BREADCRUMB
+**********************************************************************/
+.pageHolder .header #jp-breadcrumb-container {
+    border: none;
+    color: #FAFAFA;
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    left: 350px;
+    padding-top: 6px;
+    position: absolute;
+    text-align: left;
+    width: 381px;
+}
+.pageHolder .header .jp-layout-scroller {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin: 0;
+	vertical-align: text-top;
+	li {
+		display: inline-block;
+		padding-right: 12px;
+    }
+}
+
+/*********************************************************************
+* SEARCHBAR
+**********************************************************************/
+.pageHolder .searchbarContainer {
+	position: relative;
+	.searchbar {
+	    background-color: @grey;
+	    border: medium none;
+	    color: #DDDDDD;
+	    font-size: 1.1rem;
+	    height: 45px;
+	    opacity: 0.7;
+	    padding: 0 44px 0 8px;
+	    width: 232px;
+	}
+	.submitContainer {
+	    display: inline-block;
+	    position: absolute;
+	    right: 10px;
+	    top: 10px;
+	    input {
+		    background-color: transparent;
+		    background-image: url("/images/searchButton.png");
+		    border: medium none;
+		    cursor: pointer;
+		    height: 26px;
+		    width: 26px;
+		}
+	}
+}
+
+
+/*********************************************************************
+* SEARCHRESULTS
+**********************************************************************/
+.pageHolder #searchResults #resultList {
+	width: auto;
+}
+
+/*********************************************************************
+* EDIT MENU
+**********************************************************************/
+.pageHolder .editMenuDropDown {
+    color: #FAFAFA;
+    display: inline-block;
+    font-size: 24px;
+    padding: 4px 16px;
+    cursor: pointer;
+    position: relative;
+    border: 1px solid transparent;
+    &.selected {
+    	color: #333;
+		background-color: #FAFAFA;
+		border: 1px solid #999999;
+		border-bottom: none;
+	    z-index: 1;
+	}
+}
+.pageHolder .editMenu {
+	color: @text-color;
+    background-color: #FAFAFA;
+    border: 1px solid #999;
+    box-shadow: 0 0 4px #999;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    text-align: left;
+    top: 33px;
+    width: 220px;
+    .jp-layout-menu-dropdown {
+    	border-bottom: 1px solid #999;
+    }
+    .jp-layout-submenu-dropdown {
+		margin: 0px;
+		padding: 0px;
+		#ckeditorButton,#diagButton,a {
+			color: @text-color;
+		    display: inline-block;
+		    margin: 0;
+		    padding: 4px 10px;
+		    width: 200px;
+			&:hover {
+				background-color: @blue-highlight;
+			}
+		}
+    }
+}

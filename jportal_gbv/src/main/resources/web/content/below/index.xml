@@ -2,52 +2,36 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <section xml:lang="de" title="JPortal GBV - Das Zeitschriften-Portal des GBV">
-    <div class="jp-layout-index">
-      <div class="jp-layout-index-intro">
-        <h1>Willkommen beim GBV Zeitschriften-Server</h1>
-          <p classe="greeting">...in Bearbeitung...</p>
-          <!--
-        <p class="greeting">Das von der <a href="http://www.thulb.uni-jena.de">Thüringer Universitäts- und Landesbibliothek Jena</a>
-        (ThULB) betriebene Internetportal journals@UrMEL bietet Zugang zu wissenschaftlichen Zeitschriften in digitaler Form.</p>
-        <p>Zur Verfügung stehen rund 700 Zeitschriften mit mehr als 230.000 Artikeln und weiteren Periodika, welche durch die ThULB
-        Jena in Kooperation mit zahlreichen Bibliotheken, Archiven, Verlagen und wissenschaftlichen Fachgesellschaften bereitgestellt
-        werden. Zugänglich sind sowohl retrodigitalisierte historische Zeitschriften, als auch Materialien, welche in originär digitaler
-        Gestalt („born digital“) im Rahmen von journals@UrMEL publiziert werden. Das Angebot wird ständig erweitert. journal@UrMEL ist
-        Bestandteil der <a href="http://www.urmel-dl.de">Universal Multimedia Electronic Library</a> (UrMEL).</p>
-        -->
+    <div class="home">
+      <div class="horizontalContainer welcomeBlock">
+        <div class="leftBlock">
+          <div class="contentBlock">
+            <gbv-searchbar />
+            <div class="welcome">Willkommen beim Zeitschriften-Portal des GBV</div>
+          </div>
+        </div>
+        <div class="rightBlock">
+          <div class="contentBlock">
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At
+            vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
+            amet. Lorem ipsum dolor sit
+            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam.
+          </div>
+        </div>
       </div>
-
-      <div class="jp-layout-index-list">
-        <ul>
-          <li>
-            <a href="/content/main/journalList.xml#A" class="entry journal">
-              <img class="linkButton" src="/images/journal.png"/>
-              <p>
-                Zugang zu digitalisierten Zeitschriften und Zeitungen sowie weiteren online verfügbaren
-                Periodika...
-              </p>
-            </a>
-          </li>
-          <!--
-          <li>
-            <a href="/content/main/calendarList.xml#A" class="entry calendar">
-              <img class="linkButton" src="/images/calendar.png"/>
-              <p>
-                Zugang zu digitalisierten Schreibkalendern des Stadtarchivs Altenburg...
-              </p>
-            </a>
-          </li>
-          -->
-        </ul>
+      <div class="horizontalContainer journalBlock">
+        <div class="leftBlock">
+          <div class="contentBlock">Zeitschriften</div>
+        </div>
+        <a href="/gbv-journalList.xml" class="rightBlock entry journal">
+          <div class="contentBlock">
+            Zugang zu digitalisierten Zeitschriften und Zeitungen sowie weiteren online verfügbaren
+            Periodika...
+          </div>
+        </a>
       </div>
-
-      <printObjectEditing />
-
-      <div class="jp-layout-index-latestArticles">
-        <h1>Neueste Artikel</h1>
-        <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
-      </div>
-
+      <gbv-latestArticles query="objectType:jparticle&amp;sort=created%20desc&amp;rows=3"  />
     </div>
   </section>
 </MyCoReWebPage>

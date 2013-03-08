@@ -9,26 +9,21 @@
 
   <property name="jportal.directory" location="${ant.file}/../../jportal_mcr"/>
 
-  <target name="create.default-rules" description="loads default acl rules for archive application">
-    <echo>JPortal: Default rules</echo>
-    <antcall target="invoke.cli">
-      <param name="cli.directory" value="${jportal.directory}/acl"/>
-      <param name="cli.command" value="process defaultrules-commands"/>
-    </antcall>
-    <echo>JPortal: Web ACL</echo>
-    <antcall target="invoke.cli">
-      <param name="cli.directory" value="${jportal.directory}/acl"/>
-      <param name="cli.command" value="process webacl-commands"/>
-    </antcall>
-  </target>
+	<target name="create.default-rules" description="loads default acl rules for archive application">
+		<echo>Default rules</echo>
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${jportal.directory}/acl" />
+			<param name="cli.command" value="process defaultrules-commands" />
+		</antcall>
+	</target>
 
-  <target name="create.users">
-    <echo>JPortal: Create users and groups</echo>
-    <antcall target="invoke.cli">
-      <param name="cli.directory" value="${jportal.directory}/usersAndGroups"/>
-      <param name="cli.command" value="process usersAndGroups-commands"/>
-    </antcall>
-  </target>
+	<target name="create.users">
+		<echo>Create users and groups</echo>
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${jportal.directory}/usersAndGroups" />
+			<param name="cli.command" value="process usersAndGroups-commands" />
+		</antcall>
+	</target>
 
   <target name="config">
     <echo>JPortal: config</echo>
