@@ -145,6 +145,8 @@ body {
 .pageHolder {
 	.leftBlock {
 		width: 325px;
+		max-width: 325px;
+		overflow: hidden;
 		background-color: @grey;
 		border-bottom: 1px solid @border-color-dark;
 		vertical-align: middle;
@@ -221,7 +223,6 @@ body {
 	}
 }
 
-
 /*********************************************************************
 * A-Z
 **********************************************************************/
@@ -231,6 +232,7 @@ body {
 	.horizontalBlock;
 	.leftBlock {
 		.leftBlockGradient;
+		vertical-align: top;
 		.caption {
 			.leftBlockCaption(@text-color-dark, 1.6rem);
 			padding-top: 22px;
@@ -352,9 +354,45 @@ body {
 /*********************************************************************
 * SEARCHBAR
 **********************************************************************/
-.pageHolder .searchbarContainer {
+@searchBarWidth: 232px;
+.searchButton {
+	background-color: transparent;
+	background-image: url("/images/searchButton.png");
+	border: medium none;
+	cursor: pointer;
+	height: 26px;
+	width: 26px;
+}
+.pageHolder #searchBar {
+	background: none;
+	height: auto;
+	padding: 0px;
+	#searchForm {
+		#inputField {
+			width: @searchBarWidth;
+		}
+		#submitButton {
+			.searchButton;
+		    font-size: 0;
+		    position: absolute;
+		    right: 12px;
+		    top: 10px;
+		}
+		select {
+			background-color: #999;
+			border: none;
+			color: #DDD;
+			font-size: inherit;
+			margin-top: 7px;
+			opacity: 0.7;
+			padding: 2px;
+			width: 150px;
+		}
+	}
+}
+.pageHolder #searchForm {
 	position: relative;
-	.searchbar {
+	#inputField {
 	    background-color: @grey;
 	    border: medium none;
 	    color: #DDDDDD;
@@ -362,7 +400,7 @@ body {
 	    height: 45px;
 	    opacity: 0.7;
 	    padding: 0 44px 0 8px;
-	    width: 232px;
+	    width: @searchBarWidth;
 	}
 	.submitContainer {
 	    display: inline-block;
@@ -370,12 +408,7 @@ body {
 	    right: 10px;
 	    top: 10px;
 	    input {
-		    background-color: transparent;
-		    background-image: url("/images/searchButton.png");
-		    border: medium none;
-		    cursor: pointer;
-		    height: 26px;
-		    width: 26px;
+			.searchButton;
 		}
 	}
 }
@@ -404,7 +437,7 @@ body {
 		background-color: #FAFAFA;
 		border: 1px solid #999999;
 		border-bottom: none;
-	    z-index: 1;
+	    z-index: 5;
 	}
 }
 .pageHolder .editMenu {
@@ -420,6 +453,7 @@ body {
     text-align: left;
     top: 33px;
     width: 220px;
+    z-index: 4;
     .jp-layout-menu-dropdown {
     	border-bottom: 1px solid #999;
     }

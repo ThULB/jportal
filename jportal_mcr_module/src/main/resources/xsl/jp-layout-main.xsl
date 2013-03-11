@@ -96,7 +96,7 @@
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/ckeditor-4.0.1.js" />
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         <!-- TODO: don't init iview2 if no image is available -->
