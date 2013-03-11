@@ -42,8 +42,9 @@ function attachToElement(element, keywords) {
 			} else {
 				$("<span class='placeholder' id='" + keyword.id.categid + "' />").appendTo(li);
 			}
-			var a = $("<a>" + keyword.labels[0].text + "</a>");
+			var a = $("<a/>");
 			var categID = keyword.id.categid.replace(/ /g, "\\ ");
+			a.text(keyword.labels[0].text);
 			a.attr("href", "../jp-search.xml?XSL.qt=+volContentClassi1:" + categID + "&XSL.mode=hidden");
 			a.appendTo(li);
 		}
