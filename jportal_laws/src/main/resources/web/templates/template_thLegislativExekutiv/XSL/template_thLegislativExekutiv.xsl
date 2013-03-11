@@ -40,7 +40,7 @@
 
   <!-- ================================================================================= -->
   <xsl:template name="jp.laws.js">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/master/template_thLegislativExekutiv/JS/jp-laws.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/JS/jp-laws.js" />
 	<script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');

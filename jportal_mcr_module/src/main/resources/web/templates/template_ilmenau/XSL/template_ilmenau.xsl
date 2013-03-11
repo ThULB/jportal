@@ -14,7 +14,7 @@
       $(document).ready(function() {
       	$.ajax({
     			type: "GET",
-    			url: "../templates/master/template_ilmenau/config/linkConfig.xml",
+    			url: "../templates/template_ilmenau/config/linkConfig.xml",
     			dataType: "xml",
     			success: parseXml
   		});
@@ -30,10 +30,10 @@
       		$('#logo').append('<a id="LogoLink' + i + '" href="{$WebApplicationBaseURL}receive/' + id +'"></a>');
       		
       		if (id == '<xsl:value-of select="$journalId" />'){
-      			$('#LogoLink' + i).append('<img class="LogoS" src="../templates/master/template_ilmenau/IMAGES/' + img + '"/>');
+      			$('#LogoLink' + i).append('<img class="LogoS" src="../templates/template_ilmenau/IMAGES/' + img + '"/>');
       		}
       		else{
-	      		$('#LogoLink' + i).append('<img class="LogoS" src="../templates/master/template_ilmenau/IMAGES/' + alt + '"/>');
+	      		$('#LogoLink' + i).append('<img class="LogoS" src="../templates/template_ilmenau/IMAGES/' + alt + '"/>');
       		}
       		
       		i++;

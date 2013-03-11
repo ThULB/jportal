@@ -8,7 +8,7 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_calendar">
-    <script type="text/javascript" src="../templates/master/template_calendar/JS/keywords.js" />
+    <script type="text/javascript" src="../templates/template_calendar/JS/keywords.js" />
     <script>
 		$(document).ready(function() {
 			loadKeywords();

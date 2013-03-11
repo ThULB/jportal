@@ -35,7 +35,7 @@ function buildQuery() {
 }
 
 function setLogo(baseURL) {
-    $('#logo').css('background-image', 'url(' + baseURL + 'templates/master/template_thLegislativExekutiv/IMAGES/logo.png)');
+    $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_thLegislativExekutiv/IMAGES/logo.png)');
 }
 
 function setMaintitle(maintitle) {
