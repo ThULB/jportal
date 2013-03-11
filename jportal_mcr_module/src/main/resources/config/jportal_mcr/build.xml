@@ -41,13 +41,18 @@
 		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.directory}/editor/acl" includes="**/*.xml" />
 		</copy>
-		
+
 		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
 			<fileset dir="${module.directory}/" includes="**/messages_*.properties" />
 		</copy>
 
 		<copy todir="${basedir}/config/solr-home">
 			<fileset dir="${module.directory}/solr" />
+		</copy>
+
+		<!-- copy template xsl, overides defaults in docportal maven module build.xml -->
+		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" includeemptydirs="false" failonerror="false">
+			<fileset dir="${build.modules}/web" includes="templates/*/XSL/*.xsl" />
 		</copy>
 
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
@@ -76,10 +81,7 @@
 
 	</target>
 
-	 <target name="config">
-	    <mcr:config action="addInclude"
-	                propertyfile="${build.config}/mycore.properties"
-	                key="MCR.CLI.Classes.Annotated"
-	                value="org.mycore.frontend.cli.MigratingCMDs" />
+	<target name="config">
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs" />
 	</target>
 </project>
