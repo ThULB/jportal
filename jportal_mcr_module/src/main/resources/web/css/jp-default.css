@@ -849,7 +849,7 @@ body {
 }
 
 #logo {
-	background-image: url("/templates/master/template_master2/IMAGES/logo.png");
+	background-image: url("/templates/template_master2/IMAGES/logo.png");
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
