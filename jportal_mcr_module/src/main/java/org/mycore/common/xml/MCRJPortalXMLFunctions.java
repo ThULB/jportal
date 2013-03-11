@@ -155,5 +155,9 @@ public class MCRJPortalXMLFunctions {
         MCRSessionMgr.getCurrentSession().put("lastPageID", pageID);
         return "";
     }
+    
+    public static int getCentury(int year){
+        return (int) Math.ceil((float)year /100);
+    }
 
 }
