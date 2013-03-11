@@ -55,8 +55,8 @@
   <xsl:variable name="template">
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
-  <xsl:variable name="templateResourcePath" select="concat('templates/master/', $template, '/')" />
-  <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/master/', $template, '/')" />
+  <xsl:variable name="templateResourcePath" select="concat('templates/', $template, '/')" />
+  <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/', $template, '/')" />
 
     <!-- TODO: remove this -->
   <xsl:variable name="wcms.useTargets" select="'no'" />
@@ -111,6 +111,18 @@
         <link href="{$WebApplicationBaseURL}css/jp-gbv.less" rel="stylesheet/less" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <xsl:if test="$template != ''">
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
+            <style type="text/css">
+              #logo {
+                background-image: url(<xsl:value-of select="concat($templateWebURL, 'IMAGES/logo.png')" />);
+              }
+            </style>
+          </xsl:if>
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, '/CSS/', $template, '.css'))">
+            <link href="{$templateWebURL}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
+          </xsl:if>
+        </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
@@ -138,6 +150,7 @@
               <a href="http://www.gbv.de" class="gbv-logo" />
               <a href="{$WebApplicationBaseURL}" class="title">Digitale Bibliothek</a>
             </div>
+            <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
             <div class="bottomBlock">
               <xsl:if test="/mycoreobject/@ID">
                 <xsl:call-template name="gbv-breadcrumb" />
