@@ -96,9 +96,33 @@ body {
 		    height: 24px;
 		    margin-right: 36px;
 		    .languageMenu {
-				z-index: 999;
+				z-index: 998;
 				a {
 					padding: 3px 4px 2px;
+				}
+				#languageList {
+					top: 24px;
+					&.languageList_show {
+						background: @white;
+						border: 1px solid @grey;
+					}
+					a {
+						padding: 3px 19px 0 4px;
+						&:hover {
+							background: @blue-highlight;
+						}
+					}
+				}
+				#languageSelect {
+					border: 1px solid transparent;
+					position: relative;
+					&.languageSelect {
+						background: @white;
+						border: 1px solid @grey;
+						border-bottom: none;
+						z-index: 999;
+						box-shadow: none;
+					}
 				}
 			}
 		}
@@ -271,6 +295,16 @@ body {
 		width: 300px;
 	}
 }
+.pageHolder .content .form-login {
+	.form-login-heading {
+		display: none;
+	}
+	fieldset {
+	    border: none;
+    	margin: 0;
+    	padding: 0 0 12px;
+	}
+}
 
 /*********************************************************************
 * Classeditor
@@ -329,7 +363,7 @@ body {
 **********************************************************************/
 .pageHolder .header #jp-breadcrumb-container {
     border: none;
-    color: #FAFAFA;
+    color: @white;
     display: inline-block;
     font-size: 0.8rem;
     font-weight: 600;
@@ -379,7 +413,7 @@ body {
 		    top: 10px;
 		}
 		select {
-			background-color: #999;
+			background-color: @grey;
 			border: none;
 			color: #DDD;
 			font-size: inherit;
@@ -425,7 +459,7 @@ body {
 * EDIT MENU
 **********************************************************************/
 .pageHolder .editMenuDropDown {
-    color: #FAFAFA;
+    color: @white;
     display: inline-block;
     font-size: 24px;
     padding: 4px 16px;
@@ -434,17 +468,17 @@ body {
     border: 1px solid transparent;
     &.selected {
     	color: #333;
-		background-color: #FAFAFA;
-		border: 1px solid #999999;
+		background-color: @white;
+		border: 1px solid @grey;
 		border-bottom: none;
 	    z-index: 5;
 	}
 }
 .pageHolder .editMenu {
 	color: @text-color;
-    background-color: #FAFAFA;
-    border: 1px solid #999;
-    box-shadow: 0 0 4px #999;
+    background-color: @white;
+    border: 1px solid @grey;
+    box-shadow: 0 0 4px @grey;
     list-style: none outside none;
     margin: 0;
     padding: 0;
@@ -455,7 +489,7 @@ body {
     width: 220px;
     z-index: 4;
     .jp-layout-menu-dropdown {
-    	border-bottom: 1px solid #999;
+    	border-bottom: 1px solid @grey;
     }
     .jp-layout-submenu-dropdown {
 		margin: 0px;

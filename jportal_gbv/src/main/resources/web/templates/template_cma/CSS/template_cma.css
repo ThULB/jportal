@@ -26,3 +26,6 @@
 .pageHolder .editMenu .jp-layout-submenu-dropdown #ckeditorButton, .pageHolder .editMenu .jp-layout-submenu-dropdown #diagButton, .pageHolder .editMenu .jp-layout-submenu-dropdown a {
 	color: #666;
 }
+.pageHolder > .header .bottomBlock a.selected {
+    color: #333;
+}

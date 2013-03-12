@@ -129,10 +129,10 @@
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/less-1.3.3.min.js" />
-                <!-- TODO: don't init iview2 if no image is available -->
+        <!-- TODO: don't init iview2 if no image is available -->
         <xsl:call-template name="initIview2JS" />
 
-                <!-- Piwik -->
+        <!-- Piwik -->
         <xsl:call-template name="jp.piwik" />
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
