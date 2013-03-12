@@ -22,7 +22,8 @@
         <module>jportal_login_module</module>
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
-    </modules>
+    <module>jportal_acl_ip_editor_module</module>
+  </modules>
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -202,6 +203,11 @@
               <version>1.3</version>
               <type>jar</type>
               <scope>test</scope>
+            </dependency>
+            <dependency>
+              <groupId>fsu.thulb</groupId>
+              <artifactId>jportal_mcr_module</artifactId>
+              <version>${jportal.version}</version>
             </dependency>
 		</dependencies>
 	</dependencyManagement>

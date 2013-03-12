@@ -21,7 +21,10 @@
     <dependency>
       <groupId>fsu.thulb</groupId>
       <artifactId>jportal_mcr_module</artifactId>
-      <version>${jportal.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
     </dependency>
   </dependencies>
   <build>

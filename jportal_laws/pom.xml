@@ -74,7 +74,6 @@
     <dependency>
       <groupId>fsu.thulb</groupId>
       <artifactId>jportal_mcr_module</artifactId>
-      <version>${jportal.version}</version>
     </dependency>
   </dependencies>
 
