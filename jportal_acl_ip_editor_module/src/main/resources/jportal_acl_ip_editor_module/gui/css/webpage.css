@@ -1,0 +1,61 @@
+@CHARSET "UTF-8";
+#jp-ip-editor-ipList{
+	margin-top: 0px;
+	width: 300px;
+	height: 400px;
+	overflow: auto;
+    font-size: medium;
+    list-style: none outside none;
+    padding-left: 0;
+}
+
+.jp-ip-editor-ips{
+	display: block;
+}
+
+.jp-ip-editor-ip{
+	width: 30px;
+}
+
+.jp-ip-editor-label {
+    display: block;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.jp-ip-editor-button {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.jp-ip-editor-button-right{
+	float: right;
+}
+
+#jp-ip-editor-help {
+/*     font-weight: bold; */
+}
+
+.jp-ip-editor-ipList-ip:nth-child(odd) {
+	background-color:#eee; 
+}
+
+.jp-ip-editor-ipList-ip:nth-child(even) {
+	background-color:#fff; 
+}
+
+.jp-ip-editor-tipList-ip {
+    height: 25px;
+}
+
+#jp-ip-editor-ipList > .jp-ip-editor-hover{
+	background-color: #47c2ff;
+}
+
+#jp-ip-editor-ipList > .jp-ip-editor-selected{
+	background-color: #47c2ff;
+}
+
+#jp-ip-editor-button-refresh{
+	margin-left: 10px;
+}
