@@ -15,20 +15,21 @@
 
   <xsl:template name="jp.piwik">
     <xsl:if test="$MCR.Piwik.enable = 'true' and $MCR.Piwik.baseurl != ''">
-      <script type="text/javascript" src="{$MCR.Piwik.baseurl}piwik.js" />
       <script type="text/javascript">
-        var pkBaseURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-        var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
-        try {
-          var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 1);
+        var _paq = _paq || [];
+        _paq.push(["trackPageView"]);
+        _paq.push(["enableLinkTracking"]);
+        (function() {
+          var u = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
+          var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
           if(journalID != "") {
-            piwikTracker.setCustomVariable (1, "journal", journalID, scope = "page");
+            _paq.push(['setCustomVariable', 1, "journal", journalID, "page"]);
           }
-          piwikTracker.trackPageView();
-          piwikTracker.enableLinkTracking();
-        } catch( err ) {
-          console.log(err);
-        }
+          _paq.push(["setTrackerUrl", u+"piwik.php"]);
+          _paq.push(["setSiteId", "1"]);
+          var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+          g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+        })();
       </script>
     </xsl:if>
   </xsl:template>
