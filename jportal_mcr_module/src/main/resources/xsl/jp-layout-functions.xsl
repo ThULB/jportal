@@ -6,6 +6,7 @@
 
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
+  <xsl:param name="MCR.Piwik.id" select="'1'" />
 
   <xsl:template mode="jp.printListEntry" match="*">
     <li>
@@ -26,7 +27,7 @@
             _paq.push(['setCustomVariable', 1, "journal", journalID, "page"]);
           }
           _paq.push(["setTrackerUrl", u+"piwik.php"]);
-          _paq.push(["setSiteId", "1"]);
+          _paq.push(["setSiteId", '<xsl:value-of select="$MCR.Piwik.id" />']);
           var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
           g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
         })();
