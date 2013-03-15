@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="encoder layoutTools acl mcr">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="layoutTools acl mcr">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -10,6 +10,7 @@
   <xsl:include href="jp-layout-contentArea-tableOfContent.xsl" />
   <xsl:include href="jp-layout-contentArea-derivates.xsl" />
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
+  <xsl:include href="jp-layout-contentArea-linkedMetadata.xsl" />
   <xsl:include href="jp-history.xsl" />
 
   <xsl:variable name="settings" select="document('../xml/layoutDefaultSettings.xml')/layoutSettings" />
@@ -86,13 +87,15 @@
     <xsl:if test="$showMetadataAndDerivate">
       <div id="jp-content-Bottom">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
-          <dl class="jp-layout-metadataList">
-            <xsl:apply-templates mode="metadataDisplay" select="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']" />
-            <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
-              <xsl:apply-templates mode="linkedArticles" select="." />
-              <xsl:apply-templates mode="linkedCalendar" select="." />
-            </xsl:if>
-          </dl>
+        <dl class="jp-layout-metadataList">
+          <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
+          <xsl:apply-templates mode="metadataDisplay"
+            select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
+          <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
+            <xsl:apply-templates mode="linkedArticles" select="." />
+            <xsl:apply-templates mode="linkedCalendar" select="." />
+          </xsl:if>
+        </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
           <div id="derivCol">
