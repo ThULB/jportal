@@ -34,13 +34,18 @@ var checkBox = $('<input/>',
 
 var IpBeingEdited = false;
 
+$(document).ready(function() {
+    var objid = $("#jportal_acl_ip_editor_module").attr("objID")
+    getIPs(objid);
+});
+
 //ajax list
-function getIPs(){
+function getIPs(objid){
 	$.ajax({
-		url: "/rsc/IPRule/list",
+		url: "/rsc/IPRule/list/"+objid,
 		type: "GET",
 		dataType: "text",
-		data: {ruleId: ruleId},
+//		data: {ruleId: ruleId},
 		success: function(data) {
 					buildIPList($.parseJSON(data));
 				},

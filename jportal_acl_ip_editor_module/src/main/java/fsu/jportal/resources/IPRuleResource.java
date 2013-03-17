@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,15 +14,21 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Attribute;
+import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
@@ -31,6 +38,8 @@ import org.mycore.common.xml.MCRLayoutService;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import fsu.jportal.resolver.JournalFilesResolver;
 
 @Path("IPRule")
 public class IPRuleResource {
@@ -48,10 +57,18 @@ public class IPRuleResource {
     @Context HttpServletResponse response;
     
     @GET
-    public void start() throws IOException, JDOMException{
+    @Path("id/{objID}")
+    public void start(@PathParam("objID") String objID) throws IOException, JDOMException{
         InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xml/webpage.xml");
         SAXBuilder saxBuilder = new SAXBuilder();
-        MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(saxBuilder.build(guiXML)));
+        Document webPage = saxBuilder.build(guiXML);
+        XPathExpression<Object> xpath = XPathFactory.instance().compile("/MyCoReWebPage/section/div[@id='jportal_acl_ip_editor_module']");
+        Object node = xpath.evaluateFirst(webPage);
+        if(node != null){
+            Element mainDiv = (Element) node;
+            mainDiv.setAttribute("objID", objID);
+        }
+        MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
     }
     
     @GET
@@ -61,8 +78,9 @@ public class IPRuleResource {
     }
 
     @GET
-    @Path("list")
-    public JsonArray list(@QueryParam("ruleId") String ruleid) {
+    @Path("list/{objid}")
+    public String list(@PathParam("objid") String objid) throws TransformerException, JDOMException, IOException {
+        String ruleid = getRuleId(objid);
         //get the ruleString
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule accessRule = ruleStore.getRule(ruleid);
@@ -87,7 +105,22 @@ public class IPRuleResource {
                 jsonA.add(jsonO);
             }
         }
-        return jsonA;
+        return jsonA.toString();
+    }
+
+    private String getRuleId(String objid) throws TransformerException, JDOMException, IOException {
+        JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
+        FileInputStream journalConfig = journalFilesResolver.getJournalFile(objid+"/config.xml");
+        XPathExpression<Object> xpath = XPathFactory.instance().compile("/journalConf/conf[@id='jportal_acl_ip_editor_module']/key[@name='ruleId']/@value");
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document journalConfigXML = saxBuilder.build(journalConfig);
+        Object node = xpath.evaluateFirst(journalConfigXML);
+        
+        if(node != null){
+            return ((Attribute) node).getValue();
+        }
+        
+        return null;
     }
 
     @GET
@@ -115,7 +148,7 @@ public class IPRuleResource {
     @POST
     @Path("removeList")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonArray removeList(JsonObject json) {
+    public String removeList(JsonObject json) {
         JsonArray ipsAsJSONArray = json.getAsJsonArray("ips");
         for(int i = 0; i < ipsAsJSONArray.size(); i++){
             String ip = ipsAsJSONArray.get(i).getAsJsonObject().getAsJsonPrimitive("ip").getAsString();
@@ -126,7 +159,7 @@ public class IPRuleResource {
                 ipsAsJSONArray.get(i).getAsJsonObject().addProperty("success", "0");
             }
         }
-        return ipsAsJSONArray;
+        return ipsAsJSONArray.toString();
     }
 
     @GET

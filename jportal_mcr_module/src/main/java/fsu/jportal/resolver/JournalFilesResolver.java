@@ -15,21 +15,25 @@ public class JournalFilesResolver implements URIResolver {
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         href = href.substring(href.indexOf(":")+1);
-        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
-        if(journalFileFolderPath != null){
-            File journalFile = new File(journalFileFolderPath + File.separator + href);
-            
-            if(!journalFile.exists()){
-                return null;
-            }
-            
-            try {
-                return new StreamSource(new FileInputStream(journalFile));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+        
+        try {
+            return new StreamSource(getJournalFile(href));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
+        
         return null;
     }
 
+    public FileInputStream getJournalFile(String href) throws FileNotFoundException {
+        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
+        if(journalFileFolderPath != null){
+            File journalFile = new File(journalFileFolderPath + File.separator + href);
+            if(journalFile.exists()){
+                return new FileInputStream(journalFile);
+            }
+        }
+        
+        return null;
+    }
 }
