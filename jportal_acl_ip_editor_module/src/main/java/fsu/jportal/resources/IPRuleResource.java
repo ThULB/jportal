@@ -1,10 +1,12 @@
 package fsu.jportal.resources;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,7 +43,7 @@ import com.google.gson.JsonObject;
 
 import fsu.jportal.resolver.JournalFilesResolver;
 
-@Path("IPRule")
+@Path("IPRule/{objID}")
 public class IPRuleResource {
 
     static Logger LOGGER = Logger.getLogger(IPRuleResource.class);
@@ -55,10 +57,11 @@ public class IPRuleResource {
     
     @Context HttpServletRequest request;
     @Context HttpServletResponse response;
+    @PathParam("objID") String objID;
     
     @GET
-    @Path("id/{objID}")
-    public void start(@PathParam("objID") String objID) throws IOException, JDOMException{
+    @Path("start")
+    public void start() throws IOException, JDOMException{
         InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xml/webpage.xml");
         SAXBuilder saxBuilder = new SAXBuilder();
         Document webPage = saxBuilder.build(guiXML);
@@ -70,17 +73,10 @@ public class IPRuleResource {
         }
         MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
     }
-    
-    @GET
-    @Path("{filename:.*}")
-    public InputStream getResources(@PathParam("filename") String filename){
-        return getClass().getResourceAsStream("/jportal_acl_ip_editor_module/" + filename);
-    }
 
     @GET
-    @Path("list/{objid}")
-    public String list(@PathParam("objid") String objid) throws TransformerException, JDOMException, IOException {
-        String ruleid = getRuleId(objid);
+    public String list() throws TransformerException, JDOMException, IOException {
+        String ruleid = getJournalConfKeys().get("ruleId");
         //get the ruleString
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule accessRule = ruleStore.getRule(ruleid);
@@ -108,25 +104,54 @@ public class IPRuleResource {
         return jsonA.toString();
     }
 
-    private String getRuleId(String objid) throws TransformerException, JDOMException, IOException {
-        JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
-        FileInputStream journalConfig = journalFilesResolver.getJournalFile(objid+"/config.xml");
-        XPathExpression<Object> xpath = XPathFactory.instance().compile("/journalConf/conf[@id='jportal_acl_ip_editor_module']/key[@name='ruleId']/@value");
-        SAXBuilder saxBuilder = new SAXBuilder();
-        Document journalConfigXML = saxBuilder.build(journalConfig);
-        Object node = xpath.evaluateFirst(journalConfigXML);
-        
-        if(node != null){
-            return ((Attribute) node).getValue();
+    private HashMap<String,String> getJournalConfKeys(){
+        Document journalConfigXML;
+        try {
+            journalConfigXML = createXML(getJournalConf(objID));
+            return extractConfKeys(journalConfigXML);
+        } catch (JDOMException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         
         return null;
     }
 
-    @GET
-    @Path("add")
-    public Response add(@QueryParam("ruleId") String ruleid, @QueryParam("ip") String ip, @QueryParam("defRule") String defRule) {
-        if (addIp(ruleid, ip, defRule)){
+    private HashMap<String, String> extractConfKeys(Document journalConfigXML) {
+        XPathExpression<Object> xpath = XPathFactory.instance().compile("/journalConf/conf[@id='jportal_acl_ip_editor_module']/key");
+        HashMap<String, String> confKeys = new HashMap<String, String>();
+        
+        List<Object> nodes = xpath.evaluate(journalConfigXML);
+        
+        for (Object node : nodes) {
+            if(node instanceof Element){
+                Element key = (Element) node;
+                String name = key.getAttributeValue("name");
+                String value = key.getAttributeValue("value");
+                confKeys.put(name, value);
+            }
+        }
+        return confKeys;
+    }
+
+    private Document createXML(FileInputStream fileIS) throws JDOMException, IOException, FileNotFoundException {
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Document journalConfigXML = saxBuilder.build(fileIS);
+        return journalConfigXML;
+    }
+
+    private FileInputStream getJournalConf(String objid) throws FileNotFoundException {
+        JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
+        FileInputStream journalConfig = journalFilesResolver.getJournalFile(objid+"/config.xml");
+        return journalConfig;
+    }
+
+    @POST
+    public Response add(String ip) {
+        HashMap<String, String> journalConfKeys = getJournalConfKeys();
+        String ruleId = journalConfKeys.get("ruleId");
+        String defRule = journalConfKeys.get("defRule");
+        if (addIp(ruleId, ip, defRule)){
             return Response.ok().build();
         }
         else{
