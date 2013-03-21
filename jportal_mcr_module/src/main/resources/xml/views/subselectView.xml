@@ -62,7 +62,7 @@
           <component id="resultListEntry">
             <li class="resultListEntry jp-layout-topline jp-layout-border-light">
               <h3 class="jp-layout-clickLabel">
-                <a href="/receive/{result.hit.id}">
+                <a href="/receive/{result.hit.id}" data-jp-mcrid="{result.hit.id}">
                   <getData id="result.hit.heading" />
                 </a>
               </h3>
@@ -88,6 +88,19 @@
             </component>
           </menu>
         </div>
+      </div>
+    </div>
+  </component>
+  <component name="objectPreview">
+    <div id="objectPreviewContainer">
+      <script type="text/javascript" src="/js/jp-subselect.js" />
+      <script type="text/javascript">
+        $(document).ready(function() {
+          jp.subselect.init(".jp-layout-clickLabel a", "#objectPreview");
+        });
+      </script>
+      <div class="objectPreview hidden" id="objectPreview">
+        <div class="loading" />
       </div>
     </div>
   </component>

@@ -137,6 +137,7 @@
     <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='resultList']/*">
       <xsl:with-param name="data" select="document($query)/response" />
     </xsl:apply-templates>
+    <xsl:apply-templates mode="renderView" select="$subselectView/component[@name='objectPreview']/*" />
   </xsl:template>
 
   <!-- Rendering view for result list -->
@@ -191,6 +192,13 @@
     <xsl:if test="$data/str[@name='dateOfDeath']">
       <xsl:value-of select="concat('Sterbedatum: ', $data/str[@name='dateOfDeath'])" />
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="renderView" match="@data-jp-mcrid[contains(.,'{result.hit.id}')]">
+    <xsl:param name="data" />
+    <xsl:attribute name="data-jp-mcrid">
+      <xsl:value-of select="$data/str[@name='id']" />
+    </xsl:attribute>
   </xsl:template>
 
   <xsl:template mode="renderView" match="@href[contains(.,'{result.hit.id}')]">

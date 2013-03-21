@@ -20,6 +20,9 @@ body {
 	margin: 0 auto;
 	width: 1024px;
 }
+.hidden {
+	display: none;
+}
 .jp-layout-index h1 {
 	font-size: 1.2em;
 }
@@ -659,6 +662,34 @@ body {
 
 #searchResults .jp-layout-list-nodecoration>.jp-layout-topline {
 	padding-top: 6px;
+}
+
+#objectPreviewContainer .objectPreview {
+    background-color: #FAFAFA;
+    box-shadow: 0 0 4px #999999;
+    padding: 8px 18px 8px 8px;
+    position: absolute;
+    max-width: 600px;
+}
+#objectPreviewContainer .objectPreview .loading {
+	
+}
+#objectPreviewContainer .objectPreview .jp-metadata dt {
+    clear: left;
+    float: left;
+    font-style: italic;
+    text-align: right;
+    width: 130px;
+    margin-bottom: 4px;
+}
+#objectPreviewContainer .objectPreview .jp-metadata dd {
+    float: left;
+    margin-bottom: 4px;
+    margin-left: 22px;
+}
+
+#objectPreviewContainer .objectPreview .jp-metadata dt:AFTER {
+	content: ": "
 }
 
 #resultPaginator {

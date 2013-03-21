@@ -27,7 +27,7 @@
   <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or $isCalendar or $isOnlineJournal or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'" />
 
   <xsl:template priority="9" match="/mycoreobject">
-  
+
     <xsl:variable name="objectEditingHTML">
       <editing>
         <xsl:call-template name="objectEditing">
