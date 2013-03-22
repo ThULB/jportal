@@ -51,7 +51,6 @@ var IPRuleEditor = function(objid){
 					if ($(".jp-ip-editor-checkBox:checked").length > 0){
 						var json = {
 								  "ips": [],
-								  "ruleid": ruleId
 								};
 						$(".jp-ip-editor-ipList-ip").children("input:checked").each(function() {
 							json.ips.push({"ip": $(this).parent().attr("ip")});
@@ -227,10 +226,10 @@ var IPRuleEditor = function(objid){
 	//ajax remove
 	function removeIP(ip, element){
 		$.ajax({
-			url: "/rsc/IPRule/remove",
-			type: "GET",
+			url: "/rsc/IPRule/" + objid,
+			type: "DELETE",
 			dataType: "text",
-			data: {ruleId: ruleId, ip: ip},
+			data: ip,
 			statusCode: {
 				200: function() {
 					element.remove();
@@ -251,8 +250,8 @@ var IPRuleEditor = function(objid){
 	//ajax removeList
 	function removeIPList(ips){
 		$.ajax({
-			url: "/rsc/IPRule/removeList",
-			type: "POST",
+			url: "/rsc/IPRule/"+objid,
+			type: "DELETE",
 			contentType: 'application/json',
 			dataType: "json",
 			data: JSON.stringify(ips),
@@ -272,10 +271,12 @@ var IPRuleEditor = function(objid){
 	//ajax edit
 	function editIP(newIp, oldIp){
 		$.ajax({
-			url: "/rsc/IPRule/edit",
-			type: "GET",
-			dataType: "text",
-			data: {ruleId: ruleId, newIp: newIp, oldIp: oldIp, defRule: defRule},
+			url: "/rsc/IPRule/"+objid,
+			type: "PUT",
+			contentType: 'application/json',
+			dataType: "json",
+			handleAs : "json",
+			data: JSON.stringify({newIp: newIp, oldIp: oldIp}),
 			statusCode: {
 				200: function() {
 					$(".jp-ip-editor-selected").attr("ip", newIp);
