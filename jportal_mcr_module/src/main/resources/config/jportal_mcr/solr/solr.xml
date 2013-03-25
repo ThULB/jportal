@@ -22,7 +22,7 @@
   persistent: Save changes made via the API to this file
   sharedLib: path to a lib directory that will be shared across all cores
 -->
-<solr persistent="false" sharedLib="lib/**/*">
+<solr persistent="true" sharedLib="lib/**/*">
 <!--
     adminPath: RequestHandler path to manage cores.  
     If 'null' (or absent), cores will not be manageable via request handler
@@ -30,6 +30,7 @@
   <cores adminPath="/admin/cores" shareSchema="true">
     <!-- solr administration-interface for docportal core    -->
     <!-- http://<host>/<webapp-name-if-any>/docportal/admin/ -->
-    <core name="jportal" instanceDir="." dataDir="./data/solr"/>
+    <core name="jportal" instanceDir="." dataDir="./data/jportal" />
+    <core name="jportal2" instanceDir="." dataDir="./data/jportal2" />
   </cores>
 </solr>
