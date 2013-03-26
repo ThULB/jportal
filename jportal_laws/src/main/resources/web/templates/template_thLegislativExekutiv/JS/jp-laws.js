@@ -35,7 +35,19 @@ function buildQuery() {
 }
 
 function setLogo(baseURL) {
-    $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_thLegislativExekutiv/IMAGES/logo.png)');
+	var logo = $('#logo');
+	// replace div with a
+	var attrs = {};
+	$.each(logo[0].attributes, function(idx, attr) {
+	    attrs[attr.nodeName] = attr.nodeValue;
+	});
+	logo.replaceWith(function () {
+	    return $("<a />", attrs).append($(this).contents());
+	});
+	var logo = $('#logo');
+	logo.attr("href", "http://www.urmel-dl.de/Projekte/LegislativundExekutiv.html");
+	// set background
+	logo.css('background-image', 'url(' + baseURL + 'templates/template_thLegislativExekutiv/IMAGES/logo.png)');
 }
 
 function setMaintitle(maintitle) {
