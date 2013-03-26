@@ -27,7 +27,6 @@ public class SearchResource {
     HttpServletResponse httpResponse;
 
     /**
-     * Search solr. Its important to set the wt parameter to json.
      * 
      * @param uriInfo
      * @return json result
