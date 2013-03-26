@@ -152,6 +152,9 @@
     <field name="heading_base" type="string" />
     <field name="dateOfBirth" type="string" />
     <field name="dateOfDeath" type="string" />
+    
+    <!-- doublets -->
+    <field name="doubletOf" type="string" />
 
 
     <!-- ******************************************** -->

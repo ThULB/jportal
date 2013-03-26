@@ -169,6 +169,7 @@
   <xsl:template mode="jportal.person.metadata" match="metadata" >
     <xsl:apply-templates mode="jportal.person.name" select="def.heading/heading|def.alternative/alternative"/>
     <xsl:apply-templates mode="jportal.person.datesOfBirthAndDeath" select="def.dateOfBirth/dateOfBirth|def.dateOfDeath/dateOfDeath"/>
+    <xsl:apply-templates mode="jportal.person.doubletOf" select="def.doubletOf/doubletOf"/>
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="heading">
@@ -203,6 +204,11 @@
   </xsl:template>
 
   <xsl:template mode="jportal.person.datesOfBirthAndDeath" match="dateOfBirth|dateOfDeath">
+    <field name="{name()}">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+  <xsl:template mode="jportal.person.doubletOf" match="doubletOf">
     <field name="{name()}">
       <xsl:value-of select="." />
     </field>
