@@ -1,13 +1,4 @@
 @CHARSET "UTF-8";
-html {
-	background-color: #F2F2F2;
-}
-
-body {
-	margin: 0 auto;
-	width : 1024px;
-}
-
 a:link, a:visited, a:active {
     text-decoration: none;
 }

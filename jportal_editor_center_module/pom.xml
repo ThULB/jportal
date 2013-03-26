@@ -7,8 +7,8 @@
     <groupId>fsu.thulb</groupId>
     <version>2.0.18-SNAPSHOT</version>
   </parent>
-  <artifactId>jportal_editor_center_module</artifactId>
-  <name>Jportal Editor Center</name>
+  <artifactId>jportal_doublet_finder_module</artifactId>
+  <name>Jportal Doublet Finder</name>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>

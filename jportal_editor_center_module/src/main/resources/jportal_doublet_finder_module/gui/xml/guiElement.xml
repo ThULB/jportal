@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<guiElements>
+ <div id="content">
+  <div id="foo">
+   <p>Message</p>
+  </div>
+  
+  <div id="tabs">
+   <ul>
+    <li>
+     <a href="#person">Personen</a>
+    </li>
+    <li>
+     <a href="#jpinst">Institutionen</a>
+    </li>
+   </ul>
+   <div id="person">
+    <p>
+     Es wurden
+     <span class="counter"></span>
+     Personen als Dublette markiert.
+    </p>
+    <p>
+     <button class="removeButton">Entfernen</button>
+    </p>
+   </div>
+   <div id="jpinst">
+    <p>
+     Es wurden
+     <span class="counter"></span>
+     Institutionen als Dublette markiert.
+    </p>
+    <p>
+     <button class="removeButton">Entfernen</button>
+    </p>
+   </div>
+  </div>
+  <div id="errMsg" title="Autorisierungsfehler">
+   <p>Bitte Melden Sie sich an.</p>
+  </div>
+  <div id="progress" title="Entferne Dubletten.....">
+   Es sind noch
+   <span id="remainder">0</span>
+   Dubletten übrig.
+   <div id="progressbar"></div>
+  </div>
+ </div>
+</div>
+</guiElements>

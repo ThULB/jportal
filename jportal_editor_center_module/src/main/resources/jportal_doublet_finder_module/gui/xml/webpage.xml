@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+ <section xml:lang="all" title="Dubletten Check">
+  <div id="jportal_doublet_finder_module">
+   <link href="/rsc/doublets/gui/css/webpage.css" rel="stylesheet" type="text/css" />
+   <div id="header" class="jp-layout-maintitle jp-layout-border">
+    <span>
+     Dubletten-Check
+    </span>
+   </div>
+   <p id="person_doublets">
+    Anzahl der Dubletten bei Person: <span id="numDubPers"></span>
+   </p>
+   <p id="inst_doublets">
+    Anzahl der Dubletten bei Institution: <span id="numDubInst"></span>
+   </p>
+   <script type="text/javascript" src="/rsc/doublets/gui/js/webpage.js" />
+  </div>
+ </section>
+</MyCoReWebPage>

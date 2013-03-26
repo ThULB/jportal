@@ -21,7 +21,7 @@ public class DoubletsFinderResource {
     
     @GET
     public void start() throws IOException, JDOMException{
-        InputStream guiXML = getClass().getResourceAsStream("/doubletsFinder/gui.xml");
+        InputStream guiXML = getClass().getResourceAsStream("/jportal_doublet_finder_module/gui/xml/webpage.xml");
         SAXBuilder saxBuilder = new SAXBuilder();
         MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(saxBuilder.build(guiXML)));
     }
