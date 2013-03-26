@@ -41,7 +41,7 @@ public class SearchResource {
         for(Entry<String, List<String>> e : uriInfo.getQueryParameters().entrySet()) {
             encodedQuery += "&" + e.getKey() + "=" + URLEncoder.encode(e.getValue().get(0), "UTF-8");
         }
-        encodedQuery = encodedQuery.substring(1);
+        encodedQuery = encodedQuery.substring(1)+"&wt=json";
         MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), encodedQuery);
         return search(solrURL);
     }
