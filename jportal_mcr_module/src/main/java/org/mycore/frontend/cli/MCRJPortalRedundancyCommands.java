@@ -12,7 +12,6 @@ import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.parsers.bool.MCRAndCondition;
-import org.mycore.services.fieldquery.MCRFieldDef;
 import org.mycore.services.fieldquery.MCRFieldValue;
 import org.mycore.services.fieldquery.MCRHit;
 import org.mycore.services.fieldquery.MCRQuery;
@@ -59,8 +58,8 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
     }
 
     public static MCRResults getDoubletObjsOfType(String type) {
-        MCRQueryCondition typeCond = new MCRQueryCondition(MCRFieldDef.getDef("objectType"), "=", type);
-        MCRQueryCondition doubletOfCond = new MCRQueryCondition(MCRFieldDef.getDef("doubletOf"), "like", "*");
+        MCRQueryCondition typeCond = new MCRQueryCondition("objectType", "=", type);
+        MCRQueryCondition doubletOfCond = new MCRQueryCondition("doubletOf", "like", "*");
         MCRAndCondition andCond = new MCRAndCondition(typeCond, doubletOfCond);
         MCRResults results = MCRQueryManager.search(new MCRQuery(andCond));
         return results;
@@ -95,7 +94,7 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
 
     private static String getDoubletOf(MCRHit hit) {
         for (MCRFieldValue fieldValue : hit.getMetaData()) {
-            if (fieldValue.getField().getName().equals("doubletOf"))
+            if (fieldValue.getFieldName().equals("doubletOf"))
                 return fieldValue.getValue();
         }
         return null;
