@@ -15,6 +15,7 @@
    <p id="inst_doublets">
     Anzahl der Dubletten bei Institution: <span id="numDubInst"></span>
    </p>
+   <input id="delDubButton" type="button" value="Dubletten bereinigen" name="Dubletten bereinigen"/>
    <script type="text/javascript" src="/rsc/doublets/gui/js/webpage.js" />
   </div>
  </section>

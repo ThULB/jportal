@@ -82,6 +82,6 @@
 	</target>
 
 	<target name="config">
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs" />
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs,org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
 	</target>
 </project>

@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.cli.annotation.MCRCommand;
+import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.parsers.bool.MCRAndCondition;
 import org.mycore.services.fieldquery.MCRFieldValue;
 import org.mycore.services.fieldquery.MCRHit;
@@ -19,23 +21,12 @@ import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
 
-public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
+@MCRCommandGroup(name = "JP doubletOf Commands")
+public class MCRJPortalRedundancyCommands{
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalRedundancyCommands.class);
 
-    public MCRJPortalRedundancyCommands() {
-        super();
-        addCommand(new MCRCommand("jp clean up {0}", "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.cleanUp String",
-                "Deletes and relinks all doublets for a specific type."));
-
-        addCommand(new MCRCommand("merge file {1} of type {0} with redundancy map",
-                "org.mycore.frontend.cli.command.MCRMergeOldRedundancyMap.merge String String", ""));
-
-        addCommand(new MCRCommand("internal replace links and remove {0} {1}",
-                "org.mycore.frontend.cli.MCRJPortalRedundancyCommands.replaceAndRemove String String",
-                "internal command for replacing links and removing the doublet"));
-    }
-
+    @MCRCommand(helpKey = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "jp clean up {0}")
     public static List<String> cleanUp(String type) {
         // get all objects of specific type where doubletOf is not empty
         MCRResults results = getDoubletObjsOfType(type);
@@ -65,6 +56,7 @@ public class MCRJPortalRedundancyCommands extends MCRAbstractCommands {
         return results;
     }
 
+    @MCRCommand(helpKey = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
     public static List<String> replaceAndRemove(String doublet, String doubletOf) throws Exception {
         ArrayList<String> commandList = new ArrayList<String>();
         if (!MCRMetadataManager.exists(MCRObjectID.getInstance(doubletOf))) {
