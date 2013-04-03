@@ -26,7 +26,7 @@
   </xsl:template>
 
   <!-- add hidden_genhiddenfields -->
-  <xsl:template match="*[contains(name(), 'hidden_genhiddenfields')]" mode="jp-solr-export">
+  <xsl:template match="*[contains(name(), 'hidden_genhiddenfields')]" mode="jp-hidden-gen">
     <xsl:apply-templates select="*" mode="jp-solr-export-text" />
   </xsl:template>
 
@@ -59,9 +59,13 @@
   </xsl:template>
 
   <!-- enhance article and volume with journal data -->
-  <xsl:template match="*[not(contains(/mycoreobject/@ID, 'jpjournal')) and contains(name(), 'hidden_jpjournalsID')]" mode="jp-solr-export">
+  <xsl:template match="*[name() = 'hidden_jpjournalsID' and (contains(/mycoreobject/@ID, '_jpvolume_') or contains(/mycoreobject/@ID, '_jparticle_'))]" mode="jp-solr-export">
     <xsl:variable name="journalID" select="hidden_jpjournalID/text()" />
-    <xsl:apply-templates select="document(concat('mcrobject:', $journalID))/mycoreobject/metadata/*" mode="jp-solr-export" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
+    <xsl:apply-templates select="$journal/metadata/*" mode="jp-solr-export" />
+    <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields1" mode="jp-hidden-gen" />
+    <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jp-hidden-gen" />
+    <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jp-hidden-gen" />
   </xsl:template>
 
 </xsl:stylesheet>
