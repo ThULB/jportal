@@ -59,7 +59,7 @@
   </xsl:template>
 
   <!-- enhance article and volume with journal data -->
-  <xsl:template match="*[name() = 'hidden_jpjournalsID' and (contains(/mycoreobject/@ID, '_jpvolume_') or contains(/mycoreobject/@ID, '_jparticle_'))]" mode="jp-solr-export">
+  <xsl:template match="*[name() = 'hidden_jpjournalsID' and (contains(../../@ID, '_jpvolume_') or contains(../../@ID, '_jparticle_'))]" mode="jp-solr-export">
     <xsl:variable name="journalID" select="hidden_jpjournalID/text()" />
     <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
     <xsl:apply-templates select="$journal/metadata/*" mode="jp-solr-export" />
