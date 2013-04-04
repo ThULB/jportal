@@ -95,10 +95,14 @@ public class MCRJPortalURIGetClassLabel implements URIResolver {
 
     private String getClassLabel(String classID) {
         // TODO: use cache
-        MCRCategory rootCategory = MCRCategoryDAOFactory.getInstance().getRootCategory(MCRCategoryID.rootID(classID), 0);
-        if (rootCategory.getLabels() != null && rootCategory.getLabels().size() > 0) {
+        MCRCategory rootCategory = MCRCategoryDAOFactory.getInstance()
+                .getRootCategory(MCRCategoryID.rootID(classID), 0);
+        if (rootCategory == null) {
+            LOGGER.warn("Could not found ROOT Category <" + classID+ ">");
+        } else if (rootCategory.getLabels() != null && rootCategory.getLabels().size() > 0) {
             return rootCategory.getCurrentLabel().getText();
         }
+        
         return "";
     }
 
