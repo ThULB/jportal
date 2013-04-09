@@ -1,48 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-  <section xml:lang="de" title="JPortal 2 - Das Zeitschriften-Portal">
-    <div class="jp-layout-index">
-      <div class="jp-layout-index-intro">
-        <h1>Willkommen bei journals@UrMEL</h1>
-        <p class="greeting">Das von der <a href="http://www.thulb.uni-jena.de">Thüringer Universitäts- und Landesbibliothek Jena</a>
-        (ThULB) betriebene Internetportal journals@UrMEL bietet Zugang zu wissenschaftlichen Zeitschriften in digitaler Form.</p>
-        <p>Zur Verfügung stehen rund 700 Zeitschriften mit mehr als 230.000 Artikeln und weiteren Periodika, welche durch die ThULB
-        Jena in Kooperation mit zahlreichen Bibliotheken, Archiven, Verlagen und wissenschaftlichen Fachgesellschaften bereitgestellt
-        werden. Zugänglich sind sowohl retrodigitalisierte historische Zeitschriften, als auch Materialien, welche in originär digitaler
-        Gestalt („born digital“) im Rahmen von journals@UrMEL publiziert werden. Das Angebot wird ständig erweitert. journals@UrMEL ist
-        Bestandteil der <a href="http://www.urmel-dl.de">Universal Multimedia Electronic Library</a> (UrMEL).</p>
-      </div>
-
-      <div class="jp-layout-index-list">
-        <ul>
-          <li>
-            <a href="/content/main/journalList.xml#A" class="entry journal">
-              <img class="linkButton" src="/images/journal.png"/>
-              <p>
-                Zugang zu digitalisierten Zeitschriften und Zeitungen sowie weiteren online verfügbaren
-                Periodika...
-              </p>
-            </a>
-          </li>
-          <li>
-            <a href="/content/main/calendarList.xml#A" class="entry calendar">
-              <img class="linkButton" src="/images/calendar.png"/>
-              <p>
-                Zugang zu digitalisierten Schreibkalendern des Stadtarchivs Altenburg...
-              </p>
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <printObjectEditing />
-
-      <div class="jp-layout-index-latestArticles">
-        <h1>Neueste Artikel</h1>
-        <printLatestArticles sortField="created" maxResults="3" objectType="jparticle" start="true" overwritelayout="true" />
-      </div>
-
-    </div>
+  <section xml:lang="all" i18n="jportal.index.title">
+    <jpindex />
   </section>
 </MyCoReWebPage>

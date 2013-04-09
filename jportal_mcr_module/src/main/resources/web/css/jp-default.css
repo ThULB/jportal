@@ -2,18 +2,22 @@
 
 html {
 	background-color: #DBDBDB;
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 10pt;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 0.9rem;
+	font-weight: 400;
 	padding-bottom: 5px;
-}
-
-html {
-	color: black;
+	color: #333;
 }
 
 html a {
-	color: #494949;
+	color: #333;
 	text-decoration: none;
+}
+html .jp-layout-metadataList a {
+	color: #2A89C1;
+}
+html p a {
+	color: #2A89C1;
 }
 
 body {
@@ -32,6 +36,9 @@ body {
 .jp-layout-index-list {
 	margin-bottom: 35px;
 }
+.jp-layout-index-list a {
+	color: #333;
+}
 .jp-layout-index-list ul {
 	white-space: nowrap;
 	padding: 18px 0;
@@ -47,16 +54,31 @@ body {
 .jp-layout-index-list .entry {
 	display: block;
 	white-space: normal;
-	width: 170px;
+	width: 190px;
 }
-.jp-layout-index-list .entry p {
+.jp-layout-index-list .entry .title {
+	font-family: 'PT Sans Narrow', sans-serif;
+}
+.jp-layout-index-list .entry .title .initial {
+	background-color: #2A89C1;
+	color: white;
+	display: inline-block;
+	font-size: 24px;
+	margin-right: 8px;
+	padding: 0 8px;
+}
+.jp-layout-index-list .entry .title .text {
+	font-size: 22px;
+	display: inline-block;
+}
+.jp-layout-index-list .entry .description {
 	font-style: italic;
 }
 .jp-layout-index-list .journal {
-	margin-left: 258px;
+	margin-left: 254px;
 }
 .jp-layout-index-list .calendar {
-	margin-left: 78px;
+	margin-left: 44px;
 }
 
 /* IE need this */
@@ -89,7 +111,7 @@ body {
 .jp-layout-index-latestArticles ul > li:not(:first-child) .wrapper {
 	margin: 0 20px;
 }
-.jp-layout-index-latestArticles ul > li .wrapper p {
+.jp-layout-index-latestArticles ul > li .wrapper .title {
     display: list-item;
     list-style-position: inside;
     list-style-type: none;
