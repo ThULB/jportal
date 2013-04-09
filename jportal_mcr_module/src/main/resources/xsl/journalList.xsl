@@ -10,14 +10,14 @@
 
     <xsl:variable name="PageTitle" select="'Blättern A - Z'" />
 
-
     <!-- =================================================================== -->
     <xsl:template match="journalList[@mode='javascript']">
-        <div id="firstLetterTab" additionalQuery="{additionalQuery}">
-            <span class="label tab-fonts"><xsl:value-of select="listTitle"/>:</span>
-            <ul id="tabNav" class="tab-nav tab-fonts">
-            </ul>
-            <div id="resultList" class="tab-panel"></div>
+        <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
+          <div class="atoz">
+            <span class="label"><xsl:value-of select="listTitle"/>:</span>
+            <ul id="tabNav" class="tab-nav" />
+          </div>
+          <div id="resultList" class="tab-panel"></div>
         </div>
         <script src="/js/jp-journalList.js"></script>
         <script type="text/javascript">

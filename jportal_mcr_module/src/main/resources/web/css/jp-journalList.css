@@ -1,60 +1,70 @@
 @CHARSET "UTF-8";
-.tab-nav{
-	display: block;
+
+.journalList .tab-nav {
+	display: inline-block;
 	list-style: none;
 	margin: 0px;
 	padding: 0px;
-	float: left;
 }
 
-.tab-nav li{
+.journalList .tab-nav li {
 	display: inline;
 	padding: 0px 5px 0px 5px;
 	cursor: pointer;
 }
 
-.tab-panel{
+.journalList .tab-panel {
 	display: block;
-	padding: 10px 10px;
+	padding: 10px 0px;
 	clear: both;
 }
 
-.journal-title{
+.journalList .tab-panel > ul {
+	padding: 0px;
+}
+
+
+.journalList .tab-panel .publisher a {
+	color: #2A89C1;
+}
+.journalList .journal-title {
 	margin-bottom: 2px;
 }
 
-.tab-panel ul{
+.journalList .tab-panel ul {
 	list-style: none;
 }
 
-#contentArea .tab-panel h3 a{
+.journalList .tab-panel h3 a {
 	font-size: medium;
-	text-decoration: underline;
 }
 
-#firstLetterTab .label{
-	float: left;
+.journalList {
+	padding-top: 8px;
+}
+
+.journalList .label {
 	margin-right: 10px;
 }
-
-.tab-fonts {
-	font-weight: bold;
-	font-size: 10pt;
+.journalList .atoz {
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 0.9rem;
+    font-weight: bold;
+    padding: 10px 0;
 }
-
-.selected-tab{
+.journalList .selected-tab {
 	border: 1px solid;
 	margin: 0px 4px 0px 4px;
 }
 
-.default-tab{
+.journalList .default-tab {
 	margin: 1px 5px 1px 5px;
 }
 
-.tab-panel li{
+.journalList .tab-panel li {
 	padding-bottom: 15px;
 }
 
-.ui-msg {
+.journalList .ui-msg {
 	font-style: italic;
 }
