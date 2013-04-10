@@ -39,7 +39,7 @@
                 <cell col="2" row="125" anchor="NORTHWEST" ref="DdoubletOf" var="def.doubletOf" />
                 
                 <cell col="1" row="130" anchor="NORTHWEST">
-                    <text i18n="jportal.editor.required" />
+                    <text i18n="jp.editor.required" />
                 </cell>
                 <cell col="1" row="140">
             		<br />
@@ -51,14 +51,14 @@
     <panel id="personName_required" class="editorPersonNameR">
 	  <!-- lastname -->
         <cell col="1" row="1" anchor="NORTHWEST">
-            <text i18n="editor.search.lastName" />
+            <text i18n="jp.editor.person.lastName" />
         </cell>
         <cell col="2" row="1" anchor="NORTHWEST" var="lastName">
             <textfield width="16" maxlength="128" />
         </cell>
 	  <!-- firstname -->
         <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="editor.search.person.firstName" />
+            <text i18n="jp.editor.person.firstName" />
         </cell>
         <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
             <textfield width="16" maxlength="128" />
@@ -67,14 +67,14 @@
     <panel id="personName" class="editorPersonName">
 	  <!-- lastname -->
         <cell col="1" row="1" anchor="NORTHWEST">
-            <text i18n="editor.search.person.lastName" />
+            <text i18n="jp.editor.person.lastName" />
         </cell>
         <cell col="2" row="1" anchor="NORTHWEST" var="lastName">
             <textfield width="16" maxlength="128" />
         </cell>
 	  <!-- firstname -->
         <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="editor.search.person.firstName" />
+            <text i18n="jp.editor.person.firstName" />
         </cell>
         <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
             <textfield width="16" maxlength="128" />
@@ -103,7 +103,7 @@
             <repeater min="0" max="1024">
                 <panel class="editorPersonFreeText">
                     <cell col="1" row="1" anchor="NORTHWEST">
-                        <text i18n="editor.search.person.freetext" />
+                        <text i18n="jp.editor.person.freeText" />
                     </cell>
                     <cell col="2" row="1" var="name">
                         <textfield width="35" maxlength="128" />

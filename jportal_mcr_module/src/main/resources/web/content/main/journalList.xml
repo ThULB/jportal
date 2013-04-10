@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <journalList mode="javascript">
-    <listTitle>Zeitschriften</listTitle>
+    <listTitle>jp.site.home.journal</listTitle>
     <additionalQuery>%2BobjectType:jpjournal %2DcontentClassi1:calendar</additionalQuery>
 </journalList>

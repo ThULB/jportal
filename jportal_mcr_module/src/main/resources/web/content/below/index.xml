@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-  <section xml:lang="all" i18n="jportal.index.title">
+  <section xml:lang="all" i18n="jp.site.home.title">
     <jpindex />
   </section>
 </MyCoReWebPage>

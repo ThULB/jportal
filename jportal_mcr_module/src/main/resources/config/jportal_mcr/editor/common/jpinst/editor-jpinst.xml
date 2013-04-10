@@ -37,7 +37,7 @@
         </cell>
         <!--alternatives -->
         <cell col="1" row="18" anchor="NORTHWEST" class="editorLabel">
-            <text i18n="editormask.jpinst.Lalternative" />
+            <text i18n="jp.editor.inst.alternativeName" />
         </cell>
         <cell col="2" row="18" anchor="NORTHWEST" ref="Dalternative" />
         <cell col="3" row="18" anchor="NORTHWEST">
@@ -170,7 +170,7 @@
             </repeater>
         </cell>
     </panel>
-    <text id="Lalternative" i18n="editormask.jpinst.Lalternative" />
+    <text id="Lalternative" i18n="jp.editor.inst.alternativeName" />
 
     <!-- ========================================================================================================================= -->
     <panel id="DAddressCountry">

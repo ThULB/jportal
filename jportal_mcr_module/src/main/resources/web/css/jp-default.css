@@ -57,6 +57,7 @@ body {
 	width: 190px;
 }
 .jp-layout-index-list .entry .title {
+	text-transform: uppercase;
 	font-family: 'PT Sans Narrow', sans-serif;
 }
 .jp-layout-index-list .entry .title .initial {

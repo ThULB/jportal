@@ -6,14 +6,14 @@
 
     <div class="jp-layout-index">
       <div class="jp-layout-index-intro">
-        <h1><xsl:value-of select="i18n:translate('jportal.index.header')" /></h1>
+        <h1><xsl:value-of select="i18n:translate('jp.site.home.header')" /></h1>
         <p class="greeting">
-          <xsl:value-of select="i18n:translate('jportal.index.greeting1')" />
+          <xsl:value-of select="i18n:translate('jp.site.home.greeting1')" />
           <a href="http://www.thulb.uni-jena.de">Thüringer Universitäts- und Landesbibliothek Jena</a> (ThULB)
-          <xsl:value-of select="i18n:translate('jportal.index.greeting2')" />
+          <xsl:value-of select="i18n:translate('jp.site.home.greeting2')" />
         </p>
         <p>
-          <xsl:value-of select="i18n:translate('jportal.index.intro')" />
+          <xsl:value-of select="i18n:translate('jp.site.home.intro')" />
           <a href="http://www.urmel-dl.de">Universal Multimedia Electronic Library</a> (UrMEL).
         </p>
       </div>
@@ -21,22 +21,22 @@
         <ul>
           <li>
             <a href="/content/main/journalList.xml#A" class="entry journal">
-              <xsl:variable name="text" select="i18n:translate('jportal.index.journal')" />
+              <xsl:variable name="text" select="i18n:translate('jp.site.home.journal')" />
               <div class="title">
                 <span class="initial"><xsl:value-of select="substring($text, 1, 1)" /></span>
                 <span class="text"><xsl:value-of select="$text" /></span>
               </div>
-              <p class="description"><xsl:value-of select="i18n:translate('jportal.index.journal.description')" /></p>
+              <p class="description"><xsl:value-of select="i18n:translate('jp.site.home.journal.description')" /></p>
             </a>
           </li>
           <li>
             <a href="/content/main/calendarList.xml#A" class="entry calendar">
-              <xsl:variable name="text" select="i18n:translate('jportal.index.calendar')" />
+              <xsl:variable name="text" select="i18n:translate('jp.site.home.calendar')" />
               <div class="title">
                 <span class="initial"><xsl:value-of select="substring($text, 1, 1)" /></span>
                 <span class="text"><xsl:value-of select="$text" /></span>
               </div>
-              <p class="description"><xsl:value-of select="i18n:translate('jportal.index.calendar.description')" /></p>
+              <p class="description"><xsl:value-of select="i18n:translate('jp.site.home.calendar.description')" /></p>
             </a>
           </li>
         </ul>
@@ -45,7 +45,7 @@
       <xsl:call-template name="jp.layout.printObjectEditing" />
 
       <div class="jp-layout-index-latestArticles">
-        <h1><xsl:value-of select="i18n:translate('jportal.index.currentArticle')" /></h1>
+        <h1><xsl:value-of select="i18n:translate('jp.site.home.currentArticle')" /></h1>
         <xsl:call-template name="jp.layout.printLatestArticles" />
       </div>
     </div>

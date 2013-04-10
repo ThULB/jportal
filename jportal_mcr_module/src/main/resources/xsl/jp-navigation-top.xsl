@@ -19,7 +19,7 @@
       <xsl:if test="not($isGuest)">
         <li>
           <a href="{$WebApplicationBaseURL}jp-account.xml">
-            <xsl:value-of select="i18n:translate('jportal.navigation.top.account')" />
+            <xsl:value-of select="i18n:translate('jp.site.account')" />
           </a>
         </li>
       </xsl:if>
@@ -34,10 +34,10 @@
             </xsl:if>
           </xsl:attribute>
           <xsl:if test="$isGuest">
-            <xsl:value-of select="i18n:translate('jportal.navigation.top.login')" />
+            <xsl:value-of select="i18n:translate('jp.site.login')" />
           </xsl:if>
           <xsl:if test="not($isGuest)">
-            <xsl:value-of select="i18n:translate('jportal.navigation.top.logout')" />
+            <xsl:value-of select="i18n:translate('jp.site.logout')" />
           </xsl:if>
         </a>
       </li>
