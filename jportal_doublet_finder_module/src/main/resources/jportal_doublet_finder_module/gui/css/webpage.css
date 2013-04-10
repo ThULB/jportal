@@ -92,3 +92,15 @@ ul {
 .counter a:link, a:visited, a:active {
     text-decoration: underline;
 }
+
+.message {
+	text-decoration: blink;
+	display: none;
+	float: right;
+}
+
+.jp-layout-separator-horiz{
+		border-bottom: solid 1px #DBDBDB;
+		margin-top: 20px;
+		margin-bottom: 20px;
+}
