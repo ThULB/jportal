@@ -120,7 +120,12 @@
   </xsl:template>
 
   <!-- jpinst heading -->
-  <xsl:template match="names/name/fullname" mode="jportal.jpinst.metadata">
+  <xsl:template mode="jportal.jpinst.metadata" match="metadata" >
+    <xsl:apply-templates mode="jportal.jpinst.metadata" select="names/name/fullname"/>
+    <xsl:apply-templates mode="jportal.doubletOf" select="def.doubletOf/doubletOf"/>
+  </xsl:template>
+  
+  <xsl:template mode="jportal.jpinst.metadata" match="fullname">
     <field name="heading_base">
       <xsl:value-of select="." />
     </field>
@@ -141,6 +146,13 @@
   <!-- position -->
   <xsl:template match="hidden_positions/hidden_position" mode="jportal.metadata">
     <field name="position">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+  
+  <!-- identifier (gnd, pnd etc.) -->
+  <xsl:template match="def.identifier/identifier" mode="jportal.metadata">
+    <field name="id.{@type}">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
@@ -169,7 +181,7 @@
   <xsl:template mode="jportal.person.metadata" match="metadata" >
     <xsl:apply-templates mode="jportal.person.name" select="def.heading/heading|def.alternative/alternative"/>
     <xsl:apply-templates mode="jportal.person.datesOfBirthAndDeath" select="def.dateOfBirth/dateOfBirth|def.dateOfDeath/dateOfDeath"/>
-    <xsl:apply-templates mode="jportal.person.doubletOf" select="def.doubletOf/doubletOf"/>
+    <xsl:apply-templates mode="jportal.doubletOf" select="def.doubletOf/doubletOf"/>
   </xsl:template>
 
   <xsl:template mode="jportal.person.name" match="heading">
@@ -208,7 +220,7 @@
       <xsl:value-of select="." />
     </field>
   </xsl:template>
-  <xsl:template mode="jportal.person.doubletOf" match="doubletOf">
+  <xsl:template mode="jportal.doubletOf" match="doubletOf">
     <field name="{name()}">
       <xsl:value-of select="." />
     </field>

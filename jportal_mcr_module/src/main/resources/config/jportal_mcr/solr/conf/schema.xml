@@ -155,6 +155,9 @@
     
     <!-- doublets -->
     <field name="doubletOf" type="string" />
+    
+    <!-- identifier (gnd, pnd, etc.) -->
+    <dynamicField name="id.*" type="string" />
 
 
     <!-- ******************************************** -->
