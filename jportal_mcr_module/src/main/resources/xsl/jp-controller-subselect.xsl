@@ -215,7 +215,9 @@
     </xsl:variable>
 
     <xsl:attribute name="href">
-      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url" />
+      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url">
+        <xsl:with-param name="encode" select="'false'" />
+      </xsl:apply-templates>
     </xsl:attribute>
   </xsl:template>
 
