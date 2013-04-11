@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+  xmlns:math="xalan://java.lang.Math"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan encoder mcr mcrxml solrxml">
   <xsl:param name="vol.start" select="'0'" />
   <xsl:param name="art.start" select="'0'" />
@@ -159,8 +160,8 @@
     <xsl:variable name="start" select="result/@start" />
     <xsl:variable name="rows" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
     <xsl:variable name="numFound" select="result/@numFound" />
-    <xsl:variable name="page" select="round(($start div $rows) + 0.5)" />
-    <xsl:variable name="pages" select="round(($numFound div $rows) + 0.5)" />
+    <xsl:variable name="page" select="math:ceil($start div $rows)" />
+    <xsl:variable name="pages" select="math:ceil($numFound div $rows)" />
 
     <xsl:variable name="url">
       <xsl:call-template name="UrlSetParam">
@@ -171,7 +172,7 @@
     </xsl:variable>
 
     <li>
-      <xsl:if test="$i = $page">
+      <xsl:if test="$i = $page+1">
         <xsl:attribute name="class">
             <xsl:value-of select="'jp-layout-selected-underline'" />
           </xsl:attribute>
