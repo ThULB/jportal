@@ -444,7 +444,7 @@ body {
 .languageMenu a {
 	cursor: pointer;
 	display: inline-block;
-	padding: 7px 4px 2px;
+	padding: 7px 2px 0 4px;
 }
 
 .languageMenu ul {
@@ -453,9 +453,10 @@ body {
 	padding: 0;
 	position: absolute;
 	right: 0;
-	top: 15px;
-	width: 47px;
-	box-shadow: 0 3px 2px #999999;
+	top: 19px;
+	width: 45px;
+	background: none repeat scroll 0 0 #F3F3F3;
+	border: 1px solid #AAA;
 }
 
 .languageMenu ul li {
@@ -465,25 +466,20 @@ body {
 
 .languageMenu ul a {
 	display: inline-block;
-	padding: 5px 11px 4px 12px;
+	padding: 4px 17px 0 4px;
 }
-
 .languageMenu ul a:hover {
-	background:  -moz-linear-gradient(top, rgba(174,188,191,1) 0%, rgba(110,119,116,1) 50%, rgba(10,14,10,1) 51%, rgba(10,8,9,1) 100%);
+	background-color: #2A89C1;
 }
-
-.languageList_show {
-	background: -moz-linear-gradient(center top , #EDEDED 0%, #B1B1B1 100%) repeat scroll 0 0 transparent;
-	display: block;
-}
-
-.languageList_hidden {
-	display: none;
-}
-
 .languageSelect {
-	background: none repeat scroll 0 0 #EDEDED;
-	box-shadow: 0 2px 2px;
+	border: 1px solid transparent;
+}
+.languageSelect.clicked {
+	border: 1px solid #AAA;
+	border-bottom: none;
+	background: none repeat scroll 0 0 #F3F3F3;
+	position: relative;
+    z-index: 5;
 }
 
 .jp-layout-marginLR {

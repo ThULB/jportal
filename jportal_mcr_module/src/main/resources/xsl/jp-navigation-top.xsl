@@ -47,12 +47,12 @@
 
   <xsl:template name="jp.navigation.top.language">
     <span id="languageMenu" class="languageMenu">
-      <a id="languageSelect">
+      <a id="languageSelect" class="languageSelect">
         <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" />
         <img src="{$WebApplicationBaseURL}images/naviMenu/dropdown.png" style="padding: 0 3px 6px;" />
       </a>
   
-      <ul id="languageList" class="languageList_hidden">
+      <ul id="languageList" class="hidden">
         <xsl:for-each select="$languages/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>
@@ -84,9 +84,8 @@
       $(document).ready(function() {
         var languageList = $('#languageList');
         $('#languageSelect').click(function() {
-            $(this).toggleClass('languageSelect');
-            languageList.toggleClass('languageList_hidden');
-            languageList.toggleClass('languageList_show');
+            $(this).toggleClass('clicked');
+            languageList.toggleClass('hidden');
         });
       });
     </script>
