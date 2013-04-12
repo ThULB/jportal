@@ -65,21 +65,30 @@ public class IPRuleResource {
     
     @GET
     @Path("start")
-    public void start() throws IOException, JDOMException {
+    public void start() {
         InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xml/webpage.xml");
         SAXBuilder saxBuilder = new SAXBuilder();
-        Document webPage = saxBuilder.build(guiXML);
-        XPathExpression<Object> xpath = XPathFactory.instance().compile("/MyCoReWebPage/section/div[@id='jportal_acl_ip_editor_module']");
-        Object node = xpath.evaluateFirst(webPage);
-        if (node != null) {
-            Element mainDiv = (Element) node;
-            mainDiv.setAttribute("objID", objID);
+        Document webPage;
+        try {
+            webPage = saxBuilder.build(guiXML);
+            XPathExpression<Object> xpath = XPathFactory.instance().compile("/MyCoReWebPage/section/div[@id='jportal_acl_ip_editor_module']");
+            Object node = xpath.evaluateFirst(webPage);
+            if (node != null) {
+                Element mainDiv = (Element) node;
+                mainDiv.setAttribute("objID", objID);
+            }
+            MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
+        } catch (JDOMException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-        MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
     }
 
     @GET
-    public String list() throws TransformerException, JDOMException, IOException {
+    public String list() {
         String ruleid = getJournalConfKeys().get("ruleId");
         //get the ruleString
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
