@@ -16,6 +16,8 @@
     <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')}" />
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
     <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
+    <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
+    <var name="hasDeriv" value="{count(/mycoreobject/structure/derobjects/derobject) > 1}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
     <var name="updatePerm" value="{$updatePerm}" />
@@ -62,6 +64,11 @@
               <param name="todo" value="snewder" />
             </params>
           </label>
+        </item>
+        <item id="derivMergeButton">
+          <restriction name="deleteDeriv" value="true" />
+          <restriction name="hasDeriv" value="true" />
+          <label name="Derivate zusammenführen"/>
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
@@ -181,6 +188,10 @@
           classeditor.categoryId = "";
           startClassificationEditor();
         });
+        $("#derivMergeButton").click(function(){
+          mergeDerivates(<xsl:value-of select="$currentObjID"/>)
+        });
+        
       });
     </script>
   </xsl:template>
@@ -206,7 +217,15 @@
         <xsl:call-template name="classificationEditorDiag" />
         <xsl:call-template name="introEditorDiag" />
       </xsl:if>
+    <script type="text/javascript">
+      $(document).ready(function() {
+      $("#derivMergeButton").click(function(){
+          mergeDerivates('<xsl:value-of select="$currentObjID"/>')
+        });
+      })
+    </script>
     </menu>
+    
 
     <deleteMsg>
       <xsl:choose>

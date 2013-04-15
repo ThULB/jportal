@@ -813,12 +813,12 @@ body {
 	padding-top: 10px;
 }
 
-#diagButton,#ckeditorButton {
+#diagButton,#ckeditorButton, #derivMergeButton{
 	color: #494949;
 	cursor: pointer;
 }
 
-#diagButton:hover,#ckeditorButton:hover {
+#diagButton:hover,#ckeditorButton:hover,#derivMergeButton:hover {
 	text-decoration: underline;
 }
 
