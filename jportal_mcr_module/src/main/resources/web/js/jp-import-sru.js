@@ -55,7 +55,8 @@ function printInternalError() {
 
 function appendHit(html) {
 	$("#result").append(html);
-	var link = $("<p><a href='javascript:void(0)'>Datensatz importieren</a></p>").appendTo("#result");
+	var link = $("<a href='javascript:void(0)'>Datensatz importieren</a>");
+	$("<p></p>").append(link).appendTo("#result");
 	link.click(function() {
 		clearDubletCheck();
 		$.ajax({
