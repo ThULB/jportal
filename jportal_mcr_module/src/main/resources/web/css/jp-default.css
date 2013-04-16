@@ -690,10 +690,7 @@ body {
     position: absolute;
     max-width: 600px;
 }
-#objectPreviewContainer .objectPreview .loading {
-	
-}
-#objectPreviewContainer .objectPreview .jp-metadata dt {
+.jp-metadata dt {
     clear: left;
     float: left;
     font-style: italic;
@@ -701,13 +698,12 @@ body {
     width: 130px;
     margin-bottom: 4px;
 }
-#objectPreviewContainer .objectPreview .jp-metadata dd {
+.jp-metadata dd {
     float: left;
     margin-bottom: 4px;
     margin-left: 22px;
 }
-
-#objectPreviewContainer .objectPreview .jp-metadata dt:AFTER {
+.jp-metadata dt:AFTER {
 	content: ": "
 }
 
@@ -1103,6 +1099,19 @@ body {
 .jp-layout-globalmessage-editor table tr td textarea {
 	width: 100%;
 	height: 150px;
+}
+
+.jp-import-sru {
+	margin-top: 12px;
+}
+.jp-import-sru .result {
+	margin-top: 14px;
+}
+.jp-import-sru .result .jp-metadata {
+	margin-top: 16px;
+}
+.jp-import-sru .doubletCheck .title {
+	font-weight: bold;
 }
 
 #ckeditorContainer {

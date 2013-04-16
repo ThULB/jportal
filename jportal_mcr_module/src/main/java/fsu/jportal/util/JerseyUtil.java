@@ -42,4 +42,16 @@ public class JerseyUtil {
         }
     }
 
+    /**
+     * Checks if the mycore object has the given permission. Throws an unauthorized exception otherwise.
+     * 
+     * @param id mycore object id
+     * @param permission permission to check
+     */
+    public static void checkPermission(String id, String permission) {
+        if (!MCRAccessManager.checkPermission(id, permission)) {
+            throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).build());
+        }
+    }
+    
 }

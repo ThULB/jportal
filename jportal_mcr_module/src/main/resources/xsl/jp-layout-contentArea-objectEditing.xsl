@@ -93,6 +93,11 @@
           <restriction name="createInst" value="true" />
         </item>
         <item>
+          <label name="Person/Institution importieren" href="/jp-import-sru.xml" />
+          <restriction name="createPerson" value="true" />
+          <restriction name="createInst" value="true" />
+        </item>
+        <item>
           <label name="Neue Zeitschrift" ref="editorServlet">
             <params>
               <param name="type" value="jpjournal" />

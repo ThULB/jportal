@@ -151,7 +151,7 @@
   </xsl:template>
   
   <!-- identifier (gnd, pnd etc.) -->
-  <xsl:template match="def.identifier/identifier" mode="jportal.metadata">
+  <xsl:template match="def.identifier/identifier | identifiers/identifier" mode="jportal.metadata">
     <field name="id.{@type}">
       <xsl:value-of select="." />
     </field>

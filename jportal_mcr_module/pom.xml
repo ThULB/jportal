@@ -79,6 +79,11 @@
           <artifactId>JPJaxbPojos</artifactId>
         </dependency>
         <dependency>
+          <groupId>fsu.archiv.mycore.sru</groupId>
+          <artifactId>sru-pica-import</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
