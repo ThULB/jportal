@@ -65,11 +65,13 @@
             </params>
           </label>
         </item>
+        <!-- 
         <item id="derivMergeButton">
           <restriction name="deleteDeriv" value="true" />
           <restriction name="hasDeriv" value="true" />
           <label name="Derivate zusammenführen"/>
         </item>
+         -->
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
