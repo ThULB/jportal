@@ -64,7 +64,7 @@ Projektbezeichnung 					 - nazwa projektu
 	Einzelprojekte					 - projekty pojedyńcze
 	Projekte historische Kommission	 - projekty komisji historycznej
 	Virtuelle Bibliothek des 18. Jh. - Wirtualna biblioteka XVIII wieku
-	Regionalzeitschriften			 - czasopisma regianalne
+	Regionalzeitschriften			 - czasopisma regionalne
 	SFB-482						  	 - SFB-482	
 ---------------------------
 Bestandsnachweis
