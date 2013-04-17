@@ -85,7 +85,7 @@ function appendHit(html) {
 function doubletCheck(/*string*/ gnd) {
 	$.ajax({
 		type: "GET",
-		url: "/rsc/search?rows=1&fl=id&q=id.gnd:" + gnd,
+		url: "/rsc/search?rows=1&fl=id&q=id.gnd:" + gnd + " id.pnd:" + gnd,
 		success: function(json) {
 			var response = json.response;
 			if(response.numFound > 0) {
