@@ -158,7 +158,14 @@
 
         <xsl:variable name="searchBarMode">
           <xsl:variable name="controllerHook">
-            <jpsearchBar mode="{$mode}"/>
+            <xsl:choose>
+              <xsl:when test="/MyCoReWebPage/jp-searchbar/@mode">
+                <jpsearchBar mode="{/MyCoReWebPage/jp-searchbar/@mode}"/>  
+              </xsl:when>
+              <xsl:otherwise>
+                <jpsearchBar mode="{$mode}"/>  
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:variable>   
           <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar"/>
         </xsl:variable>

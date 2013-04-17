@@ -3,6 +3,13 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   exclude-result-prefixes="i18n acl">
 
+  <xsl:template mode="controllerHook" match="/jpsearchBar[@mode='import.sru']">
+    <div id='searchBar'>
+      <input id="inputField" placeholder="GND" />
+      <button id="search">Suchen</button>
+    </div>
+  </xsl:template>
+
   <xsl:template match="jp-import-sru">
     <xsl:choose> 
       <xsl:when test="acl:checkPermission('POOLPRIVILEGE', 'create-person') and acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')">
@@ -17,8 +24,6 @@
   <xsl:template name="jp.import.sru.search">
     <xsl:call-template name="jp.import.sru.js" />
     <div class="jp-import-sru">
-      <input id="query" placeholder="GND" />
-      <button id="search">Suchen</button>
       <p class="doubletCheck hidden">
         <span class="title">Dublettencheck: </span><span id="doubletCheck"></span>
       </p>
@@ -32,7 +37,7 @@
       $(document).ready(function() {
         $("#search").click(function() {
           $("#result").empty();
-          var query = $("#query").val();
+          var query = $("#inputField").val();
           querySRU(query);
         });
       });
