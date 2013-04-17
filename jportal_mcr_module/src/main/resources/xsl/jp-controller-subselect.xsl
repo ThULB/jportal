@@ -210,14 +210,12 @@
         <xsl:copy-of select="$subselectParam/subselect/param" />
         <param name="mode" value="prefix" />
         <param name="_var_@xlink:href" value="{$data/str[@name='id']}" />
-        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" />
+        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false"/>
       </url>
     </xsl:variable>
 
     <xsl:attribute name="href">
-      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url">
-        <xsl:with-param name="encode" select="'false'" />
-      </xsl:apply-templates>
+      <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url" />
     </xsl:attribute>
   </xsl:template>
 

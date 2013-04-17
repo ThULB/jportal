@@ -16,12 +16,9 @@
   </xsl:template>
 
   <xsl:template mode="createURL" match="url">
-    <xsl:param name="encode" select="'true'" />
     <xsl:value-of select="base" />
     <xsl:apply-templates mode="createQueryTermField" select="queryTermField" />
-    <xsl:apply-templates mode="createParam" select="param">
-      <xsl:with-param name="encode" select="$encode" />
-    </xsl:apply-templates>
+    <xsl:apply-templates mode="createParam" select="param" />
   </xsl:template>
 
   <xsl:template mode="createQueryTermField" match="queryTermField">
@@ -31,7 +28,6 @@
   </xsl:template>
 
   <xsl:template mode="createParam" match="param">
-    <xsl:param name="encode" select="'true'" />
     <xsl:param name="sign">
       <xsl:choose>
         <xsl:when test="position()=1">
@@ -44,17 +40,14 @@
     </xsl:param>
 
     <xsl:if test="@value != ''">
-      <xsl:variable name="value">
-        <xsl:choose>
-          <xsl:when test="$encode = 'true'">
-            <xsl:value-of select="encoder:encode(@value)" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@value" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:value-of select="concat($sign, @name, '=', $value)" />
+      <xsl:choose>
+        <xsl:when test="@encode = 'false'">
+          <xsl:value-of select="concat($sign, @name, '=', @value)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($sign, @name, '=', encoder:encode(@value))" />
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
