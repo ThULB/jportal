@@ -10,6 +10,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -65,8 +66,8 @@ public class ObjectScrollResolver implements URIResolver {
         String prevQry = buildQuery(mcrId.getTypeId(), parentID.toString(), pair.key.name(), pair.value, false);
         String nextQry = buildQuery(mcrId.getTypeId(), parentID.toString(), pair.key.name(), pair.value, true);
         // do request
-        MCRSolrURL prevURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), prevQry);
-        MCRSolrURL nextURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), nextQry);
+        MCRSolrURL prevURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), prevQry);
+        MCRSolrURL nextURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), nextQry);
         try {
             SAXBuilder saxBuilder = new SAXBuilder();
             Document prevDoc = saxBuilder.build(prevURL.openStream());

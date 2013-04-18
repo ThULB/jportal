@@ -16,6 +16,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.impl.HttpSolrServer;
 import org.mycore.solr.MCRSolrServerFactory;
 import org.mycore.solr.search.MCRSolrURL;
 
@@ -41,7 +42,7 @@ public class SearchResource {
             encodedQuery += "&" + e.getKey() + "=" + URLEncoder.encode(e.getValue().get(0), "UTF-8");
         }
         encodedQuery = encodedQuery.substring(1)+"&wt=json";
-        MCRSolrURL solrURL = new MCRSolrURL(MCRSolrServerFactory.getSolrServer(), encodedQuery);
+        MCRSolrURL solrURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), encodedQuery);
         return search(solrURL);
     }
 
