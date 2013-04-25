@@ -1,61 +1,40 @@
 @CHARSET "UTF-8";
-#jp-ip-editor-ipList{
-	margin-top: 0px;
-	width: 300px;
-	height: 400px;
-	overflow: auto;
-    font-size: medium;
-    list-style: none outside none;
-    padding-left: 0;
+
+.navbar-fixed-bottom .navbar-inner{
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
-.jp-ip-editor-ips{
-	display: block;
+body{
+	padding-bottom: 20px;
 }
 
-.jp-ip-editor-ip{
-	width: 30px;
+.hover.icon-remove{
+	color: #B32B21;
+	cursor: pointer;
 }
 
-.jp-ip-editor-label {
-    display: block;
-    margin-right: 10px;
-    font-weight: bold;
+.hover.ipAbo{
+	color: #408DD2;
+	cursor: pointer;
 }
 
-.jp-ip-editor-button {
-    margin-left: 5px;
-    cursor: pointer;
+.ipAbo{
+	width: 460px;
 }
 
-.jp-ip-editor-button-right{
-	float: right;
+.affix{
+	top: 0px;
+	width: 940px;
 }
 
-#jp-ip-editor-help {
-/*     font-weight: bold; */
+form.editValue {
+	margin-bottom: 0px;
+/* 	width: 398px; */
 }
 
-.jp-ip-editor-ipList-ip:nth-child(odd) {
-	background-color:#eee; 
-}
-
-.jp-ip-editor-ipList-ip:nth-child(even) {
-	background-color:#fff; 
-}
-
-.jp-ip-editor-tipList-ip {
-    height: 25px;
-}
-
-#jp-ip-editor-ipList > .jp-ip-editor-hover{
-	background-color: #47c2ff;
-}
-
-#jp-ip-editor-ipList > .jp-ip-editor-selected{
-	background-color: #47c2ff;
-}
-
-#jp-ip-editor-button-refresh{
-	margin-left: 10px;
+form.editValue input{
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+	padding-top: 0px;
 }

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section xml:lang="all" title="IP Editor">
+    <div id="jportal_acl_ip_editor_module">
+      <link href="/rsc/IPRule/gui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+      <link href="/rsc/IPRule/gui/css/webpage.css" rel="stylesheet" type="text/css" />
+      <div id="header" class="jp-layout-maintitle jp-layout-border">
+        <span>
+          Editor für IP-Zugriffsrechte
+        </span>
+      </div>
+      <p id="jp-ip-editor-help">
+        Mit dem IP-Editor können Sie alle IP-Adressen sehen, IP-Adressen löschen und neue hinzufügen.
+        <br />
+        Es können * eingegeben werden um ganze IP-Bereiche freizugeben.
+      </p>
+      <table>
+        <tr>
+          <td class="jp-ip-editor-label">IP-Adresse hinzufügen</td>
+          <td>
+            <div id="jp-ip-editor-ips">
+              <input id="jp-ip-editor-ip1" class="jp-ip-editor-ip" type="text" maxlength="3" />
+              .
+              <input id="jp-ip-editor-ip2" class="jp-ip-editor-ip" type="text" maxlength="3" />
+              .
+              <input id="jp-ip-editor-ip3" class="jp-ip-editor-ip" type="text" maxlength="3" />
+              .
+              <input id="jp-ip-editor-ip4" class="jp-ip-editor-ip" type="text" maxlength="3" />
+              <div id="jp-ip-editor-button-add" class="jp-ip-editor-button icon-plus icon-large" title="IP hinzufügen" />
+            </div>
+          </td>
+          <td>
+
+          </td>
+        </tr>
+        <tr>
+          <td class="jp-ip-editor-label">IP-Adressen</td>
+          <td>
+            <div id="jp-ip-editor-ipList-head">
+              <input id="jp-ip-editor-button-selectAll" type="checkbox" />
+              <div id="jp-ip-editor-button-refresh" class="jp-ip-editor-button jp-ip-editor-button-right icon-refresh icon-large" title="Liste neu laden" />
+              <div id="jp-ip-editor-button-deleteMulti" class="jp-ip-editor-button jp-ip-editor-button-right icon-trash icon-large"
+                title="Makierte IPs löschen" />
+            </div>
+            <ul id="jp-ip-editor-ipList" />
+          </td>
+        </tr>
+      </table>
+      <script type="text/javascript" src="/rsc/IPRule/gui/js/jp-ip-editor.js" />
+    </div>
+  </section>
+</MyCoReWebPage>
