@@ -17,7 +17,7 @@
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
     <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
     <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
-    <var name="hasDeriv" value="{count(/mycoreobject/structure/derobjects/derobject) > 1}" />
+<!--     <var name="hasDeriv" value="{count(/mycoreobject/structure/derobjects/derobject) > 1}" /> -->
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
     <var name="updatePerm" value="{$updatePerm}" />

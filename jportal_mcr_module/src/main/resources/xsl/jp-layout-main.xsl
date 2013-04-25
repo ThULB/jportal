@@ -79,6 +79,8 @@
         <meta content="{$JP.Site.HTML.Head.Meta.Keywords.de}" lang="de" name="keywords" />
         <meta content="{$JP.Site.HTML.Head.Meta.Keywords.en}" lang="en" name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
+        <!-- add html stuff to head for MyCoReWebPage-->
+        <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
@@ -105,6 +107,8 @@
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
+        
+        
         <!-- TODO: don't init iview2 if no image is available -->
         <xsl:call-template name="initIview2JS" />
 
@@ -127,6 +131,8 @@
           <xsl:value-of select="$cssLinked" />
           <xsl:value-of select="'&lt;![endif]'" />
         </xsl:comment>
+        <!-- add html stuff to head for MyCoReWebPage-->
+        <xsl:copy-of select="/MyCoReWebPage/head/bottom/*"/>
       </head>
       <body>
         <div id="globalHeader">
@@ -252,6 +258,8 @@
             <textarea id="ckeditor"></textarea>
           </div>
         </div>
+        <!-- add html stuff to end of body for MyCoReWebPage-->
+        <xsl:copy-of select="/MyCoReWebPage/body/*"/>
       </body>
     </html>
   </xsl:template>
@@ -277,5 +285,9 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:value-of select="concat($titleFront,' - ',$MainTitle)" />
+  </xsl:template>
+  
+  <xsl:template match="noEditor">
+    <xsl:copy-of select="*"/>
   </xsl:template>
 </xsl:stylesheet>
