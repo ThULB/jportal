@@ -68,7 +68,7 @@ $(document).ready(function(){
 							entryHtml.remove();
 						},
 						404 : function(){
-							alert("Fehler! IP: " + enteredIP + " ist nicht vorhanden.");
+							alert("Fehler! IP: " + entry.ip + " " + entry.abo + " ist nicht vorhanden.");
 						},
 						500: function(error) {
 							alert("Server Error: " + error);
@@ -149,19 +149,19 @@ $(document).ready(function(){
 	var TableController = function(/*<tbody>*/ table){
 		var ipList = SortedSet();
 		
-		var EntryController = function(){
+		var EntryController = function(parentCtr){
 			return {
 				remove : function(entry){
 					ipList.remove(entry);
 					if(ipList.entries().length == 0){
-						ctr.refreshGUI();
+						parentCtr.refreshGUI();
 					}
 				},
 				replace : function(entry, newEntry){
 					ipList.remove(entry);
 					ipList.add(newEntry);
 					if(ipList.entries().length == 0){
-						ctr.refreshGUI();
+						parentCtr.refreshGUI();
 					}
 				}
 			}
@@ -178,7 +178,7 @@ $(document).ready(function(){
 					for ( var i = 0; i < ipListEntries.length; i++) {
 						var entry = ipListEntries[i];
 						var ctr = this;
-						table.append(TableEntryGUI(entry, EntryController()));
+						table.append(TableEntryGUI(entry, EntryController(this)));
 					}
 				}
 			},

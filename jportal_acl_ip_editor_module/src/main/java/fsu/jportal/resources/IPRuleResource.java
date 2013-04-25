@@ -153,7 +153,8 @@ public class IPRuleResource {
     public Response remove(String ipStr) {
         HashMap<String, String> journalConfKeys = getJournalConfKeys();
         String ruleId = journalConfKeys.get("ruleId");
-        return response(removeIp(ruleId, ipStr));
+        String defRule = journalConfKeys.get("defRule");
+        return response(removeIp(ruleId, ipStr, defRule));
     }
 
     @DELETE
@@ -164,14 +165,7 @@ public class IPRuleResource {
         JsonArray ipsAsJSONArray = jsonObject.getAsJsonArray("ips");
         HashMap<String, String> journalConfKeys = getJournalConfKeys();
         String ruleId = journalConfKeys.get("ruleId");
-//        for (int i = 0; i < ipsAsJSONArray.size(); i++) {
-//            String ip = ipsAsJSONArray.get(i).getAsJsonObject().getAsJsonPrimitive("ip").getAsString();
-//            if (removeIp(ruleId, ip)) {
-//                ipsAsJSONArray.get(i).getAsJsonObject().addProperty("success", "1");
-//            } else {
-//                ipsAsJSONArray.get(i).getAsJsonObject().addProperty("success", "0");
-//            }
-//        }
+
         return ipsAsJSONArray.toString();
     }
 
@@ -187,7 +181,7 @@ public class IPRuleResource {
         String ruleId = journalConfKeys.get("ruleId");
         String defRule = journalConfKeys.get("defRule");
         
-        StatusType removeStatus = removeIp(ruleId, oldIp);
+        StatusType removeStatus = removeIp(ruleId, oldIp, defRule);
         
         if(removeStatus.getStatusCode() != Status.OK.getStatusCode()){
             return response(removeStatus);
@@ -212,19 +206,22 @@ public class IPRuleResource {
     }
 
     private StatusType addIp(String ruleid, String ip, String defRule) {
+        MCRRuleStore ruleStore = MCRRuleStore.getInstance();
+        MCRAccessRule rule = ruleStore.getRule(ruleid);
+        String ruleStr = rule.getRuleString();
+        
         try {
-            IPAddress ipAdress = IPAddress.getFromString(ip);
-            MCRRuleStore ruleStore = MCRRuleStore.getInstance();
-            MCRAccessRule rule = ruleStore.getRule(ruleid);
-            String ruleString = rule.getRuleString();
-            Set<String> ipSet = IPRuleParser.parseRule(ruleString, new IPSet());
-            if (ipSet.contains(ipAdress.getIP())) {
+            IPAddress ipAddress = IPAddress.getFromString(ip);
+            Map<String, IPAddress> ipRules = IPRuleParser.parseRule(ruleStr, new IPMap());
+            if(ipRules.containsKey(ipAddress.getIP())){
                 return HttpStatus.ALLREADY_EXIST;
             }
             
-            String newRule = " OR (ip " + ipAdress.toString() + ")";
-            rule.setRule(ruleString + newRule);
+            ipRules.put(ipAddress.getIP(), ipAddress);
+
+            rule.setRule(buildRule(ipRules.values(), defRule));
             ruleStore.updateRule(rule);
+            updateRuleCache(ruleid, rule);
             
             return Status.CREATED;
         } catch (IPFormatException e) {
@@ -234,10 +231,35 @@ public class IPRuleResource {
             return HttpStatus.RULE_DB_ERR;
         }
     }
+
+    private void updateRuleCache(String ruleid, MCRAccessRule rule) {
+        MCRCache<String, MCRAccessRule> cache = MCRAccessControlSystem.getCache();
+//        cache.put(ruleid, rule);
+        cache.remove(ruleid);
+    }
+
+    private String buildRule(Collection<IPAddress> values, String defRule) {
+        StringBuffer newRuleStr = new StringBuffer();
+        for (Iterator iterator = values.iterator(); iterator.hasNext();) {
+            IPAddress ipAddress = (IPAddress) iterator.next();
+            newRuleStr.append("(ip " + ipAddress.toString() +")");
+            
+            if(iterator.hasNext()){
+                newRuleStr.append(" OR ");
+            }
+        }
+        
+        if(!values.isEmpty()){
+            newRuleStr.append(" OR ");
+        }
+        newRuleStr.append(defRule);
+        
+        return newRuleStr.toString();
+    }
     
     
 
-    private StatusType removeIp(String ruleid, String ipStr) {
+    private StatusType removeIp(String ruleid, String ipStr, String defRule) {
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule rule = ruleStore.getRule(ruleid);
         String ruleStr = rule.getRuleString();
@@ -249,19 +271,9 @@ public class IPRuleResource {
                     return Status.NOT_FOUND;
                 }
                 
-                StringBuffer newRuleStr = new StringBuffer();
-                Collection<IPAddress> values = ipRules.values();
-                for (Iterator iterator = values.iterator(); iterator.hasNext();) {
-                    IPAddress ipAddress = (IPAddress) iterator.next();
-                    newRuleStr.append("(ip " + ipAddress.toString() +")");
-                    
-                    if(iterator.hasNext()){
-                        newRuleStr.append(" OR ");
-                    }
-                }
-                
-                rule.setRule(newRuleStr.toString());
+                rule.setRule(buildRule(ipRules.values(), defRule));
                 ruleStore.updateRule(rule);
+                updateRuleCache(ruleid, rule);
                 
                 return Status.OK;
             } catch (IPRuleParseException e) {
