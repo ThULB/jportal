@@ -30,11 +30,13 @@ $(document).ready(function(){
 					}
 				}
 				list.push(entry);
-				list = list.sort(sortIP);
 				return true;
 			},
 			entries : function(){
 				return list;
+			},
+			sort : function(){
+				list = list.sort(sortIP);
 			}
 		}
 	}
@@ -170,6 +172,7 @@ $(document).ready(function(){
 		return {
 			refreshGUI : function(){
 				table.empty();
+				ipList.sort();
 				ipListEntries = ipList.entries();
 				
 				if(ipListEntries.length == 0){
@@ -186,16 +189,14 @@ $(document).ready(function(){
 				if(entry != null){
 					var success = ipList.add(entry);
 					
-					if(success == true){
-						this.refreshGUI();
-					}else{
+					if(success != true){
 						$(".table").before(AlertIPExistGUI(entry));
 					}
 				}
 			}
 		};
 	}
-	
+	$('#myModal').modal('show');
 	var ipTableCtr = TableController($("#ipTable"));
 	var url = window.location.pathname.replace("/start","")
 	
@@ -204,6 +205,7 @@ $(document).ready(function(){
 			ipTableCtr.addIP(ipList[i]);
 		}
 		ipTableCtr.refreshGUI();
+		$('#myModal').modal('hide');
 	})
 	
 	$('#newIPForm').submit(function(event){
@@ -217,6 +219,7 @@ $(document).ready(function(){
 				statusCode: {
 					201: function() {
 						ipTableCtr.addIP(IPAboJSON(enteredIP));
+						ipTableCtr.refreshGUI();
 					},
 					418 : function(){
 						alert("Fehler! IP: " + enteredIP + " ist nicht korrekt.");
@@ -227,7 +230,7 @@ $(document).ready(function(){
 					500: function(error) {
 						alert("Server Error: " + error);
 					}
-				},
+				}
 			});
 		}
 		$('#newIPFormInput').val("");
