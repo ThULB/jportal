@@ -267,6 +267,9 @@
   <xsl:template name="HTMLPageTitle">
     <xsl:variable name="titleFront">
       <xsl:choose>
+        <xsl:when test="/MyCoReWebPage/journalID != ''">
+          <xsl:value-of select="document(concat('mcrobject:',/MyCoReWebPage/journalID))/mycoreobject/metadata/maintitles/maintitle[@inherited='0']" />
+        </xsl:when>
         <xsl:when test="contains(/mycoreobject/@ID,'_jpjournal_') or contains(/mycoreobject/@ID,'_jpvolume_') or contains(/mycoreobject/@ID,'_jparticle_')  ">
           <xsl:value-of select="/mycoreobject/metadata/maintitles/maintitle[@inherited='0']/text()" />
         </xsl:when>
