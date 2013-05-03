@@ -38,3 +38,17 @@ form.editValue input{
 	padding-bottom: 0px;
 	padding-top: 0px;
 }
+
+.navbar .brand{
+	clear: left;
+	display: none;
+}
+
+.affix.navbar .brand{
+	display: block;
+}
+
+.affix.navbar .navbar-form{
+	clear: both;
+	margin-bottom: 5px;
+}

@@ -2,29 +2,40 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <journalID/>
+  <titleFromJournalID>
+    <append>Abonenten</append>
+  </titleFromJournalID>
   <head>
     <top>
-      <link href="/rsc/IPRule/gui/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
-      <link href="/rsc/IPRule/gui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+      <link href="/rsc/ipAcl/gui/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+      <link href="/rsc/ipAcl/gui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     </top>
     <bottom>
-      <link href="/rsc/IPRule/gui/css/webpage.css" rel="stylesheet" media="screen" />
+      <link href="/rsc/ipAcl/gui/css/webpage.css" rel="stylesheet" media="screen" />
+      <link href="/rsc/ipAcl/gui/css/print.css" rel="stylesheet" media="print" />
     </bottom>
   </head>
   <body>
-    <script src="/rsc/IPRule/gui/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/rsc/IPRule/gui/js/webpage.js"></script>
+    <script src="/rsc/ipAcl/gui/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/rsc/ipAcl/gui/js/webpage.js"></script>
   </body>
   <section xml:lang="all" title="IP Editor">
     <noEditor>
-      <div id="jportal_acl_ip_editor_module">
+      <div id="jportal_acl_ip_editor_module" url="">
         <div class="container">
           <div id="navbar" class="navbar navbar-static-top" data-spy="affix" data-offset-top="186">
             <div class="navbar-inner">
+              <span id="navbarTitle" class="brand">
+              </span>
               <form id="newIPForm" class="navbar-form pull-left">
                 <input id="newIPFormInput" type="text" class="span4" placeholder="IP Abbonent" />
                 <button type="submit" class="btn">Hinzufügen</button>
               </form>
+              <ul class="nav pull-right">
+                <li>
+                  <a id="toJournal" href="#">Zur Zeitschrift</a>
+                </li>
+              </ul>
             </div>
           </div>
           <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -37,7 +48,7 @@
             <thead>
               <tr>
                 <th>IP-Addresse</th>
-                <th>Abbonent</th>
+                <th>Abonent</th>
                 <th>
                 </th>
               </tr>

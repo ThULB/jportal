@@ -1,4 +1,6 @@
 $(document).ready(function(){
+	var url = $("div#jportal_acl_ip_editor_module").attr("url");
+	
 	var SortedSet = function(){
 		var list = [];
 		
@@ -95,7 +97,7 @@ $(document).ready(function(){
 					var oldIp = entry.ip + " " + entry.abo;
 					var type = elem.attr("type");
 					entry[type] = newValue;
-					var url = window.location.pathname.replace("/start","")
+//					var url = window.location.pathname.replace("/start","")
 					
 					var newIp = entry.ip + " " + entry.abo;
 					
@@ -198,7 +200,9 @@ $(document).ready(function(){
 	}
 	$('#myModal').modal('show');
 	var ipTableCtr = TableController($("#ipTable"));
-	var url = window.location.pathname.replace("/start","")
+	var title = $('title').text();
+	$('#navbarTitle').text(title);
+//	var url = window.location.pathname.replace("/start","")
 	
 	$.getJSON(url,function(ipList){
 		for ( var i = 0; i < ipList.length; i++) {
@@ -206,6 +210,10 @@ $(document).ready(function(){
 		}
 		ipTableCtr.refreshGUI();
 		$('#myModal').modal('hide');
+	}).fail(function(data){
+		if(data.status == 401){
+			window.location = "/servlets/MCRLoginServlet?url=" + window.location.pathname;
+		}
 	})
 	
 	$('#newIPForm').submit(function(event){

@@ -1,18 +1,12 @@
 package fsu.jportal.resources;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -21,25 +15,16 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.log4j.Logger;
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.mcrimpl.MCRAccessControlSystem;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRRuleStore;
 import org.mycore.common.MCRCache;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import com.google.gson.JsonArray;
@@ -51,7 +36,6 @@ import fsu.jportal.jersey.access.IPRuleAccess;
 import fsu.jportal.parser.IPAddress;
 import fsu.jportal.parser.IPAddress.IPFormatException;
 import fsu.jportal.parser.IPAddressList;
-import fsu.jportal.parser.IPArrayList;
 import fsu.jportal.parser.IPJsonArray;
 import fsu.jportal.parser.IPMap;
 import fsu.jportal.parser.IPRuleParser;
@@ -61,7 +45,7 @@ import fsu.jportal.parser.IPRuleParser.IPRuleParseException;
 @MCRRestrictedAccess(IPRuleAccess.class)
 public class IPRuleResource {
     static Logger LOGGER = Logger.getLogger(IPRuleResource.class);
-
+    
     static MCRCache<String, MCRAccessRule> accessCache;
 
     static {
@@ -69,41 +53,11 @@ public class IPRuleResource {
         accessCache = MCRAccessControlSystem.getCache();
     }
 
-    @Context
-    HttpServletRequest request;
-
-    @Context
-    HttpServletResponse response;
-
     @PathParam("objID")
     String objID;
 
     JournalConfig journalConf = null;
-
-    @GET
-    @Path("start")
-    public void start() {
-        InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_ip_editor_module/gui/xml/webpage.xml");
-        SAXBuilder saxBuilder = new SAXBuilder();
-        Document webPage;
-        try {
-            webPage = saxBuilder.build(guiXML);
-            XPathExpression<Object> xpath = XPathFactory.instance().compile("/MyCoReWebPage/journalID");
-            Object node = xpath.evaluateFirst(webPage);
-            if (node != null) {
-                Element journalID = (Element) node;
-                journalID.setText(objID);
-            }
-            MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
-        } catch (JDOMException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listJSON() {
