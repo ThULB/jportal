@@ -94,7 +94,7 @@
 
     <!-- MCRDerivate related metadata -->
     <field name="urn" type="string" multiValued="true" />
-    <field name="maindoc" type="string" multiValued="true" />
+    <field name="maindoc" type="string" />
     <field name="derivateOwner" type="string" />
 
     <!-- MCRFile related fields -->
