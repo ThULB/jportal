@@ -98,7 +98,7 @@
     <field name="derivateOwner" type="string" />
 
     <!-- MCRFile related fields -->
-    <field name="DerivateID" type="string" />
+    <field name="derivateID" type="string" />
     <field name="returnId" type="string" />
     <field name="filePath" type="string" />
     <field name="fileName" type="string" />
