@@ -225,13 +225,18 @@
   </xsl:template>
 
   <!-- contentClassi and volContentClassi -->
+  <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]" mode="jportal.metadata">
+    <xsl:apply-templates select="*" mode="jportal.classification" />
+  </xsl:template>
   <xsl:template match="*[contains(name(), 'contentClassis') or contains(name(), 'volContentClassis')]" mode="jportal.journal">
-    <xsl:for-each select="*">
-      <xsl:apply-templates mode="jportal.contentClassi"
-          select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category">
-        <xsl:with-param name="name" select="name()" />
-      </xsl:apply-templates>
-    </xsl:for-each>
+    <xsl:apply-templates select="*" mode="jportal.classification" />
+  </xsl:template>
+
+  <xsl:template match="*" mode="jportal.classification">
+    <xsl:apply-templates mode="jportal.contentClassi"
+        select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category">
+      <xsl:with-param name="name" select="name()" />
+    </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template match="*" mode="jportal.contentClassi">

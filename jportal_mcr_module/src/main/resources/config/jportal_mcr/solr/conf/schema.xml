@@ -174,9 +174,9 @@
     <copyField source="participants" dest="names_de" />
 
     <!-- special search fields -->
-    <field name="contentClassi*" type="string" multiValued="true" />
-    <field name="volContentClassi*" type="string" multiValued="true" />
-    <field name="hidden_genhiddenfield*" type="string" />
+    <dynamicField name="contentClassi*" type="string" multiValued="true" />
+    <dynamicField name="volContentClassi*" type="string" multiValued="true" />
+    <dynamicField name="hidden_genhiddenfield*" type="string" />
 
     <field name="keywords" type="text_de" multiValued="true" stored="false" />
     <field name="link" type="string" multiValued="true" stored="false" />

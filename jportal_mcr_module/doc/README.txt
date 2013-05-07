@@ -55,7 +55,7 @@ Add in pom.xml below the <dependencies> element
   <dependency>
     <groupId>fsu.thulb</groupId>
     <artifactId>jportal_mcr_module</artifactId>
-    <version>2.0.17-SNAPSHOT</version>
+    <version>2.0.18-SNAPSHOT</version>
     <type>jar</type>
     <scope>compile</scope>
   </dependency>
