@@ -3,7 +3,6 @@
 <MyCoReWebPage>
   <section xml:lang="all" title="IP Editor">
     <div id="jportal_acl_ip_editor_module">
-      <link href="/rsc/IPRule/gui/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
       <link href="/rsc/IPRule/gui/css/webpage.css" rel="stylesheet" type="text/css" />
       <div id="header" class="jp-layout-maintitle jp-layout-border">
         <span>

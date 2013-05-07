@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   exclude-result-prefixes="acl">
 	<xsl:template match="jp-ip-editor">
-	<link href="{$WebApplicationBaseURL}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	
     	<div class="jp-ip-editor">
       		<h1>IP Editor</h1>
       		<xsl:choose>
