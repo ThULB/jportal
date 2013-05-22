@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <imports xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <!-- 
-    <include uri="webapp:editor/imports-application.xml" />
-  -->
+  <!-- <include uri="webapp:editor/imports-application.xml" /> -->
   <!-- *** Text fields *** -->
   <textfield id="TFzeile10" width="10" maxlength="10" />
   <textfield id="TFzeile32" width="32" maxlength="32" />
@@ -23,7 +21,7 @@
   <!-- *** Data for the buttons ** -->
   <panel id="TwoButtons">
     <cell col="1" row="1" anchor="WEST">
-      <cancelButton width="100" i18n="buttons.cancel"/>
+      <cancelButton width="100" i18n="buttons.cancel" />
     </cell>
     <cell col="2" row="1" anchor="WEST">
       <submitButton width="100" i18n="buttons.save" />
@@ -104,43 +102,23 @@
     <cell col="1" row="1" anchor="WEST" ref="TFarea4096" />
   </panel>
 
-  <panel id="linkrepeater" lines="off">
-    <hidden var="@inherited" default="0" />
-    <hidden var="@xlink:type" default="locator" />
-    <hidden var="@xlink:title" default="Person" />
-
-    <hidden var="@xlink:href" default="" />
-    <cell row="1" col="1" width="100%">
-      <output var="@xlink:title" default="Person" />
-      <text label="&#160;&#160;&#160;" />
+  <panel id="RLabel" class="editorClassLabel">
+    <cell col="1" row="1" anchor="NORTHWEST">
+      <text i18n="component.classhandler.label.lang" class="editorlabel" />
     </cell>
-    <cell row="1" col="2">
-      <subselect id="sub.select1" type="webpage" href="indexpage?searchclass=person_sub" sortnr="6">
-        <label xml:lang="de">Auswählen</label>
-        <label xml:lang="en">Select</label>
-      </subselect>
+    <cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" default="de" />
+    <cell col="1" row="2" anchor="NORTHWEST">
+      <text i18n="component.classhandler.label.text.p" class="editorlabel" />
     </cell>
+    <cell col="2" row="2" anchor="NORTHWEST" var="@text">
+      <textfield width="48" maxlength="1024" id="classCategLabel">
+        <condition id="cond.label.required" required="true" i18n="component.classhandler.condition.labelText" />
+      </textfield>
+    </cell>
+    <cell col="1" row="3" anchor="NORTHWEST">
+      <text i18n="component.classhandler.label.description" class="editorlabel" />
+    </cell>
+    <cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile1024" var="@description" />
   </panel>
-
-	<panel id="RLabel" class="editorClassLabel">
-		<cell col="1" row="1" anchor="NORTHWEST">
-			<text i18n="component.classhandler.label.lang" class="editorlabel" />
-		</cell>
-		<cell col="2" row="1" anchor="NORTHWEST" ref="Slang" var="@lang"
-			default="de" />
-		<cell col="1" row="2" anchor="NORTHWEST">
-			<text i18n="component.classhandler.label.text.p" class="editorlabel" />
-		</cell>
-		<cell col="2" row="2" anchor="NORTHWEST" var="@text">
-			<textfield width="48" maxlength="1024" id="classCategLabel">
-				<condition id="cond.label.required" required="true"
-					i18n="component.classhandler.condition.labelText" />
-			</textfield>
-		</cell>
-		<cell col="1" row="3" anchor="NORTHWEST">
-			<text i18n="component.classhandler.label.description" class="editorlabel" />
-		</cell>
-		<cell col="2" row="3" anchor="NORTHWEST" ref="TFzeile1024" var="@description" />
-	</panel>
   <!-- *** End *** -->
 </imports>

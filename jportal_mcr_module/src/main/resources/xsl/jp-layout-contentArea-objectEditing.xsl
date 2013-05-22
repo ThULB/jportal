@@ -17,7 +17,6 @@
     <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
     <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
     <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
-<!--     <var name="hasDeriv" value="{count(/mycoreobject/structure/derobjects/derobject) > 1}" /> -->
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />
     <var name="updatePerm" value="{$updatePerm}" />
@@ -30,6 +29,7 @@
   <xsl:variable name="menuXML">
     <menu>
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
+      <link id="editorResource" href="/rsc/editor" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
       <params id="editorServlet-editParam">
         <param name="tf_mcrid" select="currentObjID" />
@@ -42,12 +42,7 @@
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <item>
-          <label name="Dokument bearbeiten" ref="editorServlet">
-            <params>
-              <param ref="editorServlet-editParam" />
-              <param name="todo" value="seditobj" />
-            </params>
-          </label>
+          <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
         </item>
         <item id="ckeditorButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
@@ -65,33 +60,14 @@
             </params>
           </label>
         </item>
-        <!-- 
-        <item id="derivMergeButton">
-          <restriction name="deleteDeriv" value="true" />
-          <restriction name="hasDeriv" value="true" />
-          <label name="Derivate zusammenführen"/>
-        </item>
-         -->
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <label name="Neue Person" ref="editorServlet">
-            <params>
-              <param name="type" value="person" />
-              <param name="step" value="author" />
-              <param name="todo" value="wnewobj" />
-            </params>
-          </label>
+          <label name="Neue Person" ref="editorResource" path="create/person"/>
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-          <label name="Neue Institution" ref="editorServlet">
-            <params>
-              <param name="type" value="jpinst" />
-              <param name="step" value="author" />
-              <param name="todo" value="wnewobj" />
-            </params>
-          </label>
+          <label name="Neue Institution" ref="editorResource" path="create/jpinst"/>
           <restriction name="createInst" value="true" />
         </item>
         <item>
@@ -100,13 +76,7 @@
           <restriction name="createInst" value="true" />
         </item>
         <item>
-          <label name="Neue Zeitschrift" ref="editorServlet">
-            <params>
-              <param name="type" value="jpjournal" />
-              <param name="step" value="author" />
-              <param name="todo" value="wnewobj" />
-            </params>
-          </label>
+          <label name="Neue Zeitschrift" ref="editorResource" path="create/jpjournal"/>
           <restriction name="createJournal" value="true" />
         </item>
         <item>
@@ -307,6 +277,7 @@
       <xsl:apply-templates mode="copyAttr" select="@*" />
       <xsl:attribute name="href">
           <xsl:apply-templates mode="menuLink" select="@ref" />
+          <xsl:apply-templates mode="menuLink" select="@path" />
           <xsl:apply-templates mode="menuLinkParam" select="params" />
       </xsl:attribute>
       <xsl:value-of select="@name" />
@@ -316,6 +287,10 @@
   <xsl:template mode="menuLink" match="@ref">
     <xsl:variable name="ref" select="." />
     <xsl:value-of select="$menu/link[@id=$ref]/@href" />
+  </xsl:template>
+  
+  <xsl:template mode="menuLink" match="@path">
+    <xsl:value-of select="concat('/',.)" />
   </xsl:template>
 
   <xsl:template mode="menuLinkParam" match="params">

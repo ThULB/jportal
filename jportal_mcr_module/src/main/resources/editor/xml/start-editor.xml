@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Editor template -->
+<MyCoReWebPage>
+  <section title="{title}" xml:lang="de" />
+  <section xml:lang="all">
+    <p class="editorform">
+      <editor id="editor-{type}">
+        <source uri="{sourceUri}"/>
+        <cancel url="{cancelUrl}"/>
+        
+        <validationMessage>
+          <label xml:lang="all"><placeholder paramName="validationMsg"/></label>
+        </validationMessage>
+
+        <target type="servlet" name="{editServlet}" method="post" format="xml" />
+        <components xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-{type}" var="/mycoreobject">
+
+          <include uri="webapp:editor/editor-commons.xml" />
+          <include uri="webapp:editor/editor-jportal.xml" />
+          <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
+          <include uri="webapp:editor/editor-{type}.xml" />
+          <panel id="editor-{type}">
+            <hidden var="@ID" default="{mcrid}"/>
+            <hidden var="@label" />
+            <cell row="1" col="1" anchor="NORTHWEST" ref="edit-{type}" />
+          </panel>
+
+        </components>
+      </editor>
+    </p>
+  </section>
+</MyCoReWebPage>

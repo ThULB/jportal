@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -31,10 +32,12 @@ import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 
 @Path("modslogos")
 public class MODSLogoResource {
+    static Logger LOGGER = Logger.getLogger(MODSLogoResource.class);
     @GET
     @Path("{hiddenJournalId}")
     @Produces(MediaType.APPLICATION_XML)
     public String getLogos(@PathParam("hiddenJournalId") String hiddenJournalId) throws IOException {
+        LOGGER.info("MODS logo for " + hiddenJournalId);
         List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(hiddenJournalId));
         MCRMetaElement participants = mcrObject.getMetadata().getMetadataElement("participants");

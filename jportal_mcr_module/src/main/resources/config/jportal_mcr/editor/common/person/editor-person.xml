@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <components xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="editor.xsd">
-    <include uri="webapp:editor/editor-commons.xml" />
-    <include uri="webapp:editor/imports-jplabelsHelptexts.xml"/> s
+<!--     <include uri="webapp:editor/editor-commons.xml" /> -->
+<!--     <include uri="webapp:editor/imports-jplabelsHelptexts.xml"/> -->
     <panel id="edit-person" lines="on">
-        <hidden var="@ID" />
-        <hidden var="@label" />
+<!--         <hidden var="@ID" /> -->
+<!--         <hidden var="@label" /> -->
         <cell col="1" row="1" var="metadata">
             <panel>
                 <cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="Lheading" />

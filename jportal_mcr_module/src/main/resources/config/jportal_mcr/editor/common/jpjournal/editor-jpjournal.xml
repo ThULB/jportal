@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <imports>
-    <include uri="webapp:editor/imports-jpcommon.xml" />
-    <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
     <panel id="edit-jpjournal" lines="on">
-        <hidden var="ID" />
-        <hidden var="label" />
         <hidden var="metadata/@lang" default="de" />
         <hidden var="service/servdates" descendants="true" />
         <hidden var="service/servacls" descendants="true" />
         <hidden var="service/servflags" descendants="true" />
+        
         <!-- required fields ......................................... -->
         <!-- ########################## formal description ################################## -->
         <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
@@ -167,7 +164,7 @@
         <cell col="1" row="500">
             <br />
         </cell>
-        <cell row="501" col="1" anchor="WEST" ref="save" colspan="4" class="editorButtons"/>
+        <cell row="501" col="1" anchor="WEST" ref="TwoButtons" colspan="4" class="editorButtons" />
     </panel>
     <!-- panel definitions -->
     <!-- MainTitle ================================================================== -->

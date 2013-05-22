@@ -1,6 +1,7 @@
 package fsu.jportal.xml;
 
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,8 +14,23 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.stream.StreamSource;
 
+import org.jdom2.Document;
+import org.jdom2.transform.JDOMResult;
+
 public class XMLTools {
 
+    public Document transform(String xmlSource, String xslSource, Map<String, Object> params) throws TransformerFactoryConfigurationError, TransformerException{
+        InputStream xmlIS = getClass().getResourceAsStream(xmlSource);
+        InputStream xslIS = getClass().getResourceAsStream(xslSource);
+        StreamSource xmlSourceStream = new StreamSource(xmlIS);
+        StreamSource xslSourceStream = new StreamSource(xslIS);
+        JDOMResult transformationResult = new JDOMResult();
+        
+        transform(xmlSourceStream, xslSourceStream, params, transformationResult);
+        
+        return transformationResult.getDocument();
+    }
+    
     public void transform(Source xmlSource, Source xslSource, Map<String, Object> params, Result outputTarget)
             throws TransformerFactoryConfigurationError, TransformerException {
         URIResolver resolver = new URIResolver() {
