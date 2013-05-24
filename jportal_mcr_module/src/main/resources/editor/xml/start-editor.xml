@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Editor template -->
 <MyCoReWebPage>
+  <journalID>
+    <placeholder paramName="journalID" />
+  </journalID>
   <section title="{title}" xml:lang="de" />
   <section xml:lang="all">
     <p class="editorform">
       <editor id="editor-{type}">
-        <source uri="{sourceUri}"/>
-        <cancel url="{cancelUrl}"/>
-        
+        <source uri="{sourceUri}" />
+        <cancel url="{cancelUrl}" />
+
         <validationMessage>
-          <label xml:lang="all"><placeholder paramName="validationMsg"/></label>
+          <label xml:lang="all">
+            <placeholder paramName="validationMsg" />
+          </label>
         </validationMessage>
 
         <target type="servlet" name="{editServlet}" method="post" format="xml" />
@@ -17,15 +22,28 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-{type}" var="/mycoreobject">
 
           <include uri="webapp:editor/editor-commons.xml" />
-          <include uri="webapp:editor/editor-jportal.xml" />
+          <include uri="webapp:editor/editor-jpcommons.xml" />
           <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
           <include uri="webapp:editor/editor-{type}.xml" />
           <panel id="editor-{type}">
-            <hidden var="@ID" default="{mcrid}"/>
+            <hidden var="@ID" default="{mcrid}" />
             <hidden var="@label" />
+            
+            <!-- parents -->
+            <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
+            <hidden var="structure/parents/@heritable" default="true" />
+            <hidden var="structure/parents/parent/@inherited" default="0" />
+            <hidden var="structure/parents/parent/@xlink:type" default="locator" />
+            <hidden var="structure/parents/parent/@xlink:title" />
+            <hidden var="structure/parents/parent/@xlink:href" />
+            
+            <!-- hidden journal ID -->
+            <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
+            <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+
             <cell row="1" col="1" anchor="NORTHWEST" ref="edit-{type}" />
           </panel>
-
         </components>
       </editor>
     </p>

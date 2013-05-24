@@ -80,26 +80,12 @@
           <restriction name="createJournal" value="true" />
         </item>
         <item>
-          <label name="Neuer Band" ref="editorServlet">
-            <params>
-              <param name="type" value="jpvolume" />
-              <param name="step" value="author" />
-              <param name="todo" value="wnewobj" />
-              <param name="parentID" select="currentObjID" />
-            </params>
-          </label>
+          <label name="Neuer Band" ref="editorResource" path="{$currentObjID}/create/jpvolume"/>
           <restriction name="createVol" value="true" />
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
-          <label name="Neuer Artikel" ref="editorServlet">
-            <params>
-              <param name="type" value="jparticle" />
-              <param name="step" value="author" />
-              <param name="todo" value="wnewobj" />
-              <param name="parentID" select="currentObjID" />
-            </params>
-          </label>
+          <label name="Neuer Artikel" ref="editorResource" path="{$currentObjID}/create/jparticle"/>
           <restriction name="createArt" value="true" />
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>

@@ -17,16 +17,6 @@
         <include uri="classification:editor:-1:children:jportal_class_00000080" />
     </list>
     
-    <!-- parent ================================================================== -->
-    <panel id="parent_input_hided">
-        <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
-        <hidden var="structure/parents/@heritable" default="true" />
-        <hidden var="structure/parents/parent/@inherited" default="0" />
-        <hidden var="structure/parents/parent/@xlink:type" default="locator" />
-        <hidden var="structure/parents/parent/@xlink:title" />
-        <hidden var="structure/parents/parent/@xlink:href"/>
-    </panel>
-    
     <!--get person / institution list ======================================================-->
     <panel id="getPersonAndInst">
         <!-- <cell row="1" col="1" colspan="2" anchor="NORTHWEST" ref="personInst_label" /> -->

@@ -40,5 +40,4 @@
   <xsl:template mode="journalID" match="journalID">
     <xsl:value-of select="." />
   </xsl:template>
-
 </xsl:stylesheet>

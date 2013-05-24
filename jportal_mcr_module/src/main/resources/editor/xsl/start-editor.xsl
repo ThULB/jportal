@@ -2,10 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="/xsl/copynodes.xsl" />
 
-  <xsl:param name="type" />
-  <xsl:param name="mcrid" />
-  <xsl:param name="paramsXML" />
-
   <xsl:param name="paramsXML" />
 
   <xsl:template match="@*[contains(., '{') and contains(., '}')]">

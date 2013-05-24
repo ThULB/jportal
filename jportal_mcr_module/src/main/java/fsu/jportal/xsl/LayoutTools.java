@@ -119,6 +119,11 @@ public class LayoutTools {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/hidden_templates/hidden_template/text()");
         return infoProvider.get(new SimpleText());
     }
+    
+    public String getJournalID(String mcrID) throws TransformerException, JDOMException, IOException, SAXException {
+        InfoProvider infoProvider = new InfoProvider(mcrID, "/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID/text()");
+        return infoProvider.get(new SimpleText());
+    }
 
     public String getMaintitle(String journalID) throws TransformerException, JDOMException, IOException, SAXException {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/maintitles/maintitle/text()");
