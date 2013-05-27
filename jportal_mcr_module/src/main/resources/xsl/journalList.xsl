@@ -4,7 +4,6 @@
     exclude-result-prefixes="mcr i18n">
 
     <xsl:include href="MyCoReLayout.xsl" />
-    <xsl:include href="objecttypes.xsl" />
 
     <xsl:param name="selected" />
 
