@@ -12,16 +12,16 @@ import javax.xml.transform.stream.StreamSource;
 import org.mycore.common.MCRConfiguration;
 
 public class JournalFilesResolver implements URIResolver {
+
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         href = href.substring(href.indexOf(":")+1);
-        
         try {
-            return new StreamSource(getJournalFile(href));
+            FileInputStream fis = getJournalFile(href);
+            return fis != null ? new StreamSource(fis) : null;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        
         return null;
     }
 
@@ -33,7 +33,6 @@ public class JournalFilesResolver implements URIResolver {
                 return new FileInputStream(journalFile);
             }
         }
-        
         return null;
     }
 }
