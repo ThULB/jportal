@@ -28,19 +28,21 @@
           <panel id="editor-{type}">
             <hidden var="@ID" default="{mcrid}" />
             <hidden var="@label" />
-            
-            <!-- parents -->
-            <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
-            <hidden var="structure/parents/@heritable" default="true" />
-            <hidden var="structure/parents/parent/@inherited" default="0" />
-            <hidden var="structure/parents/parent/@xlink:type" default="locator" />
-            <hidden var="structure/parents/parent/@xlink:title" />
-            <hidden var="structure/parents/parent/@xlink:href" />
-            
-            <!-- hidden journal ID -->
-            <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
-            <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
-            <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+
+            <insert for="jpvolume jparticle">
+              <!-- parents -->
+              <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
+              <hidden var="structure/parents/@heritable" default="true" />
+              <hidden var="structure/parents/parent/@inherited" default="0" />
+              <hidden var="structure/parents/parent/@xlink:type" default="locator" />
+              <hidden var="structure/parents/parent/@xlink:title" />
+              <hidden var="structure/parents/parent/@xlink:href" />
+
+              <!-- hidden journal ID -->
+              <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
+              <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
+              <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+            </insert>
 
             <cell row="1" col="1" anchor="NORTHWEST" ref="edit-{type}" />
           </panel>
