@@ -30,7 +30,7 @@
           <td>
             <xsl:variable name="selectBox" select="document('classification:editor:-1:children:jportal_laws_territory')" />
             <select id="territory">
-              <option value=""><xsl:value-of select="i18n:translate('editor.search.choose')" /></option>
+              <option value=""><xsl:value-of select="i18n:translate('editor.search.all')" /></option>
               <xsl:for-each select="$selectBox/items/item">
                 <option value="{@value}"><xsl:value-of select="label" /></option>
               </xsl:for-each>

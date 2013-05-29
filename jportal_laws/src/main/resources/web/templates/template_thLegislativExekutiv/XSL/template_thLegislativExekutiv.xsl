@@ -79,7 +79,7 @@
       </tr>
       <xsl:if test="herzogtum">
         <tr>
-          <td><b><xsl:value-of select="i18n:translate('jp.laws.register.duchy')" />:</b></td>
+          <td><b><xsl:value-of select="i18n:translate('jp.laws.register.territory')" />:</b></td>
           <td><xsl:value-of select="herzogtum" /></td>
         </tr>
       </xsl:if>
