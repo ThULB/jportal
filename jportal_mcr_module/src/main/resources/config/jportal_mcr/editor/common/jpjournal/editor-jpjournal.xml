@@ -95,23 +95,18 @@
                 <label css-style="editorHeadlines" i18n="editormask.labels.AdminGeneral" />
             </text>
         </cell>
-        <!-- datamodel coverage -->
         <cell class="editorMandatory" row="304" col="1" anchor="NORTHWEST" >
           <text>
             <label>Template: </label>
           </text>
         </cell>
         <cell row="304" col="2" anchor="NORTHWEST" ref="template_chooser" />
-        <cell class="editorMandatory" row="305" col="1" anchor="NORTHWEST" ref="datamodelCoverage_label" />
-        <cell row="305" col="2" anchor="NORTHWEST" ref="datamodelCoverage_input" />
         <cell class="editorLabel" row="310" col="1" anchor="NORTHWEST" ref="genhiddenfield1_label" />
         <cell row="310" col="2" anchor="NORTHWEST" ref="genhiddenfield1_input" />
         <cell class="editorLabel" row="320" col="1" anchor="NORTHWEST" ref="genhiddenfield2_label" />
         <cell row="320" col="2" anchor="NORTHWEST" ref="genhiddenfield2_input" />
         <cell class="editorLabel" row="330" col="1" anchor="NORTHWEST" ref="genhiddenfield3_label" />
         <cell row="330" col="2" anchor="NORTHWEST" ref="genhiddenfield3_input" />
-        <cell class="editorLabel" row="340" col="1" anchor="NORTHWEST" ref="jpjournalID_label" />
-        <cell row="340" col="2" anchor="NORTHWEST" ref="jpjournalID_input" />
         <cell class="editorLabel" row="350" col="1" anchor="NORTHWEST" ref="websitecontext_label" />
         <cell row="350" col="2" anchor="NORTHWEST" ref="websitecontext_input" />
         
@@ -348,27 +343,6 @@
         </cell>
     </panel>
     <!-- ================================================================== -->
-    <panel id="datamodelCoverage_input">
-        <hidden var="metadata/dataModelCoverages/@class" default="MCRMetaClassification" />
-        <hidden var="metadata/dataModelCoverages/@notinherit" default="false" />
-        <hidden var="metadata/dataModelCoverages/@heritable" default="false" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dataModelCoverages/dataModelCoverage">
-            <repeater min="0" max="10" anchor="NORTHWEST" ref="datamodelCoverage_input_repeater" />
-        </cell>
-    </panel>
-    <!-- repeater -->
-    <panel id="datamodelCoverage_input_repeater">
-        <hidden var="@classid" default="jportal_class_00000067" />
-        <cell col="1" row="2" anchor=" NORTHWEST" ref="datamodelCoverage_input_repeater_list" var="@categid" />
-    </panel>
-    <!-- category list -->
-    <list id="datamodelCoverage_input_repeater_list" width="300" type="dropdown">
-        <item value="">
-            <label xml:lang="de">bitte wählen</label>
-        </item>
-        <include uri="classification:editor:-1:children:jportal_class_00000067" />
-    </list>
-    <!-- ================================================================== -->
     <panel id="template_chooser">
         <hidden var="metadata/hidden_templates/@class" default="MCRMetaLangText" />
         <hidden var="metadata/hidden_templates/@notinherit" default="false" />
@@ -411,12 +385,6 @@
             <include uri="classification:editor:-1:children:jportal_class_00000003" />
         </list>
 
-    <!-- jpjournalID ================================================================== -->
-    <panel id="jpjournalID_input">
-        <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
-        <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
-        <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile32" var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-    </panel>
     <!-- rubricsID ================================================================== -->
     <panel id="rubricID_input">
         <hidden var="metadata/hidden_rubricsID/@class" default="MCRMetaLangText" />

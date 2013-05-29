@@ -70,8 +70,8 @@
             <mcrmetalink name="successor" class="MCRMetaLink" minOccurs='0' maxOccurs='unbounded' />
         </element>
         <!-- data model coverage -->
-        <element name="dataModelCoverages" minOccurs='1' maxOccurs='1'>
-            <mcrmetaclassification name="dataModelCoverage" class="MCRMetaClassification" minOccurs='1' maxOccurs='1' />
+        <element name="dataModelCoverages" minOccurs='0' maxOccurs='1'>
+            <mcrmetaclassification name="dataModelCoverage" class="MCRMetaClassification" minOccurs='0' maxOccurs='1' />
         </element>
         <!-- content classifications -->
         <element name="contentClassis1" minOccurs='0' maxOccurs='1'>

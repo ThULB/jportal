@@ -7,6 +7,9 @@
   <section title="{title}" xml:lang="de" />
   <section xml:lang="all">
     <p class="editorform">
+      <div class="editorHeadlines jp-layout-maintitle">
+        <placeholder paramName="title" />
+      </div>
       <editor id="editor-{type}">
         <source uri="{sourceUri}" />
         <cancel url="{cancelUrl}" />
@@ -29,20 +32,18 @@
             <hidden var="@ID" default="{mcrid}" />
             <hidden var="@label" />
 
-            <insert for="jpvolume jparticle">
-              <!-- parents -->
-              <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
-              <hidden var="structure/parents/@heritable" default="true" />
-              <hidden var="structure/parents/parent/@inherited" default="0" />
-              <hidden var="structure/parents/parent/@xlink:type" default="locator" />
-              <hidden var="structure/parents/parent/@xlink:title" />
-              <hidden var="structure/parents/parent/@xlink:href" />
+            <!-- parents -->
+            <hidden var="structure/parents/@class" default="MCRMetaLinkID" />
+            <hidden var="structure/parents/@heritable" default="true" />
+            <hidden var="structure/parents/parent/@inherited" default="0" />
+            <hidden var="structure/parents/parent/@xlink:type" default="locator" />
+            <hidden var="structure/parents/parent/@xlink:title" />
+            <hidden var="structure/parents/parent/@xlink:href" />
 
-              <!-- hidden journal ID -->
-              <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
-              <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
-              <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-            </insert>
+            <!-- hidden journal ID -->
+            <hidden var="metadata/hidden_jpjournalsID/@class" default="MCRMetaLangText" />
+            <hidden var="metadata/hidden_jpjournalsID/@heritable" default="true" />
+            <hidden var="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
 
             <cell row="1" col="1" anchor="NORTHWEST" ref="edit-{type}" />
           </panel>

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <imports>
-<!--     <include uri="webapp:editor/imports-jpcommon.xml" /> -->
-<!--     <include uri="webapp:editor/imports-jplabelsHelptexts.xml" /> -->
     <panel id="edit-jpinst" lines="on">
-<!--         <hidden var="ID" /> -->
-<!--         <hidden var="label" /> -->
         <hidden var="metadata/@lang" default="de" />
         <hidden var="service/servdates" descendants="true" />
         <hidden var="service/servacls" descendants="true" />

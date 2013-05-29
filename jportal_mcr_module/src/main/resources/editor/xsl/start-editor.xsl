@@ -20,8 +20,4 @@
     <xsl:variable name="paramName" select="@paramName" />
     <xsl:value-of select="$paramsXML/params/param[@name=$paramName]/@value"/>
   </xsl:template>
-  
-  <xsl:template match="insert[contains(@for, $paramsXML/params/param[@name='type']/@value)]">
-    <xsl:apply-templates select="*"/>
-  </xsl:template>
 </xsl:stylesheet>

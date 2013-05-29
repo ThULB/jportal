@@ -386,10 +386,10 @@
 <xsd:attribute use="optional" type="xsd:boolean" name="notinherit"/>
 </xsd:complexType>
 </xsd:element>
-<xsd:element maxOccurs="1" minOccurs="1" name="dataModelCoverages">
+<xsd:element maxOccurs="1" minOccurs="0" name="dataModelCoverages">
 <xsd:complexType>
 <xsd:sequence>
-<xsd:element maxOccurs="1" minOccurs="1" name="dataModelCoverage">
+<xsd:element maxOccurs="1" minOccurs="0" name="dataModelCoverage">
 <xsd:complexType>
 <xsd:attribute type="mcrobjectid" use="required" name="classid"/>
 <xsd:attribute type="mcrcategory" use="required" name="categid"/>

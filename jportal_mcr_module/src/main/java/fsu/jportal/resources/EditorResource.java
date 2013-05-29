@@ -62,7 +62,7 @@ public class EditorResource {
             paramsXML.put("cancelUrl", cancelURL);
         }
         
-        initEditor(type, paramsXML);
+        initEditor("create", type, paramsXML);
     }
 
     @GET
@@ -82,12 +82,12 @@ public class EditorResource {
             e.printStackTrace();
         }
         
-        initEditor(type, paramsXML);
+        initEditor("update", type, paramsXML);
     }
 
-    private void initEditor(String type, ParamsXML paramsXML) {
+    private void initEditor(String method, String type, ParamsXML paramsXML) {
         paramsXML.put("type", type);
-        String title = MCRTranslation.translateWithBaseName(type + ".title", "editor.i18n.labels");
+        String title = MCRTranslation.translateWithBaseName(method + "." + type + ".title", "editor.i18n.labels");
         paramsXML.put("title", title);
         String validationMsg = MCRTranslation.translateWithBaseName("validationMsg", "editor.i18n.labels");
         paramsXML.put("validationMsg", validationMsg);
