@@ -24,7 +24,7 @@
   <xsl:variable name="isCalendar" select="$listType = 'calendar'" />
   <xsl:variable name="isOnlineJournal" select="$listType = 'online'" />
 
-  <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or $isCalendar or $isOnlineJournal or $updatePerm = 'true' or $deletePerm = 'true' or $dataModel = 'datamodel-jpjournal.xsd'" />
+  <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or $isCalendar or $updatePerm = 'true' or $deletePerm = 'true'" />
 
   <xsl:template priority="9" match="/mycoreobject">
 
