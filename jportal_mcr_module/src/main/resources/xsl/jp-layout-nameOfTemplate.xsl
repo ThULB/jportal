@@ -3,6 +3,7 @@
   xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan">
   <xsl:variable name="editorForm" select="'editor-jpjournal editor-jpvolume editor-jparticle'"></xsl:variable>
   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage/section/jpsearch|/MyCoReWebPage/section/jpadvancedsearch|/MyCoReWebPage/journalID"></xsl:variable>
+  
   <xsl:template name="nameOfTemplate">
     <xsl:apply-templates mode="nameOfTemplate"
       select="$tagsWithTemplateInfo" />

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jportal_imprint">
+  <import file="${basedir}/common-modules.xml" />
+  <import file="${basedir}/build.xml" />
+
+  <property name="module.directory" location="${ant.file}/.." />
+  <property file="${module.directory}/build.properties" />
+  <property name="module.jar" location="${build.lib}/${module.jar.name}" />
+
+    <!-- CREATE WEB APPLICATION -->
+  <target name="create.webapp">
+    <echo>JPortal imprint webapp</echo>
+
+    <unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+      <fileset file="${module.jar}" />
+      <patternset>
+        <include name="xsl/**" />
+      </patternset>
+      <regexpmapper from="^(xsl/)(.*)" to="\2" />
+    </unjar>
+
+    <unjar dest="${build.webapps}" overwrite="true">
+      <fileset file="${module.jar}" />
+      <patternset>
+        <include name="web/**" />
+      </patternset>
+      <regexpmapper from="^(web/)(.*)" to="\2" />
+    </unjar>
+
+  </target>
+
+</project>

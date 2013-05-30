@@ -46,9 +46,13 @@
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
+  <xsl:variable name="journalID">
+    <xsl:call-template name="getJournalID" />
+  </xsl:variable>
   <xsl:variable name="template">
     <xsl:call-template name="nameOfTemplate" />
   </xsl:variable>
+  
   <xsl:variable name="templateResourcePath" select="concat('templates/', $template, '/')" />
   <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/', $template, '/')" />
 
@@ -105,11 +109,8 @@
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
-        
-        
+
         <!-- TODO: don't init iview2 if no image is available -->
         <xsl:call-template name="initIview2JS" />
 
@@ -191,9 +192,6 @@
                     <xsl:value-of select="$qt" />
                   </xsl:if>
                 </xsl:variable>
-                <xsl:variable name="journalID">
-                  <xsl:call-template name="getJournalID" />
-                </xsl:variable>
                 <xsl:choose>
                   <xsl:when test="$journalID != ''">
                     <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift"></input>
@@ -244,7 +242,20 @@
             <xsl:otherwise>
                 <xsl:apply-templates />
             </xsl:otherwise>
-          </xsl:choose>   
+          </xsl:choose>
+
+          <!-- call dynamic template_*.xsl -->
+          <xsl:if test="$journalID != ''">
+            <xsl:variable name="templateXML">
+              <template id="{$template}" mcrID="{$journalID}">
+              </template>
+            </xsl:variable>
+            <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template" >
+              <!-- mcrObj is node mycoreobject root -->
+              <xsl:with-param name="mcrObj" select="document(concat('mcrobject:', $journalID))/mycoreobject"/>
+            </xsl:apply-templates>
+          </xsl:if>
+
         </div>
         <!-- footer -->
         <xsl:call-template name="jp.layout.footer" />
@@ -253,12 +264,6 @@
           <xsl:copy-of select="$objectEditing/deleteMsg" />
         </xsl:if>
         <div id="viewerContainerWrapper" />
-        <div id="ckeditorContainer">
-          <div class="jp-layout-message-background"></div>
-          <div id="ckeditorframe">
-            <textarea id="ckeditor"></textarea>
-          </div>
-        </div>
         <!-- add html stuff to end of body for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/body/*"/>
       </body>

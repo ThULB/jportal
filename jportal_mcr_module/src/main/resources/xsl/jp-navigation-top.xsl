@@ -11,6 +11,21 @@
           <xsl:value-of select="layoutTools:getUserName()"/>
         </li>
       </xsl:if>
+      <li>
+        <xsl:variable name="imprintHref">
+          <xsl:choose>
+            <xsl:when test="$journalID != ''">
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/imprint/webpage/', $journalID)" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <a href="{$imprintHref}">
+          <xsl:value-of select="i18n:translate('jp.site.imprint')" />
+        </a>
+      </li>
       <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>

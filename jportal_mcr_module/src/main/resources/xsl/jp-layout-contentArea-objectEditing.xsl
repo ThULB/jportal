@@ -44,13 +44,17 @@
         <item>
           <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
         </item>
-        <item id="ckeditorButton">
+        <item id="ckeditorButton" class="objectEditingButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Beschreibung bearbeiten" />
         </item>
-        <item id="diagButton">
+        <item id="diagButton" class="objectEditingButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" />
+        </item>
+        <item id="imprintButton" class="objectEditingButton">
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Impressum auswählen" />
         </item>
         <item>
           <label name="Datei hochladen" ref="editorServlet">
@@ -143,7 +147,6 @@
         console.log(exception);
         alert(exception);
       }
-
       $(document).ready(function() {
         $("#diagButton").click(function() {
           classeditor.settings.resourceURL = '<xsl:value-of select="$journalRecourceURL"/>';
@@ -154,7 +157,6 @@
         $("#derivMergeButton").click(function(){
           mergeDerivates(<xsl:value-of select="$currentObjID"/>)
         });
-        
       });
     </script>
   </xsl:template>
@@ -169,6 +171,61 @@
     </script>
   </xsl:template>
 
+  <xsl:template name="initImprint">
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
+    <script type="text/javascript">
+      $(document).ready(function() {
+        jp.imprint.setWebApplicationBaseURL('<xsl:value-of select="$WebApplicationBaseURL" />');
+        var journalID = '<xsl:value-of select="$currentObjID"/>';
+        var imprintContainer = $("&lt;div class='imprintContainer' /&gt;").appendTo($("#jp-content-LColumn"));
+        var imprintButton = $("#imprintButton");
+
+        var select = null;
+        var editor = null;
+
+        imprintButton.one('click', function() {
+          imprintButton.css("text-decoration", "none");
+          imprintButton.css("cursor", "default");
+
+          select = new jp.imprint.Select(journalID);
+          select.onChange = function(imprintID) {
+            if(editor != null) {
+              editor.update(imprintID);
+            }
+          };
+          select.onRender = function() {
+            imprintButton.html(select.domNode);
+          };
+          select.onEdit = function() {
+            editor = new jp.imprint.Editor(select.getValue());
+            editor.onBeforeBuild = function() {
+              imprintContainer.html(editor.domNode);
+            };
+            editor.onClose = function() {
+              editor = null;
+            };
+            editor.onBeforeSave = function(imprintID, oldID, data) {
+              if(imprintID != oldID &amp;&amp; select.has(imprintID)) {
+                return confirm("Es existiert bereits ein Impressum mit dem Namen '" + imprintID + "'. Wollen Sie das Impressum überschreiben?");
+              }
+              return true;
+            };
+            editor.onSave = function(imprintID) {
+              select.setValue(imprintID);
+            };
+            editor.render();
+          };
+          select.onRemove = function(imprintID) {
+            if(editor != null) {
+              editor.close();
+            }
+          };
+          select.render();
+        });
+      });
+    </script>
+  </xsl:template>
+
   <xsl:template name="objectEditing">
     <xsl:param name="id" />
     <xsl:param name="dataModel" />
@@ -177,18 +234,20 @@
       <xsl:apply-templates mode="menuItem" select="$menu/item" />
 
       <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
+        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
         <xsl:call-template name="classificationEditorDiag" />
         <xsl:call-template name="introEditorDiag" />
+        <xsl:call-template name="initImprint" />
       </xsl:if>
-    <script type="text/javascript">
-      $(document).ready(function() {
-      $("#derivMergeButton").click(function(){
-          mergeDerivates('<xsl:value-of select="$currentObjID"/>')
-        });
-      })
-    </script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+        $("#derivMergeButton").click(function(){
+            mergeDerivates('<xsl:value-of select="$currentObjID"/>')
+          });
+        })
+      </script>
     </menu>
-    
 
     <deleteMsg>
       <xsl:choose>

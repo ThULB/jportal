@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="layoutTools acl mcr">
+  xmlns:xalan="http://xml.apache.org/xalan" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:mcr="http://www.mycore.org/" exclude-result-prefixes="layoutTools acl mcrxml mcr">
 
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="RequestURL" />
@@ -76,7 +76,7 @@
       </div>
     </xsl:variable>
     <xsl:variable name="LColumn" select="xalan:nodeset($LColumnHTML)" />
-    <xsl:if test="$LColumn/div/ul/li">
+    <xsl:if test="$LColumn/div/ul/li or not(mcrxml:isCurrentUserGuestUser())">
       <xsl:copy-of select="$LColumn/*" />
     </xsl:if>
 
@@ -107,16 +107,6 @@
         </xsl:if>
       </div>
     </xsl:if>
-
-    <!-- call dynamic template_*.xsl -->
-    <xsl:variable name="templateXML">
-      <template id="{$template}" mcrID="{@ID}">
-      </template>
-    </xsl:variable>
-    <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template" >
-      <!-- mcrObj is node mycoreobject root -->
-      <xsl:with-param name="mcrObj" select="."/>
-    </xsl:apply-templates>
 
   </xsl:template>
 

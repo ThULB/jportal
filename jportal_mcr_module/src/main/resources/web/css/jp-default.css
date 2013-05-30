@@ -27,6 +27,9 @@ body {
 .hidden {
 	display: none;
 }
+.pointer {
+	cursor: pointer;
+}
 .jp-layout-index h1 {
 	font-size: 1.2em;
 }
@@ -780,8 +783,8 @@ body {
 	border-left: 1px solid;
 	float: right;
 	margin-left: -1px;
-	padding: 0 29px 20px 58px;
-	width: 192px;
+	padding: 0 0 20px 28px;
+	width: 251px;
 }
 
 .jp-layout-object-editing {
@@ -809,13 +812,20 @@ body {
 	padding-top: 10px;
 }
 
-#diagButton,#ckeditorButton, #derivMergeButton{
+.objectEditingButton {
 	color: #494949;
 	cursor: pointer;
 }
 
-#diagButton:hover,#ckeditorButton:hover,#derivMergeButton:hover {
+.objectEditingButton:hover {
 	text-decoration: underline;
+}
+
+.objectEditingButton select {
+	width: 200px;
+}
+.objectEditingButton i {
+	margin-left: 6px;
 }
 
 .jp-layout-tableOfContent>ul {
@@ -1125,19 +1135,15 @@ body {
 .ckeditorButtons{
 	list-style-type: none;
 	margin-top: 15px;
-	float: right;
+	text-align: right;
 }
 
-.ckeditorButtons li{
-	display: inline-block;
+ul.ckeditorButtons li {
+    display: inline-block;
+    margin: 0 5px;
 }
-
-#ckeditorCancelButton {
-	margin-right: 10px;
-}
-
-#ckeditorCancelButton {
-	margin-left: 10px;
+ul.ckeditorButtons li:last-child {
+	margin-right: 0;
 }
 
 .jp-layout-maintitle, #searchRightNavi, #resultList, #artList>li, #jp-breadcrumb-container, .jp-layout-content-LCol, .jp-layout-content-LCol >ul >li, .jp-layout-content-RCol, .jp-layout-object-editing + .jp-layout-derivateLinks, .jp-layout-object-editing > li, #jp-content-Bottom{

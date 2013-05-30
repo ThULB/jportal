@@ -43,15 +43,6 @@
       </xsl:when>
     </xsl:choose>
 
-    <!-- call dynamic template_*.xsl -->
-    <xsl:if test="$searchjournalID != ''">
-      <xsl:variable name="templateXML">
-        <template id="{$template}" />
-      </xsl:variable>
-      <xsl:apply-templates select="xalan:nodeset($templateXML)/template" mode="template">
-        <xsl:with-param name="mcrObj" select="document(concat('mcrobject:', $searchjournalID))/mycoreobject" />
-      </xsl:apply-templates>
-    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
