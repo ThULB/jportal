@@ -22,8 +22,9 @@
         <module>jportal_login_module</module>
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
-    <module>jportal_acl_ip_editor_module</module>
-  </modules>
+        <module>jportal_acl_ip_editor_module</module>
+        <module>jportal_imprint</module>
+	</modules>
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
