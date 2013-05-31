@@ -11,7 +11,7 @@
   <xsl:template match="/mycoreobject" mode="template_DynamicLayoutTemplates">
     <!-- get template ID from java -->
     <xsl:variable name="template_DynamicLayoutTemplates" select="layoutDetector:getTemplateID(@ID)" />
-    <xsl:variable name="journal" select="document(concat('mcrobject:', metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
 
     <xsl:variable name="published">
       <xsl:value-of select="$journal//date[@type='published']" />
@@ -54,7 +54,7 @@
       return;
       }
       $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
-      var maintitle = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
+      var maintitle = '<xsl:value-of select="layoutTools:getMaintitle($journalID)" />';
       $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
       $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 72) + '</div>');
       if (name.length > 40){

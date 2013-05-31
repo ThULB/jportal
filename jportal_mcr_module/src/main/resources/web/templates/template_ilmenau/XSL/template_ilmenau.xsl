@@ -8,7 +8,7 @@
 
   <xsl:template match="/mycoreobject" mode="template_ilmenau">
   	<xsl:variable name="journalId">
-		<xsl:value-of select="document(concat('mcrobject:',/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject/@ID" />
+		<xsl:value-of select="document(concat('mcrobject:',$journalID))/mycoreobject/@ID" />
 	</xsl:variable>
     <script type="text/javascript">
       $(document).ready(function() {

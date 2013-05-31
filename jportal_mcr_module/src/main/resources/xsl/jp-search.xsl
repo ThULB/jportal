@@ -32,9 +32,6 @@
       <xsl:when test="$mode = 'laws.form'">
         <xsl:apply-templates select="." mode="laws.form" />
       </xsl:when>
-      <xsl:when test="$mode = 'laws.result'">
-        <xsl:apply-templates select="." mode="laws.result" />
-      </xsl:when>
       <xsl:when test="$mode = 'subselect.form'">
         <xsl:apply-templates select="." mode="subselect.form" />
       </xsl:when>

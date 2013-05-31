@@ -9,7 +9,7 @@
     <xsl:param name="mcrObj"/>
     <script type="text/javascript">
       $(document).ready(function() {
-        var name = '<xsl:value-of select="layoutTools:getMaintitle($mcrObj/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
+        var name = '<xsl:value-of select="layoutTools:getMaintitle($journalID)" />';
         $('#logo').prepend('<h1 class="logoTitle">' + truncate(name, 180)  + '</h1>');
       });
     </script>

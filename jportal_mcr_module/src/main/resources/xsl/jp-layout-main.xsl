@@ -245,14 +245,13 @@
           </xsl:choose>
 
           <!-- call dynamic template_*.xsl -->
-          <xsl:if test="$journalID != ''">
+          <xsl:if test="$template != ''">
             <xsl:variable name="templateXML">
-              <template id="{$template}" mcrID="{$journalID}">
-              </template>
+              <template id="{$template}" />
             </xsl:variable>
             <xsl:apply-templates select="xalan:nodeset($templateXML)" mode="template" >
               <!-- mcrObj is node mycoreobject root -->
-              <xsl:with-param name="mcrObj" select="document(concat('mcrobject:', $journalID))/mycoreobject"/>
+              <xsl:with-param name="mcrObj" select="/mycoreobject"/>
             </xsl:apply-templates>
           </xsl:if>
 

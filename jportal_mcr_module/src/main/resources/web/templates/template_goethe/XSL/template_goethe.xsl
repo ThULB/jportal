@@ -12,7 +12,7 @@
 
   <xsl:template match="/mycoreobject" mode="template_goethe">
     <!-- get template ID from java -->
-    <xsl:variable name="journal" select="document(concat('mcrobject:', metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
 
     <xsl:variable name="published">
 		<xsl:value-of select="$journal//date[@type='published']" />
@@ -36,7 +36,7 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
-        var name = '<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />';
+        var name = '<xsl:value-of select="layoutTools:getMaintitle($journalID)" />';
         $('#logo').prepend('<h1 class="logoTitle">' + truncate(name, 70)  + '</h1>');
         $('#logo').prepend('<div class="logoDate"><xsl:value-of select="$pubYear"/></div>');
       });

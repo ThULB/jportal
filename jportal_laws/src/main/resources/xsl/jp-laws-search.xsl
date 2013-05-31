@@ -8,14 +8,13 @@
   <xsl:param name="rows" select="'10'" />
 
   <xsl:template match="jpsearch" mode="laws.form">
-    <xsl:call-template name="jp.laws.search.css" />
     <xsl:call-template name="jp.laws.search.js" />
-
+    <link href="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/CSS/template_thLegislativExekutiv.css" rel="stylesheet" type="text/css" />
     <p>
       <xsl:value-of select="i18n:translate('jp.laws.search.intro')" />
     </p>
 
-    <form id="advancedSearchForm" action="/jp-search.xml" onSubmit="return buildQuery()">
+    <form id="advancedSearchForm" action="/jp-search.xml" onSubmit="return buildQuery()" class="jp-laws-expertsearch">
       <input type="hidden" name="XSL.mode" value="hidden"/>
       <input type="hidden" name="XSL.returnURL" value="{$RequestURL}" />
       <input type="hidden" name="XSL.qt" id="qt" />
@@ -48,27 +47,6 @@
       </table>
       <input class="submit" type="submit" value="{i18n:translate('jp.laws.search')}" />
     </form>
-  </xsl:template>
-
-  <xsl:template name="jp.laws.search.css">
-    <style type="text/css">
-      .searchbox {
-      }
-      .searchbox table th {
-        padding-right: 20px;
-        text-align: left;
-      }
-      .searchbox table tr {
-        padding-bottom: 8px;
-      }
-      .searchbox .seperator {
-        padding-right: 3px;
-        padding-left: 3px;
-      }
-      .searchbox .submit {
-        margin-top: 12px;
-      }
-    </style>
   </xsl:template>
 
   <xsl:template name="jp.laws.search.js">

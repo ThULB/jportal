@@ -8,11 +8,11 @@
 
   <xsl:template match="/template[@id='template_thLegislativExekutiv']" mode="template">
     <xsl:param name="mcrObj"/>
+    <xsl:call-template name="jp.laws.js" />
     <xsl:apply-templates select="$mcrObj" mode="template_thLegislativExekutiv" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_thLegislativExekutiv">
-    <xsl:call-template name="jp.laws.js" />
     <xsl:if test="contains(@ID, 'jpvolume')">
       <xsl:variable name="register" select="laws:getRegister(@ID)" />
       <xsl:if test="$register">
@@ -44,7 +44,7 @@
 	<script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
-        setMaintitle('<xsl:value-of select="layoutTools:getMaintitle(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />');
+        setMaintitle('<xsl:value-of select="layoutTools:getMaintitle($journalID)" />');
         setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
         linkLawsToIview();
       });
@@ -92,7 +92,7 @@
     </xsl:apply-templates>
 
   </xsl:template>
-  
+
   <!-- ================================================================================= -->
 
   <xsl:template match="gesetze" mode="template_thLegislativExekutiv">

@@ -8,7 +8,7 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_addrBookTh">
-    <xsl:variable name="datesInfo" select="layoutTools:getDatesInfo(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
+    <xsl:variable name="datesInfo" select="layoutTools:getDatesInfo($journalID)" />
     <script type="text/javascript">
       $(document).ready(function() {		
         $('#logo').prepend('<xsl:apply-templates mode="logoTitle" select="$datesInfo"/>');
