@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  exclude-result-prefixes="mcrxml i18n">
+  xmlns:imprint="xalan://fsu.jportal.util.ImprintUtil" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" exclude-result-prefixes="mcrxml i18n imprint">
 
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
@@ -14,7 +14,7 @@
       <li>
         <xsl:variable name="imprintHref">
           <xsl:choose>
-            <xsl:when test="$journalID != ''">
+            <xsl:when test="$journalID != '' and imprint:has($journalID)">
               <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/imprint/webpage/', $journalID)" />
             </xsl:when>
             <xsl:otherwise>

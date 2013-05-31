@@ -1,4 +1,4 @@
-package org.mycore.frontend;
+package fsu.jportal.xml;
 
 import java.io.IOException;
 import java.io.Reader;

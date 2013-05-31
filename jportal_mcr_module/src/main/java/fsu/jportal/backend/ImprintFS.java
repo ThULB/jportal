@@ -1,4 +1,4 @@
-package fsu.jportal.resources;
+package fsu.jportal.backend;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,7 +29,7 @@ public class ImprintFS {
     private static final Path IMPRINT_DIR;
 
     static {
-        String baseDir = MCRConfiguration.instance().getString("jp.imprint.baseDir", "/data/imprint");
+        String baseDir = MCRConfiguration.instance().getString("JP.imprint.baseDir", "/data/imprint");
         IMPRINT_DIR = Paths.get(baseDir);
         if(!Files.exists(IMPRINT_DIR)) {
             try {

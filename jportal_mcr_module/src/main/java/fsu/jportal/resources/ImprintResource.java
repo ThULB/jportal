@@ -34,20 +34,21 @@ import org.jdom2.transform.JDOMSource;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.common.MCRLinkTableManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.MCRWebpage;
 
 import com.google.gson.Gson;
 
+import fsu.jportal.backend.ImprintFS;
+import fsu.jportal.util.ImprintUtil;
+import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
+
+import static fsu.jportal.util.ImprintUtil.*;
 
 @Path("imprint")
 //@MCRRestrictedAccess(IPRuleAccess.class)
 public class ImprintResource {
 
     private static final Logger LOGGER = Logger.getLogger(ImprintResource.class);
-
-    public static final String IMPRINT_TYPE = "imprint";
 
     @GET
     @Path("retrieve/{imprintID}")
@@ -116,7 +117,10 @@ public class ImprintResource {
     @Path("webpage/{objID}")
     @Produces(MediaType.TEXT_HTML)
     public Response webpage(@PathParam("objID") String objID, @Context HttpServletRequest request, @Context HttpServletResponse response) {
-        String imprintID = getImprintID(objID);
+        String imprintID = ImprintUtil.getImprintID(objID);
+        if(imprintID == null) {
+            return Response.status(Status.NOT_FOUND).build();
+        }
         Source xmlSource = null;
         try {
             xmlSource = ImprintFS.receive(imprintID);
@@ -124,7 +128,7 @@ public class ImprintResource {
             LOGGER.error("while retrieving imprint " + imprintID, exc);
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
         }
-        InputStream guiXSL = getClass().getResourceAsStream("/jportal_imprint/gui/xsl/webpage.xsl");
+        InputStream guiXSL = getClass().getResourceAsStream("/xsl/jp-imprint-webpage.xsl");
         JDOMResult result = new JDOMResult();
         Map<String, Object> params = new HashMap<>();
         params.put("journalID", objID);
@@ -194,22 +198,6 @@ public class ImprintResource {
         if(!imprintID.equals("null")) {
             ltm.addReferenceLink(objID, imprintID, IMPRINT_TYPE, null);
         }
-    }
-
-    /**
-     * Returns the imprint of the given object id or throws a 404 not
-     * found web application exception.
-     * 
-     * @param objID mycore object id
-     * @return id of imprint
-     */
-    protected String getImprintID(String objID) {
-        MCRObjectID mcrObjID = MCRObjectID.getInstance(objID);
-        Collection<String> c = MCRLinkTableManager.instance().getDestinationOf(mcrObjID, IMPRINT_TYPE);
-        if (c.isEmpty()) {
-            return null;
-        }
-        return c.iterator().next();
     }
 
 }

@@ -23,7 +23,6 @@
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
         <module>jportal_acl_ip_editor_module</module>
-        <module>jportal_imprint</module>
 	</modules>
 
     <properties>
