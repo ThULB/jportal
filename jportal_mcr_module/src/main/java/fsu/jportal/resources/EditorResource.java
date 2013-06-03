@@ -72,7 +72,7 @@ public class EditorResource {
         ParamsXML paramsXML = new ParamsXML();
         paramsXML.put("mcrid", id);
         paramsXML.put("editServlet", "UpdateObjectServlet");
-        paramsXML.put("sourceUri", "mcrobject:" + id);
+        paramsXML.put("sourceUri", "xslStyle:mycoreobject-editor:mcrobject:" + id);
         paramsXML.put("cancelUrl", "receive/" + id);
 
         try {
@@ -100,7 +100,7 @@ public class EditorResource {
         try {
             MCREditorServlet.replaceEditorElements(request, uri, editorJDOM);
             MCRJDOMContent editorReplaced = new MCRJDOMContent(editorJDOM);
-
+            
             MCRLayoutService.instance().doLayout(request, response, editorReplaced);
         } catch (IOException e) {
             e.printStackTrace();
