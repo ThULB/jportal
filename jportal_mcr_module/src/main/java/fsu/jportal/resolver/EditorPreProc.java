@@ -28,12 +28,11 @@ public class EditorPreProc implements URIResolver{
     }
  
     public ParamsXML getParams(String href) {
-        Matcher matcher = getMatcher(href, "[\\?|&]([\\w]+)=([\\w\\:/\\. ]+)");
+        Matcher matcher = getMatcher(href, "[\\?|&]([\\w]+)=([\\w\\:/\\.\\- ]+)");
         ParamsXML params = new ParamsXML();
         while(matcher.find()){
             params.put(matcher.group(1), matcher.group(2));
         }
-        
         return params;        
     }
 
@@ -55,7 +54,7 @@ public class EditorPreProc implements URIResolver{
     public Document exec(String fileName, ParamsXML paramsXML) {
         String xmlSource = "/editor/xml/" + fileName + ".xml";
         String xslSource = "/editor/xsl/" + fileName + ".xsl";
-        
+
         Map<String, Object> params = new HashMap<String, Object>();
         try {
             params.put("paramsXML", paramsXML.getDocument());
