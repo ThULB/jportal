@@ -6,7 +6,43 @@
   <section title="Imprint" xml:lang="en" />
 
   <section xml:lang="all">
-   
+    <h1>Impressum</h1>
+    <p>Die nachstehenden Informationen enthalten die gesetzlich vorgesehenen Pflichtangaben
+    zur Anbieterkennzeichung, sowie wichtige rechtliche Hinweise.</p>
+
+    <h2>Anbieter gemäß § 5 TMG</h2>
+    <span>Thüringer Universitäts- und Landesbibliothek Jena (ThULB)</span><br />
+    <span>Vertreten durch: Dr. Sabine Wefers, Leitende Bibliotheksdirektorin</span><br />
+    <span>Bibliotheksplatz 2</span><br />
+    <span>07743 Jena</span><br />
+    <span>Tel.: +49 (0) 3641 9-40000</span><br />
+    <span>Fax: +49 (0) 3641 9-40002</span>
+
+    <h2>Verantwortlicher gemäß § 55 RStV</h2>
+    <span>Dr. Sabine Wefers, Leitende Bibliotheksdirektorin</span><br />
+    <span>Thüringer Universitäts- und Landesbibliothek Jena</span><br />
+    <span>Bibliotheksplatz 2</span><br />
+    <span>07743 Jena</span><br />
+    <span>Tel.: +49 (0) 3641 9-40000</span><br />
+    <span>Fax: +49 (0) 3641 9-40002</span>
+
+    <h2>Haftungsausschluss</h2>
+    <p>Die Thüringer Universitäts- und Landesbibliothek Jena ist als Anbieter für die eigenen
+    Inhalte verantwortlich, sie übernimmt jedoch keine Gewähr für die Aktualität, Korrektheit
+    und Vollständigkeit der bereitgestellten Informationen. Für die Inhalte externer Links
+    können wir trotz sorgfältiger inhaltlicher Kontrolle keine Haftung übernehmen. Für diese
+    sind ausschließlich deren Anbieter verantwortlich.</p>
+
+    <h2>Vertretung</h2>
+    <p>Die Thüringer Universitäts- und Landesbibliothek Jena ist eine Einrichtung der
+    Friedrich-Schiller-Universität Jena. Die Friedrich-Schiller-Universität Jena ist eine
+    Körperschaft des Öffentlichen Rechts. Sie wird gesetzlich vertreten durch Rektor Prof. Dr.
+    Klaus Dicke.</p>
+
+    <h2>Umsatzsteueridentifikationsnummer</h2>
+    <p>Die Umsatzsteueridentifikationsnummer der Friedrich-Schiller-Universität lautet
+    DE 150546536.</p>
+
   </section>
 
 </MyCoReWebPage>
