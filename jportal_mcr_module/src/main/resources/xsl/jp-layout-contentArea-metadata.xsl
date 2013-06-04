@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="i18n xsi xlink ext mcrxml">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="i18n xsi xlink ext mcrxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -33,11 +34,11 @@
     <xsl:variable name="currentTagName" select="name()" />
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
     <xsl:for-each select="*[generate-id(.)=generate-id(key($currentTagName, @type)[1])]">
-      	<xsl:if test="not($currentTagName='def.note' and @type='hidden' and $isGuest)">
-	    	<xsl:call-template name="metadataField">
-        		<xsl:with-param name="fields" select="key($currentTagName, @type)" />
-        	</xsl:call-template>
-    	</xsl:if>
+      <xsl:if test="not($currentTagName='def.note' and @type='hidden' and $isGuest)">
+        <xsl:call-template name="metadataField">
+          <xsl:with-param name="fields" select="key($currentTagName, @type)" />
+        </xsl:call-template>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 
@@ -54,7 +55,8 @@
     </dd>
   </xsl:template>
 
-  <xsl:template mode="metadataFieldLabel" match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or ../@class='MCRMetaLink']">
+  <xsl:template mode="metadataFieldLabel"
+    match="*[../@class='MCRMetaLangText' or ../@class='MCRMetaXML' or ../@class='MCRMetaISO8601Date' or ../@class='MCRMetaLink']">
     <xsl:variable name="tagName" select="name()" />
     <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
   </xsl:template>
@@ -85,7 +87,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="tagName" select="concat(name(), '.', @type)" />
-    	<xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
+        <xsl:value-of select="i18n:translate($settings/i18n[@tag=$tagName])" />
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -94,6 +96,16 @@
     <xsl:if test="@inherited='0'">
       <p class="jp-layout-metadata-list">
         <xsl:value-of select="text()" />
+      </p>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLangText' and @type = 'doi']">
+    <xsl:if test="@inherited='0'">
+      <p class="jp-layout-metadata-list">
+        <a href="{text()}">
+          <xsl:value-of select="text()" />
+        </a>
       </p>
     </xsl:if>
   </xsl:template>
@@ -126,8 +138,8 @@
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaClassification']">
     <xsl:variable name="classlink" select="concat('classification:metadata:0:children:',@classid,':',@categid)" />
     <xsl:call-template name="jp.printClass">
-     	<xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
-   	</xsl:call-template>
+      <xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
+    </xsl:call-template>
     <xsl:if test="position() != last()">
       <xsl:value-of select="'; '" />
     </xsl:if>
