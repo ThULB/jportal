@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xsl:template match="structure" mode="structure">
+    <xsl:apply-templates mode="jportal.link" select="*" />
+  </xsl:template>
 
   <xsl:template match="metadata" mode="metadata">
     <xsl:apply-templates mode="jportal.metadata" select="." />
     <xsl:apply-templates mode="jportal.allMeta" select="." />
+    <xsl:apply-templates mode="jportal.link" select="*" />
   </xsl:template>
 
+  <xsl:template match="text()|@*" mode="jportal.link" />
   <xsl:template match="text()|@*" mode="jportal.metadata" />
   <xsl:template match="text()|@*" mode="jportal.allMeta" />
   <xsl:template match="text()|@*" mode="jportal.journal" />
@@ -32,7 +37,7 @@
   </xsl:template>
 
   <!-- link -->
-  <xsl:template match="*[@xlink:href]" mode="jportal.metadata">
+  <xsl:template match="*[@xlink:href]" mode="jportal.link">
     <field name="link">
       <xsl:value-of select="@xlink:href" />
     </field>
