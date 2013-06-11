@@ -18,7 +18,6 @@ public class IPClause implements MCRIPCondition {
 
     @Override
     public boolean evaluate(MCRAccessData data) {
-        LOGGER.info("Evaluate IP " + data.getIp().toString() + " for " + ipAddress.toString());
         if (ipAddress.hasRange()) {
             return isInRange(data);
         } else {
