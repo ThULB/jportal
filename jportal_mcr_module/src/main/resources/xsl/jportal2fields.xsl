@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <xsl:template match="structure" mode="structure">
-    <xsl:apply-templates mode="jportal.link" select="*" />
-  </xsl:template>
 
   <xsl:template match="metadata" mode="metadata">
     <xsl:apply-templates mode="jportal.metadata" select="." />
