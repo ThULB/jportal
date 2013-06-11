@@ -32,7 +32,7 @@
   </xsl:template>
 
   <!-- link -->
-  <xsl:template match="*[@xlink:href]" mode="jportal.link">
+  <xsl:template match="*[@xlink:href]" mode="jportal.metadata">
     <field name="link">
       <xsl:value-of select="@xlink:href" />
     </field>
