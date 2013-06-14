@@ -20,6 +20,16 @@ public class JPPersonProducer extends PersonProducer {
     }
 
     @Override
+    protected Element createNotesElement() {
+        Element defNotes = super.createNotesElement();
+        Element note = defNotes.getChild("note");
+        if(note != null) {
+            note.setAttribute("type", "visible");
+        }
+        return defNotes;
+    }
+
+    @Override
     protected String getGenderClassification() {
         return "urmel_class_00000001";
     }
