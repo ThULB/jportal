@@ -51,6 +51,9 @@ Setting properties in mycore.private.properties
   - MCR.Components.Exclude=migration20-21,iview
   - MCR.Module-solr.ServerURL=http\://localhost:8296/jportal
 
+optional develop properties
+  - MCR.LayoutService.LastModifiedCheckPeriod = 1000
+
 Add in pom.xml below the <dependencies> element
   <dependency>
     <groupId>fsu.thulb</groupId>

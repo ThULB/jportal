@@ -36,7 +36,7 @@ jp.az = {
 	},
 
 	getSearchURL: function() {
-		var url = jp.az.getHost() + '/rsc/search?wt=json&sort=maintitle_lowercase asc&rows=9999&q=';
+		var url = jp.az.getHost() + '/servlets/solr/select?wt=json&sort=maintitle_lowercase asc&rows=9999&q=';
 		var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
 		return url + additionalQuery;
 	},

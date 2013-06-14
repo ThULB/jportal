@@ -45,7 +45,7 @@ function attachToElement(element, keywords) {
 			var a = $("<a/>");
 			var categID = keyword.id.categid.replace(/ /g, "\\ ");
 			a.text(keyword.labels[0].text);
-			a.attr("href", "../jp-search.xml?XSL.qt=+volContentClassi1:" + categID + "&XSL.mode=hidden");
+			a.attr("href", "/servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + document.URL);
 			a.appendTo(li);
 		}
 	}

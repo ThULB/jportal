@@ -3,22 +3,17 @@
                 xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
                 xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xlink i18n xalan encoder">
 
-  <xsl:param name="qt" select="'*'" />
-  <xsl:param name="start" select="'0'" />
-  <xsl:param name="rows" select="'10'" />
-
-  <xsl:template match="jpsearch" mode="laws.form">
+  <xsl:template match="jp-laws-search">
     <xsl:call-template name="jp.laws.search.js" />
     <link href="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/CSS/template_thLegislativExekutiv.css" rel="stylesheet" type="text/css" />
     <p>
       <xsl:value-of select="i18n:translate('jp.laws.search.intro')" />
     </p>
 
-    <form id="advancedSearchForm" action="/jp-search.xml" onSubmit="return buildQuery()" class="jp-laws-expertsearch">
-      <input type="hidden" name="XSL.mode" value="hidden"/>
+    <form id="advancedSearchForm" action="/servlets/solr/laws" onSubmit="return buildQuery()" class="jp-laws-expertsearch">
       <input type="hidden" name="XSL.returnURL" value="{$RequestURL}" />
-      <input type="hidden" name="XSL.qt" id="qt" />
-      <input type="hidden" name="XSL.fq" id="fq" />
+      <input type="hidden" name="qry" id="qry" />
+      <input type="hidden" name="fq" id="fq" />
       <table>
         <tr>
           <th><xsl:value-of select="i18n:translate('jp.laws.search.text')" /></th>
@@ -47,6 +42,10 @@
       </table>
       <input class="submit" type="submit" value="{i18n:translate('jp.laws.search')}" />
     </form>
+  </xsl:template>
+
+  <xsl:template match="MyCoReWebPage[section/jp-laws-search]" mode="showSearchBar">
+    <xsl:value-of select="'false'" />
   </xsl:template>
 
   <xsl:template name="jp.laws.search.js">

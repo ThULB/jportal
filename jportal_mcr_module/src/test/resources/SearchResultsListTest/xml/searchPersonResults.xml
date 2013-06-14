@@ -2,7 +2,7 @@
 <solrSearch>
   <query>
     <queryTerm value="{$qt}" />
-    <queryTermField name="+journalID" value="{$searchjournalID}" />
+    <queryTermField name="+journalID" value="{$journalID}" />
     <queryTermField name="+objectType" value="{$subselect.type}" />
     <param name="qf" value="titles^10 heading^10 dates^5 allMeta^1" />
     <param name="rows" value="{$rows}" />

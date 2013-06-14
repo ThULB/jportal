@@ -2,8 +2,6 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
     <section xml:lang="all" title="Subselect">
-      <div class="">
-        <jpsubselect />
-      </div>
+      <jpsubselect />
     </section>
 </MyCoReWebPage>

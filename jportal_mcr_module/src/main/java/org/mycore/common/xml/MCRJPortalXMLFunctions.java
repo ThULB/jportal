@@ -1,7 +1,6 @@
 package org.mycore.common.xml;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,12 +13,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
-import org.mycore.services.i18n.MCRTranslation;
-import org.mycore.user2.MCRUserManager;
 import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
+import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.services.i18n.MCRTranslation;
+import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -68,25 +67,6 @@ public class MCRJPortalXMLFunctions {
         return MCRTranslation.translate("metaData.date");
     }
 
-    public static String toSolrQuery(String input) throws UnsupportedEncodingException {
-        String[] queries = input.split("#");
-        String contentQuery = null;
-        String solrQuery = null;
-        for (String query : queries) {
-            SolrFieldQuery solrFieldQuery = new SolrFieldQuery(query);
-            if (solrFieldQuery.isValueSet()) {
-                if (solrFieldQuery.field.equals("content")) {
-                    contentQuery = contentQuery == null ? solrFieldQuery.value : contentQuery + " " + solrFieldQuery.value;
-                } else {
-                    solrQuery = solrQuery == null ? solrFieldQuery.toString() : solrQuery + " " + solrFieldQuery.toString();
-                }
-            }
-        }
-        contentQuery = contentQuery == null ? null : "({!join from=returnId to=id}" + contentQuery + ")";
-        return solrQuery == null && contentQuery == null ? "*" : contentQuery == null ? solrQuery : solrQuery == null ? contentQuery
-                : contentQuery + " AND " + solrQuery;
-    }
-
     public static Document getLanguages() {
         String languagesString = MCRConfiguration.instance().getString("MCR.Metadata.Languages");
         String[] languagesArray = languagesString.split(",");
@@ -127,25 +107,6 @@ public class MCRJPortalXMLFunctions {
         return r.resolve(text);
     }
 
-    private static class SolrFieldQuery {
-        public String field;
-        public String value;
-
-        public SolrFieldQuery(String base) {
-            this.field = base.substring(0, base.indexOf("="));
-            this.value = base.substring(base.indexOf("=") + 1);
-        }
-
-        public boolean isValueSet() {
-            return this.value != null && !this.value.equals("");
-        }
-
-        @Override
-        public String toString() {
-            return "+" + this.field + ":" + this.value;
-        }
-    }
-
     public static String getLastValidPageID() {
         String page = (String) MCRSessionMgr.getCurrentSession().get("lastPageID");
         return page == null ? "" : page;
@@ -155,7 +116,7 @@ public class MCRJPortalXMLFunctions {
         MCRSessionMgr.getCurrentSession().put("lastPageID", pageID);
         return "";
     }
-    
+
     public static int getCentury(int year){
         return (int) Math.ceil((float)year /100);
     }

@@ -127,9 +127,7 @@
   </xsl:variable>
   <xsl:variable name="menu" select="xalan:nodeset($menuXML)/menu" />
 
-
   <xsl:template name="classificationEditorDiag">
-    <xsl:variable name="journalID" select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
 
     <xsl:call-template name="classeditor.loadSettings">

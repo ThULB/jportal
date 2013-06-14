@@ -10,11 +10,15 @@
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
+  <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
-  <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
+  
   <xsl:include href="jp-navigation-top.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
+
+  <xsl:include href="jp-layout-searchbar.xsl" />
+  
   <xsl:include href="xslInclude:modules" />
   <xsl:include href="xslInclude:templates" />
 
@@ -27,19 +31,12 @@
   <xsl:param name="object" />
   <xsl:param name="layout" />
   <xsl:param name="MCR.NameOfProject" />
-  <!-- For Subselect -->
-  <xsl:param name="subselect.type" select="''" />
-  <xsl:param name="subselect.session" select="''" />
-  <xsl:param name="subselect.varpath" select="''" />
-  <xsl:param name="subselect.webpage" select="''" />
-  <!-- Search modes -->
-  <xsl:param name="mode" select="'default'" />
+
   <!-- user -->
   <xsl:variable name="user" select="jpxml:getUserID()" />
 
   <xsl:variable name="languages" select="jpxml:getLanguages()/languages" />
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
-  <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
   <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
   <xsl:variable name="MainTitle" select="$MCR.NameOfProject" />
 
@@ -47,12 +44,15 @@
     <title allowHTML="true" />
   </xsl:variable>
   <xsl:variable name="journalID">
-    <xsl:call-template name="getJournalID" />
+    <xsl:call-template name="jp.getJournalID" />
   </xsl:variable>
   <xsl:variable name="template">
-    <xsl:call-template name="nameOfTemplate" />
+    <xsl:call-template name="jp.getNameOfTemplate" />
   </xsl:variable>
-  
+  <xsl:variable name="searchMode">
+    <xsl:call-template name="jp.getSearchMode" />
+  </xsl:variable>
+
   <xsl:variable name="templateResourcePath" select="concat('templates/', $template, '/')" />
   <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/', $template, '/')" />
 
@@ -94,6 +94,7 @@
         <xsl:if test="starts-with($RequestURL, concat($WebApplicationBaseURL, 'content/below/index.xml'))">
           <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow&amp;subset=latin-ext,cyrillic" rel="stylesheet" type="text/css" />
         </xsl:if>
+
 
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
@@ -164,49 +165,9 @@
         <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
         <div id="logo"></div>
 
-        <xsl:variable name="searchBarMode">
-          <xsl:variable name="controllerHook">
-            <xsl:choose>
-              <xsl:when test="/MyCoReWebPage/jp-searchbar/@mode">
-                <jpsearchBar mode="{/MyCoReWebPage/jp-searchbar/@mode}"/>  
-              </xsl:when>
-              <xsl:otherwise>
-                <jpsearchBar mode="{$mode}"/>  
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>   
-          <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar"/>
-        </xsl:variable>
+        <!-- searchbar -->
+        <xsl:call-template name="jp.layout.searchbar" />
 
-        <xsl:if test="$showSearchBar">
-          <xsl:variable name="searchBar" select="xalan:nodeset($searchBarMode)"/>
-          <xsl:choose>
-          <xsl:when test="$searchBar/div[@id='searchBar']">
-            <xsl:copy-of select="$searchBar/div[@id='searchBar']"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <div id="searchBar">
-              <form id="searchForm" action="/jp-search.xml">
-                <xsl:variable name="queryterm">
-                  <xsl:if test="$qt != '*' and $mode != 'hidden'">
-                    <xsl:value-of select="$qt" />
-                  </xsl:if>
-                </xsl:variable>
-                <xsl:choose>
-                  <xsl:when test="$journalID != ''">
-                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift"></input>
-                    <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand"></input>
-                  </xsl:otherwise>
-                </xsl:choose>
-                <input id="submitButton" type="submit" value="Suche" />
-              </form>
-            </div>
-          </xsl:otherwise>
-          </xsl:choose>
-        </xsl:if>
         <div id="main">
           <xsl:choose>
             <xsl:when test="/MyCoReWebPage[//mycoreobject]">

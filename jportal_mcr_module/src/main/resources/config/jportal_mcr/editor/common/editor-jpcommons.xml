@@ -27,13 +27,13 @@
             <text label=")" />
         </cell>
         <cell anchor="NORTHWEST" row="2" col="1">
-            <subselect id="sub.select1" type="webpage" href="jp-search.xml?XSL.subselect.type=person&amp;XSL.mode=subselect.form" i18n="jp.editor.person.select" />
+            <subselect id="sub.select1" type="webpage" href="servlets/solr/subselect?XSL.subselect.type=person" i18n="jp.editor.person.select" />
         </cell>
         <cell anchor="NORTHWEST" row="2" col="2">
-            <subselect id="sub.select2" type="webpage" href="jp-search.xml?XSL.subselect.type=jpinst&amp;XSL.mode=subselect.form" i18n="jp.editor.inst.select" />
+            <subselect id="sub.select2" type="webpage" href="servlets/solr/subselect?XSL.subselect.type=jpinst" i18n="jp.editor.inst.select" />
         </cell>
     </panel>
-    
+
     <!-- participants ================================================================== -->
     <panel id="participants_input">
         <hidden var="metadata/participants/@class" default="MCRMetaLinkID" sortnr="3" />

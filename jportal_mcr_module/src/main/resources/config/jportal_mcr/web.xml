@@ -71,3 +71,12 @@
     <servlet-name>MCRDFGThumbServlet</servlet-name>
     <url-pattern>/servlets/MCRDFGThumbnail/*</url-pattern>
 </servlet-mapping>
+
+<filter>
+  <filter-name>SolrQueryFilter</filter-name>
+  <filter-class>fsu.jportal.solr.SolrQueryFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>SolrQueryFilter</filter-name>
+  <url-pattern>/servlets/solr/*</url-pattern>
+</filter-mapping>
