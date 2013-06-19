@@ -131,7 +131,7 @@
       <xsl:value-of select="." />
     </field>
   </xsl:template>
-  
+
   <!-- identifier (gnd, pnd etc.) -->
   <xsl:template match="def.identifier/identifier | identifiers/identifier" mode="jportal.metadata">
     <field name="id.{@type}">
@@ -143,6 +143,13 @@
   <xsl:template match="sizes/size" mode="jportal.metadata">
     <field name="size">
       <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+
+  <!-- derivateLink -->
+  <xsl:template match="derivateLinks/derivateLink" mode="jportal.metadata">
+    <field name="derivateLink">
+      <xsl:value-of select="@xlink:href" />
     </field>
   </xsl:template>
 

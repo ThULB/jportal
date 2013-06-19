@@ -33,6 +33,9 @@
     <xsl:if test="name() = 'mycoreobject'">
       <field name="derivateCount"><xsl:value-of select="count(structure/derobjects/derobject)" /></field>
     </xsl:if>
+    <xsl:if test="name() = 'mycoreobject'">
+      <field name="childrenCount"><xsl:value-of select="count(structure/children/child)" /></field>
+    </xsl:if>
     <xsl:if test="name() = 'mycorederivate'">
       <field name="display"><xsl:value-of select="derivate/@display" /></field>
     </xsl:if>
