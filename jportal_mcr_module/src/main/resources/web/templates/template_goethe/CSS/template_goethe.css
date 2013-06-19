@@ -4,12 +4,12 @@
 	width: 426px;
 	padding-left: 205px;
 	height: 90px;
-	font-size: x-large;
+	font-size: 1.4rem;
 	color: #444;
 }
 
 #logo .logoDate {
 	padding: 3px 205px;
-	font-size: 12pt;
+	font-size: 1.1rem;
 	color: #444;
 }

@@ -4,14 +4,14 @@
 	position: relative;
 	left: 215px;
     top: 2px;
-    font-size: large;
+    font-size: medium;
     width: 809px;
 }
 
 #logoTitle{
 	position: relative;
 	left: 215px;
-    top: 16px;
+    top: 11px;
     font-size: x-large;
     width: 450px; 
 }

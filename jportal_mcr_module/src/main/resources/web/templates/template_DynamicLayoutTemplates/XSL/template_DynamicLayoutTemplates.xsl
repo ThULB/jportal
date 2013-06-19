@@ -56,7 +56,7 @@
       $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
       var maintitle = '<xsl:value-of select="layoutTools:getMaintitle($journalID)" />';
       $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
-      $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 72) + '</div>');
+      $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 64) + '</div>');
       if (name.length > 40){
       $('#logoTitle').css('font-size', 'large');
       }
