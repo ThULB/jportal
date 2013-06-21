@@ -22,9 +22,11 @@ public class JPPersonProducer extends PersonProducer {
     @Override
     protected Element createNotesElement() {
         Element defNotes = super.createNotesElement();
-        Element note = defNotes.getChild("note");
-        if(note != null) {
-            note.setAttribute("type", "visible");
+        if(defNotes != null) {
+            Element note = defNotes.getChild("note");
+            if(note != null) {
+                note.setAttribute("type", "visible");
+            }
         }
         return defNotes;
     }
