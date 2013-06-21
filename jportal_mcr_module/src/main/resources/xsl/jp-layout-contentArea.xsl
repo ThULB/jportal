@@ -120,7 +120,7 @@
   <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
     <li>
       <div id="intro" class="jp-layout-intro">
-        <xsl:apply-templates mode="renderView" select="*|text()" />
+        <xsl:copy-of select="@*|node()" />
       </div>
     </li>
   </xsl:template>
