@@ -12,7 +12,7 @@
     <xsl:variable name="findVolQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jpvolume'))" />
     <xsl:variable name="numPerPage_vol" select="$settings/numPerPage[@for='volume']" />
     <xsl:variable name="volumes"
-      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=position%20asc,maintitle%20asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
+      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=indexPosition%20asc,maintitle%20asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">

@@ -127,7 +127,7 @@
 
   <!-- position -->
   <xsl:template match="hidden_positions/hidden_position" mode="jportal.metadata">
-    <field name="position">
+    <field name="indexPosition">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
@@ -142,6 +142,9 @@
   <!-- size -->
   <xsl:template match="sizes/size" mode="jportal.metadata">
     <field name="size">
+      <xsl:value-of select="." />
+    </field>
+    <field name="indexPosition">
       <xsl:value-of select="." />
     </field>
   </xsl:template>

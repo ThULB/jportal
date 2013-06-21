@@ -3,7 +3,9 @@ package fsu.jportal.resolver;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -21,6 +23,8 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.common.MCRException;
+import org.mycore.common.MCRTextResolver;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetaLangText;
@@ -43,28 +47,20 @@ public class ObjectScrollResolver implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(ObjectScrollResolver.class);
 
-    private enum SearchType {
-        maintitle, size, position
-    }
-
     @Override
     public Source resolve(String href, String base) throws TransformerException {
         href = href.substring(href.indexOf(":") + 1);
-        MCRObjectID mcrId = MCRObjectID.getInstance(href);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrId);
+        MCRObjectID mcrID = MCRObjectID.getInstance(href);
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrID);
         // get parent
         MCRObjectID parentID = mcrObj.getStructure().getParentID();
         if (parentID == null) {
             return new JDOMSource(buildScrollElement());
         }
-        // get search pair
-        Pair<SearchType, String> pair = getSearchPair(mcrObj);
-        if (pair == null) {
-            return new JDOMSource(buildScrollElement());
-        }
         // build query
-        String prevQry = buildQuery(mcrId.getTypeId(), parentID.toString(), pair.key.name(), pair.value, false);
-        String nextQry = buildQuery(mcrId.getTypeId(), parentID.toString(), pair.key.name(), pair.value, true);
+        String sortValue = getSortValue(mcrObj);
+        String prevQry = buildQuery(mcrID, parentID.toString(), "indexPosition", sortValue, false);
+        String nextQry = buildQuery(mcrID, parentID.toString(), "indexPosition", sortValue, true);
         // do request
         MCRSolrURL prevURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), prevQry);
         MCRSolrURL nextURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), nextQry);
@@ -122,20 +118,32 @@ public class ObjectScrollResolver implements URIResolver {
         return attr == null ? null : attr.getValue();
     }
 
+    // +parent:jportal_jpvolume_00096085 +objectType:jparticle +((+size:"013" AND +id:{"jportal_jparticle_00166116" TO *}) (+size:{"013" TO *}) (+id:{"jportal_jparticle_00166116" TO *}))
+    
     // sort=maintitle+desc&q=%2Bparent:jportal_jpvolume_00000001+%2BobjectType:jparticle+%2Bmaintitle:{* TO "abc"}&rows=1
-    protected String buildQuery(String objectType, String parentID, String field, String value, boolean next) {
-        StringBuilder sb = new StringBuilder("sort=");
-        sb.append(field).append("+").append(next ? "asc" : "desc");
-        sb.append("&q=%2Bparent:").append(parentID);
-        sb.append("+%2BobjectType:").append(objectType);
-        sb.append("+%2B").append(field).append(":{");
-        if (next) {
-            sb.append("%22").append(value).append("%22%20TO%20*}");
+    protected String buildQuery(MCRObjectID objID, String parentID, String field, String value, boolean next) {
+        StringBuilder returnQuery = new StringBuilder("sort=");
+        value = value != null ? value : "0";
+        returnQuery.append(field).append("%20").append(next ? "asc" : "desc").append(",");
+        returnQuery.append("id").append("%20").append(next ? "asc" : "desc");
+        returnQuery.append("&rows=1&q=");
+        String qry = "+parent:{parent} +objectType:{objectType} +((+{field}:'{value}' AND +id:\\{";
+        if(next) {
+            qry += "'{id}' TO *\\}) (+{field}:\\{'{value}' TO *\\}))";
         } else {
-            sb.append("*%20TO%20%22").append(value).append("%22}");
+            qry += "* TO '{id}'\\}) (+{field}:\\{* TO '{value}'\\}))";
         }
-        sb.append("&rows=1");
-        return sb.toString();
+        Map<String, String> varMap = new HashMap<>();
+        varMap.put("parent", parentID);
+        varMap.put("id", objID.toString());
+        varMap.put("objectType", objID.getTypeId());
+        varMap.put("field", field);
+        varMap.put("value", value);
+        String resolvedQuery = new MCRTextResolver(varMap).resolve(qry);
+        resolvedQuery = resolvedQuery.replaceAll(" ", "%20");
+        resolvedQuery = resolvedQuery.replaceAll("\\+", "%2B");
+        resolvedQuery = resolvedQuery.replaceAll("'", "%22");
+        return returnQuery.append(resolvedQuery).toString();
     }
 
     /**
@@ -144,25 +152,15 @@ public class ObjectScrollResolver implements URIResolver {
      * @param mcrObj
      * @return
      */
-    protected Pair<SearchType, String> getSearchPair(MCRObject mcrObj) {
+    protected String getSortValue(MCRObject mcrObj) {
         String objectType = mcrObj.getId().getTypeId();
-        if (!objectType.equals("jpvolume") && !objectType.equals("jparticle")) {
-            return null;
-        }
         MCRObjectMetadata metadata = mcrObj.getMetadata();
         if (objectType.equals("jpvolume")) {
-            String value = getElementValue(metadata, "hidden_positions");
-            if (value != null) {
-                return new Pair<SearchType, String>(SearchType.position, value);
-            }
-        } else {
-            String value = getElementValue(metadata, "sizes");
-            if (value != null) {
-                return new Pair<SearchType, String>(SearchType.size, value);
-            }
+            return getElementValue(metadata, "hidden_positions");
+        } else if(objectType.equals("jpvolume")){
+            return getElementValue(metadata, "sizes");
         }
-        String value = getElementValue(metadata, "maintitles");
-        return value != null ? new Pair<SearchType, String>(SearchType.maintitle, value) : null;
+        throw new MCRException("Unsupported object type " + objectType);
     }
 
     private String getElementValue(MCRObjectMetadata metadata, String element) {
@@ -184,17 +182,6 @@ public class ObjectScrollResolver implements URIResolver {
             }
         }
         return null;
-    }
-
-    private static final class Pair<K, V> {
-        public Pair(K key, V value) {
-            this.key = key;
-            this.value = value;
-        }
-
-        public K key;
-
-        public V value;
     }
 
 }

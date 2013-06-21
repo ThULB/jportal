@@ -158,6 +158,7 @@
     <field name="alternatives" type="text" multiValued="true" stored="false" />
     <field name="participants" type="text" multiValued="true" stored="false" />
     <field name="dates" type="text" multiValued="true" stored="false" />
+    <field name="size" type="string" />
 
     <field name="titles_de" type="text_de"  multiValued="true" stored="false"/>
     <field name="heading_de" type="text_de" stored="false" />
@@ -187,11 +188,9 @@
     <!-- ******************************************** -->
     <!-- * SORT -->
     <!-- ******************************************** -->
-
     <field name="maintitle_lowercase" type="lowercase" stored="false" />
     <field name="heading_lowercase" type="lowercase" stored="false" />
-    <field name="position" type="string" />
-    <field name="size" type="string" />
+    <field name="indexPosition" type="string" default="0" />
 
     <copyField source="maintitle" dest="maintitle_lowercase" />
     <copyField source="heading_base" dest="heading_lowercase" />
