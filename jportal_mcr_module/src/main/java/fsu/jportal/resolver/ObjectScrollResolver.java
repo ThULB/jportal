@@ -118,9 +118,6 @@ public class ObjectScrollResolver implements URIResolver {
         return attr == null ? null : attr.getValue();
     }
 
-    // +parent:jportal_jpvolume_00096085 +objectType:jparticle +((+size:"013" AND +id:{"jportal_jparticle_00166116" TO *}) (+size:{"013" TO *}) (+id:{"jportal_jparticle_00166116" TO *}))
-    
-    // sort=maintitle+desc&q=%2Bparent:jportal_jpvolume_00000001+%2BobjectType:jparticle+%2Bmaintitle:{* TO "abc"}&rows=1
     protected String buildQuery(MCRObjectID objID, String parentID, String field, String value, boolean next) {
         StringBuilder returnQuery = new StringBuilder("sort=");
         value = value != null ? value : "0";
@@ -157,7 +154,7 @@ public class ObjectScrollResolver implements URIResolver {
         MCRObjectMetadata metadata = mcrObj.getMetadata();
         if (objectType.equals("jpvolume")) {
             return getElementValue(metadata, "hidden_positions");
-        } else if(objectType.equals("jpvolume")){
+        } else if(objectType.equals("jparticle")){
             return getElementValue(metadata, "sizes");
         }
         throw new MCRException("Unsupported object type " + objectType);
