@@ -19,12 +19,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.jdom2.Document;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.mcrimpl.MCRAccessRule;
 import org.mycore.access.mcrimpl.MCRAccessStore;
 import org.mycore.access.mcrimpl.MCRRuleMapping;
 import org.mycore.access.mcrimpl.MCRRuleStore;
+import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
@@ -45,6 +49,14 @@ public class ACLEResource {
         InputStream guiXML = getClass().getResourceAsStream("/jportal_acl_editor_module/gui/xml/webpage.xml");
         SAXBuilder saxBuilder = new SAXBuilder();
         Document webPage = saxBuilder.build(guiXML);
+        XPathExpression<Object> xpath = XPathFactory.instance().compile("/MyCoReWebPage/section/div[@id='jportal_acl_editor_module']");
+        Object node = xpath.evaluateFirst(webPage);
+        MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+        String lang = mcrSession.getCurrentLanguage();
+        if(node != null){
+            Element mainDiv = (Element) node;
+            mainDiv.setAttribute("lang", lang);
+        }
         MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(webPage));
     }
     

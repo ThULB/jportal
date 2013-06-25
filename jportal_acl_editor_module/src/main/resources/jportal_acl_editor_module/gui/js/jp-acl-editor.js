@@ -219,8 +219,7 @@ var ACLEditor = function(){
 			ruleSelectorInstance = ruleSelect;
 			accessTableInstance = accessTable;
 			ruleListInstance = ruleList;
-			var lang = $("#languageSelect").children("img:first").attr("alt");
-			if (lang != "en") lang = "de";
+			var lang = $("#jportal_acl_editor_module").attr("lang");
 			jQuery.getJSON("/servlets/MCRLocaleServlet/" + lang + "/ACLE.*", function(data) { 
 				i18nKeys = data;
 				getAccess();
