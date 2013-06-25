@@ -619,7 +619,12 @@ var ACLEditor = function(){
 			page = Math.floor(i / elemPerPage) + 1;
 			$(row).attr("data-page", page);
 		});
-		showPage($(".pagination .active span").html());
+		if ($(".pagination .active span").html() == undefined){
+			showPage(1);
+		}
+		else{
+			showPage($(".pagination .active span").html());
+		}	
 	}
 	
 	function showPage(num) {
