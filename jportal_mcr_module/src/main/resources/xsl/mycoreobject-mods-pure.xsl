@@ -45,34 +45,51 @@
       <xsl:call-template name="amdSec">
         <xsl:with-param name="mcrobject" select="@ID" />
       </xsl:call-template>
-      <xsl:if test="./structure/derobjects/derobject">
+      <xsl:if test="./metadata/derivateLinks/derivateLink or ./structure/derobjects/derobject">
         <mets:fileSec>
           <mets:fileGrp USE="DEFAULT">
-            <xsl:variable name="derivateID" select="./structure/derobjects/derobject/@xlink:href" />
-            <xsl:choose>
-              <xsl:when test="iview2:getSupportedMainFile($derivateID) != ''">
-                <xsl:variable name="supportedMainFile" select="iview2:getSupportedMainFileByOwner(@ID)" />
-                <mets:file ID="FILE_0000_DEFAULT" MIMETYPE="{mcrxml:getMimeType($supportedMainFile)}">
-                  <xsl:element name="mets:FLocat">
-                    <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
-                    <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
-                    <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRTileCombineServlet/MID/', $supportedMainFile)" />
-                  </xsl:attribute>
-                  </xsl:element>
-                </mets:file>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:variable name="file" select="document(concat('mcrobject:',$derivateID))/mycorederivate/derivate/internals/internal/@maindoc" />
-                <mets:file ID="FILE_0000_DEFAULT">
-                  <xsl:element name="mets:FLocat">
-                    <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
-                    <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
-                      <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivateID, '/',$file)" />
-                    </xsl:attribute>
-                  </xsl:element>
-                </mets:file>
-              </xsl:otherwise>
-            </xsl:choose>
+            <xsl:variable name="derivateID">
+              <xsl:choose>
+                <xsl:when test="./metadata/derivateLinks/derivateLink">
+                  <xsl:value-of select="substring-before(./metadata/derivateLinks/derivateLink/@xlink:href, '/')" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="./structure/derobjects/derobject/@xlink:href" />
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="file">
+              <xsl:choose>
+                <xsl:when test="./metadata/derivateLinks/derivateLink">
+                  <xsl:value-of select="./metadata/derivateLinks/derivateLink/@xlink:href" />
+                </xsl:when>
+                <xsl:when test="./structure/derobjects/derobject and iview2:getSupportedMainFile($derivateID) != ''">
+                  <xsl:value-of select="iview2:getSupportedMainFileByOwner(@ID)" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="document(concat('mcrobject:',$derivateID))/mycorederivate/derivate/internals/internal/@maindoc" />
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <xsl:variable name="mimeType" select="mcrxml:getMimeType($file)" />
+            <xsl:variable name="url">
+              <xsl:choose>
+                <xsl:when test="starts-with($mimeType, 'image/')">
+                  <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRTileCombineServlet/MID/', $file)" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivateID, '/',$file)" />
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
+            <mets:file ID="FILE_0000_DEFAULT" MIMETYPE="{$mimeType}">
+              <xsl:element name="mets:FLocat">
+                <xsl:attribute name="LOCTYPE">URL</xsl:attribute>
+                <xsl:attribute name="xlink:href" namespace="http://www.w3.org/1999/xlink">
+                <xsl:value-of select="$url" />
+              </xsl:attribute>
+              </xsl:element>
+            </mets:file>
           </mets:fileGrp>
         </mets:fileSec>
       </xsl:if>
