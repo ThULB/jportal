@@ -130,6 +130,9 @@ public class ObjectScrollResolver implements URIResolver {
         } else {
             qry += "* TO '{id}'\\}) (+{field}:\\{* TO '{value}'\\}))";
         }
+        qry = qry.replaceAll(" ", "%20");
+        qry = qry.replaceAll("\\+", "%2B");
+        qry = qry.replaceAll("'", "%22");
         Map<String, String> varMap = new HashMap<>();
         varMap.put("parent", parentID);
         varMap.put("id", objID.toString());
@@ -137,9 +140,6 @@ public class ObjectScrollResolver implements URIResolver {
         varMap.put("field", field);
         varMap.put("value", value);
         String resolvedQuery = new MCRTextResolver(varMap).resolve(qry);
-        resolvedQuery = resolvedQuery.replaceAll(" ", "%20");
-        resolvedQuery = resolvedQuery.replaceAll("\\+", "%2B");
-        resolvedQuery = resolvedQuery.replaceAll("'", "%22");
         return returnQuery.append(resolvedQuery).toString();
     }
 
