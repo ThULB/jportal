@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>mycore-parent</artifactId>
 		<groupId>org.mycore</groupId>
-		<version>13</version>
+		<version>16-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fsu.thulb</groupId>
@@ -29,7 +29,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
       <jportal.version>2.0.18-SNAPSHOT</jportal.version>
-      <mcr.version>2.1.81-SNAPSHOT</mcr.version>
+      <mcr.version>2013.07-SNAPSHOT</mcr.version>
       <jersey.version>1.17</jersey.version>
     </properties>
 
