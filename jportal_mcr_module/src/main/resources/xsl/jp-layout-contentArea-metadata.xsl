@@ -198,6 +198,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="name" />
+        <xsl:value-of select="personalName" />
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="position() != last()">
