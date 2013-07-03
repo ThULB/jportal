@@ -19,6 +19,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.jdom2.transform.JDOMResult;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
+import org.xml.sax.SAXException;
 
 import fsu.jportal.xml.XMLTools;
 
@@ -51,8 +52,7 @@ public class IPRuleGUIResource {
             new XMLTools().transform(new StreamSource(guiXML), new StreamSource(guiXSL), params, result);
             MCRLayoutService.instance().doLayout(request, response, new MCRJDOMContent(result.getDocument()));
             return Response.ok().build();
-        } catch (TransformerFactoryConfigurationError | TransformerException | IOException e) {
-            // TODO Auto-generated catch block
+        } catch (TransformerFactoryConfigurationError | TransformerException | IOException | SAXException e) {
             e.printStackTrace();
             return Response.serverError().build();
         }
