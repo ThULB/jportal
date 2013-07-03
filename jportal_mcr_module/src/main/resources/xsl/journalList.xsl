@@ -15,6 +15,7 @@
           <div class="atoz">
             <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
             <ul id="tabNav" class="tab-nav" />
+            <input id="atozFilter" class="filter" type="text" placeholder="Filter" />
           </div>
           <div id="resultList" class="tab-panel"></div>
         </div>

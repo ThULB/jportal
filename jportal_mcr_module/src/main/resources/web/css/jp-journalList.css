@@ -7,26 +7,20 @@
 	padding: 0px;
 }
 
-.journalList .tab-nav li {
-	display: inline;
-	padding: 0px 5px 0px 5px;
-	cursor: pointer;
-}
-
 .journalList .tab-panel {
 	display: block;
 	padding: 10px 0px;
 	clear: both;
 }
 
-.journalList .tab-panel > ul {
+.journalList .tab-panel>ul {
 	padding: 0px;
 }
-
 
 .journalList .tab-panel .publisher a {
 	color: #2A89C1;
 }
+
 .journalList .journal-title {
 	margin-bottom: 2px;
 }
@@ -46,23 +40,45 @@
 .journalList .label {
 	margin-right: 10px;
 }
+
 .journalList .atoz {
-    border-bottom: 1px solid #CCCCCC;
-    font-size: 0.9rem;
-    font-weight: bold;
-    padding: 10px 0;
-}
-.journalList .selected-tab {
-	border: 1px solid;
-	margin: 0px 4px 0px 4px;
+	border-bottom: 1px solid #CCCCCC;
+	font-size: 0.9rem;
+	font-weight: bold;
+	padding: 10px 0;
 }
 
-.journalList .default-tab {
-	margin: 1px 5px 1px 5px;
+.journalList .tab-nav li {
+	display: inline;
+	padding: 0px 5px;
+	margin: 2px;
+	cursor: default;
+}
+
+.journalList .tab-nav li.selected-tab {
+	border: 1px solid;
+}
+
+.journalList .tab-nav li {
+	border: 1px solid transparent;
+	color: #BBB;
+}
+
+.journalList .tab-nav li.active {
+	cursor: pointer;
+	color: #333;
 }
 
 .journalList .tab-panel li {
 	padding-bottom: 15px;
+}
+
+.journalList .atoz .filter {
+	border: 1px solid #999;
+	font-size: 0.8rem;
+	padding: 3px;
+	float: right;
+	width: 125px;
 }
 
 .journalList .ui-msg {

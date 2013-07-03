@@ -73,6 +73,7 @@ public class SolrQueryFilter implements Filter {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Map getParameterMap() {
             Map paramMap = new HashMap(super.getParameterMap());
             if (paramMap.containsKey(QRY)) {
@@ -85,6 +86,7 @@ public class SolrQueryFilter implements Filter {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
         public Enumeration getParameterNames() {
             return new Vector(this.getParameterMap().keySet()).elements();
         }

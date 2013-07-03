@@ -100,9 +100,8 @@ public class EditorResource {
         try {
             MCREditorServlet.replaceEditorElements(request, uri, editorJDOM);
             MCRJDOMContent editorReplaced = new MCRJDOMContent(editorJDOM);
-            
             MCRLayoutService.instance().doLayout(request, response, editorReplaced);
-        } catch (IOException e) {
+        } catch (IOException | SAXException | TransformerException e) {
             e.printStackTrace();
         }
     }

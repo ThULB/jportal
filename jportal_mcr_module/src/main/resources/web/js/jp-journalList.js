@@ -1,35 +1,6 @@
 var jp = jp || {};
 
-(function($) {
-    $.fn.jpResultList = function(searchURL, fill) {
-        var resultList = $('<ul/>');
-        var resultListContainer = $(this);
-
-        $.getJSON(searchURL, function(searchResult) {
-        	var response = searchResult.response;
-            for (var i = 0; i < response.numFound; i++) {
-                var resultListEntry = $('<li/>');
-                fill(resultListEntry, response.docs[i]);
-                resultList.append(resultListEntry);
-            }
-
-            if (response.numFound == 0) {
-                resultList.html('<span class="ui-msg">Keine Einträge unter dieser Katgorie.</span>')
-            }
-
-            resultListContainer.empty().append(resultList);
-        });
-    }
-})(jQuery);
-
 jp.az = {
-
-	load: function() {
-	    $.getJSON(jp.az.getSearchURL() + '&fl=maintitle', function(searchResult) {
-	    	var azList = jp.az.getList(searchResult.response);
-	    	jp.az.print(azList);
-	    });
-	},
 
 	getHost: function() {
 		return 'http://' + $(location).attr('host');
@@ -41,46 +12,53 @@ jp.az = {
 		return url + additionalQuery;
 	},
 
-	getList: function(response) {
-		var az = [];
-		for(var i = 0; i < response.numFound; i++) {
-			var maintitle = response.docs[i].maintitle;
-			if(maintitle != null && maintitle.length > 0) {
-				var char = maintitle[0].toUpperCase();
-				char = (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char;
-				if($.inArray(char, az) == -1) {
-					az.push(char);
+	getFilterQuery: function() {
+		var filter = $("#atozFilter").val().toLowerCase();;
+		return filter != "" ? "&fq=maintitle_lowercase:*" + filter + "*" : "";
+	},
+
+	getTabs: function(/*function*/ onSuccess) {
+		$.getJSON(jp.az.getSearchURL() + '&fl=maintitle' + jp.az.getFilterQuery(), function(searchResult) {
+			var response = searchResult.response;
+			var tabs = [];
+			for(var i = 0; i < response.numFound; i++) {
+				var maintitle = response.docs[i].maintitle;
+				if(maintitle != null && maintitle.length > 0) {
+					var char = maintitle[0].toUpperCase();
+					char = (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char;
+					if(tabs.indexOf(char) == -1) {
+						tabs.push(char);
+					}
 				}
 			}
-		}
-		return az;
+			onSuccess(tabs);
+		});
 	},
 
-	onTabClick: function() {
-		$('.tab-nav li.selected-tab').toggleClass('default-tab selected-tab');
-		$(this).toggleClass('default-tab selected-tab');
-
-	    var selectedChar = $(this).html();
-	    $(location).attr('hash', selectedChar);
-	    var searchQuery = '';
-	    if (selectedChar == '#') {
-	        searchQuery = '-maintitle_lowercase:[a TO z] -maintitle_lowercase:z*';
+	getJournals: function(/*string*/ tabLetter, /*function*/ onSuccess) {
+	    var qry = '';
+	    if (tabLetter == '#') {
+	    	qry = '-maintitle_lowercase:[a TO z] -maintitle_lowercase:z*';
 	    } else {
-	        searchQuery = '%2Bmaintitle_lowercase:' + selectedChar.toLowerCase() + '*';
+	    	qry = '%2Bmaintitle_lowercase:' + tabLetter.toLowerCase() + '*';
 	    }
-	    $('#resultList').jpResultList(jp.az.getSearchURL() + ' ' + searchQuery, jp.az.printJournalEntry);
+		$.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function(searchResult) {
+			onSuccess(searchResult.response);
+		});
 	},
 
-	print: function(azList) {
-		var charListHTML = "";
-	    for (var i = 0; i < azList.length; i++) {
-	    	charListHTML += "<li class='default-tab'>" + azList[i] + "</li>";
-	    }
-	    var tabNav = $('#tabNav');
-	    tabNav.append(charListHTML);
+	load: function() {
+		jp.az.importCSS();
+		jp.az.printTabNav();
+		jp.az.printFilter();
 
-	    $('.tab-nav').delegate('li', 'click', jp.az.onTabClick);
+		jp.az.updateTabs(null);
+		var tab = $(location).attr('hash').substring(1).toUpperCase();
+		jp.az.setTab(tab);
+		jp.az.updateJournals();
+	},
 
+	importCSS: function() {
 	    if (document.createStyleSheet) {
 	        document.createStyleSheet('/journalList/css/jp-journalList.css');
 	    } else {
@@ -92,15 +70,67 @@ jp.az = {
 	        });
 	        $('head').append(link);
 	    }
+	},
 
-	    $('div.headline:contains("Blättern A - Z")').remove();
+	printTabNav: function() {
+		var tabsHTML = "<li>#</li>";
+		for(var i = 65; i <= 90; i++) {
+			var char = String.fromCharCode(i);
+			tabsHTML += "<li>" + char + "</li>";
+		}
+		$('#tabNav').append(tabsHTML);
+	},
 
-	    var hash = $(location).attr('hash').substring(1).toUpperCase();
-	    if(hash.length == 1) {
-	    	$("#tabNav li:contains('" + hash + "')").click();
-	    } else {
-	    	$('#tabNav li:first-child').click();
-	    }
+	printFilter: function() {
+		var filter = $("#atozFilter");
+		filter.on("change", function() {
+			jp.az.updateTabs();
+			jp.az.updateJournals();
+		});
+	},
+
+	setTab: function(/*string*/ tab) {
+		$(location).attr('hash', tab);
+		$("#tabNav > li").removeClass("selected-tab");
+		$("#tabNav > li:contains('" + tab + "')").addClass("selected-tab");
+	},
+
+	getTab: function() {
+		return $("#tabNav > li.selected-tab").text();
+	},
+
+	updateTabs: function() {
+		jp.az.getTabs(function(activeTabs) {
+			$("#tabNav > li").each(function() {
+				var li = $(this);
+				li.off("click");
+				if(activeTabs.indexOf(li.text()) >= 0) {
+					li.addClass('active');
+					li.on("click", function() {
+						jp.az.setTab($(this).text());
+						jp.az.updateJournals();
+					});
+				} else {
+					li.removeClass('active');
+				}
+			});
+		});
+	},
+
+	updateJournals: function() {
+		var tab = jp.az.getTab();
+		jp.az.getJournals(tab, function(response) {
+			var resultList = $('<ul/>');
+			if (response.numFound == 0) {
+				resultList.html('<span class="ui-msg">Keine Einträge unter dieser Katgorie.</span>')
+			}
+			for (var i = 0; i < response.numFound; i++) {
+				var resultListEntry = $('<li/>');
+				jp.az.printJournalEntry(resultListEntry, response.docs[i]);
+				resultList.append(resultListEntry);
+			}
+			$("#resultList").empty().append(resultList);
+		});
 	},
 
 	printJournalEntry: function(resultListEntry, metadata) {
