@@ -53,7 +53,8 @@ jp.az = {
 		jp.az.printFilter();
 
 		jp.az.updateTabs(null);
-		var tab = $(location).attr('hash').substring(1).toUpperCase();
+		var tab = $(location).attr('hash').substring(1, 2).toUpperCase();
+		tab = (tab == "" || tab == null) ? "A" : tab; 
 		jp.az.setTab(tab);
 		jp.az.updateJournals();
 	},
