@@ -32,8 +32,9 @@
             </a>
           </li>
         </xsl:if>
+        <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents" />
         <xsl:apply-templates mode="jp.printListEntry"
-          select="document(concat('parents:',/mycoreobject/@ID))/parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
+          select="$parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
       <xsl:call-template name="jp-layout-breadcrumb-scroller" />
     </div>
@@ -70,7 +71,7 @@
 
   <xsl:template mode="jp.printListEntryContent" match="parent[@error!='']">
     <span style="color: red">
-      <xsl:value-of select="concat(@error, '( ', @xlink:href, ')')" />
+      <xsl:value-of select="concat(@error, ' (', @xlink:href, ')')" />
     </span>
   </xsl:template>
 

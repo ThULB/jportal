@@ -11,6 +11,7 @@
 
     <!-- =================================================================== -->
     <xsl:template match="journalList[@mode='javascript']">
+        
         <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
           <div class="atoz">
             <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
