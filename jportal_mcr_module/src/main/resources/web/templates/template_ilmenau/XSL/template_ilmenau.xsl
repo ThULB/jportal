@@ -8,35 +8,29 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_ilmenau">
-  	<xsl:variable name="journalId">
-		<xsl:value-of select="document(concat('mcrobject:',$journalID))/mycoreobject/@ID" />
-	</xsl:variable>
     <script type="text/javascript">
       $(document).ready(function() {
       	$.ajax({
-    			type: "GET",
-    			url: "../templates/template_ilmenau/config/linkConfig.xml",
-    			dataType: "xml",
-    			success: parseXml
+          type: "GET",
+          url: "../templates/template_ilmenau/config/linkConfig.xml",
+          dataType: "xml",
+          success: parseXml
   		});
       });
-      function parseXml(xml){
+      function parseXml(xml) {
       	var i = 1;
-      	$(xml).find("link").each(function()
-      	{
+      	$(xml).find("link").each(function() {
       		var id = $(this).attr("journalId");
       		var img = $(this).attr("img");
       		var alt = $(this).attr("alt");
-      		
+
       		$('#logo').append('<a id="LogoLink' + i + '" href="{$WebApplicationBaseURL}receive/' + id +'"></a>');
-      		
-      		if (id == '<xsl:value-of select="$journalId" />'){
+
+      		if (id == '<xsl:value-of select="$journalID" />'){
       			$('#LogoLink' + i).append('<img class="LogoS" src="../templates/template_ilmenau/IMAGES/' + img + '"/>');
-      		}
-      		else{
+      		} else {
 	      		$('#LogoLink' + i).append('<img class="LogoS" src="../templates/template_ilmenau/IMAGES/' + alt + '"/>');
       		}
-      		
       		i++;
       	});
       }
