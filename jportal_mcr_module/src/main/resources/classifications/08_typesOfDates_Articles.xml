@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
 	ID="jportal_class_00000008">
-	<label xml:lang="de" text="Datums-Typen in Artikel" description="Datums-Typen in Artikeln"/>
+	<label xml:lang="de" text="Datums-Typen in Artikel" description="Datums-Typen in Artikel"/>
 	<label xml:lang="en" text="Dates in article" description="Dates in article"/>
+	<label xml:lang="pl" text="Daty w artykule" description="Daty w artykule"/>
 	<categories>
 		<category ID="published">
 			<label xml:lang="de" text="Erschienen"/>
 			<label xml:lang="en" text="Published"/>
+			<label xml:lang="pl" text="Wydano"/>
 		</category>
 		<category ID="published_Original">
 			<label xml:lang="de" text="Erscheinungsjahr des rez. Werkes"></label>
 			<label xml:lang="en" text="Reviewed work published"/>
+			<label xml:lang="pl" text="Rok wydania dzieła recenzowanego"/>
 		</category>
 		<category ID="published_Original_From">
 			<label xml:lang="de" text="Erscheinungsbeginn der rez. Werke"/>
 			<label xml:lang="en" text="Reviewed work published from"/>
+			<label xml:lang="pl" text="Wydanie dzieła recenzowanego od"/>
 		</category>
 		<category ID="published_Original_Till">
 			<label xml:lang="de" text="Erscheinungsende der rez. Werke"/>
 			<label xml:lang="en" text="Reviewed work published to"/>
+			<label xml:lang="pl" text="Wydanie dzieła recenzowanego do"/>
 		</category>
 	</categories>
 </mycoreclass>

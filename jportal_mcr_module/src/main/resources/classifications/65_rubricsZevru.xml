@@ -2,18 +2,27 @@
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000065">
     <label xml:lang="de" text="Rubrik" description="Rubrik" />
     <label xml:lang="en" text="Rubric" description="Rubric" />
+    <label xml:lang="pl" text="Rubryka" description="Rubryka" />
     <categories>
         <category ID="meditation">
             <label xml:lang="de" text="Andachten" />
+            <label xml:lang="en" text="devotions" />
+            <label xml:lang="pl" text="nabożeństwa" /> ????????
         </category>
         <category ID="essay">
             <label xml:lang="de" text="Aufsätze" />
+            <label xml:lang="en" text="essays" />
+            <label xml:lang="pl" text="esej" />
         </category>
         <category ID="report">
             <label xml:lang="de" text="Berichte" />
+            <label xml:lang="en" text="reports" />
+            <label xml:lang="pl" text="sprawozdania" />
         </category>
         <category ID="literature">
             <label xml:lang="de" text="Literatur" />
+            <label xml:lang="en" text="literature" />
+            <label xml:lang="pl" text="literatura" />
         </category>
     </categories>
 </mycoreclass>

@@ -6,6 +6,7 @@
 		<category ID="article">
 			<label xml:lang="de" text="Artikel"/>
 			<label xml:lang="en" text="article"/>
+			<label xml:lang="pl" text="artykuł"/>
 		</category>
 	</categories>
 </mycoreclass>

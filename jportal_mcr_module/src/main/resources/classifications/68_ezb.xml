@@ -3,128 +3,209 @@
     <label xml:lang="de" text="Kategorien EZB" description="Kategorien EZB" />
     <categories>
         <category ID="AVSL">
-            <label xml:lang="de"
-                text="Allgemeine und vergleichende Sprach- und Literaturwissenschaft.Indogermanistik.Aussereuropäische Sprachen und Literaturen." />
+            <label xml:lang="de" text="Allgemeine und vergleichende Sprach- und Literaturwissenschaft.Indogermanistik.Aussereuropäische Sprachen und Literaturen." />
+            <label xml:lang="en" text="General and comparative linguistics and literary studies. Indo-European studies. Non-European languages and literature" />    
+            <label xml:lang="pl" text="Literaturo- i językoznawstwo ogólne i porównawcze. Indogermanistyka. Pozaeuropejskie języki i literatura." />    
         </category>
         <category ID="ALL">
             <label xml:lang="de" text="Allgemeines, Fachübergreifendes" />
+            <label xml:lang="en" text="Miscellaneous, interdisciplinary materials" />
+            <label xml:lang="pl" text="Teksty ogólne, interdyscyplinarne" />
         </category>
         <category ID="ANGL">
-            <label xml:lang="de" text="Anglistik. Amerikanistik" />
+            <label xml:lang="de" text="Anglistik, Amerikanistik" />
+            <label xml:lang="en" text="English studies, American studies" />
+            <label xml:lang="pl" text="Anglistyka, amerykanistyka" />
         </category>
         <category ID="ARCH">
             <label xml:lang="de" text="Archäologie" />
+            <label xml:lang="en" text="Archaeology" />
+            <label xml:lang="pl" text="Archeologia" />
         </category>
         <category ID="BAU">
             <label xml:lang="de" text="Architektur, Bauingenieur- und Vermessungswesen" />
+            <label xml:lang="en" text="Architecture, construction engineering and geodesy" />
+            <label xml:lang="pl" text="Architektura, inżynierstwo budowy, geodezja" />
         </category>
         <category ID="BILD">
             <label xml:lang="de" text="Bildungsgeschichte" />
+            <label xml:lang="en" text="History of education" />
+            <label xml:lang="pl" text="Historia edukacji" />
         </category>
         <category ID="BIO">
             <label xml:lang="de" text="Biologie" />
+            <label xml:lang="en" text="Biology" />
+            <label xml:lang="pl" text="Biologia" />
         </category>
         <category ID="CHEM">
             <label xml:lang="de" text="Chemie und Pharmazie" />
+            <label xml:lang="en" text="Chemistry and pharmacy" />
+            <label xml:lang="pl" text="Chemia i farmacja" />
         </category>
         <category ID="ELECTRO">
             <label xml:lang="de" text="Elektrotechnik,Mess- und Regelungstechnik" />
+            <label xml:lang="en" text="Elektrotechnik,Mess- und Regelungstechnik" />
+            <label xml:lang="pl" text="Elektrotechnika, miernictwo, technika regulacji" />
         </category>
         <category ID="ENERGY">
             <label xml:lang="de" text="Energie, Umweltschutz, Kerntechnik" />
+            <label xml:lang="en" text="Energy, environmental protection, nuclear engineering" />
+            <label xml:lang="pl" text="Energia, ochrona środowiska, technika jądrowa" />
         </category>
         <category ID="ETHNO">
             <label xml:lang="de" text="Ethnologie (Volks- und Völkerkunde)" />
+            <label xml:lang="en" text="Ethnology" />
+            <label xml:lang="pl" text="Etnologia" />
         </category>
         <category ID="GEO">
             <label xml:lang="de" text="Geographie" />
+            <label xml:lang="en" text="Geography" />
+            <label xml:lang="pl" text="Geografia" />
         </category>
         <category ID="GEOWISS">
             <label xml:lang="de" text="Geowissenschaften" />
+            <label xml:lang="en" text="Geoscience" />
+            <label xml:lang="pl" text="Nauki geograficzne" />
         </category>
         <category ID="GERMA">
             <label xml:lang="de" text="Germanistik. Niederländische Philologie. Skandinavistik" />
+            <label xml:lang="en" text="German studies. Dutch studies. Scandinavian studies" />
+            <label xml:lang="pl" text="Germanistyka, filologia niderlandzka, skandynawistyka" />
         </category>
         <category ID="GESCH">
             <label xml:lang="de" text="Geschichte" />
+            <label xml:lang="en" text="History" />
+            <label xml:lang="pl" text="Historia" />
         </category>
         <category ID="INFO">
             <label xml:lang="de" text="Informatik" />
+            <label xml:lang="en" text="Computer science" />
+            <label xml:lang="pl" text="Informatyka" />
         </category>
         <category ID="BUCHWESEN">
             <label xml:lang="de" text="Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde" />
+            <label xml:lang="de" text="Informations-, Buch- und Bibliothekswesen, Schrift- und Handschriftenkunde" />
+            <label xml:lang="pl" text="Nauka o informacji, księgoznawstwo, bibliotekarstwo, grafologia" />
         </category>
         <category ID="PHILO">
             <label xml:lang="de" text="Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein" />
+            <label xml:lang="de" text="Klassische Philologie. Byzantinistik. Mittellateinische und neugriechische Philologie. Neulatein" />
+            <label xml:lang="pl" text="Filologia klasyczna. Bizantynistyka. Filologia średniołacińska i nowogrecka. Łacina nowożytna" />
         </category>
         <category ID="KUNST">
             <label xml:lang="de" text="Kunstgeschichte" />
+            <label xml:lang="de" text="Kunstgeschichte" />
+            <label xml:lang="pl" text="Historia sztuki" />
         </category>
         <category ID="LANDWIRT">
             <label xml:lang="de" text="Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung" />
+            <label xml:lang="de" text="Land- und Forstwirtschaft. Gartenbau. Fischereiwirtschaft. Hauswirtschaft. Ernährung" />
+            <label xml:lang="pl" text="Rolnictwo, Leśnictwo, Ogrodnictwo, Rybołówictwo, Gospodarstwo domowe, Dietetyka" />
         </category>
         <category ID="MASCHINEN">
             <label xml:lang="de" text="Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik" />
+            <label xml:lang="de" text="Maschinenwesen, Werkstoffwissenschaften, Fertigungstechnik, Bergbau u. Hüttenwesen, Verkehrstechnik, Feinwerktechnik" />
+            <label xml:lang="pl" text="Budowa maszyn, Nauka o materiałach, Technika produkcyjna, Górnictwo, Inżynierstwo ruchu drogowego" />
         </category>
         <category ID="MATHE">
             <label xml:lang="de" text="Mathematik" />
+            <label xml:lang="de" text="Mathematik" />
+            <label xml:lang="pl" text="Matematyka" />
         </category>
         <category ID="MEDIEN">
             <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" />
+            <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" /
+            <label xml:lang="pl" text="Medioznawstwo, nauka o komunikowaniu się, publicystyka" /
         </category>
         <category ID="MED">
             <label xml:lang="de" text="Medizin" />
+            <label xml:lang="de" text="Medizin" />
+            <label xml:lang="pl" text="Medycyna" />
         </category>
         <category ID="MUSIK">
             <label xml:lang="de" text="Musikwissenschaft" />
+            <label xml:lang="de" text="Musikwissenschaft" />
+            <label xml:lang="pl" text="Muzykologia" />
         </category>
         <category ID="NATUR">
             <label xml:lang="de" text="Naturwissenschaft allgemein" />
+            <label xml:lang="de" text="Naturwissenschaft allgemein" />
+            <label xml:lang="pl" text="Nauki przyrodnicze" />
         </category>
         <category ID="PÄD">
             <label xml:lang="de" text="Pädagogik" />
+            <label xml:lang="de" text="Pädagogik" />
+            <label xml:lang="pl" text="Pedagogika" />
         </category>
         <category ID="PHI">
             <label xml:lang="de" text="Philosophie" />
+            <label xml:lang="de" text="Philosophie" />
+            <label xml:lang="pl" text="Filozofia" />
         </category>
         <category ID="PHY">
             <label xml:lang="de" text="Physik" />
+            <label xml:lang="en" text="Physics" />
+            <label xml:lang="pl" text="Fizyka" />
         </category>
         <category ID="POLIT">
             <label xml:lang="de" text="Politologie" />
+            <label xml:lang="de" text="Politologie" />
+            <label xml:lang="de" text="Politologia" />
         </category>
         <category ID="PSYCH">
             <label xml:lang="de" text="Psychologie" />
+            <label xml:lang="de" text="Psychologie" />
+            <label xml:lang="pl" text="Psychologia" />
         </category>
         <category ID="RECHT">
             <label xml:lang="de" text="Rechtswissenschaft" />
+            <label xml:lang="de" text="Rechtswissenschaft" />
+            <label xml:lang="pl" text="Prawoznawstwo />
         </category>
         <category ID="ROMAN">
             <label xml:lang="de" text="Romanistik" />
+            <label xml:lang="de" text="Romanistik" />
+            <label xml:lang="pl" text="Romanistyka" />
         </category>
         <category ID="SLAV">
             <label xml:lang="de" text="Slavistik" />
+            <label xml:lang="de" text="Slavistik" />
+            <label xml:lang="pl" text="Slawistyka" />
         </category>
         <category ID="SOZIO">
             <label xml:lang="de" text="Soziologie" />
+            <label xml:lang="de" text="Soziologie" />
+            <label xml:lang="pl" text="Socjologia" />
         </category>
         <category ID="SPORT">
             <label xml:lang="de" text="Sport" />
+            <label xml:lang="de" text="Sport" />
+            <label xml:lang="pl" text="Wychowanie fizyczne" />
         </category>
         <category ID="TECH">
             <label xml:lang="de" text="Technik allgemein" />
+            <label xml:lang="de" text="Technology in general" />
+            <label xml:lang="pl" text="Technika ogólnie" />
         </category>
         <category ID="THEO">
             <label xml:lang="de" text="Theologie und Religionswissenschaft" />
+            <label xml:lang="de" text="Theologie und Religionswissenschaft" />
+            <label xml:lang="pl" text="Teologia i religioznawstwo" />
         </category>
         <category ID="VERF">
             <label xml:lang="de" text="Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie" />
+            <label xml:lang="de" text="Verfahrenstechnik, Biotechnologie, Lebensmitteltechnologie" />
+            <label xml:lang="pl" text="Technika procesów przetwórczych, biotechnologia, technologia żywności" />
         </category>
         <category ID="WIWI">
             <label xml:lang="de" text="Wirtschaftswissenschaften" />
+            <label xml:lang="de" text="Wirtschaftswissenschaften" />
+            <label xml:lang="pl" text="Nauki ekonomiczne" />
         </category>
         <category ID="WIKUNDE">
             <label xml:lang="de" text="Wissenschaftskunde, Forschung, Hochschul-. Museumswesen" />
+            <label xml:lang="de" text="Wissenschaftskunde, Forschung, Hochschul-. Museumswesen" />
+            <label xml:lang="pl" text="Ekonomia, Badania naukowe, Szkolnictwo wyższe, Muzealnictwo" />
         </category>
     </categories>
 </mycoreclass>

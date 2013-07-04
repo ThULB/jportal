@@ -2,14 +2,17 @@
 <mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000060">
     <label xml:lang="de" text="Typ von Bemerkungen" description="Typ von Bemerkungen" />
     <label xml:lang="en" text="Type of notes" description="Type of notes" />
+    <label xml:lang="pl" text="Typ notatki" description="Typ notatki" />
     <categories>
         <category ID="annotation">
             <label xml:lang="de" text="Annotation" />
             <label xml:lang="en" text="Annotation" />
+            <label xml:lang="pl" text="Adnotacja" />
         </category>
         <category ID="internalNote">
             <label xml:lang="de" text="Interne Notiz"></label>
             <label xml:lang="en" text="Internal note"></label>
+            <label xml:lang="pl" text="Notatka wewnętrzna"></label>
         </category>
     </categories>
 </mycoreclass>

@@ -19,6 +19,7 @@
             <label xml:lang="de" text="sonstige"></label>
             <label xml:lang="en" text="Other"></label>
             <label xml:lang="ru" text="другое"></label>
+            <label xml:lang="pl" text="inne"></label>
         </category>
         <category ID="nodp">
             <label xml:lang="de" text="Nummer des Discussion-Papers"></label>

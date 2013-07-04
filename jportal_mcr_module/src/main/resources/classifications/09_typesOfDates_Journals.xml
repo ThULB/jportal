@@ -3,18 +3,22 @@
 	ID="jportal_class_00000009">
 	<label xml:lang="de" text="Datums-Typen in Journal" description="Datums-Typen in Journalen"/>
 	<label xml:lang="en" text="Dates in journal" description="Dates in journals"/>
+	<label xml:lang="pl" text="Daty w czasopiśmie" description="Daty w czasopiśmie"/>
 	<categories>
 		<category ID="published">
 			<label xml:lang="de" text="Erschienen"/>
 			<label xml:lang="en" text="Published"/>
+			<label xml:lang="pl" text="Wydano"/>
 		</category>
 		<category ID="published_from">
 			<label xml:lang="de" text="Erschienen von"/>
 			<label xml:lang="en" text="Published from"/>
+			<label xml:lang="pl" text="Wydano od"/>
 		</category>
 		<category ID="published_until">
 			<label xml:lang="de" text="Erschienen bis"/>
 			<label xml:lang="en" text="Published to"/>
+			<label xml:lang="pl" text="Wydano do"/>
 		</category>
 	</categories>
 </mycoreclass>

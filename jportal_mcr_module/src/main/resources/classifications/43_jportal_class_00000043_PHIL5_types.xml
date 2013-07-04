@@ -5,18 +5,28 @@
 	<categories>
 		<category ID="00001000">
 			<label xml:lang="de" text="Abbildungen"/>
+			<label xml:lang="en" text="Illustrations"/>
+			<label xml:lang="pl" text="Ilustracje"/>
 		</category>
 		<category ID="00002000">
 			<label xml:lang="de" text="Artikel"/>
+			<label xml:lang="en" text="Article"/>
+			<label xml:lang="pl" text="Artykuł"/>
 		</category>
 		<category ID="00003000">
 			<label xml:lang="de" text="Karten"/>
+			<label xml:lang="en" text="Maps"/>
+			<label xml:lang="pl" text="Mapy"/>
 		</category>
 		<category ID="00004000">
 			<label xml:lang="de" text="Tabelle"/>
+			<label xml:lang="en" text="Chart"/>
+			<label xml:lang="pl" text="Tabela"/>
 		</category>
 		<category ID="00005000">
 			<label xml:lang="de" text="Verzeichnis"/>
+			<label xml:lang="en" text="Directory"/>
+			<label xml:lang="pl" text="Spis"/>
 		</category>
 	</categories>
 </mycoreclass>
