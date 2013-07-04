@@ -3,7 +3,8 @@
     xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xlink i18n">
 
   <xsl:template match="/template[@id='template_ilmenau']" mode="template">
-    <xsl:apply-templates select="document(concat('mcrobject:',@mcrID))/mycoreobject" mode="template_ilmenau" />
+    <xsl:param name="mcrObj"/>
+    <xsl:apply-templates select="$mcrObj" mode="template_ilmenau" />
   </xsl:template>
 
   <xsl:template match="/mycoreobject" mode="template_ilmenau">
