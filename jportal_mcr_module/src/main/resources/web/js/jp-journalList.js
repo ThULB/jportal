@@ -61,7 +61,7 @@ jp.az = {
 
 	importCSS: function() {
 	    if (document.createStyleSheet) {
-	        document.createStyleSheet('/journalList/css/jp-journalList.css');
+	        document.createStyleSheet('/css/jp-journalList.css');
 	    } else {
 	        var link = $('<link>').attr({
 	            type : 'text/css',
