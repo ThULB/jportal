@@ -39,7 +39,7 @@
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
         <filter class="solr.SnowballPorterFilterFactory" language="German2" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="100" />
+        <filter class="solr.LengthFilterFactory" min="3" max="30" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory" />
@@ -51,7 +51,7 @@
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
         <filter class="solr.SnowballPorterFilterFactory" language="German2" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
-        <filter class="solr.LengthFilterFactory" min="3" max="100" />
+        <filter class="solr.LengthFilterFactory" min="3" max="30" />
       </analyzer>
     </fieldType>
 
@@ -61,6 +61,7 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.LengthFilterFactory" min="2" max="30" />
       </analyzer>
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory" />
@@ -68,6 +69,7 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.RemoveDuplicatesTokenFilterFactory" />
+        <filter class="solr.LengthFilterFactory" min="2" max="30" />
       </analyzer>
     </fieldType>
 

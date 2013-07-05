@@ -22,7 +22,7 @@ public class ParentsResolver implements URIResolver {
             Element parents = new XMLContentTools().getParents(childID);
             return new JDOMSource(parents);
         } catch (Exception exc) {
-            LOGGER.error("unable to retrieve parents of child " + childID);
+            LOGGER.error("unable to retrieve parents of mcr object " + childID);
             Element parent = new Element("parent").setAttribute("error", "Error: unable to load parent").setAttribute("href", "unknown",
                     MCRConstants.XLINK_NAMESPACE);
             return new JDOMSource(new Element("parents").addContent(parent));

@@ -1808,9 +1808,8 @@
   <requestHandler name="/find" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 allMeta^1</str>
+      <str name="qf">maintitle^50 heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
       <int name="rows">10</int>
-      <str name="df">allMeta</str>
       <str name="qry">*:*</str>
     </lst>
     <lst name="appends">
@@ -1828,7 +1827,6 @@
       <str name="defType">edismax</str>
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
-      <str name="df">allMeta</str>
       <str name="q">*:*</str>
     </lst>
     <lst name="appends">
@@ -1842,7 +1840,6 @@
       <str name="echoParams">explicit</str>
       <str name="qf">heading^10 dates^10 alternatives^5 heading_de^5 alternatives_de^3 allMeta^1</str>
       <int name="rows">10</int>
-      <str name="df">allMeta</str>
       <str name="qry">*:*</str>
       <str name="XSL.subselect.type">person</str>
     </lst>
@@ -1855,9 +1852,8 @@
   <requestHandler name="/laws" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">titles^10 participants^10 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 allMeta^1</str>
+      <str name="qf">maintitle^50 heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
       <int name="rows">10</int>
-      <str name="df">allMeta</str>
       <str name="qry">*:*</str>
     </lst>
     <lst name="appends">
