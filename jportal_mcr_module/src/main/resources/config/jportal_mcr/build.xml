@@ -50,10 +50,13 @@
 			<fileset dir="${module.directory}/solr" />
 		</copy>
 
-		<!-- copy template xsl, overides defaults in docportal maven module build.xml -->
-		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" includeemptydirs="false" failonerror="false">
-			<fileset dir="${build.modules}/web" includes="templates/*/XSL/*.xsl" />
-		</copy>
+		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="META-INF/resources/templates/*/XSL/*.xsl" />
+			</patternset>
+			<mapper type="flatten"/>
+		</unjar>
 
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
 			<fileset file="${module.jar}" />
@@ -74,9 +77,9 @@
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="web/**" />
+				<include name="META-INF/resources/**" />
 			</patternset>
-			<regexpmapper from="^(web/)(.*)" to="\2" />
+			<regexpmapper from="^(META-INF/resources/)(.*)" to="\2" />
 		</unjar>
 
 	</target>

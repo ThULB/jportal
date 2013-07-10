@@ -95,7 +95,6 @@
           <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow&amp;subset=latin-ext,cyrillic" rel="stylesheet" type="text/css" />
         </xsl:if>
 
-
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
