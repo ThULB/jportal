@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="jportal_laws" xmlns:mcr="antlib:org.mycore.buildtools">
-    <import file="${basedir}/common-modules.xml" />
-    <import file="${basedir}/build.xml" />
+	<import file="${basedir}/common-modules.xml" />
+	<import file="${basedir}/build.xml" />
 
-    <property name="module.directory" location="${ant.file}/.." />
-    <property file="${module.directory}/build.properties" />
-    <property name="module.jar" location="${build.lib}/${module.jar.name}" />
+	<property name="module.directory" location="${ant.file}/.." />
+	<property file="${module.directory}/build.properties" />
+	<property name="module.jar" location="${build.lib}/${module.jar.name}" />
 
-    <!-- CREATE WEB APPLICATION -->
-    <target name="create.webapp">
-        <echo>JPortal Laws webapp</echo>
-        <echo>Copy JPortal Laws Stuff</echo>
+	<!-- CREATE WEB APPLICATION -->
+	<target name="create.webapp">
+		<echo>JPortal Laws webapp</echo>
+		<echo>Copy JPortal Laws Stuff</echo>
 
-        <unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
-            <fileset file="${module.jar}" />
-            <patternset>
-                <include name="xsl/**" />
-            </patternset>
-            <regexpmapper from="^(xsl/)(.*)" to="\2" />
-        </unjar>
+		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/**" />
+			</patternset>
+			<regexpmapper from="^(xsl/)(.*)" to="\2" />
+		</unjar>
 
-        <unjar dest="${build.webapps}" overwrite="true">
-            <fileset file="${module.jar}" />
-            <patternset>
-                <include name="web/**" />
-            </patternset>
-            <regexpmapper from="^(web/)(.*)" to="\2" />
-        </unjar>
+		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="META-INF/resources/templates/*/XSL/*.xsl" />
+			</patternset>
+			<mapper type="flatten" />
+		</unjar>
 
-    </target>
+		<unjar dest="${build.webapps}" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="META-INF/resources/**" />
+			</patternset>
+			<regexpmapper from="^(META-INF/resources/)(.*)" to="\2" />
+		</unjar>
 
-    <target name="config">
-       <mcr:config action="addInclude"
-	                propertyfile="${build.config}/mycore.properties"
-	                key="MCR.URIResolver.xslIncludes.modules"
-	                value="template_thLegislativExekutiv.xsl" />
-		<mcr:config action="addInclude"
-	                propertyfile="${build.config}/mycore.properties"
-	                key="MCR.URIResolver.xslIncludes.modules"
-	                value="jp-laws-search.xsl" />
-    </target>
+	</target>
+
+	<target name="config">
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.URIResolver.xslIncludes.modules" value="template_thLegislativExekutiv.xsl" />
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.URIResolver.xslIncludes.modules" value="jp-laws-search.xsl" />
+	</target>
 
 </project>
