@@ -221,7 +221,7 @@
             <category ID="400-499.430">
                 <label xml:lang="de" text="Klassische Altertumswissenschaften" />
                 <label xml:lang="de" text="Klassische Altertumswissenschaften" />
-                <label xml:lang="de" text="Klassische Altertumswissenschaften" /> ?????????????????
+                <label xml:lang="de" text="Klassische Altertumswissenschaften" />
             </category>
             <category ID="400-499.440">
                 <label xml:lang="de" text="Romanistik" />
@@ -251,7 +251,7 @@
             <category ID="400-499.490">
                 <label xml:lang="de" text="Theaterwissenschaft" />
                 <label xml:lang="de" text="Theaterwissenschaft" />
-                <label xml:lang="pl" text="Teatrologia />
+                <label xml:lang="pl" text="Teatrologia" />
             </category>
         </category>
         <category ID="500-599">
@@ -397,7 +397,7 @@
         <category ID="700-799">
             <label xml:lang="de" text="Naturwissenschaften" />
             <label xml:lang="de" text="Naturwissenschaften" />
-            <label xml:lang="pl" text="Nauki przyrodnicze />
+            <label xml:lang="pl" text="Nauki przyrodnicze" />
             <category ID="700-799.700">
                 <label xml:lang="de" text="Naturwissenschaften Allg." />
                 <label xml:lang="de" text="Naturwissenschaften Allg." />
@@ -536,7 +536,7 @@
             <category ID="900-999.920">
                 <label xml:lang="de" text="Elektrotechnik" />
                 <label xml:lang="de" text="Elektrotechnik" />
-                <label xml:lang="pl" text="Elektrotechnika />
+                <label xml:lang="pl" text="Elektrotechnika" />
             </category>
             <category ID="900-999.930">
                 <label xml:lang="de" text="Verkehrswesen" />

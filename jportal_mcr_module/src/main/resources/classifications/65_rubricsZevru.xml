@@ -7,7 +7,7 @@
         <category ID="meditation">
             <label xml:lang="de" text="Andachten" />
             <label xml:lang="en" text="devotions" />
-            <label xml:lang="pl" text="nabożeństwa" /> ????????
+            <label xml:lang="pl" text="nabożeństwa" />
         </category>
         <category ID="essay">
             <label xml:lang="de" text="Aufsätze" />

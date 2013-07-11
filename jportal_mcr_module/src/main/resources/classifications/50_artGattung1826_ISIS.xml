@@ -56,8 +56,8 @@
         </category>
         <category ID="00011000">
             <label xml:lang="de" text="I.m) Reisen"/>
-            <label xml:lang="en" text="I.m) journeys"/
-            <label xml:lang="pl" text="I.m) podróże"/
+            <label xml:lang="en" text="I.m) journeys"/>
+            <label xml:lang="pl" text="I.m) podróże"/>
         </category>
         <category ID="00012000">
             <label xml:lang="de" text="II.n) Geographie"/>

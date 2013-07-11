@@ -41,7 +41,7 @@
 		<category ID="00008000">
 			<label xml:lang="de" text="Verzeichnis"/>
 			<label xml:lang="en" text="Directory"/>
-			<label xml:lang="pl" text="Spis""/>
+			<label xml:lang="pl" text="Spis"/>
 		</category>
 	</categories>
 </mycoreclass>

@@ -114,8 +114,8 @@
         </category>
         <category ID="MEDIEN">
             <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" />
-            <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" /
-            <label xml:lang="pl" text="Medioznawstwo, nauka o komunikowaniu się, publicystyka" /
+            <label xml:lang="de" text="Medien- und Kommunikationswissenschaften, Publizistik" />
+            <label xml:lang="pl" text="Medioznawstwo, nauka o komunikowaniu się, publicystyka" />
         </category>
         <category ID="MED">
             <label xml:lang="de" text="Medizin" />
@@ -160,7 +160,7 @@
         <category ID="RECHT">
             <label xml:lang="de" text="Rechtswissenschaft" />
             <label xml:lang="de" text="Rechtswissenschaft" />
-            <label xml:lang="pl" text="Prawoznawstwo />
+            <label xml:lang="pl" text="Prawoznawstwo" />
         </category>
         <category ID="ROMAN">
             <label xml:lang="de" text="Romanistik" />
