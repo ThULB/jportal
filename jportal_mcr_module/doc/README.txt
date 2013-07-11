@@ -95,7 +95,7 @@ cd $DOCPORTAL_HOME
 ant clean clean.data; rm -rf save; ant resolve create.jar create.scripts
 build/bin/solrstart.sh &
 build/bin/hsqldbstart.sh &
-ant create.users create.default-rules create.class create.webapp
+ant init.database create.users create.default-rules create.class create.webapp
 
 5.2 REINSTALLATION - already installed application 
 ==================================================
