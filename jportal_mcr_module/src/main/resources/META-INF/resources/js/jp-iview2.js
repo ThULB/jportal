@@ -1,8 +1,6 @@
 // iview settings
 var styleFolderUri = 'gfx/';
-var chapterEmbedded = 'false';
-var chapDynResize = 'false';
-var DampInViewer = 'true';
+var chapterEmbedded = false;
 var i18n;
 
 // jp specific settings
@@ -26,7 +24,7 @@ var jpIviewSettings = {
         };
     },
     getIviewCSS: function() {
-        if (this.getParam('XSL.iview2.debug') == 'true') {
+        if (this.getParam('iview2.debug') == 'true') {
             return 'iview2.css';
         }
         return 'iview2.min.css';
