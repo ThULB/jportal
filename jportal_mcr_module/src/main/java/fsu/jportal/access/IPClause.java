@@ -77,4 +77,9 @@ public class IPClause implements MCRIPCondition {
         }
     }
 
+    @Override
+    public String toString() {
+        return "ip " + ipAddress.toString() + " ";
+    }
+
 }
