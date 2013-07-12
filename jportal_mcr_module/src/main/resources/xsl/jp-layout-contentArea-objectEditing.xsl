@@ -41,6 +41,7 @@
       <item class="jp-layout-menu-dropdown">
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
+        <restriction name="dataModel" contains="datamodel-" />
         <item>
           <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
         </item>
@@ -57,6 +58,7 @@
           <label name="Impressum auswählen" />
         </item>
         <item>
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
           <label name="Datei hochladen" ref="editorServlet">
             <params>
               <param ref="editorServlet-editParam" />
@@ -103,13 +105,14 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <restriction name="deletePerm" value="true" />
+        <restriction name="dataModel" contains="datamodel-" />
         <item>
           <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
         <restriction name="isGuest" value="false" />
-        <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd datamodel-person.xsd datamodel-jpinst.xsd" />
+        <restriction name="dataModel" contains="datamodel-" />
         <item>
           <label name="XML" href="/receive/{/mycoreobject/@ID}?XSL.Style=xml" />
         </item>
@@ -278,10 +281,16 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="restriction" mode="menuItem">
+  <xsl:template match="restriction[@value]" mode="menuItem">
     <xsl:variable name="name" select="@name" />
     <xsl:variable name="permission" select="$menuVar/var[@name=$name]/@value" />
     <xsl:value-of select="$permission != '' and contains(@value, $permission)" />
+  </xsl:template>
+
+  <xsl:template match="restriction[@contains]" mode="menuItem">
+    <xsl:variable name="name" select="@name" />
+    <xsl:variable name="permission" select="$menuVar/var[@name=$name]/@value" />
+    <xsl:value-of select="$permission != '' and contains($permission, @value)" />
   </xsl:template>
 
   <xsl:template name="createMenuItem">
