@@ -613,6 +613,9 @@ body {
 	width: 690px;
 	padding-right: 40px;
 }
+.jp-layout-list-nodecoration.max-width {
+	width: 925px;
+}
 
 .jp-layout-list-nodecoration>li {
 	margin-bottom: 20px;

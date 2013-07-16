@@ -114,12 +114,20 @@
   </xsl:template>
 
   <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
-    <ul class="jp-layout-list-nodecoration">
+    <xsl:variable name="showFacet" select="lst[@name='facet_counts']" />
+    <xsl:variable name="resultListClass">
+      <xsl:if test="not($showFacet)">
+        <xsl:value-of select="'max-width'" />
+      </xsl:if>
+    </xsl:variable>
+    <ul class="jp-layout-list-nodecoration {$resultListClass}">
       <xsl:apply-templates mode="searchResults" select="result/doc" />
     </ul>
-    <div class="jp-layout-facet-list">
-      <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" />
-    </div>
+    <xsl:if test="$showFacet">
+      <div class="jp-layout-facet-list">
+        <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" />
+      </div>
+    </xsl:if>
     <div class="clear" />
     <xsl:apply-templates mode="pagination" select="." />
   </xsl:template>
