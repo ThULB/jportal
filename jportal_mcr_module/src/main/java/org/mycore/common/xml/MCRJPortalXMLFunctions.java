@@ -17,6 +17,7 @@ import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRTextResolver;
 import org.mycore.datamodel.metadata.MCRMetaISO8601Date;
+import org.mycore.frontend.MCRURL;
 import org.mycore.services.i18n.MCRTranslation;
 import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
@@ -25,6 +26,7 @@ import org.w3c.dom.Element;
 public class MCRJPortalXMLFunctions {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalXMLFunctions.class);
+
     private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
         @Override
         protected DocumentBuilder initialValue() {
@@ -56,12 +58,15 @@ public class MCRJPortalXMLFunctions {
     }
 
     public static String getFormat(String date) {
-        if(date != null && !date.equals("")) {
+        if (date != null && !date.equals("")) {
             String split[] = date.split("-");
-            switch(split.length) {
-                case 1: return MCRTranslation.translate("metaData.dateYear");
-                case 2: return MCRTranslation.translate("metaData.dateYearMonth");
-                case 3: return MCRTranslation.translate("metaData.dateYearMonthDay");
+            switch (split.length) {
+            case 1:
+                return MCRTranslation.translate("metaData.dateYear");
+            case 2:
+                return MCRTranslation.translate("metaData.dateYearMonth");
+            case 3:
+                return MCRTranslation.translate("metaData.dateYearMonthDay");
             }
         }
         return MCRTranslation.translate("metaData.date");
@@ -97,9 +102,9 @@ public class MCRJPortalXMLFunctions {
     public String resolveText(String text, String varList) {
         String[] vars = varList.split(",");
         Map<String, String> varMap = new HashMap<String, String>();
-        for(String var : vars) {
+        for (String var : vars) {
             String[] split = var.split("=");
-            if(split.length == 2) {
+            if (split.length == 2) {
                 varMap.put(split[0], split[1]);
             }
         }
@@ -117,8 +122,36 @@ public class MCRJPortalXMLFunctions {
         return "";
     }
 
-    public static int getCentury(int year){
-        return (int) Math.ceil((float)year /100);
+    public static int getCentury(int year) {
+        return (int) Math.ceil((float) year / 100);
+    }
+
+    /**
+     * Checks if a fq request parameter for the specified facet exist.
+     * 
+     * @param requestURL
+     * @param facet
+     * @param value
+     * @return
+     */
+    public static boolean isFacetSelected(String requestURL, String facet, String value) {
+        String query = facet + ":" + value;
+        try {
+            return new MCRURL(requestURL).getParameterValues("fq").contains(query);
+        } catch (Exception exc) {
+            LOGGER.error("Unable to parse request url " + requestURL, exc);
+            return false;
+        }
+    }
+
+    public static String removeFacet(String requestURL, String facet, String value) {
+        String query = facet + ":" + value;
+        try {
+            return new MCRURL(requestURL).removeParameterValue("fq", query).toString();
+        } catch (Exception exc) {
+            LOGGER.error("Unable to parse request url " + requestURL, exc);
+            return "";
+        }
     }
 
 }

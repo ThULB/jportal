@@ -30,6 +30,9 @@ body {
 .pointer {
 	cursor: pointer;
 }
+.clear {
+	clear: both;
+}
 .jp-layout-index h1 {
 	font-size: 1.2em;
 }
@@ -606,6 +609,9 @@ body {
 	color: #4E494E;
 	list-style: none outside none;
 	padding-left: 0;
+	float: left;
+	width: 690px;
+	padding-right: 40px;
 }
 
 .jp-layout-list-nodecoration>li {
@@ -723,6 +729,9 @@ body {
 	width: 900px;
 	padding-bottom: 49px;
 }
+#searchResults #resultList {
+	width: 100%;
+}
 
 #searchRightNavi {
 	border-left: 1px solid;
@@ -745,6 +754,51 @@ body {
 
 #searchRightNavi ul>li:first-child {
 	margin-top: 0;
+}
+
+.jp-layout-facet-list {
+	float: left;
+	width: 234px;
+	background-color: #F1F1F1;
+	border-radius: 6px;
+	border: 1px solid #CCC;
+	box-shadow: 0 0 4px #CCC;
+}
+.jp-layout-facet-list h3 {
+    border-bottom: 1px solid #CCC;
+    font-size: 1.1rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 10px;
+}
+.jp-layout-facet-list .group {
+	padding: 10px;
+	font-size: 1rem;
+	background-color: #F8F8F8;
+}
+.jp-layout-facet-list .group ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.jp-layout-facet-list .group .groupName {
+	font-weight: bold;
+	margin-bottom: 4px;
+	margin-top: 8px;
+}
+.jp-layout-facet-list .group a .icon {
+	font-family: FontAwesome;
+	width: 22px;
+	display: inline-block;
+}
+.jp-layout-facet-list .group a:hover .icon:before, .jp-layout-facet-list .group a .icon.selected:before {
+	content: "\f00c";
+}
+.jp-layout-facet-list .group a:hover .icon.selected:before {
+	content: "\f00d";
+}
+.jp-layout-facet-list .group .count {
+	float: right;
 }
 
 .jp-layout-content-LCol {

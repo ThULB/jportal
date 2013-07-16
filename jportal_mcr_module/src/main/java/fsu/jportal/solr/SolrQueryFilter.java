@@ -32,7 +32,7 @@ public class SolrQueryFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        SolrServletRequestWrapper wrapper = new SolrServletRequestWrapper((HttpServletRequest)request);
+        SolrServletRequestWrapper wrapper = new SolrServletRequestWrapper((HttpServletRequest) request);
         chain.doFilter(wrapper, response);
     }
 
@@ -73,12 +73,12 @@ public class SolrQueryFilter implements Filter {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         public Map getParameterMap() {
             Map paramMap = new HashMap(super.getParameterMap());
             if (paramMap.containsKey(QRY)) {
                 String[] values = getParameterValues(QRY);
-                if(values == null) {
+                if (values == null) {
                     paramMap.remove(QRY);
                 }
             }
@@ -86,7 +86,7 @@ public class SolrQueryFilter implements Filter {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         public Enumeration getParameterNames() {
             return new Vector(this.getParameterMap().keySet()).elements();
         }

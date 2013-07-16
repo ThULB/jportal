@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan mcrxml solrxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions" 
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
   <xsl:param name="returnURL" />
 
@@ -116,6 +117,10 @@
     <ul class="jp-layout-list-nodecoration">
       <xsl:apply-templates mode="searchResults" select="result/doc" />
     </ul>
+    <div class="jp-layout-facet-list">
+      <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" />
+    </div>
+    <div class="clear" />
     <xsl:apply-templates mode="pagination" select="." />
   </xsl:template>
 
@@ -260,4 +265,60 @@
       <xsl:with-param name="objID" select="../str[@name='id']" />
     </xsl:call-template>
   </xsl:template>
+  
+  <!-- *************************************************** -->
+  <!-- * FACET -->
+  <!-- *************************************************** -->
+  <xsl:template mode="facetList" match="lst">
+  </xsl:template>
+  
+  <xsl:template mode="facetList" match="lst[@name='facet_fields']">
+    <h3><xsl:value-of select="i18n:translate('jp.metadata.facet.intro')" /></h3>
+    <xsl:apply-templates mode="facetGroup" select="lst" />
+  </xsl:template>
+
+  <xsl:template mode="facetGroup" match="lst">
+    <div class="group">
+      <span class="groupName">
+        <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
+      </span>
+      <ul>
+        <xsl:apply-templates select="int" mode="facetField">
+          <xsl:with-param name="facet" select="@name"/>
+        </xsl:apply-templates>
+      </ul>
+    </div>
+  </xsl:template>
+
+  <xsl:template mode="facetField" match="int">
+    <xsl:param name="facet" />
+    <xsl:variable name="value" select="@name" />
+    <xsl:variable name="count" select="text()" />
+
+    <xsl:variable name="selected" select="jpxml:isFacetSelected($RequestURL, $facet, $value)" />
+    <xsl:variable name="href">
+      <xsl:choose>
+        <xsl:when test="$selected">
+          <xsl:value-of select="jpxml:removeFacet($RequestURL, $facet, $value)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':', $value)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="class">
+      <xsl:if test="$selected">
+        <xsl:value-of select="'selected'" />
+      </xsl:if>
+    </xsl:variable>
+
+    <li>
+      <a href="{$href}">
+        <i class="icon {$class}"></i>
+        <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))" />
+      </a>
+      <span class="count"><xsl:value-of select="concat(' (', $count, ')')" /></span>
+    </li>
+  </xsl:template>
+
 </xsl:stylesheet>
