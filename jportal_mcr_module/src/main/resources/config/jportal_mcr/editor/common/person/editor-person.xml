@@ -48,22 +48,6 @@
             </panel>
         </cell>
     </panel>
-    <panel id="personName_required" class="editorPersonNameR">
-	  <!-- lastname -->
-        <cell col="1" row="1" anchor="NORTHWEST">
-            <text i18n="jp.editor.person.lastName" />
-        </cell>
-        <cell col="2" row="1" anchor="NORTHWEST" var="lastName">
-            <textfield width="16" maxlength="128" />
-        </cell>
-	  <!-- firstname -->
-        <cell col="1" row="2" anchor="NORTHWEST">
-            <text i18n="jp.editor.person.firstName" />
-        </cell>
-        <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
-            <textfield width="16" maxlength="128" />
-        </cell>
-    </panel>
     <panel id="personName" class="editorPersonName">
 	  <!-- lastname -->
         <cell col="1" row="1" anchor="NORTHWEST">
@@ -79,18 +63,66 @@
         <cell col="2" row="2" anchor="NORTHWEST" var="firstName">
             <textfield width="16" maxlength="128" />
         </cell>
-    </panel>	
-	
+      <!-- collocation -->
+        <cell col="1" row="3" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.collocation" />
+        </cell>
+        <cell col="2" row="3" anchor="NORTHWEST" var="collocation">
+            <textfield width="16" maxlength="128" />
+        </cell>
+      <!-- name affix -->
+        <cell col="1" row="4" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.nameAffix" />
+        </cell>
+        <cell col="2" row="4" anchor="NORTHWEST" var="nameAffix">
+            <textfield width="16" maxlength="128" />
+        </cell>
+    </panel>
+
+    <panel id="personNameSingle" class="editorPersonName">
+	  <!-- name -->
+        <cell col="1" row="1" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.single" />
+        </cell>
+        <cell col="2" row="1" anchor="NORTHWEST" var="name">
+            <textfield width="16" maxlength="128" />
+        </cell>
+      <!-- collocation -->
+        <cell col="1" row="3" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.collocation" />
+        </cell>
+        <cell col="2" row="3" anchor="NORTHWEST" var="collocation">
+            <textfield width="16" maxlength="128" />
+        </cell>
+      <!-- name affix -->
+        <cell col="1" row="4" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.nameAffix" />
+        </cell>
+        <cell col="2" row="4" anchor="NORTHWEST" var="nameAffix">
+            <textfield width="16" maxlength="128" />
+        </cell>
+    </panel>
+
 <!-- *** Ansetzungsform: Name ** -->
     <panel id="Dheading">
         <hidden var="@class" default="MCRMetaXML" />
         <hidden var="@notinherit" default="true" />
         <hidden var="@heritable" default="true" />
-        <cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName_required" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="heading">
+           <panel class="editorPersonFreeText">
+              <cell col="1" row="1" anchor="NORTHWEST">
+                  <text i18n="jp.editor.person.single" />
+              </cell>
+              <cell col="2" row="1" var="name">
+                  <textfield width="35" maxlength="128" />
+              </cell>
+          </panel>
+        </cell>
     </panel>
     <text id="Lheading" i18n="editormask.person.Lheading" />
     <helpPopup id="Hheading" width="400" height="250" i18n="editormask.person.Hheading" />
-	
+
 <!-- *** Namensformen ** -->
     <panel id="Dalternative">
         <hidden var="@class" default="MCRMetaXML" />
@@ -100,16 +132,7 @@
             <repeater min="0" max="1024" ref="personName" />
         </cell>
         <cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
-            <repeater min="0" max="1024">
-                <panel class="editorPersonFreeText">
-                    <cell col="1" row="1" anchor="NORTHWEST">
-                        <text i18n="jp.editor.person.freeText" />
-                    </cell>
-                    <cell col="2" row="1" var="name">
-                        <textfield width="35" maxlength="128" />
-                    </cell>
-                </panel>
-            </repeater>
+            <repeater min="0" max="1024" ref="personNameSingle" />
         </cell>
     </panel>
     <text id="Lalternative" i18n="editormask.person.Lalternative" />

@@ -19,7 +19,7 @@
         <xsl:call-template name="getHeadingName">
           <xsl:with-param name="firstName" select="./metadata/def.heading/heading/firstName" />
           <xsl:with-param name="lastName" select="./metadata/def.heading/heading/lastName" />
-          <xsl:with-param name="personalName" select="./metadata/def.heading/heading/personalName" />
+          <xsl:with-param name="name" select="./metadata/def.heading/heading/name" />
           <xsl:with-param name="collocation" select="./metadata/def.heading/heading/collocation" />
           <xsl:with-param name="nameAffix" select="./metadata/def.heading/heading/nameAffix" />
         </xsl:call-template>

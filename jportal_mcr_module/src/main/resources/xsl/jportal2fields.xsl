@@ -171,7 +171,7 @@
     </field>
   </xsl:template>
 
-  <xsl:template mode="jportal.person.heading" match="lastName|personalName">
+  <xsl:template mode="jportal.person.heading" match="lastName|name">
     <xsl:value-of select="."/>
   </xsl:template>
 

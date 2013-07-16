@@ -207,12 +207,12 @@
           </mods:roleTerm>
         </mods:role>
       </xsl:if>
-      <xsl:variable name="personalName" select="$personObj/mycoreobject/metadata/def.heading/heading/personalName" />
+      <xsl:variable name="name" select="$personObj/mycoreobject/metadata/def.heading/heading/name" />
       <xsl:variable name="collocation" select="$personObj/mycoreobject/metadata/def.heading/heading/collocation" />
       <xsl:choose>
-        <xsl:when test="$personalName">
+        <xsl:when test="$name">
           <mods:namePart type="given">
-            <xsl:value-of select="$personalName" />
+            <xsl:value-of select="$name" />
           </mods:namePart>
           <xsl:if test="$collocation">
             <mods:namePart type="termsOfAddress">
@@ -220,7 +220,7 @@
             </mods:namePart>
           </xsl:if>
           <mods:displayForm>
-            <xsl:value-of select="$personalName" />
+            <xsl:value-of select="$name" />
           </mods:displayForm>
         </xsl:when>
         <xsl:when test="$personObj/mycoreobject/metadata/def.unittitle/unittitle">

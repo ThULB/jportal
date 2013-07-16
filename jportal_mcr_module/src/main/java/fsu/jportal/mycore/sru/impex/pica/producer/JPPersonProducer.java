@@ -57,7 +57,7 @@ public class JPPersonProducer extends PersonProducer {
         }
         /* add the personal name (if any) */
         if (personalName != null) {
-            nameContainer.addContent(new Element("personalName").setText(personalName));
+            nameContainer.addContent(new Element("name").setText(personalName));
             if(elementName.equals("alternative")) {
                 nameContainer.setAttribute("type", "single");
             }

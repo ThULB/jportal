@@ -187,18 +187,30 @@
     </dd>
   </xsl:template>
 
-  <xsl:template mode="metadataPersName" match="heading">
-    <xsl:value-of select="concat(firstName,' ', lastName)" />
-  </xsl:template>
-
-  <xsl:template mode="metadataPersName" match="alternative">
+  <xsl:template mode="metadataPersName" match="heading | alternative">
     <xsl:choose>
-      <xsl:when test="@type='complete'">
-        <xsl:value-of select="concat(firstName,' ', lastName)" />
+      <xsl:when test="name">
+        <xsl:value-of select="name" />
+        <xsl:if test="collocation">
+          <xsl:value-of select="concat(' &lt;',collocation,'&gt;')" />
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="firstName and lastName and collocation">
+        <xsl:value-of select="concat(lastName,', ',firstName,' &lt;',collocation,'&gt;')" />
       </xsl:when>
       <xsl:otherwise>
-        <xsl:value-of select="name" />
-        <xsl:value-of select="personalName" />
+        <xsl:if test="firstName and lastName and nameAffix">
+          <xsl:value-of select="concat(lastName,', ',firstName,' ',nameAffix)" />
+        </xsl:if>
+        <xsl:if test="firstName and lastName and not(nameAffix)">
+          <xsl:value-of select="concat(lastName,', ',firstName)" />
+        </xsl:if>
+        <xsl:if test="firstName and not(lastName or nameAffix)">
+          <xsl:value-of select="firstName" />
+        </xsl:if>
+        <xsl:if test="not (firstName) and lastName">
+          <xsl:value-of select="lastName" />
+        </xsl:if>
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="position() != last()">
