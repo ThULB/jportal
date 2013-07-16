@@ -1832,6 +1832,10 @@
       <str name="echoParams">explicit</str>
       <int name="rows">10</int>
       <str name="q">*:*</str>
+      <!-- facet -->
+      <str name="facet">true</str>
+      <str name="facet.field">objectType</str>
+      <str name="facet.mincount">1</str>
     </lst>
     <lst name="appends">
       <str name="fq">-objectType:data_file</str>
