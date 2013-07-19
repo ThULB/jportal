@@ -68,7 +68,8 @@ function jpInitIviewContainer() {
 	$(	'<div/><div id="viewerContainer"  class="viewerContainer min">\
 			<div class="viewer" onmousedown="return false;">\
 				<div class="surface" style="width:100%;height:100%;z-index:30" />\
-				<div class="well"/>\
+				<div class="iview_well">\
+				</div>\
 			</div>\
         </div>').appendTo($('#viewerContainerWrapper').empty()
     );

@@ -4,8 +4,6 @@
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
 
-  <xsl:param name="iview2.debug" select="'false'" />
-
   <xsl:template name="derivatePreview">
     <xsl:param name="mcrObj" />
     <xsl:variable name="journalID" select="$mcrObj//metadata/hidden_jpjournalsID/hidden_jpjournalID" />
@@ -177,8 +175,25 @@
   </xsl:template>
 
   <xsl:template name="initIview2JS">
+    <xsl:variable name="debugMode">
+      <xsl:variable name="parValue">
+        <xsl:call-template name="UrlGetParam">
+          <xsl:with-param name="url" select="$RequestURL" />
+          <xsl:with-param name="par" select="'iview2.debug'" />
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="string-length($parValue)&gt;0">
+          <xsl:value-of select="$parValue" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$MCR.Module-iview2.DeveloperMode" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:choose>
-      <xsl:when test="$iview2.debug ='true'">
+      <xsl:when test="$debugMode = 'true'">
         <script type="text/javascript" src="{$WebApplicationBaseURL}modules/iview2/js/iview2.js" />
       </xsl:when>
       <xsl:otherwise>
