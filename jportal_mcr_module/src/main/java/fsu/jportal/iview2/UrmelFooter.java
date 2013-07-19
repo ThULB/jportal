@@ -31,14 +31,13 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -77,16 +76,23 @@ public class UrmelFooter implements MCRFooterInterface {
 
     private void loadLogos() throws IOException {
         //TODO get logos from classification
-        HashMap<String, String> logoMap = new HashMap<String, String>();
-        logoMap.put("dfg", "/web/images/dfg-logo.png");
-        logoMap.put("thulb", MCRConfiguration.instance().getString("JP.Site.Owner.logo"));
-        for (Map.Entry<String, String> entry : logoMap.entrySet()) {
-            InputStream input = UrmelFooter.class.getResourceAsStream(entry.getValue());
-            if(input == null) {
-                LOGGER.error("Unable to load resource", new IOException(entry.getValue() + " not found"));
-                continue;
+        String dfgResource = "/META-INF/resources/images/dfg-logo.png";
+        InputStream dfgIS = UrmelFooter.class.getResourceAsStream(dfgResource);
+        addLogo("dfg", dfgResource, dfgIS);
+        String thulbResource = "/META-INF/resources/images/thulb-logo.png";
+        InputStream thulbIS = UrmelFooter.class.getResourceAsStream(thulbResource);
+        addLogo("thulb", thulbResource, thulbIS);
+    }
+
+    private void addLogo(String id, String path, InputStream is) {
+        try {
+            if(is != null) {
+                logos.put(id, readImage(is));
+            } else {
+                LOGGER.error("Unable to load resource", new IOException(path + " not found"));
             }
-            logos.put(entry.getKey(), readImage(input));
+        } catch(Exception exc) {
+            LOGGER.error("Unable to load resource " + path, exc);
         }
     }
 
@@ -142,15 +148,24 @@ public class UrmelFooter implements MCRFooterInterface {
         Graphics2D graphics = image.createGraphics();
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int maxTextWidth = image.getWidth();
         //generate image
         Color bgcolor = Color.WHITE;
         graphics.setColor(bgcolor);
         graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         //add Logos
         try {
-            maxTextWidth -= addRightLogo(width, height, image, graphics, bgcolor, logos.get("dfg"));
-            maxTextWidth -= addLeftLogo(width, height, image, graphics, bgcolor, logos.get("thulb"));
+            BufferedImage dfgImg = logos.get("dfg");
+            if(dfgImg != null) {
+                addRightLogo(width, height, image, graphics, bgcolor, logos.get("dfg"));
+            } else {
+                LOGGER.warn("Unable to get dfg logo.");
+            }
+            BufferedImage thulbImg = logos.get("thulb");
+            if(thulbImg != null) {
+                addLeftLogo(width, height, image, graphics, bgcolor, logos.get("thulb"));
+            } else {
+                LOGGER.warn("Unable to get thulb logo.");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
