@@ -12,6 +12,7 @@
         <xsl:call-template name="derivateDisplay">
           <xsl:with-param name="nodes" select="$mcrObj/metadata/derivateLinks/derivateLink[1]" />
           <xsl:with-param name="journalID" select="$journalID" />
+          <xsl:with-param name="mode" select="'preview'" />
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="$mcrObj/structure/derobjects/derobject">
@@ -19,6 +20,7 @@
           <xsl:with-param name="nodes" select="$mcrObj/structure/derobjects/derobject[1]" />
           <xsl:with-param name="journalID" select="$journalID" />
           <xsl:with-param name="editable" select="'false'" />
+          <xsl:with-param name="mode" select="'preview'" />
         </xsl:call-template>
       </xsl:when>
     </xsl:choose>
@@ -28,11 +30,14 @@
     <xsl:param name="nodes" />
     <xsl:param name="journalID" />
     <xsl:param name="editable" select="'true'" />
+    <xsl:param name="mode" select="'metadata'" />
+
     <xsl:if test="acl:checkPermission($journalID,'read-derivate')">
       <xsl:if test="count($nodes) &gt; 0">
         <div class="jp-layout-derivateList">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
             <xsl:with-param name="editable" select="$editable" />
+            <xsl:with-param name="mode" select="$mode" />
           </xsl:apply-templates>
         </div>
       </xsl:if>
@@ -41,18 +46,26 @@
 
   <xsl:template mode="derivateDisplay" match="derivateLink">
     <xsl:param name="editable" select="'true'" />
+    <xsl:param name="mode" select="'metadata'" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
+    <xsl:variable name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
     <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'update-jparticle')" />
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
         <div class="image">
           <xsl:call-template name="iview2Entry">
-            <xsl:with-param name="derivID" select="substring-before(@xlink:href, '/')" />
-            <xsl:with-param name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
+            <xsl:with-param name="derivID" select="$derivID" />
+            <xsl:with-param name="file" select="$file" />
           </xsl:call-template>
         </div>
+        <xsl:if test="$mode = 'metadata'">
+          <xsl:call-template name="dfgViewerLink">
+            <xsl:with-param name="derivID" select="$derivID" />
+            <xsl:with-param name="file" select="$file" />
+          </xsl:call-template>
+        </xsl:if>
         <xsl:if test="$editable = 'true' and $deleteLink">
           <ul class="edit">
             <li>
@@ -68,6 +81,7 @@
 
   <xsl:template mode="derivateDisplay" match="derobject">
     <xsl:param name="editable" select="'true'" />
+    <xsl:param name="mode" select="'metadata'" />
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="@xlink:href" />
@@ -91,6 +105,11 @@
           </xsl:otherwise>
         </xsl:choose>
       </div>
+      <xsl:if test="$mode = 'metadata'">
+        <xsl:call-template name="dfgViewerLink">
+          <xsl:with-param name="derivID" select="$derivID" />
+        </xsl:call-template>
+      </xsl:if>
       <xsl:if test="$editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
         <ul class="edit">
           <li>
@@ -127,6 +146,26 @@
       </xsl:if>
     </div>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="dfgViewerLink">
+    <xsl:param name="derivID" />
+    <xsl:param name="file" select="''" />
+    <div class="dfg-viewer">
+      <xsl:variable name="encodedURL">
+        <xsl:variable name="url">
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', $derivID)" />
+          <xsl:if test="$file != ''">
+            <xsl:value-of select="concat('/', $file)" />
+          </xsl:if>
+          <xsl:value-of select="'&amp;XSL.Style=dfg'" />
+        </xsl:variable>
+        <xsl:value-of select="encoder:encode($url)" />
+      </xsl:variable>  
+      <a href="http://dfg-viewer.de/demo/viewer/?set[mets]={$encodedURL}" target="_blank">
+        <xsl:value-of select="'alternativ im DFG-Viewer anzeigen'" />
+      </a>
+    </div>
   </xsl:template>
 
   <xsl:template name="iview2Entry">
