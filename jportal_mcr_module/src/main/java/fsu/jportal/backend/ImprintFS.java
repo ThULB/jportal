@@ -26,10 +26,22 @@ public class ImprintFS {
 
     private static final Logger LOGGER = Logger.getLogger(ImprintFS.class);
 
-    private static final Path IMPRINT_DIR;
+    private final Path IMPRINT_DIR;
 
-    static {
-        String baseDir = MCRConfiguration.instance().getString("JP.imprint.baseDir", "/data/imprint");
+//    static {
+//        String baseDir = MCRConfiguration.instance().getString("JP.imprint.baseDir", "/data/imprint");
+//        IMPRINT_DIR = Paths.get(baseDir);
+//        if(!Files.exists(IMPRINT_DIR)) {
+//            try {
+//                Files.createDirectories(IMPRINT_DIR);
+//            } catch(Exception exc) {
+//                LOGGER.error("while creating import directory " + IMPRINT_DIR, exc);
+//            }
+//        }
+//    }
+    
+    public ImprintFS(String fsType) {
+        String baseDir = MCRConfiguration.instance().getString("JP."+ fsType + ".baseDir", "/data/" + fsType);
         IMPRINT_DIR = Paths.get(baseDir);
         if(!Files.exists(IMPRINT_DIR)) {
             try {
@@ -45,7 +57,7 @@ public class ImprintFS {
      * 
      * @return
      */
-    public static List<String> list() throws IOException {
+    public List<String> list() throws IOException {
         final List<String> imprintList = new ArrayList<>();
         Files.walkFileTree(IMPRINT_DIR, new SimpleFileVisitor<Path>() {
             @Override
@@ -59,14 +71,14 @@ public class ImprintFS {
         return imprintList;
     }
 
-    public static void store(String imprintID, MCRContent content) throws IOException {
+    public void store(String imprintID, MCRContent content) throws IOException {
         Path storePath = getPath(imprintID);
         try (BufferedWriter writer = Files.newBufferedWriter(storePath, Charsets.UTF_8)) {
             writer.write(content.asString(Charsets.UTF_8.toString()));
         }
     }
 
-    public static JDOMSource receive(String imprintID) throws IOException, JDOMException {
+    public JDOMSource receive(String imprintID) throws IOException, JDOMException {
         Path receivePath = getPath(imprintID);
         try (BufferedReader reader = Files.newBufferedReader(receivePath, Charsets.UTF_8)) {
             StringBuffer buf = new StringBuffer();
@@ -79,16 +91,16 @@ public class ImprintFS {
         }
     }
 
-    public static void delete(String imprintID) throws IOException {
+    public void delete(String imprintID) throws IOException {
         Path filePath = getPath(imprintID);
         Files.delete(filePath);
     }
 
-    protected static Path getPath(String imprintID) {
+    protected Path getPath(String imprintID) {
         return IMPRINT_DIR.resolve(imprintID + ".xml");
     }
 
-    protected static String getIDFromPath(Path path) {
+    protected String getIDFromPath(Path path) {
         String filename = path.getFileName().toString();
         return filename.substring(0, filename.lastIndexOf(".xml"));
     }
