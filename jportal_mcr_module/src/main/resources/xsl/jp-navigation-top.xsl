@@ -14,8 +14,8 @@
       <li>
         <xsl:variable name="imprintHref">
           <xsl:choose>
-            <xsl:when test="$journalID != '' and imprint:has($journalID)">
-              <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/imprint/webpage/', $journalID)" />
+            <xsl:when test="$journalID != '' and imprint:has($journalID, 'imprint')">
+              <xsl:value-of select="concat($WebApplicationBaseURL, 'rsc/fs/imprint/webpage/', $journalID)" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-imprint.xml')" />
@@ -26,6 +26,13 @@
           <xsl:value-of select="i18n:translate('jp.site.imprint')" />
         </a>
       </li>
+      <xsl:if test="$journalID != '' and imprint:has($journalID, 'partner')">
+        <li>
+          <a href="{concat($WebApplicationBaseURL, 'rsc/fs/partner/webpage/', $journalID)}">
+            <xsl:value-of select="i18n:translate('jp.site.partner')" />
+          </a>
+        </li>
+      </xsl:if>
       <xsl:if test="mcrxml:isCurrentUserInRole('admin')">
         <li>
           <a href="{$WebApplicationBaseURL}jp-admin.xml">Admin</a>

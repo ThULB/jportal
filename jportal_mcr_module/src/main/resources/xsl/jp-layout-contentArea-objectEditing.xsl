@@ -27,7 +27,7 @@
   <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)"/>
 
   <xsl:variable name="menuXML">
-    <menu>
+    <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="editorResource" href="/rsc/editor" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
@@ -53,9 +53,13 @@
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" />
         </item>
-        <item id="imprintButton" class="objectEditingButton">
+        <item id="imprintButton" class="objectEditingButton jp-infoFiles-button" type="imprint" journalid="{$currentObjID}" containerid="jp-content-LColumn">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Impressum auswählen" />
+        </item>
+        <item id="partnerButton" class="objectEditingButton jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="jp-content-LColumn">
+          <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
+          <label name="Partner auswählen" />
         </item>
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
@@ -177,53 +181,15 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
     <script type="text/javascript">
       $(document).ready(function() {
-        jp.imprint.setWebApplicationBaseURL('<xsl:value-of select="$WebApplicationBaseURL" />');
-        var journalID = '<xsl:value-of select="$currentObjID"/>';
-        var imprintContainer = $("&lt;div class='imprintContainer' /&gt;").appendTo($("#jp-content-LColumn"));
-        var imprintButton = $("#imprintButton");
-
-        var select = null;
-        var editor = null;
-
-        imprintButton.one('click', function() {
-          imprintButton.css("text-decoration", "none");
-          imprintButton.css("cursor", "default");
-
-          select = new jp.imprint.Select(journalID);
-          select.onChange = function(imprintID) {
-            if(editor != null) {
-              editor.update(imprintID);
-            }
-          };
-          select.onRender = function() {
-            imprintButton.html(select.domNode);
-          };
-          select.onEdit = function() {
-            editor = new jp.imprint.Editor(select.getValue());
-            editor.onBeforeBuild = function() {
-              imprintContainer.html(editor.domNode);
-            };
-            editor.onClose = function() {
-              editor = null;
-            };
-            editor.onBeforeSave = function(imprintID, oldID, data) {
-              if(imprintID != oldID &amp;&amp; select.has(imprintID)) {
-                return confirm("Es existiert bereits ein Impressum mit dem Namen '" + imprintID + "'. Wollen Sie das Impressum überschreiben?");
-              }
-              return true;
-            };
-            editor.onSave = function(imprintID) {
-              select.setValue(imprintID);
-            };
-            editor.render();
-          };
-          select.onRemove = function(imprintID) {
-            if(editor != null) {
-              editor.close();
-            }
-          };
-          select.render();
-        });
+      <!-- 
+      initFS({
+        baseURL: '<xsl:value-of select="$WebApplicationBaseURL" />',
+        type: 'imprint',
+        journalID: '<xsl:value-of select="$currentObjID"/>',
+        container: '#jp-content-LColumn',
+        button: '#imprintButton'
+      });
+       -->
       });
     </script>
   </xsl:template>
