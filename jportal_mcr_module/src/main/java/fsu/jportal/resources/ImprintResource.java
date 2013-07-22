@@ -38,17 +38,27 @@ import org.mycore.datamodel.common.MCRLinkTableManager;
 import com.google.gson.Gson;
 
 import fsu.jportal.backend.ImprintFS;
+import fsu.jportal.backend.ImprintManager;
 import fsu.jportal.util.ImprintUtil;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
 
 import static fsu.jportal.util.ImprintUtil.*;
 
-@Path("imprint")
+@Path("fs/{fsType}")
 //@MCRRestrictedAccess(IPRuleAccess.class)
 public class ImprintResource {
 
     private static final Logger LOGGER = Logger.getLogger(ImprintResource.class);
+    private @PathParam("fsType") String fsType;
+    private ImprintFS imprintFS;
+    
+    public ImprintFS getImprintFS() {
+        if(imprintFS == null){
+            imprintFS = ImprintManager.createFS(fsType);
+        }
+        return imprintFS;
+    }
 
     @GET
     @Path("retrieve/{imprintID}")
@@ -56,7 +66,7 @@ public class ImprintResource {
     public Response retrieve(@PathParam("imprintID") String imprintID) {
         JDOMSource xmlSource = null;
         try {
-            xmlSource = ImprintFS.receive(imprintID);
+            xmlSource = getImprintFS().receive(imprintID);
         } catch(JDOMException jdomExc) {
             LOGGER.error("unable to parse imprint webpage of " + imprintID, jdomExc);
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
@@ -80,7 +90,7 @@ public class ImprintResource {
         try {
             MCRWebpage mcrWebpage = new MCRWebpage();
             mcrWebpage.addSection(new MCRWebpage.Section().addContent(content));
-            ImprintFS.store(imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
+            getImprintFS().store(imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
         } catch (Exception exc) {
             LOGGER.error("unable to store imprint content '" + imprintID + "'", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
@@ -93,7 +103,7 @@ public class ImprintResource {
     public Response delete(@PathParam("imprintID") String imprintID) {
         // delete file
         try {
-            ImprintFS.delete(imprintID);
+            getImprintFS().delete(imprintID);
         } catch(Exception exc) {
             LOGGER.error("unable to delete imprint file '" + imprintID + "'", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
@@ -102,7 +112,7 @@ public class ImprintResource {
         MCRLinkTableManager ltm = MCRLinkTableManager.instance();
         Collection<String> references = ltm.getSourceOf(imprintID);
         for(String reference : references) {
-            ltm.deleteReferenceLink(reference, imprintID, IMPRINT_TYPE);    
+            ltm.deleteReferenceLink(reference, imprintID, fsType);    
         }
         return Response.ok().build();
     }
@@ -117,13 +127,13 @@ public class ImprintResource {
     @Path("webpage/{objID}")
     @Produces(MediaType.TEXT_HTML)
     public Response webpage(@PathParam("objID") String objID, @Context HttpServletRequest request, @Context HttpServletResponse response) {
-        String imprintID = ImprintUtil.getImprintID(objID);
+        String imprintID = ImprintUtil.getImprintID(objID, fsType);
         if(imprintID == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
         Source xmlSource = null;
         try {
-            xmlSource = ImprintFS.receive(imprintID);
+            xmlSource = getImprintFS().receive(imprintID);
         } catch (Exception exc) {
             LOGGER.error("while retrieving imprint " + imprintID, exc);
             throw new WebApplicationException(Status.INTERNAL_SERVER_ERROR);
@@ -153,7 +163,7 @@ public class ImprintResource {
     public Response list() {
         List<String> idList;
         try {
-            idList = ImprintFS.list();
+            idList = getImprintFS().list();
         } catch (Exception exc) {
             LOGGER.error("while retrieving imprint list", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
@@ -171,7 +181,7 @@ public class ImprintResource {
     @Path("get/{objID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("objID") String objID) {
-        String imprintID = getImprintID(objID);
+        String imprintID = getImprintID(objID, fsType);
         if (imprintID == null) {
             return Response.status(Status.NOT_FOUND).entity("no imprint id found").build();
         }
@@ -189,14 +199,14 @@ public class ImprintResource {
     @Path("set")
     public void set(@QueryParam("objID") String objID, @QueryParam("imprintID") String imprintID) {
         MCRLinkTableManager ltm = MCRLinkTableManager.instance();
-        String oldImprintID = getImprintID(objID);
+        String oldImprintID = getImprintID(objID, fsType);
         if (oldImprintID != null && oldImprintID.equals(imprintID)) {
             return;
         } else if (oldImprintID != null) {
-            ltm.deleteReferenceLink(objID, oldImprintID, IMPRINT_TYPE);
+            ltm.deleteReferenceLink(objID, oldImprintID, fsType);
         }
         if(!imprintID.equals("null")) {
-            ltm.addReferenceLink(objID, imprintID, IMPRINT_TYPE, null);
+            ltm.addReferenceLink(objID, imprintID, fsType, null);
         }
     }
 

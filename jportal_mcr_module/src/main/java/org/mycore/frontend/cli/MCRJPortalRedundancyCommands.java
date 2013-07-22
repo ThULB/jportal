@@ -1,5 +1,6 @@
 package org.mycore.frontend.cli;
 
+import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -8,9 +9,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.filter.ElementFilter;
+import org.mycore.access.MCRAccessManager;
+import org.mycore.common.xml.MCRAttributeValueFilter;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -97,6 +105,68 @@ public class MCRJPortalRedundancyCommands{
         // add delete command
         commandList.add(new StringBuffer("delete object ").append(doublet).toString());
         return commandList;
+    }
+    
+    /**
+     * Replaces all links which are found in the source mcrobject xml-tree.
+     * @param source The source Id as String.
+     * @param oldLink The link which to replaced.
+     * @param newLink The new link.
+     */
+    @MCRCommand(helpKey = "internal command for replacing links and removing the doublet", syntax = "internal replace links {0} {1} {2}")
+    public static void replaceLinks(String sourceId, String oldLink, String newLink) throws Exception {
+        if (!MCRAccessManager.checkPermission(sourceId, PERMISSION_WRITE)) {
+            LOGGER.error("The current user has not the permission to modify " + sourceId);
+            return;
+        }
+
+        MCRObject sourceMCRObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(sourceId));
+
+        // ArrayList for equal elements
+        ArrayList<Element> equalElements = new ArrayList<Element>();
+
+        Namespace ns = Namespace.getNamespace("xlink", "http://www.w3.org/1999/xlink");
+        MCRAttributeValueFilter oldLinkFilter = new MCRAttributeValueFilter("href", ns, oldLink);
+        Document doc = sourceMCRObject.createXML();
+        Iterator<Element> i = doc.getDescendants(oldLinkFilter);
+        while (i.hasNext()) {
+            Element e = i.next();
+            e.setAttribute("href", newLink, ns);
+            /*  It is possible, that an updated element is equal with an existing element.
+                In that case it is necessary to delete the new element. */
+            if (isElementAlreadyExists(e)) {
+                equalElements.add(e);
+            }
+        }
+        // delete equal elements
+        for (Element e : equalElements) {
+            Element parent = e.getParentElement();
+            parent.removeContent(e);
+        }
+        sourceMCRObject = new MCRObject(doc);
+        MCRMetadataManager.update(sourceMCRObject);
+        LOGGER.info("Links replaced of source " + sourceId + ": " + oldLink + " -> " + newLink);
+    }
+    
+    /**
+     * Checks if the element is equal to an element from the same parent.
+     * @param element The element to check.
+     * @return If the element in the parent already exists.
+     */
+    protected static boolean isElementAlreadyExists(Element element) {
+        Element parent = element.getParentElement();
+        ElementFilter filter = new ElementFilter(element.getName());
+        for (Element child : parent.getContent(filter)) {
+            // only different instances
+            if (element == child)
+                continue;
+
+            // bad compare, but jdom doesnt support a better solution
+            if (element.getName().equals(child.getName()) && element.getAttributes().toString().equals(child.getAttributes().toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static String getDoubletOf(MCRHit hit) {

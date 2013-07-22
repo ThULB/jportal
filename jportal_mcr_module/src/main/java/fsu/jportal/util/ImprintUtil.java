@@ -7,8 +7,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 
 public abstract class ImprintUtil {
 
-    public static final String IMPRINT_TYPE = "imprint";
-
     /**
      * Returns the imprint of the given object id or throws a 404 not
      * found web application exception.
@@ -16,9 +14,9 @@ public abstract class ImprintUtil {
      * @param objID mycore object id
      * @return id of imprint
      */
-    public static String getImprintID(String objID) {
+    public static String getImprintID(String objID, String fsType) {
         MCRObjectID mcrObjID = MCRObjectID.getInstance(objID);
-        Collection<String> c = MCRLinkTableManager.instance().getDestinationOf(mcrObjID, IMPRINT_TYPE);
+        Collection<String> c = MCRLinkTableManager.instance().getDestinationOf(mcrObjID, fsType);
         if (c.isEmpty()) {
             return null;
         }
@@ -31,8 +29,8 @@ public abstract class ImprintUtil {
      * @param objID mycore object id to check
      * @return true if an imprint is assigned, otherwise false
      */
-    public static boolean has(String objID) {
-        return getImprintID(objID) != null;
+    public static boolean has(String objID, String fsType) {
+        return getImprintID(objID, fsType) != null;
     }
 
 }
