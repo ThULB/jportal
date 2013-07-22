@@ -6,7 +6,7 @@ $(document).ready(function() {
 			$("span.numDub").on("initGUIElem", function(){
 				var numDubDispl = $(this);
 				var type = numDubDispl.attr("type");
-				$.get("/rsc/search?q=%2BdoubletOf:* %2BobjectType:"+type,function(data){
+				$.get("/servlets/solr/select?wt=json&q=%2BdoubletOf:* %2BobjectType:"+type,function(data){
 					var numDoublets = data.response.numFound;
 					numDubDispl.text(numDoublets);
 					if(numDoublets == 0){
@@ -21,7 +21,7 @@ $(document).ready(function() {
 			$("span.numGND").on("initGUIElem", function(){
 				var numDubDispl = $(this);
 				var type = numDubDispl.attr("type");
-				$.get("/rsc/search?q=-id.gnd:* %2BobjectType:"+type,function(data){
+				$.get("/servlets/solr/select?wt=json&q=-id.gnd:* %2BobjectType:"+type,function(data){
 					var numDoublets = data.response.numFound;
 					numDubDispl.text(numDoublets);
 					if(numDoublets == 0){

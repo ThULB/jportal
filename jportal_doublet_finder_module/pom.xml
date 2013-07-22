@@ -9,6 +9,7 @@
   </parent>
   <artifactId>jportal_doublet_finder_module</artifactId>
   <name>Jportal Doublet Finder</name>
+  
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -28,6 +29,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>jportal_editor_center_module</finalName>
+    <finalName>JPortal Doublet Finder</finalName>
   </build>
 </project>
