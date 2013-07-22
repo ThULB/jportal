@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:ext="xalan://org.mycore.services.fieldquery.data2fields.MCRXSLBuilder" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="i18n xsi xlink ext mcrxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="i18n xsi xlink mcrxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -146,7 +145,32 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaISO8601Date']">
-    <xsl:value-of select="ext:normalizeDate(string(text()))" />
+     <xsl:variable name="format">
+      <xsl:choose>
+        <xsl:when test="string-length(normalize-space(.)) = 4">
+          <xsl:value-of select="i18n:translate('metaData.dateYear')" />
+        </xsl:when>
+        <xsl:when test="string-length(normalize-space(.)) = 7">
+          <xsl:value-of select="i18n:translate('metaData.dateYearMonth')" />
+        </xsl:when>
+        <xsl:when test="string-length(normalize-space(.)) = 10">
+          <xsl:value-of select="i18n:translate('metaData.dateYearMonthDay')" />
+        </xsl:when>
+        <xsl:when test="string-length(normalize-space(.)) = 5">
+          <xsl:value-of select="'y G'" />
+        </xsl:when>
+        <xsl:when test="string-length(normalize-space(.)) = 11">
+          <xsl:value-of select="'d. MMMM y G'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="i18n:translate('metaData.dateTime')" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:call-template name="formatISODate">
+      <xsl:with-param name="date" select="." />
+      <xsl:with-param name="format" select="$format" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink']">

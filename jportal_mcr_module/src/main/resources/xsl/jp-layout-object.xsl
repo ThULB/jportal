@@ -13,6 +13,7 @@
   <xsl:include href="jp-layout-contentArea-metadata.xsl" />
   <xsl:include href="jp-layout-functions.xsl" />
   <xsl:include href="jp-layout-tools.xsl" />
+  <xsl:include href="coreFunctions.xsl" />
 
   <xsl:template match="/mycoreobject">
     <div class="jp-metadata" data-jp-id="{@ID}">
