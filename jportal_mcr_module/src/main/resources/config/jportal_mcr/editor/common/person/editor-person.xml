@@ -305,27 +305,25 @@
   </panel>
   <text id="LdoubletOf" i18n="editormask.labels.LdoubletOf" />
   <helpPopup id="HdoubletOf" width="400" height="250" i18n="editormask.labels.HdoubletOf" />
-  
+
   <panel id="DNote">
     <hidden var="@class" default="MCRMetaLangText" />
     <hidden var="@notinherit" default="true" />
     <hidden var="@heritable" default="true" />
     <hidden var="note/@inherited" default="0" />
     <cell col="1" row="1" anchor="NORTHWEST" var="note/@type">
-        <list type="dropdown">
-    <item value="hidden">
-        <label xml:lang="en">Hidden</label>
-        <label xml:lang="de">Unsichtbar</label>
-    </item>
-    <item value="visible">
-        <label xml:lang="en">Visible</label>
-        <label xml:lang="de">Sichtbar</label>
-    </item>
-  </list>
-    
+      <list type="dropdown">
+        <item value="visible">
+          <label xml:lang="en">Visible</label>
+          <label xml:lang="de">Sichtbar</label>
+        </item>
+        <item value="hidden">
+          <label xml:lang="en">Hidden</label>
+          <label xml:lang="de">Unsichtbar</label>
+        </item>
+      </list>
     </cell>
     <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="note" />
   </panel>
-
   
 </components>

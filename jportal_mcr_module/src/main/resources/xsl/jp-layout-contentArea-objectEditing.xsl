@@ -99,6 +99,7 @@
       <item class="jp-layout-menu-dropdown">
         <restriction name="updatePerm" value="true" />
         <restriction name="linkImgAllowed" value="true" />
+        <restriction name="dataModel" contains="datamodel-" />
         <item>
           <label name="Bild verlinken" ref="linkImgUrl" />
         </item>
