@@ -66,7 +66,7 @@
             <xsl:with-param name="file" select="$file" />
           </xsl:call-template>
         </xsl:if>
-        <xsl:if test="$editable = 'true' and $deleteLink">
+        <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
           <ul class="edit">
             <li>
               <a href="{$WebApplicationBaseURL}servlets/DerivateLinkServlet?mode=removeLink&amp;from={$objID}&amp;to={@xlink:href}">
@@ -110,7 +110,7 @@
           <xsl:with-param name="derivID" select="$derivID" />
         </xsl:call-template>
       </xsl:if>
-      <xsl:if test="$editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
+      <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
         <ul class="edit">
           <li>
             <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a>
@@ -156,9 +156,9 @@
         <xsl:variable name="url">
           <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/MCRMETSServlet/', $derivID)" />
           <xsl:if test="$file != ''">
-            <xsl:value-of select="concat('/', $file)" />
+            <xsl:value-of select="$file" />
           </xsl:if>
-          <xsl:value-of select="'&amp;XSL.Style=dfg'" />
+          <xsl:value-of select="'?XSL.Style=dfg'" />
         </xsl:variable>
         <xsl:value-of select="encoder:encode($url)" />
       </xsl:variable>  
