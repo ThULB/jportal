@@ -28,8 +28,7 @@
   </xsl:template>
 
   <xsl:template match="/mycoreobject[contains(@ID, 'jpjournal') or contains(@ID, 'jpvolume') or contains(@ID, 'jparticle')]" mode="footer">
-    <xsl:variable name="hiddenJournalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
-    <xsl:variable name="journal" select="document(concat('mcrobject:', $hiddenJournalID))/mycoreobject" />
+    <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
     <xsl:choose>
       <xsl:when test="$journal/metadata/participants/participant[@type='partner']">
         <xsl:call-template name="jp.footer.print.partner">
