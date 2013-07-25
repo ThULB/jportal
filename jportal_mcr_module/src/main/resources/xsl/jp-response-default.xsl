@@ -290,11 +290,11 @@
       <span class="groupName">
         <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
       </span>
-      <ul>
+      <table>
         <xsl:apply-templates select="int" mode="facetField">
           <xsl:with-param name="facet" select="@name"/>
         </xsl:apply-templates>
-      </ul>
+      </table>
     </div>
   </xsl:template>
 
@@ -319,14 +319,36 @@
         <xsl:value-of select="'selected'" />
       </xsl:if>
     </xsl:variable>
+    <xsl:variable name="text">
+      <xsl:variable name="facetSettings" select="$settings/facet[@name=$facet]" />
+      <xsl:choose>
+        <xsl:when test="$facetSettings/@translate = 'true'">
+          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))" />
+        </xsl:when>
+        <xsl:when test="$facetSettings/@mcrid = 'true'">
+          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $value))/mycoreobject" />
+          <xsl:apply-templates mode="printTitle"
+            select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$value" />
+        </xsl:otherwise>      
+      </xsl:choose>
+    </xsl:variable>
 
-    <li>
-      <a href="{$href}">
-        <i class="icon {$class}"></i>
-        <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))" />
-      </a>
-      <span class="count"><xsl:value-of select="concat(' (', $count, ')')" /></span>
-    </li>
+    <tr>
+      <td class="text">
+        <a href="{$href}">
+          <i class="icon {$class}"></i>
+          <span class="text">
+            <xsl:value-of select="$text" />
+          </span>
+        </a>
+      </td>
+      <td class="count">
+        <xsl:value-of select="concat(' (', $count, ')')" />
+      </td>
+    </tr>
   </xsl:template>
 
 </xsl:stylesheet>

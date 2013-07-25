@@ -71,4 +71,7 @@
   <numPerPage for="volume">10</numPerPage>
   <numPerPage for="article">5</numPerPage>
   <title allowHTML="false" />
+
+  <facet name="objectType" translate="true" />
+  <facet name="participant.partner" mcrid="true" />
 </layoutSettings>

@@ -10,6 +10,15 @@
     <fieldType name="date" class="solr.TrieDateField" omitNorms="true" precisionStep="0" positionIncrementGap="0" />
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
 
+    <!-- for indexing id#label value pairs. provides searches on field:id but returns the whole value as text
+    separated by a hash. -->
+    <fieldtype name="idLabelPair" class="solr.TextField">
+      <analyzer>
+        <tokenizer class="solr.KeywordTokenizerFactory" />
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="#" encoder="identity" />
+      </analyzer>
+    </fieldtype>
+
     <fieldtype name="payloads" stored="false" class="solr.TextField">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
@@ -132,7 +141,7 @@
     <field name="date.published_Original_From" type="string" indexed="false" />
     <field name="date.published_Original_Till" type="string" indexed="false" />
 
-    <dynamicField name="participant.*" type="string" indexed="true" stored="true"  multiValued="true"/>
+    <dynamicField name="participant.*" type="idLabelPair" indexed="true" stored="true"  multiValued="true" />
 
     <field name="derivateLink" type="string" multiValued="true" />
 
@@ -140,7 +149,7 @@
     <field name="heading_base" type="string" />
     <field name="dateOfBirth" type="string" />
     <field name="dateOfDeath" type="string" />
-    
+
     <!-- doublets -->
     <field name="doubletOf" type="string" />
     

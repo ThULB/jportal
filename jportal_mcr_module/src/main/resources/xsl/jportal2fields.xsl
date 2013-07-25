@@ -95,6 +95,14 @@
 
   <!-- participant -->
   <xsl:template match="participants/participant" mode="jportal.metadata">
+    <xsl:call-template name="jp.index.participants" />
+  </xsl:template>
+
+  <xsl:template match="participants/participant" mode="jportal.journal">
+    <xsl:call-template name="jp.index.participants" />
+  </xsl:template>
+
+  <xsl:template name="jp.index.participants">
     <field name="participants">
       <xsl:value-of select="@xlink:title" />
     </field>

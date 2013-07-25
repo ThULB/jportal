@@ -1814,7 +1814,9 @@
       <!-- facet -->
       <str name="facet">true</str>
       <str name="facet.field">objectType</str>
+      <str name="facet.field">participant.partner</str>
       <str name="facet.mincount">1</str>
+      <str name="facet.limit">12</str>
     </lst>
     <lst name="appends">
       <str name="fq">-objectType:data_file</str>
@@ -1835,7 +1837,9 @@
       <!-- facet -->
       <str name="facet">true</str>
       <str name="facet.field">objectType</str>
+      <str name="facet.field">participant.partner</str>
       <str name="facet.mincount">1</str>
+      <str name="facet.limit">12</str>
     </lst>
     <lst name="appends">
       <str name="fq">-objectType:data_file</str>

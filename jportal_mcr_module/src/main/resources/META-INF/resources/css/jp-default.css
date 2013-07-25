@@ -779,11 +779,21 @@ body {
 	font-size: 1rem;
 	background-color: #F8F8F8;
 }
-.jp-layout-facet-list .group ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
+.jp-layout-facet-list .group table {
+	width: 100%;
+	border-spacing: 0px;
 }
+.jp-layout-facet-list .group table td {
+	padding: 0px;
+	vertical-align: top;
+}
+.jp-layout-facet-list .group table td.text {
+	text-align: left;
+}
+.jp-layout-facet-list .group table td.count {
+	text-align: right;
+}
+
 .jp-layout-facet-list .group .groupName {
 	font-weight: bold;
 	margin-bottom: 4px;
@@ -800,10 +810,6 @@ body {
 .jp-layout-facet-list .group a:hover .icon.selected:before {
 	content: "\f00d";
 }
-.jp-layout-facet-list .group .count {
-	float: right;
-}
-
 .jp-layout-content-LCol {
 	float: left;
 	padding-bottom: 20px;
