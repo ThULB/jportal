@@ -102,6 +102,13 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <restriction name="updatePerm" value="true" />
+        <restriction name="createJournal" value="true" />
+        <item>
+          <label name="Dublettenfinder" href="/rsc/doublets" />
+        </item>
+      </item>
+      <item class="jp-layout-menu-dropdown">
+        <restriction name="updatePerm" value="true" />
         <restriction name="linkImgAllowed" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
