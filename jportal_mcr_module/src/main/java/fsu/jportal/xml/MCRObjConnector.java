@@ -45,10 +45,46 @@ public class MCRObjConnector {
         
     }
 
-    public String getRubric(String journalID) {
-        MCRMetaElement metadataElement = mcrObject.getMetadata().getMetadataElement("hidden_rubricsID");
+    public String getRubric() {
+        return getRubric("hidden_rubricsID", "hidden_rubricID");
+    }
+    
+    public List<String> getRubrics() {
+        List<String> rubricIDs = new ArrayList<>();
+        
+        for (int i = 1; i <= 6; i++) {
+            String tag = "hidden_classiVol" +i;
+            addRubric(rubricIDs, getRubric(tag,tag));
+        }
+        
+        rubricIDs.add(getRubric("hidden_pubTypesID", "hidden_pubTypeID"));
+        
+        for (int i = 1; i <= 4; i++) {
+            String mainTag = "hidden_classispub";
+            String subTag = "hidden_classipub";
+            
+            if(i != 1){
+                mainTag = mainTag + i;
+                subTag = subTag + i;
+            }
+            
+            addRubric(rubricIDs, getRubric(mainTag,subTag));
+        }
+        
+        addRubric(rubricIDs, getRubric("hidden_rubricsID", "hidden_rubricID"));
+        return rubricIDs;
+    }
+
+    private void addRubric(List<String> rubricIDs, String rubric) {
+        if(rubric != null) {
+            rubricIDs.add(rubric);
+        }
+    }
+    
+    private String getRubric(String mainTag, String subTag) {
+        MCRMetaElement metadataElement = mcrObject.getMetadata().getMetadataElement(mainTag);
         if(metadataElement != null){
-            MCRMetaInterface element = metadataElement.getElementByName("hidden_rubricID");
+            MCRMetaInterface element = metadataElement.getElementByName(subTag);
             if(element instanceof MCRMetaLangText){
                 MCRMetaLangText metaLangText = (MCRMetaLangText) element;
                 return metaLangText.getText();
@@ -57,7 +93,7 @@ public class MCRObjConnector {
         
         return null;
     }
-
+    
     public void addRubric(MCRCategoryID newRubricID) {
         List<MCRMetaInterface> children = new ArrayList<MCRMetaInterface>();
         MCRMetaLangText elem = new MCRMetaLangText("hidden_rubricID", null, null, 0, null, newRubricID.getRootID());

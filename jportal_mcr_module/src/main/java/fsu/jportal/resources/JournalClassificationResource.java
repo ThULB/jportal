@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -36,8 +37,8 @@ public class JournalClassificationResource extends MCRClassificationEditorResour
     public String list() {
 
         MCRObjConnector objConnector = new MCRObjConnector(journalID);
-        String rubricID = objConnector.getRubric(journalID);
-        if(rubricID == null){
+        List<String> rubrics = objConnector.getRubrics();
+        if(rubrics.size() <= 0){
             MCRJSONCategory newRubricClassi = new MCRJSONCategory();
             MCRCategoryID newRubricID = newRootID();
             newRubricClassi.setId(newRubricID);
@@ -49,7 +50,14 @@ public class JournalClassificationResource extends MCRClassificationEditorResour
             objConnector.addRubric(newRubricID);
             Gson gson = MCRJSONManager.instance().createGson();
             return gson.toJson(newRubricClassi);
+        } else {
+            StringBuffer rubricJsonArray = new StringBuffer();
+            for (String rubricID : rubrics) {
+                String rubricJson = get(rubricID);
+                rubricJsonArray.append(rubricJson + ",");
+            }
+            
+            return "[" + rubricJsonArray.toString().substring(0, rubricJsonArray.length()-1) + "]";
         }
-        return get(rubricID);
     }
 }
