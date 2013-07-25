@@ -157,7 +157,7 @@ jp.az = {
 	},
 
 	printPublisher: function(node, journal) {
-		var publisherList = journal.publisher;
+		var publisherList = journal["participant.mainPublisher"];
 		if(publisherList) {
 			var pusblisherStr = '<div class="publisher">Herausgeber: ';
 	    	for(var i = 0; i < publisherList.length; i++) {

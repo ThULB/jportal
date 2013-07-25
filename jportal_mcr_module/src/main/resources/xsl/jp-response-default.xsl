@@ -138,7 +138,7 @@
     <field name="published_from" label="Erschienen" />
     <field name="dateOfBirth" label="Geburtsdatum" />
     <field name="dateOfDeath" label="Sterbedatum" />
-    <field name="participant" label="Autor" />
+    <field name="participant.author" label="Autor" />
     <field name="date.published" label="Erschienen" />
     <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
     <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
@@ -223,10 +223,10 @@
     </span>
   </xsl:template>
 
-  <xsl:template mode="searchHitDataField" match="str[@name='participant']">
+  <xsl:template mode="searchHitDataField" match="arr[@name='participant.author']/str">
     <span class="jp-layout-inList">
-      <a href="{$WebApplicationBaseURL}receive/{../str[@name='participantID']}">
-        <xsl:value-of select="text()" />
+      <a href="{$WebApplicationBaseURL}receive/{substring-before(., '#')}">
+        <xsl:value-of select="substring-after(., '#')" />
       </a>
     </span>
   </xsl:template>

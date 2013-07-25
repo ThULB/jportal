@@ -95,21 +95,11 @@
 
   <!-- participant -->
   <xsl:template match="participants/participant" mode="jportal.metadata">
-    <xsl:if test="@type='mainPublisher'">
-      <field name="publisher">
-        <xsl:value-of select="concat(@xlink:href, '#', @xlink:title)" />
-      </field>
-    </xsl:if>
-    <xsl:if test="position() = 1">
-      <field name="participant">
-        <xsl:value-of select="@xlink:title" />
-      </field>
-      <field name="participantID">
-        <xsl:value-of select="@xlink:href" />
-      </field>
-    </xsl:if>
     <field name="participants">
       <xsl:value-of select="@xlink:title" />
+    </field>
+    <field name="participant.{@type}">
+      <xsl:value-of select="concat(@xlink:href, '#', @xlink:title)" />
     </field>
   </xsl:template>
 

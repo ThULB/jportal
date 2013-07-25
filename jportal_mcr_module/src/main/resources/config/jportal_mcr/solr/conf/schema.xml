@@ -132,9 +132,7 @@
     <field name="date.published_Original_From" type="string" indexed="false" />
     <field name="date.published_Original_Till" type="string" indexed="false" />
 
-    <field name="publisher" type="string" indexed="false" multiValued="true" />
-    <field name="participant" type="string" indexed="false" />
-    <field name="participantID" type="string" indexed="false" />
+    <dynamicField name="participant.*" type="string" indexed="true" stored="true"  multiValued="true"/>
 
     <field name="derivateLink" type="string" multiValued="true" />
 

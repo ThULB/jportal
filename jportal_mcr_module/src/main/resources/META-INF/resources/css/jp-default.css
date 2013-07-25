@@ -886,12 +886,19 @@ body {
 	margin-left: 6px;
 }
 
-.jp-layout-tableOfContent>ul {
+.jp-layout-tableOfContent a.title {
+	font-weight: bold;
+	margin-bottom: 4px;
+	font-size: 1.1rem;
+	font-style: normal;
+}
+
+.jp-layout-tableOfContent > ul {
 	display: block;
 }
 
-.jp-layout-tableOfContent>ul li{
-	margin-bottom: 12px;
+.jp-layout-tableOfContent > ul li{
+	margin-bottom: 2px;
 }
 
 .resultPaginator {

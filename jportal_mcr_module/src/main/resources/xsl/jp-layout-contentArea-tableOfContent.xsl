@@ -65,7 +65,7 @@
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
         <xsl:variable name="fields">
-          <field name="participants_withName" label="Autor" />
+          <field name="participant.author" label="Autor" />
           <field name="date.published" label="Erschienen" />
           <field name="date.published_Original" label="Erscheinungsjahr des rez. Werkes" />
           <field name="date.published_Original_From" label="Erscheinungsbeginn der rez. Werke" />
@@ -75,26 +75,24 @@
         </xsl:variable>
         <xsl:variable name="doc" select="." />
         <li>
-          <div class="metadata">
-            <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
-              <xsl:value-of select="str[@name='maintitle']" />
-            </a>
-            <p>
-              <ul class="jp-layout-metadaInSearchResults">
-                <xsl:for-each select="xalan:nodeset($fields)/field">
-                  <xsl:variable name="fieldName" select="@name" />
-                  <xsl:if test="$doc/*[@name = $fieldName]">
-                    <li>
-                      <span class="jp-layout-label">
-                        <xsl:value-of select="@label" />
-                      </span>
-                      <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
-                    </li>
-                  </xsl:if>
-                </xsl:for-each>
-              </ul>
-            </p>
-          </div>
+          <ul class="metadata jp-layout-metadaInSearchResults">
+            <li>
+              <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
+                <xsl:value-of select="str[@name='maintitle']" />
+              </a>
+            </li>
+            <xsl:for-each select="xalan:nodeset($fields)/field">
+              <xsl:variable name="fieldName" select="@name" />
+              <xsl:if test="$doc/*[@name = $fieldName]">
+                <li>
+                  <span class="jp-layout-label">
+                    <xsl:value-of select="@label" />
+                  </span>
+                  <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
+                </li>
+              </xsl:if>
+            </xsl:for-each>
+          </ul>
           <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
           <xsl:call-template name="derivatePreview">
             <xsl:with-param name="mcrObj" select="$mcrObj" />
@@ -125,10 +123,10 @@
     </span>
   </xsl:template>
 
-  <xsl:template mode="artEntryFields" match="str[@name='participant']">
+  <xsl:template mode="artEntryFields" match="arr[@name='participant.author']/str">
     <span class="jp-layout-inList">
-      <a href="{$WebApplicationBaseURL}receive/{../str[@name='participantID']}">
-        <xsl:value-of select="text()" />
+      <a href="{$WebApplicationBaseURL}receive/{substring-before(., '#')}">
+        <xsl:value-of select="substring-after(., '#')" />
       </a>
     </span>
   </xsl:template>
