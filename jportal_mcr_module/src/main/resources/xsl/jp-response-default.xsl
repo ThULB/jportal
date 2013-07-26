@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
   xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
   <xsl:param name="returnURL" />
 
@@ -32,6 +33,12 @@
   </xsl:template>
 
   <xsl:template mode="searchResultText" match="response[result/@numFound &gt; 1]">
+    <xsl:variable name="resultInfoXML">
+      <xsl:call-template name="jp.pagination.getResultInfoXML">
+        <xsl:with-param name="response" select="/response" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
     <xsl:value-of select="concat($resultInfo/numFound, ' Ergebnisse gefunden.')" />
     <xsl:if test="$resultInfo/page > 0">
       <xsl:value-of select="concat(' (Seite ', $resultInfo/page + 1, ')')" />
@@ -129,7 +136,7 @@
       </div>
     </xsl:if>
     <div class="clear" />
-    <xsl:apply-templates mode="pagination" select="." />
+    <xsl:apply-templates mode="jp.pagination" select="." />
   </xsl:template>
 
   <xsl:variable name="searchResultsFields">

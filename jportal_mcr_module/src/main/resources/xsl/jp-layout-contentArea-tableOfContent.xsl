@@ -20,17 +20,9 @@
           <ul>
             <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
           </ul>
-
-          <xsl:if test="$volumes/response/result/@numFound &gt; $numPerPage_vol">
-            <div class="resultPaginator">
-              <span>Seite: </span>
-              <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-                <xsl:apply-templates mode="tableOfContentNavi" select="$volumes/response" >
-                  <xsl:with-param name="tocName" select="'XSL.vol.start'"/>
-                </xsl:apply-templates>
-              </menu>
-            </div>
-          </xsl:if>
+          <xsl:apply-templates mode="jp.pagination" select="$volumes/response">
+            <xsl:with-param name="startParam" select="'XSL.vol.start'" />
+          </xsl:apply-templates>
         </div>
       </li>
     </xsl:if>
@@ -45,16 +37,9 @@
           <ul id="artList">
             <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
           </ul>
-          <xsl:if test="$articles/response/result/@numFound &gt; $numPerPage_art">
-            <div class="resultPaginator">
-              <span>Seite: </span>
-              <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-                <xsl:apply-templates mode="tableOfContentNavi" select="$articles/response" >
-                  <xsl:with-param name="tocName" select="'XSL.art.start'"/>
-                </xsl:apply-templates>
-              </menu>
-            </div>
-          </xsl:if>
+          <xsl:apply-templates mode="jp.pagination" select="$articles/response">
+            <xsl:with-param name="startParam" select="'XSL.art.start'" />
+          </xsl:apply-templates>
         </div>
       </li>
     </xsl:if>
@@ -151,40 +136,4 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template mode="tableOfContentNavi" match="response">
-    <xsl:param name="i" select="1" />
-    <xsl:param name="tocName"/>
-
-    <xsl:variable name="start" select="result/@start" />
-    <xsl:variable name="rows" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='rows']" />
-    <xsl:variable name="numFound" select="result/@numFound" />
-    <xsl:variable name="page" select="math:ceil($start div $rows)" />
-    <xsl:variable name="pages" select="math:ceil($numFound div $rows)" />
-
-    <xsl:variable name="url">
-      <xsl:call-template name="UrlSetParam">
-        <xsl:with-param name="url" select="$RequestURL" />
-        <xsl:with-param name="par" select="$tocName" />
-        <xsl:with-param name="value" select="($i - 1) * $rows" />
-      </xsl:call-template>
-    </xsl:variable>
-
-    <li>
-      <xsl:if test="$i = $page+1">
-        <xsl:attribute name="class">
-            <xsl:value-of select="'jp-layout-selected-underline'" />
-          </xsl:attribute>
-      </xsl:if>
-      <a href="{$url}">
-        <xsl:value-of select="$i" />
-      </a>
-    </li>
-
-    <xsl:if test="$i &lt; $pages">
-      <xsl:apply-templates mode="tableOfContentNavi" select=".">
-        <xsl:with-param name="i" select="$i +1" />
-        <xsl:with-param name="tocName" select="$tocName" />
-      </xsl:apply-templates>
-    </xsl:if>
-  </xsl:template>
 </xsl:stylesheet>

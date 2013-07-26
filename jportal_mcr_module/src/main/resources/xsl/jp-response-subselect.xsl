@@ -203,7 +203,7 @@
   <!-- Rendering view for result list paginator -->
   <xsl:template mode="renderView" match="component[@id='resultPaginator']">
     <xsl:param name="data" />
-    <xsl:apply-templates select="$data" mode="pagination" />
+    <xsl:apply-templates select="$data" mode="jp.pagination" />
   </xsl:template>
 
   <xsl:template mode="renderView" match="@class[contains(.,'{resultpage}')]">
