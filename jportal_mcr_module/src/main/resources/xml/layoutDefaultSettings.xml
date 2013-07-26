@@ -74,4 +74,5 @@
 
   <facet name="objectType" translate="true" />
   <facet name="participant.partner" mcrid="true" />
+  <facet name="contentClassi1" translate="true" />
 </layoutSettings>

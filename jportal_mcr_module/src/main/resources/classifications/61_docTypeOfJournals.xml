@@ -19,5 +19,9 @@
             <label xml:lang="en" text="calendar"></label>
             <label xml:lang="pl" text="kalendarz"></label>
         </category>
+        <category ID="obligate_issue">
+            <label xml:lang="de" text="Pflichtzeitschrift"></label>
+            <label xml:lang="en" text="obligate issue"></label>
+        </category>
     </categories>
 </mycoreclass>
