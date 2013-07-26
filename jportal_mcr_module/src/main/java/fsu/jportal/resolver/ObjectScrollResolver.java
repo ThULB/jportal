@@ -51,7 +51,12 @@ public class ObjectScrollResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         href = href.substring(href.indexOf(":") + 1);
         MCRObjectID mcrID = MCRObjectID.getInstance(href);
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrID);
+        MCRObject mcrObj;
+        try {
+            mcrObj = MCRMetadataManager.retrieveMCRObject(mcrID);
+        } catch(Exception exc) {
+            throw new TransformerException("unable to get object " + href, exc);
+        }
         // get parent
         MCRObjectID parentID = mcrObj.getStructure().getParentID();
         if (parentID == null) {
