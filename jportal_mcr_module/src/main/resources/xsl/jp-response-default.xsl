@@ -286,13 +286,15 @@
   <!-- *************************************************** -->
   <xsl:template mode="facetList" match="lst">
   </xsl:template>
-  
+  <xsl:template mode="facetGroup" match="lst">
+  </xsl:template>
+
   <xsl:template mode="facetList" match="lst[@name='facet_fields']">
     <h3><xsl:value-of select="i18n:translate('jp.metadata.facet.intro')" /></h3>
     <xsl:apply-templates mode="facetGroup" select="lst" />
   </xsl:template>
 
-  <xsl:template mode="facetGroup" match="lst">
+  <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
     <div class="group">
       <span class="groupName">
         <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
