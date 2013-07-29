@@ -13,10 +13,7 @@ html a {
 	color: #333;
 	text-decoration: none;
 }
-html .jp-layout-metadataList a {
-	color: #2A89C1;
-}
-html p a {
+html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-layout-searchBreadcrumb a {
 	color: #2A89C1;
 }
 
