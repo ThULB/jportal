@@ -38,12 +38,16 @@
 
   <xsl:template name="jp.printClass">
     <xsl:param name="nodes" />
+    <xsl:param name="languages" />
+    <xsl:param name="lang" />
+    
     <xsl:for-each select="$nodes">
-      <xsl:variable name="label" select="./label[lang($CurrentLang)]/@text" />
+      <xsl:variable name="label" select="./label[lang($lang)]/@text" />
       <xsl:choose>
         <xsl:when test="string-length($label) = 0">
           <xsl:call-template name="jp.printClass.fallback">
             <xsl:with-param name="node" select="." />
+            <xsl:with-param name="languages" select="$languages" />
           </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
@@ -56,6 +60,7 @@
   <xsl:template name="jp.printClass.fallback">
     <xsl:param name="node" />
     <xsl:param name="pos" select="1" />
+    <xsl:param name="languages" />
     <xsl:variable name="classlabel" select="$node/label[lang($languages/lang[$pos]/text())]/@text" />
  	<xsl:choose>
       <xsl:when test="string-length($classlabel) != 0">
@@ -65,9 +70,44 @@
         <xsl:call-template name="jp.printClass.fallback">
           <xsl:with-param name="node" select="$node" />
           <xsl:with-param name="pos" select="$pos + 1" />
+          <xsl:with-param name="languages" select="$languages" />
         </xsl:call-template>
       </xsl:when>
     </xsl:choose>
+  </xsl:template>
+
+  <!-- *************************************************** -->
+  <!-- * PERSON NAME -->
+  <!-- *************************************************** -->
+  <xsl:template mode="jp.metadata.person.name" match="heading | alternative">
+    <xsl:choose>
+      <xsl:when test="name">
+        <xsl:value-of select="name" />
+        <xsl:if test="collocation">
+          <xsl:value-of select="concat(' &lt;',collocation,'&gt;')" />
+        </xsl:if>
+      </xsl:when>
+      <xsl:when test="firstName and lastName and collocation">
+        <xsl:value-of select="concat(lastName,', ',firstName,' &lt;',collocation,'&gt;')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="firstName and lastName and nameAffix">
+          <xsl:value-of select="concat(lastName,', ',firstName,' ',nameAffix)" />
+        </xsl:if>
+        <xsl:if test="firstName and lastName and not(nameAffix)">
+          <xsl:value-of select="concat(lastName,', ',firstName)" />
+        </xsl:if>
+        <xsl:if test="firstName and not(lastName or nameAffix)">
+          <xsl:value-of select="firstName" />
+        </xsl:if>
+        <xsl:if test="not (firstName) and lastName">
+          <xsl:value-of select="lastName" />
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:if test="position() != last()">
+      <xsl:value-of select="'; '" />
+    </xsl:if>
   </xsl:template>
 
   <!-- *************************************************** -->

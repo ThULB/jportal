@@ -86,7 +86,7 @@
 
   <xsl:template mode="jp.printListEntryContent" match="heading">
     <span>
-      <xsl:apply-templates mode="metadataPersName" select="." />
+      <xsl:apply-templates mode="jp.metadata.person.name" select="." />
     </span>
   </xsl:template>
 

@@ -138,6 +138,8 @@
     <xsl:variable name="classlink" select="concat('classification:metadata:0:children:',@classid,':',@categid)" />
     <xsl:call-template name="jp.printClass">
       <xsl:with-param name="nodes" select="document($classlink)/mycoreclass/categories/category" />
+      <xsl:with-param name="lang" select="$CurrentLang" />
+      <xsl:with-param name="languages" select="$languages" />
     </xsl:call-template>
     <xsl:if test="position() != last()">
       <xsl:value-of select="'; '" />
@@ -180,7 +182,7 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaXML']">
-    <xsl:apply-templates mode="metadataPersName" select="." />
+    <xsl:apply-templates mode="jp.metadata.person.name" select="." />
     <xsl:if test="position() != last()">
       <xsl:value-of select="'; '" />
     </xsl:if>
@@ -209,37 +211,6 @@
     <dd>
       <xsl:value-of select="." />
     </dd>
-  </xsl:template>
-
-  <xsl:template mode="metadataPersName" match="heading | alternative">
-    <xsl:choose>
-      <xsl:when test="name">
-        <xsl:value-of select="name" />
-        <xsl:if test="collocation">
-          <xsl:value-of select="concat(' &lt;',collocation,'&gt;')" />
-        </xsl:if>
-      </xsl:when>
-      <xsl:when test="firstName and lastName and collocation">
-        <xsl:value-of select="concat(lastName,', ',firstName,' &lt;',collocation,'&gt;')" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:if test="firstName and lastName and nameAffix">
-          <xsl:value-of select="concat(lastName,', ',firstName,' ',nameAffix)" />
-        </xsl:if>
-        <xsl:if test="firstName and lastName and not(nameAffix)">
-          <xsl:value-of select="concat(lastName,', ',firstName)" />
-        </xsl:if>
-        <xsl:if test="firstName and not(lastName or nameAffix)">
-          <xsl:value-of select="firstName" />
-        </xsl:if>
-        <xsl:if test="not (firstName) and lastName">
-          <xsl:value-of select="lastName" />
-        </xsl:if>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:if test="position() != last()">
-      <xsl:value-of select="'; '" />
-    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

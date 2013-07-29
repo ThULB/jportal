@@ -127,7 +127,7 @@
 
   <xsl:template mode="printTitle" match="heading[@inherited='0']">
     <div id="jp-maintitle" class="jp-layout-maintitle jp-layout-border">
-      <xsl:apply-templates mode="metadataPersName" select="." />
+      <xsl:apply-templates mode="jp.metadata.person.name" select="." />
     </div>
   </xsl:template>
 

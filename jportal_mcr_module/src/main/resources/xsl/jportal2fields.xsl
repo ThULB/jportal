@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
 
+  <xsl:include href="coreFunctions.xsl" />
+  <xsl:include href="jp-layout-functions.xsl" />
+
   <xsl:template match="metadata" mode="metadata">
     <xsl:apply-templates mode="jportal.metadata" select="." />
     <xsl:apply-templates mode="jportal.allMeta" select="." />
@@ -159,33 +162,14 @@
   <!-- *************************************************** -->
   <xsl:template mode="jportal.metadata" match="def.heading/heading">
     <field name="heading_base">
-      <xsl:apply-templates mode="jportal.person.heading" select="*" />     
+      <xsl:apply-templates mode="jp.metadata.person.name" select="." />
     </field>
   </xsl:template>
 
   <xsl:template mode="jportal.metadata" match="def.alternative/alternative">
     <field name="alternatives">
-      <xsl:apply-templates mode="jportal.person.heading" select="*" />
+      <xsl:apply-templates mode="jp.metadata.person.name" select="." />
     </field>
-  </xsl:template>
-
-  <xsl:template mode="jportal.person.heading" match="lastName|name">
-    <xsl:value-of select="."/>
-  </xsl:template>
-
-  <xsl:template mode="jportal.person.heading" match="firstName">
-    <xsl:if test="preceding-sibling::lastName">
-      <xsl:value-of select="', '"/>
-    </xsl:if>
-    <xsl:value-of select="."/>
-  </xsl:template>
-
-  <xsl:template mode="jportal.person.heading" match="collocation">
-    <xsl:value-of select="concat(' &lt;',.,'&gt;')"/>
-  </xsl:template>
-
-  <xsl:template mode="jportal.person.heading" match="nameAffix">
-    <xsl:value-of select="concat(' ',.)"/>
   </xsl:template>
 
   <xsl:template mode="jportal.metadata" match="def.dateOfBirth/dateOfBirth|def.dateOfDeath/dateOfDeath">
