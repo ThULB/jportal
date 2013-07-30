@@ -123,9 +123,7 @@
         <li>
           <a href="{$WebApplicationBaseURL}receive/{$mcrId}">
             <xsl:value-of select="str[@name='maintitle']" />
-            <xsl:if test="str[@name='date.published']">
-              <xsl:value-of select="concat(' (', str[@name='date.published'], ')')" />
-            </xsl:if>
+            <xsl:apply-templates mode="jp.toc.published" select="str" />
           </a>
         </li>
       </xsl:when>
@@ -134,6 +132,19 @@
         <xsl:value-of select="solrxml:delete($mcrId)" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template mode="jp.toc.published" match="str">
+  </xsl:template>
+  <xsl:template mode="jp.toc.published" match="str[@name='date.published']">
+    <xsl:value-of select="concat(' (', text(), ')')" />
+  </xsl:template>
+  <xsl:template mode="jp.toc.published" match="str[@name='date.published_from']">
+    <xsl:value-of select="concat(' (', text())" />
+    <xsl:if test="../str[@name='date.published_until']">
+      <xsl:value-of select="concat(' - ', ../str[@name='date.published_until'])" />
+    </xsl:if>
+    <xsl:value-of select="')'" />
   </xsl:template>
 
 </xsl:stylesheet>
