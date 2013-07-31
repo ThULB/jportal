@@ -26,7 +26,7 @@ jp.az = {
 				if(maintitle != null && maintitle.length > 0) {
 					var char = maintitle[0].toUpperCase();
 					char = (char.charCodeAt(0) < 65 || char.charCodeAt(0) > 90) ? "#" : char;
-					if(tabs.indexOf(char) == -1) {
+					if($.inArray(char, tabs) == -1) {
 						tabs.push(char);
 					}
 				}
@@ -105,7 +105,7 @@ jp.az = {
 			$("#tabNav > li").each(function() {
 				var li = $(this);
 				li.off("click");
-				if(activeTabs.indexOf(li.text()) >= 0) {
+				if($.inArray(li.text(), activeTabs) >= 0) {
 					li.addClass('active');
 					li.on("click", function() {
 						jp.az.setTab($(this).text());
@@ -162,12 +162,13 @@ jp.az = {
 			var pusblisherStr = '<div class="publisher">Herausgeber: ';
 	    	for(var i = 0; i < publisherList.length; i++) {
 	    		var publisher = publisherList[i];
-	    		if(publisher.indexOf('#') == -1) {
+	    		var indexOfHash = publisher.indexOf('#');
+	    		if(indexOfHash == -1) {
 	    			console.log("Invalid publisher format for '" + publisher + "'.");
 	    			continue;
 	    		}
-	    		var publisherID = publisher.substring(0, publisher.indexOf('#'));
-	    		var publisherText = publisher.substring(publisher.indexOf('#') + 1);
+	    		var publisherID = publisher.substring(0, indexOfHash);
+	    		var publisherText = publisher.substring(indexOfHash + 1);
 	            var publisherLink = "<a href='" + jp.az.getHost() + '/receive/' + publisherID + "'>" + publisherText + "</a>";
 	            pusblisherStr += publisherLink;
 	            if(i + 1 < publisherList.length) {
