@@ -90,6 +90,9 @@
       <xsl:when test="firstName and lastName and collocation">
         <xsl:value-of select="concat(lastName,', ',firstName,' &lt;',collocation,'&gt;')" />
       </xsl:when>
+      <xsl:when test="lastName and collocation">
+        <xsl:value-of select="concat(lastName, ' &lt;',collocation,'&gt;')" />
+      </xsl:when>
       <xsl:otherwise>
         <xsl:if test="firstName and lastName and nameAffix">
           <xsl:value-of select="concat(lastName,', ',firstName,' ',nameAffix)" />
