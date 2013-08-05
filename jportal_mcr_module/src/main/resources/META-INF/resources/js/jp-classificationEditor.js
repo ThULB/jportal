@@ -20,9 +20,9 @@ function includeClassificationEditor(onReady) {
            domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css"),
            domUtil.loadCSS(classeditor.settings.cssURL + "/modern-pictograms.css")]).then(function() {
         require([
-          "dijit/registry", "dojo/dom-construct", "dojo/on", "dojo/parser",
+          "dijit/registry", "dojo/dom-construct", "dojo/on", "dojo/dom-class", "dojo/parser",
           "dijit/form/Button", "dijit/Dialog", "mycore/classification/Editor"
-        ], function(registry, domConstruct, on) {
+        ], function(registry, domConstruct, on, domClass) {
           ready(function() {
             domUtil.updateBodyTheme();
             var classEditor = new mycore.classification.Editor({settings: classeditor.settings});
@@ -30,7 +30,7 @@ function includeClassificationEditor(onReady) {
               id : "classiDiag",
               content : classEditor
             });
-            dojo.addClass(diag.domNode, "classeditorDialog");
+            domClass.add(diag.domNode, "classeditorDialog");
             classEditor.loadClassification(classeditor.classId, classeditor.categoryId);
             onReady(classEditor);
           });
