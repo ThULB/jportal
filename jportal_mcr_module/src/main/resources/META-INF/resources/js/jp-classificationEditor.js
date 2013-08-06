@@ -1,15 +1,17 @@
 function startClassificationEditor() {
-    var diagID = 'classiDiag';
-    var diag = typeof(dijit) !== "undefined" ? dijit.byId(diagID) : undefined;
-    if (diag === undefined) {
-      includeClassificationEditor(function(classEditor) {
-    	  diag = dijit.byId(diagID);
-    	  diag.show();
-    	  classEditor.startup();
-      });
-    } else {
-    	diag.show();
-    }
+	require(["dijit/registry"], function(registry) {
+	    var diagID = 'classiDiag';
+	    var diag = typeof(dijit) !== "undefined" ? registry.byId(diagID) : undefined;
+	    if (diag === undefined) {
+	      includeClassificationEditor(function(classEditor) {
+	    	  diag = registry.byId(diagID);
+	    	  diag.show();
+	    	  classEditor.startup();
+	      });
+	    } else {
+	    	diag.show();
+	    }
+	});
 }
 
 function includeClassificationEditor(onReady) {
@@ -20,9 +22,8 @@ function includeClassificationEditor(onReady) {
            domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css"),
            domUtil.loadCSS(classeditor.settings.cssURL + "/modern-pictograms.css")]).then(function() {
         require([
-          "dijit/registry", "dojo/dom-construct", "dojo/on", "dojo/dom-class", "dojo/parser",
-          "dijit/form/Button", "dijit/Dialog", "mycore/classification/Editor"
-        ], function(registry, domConstruct, on, domClass) {
+          "dojo/dom-class", "dijit/Dialog", "mycore/classification/Editor"
+        ], function(domClass) {
           ready(function() {
             domUtil.updateBodyTheme();
             var classEditor = new mycore.classification.Editor({settings: classeditor.settings});
