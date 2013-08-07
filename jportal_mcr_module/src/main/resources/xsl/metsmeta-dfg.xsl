@@ -337,7 +337,7 @@
   <xsl:template match="/mycoreobject" mode="entities" priority="1">
     <xsl:variable name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
     <!-- TODO: don't do http calls via xsl -->
-    <xsl:variable name="entities" select="document(concat($WebApplicationBaseURL,'rsc/modslogos/',$journalID))"/>
+    <xsl:variable name="entities" select="document(concat('logo:', $journalID))" />
     <xsl:for-each select="$entities/*">
       <xsl:copy-of select="*" />
     </xsl:for-each>
@@ -349,20 +349,23 @@
         <mets:xmlData>
           <mods:mods>
             <xsl:apply-templates mode="metsmeta" select="$sourcedoc/mycoreobject" />
-            <mods:extension>
-              <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
-                <urmel:entity type="owner">
-                </urmel:entity>
-                <xsl:call-template name="ownerEntity">
-                  <xsl:with-param name="type" select="'operator'" />
-                </xsl:call-template>
-                <xsl:apply-templates mode="entities" select="$sourcedoc/mycoreobject" />
-              </urmel:entities>
-            </mods:extension>
+            <xsl:apply-templates mode="jp.mods.extension" select="$sourcedoc/mycoreobject" />
           </mods:mods>
         </mets:xmlData>
       </mets:mdWrap>
     </mets:dmdSec>
+  </xsl:template>
+
+  <xsl:template mode="jp.mods.extension" match="mycoreobject">
+    <xsl:param name="mcrobject" />
+    <mods:extension>
+      <urmel:entities xmlns:urmel="http://www.urmel-dl.de/ns/mods-entities">
+        <xsl:call-template name="ownerEntity">
+          <xsl:with-param name="type" select="'operator'" />
+        </xsl:call-template>
+        <xsl:apply-templates mode="entities" select="." />
+      </urmel:entities>
+    </mods:extension>
   </xsl:template>
 
 </xsl:stylesheet>

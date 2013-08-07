@@ -56,7 +56,6 @@ public class JournalClassificationResource extends MCRClassificationEditorResour
                 String rubricJson = get(rubricID);
                 rubricJsonArray.append(rubricJson + ",");
             }
-            
             return "[" + rubricJsonArray.toString().substring(0, rubricJsonArray.length()-1) + "]";
         }
     }

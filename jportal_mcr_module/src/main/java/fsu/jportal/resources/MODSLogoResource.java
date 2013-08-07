@@ -37,9 +37,14 @@ public class MODSLogoResource {
     @Path("{hiddenJournalId}")
     @Produces(MediaType.APPLICATION_XML)
     public String getLogos(@PathParam("hiddenJournalId") String hiddenJournalId) throws IOException {
-        LOGGER.info("MODS logo for " + hiddenJournalId);
+        Document doc = get(hiddenJournalId);
+        return xmlToString(doc);
+    }
+
+    public static Document get(String journalID) {
+        LOGGER.info("MODS logo for " + journalID);
         List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
-        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(hiddenJournalId));
+        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
         MCRMetaElement participants = mcrObject.getMetadata().getMetadataElement("participants");
         if(participants != null) {
             for (MCRMetaInterface retrievedElem : participants) {
@@ -54,10 +59,10 @@ public class MODSLogoResource {
                 }
             }
         }
-        return xmlToString(entities);
+        return new MODSLogoEntityXMLMapper(entities).getXML();
     }
 
-    protected MODSLogoEntity createLogoEntity(String role, MCRObject participantMcrObj) {
+    protected static MODSLogoEntity createLogoEntity(String role, MCRObject participantMcrObj) {
         MODSLogoEntity modsLogoEntity = new MODSLogoEntity();
         modsLogoEntity.setName(getFullname(participantMcrObj));
         modsLogoEntity.setRole(role);
@@ -66,15 +71,14 @@ public class MODSLogoResource {
         return modsLogoEntity;
     }
 
-    protected String xmlToString(List<MODSLogoEntity> entities) throws IOException {
-        Document xml = new MODSLogoEntityXMLMapper(entities).getXML();
+    protected String xmlToString(Document xml) throws IOException {
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
         Writer stringWriter = new StringWriter();
         xmlOutputter.output(xml, stringWriter);
         return stringWriter.toString();
     }
 
-    protected void getLogoURL(MCRObject participantMcrObj, MODSLogoEntity modsLogoEntity) {
+    protected static void getLogoURL(MCRObject participantMcrObj, MODSLogoEntity modsLogoEntity) {
         MCRMetaElement logo = participantMcrObj.getMetadata().getMetadataElement("logo");
         if(logo == null) {
             return;
@@ -87,7 +91,7 @@ public class MODSLogoResource {
         }
     }
 
-    protected String getFullname(MCRObject participantMcrObj) {
+    protected static String getFullname(MCRObject participantMcrObj) {
         MCRMetaElement names = participantMcrObj.getMetadata().getMetadataElement("names");
         if(names != null) {
             for (MCRMetaInterface nameElem : names) {
@@ -100,7 +104,7 @@ public class MODSLogoResource {
         return "No Name";
     }
 
-    protected String getSite(MCRObject participantMcrObj) {
+    protected static String getSite(MCRObject participantMcrObj) {
         MCRMetaElement urls = participantMcrObj.getMetadata().getMetadataElement("urls");
         if(urls != null) {
             for (MCRMetaInterface url : urls) {

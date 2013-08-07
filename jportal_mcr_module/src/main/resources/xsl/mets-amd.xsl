@@ -70,10 +70,6 @@
               <xsl:with-param name="logo" select="$JP.Site.Parent.logo" />
               <xsl:with-param name="url" select="$JP.Site.Owner.url" />
             </xsl:call-template>
-            <xsl:if test="$mcrobj/metadata/hidden_jpjournalsID/hidden_jpjournalID">
-              <xsl:variable name="journal" select="document(concat('mcrobject:', $mcrobj/metadata/hidden_jpjournalsID/hidden_jpjournalID))/mycoreobject" />
-              <xsl:apply-templates select="$journal/metadata/participants/participant[@type='partner']" mode="dvRightsPartner" />
-            </xsl:if>
           </mets:xmlData>
         </mets:mdWrap>
       </mets:rightsMD>
@@ -102,16 +98,6 @@
     <xsl:comment>
       End amdSec - mets-amd.xsl
     </xsl:comment>
-  </xsl:template>
-
-  <xsl:template match="participant" mode="dvRightsPartner">
-    <xsl:variable name="participant" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
-    <xsl:call-template name="addDvRights">
-       <xsl:with-param name="owner" select="$participant/metadata/names/name/fullname" />
-	   <xsl:with-param name="contact" select="$participant/metadata/emails/email" />
-	   <xsl:with-param name="logo" select="$participant/metadata/logo/url[@type='logoPlain']" />
-	   <xsl:with-param name="url" select="$participant/metadata/urls/url/@xlink:href" />
-    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="addDvRights">

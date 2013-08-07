@@ -37,6 +37,7 @@
           <mets:xmlData>
             <mods:mods>
               <xsl:apply-templates mode="metsmeta" select="." />
+              <xsl:apply-templates mode="jp.mods.extension" select="." />
             </mods:mods>
           </mets:xmlData>
         </mets:mdWrap>
