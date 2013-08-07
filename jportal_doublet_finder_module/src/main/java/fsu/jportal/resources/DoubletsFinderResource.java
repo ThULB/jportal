@@ -17,7 +17,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
-import org.mycore.frontend.cli.MCRKnownCommands;
+import org.mycore.frontend.cli.MCRCommandManager;
 import org.xml.sax.SAXException;
 
 @Path("doublets")
@@ -39,7 +39,7 @@ public class DoubletsFinderResource {
     @DELETE
     @Path("{type}")
     public Response removeDuplicatesFor(@PathParam("type") String type) {
-        MCRKnownCommands mcrKnownCommands = new MCRKnownCommands();
+        MCRCommandManager mcrKnownCommands = new MCRCommandManager();
         try {
             mcrKnownCommands.invokeCommand("jp clean up " + type);
             return Response.ok().build();
