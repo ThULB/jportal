@@ -86,5 +86,6 @@
 
 	<target name="config">
 		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs,org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources"/>
 	</target>
 </project>

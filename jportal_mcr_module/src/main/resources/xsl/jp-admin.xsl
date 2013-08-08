@@ -21,7 +21,10 @@
     <h2>Editoren</h2>
     <ul>
       <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRACLEditorServlet_v2?mode=getACLEditor">ACL Editor</a>
+        <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
+      </li>
+      <li>
+        <a href="{$WebApplicationBaseURL}rsc/ACLE/objectid">ACL-Editor-ObjectID</a>
       </li>
       <li>
         <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
