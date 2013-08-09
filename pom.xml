@@ -29,7 +29,7 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
       <jportal.version>2.0.18-SNAPSHOT</jportal.version>
-      <mcr.version>2013.07-SNAPSHOT</mcr.version>
+      <mcr.version>2013.09-SNAPSHOT</mcr.version>
       <jersey.version>1.17</jersey.version>
     </properties>
 
