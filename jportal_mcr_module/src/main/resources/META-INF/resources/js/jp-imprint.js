@@ -363,7 +363,7 @@ var FSConnector = function(/*string*/ type){
 				type: "DELETE",
 				url: baseURL + "/delete/" + imprintID
 			}).done(onSuccess).error(function(err) {
-				alert("Es ist ein Fehler beim l√∂schen des Impressums aufgetreten. Bitte informieren Sie den Administrator.");
+				alert("Es ist ein Fehler beim löschen des Impressums aufgetreten. Bitte informieren Sie den Administrator.");
 				console.log(err);
 			});
 		},
