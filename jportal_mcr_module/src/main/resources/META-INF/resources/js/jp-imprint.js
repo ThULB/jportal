@@ -145,7 +145,9 @@ var InfoEditorCtr = function(buttonTag){
 	
 	selectBox.on('change', function(){
 		var newID = selectBox.getValue();
-		backend.set(journalID, newID);
+		if(newID != null){
+			backend.set(journalID, newID);
+		}
 	})
 	
 	editBox.removeButton.on('click', function() {
@@ -295,7 +297,9 @@ var Select = function(){
 	var select = $("<select />");
 	
 	select.addOption = function(/* String */ value, /* String */ label, /* boolean */ selected){
-		var newOption = "<option value='" + value + "'" + (selected ? " selected='selected'" : "") + ">" + label + "</option>";
+		var newOption = $("<option" + (selected ? " selected='selected'" : "") + "/>");
+		newOption.val(value);
+		newOption.text(label);
 		select.append(newOption);
 	}
 	
@@ -304,8 +308,8 @@ var Select = function(){
 	}
 	
 	select.getValue = function(){
-		var val = select.val();
-		return val != "null" ? val : null;
+		var val = select.find(":selected").val();
+		return val != null ? val : null;
 	}
 	
 	return select;
@@ -321,6 +325,7 @@ var FSConnector = function(/*string*/ type){
 				url: baseURL + "/get/" + objectID,
 				dataType: "json",
 				async: false,
+				contentType: 'text/plain; charset=UTF-8',
 				error: function(err) {
 					if(err.status == 404) {
 						notFound = true;
@@ -336,7 +341,9 @@ var FSConnector = function(/*string*/ type){
 		set: function(/*string*/ objectID, /*string*/ imprintID, /*function*/ onSuccess) {
 			$.ajax({
 				type: "POST",
-				url: baseURL + "/set?objID=" + objectID + "&imprintID=" + imprintID,
+				url: baseURL + "/set?objID=" + objectID,
+				data: imprintID,
+				contentType: 'text/plain; charset=UTF-8',
 				error: function(err) {
 					alert("Es ist ein Fehler beim setzen des Impressums aufgetreten. Bitte informieren Sie den Administrator.");
 					console.log(err);
@@ -354,7 +361,8 @@ var FSConnector = function(/*string*/ type){
 		list: function(/*function*/ onSuccess, /*function*/ onError) {
 			$.ajax({
 				url: baseURL + "/list",
-				dataType: "json"
+				dataType: "json",
+				contentType: 'application/json; charset=UTF-8'
 			}).done(onSuccess).error(onError);
 		},
 		
@@ -371,9 +379,10 @@ var FSConnector = function(/*string*/ type){
 		save: function(/*string*/ imprintID, /*string*/ data, /*function*/ onSuccess, /*function*/ onError) {
 			$.ajax({
 				type: "POST",
-				url: baseURL + "/save/" + imprintID,
-				data: data,
-				contentType: 'text/plain; charset=UTF-8'
+				url: baseURL + "/save",
+				data: JSON.stringify({imprintID: imprintID, content: data}),
+				dataType: 'json',
+				contentType: 'application/json; charset=UTF-8'
 			}).done(onSuccess).error(onError);
 		}
 	}

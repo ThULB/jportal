@@ -1,6 +1,8 @@
 package fsu.jportal.resources;
 
 import java.io.InputStream;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +38,7 @@ import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.common.MCRLinkTableManager;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
@@ -84,18 +87,30 @@ public class ImprintResource {
     }
 
     @POST
-    @Path("save/{imprintID}")
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response save(@PathParam("imprintID") String imprintID, String content) {
+    @Path("save")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response save(String data) {
+        SaveObj save = new Gson().fromJson(data, SaveObj.class);
+        
         try {
             MCRWebpage mcrWebpage = new MCRWebpage();
-            mcrWebpage.addSection(new MCRWebpage.Section().addContent(content));
-            getImprintFS().store(imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
+            mcrWebpage.addSection(new MCRWebpage.Section().addContent(save.content));
+            getImprintFS().store(save.imprintID, new MCRJDOMContent(mcrWebpage.toXML()));
         } catch (Exception exc) {
-            LOGGER.error("unable to store imprint content '" + imprintID + "'", exc);
+            LOGGER.error("unable to store imprint content '" + save.imprintID + "'", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
         }
         return Response.ok().build();
+    }
+    
+    private static class SaveObj {
+        private String imprintID;
+        private String content;
+        
+        @Override
+        public String toString() {
+            return imprintID + " - " + content;
+        }
     }
 
     @DELETE
@@ -168,7 +183,9 @@ public class ImprintResource {
             LOGGER.error("while retrieving imprint list", exc);
             throw new WebApplicationException(exc, Status.INTERNAL_SERVER_ERROR);
         }
-        return Response.ok(new Gson().toJson(idList)).build();
+        String jsonList = new Gson().toJson(idList);
+        String normalizedJsonList = Normalizer.normalize(jsonList, Form.NFC);
+        return Response.ok(normalizedJsonList).build();
     }
 
     /**
@@ -197,7 +214,7 @@ public class ImprintResource {
      */
     @POST
     @Path("set")
-    public void set(@QueryParam("objID") String objID, @QueryParam("imprintID") String imprintID) {
+    public void set(@QueryParam("objID") String objID, String imprintID) {
         MCRLinkTableManager ltm = MCRLinkTableManager.instance();
         String oldImprintID = getImprintID(objID, fsType);
         if (oldImprintID != null && oldImprintID.equals(imprintID)) {
