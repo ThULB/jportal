@@ -9,7 +9,8 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRConstants;
 
-import fsu.jportal.xml.XMLContentTools;
+import fsu.jportal.util.ContentTools;
+import fsu.jportal.xml.ParentsListXML;
 
 public class ParentsResolver implements URIResolver {
 
@@ -19,7 +20,7 @@ public class ParentsResolver implements URIResolver {
     public Source resolve(String href, String base) throws TransformerException {
         String childID = href.replaceAll("parents:", "");
         try {
-            Element parents = new XMLContentTools().getParents(childID);
+            Element parents = new ContentTools().getParents(childID, new ParentsListXML());
             return new JDOMSource(parents);
         } catch (Exception exc) {
             LOGGER.error("unable to retrieve parents of mcr object " + childID);

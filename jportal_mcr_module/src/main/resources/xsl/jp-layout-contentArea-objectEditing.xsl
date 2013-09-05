@@ -23,6 +23,7 @@
     <var name="deletePerm" value="{$deletePerm}" />
     <var name="isGuest" value="{mcrxml:isCurrentUserGuestUser()}" />
     <var name="linkImgAllowed" value="{$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)}" />
+    <var name="notJournal" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation != 'datamodel-jpjournal.xsd'}" />
   </xsl:variable>
   <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)"/>
 
@@ -44,6 +45,10 @@
         <restriction name="dataModel" contains="datamodel-" />
         <item>
           <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
+        </item>
+        <item id="moveDocButton" class="objectEditingButton" objID="{$currentObjID}">
+          <restriction name="notJournal" value="true" />
+          <label name="Dokument verschieben" />
         </item>
         <item id="ckeditorButton" class="objectEditingButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
@@ -215,6 +220,8 @@
         <xsl:call-template name="introEditorDiag" />
         <xsl:call-template name="initImprint" />
       </xsl:if>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-move-obj.js"></script>
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/bootstrap.min.js"></script>
       <script type="text/javascript">
         $(document).ready(function() {
         $("#derivMergeButton").click(function(){

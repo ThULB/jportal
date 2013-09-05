@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-html {
+html, body {
 	background-color: #DBDBDB;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 0.9rem;

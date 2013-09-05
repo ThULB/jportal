@@ -1,0 +1,42 @@
+@CHARSET "UTF-8";
+.jp-moveObjGUI .jp-tree-view {
+	height: 250px;
+	overflow: auto;
+}
+
+.jp-moveObjGUI .jp-tree-view li i{
+	margin-right: 7px;	
+}
+
+.jp-moveObjGUI .jp-tree-view li i+a{
+	display: inline;
+	margin-left: 5px;
+}
+
+.jp-moveObjGUI .jp-tree-view li {
+	list-style: none;
+}
+
+.jp-moveObjGUI .jp-tree-view > ul {
+	margin-left: 0px;
+}
+
+.jp-moveObjGUI .folder {
+	color: #0088CC;
+}
+
+.jp-moveObjGUI .folder:HOVER {
+	cursor: pointer;
+}
+
+.jp-moveObjGUI .breadcrumbContainer ul.breadcrumb{
+	height: 20px;
+}
+
+.jp-moveObjGUI .formText {
+	margin-bottom: 20px;
+}
+
+.jp-moveObjGUI .form-actions button.btn {
+	margin-right: 10px;
+}

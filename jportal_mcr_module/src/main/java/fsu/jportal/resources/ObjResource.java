@@ -5,9 +5,13 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -26,12 +30,14 @@ import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.xsl.MCRParameterCollector;
+import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.iview2.services.MCRIView2Tools;
 import org.mycore.iview2.services.MCRImageTiler;
 import org.mycore.iview2.services.MCRTileJob;
@@ -40,15 +46,41 @@ import org.mycore.solr.MCRSolrServerFactory;
 import org.xml.sax.SAXException;
 
 import fsu.jportal.backend.MetaDataTools;
+import fsu.jportal.gson.ParentsListJSON;
+import fsu.jportal.util.ContentTools;
 
-@Path("obj")
+@Path("obj/{id}")
 public class ObjResource {
 
     private static final Logger LOGGER = Logger.getLogger(ObjResource.class);
-
+    @PathParam("id") String objID;
+    
+    @GET
+    @Path("parents")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String parentsListJSON(){
+        ContentTools contentTools = new ContentTools();
+        return contentTools.getParents(objID, new ParentsListJSON());
+    }
+    
+    @PUT
+    @Path("moveTo/{newParentID}")
+    public Response moveTo(@PathParam("newParentID") String newParentID){
+        try {
+            MCRObjectCommands.replaceParent(objID, newParentID);
+        } catch (MCRPersistenceException e) {
+            e.printStackTrace();
+            return Response.status(Status.UNAUTHORIZED).build();
+        } catch (MCRActiveLinkException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return Response.ok().build();
+    }
+    
     @POST
-    @Path("{id}/mergeDeriv")
-    public Response mergeDerivates(@PathParam("id") String objID) {
+    @Path("mergeDeriv")
+    public Response mergeDerivates() {
         MCRObjectID mcrObjectID = MCRObjectID.getInstance(objID);
         try {
             Document objXML = MCRXMLMetadataManager.instance().retrieveXML(mcrObjectID);
