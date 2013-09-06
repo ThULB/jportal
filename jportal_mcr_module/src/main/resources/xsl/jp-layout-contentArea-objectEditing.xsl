@@ -224,6 +224,8 @@
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/bootstrap.min.js"></script>
       <script type="text/javascript">
         $(document).ready(function() {
+        <!-- workaround for bootstrab/jquery-UI incompatibility -->
+        $.fn.bootstrapBtn = $.fn.button.noConflict();
         $("#derivMergeButton").click(function(){
             mergeDerivates('<xsl:value-of select="$currentObjID"/>')
           });
