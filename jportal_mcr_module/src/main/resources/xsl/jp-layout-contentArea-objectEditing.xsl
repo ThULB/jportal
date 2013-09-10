@@ -48,6 +48,7 @@
         </item>
         <item id="moveDocButton" class="objectEditingButton" objID="{$currentObjID}">
           <restriction name="notJournal" value="true" />
+          <restriction name="createJournal" value="true" />
           <label name="Dokument verschieben" />
         </item>
         <item id="ckeditorButton" class="objectEditingButton">
