@@ -52,17 +52,22 @@
   <xsl:template name="jp.layout.searchbar.default">
     <div id="searchBar">
       <form id="searchForm" action="/servlets/solr/find">
-        <xsl:choose>
-          <xsl:when test="$journalID != ''">
-            <input id="inputField" name="qry" value="{$qry}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift" />
-            <input type="hidden" name="fq" value="journalID:{$journalID}" />
-            <input type="hidden" name="journalID" value="{$journalID}" />
-          </xsl:when>
-          <xsl:otherwise>
-            <input id="inputField" name="qry" value="{$qry}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand" />
-          </xsl:otherwise>
-        </xsl:choose>
-        <input id="submitButton" type="submit" value="Suche" />
+        <div class="input-group">
+          <xsl:choose>
+            <xsl:when test="$journalID != ''">
+              <input class="form-control" id="inputField" name="qry" value="{$qry}" placeholder="Suche innerhalb der Zeitschrift"
+                title="Suche innerhalb der Zeitschrift" />
+              <input type="hidden" name="fq" value="journalID:{$journalID}" />
+              <input type="hidden" name="journalID" value="{$journalID}" />
+            </xsl:when>
+            <xsl:otherwise>
+              <input class="form-control"  id="inputField" name="qry" value="{$qry}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand" />
+            </xsl:otherwise>
+          </xsl:choose>
+          <span class="input-group-btn">
+            <button id="submitButton" type="submit" class="btn btn-default">Suche</button>
+          </span>
+        </div>
       </form>
     </div>
   </xsl:template>

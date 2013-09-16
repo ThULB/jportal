@@ -19,17 +19,20 @@ $(document).ready(function(){
 		var selectTreeFrame = $("<div class='jp-moveObjGUI'/>");
 		var selectBreadcrumb = $("<div class='breadcrumbContainer' />").appendTo(selectTreeFrame);
 		var selectTree = $("<div class='jp-tree-view'/>").appendTo(selectTreeFrame);
-		var selectForm = $("<div class='form-actions'/>").appendTo(selectTreeFrame);
+		var selectTreeParent = $("<div class='jp-tree-parent'/>").appendTo(selectTree);
+		var selectTreeChildren = $("<div class='jp-tree-children'/>").appendTo(selectTree);
+		var selectTreePaginator = $("<div class='jp-tree-paginator'/>");
+		var selectForm = $("<div class='form-actions well'/>").appendTo(selectTreeFrame);
 		var selectFormText = $("<div class='formText'/>").appendTo(selectForm);
 		var selectFormMove = $("<button class='btn disabled'>Verschieben</button>").appendTo(selectForm);
-		var selectFormCancel = $("<button class='btn'>Abbrechen</button>").appendTo(selectForm);
-		var errorUnauthorized = $('<div class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button></div>');
+		var selectFormCancel = $("<button class='btn btn-default'>Abbrechen</button>").appendTo(selectForm);
+		var errorUnauthorized = $('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button></div>');
 		
 		errorUnauthorized.css({
 			position: "absolute",
 			width: "567px",
-			height: "52px"
-		})
+			height: "74px"
+		});
 		
 		function buildListItems(search, iconClass){
 			var resultList = search.response.docs;
@@ -38,27 +41,86 @@ $(document).ready(function(){
 			
 			for ( var int = 0; int < resultList.length; int++) {
 				var resultHit = resultList[int];
+				var content = resultHit.maintitle;
 				var listItem = $("<li/>", {
 					'id' : resultHit.id,
-					html : resultHit.maintitle
 				});
 				
 				idNameMap[resultHit.id] = resultHit.maintitle;
 				
 				if(resultHit.objectType == 'jpvolume' && resultHit.id != toMoveObj.id){
-					var span = $('<span class="folder">' + listItem.html() + '</span>');
-					span.data('id', resultHit.id);
-					span.data('parent', resultHit.parent);
-					listItem.empty();
-					listItem.append('<i class="' + iconClass + '"></i>', span);
+					content = $('<i class="' + iconClass + '"></i><span class="folder">' + content + '</span>');
+					content.data('id', resultHit.id);
+					content.data('parent', resultHit.parent);
 				}
 				
+				listItem.append(content);
 				listItem.appendTo(listHtml);
 			}
 			
 			listHtml.data("idNameMap", idNameMap);
 			
 			return listHtml;
+		}
+		
+		function buildPaginator(id, search){
+			var numFound = search.response.numFound;
+			var hitsPerPage = search.response.docs.length;
+			var start = search.response.start;
+			var numPages = Math.ceil(numFound/hitsPerPage);
+			
+			if(numPages > 1){
+				var pageList = $("<ul class='pagination pagination-sm'/>").appendTo(selectTreePaginator);
+				for(var i = 1; i <= numPages; i++) {
+					var listItem = $("<li><span class='jp-pageNum'>" + i + "</span></li>");
+					
+					if(i == (start +1)){
+						listItem.addClass("active");
+					}else{
+						listItem.addClass("normal");
+					}
+					
+					pageList.append(listItem);
+				}
+				
+				selectTreePaginator.appendTo(selectTree);
+				
+				function setActive(item){
+					pageList.find("li.active").removeClass("active").addClass("normal");
+					item.removeClass("normal").addClass("active");
+				}
+				
+				pageList.on("click", "li.normal > span.jp-pageNum", function(){
+					var start = ($(this).text() - 1) * hitsPerPage;
+					setActive($(this).parent());
+					buildChildrenList(id, "&start=" + start);
+				});
+				
+			}else{
+				selectTreePaginator.empty();
+			}
+		}
+		
+		function buildChildrenList(id, params, ctr){
+			var url = "/servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json";
+			
+			if(params != undefined){
+				url = url + params;
+			}
+			
+			$.getJSON(url, function(search){
+				var listItems = buildListItems(search, 'icon-caret-right');
+				selectTreeChildren.empty().append(listItems);
+				if(ctr != undefined){
+					ctr.paginator(search);
+				}
+			});
+		}
+		
+		function setSelectFormText(text, moveButtonOn){
+			selectFormText.html(text);
+			selectFormMove.toggleClass('disabled', !moveButtonOn);
+			selectFormMove.toggleClass('btn-primary', moveButtonOn);
 		}
 		
 		function buildList(id){
@@ -68,7 +130,7 @@ $(document).ready(function(){
 					
 					var link = $('<a class="breadcrumbLink" href="#">' + parents[i].title + '</a>');
 					link.data("id", parents[i].id);
-					var entry = $('<li/>').append(link).append('<span class="divider">/</span>');
+					var entry = $('<li/>').append(link);
 					breadcrumb.append(entry);
 				}
 				
@@ -76,31 +138,30 @@ $(document).ready(function(){
 			});
 			
 			$.getJSON("/servlets/solr/find?qry=%2Bid%3A" + id + "&wt=json", function(search){
-				var listItems = buildListItems(search, 'icon-arrow-up').appendTo(selectTree);
+				var listItems = buildListItems(search, 'icon-arrow-up');
 				var idNameMap = listItems.data("idNameMap");
-				console.log("get ID: " + id + " name: " + idNameMap[id]);
-				selectForm.trigger('setText', idNameMap[id]);
-			}).done(function(){
-				$.getJSON("/servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json", function(search){
-					buildListItems(search, 'icon-caret-right').appendTo('li#' + id);
-				});
+				
+				selectTreeParent.empty().append(listItems);
+				
+				if(toMoveObj.parent == id){
+					setSelectFormText('Bitte wählen Sie ein neues Band aus, um "' + toMoveObj.maintitle + '" zu verschieben.', false);
+				}else{
+					setSelectFormText('Verschieben von "'+ toMoveObj.maintitle +'" nach "' + idNameMap[id] + '".',true);
+				}
+				selectFormMove.data('destID', id);
 			});
+			
+			this.paginator = function(search){
+				buildPaginator(id, search);
+			}
+			
+			buildChildrenList(id, undefined, this);
 		}
 		
 		function setClickEvent(selector, idName){
 			selectTreeFrame.on("click", selector, function(){
 				var id = $(this).data(idName);
-				selectTree.empty();
 				buildList(id);
-				
-				console.log("Click ID: " + id);
-				
-				selectForm.one('setText', function(evt, destName){
-					selectFormText.html('Verschieben von "'+ toMoveObj.maintitle +'" nach "' + destName + '".');
-					selectFormMove.toggleClass('disabled', false);
-					selectFormMove.toggleClass('btn-primary', true);
-					selectFormMove.data('destID', id);
-				})
 				
 			})
 		}
@@ -128,7 +189,7 @@ $(document).ready(function(){
 				selectFormMove.remove();
 				selectFormCancel.toggleClass('btn-primary', true).html("Beenden");
 				selectFormText.html('Verschieben von "'+ toMoveObj.maintitle +'" nach "' + $(this).text() + '" war erfolgreich.');
-				selectForm.addClass("alert alert-success");
+				selectForm.removeClass("well").addClass("alert alert-success");
 				selectTreeFrame.on("close", function(){
 					location.reload();
 				});
@@ -141,7 +202,6 @@ $(document).ready(function(){
 		});
 		
 		var parentID = toMoveObj.parent;
-		selectFormText.html('Bitte wählen Sie ein neues Band aus, um "' + toMoveObj.maintitle + '" zu verschieben.');
 		buildList(parentID);
 		
 		return selectTreeFrame;
@@ -179,7 +239,6 @@ $(document).ready(function(){
 	    	'margin-left': '-329px',
 	    	'margin-top': '-300px',
 	    	width: '658px',
-	    	height: '428px',
 	    	background: 'white',
 	    	padding: '20px'
 	    });

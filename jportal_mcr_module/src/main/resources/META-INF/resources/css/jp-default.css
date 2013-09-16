@@ -815,7 +815,7 @@ body {
 
 .jp-layout-content-LCol-RCol {
 	border-right: 1px solid;
-	width: 657px;
+	width: 716px;
 }
 
 .jp-layout-content-LCol-noRCol {
@@ -990,11 +990,10 @@ body {
 
 #searchBar {
 	background-color: #859198;
-	height: 30px;
-	padding: 5px 29px 0;
+	padding: 5px 29px 5px;
 }
 
-#searchBar #inputField {
+#searchBar .input-group {
 	width: 555px;
 }
 
@@ -1323,4 +1322,13 @@ ul.ckeditorButtons li:last-child {
 
 p.jp-layout-metadata-list {
 	margin-top: 0px;
+}
+
+/* iview workaround for bootstrap 3*/
+.viewerContainer *{
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+}
+#createpdf-container {
+	height: 378px;
 }

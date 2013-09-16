@@ -19,8 +19,7 @@ function includeClassificationEditor(onReady) {
     ready(function() {
       all([domUtil.loadCSS("http://ajax.googleapis.com/ajax/libs/dojo/"+classeditor.dojoVersion +"/dijit/themes/claro/claro.css"),
            domUtil.loadCSS(classeditor.settings.cssURL + "/classificationEditor.css"),
-           domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css"),
-           domUtil.loadCSS(classeditor.settings.cssURL + "/modern-pictograms.css")]).then(function() {
+           domUtil.loadCSS(classeditor.settings.cssURL + "/mycore.dojo.css")]).then(function() {
         require([
           "dojo/dom-class", "dijit/Dialog", "mycore/classification/Editor"
         ], function(domClass) {

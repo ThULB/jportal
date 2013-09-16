@@ -1,5 +1,5 @@
 @CHARSET "UTF-8";
-.jp-moveObjGUI .jp-tree-view {
+.jp-moveObjGUI .jp-tree-children {
 	height: 250px;
 	overflow: auto;
 }
@@ -30,7 +30,7 @@
 }
 
 .jp-moveObjGUI .breadcrumbContainer ul.breadcrumb{
-	height: 20px;
+	height: 36px;
 }
 
 .jp-moveObjGUI .formText {
@@ -39,4 +39,8 @@
 
 .jp-moveObjGUI .form-actions button.btn {
 	margin-right: 10px;
+}
+
+.pagination > li:HOVER {
+	cursor: pointer;
 }

@@ -32,7 +32,7 @@ var jpIviewSettings = {
     loadOnStartup: function() {
     	return this.getParam("page") != "";
     },    
-    jqueryUIVersion: '1.8.17',
+    jqueryUIVersion: '1.9.2',
 }
 
 function jpAddDefaultOptions(option) {
