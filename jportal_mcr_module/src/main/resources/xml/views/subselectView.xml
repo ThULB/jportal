@@ -3,15 +3,19 @@
   <component name="subelectFormInput">
     <div id="searchBar">
       <form id="searchForm" action="/servlets/solr/subselect">
-        <div class="input-group">
-        <input class="form-control" id="inputField" name="qry" getData="subselect.search.form.qry" />
-        <selectclass="form-control"  name="sort">
-          <option value="score desc" getData="subselect.search.form.sort">Relevanz</option>
-          <option value="heading_lowercase asc" getData="subselect.search.form.sort">Alphabetisch</option>
-        </select>
-        <span class="input-group-btn">
-          <button class="btn btn-default" id="submitButton" type="submit">Suche</button>
-        </span>
+        <div class="row">
+          <div class="col-lg-8 input-group">
+            <input class="form-control" id="inputField" name="qry" getData="subselect.search.form.qry" />
+            <span class="input-group-btn">
+              <button class="btn btn-default" id="submitButton" type="submit">Suche</button>
+            </span>
+          </div>
+          <div class="col-lg-4">
+            <select class="form-control" name="sort">
+              <option value="score desc" getData="subselect.search.form.sort">Relevanz</option>
+              <option value="heading_lowercase asc" getData="subselect.search.form.sort">Alphabetisch</option>
+            </select>
+          </div>
         </div>
         <input type="hidden" name="XSL.subselect.type" value="{subselect.type}" />
         <input type="hidden" name="XSL.subselect.session.SESSION" value="{subselect.session}" />

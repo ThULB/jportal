@@ -65,7 +65,8 @@
             </xsl:otherwise>
           </xsl:choose>
           <span class="input-group-btn">
-            <button id="submitButton" type="submit" class="btn btn-default">Suche</button>
+<!--             <button id="submitButton" type="submit" class="btn btn-default">Suche</button> -->
+            <input id="submitButton" type="submit" class="btn btn-default" value="Suche"/>
           </span>
         </div>
       </form>

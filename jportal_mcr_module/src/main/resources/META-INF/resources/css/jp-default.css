@@ -1329,6 +1329,16 @@ p.jp-layout-metadata-list {
 	box-sizing: content-box;
 	-moz-box-sizing: content-box;
 }
+
 #createpdf-container {
 	height: 378px;
+}
+
+/* bootstrap fontsize adjustment */
+#searchResults h2{
+	font-size: 20px;
+}
+
+#resultList h3{
+	font-size: 16px;
 }
