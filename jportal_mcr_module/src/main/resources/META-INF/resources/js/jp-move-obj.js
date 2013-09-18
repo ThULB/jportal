@@ -52,6 +52,8 @@ $(document).ready(function(){
 					content = $('<i class="' + iconClass + '"></i><span class="folder">' + content + '</span>');
 					content.data('id', resultHit.id);
 					content.data('parent', resultHit.parent);
+				}else{
+					listItem.addClass("listBullet");
 				}
 				
 				listItem.append(content);
@@ -70,6 +72,7 @@ $(document).ready(function(){
 			var numPages = Math.ceil(numFound/hitsPerPage);
 			
 			if(numPages > 1){
+				selectTreePaginator.empty();
 				var pageList = $("<ul class='pagination pagination-sm'/>").appendTo(selectTreePaginator);
 				for(var i = 1; i <= numPages; i++) {
 					var listItem = $("<li><span class='jp-pageNum'>" + i + "</span></li>");
@@ -102,7 +105,7 @@ $(document).ready(function(){
 		}
 		
 		function buildChildrenList(id, params, ctr){
-			var url = "/servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json";
+			var url = "/servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json&sort=size%20asc,maintitle%20asc";
 			
 			if(params != undefined){
 				url = url + params;

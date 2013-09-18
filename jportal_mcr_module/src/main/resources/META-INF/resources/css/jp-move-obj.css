@@ -17,6 +17,12 @@
 	list-style: none;
 }
 
+.jp-moveObjGUI .jp-tree-view li.listBullet {
+	list-style: disc;
+	margin-left: 18px;
+	padding-left: 6px;
+}
+
 .jp-moveObjGUI .jp-tree-view > ul {
 	margin-left: 0px;
 }
