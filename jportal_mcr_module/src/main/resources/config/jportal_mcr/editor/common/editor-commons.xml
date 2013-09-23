@@ -2,15 +2,15 @@
 <imports xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <!-- <include uri="webapp:editor/imports-application.xml" /> -->
   <!-- *** Text fields *** -->
-  <textfield id="TFzeile10" width="10" maxlength="10" />
-  <textfield id="TFzeile32" width="32" maxlength="32" />
-  <textfield id="TFzeile64" width="48" maxlength="64" />
-  <textfield id="TFzeile128" width="48" maxlength="128" />
-  <textfield id="TFzeile1024" width="64" maxlength="1024" />
+  <textfield class="form-control" id="TFzeile10" width="10" maxlength="10" />
+  <textfield class="form-control" id="TFzeile32" width="32" maxlength="32" />
+  <textfield class="form-control" id="TFzeile64" width="48" maxlength="64" />
+  <textfield class="form-control" id="TFzeile128" width="48" maxlength="128" />
+  <textfield class="form-control" id="TFzeile1024" width="64" maxlength="1024" />
   <!-- *** Text area *** -->
-  <textarea id="TFarea4096" width="48" height="3" maxlength="4096" />
+  <textarea class="form-control" id="TFarea4096" width="48" height="3" maxlength="4096" />
   <!-- *** Language List *** -->
-  <list id="Slang" width="60" type="dropdown">
+  <list class="form-control" id="Slang" width="60" type="dropdown">
     <item value="de">
       <label xml:lang="de">de</label>
     </item>
@@ -20,11 +20,11 @@
   </list>
   <!-- *** Data for the buttons ** -->
   <panel id="TwoButtons">
-    <cell col="1" row="1" anchor="WEST">
-      <cancelButton width="100" i18n="buttons.cancel" />
+    <cell class="twoButtons" col="1" row="1" anchor="WEST">
+      <cancelButton class="btn btn-default" width="100" i18n="buttons.cancel" />
     </cell>
-    <cell col="2" row="1" anchor="WEST">
-      <submitButton width="100" i18n="buttons.save" />
+    <cell class="twoButtons" col="2" row="1" anchor="WEST">
+      <submitButton class="btn btn-primary" width="100" i18n="buttons.save" />
     </cell>
   </panel>
   <!-- *** bemerkungen ** -->
@@ -79,27 +79,27 @@
 
   <panel id="repeater32">
     <hidden var="@inherited" default="0" />
-    <cell col="1" row="1" anchor="WEST" ref="TFzeile32" />
+    <cell  col="1" row="1" anchor="WEST" ref="TFzeile32" />
   </panel>
 
   <panel id="repeater64">
     <hidden var="@inherited" default="0" />
-    <cell col="1" row="1" anchor="WEST" ref="TFzeile64" />
+    <cell  col="1" row="1" anchor="WEST" ref="TFzeile64" />
   </panel>
 
   <panel id="repeater128">
     <hidden var="@inherited" default="0" />
-    <cell col="1" row="1" anchor="WEST" ref="TFzeile128" />
+    <cell  col="1" row="1" anchor="WEST" ref="TFzeile128" />
   </panel>
 
   <panel id="repeater1024">
     <hidden var="@inherited" default="0" />
-    <cell col="1" row="1" anchor="WEST" ref="TFzeile1024" />
+    <cell  col="1" row="1" anchor="WEST" ref="TFzeile1024" />
   </panel>
 
   <panel id="repeater4096">
     <hidden var="@inherited" default="0" />
-    <cell col="1" row="1" anchor="WEST" ref="TFarea4096" />
+    <cell  col="1" row="1" anchor="WEST" ref="TFarea4096" />
   </panel>
 
   <panel id="RLabel" class="editorClassLabel">

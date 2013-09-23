@@ -122,14 +122,14 @@
   
   <!-- *** Data for predefinitions *** -->
   
-  <textfield id="TFzeile128" width="20" maxlength="32"/>
+  <textfield class="form-control" id="TFzeile128" width="20" maxlength="32"/>
   
-  <list id="ListAndOr" width="160" type="dropdown">
+  <list class="form-control" id="ListAndOr" width="160" type="dropdown">
     <item value="and" i18n="component.swf.editor.acl.condition.and"/>
     <item value="or" i18n="component.swf.editor.acl.condition.or"/>
   </list>
   
-  <list id="ListUser" width="160" type="dropdown">
+  <list class="form-control" id="ListUser" width="160" type="dropdown">
     <item value="user">
       <label i18n="component.swf.editor.acl.condition.user"/>
     </item>
@@ -138,7 +138,7 @@
     </item>
   </list>
   
-  <list id="OperUser" width="160" type="dropdown">
+  <list class="form-control" id="OperUser" width="160" type="dropdown">
     <item value="=">
       <label i18n="component.swf.editor.acl.condition.equal"/>
     </item>
@@ -147,13 +147,13 @@
     </item>
   </list>
   
-  <list id="ListDate" width="160" type="dropdown">
+  <list class="form-control" id="ListDate" width="160" type="dropdown">
     <item value="date">
       <label i18n="component.swf.editor.acl.condition.date"/>
     </item>
   </list>
   
-  <list id="OperDate" width="160" type="dropdown">
+  <list class="form-control" id="OperDate" width="160" type="dropdown">
     <item value="=">
       <label i18n="component.swf.editor.acl.condition.equal"/>
     </item>
@@ -174,13 +174,13 @@
     </item>
   </list>
   
-  <list id="ListIP" width="160" type="dropdown">
+  <list class="form-control" id="ListIP" width="160" type="dropdown">
     <item value="ip">
       <label i18n="component.swf.editor.acl.condition.ip"/>
     </item>
   </list>
   
-  <list id="OperIP" width="160" type="dropdown">
+  <list class="form-control" id="OperIP" width="160" type="dropdown">
     <item value="=">
       <label i18n="component.swf.editor.acl.condition.equal"/>
     </item>

@@ -158,9 +158,7 @@
         <cell col="1" row="1" anchor="NORTHWEST" var="metadata/alternatives/alternative">
             <repeater min="0" max="1024">
                 <panel>
-                    <cell col="1" row="2" var="name">
-                        <textfield width="35" maxlength="128" />
-                    </cell>
+                    <cell col="1" row="2" var="name" ref="TFzeile128"/>
                 </panel>
             </repeater>
         </cell>
@@ -239,15 +237,13 @@
                 <panel>
                     <hidden var="@inherited" default="0" />
                     <cell anchor="WEST" col="1" row="1" var="@type">
-                        <list type="dropdown">
+                        <list class="form-control" type="dropdown">
                             <item value="gnd" i18n="metaData.person.gnd" />
                             <item value="pnd" i18n="metaData.person.pnd" />
                             <item value="ppn" i18n="metaData.person.ppn" />
                         </list>
                     </cell>
-                    <cell anchor="WEST" col="1" row="2">
-                        <textfield width="35" maxlength="128" />
-                    </cell>
+                    <cell anchor="WEST" col="1" row="2" ref="TFzeile128"/>
                 </panel>
             </repeater>
         </cell>
@@ -264,7 +260,7 @@
                 <panel>
                     <hidden var="@inherited" default="0" />
                     <cell anchor="WEST" col="1" row="1" var="@type">
-                        <list type="dropdown">
+                        <list class="form-control" type="dropdown">
                             <item value="logoPlain">
                                 <label xml:lang="de">Einfaches Logo</label>
                             </item>
@@ -273,9 +269,7 @@
                             </item>
                         </list>
                     </cell>
-                    <cell anchor="WEST" col="1" row="2">
-                        <textfield width="35" maxlength="128" />
-                    </cell>
+                    <cell anchor="WEST" col="1" row="2" ref="TFzeile128"/>
                 </panel>
             </repeater>
         </cell>

@@ -40,7 +40,7 @@
                 <text id="LAdminUsers" i18n="component.useradmin.group.adminuser.label" />
             </cell>
             <cell row="6" col="2" anchor="WEST" var="group/group.admins/admins.userID" sortnr="20">
-                <list width="150" type="multirow" multiple="true" rows="10">
+                <list class="form-control" width="150" type="multirow" multiple="true" rows="10">
                     <item value="" i18n="component.useradmin.group.adminuser.select" />
                     <include uri="request:servlets/MCRUserEditorServlet?mode=getAllUsers"  cacheable="false" />
                 </list>
@@ -54,7 +54,7 @@
                 <text id="LAdminGroups" i18n="component.useradmin.group.admingroup.label" />
             </cell>
             <cell row="8" col="2" anchor="WEST" var="group/group.admins/admins.groupID" sortnr="20">
-                <list width="150" type="multirow" multiple="true" rows="10">
+                <list class="form-control" width="150" type="multirow" multiple="true" rows="10">
                     <item value="" i18n="component.useradmin.group.admingroup.select" />
                     <include uri="request:servlets/MCRUserEditorServlet?mode=getAllGroups"  cacheable="false" />
                 </list>
@@ -70,7 +70,7 @@
                 <text id="LGroupMembers" i18n="component.useradmin.group.groupmember.label" />
             </cell>
             <cell row="10" col="2" anchor="WEST" var="group/group.members/members.userID" sortnr="20">
-                <list width="150" type="multirow" multiple="true" rows="10">
+                <list class="form-control" width="150" type="multirow" multiple="true" rows="10">
                     <item value="" i18n="component.useradmin.group.groupmember.select" />
                     <include uri="request:servlets/MCRUserEditorServlet?mode=getAllUsers"  cacheable="false" />
                 </list>

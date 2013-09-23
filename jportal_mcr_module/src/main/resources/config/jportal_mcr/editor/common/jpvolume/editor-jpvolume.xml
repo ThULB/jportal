@@ -263,7 +263,7 @@
     <cell col="1" row="1" anchor="NORTHWEST" ref="coll_type" var="metadata/collationNotes/collationNote/@type" />
     <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="metadata/collationNotes/collationNote" ordernr="1" />
   </panel>
-  <list id="coll_type" type="dropdown">
+  <list class="form-control" id="coll_type" type="dropdown">
     <include uri="classification:editor:-1:children:jportal_class_00000082" />
   </list>
   <!-- end: note -->
@@ -295,7 +295,7 @@
   </panel>
   <!-- end: hidden_position -->
   <!--date ======================================================================= -->
-  <list id="date_type" type="dropdown">
+  <list class="form-control" id="date_type" type="dropdown">
     <include uri="classification:editor:-1:children:jportal_class_00000009" />
   </list>
 </imports>

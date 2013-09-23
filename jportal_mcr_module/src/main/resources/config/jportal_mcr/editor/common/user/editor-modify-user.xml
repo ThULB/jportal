@@ -60,7 +60,7 @@
                 <text id="LPrimaryGroup" i18n="component.useradmin.user.primary.label" />
             </cell>
             <cell row="7" col="2" anchor="WEST" var="user/user.primary_group" sortnr="4">
-                <list width="150" type="dropdown">
+                <list class="form-control" width="150" type="dropdown">
                     <item value="" i18n="component.useradmin.user.primary.select" />
                     <include uri="request:servlets/MCRUserEditorServlet?mode=getAssignableGroupsForUser"  cacheable="false" />
                 </list>
@@ -74,7 +74,7 @@
                 <text id="LAdditionalGroups" i18n="component.useradmin.user.additional.label" />
             </cell>
             <cell row="8" col="2" anchor="NORTHWEST" var="user/user.groups/groups.groupID" sortnr="20">
-                <list width="150" type="multirow" multiple="true" rows="5">
+                <list class="form-control" width="150" type="multirow" multiple="true" rows="5">
                     <item value="" i18n="component.useradmin.user.additional.select" />
                     <include uri="request:servlets/MCRUserEditorServlet?mode=getAssignableGroupsForUser"  cacheable="false" />
                 </list>

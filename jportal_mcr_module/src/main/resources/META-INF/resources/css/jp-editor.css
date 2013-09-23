@@ -44,12 +44,39 @@ table.editor{
 .editorCell {
 	text-align: left;
 	table-layout: fixed;
-	max-width: 956px;
-	padding-right: 10px;
+	width: 956px;
+}
+
+.editorCell .form-control{
+	width: 630px;
+	resize: none;
+}
+
+.editorCell .form-control.narrow{
+	width: 582px;
+}
+
+.editorCell .form-control.s_narrow{
+	width: 506px;
+	margin-left: 20px;
+}
+
+.editorPersName label{
+	width: 100px;
+}
+
+.editorPredSucc label{
+	width: 45px;
+}
+
+
+.editorPredSucc, .editorPersName {
+	margin-right: 10px;
+	width: 630px;
 }
 
 .editorList{
-	width: 636px;
+	width: 630px;
 	table-layout: fixed;
 }
 
@@ -71,7 +98,7 @@ input.editorList{
 }
 
 .editorRepeater .editorPanel{
-	margin-left: -6px;
+	margin-left: -2px;
 }
 
 .editorRepeater .editorCell .editorCell{
@@ -102,15 +129,6 @@ label.editorText {
 
 .editorButtons .editorButton{
 	margin-left: 10px;
-}
-
-/*journal*/
-.editorPredece .editorTextfield{
-	width: 588px;
-}
-
-.editorSuccessor .editorTextfield{
-	width: 588px;
 }
 
 /*person*/
@@ -205,4 +223,8 @@ label.editorText {
 /*search-expert*/
 .editorButtonSearch{
 	float: right;
+}
+
+.twoButtons {
+	padding-right: 5px;
 }

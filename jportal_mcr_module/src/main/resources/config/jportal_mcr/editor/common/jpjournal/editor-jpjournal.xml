@@ -241,7 +241,7 @@
     <hidden var="metadata/formats/format/@classid" default="jportal_class_00000081" />
     <cell col="1" row="1" anchor=" NORTHWEST" ref="CFormat" var="metadata/formats/format/@categid" />
   </panel>
-  <list id="CFormat" width="300" type="dropdown">
+  <list class="form-control" id="CFormat" width="300" type="dropdown">
     <item value="">
       <label xml:lang="de"></label>
     </item>
@@ -271,7 +271,7 @@
     <hidden var="metadata/languages/language/@classid" default="jportal_class_00000004" />
     <cell col="1" row="1" anchor=" NORTHWEST" ref="CLanguage" var="metadata/languages/language/@categid" />
   </panel>
-  <list id="CLanguage" width="300" type="dropdown">
+  <list class="form-control" id="CLanguage" width="300" type="dropdown">
     <item value="">
       <label xml:lang="de"></label>
     </item>
@@ -298,23 +298,23 @@
     <hidden var="metadata/predeces/@notinherit" default="false" />
     <hidden var="metadata/predeces/@heritable" default="false" />
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/predeces/predece">
-      <repeater min="0" max="10" anchor="NORTHWEST" ref="predece_input_repeater" />
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="pred_succ_input_repeater" />
     </cell>
   </panel>
-  <panel id="predece_input_repeater" class="editorPredece">
+  <panel id="pred_succ_input_repeater" class="editorPredSucc">
     <hidden var="@inherited" default="0" />
     <hidden var="@type" default="locator" />
     <cell col="1" row="1" anchor="NORTHEAST">
       <text i18n="jp.editor.journal.name" />
     </cell>
     <cell col="2" row="1" anchor="NORTHWEST" var="@title">
-      <textfield id="predece_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
+      <textfield class="form-control narrow" id="predece_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
     </cell>
     <cell col="1" row="2" anchor="NORTHEAST">
       <text i18n="jp.editor.journal.link" />
     </cell>
     <cell col="2" row="2" anchor="NORTHWEST" var="@xlink:href">
-      <textfield id="predece_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
+      <textfield class="form-control narrow" id="predece_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
     </cell>
   </panel>
   <!-- end: predece -->
@@ -324,23 +324,7 @@
     <hidden var="metadata/successors/@notinherit" default="false" />
     <hidden var="metadata/successors/@heritable" default="false" />
     <cell col="1" row="1" anchor="NORTHWEST" ordernr="3" var="metadata/successors/successor">
-      <repeater min="0" max="10" anchor="NORTHWEST" ref="successor_input_repeater" />
-    </cell>
-  </panel>
-  <panel id="successor_input_repeater" class="editorSuccessor">
-    <hidden var="@inherited" default="0" />
-    <hidden var="@xlink:type" default="locator" />
-    <cell col="1" row="1" anchor="NORTHEAST">
-      <text i18n="jp.editor.journal.name" />
-    </cell>
-    <cell col="2" row="1" anchor="NORTHWEST" var="@title">
-      <textfield id="successor_input_repeater_nameLink" width="64" maxlength="128" autofill="Name des Linkes" />
-    </cell>
-    <cell col="1" row="2" anchor="NORTHEAST">
-      <text i18n="jp.editor.journal.link" />
-    </cell>
-    <cell col="2" row="2" anchor="NORTHWEST" var="@xlink:href">
-      <textfield id="successor_input_repeater_valueLink" width="64" maxlength="128" autofill="www.link.de" />
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="pred_succ_input_repeater" />
     </cell>
   </panel>
   <!-- ================================================================== -->
@@ -351,7 +335,7 @@
     <cell col="1" row="1" anchor="NORTHWEST" var="metadata/hidden_templates/hidden_template" ref="template_chooser_list" />
   </panel>
   <!-- category list -->
-  <list id="template_chooser_list" width="300" type="dropdown">
+  <list class="form-control" id="template_chooser_list" width="300" type="dropdown">
     <include uri="templates:prop:templates.folder" />
   </list>
 
@@ -362,7 +346,7 @@
     uri="jportal_includeEditorCode:jpjournal:editor/editor-dynamicInludes_journalClassis.xml:include_dynamicClassiForJournal-code" />
 
   <!--date types ======================================================================= -->
-  <list id="date_type" type="dropdown">
+  <list class="form-control" id="date_type" type="dropdown">
     <include uri="classification:editor:-1:children:jportal_class_00000009" />
   </list>
 
@@ -380,7 +364,7 @@
     <hidden var="@classid" default="jportal_class_00000003" />
     <cell col="1" row="2" anchor=" NORTHWEST" ref="ddc" var="@categid" />
   </panel>
-  <list id="ddc" width="300" type="dropdown">
+  <list class="form-control" id="ddc" width="300" type="dropdown">
     <item value="">
       <label xml:lang="de"></label>
     </item>
@@ -485,7 +469,7 @@
   </panel>
 
   <!-- =================================================================================================== -->
-  <list type="dropdown" id="classiIDs">
+  <list class="form-control" type="dropdown" id="classiIDs">
     <item value="">
       <label xml:lang="de">bitte wählen</label>
     </item>

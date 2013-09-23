@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <imports>
     <!-- *** author_input_repeater_type List *** -->
-    <list id="participants_input_repeater_type" type="dropdown">
+    <list class="form-control" id="participants_input_repeater_type" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000007" />
     </list>
-    <list id="subtitle_type" width="120" type="dropdown">
+    <list class="form-control" id="subtitle_type" width="120" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000006" />
     </list>
-    <list id="identi_type" width="120" type="dropdown">
+    <list class="form-control" id="identi_type" width="120" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000010" />
     </list>
-    <list id="note_type" width="120" type="dropdown">
+    <list class="form-control" id="note_type" width="120" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000060" />
     </list>
-    <list id="tradition_type" width="120" type="dropdown">
+    <list class="form-control" id="tradition_type" width="120" type="dropdown">
         <include uri="classification:editor:-1:children:jportal_class_00000080" />
     </list>
     

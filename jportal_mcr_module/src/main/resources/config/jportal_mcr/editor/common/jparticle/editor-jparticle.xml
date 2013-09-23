@@ -195,7 +195,7 @@
     <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile128" var="" ordernr="1" />
   </panel>
   <!--date types ======================================================================= -->
-  <list id="date_type" type="dropdown">
+  <list class="form-control" id="date_type" type="dropdown">
     <include uri="classification:editor:-1:children:jportal_class_00000008" />
   </list>
 </imports>

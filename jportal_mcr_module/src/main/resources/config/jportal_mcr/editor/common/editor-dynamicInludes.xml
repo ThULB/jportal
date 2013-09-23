@@ -83,7 +83,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_pubTypesID/hidden_pubTypeID:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Ctype" var="@categid" />
         </panel>
-        <list id="Ctype" width="300" type="dropdown">
+        <list class="form-control" id="Ctype" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -104,7 +104,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_rubricsID/hidden_rubricID:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Crubric" var="@categid" />
         </panel>
-        <list id="Crubric" width="300" type="dropdown">
+        <list class="form-control" id="Crubric" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -125,7 +125,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classispub/hidden_classipub:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub" var="@categid" />
         </panel>
-        <list id="Cclassipub" width="300" type="dropdown">
+        <list class="form-control" id="Cclassipub" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -146,7 +146,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classispub2/hidden_classipub2:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub2" var="@categid" />
         </panel>
-        <list id="Cclassipub2" width="300" type="dropdown">
+        <list class="form-control" id="Cclassipub2" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -167,7 +167,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classispub3/hidden_classipub3:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub3" var="@categid" />
         </panel>
-        <list id="Cclassipub3" width="300" type="dropdown">
+        <list class="form-control" id="Cclassipub3" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -188,7 +188,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classispub4/hidden_classipub4:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="Cclassipub4" var="@categid" />
         </panel>
-        <list id="Cclassipub4" width="300" type="dropdown">
+        <list class="form-control" id="Cclassipub4" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -209,7 +209,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol1/hidden_classiVol1:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol1" var="@categid" />
         </panel>
-        <list id="CclassiVol1" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol1" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -230,7 +230,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol2/hidden_classiVol2:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol2" var="@categid" />
         </panel>
-        <list id="CclassiVol2" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol2" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -251,7 +251,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol3/hidden_classiVol3:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol3" var="@categid" />
         </panel>
-        <list id="CclassiVol3" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol3" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -272,7 +272,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol4/hidden_classiVol4:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol4" var="@categid" />
         </panel>
-        <list id="CclassiVol4" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol4" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -293,7 +293,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol5/hidden_classiVol5:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol5" var="@categid" />
         </panel>
-        <list id="CclassiVol5" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol5" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>
@@ -314,7 +314,7 @@
             <include cacheable="false" uri="jportal_getClassID:hidden_classiVol6/hidden_classiVol6:@classid" />
             <cell col="1" row="2" anchor=" NORTHWEST" ref="CclassiVol6" var="@categid" />
         </panel>
-        <list id="CclassiVol6" width="300" type="dropdown">
+        <list class="form-control" id="CclassiVol6" width="300" type="dropdown">
             <item value="">
                 <label xml:lang="de"></label>
             </item>

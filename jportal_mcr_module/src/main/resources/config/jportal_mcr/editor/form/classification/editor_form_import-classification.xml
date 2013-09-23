@@ -46,7 +46,7 @@
 
         <panel id="RBupdate" lines="on">
           <cell row="1" col="1" anchor="WEST" var="update">
-            <list id="Supdate" width="400" type="radio" cols="2" default="true">
+            <list class="form-control" id="Supdate" width="400" type="radio" cols="2" default="true">
               <item value="false" default="false" i18n="component.classhandler.label.impclass.aclid" />
               <item value="true" i18n="component.classhandler.label.impclass.bclid" />
             </list>

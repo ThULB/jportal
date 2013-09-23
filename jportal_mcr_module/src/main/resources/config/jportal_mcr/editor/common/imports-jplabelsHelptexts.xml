@@ -202,7 +202,7 @@
 
     <text id="LPhone" i18n="editormask.labels.LPhone" />
 
-    <list id="Sphone" width="160" type="dropdown">
+    <list class="form-control" id="Sphone" width="160" type="dropdown">
         <item value="Telefon" i18n="editormask.labels.SphoneTelefon" />
         <item value="Fax" i18n="editormask.labels.SphoneFax" />
         <item value="Mobil" i18n="editormask.labels.SphoneMobil" />
