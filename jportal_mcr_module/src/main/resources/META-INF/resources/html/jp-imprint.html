@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Imprint GUI</title>
+</head>
+<body style="background-color: white">
+	<div id="imprintEditorGUI">
+		<div class="modal fade in" style="display: block;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 id="imprintTitle" class="modal-title">Impressum
+							bearbeiten</h4>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="inputName" class="control-label">Name</label> <input
+								type="text" class="form-control" id="inputName"
+								placeholder="Name">
+						</div>
+						<div class='ckeditor' id="ckEditorContainer"></div>
+					</div>
+					<div class="modal-footer">
+						<button id="imprintCancelButton" class="btn btn-default"
+							type="button">Abbrechen</button>
+						<button id="imprintSaveButton" class="btn btn-primary"
+							type="button">Speichern</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal-backdrop fade in"></div>
+	</div>
+</body>
+</html>

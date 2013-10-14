@@ -41,14 +41,28 @@ var InfoEditorCtr = function(buttonTag){
 	var imprintID = backend.get(journalID);
 	var selectBox = new Select();
 	var editBox = new EditBox();
-	var editor = new Editor(type);
+	var editor = new Editor(type, controller);
 	var button = $('<div>' + buttonLabel +'</div>');
-	var imprintContainer = $("<div class='imprintContainer' />").appendTo("#" + containerID);
+	var imprintContainer = $("<div class='imprintContainer' />").load("/html/jp-imprint.html #imprintEditorGUI");
 	
 	buttonTag.html(button);
 	
 	controller.setMasterCtr = function(ctr){
 		masterCtr = ctr;
+	}
+	
+	controller.has = function(id){
+		return id == imprintID && selectBox.has(id);
+	}
+	
+	controller.save = function(id, data){
+		backend.save(id, data, function() {
+			selectBox.addOption(id, id, true);
+			editor.close();
+		}, function(err) {
+			alert('Es ist ein Fehler beim speichern aufgetreten.');
+		});
+		backend.set(journalID, id);
 	}
 	
 	controller.deactivateButton = function(){
@@ -96,56 +110,24 @@ var InfoEditorCtr = function(buttonTag){
 	editBox.editButton.on('click', function(){
 		var imprintID = selectBox.getValue();
 		
-		if(imprintID != null) {
+		if(imprintID != null && imprintID != '') {
 			backend.retrieve(imprintID, function(xml) {
 				editor.setContent(xml);
 				editor.setID(imprintID);
 			}, function(err) {
+				console.log("Error");
 				console.log(err);
 				alert("Error while loading. Please inform the administrator.");
 			});
 		} 
 		
-		editor.start();
-		imprintContainer.append(editor);
+		editor.start("#" + containerID);
 	});
-	
-	editor.saveButton.on('click', function(){
-		var newID = editor.getID();
-		
-		if(newID == null || newID == "") {
-			alert("Bitte geben Sie einen Namen für den Eintrag an.");
-			editor.idInput.focus();
-			return false;
-		}
-		
-		if(newID == imprintID && selectBox.has(newID)) {
-			var confirmUpdate = confirm("Es existiert bereits ein Eintrag mit dem Namen '" + imprintID + "'. Wollen Sie den Eintrag überschreiben?");
-			
-			if(!confirmUpdate){
-				return;
-			}
-		}
-		
-		var data = editor.getData();
-		backend.save(newID, data, function() {
-			selectBox.addOption(newID, newID, true);
-			editor.close();
-			
-		}, function(err) {
-			alert('Es ist ein Fehler beim speichern aufgetreten.');
-			console.log(err);
-		});
-		backend.set(journalID, newID);
-	});
-	
-	editor.cancelButton.on('click', function(){
-		editor.close();
-	})
 	
 	selectBox.on('change', function(){
 		var newID = selectBox.getValue();
-		if(newID != null){
+		
+		if(newID != null && newID != ""){
 			backend.set(journalID, newID);
 		}
 	})
@@ -163,14 +145,107 @@ var InfoEditorCtr = function(buttonTag){
 	return controller;
 }
 
-var Editor = function(type){
+var Editor = function(type, ctr){
 	var title = {
 			imprint : 'Impressum',
 			partner : 'Partner'
 	}
+	
 	var editorFrame = $("<div/>");
-	var editorOverlay = $("<div/>").appendTo(editorFrame);
-	var editorCenter = $("<div/>").appendTo(editorFrame);
+	editorFrame.load("/html/jp-imprint.html #imprintEditorGUI", function(){
+		var cancelButton = editorFrame.find("#imprintCancelButton");
+		var saveButton = editorFrame.find("#imprintSaveButton");
+		var idInput = editorFrame.find("#inputName");
+		var ckEditor = editorFrame.find("#ckEditorContainer");
+		
+		cancelButton.on('click', function(){
+			editorFrame.close();
+		});
+		
+		saveButton.on('click', function(){
+			var newID = idInput.val();
+			
+			if(newID == null || newID == "") {
+				alert("Bitte geben Sie einen Namen für den Eintrag an.");
+				editor.idInput.focus();
+				return false;
+			}
+			
+			if(ctr.has(newID)) {
+				var confirmUpdate = confirm("Es existiert bereits ein Eintrag mit dem Namen '" + newID + "'. Wollen Sie den Eintrag überschreiben?");
+				
+				if(!confirmUpdate){
+					return;
+				}
+			}
+			
+			var data = editorFrame.getData();
+			ctr.save(newID, data)
+		});
+		
+		editorFrame.start = function(appendTo){
+	    	ckEditor.ckeditor({
+	    		resize_enabled : false,
+	    		entities: false,
+	    		enterMode: CKEDITOR.ENTER_BR,
+	    		entities_processNumerical: 'force',
+	    		tabSpaces: 4,
+	    		fillEmptyBlocks: false,
+	    		height : '500px',
+	    		toolbar : [ ['Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
+	    		             'Link', 'Unlink', 'Source' ] ]
+	    	});
+	    	$("body").css("overflow","hidden");
+	    	editorFrame.appendTo(appendTo);
+	    }
+	    
+	    editorFrame.setContent = function(xml){
+	    	if(xml != null){
+	    		ckEditor.html(xml);
+	    	}
+	    }
+	    
+	    editorFrame.setID = function(id){
+	    	idInput.val(id);
+	    }
+	    
+	    editorFrame.getData = function(){
+	    	return ckEditor.ckeditorGet().getData();
+	    }
+	    
+	    editorFrame.getID = function(){
+	    	return idInput.val();
+	    }
+	    
+	    editorFrame.close = function(){
+	    	var ckEditorInst = CKEDITOR.instances['ckEditorContainer'];
+	    	
+	    	if(ckEditorInst){
+	    		ckEditorInst.destroy();
+	    	}
+	    	editorFrame.detach();
+	    	$("body").css("overflow","");
+	    }
+	    
+	    editorFrame.hasChanged = function(){
+	    	var ckEditorInst = CKEDITOR.instances['imprintEditor'];
+	    	
+	    	if(ckEditorInst){
+	    		return ckEditorInst.checkDirty();
+	    	}
+	    	
+	    	return false;
+	    }
+	    
+	    editorFrame.checkAllreadyExist = function(){
+	    	return false;
+	    }
+	});
+	
+	
+	
+	var editorOverlay = $("<div id='overlay' class='well'/>")//.appendTo(editorFrame);
+	var editorCenter = $("<div/>")//.appendTo(editorFrame);
 	var editorNode = $("<div/>").appendTo(editorCenter);
 	editorNode.append($("<h3>" + title[type] + " bearbeiten</h3>"));
 	var idInput = $("<input type='text' site='40' />");
@@ -178,94 +253,15 @@ var Editor = function(type){
     var ckEditor = $("<div class='ckeditor' id='imprintEditor'/>").appendTo(editorNode);
     var buttonUl = $("<ul class='ckeditorButtons ckGUI'/>").appendTo(editorNode);
     var cancelLi = $("<li />").appendTo(buttonUl);
-    var cancelButton = $("<input type='button' value='Abbrechen' />").appendTo(cancelLi);
     var saveLi = $("<li />").appendTo(buttonUl);
-    var saveButton = $("<input type='button' value='Speichern' />").appendTo(saveLi);
     
-    editorOverlay.css({
-    	width: '100%',
-    	height: '100%',
-    	position: 'fixed',
-    	top: '0',
-    	left: '0',
-    	'z-index': '3000',
-    	background: 'black',
-    	 filter: 'alpha(opacity=50)',
-        '-moz-opacity': '0.5',
-        '-khtml-opacity': '0.5', 
-    	opacity: '0.5'
-    });
     
-    editorCenter.css({
-    	position: 'absolute',
-    	top: '50%',
-    	left: '50%',
-    	'z-index': '5000'
-    });
     
-    editorNode.css({
-    	position: 'relative',
-    	'margin-left': '-329px',
-    	'margin-top': '-300px',
-    	width: '658px',
-    	background: 'white',
-    	padding: '20px'
-    });
     
-    editorFrame.start = function(){
-    	ckEditor.ckeditor({
-    		resize_enabled : false,
-    		entities: false,
-    		enterMode: CKEDITOR.ENTER_BR,
-    		entities_processNumerical: 'force',
-    		tabSpaces: 4,
-    		fillEmptyBlocks: false,
-    		height : '500px',
-    		toolbar : [ ['Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
-    		             'Link', 'Unlink', 'Source' ] ]
-    	});
-    }
     
-    editorFrame.setContent = function(xml){
-    	if(xml != null){
-    		ckEditor.append(xml);
-    	}
-    }
-    
-    editorFrame.setID = function(id){
-    	idInput.val(id);
-    }
-    
-    editorFrame.getData = function(){
-    	return ckEditor.ckeditorGet().getData();
-    }
-    
-    editorFrame.getID = function(){
-    	return idInput.val();
-    }
-    
-    editorFrame.close = function(){
-    	var ckEditorInst = CKEDITOR.instances['imprintEditor'];
-    	
-    	if(ckEditorInst){
-    		ckEditorInst.destroy();
-    		editorFrame.remove();
-    	}
-    }
-    
-    editorFrame.hasChanged = function(){
-    	var ckEditorInst = CKEDITOR.instances['imprintEditor'];
-    	
-    	if(ckEditorInst){
-    		return ckEditorInst.checkDirty();
-    	}
-    	
-    	return false;
-    }
-    
-    editorFrame.cancelButton = cancelButton;
-    editorFrame.saveButton = saveButton;
-    editorFrame.idInput = idInput;
+//    editorFrame.cancelButton = cancelButton;
+//    editorFrame.saveButton = saveButton;
+//    editorFrame.idInput = idInput;
     
     return editorFrame;
 }
@@ -381,9 +377,8 @@ var FSConnector = function(/*string*/ type){
 				type: "POST",
 				url: baseURL + "/save",
 				data: JSON.stringify({imprintID: imprintID, content: data}),
-				dataType: 'json',
 				contentType: 'application/json; charset=UTF-8'
-			}).done(onSuccess).error(onError);
+			}).done(onSuccess).fail(onError);
 		}
 	}
 }
