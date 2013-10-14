@@ -21,6 +21,10 @@
     <xsl:value-of select="'false'" />
   </xsl:template>
 
+  <xsl:template match="jp-searchbar">
+    <xsl:call-template name="jp.layout.searchbar" />
+  </xsl:template>
+
   <xsl:template name="jp.layout.searchbar">
     <xsl:variable name="searchBarMode">
       <xsl:variable name="controllerHook">
