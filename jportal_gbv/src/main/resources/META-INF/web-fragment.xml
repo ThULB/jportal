@@ -1,0 +1,93 @@
+<web-fragment xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-complete="true">
+  <name>jportal_gbv</name>
+
+<!-- TODO just copied from jportal_mcr_module:
+we should remove all the following lines and use the jportal_mcr_module web-fragment.xml.
+currently it just overwrites the web-fragment.xml of the jportal_mcr_module.
+ -->
+
+  <servlet id="DerivateLinkServlet">
+      <servlet-name>DerivateLinkServlet</servlet-name>
+      <servlet-class>org.mycore.frontend.servlets.DerivateLinkServlet</servlet-class>
+  </servlet>
+  <servlet id="MCRJPortalCheckCommitDataServlet">
+      <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+      <servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet</servlet-class>
+  </servlet>
+  <servlet id="MCRJPortalEditorCancelServlet">
+      <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
+      <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>DerivateLinkServlet</servlet-name>
+      <url-pattern>/servlets/DerivateLinkServlet/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+      <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
+      <url-pattern>/servlets/MCRJPortalCheckCommitDataServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+      <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
+      <url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>OAIURNProvider</servlet-name>
+      <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>OAIURNProvider</servlet-name>
+      <url-pattern>/oai</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>OAIJPortalProvider</servlet-name>
+      <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>OAIJPortalProvider</servlet-name>
+      <url-pattern>/oai2</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+      <servlet-name>MCRDFGServlet</servlet-name>
+      <servlet-class>org.mycore.iview2.frontend.MCRTileCombineServlet</servlet-class>
+      <init-param>
+          <param-name>org.mycore.iview2.frontend.MCRFooterInterface</param-name>
+          <param-value>fsu.jportal.iview2.UrmelFooter</param-value>
+      </init-param>
+  </servlet>
+  
+  <servlet>
+      <servlet-name>MCRDFGThumbServlet</servlet-name>
+      <servlet-class>org.mycore.iview2.frontend.MCRThumbnailServlet</servlet-class>
+      <init-param>
+          <param-name>thumbnailSize</param-name>
+          <param-value>150</param-value>
+      </init-param>
+  </servlet>
+  
+  <servlet-mapping>
+      <servlet-name>MCRDFGServlet</servlet-name>
+      <url-pattern>/servlets/MCRDFGServlet/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+      <servlet-name>MCRDFGThumbServlet</servlet-name>
+      <url-pattern>/servlets/MCRDFGThumbnail/*</url-pattern>
+  </servlet-mapping>
+  
+  <filter>
+    <filter-name>SolrQueryFilter</filter-name>
+    <filter-class>fsu.jportal.solr.SolrQueryFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SolrQueryFilter</filter-name>
+    <url-pattern>/servlets/solr/*</url-pattern>
+  </filter-mapping>
+
+</web-fragment>

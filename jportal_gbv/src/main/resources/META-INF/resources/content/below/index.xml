@@ -6,7 +6,7 @@
       <div class="horizontalContainer welcomeBlock">
         <div class="leftBlock">
           <div class="contentBlock">
-            <gbv-searchbar />
+            <jp-searchbar />
             <div class="welcome">Willkommen beim Zeitschriften-Portal des GBV</div>
           </div>
         </div>

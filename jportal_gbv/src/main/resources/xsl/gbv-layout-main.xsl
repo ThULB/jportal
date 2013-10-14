@@ -9,13 +9,13 @@
   <xsl:include href="jp-layout-nameOfTemplate.xsl" />
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
+  <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
-  <xsl:include href="jp-layout-contentArea-searchResults.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
   <xsl:include href="jp-navigation-top.xsl" />
+  <xsl:include href="jp-layout-searchbar.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
 
-  <xsl:include href="gbv-searchbar.xsl" />
   <xsl:include href="gbv-journalList.xsl" />
   <xsl:include href="gbv-breadcrumb.xsl" />
   <xsl:include href="gbv-editMenu.xsl" />
@@ -45,15 +45,20 @@
 
   <xsl:variable name="languages" select="jpxml:getLanguages()/languages" />
   <xsl:variable name="objSetting" select="xalan:nodeset($objSettingXML)" />
-  <xsl:variable name="showSearchBar" select="not(contains('advanced.form laws.form', $mode))" />
   <xsl:variable name="ImageBaseURL" select="concat($WebApplicationBaseURL,'images/') " />
   <xsl:variable name="MainTitle" select="$MCR.NameOfProject" />
 
   <xsl:variable name="objSettingXML">
     <title allowHTML="true" />
   </xsl:variable>
+  <xsl:variable name="journalID">
+    <xsl:call-template name="jp.getJournalID" />
+  </xsl:variable>
   <xsl:variable name="template">
-    <xsl:call-template name="nameOfTemplate" />
+    <xsl:call-template name="jp.getNameOfTemplate" />
+  </xsl:variable>
+  <xsl:variable name="searchMode">
+    <xsl:call-template name="jp.getSearchMode" />
   </xsl:variable>
   <xsl:variable name="templateResourcePath" select="concat('templates/', $template, '/')" />
   <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/', $template, '/')" />
@@ -70,10 +75,10 @@
   <xsl:variable name="pageList" select="xalan:nodeset($pageListXML)" />
 
   <xsl:variable name="maxWidthPageListXML">
-    <page name="servlets/MCRACLEditorServlet" />
+    <page name="rsc/ACLE/start" />
     <page name="jp-classeditor.xml" />
     <page name="authorization/roles-editor.xml" />
-    <page name="editor_form_" />
+    <page name="rsc/editor" />
     <page name="fileupload_commit.xml" />
     <page name="servlets/MCRFileNodeServlet" />
   </xsl:variable>
@@ -175,7 +180,7 @@
                   <div class="horizontalContainer">
                     <div class="leftBlock">
                       <div class="contentBlock">
-                        <xsl:call-template name="gbv-searchbar" />
+                        <xsl:call-template name="jp.layout.searchbar" />
                         <div class="caption">
                           <xsl:value-of select="$pageTitle" />
                         </div>
@@ -210,121 +215,6 @@
             <textarea id="ckeditor"></textarea>
           </div>
         </div>
-
-            <!-- 
-                <div id="globalHeader">
-                    <ul id="globalHomeLink" class="jp-layout-hMenu">
-                        <li>
-                            <a href="{$JP.Site.Parent.url}" target="_blank">
-                                <xsl:value-of select="$JP.Site.Parent.label" />
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/content/below/index.xml" target="_self">
-                                <xsl:value-of select="$JP.Site.label" />
-                            </a>
-                        </li>
-                        <xsl:if test="websiteWriteProtection:isActive() and $CurrentUser != 'gast'">
-                            <li>
-                                <span class="webWriteProtection">
-                                    <xsl:value-of select="websiteWriteProtection:getMessage()" />
-                                </span>
-                            </li>
-                        </xsl:if>
-                    </ul>
-                    <div id="globalMenu" class="globalMenu">
-                        <xsl:call-template name="jp.navigation.top" />
-                    </div>
-                </div>
-                <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
-                <div id="logo"></div>
-
-                <xsl:variable name="searchBarMode">
-                    <xsl:variable name="controllerHook">
-                        <jpsearchBar mode="{$mode}"/>
-                    </xsl:variable>
-                    <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar"/>
-                </xsl:variable>
-
-                <xsl:if test="$showSearchBar">
-                    <xsl:variable name="searchBar" select="xalan:nodeset($searchBarMode)"/>
-                    <xsl:choose>
-                        <xsl:when test="$searchBar/div[@id='searchBar']">
-                            <xsl:copy-of select="$searchBar/div[@id='searchBar']"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <div id="searchBar">
-                                <form id="searchForm" action="/jp-search.xml">
-                                    <xsl:variable name="queryterm">
-                                        <xsl:if test="$qt != '*' and $mode != 'hidden'">
-                                            <xsl:value-of select="$qt" />
-                                        </xsl:if>
-                                    </xsl:variable>
-                                    <xsl:variable name="journalID">
-                                        <xsl:call-template name="getJournalID" />
-                                    </xsl:variable>
-                                    <xsl:choose>
-                                        <xsl:when test="$journalID != ''">
-                                            <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift"></input>
-                                            <input type="hidden" name="XSL.searchjournalID" value="{$journalID}" />
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <input id="inputField" name="XSL.qt" value="{$queryterm}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand"></input>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                    <input id="submitButton" type="submit" value="Suche" />
-                                </form>
-                            </div>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:if>
-                <div id="main">
-                    <xsl:choose>
-                        <xsl:when test="/MyCoReWebPage[//mycoreobject]">
-                            <xsl:variable name="objectEditingHTML">
-                                <editing>
-                                    <xsl:call-template name="objectEditing">
-                                        <xsl:with-param name="id" select="/mycoreobject/@ID" />
-                                        <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-                                    </xsl:call-template>
-                                </editing>
-                            </xsl:variable>
-                            <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
-                            <xsl:variable name="contentRColHtml">
-                                <xsl:choose>
-                                    <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
-                                        <div id="jp-content-RColumn" class="jp-layout-content-RCol">
-                                            <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing' and li]" />
-                                        </div>
-                                        <class for="jp-content-LColumn">jp-layout-content-LCol-RCol</class>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <class for="jp-content-LColumn">jp-layout-content-LCol-noRCol</class>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:variable>
-                            <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
-                            <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
-                                <xsl:apply-templates />
-                            </div>
-                            <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:apply-templates />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </div>
-                <xsl:call-template name="jp.layout.footer" />
-                <xsl:if test="$object='delete'">
-                    <xsl:copy-of select="$objectEditing/deleteMsg" />
-                </xsl:if>
-                <div id="viewerContainerWrapper" />
-                <div id="ckeditorContainer">
-                    <div class="jp-layout-message-background"></div>
-                    <div id="ckeditorframe">
-                        <textarea id="ckeditor"></textarea>
-                    </div>
-                </div> -->
       </body>
     </html>
   </xsl:template>

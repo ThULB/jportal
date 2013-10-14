@@ -14,7 +14,7 @@ gbv.latestArticles = {
 
 	getSearchURL: function(query) {
 		var host = gbv.latestArticles.getHost();
-		var base = '/rsc/search?wt=json&q=';
+		var base = '/servlets/solr/select?wt=json&q=';
 		return host + base + query;
 	},
 

@@ -6,7 +6,7 @@
       <div class="horizontalContainer">
         <div class="leftBlock">
           <div class="contentBlock">
-            <gbv-searchbar />
+            <jp-searchbar />
             <div class="caption">Zeitschriften A-Z</div>
           </div>
         </div>
