@@ -14,9 +14,9 @@
   </xsl:template>
 
   <xsl:template name="jp.globalmessage.print">
-    <div class="message-wrapper" style="background: none repeat scroll 0% 0% white; padding: 9px;">
-      <div class="message" style="border-radius: 6px; padding: 0px 8px; border: 1px solid #666666; background-color: #FFC8C1;">
-        <h1 style="font-size: 14px;">
+    <div class="message-wrapper">
+      <div class="message">
+        <h1>
           <xsl:value-of select="head" />
         </h1>
         <p>

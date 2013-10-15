@@ -1342,3 +1342,17 @@ p.jp-layout-metadata-list {
 #resultList h3{
 	font-size: 16px;
 }
+
+.message-wrapper {
+	background-color: white;
+	padding: 9px;
+}
+.message-wrapper .message {
+	border-radius: 6px;
+	padding: 0px 8px;
+	border: 1px solid #666666;
+	background-color: #FFC8C1;
+}
+.message-wrapper .message h1 {
+	font-size: 14px;
+}
