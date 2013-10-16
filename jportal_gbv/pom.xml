@@ -23,6 +23,27 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.lesscss</groupId>
+        <artifactId>lesscss-maven-plugin</artifactId>
+        <version>1.3.3</version>
+        <configuration>
+          <sourceDirectory>${project.basedir}/src/main/resources/META-INF/resources/css</sourceDirectory>
+          <!-- we put the css file into the classes folder, cause its read by the following maven-dependency-plugin -->
+          <outputDirectory>${project.build.directory}/classes/META-INF/resources/css</outputDirectory>
+          <compress>true</compress>
+          <includes>
+            <include>jp-gbv.less</include>
+          </includes>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>2.6</version>

@@ -19,6 +19,8 @@
 @border-color-light: #ccc;
 @border-color-dark: #898989;
 
+@right-block: 675px;
+
 /*********************************************************************
 * DEFAULT
 **********************************************************************/
@@ -32,8 +34,13 @@ html {
 }
 
 body {
+	background-color: @page-background-color;
 	margin: auto;
 	width: auto;
+}
+
+a:hover {
+	text-decoration: none;
 }
 
 .pageHolder {
@@ -77,7 +84,7 @@ body {
 * HEADER
 **********************************************************************/
 .pageHolder > .header {
-	height: 200px;
+	min-height: 200px;
 	background-color: @blue;
 	color: @white;
 	a {
@@ -98,27 +105,31 @@ body {
 		    .languageMenu {
 				z-index: 998;
 				a {
-					padding: 3px 4px 2px;
+					padding: 3px 0 0 3px;
 				}
 				#languageList {
-					top: 24px;
+					top: 20px;
+					border: none;
+					width: 44px;
 					&.languageList_show {
 						background: @white;
-						border: 1px solid @grey;
 					}
 					a {
-						padding: 3px 19px 0 4px;
+						padding: 2px 16px 4px 4px;
 						&:hover {
 							background: @blue-highlight;
 						}
 					}
 				}
 				#languageSelect {
+					img {
+						vertical-align: inherit;
+					}
 					border: 1px solid transparent;
 					position: relative;
 					&.languageSelect {
-						background: @white;
-						border: 1px solid @grey;
+						/*background: @white;
+						border: 1px solid @grey;*/
 						border-bottom: none;
 						z-index: 999;
 						box-shadow: none;
@@ -153,13 +164,18 @@ body {
 	    position: relative;
 	    text-align: right;
 	}
+	.message-wrapper {
+		background-color: @blue;
+		color: @text-color-dark;
+	}
 }
 
 /*********************************************************************
 * DEFAULT CONTENT
 **********************************************************************/
 .contentContainer {
-	width: 675px;
+	width: @right-block;
+	max-width: @right-block;
 	background-color: @light-grey;
 	border-top: 1px solid @white;
 	border-bottom: 1px solid @border-color-light;
@@ -266,7 +282,7 @@ body {
 		.contentContainer;
 		display: block;
 		padding: 20px 30px 20px 20px;
-	    width: 625px;
+	    width: @right-block;
 	    &:hover {
 	    	background-color: @grey-highlight;
 	    }
@@ -389,7 +405,7 @@ body {
 /*********************************************************************
 * SEARCHBAR
 **********************************************************************/
-@searchBarWidth: 232px;
+@searchBarWidth: 284px;
 .searchButton {
 	background-color: transparent;
 	background-image: url("/images/searchButton.png");
@@ -403,6 +419,12 @@ body {
 	height: auto;
 	padding: 0px;
 	#searchForm {
+		.input-group {
+			width: auto;
+			.form-control::-moz-placeholder {
+				color: inherit;
+			}
+		}
 		#inputField {
 			width: @searchBarWidth;
 		}
@@ -412,6 +434,9 @@ body {
 		    position: absolute;
 		    right: 12px;
 		    top: 10px;
+		}
+		.row #submitButton {
+			right: 24px;
 		}
 		select {
 			background-color: @grey;
@@ -452,8 +477,17 @@ body {
 /*********************************************************************
 * SEARCHRESULTS
 **********************************************************************/
-.pageHolder #searchResults #resultList {
-	width: auto;
+.pageHolder #searchResults {
+	#resultListHeader > div {
+		font-size: 85%;
+	}
+	#resultList {
+		width: auto;
+	}
+	ul.jp-layout-list-nodecoration {
+		padding-right: 0px;
+		width: 645px;
+	}
 }
 
 /*********************************************************************
@@ -495,12 +529,12 @@ body {
     .jp-layout-submenu-dropdown {
 		margin: 0px;
 		padding: 0px;
-		#ckeditorButton,#diagButton,a {
+		#moveDocButton,#ckeditorButton,#diagButton,a,div {
 			color: @text-color;
 		    display: inline-block;
 		    margin: 0;
-		    padding: 5px 10px;
-		    width: 200px;
+		    padding: 5px 0 5px 10px;
+		    width: 218px;
 		    font-size: 0.9rem;
 			&:hover {
 				background-color: @blue-highlight;
