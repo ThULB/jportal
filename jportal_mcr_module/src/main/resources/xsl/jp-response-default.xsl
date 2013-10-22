@@ -193,7 +193,16 @@
 
   <xsl:template mode="searchHitLabel" match="doc">
     <h3 class="jp-layout-clickLabel">
-      <a href="/receive/{str[@name='id']}">
+      <!-- TODO: do not pass the hl parameter, instead we should pass a generated response id.
+      with this id we could get the response from cache and use it in our metadata object -->
+      <xsl:variable name="hl" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
+      <a>
+        <xsl:attribute name="href">
+          <xsl:value-of select="concat('/receive/', str[@name='id'])" />
+          <xsl:if test="$hl != ''">
+            <xsl:value-of select="concat('?hl=', $hl)" />
+          </xsl:if>
+        </xsl:attribute>
         <xsl:apply-templates mode="searchHitLabelText" select="." />
       </a>
     </h3>
