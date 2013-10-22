@@ -52,3 +52,11 @@ function setMaintitle(maintitle) {
 function setSearchLink(baseURL) {
 	$('#searchForm').append('<a href="' + baseURL + 'jp-laws-search.xml">Expertensuche in Gesetzesblättern</a>');
 }
+
+function highlightLawsText(/*string*/ hl) {
+	if(hl == null || hl == '') {
+		return;
+	}
+	var hlArray = hl.split(/\W+/);
+	$('#jp-content-laws').highlight(hlArray);
+}

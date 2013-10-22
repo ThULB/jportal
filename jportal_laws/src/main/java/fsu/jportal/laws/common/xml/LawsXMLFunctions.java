@@ -36,19 +36,19 @@ public abstract class LawsXMLFunctions {
         }
     };
 
-    public static Document getRegister(String objectId) {
-        if(objectId == null) {
+    public static Document getXML(String objectID) {
+        if(objectID == null) {
             return null;
         }
         try {
-            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
+            MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
             List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
             for(MCRMetaLinkID derLink : metaLinkList) {
-                String derId = derLink.getXLinkHref();
-                MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derId));
+                String derID = derLink.getXLinkHref();
+                MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
                 MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
                 String mainDoc = metaIFS.getMainDoc();
-                // assume that a xml file is always the register xml
+                // assume that the first xml is the right one
                 if(mainDoc.toLowerCase().endsWith(".xml")) {
                     MCRFilesystemNode xmlFile = MCRFileMetadataManager.instance().retrieveChild(metaIFS.getIFSID(), mainDoc);
                     if(xmlFile instanceof MCRFile) {
@@ -63,20 +63,20 @@ public abstract class LawsXMLFunctions {
         return null;
     }
 
-    public static String getImageDerivate(String objectId) {
-        if(objectId == null) {
+    public static String getImageDerivate(String objectID) {
+        if(objectID == null) {
             return null;
         }
-        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId));
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectID));
         List<MCRMetaLinkID> metaLinkList = mcrObj.getStructure().getDerivates();
         for(MCRMetaLinkID derLink : metaLinkList) {
-            String derId = derLink.getXLinkHref();
-            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derId));
+            String derID = derLink.getXLinkHref();
+            MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derID));
             MCRMetaIFS metaIFS = derivate.getDerivate().getInternals();
             String mainDoc = metaIFS.getMainDoc();
-            // assume that a tif file is always
+            // just tiff's, should be fine
             if(mainDoc.toLowerCase().endsWith(".tif") || mainDoc.toLowerCase().endsWith(".tiff")) {
-                return derId;
+                return derID;
             }
         }
         return null;

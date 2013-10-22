@@ -34,6 +34,10 @@
 	background-color: #ccc;
 }
 
+.jp-content-laws .highlight {
+	background-color: yellow;
+}
+
 .jp-content-laws .laws td {
 	text-align: left;
 	vertical-align: top;
