@@ -24,10 +24,10 @@
         <components xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" root="editor-{type}" var="/mycoreobject">
 
-          <include uri="webapp:editor/editor-commons.xml" />
-          <include uri="webapp:editor/editor-jpcommons.xml" />
-          <include uri="webapp:editor/imports-jplabelsHelptexts.xml" />
-          <include uri="webapp:editor/editor-{type}.xml" />
+          <include uri="webapp:editor/common/editor-commons.xml" />
+          <include uri="webapp:editor/common/editor-jpcommons.xml" />
+          <include uri="webapp:editor/common/imports-jplabelsHelptexts.xml" />
+          <include uri="webapp:editor/common/{type}/editor-{type}.xml" />
           <panel id="editor-{type}">
             <hidden var="@ID" default="{mcrid}" />
             <hidden var="@label" />
