@@ -106,7 +106,7 @@
             </style>
           </xsl:if>
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, '/CSS/', $template, '.css'))">
-            <link href="{$templateWebURL}/CSS/{$template}.css" rel="stylesheet" type="text/css" />
+            <link href="{$templateWebURL}CSS/{$template}.css" rel="stylesheet" type="text/css" />
           </xsl:if>
         </xsl:if>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
