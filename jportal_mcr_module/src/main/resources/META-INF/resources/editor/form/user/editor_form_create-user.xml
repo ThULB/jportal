@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+<section i18n="component.useradmin.page.create.user.title" direction="ltr">
+  <editor id="createuser"><include uri="webapp:editor/editor-create-user.xml" /></editor>
+</section>
+
+</MyCoReWebPage>

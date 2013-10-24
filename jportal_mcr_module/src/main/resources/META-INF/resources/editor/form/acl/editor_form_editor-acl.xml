@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+  
+  <section i18n="component.swf.page.editor.acl.title" direction="ltr">
+    <editor id="editor-acl">
+      
+      <source uri="{sourceUri}"/>
+      <target type="servlet" name="MCRCheckEditACLServlet" method="post" format="xml"/>
+      <cancel url="{cancelUrl}"/>
+      
+      <validationMessage i18n="common.validationMessage"/>
+      
+      <components root="editor-acl" var="/service" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <include uri="webapp:editor/editor-acl.xml"/>
+        <include uri="webapp:editor/imports-editor-acl-project.xml"/>
+        <panel id="editor-acl">
+        	<cell row="1" col="1" anchor="NORTHWEST" ref="editor-acls"/>
+        </panel>
+      </components>
+    </editor>
+  </section>
+   
+</MyCoReWebPage>

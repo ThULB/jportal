@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<components xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="editor.xsd">
+<!--     <include uri="webapp:editor/editor-commons.xml" /> -->
+<!--     <include uri="webapp:editor/imports-jplabelsHelptexts.xml"/> -->
+    <panel id="edit-person" lines="on">
+<!--         <hidden var="@ID" /> -->
+<!--         <hidden var="@label" /> -->
+        <cell col="1" row="1" var="metadata">
+            <panel>
+                <cell class="editorMandatory" col="1" row="10" anchor="NORTHWEST" ref="Lheading" />
+                <cell col="2" row="10" anchor="NORTHWEST" ref="Dheading" var="def.heading" />
+                <cell class="editorLabel" col="1" row="20" anchor="NORTHWEST" ref="Lalternative" />
+                <cell col="2" row="20" anchor="NORTHWEST" ref="Dalternative" var="def.alternative" />
+                <cell class="editorLabel" col="1" row="30" anchor="NORTHWEST" ref="Lpeerage" />
+                <cell col="2" row="30" anchor="NORTHWEST" ref="Dpeerage" var="def.peerage" />
+                <cell col="1" row="40" anchor="NORTHWEST" ref="Lgender" class="editorMandatory" />
+                <cell col="2" row="40" anchor="NORTHWEST" ref="Dgender" var="def.gender" />
+                <cell class="editorLabel" col="1" row="42" anchor="NORTHWEST" ref="Lcontact" />
+                <cell col="2" row="42" anchor="NORTHWEST" ref="Dcontact" var="def.contact" />
+                <cell col="1" row="50" anchor="NORTHWEST" ref="Lrole" class="editorLabel" />
+                <cell col="2" row="50" anchor="NORTHWEST" ref="Drole" var="def.role" />
+                <cell class="editorLabel" col="1" row="60" anchor="NORTHWEST" ref="LplaceOfActivity" />
+                <cell col="2" row="60" anchor="NORTHWEST" ref="DplaceOfActivity" var="def.placeOfActivity" />
+                <cell class="editorLabel" col="1" row="70" anchor="NORTHWEST" ref="LdateOfBirth" />
+                <cell col="2" row="70" anchor="NORTHWEST" ref="DdateOfBirth" var="def.dateOfBirth" />
+                <cell class="editorLabel" col="1" row="80" anchor="NORTHWEST" ref="LplaceOfBirth" />
+                <cell col="2" row="80" anchor="NORTHWEST" ref="DplaceOfBirth" var="def.placeOfBirth" />
+                <cell class="editorLabel" col="1" row="90" anchor="NORTHWEST" ref="LdateOfDeath" />
+                <cell col="2" row="90" anchor="NORTHWEST" ref="DdateOfDeath" var="def.dateOfDeath" />
+                <cell class="editorLabel" col="1" row="100" anchor="NORTHWEST" ref="LplaceOfDeath" />
+                <cell col="2" row="100" anchor="NORTHWEST" ref="DplaceOfDeath" var="def.placeOfDeath" />
+                <cell class="editorLabel" col="1" row="110" anchor="NORTHWEST" ref="Lnote" />
+                <cell col="2" row="110" anchor="NORTHWEST" ref="DNote" var="def.note" />
+                <cell class="editorLabel" col="1" row="121" anchor="NORTHWEST" ref="Llink" />
+                <cell col="2" row="121" anchor="NORTHWEST" ref="Dlink" var="def.link" />
+                <cell class="editorLabel" col="1" row="122" anchor="NORTHWEST" ref="Lidentifier" />
+                <cell col="2" row="122" anchor="NORTHWEST" ref="Didentifier" var="def.identifier" />
+                <cell class="editorLabel" col="1" row="125" anchor="NORTHWEST" ref="LdoubletOf" />
+                <cell col="2" row="125" anchor="NORTHWEST" ref="DdoubletOf" var="def.doubletOf" />
+                
+                <cell col="1" row="130" anchor="NORTHWEST">
+                    <text i18n="jp.editor.required" />
+                </cell>
+                <cell col="1" row="140">
+            		<br />
+        		</cell>
+       			<cell row="141" col="1" anchor="WEST" ref="TwoButtons" colspan="4" class="editorButtons" />
+            </panel>
+        </cell>
+    </panel>
+    <textfield id="TF128_16" class="form-control s_narrow" width="16" maxlength="128" />
+    <panel id="personName" class="editorPersonName">
+	  <!-- lastname -->
+        <cell col="1" row="1" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.lastName" />
+        </cell>
+        <cell col="2" row="1" anchor="NORTHWEST" var="lastName" ref="TF128_16"/>
+	  <!-- firstname -->
+        <cell col="1" row="2" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.firstName" />
+        </cell>
+        <cell col="2" row="2" anchor="NORTHWEST" var="firstName" ref="TF128_16"/>
+      <!-- collocation -->
+        <cell col="1" row="3" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.collocation" />
+        </cell>
+        <cell col="2" row="3" anchor="NORTHWEST" var="collocation" ref="TF128_16"/>
+      <!-- name affix -->
+        <cell col="1" row="4" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.nameAffix" />
+        </cell>
+        <cell col="2" row="4" anchor="NORTHWEST" var="nameAffix" ref="TF128_16"/>
+    </panel>
+
+    <panel id="personNameSingle" class="editorPersonName">
+	  <!-- name -->
+        <cell col="1" row="1" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.single" />
+        </cell>
+        <cell col="2" row="1" anchor="NORTHWEST" var="name" ref="TF128_16"/>
+      <!-- collocation -->
+        <cell col="1" row="3" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.collocation" />
+        </cell>
+        <cell col="2" row="3" anchor="NORTHWEST" var="collocation" ref="TF128_16"/>
+      <!-- name affix -->
+        <cell col="1" row="4" anchor="NORTHWEST">
+            <text i18n="jp.editor.person.nameAffix" />
+        </cell>
+        <cell col="2" row="4" anchor="NORTHWEST" var="nameAffix" ref="TF128_16"/>
+    </panel>
+
+<!-- *** Ansetzungsform: Name ** -->
+    <panel class="editorPersName" id="Dheading">
+        <hidden var="@class" default="MCRMetaXML" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="heading" ref="personName" />
+        <cell col="1" row="2" anchor="NORTHWEST" var="heading">
+           <panel class="editorPersonFreeText">
+              <cell col="1" row="1" anchor="NORTHWEST">
+                  <text i18n="jp.editor.person.single" />
+              </cell>
+              <cell col="2" row="1" var="name" ref="TF128_16"/>
+          </panel>
+        </cell>
+    </panel>
+    <text id="Lheading" i18n="editormask.person.Lheading" />
+    <helpPopup id="Hheading" width="400" height="250" i18n="editormask.person.Hheading" />
+
+<!-- *** Namensformen ** -->
+    <panel class="editorPersName" id="Dalternative">
+        <hidden var="@class" default="MCRMetaXML" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="alternative[@type='complete']">
+            <repeater min="0" max="1024" ref="personName" />
+        </cell>
+        <cell col="1" row="2" anchor="NORTHWEST" var="alternative[@type='single']">
+            <repeater min="0" max="1024" ref="personNameSingle" />
+        </cell>
+    </panel>
+    <text id="Lalternative" i18n="editormask.person.Lalternative" />
+    <helpPopup id="Halternative" width="400" height="250" i18n="editormask.person.Halternative" />
+<!-- *** Geschlecht ** -->
+    <panel id="Dgender">
+        <hidden var="@class" default="MCRMetaClassification" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="gender">
+            <panel>
+                <hidden var="@classid" default="urmel_class_00000001" />
+                <hidden var="@inherited" default="0" />
+                <cell var="@categid">
+                    <list width="300" type="radio" default="unknown">
+                        <include uri="classification:editor:-1:children:urmel_class_00000001" />
+                    </list>
+                </cell>
+            </panel>
+        </cell>
+    </panel>
+    <text id="Lgender" i18n="editormask.person.Lgender" />
+    <helpPopup id="Hgender" width="400" height="250" i18n="editormask.person.Hgender" />
+<!-- *** Contact ** -->
+    <panel id="Dcontact">
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@heritable" default="false" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="contact" ordernr="1">
+            <repeater min="0" max="9" anchor="NORTHWEST">
+                <panel id="Dcontact_repeater">
+                    <cell row="1" anchor="NORTHWEST" ref="contact_type" var="@type" />
+                    <cell row="3" anchor="NORTHWEST" ref="TFarea4096" />
+                </panel>
+            </repeater>
+        </cell>
+    </panel>
+    <list class="form-control" id="contact_type" type="dropdown">
+        <include uri="classification:editor:-1:children:urmel_class_00000002" />
+    </list>
+    <text id="Lcontact" i18n="metaData.person.contact" />
+    <helpPopup id="Hcontact" width="400" height="250" i18n="contactData.accountData" />
+<!-- *** Adelstitel ** -->
+    <panel id="Dpeerage">
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="peerage" ref="TFzeile128" />
+    </panel>
+    <text id="Lpeerage" i18n="editormask.person.Lpeerage" />
+    <helpPopup id="Hpeerage" width="400" height="250" i18n="editormask.person.Hpeerage" />
+<!-- *** Ämter und Funktionen ** -->
+    <panel id="Drole">
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="role">
+            <repeater min="0" max="10" ref="repeater4096" />
+        </cell>
+    </panel>
+    <text id="Lrole" i18n="editormask.person.Lrole" />
+    <helpPopup id="Hrole" width="400" height="250" i18n="editormask.person.Hrole" />
+<!-- *** Lebens- und Wirkungsorte ** -->
+    <panel id="DplaceOfActivity">
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="placeOfActivity">
+            <repeater min="0" max="10" ref="repeater32" />
+        </cell>
+    </panel>
+    <text id="LplaceOfActivity" i18n="editormask.person.LplaceOfActivity" />
+    <helpPopup id="HplaceOfActivity" width="400" height="250" i18n="editormask.person.HplaceOfActivity" />
+<!-- *** Geburtsdatum ** -->
+    <panel id="DdateOfBirth">
+        <hidden var="@class" default="MCRMetaISO8601Date" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="dateOfBirth" ref="TFzeile10" />
+    </panel>
+    <text id="LdateOfBirth" i18n="editormask.person.LdateOfBirth" />
+    <helpPopup id="HdateOfBirth" width="400" height="250" i18n="editormask.person.HdateOfBirth" />
+<!-- *** Geburtsort ** -->
+    <panel id="DplaceOfBirth">
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="placeOfBirth" ref="TFzeile128" />
+    </panel>
+    <text id="LplaceOfBirth" i18n="editormask.person.LplaceOfBirth" />
+    <helpPopup id="HplaceOfBirth" width="400" height="250" i18n="editormask.person.HplaceOfBirth" />
+<!-- *** Sterbedatum ** -->
+    <panel id="DdateOfDeath">
+        <hidden var="@class" default="MCRMetaISO8601Date" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+        <cell col="1" row="1" anchor="NORTHWEST" var="dateOfDeath" ref="TFzeile10" />
+    </panel>
+    <text id="LdateOfDeath" i18n="editormask.person.LdateOfDeath" />
+    <helpPopup id="HdateOfDeath" width="400" height="250" i18n="editormask.person.HdateOfDeath" />
+<!-- *** Sterbeort ** -->
+    <panel id="DplaceOfDeath">
+        <cell col="1" row="1" anchor="NORTHWEST" var="placeOfDeath" ref="TFzeile128" />
+        <hidden var="@class" default="MCRMetaLangText" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+    </panel>
+    <text id="LplaceOfDeath" i18n="editormask.person.LplaceOfDeath" />
+    <helpPopup id="HplaceOfDeath" width="400" height="250" i18n="editormask.person.HplaceOfDeath" />
+  
+    <!-- *** Links ** -->
+    <panel id="Dlink">
+        <cell col="1" row="1" anchor="NORTHWEST" var="link">
+            <repeater min="0" max="10" anchor="NORTHWEST">
+                <panel>
+                    <hidden var="@inherited" default="0" />
+                    <hidden var="@xtype" default="locator" />
+                    <cell anchor="WEST" ref="TFzeile128" var="@xlink:href" />
+                </panel>
+            </repeater>
+        </cell>
+        <hidden var="@class" default="MCRMetaLink" />
+        <hidden var="@notinherit" default="true" />
+        <hidden var="@heritable" default="true" />
+    </panel>
+    <text id="Llink">
+        <label xml:lang="de">
+            <xhtml:span class="editorlabel">&#160;Links &#160;</xhtml:span>
+    </label>
+  </text>
+  <helpPopup id="Hlink" width="400" height="250">
+    <label xml:lang="de">Geben Sie Links zu externen Webseiten an, die sich dieser Person widmen.</label>
+
+  </helpPopup>
+
+  <!-- *** Identifier ** -->
+  <panel id="Didentifier">
+    <cell col="1" row="1" anchor="NORTHWEST" var="identifier">
+      <repeater min="0" max="10" anchor="NORTHWEST">
+        <panel>
+          <hidden var="@inherited" default="0" />
+          <cell anchor="WEST" col="1" row="1" var="@type">
+
+            <list class="form-control" type="dropdown">
+              <item value="gnd" i18n="metaData.person.gnd" />
+              <item value="pnd" i18n="metaData.person.pnd" />
+              <item value="ppn" i18n="metaData.person.ppn" />
+            </list>
+          </cell>
+          <cell anchor="WEST" col="1" row="2">
+            <textfield class="form-control" width="35" maxlength="128" />
+          </cell>
+        </panel>
+
+      </repeater>
+    </cell>
+    <hidden var="@class" default="MCRMetaLangText" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+  </panel>
+  <helpPopup id="Hidentifier" width="400" height="250">
+    <label xml:lang="de">Wenn diese Person in anderen Katalogen geführt wird, geben Sie die dort verwendete ID an.</label>
+  </helpPopup>
+  
+  <!-- doubletOf -->
+  <panel id="DdoubletOf">
+    <hidden var="@class" default="MCRMetaLangText" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="doubletOf" ref="TFzeile128" />
+  </panel>
+  <text id="LdoubletOf" i18n="editormask.labels.LdoubletOf" />
+  <helpPopup id="HdoubletOf" width="400" height="250" i18n="editormask.labels.HdoubletOf" />
+
+  <panel id="DNote">
+    <hidden var="@class" default="MCRMetaLangText" />
+    <hidden var="@notinherit" default="true" />
+    <hidden var="@heritable" default="true" />
+    <hidden var="note/@inherited" default="0" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="note/@type">
+      <list class="form-control" type="dropdown">
+        <item value="visible">
+          <label xml:lang="en">Visible</label>
+          <label xml:lang="de">Sichtbar</label>
+        </item>
+        <item value="hidden">
+          <label xml:lang="en">Hidden</label>
+          <label xml:lang="de">Unsichtbar</label>
+        </item>
+      </list>
+    </cell>
+    <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="note" />
+  </panel>
+  
+</components>

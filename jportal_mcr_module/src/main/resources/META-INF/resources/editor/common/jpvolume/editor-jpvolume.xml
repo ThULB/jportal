@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<imports>
+  <panel id="edit-jpvolume" lines="on">
+    <hidden var="metadata/@lang" default="de" />
+    <hidden var="service/servdates" descendants="true" />
+    <hidden var="service/servacls" descendants="true" />
+    <hidden var="service/servflags" descendants="true" />
+    <hidden var="metadata/derivateLinks" descendants="true" />
+
+    <!-- ########################## formal description ################################## -->
+    <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
+      <text>
+        <label i18n="metaData.headlines.formaldiscr" />
+      </text>
+    </cell>
+    <!-- maintitle -->
+    <cell class="editorMandatory" row="10" col="1" anchor="NORTHWEST" ref="maintitle_label" />
+    <cell row="10" col="2" anchor="NORTHWEST" ref="maintitle_input" />
+    <!-- subtitle -->
+    <cell class="editorLabel" row="20" col="1" anchor="NORTHWEST" ref="subtitle_label" />
+    <cell row="20" col="2" anchor="NORTHWEST" ref="subtitle_input" />
+    <!-- partic -->
+    <cell class="editorLabel" row="30" col="1" anchor="NORTHWEST" ref="participants_label" />
+    <cell row="30" col="2" anchor="NORTHWEST" ref="participants_input" />
+    <!-- date -->
+    <cell class="editorLabel" row="40" col="1" anchor="NORTHWEST" ref="date_label" />
+    <!-- tradition -->
+    <cell class="editorLabel" row="41" col="1" anchor="NORTHWEST" ref="tradition_label" />
+    <cell row="41" col="2" anchor="NORTHWEST" ref="tradition_input" />
+    <!-- collation note -->
+    <cell class="editorLabel" row="50" col="1" anchor="NORTHWEST" ref="collation_note_label" />
+    <cell row="50" col="2" anchor="NORTHWEST" ref="collation_note_input" />
+    <cell row="40" col="2" anchor="NORTHWEST" ref="date_input" />
+    <!-- identi -->
+    <cell class="editorLabel" row="45" col="1" anchor="NORTHWEST" ref="identi_label" />
+    <cell row="45" col="2" anchor="NORTHWEST" ref="identi_input" />
+    <cell col="1" row="60">
+      <br />
+    </cell>
+    <!-- ########################## content description ################################## -->
+    <cell anchor="WEST" colspan="4" col="1" row="61" class="editorHeadlines">
+      <text>
+        <label css-style="editorHeadlines" i18n="metaData.headlines.contantdiscr" />
+      </text>
+    </cell>
+    <!-- abstract -->
+    <cell class="editorLabel" row="80" col="1" anchor="NORTHWEST" ref="abstract_label" />
+    <cell row="80" col="2" anchor="NORTHWEST" ref="abstract_input" />
+
+    <!-- note -->
+    <cell class="editorLabel" row="160" col="1" anchor="NORTHWEST" ref="note_label" />
+    <cell row="160" col="2" anchor="NORTHWEST" ref="note_input" />
+
+    <!-- person -->
+    <cell class="editorLabel" row="162" col="1" anchor="NORTHWEST" ref="person_label" />
+    <cell row="162" col="2" anchor="NORTHWEST" ref="person_input" />
+
+    <!-- publication note -->
+    <cell class="editorLabel" row="164" col="1" anchor="NORTHWEST" ref="publicationNote_label" />
+    <cell row="164" col="2" anchor="NORTHWEST" ref="publicationNote_input" />
+
+    <!-- normed pubLocation -->
+    <cell class="editorLabel" row="166" col="1" anchor="NORTHWEST" ref="normedPubLocation_label" />
+    <cell row="166" col="2" anchor="NORTHWEST" ref="normedPubLocation_input" />
+
+    <!-- foot note -->
+    <cell class="editorLabel" row="168" col="1" anchor="NORTHWEST" ref="footNote_label" />
+    <cell row="168" col="2" anchor="NORTHWEST" ref="footNote_input" />
+
+    <!-- bib evidence -->
+    <cell class="editorLabel" row="170" col="1" anchor="NORTHWEST" ref="bibEvidence_label" />
+    <cell row="170" col="2" anchor="NORTHWEST" ref="bibEvidence_input" />
+
+    <!-- index field -->
+    <cell class="editorLabel" row="172" col="1" anchor="NORTHWEST" ref="indexField_label" />
+    <cell row="172" col="2" anchor="NORTHWEST" ref="indexField_input" />
+
+    <!-- ================================================================================================= -->
+    <!-- dynamic includes, if used within a journal -->
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol1/hidden_classiVol1:editor/common/editor-dynamicInludes.xml:include_volContent1-classi_code_head" />
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol2/hidden_classiVol2:editor/common/editor-dynamicInludes.xml:include_volContent2-classi_code_head" />
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol3/hidden_classiVol3:editor/common/editor-dynamicInludes.xml:include_volContent3-classi_code_head" />
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol4/hidden_classiVol4:editor/common/editor-dynamicInludes.xml:include_volContent4-classi_code_head" />
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol5/hidden_classiVol5:editor/common/editor-dynamicInludes.xml:include_volContent5-classi_code_head" />
+    <include cacheable="false"
+      uri="jportal_includeEditorCode:jparticle:hidden_classiVol6/hidden_classiVol6:editor/common/editor-dynamicInludes.xml:include_volContent6-classi_code_head" />
+    <cell col="1" row="181">
+      <br />
+    </cell>
+
+    <!-- ########################## misc ################################## -->
+    <cell anchor="WEST" colspan="4" col="1" row="250" class="editorHeadlines">
+      <text>
+        <label css-style="editorHeadlines" i18n="metaData.headlines.misc" />
+      </text>
+    </cell>
+    <!-- position -->
+    <cell class="editorLabel" row="270" col="1" anchor="NORTHWEST" ref="position_label" />
+    <cell row="270" col="2" anchor="NORTHWEST" ref="position_input" />
+
+    <!-- ================================================================================================= -->
+    <cell col="1" row="300">
+      <br />
+    </cell>
+    <cell row="301" col="1" anchor="WEST" ref="TwoButtons" colspan="4" class="editorButtons" />
+  </panel>
+  <cell anchor="WEST" colspan="4" col="1" row="1" class="editorHeadlines">
+    <text>
+      <label i18n="metaData.headlines.formaldiscr" />
+    </text>
+  </cell>
+  <!-- panel definitions -->
+  <!-- MainTitle ================================================================== -->
+  <panel id="maintitle_input">
+    <hidden var="metadata/maintitles/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/maintitles/@heritable" default="true" />
+    <hidden var="metadata/maintitles/maintitle/@inherited" default="0" />
+    <cell col="1" row="2" anchor="WEST" ref="TFarea4096" var="metadata/maintitles/maintitle" />
+  </panel>
+
+  <!-- end: MainTitle -->
+  <!-- SubTitle ================================================================== -->
+  <panel id="subtitle_input">
+    <hidden var="metadata/subtitles/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/subtitles/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/subtitles/subtitle">
+      <repeater min="0" max="20" anchor="NORTHWEST" ref="subtitle_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="subtitle_input_repeater">
+    <cell col="1" row="1" anchor="NORTHWEST" ref="subtitle_type" var="@type" />
+    <cell col="1" row="3" anchor="NORTHWEST" ref="TFarea4096" />
+  </panel>
+  <!-- end: SubTitle -->
+  <!-- date ================================================================== -->
+  <panel id="date_input">
+    <hidden var="metadata/dates/@class" default="MCRMetaISO8601Date" />
+    <hidden var="metadata/dates/@heritable" default="true" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/dates/date" ordernr="1">
+      <repeater min="0" max="2" anchor="NORTHWEST" ref="date_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="date_input_repeater">
+    <cell col="1" row="1" anchor="NORTHWEST" ref="date_type" var="@type" ordernr="1" />
+    <cell col="1" row="3" anchor="NORTHWEST" ref="TFzeile10" var="" ordernr="1" />
+    <cell col="1" row="2" anchor="NORTHWEST" ref="date_howToUse" />
+  </panel>
+
+  <!-- end: date -->
+  <!-- abstract ================================================================== -->
+  <panel id="abstract_input">
+    <hidden var="metadata/abstracts/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/abstracts/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/abstracts/abstract" ordernr="1">
+      <repeater min="0" max="3" anchor="NORTHWEST" ref="abstract_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="abstract_input_repeater">
+    <!-- <cell col="1" row="1" anchor="NORTHWEST" ref="abstract_type" var="@type" ordernr="1"/> -->
+    <!-- <cell col="1" row="1" anchor="NORTHWEST" ref="Slang" var="@lang" ordernr="1" default="de" /> -->
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="" ordernr="1" />
+  </panel>
+  <!-- traditions ================================================================== -->
+  <panel id="tradition_input">
+    <hidden var="metadata/traditions/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/traditions/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/traditions/tradition" ordernr="1">
+      <repeater min="0" max="20" anchor="NORTHWEST" ref="traditions_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="traditions_input_repeater">
+    <cell col="1" row="1" anchor="NORTHWEST" ref="tradition_type" var="@type" ordernr="1" />
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile64" var="" ordernr="1" />
+  </panel>
+  <!-- identi ================================================================== -->
+  <panel id="identi_input">
+    <hidden var="metadata/identis/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/identis/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/identis/identi" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="identi_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="identi_input_repeater">
+    <cell col="1" row="1" anchor="NORTHWEST" ref="identi_type" var="@type" ordernr="1" />
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- person ================================================================== -->
+  <panel id="person_input">
+    <hidden var="metadata/people/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/people/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/people/person" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="person_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="person_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- publication note ================================================================== -->
+  <panel id="publicationNote_input">
+    <hidden var="metadata/publicationNotes/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/publicationNotes/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/publicationNotes/publicationNote" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="publicationNote_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="publicationNote_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- normed PubLocation ================================================================== -->
+  <panel id="normedPubLocation_input">
+    <hidden var="metadata/normedPubLocations/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/normedPubLocations/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/normedPubLocations/normedPubLocation" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="normedPubLocation_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="normedPubLocation_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- foot note ================================================================== -->
+  <panel id="footNote_input">
+    <hidden var="metadata/footNotes/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/footNotes/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/footNotes/footNote" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="footNote_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="footNote_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- bib evidence ================================================================== -->
+  <panel id="bibEvidence_input">
+    <hidden var="metadata/bibEvidences/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/bibEvidences/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/bibEvidences/bibEvidence" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="bibEvidence_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="bibEvidence_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+  <!-- indexField ================================================================== -->
+  <panel id="indexField_input">
+    <hidden var="metadata/indexFields/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/indexFields/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" var="metadata/indexFields/indexField" ordernr="1">
+      <repeater min="0" max="10" anchor="NORTHWEST" ref="indexField_input_repeater" />
+    </cell>
+  </panel>
+  <panel id="indexField_input_repeater">
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="" ordernr="1" />
+  </panel>
+
+  <!-- collation note ================================================================== -->
+  <panel id="collation_note_input">
+    <hidden var="metadata/collationNotes/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/collationNotes/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" ref="coll_type" var="metadata/collationNotes/collationNote/@type" />
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFzeile1024" var="metadata/collationNotes/collationNote" ordernr="1" />
+  </panel>
+  <list class="form-control" id="coll_type" type="dropdown">
+    <include uri="classification:editor:-1:children:jportal_class_00000082" />
+  </list>
+  <!-- end: note -->
+  <!-- note ================================================================== -->
+  <panel id="note_input">
+    <hidden var="metadata/notes/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/notes/@heritable" default="false" />
+    <cell col="1" row="2" anchor="NORTHWEST" ref="TFarea4096" var="metadata/notes/note" ordernr="1" />
+  </panel>
+  <!-- end: note -->
+  <!-- hidden_position ================================================================== -->
+  <!-- dynamic includes, if used within a journal -->
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol1/hidden_classiVol1:editor/common/editor-dynamicInludes.xml:include_volContent1-classi_code:false" />
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol2/hidden_classiVol2:editor/common/editor-dynamicInludes.xml:include_volContent2-classi_code:false" />
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol3/hidden_classiVol3:editor/common/editor-dynamicInludes.xml:include_volContent3-classi_code:false" />
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol4/hidden_classiVol4:editor/common/editor-dynamicInludes.xml:include_volContent4-classi_code:false" />
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol5/hidden_classiVol5:editor/common/editor-dynamicInludes.xml:include_volContent5-classi_code:false" />
+  <include cacheable="false"
+    uri="jportal_includeEditorCode:jparticle:hidden_classiVol6/hidden_classiVol6:editor/common/editor-dynamicInludes.xml:include_volContent6-classi_code:false" />
+  <panel id="position_input">
+    <hidden var="metadata/hidden_positions/@class" default="MCRMetaLangText" />
+    <hidden var="metadata/hidden_positions/@heritable" default="false" />
+    <cell col="1" row="1" anchor="NORTHWEST" ref="TFzeile10" var="metadata/hidden_positions/hidden_position" />
+  </panel>
+  <!-- end: hidden_position -->
+  <!--date ======================================================================= -->
+  <list class="form-control" id="date_type" type="dropdown">
+    <include uri="classification:editor:-1:children:jportal_class_00000009" />
+  </list>
+</imports>

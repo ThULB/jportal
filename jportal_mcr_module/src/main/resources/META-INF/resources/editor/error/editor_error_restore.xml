@@ -1,0 +1,37 @@
+<MyCoReWebPage>
+	<section title="Fehler beim Wiederherstellen" xml:lang="de">
+		<p></p>
+		<br/>
+		<p></p>
+		<center>
+			<table width="80%">
+				<tr align="center">
+					<td align="center">
+						<font color="red">Bei der Wiederherstellung des Objektes ist ein Fehler aufgetreten.</font>
+					</td>
+				</tr>
+			</table>
+		</center>
+		<p>
+		<a href="JavaScript:history.back(1)" >zurück</a>
+		</p>
+	</section>
+
+	<section title="Error on restore" xml:lang="en">
+		<p></p>
+		<br/>
+		<p></p>
+		<center>
+			<table width="80%">
+				<tr align="center">
+					<td align="center">
+						<font color="red">An error occurred while restoring the object.</font>
+					</td>
+				</tr>
+			</table>
+		</center>
+		<p>
+		<a href="JavaScript:history.back(1)" >back</a>
+		</p>		
+	</section>
+</MyCoReWebPage>
