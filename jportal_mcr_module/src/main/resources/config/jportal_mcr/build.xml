@@ -26,61 +26,41 @@
 	<!-- CREATE WEB APPLICATION -->
 	<target name="create.webapp">
 		<echo>JPortal webapp</echo>
-		<echo>Copy JPortal Stuff</echo>
-		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
-			<fileset dir="${module.directory}/editor/form" includes="**/*.xml" />
-			<fileset dir="${module.directory}/editor/error" includes="**/*.xml" />
-			<fileset dir="${module.directory}/editor/restore" includes="**/*.xml" />
-			<fileset dir="${module.directory}" includes="fileMappings.xml" />
-		</copy>
 
-		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
-			<fileset dir="${module.directory}/editor/common" includes="**/*.xml" />
-		</copy>
-
-		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
-			<fileset dir="${module.directory}/editor/acl" includes="**/*.xml" />
-		</copy>
-
-		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
-			<fileset dir="${module.directory}/" includes="**/messages_*.properties" />
-		</copy>
-
-		<copy todir="${basedir}/config/solr-home">
-			<fileset dir="${module.directory}/solr" />
-		</copy>
-
-		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
-			<fileset file="${module.jar}" />
-			<patternset>
-				<include name="META-INF/resources/templates/*/XSL/*.xsl" />
-			</patternset>
-			<mapper type="flatten"/>
-		</unjar>
-
-		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
-			<fileset file="${module.jar}" />
-			<patternset>
-				<include name="xsl/**" />
-			</patternset>
-			<regexpmapper from="^(xsl/)(.*)" to="\2" />
-		</unjar>
-
-		<unjar dest="${build.webapps}/WEB-INF/classes/xml" overwrite="true">
-			<fileset file="${module.jar}" />
-			<patternset>
-				<include name="xml/**" />
-			</patternset>
-			<regexpmapper from="^(xml/)(.*)" to="\2" />
-		</unjar>
-
+		<!-- extract templates until we find a better approach -->
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="META-INF/resources/**" />
+				<include name="META-INF/resources/templates/**" />
+			</patternset>
+			<regexpmapper from="^(META-INF/resources/)(templates/.*)" to="\2" />
+		</unjar>
+		<!-- overwrite index.xml -->
+		<unjar dest="${build.webapps}" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="META-INF/resources/content/below/index.xml" />
 			</patternset>
 			<regexpmapper from="^(META-INF/resources/)(.*)" to="\2" />
 		</unjar>
+		<!-- overwrite generatePage.xsl -->
+		<unjar dest="${build.webapps}/WEB-INF/classes" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/generatePage.xsl" />
+			</patternset>
+		</unjar>
+		<!-- overwrite sitemap.xsl -->
+		<unjar dest="${build.webapps}/WEB-INF/classes" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/sitemap.xsl" />
+			</patternset>
+		</unjar>
+		<!-- copy solr stuff -->
+		<copy todir="${basedir}/config/solr-home">
+			<fileset dir="${module.directory}/solr" />
+		</copy>
 
 	</target>
 
