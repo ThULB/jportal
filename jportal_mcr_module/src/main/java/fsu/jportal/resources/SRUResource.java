@@ -35,7 +35,7 @@ public class SRUResource {
     @Path("search")
     @Produces(MediaType.APPLICATION_XML)
     public Response query(@QueryParam("q") String query) {
-        SRUQueryParser queryParser = new SRUQueryParser(new GBVKeywordStore(GBVKeywordStore.KEYWORDS_URL_GBV_DB_11));
+        SRUQueryParser queryParser = new SRUQueryParser(GBVKeywordStore.getInstance());
         SRUConnector connector = SRUConnectorFactory.getSRUConnector(SRUConnectorFactory.GBV_SRU_CONNECTION_DB_11,
                 queryParser.parse("num " + query));
         connector.setMaximumRecords(10);
