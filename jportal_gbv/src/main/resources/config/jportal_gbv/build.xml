@@ -32,65 +32,39 @@
 	</target>
 
 	<target name="create.webapp">
+
 		<echo>JPortal-GBV create.webapp</echo>
-
-		<copy todir="${build.webapps}" flatten="true" preservelastmodified="true">
-			<fileset dir="${jportal.directory}/editor/form" includes="**/*.xml" />
-			<fileset dir="${jportal.directory}/editor/error" includes="**/*.xml" />
-			<fileset dir="${jportal.directory}/editor/restore" includes="**/*.xml" />
-			<fileset dir="${jportal.directory}" includes="fileMappings.xml" />
-		</copy>
-
-		<copy todir="${build.webapps}/editor" flatten="true" preservelastmodified="true">
-			<fileset dir="${jportal.directory}/editor/common" includes="**/*.xml" />
-		</copy>
-
-		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
-			<fileset dir="${jportal.directory}/editor/acl" includes="**/*.xml" />
-		</copy>
-
-		<copy todir="${build.webapps}/WEB-INF/classes/" flatten="true" preservelastmodified="true">
-			<fileset dir="${jportal.directory}/" includes="**/messages_*.properties" />
-		</copy>
-
-		<copy todir="${basedir}/config/solr-home">
-			<fileset dir="${jportal.directory}/solr" />
-		</copy>
-
-		<!-- copy template xsl, overides defaults in docportal maven module build.xml -->
-		<copy todir="${build.webapps}/WEB-INF/classes/xsl" flatten="true" preservelastmodified="true" includeemptydirs="false" failonerror="false">
-			<fileset dir="${build.modules}/META-INF/resources" includes="templates/*/XSL/*.xsl" />
-		</copy>
-
-		<echo>Unjar xsl to ${build.webapps}/WEB-INF/classes/xsl from ${module.jar}</echo>
-		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
-			<fileset file="${module.jar}" />
-			<patternset>
-				<include name="xsl/**" />
-			</patternset>
-			<regexpmapper from="^(xsl/)(.*)" to="\2" />
-		</unjar>
-
-		<unjar dest="${build.webapps}/WEB-INF/classes/xml" overwrite="true">
-			<fileset file="${module.jar}" />
-			<patternset>
-				<include name="xml/**" />
-			</patternset>
-			<regexpmapper from="^(xml/)(.*)" to="\2" />
-		</unjar>
 
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="META-INF/resources/**" />
+				<include name="META-INF/resources/content/below/index.xml" />
 			</patternset>
 			<regexpmapper from="^(META-INF/resources/)(.*)" to="\2" />
 		</unjar>
+		<unjar dest="${build.webapps}/WEB-INF/classes" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/generatePage.xsl" />
+			</patternset>
+		</unjar>
+		<unjar dest="${build.webapps}" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="META-INF/resources/templates/**" />
+			</patternset>
+			<regexpmapper from="^(META-INF/resources/)(templates/.*)" to="\2" />
+		</unjar>
+		<unjar dest="${build.webapps}/WEB-INF/classes" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/sitemap.xsl" />
+			</patternset>
+		</unjar>
 
-
-		<echo>Merging JPortal-GBV properties</echo>
-		<mcr:config propertyfile="${build.config}/mycore.properties" mergeFile="${module.directory}/mycore.properties" />
-		<mcr:config propertyfile="${build.webapps}/WEB-INF/classes/mycore.properties" mergeFile="${module.directory}/mycore.properties" />
+		<copy todir="${basedir}/config/solr-home">
+			<fileset dir="${jportal.directory}/solr" />
+		</copy>
 
 	</target>
 
