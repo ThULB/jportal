@@ -90,6 +90,7 @@ var InfoEditorCtr = function(buttonTag){
 		buttonTag.addClass('active');
 		selectBox.empty();
 		backend.list(function(idList){
+			idList.sort();
 	    	if(idList.length != 0) {
 	    		editBox.toggleDel();
 	    		selectBox.addOption(null, "bitte wählen... / neuer Eintrag", imprintID == null);
