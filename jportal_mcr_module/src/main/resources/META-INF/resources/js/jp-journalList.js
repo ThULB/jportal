@@ -7,14 +7,14 @@ jp.az = {
 	},
 
 	getSearchURL: function() {
-		var url = jp.az.getHost() + '/servlets/solr/select?wt=json&sort=maintitle_lowercase asc&rows=9999&q=';
+		var url = jp.az.getHost() + '/servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=';
 		var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
 		return url + additionalQuery;
 	},
 
 	getFilterQuery: function() {
 		var filter = $("#atozFilter").val().toLowerCase();;
-		return filter != "" ? "&fq=maintitle_lowercase:*" + filter + "*" : "";
+		return filter != "" ? "&fq=maintitle_sort:*" + filter + "*" : "";
 	},
 
 	getTabs: function(/*function*/ onSuccess) {
@@ -38,9 +38,9 @@ jp.az = {
 	getJournals: function(/*string*/ tabLetter, /*function*/ onSuccess) {
 	    var qry = '';
 	    if (tabLetter == '#') {
-	    	qry = '-maintitle_lowercase:[a TO z] -maintitle_lowercase:z*';
+	    	qry = '-maintitle_sort:[a TO z] -maintitle_sort:z*';
 	    } else {
-	    	qry = '%2Bmaintitle_lowercase:' + tabLetter.toLowerCase() + '*';
+	    	qry = '%2Bmaintitle_sort:' + tabLetter.toLowerCase() + '*';
 	    }
 		$.getJSON(jp.az.getSearchURL() + ' ' + qry + jp.az.getFilterQuery(), function(searchResult) {
 			onSuccess(searchResult.response);

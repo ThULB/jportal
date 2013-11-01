@@ -30,11 +30,13 @@
       </analyzer>
     </fieldtype>
 
-    <!-- lowercases the entire field value, keeping it as a single token. -->
-    <fieldType name="lowercase" class="solr.TextField" positionIncrementGap="100">
+    <!-- sort -> lowercase, handle umlaute, replace special characters -->
+    <fieldType name="sort" class="solr.TextField" positionIncrementGap="100">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
         <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.ASCIIFoldingFilterFactory"/>
+        <filter class="solr.PatternReplaceFilterFactory" pattern="[^A-Za-z0-9\s]" replacement=""/>
       </analyzer>
     </fieldType>
 
@@ -197,12 +199,12 @@
     <!-- ******************************************** -->
     <!-- * SORT -->
     <!-- ******************************************** -->
-    <field name="maintitle_lowercase" type="lowercase" stored="false" />
-    <field name="heading_lowercase" type="lowercase" stored="false" />
+    <field name="maintitle_sort" type="sort" stored="false" />
+    <field name="heading_sort" type="sort" stored="false" />
     <field name="indexPosition" type="string" default="0" />
 
-    <copyField source="maintitle" dest="maintitle_lowercase" />
-    <copyField source="heading_base" dest="heading_lowercase" />
+    <copyField source="maintitle" dest="maintitle_sort" />
+    <copyField source="heading_base" dest="heading_sort" />
 
   </fields>
 

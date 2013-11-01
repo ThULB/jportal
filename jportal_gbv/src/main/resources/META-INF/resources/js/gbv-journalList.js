@@ -10,7 +10,7 @@ gbv.az = {
 
 	getSearchURL: function() {
 		var host = jp.az.getHost();
-		var base = '/servlets/solr/select?wt=json&sort=maintitle_lowercase asc&rows=9999&q=';
+		var base = '/servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=';
 		var query = "%2BobjectType:jpjournal %2DcontentClassi1:calendar";
 		return host + base + query;
 	},
