@@ -1808,7 +1808,7 @@
   <requestHandler name="/find" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">maintitle^50 heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
+      <str name="qf">heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
       <!-- facet -->
@@ -1866,7 +1866,7 @@
   <requestHandler name="/laws" class="solr.SearchHandler">
     <lst name="defaults">
       <str name="echoParams">explicit</str>
-      <str name="qf">maintitle^50 heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
+      <str name="qf">heading^10 titles^10 participants^10 heading_de^5 participants_de^5 alternatives^5 dates^5 titles_de^5 alternatives_de^3 content^3 allMeta^1</str>
       <int name="rows">10</int>
       <str name="qry">*:*</str>
       <str name="sort">date.published asc, maintitle asc</str>
