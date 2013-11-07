@@ -21,10 +21,11 @@
   <xsl:variable name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
   <xsl:variable name="hasChildren" select="count(/mycoreobject/structure/children) > 0" />
   <xsl:variable name="listType" select="layoutTools:getListType(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID)" />
-  <xsl:variable name="isCalendar" select="$listType = 'calendar'" />
-  <xsl:variable name="isOnlineJournal" select="$listType = 'online'" />
+  <xsl:variable name="isPartOfCalendar" select="$listType = 'calendar'" />
+  <xsl:variable name="isPartOfOnlineJournal" select="$listType = 'online'" />
+  <xsl:variable name="isJournal" select="$currentType = 'jpjournal'" />
 
-  <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or $isCalendar or $updatePerm = 'true' or $deletePerm = 'true'" />
+  <xsl:variable name="showMetadataAndDerivate" select="not($hasChildren) or (not($isJournal) and ($isPartOfOnlineJournal or $isPartOfCalendar)) or $updatePerm = 'true' or $deletePerm = 'true'" />
 
   <xsl:template priority="9" match="/mycoreobject">
 
