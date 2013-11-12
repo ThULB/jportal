@@ -1356,3 +1356,11 @@ p.jp-layout-metadata-list {
 .message-wrapper .message h1 {
 	font-size: 14px;
 }
+
+.form-login .control-label {
+	visibility: hidden;
+}
+
+.form-login .control {
+	max-width: 193px;
+}
