@@ -11,8 +11,20 @@
 
     <xsl:variable name="findVolQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jpvolume'))" />
     <xsl:variable name="numPerPage_vol" select="$settings/numPerPage[@for='volume']" />
+    <xsl:variable name="sort_vol">
+      <xsl:value-of select="'indexPosition%20asc'" />
+      <xsl:choose>
+        <xsl:when test="$isPartOfOnlineJournal">
+          <xsl:value-of select="',date.published%20desc'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="',date.published%20asc'" />
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="',maintitle%20asc'" />
+    </xsl:variable>
     <xsl:variable name="volumes"
-      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=indexPosition%20asc,maintitle%20asc&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
+      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=', $sort_vol, '&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
