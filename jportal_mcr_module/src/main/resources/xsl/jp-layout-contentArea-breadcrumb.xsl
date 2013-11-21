@@ -2,9 +2,6 @@
 <xsl:stylesheet version="1.0" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:xlink="http://www.w3.org/1999/xlink">
 
-  <xsl:param name="previousObject" />
-  <xsl:param name="nextObject" />
-
   <xsl:template name="breadcrumb">
     <div id="jp-breadcrumb-container">
       <menu class="jp-layout-breadcrumb">
@@ -64,7 +61,7 @@
   </xsl:template>
 
   <xsl:template mode="jp.printListEntryContent" match="parent">
-    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
+    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}?XSL.referer={@referer}">
       <xsl:value-of select="@xlink:title" />
     </a>
   </xsl:template>

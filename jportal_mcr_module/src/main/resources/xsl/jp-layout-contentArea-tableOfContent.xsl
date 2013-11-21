@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
-  xmlns:math="xalan://java.lang.Math"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan encoder mcr mcrxml solrxml">
-  <xsl:param name="vol.start" select="'0'" />
-  <xsl:param name="art.start" select="'0'" />
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xalan encoder mcr mcrxml solrxml">
+
+  <xsl:param name="referer" />
+  <xsl:param name="vol.start" />
+  <xsl:param name="art.start" />
 
   <xsl:template name="tableOfContent">
     <xsl:param name="id" />
+    <xsl:call-template name="jp.toc.printVolumes">
+      <xsl:with-param name="parentID" select="$id" />
+    </xsl:call-template>
+    <xsl:call-template name="jp.toc.printArticles">
+      <xsl:with-param name="parentID" select="$id" />
+    </xsl:call-template>
+  </xsl:template>
 
-    <xsl:variable name="findVolQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jpvolume'))" />
-    <xsl:variable name="numPerPage_vol" select="$settings/numPerPage[@for='volume']" />
-    <xsl:variable name="sort_vol">
+  <xsl:template name="jp.toc.printVolumes">
+    <xsl:param name="parentID" />
+    <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jpvolume'))" />
+    <xsl:variable name="rows" select="$settings/numPerPage[@for='volume']" />
+    <xsl:variable name="sort">
       <xsl:value-of select="'indexPosition%20asc'" />
       <xsl:choose>
         <xsl:when test="$isPartOfOnlineJournal">
@@ -23,8 +33,26 @@
       </xsl:choose>
       <xsl:value-of select="',maintitle%20asc'" />
     </xsl:variable>
+    <xsl:variable name="start">
+      <xsl:choose>
+        <xsl:when test="$vol.start">
+          <xsl:value-of select="$vol.start" />
+        </xsl:when>
+        <xsl:when test="$referer">
+          <xsl:call-template name="jp.toc.getRefererStart">
+            <xsl:with-param name="q" select="$q" />
+            <xsl:with-param name="sort" select="$sort" />
+            <xsl:with-param name="rows" select="$rows" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'0'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:variable name="volumes"
-      select="document(concat('solr:q=', $findVolQuery, '&amp;sort=', $sort_vol, '&amp;rows=', $numPerPage_vol,'&amp;start=', $vol.start))" />
+      select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
@@ -38,10 +66,33 @@
         </div>
       </li>
     </xsl:if>
-    <xsl:variable name="findArtQuery" select="encoder:encode(concat('+parent:', $id, ' +objectType:jparticle'))" />
-    <xsl:variable name="numPerPage_art" select="$settings/numPerPage[@for='article']" />
+  </xsl:template>
+
+  <xsl:template name="jp.toc.printArticles">
+    <xsl:param name="parentID" />
+    <xsl:variable name="q" select="encoder:encode(concat('+parent:', $parentID, ' +objectType:jparticle'))" />
+    <xsl:variable name="rows" select="$settings/numPerPage[@for='article']" />
+    <xsl:variable name="sort" select="'size%20asc,maintitle%20asc'" />
+    <xsl:variable name="start">
+      <xsl:choose>
+        <xsl:when test="$art.start">
+          <xsl:value-of select="$art.start" />
+        </xsl:when>
+        <xsl:when test="$referer">
+          <xsl:call-template name="jp.toc.getRefererStart">
+            <xsl:with-param name="q" select="$q" />
+            <xsl:with-param name="sort" select="$sort" />
+            <xsl:with-param name="rows" select="$rows" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'0'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
     <xsl:variable name="articles"
-      select="document(concat('solr:q=', $findArtQuery, '&amp;sort=size%20asc,maintitle%20asc&amp;rows=', $numPerPage_art,'&amp;start=', $art.start))" />
+      select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
@@ -55,6 +106,15 @@
         </div>
       </li>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="jp.toc.getRefererStart">
+    <xsl:param name="q" />
+    <xsl:param name="sort" />
+    <xsl:param name="rows" />
+    <xsl:variable name="xml" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=99999&amp;fl=id'))" />
+    <xsl:variable name="positionInParent" select="count($xml/response/result/doc[str[@name] = $referer]/preceding-sibling::*)" />
+    <xsl:value-of select="floor($positionInParent div $rows) * $rows" />
   </xsl:template>
 
   <xsl:template mode="artList" match="doc">

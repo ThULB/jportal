@@ -9,11 +9,14 @@ public class ParentsListXML implements ParentsList<Element> {
     Element parentsElement = new Element("parents");
     
     @Override
-    public void addParent(String title, String id, String inherited){
+    public void addParent(String title, String id, String inherited, String referer){
         Element parentElement = new Element("parent");
         parentElement.setAttribute("inherited", inherited);
         parentElement.setAttribute("title", title, MCRConstants.XLINK_NAMESPACE);
         parentElement.setAttribute("href", id, MCRConstants.XLINK_NAMESPACE);
+        if(referer != null) {
+            parentElement.setAttribute("referer", referer);
+        }
         getParents().addContent(0, parentElement);
     }
     
