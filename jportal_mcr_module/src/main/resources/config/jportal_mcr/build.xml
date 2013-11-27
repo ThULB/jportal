@@ -57,6 +57,13 @@
 				<include name="xsl/sitemap.xsl" />
 			</patternset>
 		</unjar>
+		<!-- overwrite mycoreobject-solr.xsl -->
+		<unjar dest="${build.webapps}/WEB-INF/classes" overwrite="true">
+			<fileset file="${module.jar}" />
+			<patternset>
+				<include name="xsl/mycoreobject-solr.xsl" />
+			</patternset>
+		</unjar>
 		<!-- copy solr stuff -->
 		<copy todir="${basedir}/config/solr-home">
 			<fileset dir="${module.directory}/solr" />
