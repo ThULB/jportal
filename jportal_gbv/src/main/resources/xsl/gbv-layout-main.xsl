@@ -12,10 +12,10 @@
   <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
   <xsl:include href="jp-layout-mcrwebpage.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
-  <xsl:include href="jp-navigation-top.xsl" />
   <xsl:include href="jp-layout-searchbar.xsl" />
   <xsl:include href="jp-globalmessage.xsl" />
 
+  <xsl:include href="gbv-navigation-top.xsl" />
   <xsl:include href="gbv-journalList.xsl" />
   <xsl:include href="gbv-breadcrumb.xsl" />
   <xsl:include href="gbv-response-default.xsl" />
@@ -157,7 +157,7 @@
                 <xsl:call-template name="jp.navigation.top" />
               </div>
               <a href="http://www.gbv.de" class="gbv-logo" />
-              <a href="{$WebApplicationBaseURL}" class="title">Digitale Bibliothek</a>
+              <a href="{$WebApplicationBaseURL}" class="title">Digitale Bibliothek - Zeitschriftenportal</a>
             </div>
             <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
             <div class="bottomBlock">

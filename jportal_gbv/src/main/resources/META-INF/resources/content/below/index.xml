@@ -12,11 +12,11 @@
         </div>
         <div class="rightBlock">
           <div class="contentBlock">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-            sed diam voluptua. At
-            vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit
-            amet. Lorem ipsum dolor sit
-            amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam.
+            <p>
+              Das Zeitschriftenportal der VZG bietet Zugang zu wissenschaftlichten Zeitschriften, die
+              sowohl als reine Onlinezeitschriften, als auch in digitalisierter Form vorliegen.
+              Aktuell befindet sich dieser Auftritt im Aufbau und umfasst insgesamt 3 Zeitschriften.
+            </p>
           </div>
         </div>
       </div>
@@ -24,12 +24,31 @@
         <div class="leftBlock">
           <div class="contentBlock">Zeitschriften</div>
         </div>
-        <a href="/gbv-journalList.xml" class="rightBlock entry journal">
-          <div class="contentBlock">
-            Zugang zu digitalisierten Zeitschriften und Zeitungen sowie weiteren online verfügbaren
-            Periodika...
+        <!-- go to journal list when there are more than three journals -->
+        <!-- a href="/gbv-journalList.xml" class="rightBlock entry journal" -->
+          <div class="contentBlock container">
+            <div class="row">
+              <a href="../../receive/jportal_jpjournal_00000001">
+                <div class="col-md-4">
+                  Concilium medii aevi <br />
+                  Erscheinungsverlauf: 1998 -
+                </div>
+              </a>
+              <a href="#">
+                <div class="col-md-4">
+                  Göttinger Forum für Altertumswissenschaft <br />
+                  Erscheinungsverlauf: 1998 -
+                </div>
+              </a>
+              <a href="#">
+                <div class="col-md-4">
+                  Jenaische gelehrte Anzeigen <br />
+                  Erscheinungsverlauf: 1787 - 1787
+                </div>
+              </a>
+            </div>
           </div>
-        </a>
+        <!-- /a -->
       </div>
       <gbv-latestArticles query="objectType:jparticle&amp;sort=created%20desc&amp;rows=3"  />
     </div>
