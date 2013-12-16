@@ -15,6 +15,15 @@
 	padding: 92px 31px 0px;
 }
 
+#logoLink {
+    display: inline-block;
+    height: 62px;
+    left: 29px;
+    position: absolute;
+    top: 20px;
+    width: 145px;
+}
+
 @CHARSET "UTF-8";
 
 .jp-content-laws .register {
