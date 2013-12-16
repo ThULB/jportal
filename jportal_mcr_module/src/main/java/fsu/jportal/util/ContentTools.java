@@ -25,7 +25,7 @@ public class ContentTools {
             for (int i = 0; i < parents.size(); i++) {
                 MCRObject parent = parents.get(i);
                 Document parentXML = parent.createXML();
-                String title = shortenText(titleXpath.evaluateFirst(parentXML).getText());
+                String title = titleXpath.evaluateFirst(parentXML).getText();
                 String id = parent.getId().toString();
                 String inherited = String.valueOf(i + 1);
                 parentsList.addParent(title, id, inherited, referer);
@@ -36,10 +36,4 @@ public class ContentTools {
         return parentsList.getParents();
     }
 
-    private String shortenText(String text) {
-        if (text.length() > 20) {
-            return text.substring(0, 20) + "...";
-        }
-        return text;
-    }
 }

@@ -30,8 +30,7 @@
           </li>
         </xsl:if>
         <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents" />
-        <xsl:apply-templates mode="jp.printListEntry"
-          select="$parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
+        <xsl:apply-templates mode="jp.printListEntry" select="$parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
       </menu>
       <xsl:call-template name="jp-layout-breadcrumb-scroller" />
     </div>
@@ -47,7 +46,6 @@
   <xsl:template name="searchBreadcrumb">
     <xsl:param name="objID" />
     <xsl:param name="currentPageName" />
-
     <ul class="jp-layout-searchBreadcrumb">
       <li>
         <a href="{$WebApplicationBaseURL}receive/$objID">
@@ -61,8 +59,16 @@
   </xsl:template>
 
   <xsl:template mode="jp.printListEntryContent" match="parent">
-    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}?XSL.referer={@referer}">
-      <xsl:value-of select="@xlink:title" />
+    <a href="{$WebApplicationBaseURL}receive/{@xlink:href}?XSL.referer={@referer}" alt="{@xlink:title}">
+      <xsl:if test="string-length(@xlink:title) &gt;= 20">
+        <xsl:attribute name="title">
+          <xsl:value-of select="@xlink:title" />
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:call-template name="shortenString">
+        <xsl:with-param name="string" select="@xlink:title" />
+        <xsl:with-param name="length" select="20" />
+      </xsl:call-template>
     </a>
   </xsl:template>
 
@@ -106,4 +112,5 @@
       </xsl:if>
     </menu>
   </xsl:template>
+
 </xsl:stylesheet>
