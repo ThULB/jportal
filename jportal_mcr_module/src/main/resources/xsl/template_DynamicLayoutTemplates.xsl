@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
   xmlns:layoutDetector="xalan://org.mycore.frontend.MCRJPortalLayoutTemplateDetector" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  xmlns:xalan="http://xml.apache.org/xalan">
+  xmlns:escapeUtils="org.apache.commons.lang.StringEscapeUtils" xmlns:xalan="http://xml.apache.org/xalan"
+  exclude-result-prefixes="jpxml xalan layoutTools escapeUtils">
 
   <xsl:template match="/template[@id='template_DynamicLayoutTemplates']" mode="template">
     <xsl:param name="mcrObj" />
@@ -19,7 +20,7 @@
     <xsl:variable name="published_from">
       <xsl:value-of select="$journal//date[@type='published_from']" />
     </xsl:variable>
-    
+
     <xsl:variable name="century">
       <xsl:choose>
         <xsl:when test="$published_from != ''">
@@ -54,7 +55,7 @@
       return;
       }
       $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
-      var maintitle = '<xsl:value-of select="layoutTools:getMaintitle($journalID)" />';
+      var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
       $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
       $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 64) + '</div>');
       if (name.length > 40){
