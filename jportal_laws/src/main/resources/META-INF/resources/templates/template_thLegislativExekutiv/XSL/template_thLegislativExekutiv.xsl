@@ -3,8 +3,8 @@
 <!-- $Revision: 575 $ $Date: 2008-09-04 14:26:32 +0200 (Do, 04 Sep 2008) $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools"
-  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:decoder="xalan://java.net.URLDecoder"
-  exclude-result-prefixes="layoutTools laws decoder">
+  xmlns:laws="xalan://fsu.jportal.laws.common.xml.LawsXMLFunctions" xmlns:decoder="xalan://java.net.URLDecoder" xmlns:escapeUtils="org.apache.commons.lang.StringEscapeUtils"
+  exclude-result-prefixes="layoutTools laws decoder escapeUtils">
 
   <xsl:variable name="hl">
     <xsl:variable name="encodedQuery">
@@ -17,7 +17,7 @@
   </xsl:variable>
 
   <xsl:template match="/template[@id='template_thLegislativExekutiv']" mode="template">
-    <xsl:param name="mcrObj"/>
+    <xsl:param name="mcrObj" />
     <xsl:call-template name="jp.laws.js" />
     <xsl:apply-templates select="$mcrObj" mode="template_thLegislativExekutiv" />
   </xsl:template>
@@ -32,7 +32,7 @@
           <xsl:with-param name="derivateId" select="$derivateID" />
         </xsl:apply-templates>
       </xsl:if>
-    </xsl:if> 
+    </xsl:if>
   </xsl:template>
 
   <!-- ================================================================================= -->
@@ -42,7 +42,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');
-        setMaintitle('<xsl:value-of select="layoutTools:getMaintitle($journalID)" />');
+        setMaintitle('<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />');
         setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
         linkLawsToIview();
         highlightLawsText('<xsl:value-of select="$hl" />');
