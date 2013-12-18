@@ -144,7 +144,7 @@ public class LayoutTools {
         InfoProvider infoProvider = new InfoProvider(journalID, "/mycoreobject/metadata/dates","/mycoreobject/metadata/hidden_genhiddenfields1");
         return infoProvider.get(new DatesInfo());
     }
-    
+
     public String getUserName(){
         MCRUserInformation userInformation = MCRSessionMgr.getCurrentSession().getUserInformation();
         String realname = userInformation.getUserAttribute(MCRUserInformation.ATT_REAL_NAME);

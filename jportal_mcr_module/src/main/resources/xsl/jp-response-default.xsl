@@ -11,11 +11,13 @@
     <div id="searchResults">
       <div id="resultListHeader" class="jp-layout-bottomline jp-layout-border-light">
         <h2>Suchergebnisse</h2>
-        <div>
-          <span>
+        <div class="row">
+          <div class="col-md-3">
             <xsl:apply-templates mode="searchResultText" select="." />
-          </span>
-          <xsl:call-template name="jpsearch.printNavigation" />
+          </div>
+          <div class="col-md-9 pull-right">
+            <xsl:apply-templates mode="jp.response.navigation" select="." />
+          </div>
         </div>
       </div>
       <div id="resultList">
@@ -45,7 +47,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template name="jpsearch.printNavigation">
+  <xsl:template match="response" mode="jp.response.navigation">
     <ul class="navigation">
       <xsl:choose>
         <xsl:when test="$searchMode != 'advanced'">
@@ -105,6 +107,9 @@
           <a href="{$returnURL}">Zurück</a>
         </li>
       </xsl:if>
+      <li>
+        <xsl:apply-templates mode="jp.response.sort"  select="." />
+      </li>
     </ul>
   </xsl:template>
 
@@ -289,7 +294,42 @@
       <xsl:with-param name="objID" select="../str[@name='id']" />
     </xsl:call-template>
   </xsl:template>
-  
+
+  <!-- *************************************************** -->
+  <!-- * SORT -->
+  <!-- *************************************************** -->
+  <xsl:template mode="jp.response.sort" match="response">
+    <xsl:variable name="sort" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='sort']/text()" />
+    <xsl:variable name="sortOptionsXML">
+      <option value="score desc">Relevanz</option>
+      <!-- <option value="date.published asc">Chronologisch aufsteigend</option>
+      <option value="date.published desc">Chronologisch absteigend</option>-->
+      <option value="heading_sort asc,maintitle_sort asc">Alphabetisch</option>
+    </xsl:variable>
+    <xsl:variable name="sortOptions" select="xalan:nodeset($sortOptionsXML)" />
+    <span style="padding-right: 5px;">Sortieren</span>
+    <select id="sortSelect">
+      <xsl:apply-templates select="$sortOptions/option" mode="jp.response.sort.option">
+        <xsl:with-param name="selected" select="$sort" />
+      </xsl:apply-templates>
+    </select>
+  </xsl:template>
+
+  <xsl:template match="option" mode="jp.response.sort.option">
+    <xsl:param name="selected" />
+    <xsl:element name="option">
+      <xsl:attribute name="value">
+        <xsl:value-of select="@value" />
+      </xsl:attribute>
+      <xsl:if test="@value = $selected">
+        <xsl:attribute name="selected">
+          <xsl:value-of select="'selected'" />
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="text()" />
+    </xsl:element>
+  </xsl:template>
+
   <!-- *************************************************** -->
   <!-- * FACET -->
   <!-- *************************************************** -->

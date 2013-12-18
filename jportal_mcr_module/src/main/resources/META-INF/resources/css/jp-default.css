@@ -661,8 +661,12 @@ body {
     padding: 0;
 }
 
+#resultListHeader .row {
+	line-height: 26px;
+}
+
 #resultListHeader .navigation li {
-	display: inline-block;
+	display: inline;
 	padding: 0 10px;
 	border-left: 1px solid;
 }
