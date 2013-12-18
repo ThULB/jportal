@@ -607,7 +607,7 @@ body {
 	list-style: none outside none;
 	padding-left: 0;
 	float: left;
-	width: 732px;
+	width: 700px;
 	padding-right: 40px;
 }
 .jp-layout-list-nodecoration.max-width {
@@ -762,7 +762,7 @@ body {
 
 .jp-layout-facet-list {
 	float: left;
-	width: 234px;
+	width: 266px;
 	background-color: #F1F1F1;
 	border-radius: 6px;
 	border: 1px solid #CCC;
@@ -1052,7 +1052,7 @@ body {
 
 #artList li .metadata, #resultList .metadata {
 	float: left;
-	width: 70%;
+	width: 82%;
 }
 
 #resultList .jp-layout-derivateList, #artList .jp-layout-derivateList {
