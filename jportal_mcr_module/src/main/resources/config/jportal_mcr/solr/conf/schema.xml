@@ -13,38 +13,40 @@
     <!-- for indexing id#label value pairs. provides searches on field:id but returns the whole value as text
     separated by a hash. -->
     <fieldtype name="idLabelPair" class="solr.TextField">
+        <!-- The DelimitedPayloadTokenFilter can put payloads on tokens... for example, a token of "foo|1.4" would be indexed as "foo" with a 
+          payload of 1.4f Attributes of the DelimitedPayloadTokenFilterFactory : "delimiter" - a one character delimiter. Default is | (pipe) "encoder" 
+          - how to encode the following value into a playload float -> org.apache.lucene.analysis.payloads.FloatEncoder, integer -> o.a.l.a.p.IntegerEncoder 
+          identity -> o.a.l.a.p.IdentityEncoder Fully Qualified class name implementing PayloadEncoder, Encoder must have a no arg constructor. -->
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
         <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="#" encoder="identity" />
       </analyzer>
     </fieldtype>
 
-    <fieldtype name="payloads" stored="false" class="solr.TextField">
+<!-- 
+    <fieldtype name="payloads" stored="false" class="solr.TextField" multiValued="true">
       <analyzer>
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
-        <!-- The DelimitedPayloadTokenFilter can put payloads on tokens... for example, a token of "foo|1.4" would be indexed as "foo" with a 
-          payload of 1.4f Attributes of the DelimitedPayloadTokenFilterFactory : "delimiter" - a one character delimiter. Default is | (pipe) "encoder" 
-          - how to encode the following value into a playload float -> org.apache.lucene.analysis.payloads.FloatEncoder, integer -> o.a.l.a.p.IntegerEncoder 
-          identity -> o.a.l.a.p.IdentityEncoder Fully Qualified class name implementing PayloadEncoder, Encoder must have a no arg constructor. -->
-        <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="|" encoder="identity" />
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="$" encoder="identity" />
       </analyzer>
     </fieldtype>
-
+ -->
+ 
     <!-- sort -> lowercase, handle umlaute, replace special characters -->
-    <fieldType name="sort" class="solr.TextField" positionIncrementGap="100">
+    <fieldType name="sort" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer>
         <tokenizer class="solr.KeywordTokenizerFactory" />
         <filter class="solr.LowerCaseFilterFactory" />
-        <filter class="solr.ASCIIFoldingFilterFactory"/>
-        <filter class="solr.PatternReplaceFilterFactory" pattern="[^A-Za-z0-9\s]" replacement=""/>
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.PatternReplaceFilterFactory" pattern="[^A-Za-z0-9\s]" replacement="" />
       </analyzer>
     </fieldType>
 
     <fieldType name="text_de" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.ICUTokenizerFactory" />
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1"
-          catenateNumbers="1" catenateAll="0" splitOnCaseChange="1" />
+        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="1" catenateNumbers="1" catenateAll="0"
+          splitOnCaseChange="1" />
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
@@ -55,8 +57,8 @@
       <analyzer type="query">
         <tokenizer class="solr.ICUTokenizerFactory" />
         <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true" />
-        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0"
-          catenateNumbers="0" catenateAll="0" splitOnCaseChange="1" />
+        <filter class="solr.WordDelimiterFilterFactory" generateWordParts="1" generateNumberParts="1" catenateWords="0" catenateNumbers="0" catenateAll="0"
+          splitOnCaseChange="1" />
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
         <filter class="solr.ICUFoldingFilterFactory" />
         <filter class="solr.KeywordMarkerFilterFactory" protected="protwords.txt" />
@@ -143,7 +145,7 @@
     <field name="date.published_Original_From" type="string" indexed="false" />
     <field name="date.published_Original_Till" type="string" indexed="false" />
 
-    <dynamicField name="participant.*" type="idLabelPair" indexed="true" stored="true"  multiValued="true" />
+    <dynamicField name="participant.*" type="idLabelPair" indexed="true" stored="true" multiValued="true" />
 
     <field name="derivateLink" type="string" multiValued="true" />
 
@@ -154,16 +156,18 @@
 
     <!-- doublets -->
     <field name="doubletOf" type="string" />
-    
+
     <!-- identifier (gnd, pnd, etc.) -->
-    <dynamicField name="id.*" type="string" />
+    <dynamicField name="id.*" type="string" multiValued="true" />
+
+    <!-- <field name="mypayload" type="payloads" /> -->
 
     <!-- ******************************************** -->
     <!-- * SEARCH -->
     <!-- ******************************************** -->
 
     <!-- default search fields -->
-    <field name="allMeta" type="text_de"  multiValued="true" stored="false" />
+    <field name="allMeta" type="text_de" multiValued="true" stored="false" />
     <field name="titles" type="text" multiValued="true" stored="false" />
     <field name="heading" type="text" />
     <field name="alternatives" type="text" multiValued="true" stored="false" />
@@ -171,7 +175,7 @@
     <field name="dates" type="text" multiValued="true" stored="false" />
     <field name="size" type="string" />
 
-    <field name="titles_de" type="text_de"  multiValued="true" stored="false"/>
+    <field name="titles_de" type="text_de" multiValued="true" stored="false" />
     <field name="heading_de" type="text_de" stored="false" />
     <field name="alternatives_de" type="text_de" multiValued="true" stored="false" />
     <field name="participants_de" type="text_de" multiValued="true" stored="false" />
@@ -201,10 +205,14 @@
     <!-- ******************************************** -->
     <field name="maintitle_sort" type="sort" stored="false" />
     <field name="heading_sort" type="sort" stored="false" />
+    <field name="alphabetic_sort" type="sort" stored="false" />
+    <field name="published_sort" type="date" stored="false" sortMissingLast="true" />
     <field name="indexPosition" type="string" default="0" />
 
     <copyField source="maintitle" dest="maintitle_sort" />
     <copyField source="heading_base" dest="heading_sort" />
+    <copyField source="maintitle" dest="alphabetic_sort" />
+    <copyField source="heading_base" dest="alphabetic_sort" />
 
   </fields>
 

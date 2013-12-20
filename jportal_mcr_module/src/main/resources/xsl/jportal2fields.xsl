@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
+  exclude-result-prefixes="jpxml">
 
   <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="jp-layout-functions.xsl" />
@@ -34,6 +35,12 @@
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jportal.hiddenGenFields" />
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jportal.hiddenGenFields" />
     </xsl:if>
+
+    <!-- TODO: remove this test code -->
+    <!-- <field name="mypayload">Jena$300$250$400$25</field>
+    <field name="mypayload">Jena$100$150$200$25</field>
+    <field name="mypayload">Gera$200$550$200$15</field>
+    <field name="mypayload">Erfurt$100$150$100$45</field>-->
   </xsl:template>
 
   <!-- link -->
@@ -81,6 +88,14 @@
     <field name="date.{@type}">
       <xsl:value-of select="text()" />
     </field>
+    <xsl:if test="@type = 'published' or @type = 'published_from'">
+      <xsl:variable name="formattedDate" select="jpxml:formatDate(text())" />
+      <xsl:if test="$formattedDate != ''">
+        <field name="published_sort">
+          <xsl:value-of select="$formattedDate" />
+        </field>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
 
   <!-- rubric -->
@@ -91,7 +106,8 @@
       </field>
     </xsl:if>
     <!-- resolve text -->
-    <xsl:apply-templates mode="jportal.classText" select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category/label">
+    <xsl:apply-templates mode="jportal.classText"
+      select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category/label">
       <xsl:with-param name="name" select="'rubricText'" />
     </xsl:apply-templates>
   </xsl:template>
@@ -228,7 +244,7 @@
 
   <xsl:template match="*" mode="jportal.classification">
     <xsl:apply-templates mode="jportal.contentClassi"
-        select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category">
+      select="document(concat('classification:metadata:0:parents:', @classid, ':', @categid))/mycoreclass/categories//category">
       <xsl:with-param name="name" select="name()" />
     </xsl:apply-templates>
   </xsl:template>
@@ -246,5 +262,5 @@
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
-  
+
 </xsl:stylesheet>

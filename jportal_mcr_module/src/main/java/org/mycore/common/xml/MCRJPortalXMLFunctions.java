@@ -127,6 +127,33 @@ public class MCRJPortalXMLFunctions {
     }
 
     /**
+     * Tries to format the date string to a valid solr date string. If the given
+     * date could not be formatted an empty string is returned.
+     * 
+     * @param date date to format
+     * @return
+     */
+    public static String formatDate(String date) {
+        try {
+            SimpleDateFormat format = null;
+            if (date.length() == 4) {
+                // 4 digit year
+                format = new SimpleDateFormat("yyyy");
+            } else if (date.length() == 7) {
+                // 7 digit year-month
+                format = new SimpleDateFormat("yyyy-MM");
+            } else {
+                format = new SimpleDateFormat("yyyy-MM-dd");
+            }
+            Date solrDate = format.parse(date);
+            SimpleDateFormat solrDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+            return solrDateFormat.format(solrDate);
+        } catch (Exception exc) {
+            return "";
+        }
+    }
+
+    /**
      * Checks if a fq request parameter for the specified facet exist.
      * 
      * @param requestURL

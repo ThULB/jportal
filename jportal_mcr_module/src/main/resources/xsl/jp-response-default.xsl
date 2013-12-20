@@ -302,9 +302,9 @@
     <xsl:variable name="sort" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='sort']/text()" />
     <xsl:variable name="sortOptionsXML">
       <option value="score desc">Relevanz</option>
-      <!-- <option value="date.published asc">Chronologisch aufsteigend</option>
-      <option value="date.published desc">Chronologisch absteigend</option>-->
-      <option value="heading_sort asc,maintitle_sort asc">Alphabetisch</option>
+      <option value="published_sort asc">Chronologisch aufsteigend</option>
+      <option value="published_sort desc">Chronologisch absteigend</option>
+      <option value="alphabetic_sort asc">Alphabetisch</option>
     </xsl:variable>
     <xsl:variable name="sortOptions" select="xalan:nodeset($sortOptionsXML)" />
     <span style="padding-right: 5px;">Sortieren</span>
