@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.common.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 
 import com.google.common.base.Charsets;

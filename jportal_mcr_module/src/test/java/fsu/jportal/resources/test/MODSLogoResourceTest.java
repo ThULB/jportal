@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashMap;
-import java.util.Properties;
 
 import org.custommonkey.xmlunit.XMLUnit;
 import org.jdom2.Document;
@@ -20,7 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mycore.common.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.ifs2.MCRStoreManager;
@@ -31,10 +30,10 @@ import org.xml.sax.SAXException;
 import fsu.jportal.mocks.LinkTableStoreMock;
 import fsu.jportal.resources.MODSLogoResource;
 
-
 public class MODSLogoResourceTest extends MCRJerseyResourceTest {
     public static class MyDataStore extends MCRMetadataStore {
         private HashMap<Integer, MCRStoredMetadata> storedMetadata;
+
         public MyDataStore() throws IOException, JDOMException, SAXException {
             storedMetadata = new HashMap<Integer, MCRStoredMetadata>();
             createMetadataMock("journal", 2);
@@ -58,7 +57,7 @@ public class MODSLogoResourceTest extends MCRJerseyResourceTest {
             Document journalXML = saxBuilder.build(getClass().getResourceAsStream("/logoRescourceTest/" + id + ".xml"));
             return journalXML;
         }
-        
+
         @Override
         public MCRStoredMetadata retrieve(int id) throws IOException {
             return storedMetadata.get(id);
@@ -66,36 +65,37 @@ public class MODSLogoResourceTest extends MCRJerseyResourceTest {
     }
 
     String jpjournal = "jportal_jpjournal";
+
     String jpinst = "jportal_jpinst";
 
     @Before
     public void init() throws Exception {
         System.setProperty("MCR.Configuration.File", "config/test.properties");
-        Properties mcrProperties = MCRConfiguration.instance().getProperties();
-        mcrProperties.setProperty("MCR.Metadata.Type.jpjournal", "true");
-        mcrProperties.setProperty("MCR.Metadata.Type.jpvolume", "true");
-        mcrProperties.setProperty("MCR.Metadata.Type.jpinst", "true");
-        mcrProperties.setProperty("MCR.Metadata.Type.person", "true");
-        mcrProperties.setProperty("MCR.Metadata.Store.BaseDir", "/tmp");
-        mcrProperties.setProperty("MCR.Metadata.Store.SVNBase", "/tmp/versions");
-        setupIFS2ForType(mcrProperties, jpjournal);
-        setupIFS2ForType(mcrProperties, jpinst);
-        mcrProperties.setProperty("MCR.EventHandler.MCRObject.2.Class", "org.mycore.datamodel.common.MCRXMLMetadataEventHandler");
-        mcrProperties.setProperty("MCR.Persistence.LinkTable.Store.Class", LinkTableStoreMock.class.getName());
+        MCRConfiguration conf = MCRConfiguration.instance();
+        conf.set("MCR.Metadata.Type.jpjournal", "true");
+        conf.set("MCR.Metadata.Type.jpvolume", "true");
+        conf.set("MCR.Metadata.Type.jpinst", "true");
+        conf.set("MCR.Metadata.Type.person", "true");
+        conf.set("MCR.Metadata.Store.BaseDir", "/tmp");
+        conf.set("MCR.Metadata.Store.SVNBase", "/tmp/versions");
+        setupIFS2ForType(conf, jpjournal);
+        setupIFS2ForType(conf, jpinst);
+        conf.set("MCR.EventHandler.MCRObject.2.Class", "org.mycore.datamodel.common.MCRXMLMetadataEventHandler");
+        conf.set("MCR.Persistence.LinkTable.Store.Class", LinkTableStoreMock.class.getName());
 
         MCRStoreManager.createStore(jpjournal, MyDataStore.class);
         MCRStoreManager.createStore(jpinst, MyDataStore.class);
     }
 
-    protected void setupIFS2ForType(Properties mcrProperties, String type) {
-        mcrProperties.setProperty("MCR.IFS2.Store." + type + ".ForceXML", "true");
-        mcrProperties.setProperty("MCR.IFS2.Store." + type + ".BaseDir", "ram:///tmp");
-        mcrProperties.setProperty("MCR.IFS2.Store." + type + ".SlotLayout", "4-2-2");
-        mcrProperties.setProperty("MCR.IFS2.Store." + type + ".SVNRepositoryURL", "ram:///tmp");
+    protected void setupIFS2ForType(MCRConfiguration conf, String type) {
+        conf.set("MCR.IFS2.Store." + type + ".ForceXML", "true");
+        conf.set("MCR.IFS2.Store." + type + ".BaseDir", "ram:///tmp");
+        conf.set("MCR.IFS2.Store." + type + ".SlotLayout", "4-2-2");
+        conf.set("MCR.IFS2.Store." + type + ".SVNRepositoryURL", "ram:///tmp");
     }
 
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         MCRStoreManager.removeStore(jpjournal);
         MCRStoreManager.removeStore(jpinst);
     }
@@ -105,8 +105,8 @@ public class MODSLogoResourceTest extends MCRJerseyResourceTest {
     // TODO: fix this test
     public void getLogo() throws Exception {
         String response = resource().path("/modslogos/jportal_jpjournal_00000002").get(String.class);
-        
-//        System.out.println("response: " + response);
+
+        //        System.out.println("response: " + response);
         XMLUnit.setIgnoreWhitespace(true);
         Reader controlDoc = new InputStreamReader(getClass().getResourceAsStream("/logoRescourceTest/result.xml"));
         Reader testDoc = new StringReader(response);
@@ -115,7 +115,7 @@ public class MODSLogoResourceTest extends MCRJerseyResourceTest {
 
     @Override
     protected String[] getPackageName() {
-        return new String[]{MODSLogoResource.class.getPackage().getName()};
+        return new String[] { MODSLogoResource.class.getPackage().getName() };
     }
 
 }

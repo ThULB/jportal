@@ -8,13 +8,12 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRCache;
-import org.mycore.common.MCRConfiguration;
 import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration;
 
 public class MCRJPortalURIGetClass implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetClass.class);
-    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
     private static final String CONFIG_PREFIX = "MCR.UriResolver.";
     private static MCRCache CLASS_CACHE;
     private static long CACHE_INIT_TIME;
@@ -64,7 +63,7 @@ public class MCRJPortalURIGetClass implements URIResolver {
         String classiURI = "classification:editor:-1:children:" + classID;
         Element returnXML;
         // not cached
-        if (CONFIG.getSystemLastModified() > CACHE_INIT_TIME) {
+        if (MCRConfiguration.instance().getSystemLastModified() > CACHE_INIT_TIME) {
             initCache();
             returnXML = MCRURIResolver.instance().resolve(classiURI);
             CLASS_CACHE.put(classiURI, returnXML);

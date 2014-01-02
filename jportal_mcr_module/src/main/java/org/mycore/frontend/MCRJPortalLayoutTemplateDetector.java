@@ -6,7 +6,7 @@ import org.jdom2.Element;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
-import org.mycore.common.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.xml.MCRJPortalURIGetJournalID;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetaElement;
@@ -25,8 +25,8 @@ public class MCRJPortalLayoutTemplateDetector {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(mcrId);
         MCRMetaElement me = obj.getMetadata().getMetadataElement("hidden_jpjournalsID");
-        if(me != null && me.size() == 1) {
-            MCRMetaLangText metaText = (MCRMetaLangText)me.getElement(0);
+        if (me != null && me.size() == 1) {
+            MCRMetaLangText metaText = (MCRMetaLangText) me.getElement(0);
             return getJournalTemplateID(metaText.getText());
         }
         return getTemplateID();
@@ -48,14 +48,14 @@ public class MCRJPortalLayoutTemplateDetector {
         Document objXML;
         try {
             objXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(journalID));
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("Unable to get journal " + journalID, exc);
             return "";
         }
         Integer dateOfJournal = 0;
         Element dateNode = null;
-        XPathExpression<Element> xpath =
-                XPathFactory.instance().compile("/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
+        XPathExpression<Element> xpath = XPathFactory.instance().compile(
+                "/mycoreobject/metadata/dates/date[@type='published_from' or @type='published']", Filters.element());
         dateNode = xpath.evaluateFirst(objXML);
         if (dateNode == null) {
             LOGGER.error("No /mycoreobject/metadata/dates/date[@type='published_from'] can be found, return empty string.");
@@ -67,7 +67,7 @@ public class MCRJPortalLayoutTemplateDetector {
         MCRConfiguration mcrConfig = MCRConfiguration.instance();
         String template = "";
         int pos = 1;
-        int numberOfTemplates = mcrConfig.getProperties(KEY_PREFIX + "yearFrom").size();
+        int numberOfTemplates = mcrConfig.getPropertiesMap(KEY_PREFIX + "yearFrom").size();
         while (pos <= numberOfTemplates) {
             // get from and until dates
             int dateFrom = mcrConfig.getInt(KEY_PREFIX + "yearFrom." + Integer.toString(pos));
@@ -82,7 +82,7 @@ public class MCRJPortalLayoutTemplateDetector {
             }
             pos++;
         }
-        if(LOGGER.isDebugEnabled()) {
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Calculated template=" + template + " for date=" + dateOfJournal);
         }
         return template;
