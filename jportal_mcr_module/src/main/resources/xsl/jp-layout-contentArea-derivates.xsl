@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
 
   <xsl:template name="derivatePreview">
@@ -32,7 +32,7 @@
     <xsl:param name="editable" select="'true'" />
     <xsl:param name="mode" select="'metadata'" />
 
-    <xsl:if test="acl:checkPermission($journalID,'read-derivate')">
+    <xsl:if test="acl:checkPermission($journalID,'read-derivate') or derivAccess:checkPermission($journalID, /mycoreobject/metadata/dates/date[@type='published' and @inherited=0])">
       <xsl:if test="count($nodes) &gt; 0">
         <div class="jp-layout-derivateList">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
