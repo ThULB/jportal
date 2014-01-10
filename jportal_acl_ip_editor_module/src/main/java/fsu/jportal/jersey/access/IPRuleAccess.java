@@ -8,7 +8,7 @@ import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
-import fsu.jportal.resources.JournalConfig;
+import fsu.jportal.pref.JournalConfig;
 
 public class IPRuleAccess implements MCRResourceAccessChecker{
 
@@ -16,9 +16,9 @@ public class IPRuleAccess implements MCRResourceAccessChecker{
     public boolean isPermitted(ContainerRequest request) {
         String path = request.getPath();
         String id = extractId(path);
-        JournalConfig journalConfig = new JournalConfig(id);
-        String aclObjId = journalConfig.getJournalConfKeys().get("aclObjId");
-        String aclPerm = journalConfig.getJournalConfKeys().get("aclPerm");
+        JournalConfig journalConfig = new JournalConfig(id, "jportal_acl_ip_editor_module");
+        String aclObjId = journalConfig.getKey("aclObjId");
+        String aclPerm = journalConfig.getKey("aclPerm");
         
         return MCRAccessManager.checkPermission(aclObjId,aclPerm);
     }

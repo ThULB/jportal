@@ -40,6 +40,7 @@ import fsu.jportal.parser.IPJsonArray;
 import fsu.jportal.parser.IPMap;
 import fsu.jportal.parser.IPRuleParser;
 import fsu.jportal.parser.IPRuleParser.IPRuleParseException;
+import fsu.jportal.pref.JournalConfig;
 
 @Path("IPRule/{objID}")
 @MCRRestrictedAccess(IPRuleAccess.class)
@@ -61,7 +62,7 @@ public class IPRuleResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String listJSON() {
-        String ruleid = getJournalConfKeys().get("ruleId");
+        String ruleid = getJournalConfKeys().getKey("ruleId");
         MCRRuleStore ruleStore = MCRRuleStore.getInstance();
         MCRAccessRule rule = ruleStore.getRule(ruleid);
         String ruleString = rule.getRuleString();
@@ -82,19 +83,18 @@ public class IPRuleResource {
         return ruleStore.getRule(ruleid);
     }
 
-    private HashMap<String, String> getJournalConfKeys() {
+    private JournalConfig getJournalConfKeys() {
         if (journalConf == null) {
-            journalConf = new JournalConfig(objID);
+            journalConf = new JournalConfig(objID, "jportal_acl_ip_editor_module");
         }
 
-        return journalConf.getJournalConfKeys();
+        return journalConf;
     }
 
     @POST
     public Response add(String ip) {
-        HashMap<String, String> journalConfKeys = getJournalConfKeys();
-        String ruleId = journalConfKeys.get("ruleId");
-        String defRule = journalConfKeys.get("defRule");
+        String ruleId = getJournalConfKeys().getKey("ruleId");
+        String defRule = getJournalConfKeys().getKey("defRule");
         
         return response(addIp(ruleId, ip, defRule));
     }
@@ -105,9 +105,9 @@ public class IPRuleResource {
 
     @DELETE
     public Response remove(String ipStr) {
-        HashMap<String, String> journalConfKeys = getJournalConfKeys();
-        String ruleId = journalConfKeys.get("ruleId");
-        String defRule = journalConfKeys.get("defRule");
+        String ruleId = getJournalConfKeys().getKey("ruleId");
+        String defRule = getJournalConfKeys().getKey("defRule");
+
         return response(removeIp(ruleId, ipStr, defRule));
     }
 
@@ -117,8 +117,7 @@ public class IPRuleResource {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         JsonArray ipsAsJSONArray = jsonObject.getAsJsonArray("ips");
-        HashMap<String, String> journalConfKeys = getJournalConfKeys();
-        String ruleId = journalConfKeys.get("ruleId");
+        String ruleId = getJournalConfKeys().getKey("ruleId");
 
         return ipsAsJSONArray.toString();
     }
@@ -131,9 +130,8 @@ public class IPRuleResource {
         String newIp = jsonObject.get("newIp").getAsString();
         String oldIp = jsonObject.get("oldIp").getAsString();
 
-        HashMap<String, String> journalConfKeys = getJournalConfKeys();
-        String ruleId = journalConfKeys.get("ruleId");
-        String defRule = journalConfKeys.get("defRule");
+        String ruleId = getJournalConfKeys().getKey("ruleId");
+        String defRule = getJournalConfKeys().getKey("defRule");
         
         StatusType removeStatus = removeIp(ruleId, oldIp, defRule);
         
