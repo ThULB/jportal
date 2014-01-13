@@ -27,8 +27,8 @@ public class DerivateAccess {
                 solrParams.set("q", sorlQuery).set("rows", 1);
                 QueryResponse response = MCRSolrServerFactory.getSolrServer().query(solrParams);
                 
-                if(response.getResults().isEmpty()){
-                    return false;
+                if(!response.getResults().isEmpty()){
+                    return true;
                 }
                 
             } catch (SolrServerException e) {
@@ -36,6 +36,6 @@ public class DerivateAccess {
                 e.printStackTrace();
             }
         }
-        return true;
+        return false;
     }
 }
