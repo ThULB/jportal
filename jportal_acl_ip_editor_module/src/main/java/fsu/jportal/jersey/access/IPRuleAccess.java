@@ -20,6 +20,11 @@ public class IPRuleAccess implements MCRResourceAccessChecker{
         String aclObjId = journalConfig.getKey("aclObjId");
         String aclPerm = journalConfig.getKey("aclPerm");
         
+        if(aclObjId == null || aclPerm == null){
+            return false;
+        }
+        
+        
         return MCRAccessManager.checkPermission(aclObjId,aclPerm);
     }
 
