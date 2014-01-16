@@ -167,6 +167,7 @@ function updateQueryStringParameter(uri, key, value) {
 	}
 }
 
+// SORT
 $(document).ready(function() {
 	$("#sortSelect").on("change", function() {
 		// get url
@@ -177,3 +178,20 @@ $(document).ready(function() {
 		window.location = newLocation;
 	});
 });
+
+// PIWIK
+function trackPageView(piwikURL, journalID, pageID) {
+	window._paq = [];
+	(function() {
+		var u = piwikURL;
+		if(journalID != "") {
+			_paq.push(['setCustomVariable', 1, "journal", journalID, "page"]);
+		}
+		_paq.push(["setTrackerUrl", u+"piwik.php"]);
+		_paq.push(["setSiteId", pageID]);
+		_paq.push(["trackPageView"]);
+		_paq.push(["enableLinkTracking"]);
+		var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+		g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+	})();
+}

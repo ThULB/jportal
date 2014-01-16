@@ -18,20 +18,10 @@
   <xsl:template name="jp.piwik">
     <xsl:if test="$MCR.Piwik.enable = 'true' and $MCR.Piwik.baseurl != ''">
       <script type="text/javascript">
-        var _paq = _paq || [];
-        _paq.push(["trackPageView"]);
-        _paq.push(["enableLinkTracking"]);
-        (function() {
-          var u = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
-          var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
-          if(journalID != "") {
-            _paq.push(['setCustomVariable', 1, "journal", journalID, "page"]);
-          }
-          _paq.push(["setTrackerUrl", u+"piwik.php"]);
-          _paq.push(["setSiteId", '<xsl:value-of select="$MCR.Piwik.id" />']);
-          var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
-          g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
-        })();
+        var piwikURL = '<xsl:value-of select="$MCR.Piwik.baseurl" />';
+        var journalID = '<xsl:value-of select="/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID" />';
+        var pageID = '<xsl:value-of select="$MCR.Piwik.id" />';
+        trackPageView(piwikURL, journalID, pageID);
       </script>
     </xsl:if>
   </xsl:template>
