@@ -15,7 +15,11 @@ public class DerivateAccess {
         JournalConfig journalConfig = new JournalConfig(id, "fsu.jportal.derivate.access");
         String accessClassName = journalConfig.getKey("accessClass");
         
-        if(accessClassName != null && "klostermann".equals(accessClassName) && !date.equals("")){
+        if(accessClassName != null && "klostermann".equals(accessClassName)){
+            if(date.equals("")){
+                return true;
+            }
+            
             try {
                 MCRISO8601Date objDate = new MCRISO8601Date(date);
                 Calendar calendar = Calendar.getInstance();
