@@ -4,7 +4,7 @@
 		<artifactId>mycore</artifactId>
 		<groupId>org.mycore</groupId>
         <!-- don't forgett to change mcr.version below while changing verions-->
-		<version>2013.12-SNAPSHOT</version>
+		<version>2014.02-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fsu.thulb</groupId>
