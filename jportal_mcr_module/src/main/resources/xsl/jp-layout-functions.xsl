@@ -67,8 +67,21 @@
   </xsl:template>
 
   <!-- *************************************************** -->
-  <!-- * PERSON NAME -->
+  <!-- * NAMES -->
   <!-- *************************************************** -->
+  <xsl:template mode="jp.metadata.name" match="mycoreobject">
+    <xsl:if test="contains(@ID, '_person_')"> 
+      <xsl:apply-templates mode="jp.metadata.person.name" select="metadata/def.heading/heading" />
+    </xsl:if>
+    <xsl:if test="contains(@ID, '_jpinst_')"> 
+      <xsl:apply-templates mode="jp.metadata.jpinst.name" select="metadata/names" />
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template mode="jp.metadata.jpinst.name" match="names[@class='MCRMetaInstitutionName']">
+    <xsl:value-of select="name/fullname" />
+  </xsl:template>
+
   <xsl:template mode="jp.metadata.person.name" match="heading | alternative">
     <xsl:choose>
       <xsl:when test="name">

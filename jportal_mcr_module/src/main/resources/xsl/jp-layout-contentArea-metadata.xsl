@@ -113,7 +113,7 @@
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLinkID']">
     <p class="jp-layout-metadata-list">
       <a href="{$WebApplicationBaseURL}receive/{@xlink:href}">
-        <xsl:value-of select="@xlink:title" />
+        <xsl:apply-templates mode="jp.metadata.name" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
       </a>
     </p>
   </xsl:template>
