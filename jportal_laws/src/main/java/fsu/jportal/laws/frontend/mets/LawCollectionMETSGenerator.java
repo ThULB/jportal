@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.mycore.common.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.mets.misc.LogicalIdProvider;
