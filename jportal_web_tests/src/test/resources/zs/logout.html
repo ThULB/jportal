@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8291/content/below/index.xml" />
+<title>logout</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">logout</td></tr>
+</thead><tbody>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/content/below/index.xml?lang=de</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Journals@UrMEL</td>
+	<td>Link in Titelzeile</td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>//div[@id='globalMenu']/ul/li[5]</td>
+	<td>Abmelden</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Person</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=baumgart, cornelia</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Dokument löschen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=delObj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>css=td</td>
+	<td>Beim Löschen der Daten aus dem Server gab es ein Problem. Die Daten wurden nicht gelöscht. Bitte sprechen Sie mit dem Systemadministrator darüber.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Zeitschrift</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=neue Zeitschrift2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Dokument löschen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=delObj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td</td>
+	<td>Das Löschen der Daten war erfolgreich.</td>
+</tr>
+
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Band</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Bibliogaphische Beschreibung Band de</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Dokument löschen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=delObj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td</td>
+	<td>Das Löschen der Daten war erfolgreich.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Zeitschrift</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Familie Baumgart</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Dokument löschen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=delObj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>css=td</td>
+	<td>Das Löschen der Daten war erfolgreich.</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=(//a[contains(text(),'baumgart, cornelia')])</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Dokument löschen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=delObj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>id=main</td>
+	<td>Das Löschen der Daten war erfolgreich.</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Abmelden</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>

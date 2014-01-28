@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8291/content/below/index.xml" />
+<title>Band_alle_Felder</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Band_alle_Felder</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/content/below/index.xml?lang=de</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=p.description</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Blättern A - Z - DocPortal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//ul[@id='tabNav']/li[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//ul[@id='tabNav']/li[4]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//ul[@id='tabNav']/li[7]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>xpath=//h3[contains(@class,'journal-title')]//a[1]</td>
+	<td>muss enthalten sein</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Neuer Band</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>css=div.editorHeadlines.jp-layout-maintitle</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/maintitles/maintitle</td>
+	<td>Bibliogaphische Beschreibung Band de</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=/mycoreobject/metadata/subtitles/subtitle/@type</td>
+	<td>index=0</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/subtitles/subtitle</td>
+	<td>Hauptsachtitel</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_p-/mycoreobject/metadata/subtitles/subtitle-1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=/mycoreobject/metadata/subtitles/subtitle[2]/@type</td>
+	<td>index=6</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/subtitles/subtitle[2]</td>
+	<td>Titel Vorlage</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_s-sub.select1-/mycoreobject/metadata/participants/participant</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Result - DocPortal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=baumgart, cornelia</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=/mycoreobject/metadata/participants/participant/@type</td>
+	<td>index=5</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_p-/mycoreobject/metadata/subtitles/subtitle-2</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_p-/mycoreobject/metadata/participants/participant-1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_m-/mycoreobject/metadata/subtitles/subtitle-3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=/mycoreobject/metadata/participants/participant[2]/@type</td>
+	<td>index=7</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_s-sub.select1-/mycoreobject/metadata/participants/participant[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTitle</td>
+	<td>Result - DocPortal</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=inputField</td>
+	<td>baumgart</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=submitButton</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=baumgart, cornelia</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/dates/date</td>
+	<td>2013-09-04</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=/mycoreobject/metadata/traditions/tradition/@type</td>
+	<td>index=1</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/traditions/tradition</td>
+	<td>Überlieferung</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/identis/identi</td>
+	<td>DOI</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/collationNotes/collationNote</td>
+	<td>Kollationsvermerk</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/abstracts/abstract</td>
+	<td>Zusammenfassung</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/notes/note</td>
+	<td>Bemerkung</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/people/person</td>
+	<td>Person</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/publicationNotes/publicationNote</td>
+	<td>Erscheinung</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/normedPubLocations/normedPubLocation</td>
+	<td>Normierung</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/footNotes/footNote</td>
+	<td>Fußnote</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/bibEvidences/bibEvidence</td>
+	<td>bibliographischer Nachweis</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/indexFields/indexField</td>
+	<td>Index</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=/mycoreobject/metadata/hidden_positions/hidden_position</td>
+	<td>sonstiges</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//form[@class='editor']//tr//td[@class='editorButtons']//table//tbody//tr//td//input[@type='submit'] 	</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertText</td>
+	<td>id=jp-maintitle</td>
+	<td>Bibliogaphische Beschreibung Band de</td>
+</tr>
+</tbody></table>
+</body>
+</html>
