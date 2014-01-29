@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="JPortal Integration Tests" default="install" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<path id="maven-ant-tasks.classpath" path="${basedir}/lib/maven-ant-tasks-2.1.3.jar" />
+	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+
+	<property name="databasePort" value="7298" />
+	<property name="jettyPort" value="7291" />
+	<property name="jettyStopPort" value="7293" />
+	<property name="solrPort" value="7296" />
+	<property name="solrStopPort" value="7297" />
+
+	<property name="maven.version" value="2.2.1" />
+
+	<property name="webtestFile" value="webtest.xml" />
+	<property name="webtestArguments" value="" />
+
+	<property name="homepage" value="http://localhost:${jettyPort}/content/below/index.xml" />
+	<property name="solrCheck" value="http://localhost:${solrPort}/jportal/select" />
+
+	<target name="install">
+		<antcall target="configure" />
+		<antcall target="start.hsqldb" />
+		<antcall target="start.solr" />
+		<antcall target="init" />
+		<antcall target="clean" />
+		<antcall target="start.jetty" />
+		<antcall target="stop" />
+	</target>
+
+	<!--Docportal properties-->
+	<property name="docportal" value="${basedir}/docportal" />
+	<property name="docportal.root.dir" value="${docportal}" />
+	<property name="docportal.config.dir" value="${docportal}/config" />
+	<property name="docportal.config.template.file" value="mycore.private.properties.template" />
+	<property name="docportal.config.file" value="mycore.private.properties" />
+
+	<property name="docportal.hibernate.cfg.dir" value="${docportal.config.dir}/hibernate" />
+	<property name="docportal.hibernate.cfg.template.file" value="hibernate.cfg.xml.template" />
+	<property name="docportal.hibernate.cfg.file" value="hibernate.cfg.xml" />
+	<property name="docportal.build.dir" value="${docportal.root.dir}/build" />
+	<property name="docportal.build.bin.dir" value="${docportal.root.dir}/build/bin" />
+
+	<target name="configure">
+		<echo>==================================================</echo>
+		<echo>Configuring mycore.private.properties...</echo>
+		<echo>==================================================</echo>
+
+		<ant dir="${basedir}">
+			<target name="init" />
+		</ant>
+
+		<replace file="docportal/config/mycore.private.properties" token="8291" value="${jettyPort}" />
+		<replace file="docportal/config/mycore.private.properties" token="8296" value="${solrPort}" />
+		<replace file="docportal/config/mycore.private.properties" token="8298" value="${databasePort}" />
+
+
+		<echo>==================================================</echo>
+		<echo>Configuring jetty-pom.xml...                      </echo>
+		<echo>==================================================</echo>
+		<replace file="docportal/config/jetty-pom.xml" token="8291" value="${jettyPort}" />
+		<replace file="docportal/config/jetty-pom.xml" token="8293" value="${jettyStopPort}" />
+
+		<echo>==================================================</echo>
+		<echo>Configuring ${docportal.config.dir}/${docportal.config.file} ...</echo>
+		<echo>==================================================</echo>
+
+		<concat append="true" destfile="${docportal.config.dir}/${docportal.config.file}">
+		  # file appender for logging jetty during tests with ant
+		  log4j.appender.fileAppender=org.apache.log4j.FileAppender
+		  log4j.appender.fileAppender.File=${docportal.build.dir}/logfile.txt
+		  log4j.appender.fileAppender.layout=org.apache.log4j.PatternLayout
+		  log4j.appender.fileAppender.layout.ConversionPattern=%d %-5p (%F:%L) - %m%n
+		
+		  MCR.Module-solr.ServerURL=http\://localhost\:${solrPort}/jportal
+	    </concat>
+		<replace file="${docportal.config.dir}/${docportal.config.file}" token="  log4j.rootLogger=INFO, stdout" value="  log4j.rootLogger=INFO, fileAppender" />
+
+		<echo>==================================================</echo>
+		<echo>Configuring hibernate.cfg.xml...</echo>
+		<echo>==================================================</echo>
+
+		<copy file="docportal/config/hibernate/hibernate.cfg.xml.template" tofile="docportal/config/hibernate/hibernate.cfg.xml" />
+
+		<replace file="docportal/config/hibernate/hibernate.cfg.xml" token="8298" value="${databasePort}" />
+
+		<echo>==================================================</echo>
+		<echo>Resolving libraries, schema, jar and scripts...</echo>
+		<echo>==================================================</echo>
+		<ant dir="docportal/">
+			<target name="resolve" />
+			<target name="create.schema" />
+			<target name="create.jar" />
+			<target name="create.scripts" />
+		</ant>
+
+		<echo>==================================================</echo>
+		<echo>Changing ports in HSQLDB and Jetty scripts...</echo>
+		<echo>==================================================</echo>
+
+		<ant antfile="jetty.xml" target="scripts" dir="docportal" />
+		<ant antfile="solr.xml" target="scripts" dir="docportal" />
+
+		<!-- replace the std Ports -->
+		<replace dir="docportal/build/bin" includes="hsqldb*" token="8298" value="${databasePort}" />
+		<replace dir="docportal/build/bin" includes="jetty*" token="8291" value="${jettyPort}" />
+		<replace dir="docportal/build/bin" includes="jetty*" token="8293" value="${jettyStopPort}" />
+		<replace dir="docportal/build/bin" includes="solr*" token="8296" value="${solrPort}" />
+		<replace dir="docportal/build/bin" includes="solr*" token="8297" value="${solrStopPort}" />
+
+		<!-- remove debug port as docportal demo uses this port -->
+		<replace dir="docportal/build/bin" includes="jetty*" token=" -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295" value="" />
+		<!-- remove debug port as docportal demo uses this port -->
+		<replace dir="docportal/build/bin" includes="solrstart.sh" token="jetty:run" value="jetty:run >${basedir}/docportal/build/solr-log.txt 2>&amp;1" />
+
+		<chmod perm="755">
+			<fileset dir="docportal/build/bin/" includes="*.sh" />
+		</chmod>
+	</target>
+
+	<target name="start.hsqldb">
+		<echo>==================================================</echo>
+		<echo>Starting HSQLDB on port ${databasePort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="hsqldbstart" />
+		</antcall>
+		<waitfor maxwait="60" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<socket server="127.0.0.1" port="${databasePort}" />
+		</waitfor>
+	</target>
+
+	<target name="start.solr">
+		<echo>==================================================</echo>
+		<echo>Starting Solr on port ${solrPort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="solrstart" />
+		</antcall>
+		<waitfor maxwait="120" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<http url="${solrCheck}" />
+		</waitfor>
+	</target>
+
+
+	<target name="init">
+		<echo>==================================================</echo>
+		<echo>Creating users, default rules, classifications and webapp</echo>
+		<echo>==================================================</echo>
+		<ant dir="docportal/">
+			<target name="init.database" />
+			<target name="create.users" />
+			<target name="create.default-rules" />
+			<target name="create.class" />
+			<target name="create.webapp" />
+		</ant>
+		<replace file="docportal/build/webapps/WEB-INF/classes/mycore.properties" token="log4j.rootLogger=INFO, stdout" value="log4j.rootLogger=INFO, webapp" />
+		<echo file="docportal/build/webapps/WEB-INF/classes/mycore.properties" append="true">
+	      log4j.logger.org.mycore.common.MCRSession=DEBUG
+	      log4j.logger.org.mycore.frontend.servlets.MCRErrorServlet=DEBUG
+	      log4j.logger.org.mycore.frontend.servlets.MCRLogoutServlet=DEBUG
+	    </echo>
+	</target>
+
+
+	<target name="start.jetty">
+		<echo>==================================================</echo>
+		<echo>Starting Jetty on port ${jettyPort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="jettystart" />
+		</antcall>
+		<waitfor maxwait="120" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<http url="${homepage}" />
+		</waitfor>
+	</target>
+
+
+	<target name="stop.jetty">
+
+		<echo>==================================================</echo>
+		<echo>Stopping Jetty on port ${jettyPort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="jettystop" />
+		</antcall>
+		<waitfor maxwait="300" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<not>
+				<http url="${homepage}" />
+			</not>
+		</waitfor>
+	</target>
+
+	<target name="stop.solr">
+		<echo>==================================================</echo>
+		<echo>Stopping Solr on port ${solrPort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="solrstop" />
+		</antcall>
+		<waitfor maxwait="300" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<not>
+				<http url="${solrCheck}" />
+			</not>
+		</waitfor>
+	</target>
+
+	<target name="stop.hsqldb">
+
+		<echo>==================================================</echo>
+		<echo>Stopping HSQLDB on port ${databasePort}...</echo>
+		<echo>==================================================</echo>
+		<antcall target="run">
+			<param name="command" value="hsqldbstop" />
+		</antcall>
+		<waitfor maxwait="60" maxwaitunit="second" checkevery="5" checkeveryunit="second">
+			<not>
+				<socket server="127.0.0.1" port="${databasePort}" />
+			</not>
+		</waitfor>
+	</target>
+
+	<target name="clean">
+
+		<echo>==================================================</echo>
+		<echo> Clean data</echo>
+		<echo>==================================================</echo>
+
+		<exec taskname="delete old derivates" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type derivate" />
+		</exec>
+
+		<exec taskname="delete old cbu objects" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type person" />
+		</exec>
+
+		<exec taskname="delete old cbu objects" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type jpinst" />
+		</exec>
+
+		<exec taskname="delete old cbu objects" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type jparticle" />
+		</exec>
+
+		<exec taskname="delete old cbu objects" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type jpvolume" />
+		</exec>
+
+		<exec taskname="delete old cbu objects" failonerror="false" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="delete all objects of type jpjournal" />
+		</exec>
+
+		<exec taskname="dropSolrIndex" failonerror="true" executable="docportal/build/bin/mycore.sh" spawn="false" osfamily="unix">
+			<arg line="drop solr index" />
+		</exec>
+
+	</target>
+
+	<target name="run">
+		<exec executable="cmd" spawn="true" osfamily="windows">
+			<arg value="/c" />
+			<arg value="${basedir}/docportal/build/bin/${command}.cmd" />
+			<arg value="-p" />
+		</exec>
+		<exec dir="${basedir}" executable="nohup" spawn="true" osfamily="unix">
+			<arg value="/bin/sh" />
+			<arg value="${basedir}/docportal/build/bin/${command}.sh" />
+		</exec>
+	</target>
+
+	<target name="stop">
+		<antcall target="stop.jetty" />
+		<antcall target="stop.solr" />
+		<antcall target="stop.hsqldb" />
+	</target>
+
+	<target name="start">
+		<antcall target="start.hsqldb" />
+		<antcall target="start.solr" />
+		<antcall target="start.jetty" />
+	</target>
+
+	<target name="selenium">
+		<echo>==================================================</echo>
+		<echo>Running selenium tests with server on port 6644...</echo>
+		<echo>==================================================</echo>
+
+		<artifact:mvn fork="true" dir="${basedir}" mavenversion="${maven.version}">
+			<arg value="org.codehaus.mojo:selenium-maven-plugin:2.4-SNAPSHOT:selenese" />
+		</artifact:mvn>
+
+		<loadfile property="seleniumResults" srcFile="target/selenium-results.html" />
+		<fail message="Selenium tests failed, see target/selenium-results.html">
+			<condition>
+				<contains string="${seleniumResults}" substring="  status_failed" />
+			</condition>
+		</fail>
+
+	</target>
+
+</project>

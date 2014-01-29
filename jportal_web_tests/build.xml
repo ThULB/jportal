@@ -1,0 +1,41 @@
+<project name="JPortal initializer" default="info">
+  <target name="info">
+    <java classname="org.apache.tools.ant.Main" fork="false">
+      <arg value="-projecthelp" />
+    </java>
+  </target>
+  
+  <target name="init" description="--> initializes docportal applications and turns it into jportal application">
+    <path id="init.classpath">
+      <fileset dir="lib" includes="*.jar"/>
+    </path>
+    <property name="pom.xml" location="docportal/config/pom.xml" />
+    <!-- copy hibernate.cfg.xml.template if it isn't -->
+    <copy file="${pom.xml}.template" tofile="${pom.xml}" overwrite="true"/>
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpathref="init.classpath"/>
+    <xmltask source="${pom.xml}" dest="${pom.xml}">
+      <insert path="/:project/:dependencies" position="under">
+        <![CDATA[ 
+        <dependency>
+          <groupId>fsu.thulb</groupId>
+          <artifactId>jportal_mcr_module</artifactId>
+          <version>2.0.18-SNAPSHOT</version>
+        </dependency>
+        ]]>
+      </insert>
+    </xmltask>
+    <replace file="${pom.xml}" token='xmlns=""'/>
+	<copy file="docportal/config/mycore.private.properties.template" tofile="docportal/config/mycore.private.properties" />
+
+	<pathconvert property="convertedBaseDir">
+		<path id="p1">
+			<pathelement path="${basedir}/docportal/" />
+		</path>
+	</pathconvert>
+
+	<replace file="docportal/config/mycore.private.properties" token="MCR.basedir=/home/mcradmin/docportal" value="MCR.basedir=${convertedBaseDir}" />
+	<replace file="docportal/config/mycore.private.properties" token="MCR.NameOfProject=DocPortal" value="MCR.NameOfProject=JPortal" />
+	<replace file="docportal/config/mycore.private.properties" token="MCR.Modules.Application=common,docportal,xslinfo,sampleusers,maven" value="MCR.Modules.Application=common,maven" />
+	<replace file="docportal/config/mycore.private.properties" token="migration20-21,imaging,iview" value="migration20-21,iview,imaging,swf,z3950,zoomify" />
+  </target>
+</project>
