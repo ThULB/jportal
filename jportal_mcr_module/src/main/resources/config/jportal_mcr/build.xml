@@ -23,6 +23,16 @@
 		</antcall>
 	</target>
 
+	<target name="config">
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs,org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources" />
+
+		<!-- copy solr stuff -->
+		<copy todir="${basedir}/config/solr-home">
+			<fileset dir="${module.directory}/solr" />
+		</copy>
+	</target>
+
 	<!-- CREATE WEB APPLICATION -->
 	<target name="create.webapp">
 		<echo>JPortal webapp</echo>
@@ -64,15 +74,7 @@
 				<include name="xsl/mycoreobject-solr.xsl" />
 			</patternset>
 		</unjar>
-		<!-- copy solr stuff -->
-		<copy todir="${basedir}/config/solr-home">
-			<fileset dir="${module.directory}/solr" />
-		</copy>
 
 	</target>
 
-	<target name="config">
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Annotated" value="org.mycore.frontend.cli.MigratingCMDs,org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources"/>
-	</target>
 </project>
