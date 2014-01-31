@@ -56,6 +56,47 @@
 	<td>xpath=//*[@id='resultListHeader']/div/div</td>
 	<td>Ihre Suche ergab keine Treffer.</td>
 </tr>
+
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Journals@UrMEL</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPageToLoad</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Anmelden</td>
+	<td>Anmelden</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Anmelden</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=uid</td>
+	<td>administrator</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=pwd</td>
+	<td>alleswirdgut</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=LoginSubmit</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>link=Admin</td>
+	<td>Admin</td>
+</tr>
 </tbody></table>
 </body>
 </html>
