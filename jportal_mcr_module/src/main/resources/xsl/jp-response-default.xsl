@@ -148,6 +148,7 @@
     <field name="objectType" />
     <field name="published" label="Erschienen" />
     <field name="published_from" label="Erschienen" />
+    <field name="date.published_from" label="Erschienen" />
     <field name="dateOfBirth" label="Geburtsdatum" />
     <field name="dateOfDeath" label="Sterbedatum" />
     <field name="participant.author" label="Autor" />
@@ -241,6 +242,15 @@
   <xsl:template mode="searchHitDataField" match="str">
     <span class="jp-layout-inList">
       <xsl:value-of select="." />
+    </span>
+  </xsl:template>
+
+  <xsl:template mode="searchHitDataField" match="str[@name='date.published_from']">
+    <span class="jp-layout-inList">
+      <xsl:value-of select="." />
+      <xsl:if test="../str[@name='date.published_until']">
+        <xsl:value-of select="concat(' - ', ../str[@name='date.published_until'])" />
+      </xsl:if>
     </span>
   </xsl:template>
 
