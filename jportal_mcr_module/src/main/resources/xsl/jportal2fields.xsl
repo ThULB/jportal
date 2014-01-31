@@ -122,11 +122,14 @@
   </xsl:template>
 
   <xsl:template name="jp.index.participants">
+    <xsl:variable name="name">
+      <xsl:apply-templates select="document(concat('mcrobject:', @xlink:href))/mycoreobject" mode="jp.metadata.name" />
+    </xsl:variable>
     <field name="participants">
-      <xsl:value-of select="@xlink:title" />
+      <xsl:value-of select="$name" />
     </field>
     <field name="participant.{@type}">
-      <xsl:value-of select="concat(@xlink:href, '#', @xlink:title)" />
+      <xsl:value-of select="concat(@xlink:href, '#', $name)" />
     </field>
   </xsl:template>
 
