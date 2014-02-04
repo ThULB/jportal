@@ -65,7 +65,7 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
 //        String currentObjID = MCRLayoutUtilities.getLastValidPageID();
         
         String currentObjID = MCRJPortalXMLFunctions.getLastValidPageID();
-        if(currentObjID.equals("")) {
+        if(currentObjID.equals("") || currentObjID.contains("_jpinst_") || currentObjID.contains("_person_")) {
             return "";
         }
         MCRObjectID mcrId;
@@ -84,6 +84,10 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
             objXML = MCRXMLMetadataManager.instance().retrieveXML(mcrId);
         } catch(Exception exc) {
             LOGGER.error("Unable to retrieve object " + mcrId, exc);
+            return "";
+        }
+        if(objXML == null) {
+            LOGGER.error("Unable to retrieve object " + mcrId);
             return "";
         }
         XPathExpression<Element> hiddenJournalIDXpath = XPathFactory.instance().compile(
