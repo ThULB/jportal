@@ -1,5 +1,6 @@
 INSTALL
 ---------------
+mvn clean install
 ant -f hudson.xml install
 
 START JPORTAL
