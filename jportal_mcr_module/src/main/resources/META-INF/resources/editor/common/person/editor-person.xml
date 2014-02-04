@@ -51,7 +51,7 @@
     <textfield id="TF128_16" class="form-control s_narrow" width="16" maxlength="128" />
     <panel id="personName" class="editorPersonName">
 	  <!-- lastname -->
-        <cell col="1" row="1" anchor="NORTHWEST">
+        <cell class="badge" col="1" row="1" anchor="NORTHWEST">
             <text i18n="jp.editor.person.lastName" />
         </cell>
         <cell col="2" row="1" anchor="NORTHWEST" var="lastName" ref="TF128_16"/>
