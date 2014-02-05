@@ -187,6 +187,7 @@ function trackPageView(piwikURL, journalID, pageID) {
 		if(journalID != "") {
 			_paq.push(['setCustomVariable', 1, "journal", journalID, "page"]);
 		}
+		_paq.push(['setDownloadExtensions', "pdf"]);
 		_paq.push(["setTrackerUrl", u+"piwik.php"]);
 		_paq.push(["setSiteId", pageID]);
 		_paq.push(["trackPageView"]);

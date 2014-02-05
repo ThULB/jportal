@@ -102,5 +102,15 @@ function showIview(derivInfo) {
     jQuery.extend(finalOptions, defaultOptions[derivInfo.ID], containerOptions);
     var iviewObj = new iview.IViewInstance(container, finalOptions);
     iview.addInstance(iviewObj);
+	$(iviewObj.currentImage).bind("imageChanged", function(e) {
+	    // piwik tracking
+		if(typeof Piwik !== 'undefined') {
+			var currentImage = e.target;
+			var properties = currentImage.viewer.properties;
+			var trackURL = properties.webappBaseUri + "receive/" + properties.objectId + "?derivate=" + properties.derivateId + "&page=" + currentImage.name;
+			var tracker = Piwik.getAsyncTracker();
+			tracker.trackLink(trackURL, 'download');
+		}
+	});
     iviewObj.startViewer(derivInfo.file, "true");
 }
