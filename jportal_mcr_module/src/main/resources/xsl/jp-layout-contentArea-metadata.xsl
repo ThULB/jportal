@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="i18n xsi xlink mcrxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:urn="xalan://org.mycore.services.urn.MCRURNManager" exclude-result-prefixes="i18n xsi xlink mcrxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -22,6 +22,20 @@
     select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink'" />
 
   <xsl:template mode="metadataDisplay" match="metadata/*">
+  </xsl:template>
+  
+  <xsl:template mode="metadataURN" match="derivateLink">
+    <xsl:variable name="derivID" select="substring-before(@xlink:href,'/')"/>
+    <xsl:variable name="filePath" select="concat('/',substring-after(@xlink:href,'/'))"/>
+    <dt>
+      URN
+    </dt>
+    <dd>
+      <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)"/>
+      <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
+        <xsl:value-of select="$urn"/>
+      </a>
+    </dd>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">

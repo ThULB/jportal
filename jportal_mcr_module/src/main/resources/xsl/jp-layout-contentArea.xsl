@@ -96,6 +96,14 @@
             <xsl:apply-templates mode="linkedArticles" select="." />
             <xsl:apply-templates mode="linkedCalendar" select="." />
           </xsl:if>
+          <xsl:choose>
+            <xsl:when test="metadata/derivateLinks/derivateLink">
+              <xsl:apply-templates mode="metadataURN" select="metadata/derivateLinks/derivateLink"/>
+            </xsl:when>
+            <xsl:when test="structure/derobjects/derobject">
+              <xsl:apply-templates mode="metadataURN" select="structure/derobjects/derobject"/>
+            </xsl:when>
+          </xsl:choose>
         </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
