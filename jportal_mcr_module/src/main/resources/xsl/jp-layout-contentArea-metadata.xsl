@@ -27,15 +27,17 @@
   <xsl:template mode="metadataURN" match="derivateLink">
     <xsl:variable name="derivID" select="substring-before(@xlink:href,'/')"/>
     <xsl:variable name="filePath" select="concat('/',substring-after(@xlink:href,'/'))"/>
+    <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)"/>
+    <xsl:if test="$urn != ''">
     <dt>
       URN
     </dt>
     <dd>
-      <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)"/>
       <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
         <xsl:value-of select="$urn"/>
       </a>
     </dd>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
