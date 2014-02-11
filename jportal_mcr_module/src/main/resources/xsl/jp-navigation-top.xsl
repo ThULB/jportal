@@ -71,10 +71,9 @@
     <span id="languageMenu" class="languageMenu">
       <a id="languageSelect" class="languageSelect">
         <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" />
-        <img src="{$WebApplicationBaseURL}images/naviMenu/dropdown.png" style="padding: 0 3px 6px;" />
+        <img class="caret" src="{$WebApplicationBaseURL}images/naviMenu/dropdown.png" />
       </a>
-  
-      <ul id="languageList" class="hidden">
+      <ul id="languageList" class="hidden languageMenu">
         <xsl:for-each select="$languages/lang">
           <xsl:if test="$CurrentLang != text()">
             <li>

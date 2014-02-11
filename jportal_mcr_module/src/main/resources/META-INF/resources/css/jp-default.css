@@ -447,7 +447,7 @@ body {
 .languageMenu a {
 	cursor: pointer;
 	display: inline-block;
-	padding: 7px 2px 0 4px;
+	padding: 6px 2px 3px 4px;
 }
 
 .languageMenu ul {
@@ -457,7 +457,7 @@ body {
 	position: absolute;
 	right: 0;
 	top: 19px;
-	width: 45px;
+	width: 46px;
 	background: none repeat scroll 0 0 #F3F3F3;
 	border: 1px solid #AAA;
 }
@@ -469,7 +469,7 @@ body {
 
 .languageMenu ul a {
 	display: inline-block;
-	padding: 4px 17px 0 4px;
+	padding: 4px 17px 4px 4px;
 }
 .languageMenu ul a:hover {
 	background-color: #2A89C1;
@@ -483,6 +483,9 @@ body {
 	background: none repeat scroll 0 0 #F3F3F3;
 	position: relative;
     z-index: 5;
+}
+.languageSelect .caret {
+	margin: 0 2px 0 4px;
 }
 
 .jp-layout-marginLR {
