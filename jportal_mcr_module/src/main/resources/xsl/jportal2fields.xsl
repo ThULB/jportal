@@ -79,6 +79,13 @@
       <xsl:value-of select="text()" />
     </field>
   </xsl:template>
+  
+  <!-- roles -->
+  <xsl:template match="def.role/role[@inherited='0']" mode="jportal.metadata">
+    <field name="roles">
+      <xsl:value-of select="text()" />
+    </field>
+  </xsl:template>
 
   <!-- dates -->
   <xsl:template match="dates/date[@inherited='0']" mode="jportal.metadata">
