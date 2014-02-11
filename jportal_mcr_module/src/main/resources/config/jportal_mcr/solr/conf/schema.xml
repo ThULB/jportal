@@ -23,15 +23,26 @@
       </analyzer>
     </fieldtype>
 
-<!-- 
-    <fieldtype name="payloads" stored="false" class="solr.TextField" multiValued="true">
-      <analyzer>
+    <!-- text with word coordinates -->
+    <fieldtype name="text_wc" stored="false" class="solr.TextField" multiValued="true">
+      <analyzer type="index">
         <tokenizer class="solr.WhitespaceTokenizerFactory" />
-        <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="$" encoder="identity" />
+        <filter class="solr.DelimitedPayloadTokenFilterFactory" delimiter="|" encoder="identity" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.ICUNormalizer2FilterFactory" />
+        <filter class="solr.PatternReplaceCharFilterFactory" pattern="[^\p{L}\p{Nd}]" replacement="" />
+      </analyzer>
+      <analyzer type="query">
+        <tokenizer class="solr.WhitespaceTokenizerFactory" />
+        <filter class="solr.LowerCaseFilterFactory" />
+        <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
+        <filter class="solr.ASCIIFoldingFilterFactory" />
+        <filter class="solr.ICUNormalizer2FilterFactory" />
       </analyzer>
     </fieldtype>
- -->
- 
+
     <!-- sort -> lowercase, handle umlaute, replace special characters -->
     <fieldType name="sort" class="solr.TextField" positionIncrementGap="100" sortMissingLast="true">
       <analyzer>
@@ -135,7 +146,7 @@
     <field name="journalID" type="string" />
     <field name="journalTitle" type="string" />
     <field name="maintitle" type="string" />
-    <field name="roles" type="string" />
+    <field name="roles" type="string" multiValued="true" />
     <field name="rubric" type="string" indexed="false" multiValued="true" />
     <field name="rubricText" type="text_de" multiValued="true" />
 
@@ -160,8 +171,6 @@
 
     <!-- identifier (gnd, pnd, etc.) -->
     <dynamicField name="id.*" type="string" multiValued="true" />
-
-    <!-- <field name="mypayload" type="payloads" /> -->
 
     <!-- ******************************************** -->
     <!-- * SEARCH -->
@@ -214,6 +223,11 @@
     <copyField source="heading_base" dest="heading_sort" />
     <copyField source="maintitle" dest="alphabetic_sort" />
     <copyField source="heading_base" dest="alphabetic_sort" />
+
+    <!-- ******************************************** -->
+    <!-- * TEXT WITH WORD COORDINATES -->
+    <!-- ******************************************** -->
+    <field name="text_wc" type="text_wc" />
 
   </fields>
 
