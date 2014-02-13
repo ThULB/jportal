@@ -25,8 +25,9 @@ public class DerivateAccess {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(objDate.getDate());
                 int year = calendar.get(Calendar.YEAR) + 1;
+                int month = calendar.get(Calendar.MONTH) + 1;
                 
-                String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[" + year + "-01-01T00:00:00.000Z TO "+year+"-12-31T23:59:59.999Z]";
+                String sorlQuery = "+journalID:" + id +" +objectType:jparticle +published_sort:[" + year + "-"+month+"-01T00:00:00.000Z TO "+year+"-"+month+"-31T23:59:59.999Z]";
                 ModifiableSolrParams solrParams = new ModifiableSolrParams(); 
                 solrParams.set("q", sorlQuery).set("rows", 1);
                 QueryResponse response = MCRSolrServerFactory.getSolrServer().query(solrParams);
