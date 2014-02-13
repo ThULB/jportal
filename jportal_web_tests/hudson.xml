@@ -4,6 +4,11 @@
 
 	<path id="maven-ant-tasks.classpath" path="${basedir}/lib/maven-ant-tasks-2.1.3.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	     <classpath>
+	         <fileset dir="${basedir}/lib" />
+	     </classpath>
+	</taskdef>
 
 	<property name="databasePort" value="7298" />
 	<property name="jettyPort" value="7291" />
@@ -21,12 +26,24 @@
 	<property name="solrCheck" value="http://localhost:${solrPort}/jportal/select" />
 
 	<target name="install">
+		<antcall target="drop" />
 		<antcall target="configure" />
 		<antcall target="start.hsqldb" />
 		<antcall target="start.solr" />
 		<antcall target="init" />
-		<antcall target="clean" />
 		<antcall target="start.jetty" />
+		<antcall target="stop" />
+	</target>
+
+	<target name="singleshot">
+		<antcall target="stop" />
+		<antcall target="drop" />
+		<antcall target="configure" />
+		<antcall target="start.hsqldb" />
+		<antcall target="start.solr" />
+		<antcall target="init" />
+		<antcall target="start.jetty" />
+		<antcall target="selenium" />
 		<antcall target="stop" />
 	</target>
 
@@ -42,6 +59,8 @@
 	<property name="docportal.hibernate.cfg.file" value="hibernate.cfg.xml" />
 	<property name="docportal.build.dir" value="${docportal.root.dir}/build" />
 	<property name="docportal.build.bin.dir" value="${docportal.root.dir}/build/bin" />
+
+	<property name="mycore.private.properties" value="${basedir}/docportal/config/mycore.private.properties" />
 
 	<target name="configure">
 		<echo>==================================================</echo>
@@ -73,7 +92,6 @@
 		  log4j.appender.fileAppender.File=${docportal.build.dir}/logfile.txt
 		  log4j.appender.fileAppender.layout=org.apache.log4j.PatternLayout
 		  log4j.appender.fileAppender.layout.ConversionPattern=%d %-5p (%F:%L) - %m%n
-		
 		  MCR.Module-solr.ServerURL=http\://localhost\:${solrPort}/jportal
 	    </concat>
 		<replace file="${docportal.config.dir}/${docportal.config.file}" token="  log4j.rootLogger=INFO, stdout" value="  log4j.rootLogger=INFO, fileAppender" />
@@ -117,6 +135,23 @@
 		<chmod perm="755">
 			<fileset dir="docportal/build/bin/" includes="*.sh" />
 		</chmod>
+	</target>
+
+	<target name="drop">
+		<if>
+			<available file="${mycore.private.properties}" />
+			<then>
+				<ant dir="docportal/">
+					<target name="clean"  />
+					<target name="clean.data" />
+				</ant>
+			</then>
+		</if>
+		<delete dir="${basedir}/docportal/save" quiet="false"/>
+		<delete dir="${basedir}/docportal/config/solr-home" quiet="false" />
+		<delete file="${mycore.private.properties}" quiet="false" />
+		<delete file="${basedir}/docportal/config/pom.xml" quiet="false" />
+		<delete file="${basedir}/docportal/config/hibernate/hibernate.cfg.xml" quiet="false" />
 	</target>
 
 	<target name="start.hsqldb">
@@ -221,7 +256,7 @@
 		</waitfor>
 	</target>
 
-	<target name="clean">
+	<target name="clean.data">
 
 		<echo>==================================================</echo>
 		<echo> Clean data</echo>
