@@ -1010,7 +1010,7 @@
       <str name="fmap.div">ignored_</str>
     </lst>
     <!-- tika config -->
-<!--    <str name="tika.config">tikaconfig.xml</str> -->
+    <str name="tika.config">tikaconfig.xml</str>
   </requestHandler>
   <!-- MyCoRe modification END -->
 
@@ -1720,15 +1720,15 @@
     -->
 
   <!-- Request Handler to do payload queries -->
-  <!-- <queryParser name="payloadQueryParser" class="org.mycore.solr.ext.PayloadQParserPlugin" />
-  <requestHandler name="/payload" class="org.mycore.solr.ext.PayloadSearchHandler">
+  <requestHandler name="/wordcoordinates" class="org.mycore.solr.ext.WordCoordinateSearchHandler">
     <lst name="defaults">
-      <str name="defType">payloadQueryParser</str>
+      <int name="rows">10</int>  <!-- we don't need the results - numFound is enough -->
+      <str name="df">text_wc</str>
     </lst>
   </requestHandler>
 
-  <searchComponent name="payload" class="org.mycore.solr.ext.PayloadComponent">
-  </searchComponent> -->
+  <searchComponent name="wordcoordinates" class="org.mycore.solr.ext.WordCoordinateComponent">
+  </searchComponent>
 
   <!-- Function Parsers
 

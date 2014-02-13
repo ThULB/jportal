@@ -28,6 +28,14 @@
 		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources" />
 
 		<!-- copy solr stuff -->
+		<echo>copy solr stuff</echo>
+	    <copy todir="${basedir}/config/solr-home">
+	      <fileset dir="${basedir}/config/solr-home.template">
+	        <exclude name="solr.xml" />
+	        <exclude name="conf/schema.xml" />
+	        <exclude name="conf/solrconfig.xml" />
+	      </fileset>
+	    </copy>
 		<copy todir="${basedir}/config/solr-home">
 			<fileset dir="${module.directory}/solr" />
 		</copy>
