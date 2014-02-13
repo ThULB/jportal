@@ -16,6 +16,7 @@
 	<property name="jettyDebugPort" value="7295" />
 	<property name="solrPort" value="7296" />
 	<property name="solrStopPort" value="7297" />
+	<property name="solrDebugPort" value="7294" />
 
 	<property name="maven.version" value="2.2.1" />
 
@@ -128,6 +129,7 @@
 		<replace dir="docportal/build/bin" includes="jetty*" token="8295" value="${jettyDebugPort}" />
 		<replace dir="docportal/build/bin" includes="solr*" token="8296" value="${solrPort}" />
 		<replace dir="docportal/build/bin" includes="solr*" token="8297" value="${solrStopPort}" />
+		<replace dir="docportal/build/bin" includes="solr*" token="8294" value="${solrDebugPort}" />
 
 		<!-- remove debug port as docportal demo uses this port -->
 		<replace dir="docportal/build/bin" includes="solrstart.sh" token="jetty:run" value="jetty:run >${basedir}/docportal/build/solr-log.txt 2>&amp;1" />
