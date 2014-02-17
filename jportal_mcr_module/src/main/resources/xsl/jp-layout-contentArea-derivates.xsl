@@ -120,8 +120,9 @@
             <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a>
           </li>
           <li>
+<!--               href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a> -->
             <a
-              href="{$WebApplicationBaseURL}servlets/MCRStartEditorServlet?se_mcrid={@xlink:href}&amp;te_mcrid={@xlink:href}&amp;re_mcrid={$objID}&amp;todo=saddfile">Dateien hinzufügen</a>
+              href="{$WebApplicationBaseURL}servlets/derivate/update?id={@xlink:href}&amp;objectid={$objID}">Dateien hinzufügen</a>
           </li>
           <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
             <xsl:if test="not(mcrxml:hasURNDefined(@xlink:href))">
