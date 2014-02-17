@@ -4,7 +4,7 @@
 		<artifactId>mycore</artifactId>
 		<groupId>org.mycore</groupId>
         <!-- don't forgett to change mcr.version below while changing verions-->
-		<version>2014.02-SNAPSHOT</version>
+		<version>2014.03-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fsu.thulb</groupId>
@@ -24,17 +24,16 @@
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
         <module>jportal_acl_ip_editor_module</module>
-        <!-- 
-    <module>jportal_webapp</module>
+    
     <module>jportal_model</module>
-         -->
+    <module>jportal_webapp_MVC</module>
   </modules>
 
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <java.version>1.7</java.version>
       <jportal.version>2.0.18-SNAPSHOT</jportal.version>
-      <mcr.version>2013.12-SNAPSHOT</mcr.version>
+      <mcr.version>2014.03-SNAPSHOT</mcr.version>
       <jersey.version>1.17</jersey.version>
     </properties>
 
@@ -107,25 +106,6 @@
 	</repositories>
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.mycore</groupId>
-				<artifactId>mycore-complete</artifactId>
-				<version>${mcr.version}</version>
-			</dependency>
-            <dependency>
-              <groupId>org.mycore</groupId>
-              <artifactId>mycore-base</artifactId>
-              <version>${mcr.version}</version>
-              <scope>test</scope>
-              <type>test-jar</type>
-            </dependency>
-            <dependency>
-              <groupId>org.mycore</groupId>
-              <artifactId>mycore-jersey</artifactId>
-              <version>${mcr.version}</version>
-              <scope>test</scope>
-              <type>test-jar</type>
-            </dependency>
             <dependency>
               <groupId>de.uni-jena.thulb</groupId>
               <artifactId>JPJaxbPojos</artifactId>
@@ -163,6 +143,57 @@
               <groupId>fsu.thulb</groupId>
               <artifactId>jportal_mcr_module</artifactId>
               <version>${jportal.version}</version>
+              <scope>provided</scope>
+            </dependency>
+             <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-base</artifactId>
+              <version>${mcr.version}</version>
+              <type>test-jar</type>
+              <scope>test</scope>
+             </dependency>
+             <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-base</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-jersey</artifactId>
+              <version>${mcr.version}</version>
+              <scope>test</scope>
+              <type>test-jar</type>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-solr</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-mets</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-iview2</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-user2</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
+            </dependency>
+            <dependency>
+              <groupId>org.mycore</groupId>
+              <artifactId>mycore-classeditor</artifactId>
+              <version>${mcr.version}</version>
+              <scope>provided</scope>
             </dependency>
 		</dependencies>
 	</dependencyManagement>

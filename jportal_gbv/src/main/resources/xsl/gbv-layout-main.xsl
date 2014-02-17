@@ -120,7 +120,7 @@
         <link href="{$WebApplicationBaseURL}css/jp-gbv.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-move-obj.css" rel="stylesheet" type="text/css" />
-        <link href="{$WebApplicationBaseURL}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{$WebApplicationBaseURL}font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">

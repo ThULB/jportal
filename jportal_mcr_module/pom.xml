@@ -41,6 +41,7 @@
                         </manifest>
                         <manifestEntries>
                             <MCR-Application-Module>${project.name}</MCR-Application-Module>
+                            <POM>META-INF/maven/${groupId}/${artifactId}/pom.properties</POM>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -57,16 +58,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-          <groupId>org.mycore</groupId>
-          <artifactId>mycore-complete</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.mycore</groupId>
-          <artifactId>mycore-base</artifactId>
-          <scope>test</scope>
-          <type>test-jar</type>
-        </dependency>
         <dependency>
           <groupId>fsu.thulb</groupId>
           <artifactId>jportal-commons</artifactId>
@@ -135,6 +126,36 @@
         <dependency>
         	<groupId>xmlunit</groupId>
         	<artifactId>xmlunit</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-base</artifactId>
+          <type>test-jar</type>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-base</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-solr</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-mets</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-iview2</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-user2</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore</groupId>
+          <artifactId>mycore-classeditor</artifactId>
         </dependency>
     </dependencies>
 </project>

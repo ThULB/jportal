@@ -23,6 +23,14 @@
       <artifactId>jportal_mcr_module</artifactId>
       <version>${jportal.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-base</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <finalName>jportal_experiments</finalName>

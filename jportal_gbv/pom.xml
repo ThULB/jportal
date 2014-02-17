@@ -103,13 +103,7 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
-      <artifactId>mycore-complete</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
-      <scope>test</scope>
-      <type>test-jar</type>
     </dependency>
   </dependencies>
 </project>

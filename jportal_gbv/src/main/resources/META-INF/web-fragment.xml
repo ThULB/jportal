@@ -11,10 +11,6 @@ currently it just overwrites the web-fragment.xml of the jportal_mcr_module.
       <servlet-name>DerivateLinkServlet</servlet-name>
       <servlet-class>org.mycore.frontend.servlets.DerivateLinkServlet</servlet-class>
   </servlet>
-  <servlet id="MCRJPortalCheckCommitDataServlet">
-      <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
-      <servlet-class>org.mycore.frontend.servlets.MCRJPortalCheckCommitDataServlet</servlet-class>
-  </servlet>
   <servlet id="MCRJPortalEditorCancelServlet">
       <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
       <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
@@ -23,10 +19,6 @@ currently it just overwrites the web-fragment.xml of the jportal_mcr_module.
   <servlet-mapping>
       <servlet-name>DerivateLinkServlet</servlet-name>
       <url-pattern>/servlets/DerivateLinkServlet/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-      <servlet-name>MCRJPortalCheckCommitDataServlet</servlet-name>
-      <url-pattern>/servlets/MCRJPortalCheckCommitDataServlet</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
       <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>

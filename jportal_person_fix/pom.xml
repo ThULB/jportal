@@ -53,11 +53,15 @@
   <dependencies>
     <dependency>
       <groupId>org.mycore</groupId>
-      <artifactId>mycore-complete</artifactId>
+      <artifactId>mycore-base</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
     </dependency>
   </dependencies>
   <name>jportal_person_fix</name>

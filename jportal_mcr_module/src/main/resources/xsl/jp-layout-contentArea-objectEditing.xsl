@@ -69,12 +69,7 @@
         </item>
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
-          <label name="Datei hochladen" ref="editorServlet">
-            <params>
-              <param ref="editorServlet-editParam" />
-              <param name="todo" value="snewder" />
-            </params>
-          </label>
+          <label name="Datei hochladen" href="/servlets/derivate/create?id={$currentObjID}"/>
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
