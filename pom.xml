@@ -24,9 +24,7 @@
         <module>jportal-commons</module>
         <module>jportal_person_fix</module>
         <module>jportal_acl_ip_editor_module</module>
-    
-    
-    
+	    <module>jportal_move_obj_module</module>
   </modules>
 
     <properties>

@@ -24,9 +24,6 @@
         <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}rsc/ACLE/objectid">ACL-Editor-ObjectID</a>
-      </li>
-      <li>
         <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
       </li>
     </ul>

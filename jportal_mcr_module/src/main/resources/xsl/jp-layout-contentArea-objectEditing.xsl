@@ -3,7 +3,8 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
+  exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
 
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
@@ -24,6 +25,7 @@
     <var name="isGuest" value="{mcrxml:isCurrentUserGuestUser()}" />
     <var name="linkImgAllowed" value="{$bookmarkedImage != '' and not($linkExist) and not($hasSourceOfLink)}" />
     <var name="notJournal" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation != 'datamodel-jpjournal.xsd'}" />
+    <var name="hasChildren" value="{count(/mycoreobject/structure/children) &gt; 0}" />
   </xsl:variable>
   <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)"/>
 
@@ -31,6 +33,7 @@
     <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="editorResource" href="/rsc/editor" />
+      <link id="moveObjResource" href="/rsc/moveObj" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
       <params id="editorServlet-editParam">
         <param name="tf_mcrid" select="currentObjID" />
@@ -46,6 +49,11 @@
         <item>
           <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
         </item>
+       	<item>
+       		<restriction name="hasChildren" value="true" />
+       		<restriction name="createJournal" value="true" />
+         	<label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}"/>
+       	</item>
         <item id="moveDocButton" class="objectEditingButton" objID="{$currentObjID}">
           <restriction name="notJournal" value="true" />
           <restriction name="createJournal" value="true" />
