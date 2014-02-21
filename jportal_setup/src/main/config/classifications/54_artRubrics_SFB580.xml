@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000054" >
+	<label xml:lang="de" text="Rubriken"/>
+<categories>
+    <category ID="00010000">
+        <label xml:lang="de" text="A1 – Führungsgruppen und gesellschaftliche Differenzierungsprozesse in der DDR" />
+    </category>
+    <category ID="00011000">
+        <label xml:lang="de" text="A2 – Generationswechsel im Management. Persistenz oder Wandel der Managementstrategien in Ost- und Westdeutschland" />
+    </category>
+    <category ID="00012000">
+        <label xml:lang="de" text="A3 – Delegationseliten nach dem Systemumbruch" />
+    </category>
+    <category ID="00013000">
+        <label xml:lang="de" text="A4 – Lokale politisch-administrative Eliten" />
+    </category>
+    <category ID="00014000">
+        <label xml:lang="de"
+            text="A5 – Erfahrungsräume und Erwartungshorizonte im Generationenumbruch. Beteiligungschancen und Deutungssysteme ausgewählter Basiseliten" />
+    </category>
+    <category ID="00015000">
+        <label xml:lang="de" text="A6 – Freie Wählergemeinschaften als kommunalpolitische Akteure" />
+    </category>
+    <category ID="00016000">
+        <label xml:lang="de" text="B1 – Zwischenbetrieblicher Arbeitsmarkt zwischen Instabilität und mühsamer Neustrukturierung" />
+    </category>
+    <category ID="00017000">
+        <label xml:lang="de" text="B2 – Betrieb und Beschäftigung im Wandel" />
+    </category>
+    <category ID="00018000">
+        <label xml:lang="de" text="B5 – Personaldienstleistungen im Spannungsfeld von ökonomischen und rechtlichen Determinanten" />
+    </category>
+    <category ID="00019000">
+        <label xml:lang="de" text="B7 – Strategische Interaktion, Reziprozität und Fairness - Bausteine zu einer Theorie der Beschäftigungsbeziehung" />
+    </category>
+    <category ID="00020000">
+        <label xml:lang="de" text="B8 – Demographischer Wandel und Arbeitsmarkt des öffentlichen Sektors" />
+    </category>
+    <category ID="00021000">
+        <label xml:lang="de"
+            text="B9 – Eigensinnige Kunden. Der Einfluss strenger Zumutbarkeit auf die Erwerbsorientierung Arbeitsloser und prekär Beschäftigter" />
+    </category>
+    <category ID="00022000">
+        <label xml:lang="de" text="C3 – Jugendhilfe in Transformationsprozessen" />
+    </category>
+    <category ID="00023000">
+        <label xml:lang="de" text="C4 – Politische Kultur und bürgerschaftliches Engagement" />
+    </category>
+    <category ID="00024000">
+        <label xml:lang="de" text="C5 – Rehabilitation zwischen Transformation und Weiterentwicklung" />
+    </category>
+    <category ID="00025000">
+        <label xml:lang="de" text="C6 – Individuelle und soziale Ressourcen für den Umgang mit sozialem Wandel" />
+    </category>
+    <category ID="00026000">
+        <label xml:lang="de" text="M – Methodische Grundlagenforschung" />
+    </category>
+</categories>
+</mycoreclass>

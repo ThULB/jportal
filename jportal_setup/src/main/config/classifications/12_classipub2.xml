@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000012" >
+	<label xml:lang="de" text="Classipub 2"/>
+	<categories>
+		<category ID="empty">
+			<label xml:lang="de" text="nicht auswählen"/>
+			<label xml:lang="en" text="do not choose"/>
+		</category>
+	</categories>
+</mycoreclass>

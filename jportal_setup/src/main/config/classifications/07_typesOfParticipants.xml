@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000007">
+  <label xml:lang="de" text="Beteiligte Personen" description="Beteiligte Personen" />
+  <label xml:lang="en" text="Contributors" description="Contributors" />
+  <categories>
+    <category ID="mainauthor">
+      <label text="Hauptautor" xml:lang="de"></label>
+      <label text="First author" xml:lang="en" />
+      <label text="Автор" xml:lang="ru"></label>
+      <label text="Autor główny" xml:lang="pl"></label>
+    </category>
+    <category ID="subauthor">
+      <label text="Mitautor" xml:lang="de"></label>
+      <label text="Co-author" xml:lang="en" />
+      <label text="Соавтор" xml:lang="ru" />
+      <label text="Współautor" xml:lang="pl" />
+    </category>
+    <category ID="mainPublisher">
+      <label text="Herausgeber" xml:lang="de" />
+      <label text="Chief editor" xml:lang="en" />
+      <label text="Wydawca" xml:lang="pl" />
+    </category>
+    <category ID="subPublisher">
+      <label text="Mitherausgeber" xml:lang="de" />
+      <label text="Co-editor" xml:lang="en" />
+      <label text="Współwydawca" xml:lang="pl" />
+    </category>
+    <category ID="translator">
+      <label text="Übersetzer" xml:lang="de"></label>
+      <label text="Translator" xml:lang="en" />
+      <label text="Переводчик" xml:lang="ru"></label>
+      <label text="Tłumacz" xml:lang="pl"></label>
+    </category>
+    <category ID="fotographer">
+      <label text="Fotograf" xml:lang="de"></label>
+      <label text="Photographer" xml:lang="en" />
+      <label text="Фотограф" xml:lang="ru"></label>
+      <label text="Fotograf" xml:lang="pl"></label>
+    </category>
+    <category ID="illustrator">
+      <label text="Illustrator, Kupferstecher" xml:lang="de"></label>
+      <label text="Illustrator, engraver" xml:lang="en" />
+      <label text="Иллюстратор" xml:lang="ru"></label>
+      <label text="Ilustrator" xml:lang="pl"></label>
+    </category>
+    <category ID="commentator">
+      <label text="Kommentator, Bearbeiter" xml:lang="de"></label>
+      <label text="Commentator, corrector" xml:lang="en" />
+      <label text="Комментатор" xml:lang="ru"></label>
+      <label text="Komentator" xml:lang="pl"></label>
+    </category>
+    <category ID="composer">
+      <label text="Komponist" xml:lang="de"></label>
+      <label text="Composer" xml:lang="en" />
+      <label text="Композитор" xml:lang="ru"></label>
+      <label text="Kompozytor" xml:lang="pl"></label>
+    </category>
+    <category ID="painter">
+      <label text="Maler" xml:lang="de"></label>
+      <label text="Painter" xml:lang="en" />
+      <label text="Художник" xml:lang="ru"></label>
+      <label text="Malarz" xml:lang="pl"></label>
+    </category>
+    <category ID="moderator">
+      <label text="Moderator" xml:lang="de"></label>
+      <label text="Moderator" xml:lang="en" />
+      <label text="Модератор" xml:lang="ru"></label>
+      <label text="Moderator" xml:lang="pl"></label>
+    </category>
+    <category ID="editor">
+      <label text="Redakteur" xml:lang="de"></label>
+      <label text="Editorial journalist" xml:lang="en" />
+      <label text="Редактор" xml:lang="ru"></label>
+      <label text="Redaktor" xml:lang="pl"></label>
+    </category>
+    <category ID="sponsor">
+      <label text="Sponsor" xml:lang="de"></label>
+      <label text="Sponsor" xml:lang="en" />
+      <label text="Спонсор" xml:lang="ru"></label>
+      <label text="Sponsor" xml:lang="pl"></label>
+    </category>
+    <category ID="organiser">
+      <label text="Veranstalter" xml:lang="de"></label>
+      <label text="Host, organiser" xml:lang="en" />
+      <label text="Организатор" xml:lang="ru"></label>
+      <label text="Organizator" xml:lang="pl"></label>
+    </category>
+    <category ID="reviewer">
+      <label text="Rezensent" xml:lang="de"></label>
+      <label text="Reviewer" xml:lang="en" />
+      <label text="Рецензент" xml:lang="ru"></label>
+      <label text="Recenzent" xml:lang="pl"></label>
+    </category>
+    <category ID="authorOfReviewer">
+      <label text="Autor des rezensierten Werkes" xml:lang="de"></label>
+      <label text="Author of reviewed work" xml:lang="en"></label>
+      <label text="Автор рецензируемого произведения" xml:lang="ru"></label>
+      <label text="Autor recenzowanego dzieła" xml:lang="pl"></label>
+    </category>
+    <category ID="contibutorOfReviewer">
+      <label text="Herausgeber des rezensierten Werkes" xml:lang="de"></label>
+      <label text="Editor of reviewed work" xml:lang="en" />
+      <label text="Редактор рецензируемого произведения" xml:lang="ru"></label>
+      <label text="Wydawca recenzowanego dzieła" xml:lang="pl" />
+    </category>
+    <category ID="mentionedInst">
+      <label text="Erwähnte Institution" xml:lang="de"></label>
+      <label text="Mentioned institution" xml:lang="en"></label>
+      <label text="Wspomniana instytucja" xml:lang="pl"></label>
+    </category>
+    <category ID="mentionedPerson">
+      <label text="Erwähnte Person" xml:lang="de" />
+      <label text="Mentioned person" xml:lang="en" />
+      <label text="Wspomniana osoba" xml:lang="pl"></label>
+    </category>
+    <category ID="publisherOfOriginal">
+      <label text="Verlag des rezensierten Werkes" xml:lang="de" />
+      <label text="Publisher of reviewed work" xml:lang="en" />
+      <label text="Wydawnictwo recenzowanego dzieła" xml:lang="pl" />
+    </category>
+    <category ID="misc">
+      <label text="Sonst. Mitarbeiter" xml:lang="de"></label>
+      <label text="Other" xml:lang="en" />
+      <label text="Другой сотрудник" xml:lang="ru"></label>
+      <label text="Inni" xml:lang="pl" />
+    </category>
+    <category ID="author">
+      <label text="Autor" xml:lang="de"></label>
+      <label text="author" xml:lang="en" />
+      <label text="Autor" xml:lang="pl" />
+    </category>
+    <category ID="interviewer">
+      <label text="Interviewer" xml:lang="de" />
+      <label text="Interviewer" xml:lang="en" />
+      <label text="Osoba przeprowadzająca wywiad" xml:lang="pl" />
+    </category>
+    <category ID="interviewee">
+      <label text="Befragte Person / Interviewter" xml:lang="de" />
+      <label text="Respondent / interviewee" xml:lang="en" />
+      <label text="Respondent" xml:lang="pl" />
+    </category>
+    <category ID="publisher">
+      <label text="Verlag" xml:lang="de" />
+      <label text="Publisher" xml:lang="en" />
+      <label text="Wydawnictwo" xml:lang="pl" />
+    </category>
+    <category ID="contributor">
+      <label text="Beitragender" xml:lang="de" />
+      <label text="Contributor" xml:lang="en" />
+      <label text="Osoba przyczyniająca się" xml:lang="pl" />
+    </category>
+    <category ID="director">
+      <label text="Regisseur" xml:lang="de" />
+      <label text="Director" xml:lang="en" />
+      <label text="Reżyser" xml:lang="pl" />
+    </category>
+    <category ID="assumedAuthor">
+      <label text="vermuteter Autor" xml:lang="de" />
+      <label text="Assumed author" xml:lang="en" />
+      <label text="........" xml:lang="pl" />
+    </category>
+    <category ID="assumedMentionedPerson">
+      <label text="Vermutete erwähnte Person" xml:lang="de" />
+      <label text="Assumed mentioned person" xml:lang="en" />
+      <label text="........." xml:lang="pl" />
+    </category>
+    <category ID="publisherPrinter">
+      <label text="Verleger / Drucker" xml:lang="de" />
+      <label text="Publisher / printer" xml:lang="en" />
+      <label text="Wydawca / drukarz" xml:lang="pl" />
+    </category>
+    <category ID="publishingPlace">
+      <label text="Verlagsort / Druckort" xml:lang="de" />
+      <label text="Publishing place / place of printing" xml:lang="en" />
+      <label text="Miejsce wydania / miejsce druku" xml:lang="pl" />
+    </category>
+    <category ID="authorOnTiltePage">
+      <label text="Verfasser laut Titelblatt" xml:lang="de" />
+      <label text="Author on tilte page" xml:lang="en" />
+      <label text="Autor według strony tytułowej" xml:lang="pl" />
+    </category>
+    <category ID="receiverOfDevotement">
+      <label text="Widmungsempfänger" xml:lang="de" />
+      <label text="Receiver of devotement" xml:lang="en" />
+      <label text="Adresat dedykacji" xml:lang="pl" />
+    </category>
+    <category ID="partner">
+      <label text="Partner" xml:lang="de" />
+      <label text="Partner" xml:lang="en" />
+      <label text="Partner" xml:lang="pl" />
+    </category>
+  </categories>
+</mycoreclass>

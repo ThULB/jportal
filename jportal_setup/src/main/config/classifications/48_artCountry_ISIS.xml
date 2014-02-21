@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000048">
+    <label xml:lang="de" text="Land"/>
+    <label xml:lang="en" text="Country"/>
+    <label xml:lang="pl" text="Kraj"/>
+    <categories>
+        <category ID="00001000">
+            <label xml:lang="de" text="Dänemark"/>
+            <label xml:lang="en" text="Denmark"/>
+            <label xml:lang="pl" text="Dania"/>
+        </category>
+        <category ID="00002000">
+            <label xml:lang="de" text="Deutschland"/>
+            <label xml:lang="en" text="Germany"/>
+            <label xml:lang="pl" text="Niemcy"/>
+        </category>
+        <category ID="00003000">
+            <label xml:lang="de" text="England"/>
+            <label xml:lang="en" text="England"/>
+            <label xml:lang="pl" text="Anglia"/>
+        </category>
+        <category ID="00004000">
+            <label xml:lang="de" text="Frankreich"/>
+            <label xml:lang="en" text="France"/>
+            <label xml:lang="pl" text="Francja"/>
+        </category>
+        <category ID="00005000">
+            <label xml:lang="de" text="Japan"/>
+            <label xml:lang="en" text="Japan"/>
+            <label xml:lang="pl" text="Japonia"/>
+        </category>
+        <category ID="00006000">
+            <label xml:lang="de" text="Kolumbien"/>
+            <label xml:lang="en" text="Colombia"/>
+            <label xml:lang="pl" text="Kolumbia"/>
+        </category>
+        <category ID="00007000">
+            <label xml:lang="de" text="Niederlande"/>
+            <label xml:lang="en" text="Netherlands"/>
+            <label xml:lang="pl" text="Holandia"/>
+        </category>
+        <category ID="00008000">
+            <label xml:lang="de" text="Östereich-Ungarn"/>
+            <label xml:lang="en" text="Austria-Hungary"/>
+            <label xml:lang="pl" text="Austro-Węgry"/>
+        </category>
+        <category ID="00009000">
+            <label xml:lang="de" text="Russland"/>
+            <label xml:lang="en" text="Russia"/>
+            <label xml:lang="pl" text="Rosja"/>
+        </category>
+        <category ID="00010000">
+            <label xml:lang="de" text="Schottland"/>
+            <label xml:lang="en" text="Scotland"/>
+            <label xml:lang="pl" text="Szkocja"/>
+        </category>
+        <category ID="00011000">
+            <label xml:lang="de" text="Schweden"/>
+            <label xml:lang="en" text="Sweden"/>
+            <label xml:lang="pl" text="Szwecja"/>
+        </category>
+        <category ID="00012000">
+            <label xml:lang="de" text="Schweiz"/>
+            <label xml:lang="en" text="Switzerland"/>
+            <label xml:lang="pl" text="Szwajcaria"/>
+        </category>
+        <category ID="00013000">
+            <label xml:lang="de" text="Teneriffa"/>
+            <label xml:lang="en" text="Tenerife"/>
+            <label xml:lang="pl" text="Teneryfa"/>
+        </category>
+    </categories>
+</mycoreclass>

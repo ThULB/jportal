@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+	ID="jportal_class_00000053" >
+	<label xml:lang="de" text="Publikationstyp"/>
+	<label xml:lang="en" text="Type of publication"/>
+	<label xml:lang="pl" text="Typ publikacji"/>
+	<categories>
+		<category ID="article">
+			<label xml:lang="de" text="Forschungsartikel"/>
+			<label xml:lang="en" text="Research article"/>
+			<label xml:lang="pl" text="Artykuł badawczy"/>
+		</category>
+	</categories>
+</mycoreclass>

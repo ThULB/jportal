@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mycoreclass xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="jportal_class_00000049">
+    <label xml:lang="de" text="Textsprache"/>
+    <label xml:lang="en" text="Language"/>
+    <label xml:lang="pl" text="Język tekstu"/>
+    <categories>
+        <category ID="00001000">
+            <label xml:lang="de" text="deutsch"/>
+            <label xml:lang="en" text="german"/>
+            <label xml:lang="pl" text="niemiecki"/>
+        </category>
+        <category ID="00002000">
+            <label xml:lang="de" text="deutsch / französisch"/>
+            <label xml:lang="en" text="german / france"/>
+            <label xml:lang="pl" text="niemiecki / francuski"/>
+        </category>
+        <category ID="00003000">
+            <label xml:lang="de" text="deutsch / griechisch"/>
+            <label xml:lang="en" text="german / greek"/>
+            <label xml:lang="pl" text="niemiecki / grecki"/>
+        </category>
+        <category ID="00004000">
+            <label xml:lang="de" text="deutsch / latein"/>
+            <label xml:lang="en" text="german / latin"/>
+            <label xml:lang="pl" text="niemiecki / łaciński"/>
+        </category>
+        <category ID="00005000">
+            <label xml:lang="de" text="deutsch / russisch"/>
+            <label xml:lang="en" text="german / russian"/>
+            <label xml:lang="pl" text="niemiecki / rosyjski"/>
+        </category>
+        <category ID="00006000">
+            <label xml:lang="de" text="deutsch / ungarisch"/>
+            <label xml:lang="en" text="german / hungarian"/>
+            <label xml:lang="pl" text="niemiecki / węgierski"/>
+        </category>
+        <category ID="00007000">
+            <label xml:lang="de" text="englisch"/>
+            <label xml:lang="en" text="english"/>
+            <label xml:lang="pl" text="angielski"/>
+        </category>
+        <category ID="00008000">
+            <label xml:lang="de" text="englisch / latein"/>
+            <label xml:lang="en" text="english / latin"/>
+            <label xml:lang="pl" text="angielski / łaciński"/>
+        </category>
+        <category ID="00009000">
+            <label xml:lang="de" text="französisch"/>
+            <label xml:lang="en" text="french"/>
+            <label xml:lang="pl" text="francuski"/>
+        </category>
+        <category ID="00010000">
+            <label xml:lang="de" text="französisch / latein"/>
+            <label xml:lang="en" text="french / latin"/>
+            <label xml:lang="pl" text="francuski / łaciński"/>
+        </category>
+        <category ID="00011000">
+            <label xml:lang="de" text="italienisch"/>
+            <label xml:lang="en" text="italian"/>
+            <label xml:lang="pl" text="włoski"/>
+        </category>
+        <category ID="00012000">
+            <label xml:lang="de" text="latein"/>
+            <label xml:lang="en" text="latin"/>
+            <label xml:lang="pl" text="łaciński"/>
+        </category>
+        <category ID="00013000">
+            <label xml:lang="de" text="niederländisch"/>
+            <label xml:lang="en" text="dutch"/>
+            <label xml:lang="pl" text="holenderski"/>
+        </category>
+        <category ID="00014000">
+            <label xml:lang="de" text="schwedisch"/>
+            <label xml:lang="en" text="swedish"/>
+            <label xml:lang="pl" text="szwedzki"/>
+        </category>
+    </categories>
+</mycoreclass>
