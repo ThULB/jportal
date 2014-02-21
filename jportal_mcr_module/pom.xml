@@ -66,6 +66,10 @@
           <scope>compile</scope>
         </dependency>
         <dependency>
+          <groupId>fsu.thulb</groupId>
+          <artifactId>jportal_ext_web_lib</artifactId>
+        </dependency>
+        <dependency>
           <groupId>de.uni-jena.thulb</groupId>
           <artifactId>JPJaxbPojos</artifactId>
         </dependency>

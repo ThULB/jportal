@@ -269,8 +269,8 @@ var Editor = function(type, ctr){
 
 var EditBox = function(){
 	var domNode = $("<div class='editBox'/>");
-	var editButton = $("<i class='editButton icon-pencil pointer' />").appendTo(domNode);
-	var removeButton = $("<i class='removeButton icon-trash pointer'/>");
+	var editButton = $("<i class='editButton fa fa-edit pointer' />").appendTo(domNode);
+	var removeButton = $("<i class='removeButton fa fa-trash-o pointer'/>");
 	
 	domNode.addSelectBox = function(selectBox){
 		editButton.before(selectBox);

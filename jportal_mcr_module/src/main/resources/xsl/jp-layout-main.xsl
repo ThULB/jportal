@@ -85,7 +85,7 @@
         <meta content="MyCoRe" lang="de" name="generator" />
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*"/>
-        <link href="{$WebApplicationBaseURL}css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{$WebApplicationBaseURL}bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
         <link href="{$WebApplicationBaseURL}css/jp-default.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-editor.css" rel="stylesheet" type="text/css" />
         <link href="{$WebApplicationBaseURL}css/jp-local-overrides.css" rel="stylesheet" type="text/css" />
