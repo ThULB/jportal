@@ -8,10 +8,11 @@ import javax.ws.rs.PathParam;
 
 @Path("moveObj/gui")
 public class MoveObjGUIResource {
-    
+
     @GET
     @Path("{filename:.*}")
-    public InputStream getResources(@PathParam("filename") String filename){
-        return getClass().getResourceAsStream("/jportal_move_obj_module/gui/" + filename);
+    public InputStream getResources(@PathParam("filename") String filename) {
+        return getClass().getResourceAsStream("/META-INF/resources/" + filename);
     }
+
 }

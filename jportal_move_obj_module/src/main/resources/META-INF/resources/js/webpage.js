@@ -5,18 +5,17 @@ $(document).ready(function(){
 	getObject(objID);
 	var objToMove = [];
 	$("#mom_checkbox_childlist_all").prop('checked', false);
-	
-	
+
 	$("body").on("click", "#mom_search_button", function() {
 		getMoveList($("#mom_search").val(), 0);
 	});
-	
+
 	$("body").on("keydown", "#mom_search", function(key) {
 		if(key.which == 13) {
 			getMoveList($("#mom_search").val(), 0);
 		}
 	});
-	
+
 	$("body").on("click", "#mom_button_move", function() {
 		var elm = $(".mom_checkbox_result:checked").length;
 		if (elm > 0 && objToMove.length != 0){
@@ -27,15 +26,15 @@ $(document).ready(function(){
 				json.push({"objId": val, "newParentId": newparentID});
 			});
 			$("#mom_button_move").addClass("disabled");
-			$("#mom_button_move > i").removeClass("icon-arrow-right");
-			$("#mom_button_move > i").addClass("icon-spinner icon-spin");
+			$("#mom_button_move > i").removeClass("fa-arrow-right");
+			$("#mom_button_move > i").addClass("fa-spinner fa-spin");
 			moveTo(json, newparentID);
 		}
 		else{
 			alert("Bitte wählen Sie erst ein Kindelement aus.")
 		}
 	});
-	
+
 	$("body").on("click", ".mom_checkbox_result", function(event) {
 		if($(this).is(":checked")){
 			$(".mom_checkbox_result").prop('checked', false);

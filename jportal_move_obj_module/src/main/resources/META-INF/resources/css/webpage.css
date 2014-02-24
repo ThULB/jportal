@@ -8,8 +8,9 @@
 	height: 452px;
 }
 
-ul{
+.mom_panel ul {
 	list-style: none;
+	padding: 0;
 }
 
 #mom_childlist{

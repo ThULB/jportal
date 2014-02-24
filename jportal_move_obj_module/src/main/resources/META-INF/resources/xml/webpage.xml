@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <body>
+    <link href="/rsc/moveObj/gui/css/webpage.css" rel="stylesheet" media="screen" />
+    <script src="/rsc/moveObj/gui/js/webpage.js"></script>
+    <script type="text/javascript" src="/js/jp-subselect.js" />
+  </body>
+  <section xml:lang="all" title="Move Object">
+    <div id="jportal_move_obj_module" url="">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="mom_panel panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <text i18n="mom.label.childs" />
+              </h3>
+            </div>
+            <div class="panel-body">
+              <ul>
+                <li id="mom_parent">
+                  <h4></h4>
+                  <ul id="mom_childlist" class="mom_list">
+                  </ul>
+                </li>
+              </ul>
+              <p>
+                <input id="mom_checkbox_childlist_all" type="checkbox" value="1" />
+                <text i18n="mom.label.select" />
+              </p>
+              <div id="mom_childlist_paginator" class="mom_pagination">
+                <ul class="pagination">
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="mom_middle" class="col-md-2">
+          <div id="mom_move_popup" class="hidden">
+            <div id="mom_move_popup_text">
+              <p>
+                <text i18n="mom.label.popup.1" />
+              </p>
+              <p>
+                <text i18n="mom.label.popup.2" />
+              </p>
+              <p>
+                <text i18n="mom.label.popup.3" />
+              </p>
+              <p>
+                <i class="fa fa-lg fa-spinner fa-spin"></i>
+              </p>
+            </div>
+            <div id="mom_move_popup_arrow"></div>
+          </div>
+          <button id="mom_button_move" type="button" class="btn btn-primary mom_button disabled">
+            <i class="fa fa-lg fa-arrow-right"></i>
+            <text i18n="mom.label.move" />
+          </button>
+          <button id="mom_button_move_cancel" type="button" class="btn btn-danger mom_button">
+            <i class="fa fa-lg fa-minus-circle"></i>
+            <text i18n="mom.label.cancel" />
+          </button>
+        </div>
+        <div class="col-md-5">
+          <div class="mom_panel panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <text i18n="mom.label.target" />
+              </h3>
+            </div>
+            <div class="panel-body">
+              <div class="input-group input-group-sm">
+                <input id="mom_search" class="form-control" type="text" placeholder="i18n:mom.label.search" />
+                <span class="input-group-btn">
+                  <button id="mom_search_button" class="btn btn-default" type="button">
+                    <i class="fa fa-lg fa-search"></i>
+                  </button>
+                </span>
+              </div>
+              <p id="mom_search_filter_label">
+                <text i18n="mom.label.searchin" />
+              </p>
+              <label class="mom_radio_label radio-inline">
+                <input type="radio" name="mom_radio_search_filter" id="mom_radio_search_filter1" />
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="mom_radio_search_filter" id="mom_radio_search_filter2" checked="checked" />
+                <text i18n="mom.label.total" />
+              </label>
+              <ul id="mom_resultlist" class="mom_list">
+              </ul>
+              <div id="mom_resultlist_nothing" class="hidden">
+                <text i18n="mom.label.nothing" />
+              </div>
+              <div id="mom_movelist_paginator" class="mom_pagination">
+                <ul class="pagination">
+                </ul>
+              </div>
+              <div id="objectPreviewContainer">
+                <div class="objectPreview hidden" id="objectPreview">
+                  <div class="loading" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MyCoReWebPage>

@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -32,26 +31,33 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 @Path("moveObj")
-public class MoveObjResource{
+public class MoveObjResource {
     static Logger LOGGER = Logger.getLogger(MoveObjResource.class);
-    
+
     @Context
     HttpServletRequest request;
 
     @Context
     HttpServletResponse response;
-    
+
     @GET
     @Path("start")
     public byte[] start() throws Exception {
         if (!MCRAccessManager.getAccessImpl().checkPermission("create-jpjournal")) {
-            throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).build());
+            return transform("/META-INF/resources/xml/404.xml");
         }
-        InputStream guiXML = getClass().getResourceAsStream("/jportal_move_obj_module/gui/xml/webpage.xml");
+        return transform("/META-INF/resources/xml/webpage.xml");
+    }
+
+    protected byte[] transform(String xmlFile) throws Exception {
+        InputStream is = getClass().getResourceAsStream(xmlFile);
+        if (is == null) {
+            LOGGER.error("Unable to locate xmlFile of move object resource");
+            throw new WebApplicationException(Response.status(Status.INTERNAL_SERVER_ERROR).build());
+        }
         SAXBuilder saxBuilder = new SAXBuilder();
-        Document webPage = saxBuilder.build(guiXML);
+        Document webPage = saxBuilder.build(is);
         MCRJDOMContent source = new MCRJDOMContent(webPage);
-        
         MCRParameterCollector parameter = new MCRParameterCollector(request);
         MCRContentTransformer transformer = MCRLayoutService.getContentTransformer("MyCoReWebPage", parameter);
         MCRContent result;
@@ -62,17 +68,17 @@ public class MoveObjResource{
         }
         return result.asByteArray();
     }
-    
+
     @PUT
     @Path("move")
-    public Response moveTo(String data){
+    public Response moveTo(String data) {
         JsonParser jsonParser = new JsonParser();
         JsonArray jsonArray = jsonParser.parse(data).getAsJsonArray();
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
             String objID = jsonObject.get("objId").getAsString();
             String newParentID = jsonObject.get("newParentId").getAsString();
-            if (!objID.equals(newParentID)){
+            if (!objID.equals(newParentID)) {
                 try {
                     MCRObjectCommands.replaceParent(objID, newParentID);
                 } catch (MCRPersistenceException e) {
@@ -80,7 +86,7 @@ public class MoveObjResource{
                     return Response.status(Status.UNAUTHORIZED).build();
                 } catch (MCRActiveLinkException e) {
                     e.printStackTrace();
-                } 
+                }
             }
 
         }
