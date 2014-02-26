@@ -21,14 +21,14 @@
   <section xml:lang="all" title="IP Editor">
     <noEditor>
       <div id="jportal_acl_ip_editor_module" url="">
-        <div class="container">
+        <div class="container-fluid">
           <div id="navbar" class="navbar navbar-static-top" data-spy="affix" data-offset-top="186">
             <div class="navbar-inner">
               <span id="navbarTitle" class="brand">
               </span>
               <form id="newIPForm" class="navbar-form pull-left">
-                <input id="newIPFormInput" type="text" class="span4" placeholder="IP Abbonent" />
-                <button type="submit" class="btn">Hinzufügen</button>
+                  <input id="newIPFormInput" class="span4 form-control" placeholder="IP Abbonent" />
+                  <button type="submit" class="btn btn-default">Hinzufügen</button>
               </form>
               <ul class="nav pull-right">
                 <li>
