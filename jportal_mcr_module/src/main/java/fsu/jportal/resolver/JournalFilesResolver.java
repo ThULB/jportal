@@ -36,4 +36,13 @@ public class JournalFilesResolver implements URIResolver {
         }
         return null;
     }
+    
+    public File getJournalFileFolder(String href) {
+        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
+        if(journalFileFolderPath != null){
+            File journalFile = new File(journalFileFolderPath + File.separator + href);
+            return journalFile;
+        }
+        return null;
+    }
 }

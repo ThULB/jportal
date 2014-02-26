@@ -42,10 +42,10 @@ import com.google.gson.GsonBuilder;
 
 import fsu.jportal.backend.ImprintFS;
 import fsu.jportal.backend.ImprintManager;
+import fsu.jportal.pref.JournalConfig;
 import fsu.jportal.util.ImprintUtil;
 import fsu.jportal.xml.MCRWebpage;
 import fsu.jportal.xml.XMLTools;
-
 import static fsu.jportal.util.ImprintUtil.*;
 
 @Path("fs/{fsType}")
@@ -55,6 +55,7 @@ public class ImprintResource {
     private static final Logger LOGGER = Logger.getLogger(ImprintResource.class);
     private @PathParam("fsType") String fsType;
     private ImprintFS imprintFS;
+    private JournalConfig journalConfig;
     
     public ImprintFS getImprintFS() {
         if(imprintFS == null){
@@ -216,15 +217,15 @@ public class ImprintResource {
     @Path("set")
     public void set(@QueryParam("objID") String objID, String imprintID) {
         MCRLinkTableManager ltm = MCRLinkTableManager.instance();
+        JournalConfig journalConf = getJournalConf(objID);
         String oldImprintID = getImprintID(objID, fsType);
         if (oldImprintID != null && oldImprintID.equals(imprintID)) {
             return;
         } else if (oldImprintID != null) {
-            ltm.deleteReferenceLink(objID, oldImprintID, fsType);
+            journalConf.removeKey(fsType);
         }
         if(!imprintID.equals("null")) {
-            ltm.addReferenceLink(objID, imprintID, fsType, null);
+            journalConf.setKey(fsType, imprintID);
         }
     }
-
 }

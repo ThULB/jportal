@@ -1,22 +1,22 @@
 package fsu.jportal.pref;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 import fsu.jportal.resolver.JournalFilesResolver;
 
 public class JournalConfig {
-    private String objID;
+    private String prefFileName;
     private Properties journalPrefs;
+    private String prefFolderName;
 
-    public JournalConfig(String objID) {
-        this.objID = objID;
-    }
-    
     public JournalConfig(String objID, String prefID) {
-        this.objID = objID;
         journalPrefs = new Properties();
+        prefFolderName = objID + "/conf/";
+        prefFileName = prefID + ".properties";
         loadJournalPref(objID, prefID);
     }
     
@@ -26,6 +26,33 @@ public class JournalConfig {
     
     public String getKey(String key, String defaultVal){
         return journalPrefs.getProperty(key, defaultVal);
+    }
+    
+    public void setKey(String key, String value){
+        journalPrefs.setProperty(key, value);
+        storePref();
+    }
+    
+    public void removeKey(String key){
+        journalPrefs.remove(key);
+        storePref();
+    }
+
+    private void storePref() {
+        JournalFilesResolver journalFilesResolver = new JournalFilesResolver();
+        File prefFolder = journalFilesResolver.getJournalFileFolder(prefFolderName);
+        
+        if(!prefFolder.exists()){
+            prefFolder.mkdirs();
+        }
+        
+        File prefFile = new File(prefFolder, prefFileName);
+        try {
+            journalPrefs.store(new FileOutputStream(prefFile), null);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     private void loadJournalPref(String objid, String prefID) {

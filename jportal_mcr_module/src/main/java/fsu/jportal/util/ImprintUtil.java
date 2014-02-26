@@ -1,9 +1,6 @@
 package fsu.jportal.util;
 
-import java.util.Collection;
-
-import org.mycore.datamodel.common.MCRLinkTableManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import fsu.jportal.pref.JournalConfig;
 
 public abstract class ImprintUtil {
 
@@ -15,12 +12,7 @@ public abstract class ImprintUtil {
      * @return id of imprint
      */
     public static String getImprintID(String objID, String fsType) {
-        MCRObjectID mcrObjID = MCRObjectID.getInstance(objID);
-        Collection<String> c = MCRLinkTableManager.instance().getDestinationOf(mcrObjID, fsType);
-        if (c.isEmpty()) {
-            return null;
-        }
-        return c.iterator().next();
+        return getJournalConf(objID).getKey(fsType);
     }
 
     /**
@@ -33,4 +25,7 @@ public abstract class ImprintUtil {
         return getImprintID(objID, fsType) != null;
     }
 
+    public static JournalConfig getJournalConf(String objID) {
+        return new JournalConfig(objID, "imprint.partner");
+    }
 }
