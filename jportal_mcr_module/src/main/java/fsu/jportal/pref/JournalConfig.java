@@ -28,8 +28,8 @@ public class JournalConfig {
         return journalPrefs.getProperty(key, defaultVal);
     }
     
-    public void setKey(String key, String value){
-        journalPrefs.setProperty(key, value);
+    public void setKey(String fsType, String imprintName){
+        journalPrefs.setProperty(fsType, imprintName);
         storePref();
     }
     

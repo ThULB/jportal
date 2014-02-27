@@ -1,5 +1,7 @@
 package org.mycore.frontend.cli;
 
+import static fsu.jportal.util.ImprintUtil.getJournalConf;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,7 +16,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,6 +33,8 @@ import org.jdom2.transform.JDOMSource;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.backend.hibernate.tables.MCRLINKHREF;
+import org.mycore.backend.hibernate.tables.MCRLINKHREFPK;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.MCRUtils;
 import org.mycore.common.xml.MCRXSLTransformation;
@@ -175,6 +183,22 @@ public class MigratingCMDs {
             } else {
                 LOGGER.info("Nothing to replace for " + mcrid);
             }
+        }
+    }
+    
+    @MCRCommand(help="move imprint link out of DB", syntax="migrate imprint")
+    public static void migrateImprint(){
+        Criteria criteria = MCRHIBConnection.instance().getSession().createCriteria(MCRLINKHREF.class);
+        List<MCRLINKHREFPK> resultList = criteria.add(Restrictions.eq("key.mcrtype", "imprint")).setProjection(Projections.id()).list();
+        for (MCRLINKHREFPK mcrlinkhrefpk : resultList) {
+            String objectID = mcrlinkhrefpk.getMcrfrom();
+            String imprintName = mcrlinkhrefpk.getMcrto();
+            getJournalConf(objectID).setKey("imprint", imprintName);
+            LOGGER.info("Successfully migrating " + objectID + " with imprint " + imprintName);
+        }
+        
+        if(resultList.size() == 0){
+            LOGGER.info("No Imprint found in database.");
         }
     }
 }

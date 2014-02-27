@@ -216,7 +216,6 @@ public class ImprintResource {
     @POST
     @Path("set")
     public void set(@QueryParam("objID") String objID, String imprintID) {
-        MCRLinkTableManager ltm = MCRLinkTableManager.instance();
         JournalConfig journalConf = getJournalConf(objID);
         String oldImprintID = getImprintID(objID, fsType);
         if (oldImprintID != null && oldImprintID.equals(imprintID)) {
