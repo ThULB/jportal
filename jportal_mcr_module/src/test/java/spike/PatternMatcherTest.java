@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 
-public class StringTest {
+public class PatternMatcherTest {
 	@Test
 	public void testString() throws Exception {
 		String string = "jportal_jpjournal_00000002";
@@ -36,4 +36,19 @@ public class StringTest {
             System.out.println(idMathcher.group());
 //        }
     }
+	
+	@Test
+	public void ownerIDPath() throws Exception {
+	    String path = "/jportal_derivate_00000001";
+	    Pattern idPattern = Pattern.compile("/(jportal_\\w*_[0-9]{1,8})((/.*)*/(.*)$)?");
+	    Matcher idMathcher = idPattern.matcher(path);
+	    
+        while (idMathcher.find()) {
+//	    idMathcher.find();
+            System.out.println(idMathcher.group(1));
+	    System.out.println(idMathcher.group(2));
+	    System.out.println(idMathcher.group(3));
+	    System.out.println(idMathcher.group(4));
+        }
+	}
 }
