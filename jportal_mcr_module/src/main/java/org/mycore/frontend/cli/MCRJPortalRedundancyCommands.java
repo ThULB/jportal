@@ -1,6 +1,7 @@
 package org.mycore.frontend.cli;
 
 import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -9,6 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -29,6 +34,7 @@ import org.mycore.services.fieldquery.MCRQuery;
 import org.mycore.services.fieldquery.MCRQueryCondition;
 import org.mycore.services.fieldquery.MCRQueryManager;
 import org.mycore.services.fieldquery.MCRResults;
+import org.mycore.solr.MCRSolrServerFactory;
 
 import fsu.jportal.backend.MetaDataTools;
 
@@ -50,31 +56,33 @@ public class MCRJPortalRedundancyCommands{
     @MCRCommand(helpKey = "Deletes and relinks all doublets for a specific type. Doublets signed with doubletOf", syntax = "jp clean up {0}")
     public static List<String> cleanUp(String type) {
         // get all objects of specific type where doubletOf is not empty
-        MCRResults results = getDoubletObjsOfType(type);
-        
+        SolrDocumentList results = getDoubletObjsOfType(type);
         ArrayList<String> commandList = new ArrayList<String>();
-        Iterator<MCRHit> it = results.iterator();
-        while (it.hasNext()) {
-            MCRHit hit = it.next();
-            String doublet = hit.getID();
-            String doubletOf = getDoubletOf(hit);
+        
+        for (SolrDocument hit : results) {
+            String doublet = (String) hit.getFieldValue("id");
+            String doubletOf = (String) hit.getFieldValue("doubletOf");
             if (!doublet.equals(doubletOf)) {
                 StringBuffer replaceCommand = new StringBuffer("internal replace links and remove ");
                 replaceCommand.append(doublet).append(" ").append(doubletOf);
                 commandList.add(replaceCommand.toString());
             }
         }
-
-//        commandList.add(new StringBuffer("clean up redundancy in database for type ").append(type).toString());
+        
         return commandList;
     }
 
-    public static MCRResults getDoubletObjsOfType(String type) {
-        MCRQueryCondition typeCond = new MCRQueryCondition("objectType", "=", type);
-        MCRQueryCondition doubletOfCond = new MCRQueryCondition("doubletOf", "like", "*");
-        MCRAndCondition andCond = new MCRAndCondition(typeCond, doubletOfCond);
-        MCRResults results = MCRQueryManager.search(new MCRQuery(andCond));
-        return results;
+    public static SolrDocumentList getDoubletObjsOfType(String type) {
+        try {
+            SolrQuery q = new SolrQuery("+doubletOf:* +objectType:"+type);
+            SolrDocumentList solrResultList = MCRSolrServerFactory.getSolrServer().query(q).getResults();
+            return solrResultList;
+        } catch (SolrServerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 
     @MCRCommand(helpKey = "internal command for replacing links and removing the doublet", syntax = "internal replace links and remove {0} {1}")
@@ -168,13 +176,4 @@ public class MCRJPortalRedundancyCommands{
         }
         return false;
     }
-
-    private static String getDoubletOf(MCRHit hit) {
-        for (MCRFieldValue fieldValue : hit.getMetaData()) {
-            if (fieldValue.getFieldName().equals("doubletOf"))
-                return fieldValue.getValue();
-        }
-        return null;
-    }
-
 }

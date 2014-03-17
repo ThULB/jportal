@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:noNamespaceSchemaLocation="datamodel-jpvolume.xsd" ID="jportal_jpvolume_00141181" label="jportal_jpvolume_00141181" version="2.0">
+  <structure>
+    <parents class="MCRMetaLinkID">
+      <parent inherited="0" xlink:type="locator" xlink:href="jportal_jpjournal_00000817"/>
+    </parents>
+    <derobjects class="MCRMetaLinkID">
+      <derobject inherited="0" xlink:type="locator" xlink:href="jportal_derivate_00216170" xlink:title="data object from jportal_jpvolume_00141181"/>
+    </derobjects>
+  </structure>
+  <metadata>
+    <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+      <maintitle inherited="0" form="plain">1855</maintitle>
+      <maintitle inherited="1" form="plain">Mittheilungen aus Justus Perthes' Geographischer Anstalt ...</maintitle>
+    </maintitles>
+    <hidden_positions class="MCRMetaLangText" heritable="false" notinherit="false">
+      <hidden_position inherited="0" form="plain">001</hidden_position>
+    </hidden_positions>
+    <dates class="MCRMetaISO8601Date" heritable="true" notinherit="false">
+      <date type="published_from" inherited="1">1855</date>
+      <date type="published_until" inherited="1">1878</date>
+    </dates>
+    <hidden_jpjournalsID class="MCRMetaLangText" heritable="true" notinherit="false">
+      <hidden_jpjournalID inherited="1" form="plain">jportal_jpjournal_00000817</hidden_jpjournalID>
+    </hidden_jpjournalsID>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="modifydate" inherited="0">2012-01-24T07:28:05.106Z</servdate>
+      <servdate type="createdate" inherited="0">2012-01-24T07:24:15.226Z</servdate>
+    </servdates>
+  </service>
+</mycoreobject>
