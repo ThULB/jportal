@@ -33,9 +33,9 @@
 		</path>
 	</pathconvert>
 
-	<replace file="docportal/config/mycore.private.properties" token="MCR.basedir=/home/mcradmin/docportal" value="MCR.basedir=${convertedBaseDir}" />
-	<replace file="docportal/config/mycore.private.properties" token="MCR.NameOfProject=DocPortal" value="MCR.NameOfProject=JPortal" />
-	<replace file="docportal/config/mycore.private.properties" token="MCR.Modules.Application=common,docportal,xslinfo,sampleusers,maven" value="MCR.Modules.Application=common,maven" />
+  	<replaceregexp file="docportal/config/mycore.private.properties" match="MCR.basedir=(.*)" replace="MCR.basedir=${convertedBaseDir}" byline="true" />
+  	<replaceregexp file="docportal/config/mycore.private.properties" match="MCR.NameOfProject=(.*)" replace="MCR.NameOfProject=JPortal" byline="true" />
+  	<replaceregexp file="docportal/config/mycore.private.properties" match="MCR.Modules.Application=(.*)" replace="MCR.Modules.Application=common,legacy-search,maven" byline="true" />
 	<replace file="docportal/config/mycore.private.properties" token="migration20-21,imaging,iview" value="migration20-21,iview,imaging,swf,z3950,zoomify" />
   </target>
 </project>
