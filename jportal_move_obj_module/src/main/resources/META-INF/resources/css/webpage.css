@@ -4,10 +4,6 @@
 	margin-top: 10px;
 }
 
-.mom_panel{
-	height: 452px;
-}
-
 .mom_panel ul {
 	list-style: none;
 	padding: 0;
@@ -37,10 +33,6 @@
 #mom_resultlist  p{
 	display: inline;
 	margin-left: 5px;
-}
-
-.mom_list{
-	height: 225px;
 }
 
 #mom_childlist .mom_checkbox_childlist_all{
@@ -129,4 +121,14 @@ label{
 
 #mom_search_filter_label{
 	margin-bottom: 0px;
+}
+
+.mom_text{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+#mom_childlist p {
+    display: inline;
 }

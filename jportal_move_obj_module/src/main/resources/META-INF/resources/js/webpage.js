@@ -93,7 +93,7 @@ $(document).ready(function(){
 	
 	function addSearchResult(result) {
 		var li = $("<li></li>");
-		li.append('<div data-objId="' + result.id +  '"><input class="mom_checkbox_result" type="checkbox"/><p data-jp-mcrid="' + result.id + '" class="jp-layout-clickLabel">' + result.maintitle + '</p></div>');
+		li.append('<div class="mom_text" data-objId="' + result.id +  '"><input class="mom_checkbox_result" type="checkbox"/><p data-jp-mcrid="' + result.id + '" class="mom_resultlist_entry">' + result.maintitle + '</p></div>');
 		if (result.objectType != "jpjournal"){
 			li.find("p").append( " (" + result.journalTitle + ")");
 		}
@@ -106,6 +106,7 @@ $(document).ready(function(){
 				var parent = search.response.docs[0];
 				if (parent.maintitle != ""){
 					$("#mom_parent h4").prepend(parent.maintitle);
+					$("#mom_parent h4").attr("data-jp-mcrid", id);
 					$("#mom_radio_search_filter1").parent().append(parent.maintitle);
 					$("#mom_radio_search_filter1").parent().attr("title", parent.maintitle);
 				}
@@ -119,6 +120,7 @@ $(document).ready(function(){
 			if(search.response.numFound > 0){
 				buildTree(search.response.docs);
 				buildPaginator(id,search.response,"#mom_childlist_paginator");
+				jp.subselect.init(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
 			}
 		});
 	}
@@ -142,7 +144,7 @@ $(document).ready(function(){
 					addSearchResult(results[result]);
 				}
 				buildPaginator(id,search.response,"#mom_movelist_paginator");
-				jp.subselect.init(".jp-layout-clickLabel", "#objectPreview");
+				jp.subselect.init(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
 			}
 			else{
 				$("#mom_resultlist").addClass("hidden");
@@ -252,8 +254,9 @@ $(document).ready(function(){
 	function buildTree(childs) {
 		$("#mom_childlist").html("");
 		for (child in childs){
-			var li = $('<li data-objId="' + childs[child].id +  '"></li>')
-			li.append('<input class="mom_checkbox_childlist" type="checkbox"/>' + childs[child].maintitle);
+			var li = $('<li class="mom_text" data-objId="' + childs[child].id +  '"></li>')
+			li.append('<input class="mom_checkbox_childlist" type="checkbox"/>');
+			li.append('<p class="mom_childlist_entry" data-jp-mcrid="' + childs[child].id + '">' + childs[child].maintitle + '</p>')
 			var pos = $.inArray(childs[child].id, objToMove);
 			if (~pos) $(li).find(".mom_checkbox_childlist").prop('checked', true);
 			$("#mom_childlist").append(li);

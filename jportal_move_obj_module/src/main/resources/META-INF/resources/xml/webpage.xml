@@ -17,13 +17,11 @@
               </h3>
             </div>
             <div class="panel-body">
-              <ul>
-                <li id="mom_parent">
-                  <h4></h4>
+                <div id="mom_parent">
+                  <h4 class="mom_text mom_childlist_entry" data-jp-mcrid=""></h4>
                   <ul id="mom_childlist" class="mom_list">
                   </ul>
-                </li>
-              </ul>
+                </div>
               <p>
                 <input id="mom_checkbox_childlist_all" type="checkbox" value="1" />
                 <text i18n="mom.label.select" />
@@ -31,6 +29,11 @@
               <div id="mom_childlist_paginator" class="mom_pagination">
                 <ul class="pagination">
                 </ul>
+              </div>
+              <div id="objectPreviewContainer">
+                <div class="objectPreview hidden" id="mom_childlist_objectPreviewContainer">
+                  <div class="loading" />
+                </div>
               </div>
             </div>
           </div>
@@ -98,7 +101,7 @@
                 </ul>
               </div>
               <div id="objectPreviewContainer">
-                <div class="objectPreview hidden" id="objectPreview">
+                <div class="objectPreview hidden" id="mom_resultlist_objectPreviewContainer">
                   <div class="loading" />
                 </div>
               </div>
