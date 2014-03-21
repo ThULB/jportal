@@ -50,6 +50,6 @@ function highlightLawsText(/* string */hl) {
 	if (hl == null || hl == '') {
 		return;
 	}
-	var hlArray = hl.split(/\W+/);
+	var hlArray = hl.split(/[^\wÄÖÜäöüß]+/);
 	$('#jp-content-laws').highlight(hlArray);
 }
