@@ -169,6 +169,10 @@
     <!-- doublets -->
     <field name="doubletOf" type="string" />
 
+    <!-- classification and category -->
+    <field name="classification" type="string" multiValued="true"/>
+    <field name="category" type="string" multiValued="true" />
+
     <!-- identifier (gnd, pnd, etc.) -->
     <dynamicField name="id.*" type="string" multiValued="true" />
 

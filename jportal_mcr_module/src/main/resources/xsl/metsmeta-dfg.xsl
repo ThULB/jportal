@@ -96,6 +96,15 @@
       </mods:language>
     </xsl:if>
 
+    <!-- Part -->
+    <xsl:if test="./metadata/sizes/size">
+      <mods:part>
+        <mods:detail type="pages">
+          <mods:number><xsl:value-of select="./metadata/sizes/size/text()" /></mods:number>
+        </mods:detail>
+      </mods:part>
+    </xsl:if>
+
     <!-- physical location -->
     <xsl:if test="./metadata/contentClassis3/contentClassi3">
       <mods:location>
@@ -105,8 +114,15 @@
 
     <!-- related item -> parent journal id -->
     <xsl:if test="./metadata/hidden_jpjournalsID/hidden_jpjournalID and not(contains(@ID,'_jpjournal_'))">
+      <xsl:variable name="journalID" select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
       <mods:relatedItem type="host">
-        <mods:identifier><xsl:value-of select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" /></mods:identifier>
+        <xsl:attribute name="ID">
+          <xsl:value-of select="$journalID" />
+        </xsl:attribute>
+        <mods:identifier type="uri"><xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$journalID)" /></mods:identifier>
+        <mods:titleInfo>
+          <mods:title><xsl:value-of select="document(concat('mcrobject:', $journalID))/mycoreobject/metadata/maintitles/maintitle" /></mods:title>
+        </mods:titleInfo>
       </mods:relatedItem>
     </xsl:if>
 

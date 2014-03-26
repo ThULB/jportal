@@ -9,9 +9,11 @@
     <xsl:apply-templates mode="jportal.metadata" select="." />
     <xsl:apply-templates mode="jportal.allMeta" select="." />
     <xsl:apply-templates mode="jportal.link" select="*" />
+    <xsl:apply-templates mode="jportal.category" select="*" />
   </xsl:template>
 
   <xsl:template match="text()|@*" mode="jportal.link" />
+  <xsl:template match="text()|@*" mode="jportal.category" />
   <xsl:template match="text()|@*" mode="jportal.metadata" />
   <xsl:template match="text()|@*" mode="jportal.allMeta" />
   <xsl:template match="text()|@*" mode="jportal.journal" />
@@ -35,18 +37,22 @@
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields2" mode="jportal.hiddenGenFields" />
       <xsl:apply-templates select="$journal/metadata/hidden_genhiddenfields3" mode="jportal.hiddenGenFields" />
     </xsl:if>
-
-    <!-- TODO: remove this test code -->
-    <!-- <field name="mypayload">Jena$300$250$400$25</field>
-    <field name="mypayload">Jena$100$150$200$25</field>
-    <field name="mypayload">Gera$200$550$200$15</field>
-    <field name="mypayload">Erfurt$100$150$100$45</field>-->
   </xsl:template>
 
   <!-- link -->
   <xsl:template match="*[@xlink:href]" mode="jportal.link">
     <field name="link">
       <xsl:value-of select="@xlink:href" />
+    </field>
+  </xsl:template>
+
+  <!-- category -->
+  <xsl:template match="*[@class='MCRMetaClassification']/*" mode="jportal.category">
+    <field name="category">
+      <xsl:value-of select="concat(@classid, ':', @categid)" />
+    </field>
+    <field name="classification">
+      <xsl:value-of select="@classid" />
     </field>
   </xsl:template>
 
