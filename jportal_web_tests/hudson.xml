@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="JPortal Integration Tests" default="install" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+<project name="JPortal Integration Tests" default="install" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<path id="maven-ant-tasks.classpath" path="${basedir}/lib/maven-ant-tasks-2.1.3.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="antlib:org.apache.maven.artifact.ant" classpathref="maven-ant-tasks.classpath" />
@@ -10,13 +10,13 @@
 	     </classpath>
 	</taskdef>
 
-	<property name="databasePort" value="7298" />
-	<property name="jettyPort" value="7291" />
-	<property name="jettyStopPort" value="7293" />
-	<property name="jettyDebugPort" value="7295" />
-	<property name="solrPort" value="7296" />
-	<property name="solrStopPort" value="7297" />
-	<property name="solrDebugPort" value="7294" />
+	<property name="databasePort" value="6298" />
+	<property name="jettyPort" value="6291" />
+	<property name="jettyStopPort" value="6293" />
+	<property name="jettyDebugPort" value="6295" />
+	<property name="solrPort" value="6296" />
+	<property name="solrStopPort" value="6297" />
+	<property name="solrDebugPort" value="6294" />
 
 	<property name="maven.version" value="2.2.1" />
 

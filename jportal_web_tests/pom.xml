@@ -9,7 +9,7 @@
   <artifactId>jportal_web_tests</artifactId>
 
   <properties>
-    <selenium.startURL>http://127.0.0.1:7291</selenium.startURL>
+    <selenium.startURL>http://127.0.0.1:6291</selenium.startURL>
     <selenium.suite>src/test/resources/testsuite.html</selenium.suite>
     <selenium.results>target/selenium-results.html</selenium.results>
     <selenium.port>6644</selenium.port>
