@@ -417,14 +417,14 @@ body {
 }
 
 #resultList .jp-layout-hidden-Button, #artList .jp-layout-hidden-Button {
-	background: url("/images/enlargeButton_small.png") no-repeat scroll 0 0
+	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
 		transparent;
 	margin-left: -13px;
 	margin-top: -13px;
 }
 
 .jp-layout-hidden-Button {
-	background: url("/images/enlargeButton_small.png") no-repeat scroll 0 0
+	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
 		transparent;
 	color: white;
 	display: none;
@@ -574,7 +574,7 @@ body {
 }
 
 .paperClip-icon {
-	background-image: url("/images/paperClip.png") !important;
+	background-image: url("../images/paperClip.png") !important;
 	height: 24px !important;
 	width: 24px !important;
 }
@@ -980,7 +980,7 @@ body {
 }
 
 #logo {
-	background-image: url("/templates/template_master2/IMAGES/logo.png");
+	background-image: url("../templates/template_master2/IMAGES/logo.png");
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
@@ -1316,13 +1316,13 @@ ul.ckeditorButtons li:last-child {
 }
 #files td .inputDeleteFile {
 	display: block;
-	background-image: url("/images/button_delete.gif");
+	background-image: url("../images/button_delete.gif");
 	width: 16px;
 	height: 16px;
 }
 #files td img.inputAddUrn {
 	display: block;
-	background-image: url("/images/addnbn.gif");
+	background-image: url("../images/addnbn.gif");
 	width: 29px;
 	height: 22px;
 }

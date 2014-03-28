@@ -57,7 +57,7 @@
           var head = $('#head').attr("value");
           var message = $('#message').attr("value");
           $.ajax({
-            url: "/rsc/globalMessage/save",
+            url: jp.baseURL + "rsc/globalMessage/save",
             type:"POST",
             data: JSON.stringify({
               visibility: visibility,

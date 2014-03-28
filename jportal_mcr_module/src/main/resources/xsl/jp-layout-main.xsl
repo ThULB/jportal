@@ -109,6 +109,10 @@
             <link href="{$templateWebURL}CSS/{$template}.css" rel="stylesheet" type="text/css" />
           </xsl:if>
         </xsl:if>
+        <script type="text/javascript">
+          var jp = jp || {};
+          jp.baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
+        </script>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
@@ -147,7 +151,7 @@
               </a>
             </li>
             <li>
-              <a href="/content/below/index.xml" target="_self">
+              <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
                 <xsl:value-of select="$JP.Site.label" />
               </a>
             </li>

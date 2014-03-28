@@ -28,7 +28,7 @@
       </li>
     </ul>
     <h2>WebCLI</h2>
-    <input type="button" value="Start" onclick="window.open('/modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+    <input type="button" value="Start" onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
     <h2>Benutzer</h2>
     <ul>
       <li>

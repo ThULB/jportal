@@ -31,7 +31,7 @@ jp.subselect = {
 			return;
 		}
 		$.ajax({
-			url: "/rsc/render/object/" + mcrid,
+			url: jp.baseURL + "rsc/render/object/" + mcrid,
 			dataType: "html"
 		}).done(function(html) {
 			jp.subselect.cache[mcrid] = html;

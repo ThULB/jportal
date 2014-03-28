@@ -186,7 +186,7 @@
     <xsl:param name="data" />
     <xsl:variable name="url">
       <url>
-        <base>/servlets/XMLEditor</base>
+        <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>
         <param name="_action" value="end.subselect" />
         <xsl:copy-of select="$subselectParam/subselect/param" />
         <param name="mode" value="prefix" />

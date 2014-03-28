@@ -7,7 +7,7 @@ jp.importSRU = {
 function querySRU(/*string*/ query) {
 	clearDubletCheck();
 	$.ajax({
-		url: "/rsc/sru/search?q=" + query,
+		url: jp.baseURL + "rsc/sru/search?q=" + query,
 		success: function(data) {
 			var sruContainer = data.documentElement;
 			if(sruContainer != null && sruContainer.children.length > 0) {
@@ -36,7 +36,7 @@ function querySRU(/*string*/ query) {
 function renderHit(/*string*/ xml, /*boolean*/ importable) {
 	$.ajax({
 		type: "POST",
-		url: "/rsc/render/xml",
+		url: jp.baseURL + "rsc/render/xml",
 		data: xml,
 		success: function(html) {
 			appendHit(html, importable);
@@ -64,10 +64,10 @@ function appendHit(html, importable) {
 			clearDubletCheck();
 			$.ajax({
 				type: "POST",
-				url: "/rsc/object/import",
+				url: jp.baseURL + "rsc/object/import",
 				data: jp.importSRU.xml,
 				success: function(id) {
-					$("#result").html("<p>Datensatz erfolgreich importiert. <a href='/receive/" + id +
+					$("#result").html("<p>Datensatz erfolgreich importiert. <a href='" + jp.baseURL + "receive/" + id +
 							"'>Link zum Objekt</a></p>");
 				},
 				error: function(error) {
@@ -89,7 +89,7 @@ function appendHit(html, importable) {
 function doubletCheck(/*string*/ gnd) {
 	var json = $.ajax({
 		type: "GET",
-		url: "/servlets/solr/select?rows=1&fl=id&q=id.gnd:" + gnd + " id.pnd:" + gnd + "&wt=json",
+		url: jp.baseURL + "servlets/solr/select?rows=1&fl=id&q=id.gnd:" + gnd + " id.pnd:" + gnd + "&wt=json",
 		async: false,
 		error: function(error) {
 			console.log(error);
@@ -98,7 +98,7 @@ function doubletCheck(/*string*/ gnd) {
 	var response = $.parseJSON(json).response;
 	if(response.numFound > 0) {
 		var id = response.docs[0].id;
-		showDubletCheck("<span style='color:red'>Datensatz existiert bereits!</span> <a href='/receive/" + id + "'>Link zum Objekt</a>");
+		showDubletCheck("<span style='color:red'>Datensatz existiert bereits!</span> <a href='" + jp.baseURL + "receive/" + id + "'>Link zum Objekt</a>");
 		return false;
 	} else {
 		showDubletCheck("Datensatz kann importiert werden. Keine Dubletten (identische GND-ID) gefunden.");

@@ -2,12 +2,8 @@ var jp = jp || {};
 
 jp.az = {
 
-	getHost: function() {
-		return 'http://' + $(location).attr('host');
-	},
-
 	getSearchURL: function() {
-		var url = jp.az.getHost() + '/servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=';
+		var url = jp.baseURL + 'servlets/solr/select?wt=json&sort=maintitle_sort asc&rows=9999&q=';
 		var additionalQuery = $('#firstLetterTab').attr('additionalQuery');
 		return url + additionalQuery;
 	},
@@ -61,12 +57,12 @@ jp.az = {
 
 	importCSS: function() {
 	    if (document.createStyleSheet) {
-	        document.createStyleSheet('/css/jp-journalList.css');
+	        document.createStyleSheet(jp.baseURL + 'css/jp-journalList.css');
 	    } else {
 	        var link = $('<link>').attr({
 	            type : 'text/css',
 	            rel : 'stylesheet',
-	            href : '/css/jp-journalList.css',
+	            href : jp.baseURL + 'css/jp-journalList.css',
 	            'class' : 'myStyle'
 	        });
 	        $('head').append(link);
@@ -135,7 +131,7 @@ jp.az = {
 	},
 
 	printJournalEntry: function(resultListEntry, metadata) {
-	    var titleLink = $('<a/>').html(metadata.maintitle).attr('href', '/receive/' + metadata.id);
+	    var titleLink = $('<a/>').html(metadata.maintitle).attr('href', jp.baseURL + 'receive/' + metadata.id);
 	    var title = $('<h3 class="journal-title"/>').append(titleLink);
 	    resultListEntry.append(title);
 	    jp.az.printPublished(resultListEntry, metadata);
@@ -169,7 +165,7 @@ jp.az = {
 	    		}
 	    		var publisherID = publisher.substring(0, indexOfHash);
 	    		var publisherText = publisher.substring(indexOfHash + 1);
-	            var publisherLink = "<a href='" + jp.az.getHost() + '/receive/' + publisherID + "'>" + publisherText + "</a>";
+	            var publisherLink = "<a href='" + jp.baseURL + 'receive/' + publisherID + "'>" + publisherText + "</a>";
 	            pusblisherStr += publisherLink;
 	            if(i + 1 < publisherList.length) {
 	            	pusblisherStr += "; ";

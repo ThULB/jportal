@@ -17,11 +17,11 @@ function toggleKeyword(element) {
 
 function loadKeyword(element, keyword) {
 	if(keyword == "") {
-		$.get("/rsc/classifications/jportal_class_00000083/", function(data) {
+		$.get(jp.baseURL + "rsc/classifications/jportal_class_00000083/", function(data) {
 			attachToElement(element, data);
 		});
 	} else{
-		$.get("/rsc/classifications/jportal_class_00000083/" + keyword, function(data) {
+		$.get(jp.baseURL + "rsc/classifications/jportal_class_00000083/" + keyword, function(data) {
 			attachToElement(element, data);
 		});
 	}
@@ -45,7 +45,7 @@ function attachToElement(element, keywords) {
 			var a = $("<a/>");
 			var categID = keyword.id.categid.replace(/ /g, "\\ ");
 			a.text(keyword.labels[0].text);
-			a.attr("href", "/servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + document.URL);
+			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + document.URL);
 			a.appendTo(li);
 		}
 	}

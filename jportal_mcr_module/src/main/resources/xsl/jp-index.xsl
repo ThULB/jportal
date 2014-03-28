@@ -20,7 +20,7 @@
       <div class="jp-layout-index-list">
         <ul>
           <li>
-            <a href="/content/main/journalList.xml#A" class="entry journal">
+            <a href="{$WebApplicationBaseURL}content/main/journalList.xml#A" class="entry journal">
               <xsl:variable name="text" select="i18n:translate('jp.site.home.journal')" />
               <div class="title">
                 <span class="initial"><xsl:value-of select="substring($text, 1, 1)" /></span>
@@ -30,7 +30,7 @@
             </a>
           </li>
           <li>
-            <a href="/content/main/calendarList.xml#A" class="entry calendar">
+            <a href="{$WebApplicationBaseURL}content/main/calendarList.xml#A" class="entry calendar">
               <xsl:variable name="text" select="i18n:translate('jp.site.home.calendar')" />
               <div class="title">
                 <span class="initial"><xsl:value-of select="substring($text, 1, 1)" /></span>

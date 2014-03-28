@@ -7,11 +7,9 @@ var i18n;
 var defaultOptions = {};
 
 var jpIviewSettings = {
-    getBaseURL : function() {
-        return location.protocol + '//' + location.host + '/';
-    },
+
     getServletBaseURL : function() {
-        return this.getBaseURL() + 'servlets/';
+        return jp.baseURL + 'servlets/';
     },
     getParam : function(name) {
         return (location.search.match(new RegExp('[\\?&]' + name + '=([^&#]*)')) || [ , "" ])[1];
@@ -40,9 +38,8 @@ function jpAddDefaultOptions(option) {
 }
 
 function jpInitIview2(settings) {
-	var baseURL = jpIviewSettings.getBaseURL();
-	i18n = i18n || new iview.i18n(baseURL, settings.currentLang, 'component.iview2');
-    loadCssFile(baseURL + 'modules/iview2/gfx/default/' + jpIviewSettings.getIviewCSS(), 'iviewCss');
+	i18n = i18n || new iview.i18n(jp.baseURL, settings.currentLang, 'component.iview2');
+    loadCssFile(jp.baseURL + 'modules/iview2/gfx/default/' + jpIviewSettings.getIviewCSS(), 'iviewCss');
     loadCssFile('http://ajax.googleapis.com/ajax/libs/jqueryui/' + jpIviewSettings.jqueryUIVersion + '/themes/base/jquery-ui.css');
     jQuery('div.jp-layout-derivateWrapper .image').on({
     	mouseenter: function() {
@@ -94,7 +91,7 @@ function showIview(derivInfo) {
     var finalOptions = {};
     var containerOptions = {
         derivateId : derivInfo.ID,
-        webappBaseUri : jpIviewSettings.getBaseURL(),
+        webappBaseUri : jp.baseURL,
         baseUri : [ jpIviewSettings.getServletBaseURL() + 'MCRTileServlet' ],
         startWidth : 192,
         startHeight : 192

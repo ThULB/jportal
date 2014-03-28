@@ -32,8 +32,8 @@
   <xsl:variable name="menuXML">
     <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
-      <link id="editorResource" href="/rsc/editor" />
-      <link id="moveObjResource" href="/rsc/moveObj" />
+      <link id="editorResource" href="{$WebApplicationBaseURL}rsc/editor" />
+      <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
       <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
       <params id="editorServlet-editParam">
         <param name="tf_mcrid" select="currentObjID" />
@@ -77,7 +77,7 @@
         </item>
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
-          <label name="Datei hochladen" href="/servlets/derivate/create?id={$currentObjID}"/>
+          <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}"/>
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
@@ -90,7 +90,7 @@
           <restriction name="createInst" value="true" />
         </item>
         <item>
-          <label name="Person/Institution importieren" href="/jp-import-sru.xml" />
+          <label name="Person/Institution importieren" href="{$WebApplicationBaseURL}jp-import-sru.xml" />
           <restriction name="createPerson" value="true" />
           <restriction name="createInst" value="true" />
         </item>
@@ -113,7 +113,7 @@
         <restriction name="updatePerm" value="true" />
         <restriction name="createJournal" value="true" />
         <item>
-          <label name="Dublettenfinder" href="/rsc/doublets" />
+          <label name="Dublettenfinder" href="{$WebApplicationBaseURL}rsc/doublets" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
@@ -128,17 +128,17 @@
         <restriction name="deletePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="Dokument löschen" href="/receive/{/mycoreobject/@ID}?XSL.object=delete" />
+          <label name="Dokument löschen" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.object=delete" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
         <restriction name="isGuest" value="false" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="XML" href="/receive/{/mycoreobject/@ID}?XSL.Style=xml" />
+          <label name="XML" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.Style=xml" />
         </item>
         <item>
-          <label name="Versionsgeschichte" href="/jp-history.xml?XSL.id={/mycoreobject/@ID}" />
+          <label name="Versionsgeschichte" href="{$WebApplicationBaseURL}jp-history.xml?XSL.id={/mycoreobject/@ID}" />
         </item>
       </item>
       <link id="delObj" class="jp-layout-message-button" name="Löschen" ref="editorServlet">
@@ -360,12 +360,12 @@
     <div class="jp-layout-message-background" />
     <div id="deleteFail" class="jp-layout-message">
       <div class="jp-layout-message-icon">
-        <img src="/images/error.png" width="64px" />
+        <img src="{$WebApplicationBaseURL}images/error.png" width="64px" />
       </div>
       <div class="jp-layout-message-text">
         Dieses Dokument enthält Digitalisate. Löschen nicht möglich!
       </div>
-      <a id="okButton" class="jp-layout-message-button" href="/receive/{/mycoreobject/@ID}">
+      <a id="okButton" class="jp-layout-message-button" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}">
         OK
       </a>
     </div>
@@ -377,14 +377,14 @@
     <div class="jp-layout-message-background" />
     <div id="deleteCheck" class="jp-layout-message">
       <div class="jp-layout-message-icon">
-        <img src="/images/warning.png" width="64px" />
+        <img src="{$WebApplicationBaseURL}images/warning.png" width="64px" />
       </div>
       <div class="jp-layout-message-text">
         Sind Sie sicher, daß Sie dieses Dokument löschen wollen?
       </div>
       <ul id="delCheckButtons" class="jp-layout-horiz-menu">
         <li>
-          <a class="jp-layout-message-button" href="/receive/{/mycoreobject/@ID}">
+          <a class="jp-layout-message-button" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}">
             Abbrechen
           </a>
         </li>

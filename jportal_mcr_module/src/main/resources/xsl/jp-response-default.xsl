@@ -82,7 +82,7 @@
       </xsl:choose>
       <xsl:if test="$journalID != ''">
         <li>
-          <a href="/receive/{$journalID}">Zurück zur Zeitschrift</a>
+          <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a>
         </li>
         <li>
           <a>
@@ -204,7 +204,7 @@
       <xsl:variable name="hl" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
       <a>
         <xsl:attribute name="href">
-          <xsl:value-of select="concat('/receive/', str[@name='id'])" />
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'receive/', str[@name='id'])" />
           <xsl:if test="$hl != ''">
             <xsl:value-of select="concat('?hl=', $hl)" />
           </xsl:if>

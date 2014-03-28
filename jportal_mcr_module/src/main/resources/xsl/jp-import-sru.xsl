@@ -32,7 +32,7 @@
   </xsl:template>
 
   <xsl:template name="jp.import.sru.js">
-    <script type="text/javascript" src="/js/jp-import-sru.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-import-sru.js" />
     <script type="text/javascript">
       $(document).ready(function() {
         $("#search").click(function() {

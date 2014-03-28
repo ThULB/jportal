@@ -64,7 +64,7 @@
 
   <xsl:template name="jp.layout.searchbar.default">
     <div id="searchBar">
-      <form id="searchForm" action="/servlets/solr/find">
+      <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
         <div class="row">
           <div class="col-lg-8 input-group">
             <xsl:choose>

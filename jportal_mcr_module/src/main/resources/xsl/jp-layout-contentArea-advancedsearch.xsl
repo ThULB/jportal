@@ -20,10 +20,10 @@
   </xsl:variable>
 
   <xsl:template match="jpadvancedsearch">
-    <script type="text/javascript" src="/js/jp-advancedsearch.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-advancedsearch.js" />
     <div>
       <h2>Erweiterte Suche</h2>
-      <form id="advancedSearchForm" action="/servlets/solr/advanced" onsubmit="jp.advancedsearch.onsubmit()">
+      <form id="advancedSearchForm" action="{$WebApplicationBaseURL}servlets/solr/advanced" onsubmit="jp.advancedsearch.onsubmit()">
         <xsl:call-template name="jpadvancedsearch.printSearchRow">
           <xsl:with-param name="row" select="'1'" />
           <xsl:with-param name="field" select="$field1" />

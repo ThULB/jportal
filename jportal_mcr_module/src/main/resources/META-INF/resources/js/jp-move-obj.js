@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$("#moveDocButton").on("click", function(){
 		var overlay = new Overlay();
 		var id = $(this).attr("objID");
-		$.getJSON("/servlets/solr/find?qry=%2Bid%3A" + id + "&wt=json", function(search){
+		$.getJSON(jp.baseURL + "servlets/solr/find?qry=%2Bid%3A" + id + "&wt=json", function(search){
 			if(search.response.numFound == 1){
 				var selectTree = new SelectTree(search.response.docs[0]);
 				overlay.setContent(selectTree);
@@ -105,7 +105,7 @@ $(document).ready(function(){
 		}
 		
 		function buildChildrenList(id, params, ctr){
-			var url = "/servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json&sort=size%20asc,maintitle%20asc";
+			var url = jp.baseURL + "servlets/solr/find?qry=%2Bparent%3A" + id + "&wt=json&sort=size%20asc,maintitle%20asc";
 			
 			if(params != undefined){
 				url = url + params;
@@ -127,7 +127,7 @@ $(document).ready(function(){
 		}
 		
 		function buildList(id){
-			$.getJSON("/rsc/obj/" + id + "/parents", function(parents){
+			$.getJSON(jp.baseURL + "rsc/obj/" + id + "/parents", function(parents){
 				var breadcrumb = $("<ul class='breadcrumb'/>")
 				for ( var i = parents.length - 1 ; i >= 0; i--) {
 					
@@ -140,7 +140,7 @@ $(document).ready(function(){
 				selectBreadcrumb.html(breadcrumb);
 			});
 			
-			$.getJSON("/servlets/solr/find?qry=%2Bid%3A" + id + "&wt=json", function(search){
+			$.getJSON(jp.baseURL + "servlets/solr/find?qry=%2Bid%3A" + id + "&wt=json", function(search){
 				var listItems = buildListItems(search, 'icon-arrow-up');
 				var idNameMap = listItems.data("idNameMap");
 				
@@ -185,7 +185,7 @@ $(document).ready(function(){
 		selectFormMove.on("click", function(){
 			var destID = $(this).data("destID");
 			$.ajax({
-				url: "/rsc/obj/" + toMoveObj.id + "/moveTo/" + destID,
+				url: jp.baseURL + "rsc/obj/" + toMoveObj.id + "/moveTo/" + destID,
 				type: "PUT"
 			}).done(function(){
 				selectTree.empty();

@@ -28,7 +28,7 @@ function introEditor(journalID) {
 				var editor = introFrame.ckeditorGet();
 				var editorData = editor.getData();
 				$.ajax({
-					url : '/rsc/journalFile/' + journalID + '/intro.xml',
+					url : jp.baseURL + 'rsc/journalFile/' + journalID + '/intro.xml',
 					type : 'POST',
 					data : editorData,
 					contentType : 'application/xhtml+xml'
@@ -57,7 +57,7 @@ function introEditor(journalID) {
 
 				$('#ckeditorButtons').remove();
 				if (introFrame.ckeditorGet().checkDirty()) {
-					$('<div/>').load('/ckeditor/GUI.html #ckEditorCancelMsgContainer', cancelMsgButtonCtr).appendTo('#main');
+					$('<div/>').load(jp.baseURL + 'ckeditor/GUI.html #ckEditorCancelMsgContainer', cancelMsgButtonCtr).appendTo('#main');
 				} else {
 					cancelNoSave();
 				}
@@ -68,15 +68,15 @@ function introEditor(journalID) {
 
 	if ($('#intro').length) {
 		var tmpElem = $('<div id="#ckEditorTmp"/>')
-		tmpElem.load('/ckeditor/GUI.html #ckeditorButtons', ckEditorMainButtonCtr(tmpElem)).insertAfter('#intro');
+		tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #ckeditorButtons', ckEditorMainButtonCtr(tmpElem)).insertAfter('#intro');
 	} else {
 		var Lcolum = $('#jp-content-LColumn>ul');
 		if (Lcolum.length == 0) {
 			var tmpElem = $('<div id="#ckEditorTmp"/>')
-			tmpElem.load('/ckeditor/GUI.html #jp-content-LColumn', ckEditorMainButtonCtr(tmpElem)).insertAfter('#jp-maintitle');
+			tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #jp-content-LColumn', ckEditorMainButtonCtr(tmpElem)).insertAfter('#jp-maintitle');
 		} else {
 			var tmpElem = $('<li id="#ckEditorTmp"/>')
-			tmpElem.load('/ckeditor/GUI.html #jp-content-LColumn-List .ckGUI', ckEditorMainButtonCtr(tmpElem)).appendTo(Lcolum);
+			tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #jp-content-LColumn-List .ckGUI', ckEditorMainButtonCtr(tmpElem)).appendTo(Lcolum);
 		}
 	}
 }
@@ -87,7 +87,7 @@ function showDeleteDerivateDialog(/* String */id) {
 	}
 	jQuery.ajax({
 		type : 'DELETE',
-		url : '/rsc/object/' + id
+		url : jp.baseURL + 'rsc/object/' + id
 	}).done(function(msg) {
 		location.reload(true);
 	}).fail(function(error) {
@@ -109,7 +109,7 @@ function mergeDerivates(/* String */objID) {
 	}
 	jQuery.ajax({
 		type : 'POST',
-		url : '/rsc/obj/' + objID + '/mergeDeriv'
+		url : jp.baseURL + 'rsc/obj/' + objID + '/mergeDeriv'
 	}).done(function(msg) {
 		location.reload(true);
 	}).fail(function(error) {

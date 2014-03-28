@@ -1,4 +1,3 @@
-var baseUrl = location.protocol + '//' + location.host + '/';
 var runid = [];
 jQuery(document).bind("toolbarloaded", function(e) {
     // just run if a given viewType is created
@@ -27,7 +26,7 @@ jQuery(document).bind("toolbarloaded", function(e) {
                 if (args.elementName == buttonSet.elementName) {
                     var file = decodeURI(e.viewer.currentImage.name);
                     var derivId = e.viewer.properties.derivateId;
-                    var servletPath = baseUrl + "servlets/DerivateLinkServlet";
+                    var servletPath = jp.baseURL + "servlets/DerivateLinkServlet";
                     jQuery.post(servletPath, {
                         mode : "setImage",
                         derivateId : derivId,

@@ -43,7 +43,7 @@ var InfoEditorCtr = function(buttonTag){
 	var editBox = new EditBox();
 	var editor = new Editor(type, controller);
 	var button = $('<div>' + buttonLabel +'</div>');
-	var imprintContainer = $("<div class='imprintContainer' />").load("/html/jp-imprint.html #imprintEditorGUI");
+	var imprintContainer = $("<div class='imprintContainer' />").load(jp.baseURL + "html/jp-imprint.html #imprintEditorGUI");
 	
 	buttonTag.html(button);
 	
@@ -153,7 +153,7 @@ var Editor = function(type, ctr){
 	}
 	
 	var editorFrame = $("<div/>");
-	editorFrame.load("/html/jp-imprint.html #imprintEditorGUI", function(){
+	editorFrame.load(jp.baseURL + "html/jp-imprint.html #imprintEditorGUI", function(){
 		var cancelButton = editorFrame.find("#imprintCancelButton");
 		var saveButton = editorFrame.find("#imprintSaveButton");
 		var idInput = editorFrame.find("#inputName");
@@ -313,8 +313,8 @@ var Select = function(){
 }
 
 var FSConnector = function(/*string*/ type){
-	var baseURL = "/rsc/fs/" + type;
-	
+	var baseURL = jp.baseURL + "rsc/fs/" + type;
+
 	return {
 		get: function(/*string*/ objectID) {
 			var notFound = false;
