@@ -26,6 +26,10 @@
 
 @CHARSET "UTF-8";
 
+.jp-content-laws {
+	clear: both;
+}
+
 .jp-content-laws .register {
 	padding-bottom: 12px;
 }

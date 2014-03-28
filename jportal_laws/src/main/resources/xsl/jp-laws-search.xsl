@@ -10,7 +10,7 @@
       <xsl:value-of select="i18n:translate('jp.laws.search.intro')" />
     </p>
 
-    <form id="advancedSearchForm" action="/servlets/solr/laws" onSubmit="return buildQuery()" class="jp-laws-expertsearch">
+    <form id="advancedSearchForm" action="{$WebApplicationBaseURL}servlets/solr/laws" onSubmit="return buildQuery()" class="jp-laws-expertsearch">
       <input type="hidden" name="XSL.returnURL" value="{$RequestURL}" />
       <input type="hidden" name="qry" id="qry" />
       <input type="hidden" name="fq" id="fq" />
