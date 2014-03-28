@@ -1,0 +1,19 @@
+@CHARSET "US-ASCII";
+
+.glyphicon-trash:HOVER {
+	color: red;
+	cursor: pointer;
+}
+
+.glyphicon-check:HOVER {
+	cursor: default;
+}
+
+.glyphicon-unchecked:HOVER {
+	color: green;
+	cursor: pointer;
+}
+
+.filename{
+	cursor: pointer;
+}

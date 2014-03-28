@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.InputStream;
 import java.lang.reflect.Type;
 
 import javax.ws.rs.GET;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response.Status;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRObjectID;
 
 import fsu.jportal.gson.MCRDirectoryTypeAdapter;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
@@ -57,5 +59,17 @@ public class Filebrowser {
         
         String json = gsonManager.createGson().toJson(node, nodeType);
         return Response.ok(json).build();
+    }
+    
+    @GET
+    @Path("gui/{id}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response gui(@PathParam("id") String id){
+//        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(id);
+//        if(rootNode == null){
+//            return Response.status(Status.NOT_FOUND).build();
+//        }
+        InputStream mainGui = getClass().getResourceAsStream("/gui/main.html");
+        return Response.ok(mainGui).build();
     }
 }

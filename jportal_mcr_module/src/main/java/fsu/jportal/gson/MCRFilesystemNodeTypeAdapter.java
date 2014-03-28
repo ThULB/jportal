@@ -25,7 +25,7 @@ public class MCRFilesystemNodeTypeAdapter extends MCRJSONTypeAdapter<MCRFilesyst
         JsonObject fileNodeJSON = new JsonObject();
         fileNodeJSON.addProperty("name", fileNode.getName());
         fileNodeJSON.addProperty("size", fileNode.getSize());
-        fileNodeJSON.addProperty("latmodified", dateFormatter.format(fileNode.getLastModified().getTime()));
+        fileNodeJSON.addProperty("lastmodified", dateFormatter.format(fileNode.getLastModified().getTime()));
         
         if(fileNode instanceof MCRFile) {
             fileNodeJSON.addProperty("type", "file");
