@@ -14,6 +14,9 @@ public class BaseITCase extends BaseIntegrationTest {
     public void loginAndLogout() throws Exception {
         home();
         TestCase.assertEquals("Title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
+        if (TestUtils.isLoggedIn(DRIVER)) {
+            TestUtils.logout(DRIVER);
+        }
         TestUtils.login(DRIVER);
         TestUtils.logout(DRIVER);
     }
