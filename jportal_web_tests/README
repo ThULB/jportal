@@ -1,20 +1,7 @@
 INSTALL
----------------
-mvn clean install
-ant -f hudson.xml install
+-------
+mvn clean install -Dtomcat=7
 
-START JPORTAL
----------------
-ant -f hudson.xml start
+RUN
+---
 
-RUN TESTS
----------------
-ant -f hudson.xml selenium
-
-STOP JPORTAL
----------------
-ant -f hudson.xml stop
-
-CLEAN DATA
----------------
-ant -f hudson.xml clean
