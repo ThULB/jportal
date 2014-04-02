@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role name="journalgroup">
+  <label xml:lang="en" text="journalgroup" description="Create, edit and delete journals" />
+</role>

@@ -34,4 +34,4 @@ done
 
 PRGDIR=`dirname "$PRG"`
 BASEDIR=`cd "$PRGDIR/.." >/dev/null; pwd`
-${PRGDIR}/mir.sh process ${BASEDIR}/config/setup-commands.txt
+${PRGDIR}/jportal.sh process ${BASEDIR}/config/setup-commands.txt
