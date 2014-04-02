@@ -6,12 +6,13 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -20,7 +21,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.cli.JPortalCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import fsu.jportal.gson.MCRDirectoryTypeAdapter;
@@ -69,7 +70,7 @@ public class Filebrowser {
     }
 
     @GET
-    @Path("gui/{id}")
+    @Path("gui/{id}{path:(/.*)*}")
     @Produces(MediaType.TEXT_HTML)
     public Response gui(@PathParam("id") String id) {
         //        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(id);
@@ -104,5 +105,12 @@ public class Filebrowser {
         //        }
 
         return Response.serverError().build();
+    }
+    
+    @POST
+    @Path("rename")
+    public Response rename(@QueryParam("newFile") String newFile, @QueryParam("oldFile") String oldFile){
+        JPortalCommands.renameFileInIFS(oldFile, newFile);
+        return Response.ok().build();
     }
 }
