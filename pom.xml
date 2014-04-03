@@ -29,9 +29,16 @@
     <module>jportal_webapp</module>
     <module>jportal_setup</module>
     <module>jportal_ext_web_lib</module>
-
-    
   </modules>
+
+  <profiles>
+    <profile>
+      <id>ci</id>
+      <modules>
+        <module>jportal_web_tests</module>
+      </modules>
+    </profile>
+  </profiles>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
