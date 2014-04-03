@@ -74,7 +74,7 @@ public class ImprintFS {
     public void store(String imprintID, MCRContent content) throws IOException {
         Path storePath = getPath(imprintID);
         try (BufferedWriter writer = Files.newBufferedWriter(storePath, Charsets.UTF_8)) {
-            writer.write(content.asString(Charsets.UTF_8.toString()));
+            writer.write(content.asString());
         }
     }
 
