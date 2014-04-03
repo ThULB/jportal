@@ -30,7 +30,7 @@
     <module>jportal_setup</module>
     <module>jportal_ext_web_lib</module>
 
-    <module>jportal_web_tests</module>
+    
   </modules>
 
   <properties>

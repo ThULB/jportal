@@ -2,7 +2,6 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -27,16 +26,14 @@ import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.JPortalCommands;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.xml.sax.SAXException;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 
 import fsu.jportal.gson.DerivateTypeAdapter;
-import fsu.jportal.gson.FileNodeWraper;
-import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 
 @Path("filebrowser")
 public class Filebrowser {
@@ -44,7 +41,7 @@ public class Filebrowser {
 
     public Filebrowser() {
         gsonManager = MCRJSONManager.instance();
-        gsonManager.registerAdapter(new MCRFilesystemNodeTypeAdapter());
+        gsonManager.registerAdapter(new DerivateTypeAdapter());
         gsonManager.registerAdapter(new DerivateTypeAdapter());
     }
 
