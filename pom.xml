@@ -123,18 +123,23 @@
         <version>${jersey.version}</version>
       </dependency>
       <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-server</artifactId>
+        <version>${jersey.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.easymock</groupId>
         <artifactId>easymock</artifactId>
-        <version>3.0</version>
+        <version>3.2</version>
         <type>jar</type>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.easymock</groupId>
         <artifactId>easymockclassextension</artifactId>
-        <version>3.0</version>
+        <version>3.2</version>
         <type>jar</type>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>xmlunit</groupId>
