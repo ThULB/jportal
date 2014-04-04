@@ -34,6 +34,8 @@ import org.xml.sax.SAXException;
 import com.sun.jersey.spi.container.ContainerRequest;
 
 import fsu.jportal.gson.DerivateTypeAdapter;
+import fsu.jportal.gson.FileNodeWraper;
+import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 
 @Path("filebrowser")
 public class Filebrowser {
@@ -42,7 +44,7 @@ public class Filebrowser {
     public Filebrowser() {
         gsonManager = MCRJSONManager.instance();
         gsonManager.registerAdapter(new DerivateTypeAdapter());
-        gsonManager.registerAdapter(new DerivateTypeAdapter());
+        gsonManager.registerAdapter(new MCRFilesystemNodeTypeAdapter());
     }
 
     @GET
@@ -55,6 +57,7 @@ public class Filebrowser {
         }
         
         String maindoc = getMaindoc(id);
+        FileNodeWraper wrapper;
 
         if (path != null && !"".equals(path.trim())) {
             MCRFilesystemNode node = rootDirectory.getChildByPath(path);
@@ -62,10 +65,13 @@ public class Filebrowser {
                 return Response.status(Status.NOT_FOUND).build();
             }
 
-            return createJSON(node);
+            wrapper = new FileNodeWraper(node, maindoc);
+        }else{
+            wrapper = new FileNodeWraper(rootDirectory, maindoc);
         }
         
-        return createJSON(rootDirectory);
+        String json = gsonManager.createGson().toJson(wrapper);
+        return Response.ok(json).build();
     }
 
     private String getMaindoc(String id) {
@@ -81,22 +87,6 @@ public class Filebrowser {
         }
         
         return null;
-    }
-
-    private Response createJSON(MCRDirectory node) {
-        
-        String json = gsonManager.createGson().toJson(node);
-        return Response.ok(json).build();
-    }
-    
-    private Response createJSON(MCRFilesystemNode node) {
-
-        if (node instanceof MCRDirectory) {
-            return createJSON((MCRDirectory)node);
-        }
-
-        String json = gsonManager.createGson().toJson(node);
-        return Response.ok(json).build();
     }
 
     @GET

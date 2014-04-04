@@ -1,22 +1,11 @@
 package fsu.jportal.gson;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRJSONTypeAdapter;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRObjectID;
-import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -32,31 +21,22 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper>{
 
     @Override
     public JsonElement serialize(FileNodeWraper deriv, Type typeOfSrc, JsonSerializationContext context) {
-        MCRDirectory dir = deriv.getDir();
-        JsonObject dirJSON = context.serialize(dir, MCRFilesystemNode.class).getAsJsonObject();
-        MCRFilesystemNode[] children = dir.getChildren();
+        Class<MCRFilesystemNode> type = MCRFilesystemNode.class;
+        JsonObject dirJSON = context.serialize(deriv.getNode(), type).getAsJsonObject();
+        MCRFilesystemNode[] children = deriv.getChildren();
         JsonArray childrenJSON = new JsonArray();
-        String derivID = deriv.getDerivID();
-        try {
-            Document derivXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(derivID));
-            XPathFactory xPathFactory = XPathFactory.instance();
-            XPathExpression<Attribute> attr = xPathFactory.compile("/mycorederivate/derivate/internals/internal/@maindoc", Filters.attribute());
-            String maindoc = attr.getExpression();
-            
-            for (MCRFilesystemNode childNode : children) {
-                JsonElement childNodeJSON = context.serialize(childNode, MCRFilesystemNode.class);
-                if(childNode.getName().equals(maindoc)){
-                    childNodeJSON.getAsJsonObject().addProperty("maindoc", true);
-                }
-                
-                childrenJSON.add(childNodeJSON);
+        String maindoc = deriv.getMaindoc();
+        
+        for (MCRFilesystemNode childNode : children) {
+            JsonElement childNodeJSON = context.serialize(childNode, type);
+            if(childNode.getName().equals(maindoc)){
+                childNodeJSON.getAsJsonObject().addProperty("maindoc", true);
             }
             
-            dirJSON.add("children", childrenJSON);
-        } catch (IOException | JDOMException | SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            childrenJSON.add(childNodeJSON);
         }
+        
+        dirJSON.add("children", childrenJSON);
         
         return dirJSON;
     }

@@ -1,50 +1,46 @@
 package fsu.jportal.gson;
 
-import java.lang.reflect.Type;
-
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 
 public class FileNodeWraper {
-    private FileNodeWraper() {
-    }
-    
     private String maindoc;
-    private Class type;
     private MCRFilesystemNode[] children;
+    private MCRFilesystemNode node;
     
-    public static FileNodeWraper newInstance(MCRDirectory node, String maindoc){
-        MCRFilesystemNode[] children = node.getChildren();
-        return new FileNodeWraper();
-    }
-    
-    public static FileNodeWraper newInstance(MCRFilesystemNode node){
-        return new FileNodeWraper();
-    }
-    
-    public Type getType(){
-        return null;
+    public FileNodeWraper(MCRFilesystemNode node, String maindoc) {
+        if(node instanceof MCRDirectory){
+            setChildren(((MCRDirectory) node).getChildren());
+        } else {
+            setChildren(new MCRFilesystemNode[]{});
+        }
+        
+        setNode(node);
+        setMainDoc(maindoc);
     }
 
-    public FileNodeWraper(MCRDirectory dir, String derivID) {
-//        this.setDir(dir);
-        this.setDerivID(derivID);
-    }
-
-    public String getDerivID() {
+    public String getMaindoc() {
         return maindoc;
     }
 
-    public void setDerivID(String derivID) {
-        this.maindoc = derivID;
+    public void setMainDoc(String maindoc) {
+        this.maindoc = maindoc;
     }
 
-    public MCRDirectory getDir() {
-        return null;
+    public MCRFilesystemNode[] getChildren() {
+        return children;
     }
 
-    public void setDir(MCRDirectory dir) {
-//        this.dir = dir;
+    public void setChildren(MCRFilesystemNode[] children) {
+        this.children = children;
+    }
+
+    public MCRFilesystemNode getNode() {
+        return node;
+    }
+
+    public void setNode(MCRFilesystemNode node) {
+        this.node = node;
     }
     
 }
