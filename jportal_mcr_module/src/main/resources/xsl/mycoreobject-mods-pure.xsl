@@ -72,7 +72,18 @@
                 </xsl:otherwise>
               </xsl:choose>
             </xsl:variable>
-            <xsl:variable name="mimeType" select="mcrxml:getMimeType($file)" />
+            <xsl:variable name="fileMimeType" select="mcrxml:getMimeType($file)" />
+            <xsl:variable name="mimeType">
+              <xsl:choose>
+                <!-- we use the tile combine servlet which gives us always jpegs -->
+                <xsl:when test="starts-with($fileMimeType, 'image/')">
+                  <xsl:value-of select="'image/jpeg'" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$fileMimeType" />
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:variable>
             <xsl:variable name="url">
               <xsl:choose>
                 <xsl:when test="starts-with($mimeType, 'image/')">
