@@ -1,6 +1,8 @@
 package fsu.jportal.resources;
 
 import java.net.ConnectException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -14,14 +16,21 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.Namespace;
+import org.jdom2.filter.ElementFilter;
+import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
 
 import fsu.archiv.mycore.sru.GBVKeywordStore;
 import fsu.archiv.mycore.sru.SRUQueryParser;
+import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
+import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
 import fsu.archiv.mycore.sru.impex.pica.model.provider.SRURecordProvider;
 import fsu.jportal.mycore.sru.impex.pica.producer.InstitutionProducer;
 import fsu.jportal.mycore.sru.impex.pica.producer.JPPersonProducer;
@@ -36,7 +45,7 @@ public class SRUResource {
     @Produces(MediaType.APPLICATION_XML)
     public Response query(@QueryParam("q") String query) {
         SRUQueryParser queryParser = new SRUQueryParser(GBVKeywordStore.getInstance());
-        SRUConnector connector = SRUConnectorFactory.getSRUConnector(SRUConnectorFactory.GBV_SRU_CONNECTION_DB_11,
+        SRUConnector connector = SRUConnectorFactory.getSRUConnector(SRUConnectorFactory.GBV_SRU_STANDARD_CONNECTION,
                 queryParser.parse("num " + query));
         connector.setMaximumRecords(10);
         Document xml;
@@ -50,7 +59,7 @@ public class SRUResource {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.info(out.outputString(xml));
         }
-        List<PicaRecord> recordList = new SRURecordProvider().getPicaRecords(xml);
+        List<PicaRecord> recordList = getPicaRecords(xml);
         Element returnElement = new Element("sruobjects");
         for (PicaRecord picaRecord : recordList) {
             String objectType = picaRecord.getValue("002@", "0");
@@ -90,6 +99,49 @@ public class SRUResource {
 
     private boolean isInstitution(String picaObjectType) {
         return picaObjectType.charAt(0) == 'T' && picaObjectType.charAt(1) == 'b';
+    }
+    
+    // copy from fsu.archiv.mycore.sru.impex.pica.model.provider.SRURecordProvider
+    public List<PicaRecord> getPicaRecords(Document source) {
+        List<PicaRecord> records = new ArrayList<>();
+        if(source == null){
+            return records;
+        }
+        
+        Document doc = (Document) source;
+        ArrayList<Namespace> namespaces = new ArrayList<Namespace>();
+        namespaces.add(Namespace.getNamespace("zs", "http://www.loc.gov/zing/srw/"));
+        namespaces.add(Namespace.getNamespace("pica", "info:srw/schema/5/picaXML-v1.0"));
+        XPathExpression<Element> xp = XPathFactory.instance().compile("//pica:record", Filters.element(), null, namespaces);
+        List<Element> recordElements = xp.evaluate(doc);
+        for (Element recordElement : recordElements) {
+            records.add(convertToPica(recordElement));
+        }
+        return records;
+    }
+    
+    private PicaRecord convertToPica(Element record) {
+        PicaRecord pr = new PicaRecord();
+        Iterator<Element> it = record.getDescendants(new ElementFilter("datafield"));
+
+        while (it.hasNext()) {
+            Element dfElem = it.next();
+            String tag = dfElem.getAttributeValue("tag");
+            String occ = dfElem.getAttributeValue("occurrence");
+            Datafield df = new Datafield(tag, occ);
+            pr.addDatafield(df);
+
+            Iterator<Element> subfieldIterator = dfElem.getDescendants(new ElementFilter("subfield"));
+            while (subfieldIterator.hasNext()) {
+                Element sfElem = subfieldIterator.next();
+                String code = sfElem.getAttributeValue("code");
+                String value = sfElem.getText();
+                Subfield sf = new Subfield(code, value);
+                df.addSubField(sf);
+            }
+        }
+
+        return pr;
     }
 
 }
