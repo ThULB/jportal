@@ -5,9 +5,8 @@ $(document).ready(function(){
 	$("#filetable").delegate("span.openFolder.glyphicon-folder-open", "click", openFolder);
 	$("#filetable").delegate("td.filename", "click", fileNameEdit);
 	$("#filetable").delegate("span.deleteFile.glyphicon-trash", "click", deleteFile);
-	$("#filetable").delegate("span.setAsMainFile.glyphicon-unchecked", "click", setAsMainFile);
+	$("#filetable").delegate("span.glyphicon-unchecked", "click", setAsMainFile);
 	$("#filetable").delegate("td.goBack", "click", goBack);
-//	$("#filebrowser-lightbox-delete-main").delegate("tr.filebrowser-lightbox-delete-main-fileList-row", "click", selectRow);	
 	
 	var derivatID = window.location.href.substr(window.location.href.lastIndexOf('gui/') + 4);
 	var currentPath = derivatID;
@@ -72,7 +71,7 @@ $(document).ready(function(){
 	
 	function deleteFile(){
 		var parent = $(this).parents("tr");
-		if (parent.find(".setAsMainFile").hasClass("glyphicon-check")){
+		if (parent.find(".setAsMainFile").hasClass("setAsMainFile")){
 			if (confirm("Derivat ist Start-Datei, wirklich löschen?")){
 				doDelete(parent);
 			}
@@ -83,7 +82,7 @@ $(document).ready(function(){
 	}
 	
 	function doDelete(parent) {
-		console.log("Delete file!");
+//		console.log("Delete file!");
 		var file = parent.find(".filename").html();		
 		$.ajax({
 			url: "/rsc/filebrowser/" + currentPath + "/" + file,
@@ -97,11 +96,21 @@ $(document).ready(function(){
 	}
 	
 	function setAsMainFile(){
-		console.log("Set as main file!");
-		$(".setAsMainFile.glyphicon-check").addClass("glyphicon-unchecked");
-		$(".setAsMainFile.glyphicon-check").removeClass("glyphicon-check");
-		$(this).addClass("glyphicon-check");
-		$(this).removeClass("glyphicon-unchecked");
+//		console.log("Set as main file!");
+		var newMainFile = $(this);
+		var filename = $(this).parents("tr").find(".filename").html();
+		$.ajax({
+			url: "/rsc/filebrowser/" + currentPath + "/" + filename + "/main",
+			type: "PUT",
+			statusCode: {
+				200: function() {
+					$(".glyphicon-check").addClass("glyphicon-unchecked");
+					$(".glyphicon-check").removeClass("glyphicon-check setAsMainFile");
+					newMainFile.addClass("glyphicon-check setAsMainFile");
+					newMainFile.removeClass("glyphicon-unchecked");
+				}			
+			}
+		});
 	}
 	
 	function goBack() {
@@ -109,36 +118,7 @@ $(document).ready(function(){
 //		currentPath = currentPath.substr(0,currentPath.lastIndexOf('/'));
 //		init(currentPath);
 	}
-	
-//	function selectRow() {
-//		$(".filebrowser-lightbox-delete-main-fileList-row").removeClass("fileBrowser-selected");
-//		$(this).addClass("fileBrowser-selected");
-//	}
-	
-//	function initLightboxDeleteMain(id) {
-//		var fileList = $("#filebrowser-lightbox-delete-main-fileList")
-//		fileList.html("");
-//		$.get("/rsc/filebrowser/" + id, function(data){
-//			for(i = 0; i<data.children.length; i++){
-//				var obj = data.children[i];
-//				var row = $('<tr class="filebrowser-lightbox-delete-main-fileList-row"/>');
-//				if(obj.type == "file"){
-//					row.append("<td><span class='glyphicon glyphicon-picture'/></td>");
-//				}
-//				else{
-//					row.append("<td><span class='glyphicon glyphicon-folder-open openFolder'/></td>");
-//				}
-//				row.append("<td class='filename'>"+ obj.name +"</td>");
-//				fileList.append(row);
-//			}
-//		});
-//		if(id.indexOf("/") != -1){
-//			var row = $("<tr/>");
-//			row.append('<td class="goBack">...</td>');
-//			fileList.append(row);
-//		}
-//	}
-	
+		
 	function init(id){
 		var fileList = $("#fileList")
 		fileList.html("");
@@ -146,20 +126,36 @@ $(document).ready(function(){
 			for(i = 0; i<data.children.length; i++){
 				var obj = data.children[i];
 				var row = $("<tr/>");
+				//picture
 				if(obj.type == "file"){
 					row.append("<td><span class='glyphicon glyphicon-picture'/></td>");
 				}
 				else{
 					row.append("<td><span class='glyphicon glyphicon-folder-open openFolder'/></td>");
 				}
+				//filename
 				row.append("<td class='filename'>"+ obj.name +"</td>");
+				//urn
 				if (obj.urn != undefined){
 					row.append("<td>"+ obj.urn +"</td>");
 				}
 				else{
 					row.append("<td>-</td>");
 				}
-				row.append("<td><span class='glyphicon glyphicon-unchecked setAsMainFile'/></td>");
+				//maindoc+
+				if (obj.type == "file"){
+					if (obj.maindoc != true){
+						row.append("<td><span class='glyphicon glyphicon-unchecked'/></td>");
+					}
+					else{
+						row.append("<td><span class='glyphicon glyphicon-check setAsMainFile'/></td>");
+					}
+				}
+				else{
+					row.append("<td>-</td>");
+				}
+
+				//size
 				row.append("<td>"+ obj.size +" Bytes</td>");
 				if (obj.contentType != undefined){
 					row.append("<td>"+ obj.contentType +"</td>");
@@ -167,7 +163,9 @@ $(document).ready(function(){
 				else{
 					row.append("<td>"+ obj.type +"</td>");
 				}
+				//lastmodified
 				row.append("<td>"+ obj.lastmodified +"</td>");
+				//delete
 				row.append("<td><span class='glyphicon glyphicon-trash deleteFile'/></td>");
 				fileList.append(row);
 			}
