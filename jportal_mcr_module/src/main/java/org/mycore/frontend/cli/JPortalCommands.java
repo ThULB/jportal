@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,7 +28,11 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.frontend.util.DerivateLinkUtil;
+import org.mycore.imagetiler.MCRImage;
+import org.mycore.iview2.services.MCRIView2Tools;
 import org.xml.sax.SAXException;
+
+import com.google.common.io.Files;
 
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {
@@ -113,10 +119,10 @@ public class JPortalCommands {
         FileLocation oldFileLocation = new FileLocation(oldFile);
         FileLocation newFileLocation = new FileLocation(newFile);
         
-        String oldFileName = oldFileLocation.getFileName();
-        String newFileName = newFileLocation.getFileName();
         String oldDerivId = oldFileLocation.getOwnerID();
+        String oldFileName = oldFileLocation.getFileName();
         String newDerivId = newFileLocation.getOwnerID();
+        String newFileName = newFileLocation.getFileName();
         
         if(!oldDerivId.equals(newDerivId)){
             MCRDirectory oldRootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(oldDerivId);
@@ -143,6 +149,18 @@ public class JPortalCommands {
             }   
         }else{
             LOGGER.info("New file name " + newFile + " equals old file name " + oldFileName + ", nothing to do.");
+        }
+        
+        File tileDir = MCRIView2Tools.getTileDir();
+        File tiledFile = MCRImage.getTiledFile(tileDir, oldDerivId, oldFileName);
+        File newTiledFile = MCRImage.getTiledFile(tileDir, newDerivId, null);
+        try {
+            final int pos = newFileName.lastIndexOf('.');
+            final String relPath = newFileName.substring(0, pos > 0 ? pos : newFileName.length()) + ".iview2";
+            Files.move(tiledFile, new File(newTiledFile, relPath));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -26,6 +27,8 @@ import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.JPortalCommands;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
@@ -55,7 +58,7 @@ public class Filebrowser {
         if (rootDirectory == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
-        
+
         String maindoc = getMaindoc(id);
         FileNodeWraper wrapper;
 
@@ -66,10 +69,10 @@ public class Filebrowser {
             }
 
             wrapper = new FileNodeWraper(node, maindoc);
-        }else{
+        } else {
             wrapper = new FileNodeWraper(rootDirectory, maindoc);
         }
-        
+
         String json = gsonManager.createGson().toJson(wrapper);
         return Response.ok(json).build();
     }
@@ -79,13 +82,15 @@ public class Filebrowser {
         try {
             derivXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(id));
             XPathFactory xPathFactory = XPathFactory.instance();
-            XPathExpression<Attribute> attr = xPathFactory.compile("/mycorederivate/derivate/internals/internal/@maindoc", Filters.attribute());
-            return attr.evaluateFirst(derivXML).getValue();
+            XPathExpression<Attribute> attr = xPathFactory.compile(
+                    "/mycorederivate/derivate/internals/internal/@maindoc", Filters.attribute());
+            String maindoc = attr.evaluateFirst(derivXML).getValue();
+            return maindoc.startsWith("/") ? maindoc : "/" + maindoc;
         } catch (IOException | JDOMException | SAXException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        
+
         return null;
     }
 
@@ -130,14 +135,30 @@ public class Filebrowser {
         return Response.serverError().build();
     }
 
-    
     @POST
     @Path("rename")
-    public Response rename(@QueryParam("newFile") String newFile, @QueryParam("oldFile") String oldFile){
+    public Response rename(@QueryParam("newFile") String newFile, @QueryParam("oldFile") String oldFile) {
         JPortalCommands.renameFileInIFS(oldFile, newFile);
         return Response.ok().build();
     }
-    
+
+    @PUT
+    @Path("{derivID}{path:(/.*)*}/main")
+    public Response setMainDoc(@PathParam("derivID") String derivID, @PathParam("path") String path) throws IOException {
+        //        if (MCRAccessManager.checkPermission(derivID, PERMISSION_WRITE)) {
+        MCRObjectID mcrid = MCRObjectID.getInstance(derivID);
+        MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(mcrid);
+        der.getDerivate().getInternals().setMainDoc(path);
+        MCRMetadataManager.updateMCRDerivateXML(der);
+        
+        return Response.ok().build();
+
+        //        } else {
+        //            response.sendError(HttpServletResponse.SC_FORBIDDEN,
+        //                MessageFormat.format("User has not the \"" + PERMISSION_WRITE + "\" permission on object {0}.", derivID));
+        //        }
+    }
+
     public static class ResourceAccess implements MCRResourceAccessChecker {
         private static Logger LOGGER = Logger.getLogger(ResourceAccess.class);
 
