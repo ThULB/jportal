@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.services.urn.MCRURNManager;
+import org.mycore.urn.services.MCRURNManager;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;

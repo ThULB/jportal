@@ -29,6 +29,7 @@
     <module>jportal_webapp</module>
     <module>jportal_setup</module>
     <module>jportal_ext_web_lib</module>
+<!--    <module>jportal_sample_data</module>-->
   </modules>
 
   <profiles>
@@ -213,6 +214,12 @@
       <dependency>
         <groupId>org.mycore</groupId>
         <artifactId>mycore-classeditor</artifactId>
+        <version>${mcr.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore</groupId>
+        <artifactId>mycore-urn</artifactId>
         <version>${mcr.version}</version>
         <scope>provided</scope>
       </dependency>

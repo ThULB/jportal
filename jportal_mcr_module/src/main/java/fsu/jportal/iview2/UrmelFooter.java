@@ -33,7 +33,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -49,9 +48,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.mycore.backend.hibernate.MCRHIBConnection;
-import org.mycore.backend.hibernate.tables.MCRURN;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.iview2.frontend.MCRFooterInterface;
+import org.mycore.urn.hibernate.MCRURN;
 
 /**
  * @author Thomas Scheffler (yagee)
