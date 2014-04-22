@@ -143,27 +143,6 @@
                   </properties>
                 </configuration>
               </configuration>
-              <executions>
-                <execution>
-                  <id>run</id>
-                  <configuration>
-                    <configuration>
-                      <properties>
-                        <cargo.jvmargs>
-                          <!-- -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=6295 -->
-                          -Xdebug
-                          -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=6295
-                          -Xnoagent
-                          -Djava.compiler=NONE
-                        </cargo.jvmargs>
-                      </properties>
-                    </configuration>
-                  </configuration>
-                  <goals>
-                    <goal>run</goal>
-                  </goals>
-                </execution>
-              </executions>
             </plugin>
           </plugins>
         </pluginManagement>
@@ -251,11 +230,17 @@
                       <artifactId>jportal_mcr_module</artifactId>
                       <version>${project.version}</version>
                     </dependency>
+                    <dependency>
+                      <groupId>fsu.thulb</groupId>
+                      <artifactId>jportal_sample_data</artifactId>
+                      <version>${project.version}</version>
+                    </dependency>
                     ]]>
                   </insert>
                 </xmltask>
                 <replace file="${pom.xml}" token='xmlns=""' />
-                <copy file="${docportal.dir}/config/mycore.private.properties.template" tofile="${docportal.dir}/config/mycore.private.properties" />
+                <copy file="${docportal.dir}/config/mycore.private.properties.template" tofile="${docportal.dir}/config/mycore.private.properties"
+                  overwrite="true" />
 
                 <echo>==================================================</echo>
                 <echo>Configuring mycore.private.properties...</echo>
@@ -278,6 +263,8 @@
                   log4j.appender.fileAppender.layout=org.apache.log4j.PatternLayout
                   log4j.appender.fileAppender.layout.ConversionPattern=%d %-5p (%F:%L) - %m%n
                   MCR.Module-solr.ServerURL=http\://localhost\:${cargo.servlet.port}/solr/jportal
+                  JP.Sampledata.loadOnStartup=true
+                  MCR.Startup.Class=%MCR.Startup.Class%,fsu.jportal.sampledata.Setup
                 </concat>
 
                 <echo>==================================================</echo>
@@ -292,6 +279,7 @@
                 <!-- ANT Task not working - use exec instead -->
                 <exec dir="${docportal.dir}" executable="ant">
                   <arg value="resolve" />
+                  <arg value="clean.data" />
                   <arg value="create.schema" />
                   <arg value="create.jar" />
                   <arg value="create.war" />
@@ -417,6 +405,23 @@
               </resources>
             </configuration>
           </execution>
+          <execution>
+            <id>copy-sample-data</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>pre-integration-test</phase>
+            <configuration>
+              <outputDirectory>${MCR.Home.Integration}/${MCR.AppName}</outputDirectory>
+              <overwrite>true</overwrite>
+              <resources>
+                <resource>
+                  <directory>src/test/resources</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -533,6 +538,13 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>jportal_sample_data</artifactId>
+      <version>${project.version}</version>
+      <type>jar</type>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore.solr</groupId>

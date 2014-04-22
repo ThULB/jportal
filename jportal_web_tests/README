@@ -1,7 +1,7 @@
 INSTALL
 -------
-mvn clean install -Dtomcat=7
+mvn clean verify -Dtomcat=7
 
-RUN
+DEBUG on 6295 and wait for connection
 ---
-
+mvn -Dtomcat=7 -Dmaven.failsafe.debug="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=6295 -Xnoagent -Djava.compiler=NONE" verify

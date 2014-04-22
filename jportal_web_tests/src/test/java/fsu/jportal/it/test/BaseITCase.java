@@ -12,8 +12,7 @@ public class BaseITCase extends BaseIntegrationTest {
 
     @Test
     public void loginAndLogout() throws Exception {
-        home();
-        TestCase.assertEquals("Title does not match", "journals@UrMEL - JPortal", DRIVER.getTitle());
+        TestUtils.home(DRIVER);
         if (TestUtils.isLoggedIn(DRIVER)) {
             TestUtils.logout(DRIVER);
         }
@@ -23,7 +22,7 @@ public class BaseITCase extends BaseIntegrationTest {
 
     @Test
     public void language() throws Exception {
-        home();
+        TestUtils.home(DRIVER);
         DRIVER.findElement(By.id("languageSelect")).click();
         DRIVER.findElement(By.xpath("//ul[@id='languageList']/li[1]/a")).click();
         TestCase.assertEquals("language not changed - content does not match", "Welcome to journals@UrMEL!",

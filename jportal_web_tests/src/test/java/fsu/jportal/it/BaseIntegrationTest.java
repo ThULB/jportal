@@ -118,8 +118,8 @@ public class BaseIntegrationTest {
         }
         TEST_URL = DRIVER.getCurrentUrl();
     }
-    
-    public void home() {
-        DRIVER.get(START_URL + "/content/below/index.xml");
+
+    public static String getHomeAddress() {
+        return START_URL + "/content/below/index.xml";
     }
 }
