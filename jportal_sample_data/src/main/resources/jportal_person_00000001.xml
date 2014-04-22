@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_person_00000001" label="jportal_person_00000001"
+  version="2.0" xsi:noNamespaceSchemaLocation="datamodel-person.xsd">
+  <structure />
+  <metadata xml:lang="de">
+    <def.heading class="MCRMetaXML" heritable="true" notinherit="true">
+      <heading inherited="0">
+        <lastName>Schiller</lastName>
+        <firstName>Friedrich</firstName>
+        <nameAffix>von</nameAffix>
+      </heading>
+    </def.heading>
+    <def.gender class="MCRMetaClassification" heritable="true" notinherit="true">
+      <gender inherited="0" classid="urmel_class_00000001" categid="male" />
+    </def.gender>
+    <def.placeOfActivity class="MCRMetaLangText" heritable="true" notinherit="true">
+      <placeOfActivity inherited="0" form="plain">Weimar, Jena</placeOfActivity>
+    </def.placeOfActivity>
+    <def.dateOfBirth class="MCRMetaISO8601Date" heritable="true" notinherit="true">
+      <dateOfBirth inherited="0">1759-11-10</dateOfBirth>
+    </def.dateOfBirth>
+    <def.placeOfBirth class="MCRMetaLangText" heritable="true" notinherit="true">
+      <placeOfBirth inherited="0" form="plain">Marbach am Neckar</placeOfBirth>
+    </def.placeOfBirth>
+    <def.dateOfDeath class="MCRMetaISO8601Date" heritable="true" notinherit="true">
+      <dateOfDeath inherited="0">1805-05-09</dateOfDeath>
+    </def.dateOfDeath>
+    <def.placeOfDeath class="MCRMetaLangText" heritable="true" notinherit="true">
+      <placeOfDeath inherited="0" form="plain">Weimar</placeOfDeath>
+    </def.placeOfDeath>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="modifydate" inherited="0">2014-04-03T14:18:30.971Z</servdate>
+      <servdate type="createdate" inherited="0">2014-04-03T14:18:30.971Z</servdate>
+    </servdates>
+    <servflags class="MCRMetaLangText">
+      <servflag type="createdby" inherited="0" form="plain">administrator</servflag>
+      <servflag type="modifiedby" inherited="0" form="plain">administrator</servflag>
+    </servflags>
+  </service>
+</mycoreobject>

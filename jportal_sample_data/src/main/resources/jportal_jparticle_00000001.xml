@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jparticle_00000001"
+  label="jportal_jparticle_00000001" version="2.0" xsi:noNamespaceSchemaLocation="datamodel-jparticle.xsd">
+  <structure>
+    <parents class="MCRMetaLinkID">
+      <parent inherited="0" xlink:type="locator" xlink:href="jportal_jpvolume_00000001" />
+    </parents>
+  </structure>
+  <metadata xml:lang="de">
+    <maintitles class="MCRMetaLangText" heritable="true" notinherit="false">
+      <maintitle inherited="0" form="plain">Schiller und die Räuber</maintitle>
+    </maintitles>
+    <participants class="MCRMetaLinkID" heritable="false" notinherit="false">
+      <participant type="mentionedPerson" inherited="0" xlink:type="locator" xlink:title="Schiller, Friedrich von" xlink:href="jportal_person_00000001" />
+    </participants>
+    <sizes class="MCRMetaLangText" heritable="false" notinherit="false">
+      <size inherited="0" form="plain">001</size>
+    </sizes>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
+      <servdate type="modifydate" inherited="0">2014-04-03T15:40:42.013Z</servdate>
+      <servdate type="createdate" inherited="0">2014-04-03T15:40:08.877Z</servdate>
+    </servdates>
+    <servflags class="MCRMetaLangText">
+      <servflag type="createdby" inherited="0" form="plain">administrator</servflag>
+      <servflag type="modifiedby" inherited="0" form="plain">administrator</servflag>
+    </servflags>
+  </service>
+</mycoreobject>
