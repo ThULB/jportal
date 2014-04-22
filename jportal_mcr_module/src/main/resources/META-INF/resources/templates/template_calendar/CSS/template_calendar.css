@@ -27,10 +27,11 @@
 }
 .keywords .expand {
 	background-image: url("../IMAGES/plus.png");
-
+	display: inline;
 }
 .keywords .collapse {
 	background-image: url("../IMAGES/minus.png");
+	display: inline;
 }
 
 #jp-content-LColumn ul {
