@@ -32,26 +32,23 @@ Watch and agree license agreement specified in LICENSE.txt
 ======================================
 svn checkout https://server.mycore.de/svn/docportal/trunk docportal
 svn checkout https://server.mycore.de/svn/mycore/trunk mycore
-svn checkout http://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
+svn checkout https://svn.thulb.uni-jena.de/repos/jportal2/trunk jportal
 
 4. CONFIGURATION  
 ======================================
 ======================================
-Setting system environment variables (this is optional)
-  - $JPORTAL_HOME to <Installation-Directory>/jportal
-  - $DOCPORTAL_HOME to <Installation-Directory>/docportal
 
-Copy templates
-  - cp $DOCPORTAL_HOME/config/mycore.private.properties.template $DOCPORTAL_HOME/config/mycore.private.properties
-  - cp $DOCPORTAL_HOME/config/pom.xml.template $DOCPORTAL_HOME/config/pom.xml
+Copy templates (in docportal)
+  - cp config/mycore.private.properties.template config/mycore.private.properties
+  - cp config/pom.xml.template config/pom.xml
 
-Setting properties in mycore.private.properties
-  - MCR.basedir=<$DOCPORTAL_HOME>
+Setting properties in mycore.private.properties (in docportal)
+  - MCR.basedir=<Path to docportal>
   - MCR.Modules.Application=common,maven
   - MCR.Components.Exclude=migration20-21,iview
   - MCR.Module-solr.ServerURL=http\://localhost:8296/jportal
 
-optional develop properties
+  optional develop properties
   - MCR.LayoutService.LastModifiedCheckPeriod = 1000
 
 Add in pom.xml below the <dependencies> element
