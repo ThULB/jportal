@@ -1,27 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?><mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jpinst_00000001" label="jportal_jpinst_00000001" version="2.0" xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd"><structure/><metadata xml:lang="de"><names class="MCRMetaInstitutionName" heritable="true" notinherit="false"><name inherited="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" ID="jportal_jpinst_00000001"
+  label="jportal_jpinst_00000001" version="2.0" xsi:noNamespaceSchemaLocation="datamodel-jpinst.xsd">
+  <structure />
+  <metadata xml:lang="de">
+    <names class="MCRMetaInstitutionName" heritable="true" notinherit="false">
+      <name inherited="0">
         <fullname>Spiegel-Verlag</fullname>
         <property>GmbH &amp; Co. KG</property>
       </name>
-</names>
-<addresses class="MCRMetaAddress" heritable="true" notinherit="false"><address inherited="0">
+    </names>
+    <addresses class="MCRMetaAddress" heritable="true" notinherit="false">
+      <address inherited="0">
         <country>Deutschland</country>
         <zipcode>20457</zipcode>
         <city>Hamburg</city>
         <street>Ericusspitze</street>
         <number>1</number>
       </address>
-</addresses>
-<phones class="MCRMetaLangText" heritable="true" notinherit="false"><phone xml:lang="de" type="Telefon" inherited="0" form="plain">040 3007-0</phone>
-<phone xml:lang="de" type="Fax" inherited="0" form="plain">040 3007-2246</phone>
-</phones>
-<urls class="MCRMetaLink" heritable="true" notinherit="false"><url inherited="0" xlink:type="locator" xlink:title="spiegel-gruppe" xlink:href="http://www.spiegelgruppe.de"/>
-</urls>
-<emails class="MCRMetaLangText" heritable="true" notinherit="false"><email inherited="0" form="plain">spiegel@spiegel.de</email>
-</emails>
-</metadata><service><servdates class="MCRMetaISO8601Date">
+    </addresses>
+    <phones class="MCRMetaLangText" heritable="true" notinherit="false">
+      <phone xml:lang="de" type="Telefon" inherited="0" form="plain">040
+        3007-0
+      </phone>
+      <phone xml:lang="de" type="Fax" inherited="0" form="plain">040
+        3007-2246
+      </phone>
+    </phones>
+    <urls class="MCRMetaLink" heritable="true" notinherit="false">
+      <url inherited="0" xlink:type="locator" xlink:title="spiegel-gruppe" xlink:href="http://www.spiegelgruppe.de" />
+    </urls>
+    <emails class="MCRMetaLangText" heritable="true" notinherit="false">
+      <email inherited="0" form="plain">spiegel@spiegel.de</email>
+    </emails>
+  </metadata>
+  <service>
+    <servdates class="MCRMetaISO8601Date">
       <servdate type="modifydate" inherited="0">2014-04-03T14:26:27.380Z</servdate>
       <servdate type="createdate" inherited="0">2014-04-03T14:26:27.380Z</servdate>
-    </servdates><servflags class="MCRMetaLangText">
+    </servdates>
+    <servflags class="MCRMetaLangText">
       <servflag type="createdby" inherited="0" form="plain">administrator</servflag>
       <servflag type="modifiedby" inherited="0" form="plain">administrator</servflag>
-    </servflags></service></mycoreobject>
+    </servflags>
+  </service>
+</mycoreobject>
