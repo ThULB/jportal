@@ -31,7 +31,6 @@ import fsu.archiv.mycore.sru.SRUQueryParser;
 import fsu.archiv.mycore.sru.impex.pica.model.Datafield;
 import fsu.archiv.mycore.sru.impex.pica.model.PicaRecord;
 import fsu.archiv.mycore.sru.impex.pica.model.Subfield;
-import fsu.archiv.mycore.sru.impex.pica.model.provider.SRURecordProvider;
 import fsu.jportal.mycore.sru.impex.pica.producer.InstitutionProducer;
 import fsu.jportal.mycore.sru.impex.pica.producer.JPPersonProducer;
 
@@ -126,22 +125,32 @@ public class SRUResource {
 
         while (it.hasNext()) {
             Element dfElem = it.next();
-            String tag = dfElem.getAttributeValue("tag");
-            String occ = dfElem.getAttributeValue("occurrence");
-            Datafield df = new Datafield(tag, occ);
+            Datafield df = parseDatafield(dfElem);
             pr.addDatafield(df);
 
             Iterator<Element> subfieldIterator = dfElem.getDescendants(new ElementFilter("subfield"));
             while (subfieldIterator.hasNext()) {
                 Element sfElem = subfieldIterator.next();
-                String code = sfElem.getAttributeValue("code");
-                String value = sfElem.getText();
-                Subfield sf = new Subfield(code, value);
+                Subfield sf = parseSubfield(sfElem);
                 df.addSubField(sf);
             }
         }
 
         return pr;
+    }
+
+    private Datafield parseDatafield(Element dfElem) {
+        String tag = dfElem.getAttributeValue("tag");
+        String occ = dfElem.getAttributeValue("occurrence");
+        Datafield df = new Datafield(tag, occ);
+        return df;
+    }
+
+    private Subfield parseSubfield(Element sfElem) {
+        String code = sfElem.getAttributeValue("code");
+        String value = sfElem.getText();
+        Subfield sf = new Subfield(code, value);
+        return sf;
     }
 
 }

@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.Path;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -22,56 +20,24 @@ import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFileMetadataManager;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRFileMetadata;
 import org.mycore.datamodel.metadata.MCRMetaIFS;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.frontend.util.DerivateLinkUtil;
+import org.mycore.frontend.util.FileLocation;
 import org.mycore.imagetiler.MCRImage;
 import org.mycore.iview2.services.MCRIView2Tools;
 import org.xml.sax.SAXException;
 
 import com.google.common.io.Files;
 
+import fsu.jportal.backend.DerivateTools;
+
 @MCRCommandGroup(name = "JP Commands")
 public class JPortalCommands {
-
-    public static class FileLocation {
-        static final Pattern locationPattern = Pattern.compile("/(jportal_\\w*_[0-9]{1,8})((/.*)*/(.*)$)?");
-
-        String ownerID;
-
-        String path;
-        
-        String fileName;
-
-        public FileLocation(String oldFile) {
-            parseOwnerIDAndPath(oldFile);
-        }
-
-        private void parseOwnerIDAndPath(String oldFile) {
-            Matcher locationMatcher = locationPattern.matcher(oldFile);
-            while (locationMatcher.find()) {
-                ownerID = locationMatcher.group(1);
-                path = locationMatcher.group(2);
-                fileName = locationMatcher.group(4);
-            }
-        }
-
-        public String getOwnerID() {
-            return ownerID;
-        }
-
-        public String getPath() {
-            return path;
-        }
-
-        public String getFileName() {
-            return fileName;
-        }
-
-    }
 
     private static Logger LOGGER = Logger.getLogger(JPortalCommands.class.getName());
 
@@ -112,55 +78,6 @@ public class JPortalCommands {
 
     @MCRCommand(help = "Rename file in derivate: mv {oldName} {newName}", syntax = "mv {0} {1}")
     public static void renameFileInIFS(String oldFile, String newFile) {
-        // check if oldName, newName or derivId not null and not empty ""
-        oldFile = oldFile.trim();
-        newFile = newFile.trim();
-
-        FileLocation oldFileLocation = new FileLocation(oldFile);
-        FileLocation newFileLocation = new FileLocation(newFile);
-        
-        String oldDerivId = oldFileLocation.getOwnerID();
-        String oldFileName = oldFileLocation.getFileName();
-        String newDerivId = newFileLocation.getOwnerID();
-        String newFileName = newFileLocation.getFileName();
-        
-        if(!oldDerivId.equals(newDerivId)){
-            MCRDirectory oldRootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(oldDerivId);
-            MCRDirectory newRootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(newDerivId);
-            MCRFilesystemNode file = oldRootNode.getChildByPath(oldFileLocation.getPath());
-            file.move(newRootNode);
-            LOGGER.info("Moved file " + oldFile + " to " + newFile);
-        } else if(oldDerivId.equals(newDerivId) && !newFileName.equals(oldFileName)){
-            MCRDirectory rootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(oldDerivId);
-            MCRFilesystemNode file = rootNode.getChildByPath(oldFileLocation.getPath());
-
-            file.setName(newFileName);
-            MCRFileMetadataManager.instance().storeNode(file);
-            LOGGER.info("Renamed file " + oldFile + " to " + newFile);
-
-            MCRObjectID mcrid = MCRObjectID.getInstance(oldDerivId);
-            MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(mcrid);
-            MCRMetaIFS internals = der.getDerivate().getInternals();
-            String mainDoc = internals.getMainDoc();
-            if (oldFileName.equals(mainDoc)) {
-                internals.setMainDoc(newFileName);
-                MCRMetadataManager.updateMCRDerivateXML(der);
-                LOGGER.info("Setted maindoc " + mainDoc + " to " + newFile);
-            }   
-        }else{
-            LOGGER.info("New file name " + newFile + " equals old file name " + oldFileName + ", nothing to do.");
-        }
-        
-        File tileDir = MCRIView2Tools.getTileDir();
-        File tiledFile = MCRImage.getTiledFile(tileDir, oldDerivId, oldFileName);
-        File newTiledFile = MCRImage.getTiledFile(tileDir, newDerivId, null);
-        try {
-            final int pos = newFileName.lastIndexOf('.');
-            final String relPath = newFileName.substring(0, pos > 0 ? pos : newFileName.length()) + ".iview2";
-            Files.move(tiledFile, new File(newTiledFile, relPath));
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        DerivateTools.mv(oldFile, newFile);
     }
 }

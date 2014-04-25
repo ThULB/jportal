@@ -15,32 +15,20 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.log4j.Logger;
-import org.jdom2.Attribute;
-import org.jdom2.Document;
-import org.jdom2.JDOMException;
-import org.jdom2.filter.Filters;
-import org.jdom2.xpath.XPathExpression;
-import org.jdom2.xpath.XPathFactory;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.JPortalCommands;
-import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-import org.xml.sax.SAXException;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
-import com.sun.jersey.spi.container.ContainerRequest;
-
+import fsu.jportal.backend.Derivate;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
 
 @Path("filebrowser")
+@MCRRestrictedAccess(ResourceAccess.class)
 public class Filebrowser {
     private MCRJSONManager gsonManager;
 
@@ -51,53 +39,32 @@ public class Filebrowser {
     }
 
     @GET
-    @Path("{id}{path:(/.*)*}")
+    @Path("{derivID}{path:(/.*)*}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response browsePath(@PathParam("id") String id, @PathParam("path") String path) {
-        MCRDirectory rootDirectory = MCRDirectory.getRootDirectory(id);
-        if (rootDirectory == null) {
+    public Response browsePath(@PathParam("derivID") String derivID, @PathParam("path") String path) {
+        Derivate derivate = new Derivate(derivID);
+
+        MCRFilesystemNode node;
+        if (path != null && !"".equals(path.trim())) {
+            node = derivate.getChildByPath(path);
+        } else {
+            node = derivate.getRootDir();
+        }
+        
+        if (node == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
-
-        String maindoc = getMaindoc(id);
-        FileNodeWraper wrapper;
-
-        if (path != null && !"".equals(path.trim())) {
-            MCRFilesystemNode node = rootDirectory.getChildByPath(path);
-            if (node == null) {
-                return Response.status(Status.NOT_FOUND).build();
-            }
-
-            wrapper = new FileNodeWraper(node, maindoc);
-        } else {
-            wrapper = new FileNodeWraper(rootDirectory, maindoc);
-        }
-
+        
+        String maindoc = derivate.getMaindoc();
+        FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
         String json = gsonManager.createGson().toJson(wrapper);
         return Response.ok(json).build();
     }
 
-    private String getMaindoc(String id) {
-        Document derivXML;
-        try {
-            derivXML = MCRXMLMetadataManager.instance().retrieveXML(MCRObjectID.getInstance(id));
-            XPathFactory xPathFactory = XPathFactory.instance();
-            XPathExpression<Attribute> attr = xPathFactory.compile(
-                    "/mycorederivate/derivate/internals/internal/@maindoc", Filters.attribute());
-            String maindoc = attr.evaluateFirst(derivXML).getValue();
-            return maindoc.startsWith("/") ? maindoc : "/" + maindoc;
-        } catch (IOException | JDOMException | SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     @GET
-    @Path("gui/{id}{path:(/.*)*}")
+    @Path("gui/{derivID}{path:(/.*)*}")
     @Produces(MediaType.TEXT_HTML)
-    public Response gui(@PathParam("id") String id) {
+    public Response gui(@PathParam("derivID") String derivID) {
         //        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(id);
         //        if(rootNode == null){
         //            return Response.status(Status.NOT_FOUND).build();
@@ -107,13 +74,13 @@ public class Filebrowser {
     }
 
     @DELETE
-    @Path("{id}{path:(/.*)*}")
+    @Path("{derivID}{path:(/.*)*}")
     //    @MCRRestrictedAccess(ResourceAccess.class)
-    public Response deleteFile(@PathParam("id") String id, @PathParam("path") String path) {
-        if (MCRAccessManager.checkPermission(id, "delete")) {
+    public Response deleteFile(@PathParam("derivID") String derivID, @PathParam("path") String path) {
+        if (MCRAccessManager.checkPermission(derivID, "delete")) {
 
         }
-        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(id);
+        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(derivID);
         if (rootNode == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -146,10 +113,8 @@ public class Filebrowser {
     @Path("{derivID}{path:(/.*)*}/main")
     public Response setMainDoc(@PathParam("derivID") String derivID, @PathParam("path") String path) throws IOException {
         //        if (MCRAccessManager.checkPermission(derivID, PERMISSION_WRITE)) {
-        MCRObjectID mcrid = MCRObjectID.getInstance(derivID);
-        MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(mcrid);
-        der.getDerivate().getInternals().setMainDoc(path);
-        MCRMetadataManager.updateMCRDerivateXML(der);
+        Derivate derivate = new Derivate(derivID);
+        derivate.setMaindoc(path);
         
         return Response.ok().build();
 
@@ -157,19 +122,5 @@ public class Filebrowser {
         //            response.sendError(HttpServletResponse.SC_FORBIDDEN,
         //                MessageFormat.format("User has not the \"" + PERMISSION_WRITE + "\" permission on object {0}.", derivID));
         //        }
-    }
-
-    public static class ResourceAccess implements MCRResourceAccessChecker {
-        private static Logger LOGGER = Logger.getLogger(ResourceAccess.class);
-
-        @Override
-        public boolean isPermitted(ContainerRequest request) {
-            LOGGER.info("Method: " + request.getMethod());
-            LOGGER.info("Path: " + request.getPath());
-            LOGGER.info("AbsPath: " + request.getAbsolutePath());
-            LOGGER.info("BaseUri: " + request.getBaseUri());
-            return false;
-        }
-
     }
 }

@@ -1,0 +1,2057 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zs:searchRetrieveResponse xmlns:zs="http://www.loc.gov/zing/srw/"><zs:version>1.1</zs:version><zs:numberOfRecords>2</zs:numberOfRecords><zs:records><zs:record><zs:recordSchema>picaxml</zs:recordSchema><zs:recordPacking>xml</zs:recordPacking><zs:recordData><record xmlns="info:srw/schema/5/picaXML-v1.0">
+  <datafield tag="001A">
+    <subfield code="0">2012:19-04-12</subfield>
+  </datafield>
+  <datafield tag="001B">
+    <subfield code="0">2012:19-04-12</subfield>
+    <subfield code="t">11:07:47.321</subfield>
+  </datafield>
+  <datafield tag="001D">
+    <subfield code="0">2012:01-11-03</subfield>
+  </datafield>
+  <datafield tag="001U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="001X">
+    <subfield code="0">0</subfield>
+  </datafield>
+  <datafield tag="002@">
+    <subfield code="0">Tpv3</subfield>
+  </datafield>
+  <datafield tag="003@">
+    <subfield code="0">372646808</subfield>
+  </datafield>
+  <datafield tag="003U">
+    <subfield code="a">http://d-nb.info/gnd/128407093</subfield>
+  </datafield>
+  <datafield tag="004B">
+    <subfield code="a">piz</subfield>
+  </datafield>
+  <datafield tag="007K">
+    <subfield code="a">gnd</subfield>
+    <subfield code="0">128407093</subfield>
+  </datafield>
+  <datafield tag="007N">
+    <subfield code="a">pnd</subfield>
+    <subfield code="0">128407093</subfield>
+    <subfield code="v">zg</subfield>
+  </datafield>
+  <datafield tag="008A">
+    <subfield code="a">a</subfield>
+    <subfield code="a">f</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christoph</subfield>
+    <subfield code="a">Ausfeldt</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johann Christoph</subfield>
+    <subfield code="a">Ausfeld</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christoph</subfield>
+    <subfield code="a">Ausfeld</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christophorus</subfield>
+    <subfield code="a">Ausfeldt</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christophorus</subfield>
+    <subfield code="a">Ausfeld</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Joh. Christophorus</subfield>
+    <subfield code="a">Aussfeldus</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christophorus</subfield>
+    <subfield code="a">Aussfeldus</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johann Christoph</subfield>
+    <subfield code="a">Außfeld</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christoph</subfield>
+    <subfield code="a">Außfeld</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johann Christoph</subfield>
+    <subfield code="a">Außfeldt</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Johannes Christoph</subfield>
+    <subfield code="a">Außfeldt</subfield>
+  </datafield>
+  <datafield tag="028@">
+    <subfield code="d">Joh. Christophorus</subfield>
+    <subfield code="a">Ausfeldius</subfield>
+  </datafield>
+  <datafield tag="028A">
+    <subfield code="d">Johann Christoph</subfield>
+    <subfield code="a">Ausfeldt</subfield>
+  </datafield>
+  <datafield tag="050C">
+    <subfield code="a">RAK-WB</subfield>
+  </datafield>
+  <datafield tag="050C">
+    <subfield code="a">12</subfield>
+  </datafield>
+  <datafield tag="050C">
+    <subfield code="a">7</subfield>
+  </datafield>
+  <datafield tag="050C">
+    <subfield code="a">VD-17</subfield>
+  </datafield>
+  <datafield tag="050F">
+    <subfield code="a">Jöcher Zedler, Saur, LOC-NA</subfield>
+  </datafield>
+  <datafield tag="050G">
+    <subfield code="b">Promotion 1681 in Jena</subfield>
+  </datafield>
+  <datafield tag="060R">
+    <subfield code="c">e1681</subfield>
+    <subfield code="4">datw</subfield>
+  </datafield>
+</record></zs:recordData><zs:recordPosition>1</zs:recordPosition></zs:record><zs:record><zs:recordSchema>picaxml</zs:recordSchema><zs:recordPacking>xml</zs:recordPacking><zs:recordData><record xmlns="info:srw/schema/5/picaXML-v1.0">
+  <datafield tag="001@">
+    <subfield code="0">11,20-24,30-31,39-40,62,65,69-70,82,90,104,108,110,118,120,122,124,130-131,147,156,181,188,190,209,213,223,267,277,285,370,381</subfield>
+  </datafield>
+  <datafield tag="001A">
+    <subfield code="0">2004:16-11-93</subfield>
+  </datafield>
+  <datafield tag="001B">
+    <subfield code="0">0003:14-01-14</subfield>
+    <subfield code="t">15:12:57.000</subfield>
+  </datafield>
+  <datafield tag="001D">
+    <subfield code="0">2004:17-05-03</subfield>
+  </datafield>
+  <datafield tag="001U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="001X">
+    <subfield code="0">0</subfield>
+  </datafield>
+  <datafield tag="002@">
+    <subfield code="0">Advz</subfield>
+  </datafield>
+  <datafield tag="003@">
+    <subfield code="0">130113670</subfield>
+  </datafield>
+  <datafield tag="003O">
+    <subfield code="a">OCoLC</subfield>
+    <subfield code="0">263600862</subfield>
+    <subfield code="v">2012-12-31</subfield>
+  </datafield>
+  <datafield tag="005B">
+    <subfield code="0">05239160</subfield>
+  </datafield>
+  <datafield tag="006G">
+    <subfield code="0">012640247</subfield>
+  </datafield>
+  <datafield tag="006U">
+    <subfield code="0">07B310018</subfield>
+  </datafield>
+  <datafield tag="006X">
+    <subfield code="c">OCoLC</subfield>
+    <subfield code="0">714177227</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">0089010891</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">SBBT36440</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">BIST509209</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">SPKT310856</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">IFMGW000077568</subfield>
+  </datafield>
+  <datafield tag="006Y">
+    <subfield code="0">SBRT930466</subfield>
+  </datafield>
+  <datafield tag="006Z">
+    <subfield code="0">5041624</subfield>
+  </datafield>
+  <datafield tag="007G">
+    <subfield code="c">ZDB</subfield>
+    <subfield code="0">5041624</subfield>
+  </datafield>
+  <datafield tag="010@">
+    <subfield code="a">ger</subfield>
+  </datafield>
+  <datafield tag="011@">
+    <subfield code="a">1964</subfield>
+    <subfield code="n">1964-</subfield>
+  </datafield>
+  <datafield tag="019@">
+    <subfield code="a">XA-DE</subfield>
+  </datafield>
+  <datafield tag="021A">
+    <subfield code="a">Berliner geographische Abhandlungen</subfield>
+    <subfield code="h">Institut für Geographische Wissenschaften der Freien Universität Berlin</subfield>
+  </datafield>
+  <datafield tag="026C">
+    <subfield code="a">Berliner geogr. Abh</subfield>
+  </datafield>
+  <datafield tag="027A">
+    <subfield code="a">@Berliner geographische Abhandlung</subfield>
+  </datafield>
+  <datafield tag="029F">
+    <subfield code="9">103079297</subfield>
+    <subfield code="M">Tbv1</subfield>
+    <subfield code="a">Geographisches Institut</subfield>
+    <subfield code="g">Universität Berlin, Freie Universität, 2</subfield>
+    <subfield code="0">gnd/1006411-4</subfield>
+  </datafield>
+  <datafield tag="029F">
+    <subfield code="9">10404344X</subfield>
+    <subfield code="M">Tbv1</subfield>
+    <subfield code="a">Institut für Geographische Wissenschaften</subfield>
+    <subfield code="0">gnd/5052482-3</subfield>
+  </datafield>
+  <datafield tag="029F">
+    <subfield code="9">102723192</subfield>
+    <subfield code="M">Tbv1</subfield>
+    <subfield code="a">Institut für Physische Geographie</subfield>
+    <subfield code="g">Berlin, West</subfield>
+    <subfield code="0">gnd/2040747-6</subfield>
+  </datafield>
+  <datafield tag="031@">
+    <subfield code="a">Nr. 1.1964 -</subfield>
+  </datafield>
+  <datafield tag="033A">
+    <subfield code="p">Berlin</subfield>
+    <subfield code="n">Inst. für Geographische Wissenschaften der Freien Univ. Berlin</subfield>
+  </datafield>
+  <datafield tag="033B" occurrence="05">
+    <subfield code="p">Berlin</subfield>
+    <subfield code="n">Inst. für Phys. Geographie der Freien Univ. Berlin</subfield>
+    <subfield code="h">anfangs</subfield>
+  </datafield>
+  <datafield tag="039S">
+    <subfield code="c">5=1; 8=2; 16=3; 24=4; 32=5 von</subfield>
+    <subfield code="a">Geomorphologisches Laboratorium &lt;Berlin, West&gt; / Außenstelle &lt;Bardaï&gt;: Arbeitsberichte aus der Forschungsstation Bardai, Tibesti</subfield>
+    <subfield code="C">ZDB</subfield>
+    <subfield code="6">504163-6</subfield>
+  </datafield>
+  <datafield tag="039S">
+    <subfield code="c">30=1; 31=2; 35=3; 39=4; 40=5; 42=6; 46=7; 47=8 von</subfield>
+    <subfield code="a">Beiträge zum GMK-Schwerpunktprogramm</subfield>
+    <subfield code="C">ZDB</subfield>
+    <subfield code="6">1229436-6</subfield>
+  </datafield>
+  <datafield tag="039S">
+    <subfield code="c">30=1 von</subfield>
+    <subfield code="a">Geomorphologische Detailaufnahme</subfield>
+    <subfield code="C">ZDB</subfield>
+    <subfield code="6">1258050-8</subfield>
+  </datafield>
+  <datafield tag="039S">
+    <subfield code="c">41=1; 48=2; 56=3 von</subfield>
+    <subfield code="a">Beiträge zur Werra-Meissner-Forschung</subfield>
+    <subfield code="C">ZDB</subfield>
+    <subfield code="6">2293688-9</subfield>
+  </datafield>
+  <datafield tag="045G">
+    <subfield code="a">050</subfield>
+    <subfield code="A">DNB</subfield>
+  </datafield>
+  <datafield tag="045G">
+    <subfield code="a">910</subfield>
+    <subfield code="A">DNB</subfield>
+  </datafield>
+  <datafield tag="045V">
+    <subfield code="a">14</subfield>
+    <subfield code="a">21</subfield>
+    <subfield code="a">6,23</subfield>
+  </datafield>
+  <datafield tag="045Y">
+    <subfield code="a">ggo</subfield>
+    <subfield code="a">vor</subfield>
+  </datafield>
+  <datafield tag="046D">
+    <subfield code="a">Hauptsacht. teils: Berliner geographische Abhandlung</subfield>
+  </datafield>
+  <datafield tag="046F">
+    <subfield code="a">Beteil. Körp. anfangs: 2. Geographisches Institut der Freien Universität Berlin; später: Institut für Physische Geographie der Freien Universität Berlin</subfield>
+  </datafield>
+  <datafield tag="047D">
+    <subfield code="a">31!(26-09-07); 17!IIA!(03-05-05)188!läuft weiter(21-07-09)</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">11</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="101B">
+    <subfield code="0">09-10-13</subfield>
+    <subfield code="t">13:35:59.000</subfield>
+  </datafield>
+  <datafield tag="101D">
+    <subfield code="0">09-10-13</subfield>
+    <subfield code="b">1687</subfield>
+    <subfield code="a">0001</subfield>
+  </datafield>
+  <datafield tag="101U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="107F">
+    <subfield code="0">SBBL36050</subfield>
+  </datafield>
+  <datafield tag="107F">
+    <subfield code="0">SBRT930466</subfield>
+  </datafield>
+  <datafield tag="107F" occurrence="05">
+    <subfield code="0">SZTB.00483733</subfield>
+  </datafield>
+  <datafield tag="107F" occurrence="09">
+    <subfield code="0">00060344</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">14-11-07</subfield>
+    <subfield code="t">10:41:28.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">14-11-07</subfield>
+    <subfield code="b">1676</subfield>
+    <subfield code="a">0001</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">269431047</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">027575055</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220B" occurrence="01">
+    <subfield code="a">II A / ACQ</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">06-04-05</subfield>
+    <subfield code="t">07:21:57.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">06-04-05</subfield>
+    <subfield code="b">1687</subfield>
+    <subfield code="a">0001</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">419287914</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="02">
+    <subfield code="0">027575063</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">ba</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="02">
+    <subfield code="b">1</subfield>
+    <subfield code="j">1</subfield>
+    <subfield code="f">6</subfield>
+    <subfield code="a">29 SB 527</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="02">
+    <subfield code="d">1</subfield>
+    <subfield code="j">1964</subfield>
+    <subfield code="n">6</subfield>
+    <subfield code="k">1969</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">8</subfield>
+    <subfield code="j">1969</subfield>
+    <subfield code="n">19</subfield>
+    <subfield code="k">1973</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">21</subfield>
+    <subfield code="j">1975</subfield>
+    <subfield code="n">22</subfield>
+    <subfield code="k">1975</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">24</subfield>
+    <subfield code="j">1976</subfield>
+    <subfield code="n">30</subfield>
+    <subfield code="k">1978</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">32</subfield>
+    <subfield code="j">1982</subfield>
+    <subfield code="n">38</subfield>
+    <subfield code="k">1984</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">41</subfield>
+    <subfield code="j">1986</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">43</subfield>
+    <subfield code="j">1987</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="02">
+    <subfield code="a">1.1964 - 6.1969; 8.1969 - 19.1973; 21.1975 - 22.1975; 24.1976 - 30.1978; 32.1982 - 38.1984; 41.1986; 43.1987</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">20</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">20-08-07</subfield>
+    <subfield code="t">10:20:19.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">20-08-07</subfield>
+    <subfield code="b">1014</subfield>
+    <subfield code="a">0084</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">597643725</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">08-04-03</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">21</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">04-07-00</subfield>
+    <subfield code="t">09:52:20.901</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">23-04-93</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">167223739</subfield>
+  </datafield>
+  <datafield tag="206X" occurrence="01">
+    <subfield code="0">1184268</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">14-01-94</subfield>
+    <subfield code="b">xza</subfield>
+  </datafield>
+  <datafield tag="220B" occurrence="01">
+    <subfield code="a">*****Serie zur Fortsetzung*****</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">22</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">21-08-01</subfield>
+    <subfield code="t">07:05:55.943</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">28-06-84</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">097504742</subfield>
+  </datafield>
+  <datafield tag="206X" occurrence="01">
+    <subfield code="0">0249700</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">14-01-94</subfield>
+    <subfield code="b">xu</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">01-08-96</subfield>
+    <subfield code="t">15:55:16.129</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">099545063</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">20-01-80</subfield>
+    <subfield code="b">bi02415</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="02">
+    <subfield code="f">18/24</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209B" occurrence="02">
+    <subfield code="a">8.1965/66(1969) ff.</subfield>
+    <subfield code="x">32</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="02">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="02">
+    <subfield code="d">8</subfield>
+    <subfield code="j">1965/66</subfield>
+    <subfield code="h">1969</subfield>
+    <subfield code="6"/>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="03">
+    <subfield code="0">21-08-01</subfield>
+    <subfield code="t">07:05:56.046</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="03">
+    <subfield code="0">29-10-97</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="03">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="03">
+    <subfield code="0">262447010</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="03">
+    <subfield code="a">29-10-97</subfield>
+    <subfield code="b">xi05715</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="03">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="03">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="04">
+    <subfield code="0">21-08-03</subfield>
+    <subfield code="t">14:07:10.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="04">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="04">
+    <subfield code="0">612828468</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="04">
+    <subfield code="a">21-08-03</subfield>
+    <subfield code="b">xi00815</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="04">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="04">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="05">
+    <subfield code="0">22-11-07</subfield>
+    <subfield code="t">08:37:39.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="05">
+    <subfield code="0">04-09-03</subfield>
+    <subfield code="b">5168</subfield>
+    <subfield code="a">0018/0008</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="05">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="05">
+    <subfield code="0">614262399</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="05">
+    <subfield code="a">04-09-03</subfield>
+    <subfield code="b">xi00815</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="06">
+    <subfield code="0">23-01-14</subfield>
+    <subfield code="t">13:32:36.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="06">
+    <subfield code="0">23-01-14</subfield>
+    <subfield code="b">6583</subfield>
+    <subfield code="a">0018/0305</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="06">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="06">
+    <subfield code="0">1454099801</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="06">
+    <subfield code="a">23-01-14</subfield>
+    <subfield code="b">xi30514</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">23</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">10-09-97</subfield>
+    <subfield code="t">18:38:35.778</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">167406124</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">14-10-95</subfield>
+    <subfield code="b">zzr</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">24</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">02-06-06</subfield>
+    <subfield code="t">22:17:05.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">02-05-96</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">02-06-06</subfield>
+    <subfield code="b">r24sigabc</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">185061893</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">02-05-96</subfield>
+    <subfield code="b">zz1</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8</subfield>
+    <subfield code="f">16</subfield>
+    <subfield code="a">Einzelsignaturen</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">09</subfield>
+  </datafield>
+  <datafield tag="209O" occurrence="01">
+    <subfield code="a">kd</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="01">
+    <subfield code="a">Teilweise vorhanden unter U 522</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="03">
+    <subfield code="0">26-10-12</subfield>
+    <subfield code="t">12:06:41.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="03">
+    <subfield code="0">26-10-12</subfield>
+    <subfield code="b">cbs_335</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="03">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="03">
+    <subfield code="0">741252848</subfield>
+  </datafield>
+  <datafield tag="206X" occurrence="03">
+    <subfield code="0">1422344</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="03">
+    <subfield code="a">14-01-94</subfield>
+    <subfield code="b">bf070</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="03">
+    <subfield code="f">8/70</subfield>
+    <subfield code="a">Z-141</subfield>
+    <subfield code="d">i</subfield>
+    <subfield code="x">09</subfield>
+  </datafield>
+  <datafield tag="209B" occurrence="03">
+    <subfield code="a">ff</subfield>
+    <subfield code="x">50</subfield>
+  </datafield>
+  <datafield tag="209C" occurrence="03">
+    <subfield code="a">A 22838</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209O" occurrence="03">
+    <subfield code="a">kd</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209O" occurrence="03">
+    <subfield code="a">zp</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="03">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">30</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">23-02-06</subfield>
+    <subfield code="t">18:38:54.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">04-11-96</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">23-02-06</subfield>
+    <subfield code="b">1201</subfield>
+    <subfield code="a">0104</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">217982085</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">23-02-06</subfield>
+    <subfield code="b">bi004</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="f">104/04</subfield>
+    <subfield code="a"> CL 4</subfield>
+    <subfield code="d">g</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">1</subfield>
+    <subfield code="j">1964</subfield>
+    <subfield code="n">8</subfield>
+    <subfield code="k">1969</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">12</subfield>
+    <subfield code="j">1971</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">14</subfield>
+    <subfield code="j">1972</subfield>
+    <subfield code="6"/>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">1.1964 - 8.1969; 12.1971; 14.1972 -</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="01">
+    <subfield code="a">Genauen Bestand bitte im Institut erfragen</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">31</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">20-11-98</subfield>
+    <subfield code="t">09:31:56.631</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">20-11-98</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">310905389</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">20-11-98</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">39</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">11-02-01</subfield>
+    <subfield code="t">10:14:29.776</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">27-11-98</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">311746608</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">13-12-00</subfield>
+    <subfield code="b">xe</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">12-09-08</subfield>
+    <subfield code="t">10:23:33.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">12-09-08</subfield>
+    <subfield code="b">5784</subfield>
+    <subfield code="a">0547</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">890904324</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">12-09-08</subfield>
+    <subfield code="b">xg</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">40</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="101B">
+    <subfield code="0">16-05-96</subfield>
+    <subfield code="t">12:14:27.837</subfield>
+  </datafield>
+  <datafield tag="101D">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="101U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="145B">
+    <subfield code="b">14</subfield>
+  </datafield>
+  <datafield tag="145Z" occurrence="10">
+    <subfield code="a">QA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">06-06-08</subfield>
+    <subfield code="t">15:58:33.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">08-06-88</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">06-06-08</subfield>
+    <subfield code="b">1452</subfield>
+    <subfield code="a">0007</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">128407093</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">01-06-05</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="a">Einzelsignaturen</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="a">ZB 20559</subfield>
+    <subfield code="x">09</subfield>
+  </datafield>
+  <datafield tag="209B" occurrence="01">
+    <subfield code="a">*</subfield>
+    <subfield code="x">50</subfield>
+  </datafield>
+  <datafield tag="209C" occurrence="01">
+    <subfield code="a">20559</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">1.1964 - 66.2006</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">12-01-05</subfield>
+    <subfield code="t">09:20:51.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">29-09-09</subfield>
+    <subfield code="b">movbio</subfield>
+    <subfield code="a">0007</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">69332791X</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">12-01-05</subfield>
+    <subfield code="b">xi127</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="02">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="03">
+    <subfield code="0">29-01-10</subfield>
+    <subfield code="t">12:46:51.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="03">
+    <subfield code="0">29-01-10</subfield>
+    <subfield code="b">movgeol</subfield>
+    <subfield code="a">0007</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="03">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="03">
+    <subfield code="0">135358817</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="03">
+    <subfield code="a">22-03-95</subfield>
+    <subfield code="b">bi016</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="03">
+    <subfield code="b">7</subfield>
+    <subfield code="j">196</subfield>
+    <subfield code="f">7/016</subfield>
+    <subfield code="a">216 A</subfield>
+    <subfield code="d">i</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="03">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="03">
+    <subfield code="d">1</subfield>
+    <subfield code="j">1964</subfield>
+    <subfield code="n">66</subfield>
+    <subfield code="k">2006</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="03">
+    <subfield code="a">1.1964 - 66.2006</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">62</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">10-06-04</subfield>
+    <subfield code="t">11:15:44.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">093995792</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">16-12-95</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">65</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">16-01-06</subfield>
+    <subfield code="t">08:25:42.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">16-01-06</subfield>
+    <subfield code="b">384906</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">219312745</subfield>
+  </datafield>
+  <datafield tag="206X" occurrence="01">
+    <subfield code="0">37963922/01</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">03-06-96</subfield>
+    <subfield code="b">b3</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="a">ZB 998</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209B" occurrence="01">
+    <subfield code="a">5.1967</subfield>
+    <subfield code="x">32</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">5</subfield>
+    <subfield code="j">1967</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">18-01-06</subfield>
+    <subfield code="t">06:22:04.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="02">
+    <subfield code="0">28-03-00</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">18-01-06</subfield>
+    <subfield code="b">384906</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">384228860</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">28-03-00</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="02">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">69</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">07-07-09</subfield>
+    <subfield code="t">10:30:27.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="02">
+    <subfield code="0">01-02-95</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">07-07-09</subfield>
+    <subfield code="b">5065</subfield>
+    <subfield code="a">0009</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">165540044</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">08-05-00</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="02">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">70</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="101B">
+    <subfield code="0">01-04-96</subfield>
+    <subfield code="t">11:38:51.306</subfield>
+  </datafield>
+  <datafield tag="101D">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="101U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="145Z">
+    <subfield code="a">020/3740</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">24-10-13</subfield>
+    <subfield code="t">15:12:20.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">24-10-13</subfield>
+    <subfield code="b">2991</subfield>
+    <subfield code="a">0089</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">138513880</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">16-09-94</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="f">Haus2</subfield>
+    <subfield code="a">RA 4476</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">Einzelbandnachweis</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="01">
+    <subfield code="a">Zugl. unter anderen Signaturen vorh.: 7.1969 = DH 1885</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">82</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">13-06-06</subfield>
+    <subfield code="t">17:17:51.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">13-06-06</subfield>
+    <subfield code="b">zdb2vfl</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">764675745</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">115684700</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">07-03-06</subfield>
+    <subfield code="b">bAa</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8110</subfield>
+    <subfield code="f">000</subfield>
+    <subfield code="a">SRq 746</subfield>
+    <subfield code="d">s</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209K" occurrence="01">
+    <subfield code="b">0030</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">26</subfield>
+    <subfield code="j">1977</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">28</subfield>
+    <subfield code="j">1979</subfield>
+    <subfield code="n">29</subfield>
+    <subfield code="k">1978</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">37</subfield>
+    <subfield code="j">1984</subfield>
+    <subfield code="n">38</subfield>
+    <subfield code="k">1984</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">45</subfield>
+    <subfield code="j">1987</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">26.1977; 28.1979 - 29.1978; 37.1984 - 38.1984; 45.1987</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">90</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">02-12-05</subfield>
+    <subfield code="t">14:36:59.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">02-12-05</subfield>
+    <subfield code="b">5409</subfield>
+    <subfield code="a">3090</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">746477392</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">02-12-05</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">104</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">11-01-07</subfield>
+    <subfield code="t">11:09:09.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">11-01-07</subfield>
+    <subfield code="b">6719</subfield>
+    <subfield code="a">0068</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">805521143</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">11-01-07</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="a">Einzelsignatur</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">108</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">15-03-13</subfield>
+    <subfield code="t">18:10:30.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">15-03-13</subfield>
+    <subfield code="b">zdblok</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">523304544</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">027575217</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8113</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">6</subfield>
+    <subfield code="j">1969</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">8</subfield>
+    <subfield code="j">1969</subfield>
+    <subfield code="n">10</subfield>
+    <subfield code="k">1971</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">12</subfield>
+    <subfield code="j">1971</subfield>
+    <subfield code="n">14</subfield>
+    <subfield code="k">1972</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">16</subfield>
+    <subfield code="j">1972</subfield>
+    <subfield code="n">66</subfield>
+    <subfield code="k">2006</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">6.1969; 8.1969 - 10.1971; 12.1971 - 14.1972; 16.1972 - 66.2006</subfield>
+  </datafield>
+  <datafield tag="231D" occurrence="01">
+    <subfield code="a">Einzelnachweis</subfield>
+  </datafield>
+  <datafield tag="231F" occurrence="01">
+    <subfield code="a">[N=1-5;7;11;15;67-]</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">110</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">13-08-05</subfield>
+    <subfield code="t">07:31:51.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">26-06-02</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">13-08-05</subfield>
+    <subfield code="b">384906</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">559641214</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">26-06-02</subfield>
+    <subfield code="b">xz</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">118</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">09-12-11</subfield>
+    <subfield code="t">00:16:18.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">21-06-00</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">09-12-11</subfield>
+    <subfield code="b">touchtitle</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">393476200</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">21-06-00</subfield>
+    <subfield code="b">x3</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">120</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">19-07-12</subfield>
+    <subfield code="t">13:48:41.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">19-07-12</subfield>
+    <subfield code="b">9331</subfield>
+    <subfield code="a">0715</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">1312264020</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">19-07-12</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">122</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">30-11-11</subfield>
+    <subfield code="t">16:19:41.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">30-11-11</subfield>
+    <subfield code="b">7916</subfield>
+    <subfield code="a">0897</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">1279878304</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">30-11-11</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">124</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">13-06-06</subfield>
+    <subfield code="t">17:17:51.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">13-06-06</subfield>
+    <subfield code="b">zdb2vfl</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">484797425</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">027575187</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8113</subfield>
+    <subfield code="a">Einzelsign.</subfield>
+    <subfield code="d">s</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209K" occurrence="01">
+    <subfield code="b">0014</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">1</subfield>
+    <subfield code="j">1964</subfield>
+    <subfield code="6"/>
+  </datafield>
+  <datafield tag="231D" occurrence="01">
+    <subfield code="a">monographisch erfasst</subfield>
+  </datafield>
+  <datafield tag="245G" occurrence="01">
+    <subfield code="c">A</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">130</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">12-10-07</subfield>
+    <subfield code="t">11:20:55.000</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">12-12-95</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">12-10-07</subfield>
+    <subfield code="b">4556</subfield>
+    <subfield code="a">0700</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">168725916</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-95</subfield>
+    <subfield code="b">xb</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">131</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">11-05-98</subfield>
+    <subfield code="t">12:06:23.687</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">02-03-98</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">274992477</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">11-05-98</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">147</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">07-11-01</subfield>
+    <subfield code="t">15:05:54.244</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">07-11-01</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">529222124</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">07-11-01</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">156</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="101B">
+    <subfield code="0">04-01-05</subfield>
+    <subfield code="t">19:26:05.000</subfield>
+  </datafield>
+  <datafield tag="101D">
+    <subfield code="0">02-07-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="101U">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="145Y">
+    <subfield code="a">Erf: 10441WIED</subfield>
+  </datafield>
+  <datafield tag="145Y">
+    <subfield code="a">Kor: 10441WIED</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">01-10-10</subfield>
+    <subfield code="t">22:31:31.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">01-10-10</subfield>
+    <subfield code="b">r156delex</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">1185090282</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">01-01-01</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">181</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="15">
+    <subfield code="0">16-02-11</subfield>
+    <subfield code="t">12:22:01.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="15">
+    <subfield code="0">16-02-11</subfield>
+    <subfield code="b">9056</subfield>
+    <subfield code="a">3181/0012</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="15">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="15">
+    <subfield code="0">1227054130</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="15">
+    <subfield code="a">16-02-11</subfield>
+    <subfield code="b">xb015</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="15">
+    <subfield code="b">3181</subfield>
+    <subfield code="j">015</subfield>
+    <subfield code="f">AB8</subfield>
+    <subfield code="d">i</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">188</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">26-04-07</subfield>
+    <subfield code="t">16:56:21.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">26-04-07</subfield>
+    <subfield code="b">7928</subfield>
+    <subfield code="a">3188/0001</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">817599355</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">26-04-07</subfield>
+    <subfield code="b">xJS001</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">190</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">06-10-07</subfield>
+    <subfield code="t">12:04:15.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">06-10-07</subfield>
+    <subfield code="b">zdblok</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">490330703</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">02757525X</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8113</subfield>
+    <subfield code="a">Zw 5/1</subfield>
+    <subfield code="d">s</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">9</subfield>
+    <subfield code="j">1970</subfield>
+    <subfield code="n">14</subfield>
+    <subfield code="k">1972</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">Nr. 9.1970 - 14.1972</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">209</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">03-02-98</subfield>
+    <subfield code="t">14:23:59.411</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">03-02-98</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">272031461</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">03-02-98</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">213</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">17-01-02</subfield>
+    <subfield code="t">10:46:17.887</subfield>
+  </datafield>
+  <datafield tag="201C" occurrence="01">
+    <subfield code="0">17-01-02</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">21-06-05</subfield>
+    <subfield code="b">801</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">542082780</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">17-01-02</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="220D" occurrence="01">
+    <subfield code="a">QP035823313</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">223</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">07-12-07</subfield>
+    <subfield code="t">04:46:09.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">07-12-07</subfield>
+    <subfield code="b">zdblok</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">704241064</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">02757511X</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">b98</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8111</subfield>
+    <subfield code="a">((Einzelsign.))</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="209K" occurrence="01">
+    <subfield code="b">4002</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="d">1</subfield>
+    <subfield code="j">1964</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">6</subfield>
+    <subfield code="j">1969</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">11</subfield>
+    <subfield code="j">1971</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">61</subfield>
+    <subfield code="j">1996</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">66</subfield>
+    <subfield code="j">2006</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">1.1964; 6.1969; 11.1971; 61.1996; 66.2006</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">277</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">10-11-12</subfield>
+    <subfield code="t">00:03:07.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">10-11-12</subfield>
+    <subfield code="b">zdblok</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">1336814047</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">246642610</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">15-12-04</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">8114</subfield>
+    <subfield code="a">Einzelsign.</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="245G" occurrence="01">
+    <subfield code="c">1</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">285</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">19-02-13</subfield>
+    <subfield code="t">07:31:36.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">19-02-13</subfield>
+    <subfield code="b">9455</subfield>
+    <subfield code="a">0517</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">49226743X</subfield>
+  </datafield>
+  <datafield tag="206W" occurrence="01">
+    <subfield code="0">027575284</subfield>
+    <subfield code="z">1</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">12-12-99</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="f">2200</subfield>
+    <subfield code="a">Einzelsign.</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="01">
+    <subfield code="f">Nr.</subfield>
+    <subfield code="d">3</subfield>
+    <subfield code="j">1966</subfield>
+    <subfield code="n">33/1981</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">Nr. 3.1966 - 33.1981</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="01">
+    <subfield code="a">[N=16;20-22;24;26-27;30-31]</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="02">
+    <subfield code="0">13-10-11</subfield>
+    <subfield code="t">00:58:31.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="02">
+    <subfield code="0">13-10-11</subfield>
+    <subfield code="b">r285sso</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="02">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="02">
+    <subfield code="0">941776425</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="02">
+    <subfield code="a">22-07-09</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="02">
+    <subfield code="f">2205</subfield>
+    <subfield code="a">X 1528</subfield>
+    <subfield code="d">s</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="02">
+    <subfield code="f">Nr.</subfield>
+    <subfield code="d">7</subfield>
+    <subfield code="j">1969</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">37</subfield>
+    <subfield code="j">1984</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">43</subfield>
+    <subfield code="j">1987</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="02">
+    <subfield code="a">Nr. 7.1969; 37.1984; 43.1987</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="02">
+    <subfield code="a">DGG-Bestand</subfield>
+  </datafield>
+  <datafield tag="237A" occurrence="02">
+    <subfield code="a">Sammlung Deutsche Gesellschaft für Geowissenschaften - DGG</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="03">
+    <subfield code="0">19-08-09</subfield>
+    <subfield code="t">09:02:32.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="03">
+    <subfield code="0">19-08-09</subfield>
+    <subfield code="b">9453</subfield>
+    <subfield code="a">0517</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="03">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="03">
+    <subfield code="0">945216017</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="03">
+    <subfield code="a">19-08-09</subfield>
+    <subfield code="b">b</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="03">
+    <subfield code="f">2150</subfield>
+    <subfield code="a">Einzelsign.</subfield>
+    <subfield code="d">u</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231@" occurrence="03">
+    <subfield code="d">31</subfield>
+    <subfield code="j">1980</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">37</subfield>
+    <subfield code="j">1984</subfield>
+    <subfield code="n">40</subfield>
+    <subfield code="k">1985</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">42</subfield>
+    <subfield code="j">1987</subfield>
+    <subfield code="n">47</subfield>
+    <subfield code="k">1988</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">49</subfield>
+    <subfield code="j">1988</subfield>
+    <subfield code="n">55</subfield>
+    <subfield code="k">1993</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">57</subfield>
+    <subfield code="j">1993</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">59</subfield>
+    <subfield code="j">1995</subfield>
+    <subfield code="0"> </subfield>
+    <subfield code="d">62</subfield>
+    <subfield code="j">1996</subfield>
+    <subfield code="n">66</subfield>
+    <subfield code="k">2006</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="03">
+    <subfield code="a">31.1980; 37.1984 - 40.1985; 42.1987 - 47.1988; 49.1988 - 55.1993; 57.1993; 59.1995; 62.1996 - 66.2006</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">370</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">24-07-12</subfield>
+    <subfield code="t">15:19:57.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">24-07-12</subfield>
+    <subfield code="b">844593</subfield>
+    <subfield code="a">4370</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">1312842512</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">24-07-12</subfield>
+    <subfield code="b">x</subfield>
+  </datafield>
+  <datafield tag="101@">
+    <subfield code="a">381</subfield>
+    <subfield code="c">PICA</subfield>
+  </datafield>
+  <datafield tag="201B" occurrence="01">
+    <subfield code="0">16-05-13</subfield>
+    <subfield code="t">20:02:57.000</subfield>
+  </datafield>
+  <datafield tag="201D" occurrence="01">
+    <subfield code="0">16-05-13</subfield>
+    <subfield code="b">r426</subfield>
+    <subfield code="a">1999</subfield>
+  </datafield>
+  <datafield tag="201U" occurrence="01">
+    <subfield code="0">utf8</subfield>
+  </datafield>
+  <datafield tag="203@" occurrence="01">
+    <subfield code="0">088921727</subfield>
+  </datafield>
+  <datafield tag="208@" occurrence="01">
+    <subfield code="a">01-03-05</subfield>
+    <subfield code="b">nw</subfield>
+  </datafield>
+  <datafield tag="209A" occurrence="01">
+    <subfield code="b">4381</subfield>
+    <subfield code="j">0001</subfield>
+    <subfield code="f">W-Magazin: 76a-g</subfield>
+    <subfield code="a">Sonderdrucke Sd</subfield>
+    <subfield code="d">c</subfield>
+    <subfield code="x">00</subfield>
+  </datafield>
+  <datafield tag="231B" occurrence="01">
+    <subfield code="a">nur einzelne Artikel vorhanden</subfield>
+  </datafield>
+</record></zs:recordData><zs:recordPosition>2</zs:recordPosition></zs:record></zs:records></zs:searchRetrieveResponse>
