@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import fsu.jportal.it.BaseIntegrationTest;
 import fsu.jportal.it.TestUtils;
 
-public class CreateITCase extends BaseIntegrationTest {
+public class CRUDITCase extends BaseIntegrationTest {
 
     @Test
     public void createPerson() {
@@ -143,6 +143,24 @@ public class CreateITCase extends BaseIntegrationTest {
         // Tests
         TestCase.assertEquals("header does not match", "Heim ins Frankreich", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
+    }
+
+    @Test
+    public void delete() throws Exception {
+        // create
+        TestUtils.home(DRIVER);
+        TestUtils.login(DRIVER);
+        DRIVER.findElement(By.xpath("//a[@path='create/jpinst']")).click();
+        DRIVER.findElement(By.name("/mycoreobject/metadata/names/name/fullname")).sendKeys("Uni Jena");
+        TestUtils.saveForm(DRIVER);
+        TestCase.assertEquals("header does not match", "Uni Jena", DRIVER.findElement(By.id("jp-maintitle")).getText());
+
+        // delete
+        DRIVER.findElement(By.linkText("Dokument löschen")).click();
+        DRIVER.findElement(By.id("delObj")).click();
+
+        TestCase.assertEquals("title does not match", "Das Löschen der Daten war erfolgreich. - JPortal",
+            DRIVER.getTitle());
     }
 
 }
