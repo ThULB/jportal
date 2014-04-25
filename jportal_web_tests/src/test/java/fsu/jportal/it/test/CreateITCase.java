@@ -116,14 +116,14 @@ public class CreateITCase extends BaseIntegrationTest {
         DRIVER.get(START_URL + "/rsc/editor/jportal_jpjournal_00000001/create/jpvolume");
 
         // bibl. Beschreibung
-        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("Erstausgabe");
+        DRIVER.findElement(By.name("/mycoreobject/metadata/maintitles/maintitle")).sendKeys("Zweite Ausgabe");
         // Datum
         DRIVER.findElement(By.name("/mycoreobject/metadata/dates/date")).sendKeys("1947");
 
         TestUtils.saveForm(DRIVER);
 
         // Tests
-        TestCase.assertEquals("header does not match", "Erstausgabe", DRIVER.findElement(By.id("jp-maintitle"))
+        TestCase.assertEquals("header does not match", "Zweite Ausgabe", DRIVER.findElement(By.id("jp-maintitle"))
             .getText());
     }
 
