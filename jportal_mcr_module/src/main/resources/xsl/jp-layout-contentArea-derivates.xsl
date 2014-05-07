@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcr="http://www.mycore.org/" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml acl encoder">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:derivAccess="xalan://fsu.jportal.access.DerivateAccess" xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xlink iview2 mcr mcrservlet mcrxml mcrurn acl encoder">
 
   <xsl:template name="derivatePreview">
     <xsl:param name="mcrObj" />
@@ -124,7 +125,7 @@
               href="{$WebApplicationBaseURL}servlets/derivate/update?id={@xlink:href}&amp;objectid={$objID}">Dateien hinzufügen</a>
           </li>
           <xsl:if test="acl:checkPermission(@xlink:href, 'update-derivate')">
-            <xsl:if test="not(mcrxml:hasURNDefined(@xlink:href))">
+            <xsl:if test="not(mcrurn:hasURNDefined(@xlink:href))">
               <li>
                 <a href="{$WebApplicationBaseURL}servlets/MCRAddURNToObjectServlet?object={@xlink:href}">URN vergeben</a>
               </li>
