@@ -48,26 +48,19 @@
 
     <script type="text/javascript">
       $(document).ready(function() {
-      var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
-      var template = '<xsl:value-of select="$template_DynamicLayoutTemplates" />';
-      if(template == '') {
-      console.error("Unable to find template. Maybe there is no valid published or published_from metadata field set.");
-      return;
-      }
-      $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
-      var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
-      $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
-      $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 64) + '</div>');
-      if (name.length > 40){
-      $('#logoTitle').css('font-size', 'large');
-      }
-      if (name.length > 80){
-      $('#logoTitle').css('top', '8px');
-      $('#logoTitle').css('height', '70px');
-      $('#logoTitle').css('line-height', '24px');
-      $('#logoTitle').css('overflow', 'hidden');
-      $('#logoTitle').css('text-overflow', 'ellipsis');
-      }
+        var baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
+        var template = '<xsl:value-of select="$template_DynamicLayoutTemplates" />';
+        if(template == '') {
+          console.error("Unable to find template. Maybe there is no valid published or published_from metadata field set.");
+          return;
+        }
+        $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
+        var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
+        $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
+        $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 96) + '</div>');
+        if (maintitle.length > 40) {
+          $('#logoTitle').css('font-size', 'large');
+        }
       });
     </script>
   </xsl:template>
