@@ -43,7 +43,8 @@ function attachToElement(element, keywords) {
 				$("<span class='placeholder' id='" + keyword.id.categid + "' />").appendTo(li);
 			}
 			var a = $("<a/>");
-			var categID = keyword.id.categid.replace(/ /g, "\\ ");
+			var categID = keyword.id.categid.replace(/ /g, "\\ ").replace(
+					/[(]/g, "\\(").replace(/[)]/g, "\\)");
 			a.text(keyword.labels[0].text);
 			a.attr("href", jp.baseURL + "servlets/solr/select?q=+volContentClassi1:" + categID + "&XSL.returnURL=" + document.URL);
 			a.appendTo(li);
