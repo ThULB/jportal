@@ -27,13 +27,6 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.mycore.parsers.bool.MCRAndCondition;
-import org.mycore.services.fieldquery.MCRFieldValue;
-import org.mycore.services.fieldquery.MCRHit;
-import org.mycore.services.fieldquery.MCRQuery;
-import org.mycore.services.fieldquery.MCRQueryCondition;
-import org.mycore.services.fieldquery.MCRQueryManager;
-import org.mycore.services.fieldquery.MCRResults;
 import org.mycore.solr.MCRSolrServerFactory;
 
 import fsu.jportal.backend.MetaDataTools;

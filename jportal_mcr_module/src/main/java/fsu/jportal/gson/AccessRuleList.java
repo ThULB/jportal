@@ -7,8 +7,9 @@ import org.mycore.backend.hibernate.tables.MCRACCESSRULE;
 
 public class AccessRuleList {
     private List<MCRACCESSRULE> ruleList;
+
     private URI uri;
-    
+
     public AccessRuleList(List<MCRACCESSRULE> ruleList, URI uri) {
         this.setRuleList(ruleList);
         this.setUri(uri);

@@ -15,10 +15,10 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.jdom2.Attribute;
@@ -36,7 +36,6 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.backend.hibernate.tables.MCRLINKHREF;
 import org.mycore.backend.hibernate.tables.MCRLINKHREFPK;
 import org.mycore.common.config.MCRConfiguration;
-import org.mycore.common.MCRUtils;
 import org.mycore.common.xml.MCRXSLTransformation;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -82,7 +81,7 @@ public class MigratingCMDs {
                     File introXMLFile = new File(introXMLPath);
                     FileInputStream journalXMLInputStream = new FileInputStream(journalXMLFile);
                     FileOutputStream introXMLOutputStream = new FileOutputStream(introXMLFile);
-                    MCRUtils.copyStream(journalXMLInputStream, introXMLOutputStream);
+                    IOUtils.copy(journalXMLInputStream, introXMLOutputStream);
                     introXMLOutputStream.close();
                     journalXMLInputStream.close();
                     LOGGER.info("Successful moved " + pathToJournalXML + " to " + introXMLPath);
