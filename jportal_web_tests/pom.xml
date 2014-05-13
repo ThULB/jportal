@@ -25,8 +25,8 @@
     <pom.xml>${docportal.dir}/config/pom.xml</pom.xml>
 
     <jetty.version>9.1.2.v20140210</jetty.version>
-    <tomcat7.version>7.0.52</tomcat7.version>
-    <tomcat8.version>8.0.3</tomcat8.version>
+    <tomcat7.version>7.0.53</tomcat7.version>
+    <tomcat8.version>8.0.5</tomcat8.version>
     <cargo.version>1.4.7</cargo.version>
     <cargo.servlet.uriencoding>UTF-8</cargo.servlet.uriencoding>
     <cargo.container.zipUrlInstaller.downloadDir>${settings.localRepository}/../cargo/containers</cargo.container.zipUrlInstaller.downloadDir>
@@ -497,7 +497,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
-        <version>2.16</version>
+        <version>2.17</version>
         <configuration>
           <reportsDirectory>${project.build.directory}/failsafe-reports/${cargo.container}</reportsDirectory>
           <systemPropertyVariables>
