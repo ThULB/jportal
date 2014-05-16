@@ -4,11 +4,13 @@
     <div id="searchBar">
       <form id="searchForm" action="/servlets/solr/subselect">
         <div class="row">
-          <div class="col-lg-8 input-group">
-            <input class="form-control" id="inputField" name="qry" getData="subselect.search.form.qry" />
-            <span class="input-group-btn">
-              <button class="btn btn-default" id="submitButton" type="submit">Suche</button>
-            </span>
+          <div class="col-lg-8">
+            <div class="input-group">
+              <input class="form-control" id="inputField" name="qry" getData="subselect.search.form.qry" />
+              <span class="input-group-btn">
+                <button class="btn btn-default" id="submitButton" type="submit">Suche</button>
+              </span>
+            </div>
           </div>
           <div class="col-lg-4 pull-right">
             <select class="form-control" name="sort">

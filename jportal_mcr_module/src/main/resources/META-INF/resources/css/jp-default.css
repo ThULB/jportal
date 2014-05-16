@@ -609,12 +609,11 @@ body {
 	color: #4E494E;
 	list-style: none outside none;
 	padding-left: 0;
-	float: left;
-	width: 700px;
 	padding-right: 40px;
 }
-.jp-layout-list-nodecoration.max-width {
-	width: 925px;
+.jp-layout-list-nodecoration.facet {
+	width: 700px;
+	float: left;
 }
 
 .jp-layout-list-nodecoration>li {

@@ -128,8 +128,8 @@
   <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
     <xsl:variable name="showFacet" select="lst[@name='facet_counts']" />
     <xsl:variable name="resultListClass">
-      <xsl:if test="not($showFacet)">
-        <xsl:value-of select="'max-width'" />
+      <xsl:if test="$showFacet">
+        <xsl:value-of select="'facet'" />
       </xsl:if>
     </xsl:variable>
     <ul class="jp-layout-list-nodecoration {$resultListClass}">
