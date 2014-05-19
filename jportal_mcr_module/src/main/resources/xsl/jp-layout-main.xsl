@@ -176,15 +176,6 @@
         <div id="main">
           <xsl:choose>
             <xsl:when test="/MyCoReWebPage[//mycoreobject]">
-              <xsl:variable name="objectEditingHTML">
-                <editing>
-                  <xsl:call-template name="objectEditing">
-                    <xsl:with-param name="id" select="/mycoreobject/@ID" />
-                    <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-                  </xsl:call-template>
-                </editing>
-              </xsl:variable>
-              <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
               <xsl:variable name="contentRColHtml">
                 <xsl:choose>
                   <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
