@@ -53,19 +53,21 @@ import fsu.jportal.util.ContentTools;
 public class ObjResource {
 
     private static final Logger LOGGER = Logger.getLogger(ObjResource.class);
-    @PathParam("id") String objID;
-    
+
+    @PathParam("id")
+    String objID;
+
     @GET
     @Path("parents")
     @Produces(MediaType.APPLICATION_JSON)
-    public String parentsListJSON(){
+    public String parentsListJSON() {
         ContentTools contentTools = new ContentTools();
         return contentTools.getParents(objID, new ParentsListJSON());
     }
-    
+
     @PUT
     @Path("moveTo/{newParentID}")
-    public Response moveTo(@PathParam("newParentID") String newParentID){
+    public Response moveTo(@PathParam("newParentID") String newParentID) {
         try {
             MCRObjectCommands.replaceParent(objID, newParentID);
         } catch (MCRPersistenceException e) {
@@ -77,7 +79,7 @@ public class ObjResource {
         }
         return Response.ok().build();
     }
-    
+
     @POST
     @Path("mergeDeriv")
     public Response mergeDerivates() {
@@ -89,8 +91,8 @@ public class ObjResource {
             }
 
             XPathExpression<Attribute> derivIDsXpath = XPathFactory.instance().compile(
-                    "/mycoreobject/structure/derobjects/derobject/@xlink:href", Filters.attribute(), null,
-                    MCRConstants.XLINK_NAMESPACE);
+                "/mycoreobject/structure/derobjects/derobject/@xlink:href", Filters.attribute(), null,
+                MCRConstants.XLINK_NAMESPACE);
             List<Attribute> hrefAttributes = derivIDsXpath.evaluate(objXML);
 
             if (hrefAttributes.size() > 1) {
@@ -125,16 +127,16 @@ public class ObjResource {
     private void resetLink(String oldID, String newID) {
         LOGGER.info(MessageFormat.format("Reset derivate link for {0} to {1}.", oldID, newID));
         try {
-            SolrQuery q = new SolrQuery("link:" +oldID + "/*");
+            SolrQuery q = new SolrQuery("link:" + oldID + "/*");
             SolrDocumentList solrResultList = MCRSolrServerFactory.getSolrServer().query(q).getResults();
             for (SolrDocument solrDocument : solrResultList) {
                 String objID = (String) solrDocument.getFieldValue("id");
                 MCRParameterCollector parameter = new MCRParameterCollector();
                 parameter.setParameter("oldID", oldID);
                 parameter.setParameter("newID", newID);
-                
+
                 MetaDataTools.updateWithXslt(objID, "/xsl/resetDerivLink.xsl", parameter);
-                
+
             }
         } catch (SolrServerException e) {
             // TODO Auto-generated catch block
@@ -146,7 +148,6 @@ public class ObjResource {
         if (!MCRIView2Tools.isDerivateSupported(derivateID)) {
             LOGGER.info("Skipping tiling of derivate " + derivateID + " as it's main file is not supported by IView2.");
         }
-        List<String> returns = new ArrayList<String>();
         MCRDirectory derivate = null;
 
         MCRFilesystemNode node = MCRFilesystemNode.getRootNode(derivateID);
@@ -201,8 +202,8 @@ public class ObjResource {
 
     private List<String> getDerivIDs(Document objXML) {
         XPathExpression<Attribute> derivIDsXpath = XPathFactory.instance().compile(
-                "/mycoreobject/structure/derobjects/derobject/@xlink:href", Filters.attribute(), null,
-                MCRConstants.XLINK_NAMESPACE);
+            "/mycoreobject/structure/derobjects/derobject/@xlink:href", Filters.attribute(), null,
+            MCRConstants.XLINK_NAMESPACE);
         List<Attribute> hrefAttributes = derivIDsXpath.evaluate(objXML);
 
         ArrayList<String> derivIDs = new ArrayList<String>();

@@ -1,7 +1,6 @@
 package fsu.jportal.xml;
 
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
