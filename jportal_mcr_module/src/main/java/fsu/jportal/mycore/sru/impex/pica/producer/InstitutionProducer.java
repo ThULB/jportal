@@ -30,11 +30,11 @@ public class InstitutionProducer extends CorporationProducer {
         Element nameElement = new Element("name").setAttribute("inherited", "0");
         parent.addContent(nameElement);
         String fullname = this.record.getValue("029A", "a");
-        if(fullname != null) {
+        if (fullname != null) {
             nameElement.addContent(new Element("fullname").setText(fullname));
         }
         String nickname = this.record.getValue("029@", "a", "4", "abku");
-        if(nickname != null) {
+        if (nickname != null) {
             nameElement.addContent(new Element("nickname").setText(nickname));
         }
     }
@@ -68,6 +68,11 @@ public class InstitutionProducer extends CorporationProducer {
 
     protected Element getDefaultNoteElement() {
         return generateDefElement("notes", MCRMetaLangText.class, true, false);
+    }
+
+    protected Element createGndLinkElement() {
+        // TODO: there is no gndlink entry in jpinst datamodel
+        return null;
     }
 
 }

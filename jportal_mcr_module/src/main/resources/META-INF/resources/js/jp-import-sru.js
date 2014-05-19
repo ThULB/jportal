@@ -5,10 +5,13 @@ jp.importSRU = {
 }
 
 function querySRU(/*string*/ query) {
+	clearResults();
 	clearDubletCheck();
+	showLoading();
 	$.ajax({
 		url: jp.baseURL + "rsc/sru/search?q=" + query,
 		success: function(data) {
+			clearResults();
 			var sruContainer = data.documentElement;
 			if(sruContainer != null && sruContainer.children.length > 0) {
 				// just print one result, should be enough and is much
@@ -111,9 +114,17 @@ function showDubletCheck(/*string*/ msg) {
 	$("#doubletCheck").html(msg);
 }
 
+function clearResults() {
+	$("#result").empty();
+}
+
 function clearDubletCheck() {
 	$(".doubletCheck").addClass("hidden");
 	$("#doubletCheck").empty();
+}
+
+function showLoading() {
+	$("#result").append("<i class='fa fa-spinner fa-spin'></i>");
 }
 
 function xmlToString(xmlData) {
