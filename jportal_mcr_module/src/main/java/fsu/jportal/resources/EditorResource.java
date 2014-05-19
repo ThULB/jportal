@@ -56,13 +56,9 @@ public class EditorResource {
                 e.printStackTrace();
             }
         }
-
         paramsXML.put("mcrid", "jportal_" + type + "_00000000");
         paramsXML.put("editServlet", "CreateObjectServlet");
-        if (cancelURL != null) {
-            paramsXML.put("cancelUrl", cancelURL);
-        }
-
+        paramsXML.put("cancelUrl", cancelURL != null ? cancelURL : request.getHeader("referer"));
         initEditor("create", type, paramsXML);
         return Response.ok().build();
     }
