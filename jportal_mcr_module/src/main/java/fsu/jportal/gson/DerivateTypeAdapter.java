@@ -21,6 +21,8 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
         if (!deriv.isDir()) {
             return nodeJSON;
         }
+        
+        nodeJSON.addProperty("maindocName", maindoc);
 
         MCRFilesystemNode[] children = deriv.getChildren();
         JsonArray childrenJSON = new JsonArray();

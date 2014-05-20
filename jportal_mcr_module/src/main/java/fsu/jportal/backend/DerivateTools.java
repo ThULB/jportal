@@ -43,6 +43,14 @@ public class DerivateTools {
 
         mv(file, newRootNode, newPath, newName);
     }
+    
+    public static void cp(MCRFilesystemNode node, MCRDirectory newRootDir, String newPath, String newName) {
+        if(node instanceof MCRDirectory){
+            //is a directory (not copied)
+            return;
+        }
+        
+    }
 
     public static void mv(MCRFilesystemNode node, MCRDirectory newRootDir, String newPath, String newName) {
         String absolutePathOfNode = node.getAbsolutePath();

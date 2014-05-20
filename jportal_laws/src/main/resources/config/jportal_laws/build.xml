@@ -37,11 +37,4 @@
 		</unjar>
 
 	</target>
-
-	<target name="config">
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.URIResolver.xslIncludes.modules" value="template_thLegislativExekutiv.xsl" />
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.URIResolver.xslIncludes.modules" value="jp-laws-search.xsl" />
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.URIResolver.xslIncludes.modules" value="jp-laws-gesetzessammlung.xsl" />
-	</target>
-
 </project>
