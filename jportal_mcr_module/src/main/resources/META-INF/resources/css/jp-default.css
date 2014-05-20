@@ -551,10 +551,10 @@ body {
 	border: 1px solid #9A9899;
 	cursor: pointer;
 	display: inline-block;
-	height: 20px;
+	height: 30px;
 	padding: 4px 6px 0;
 	text-align: center;
-	width: 66px;
+	width: 80px;
 }
 
 .jp-layout-message-button:hover {

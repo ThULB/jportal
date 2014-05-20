@@ -103,28 +103,6 @@ function showDeleteDerivateDialog(/* String */id) {
 	});
 }
 
-function mergeDerivates(/* String */objID) {
-	if (!confirm('Derivate wirklich zusammenführen?')) {
-		return;
-	}
-	jQuery.ajax({
-		type : 'POST',
-		url : jp.baseURL + 'rsc/obj/' + objID + '/mergeDeriv'
-	}).done(function(msg) {
-		location.reload(true);
-	}).fail(function(error) {
-		if (error.status == 400) {
-			alert('Bad request: ' + error.responseText);
-		} else if (error.status == 401) {
-			alert('Unauthorized: You have no permission to merge this object!');
-		} else if (error.status == 403) {
-			alert('Forbidden: ' + error.responseText);
-		} else if (error.status == 404) {
-			alert('Unknown MyCoRe object id ' + id);
-		}
-	});
-}
-
 $(document).ready(function() {
 	function supportHTML5() {
 		return !!document.createElement('canvas').getContext;

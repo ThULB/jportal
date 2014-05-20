@@ -176,9 +176,6 @@
           classeditor.categoryId = "";
           startClassificationEditor();
         });
-        $("#derivMergeButton").click(function(){
-          mergeDerivates(<xsl:value-of select="$currentObjID"/>)
-        });
       });
     </script>
   </xsl:template>
@@ -225,13 +222,6 @@
         <xsl:call-template name="initImprint" />
       </xsl:if>
       <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-move-obj.js"></script>
-      <script type="text/javascript">
-        $(document).ready(function() {
-        $("#derivMergeButton").click(function(){
-            mergeDerivates('<xsl:value-of select="$currentObjID"/>')
-          });
-        })
-      </script>
     </menu>
 
     <deleteMsg>
