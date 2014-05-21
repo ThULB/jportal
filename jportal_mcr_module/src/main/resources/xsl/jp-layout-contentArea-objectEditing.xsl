@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions"
-  exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:derivateLinkUtil="xalan://org.mycore.frontend.util.DerivateLinkUtil" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" exclude-result-prefixes="i18n derivateLinkUtil xlink acl mcrxml xalan xsi solrxml">
 
   <xsl:variable name="bookmarkedImage" select="derivateLinkUtil:getBookmarkedImage()" />
   <xsl:variable name="linkExist" select="/mycoreobject/metadata/derivateLinks/derivateLink[@xlink:href = $bookmarkedImage]" />
   <xsl:variable name="hasSourceOfLink" select="/mycoreobject/structure/derobjects/derobject[@xlink:href = substring-before($bookmarkedImage,'/')]" />
-  
+
   <xsl:variable name="menuVarXML">
     <var name="dataModel" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation}" />
     <var name="createJournal" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpjournal')}" />
@@ -27,7 +25,7 @@
     <var name="notJournal" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation != 'datamodel-jpjournal.xsd'}" />
     <var name="hasChildren" value="{count(/mycoreobject/structure/children) &gt; 0}" />
   </xsl:variable>
-  <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)"/>
+  <xsl:variable name="menuVar" select="xalan:nodeset($menuVarXML)" />
 
   <xsl:variable name="menuXML">
     <menu id="jp-main-menu" journalid="{$currentObjID}">
@@ -47,17 +45,12 @@
         <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}"/>
+          <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}" />
         </item>
-       	<item>
-       		<restriction name="hasChildren" value="true" />
-       		<restriction name="createJournal" value="true" />
-         	<label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}"/>
-       	</item>
-        <item id="moveDocButton" class="objectEditingButton" objID="{$currentObjID}">
-          <restriction name="notJournal" value="true" />
+        <item>
+          <restriction name="hasChildren" value="true" />
           <restriction name="createJournal" value="true" />
-          <label name="Dokument verschieben" />
+          <label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}" />
         </item>
         <item id="ckeditorButton" class="objectEditingButton">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
@@ -77,16 +70,16 @@
         </item>
         <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
-          <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}"/>
+          <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <label name="Neue Person" ref="editorResource" path="create/person"/>
+          <label name="Neue Person" ref="editorResource" path="create/person" />
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-          <label name="Neue Institution" ref="editorResource" path="create/jpinst"/>
+          <label name="Neue Institution" ref="editorResource" path="create/jpinst" />
           <restriction name="createInst" value="true" />
         </item>
         <item>
@@ -95,16 +88,16 @@
           <restriction name="createInst" value="true" />
         </item>
         <item>
-          <label name="Neue Zeitschrift" ref="editorResource" path="create/jpjournal"/>
+          <label name="Neue Zeitschrift" ref="editorResource" path="create/jpjournal" />
           <restriction name="createJournal" value="true" />
         </item>
         <item>
-          <label name="Neuer Band" ref="editorResource" path="{$currentObjID}/create/jpvolume"/>
+          <label name="Neuer Band" ref="editorResource" path="{$currentObjID}/create/jpvolume" />
           <restriction name="createVol" value="true" />
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
-          <label name="Neuer Artikel" ref="editorResource" path="{$currentObjID}/create/jparticle"/>
+          <label name="Neuer Artikel" ref="editorResource" path="{$currentObjID}/create/jparticle" />
           <restriction name="createArt" value="true" />
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>
@@ -124,11 +117,11 @@
           <label name="Bild verlinken" ref="linkImgUrl" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item class="jp-layout-menu-dropdown objectEditingButton" id="deleteDocButton" objID="{$currentObjID}">
         <restriction name="deletePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="Dokument löschen" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}?XSL.object=delete" />
+          <label name="Dokument löschen" />
         </item>
       </item>
       <item class="jp-layout-menu-dropdown">
@@ -155,9 +148,9 @@
     <xsl:variable name="journalRecourceURL" select="concat($classeditor.resourceURL,'jp/',$journalID,'/')" />
 
     <xsl:call-template name="classeditor.loadSettings">
-      <xsl:with-param name="classeditor.class" select="@classId"/>
-      <xsl:with-param name="classeditor.categ" select="@categId"/>
-      <xsl:with-param name="classeditor.showId" select="@showId='true'"/>
+      <xsl:with-param name="classeditor.class" select="@classId" />
+      <xsl:with-param name="classeditor.categ" select="@categId" />
+      <xsl:with-param name="classeditor.showId" select="@showId='true'" />
     </xsl:call-template>
     <xsl:call-template name="classeditor.includeDojoJS" />
     <xsl:call-template name="classeditor.includeJS" />
@@ -165,13 +158,9 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-classificationEditor.js"></script>
 
     <script type="text/javascript">
-      function loadError(jqxhr, settings, exception) {
-        console.log(exception);
-        alert(exception);
-      }
       $(document).ready(function() {
         $("#diagButton").click(function() {
-          classeditor.settings.resourceURL = '<xsl:value-of select="$journalRecourceURL"/>';
+          classeditor.settings.resourceURL = '<xsl:value-of select="$journalRecourceURL" />';
           classeditor.classId = "list";
           classeditor.categoryId = "";
           startClassificationEditor();
@@ -179,14 +168,14 @@
       });
     </script>
   </xsl:template>
-  
+
   <xsl:template name="introEditorDiag">
     <script type="text/javascript">
       $(document).ready(function() {
-      $("#ckeditorButton").click(function(){
-      introEditor('<xsl:value-of select="$currentObjID"/>')
-      })
-      })
+        $("#ckeditorButton").click(function() {
+          introEditor('<xsl:value-of select="$currentObjID" />');
+        });
+      });
     </script>
   </xsl:template>
 
@@ -194,15 +183,8 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
     <script type="text/javascript">
       $(document).ready(function() {
-      <!-- 
-      initFS({
-        baseURL: '<xsl:value-of select="$WebApplicationBaseURL" />',
-        type: 'imprint',
-        journalID: '<xsl:value-of select="$currentObjID"/>',
-        container: '#jp-content-LColumn',
-        button: '#imprintButton'
-      });
-       -->
+      <!-- initFS({ baseURL: '<xsl:value-of select="$WebApplicationBaseURL" />', type: 'imprint', journalID: '<xsl:value-of select="$currentObjID"/>', container: 
+        '#jp-content-LColumn', button: '#imprintButton' }); -->
       });
     </script>
   </xsl:template>
@@ -210,10 +192,9 @@
   <xsl:template name="objectEditing">
     <xsl:param name="id" />
     <xsl:param name="dataModel" />
-    
+
     <menu id="jp-object-editing" class="jp-layout-object-editing">
       <xsl:apply-templates mode="menuItem" select="$menu/item" />
-
       <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
         <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
@@ -221,24 +202,37 @@
         <xsl:call-template name="introEditorDiag" />
         <xsl:call-template name="initImprint" />
       </xsl:if>
-      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-move-obj.js"></script>
     </menu>
 
-    <deleteMsg>
-      <xsl:choose>
-        <xsl:when test="/mycoreobject/structure/derobjects">
-          <xsl:call-template name="deleteFailMessage" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:variable name="deleteButton">
-            <xsl:apply-templates mode="menuLabel" select="$menu/link[@id='delObj']" />
-          </xsl:variable>
-          <xsl:call-template name="deleteCheckMessage">
-            <xsl:with-param name="delButton" select="$deleteButton" />
-          </xsl:call-template>
-        </xsl:otherwise>
-      </xsl:choose>
-    </deleteMsg>
+    <delete>
+      <xsl:if test="$deletePerm='true' and /mycoreobject">
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.min.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-delete-dialog.js" />
+        <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true"
+          data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
+          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="delete-dialog-title"></h4>
+              </div>
+              <div class="modal-body" id="delete-dialog-body">
+                <div class="row">
+                  <div class="col-md-2 text-center" id="delete-dialog-image">
+                  </div>
+                  <div class="col-md-10" id="delete-dialog-info">
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer" id="delete-dialog-footer">
+                <button type="button" class="btn btn-default" id="delete-dialog-close" data-dismiss="modal">Ok</button>
+                <button type="button" class="btn btn-primary hidden" id="delete-dialog-submit">Löschen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </xsl:if>
+    </delete>
   </xsl:template>
 
   <!-- MENU ##################################################################### -->
@@ -293,7 +287,8 @@
   </xsl:template>
 
   <xsl:template mode="menuLabel" match="label[@href]">
-    <a href="{@href}">
+    <a>
+      <xsl:copy-of select="@*" />
       <xsl:value-of select="@name" />
     </a>
   </xsl:template>
@@ -314,7 +309,7 @@
     <xsl:variable name="ref" select="." />
     <xsl:value-of select="$menu/link[@id=$ref]/@href" />
   </xsl:template>
-  
+
   <xsl:template mode="menuLink" match="@path">
     <xsl:value-of select="concat('/',.)" />
   </xsl:template>
@@ -345,43 +340,4 @@
     <xsl:value-of select="concat(@name,'=', $menuVar/var[@name=$selectID]/@value)" />
   </xsl:template>
   <!-- END MENU ##################################################################### -->
-
-  <xsl:template name="deleteFailMessage">
-    <div class="jp-layout-message-background" />
-    <div id="deleteFail" class="jp-layout-message">
-      <div class="jp-layout-message-icon">
-        <img src="{$WebApplicationBaseURL}images/error.png" width="64px" />
-      </div>
-      <div class="jp-layout-message-text">
-        Dieses Dokument enthält Digitalisate. Löschen nicht möglich!
-      </div>
-      <a id="okButton" class="jp-layout-message-button" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}">
-        OK
-      </a>
-    </div>
-  </xsl:template>
-
-  <xsl:template name="deleteCheckMessage">
-    <xsl:param name="delButton" />
-
-    <div class="jp-layout-message-background" />
-    <div id="deleteCheck" class="jp-layout-message">
-      <div class="jp-layout-message-icon">
-        <img src="{$WebApplicationBaseURL}images/warning.png" width="64px" />
-      </div>
-      <div class="jp-layout-message-text">
-        Sind Sie sicher, daß Sie dieses Dokument löschen wollen?
-      </div>
-      <ul id="delCheckButtons" class="jp-layout-horiz-menu">
-        <li>
-          <a class="jp-layout-message-button" href="{$WebApplicationBaseURL}receive/{/mycoreobject/@ID}">
-            Abbrechen
-          </a>
-        </li>
-        <li>
-          <xsl:copy-of select="$delButton" />
-        </li>
-      </ul>
-    </div>
-  </xsl:template>
 </xsl:stylesheet>

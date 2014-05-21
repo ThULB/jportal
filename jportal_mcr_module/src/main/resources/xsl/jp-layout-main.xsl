@@ -215,10 +215,8 @@
         </div>
         <!-- footer -->
         <xsl:call-template name="jp.layout.footer" />
-        <!-- delete messages -->
-        <xsl:if test="$object='delete'">
-          <xsl:copy-of select="$objectEditing/deleteMsg" />
-        </xsl:if>
+        <!-- delete -->
+        <xsl:copy-of select="$objectEditing/delete/*" />
         <div id="viewerContainerWrapper" />
         <!-- add html stuff to end of body for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/body/*"/>
