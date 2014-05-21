@@ -24,12 +24,14 @@ public class XSLTemplateInclude implements MCRXslIncludeHrefs {
     @Override
     public List<String> getHrefs() {
         ServletContext servletContext = MCRURIResolver.getServletContext();
+        LOGGER.info("###### Servlet Context: " + servletContext);
         String templatesPath = "/templates/";
         Set<String> resourcePaths = servletContext.getResourcePaths(templatesPath);
         List<String> hrefList = new ArrayList<String>();
         for (String string : resourcePaths) {
             String xslPath = string + "XSL/";
             Set<String> xsl = servletContext.getResourcePaths(xslPath);
+            LOGGER.info("###### xsl: " + xsl);
 
             for (String xslName : xsl) {
                 if (xslName.endsWith(".xsl")) {
