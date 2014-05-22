@@ -1,6 +1,8 @@
 package fsu.jportal.resources;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +60,12 @@ public class EditorResource {
         }
         paramsXML.put("mcrid", "jportal_" + type + "_00000000");
         paramsXML.put("editServlet", "CreateObjectServlet");
-        paramsXML.put("cancelUrl", cancelURL != null ? cancelURL : request.getHeader("referer"));
+        try {
+            paramsXML.put("cancelUrl", cancelURL != null ? cancelURL : URLEncoder.encode(request.getHeader("referer"), "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        
         initEditor("create", type, paramsXML);
         return Response.ok().build();
     }
