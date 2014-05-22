@@ -3,7 +3,7 @@
   Contains jportal specific layout functions.
  -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="xalan">
+  xmlns:math="xalan://java.lang.Math" exclude-result-prefixes="xalan math">
 
   <xsl:param name="MCR.Piwik.baseurl" />
   <xsl:param name="MCR.Piwik.enable" />
@@ -152,7 +152,7 @@
 
   <xsl:template match="response" mode="jp.pagination">
     <xsl:param name="startParam" select="'start'" />
-  
+
     <xsl:variable name="resultInfoXML">
       <xsl:call-template name="jp.pagination.getResultInfoXML">
         <xsl:with-param name="response" select="/response" />
@@ -161,67 +161,52 @@
     <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
 
     <xsl:if test="$resultInfo/pages &gt; 1">
-      <div id="resultPaginator" class="jp-layout-topline jp-layout-border-light">
-        <xsl:variable name="start" select="$resultInfo/start" />
-        <xsl:variable name="rows" select="$resultInfo/rows" />
-        <xsl:variable name="numFound" select="$resultInfo/numFound" />
-        <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-          <xsl:if test="($start - $rows) &gt;= 0">
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:call-template name="UrlSetParam">
-                    <xsl:with-param name="url" select="$RequestURL" />
-                    <xsl:with-param name="par" select="$startParam" />
-                    <xsl:with-param name="value" select="$start - $rows" />
-                  </xsl:call-template> 
-                </xsl:attribute>
-                <xsl:value-of select="'&lt; Zurück'" />
-              </a>
-            </li>
-          </xsl:if>
-          <xsl:variable name="pageStart">
-            <xsl:choose>
-              <xsl:when test="($resultInfo/page - 4) &gt; 1">
-                <xsl:value-of select="$resultInfo/page - 4" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="1" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-          <xsl:variable name="pageEnd">
-            <xsl:choose>
-              <xsl:when test="($resultInfo/page + 5) &gt; 10">
-                <xsl:value-of select="$resultInfo/page + 5" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="10" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
+      <xsl:variable name="start" select="$resultInfo/start" />
+      <xsl:variable name="rows" select="$resultInfo/rows" />
 
+      <xsl:variable name="numFound" select="$resultInfo/numFound" />
+      <xsl:variable name="pageStart" select="math:min(math:max($resultInfo/page - 2, 1), math:max($resultInfo/pages - 6, 1))" />
+      <xsl:variable name="pageEnd" select="math:max(math:min($resultInfo/page + 4, $resultInfo/pages), math:min($resultInfo/pages, 7))" />
+
+      <div class="center-block" id="resultPaginator">
+        <ul class="pagination">
+          <xsl:if test="($start - $rows) &gt;= 0">
+            <xsl:call-template name="jp.pagination.entry">
+              <xsl:with-param name="startParam" select="$startParam" />
+              <xsl:with-param name="text" select="'&lt; Zurück'" />
+              <xsl:with-param name="value" select="$start - $rows" />
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="$pageStart &gt; 1">
+            <xsl:call-template name="jp.pagination.entry">
+              <xsl:with-param name="startParam" select="$startParam" />
+              <xsl:with-param name="text" select="'1'" />
+              <xsl:with-param name="value" select="0" />
+            </xsl:call-template>
+            <li class="plain"><span>...</span></li>
+          </xsl:if>
           <xsl:call-template name="jp.pagination.createResultPages">
             <xsl:with-param name="resultInfo" select="$resultInfo" />
             <xsl:with-param name="startParam" select="$startParam" />
             <xsl:with-param name="i" select="$pageStart" />
             <xsl:with-param name="pageEnd" select="$pageEnd" />
           </xsl:call-template>
-          <xsl:if test="($start + $rows) &lt; $numFound">
-            <li>
-              <a>
-                <xsl:attribute name="href">
-                  <xsl:call-template name="UrlSetParam">
-                    <xsl:with-param name="url" select="$RequestURL" />
-                    <xsl:with-param name="par" select="$startParam" />
-                    <xsl:with-param name="value" select="$start + $rows" />
-                  </xsl:call-template>
-                </xsl:attribute>
-                <xsl:value-of select="'Weiter &gt;'" />
-              </a>
-            </li>
+          <xsl:if test="$pageEnd &lt; $resultInfo/pages">
+            <li class="plain"><span>...</span></li>
+            <xsl:call-template name="jp.pagination.entry">
+              <xsl:with-param name="startParam" select="$startParam" />
+              <xsl:with-param name="text" select="$resultInfo/pages" />
+              <xsl:with-param name="value" select="$rows * ($resultInfo/pages - 1)" />
+            </xsl:call-template>
           </xsl:if>
-        </menu>
+          <xsl:if test="($start + $rows) &lt; $numFound">
+             <xsl:call-template name="jp.pagination.entry">
+              <xsl:with-param name="startParam" select="$startParam" />
+              <xsl:with-param name="text" select="'Weiter &gt;'" />
+              <xsl:with-param name="value" select="$start + $rows" />
+            </xsl:call-template>
+          </xsl:if>
+        </ul>
       </div>
     </xsl:if>
   </xsl:template>
@@ -233,23 +218,18 @@
     <xsl:param name="i" />
 
     <xsl:if test="$i &lt;= $resultInfo/pages and $i &lt;= $pageEnd">
-      <li>
-        <xsl:if test="$i = $resultInfo/page + 1">
-          <xsl:attribute name="class">
-            <xsl:value-of select="'jp-layout-selected-underline'" />
-          </xsl:attribute>
-        </xsl:if>
-        <a>
-          <xsl:attribute name="href">
-             <xsl:call-template name="UrlSetParam">
-              <xsl:with-param name="url" select="$RequestURL" />
-              <xsl:with-param name="par" select="$startParam" />
-              <xsl:with-param name="value" select="($i - 1) * $resultInfo/rows" />
-            </xsl:call-template> 
-          </xsl:attribute>
-          <xsl:value-of select="$i" />
-        </a>
-      </li>
+      <xsl:choose>
+        <xsl:when test="$i = $resultInfo/page + 1">
+          <li class="active"><span><xsl:value-of select="$i" /></span></li>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="jp.pagination.entry">
+            <xsl:with-param name="startParam" select="$startParam" />
+            <xsl:with-param name="text" select="$i" />
+            <xsl:with-param name="value" select="($i - 1) * $resultInfo/rows" />
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:call-template name="jp.pagination.createResultPages">
         <xsl:with-param name="resultInfo" select="$resultInfo" />
         <xsl:with-param name="startParam" select="$startParam" />
@@ -257,6 +237,24 @@
         <xsl:with-param name="i" select="$i+1" />
       </xsl:call-template>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="jp.pagination.entry">
+    <xsl:param name="startParam" select="'start'" />
+    <xsl:param name="value" />
+    <xsl:param name="text" />
+    <li>
+      <a>
+        <xsl:attribute name="href">
+          <xsl:call-template name="UrlSetParam">
+            <xsl:with-param name="url" select="$RequestURL" />
+            <xsl:with-param name="par" select="$startParam" />
+            <xsl:with-param name="value" select="$value" />
+          </xsl:call-template>
+        </xsl:attribute>
+        <xsl:value-of select="$text" />
+      </a>
+    </li>
   </xsl:template>
 
 </xsl:stylesheet>

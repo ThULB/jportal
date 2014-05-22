@@ -1,5 +1,26 @@
 @charset "UTF-8";
 
+/*******************************************************
+* Overwrite Bootstrap Stuff
+********************************************************/
+.pagination > .active:hover {
+	text-decoration: none;
+}
+.pagination > .plain > a,  .pagination > .plain > span {
+	cursor: default;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+	color: inherit;
+}
+.pagination > .plain:hover > a, .pagination > .plain:hover > span {
+	background: none;
+	border-top: 1px solid transparent;
+	border-bottom: 1px solid transparent;
+}
+
+/*******************************************************
+*
+********************************************************/
 html, body {
 	background-color: #DBDBDB;
 	font-family: 'Open Sans', sans-serif;
@@ -632,20 +653,6 @@ body {
 
 .jp-layout-bottomline {
 	border-bottom: 1px solid;
-}
-
-.jp-layout-paginator li {
-	margin: 0;
-}
-
-.jp-layout-paginator li a {
-	display: block;
-	font-size: 10pt;
-	padding: 0 5px;
-}
-
-.jp-layout-paginator li.jp-layout-selected-underline a {
-	border: 1px solid;
 }
 
 #resultListHeader {
