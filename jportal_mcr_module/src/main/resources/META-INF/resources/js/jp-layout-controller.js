@@ -174,3 +174,61 @@ function trackPageView(piwikURL, journalID, pageID) {
 		g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
 	})();
 }
+
+// PAGINATION JUMP
+$(document).ready(function() {
+	$(".pagination-jump-submit").on("click", function() {
+		jump($(this));
+	});
+	$(".pagination-jumper-form").submit(function(event) {
+		jump($("input[type=submit]", $(this)));
+		event.preventDefault();
+	});
+
+	function jump(submitButton) {
+		var param = submitButton.attr("data-param");
+		if(param == null) {
+			console.log("data-param of pagination-jump-submit not set!");
+			return;
+		}
+		var input = $("input[id='pagination-" + param + "']");
+		if(input == null || input.length == 0) {
+			console.log("cannot find associated input text of " + param);
+			return;
+		}
+		var page = parseInt(input.val());
+		var pages = parseInt(submitButton.attr("data-pages"));
+		if(isNaN(pages)) {
+			console.log("cannot find data-pages attribute");
+			pages = 99999;
+		}
+		if(isNaN(page) || page <= 0 || page > pages) {
+			$(input).stop().animate({ borderColor: "#CD3700" }, 'fast');
+			return;
+		}
+		var rows = parseInt(submitButton.attr("data-rows"));
+		if(isNaN(rows)) {
+			rows = 5;
+		}
+		setGetParameter(param, (page - 1) * rows);
+	}
+
+	// http://stackoverflow.com/questions/13063838/add-change-parameter-of-url-and-redirect-to-the-new-url
+	function setGetParameter(paramName, paramValue) {
+		var url = window.location.href;
+		if (url.indexOf(paramName + "=") >= 0) {
+			var prefix = url.substring(0, url.indexOf(paramName));
+			var suffix = url.substring(url.indexOf(paramName));
+			suffix = suffix.substring(suffix.indexOf("=") + 1);
+			suffix = (suffix.indexOf("&") >= 0) ? suffix.substring(suffix.indexOf("&")) : "";
+			url = prefix + paramName + "=" + paramValue + suffix;
+		} else {
+			if (url.indexOf("?") < 0) {
+				url += "?" + paramName + "=" + paramValue;
+			} else {
+				url += "&" + paramName + "=" + paramValue;
+			}
+		}
+		window.location = url;
+	}
+});

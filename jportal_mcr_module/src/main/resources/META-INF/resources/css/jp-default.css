@@ -17,7 +17,10 @@
 	border-top: 1px solid transparent;
 	border-bottom: 1px solid transparent;
 }
-
+.pagination .input-group-sm .form-control, .pagination .input-group-sm .btn {
+	height: 33px;
+	border-color: #DDD;
+}
 /*******************************************************
 *
 ********************************************************/
@@ -689,6 +692,13 @@ body {
 #resultPaginator {
 	margin-top: 25px;
 	padding-top: 20px;
+	text-align: center;
+}
+#resultPaginator input.form-control {
+	width: 60px;
+}
+.pagination-jumper {
+	padding-left: 5px;
 }
 
 .jp-layout-topline {
@@ -728,14 +738,6 @@ body {
 }
 .jp-metadata dt:AFTER {
 	content: ": "
-}
-
-#resultPaginator {
-	text-align: center;
-}
-
-#resultPaginator .jp-layout-paginator {
-	display: inline;
 }
 
 #resultList {

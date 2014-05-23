@@ -173,7 +173,7 @@
           <xsl:if test="($start - $rows) &gt;= 0">
             <xsl:call-template name="jp.pagination.entry">
               <xsl:with-param name="startParam" select="$startParam" />
-              <xsl:with-param name="text" select="'&lt; Zurück'" />
+              <xsl:with-param name="text" select="'&lt;'" />
               <xsl:with-param name="value" select="$start - $rows" />
             </xsl:call-template>
           </xsl:if>
@@ -202,11 +202,24 @@
           <xsl:if test="($start + $rows) &lt; $numFound">
              <xsl:call-template name="jp.pagination.entry">
               <xsl:with-param name="startParam" select="$startParam" />
-              <xsl:with-param name="text" select="'Weiter &gt;'" />
+              <xsl:with-param name="text" select="'&gt;'" />
               <xsl:with-param name="value" select="$start + $rows" />
             </xsl:call-template>
           </xsl:if>
         </ul>
+        <xsl:if test="$resultInfo/pages &gt; 7">
+          <div class="pagination pagination-jumper">
+            <span class="input-group input-group-sm">
+              <form class="pagination-jumper-form">
+                <input class="form-control" placeholder="Seite" id="pagination-{$startParam}" />
+                <span class="input-group-btn">
+                  <input class="btn btn-default pagination-jump-submit" data-param="{$startParam}" data-rows="{$rows}"
+                  data-pages="{$resultInfo/pages}" value="Go" type="submit" />
+                </span>
+              </form>
+            </span>
+          </div>
+        </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>
