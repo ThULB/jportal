@@ -2,6 +2,8 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ import org.jdom2.JDOMException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
+import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.editor.MCREditorServlet;
 import org.mycore.services.i18n.MCRTranslation;
@@ -65,14 +68,22 @@ public class EditorResource {
         }
         paramsXML.put("mcrid", "jportal_" + type + "_00000000");
         paramsXML.put("editServlet", "CreateObjectServlet");
-        try {
-            paramsXML.put("cancelUrl",
-                cancelURL != null ? cancelURL : URLEncoder.encode(request.getHeader("referer"), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        paramsXML.put("cancelUrl", cancelURL != null ? cancelURL : encodeURL(request.getHeader("referer")));
         MCRContent content = transform("create", type, paramsXML);
         return Response.ok(content.getInputStream()).build();
+    }
+    
+    private String encodeURL(String url){
+        try {
+            URI relativeURI;
+            relativeURI = new URI(null, null, url, null, null);
+            return relativeURI.getScheme() + ":" + relativeURI.getRawSchemeSpecificPart();
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return null;
     }
 
     @GET
@@ -96,7 +107,7 @@ public class EditorResource {
     }
 
     private MCRContent transform(String method, String type, ParamsXML paramsXML) throws IOException, SAXException,
-        TransformerException {
+            TransformerException {
         paramsXML.put("type", type);
         String title = MCRTranslation.translateWithBaseName(method + "." + type + ".title", "editor.i18n.labels");
         paramsXML.put("title", title);
