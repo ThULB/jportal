@@ -52,9 +52,14 @@ public class ObjectScrollResolver implements URIResolver {
         href = href.substring(href.indexOf(":") + 1);
         MCRObjectID mcrID = MCRObjectID.getInstance(href);
         MCRObject mcrObj;
+
+        if (!MCRMetadataManager.exists(mcrID)) {
+            return new JDOMSource(buildScrollElement());
+        }
+        
         try {
             mcrObj = MCRMetadataManager.retrieveMCRObject(mcrID);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             throw new TransformerException("unable to get object " + href, exc);
         }
         // get parent
@@ -67,13 +72,14 @@ public class ObjectScrollResolver implements URIResolver {
         String prevQry = buildQuery(mcrID, parentID.toString(), "indexPosition", sortValue, false);
         String nextQry = buildQuery(mcrID, parentID.toString(), "indexPosition", sortValue, true);
         // do request
-        MCRSolrURL prevURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), prevQry);
-        MCRSolrURL nextURL = new MCRSolrURL((HttpSolrServer)MCRSolrServerFactory.getSolrServer(), nextQry);
+        MCRSolrURL prevURL = new MCRSolrURL((HttpSolrServer) MCRSolrServerFactory.getSolrServer(), prevQry);
+        MCRSolrURL nextURL = new MCRSolrURL((HttpSolrServer) MCRSolrServerFactory.getSolrServer(), nextQry);
         try {
             SAXBuilder saxBuilder = new SAXBuilder();
             Document prevDoc = saxBuilder.build(prevURL.openStream());
             Document nextDoc = saxBuilder.build(nextURL.openStream());
-            return new JDOMSource(buildResult((Element) prevDoc.getRootElement().detach(), (Element) nextDoc.getRootElement().detach()));
+            return new JDOMSource(buildResult((Element) prevDoc.getRootElement().detach(), (Element) nextDoc
+                    .getRootElement().detach()));
         } catch (IOException e) {
             LOGGER.error("Unable to get input stream from solr", e);
             throw new TransformerException("Unable to get input stream from solr", e);
@@ -100,12 +106,12 @@ public class ObjectScrollResolver implements URIResolver {
     protected Element buildScrollElement(String name, Element e) throws JDOMException {
         Element returnElement = new Element(name);
         String numFound = getElementAttr(e, "result/@numFound");
-        if(numFound == null || Integer.valueOf(numFound) == 0) {
+        if (numFound == null || Integer.valueOf(numFound) == 0) {
             return returnElement;
         }
         String id = getElementText(e, "result/doc/str[@name='id']/text()");
         String title = getElementText(e, "result/doc/str[@name='maintitle']/text()");
-        if(id == null || title == null) {
+        if (id == null || title == null) {
             return returnElement;
         }
         return returnElement.setAttribute("id", id).setAttribute("title", title);
@@ -130,7 +136,7 @@ public class ObjectScrollResolver implements URIResolver {
         returnQuery.append("id").append("%20").append(next ? "asc" : "desc");
         returnQuery.append("&rows=1&q=");
         String qry = "+parent:{parent} +objectType:{objectType} +((+{field}:'{value}' AND +id:\\{";
-        if(next) {
+        if (next) {
             qry += "'{id}' TO *\\}) (+{field}:\\{'{value}' TO *\\}))";
         } else {
             qry += "* TO '{id}'\\}) (+{field}:\\{* TO '{value}'\\}))";
@@ -159,7 +165,7 @@ public class ObjectScrollResolver implements URIResolver {
         MCRObjectMetadata metadata = mcrObj.getMetadata();
         if (objectType.equals("jpvolume")) {
             return getElementValue(metadata, "hidden_positions");
-        } else if(objectType.equals("jparticle")){
+        } else if (objectType.equals("jparticle")) {
             return getElementValue(metadata, "sizes");
         }
         throw new MCRException("Unsupported object type " + objectType);
@@ -169,14 +175,14 @@ public class ObjectScrollResolver implements URIResolver {
         MCRMetaElement metaElement = metadata.getMetadataElement(element);
         if (metaElement != null) {
             Iterator<MCRMetaInterface> it = metaElement.iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 MCRMetaInterface metaInterface = it.next();
-                if(metaInterface.getInherited() == 0) {
+                if (metaInterface.getInherited() == 0) {
                     try {
                         String text = ((MCRMetaLangText) metaInterface).getText();
                         text = text.replaceAll("\"", "\\\\\"");
                         return URLEncoder.encode(text, "UTF-8");
-                    } catch(UnsupportedEncodingException uee) {
+                    } catch (UnsupportedEncodingException uee) {
                         LOGGER.error(uee);
                         break;
                     }
