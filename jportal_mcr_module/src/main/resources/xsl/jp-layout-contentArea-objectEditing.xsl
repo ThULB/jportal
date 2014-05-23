@@ -214,7 +214,7 @@
         <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true"
           data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
           data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}"
-          data-title="{$title}">
+          data-title="{$title}" data-backdrop="static">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

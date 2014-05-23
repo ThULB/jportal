@@ -72,17 +72,19 @@ $(document).ready(function() {
 			infoDiv.html("Löschen erfolgreich!");
 			closeButton.on("click", onCloseClicked);
 		}).error(function(error, xhr) {
-			title.text("Fehler");
+			title.text("Es ist ein Fehler beim Löschen aufgetreten");
 			dialog.addClass("text-danger");
 			imageDiv.html("<i class='fa fa-exclamation fa-5x'></i>");
 			if(error.status == 404) {
 				infoDiv.html("<p class='text-danger'>Das Dokument wurde bereits gelöscht.</p>");
 			} else if(error.status == 401) {
 				infoDiv.html("<p class='text-danger'>Sie haben nicht die notwendigen Rechte das Dokument zu löschen.</p>");
+			} else if(error.status == 403 && error.responseText != null && error.responseText != "") {
+				infoDiv.html("<p class='text-danger'>" + error.responseText + "</p>");
 			} else {
-				infoDiv.html("<p class='text-danger'>Das Dokument mit der ID " + objectID + " konnte nicht gelöscht werden." +
+				infoDiv.html("<p class='text-danger'>Das Dokument mit der ID <b>" + objectID + "</b> konnte nicht gelöscht werden." +
 						" Bitte wenden Sie sich an den Administrator!</p>" +
-						"<p>" + error.status + ": " + error.statusText + "</p>");
+						"<p>" + error.status + ": " + error.statusText + "</p><p>" + error.responseText + "</p>");
 			}
 		});
 	}
