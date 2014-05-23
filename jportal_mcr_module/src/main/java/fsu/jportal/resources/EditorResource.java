@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.TransformerException;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
+import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -40,13 +43,15 @@ public class EditorResource {
 
     @GET
     @Path("create/{type}")
-    public Response create(@PathParam("type") String type) {
+    @Produces(MediaType.TEXT_HTML)
+    public Response create(@PathParam("type") String type) throws Exception {
         return create(null, type);
     }
 
     @GET
     @Path("{parentID}/create/{type}")
-    public Response create(@PathParam("parentID") String parentID, @PathParam("type") String type) {
+    @Produces(MediaType.TEXT_HTML)
+    public Response create(@PathParam("parentID") String parentID, @PathParam("type") String type) throws Exception {
         ParamsXML paramsXML = new ParamsXML();
 
         if (parentID != null) {
@@ -61,18 +66,19 @@ public class EditorResource {
         paramsXML.put("mcrid", "jportal_" + type + "_00000000");
         paramsXML.put("editServlet", "CreateObjectServlet");
         try {
-            paramsXML.put("cancelUrl", cancelURL != null ? cancelURL : URLEncoder.encode(request.getHeader("referer"), "UTF-8"));
+            paramsXML.put("cancelUrl",
+                cancelURL != null ? cancelURL : URLEncoder.encode(request.getHeader("referer"), "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        
-        initEditor("create", type, paramsXML);
-        return Response.ok().build();
+        MCRContent content = transform("create", type, paramsXML);
+        return Response.ok(content.getInputStream()).build();
     }
 
     @GET
     @Path("update/{id}")
-    public Response update(/*@PathParam("type") String type,*/@PathParam("id") String id) {
+    @Produces(MediaType.TEXT_HTML)
+    public Response update(/*@PathParam("type") String type,*/@PathParam("id") String id) throws Exception {
         String type = MCRObjectID.getIDParts(id)[1];
         ParamsXML paramsXML = new ParamsXML();
         paramsXML.put("mcrid", id);
@@ -85,11 +91,12 @@ public class EditorResource {
         } catch (TransformerException | JDOMException | IOException | SAXException e) {
             e.printStackTrace();
         }
-        initEditor("update", type, paramsXML);
-        return Response.ok().build();
+        MCRContent content = transform("update", type, paramsXML);
+        return Response.ok(content.getInputStream()).build();
     }
 
-    private void initEditor(String method, String type, ParamsXML paramsXML) {
+    private MCRContent transform(String method, String type, ParamsXML paramsXML) throws IOException, SAXException,
+        TransformerException {
         paramsXML.put("type", type);
         String title = MCRTranslation.translateWithBaseName(method + "." + type + ".title", "editor.i18n.labels");
         paramsXML.put("title", title);
@@ -100,15 +107,8 @@ public class EditorResource {
 
         EditorPreProc proc = new EditorPreProc();
         Document editorJDOM = proc.exec("start-editor", paramsXML);
-
-        try {
-            MCREditorServlet.replaceEditorElements(request, uri, editorJDOM);
-            MCRJDOMContent editorReplaced = new MCRJDOMContent(editorJDOM);
-            MCRLayoutService.instance().doLayout(request, response, editorReplaced);
-            
-            
-        } catch (IOException | SAXException | TransformerException e) {
-            e.printStackTrace();
-        }
+        MCREditorServlet.replaceEditorElements(request, uri, editorJDOM);
+        MCRJDOMContent editorReplaced = new MCRJDOMContent(editorJDOM);
+        return MCRLayoutService.instance().getTransformedContent(request, response, editorReplaced);
     }
 }
