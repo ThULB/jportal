@@ -1,6 +1,7 @@
 $(document).ready(function() {
 
 	var objectID = null;
+	var objectTitle = null;
 	var deletable = false;
 	var referer = null;
 	var parent = null;
@@ -34,6 +35,7 @@ $(document).ready(function() {
 		closeButton = $("#delete-dialog-close");
 
 		objectID = dialog.attr("data-id");
+		objectTitle = dialog.attr("data-title");
 		deletable = dialog.attr("data-deletable") === "true";
 		referer = dialog.attr("data-referer");
 		parent = dialog.attr("data-parent");
@@ -45,7 +47,7 @@ $(document).ready(function() {
 
 		if(deletable) {
 			imageDiv.html("<i class='fa fa-warning fa-5x'></i>");
-			infoDiv.html("Sind Sie sicher, daß Sie dieses Dokument löschen wollen?");
+			infoDiv.html("Sind Sie sicher, daß Sie <b>" + objectTitle + "</b> löschen wollen?");
 			submitButton.removeClass("hidden");
 			closeButton.text("Abbrechen");
 		} else {

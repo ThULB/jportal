@@ -69,6 +69,17 @@
   <!-- *************************************************** -->
   <!-- * NAMES -->
   <!-- *************************************************** -->
+  <xsl:template mode="jp.metadata.title" match="mycoreobject">
+    <!-- person/jpinst -->
+    <xsl:apply-templates select="." mode="jp.metadata.name"/>
+    <!-- journal/volume/article -->
+    <xsl:apply-templates select="." mode="jp.metadata.maintitle"/>
+  </xsl:template>
+
+  <xsl:template mode="jp.metadata.maintitle" match="mycoreobject">
+    <xsl:value-of select="metadata/maintitles/maintitle[@inherited='0']" />
+  </xsl:template>
+
   <xsl:template mode="jp.metadata.name" match="mycoreobject">
     <xsl:if test="contains(@ID, '_person_')"> 
       <xsl:apply-templates mode="jp.metadata.person.name" select="metadata/def.heading/heading" />

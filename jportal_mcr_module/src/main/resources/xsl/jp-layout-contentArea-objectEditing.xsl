@@ -208,9 +208,13 @@
       <xsl:if test="$deletePerm='true' and /mycoreobject">
         <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-delete-dialog.js" />
+        <xsl:variable name="title">
+          <xsl:apply-templates select="." mode="jp.metadata.title" />
+        </xsl:variable>
         <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true"
           data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
-          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}">
+          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}"
+          data-title="{$title}">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
