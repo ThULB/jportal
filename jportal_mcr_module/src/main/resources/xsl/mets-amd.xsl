@@ -55,49 +55,50 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="mcrobj" select="document(concat('mcrobject:', $derivateOwnerID))/mycoreobject" />
-
-    <xsl:comment>
-      Start amdSec - mets-amd.xsl
-    </xsl:comment>
-    <mets:amdSec ID="amd_{$sectionID}">
-      <mets:rightsMD ID="rightsMD_263566811">
-        <mets:mdWrap MIMETYPE="text/xml" MDTYPE="OTHER" OTHERMDTYPE="DVRIGHTS">
-          <mets:xmlData>
-            <xsl:call-template name="addDvRights">
-              <xsl:with-param name="owner" select="$JP.Site.Owner.label" />
-              <xsl:with-param name="contact" select="concat('mailto:', $JP.Site.adminMail)" />
-              <xsl:with-param name="logo" select="$JP.Site.Parent.logo" />
-              <xsl:with-param name="url" select="$JP.Site.Owner.url" />
-            </xsl:call-template>
-          </mets:xmlData>
-        </mets:mdWrap>
-      </mets:rightsMD>
-      <mets:digiprovMD>
-        <xsl:attribute name="ID">
-            <xsl:value-of select="concat('digiprovMD',$sectionID)" />          
-          </xsl:attribute>
-        <mets:mdWrap MIMETYPE="text/xml" MDTYPE="OTHER" OTHERMDTYPE="DVLINKS">
-          <mets:xmlData>
-            <dv:links xmlns:dv="http://dfg-viewer.de/">
-              <dv:presentation>
-                <xsl:choose>
-                  <xsl:when test="$mcrobjectID">
-                    <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$mcrobjectID)" />
-                  </xsl:when>
-                  <xsl:when test="$derobjectID">
-                    <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',mcrxml:getMCRObjectID($derobjectID))" />
-                  </xsl:when>
-                </xsl:choose>
-              </dv:presentation>
-            </dv:links>
-          </mets:xmlData>
-        </mets:mdWrap>
-      </mets:digiprovMD>
-    </mets:amdSec>
-    <xsl:comment>
-      End amdSec - mets-amd.xsl
-    </xsl:comment>
+    <xsl:if test="$derivateOwnerID != ''">
+      <xsl:variable name="mcrobj" select="document(concat('mcrobject:', $derivateOwnerID))/mycoreobject" />
+      <xsl:comment>
+        Start amdSec - mets-amd.xsl
+      </xsl:comment>
+      <mets:amdSec ID="amd_{$sectionID}">
+        <mets:rightsMD ID="rightsMD_263566811">
+          <mets:mdWrap MIMETYPE="text/xml" MDTYPE="OTHER" OTHERMDTYPE="DVRIGHTS">
+            <mets:xmlData>
+              <xsl:call-template name="addDvRights">
+                <xsl:with-param name="owner" select="$JP.Site.Owner.label" />
+                <xsl:with-param name="contact" select="concat('mailto:', $JP.Site.adminMail)" />
+                <xsl:with-param name="logo" select="$JP.Site.Parent.logo" />
+                <xsl:with-param name="url" select="$JP.Site.Owner.url" />
+              </xsl:call-template>
+            </mets:xmlData>
+          </mets:mdWrap>
+        </mets:rightsMD>
+        <mets:digiprovMD>
+          <xsl:attribute name="ID">
+              <xsl:value-of select="concat('digiprovMD',$sectionID)" />          
+            </xsl:attribute>
+          <mets:mdWrap MIMETYPE="text/xml" MDTYPE="OTHER" OTHERMDTYPE="DVLINKS">
+            <mets:xmlData>
+              <dv:links xmlns:dv="http://dfg-viewer.de/">
+                <dv:presentation>
+                  <xsl:choose>
+                    <xsl:when test="$mcrobjectID">
+                      <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$mcrobjectID)" />
+                    </xsl:when>
+                    <xsl:when test="$derobjectID">
+                      <xsl:value-of select="concat($WebApplicationBaseURL,'receive/',mcrxml:getMCRObjectID($derobjectID))" />
+                    </xsl:when>
+                  </xsl:choose>
+                </dv:presentation>
+              </dv:links>
+            </mets:xmlData>
+          </mets:mdWrap>
+        </mets:digiprovMD>
+      </mets:amdSec>
+      <xsl:comment>
+        End amdSec - mets-amd.xsl
+      </xsl:comment>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template name="addDvRights">
