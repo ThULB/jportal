@@ -92,10 +92,4 @@
     </mets:dmdSec>
   </xsl:template>
 
-  <xsl:template match="mets:amdSec">
-    <xsl:call-template name="amdSec">
-      <xsl:with-param name="derobject" select="$derivateID" />
-    </xsl:call-template>
-  </xsl:template>
-
 </xsl:stylesheet>

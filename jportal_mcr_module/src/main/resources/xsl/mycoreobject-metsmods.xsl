@@ -41,9 +41,7 @@
         </mets:mdWrap>
       </mets:dmdSec>
 
-      <xsl:call-template name="amdSec">
-        <xsl:with-param name="mcrobject" select="@ID"/>
-      </xsl:call-template>
+      <xsl:call-template name="amdSec" />
 
       <xsl:copy-of select="$derMets/mets:mets/mets:fileSec" />
       <xsl:copy-of select="$derMets/mets:mets/mets:structMap" />

@@ -43,9 +43,8 @@
         </mets:mdWrap>
       </mets:dmdSec>
 
-      <xsl:call-template name="amdSec">
-        <xsl:with-param name="mcrobject" select="@ID" />
-      </xsl:call-template>
+      <xsl:call-template name="amdSec" />
+
       <xsl:if test="./metadata/derivateLinks/derivateLink or ./structure/derobjects/derobject">
         <mets:fileSec>
           <mets:fileGrp USE="DEFAULT">
