@@ -3,10 +3,10 @@
 <!-- $Revision: 3494 $ $Date: 2011-07-12 11:36:36 +0200 (Tue, 12 Jul 2011) $ -->
 <!-- ============================================== -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mcr="http://www.mycore.org/" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mets="http://www.loc.gov/METS/"
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:mets="http://www.loc.gov/METS/"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:iview2="iview2://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="mcr xalan i18n acl mcrxml iview2">
+  exclude-result-prefixes="xalan i18n acl mcrxml iview2">
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="ThumbnailBaseURL" select="concat($ServletsBaseURL,'MCRDFGThumbnail/')" />
   <xsl:param name="ImageBaseURL" select="concat($ServletsBaseURL,'MCRDFGServlet/')"/>

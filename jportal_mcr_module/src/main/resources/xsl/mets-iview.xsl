@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mets="http://www.loc.gov/METS/"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xalan="http://xml.apache.org/xalan" xmlns:mcrurn="xalan://org.mycore.urn.MCRXMLFunctions"
-  exclude-result-prefixes="mcr" version="1.0">
+  exclude-result-prefixes="xsl xlink mets mods xalan mcrurn" version="1.0">
   <xsl:output method="xml" encoding="utf-8" />
   <xsl:param name="MCR.Module-iview2.SupportedContentTypes" />
   <xsl:param name="WebApplicationBaseURL" />
