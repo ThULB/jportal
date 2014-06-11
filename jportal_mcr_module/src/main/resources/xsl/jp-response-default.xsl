@@ -332,8 +332,14 @@
   </xsl:template>
 
   <xsl:template mode="facetList" match="lst[@name='facet_fields']">
-    <h3><xsl:value-of select="i18n:translate('jp.metadata.facet.intro')" /></h3>
-    <xsl:apply-templates mode="facetGroup" select="lst" />
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><xsl:value-of select="i18n:translate('jp.metadata.facet.intro')" /></h3>
+      </div>
+      <div class="panel-body">
+         <xsl:apply-templates mode="facetGroup" select="lst" />
+      </div>
+    </div>
   </xsl:template>
 
   <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">

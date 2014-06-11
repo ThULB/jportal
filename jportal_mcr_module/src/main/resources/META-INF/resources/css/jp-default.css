@@ -774,22 +774,9 @@ body {
 .jp-layout-facet-list {
 	float: left;
 	width: 266px;
-	background-color: #F1F1F1;
-	border-radius: 6px;
-	border: 1px solid #CCC;
-	box-shadow: 0 0 4px #CCC;
-}
-.jp-layout-facet-list h3 {
-    border-bottom: 1px solid #CCC;
-    font-size: 1.1rem;
-    margin-bottom: 0;
-    margin-top: 0;
-    padding: 10px;
 }
 .jp-layout-facet-list .group {
-	padding: 10px;
 	font-size: 1rem;
-	background-color: #F8F8F8;
 }
 .jp-layout-facet-list .group table {
 	width: 100%;
