@@ -112,9 +112,12 @@
         <script type="text/javascript">
           var jp = jp || {};
           jp.baseURL = '<xsl:value-of select="$WebApplicationBaseURL" />';
+          jp.journalID = '<xsl:value-of select="$journalID" />';
+          jp.journalID = jp.journalID != '' ? jp.journalID : null;
         </script>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
 
         <!-- TODO: don't init iview2 if no image is available -->

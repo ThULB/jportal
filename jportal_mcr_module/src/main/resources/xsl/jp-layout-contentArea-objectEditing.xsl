@@ -206,7 +206,6 @@
 
     <delete>
       <xsl:if test="$deletePerm='true' and /mycoreobject">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.min.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-delete-dialog.js" />
         <xsl:variable name="title">
           <xsl:apply-templates select="." mode="jp.metadata.title" />

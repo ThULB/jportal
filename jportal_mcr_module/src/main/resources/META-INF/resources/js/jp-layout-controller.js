@@ -145,6 +145,60 @@ function updateQueryStringParameter(uri, key, value) {
 	}
 }
 
+// SEARCHBAR
+$(document).ready(function() {
+	var searchForm = $("#searchForm");
+	var searchField = $("#inputField");
+	var searchDropDownButton = $("#searchDropDownButton");
+	var journalSearchOption = $("#journalSearchOption");
+	var globalSearchOption = $("#globalSearchOption");
+	var journalSearchLabel = $("#journalSearchLabel").text();
+	var globalSearchLabel = $("#globalSearchLabel").text();
+
+	journalSearchOption.on("click", activateJournalSearch);
+	globalSearchOption.on("click", activateGlobalSearch);
+
+	journalSearchOption.append(journalSearchLabel);
+	globalSearchOption.append(globalSearchLabel);
+
+	if(jp.journalID != null) {
+		activateJournalSearch();
+	} else {
+		activateGlobalSearch();
+	}
+
+	function activateGlobalSearch() {
+		searchField.attr("placeholder", globalSearchLabel);
+		searchField.attr("title", globalSearchLabel);
+		setDrowDownIcon("fa-globe");
+		removeHiddenFields();
+	}
+
+	function activateJournalSearch() {
+		searchField.attr("placeholder", journalSearchLabel);
+		searchField.attr("title", journalSearchLabel);
+		setDrowDownIcon("fa-book");
+		removeHiddenFields();
+		appendHiddenFields();
+	}
+
+	function removeHiddenFields() {
+		$("#searchForm input[name='fq']").remove();
+		$("#searchForm input[name='journalID']").remove();
+	}
+
+	function appendHiddenFields() {
+		searchForm.append("<input type='hidden' name='fq' value='journalID:" + jp.journalID + "' />");
+		searchForm.append("<input type='hidden' name='journalID' value='" + jp.journalID + "' />");
+	}
+
+	function setDrowDownIcon(iconClass) {
+		$("#searchDropDownButton i").remove();
+		searchDropDownButton.prepend("<i class='fa fa-fw " + iconClass + "'></i>");
+	}
+
+});
+
 // SORT
 $(document).ready(function() {
 	$("#sortSelect").on("change", function() {

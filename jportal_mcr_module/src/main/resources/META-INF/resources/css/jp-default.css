@@ -1012,9 +1012,15 @@ body {
 	width: 555px;
 }
 
-#searchBar #searchForm a {
-	color: white;
-	margin-left: 12px;
+#searchBar .dropdown-menu .fa-fw {
+	margin-left: -6px;
+	margin-right: 6px;
+}
+#searchBar button.dropdown-toggle {
+	padding: 6px 8px;
+}
+#searchBar button.dropdown-toggle .fa-fw {
+	margin-right: 2px;
 }
 
 #main {

@@ -84,23 +84,6 @@
         <li>
           <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a>
         </li>
-        <li>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:variable name="requestUrlWithoutJournalID">
-                <xsl:call-template name="UrlDelParam">
-                  <xsl:with-param name="url" select="$RequestURL" />
-                  <xsl:with-param name="par" select="'journalID'" />
-                </xsl:call-template>
-              </xsl:variable>
-              <xsl:call-template name="UrlDelParam">
-                <xsl:with-param name="url" select="$requestUrlWithoutJournalID" />
-                <xsl:with-param name="par" select="'fq'" />
-              </xsl:call-template>
-            </xsl:attribute>
-            <xsl:value-of select="'Im Gesamtbestand suchen'" />
-          </a>
-        </li>
       </xsl:if>
       <xsl:if test="$returnURL">
         <li>

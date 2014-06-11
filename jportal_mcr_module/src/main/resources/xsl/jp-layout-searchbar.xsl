@@ -64,19 +64,34 @@
 
   <xsl:template name="jp.layout.searchbar.default">
     <div id="searchBar">
-      <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
+      <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="container-fluid">
         <div class="row">
-          <div class="col-lg-8 input-group">
-            <xsl:choose>
-              <xsl:when test="$journalID != ''">
-                <input class="form-control" id="inputField" name="qry" value="{$qry}" placeholder="Suche innerhalb der Zeitschrift" title="Suche innerhalb der Zeitschrift" />
-                <input type="hidden" name="fq" value="journalID:{$journalID}" />
-                <input type="hidden" name="journalID" value="{$journalID}" />
-              </xsl:when>
-              <xsl:otherwise>
-                <input class="form-control" id="inputField" name="qry" value="{$qry}" placeholder="Suche im Gesamtbestand" title="Suche im Gesamtbestand" />
-              </xsl:otherwise>
-            </xsl:choose>
+          <div class="hidden">
+            <span id="globalSearchLabel">Suche im Gesamtbestand</span>
+            <span id="journalSearchLabel">Suche innerhalb der Zeitschrift</span>
+          </div>
+          <div class="col-md-8 input-group">
+            <xsl:if test="$journalID != ''">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Search</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" id="searchDropDownMenu">
+                  <li>
+                    <a href="javascript:void(0)" id="globalSearchOption">
+                      <i class="fa fa-fw fa-globe" />
+                    </a>
+                  </li>
+                  <li>
+                    <a href="javascript:void(0)" id="journalSearchOption">
+                      <i class="fa fa-fw fa-book" />
+                    </a>
+                  </li>
+                </ul>
+              </span>
+            </xsl:if>
+            <input class="form-control" id="inputField" name="qry" value="{$qry}" />
             <xsl:if test="$sort != ''">
               <input type="hidden" name="sort" value="{$sort}" />
             </xsl:if>
