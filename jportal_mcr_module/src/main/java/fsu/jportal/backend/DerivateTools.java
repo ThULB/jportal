@@ -1,6 +1,7 @@
 package fsu.jportal.backend;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.mycore.datamodel.ifs.MCRDirectory;
@@ -16,6 +17,23 @@ import org.mycore.iview2.services.MCRIView2Tools;
 import com.google.common.io.Files;
 
 public class DerivateTools {
+
+    public static void rename(String filePath, String newName) throws FileNotFoundException {
+        FileLocation fileLocation = new FileLocation(filePath);
+        String absolutePath = fileLocation.getAbsolutPath();
+
+        String derivateID = fileLocation.getOwnerID();
+        MCRDirectory rootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(derivateID);
+        if (rootNode == null) {
+            throw new FileNotFoundException("Cannot find root node of derivate " + derivateID);
+        }
+        MCRFilesystemNode file = rootNode.getChildByPath(absolutePath);
+        if (file == null) {
+            throw new FileNotFoundException(filePath);
+        }
+        file.setName(newName);
+    }
+
     public static void mv(String oldFile, String newFile) {
         oldFile = oldFile.trim();
         newFile = newFile.trim();
@@ -43,13 +61,13 @@ public class DerivateTools {
 
         mv(file, newRootNode, newPath, newName);
     }
-    
+
     public static void cp(MCRFilesystemNode node, MCRDirectory newRootDir, String newPath, String newName) {
-        if(node instanceof MCRDirectory){
+        if (node instanceof MCRDirectory) {
             //is a directory (not copied)
             return;
         }
-        
+
     }
 
     public static void mv(MCRFilesystemNode node, MCRDirectory newRootDir, String newPath, String newName) {
@@ -58,10 +76,10 @@ public class DerivateTools {
         MCRDirectory newParent = null;
         File newTiledFile = null;
 
-        if(node instanceof MCRDirectory){
-            
+        if (node instanceof MCRDirectory) {
+
         }
-        
+
         File tileDir = MCRIView2Tools.getTileDir();
         if (newRootDir != null) {
             newParent = newRootDir;

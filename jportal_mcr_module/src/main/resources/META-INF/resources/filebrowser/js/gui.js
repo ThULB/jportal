@@ -31,10 +31,10 @@ $(document).ready(function(){
 			textfield.toggleClass("textfield");
 			swapClass();
 		}
-		
+
 		function commitChanges(){
 			$.ajax({
-				url: "/rsc/filebrowser/rename?newFile=" + "/" + currentPath + "/" + textfieldInput.val() + "&oldFile=" + "/" + currentPath + "/" +  textfieldValue,
+				url: "/rsc/filebrowser/rename?file=" + "/" + currentPath + "/" + textfieldValue + "&name=" +  textfieldInput.val(),
 				type: "POST",
 				statusCode: {
 					200: function() {
@@ -43,7 +43,7 @@ $(document).ready(function(){
 				}
 			});
 		}
-		
+
 		function cancelChanges(){
 			setInputValue(textfieldValue);
 		}

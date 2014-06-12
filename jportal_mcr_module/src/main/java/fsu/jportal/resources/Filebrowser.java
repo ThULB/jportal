@@ -19,10 +19,10 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.frontend.cli.JPortalCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import fsu.jportal.backend.Derivate;
+import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
@@ -50,11 +50,11 @@ public class Filebrowser {
         } else {
             node = derivate.getRootDir();
         }
-        
+
         if (node == null) {
             return Response.status(Status.NOT_FOUND).build();
         }
-        
+
         String maindoc = derivate.getMaindoc();
         FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
         String json = gsonManager.createGson().toJson(wrapper);
@@ -104,8 +104,8 @@ public class Filebrowser {
 
     @POST
     @Path("rename")
-    public Response rename(@QueryParam("newFile") String newFile, @QueryParam("oldFile") String oldFile) {
-        JPortalCommands.renameFileInIFS(oldFile, newFile);
+    public Response rename(@QueryParam("file") String file, @QueryParam("name") String name) throws Exception {
+        DerivateTools.rename(file, name);
         return Response.ok().build();
     }
 
@@ -115,7 +115,7 @@ public class Filebrowser {
         //        if (MCRAccessManager.checkPermission(derivID, PERMISSION_WRITE)) {
         Derivate derivate = new Derivate(derivID);
         derivate.setMaindoc(path);
-        
+
         return Response.ok().build();
 
         //        } else {

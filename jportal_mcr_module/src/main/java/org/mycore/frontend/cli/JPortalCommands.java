@@ -76,8 +76,9 @@ public class JPortalCommands {
         DerivateLinkUtil.setLink(mcrId, link);
     }
 
-    @MCRCommand(help = "Rename file in derivate: mv {oldName} {newName}", syntax = "mv {0} {1}")
-    public static void renameFileInIFS(String oldFile, String newFile) {
-        DerivateTools.mv(oldFile, newFile);
+    @MCRCommand(help = "Rename file in derivate: rename {file} {name}", syntax = "rename {0} {1}")
+    public static void renameFileInIFS(String file, String name) throws Exception {
+        DerivateTools.rename(file, name);
     }
+
 }
