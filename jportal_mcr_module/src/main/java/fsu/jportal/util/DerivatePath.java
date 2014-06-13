@@ -3,59 +3,62 @@ package fsu.jportal.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
+
 public class DerivatePath {
     static final Pattern pathPattern = Pattern.compile("(.*):((/(.*/)*)(.*)$){1}");
+    
+    String derivateID;
 
-    String ownerID;
+    String parentPath;
 
-    String directoryPath;
-
-    String resourceName;
+    String fileName;
 
     String absPath;
 
-    private boolean isDirectory;
-
+    /**
+     * @param path "derivate_id:/path/to/file"
+     */
     public DerivatePath(String path) {
         if(path.endsWith("/")){
-            setDirectory(true);
             path.substring(0, path.length());
         }
+        
         parsePath(path);
     }
-
+    
     private void parsePath(String path) {
         Matcher pathMatcher = pathPattern.matcher(path);
         while (pathMatcher.find()) {
-            ownerID = pathMatcher.group(1);
+            derivateID = pathMatcher.group(1);
             absPath = pathMatcher.group(2);
-            directoryPath = pathMatcher.group(3);
-            resourceName = pathMatcher.group(5);
+            parentPath = pathMatcher.group(3);
+            
+            fileName = pathMatcher.group(5);
+        }
+        
+        if(parentPath.equals(absPath)){
+            parentPath = null;
+        }
+        
+        if(fileName.equals("")){
+            fileName = null;
         }
     }
 
-    public String getOwnerID() {
-        return ownerID;
+    public String getDerivateID() {
+        return derivateID;
     }
 
     public String getAbsolutePath() {
         return absPath;
     }
     
-    public String getDirectoryPath() {
-        return directoryPath;
+    public String getParentPath() {
+        return parentPath;
     }
 
     public String getFileName() {
-        return resourceName;
+        return fileName;
     }
-
-    public boolean isDirectory() {
-        return isDirectory;
-    }
-
-    private void setDirectory(boolean isDirectory) {
-        this.isDirectory = isDirectory;
-    }
-
 }
