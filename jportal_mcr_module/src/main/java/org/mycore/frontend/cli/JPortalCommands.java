@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Path;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -16,23 +14,11 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRFileMetadataManager;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
-import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRFileMetadata;
-import org.mycore.datamodel.metadata.MCRMetaIFS;
-import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.frontend.util.DerivateLinkUtil;
-import org.mycore.frontend.util.FileLocation;
-import org.mycore.imagetiler.MCRImage;
-import org.mycore.iview2.services.MCRIView2Tools;
 import org.xml.sax.SAXException;
-
-import com.google.common.io.Files;
 
 import fsu.jportal.backend.DerivateTools;
 
@@ -80,5 +66,9 @@ public class JPortalCommands {
     public static void renameFileInIFS(String file, String name) throws Exception {
         DerivateTools.rename(file, name);
     }
-
+    
+    @MCRCommand(help = "Copy file in derivate: mv {oldName} {newName}", syntax = "copy {0} {1}")
+    public static void copy(String oldFile, String newFile) {
+        DerivateTools.cp(oldFile, newFile);
+    }
 }

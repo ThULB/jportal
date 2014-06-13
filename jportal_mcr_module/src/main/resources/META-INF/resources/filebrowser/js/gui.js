@@ -123,6 +123,10 @@ $(document).ready(function(){
 		var fileList = $("#fileList")
 		fileList.html("");
 		$.get("/rsc/filebrowser/" + id, function(data){
+			if(data.maindocName){
+				$("#maindocName").html(data.maindocName);
+			}
+			
 			for(i = 0; i<data.children.length; i++){
 				var obj = data.children[i];
 				var row = $("<tr/>");
@@ -142,7 +146,7 @@ $(document).ready(function(){
 				else{
 					row.append("<td>-</td>");
 				}
-				//maindoc+
+				//maindoc
 				if (obj.type == "file"){
 					if (obj.maindoc != true){
 						row.append("<td><span class='glyphicon glyphicon-unchecked'/></td>");
