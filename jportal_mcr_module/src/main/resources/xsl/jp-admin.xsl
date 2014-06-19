@@ -35,7 +35,7 @@
         <a href="{$WebApplicationBaseURL}servlets/MCRUserServlet">Suchen und verwalten</a>
       </li>
       <li>
-        <a href="{$WebApplicationBaseURL}authorization/new-user.xed">Nutzer anlegen</a>
+        <a href="{$WebApplicationBaseURL}authorization/new-user.xed?action=save">Nutzer anlegen</a>
       </li>
       <li>
         <a href="{$WebApplicationBaseURL}authorization/roles-editor.xml">Gruppen verwalten</a>
