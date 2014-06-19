@@ -39,6 +39,24 @@
     </dd>
     </xsl:if>
   </xsl:template>
+  
+  <xsl:template mode="metadataURN" match="derobject">
+    <xsl:variable name="derivID" select="@xlink:href"/>
+    <xsl:variable name="filePath" select="document(concat('notnull:mcrobject:',$derivID))/mycorederivate/derivate/internals/internal/@maindoc"/>
+    <xsl:if test="$filePath != ''">
+      <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
+      <xsl:if test="$urn != ''">
+        <dt>
+          URN
+        </dt>
+        <dd>
+          <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
+            <xsl:value-of select="$urn" />
+          </a>
+        </dd>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
 
   <xsl:template mode="metadataDisplay" match="metadata/*[contains($simpleType, @class)]">
     <xsl:call-template name="metadataField">
