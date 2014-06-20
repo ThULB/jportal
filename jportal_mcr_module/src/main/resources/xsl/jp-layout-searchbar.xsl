@@ -63,6 +63,11 @@
   </xsl:template>
 
   <xsl:template name="jp.layout.searchbar.default">
+    <script type="text/javascript">
+      $(document).ready(function() {
+        updateSearchbar();
+      });
+    </script>
     <div id="searchBar">
       <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="container-fluid">
         <div class="row">

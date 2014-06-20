@@ -146,7 +146,7 @@ function updateQueryStringParameter(uri, key, value) {
 }
 
 // SEARCHBAR
-$(document).ready(function() {
+function updateSearchbar() {
 	var searchForm = $("#searchForm");
 	var searchField = $("#inputField");
 	var searchDropDownButton = $("#searchDropDownButton");
@@ -197,7 +197,7 @@ $(document).ready(function() {
 		searchDropDownButton.prepend("<i class='fa fa-fw " + iconClass + "'></i>");
 	}
 
-});
+}
 
 // SORT
 $(document).ready(function() {
