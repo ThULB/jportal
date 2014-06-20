@@ -42,7 +42,17 @@
   
   <xsl:template mode="metadataURN" match="derobject">
     <xsl:variable name="derivID" select="@xlink:href"/>
-    <xsl:variable name="filePath" select="document(concat('notnull:mcrobject:',$derivID))/mycorederivate/derivate/internals/internal/@maindoc"/>
+    <xsl:variable name="_filePath" select="document(concat('notnull:mcrobject:',$derivID))/mycorederivate/derivate/internals/internal/@maindoc"/>
+    <xsl:variable name="filePath">
+      <xsl:choose>
+        <xsl:when test="starts-with($_filePath,'/')">
+          <xsl:value-of select="$_filePath"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat('/',$_filePath)"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:if test="$filePath != ''">
       <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
       <xsl:if test="$urn != ''">
