@@ -116,18 +116,8 @@
           jp.journalID = jp.journalID != '' ? jp.journalID : null;
         </script>
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/{$jqueryUI.version}/jquery-ui.min.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.js" />
-        <script type="text/javascript">
-          // fix for jquery-ui and bootstrap
-          // @see http://dullsharpness.com/2013/04/29/resolve-jqueryui-and-twitter-bootstrap-button-conflict/
-          var btn = $.fn.button.noConflict(); // reverts $.fn.button to jqueryui btn
-          $.fn.btn = btn; // assigns bootstrap button functionality to $.fn.btn
-        </script>
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
-
-        <!-- TODO: don't init iview2 if no image is available -->
-        <xsl:call-template name="initIview2JS" />
+        <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.js" />
 
         <!-- Piwik -->
         <xsl:call-template name="jp.piwik" />

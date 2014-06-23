@@ -45,6 +45,7 @@
             <xsl:with-param name="mode" select="$mode" />
           </xsl:apply-templates>
         </div>
+        <xsl:call-template name="initIview2JS" />
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -166,7 +167,7 @@
           <xsl:value-of select="'?XSL.Style=dfg'" />
         </xsl:variable>
         <xsl:value-of select="encoder:encode($url)" />
-      </xsl:variable>  
+      </xsl:variable>
       <a href="http://dfg-viewer.de/demo/viewer/?set[mets]={$encodedURL}" target="_blank">
         <xsl:value-of select="'alternativ im DFG-Viewer anzeigen'" />
       </a>
@@ -176,16 +177,10 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <div class="jp-layout-hidden-Button"></div>
-    <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
-    <script type="text/javascript">
-      $(document).ready(function() {
-        jpAddDefaultOptions({
-          id: '<xsl:value-of select="$derivID"/>',
-          options: <xsl:value-of select="iview2:getOptions($derivID, '')" />
-        });
-      });
-    </script>
+    <a href="{$WebApplicationBaseURL}servlets/MCRIviewClient?derivate={$derivID}&amp;startImage={$file}">
+      <div class="jp-layout-hidden-Button"></div>
+      <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
+    </a>
   </xsl:template>
 
   <xsl:template name="derivEntry">
@@ -219,37 +214,10 @@
   </xsl:template>
 
   <xsl:template name="initIview2JS">
-    <xsl:variable name="debugMode">
-      <xsl:variable name="parValue">
-        <xsl:call-template name="UrlGetParam">
-          <xsl:with-param name="url" select="$RequestURL" />
-          <xsl:with-param name="par" select="'iview2.debug'" />
-        </xsl:call-template>
-      </xsl:variable>
-      <xsl:choose>
-        <xsl:when test="string-length($parValue)&gt;0">
-          <xsl:value-of select="$parValue" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$MCR.Module-iview2.DeveloperMode" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:variable>
-
-    <xsl:choose>
-      <xsl:when test="$debugMode = 'true'">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}modules/iview2/js/iview2.js" />
-      </xsl:when>
-      <xsl:otherwise>
-        <script type="text/javascript" src="{$WebApplicationBaseURL}modules/iview2/js/iview2.min.js" />
-      </xsl:otherwise>
-    </xsl:choose>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2.js" />
     <script type="text/javascript">
       $(document).ready(function() {
-        jpInitIview2({
-          lang: '<xsl:value-of select="$CurrentLang" />'
-        });
+        jpInitIview2();
       });
     </script>
   </xsl:template>
