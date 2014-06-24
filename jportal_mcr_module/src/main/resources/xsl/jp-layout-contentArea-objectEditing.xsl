@@ -32,14 +32,6 @@
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       <link id="editorResource" href="{$WebApplicationBaseURL}rsc/editor" />
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
-      <link id="linkImgUrl" href="{$ServletsBaseURL}DerivateLinkServlet?mode=setLink&amp;from={$currentObjID}" />
-      <params id="editorServlet-editParam">
-        <param name="tf_mcrid" select="currentObjID" />
-        <param name="re_mcrid" select="currentObjID" />
-        <param name="se_mcrid" select="currentObjID" />
-        <param name="type" select="currentType" />
-        <param name="step" value="commit" />
-      </params>
       <item class="jp-layout-menu-dropdown">
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
@@ -113,14 +105,14 @@
         <restriction name="updatePerm" value="true" />
         <restriction name="linkImgAllowed" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
-        <item>
-          <label name="Bild verlinken" ref="linkImgUrl" />
+        <item class="objectEditingButton" id="linkImage" data-object="{$currentObjID}">
+          <label name="Bild verlinken" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown objectEditingButton" id="deleteDocButton" objID="{$currentObjID}">
+      <item class="jp-layout-menu-dropdown">
         <restriction name="deletePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
-        <item>
+        <item class="objectEditingButton" id="deleteDocButton">
           <label name="Dokument löschen" />
         </item>
       </item>
@@ -134,12 +126,6 @@
           <label name="Versionsgeschichte" href="{$WebApplicationBaseURL}jp-history.xml?XSL.id={/mycoreobject/@ID}" />
         </item>
       </item>
-      <link id="delObj" class="jp-layout-message-button" name="Löschen" ref="editorServlet">
-        <params>
-          <param ref="editorServlet-editParam" />
-          <param name="todo" value="sdelobj" />
-        </params>
-      </link>
     </menu>
   </xsl:variable>
   <xsl:variable name="menu" select="xalan:nodeset($menuXML)/menu" />
@@ -210,10 +196,8 @@
         <xsl:variable name="title">
           <xsl:apply-templates select="." mode="jp.metadata.title" />
         </xsl:variable>
-        <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true"
-          data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
-          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}"
-          data-title="{$title}" data-backdrop="static">
+        <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true" data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
+          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}" data-title="{$title}" data-backdrop="static">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">

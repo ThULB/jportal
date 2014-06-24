@@ -73,13 +73,9 @@
           </xsl:call-template>
         </xsl:if>
         <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
-          <ul class="edit">
-            <li>
-              <a href="{$WebApplicationBaseURL}servlets/DerivateLinkServlet?mode=removeLink&amp;from={$objID}&amp;to={@xlink:href}">
-                <xsl:value-of select="'Verlinkung löschen'" />
-              </a>
-            </li>
-          </ul>
+          <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
+            <xsl:value-of select="'Verlinkung löschen'" />
+          </div>
         </xsl:if>
       </div>
     </xsl:if>

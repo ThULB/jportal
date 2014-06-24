@@ -35,7 +35,7 @@ public abstract class DerivateLinkUtil {
         String derivateId = (String)session.get(IMAGE_BOOKMARK_DERIVATE_ID);
         if(file == null || derivateId == null)
             return null;
-        return new StringBuffer(derivateId).append("/").append(file).toString();
+        return new StringBuffer(derivateId).append(file.startsWith("/") ? "" : "/").append(file).toString();
     }
 
     public static void setLink(MCRObjectID mcrObjId, String pathOfImage) throws MCRActiveLinkException {

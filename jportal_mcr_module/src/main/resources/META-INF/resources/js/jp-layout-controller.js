@@ -229,6 +229,38 @@ function trackPageView(piwikURL, journalID, pageID) {
 	})();
 }
 
+// LINK IMAGE
+$(document).ready(function() {
+
+	$("#linkImage").one("click", function() {
+		appendSpinner($(this));
+		var objectID = $(this).attr("data-object");
+		$.post(jp.baseURL + "rsc/derivate/link/set/" + objectID).done(function() {
+			window.location.reload();
+		}).fail(function(err) {
+			alert(err.responseText);
+			window.location.reload();
+		});
+	});
+
+	$(".unlinkImage").one("click", function() {
+		appendSpinner($(this));
+		var objectID = $(this).attr("data-object");
+		var image = $(this).attr("data-image");
+		$.post(jp.baseURL + "rsc/derivate/link/remove/" + objectID + "?image=" + image).done(function() {
+			window.location.reload();
+		}).fail(function(err) {
+			alert(err.responseText);
+			window.location.reload();
+		});
+	});
+
+	function appendSpinner(node) {
+		node.append("<i class='fa fa-circle-o-notch fa-spin'></i>");
+	}
+
+});
+
 // PAGINATION JUMP
 $(document).ready(function() {
 	$(".pagination-jump-submit").on("click", function() {

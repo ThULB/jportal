@@ -2,24 +2,6 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-complete="true">
   <name>jportal_mcr_module</name>
 
-  <servlet id="DerivateLinkServlet">
-    <servlet-name>DerivateLinkServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.DerivateLinkServlet</servlet-class>
-  </servlet>
-  <servlet id="MCRJPortalEditorCancelServlet">
-    <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
-    <servlet-class>org.mycore.frontend.servlets.MCRJPortalEditorCancelServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>DerivateLinkServlet</servlet-name>
-    <url-pattern>/servlets/DerivateLinkServlet/*</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>MCRJPortalEditorCancelServlet</servlet-name>
-    <url-pattern>/servlets/MCRJPortalEditorCancelServlet</url-pattern>
-  </servlet-mapping>
-
   <servlet>
     <servlet-name>OAIURNProvider</servlet-name>
     <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
