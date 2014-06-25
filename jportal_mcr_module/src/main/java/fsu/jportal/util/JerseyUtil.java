@@ -53,5 +53,5 @@ public class JerseyUtil {
             throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).build());
         }
     }
-    
+
 }

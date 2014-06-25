@@ -123,9 +123,6 @@
         <xsl:call-template name="jp.piwik" />
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
-        <xsl:if test="acl:checkPermission('POOLPRIVILEGE',concat('update-',$type))">
-          <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2-derivLink.js" />
-        </xsl:if>
 
         <!-- add IE CSS to head -->
         <xsl:variable name="cssLinked">

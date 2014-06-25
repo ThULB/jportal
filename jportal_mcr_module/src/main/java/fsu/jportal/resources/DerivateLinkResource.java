@@ -8,15 +8,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.mycore.common.MCRException;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.util.DerivateLinkUtil;
 
+import fsu.jportal.util.JerseyUtil;
+
 @Path("derivate/link")
 public class DerivateLinkResource {
-
-    // TODO: secure this class!
 
     @Path("set/{id}")
     @POST
@@ -44,21 +43,14 @@ public class DerivateLinkResource {
         if (image == null) {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
+        JerseyUtil.checkPermission(derivate, "writedb");
         DerivateLinkUtil.bookmarkImage(derivate, image);
     }
 
     protected MCRObjectID getMyCoReID(String id) {
-        MCRObjectID objectID;
-        try {
-            objectID = MCRObjectID.getInstance(id);
-        } catch (MCRException exc) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("invalid mycore id " + id)
-                .build());
-        }
-        if (objectID == null) {
-            throw new WebApplicationException(Response.status(Status.NOT_FOUND)
-                .entity("mycore object " + id + " not found").build());
-        }
+        MCRObjectID objectID = JerseyUtil.getID(id);
+        JerseyUtil.checkPermission(objectID, "writedb");
         return objectID;
     }
+
 }
