@@ -27,8 +27,7 @@ import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-import fsu.jportal.util.JerseyUtil;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
 
 @Path("object")
 public class ObjectResource {
@@ -38,8 +37,8 @@ public class ObjectResource {
     @Path("{id}")
     @Produces(MediaType.APPLICATION_XML)
     public Response get(@PathParam("id") String id) {
-        MCRObjectID mcrId = JerseyUtil.getID(id);
-        JerseyUtil.checkPermission(mcrId, PERMISSION_READ);
+        MCRObjectID mcrId = MCRJerseyUtil.getID(id);
+        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_READ);
         try {
             MCRContent content = MCRXMLMetadataManager.instance().retrieveContent(mcrId);
             return Response.ok(content.asString(), MediaType.APPLICATION_XML).build();
@@ -53,8 +52,8 @@ public class ObjectResource {
     @Path("{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public Response delete(@PathParam("id") String id) {
-        MCRObjectID mcrId = JerseyUtil.getID(id);
-        JerseyUtil.checkPermission(mcrId, PERMISSION_DELETE);
+        MCRObjectID mcrId = MCRJerseyUtil.getID(id);
+        MCRJerseyUtil.checkPermission(mcrId, PERMISSION_DELETE);
         if (mcrId.getTypeId().equals("derivate")) {
             MCRDerivate mcrDer = MCRMetadataManager.retrieveMCRDerivate(mcrId);
             MCRMetadataManager.delete(mcrDer);
@@ -84,7 +83,7 @@ public class ObjectResource {
             return Response.status(Status.BAD_REQUEST).entity("invalid xml data").build();
         }
         String objectType = obj.getId().getTypeId();
-        JerseyUtil.checkPermission("POOLPRIVILEGE", "create-" + objectType);
+        MCRJerseyUtil.checkPermission("POOLPRIVILEGE", "create-" + objectType);
         obj.setId(MCRObjectID.getNextFreeIdByType(objectType));
         MCRMetadataManager.create(obj);
         return Response.ok(obj.getId().toString()).build();

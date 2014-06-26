@@ -19,9 +19,7 @@ import org.mycore.common.content.transformer.MCRContentTransformer;
 import org.mycore.common.xml.MCRLayoutTransformerFactory;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-
-
-import fsu.jportal.util.JerseyUtil;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
 
 @Path("render")
 public class RenderResource {
@@ -32,8 +30,8 @@ public class RenderResource {
     @Path("object/{id}")
     @Produces(MediaType.TEXT_HTML)
     public Response object(@PathParam("id") String id) {
-        MCRObjectID mcrId = JerseyUtil.getID(id);
-        JerseyUtil.checkPermission(mcrId, MCRAccessManager.PERMISSION_READ);
+        MCRObjectID mcrId = MCRJerseyUtil.getID(id);
+        MCRJerseyUtil.checkPermission(mcrId, MCRAccessManager.PERMISSION_READ);
         MCRContent xmlContent;
         try {
             xmlContent = MCRXMLMetadataManager.instance().retrieveContent(mcrId);

@@ -10,9 +10,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.jersey.MCRJerseyUtil;
 import org.mycore.frontend.util.DerivateLinkUtil;
-
-import fsu.jportal.util.JerseyUtil;
 
 @Path("derivate/link")
 public class DerivateLinkResource {
@@ -43,13 +42,14 @@ public class DerivateLinkResource {
         if (image == null) {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
-        JerseyUtil.checkPermission(derivate, "writedb");
+        
+        MCRJerseyUtil.checkPermission(derivate, "writedb");
         DerivateLinkUtil.bookmarkImage(derivate, image);
     }
 
     protected MCRObjectID getMyCoReID(String id) {
-        MCRObjectID objectID = JerseyUtil.getID(id);
-        JerseyUtil.checkPermission(objectID, "writedb");
+        MCRObjectID objectID = MCRJerseyUtil.getID(id);
+        MCRJerseyUtil.checkPermission(objectID, "writedb");
         return objectID;
     }
 
