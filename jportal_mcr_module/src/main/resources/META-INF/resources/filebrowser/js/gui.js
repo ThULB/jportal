@@ -34,7 +34,7 @@ $(document).ready(function(){
 
 		function commitChanges(){
 			$.ajax({
-				url: "/rsc/filebrowser/rename?file=" + "/" + currentPath + "/" + textfieldValue + "&name=" +  textfieldInput.val(),
+				url: "/rsc/filebrowser/rename?file=" + currentPath + ":/" + textfieldValue + "&name=" +  textfieldInput.val(),
 				type: "POST",
 				statusCode: {
 					200: function() {

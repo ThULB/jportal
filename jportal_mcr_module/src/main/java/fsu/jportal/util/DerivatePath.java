@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 
 public class DerivatePath {
+    // TODO: check for wrong path syntax, derivatID must not be null, parentPath ist null for root
     static final Pattern pathPattern = Pattern.compile("(.*):((/(.*/)*)(.*)$){1}");
     
     String derivateID;

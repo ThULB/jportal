@@ -67,8 +67,13 @@ public class JPortalCommands {
         DerivateTools.rename(file, name);
     }
     
-    @MCRCommand(help = "Copy file in derivate: mv {oldName} {newName}", syntax = "copy {0} {1}")
+    @MCRCommand(help = "Copy file in derivate: copy {oldName} {newName}", syntax = "copy {0} {1}")
     public static void copy(String oldFile, String newFile) {
         DerivateTools.cp(oldFile, newFile);
+    }
+    
+    @MCRCommand(help = "Copy file in derivate: move {oldName} {newName}", syntax = "move {0} {1}")
+    public static void move(String oldFile, String newFile) {
+        DerivateTools.mv(oldFile, newFile);
     }
 }

@@ -7,16 +7,18 @@ import com.sun.jersey.spi.container.ContainerRequest;
 
 public class ResourceAccess implements MCRResourceAccessChecker{
 
+    private static final String RESOURCE_EDIT = "resourceEdit";
+
     @Override
     public boolean isPermitted(ContainerRequest request) {
         String method = request.getMethod();
+        String path = request.getPath();
         
-        if("GET".equals(method)){
+        if("GET".equals(method) && !MCRAccessManager.hasRule(path, RESOURCE_EDIT)){
             return true;
         }
         
-        String path = request.getPath();
-        return MCRAccessManager.checkPermission(path, "resourceEdit");
+        return MCRAccessManager.checkPermission(path, RESOURCE_EDIT);
     }
 
 }

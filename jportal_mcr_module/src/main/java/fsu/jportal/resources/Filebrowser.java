@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,13 +20,17 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+import org.mycore.urn.hibernate.MCRURN;
+import org.mycore.urn.services.MCRURNManager;
 
 import fsu.jportal.backend.Derivate;
 import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
+import fsu.jportal.urn.URNTools;
 
 @Path("filebrowser")
 @MCRRestrictedAccess(ResourceAccess.class)
@@ -122,5 +127,16 @@ public class Filebrowser {
         //            response.sendError(HttpServletResponse.SC_FORBIDDEN,
         //                MessageFormat.format("User has not the \"" + PERMISSION_WRITE + "\" permission on object {0}.", derivID));
         //        }
+    }
+    
+    @GET
+    @Path("{derivID}/urnUpdate")
+    public Response urnUpdate(@PathParam("derivID") String derivID) throws IOException {
+        List<MCRURN> urnList = MCRURNManager.get(MCRObjectID.getInstance(derivID));
+        for (MCRURN mcrurn : urnList) {
+            mcrurn.setRegistered(false);
+            MCRURNManager.update(mcrurn);
+        }
+        return Response.ok().build();
     }
 }
