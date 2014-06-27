@@ -199,6 +199,18 @@ function updateSearchbar() {
 
 }
 
+// IVIEW 2
+$(document).ready(function() {
+	$('div.jp-layout-derivateWrapper .image').on({
+		mouseenter: function() {
+			jQuery(this).find('div.jp-layout-hidden-Button').show();
+		},
+		mouseleave: function() {
+			jQuery(this).find('div.jp-layout-hidden-Button').hide();
+		}
+	});
+});
+
 // SORT
 $(document).ready(function() {
 	$("#sortSelect").on("change", function() {

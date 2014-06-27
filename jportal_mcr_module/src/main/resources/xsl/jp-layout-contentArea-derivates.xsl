@@ -45,7 +45,6 @@
             <xsl:with-param name="mode" select="$mode" />
           </xsl:apply-templates>
         </div>
-        <xsl:call-template name="initIview2JS" />
       </xsl:if>
     </xsl:if>
   </xsl:template>
@@ -209,12 +208,4 @@
     </a>
   </xsl:template>
 
-  <xsl:template name="initIview2JS">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-iview2.js" />
-    <script type="text/javascript">
-      $(document).ready(function() {
-        jpInitIview2();
-      });
-    </script>
-  </xsl:template>
 </xsl:stylesheet>
