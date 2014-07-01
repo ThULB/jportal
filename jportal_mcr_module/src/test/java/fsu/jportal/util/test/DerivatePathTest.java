@@ -1,12 +1,19 @@
 package fsu.jportal.util.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import fsu.jportal.util.DerivatePath;
 
 public class DerivatePathTest {
+    @Test
+    public void stringFoo() throws Exception {
+        String foo = "/83157195.pdf";
+        String bar = "/83157195.pdf";
+        
+        System.out.println("Equals: " + foo.equals(bar));
+    }
     @Test
     public void justOwnerID() {
         String derivateID = "jportal_derivate_00000024";
@@ -22,7 +29,7 @@ public class DerivatePathTest {
         String derivateID = "jportal_derivate_00000024";
         String parentPath = "/";
         String fileName = "level1";
-        String absPath = parentPath + fileName;
+        String absPath = parentPath + "/" + fileName;
         String path = derivateID + ":" + absPath;
         DerivatePath filePath = new DerivatePath(path);
         
@@ -35,7 +42,7 @@ public class DerivatePathTest {
         String derivateID = "jportal_derivate_00000024";
         String parentPath = "/level1/";
         String fileName = "level2";
-        String absPath = parentPath + fileName;
+        String absPath = parentPath + "/" + fileName;
         String path = derivateID + ":" + absPath;
         DerivatePath filePath = new DerivatePath(path);
         
@@ -45,11 +52,13 @@ public class DerivatePathTest {
     @Test
     public void threeChildLevel() {
         String derivateID = "jportal_derivate_00000024";
-        String parentPath = "/level1/level2/";
+        String parentPath = "/level1/level2";
         String fileName = "level3";
-        String absPath = parentPath + fileName;
+        String absPath = parentPath + "/" + fileName;
         String path = derivateID + ":" + absPath;
         DerivatePath filePath = new DerivatePath(path);
+        
+        DerivatePath parent = filePath.getParent();
         
         assertPath(derivateID, parentPath, fileName, absPath, filePath);
     }

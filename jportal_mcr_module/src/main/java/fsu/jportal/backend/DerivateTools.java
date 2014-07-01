@@ -56,11 +56,10 @@ public class DerivateTools {
         DerivatePath sourceLocation = new DerivatePath(sourcePath.trim());
 
         try {
-            MCRDirectory sourceRootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(sourceLocation.getDerivateID());
-            MCRFilesystemNode sourceNode = sourceRootNode.getChildByPath(sourceLocation.getAbsolutePath());
+            MCRFilesystemNode sourceNode = sourceLocation.toFileNode();
 
             if (sourceNode == null) {
-                LOGGER.info("cp: " + sourcePath + " does not exists (not copied)");
+                LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
                 return;
             }
 
@@ -68,7 +67,7 @@ public class DerivateTools {
             MCRDirectory targetDir = getTargetDir(targetLocation);
 
             if (targetDir == null) {
-                LOGGER.info("cp: " + targetLocation.getAbsolutePath() + " does not exists (not copied)");
+                LOGGER.info("cp: target " + targetLocation.getAbsolutePath() + " does not exists (not copied)");
                 return;
             }
 
@@ -79,6 +78,7 @@ public class DerivateTools {
             cp(sourceNode, targetDir, newFileName, copyHistory);
             
             if(delAfterCopy){
+                moveAttachedData(copyHistory);
                 sourceNode.delete();
             }
         } catch (MCRUsageException e) {
@@ -90,14 +90,19 @@ public class DerivateTools {
 
     }
 
-    public static MCRDirectory getTargetDir(DerivatePath derivPath) {
-        MCRDirectory rootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(derivPath.getDerivateID());
+    private static void moveAttachedData(Map<MCRFilesystemNode, MCRFile> copyHistory) {
+        for (MCRFilesystemNode sourceNode : copyHistory.keySet()) {
+            MCRFile target = copyHistory.get(sourceNode);
+            URNTools.updateURN(sourceNode, target);
+        }
+    }
 
-        MCRFilesystemNode fileNode = rootNode.getChildByPath(derivPath.getAbsolutePath());
+    public static MCRDirectory getTargetDir(DerivatePath derivPath) {
+        MCRFilesystemNode fileNode = derivPath.toFileNode();
         if (fileNode == null) {
             String parentPath = derivPath.getParentPath();
             if (parentPath != null) {
-                MCRFilesystemNode parentNode = rootNode.getChildByPath(parentPath);
+                MCRFilesystemNode parentNode = derivPath.getParent().toFileNode();
 
                 if (parentNode instanceof MCRDirectory) {
                     return (MCRDirectory) parentNode;
@@ -112,14 +117,8 @@ public class DerivateTools {
 
     public static void rename(String filePath, String newName) throws FileNotFoundException {
         DerivatePath fileLocation = new DerivatePath(filePath);
-        String absolutePath = fileLocation.getAbsolutePath();
-
-        String derivateID = fileLocation.getDerivateID();
-        MCRDirectory rootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(derivateID);
-        if (rootNode == null) {
-            throw new FileNotFoundException("Cannot find root node of derivate " + derivateID);
-        }
-        MCRFilesystemNode file = rootNode.getChildByPath(absolutePath);
+        
+        MCRFilesystemNode file = fileLocation.toFileNode();
         if (file == null) {
             throw new FileNotFoundException(filePath);
         }
@@ -128,7 +127,7 @@ public class DerivateTools {
         file.setName(newName);
         
         if(urn != null){
-            URNTools.updateURNFileName(urn, newName);
+            URNTools.updateURNFileName(urn, null, newName);
         }
     }
 
@@ -138,5 +137,23 @@ public class DerivateTools {
 
     public static void cp(String sourcePath, String targetPath) {
         cp(sourcePath, targetPath, false);
+    }
+    
+    public static void mkdir(String path){
+        DerivatePath dirPath = new DerivatePath(path);
+        MCRFilesystemNode dirNode = dirPath.toFileNode();
+        
+        if(dirNode != null){
+            LOGGER.info("mkdir: " + dirPath.getAbsolutePath() + " allready exists.");
+            return;
+        }
+        
+        MCRFilesystemNode parentNode = dirPath.getParent().toFileNode();
+        
+        if(parentNode instanceof MCRDirectory){
+            new MCRDirectory(dirPath.getFileName(), (MCRDirectory) parentNode);
+        } else {
+            LOGGER.info("mkdir: " + dirPath.getParentPath() + " does not exists or is not a directory.");
+        }
     }
 }

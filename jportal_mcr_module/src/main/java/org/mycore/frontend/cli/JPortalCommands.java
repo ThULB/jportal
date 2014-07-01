@@ -62,18 +62,23 @@ public class JPortalCommands {
         DerivateLinkUtil.setLink(mcrId, link);
     }
 
-    @MCRCommand(help = "Rename file in derivate: rename {file} {name}", syntax = "rename {0} {1}")
+    @MCRCommand(help = "Rename file in derivate: rename derivID_1:/path/to/fileName newFileName", syntax = "rename {0} {1}")
     public static void renameFileInIFS(String file, String name) throws Exception {
         DerivateTools.rename(file, name);
     }
     
-    @MCRCommand(help = "Copy file in derivate: copy {oldName} {newName}", syntax = "copy {0} {1}")
+    @MCRCommand(help = "Copy file in derivate: copy derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "copy {0} {1}")
     public static void copy(String oldFile, String newFile) {
         DerivateTools.cp(oldFile, newFile);
     }
     
-    @MCRCommand(help = "Copy file in derivate: move {oldName} {newName}", syntax = "move {0} {1}")
+    @MCRCommand(help = "Move file in derivate: move derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "move {0} {1}")
     public static void move(String oldFile, String newFile) {
         DerivateTools.mv(oldFile, newFile);
+    }
+    
+    @MCRCommand(help = "Create directories in derivate: mkir derivID:/path/to/newDir", syntax = "mkdir {0}")
+    public static void mkdir(String newDir) {
+        DerivateTools.mkdir(newDir);;
     }
 }

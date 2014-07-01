@@ -3,6 +3,9 @@ package fsu.jportal.util;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.mycore.datamodel.ifs.MCRDirectory;
+import org.mycore.datamodel.ifs.MCRFilesystemNode;
+
 
 
 public class DerivatePath {
@@ -21,19 +24,23 @@ public class DerivatePath {
      * @param path "derivate_id:/path/to/file"
      */
     public DerivatePath(String path) {
-        if(path.endsWith("/")){
-            path.substring(0, path.length());
+        parsePath(path);
+    }
+
+    private String removeSlashAtEnd(String path) {
+        if(path.length() > 1 && path.endsWith("/")){
+            path = path.substring(0, path.length()-1);
         }
         
-        parsePath(path);
+        return path;
     }
     
     private void parsePath(String path) {
         Matcher pathMatcher = pathPattern.matcher(path);
         while (pathMatcher.find()) {
             derivateID = pathMatcher.group(1);
-            absPath = pathMatcher.group(2);
-            parentPath = pathMatcher.group(3);
+            absPath = removeSlashAtEnd(pathMatcher.group(2));
+            parentPath = removeSlashAtEnd(pathMatcher.group(3));
             
             fileName = pathMatcher.group(5);
         }
@@ -58,8 +65,21 @@ public class DerivatePath {
     public String getParentPath() {
         return parentPath;
     }
+    
+    public DerivatePath getParent() {
+        return new DerivatePath(getDerivateID() + ":" + getParentPath());
+    }
 
     public String getFileName() {
         return fileName;
+    }
+    
+    public MCRFilesystemNode toFileNode(){
+        MCRDirectory rootNode = (MCRDirectory) MCRFilesystemNode.getRootNode(getDerivateID());
+        if(rootNode == null){
+            return null;
+        }
+        
+        return rootNode.getChildByPath(getAbsolutePath());
     }
 }
