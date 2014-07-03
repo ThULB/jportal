@@ -172,9 +172,9 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}servlets/MCRIviewClient?derivate={$derivID}&amp;startImage={$file}">
+    <a href="{$WebApplicationBaseURL}servlets/MCRIviewClient?derivate={$derivID}&amp;startImage={encoder:encode($file, 'UTF-8')}">
       <div class="jp-layout-hidden-Button"></div>
-      <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, $file,'?centerThumb=no')}" />
+      <img src="{concat($WebApplicationBaseURL,'servlets/MCRThumbnailServlet/',$derivID, mcrxml:encodeURIPath($file),'?centerThumb=no')}" />
     </a>
   </xsl:template>
 
