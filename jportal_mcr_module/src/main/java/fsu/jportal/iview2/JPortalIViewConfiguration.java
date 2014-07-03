@@ -18,8 +18,8 @@ public class JPortalIViewConfiguration extends MCRIViewMetsClientConfiguration {
         // piwik
         if (MCRConfiguration.instance().getBoolean("MCR.Piwik.enable", false)) {
             this.addScript("modules/iview2/js/iview-client-piwik.js");
-            this.addProperty("MCR.Piwik.baseurl", MCRConfiguration.instance().getString("MCR.Piwik.baseurl"));
-            this.addProperty("MCR.Piwik.id", MCRConfiguration.instance().getString("MCR.Piwik.id"));
+            this.setProperty("MCR.Piwik.baseurl", MCRConfiguration.instance().getString("MCR.Piwik.baseurl"));
+            this.setProperty("MCR.Piwik.id", MCRConfiguration.instance().getString("MCR.Piwik.id"));
         }
 
         // derivate link
