@@ -1,6 +1,8 @@
 package org.mycore.frontend.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mycore.access.MCRAccessManager;
@@ -95,9 +97,23 @@ public abstract class DerivateLinkUtil {
         MCRMetadataManager.update(mcrObj);
     }
 
+    public static void removeLinks(MCRObjectID mcrObjId, MCRObjectID derivateId) throws MCRActiveLinkException {
+        MCRObject mcrObj = MCRMetadataManager.retrieveMCRObject(mcrObjId);
+        MCRMetaElement derLinks = mcrObj.getMetadata().getMetadataElement(DERIVATE_LINKS);
+        List<MCRMetaDerivateLink> linkList = getLinks(derLinks, derivateId.toString());
+        for (MCRMetaDerivateLink link : linkList) {
+            derLinks.removeMetaObject(link);
+        }
+        if (derLinks.size() <= 0) {
+            mcrObj.getMetadata().removeMetadataElement(DERIVATE_LINKS);
+        }
+        MCRMetadataManager.update(mcrObj);
+    }
+
     private static MCRMetaDerivateLink getLink(MCRMetaElement derLinks, String pathOfImage) {
-        if (derLinks == null)
+        if (derLinks == null) {
             return null;
+        }
         Iterator<MCRMetaInterface> it = derLinks.iterator();
         while (it.hasNext()) {
             MCRMetaInterface link = it.next();
@@ -110,4 +126,22 @@ public abstract class DerivateLinkUtil {
         }
         return null;
     }
+
+    private static List<MCRMetaDerivateLink> getLinks(MCRMetaElement derLinks, String derivateId) {
+        List<MCRMetaDerivateLink> linkList = new ArrayList<>();
+        if (derLinks != null) {
+            Iterator<MCRMetaInterface> it = derLinks.iterator();
+            while (it.hasNext()) {
+                MCRMetaInterface link = it.next();
+                if (link.getSubTag().equals(DERIVATE_LINK) && link instanceof MCRMetaDerivateLink) {
+                    String href = ((MCRMetaDerivateLink) link).getXLinkHref();
+                    if (href.startsWith(derivateId)) {
+                        linkList.add((MCRMetaDerivateLink) link);
+                    }
+                }
+            }
+        }
+        return linkList;
+    }
+
 }
