@@ -259,7 +259,7 @@ $(document).ready(function() {
 		appendSpinner($(this));
 		var objectID = $(this).attr("data-object");
 		var image = $(this).attr("data-image");
-		$.post(jp.baseURL + "rsc/derivate/link/remove/" + objectID + "?image=" + image).done(function() {
+		$.post(jp.baseURL + "rsc/derivate/link/remove/" + objectID + "?image=" + encodeURIComponent(image)).done(function() {
 			window.location.reload();
 		}).fail(function(err) {
 			alert(err.responseText);

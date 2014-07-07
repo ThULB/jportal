@@ -42,7 +42,6 @@ public class DerivateLinkResource {
         if (image == null) {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST).entity("image param not set").build());
         }
-        
         MCRJerseyUtil.checkPermission(derivate, "writedb");
         DerivateLinkUtil.bookmarkImage(derivate, image);
     }
