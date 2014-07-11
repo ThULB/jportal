@@ -5,16 +5,25 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.solr.client.solrj.SolrServer;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaDerivateLink;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.solr.MCRSolrServerFactory;
 
 public abstract class DerivateLinkUtil {
 
@@ -108,6 +117,39 @@ public abstract class DerivateLinkUtil {
             mcrObj.getMetadata().removeMetadataElement(DERIVATE_LINKS);
         }
         MCRMetadataManager.update(mcrObj);
+    }
+
+    /**
+     * Deletes all corresponding derivate links of a derivate. Be aware that this 
+     * method uses solr! It cannot be guaranteed that all links are found!
+     * 
+     * @param der 
+     * @throws SolrServerException
+     */
+    public static void deleteDerivateLinks(MCRDerivate der) throws SolrServerException {
+        SolrServer solrServer = MCRSolrServerFactory.getSolrServer();
+        ModifiableSolrParams params = new ModifiableSolrParams();
+        MCRObjectID derivateId = der.getId();
+        params.add("q", "derivateLink:" + derivateId + "*");
+        params.set("rows", 100);
+        params.set("fl", "id");
+        int numFound = Integer.MAX_VALUE, start = 0;
+        while (start < numFound) {
+            params.set("start", start);
+            QueryResponse response = solrServer.query(params);
+            SolrDocumentList results = response.getResults();
+            numFound = (int) results.getNumFound();
+            start += results.size();
+            for (SolrDocument doc : results) {
+                String docId = (String) doc.getFieldValue("id");
+                try {
+                    DerivateLinkUtil.removeLinks(MCRObjectID.getInstance(docId), derivateId);
+                } catch (MCRException | MCRActiveLinkException exc) {
+                    LOGGER.error("unable to delete derivate link of object " + docId + " and derivate " + derivateId,
+                        exc);
+                }
+            }
+        }
     }
 
     private static MCRMetaDerivateLink getLink(MCRMetaElement derLinks, String pathOfImage) {
