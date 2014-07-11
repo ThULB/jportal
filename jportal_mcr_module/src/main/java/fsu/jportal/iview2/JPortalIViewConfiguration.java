@@ -16,6 +16,10 @@ public class JPortalIViewConfiguration extends MCRIViewMetsClientConfiguration {
     public void setup(HttpServletRequest request) {
         super.setup(request);
         String baseURL = MCRServlet.getBaseURL();
+
+        // css
+        this.addCSS(baseURL + "css/jp-iview.css");
+
         // piwik
         if (MCRConfiguration.instance().getBoolean("MCR.Piwik.enable", false)) {
             this.addScript(baseURL + "modules/iview2/js/iview-client-piwik.js");

@@ -1332,16 +1332,6 @@ p.jp-layout-metadata-list {
 	margin-top: 0px;
 }
 
-/* iview workaround for bootstrap 3*/
-.viewerContainer *{
-	box-sizing: content-box;
-	-moz-box-sizing: content-box;
-}
-
-#createpdf-container {
-	height: 378px;
-}
-
 /* bootstrap fontsize adjustment */
 #searchResults h2{
 	font-size: 20px;

@@ -1,0 +1,6 @@
+@charset "UTF-8";
+
+img[data-id="ToolbarImage"] {
+  height: 26px; 
+  width: 96px;
+}
