@@ -74,7 +74,7 @@
 
     <panel id="personNameSingle" class="editorPersonName">
 	  <!-- name -->
-        <cell col="1" row="1" anchor="NORTHWEST">
+        <cell class="badge" col="1" row="1" anchor="NORTHWEST">
             <text i18n="jp.editor.person.single" />
         </cell>
         <cell col="2" row="1" anchor="NORTHWEST" var="name" ref="TF128_16"/>
