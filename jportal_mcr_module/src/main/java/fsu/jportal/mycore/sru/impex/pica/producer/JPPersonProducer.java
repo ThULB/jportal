@@ -7,14 +7,14 @@ import fsu.archiv.mycore.sru.impex.pica.producer.PersonProducer;
 public class JPPersonProducer extends PersonProducer {
 
     @Override
-    protected Element createMetadataElement() throws Exception {
+    protected Element createMetadataElement() {
         addBiographicHistoricalNotes();
         return super.createMetadataElement();
     }
 
     protected void addBiographicHistoricalNotes() {
         String value = this.record.getValue("050G", "b");
-        if(value != null) {
+        if (value != null) {
             appendToNotes(value, "\n");
         }
     }
@@ -22,9 +22,9 @@ public class JPPersonProducer extends PersonProducer {
     @Override
     protected Element createNotesElement() {
         Element defNotes = super.createNotesElement();
-        if(defNotes != null) {
+        if (defNotes != null) {
             Element note = defNotes.getChild("note");
-            if(note != null) {
+            if (note != null) {
                 note.setAttribute("type", "visible");
             }
         }
@@ -37,12 +37,12 @@ public class JPPersonProducer extends PersonProducer {
     }
 
     @Override
-    protected Element createNameContainer(String elementName, String personalName, String collocation, String lastName, String firstName,
-            String nameAffix) {
+    protected Element createNameContainer(String elementName, String personalName, String collocation, String lastName,
+        String firstName, String nameAffix) {
         Element nameContainer = generateSubElement(elementName, "de", 0, null, null, null, null);
         /* family name */
         if (lastName != null) {
-            if(elementName.equals("alternative")) {
+            if (elementName.equals("alternative")) {
                 nameContainer.setAttribute("type", "complete");
             }
             nameContainer.addContent(new Element("lastName").setText(lastName));
@@ -54,7 +54,7 @@ public class JPPersonProducer extends PersonProducer {
         /* add the personal name (if any) */
         if (personalName != null) {
             nameContainer.addContent(new Element("name").setText(personalName));
-            if(elementName.equals("alternative")) {
+            if (elementName.equals("alternative")) {
                 nameContainer.setAttribute("type", "single");
             }
         }
