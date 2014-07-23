@@ -34,7 +34,7 @@ public class SRUResource {
                 .entity("unable to retrieve pica record (" + query + ") from sru interface").build());
         }
         try {
-            Document mcrObjectXML = GndUtil.convertPicaRecord(picaRecord);
+            Document mcrObjectXML = GndUtil.toMCRObjectDocument(picaRecord);
             Element returnElement = new Element("sruobjects");
             returnElement.addContent(mcrObjectXML.getRootElement().detach());
             XMLOutputter out = new XMLOutputter();
