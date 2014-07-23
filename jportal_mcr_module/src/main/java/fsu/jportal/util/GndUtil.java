@@ -7,6 +7,8 @@ import java.util.Iterator;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -15,6 +17,7 @@ import org.jdom2.filter.ElementFilter;
 import org.jdom2.filter.Filters;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.solr.MCRSolrServerFactory;
 import org.mycore.sru.SRUConnector;
 import org.mycore.sru.SRUConnectorFactory;
@@ -30,21 +33,37 @@ import fsu.jportal.mycore.sru.impex.pica.producer.JPPersonProducer;
 public class GndUtil {
 
     /**
+     * Returns the mycore object with the given gnd id. Returns null if there
+     * is no such object. Uses solr gnd.id as query.
+     * 
+     * @param gndId gnd id
+     * @return mycore object with the given id
+     * @throws SolrServerException if a solr error occur
+     */
+    public static SolrDocument getMCRObject(String gndId) throws SolrServerException {
+        SolrServer solrServer = MCRSolrServerFactory.getSolrServer();
+        ModifiableSolrParams p = new ModifiableSolrParams();
+        p.set("q", "id.gnd:" + gndId);
+        p.set("rows", 1);
+        QueryResponse query = solrServer.query(p);
+        SolrDocumentList results = query.getResults();
+        if (results.isEmpty()) {
+            return null;
+        }
+        return results.get(0);
+    }
+
+    /**
      * Returns the mycore object id of the given gnd id. Returns null if there
-     * is no object which such an id. Uses the solr gnd.id as query.
+     * is no such object. Uses solr gnd.id as query.
      * 
      * @param gndId gnd id
      * @return mcr id or null
      * @throws SolrServerException if a solr error occur
      */
     public static String getMCRId(String gndId) throws SolrServerException {
-        SolrServer solrServer = MCRSolrServerFactory.getSolrServer();
-        ModifiableSolrParams p = new ModifiableSolrParams();
-        p.set("id.gnd:" + gndId);
-        p.set("rows", 1);
-        p.set("fl", "id");
-        QueryResponse query = solrServer.query(p);
-        return query.getResults().isEmpty() ? null : (String) query.getResults().get(0).getFieldValue("id");
+        SolrDocument doc = getMCRObject(gndId);
+        return doc == null ? null : (String) doc.getFieldValue("id");
     }
 
     /**
@@ -77,14 +96,24 @@ public class GndUtil {
     }
 
     /**
-     * Converts the given pica record to a mycore xml object. Be aware that no
-     * mycore id is set.
+     * Converts the given pica record to mycore object.
+     * 
+     * @param picaRecord the pica record to convert
+     * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
+     * @return new mycore object
+     */
+    public static MCRObject toMCRObject(PicaRecord picaRecord) {
+        return new MCRObject(toMCRObjectDocument(picaRecord));
+    }
+
+    /**
+     * Converts the given pica record to a mycore xml object.
      * 
      * @param picaRecord the pica record to convert
      * @throws IllegalArgumentException if the {@link PicaRecord} cannot be parsed due an invalid object type
      * @return jdom2 document
      */
-    public static Document convertPicaRecord(PicaRecord picaRecord) {
+    public static Document toMCRObjectDocument(PicaRecord picaRecord) {
         String objectType = picaRecord.getValue("002@", "0");
         if (isPerson(objectType)) {
             return new JPPersonProducer().procudeRawMCRObject(picaRecord);
