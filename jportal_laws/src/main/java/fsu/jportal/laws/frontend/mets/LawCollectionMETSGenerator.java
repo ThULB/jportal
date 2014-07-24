@@ -30,6 +30,7 @@ import org.mycore.mets.model.struct.PhysicalStructMap;
 import org.mycore.mets.model.struct.PhysicalSubDiv;
 import org.mycore.mets.model.struct.SmLink;
 import org.mycore.mets.model.struct.StructLink;
+import org.mycore.mets.tools.MCRMetsSave;
 
 /**
  * @author shermann
@@ -48,7 +49,7 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
         LogicalIdProvider idProvider = new LogicalIdProvider("log_", 6);
         LogicalSubDiv logDiv = null;
         int logicalOrder = 0;
-        String metsFile = MCRConfiguration.instance().getString("MCR.Mets.Filename", "mets.xml");
+        String metsFile = MCRMetsSave.getMetsFileName();
 
         for (int i = 0; i < nodes.length; i++) {
             MCRFilesystemNode node = nodes[i];
