@@ -8,13 +8,6 @@ import fsu.jportal.util.DerivatePath;
 
 public class DerivatePathTest {
     @Test
-    public void stringFoo() throws Exception {
-        String foo = "/83157195.pdf";
-        String bar = "/83157195.pdf";
-        
-        System.out.println("Equals: " + foo.equals(bar));
-    }
-    @Test
     public void justOwnerID() {
         String derivateID = "jportal_derivate_00000024";
         String absPath = "/";

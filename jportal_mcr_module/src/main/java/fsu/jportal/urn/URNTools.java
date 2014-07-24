@@ -63,11 +63,16 @@ public class URNTools {
             return;
         }
         
-        String absPath = target.getAbsolutePath();
-        int lastSlash = absPath.lastIndexOf("/");
-        String targetName = absPath.substring(lastSlash);
-        String targetPath = absPath.substring(0, lastSlash);
         MCRURN urn = getURNForFile(sourceNode);
+        if(urn == null){
+            return;
+        }
+        
+        String targetName = target.getName();
+        String targetPath = target.getParent().getAbsolutePath();
+        if(!targetPath.endsWith("/")){
+            targetPath += "/";
+        }
         
         updateURNFileName(urn, targetPath, targetName);
     }

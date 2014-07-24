@@ -13,6 +13,7 @@ import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.urn.hibernate.MCRURN;
 
+import fsu.jportal.mets.MetsTools;
 import fsu.jportal.urn.URNTools;
 import fsu.jportal.util.DerivatePath;
 
@@ -62,6 +63,7 @@ public class DerivateTools {
                 LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
                 return;
             }
+            
 
             DerivatePath targetLocation = new DerivatePath(targetPath.trim());
             MCRDirectory targetDir = getTargetDir(targetLocation);
@@ -71,14 +73,15 @@ public class DerivateTools {
                 return;
             }
 
-            String newFileName = targetLocation.getFileName().equals(targetDir.getName()) ? null : targetLocation
+            String newFileName = targetDir.getName().equals(targetLocation.getFileName()) ? null : targetLocation
                     .getFileName();
 
             Map<MCRFilesystemNode, MCRFile> copyHistory = new HashMap<MCRFilesystemNode, MCRFile>();
             cp(sourceNode, targetDir, newFileName, copyHistory);
             
             if(delAfterCopy){
-                moveAttachedData(copyHistory);
+                Derivate derivate = new Derivate(sourceNode.getOwnerID());
+                moveAttachedData(derivate, copyHistory);
                 sourceNode.delete();
             }
         } catch (MCRUsageException e) {
@@ -90,11 +93,27 @@ public class DerivateTools {
 
     }
 
-    private static void moveAttachedData(Map<MCRFilesystemNode, MCRFile> copyHistory) {
+    private static void moveAttachedData(Derivate derivate, Map<MCRFilesystemNode, MCRFile> copyHistory) {
+        String maindoc = derivate.getMaindoc();
         for (MCRFilesystemNode sourceNode : copyHistory.keySet()) {
             MCRFile target = copyHistory.get(sourceNode);
+            
+            String sourcePath = getPathNoLeadingRoot(sourceNode);
+            if(sourcePath.equals(maindoc)){
+                derivate.setMaindoc(getPathNoLeadingRoot(target));
+            }
+            
             URNTools.updateURN(sourceNode, target);
+            MetsTools.updateFileEntry(sourceNode, target);
         }
+    }
+
+    public static String getPathNoLeadingRoot(MCRFilesystemNode node) {
+        String nodePath = node.getAbsolutePath();
+        if(!node.equals("/")){
+            nodePath = nodePath.substring(1);
+        }
+        return nodePath;
     }
 
     public static MCRDirectory getTargetDir(DerivatePath derivPath) {
