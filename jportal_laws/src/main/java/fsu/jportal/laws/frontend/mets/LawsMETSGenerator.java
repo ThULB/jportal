@@ -12,10 +12,11 @@ import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.mets.JPortalMetsGenerator;
 import org.mycore.mets.model.MCRMETSDefaultGenerator;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
+
+import fsu.jportal.mets.JPortalMetsGenerator;
 
 public class LawsMETSGenerator extends MCRMETSGenerator {
 
