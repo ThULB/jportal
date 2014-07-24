@@ -30,7 +30,6 @@ import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.urn.URNTools;
 
 @Path("filebrowser")
 @MCRRestrictedAccess(ResourceAccess.class)
