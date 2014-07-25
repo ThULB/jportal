@@ -1,0 +1,94 @@
+.startfile{
+	background-color: #3276B1;
+}
+
+.table-hover tbody tr.startfile:hover td, .table-hover tbody tr.startfile:hover th{
+	background-color: #65A9E4;
+}
+
+.popover-img{
+	width: 100%;
+}
+
+#browser-startfile{
+	display: inline-block;
+}
+
+#browser-startfile-label{
+	display: inline-block;
+}
+
+.btn-group{
+	margin-left: 10px;
+}
+
+#browser-table{
+	margin-bottom:	0px; 
+}
+
+.browser-table-entry td:nth-child(1) {
+	width: 30px; 
+}
+
+.browser-table-entry td:nth-child(2) {
+	width: 90px; 
+}
+
+.browser-table-entry{
+	height: 38px;
+}
+
+.browser-table-entry td:nth-child(3) {
+	width: 599px; 
+}
+
+.delete{
+	background-color: #D9534F;
+}
+
+.table-hover tbody tr.delete:hover td, .table-hover tbody tr.delete:hover th{
+	background-color: #F36D69;
+}
+
+.choose{
+	background-color: #F0AD4E;
+}
+
+.table-hover tbody tr.choose:hover td, .table-hover tbody tr.choose:hover th{
+	background-color: #FFC768;
+}
+
+.btn{
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	display: inline;	
+}
+.invisable{
+	opacity: 0;
+}
+
+.checked{
+	background-color: #3276B1;
+}
+
+.table-hover tbody tr.checked:hover td, .table-hover tbody tr.checked:hover th{
+	background-color: #65A9E4;
+}
+.no-button {
+    display: inline-block;
+    min-width: 19px;
+    padding-right: 5px;
+}
+
+#bottom-btns {
+	margin-left: 2px;
+}
+
+#bottom-btns > .no-button {
+	min-width: 13px;
+}
+
+.glyphicon-plus{
+	padding-right: 10px;
+}

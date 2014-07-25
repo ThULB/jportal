@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +25,10 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 import org.mycore.urn.hibernate.MCRURN;
 import org.mycore.urn.services.MCRURNManager;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import fsu.jportal.backend.Derivate;
 import fsu.jportal.backend.DerivateTools;
@@ -76,6 +81,18 @@ public class Filebrowser {
         InputStream mainGui = getClass().getResourceAsStream("/gui/main.html");
         return Response.ok(mainGui).build();
     }
+    
+    @GET
+    @Path("gui2/{derivID}{path:(/.*)*}")
+    @Produces(MediaType.TEXT_HTML)
+    public Response gui2(@PathParam("derivID") String derivID) {
+        //        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(id);
+        //        if(rootNode == null){
+        //            return Response.status(Status.NOT_FOUND).build();
+        //        }
+        InputStream mainGui = getClass().getResourceAsStream("/gui/prototype.html");
+        return Response.ok(mainGui).build();
+    }
 
     @DELETE
     @Path("{derivID}{path:(/.*)*}")
@@ -105,11 +122,32 @@ public class Filebrowser {
 
         return Response.serverError().build();
     }
+    
+    @POST
+    @Path("{derivID}{path:(/.*)*}")
+    public Response createFolder(@PathParam("derivID") String derivID, @PathParam("path") String path) throws Exception {
+        DerivateTools.mkdir(derivID + ":" + path);
+        return Response.ok().build();
+    }
+
 
     @POST
     @Path("rename")
     public Response rename(@QueryParam("file") String file, @QueryParam("name") String name) throws Exception {
         DerivateTools.rename(file, name);
+        return Response.ok().build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("move")
+    public Response moveFiles(String data) throws Exception {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
+        JsonArray jsonArray = jsonObject.getAsJsonArray("files");
+        for (int i = 0; i < jsonArray.size(); i++) {
+            DerivateTools.mv(jsonArray.get(i).getAsString(), jsonObject.get("moveTo").getAsString());
+        }
         return Response.ok().build();
     }
 
