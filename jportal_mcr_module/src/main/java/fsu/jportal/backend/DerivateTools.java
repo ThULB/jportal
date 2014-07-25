@@ -93,14 +93,15 @@ public class DerivateTools {
 
     }
 
-    private static void moveAttachedData(Derivate derivate, Map<MCRFilesystemNode, MCRFile> copyHistory) {
-        String maindoc = derivate.getMaindoc();
+    private static void moveAttachedData(Derivate srcDerivate, Map<MCRFilesystemNode, MCRFile> copyHistory) {
+        String maindoc = srcDerivate.getMaindoc();
         for (MCRFilesystemNode sourceNode : copyHistory.keySet()) {
             MCRFile target = copyHistory.get(sourceNode);
             
             String sourcePath = getPathNoLeadingRoot(sourceNode);
             if(sourcePath.equals(maindoc)){
-                derivate.setMaindoc(getPathNoLeadingRoot(target));
+                Derivate targetDerivate = new Derivate(target.getOwnerID());
+                targetDerivate.setMaindoc(getPathNoLeadingRoot(target));
             }
             
             URNTools.updateURN(sourceNode, target);
