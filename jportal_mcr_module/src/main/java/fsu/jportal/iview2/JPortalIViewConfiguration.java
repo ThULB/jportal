@@ -1,37 +1,35 @@
 package fsu.jportal.iview2;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.servlets.MCRServlet;
-import org.mycore.iview2.frontend.MCRIViewMetsClientConfiguration;
+import org.mycore.iview2.frontend.configuration.MCRIViewClientConfiguration;
+import org.mycore.iview2.frontend.configuration.MCRIViewClientConfigurationBuilder;
 
-@XmlRootElement(name = "iviewClientConfiguration")
-public class JPortalIViewConfiguration extends MCRIViewMetsClientConfiguration {
+public class JPortalIViewConfiguration extends MCRIViewClientConfiguration {
 
     @Override
-    public void setup(HttpServletRequest request) {
+    public MCRIViewClientConfiguration setup(HttpServletRequest request) {
+        // mets, logo, metadata, piwik
+        MCRIViewClientConfigurationBuilder builder = MCRIViewClientConfigurationBuilder.metsAndPlugins(request);
+        // get base configuration
+        MCRIViewClientConfiguration baseConfiguration = builder.get();
+        // mixin with configuration
+        MCRIViewClientConfigurationBuilder.mixin(this, baseConfiguration);
+        // add jportal required stuff
         super.setup(request);
-        String baseURL = MCRServlet.getBaseURL();
 
+        String baseURL = MCRServlet.getBaseURL();
         // css
         this.addCSS(baseURL + "css/jp-iview.css");
 
-        // piwik
-        if (MCRConfiguration.instance().getBoolean("MCR.Piwik.enable", false)) {
-            this.addScript(baseURL + "modules/iview2/js/iview-client-piwik.js");
-            this.setProperty("MCR.Piwik.baseurl", MCRConfiguration.instance().getString("MCR.Piwik.baseurl"));
-            this.setProperty("MCR.Piwik.id", MCRConfiguration.instance().getString("MCR.Piwik.id"));
-        }
-
         // derivate link
         if (!MCRSessionMgr.getCurrentSession().getUserInformation().equals(MCRSystemUserInformation.getGuestInstance())) {
-            this.addScript(baseURL + "modules/iview2/js/derivate-link-module.js");
+            this.addLocalScript("derivate-link-module.js");
         }
-
+        return this;
     }
 
 }
