@@ -50,7 +50,7 @@ public class MetsImporterResource {
         if (creatorSoftware.equals("DEA METS Engine")) {
             new InnsbruckMetsImporter(xml, derivate).importMets();
         } else if (creatorSoftware.startsWith("AAS_ImageCutting_")) {
-
+            new PPSMetsImporter(xml, derivate).importMets();
         } else {
             throw new WebApplicationException(Response.status(Status.NOT_FOUND)
                 .entity("Unknown mets.xml format. Cannot import.").build());

@@ -110,22 +110,18 @@ public abstract class MetsImporterBase {
      * @param mets
      * @return
      */
-    protected Map<String, Element> parseLogicalStructMap(Element mets) {
-        XPathExpression<Element> exp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='logical_structmap']//mets:div[@DMDID != '']", Filters.element(), null,
-            getNameSpaceList());
-        List<Element> logicalDmds = exp.evaluate(mets);
-        Map<String, Element> logicalStructMap = new HashMap<>(logicalDmds.size());
-        for (Element e : logicalDmds) {
-            logicalStructMap.put(e.getAttributeValue("DMDID"), e);
-        }
-        return logicalStructMap;
-    }
+    protected abstract Map<String, Element> parseLogicalStructMap(Element mets);
 
     public Map<String, Element> getLogicalStructMap() {
         return logicalStructMap;
     }
 
+    /**
+     * Returns a map containing all alto files. key = METS_ID, value = path to image.
+     * 
+     * @param mets
+     * @return
+     */
     protected abstract Map<String, String> parseALTOFiles(Element mets);
 
     public Map<String, String> getAltoFiles() {
@@ -178,9 +174,37 @@ public abstract class MetsImporterBase {
         for (String dmdId : dmdIds) {
             MODS_EXPRESSION.setVariable("id", dmdId);
             Element mods = MODS_EXPRESSION.evaluateFirst(getMets());
+            if (mods == null) {
+                continue;
+            }
             MCRObject article = buildArticle(mods, dmdId);
             MCRMetadataManager.create(article);
         }
+    }
+
+    /**
+     * Returns a map of files. The expression should match //mets:file. The mets:file should
+     * look like:
+     * <file ID="ALTO00001">
+     *   <FLocat LOCTYPE="URL" xlink:href="file://./alto/032_JV_1933-02-07_001_ALTO.xml" />
+     * </file>
+     * 
+     * Key of the map will be the ID, the value the xlink:href
+     * 
+     * @param expression
+     * @param context
+     * @return
+     */
+    public static Map<String, String> parseFiles(XPathExpression<Element> expression, Element context) {
+        List<Element> fileElements = expression.evaluate(context);
+        Map<String, String> returnMap = new HashMap<>();
+        for (Element fileElement : fileElements) {
+            String key = fileElement.getAttributeValue("ID");
+            String value = fileElement.getChild("FLocat", MCRConstants.METS_NAMESPACE).getAttributeValue("href",
+                MCRConstants.XLINK_NAMESPACE);
+            returnMap.put(key, value);
+        }
+        return returnMap;
     }
 
     protected MCRObject buildArticle(Element mods, String dmdId) {
@@ -275,6 +299,14 @@ public abstract class MetsImporterBase {
                 }
             }
         }
+
+        // position in volume (sizes)
+        String order = "";
+        MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
+        sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", order));
+        o.getMetadata().setMetadataElement(sizes);
+
         return o;
     }
+
 }
