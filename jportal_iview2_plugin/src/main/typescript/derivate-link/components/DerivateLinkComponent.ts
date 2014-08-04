@@ -1,6 +1,9 @@
 
 module mycore.iview.imageviewer.components {
 
+    export interface DerivateLinkComponentSettings extends MyCoReImageViewerSettings {
+    }
+
     export class DerivateLinkComponent extends IviewComponent {
 
         public _toolbarModel: model.MyCoReBasicToolbarModel;
@@ -8,7 +11,7 @@ module mycore.iview.imageviewer.components {
         public _derivateLinkButton: widgets.toolbar.ToolbarButton;
         public _currentImage: string;
 
-        constructor(private _settings: MyCoReImageViewerSettings) {
+        constructor(private _settings: DerivateLinkComponentSettings) {
             super();
         }
 
@@ -55,10 +58,10 @@ module mycore.iview.imageviewer.components {
         }
 
         public init() {
-            this._currentImage = this._settings.startImage;
+            this._currentImage = this._settings.filePath;
             this.trigger(new events.WaitForEvent(this, events.ProvideToolbarModelEvent.TYPE));
             this.trigger(new events.WaitForEvent(this, events.LanguageModelLoadedEvent.TYPE));
-            
+
         }
 
         private _linkImage() {
