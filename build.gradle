@@ -3,6 +3,8 @@ evaluationDependsOn(':jportal_mcr_module')
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
+	apply plugin: 'eclipse'
+	
     group = "fsu.thulb"
     version = "2.0.18-SNAPSHOT"
     repositories {
@@ -23,6 +25,7 @@ allprojects {
         main.compileClasspath += configurations.provided
         test.compileClasspath += configurations.provided
         test.runtimeClasspath += configurations.provided
+		eclipse.classpath.plusConfigurations += configurations.provided
     }
 
     def mcrVersion = '2014.07-SNAPSHOT'
@@ -56,9 +59,6 @@ allprojects {
         testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
     }
 }
-
-
- 
 
 project(':jportal_mcr_module'){
    
