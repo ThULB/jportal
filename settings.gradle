@@ -1,0 +1,17 @@
+include(
+'jportal_mcr_module',
+'jportal_laws',
+'jportal_gbv',
+'jportal_doublet_finder_module',
+'jportal_jquery_cnd',
+'jportal_experiments',
+'jportal_login_module',
+'jportal-commons',
+'jportal_acl_ip_editor_module',
+'jportal_move_obj_module',
+'jportal_webapp',
+'jportal_setup',
+'jportal_ext_web_lib',
+'jportal_sample_data',
+'jportal_iview2_plugin'
+)
