@@ -61,7 +61,6 @@ module mycore.iview.imageviewer.components {
             this._currentImage = this._settings.filePath;
             this.trigger(new events.WaitForEvent(this, events.ProvideToolbarModelEvent.TYPE));
             this.trigger(new events.WaitForEvent(this, events.LanguageModelLoadedEvent.TYPE));
-
         }
 
         private _linkImage() {
@@ -71,7 +70,6 @@ module mycore.iview.imageviewer.components {
             jQuery.post(servletPath).fail(function(error) {
                 alert(error.responseText);
             });
-
         }
 
     }

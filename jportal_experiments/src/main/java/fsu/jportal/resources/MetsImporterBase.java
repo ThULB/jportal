@@ -301,10 +301,10 @@ public abstract class MetsImporterBase {
         }
 
         // position in volume (sizes)
-        String order = "";
-        MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
-        sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", order));
-        o.getMetadata().setMetadataElement(sizes);
+//        String order = "";
+//        MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
+//        sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", order));
+//        o.getMetadata().setMetadataElement(sizes);
 
         return o;
     }

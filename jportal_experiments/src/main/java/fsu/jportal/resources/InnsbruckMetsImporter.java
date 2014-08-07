@@ -25,7 +25,7 @@ public class InnsbruckMetsImporter extends MetsImporterBase {
     @Override
     protected Map<String, Element> parseLogicalStructMap(Element mets) {
         XPathExpression<Element> exp = XPathFactory.instance().compile(
-            "mets:structMap[@TYPE='logical_structmap']//mets:div[@DMDID != '']", Filters.element(), null,
+            "mets:structMap[@TYPE='LOGICAL']//mets:div[@DMDID != '']", Filters.element(), null,
             getNameSpaceList());
         List<Element> logicalDmds = exp.evaluate(mets);
         Map<String, Element> logicalStructMap = new HashMap<>(logicalDmds.size());
@@ -63,7 +63,7 @@ public class InnsbruckMetsImporter extends MetsImporterBase {
     @Override
     protected Map<String, String> parseImageFiles(Element mets) {
         XPathExpression<Element> exp = XPathFactory.instance().compile(
-            "mets:fileSec/mets:fileGrp[@ID='ImageGroup']/mets:fileGrp[@ID='OCRMasterFiles']/mets:file",
+            "mets:fileSec/mets:fileGrp[@ID='ImageGroup']/mets:fileGrp[@ID='MASTER']/mets:file",
             Filters.element(), null, getNameSpaceList());
         return parseFiles(exp, mets);
     }
