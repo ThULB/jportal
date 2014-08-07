@@ -1,11 +1,11 @@
 package spike;
 
-import static org.junit.Assert.*;
-
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mycore.datamodel.common.MCRISO8601Date;
 import org.mycore.services.fieldquery.data2fields.MCRXSLBuilder;
 
+@Ignore
 public class Dates {
 
     @Test
