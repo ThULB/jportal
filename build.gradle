@@ -3,29 +3,21 @@ evaluationDependsOn(':jportal_mcr_module')
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
-	apply plugin: 'eclipse'
-	
+    apply plugin: 'eclipse'
+
     group = "fsu.thulb"
     version = "2.0.18-SNAPSHOT"
     repositories {
-        maven{
-            url "http://artifactory.mycore.de/mycore-releases"
-        }
+        maven{ url "http://artifactory.mycore.de/mycore-releases" }
 
-        maven{
-            url "http://artifactory.mycore.de/mycore-snapshots"
-        }
-    
+        maven{ url "http://artifactory.mycore.de/mycore-snapshots" }
     }
-    configurations {
-        provided
-    }
-    
+    configurations { provided }
+
     sourceSets {
         main.compileClasspath += configurations.provided
         test.compileClasspath += configurations.provided
         test.runtimeClasspath += configurations.provided
-		eclipse.classpath.plusConfigurations += configurations.provided
     }
 
     def mcrVersion = '2014.07-SNAPSHOT'
@@ -55,98 +47,38 @@ allprojects {
         provided('org.mycore.mets:mets-model:0.5-SNAPSHOT'){
             exclude group: 'org.mycore', module: 'mycore-base'
         }
+        compile 'javax.servlet:javax.servlet-api:3.1.0'
         testCompile group: 'junit', name: 'junit', version: '4.+'
         testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
     }
 }
 
-project(':jportal_mcr_module'){
-   
+subprojects {
+    if(project.name.equals("jportal_mcr_module")){
+        dependencies{
+            compile project(':jportal-commons')
+            compile project(':jportal_ext_web_lib')
+            compile project(':jportal_iview2_plugin')
+            compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
+            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+            compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
 
-    dependencies{
-        compile project(':jportal-commons')
-        compile project(':jportal_ext_web_lib')
-        compile project(':jportal_iview2_plugin')
-        compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
-        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
-        compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
-        
-        compile 'javax.servlet:javax.servlet-api:3.1.0'
-        compile 'log4j:log4j:1.2.17'
-        compile 'com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:1.17'
-        compile 'com.sun.jersey.contribs:jersey-apache-client:1.17'
-        compile 'com.sun.jersey:jersey-client:1.17'
-        compile 'com.sun.jersey:jersey-server:1.17'
-        compile 'org.easymock:easymock:3.2'
-        compile 'xmlunit:xmlunit:1.3'
-        compile 'javax.xml.bind:jaxb-api:2.2.1'
-        compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
-    }
-    
-    
-    jar {
-        manifest {
-            attributes("MCR-Application-Module": "$project.name", "gradle": "build")
+            compile 'log4j:log4j:1.2.17'
+            compile 'com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:1.17'
+            compile 'com.sun.jersey.contribs:jersey-apache-client:1.17'
+            compile 'com.sun.jersey:jersey-client:1.17'
+            compile 'com.sun.jersey:jersey-server:1.17'
+            compile 'org.easymock:easymock:3.2'
+            compile 'xmlunit:xmlunit:1.3'
+            compile 'javax.xml.bind:jaxb-api:2.2.1'
+            compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
         }
+    } else if(project.name.equals("jportal_webapp")){
+        apply plugin: 'war'
     }
-    
-    processResources {
-        filesMatching('**/build.properties'){
-            def jarName = "$project.name-$project.version".toString()
-            filter{String line -> line.replaceAll('\\$\\{project.build.finalName\\}', jarName)}
-        }
-    } 
-}
-
-project(':jportal_acl_ip_editor_module'){
-    dependencies{
-        provided project(':jportal_mcr_module')
+    else if(!project.name.equals("jportal-commons") && !project.name.equals("jportal_ext_web_lib") && !project.name.equals("jportal_iview2_plugin")){
+        dependencies{ provided project(':jportal_mcr_module') }
     }
 }
 
-project(':jportal_doublet_finder_module'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_experiments'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_jquery_cnd'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_laws'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_login_module'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_move_obj_module'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-project(':jportal_sample_data'){
-    dependencies{
-        provided project(':jportal_mcr_module')
-    }
-}
-
-
-dependencies {
-    compile project(':jportal_mcr_module')
-}
+dependencies { compile project(':jportal_mcr_module') }
