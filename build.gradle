@@ -22,32 +22,18 @@ allprojects {
 
     def mcrVersion = '2014.07-SNAPSHOT'
     dependencies{
-        provided "org.mycore:mycore-base:$mcrVersion"
-        provided("org.mycore:mycore-solr:$mcrVersion"){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided("org.mycore:mycore-mets:$mcrVersion"){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided("org.mycore:mycore-iview2:$mcrVersion"){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided("org.mycore:mycore-user2:$mcrVersion"){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided("org.mycore:mycore-classeditor:$mcrVersion"){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided('org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided('org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
-        provided('org.mycore.mets:mets-model:0.5-SNAPSHOT'){
-            exclude group: 'org.mycore', module: 'mycore-base'
-        }
+        compile "org.mycore:mycore-base:$mcrVersion"
+        compile "org.mycore:mycore-solr:$mcrVersion"
+        compile "org.mycore:mycore-mets:$mcrVersion"
+        compile "org.mycore:mycore-iview2:$mcrVersion"
+        compile "org.mycore:mycore-user2:$mcrVersion"
+        compile "org.mycore:mycore-classeditor:$mcrVersion"
+        compile "org.mycore:mycore-mets:$mcrVersion"
+        compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
+        compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
+        compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
         compile 'javax.servlet:javax.servlet-api:3.1.0'
+        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
         testCompile group: 'junit', name: 'junit', version: '4.+'
         testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
     }
@@ -60,7 +46,6 @@ subprojects {
             compile project(':jportal_ext_web_lib')
             compile project(':jportal_iview2_plugin')
             compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
-            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
             compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
 
             compile 'log4j:log4j:1.2.17'
@@ -77,7 +62,7 @@ subprojects {
         apply plugin: 'war'
     }
     else if(!project.name.equals("jportal-commons") && !project.name.equals("jportal_ext_web_lib") && !project.name.equals("jportal_iview2_plugin")){
-        dependencies{ provided project(':jportal_mcr_module') }
+        dependencies{ compile project(':jportal_mcr_module') }
     }
 }
 
