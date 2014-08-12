@@ -57,7 +57,7 @@ public class PersonFixServlet extends MCRServlet {
     }
 
     public MCRResults find() {
-        MCRCondition<Object> cond = new MCRQueryCondition(MCRFieldDef.getDef("corruptParticipants"), ">", "0");
+        MCRCondition<Object> cond = new MCRQueryCondition(MCRFieldDef.getDef("corruptParticipants").toString(), ">", "0");
         MCRQuery query = new MCRQuery(cond);
         return MCRQueryManager.search(query);
     }
