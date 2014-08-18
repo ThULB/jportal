@@ -25,7 +25,6 @@
 
     <module>jportal_acl_ip_editor_module</module>
     <module>jportal_move_obj_module</module>
-    <module>jportal_webapp</module>
     <module>jportal_setup</module>
     <module>jportal_ext_web_lib</module>
     <module>jportal_sample_data</module>
