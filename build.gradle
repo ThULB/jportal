@@ -1,5 +1,14 @@
 evaluationDependsOn(':jportal_mcr_module')
 
+def mcrVersion = '2014.07-SNAPSHOT'
+def jettyVersion = "9.2.2.v20140723"
+
+def getDate() {
+    def date = new Date()
+    def formattedDate = date.format('yyyyMMdd.HHmmss')
+    return formattedDate
+}
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -8,19 +17,14 @@ allprojects {
     group = "fsu.thulb"
     version = "2.0.18-SNAPSHOT"
     repositories {
+        mavenLocal()
+
         maven{ url "http://artifactory.mycore.de/mycore-releases" }
 
         maven{ url "http://artifactory.mycore.de/mycore-snapshots" }
+        
     }
-    configurations { provided }
-
-    sourceSets {
-        main.compileClasspath += configurations.provided
-        test.compileClasspath += configurations.provided
-        test.runtimeClasspath += configurations.provided
-    }
-
-    def mcrVersion = '2014.07-SNAPSHOT'
+    
     dependencies{
         compile "org.mycore:mycore-base:$mcrVersion"
         compile "org.mycore:mycore-solr:$mcrVersion"
@@ -29,6 +33,7 @@ allprojects {
         compile "org.mycore:mycore-user2:$mcrVersion"
         compile "org.mycore:mycore-classeditor:$mcrVersion"
         compile "org.mycore:mycore-mets:$mcrVersion"
+        compile "org.mycore:mycore-oai:$mcrVersion"
         compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
@@ -40,6 +45,38 @@ allprojects {
 }
 
 subprojects {
+    if(project.name.equals("jportal_webapp")){
+        apply plugin: 'war'
+
+        configurations { jetty }
+
+        dependencies {
+            jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
+            runtime project(":jportal_webapp_wizard")
+        }
+        
+        task runJetty(type: JavaExec) {
+            main = "org.eclipse.jetty.runner.Runner"
+            println(war.archivePath)
+            args '--config', 'jetty/jetty-config.xml'
+            args war.archivePath
+            classpath configurations.jetty
+        }
+
+    }
+    
+    if(project.name.equals("jportal_webapp_wizard")){
+        jar {
+            manifest {
+                attributes("MCR-Application-Module": "$project.name")
+                attributes("MCR-Artifact-Id": "$project.name")
+                attributes("version": "$project.version")
+                attributes("timestamp": getDate())
+            }
+            
+        }
+    }
+
     if(project.name.equals("jportal_mcr_module")){
         dependencies{
             compile project(':jportal-commons')
@@ -47,7 +84,6 @@ subprojects {
             compile project(':jportal_iview2_plugin')
             compile 'de.uni-jena.thulb:JPJaxbPojos:0.0.1-SNAPSHOT'
             compile 'de.uni-jena.thulb.oai:archive-oai-resources:0.0.1-SNAPSHOT'
-
             compile 'log4j:log4j:1.2.17'
             compile 'com.sun.jersey.jersey-test-framework:jersey-test-framework-grizzly:1.17'
             compile 'com.sun.jersey.contribs:jersey-apache-client:1.17'
@@ -57,13 +93,24 @@ subprojects {
             compile 'xmlunit:xmlunit:1.3'
             compile 'javax.xml.bind:jaxb-api:2.2.1'
             compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
+
+            jar {
+                manifest {
+                    attributes("MCR-Application-Module": "$project.name")
+                    attributes("MCR-Artifact-Id": "$project.name")
+                    attributes("version": "$project.version")
+                    attributes("timestamp": getDate())
+                }
+            }
         }
-    } else if(project.name.equals("jportal_webapp")){
-        apply plugin: 'war'
-    }
-    else if(!project.name.equals("jportal-commons") && !project.name.equals("jportal_ext_web_lib") && !project.name.equals("jportal_iview2_plugin")){
+    } else if(!project.name.equals("jportal-commons") && !project.name.equals("jportal_ext_web_lib") && !project.name.equals("jportal_iview2_plugin")){
         dependencies{ compile project(':jportal_mcr_module') }
     }
 }
+
+configurations.all {
+    resolutionStrategy.cacheDynamicVersionsFor 0, 'minutes'
+}
+
 
 dependencies { compile project(':jportal_mcr_module') }
