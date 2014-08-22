@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+MCR-Application-Module: jportal_webapp_wizard
+MCR-Artifact-Id: jportal_webapp_wizard
+version: 2.0.18-SNAPSHOT
+timestamp: 20140821.143318
+
