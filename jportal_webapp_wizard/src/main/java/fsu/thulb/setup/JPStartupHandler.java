@@ -118,6 +118,7 @@ public class JPStartupHandler implements AutoExecutable, Closeable {
         LOGGER.info("Register " + WIZARD_FILTER_NAME + "...");
 
         Dynamic ft = servletContext.addFilter(WIZARD_FILTER_NAME, WIZARD_FILTER_CLASS);
+        
         if (ft != null) {
             ft.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
         } else {
@@ -138,5 +139,4 @@ public class JPStartupHandler implements AutoExecutable, Closeable {
         //            String wizStylesheet = config.getString("MIR.Wizard.LayoutStylesheet", "xsl/mir-wizard-layout.xsl");
         //            config.set("MCR.LayoutTransformerFactory.Default.Stylesheets", wizStylesheet);
     }
-
 }
