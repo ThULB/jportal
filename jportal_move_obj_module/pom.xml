@@ -39,6 +39,7 @@
             </manifest>
             <manifestEntries>
               <MCR-Application-Module>${project.name}</MCR-Application-Module>
+              <POM>META-INF/maven/${project.groupId}/${project.artifactId}/pom.properties</POM>
             </manifestEntries>
           </archive>
         </configuration>
