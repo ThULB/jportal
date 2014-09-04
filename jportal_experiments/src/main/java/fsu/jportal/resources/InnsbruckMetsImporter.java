@@ -35,7 +35,6 @@ public class InnsbruckMetsImporter extends MetsImporterBase {
         return logicalStructMap;
     }
 
-    @Override
     protected BiMap<String, String> parseImageALTOMap(Element mets) {
         // get all pages of the physical structure map
         XPathExpression<Element> exp = XPathFactory.instance().compile(
@@ -74,6 +73,12 @@ public class InnsbruckMetsImporter extends MetsImporterBase {
             Filters.attribute(), null, getNameSpaceList());
         Attribute fileId = exp.evaluateFirst(div);
         return fileId != null ? fileId.getValue() : null;
+    }
+
+    @Override
+    protected Map<String, Element> parsePages(Element mets) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

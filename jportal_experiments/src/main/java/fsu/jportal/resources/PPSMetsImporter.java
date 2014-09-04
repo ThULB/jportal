@@ -50,7 +50,6 @@ public class PPSMetsImporter extends MetsImporterBase {
         return parseFiles(exp, mets);
     }
 
-    @Override
     protected BiMap<String, String> parseImageALTOMap(Element mets) {
         HashBiMap<String, String> map = HashBiMap.create();
 
@@ -88,6 +87,12 @@ public class PPSMetsImporter extends MetsImporterBase {
         XPathExpression<Element> exp = XPathFactory.instance().compile(
             "mets:fileSec/mets:fileGrp[@ID='IMGGRP']/mets:file", Filters.element(), null, getNameSpaceList());
         return parseFiles(exp, mets);
+    }
+
+    @Override
+    protected Map<String, Element> parsePages(Element mets) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

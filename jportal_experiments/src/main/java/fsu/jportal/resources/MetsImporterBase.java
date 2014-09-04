@@ -294,28 +294,28 @@ public abstract class MetsImporterBase {
         Element logicalDmdElement = getLogicalStructMap().get(dmdId);
         String altoId = getFirstALTOIdOfLogicalDiv(logicalDmdElement);
         if (altoId != null) {
-            String imageId = getLinkedImageAltoMap().get(altoId);
-            if (imageId == null) {
-                imageId = getLinkedImageAltoMap().inverse().get(altoId);
-                if (imageId != null) {
-                    MCRMetaElement derivateLinks = new MCRMetaElement(MCRMetaDerivateLink.class, "derivateLinks",
-                        false, false, null);
-                    try {
-                        String imageFilePath = Paths.get(new URI(getImageFiles().get(imageId))).normalize().toString();
-                        MCRMetaDerivateLink link = new MCRMetaDerivateLink();
-                        link.setInherited(0);
-                        link.setSubTag("derivateLink");
-                        link.setReference(getDerivate().getId() + imageFilePath, null, null);
-                        derivateLinks.addMetaObject(link);
-                        o.getMetadata().setMetadataElement(derivateLinks);
-                    } catch (Exception exc) {
-                        // TODO: warn here
-                        exc.printStackTrace();
-                    }
-                } else {
-                    // TODO: warn that image cannot be found
-                }
-            }
+//            String imageId = getLinkedImageAltoMap().get(altoId);
+//            if (imageId == null) {
+//                imageId = getLinkedImageAltoMap().inverse().get(altoId);
+//                if (imageId != null) {
+//                    MCRMetaElement derivateLinks = new MCRMetaElement(MCRMetaDerivateLink.class, "derivateLinks",
+//                        false, false, null);
+//                    try {
+//                        String imageFilePath = Paths.get(new URI(getImageFiles().get(imageId))).normalize().toString();
+//                        MCRMetaDerivateLink link = new MCRMetaDerivateLink();
+//                        link.setInherited(0);
+//                        link.setSubTag("derivateLink");
+//                        link.setReference(getDerivate().getId() + imageFilePath, null, null);
+//                        derivateLinks.addMetaObject(link);
+//                        o.getMetadata().setMetadataElement(derivateLinks);
+//                    } catch (Exception exc) {
+//                        // TODO: warn here
+//                        exc.printStackTrace();
+//                    }
+//                } else {
+//                    // TODO: warn that image cannot be found
+//                }
+//            }
         }
 
         // position in volume (sizes)
