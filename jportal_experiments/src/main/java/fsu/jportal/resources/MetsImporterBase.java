@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,6 +52,8 @@ public abstract class MetsImporterBase {
 
     final static XPathExpression<Text> HEADING_EXPRESSION;
 
+    final static DecimalFormat EIGHT_DIGIT_FORMAT;
+
     private Element mets;
 
     private MCRDerivate derivate;
@@ -62,6 +65,8 @@ public abstract class MetsImporterBase {
     private Map<String, String> altoFiles;
 
     private BiMap<String, String> linkedImageAltoMap;
+
+    private Map<String, Element> pages;
 
     static {
         NS_LIST = new ArrayList<>();
@@ -75,6 +80,7 @@ public abstract class MetsImporterBase {
             Filters.element(), vars, NS_LIST);
         HEADING_EXPRESSION = XPathFactory.instance().compile("/add/doc/field[@name='heading_base']/text()",
             Filters.text());
+        EIGHT_DIGIT_FORMAT = new DecimalFormat("00000000");
     }
 
     public MetsImporterBase(Document metsDocument, MCRDerivate derivate) {
@@ -83,7 +89,8 @@ public abstract class MetsImporterBase {
         this.logicalStructMap = parseLogicalStructMap(mets);
         this.altoFiles = parseALTOFiles(mets);
         this.imageFiles = parseImageFiles(mets);
-        this.linkedImageAltoMap = parseImageALTOMap(mets);
+        //        this.linkedImageAltoMap = parseImageALTOMap(mets);
+        this.pages = parsePages(mets);
     }
 
     /**
@@ -146,7 +153,18 @@ public abstract class MetsImporterBase {
      * @param mets
      * @return
      */
-    protected abstract BiMap<String, String> parseImageALTOMap(Element mets);
+    //    protected abstract BiMap<String, String> parseImageALTOMap(Element mets);
+
+    /**
+     * Returns a map containing all pages. key = id; value = page element
+     * 
+     * @return
+     */
+    protected abstract Map<String, Element> parsePages(Element mets);
+
+    protected Map<String, Element> getPages() {
+        return this.pages;
+    }
 
     /**
      * Returns the first alto file id of a logical div section.
@@ -164,9 +182,9 @@ public abstract class MetsImporterBase {
      */
     protected abstract String getFirstALTOIdOfLogicalDiv(Element div);
 
-    public BiMap<String, String> getLinkedImageAltoMap() {
-        return linkedImageAltoMap;
-    }
+    //    public BiMap<String, String> getLinkedImageAltoMap() {
+    //        return linkedImageAltoMap;
+    //    }
 
     public void importMets() {
         Set<String> dmdIds = getLogicalStructMap().keySet();
@@ -301,11 +319,13 @@ public abstract class MetsImporterBase {
         }
 
         // position in volume (sizes)
-//        String order = "";
-//        MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
-//        sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", order));
-//        o.getMetadata().setMetadataElement(sizes);
-
+        String order = logicalDmdElement.getAttributeValue("ORDER");
+        if (order != null) {
+            order = EIGHT_DIGIT_FORMAT.format(Long.valueOf(order));
+            MCRMetaElement sizes = new MCRMetaElement(MCRMetaLangText.class, "sizes", false, false, null);
+            sizes.addMetaObject(new MCRMetaLangText("size", null, null, 0, "plain", order));
+            o.getMetadata().setMetadataElement(sizes);
+        }
         return o;
     }
 
