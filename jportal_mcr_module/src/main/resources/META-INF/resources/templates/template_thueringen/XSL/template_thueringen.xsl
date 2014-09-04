@@ -11,7 +11,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
         var name = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
-        $('#logo').prepend('<h1 class="logoTitle">' + truncate(name, 120)  + '</h1>');
+        $('#logo').prepend('<h1 class="logoTitle">' + truncate(name, 90)  + '</h1>');
       });
     </script>
   </xsl:template>
