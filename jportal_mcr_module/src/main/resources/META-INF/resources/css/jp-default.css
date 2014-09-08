@@ -1362,3 +1362,52 @@ p.jp-layout-metadata-list {
 .form-login .form-group {
 	max-width: 193px;
 }
+
+/*******************************************************
+* Header Stuff 
+********************************************************/
+.jp-layout-mainHeader-UlLeft{
+	padding: 10px; 
+	margin-bottom: 0;
+} 
+
+.jp-layout-mainHeader-LiPaPushRight{
+	padding-right: 10px !important;
+}
+
+.jp-layout-mainHeader-SeperatorLeft{
+	border-left: 2px solid #000; 
+	padding-left: 10px !important; 
+}
+
+.jp-navigation-topHeader-UlRightWraper{
+	padding: 10px 6px; 
+	float:right; 
+	margin-bottom: 0;
+}
+
+.jp-navigation-topHeader-LanguageMenu{
+	float: right; 
+	padding: 3px;
+}
+
+.jp-navigation-topHeader-DropdownMenu{
+	min-width: 50px; 
+	margin-left: -24px; 
+	margin-top: -2px;
+}
+
+.jp-navigation-topHeader-ImgPush{
+	padding-right: 4px;
+}
+
+.jp-navigation-topHeader-Pad0{
+	padding: 0;
+}
+
+.jp-navigation-topHeader-DropdownBorder{
+	border: none;
+}
+/*******************************************************
+* Header Stuff END
+********************************************************/
