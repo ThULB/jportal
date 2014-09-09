@@ -217,30 +217,9 @@ body {
 	padding-left: 0px;
 }
 
-.jp-layout-content-area {
-	overflow: hidden;
-	padding: 0 29px;
-}
-
-.jp-layout-content-area a {
-	font-weight: normal;
-}
-
-.jp-layout-content-area a:hover {
-	text-decoration: underline;
-}
-
 .jp-layout-horiz-menu,.topList {
 	list-style-type: none;
 	padding: 0;
-}
-
-.jp-layout-menu-dropdown {
-	
-}
-
-.jp-layout-menu-dropdown:hover {
-	
 }
 
 .jp-layout-menu-dropdown:nth-last-child(4):hover>menu.jp-layout-submenu-dropdown
@@ -436,9 +415,6 @@ body {
 	text-decoration: underline;
 }
 
-#jp-content-container {
-	padding-top: 20px;
-}
 
 #resultList .jp-layout-hidden-Button, #artList .jp-layout-hidden-Button {
 	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
@@ -512,26 +488,6 @@ body {
 	margin: 0 2px 0 4px;
 }
 
-.jp-layout-marginLR {
-	margin-left: 29px;
-	margin-right: 29px;
-}
-
-#jp-footer-menu {
-	
-}
-
-.jp-layout-menubar {
-	border-top: 1px solid #9A9899;
-}
-
-#jp-delete-objects {
-	margin: 0;
-}
-
-#jp-delete-objects a:hover {
-	text-decoration: underline;
-}
 
 .jp-layout-message-background {
 	background-color: black;
@@ -1371,13 +1327,13 @@ p.jp-layout-metadata-list {
 	margin-bottom: 0;
 } 
 
-.jp-layout-mainHeader-LiPaPushRight{
-	padding-right: 10px !important;
+.jp-layout-mainHeader-LiPaPushleft{
+	padding-left: 7px !important;
 }
 
-.jp-layout-mainHeader-SeperatorLeft{
-	border-left: 2px solid #000; 
-	padding-left: 10px !important; 
+.jp-layout-mainHeader-SeperatorRight{
+	border-right: 2px solid #000; 
+	padding-right: 13px !important; 
 }
 
 .jp-navigation-topHeader-UlRightWraper{

@@ -143,12 +143,12 @@
           <div class="row">
             <div class="col-md-6 pull-left">
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
-                <li class="jp-layout-mainHeader-LiPaPushRight">
+                <li class="jp-layout-mainHeader-SeperatorRight">
                   <a href="{$JP.Site.Parent.url}" target="_blank">
                     <xsl:value-of select="$JP.Site.Parent.label" />
                   </a>
                 </li>
-                <li class="jp-layout-mainHeader-SeperatorLeft">
+                <li class="jp-layout-mainHeader-LiPaPushleft">
                   <a href="{$WebApplicationBaseURL}content/below/index.xml" target="_self">
                     <xsl:value-of select="$JP.Site.label" />
                   </a>

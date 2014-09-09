@@ -8,7 +8,7 @@
     <div class="col-md-11 pull-left">
       <ul class="list-inline jp-navigation-topHeader-UlRightWraper">
         <xsl:if test="not($isGuest)">
-          <li class="userName">
+          <li class="userName jp-layout-mainHeader-SeperatorRight">
             <xsl:value-of select="layoutTools:getUserName()" />
           </li>
         </xsl:if>
