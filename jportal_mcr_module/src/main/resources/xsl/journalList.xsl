@@ -16,7 +16,9 @@
           <div class="atoz">
             <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
             <ul id="tabNav" class="tab-nav" />
-            <input id="atozFilter" class="filter" type="text" placeholder="Filter" />
+            <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" onkeyup="jp.az.showSearchDIcon();"/>
+            <span id="glyphRemove" class="glyphicon glyphicon-remove" onclick="jp.az.deleteSearchInput();"></span>
+
           </div>
           <div id="resultList" class="tab-panel"></div>
         </div>

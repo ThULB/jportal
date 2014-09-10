@@ -13,7 +13,7 @@ jp.az = {
 		return filter != "" ? "&fq=maintitle_sort:*" + filter + "*" : "";
 	},
 
-	getTabs: function(/*function*/ onSuccess) {
+	getTabs: function(/* function */ onSuccess) {
 		$.getJSON(jp.az.getSearchURL() + '&fl=maintitle' + jp.az.getFilterQuery(), function(searchResult) {
 			var response = searchResult.response;
 			var tabs = [];
@@ -31,7 +31,7 @@ jp.az = {
 		});
 	},
 
-	getJournals: function(/*string*/ tabLetter, /*function*/ onSuccess) {
+	getJournals: function(/* string */ tabLetter, /* function */ onSuccess) {
 	    var qry = '';
 	    if (tabLetter == '#') {
 	    	qry = '-maintitle_sort:[a TO z] -maintitle_sort:z*';
@@ -81,12 +81,12 @@ jp.az = {
 	printFilter: function() {
 		var filter = $("#atozFilter");
 		filter.on("change", function() {
-			jp.az.updateTabs();
+			jp.az.updateTabs(); 
 			jp.az.updateJournals();
 		});
 	},
 
-	setTab: function(/*string*/ tab) {
+	setTab: function(/* string */ tab) {
 		$(location).attr('hash', tab);
 		$("#tabNav > li").removeClass("selected-tab");
 		$("#tabNav > li:contains('" + tab + "')").addClass("selected-tab");
@@ -173,6 +173,19 @@ jp.az = {
 	    	}
 	    	node.append(pusblisherStr + "</div>");
 		}
+	},
+	
+	showSearchDIcon: function(){
+	    if($('#atozFilter').val() == '') 
+	        $('#glyphRemove').css("visibility", 'hidden');
+	    else
+	        $('#glyphRemove').css("visibility", 'visible'); 
+	},
+		  
+	deleteSearchInput: function(){
+	  $('#atozFilter').val('');
+	  $('#glyphRemove').css("visibility", 'hidden');
 	}
 
 }
+

@@ -76,11 +76,23 @@
 .journalList .atoz .filter {
 	border: 1px solid #999;
 	font-size: 0.8rem;
-	padding: 3px;
+	padding: 3px 19px 3px 3px;
 	float: right;
 	width: 125px;
+	height: 24px; 
+	margin-top: -2px;
 }
 
 .journalList .ui-msg {
 	font-style: italic;
+}
+
+#glyphRemove {
+	width: 16px; 
+	height: 20px; 
+	left: 14.8em; 
+	padding-top: 3px; 
+	cursor: pointer; 
+	visibility: hidden;
+	color: #666;
 }
