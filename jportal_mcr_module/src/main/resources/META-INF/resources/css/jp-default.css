@@ -116,38 +116,42 @@ body {
 .jp-layout-index-objectEditing {
 	margin-bottom: 30px;
 }
-.jp-layout-index-latestArticles ul {
+.jp-layout-index-latestArticles{
+	margin: 0 0 10px 0;
+}
+.jp-layout-index-latestArticles h1{
+	margin-top: 0;
+}
+.jp-layout-index-latestArticles div {
     height: 130px;
-    padding: 0;
-    white-space: nowrap;
+    margin: 0;
 }
-.jp-layout-index-latestArticles ul > li {
-    display: inline-block;
-    height: 100%;
-    text-align: left;
-    vertical-align: bottom;
-    white-space: normal;
-    width: 33.3%;
-    border-right: 1px solid #999898;
+.jp-layout-index-latestArticles div > div {	
+	border-right: 1px solid #999898;
 }
-.jp-layout-index-latestArticles ul > li:last-child {
+.jp-layout-index-latestArticles div > div:last-child {
 	border-right: none;
 }
-.jp-layout-index-latestArticles ul > li:first-child .wrapper {
-	margin: 0 20px 0 0;
+.jp-layout-index-latestArticles div > div:first-child  {
+	padding: 0 20px 0 0;
 }
-.jp-layout-index-latestArticles ul > li:not(:first-child) .wrapper {
-	margin: 0 20px;
+.jp-layout-index-latestArticles div > div:not(:first-child)  {
+	padding: 0 20px;
 }
-.jp-layout-index-latestArticles ul > li .wrapper .title {
-    display: list-item;
-    list-style-position: inside;
-    list-style-type: none;
-    margin: 0 0 20px;
+.jp-layout-index-latestArticles div > div > div:first-child{
+	border-right: none;
+	padding: 0;
+	height: 95px; 
+}
+.jp-layout-index-latestArticles div > div > div .title {
     font-style: italic;
     min-height: 80px;
 }
-
+.jp-layout-index-latestArticles div > div .journal{
+	padding: 0;
+	height: 35px;
+	overflow: hidden; 
+}
 .jp-layout-footer {
 	text-align: center;
 	margin-top: 15px;

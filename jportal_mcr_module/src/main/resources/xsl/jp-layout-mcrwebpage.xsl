@@ -10,9 +10,9 @@
 
     <xsl:variable name="searchTerm" select="concat('objectType:', $objectType)" />
     <xsl:variable name="queryURI" select="concat('solr:q=',$searchTerm,'&amp;sort=',$sortField, '%20desc&amp;rows=',$maxResults)" />
-    <ul>
+    <div class="row">
       <xsl:apply-templates mode="jp.layout.printLatestArticles" select="document($queryURI)/response/result/doc" />
-    </ul>
+    </div>
   </xsl:template>
 
   <xsl:template name="jp.layout.printObjectEditing">
@@ -34,22 +34,27 @@
   </xsl:template>
 
   <xsl:template mode="jp.layout.printLatestArticles" match="doc">
-    <li>
-      <div class="wrapper">
+    <div class="col-md-4">
+      <div>
         <a class="title" href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
           <xsl:call-template name="shortenString">
             <xsl:with-param name="string" select="str[@name='maintitle']" />
-            <xsl:with-param name="length" select="250" />
+            <xsl:with-param name="length" select="200" />
           </xsl:call-template>
         </a>
+        </div>
         <div class="journal">
           Erschienen in
           <a href="{$WebApplicationBaseURL}receive/{str[@name='journalID']}">
-            <xsl:value-of select="str[@name='journalTitle']" />
+              <!-- <xsl:value-of select="str[@name='journalTitle']" />  -->
+           <xsl:call-template name="shortenString">
+            <xsl:with-param name="string" select="str[@name='journalTitle']" />
+            <xsl:with-param name="length" select="60" />
+          </xsl:call-template> 
+            
           </a>
         </div>
-      </div>
-    </li>
+    </div>
   </xsl:template>
   
 </xsl:stylesheet>
