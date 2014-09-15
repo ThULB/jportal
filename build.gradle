@@ -34,6 +34,7 @@ allprojects {
         compile "org.mycore:mycore-classeditor:$mcrVersion"
         compile "org.mycore:mycore-mets:$mcrVersion"
         compile "org.mycore:mycore-oai:$mcrVersion"
+//        compile "org.mycore:mycore-handle:$mcrVersion"
         compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
         compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
         compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
