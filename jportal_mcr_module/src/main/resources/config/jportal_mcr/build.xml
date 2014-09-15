@@ -7,7 +7,7 @@
 	<property file="${module.directory}/build.properties" />
 	<property name="module.jar" location="${build.lib}/${module.jar.name}" />
 
-	<target name="create.default-rules" description="loads default acl rules for archive application">
+	<target name="create.default-rules" description="loads default acl rules for jportal application">
 		<echo>Default rules</echo>
 		<antcall target="invoke.cli">
 			<param name="cli.directory" value="${module.directory}/acl" />
