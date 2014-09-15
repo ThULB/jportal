@@ -1,4 +1,8 @@
 $(document).ready(function(){
+	var searchConf
+	$.getJSON("/rsc/moveObj/conf", function(conf){
+		searchConf = conf;
+	});
 	var qpara = [], hash;
 	readQueryParameter();
 	var objID =  qpara["objId"];
@@ -116,11 +120,11 @@ $(document).ready(function(){
 	}
 	
 	function getChildren(id, start){
-		$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + id + "&start=" + start + "&rows=10&wt=json&sort=maintitle%20asc&wt=json", function(search){
+		$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + id + "&start=" + start + "&rows=10&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search){
 			if(search.response.numFound > 0){
 				buildTree(search.response.docs);
 				buildPaginator(id,search.response,"#mom_childlist_paginator");
-				jp.subselect.init(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
+				hoverPopUp(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
 			}
 		});
 	}
@@ -130,10 +134,10 @@ $(document).ready(function(){
 		$("#mom_resultlist_nothing").addClass("hidden");
 		if (id == "") id = "*";
 		if ($("#mom_radio_search_filter1").is(':checked')){
-			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID +"&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
+			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID +"&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort="+searchConf.sort+"+asc&wt=json&indent=true";
 		}
 		else{
-			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
+			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort="+searchConf.sort+"+asc&wt=json&indent=true";
 		}
 		
 		$.getJSON(url, function(search){
@@ -144,7 +148,7 @@ $(document).ready(function(){
 					addSearchResult(results[result]);
 				}
 				buildPaginator(id,search.response,"#mom_movelist_paginator");
-				jp.subselect.init(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
+				hoverPopUp(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
 			}
 			else{
 				$("#mom_resultlist").addClass("hidden");
@@ -263,6 +267,27 @@ $(document).ready(function(){
 		}
 	}
 	
+	function hoverPopUp(/*String*/ hoverSelector, /*String*/ previewSelector) {
+		var div = $(previewSelector);
+		$(hoverSelector).hover(function() {
+			var mcrid = $(this).attr("data-jp-mcrid");
+			var pos = $(this).position();
+			div.css("top", pos.top + 30);
+			div.css("left", pos.left - 8);
+			jp.subselect.get(mcrid, function(html) {
+				div.html(html);
+			});
+			div.removeClass("hidden");
+			div.stop().animate({opacity: 1}, 500);
+		},
+		function () {
+			div.stop().animate({opacity: 0}, 500, function() {
+				div.css("opacity", "0");
+				div.addClass("hidden");
+			});
+		});
+	}
+	
 	function readQueryParameter() {
 		var q = document.URL.split(/\?(.+)?/)[1];
 		if(q != undefined){
@@ -276,9 +301,9 @@ $(document).ready(function(){
 	}
 	function selectAll() {
 		if($("#mom_checkbox_childlist_all").is(":checked")){
-			$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&wt=json&sort=maintitle%20asc&wt=json", function(search){
+			$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search){
 				if(search.response.numFound > 0){
-					$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&rows=" + search.response.numFound + "&wt=json&sort=maintitle%20asc&wt=json", function(search2){
+					$.getJSON("/servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&rows=" + search.response.numFound + "&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search2){
 						if(search2.response.numFound > 0){
 							var childs = search2.response.docs;
 							for (child in childs){

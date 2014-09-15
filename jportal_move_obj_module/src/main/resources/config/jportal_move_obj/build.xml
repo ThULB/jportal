@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jportal_mcr" xmlns:mcr="antlib:org.mycore.buildtools">
+	<import file="${basedir}/common-modules.xml" />
+	<import file="${basedir}/build.xml" />
+
+	<target name="config">
+		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="de.uni_jena.thulb.mcr.resources" />
+	</target>
+
+	<target name="create.default-rules" description="loads default acl rules for move object module">
+		<echo>Move Object Module default rules</echo>
+		<antcall target="invoke.cli">
+			<param name="cli.directory" value="${module.directory}/acl" />
+			<param name="cli.command" value="process defaultrules-commands" />
+		</antcall>
+	</target>
+</project>

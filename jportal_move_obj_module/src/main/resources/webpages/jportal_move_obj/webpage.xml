@@ -2,12 +2,12 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <body>
-    <link href="/rsc/moveObj/gui/css/webpage.css" rel="stylesheet" media="screen" />
-    <script src="/rsc/moveObj/gui/js/webpage.js"></script>
-    <script type="text/javascript" src="/js/jp-subselect.js" />
   </body>
   <section xml:lang="all" title="Move Object">
     <div id="jportal_move_obj_module" url="">
+    <link href="/rsc/moveObj/gui/css/webpage.css" rel="stylesheet" media="screen" />
+    <script src="/rsc/moveObj/gui/js/webpage.js"></script>
+    <script type="text/javascript" src="/js/jp-subselect.js" />
       <div class="row">
         <div class="col-md-5">
           <div class="mom_panel panel panel-primary">

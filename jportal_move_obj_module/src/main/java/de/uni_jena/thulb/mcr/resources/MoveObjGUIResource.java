@@ -1,4 +1,4 @@
-package fsu.jportal.resources;
+package de.uni_jena.thulb.mcr.resources;
 
 import java.io.InputStream;
 

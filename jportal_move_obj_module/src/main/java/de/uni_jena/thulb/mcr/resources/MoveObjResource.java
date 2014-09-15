@@ -1,4 +1,4 @@
-package fsu.jportal.resources;
+package de.uni_jena.thulb.mcr.resources;
 
 import java.io.InputStream;
 
@@ -15,7 +15,6 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -25,12 +24,17 @@ import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.cli.MCRObjectCommands;
+import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
+
 @Path("moveObj")
+@MCRRestrictedAccess(MoveObjectAccess.class)
 public class MoveObjResource {
     static Logger LOGGER = Logger.getLogger(MoveObjResource.class);
 
@@ -43,10 +47,7 @@ public class MoveObjResource {
     @GET
     @Path("start")
     public byte[] start() throws Exception {
-        if (!MCRAccessManager.getAccessImpl().checkPermission("create-jpjournal")) {
-            return transform("/META-INF/resources/xml/404.xml");
-        }
-        return transform("/META-INF/resources/xml/webpage.xml");
+        return transform("/webpages/jportal_move_obj/webpage.xml");
     }
 
     protected byte[] transform(String xmlFile) throws Exception {
@@ -91,5 +92,14 @@ public class MoveObjResource {
 
         }
         return Response.ok().build();
+    }
+    
+    @GET
+    @Path("conf")
+    public Response conf() {
+        JsonObject confObj = new JsonObject();
+        confObj.addProperty("sort", "maintitle");
+        confObj.addProperty("parentTypes", "[jpvolume,jpjournal]");
+        return Response.ok(confObj.toString()).build();
     }
 }
