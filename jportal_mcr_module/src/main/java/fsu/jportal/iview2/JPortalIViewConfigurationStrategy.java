@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
-import org.mycore.frontend.servlets.MCRServlet;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.iview2.frontend.configuration.MCRIViewClientConfiguration;
 import org.mycore.iview2.frontend.configuration.MCRIViewClientDefaultConfigurationStrategy;
 
@@ -14,7 +14,7 @@ public class JPortalIViewConfigurationStrategy extends MCRIViewClientDefaultConf
     public MCRIViewClientConfiguration get(HttpServletRequest request) {
         MCRIViewClientConfiguration config = super.get(request);
 
-        String baseURL = MCRServlet.getBaseURL();
+        String baseURL = MCRFrontendUtil.getBaseURL();
         // css
         config.addCSS(baseURL + "css/jp-iview.css");
 
