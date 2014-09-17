@@ -17,6 +17,7 @@
   <xsl:key name="phones" match="phone[@inherited='0']" use="@type" />
   <xsl:key name="identifiers" match="identifier[@inherited='0']" use="@type" />
   <xsl:key name="abstracts" match="abstract[@inherited='0']" use="@type" />
+  <xsl:key name="people" match="person[@inherited='0']" use="@type" />
 
   <xsl:variable name="simpleType"
     select="'MCRMetaLangText MCRMetaClassification MCRMetaXML MCRMetaInstitutionName MCRMetaISO8601Date MCRMetaAddress MCRMetaLink'" />
