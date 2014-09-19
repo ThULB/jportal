@@ -11,6 +11,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -43,6 +44,9 @@ public class MoveObjResource {
 
     @Context
     HttpServletResponse response;
+    
+    @Context
+    UriInfo uri;
 
     @GET
     @Path("start")
@@ -100,6 +104,7 @@ public class MoveObjResource {
         JsonObject confObj = new JsonObject();
         confObj.addProperty("sort", "maintitle");
         confObj.addProperty("parentTypes", "[jpvolume,jpjournal]");
+        confObj.addProperty("url", uri.getBaseUriBuilder().replacePath("/rsc/render/object/").build().toString());
         return Response.ok(confObj.toString()).build();
     }
 }

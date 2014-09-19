@@ -3,6 +3,53 @@ $(document).ready(function(){
 	$.getJSON("/rsc/moveObj/conf", function(conf){
 		searchConf = conf;
 	});
+	
+	var subselect = {};
+
+	subselect = {
+
+		cache: [],
+
+		init: function(/*String*/ hoverSelector, /*String*/ previewSelector) {
+			var div = $(previewSelector);
+			$(hoverSelector).hover(function() {
+				var mcrid = $(this).attr("data-jp-mcrid");
+				var pos = $(this).position();
+				div.css("top", pos.top + 30);
+				div.css("left", pos.left - 8);
+				
+				if(searchConf.url){
+					subselect.get(mcrid, function(html) {
+						div.html(html);
+					});
+					div.removeClass("hidden");
+					div.stop().animate({opacity: 1}, 500);
+				}
+			},
+			function () {
+				div.stop().animate({opacity: 0}, 500, function() {
+					div.css("opacity", "0");
+					div.addClass("hidden");
+				});
+			});
+		},
+
+		get: function(/*String*/ mcrid, /*function*/ onSuccess) {
+			if(subselect.cache[mcrid]) {
+				onSuccess(subselect.cache[mcrid]);
+				return;
+			}
+			$.ajax({
+				url: searchConf.url + mcrid,
+				dataType: "html"
+			}).done(function(html) {
+				subselect.cache[mcrid] = html;
+				onSuccess(html);
+			});
+		}
+
+	};
+	
 	var qpara = [], hash;
 	readQueryParameter();
 	var objID =  qpara["objId"];
@@ -124,7 +171,7 @@ $(document).ready(function(){
 			if(search.response.numFound > 0){
 				buildTree(search.response.docs);
 				buildPaginator(id,search.response,"#mom_childlist_paginator");
-				hoverPopUp(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
+				subselect.init(".mom_childlist_entry", "#mom_childlist_objectPreviewContainer");
 			}
 		});
 	}
@@ -148,7 +195,7 @@ $(document).ready(function(){
 					addSearchResult(results[result]);
 				}
 				buildPaginator(id,search.response,"#mom_movelist_paginator");
-				hoverPopUp(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
+				subselect.init(".mom_resultlist_entry", "#mom_resultlist_objectPreviewContainer");
 			}
 			else{
 				$("#mom_resultlist").addClass("hidden");
@@ -265,27 +312,6 @@ $(document).ready(function(){
 			if (~pos) $(li).find(".mom_checkbox_childlist").prop('checked', true);
 			$("#mom_childlist").append(li);
 		}
-	}
-	
-	function hoverPopUp(/*String*/ hoverSelector, /*String*/ previewSelector) {
-		var div = $(previewSelector);
-		$(hoverSelector).hover(function() {
-			var mcrid = $(this).attr("data-jp-mcrid");
-			var pos = $(this).position();
-			div.css("top", pos.top + 30);
-			div.css("left", pos.left - 8);
-			jp.subselect.get(mcrid, function(html) {
-				div.html(html);
-			});
-			div.removeClass("hidden");
-			div.stop().animate({opacity: 1}, 500);
-		},
-		function () {
-			div.stop().animate({opacity: 0}, 500, function() {
-				div.css("opacity", "0");
-				div.addClass("hidden");
-			});
-		});
 	}
 	
 	function readQueryParameter() {
