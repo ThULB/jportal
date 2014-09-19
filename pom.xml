@@ -29,6 +29,7 @@
     <module>jportal_ext_web_lib</module>
     <module>jportal_sample_data</module>
     <module>jportal_iview2_plugin</module>
+  	<module>jportal_derivate_browser</module>
   </modules>
 
   <profiles>

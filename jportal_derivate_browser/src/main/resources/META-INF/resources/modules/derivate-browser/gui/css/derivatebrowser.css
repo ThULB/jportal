@@ -1,0 +1,373 @@
+html,body{
+	width: 100%;
+	height: 100%;
+}
+
+#filebrowser{
+	padding: 15px;
+	width: 100%;
+	height: 100%;
+}
+
+.hide-folder {
+    display: none;
+}
+
+ul{
+	list-style: none outside none;
+}
+
+.button{
+	cursor: pointer;
+	padding-right: 5px;
+}
+
+.icon{
+	padding-right: 5px;
+	cursor: default;
+}
+
+.no-button{
+	min-width: 19px;
+	padding-right: 5px;
+	display: inline-block;
+}
+
+.folder-name{
+	display: inline;
+	position: relative;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.folder{
+	white-space: nowrap;
+}
+
+/* .file{ */
+/* 	border: 1px solid #000; */
+/* 	width: 110px; */
+/* 	height: 150px; */
+/* 	display: inline-block; */
+/* 	float: left; */
+/* 	margin-right: 10px; */
+/* 	margin-bottom: 10px; */
+/* 	text-align: center; */
+/* 	position: relative; */
+/* 	background-color: white; */
+/* } */
+
+/* .file-image{ */
+/* 	position: absolute; */
+/* 	margin: auto; */
+/* 	top: 0; */
+/* 	left: 0; */
+/* 	bottom: 0; */
+/* 	right: 0; */
+/* 	width: auto; */
+/* 	height: auto; */
+/* 	max-width: 100px; */
+/* 	max-height: 100px; */
+/* } */
+
+/* .file-image-cotainer{ */
+/* 	display: block; */
+/* 	width: 100px; */
+/* 	height: 100px; */
+/* 	position: relative; */
+/* 	margin: auto; */
+/* } */
+
+/* .file-title{ */
+/* 	width: 100px; */
+/* 	padding-right: 5px; */
+/* 	padding-left: 5px; */
+/* 	position: absolute; */
+/* 	bottom: 0; */
+/* 	overflow: hidden; */
+/* 	white-space: nowrap; */
+/* 	text-overflow: ellipsis; */
+
+/* } */
+
+#file-view{
+	display: inline-block;
+	width: 70%;
+	height: 100%;
+	overflow: auto;
+	margin-bottom: 0px;
+}
+
+#files{
+	height: 100%;
+	position: relative;
+}
+
+#folder-list-div{
+	margin-bottom: 0px;
+	display: inline-block;
+	width: 30%;
+	height: 100%;
+	float: left;
+	position: relative;
+}
+
+.aktiv:BEFORE {
+    background-color: #3276B1;
+    content: "";
+    height: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+}
+
+.aktiv{
+	position: relative;
+}
+
+li.aktiv > div.folder-name{
+	color: #FFFFFF;
+}
+
+li.aktiv > span{
+	color: #FFFFFF;
+}
+
+#folder-list-ul{
+	position: absolute;
+	top: 60px;
+	bottom: 0px;
+	right: 5px;
+	left: 0px;
+	overflow: auto;
+	margin-bottom: 0px;
+}
+
+ul{
+	padding-left: 15px;
+}
+
+#bottom-buttons{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-left: 20px;
+	padding-top: 5px;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+#bottom-buttons > div{
+	cursor: pointer;
+}
+
+#bottom-buttons > div > span{
+	padding-right: 5px;
+}
+
+.folder-name{
+	cursor: default;
+}
+
+/* .file-file{ */
+/* 	font-size: 50px; */
+/* 	padding-top: 20px; */
+/* 	text-align: center; */
+/* } */
+/* #drag-and-drop-info{ */
+/* 	background-color: #3276B1; */
+/*     color: #FFFFFF; */
+/*     height: 70px; */
+/*     width: 100%; */
+/*     text-align: center; */
+/*     float: left; */
+/*     margin-bottom: 10px; */
+/*     padding-top: 22px; */
+/*     font-size: larger; */
+/*     position: relative; */
+/*     z-index: 2; */
+/* } */
+
+/* #hide-drag-drop-info { */
+/*     cursor: pointer; */
+/*     position: absolute; */
+/*     right: 5px; */
+/*     top: 5px; */
+/* } */
+
+/* #noFiles { */
+/*     bottom: 0; */
+/*     font-weight: bold; */
+/*     height: 20px; */
+/*     left: 0; */
+/*     margin: auto; */
+/*     opacity: 0.5; */
+/*     position: absolute; */
+/*     right: 0; */
+/*     text-align: center; */
+/*     top: 0; */
+/* } */
+
+.browser-table-entry td:nth-child(1) {
+	width: 30px; 
+}
+
+.browser-table-entry td:nth-child(2) {
+	width: 90px; 
+}
+
+.browser-table-entry{
+	height: 38px;
+}
+
+.browser-table-entry td:nth-child(3) {
+	width: 350px; 
+}
+
+span.btn{
+	padding-left: 3px;
+	padding-right: 3px;
+	cursor: pointer;
+	display: inline;	
+}
+
+.popover-img{
+	width: 50%;
+}
+
+.checked{
+	background-color: #3276B1;
+}
+
+.table-hover > tbody > tr:hover > td, .table-hover > tbody > tr:hover > td{
+/* 	background-color: #65A9E4; */
+	background-color: #9A9898;
+}
+
+.invisable{
+	opacity: 0;
+}
+
+.popover {
+    max-width: 552px;
+}
+
+.popover-content dl {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.panel-body dt{
+	float: left;
+	text-align: right;
+	width: 100px;
+}
+
+.panel-body dd{
+	margin-left: 110px;
+}
+
+.panel-body dl{
+	margin-bottom: 0px;
+	display: inline-block;
+}
+
+#derivat-panel-startfile{
+	display: inline-block;
+	float: right;
+}
+
+#collapse-btn-div{
+	text-align: center;
+}
+
+#panel-img{
+	max-width: 400px;
+	max-height: 300px;
+	display: block;
+	border: 1px solid;
+	
+}
+
+#derivat-panel-startfile figure{
+	position: relative;
+	height: auto;
+}
+
+.panel-img-cap{
+	position: absolute;
+	bottom: 0;
+	background-color: rgba(77,77,77,0.8);
+	width: 100%;
+	text-align: center;
+}
+
+#derivat-panel-startfile-label{
+	color: #FFFFFF
+}
+
+#derivat-panel-startfile-btn-div{
+	background-color: rgba(77, 77, 77, 0.8);
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+#derivat-panel-startfile-btn{
+    position: absolute;
+    top: 30%;
+    width: 100%;
+    text-align: center;
+}
+
+.startfile-btn{
+	color: #FFFFFF;
+    font-size: 30px;
+    margin-right: 10px;
+}
+
+.startfile-btn:hover{
+	color: #FFFFFF;
+}
+
+.startfile{
+	background-color: #3276B1;
+}
+
+.target-folder-selected:BEFORE {
+    background-color: #3276B1;
+    content: "";
+    height: 20px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+}
+
+.target-folder-selected{
+	position: relative;
+}
+
+li.target-folder-selected > div.folder-name{
+	color: #FFFFFF;
+}
+
+li.target-folder-selected > span{
+	color: #FFFFFF;
+}
+
+span.popover-file{
+	cursor: default;
+}
+
+span.btn-folder{
+	cursor: default;
+}
+
+li.derivate-browser-breadcrumb-entry{
+	cursor: pointer;
+}
