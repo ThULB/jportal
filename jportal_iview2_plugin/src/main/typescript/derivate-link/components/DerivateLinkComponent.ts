@@ -1,7 +1,7 @@
 
-module mycore.iview.imageviewer.components {
+module mycore.viewer.components {
 
-    export interface DerivateLinkComponentSettings extends MyCoReImageViewerSettings {
+    export interface DerivateLinkComponentSettings extends MyCoReViewerSettings {
     }
 
     export class DerivateLinkComponent extends IviewComponent {
@@ -15,7 +15,7 @@ module mycore.iview.imageviewer.components {
             super();
         }
 
-        public handle(e: mycore.iview.widgets.events.IviewEvent): void {
+        public handle(e: mycore.viewer.widgets.events.IviewEvent): void {
             // add to toolbar
             if (e.type == events.ProvideToolbarModelEvent.TYPE) {
                 this._toolbarModel = (<events.ProvideToolbarModelEvent>e).model;
@@ -32,8 +32,8 @@ module mycore.iview.imageviewer.components {
                 }
             }
             // button events
-            if (e.type == mycore.iview.widgets.toolbar.events.ButtonPressedEvent.TYPE) {
-                var buttonPressedEvent = <mycore.iview.widgets.toolbar.events.ButtonPressedEvent> e;
+            if (e.type == mycore.viewer.widgets.toolbar.events.ButtonPressedEvent.TYPE) {
+                var buttonPressedEvent = <mycore.viewer.widgets.toolbar.events.ButtonPressedEvent> e;
                 if (buttonPressedEvent.button.id == "DerivateLinkButton") {
                     this._linkImage();
                 }
@@ -52,7 +52,7 @@ module mycore.iview.imageviewer.components {
             var handleEvents: Array<string> = new Array<string>();
             handleEvents.push(events.ProvideToolbarModelEvent.TYPE);
             handleEvents.push(events.LanguageModelLoadedEvent.TYPE);
-            handleEvents.push(mycore.iview.widgets.toolbar.events.ButtonPressedEvent.TYPE);
+            handleEvents.push(mycore.viewer.widgets.toolbar.events.ButtonPressedEvent.TYPE);
             handleEvents.push(events.ImageChangedEvent.TYPE);
             return handleEvents;
         }
@@ -76,4 +76,4 @@ module mycore.iview.imageviewer.components {
 
 }
 
-addIviewComponent(mycore.iview.imageviewer.components.DerivateLinkComponent);
+addIviewComponent(mycore.viewer.components.DerivateLinkComponent);
