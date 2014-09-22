@@ -180,11 +180,20 @@ $(document).ready(function(){
 		$("#mom_resultlist").removeClass("hidden");
 		$("#mom_resultlist_nothing").addClass("hidden");
 		if (id == "") id = "*";
+		
+		var typeQuery = "&fq=";
+		for (i = 0; i < searchConf.parentTypes.length; i++) {
+		    typeQuery += searchConf.parentField + "%3A" + searchConf.parentTypes[i];
+		    if(i>0){
+		    	typeQuery += "+" + typeQuery;
+		    }
+		}
+		
 		if ($("#mom_radio_search_filter1").is(':checked')){
-			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID +"&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort="+searchConf.sort+"+asc&wt=json&indent=true";
+			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID + typeQuery + "&sort="+searchConf.sort+"+asc&wt=json&indent=true";
 		}
 		else{
-			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=objectType%3Ajpvolume+objectType%3Ajpjournal&sort="+searchConf.sort+"+asc&wt=json&indent=true";
+			var url = "/servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10" + typeQuery + "&sort="+searchConf.sort+"+asc&wt=json&indent=true";
 		}
 		
 		$.getJSON(url, function(search){
