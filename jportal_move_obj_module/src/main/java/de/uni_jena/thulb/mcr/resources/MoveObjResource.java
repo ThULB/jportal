@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRContentTransformer;
@@ -102,9 +103,12 @@ public class MoveObjResource {
     @Path("conf")
     public Response conf() {
         JsonObject confObj = new JsonObject();
-        confObj.addProperty("sort", "maintitle");
-        confObj.addProperty("parentTypes", "[jpvolume,jpjournal]");
-        confObj.addProperty("url", uri.getBaseUriBuilder().replacePath("/rsc/render/object/").build().toString());
+        String sort = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.sort");
+        String parentTypes = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.parentTypes");
+        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
+        confObj.addProperty("sort", sort);
+        confObj.addProperty("parentTypes", parentTypes);
+        confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
         return Response.ok(confObj.toString()).build();
     }
 }
