@@ -5,14 +5,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.mycore.iview2.frontend.configuration.MCRIViewClientConfiguration;
-import org.mycore.iview2.frontend.configuration.MCRIViewClientDefaultConfigurationStrategy;
+import org.mycore.iview2.frontend.configuration.MCRViewerConfiguration;
+import org.mycore.iview2.frontend.configuration.MCRViewerDefaultConfigurationStrategy;
 
-public class JPortalIViewConfigurationStrategy extends MCRIViewClientDefaultConfigurationStrategy {
+public class JPortalIViewConfigurationStrategy extends MCRViewerDefaultConfigurationStrategy {
 
     @Override
-    public MCRIViewClientConfiguration get(HttpServletRequest request) {
-        MCRIViewClientConfiguration config = super.get(request);
+    public MCRViewerConfiguration get(HttpServletRequest request) {
+        MCRViewerConfiguration config = super.get(request);
 
         String baseURL = MCRFrontendUtil.getBaseURL();
         // css
