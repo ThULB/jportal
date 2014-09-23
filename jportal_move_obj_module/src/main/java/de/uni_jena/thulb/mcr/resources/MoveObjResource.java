@@ -109,6 +109,7 @@ public class MoveObjResource {
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentTypes", parentTypes);
         confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
+        confObj.addProperty("baseUrl", uri.getBaseUriBuilder().build().toString());
         return Response.ok(confObj.toString()).build();
     }
 }
