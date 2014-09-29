@@ -10,6 +10,7 @@
 	text-decoration: underline;
     display: inline-block;
     margin: 5px 0;
+    font-size: 1.1rem;
 }
 .keywords > ul {
     padding-left: 0px !important;
