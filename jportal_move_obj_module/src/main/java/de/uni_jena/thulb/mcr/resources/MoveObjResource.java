@@ -1,6 +1,7 @@
 package de.uni_jena.thulb.mcr.resources;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import javax.ws.rs.core.UriInfo;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
+import org.mycore.common.MCRConstants;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
@@ -25,13 +27,16 @@ import org.mycore.common.content.transformer.MCRParameterizedTransformer;
 import org.mycore.common.xml.MCRLayoutService;
 import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+import org.mycore.frontend.servlets.MCRServlet;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import de.uni_jena.thulb.mcr.acl.MoveObjectAccess;
 
@@ -100,16 +105,25 @@ public class MoveObjResource {
     }
     
     @GET
-    @Path("conf")
-    public Response conf() {
+    @Path("confJS")
+    public Response confJS() {
         JsonObject confObj = new JsonObject();
         String sort = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.sort");
-        String parentTypes = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.parentTypes");
+        String parentField = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.parentField");
+        List<String> parentTypes = MCRConfiguration.instance().getStrings("MCR.Module.Move.Obj.parentTypes");
+        JsonArray parentTypeJson = new JsonArray();
+        for (String parentType : parentTypes) {
+            parentTypeJson.add(new JsonPrimitive(parentType));
+        }
+        
         String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
+        String baseURL = MCRFrontendUtil.getBaseURL();
         confObj.addProperty("sort", sort);
-        confObj.addProperty("parentTypes", parentTypes);
+        confObj.addProperty("parentField", parentField);
+        confObj.add("parentTypes", parentTypeJson);
         confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
-        confObj.addProperty("baseUrl", uri.getBaseUriBuilder().build().toString());
-        return Response.ok(confObj.toString()).build();
+        confObj.addProperty("baseUrl", baseURL);
+        String jsonConf = "var jpMoveObjConf = " + confObj.toString();
+        return Response.ok(jsonConf).build();
     }
 }

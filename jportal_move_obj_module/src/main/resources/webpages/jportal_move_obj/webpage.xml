@@ -5,8 +5,9 @@
   </body>
   <section xml:lang="all" title="Move Object">
     <div id="jportal_move_obj_module" url="">
-    <link href="gui/css/webpage.css" rel="stylesheet" media="screen" />
-    <script src="gui/js/webpage.js"></script>
+    <link href="../../jportal_move_obj/css/webpage.css" rel="stylesheet" media="screen" />
+    <script src="confJS"></script>
+    <script src="../../jportal_move_obj/js/webpage.js"></script>
 <!--     <script type="text/javascript" src="/js/jp-subselect.js" /> -->
       <div class="row">
         <div class="col-md-5">

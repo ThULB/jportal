@@ -1,9 +1,5 @@
 $(document).ready(function(){
-	var searchConf
-	$.getJSON("conf", function(conf){
-		searchConf = conf;
-	});
-	
+	var solrUrl = jpMoveObjConf.baseUrl + "servlets/solr/select";
 	var subselect = {};
 
 	subselect = {
@@ -18,7 +14,7 @@ $(document).ready(function(){
 				div.css("top", pos.top + 30);
 				div.css("left", pos.left - 8);
 				
-				if(searchConf.url){
+				if(jpMoveObjConf.url){
 					subselect.get(mcrid, function(html) {
 						div.html(html);
 					});
@@ -40,7 +36,7 @@ $(document).ready(function(){
 				return;
 			}
 			$.ajax({
-				url: searchConf.url + mcrid,
+				url: jpMoveObjConf.url + mcrid,
 				dataType: "html"
 			}).done(function(html) {
 				subselect.cache[mcrid] = html;
@@ -152,7 +148,7 @@ $(document).ready(function(){
 	}
 	
 	function getObject(id) {
-		$.getJSON(searchConf.baseUrl + "servlets/solr/select?q=%2Bid%3A" + id + "&wt=json", function(search){
+		$.getJSON(solrUrl + "?q=%2Bid%3A" + id + "&wt=json", function(search){
 			if(search.response.numFound == 1){
 				var parent = search.response.docs[0];
 				if (parent.maintitle != ""){
@@ -167,7 +163,7 @@ $(document).ready(function(){
 	}
 	
 	function getChildren(id, start){
-		$.getJSON(searchConf.baseUrl + "servlets/solr/select?q=%2Bparent%3A" + id + "&start=" + start + "&rows=10&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search){
+		$.getJSON(solrUrl + "?q=%2Bparent%3A" + id + "&start=" + start + "&rows=10&wt=json&sort="+jpMoveObjConf.sort+"%20asc&wt=json", function(search){
 			if(search.response.numFound > 0){
 				buildTree(search.response.docs);
 				buildPaginator(id,search.response,"#mom_childlist_paginator");
@@ -182,18 +178,18 @@ $(document).ready(function(){
 		if (id == "") id = "*";
 		
 		var typeQuery = "&fq=";
-		for (i = 0; i < searchConf.parentTypes.length; i++) {
-		    typeQuery += searchConf.parentField + "%3A" + searchConf.parentTypes[i];
-		    if(i>0){
-		    	typeQuery += "+" + typeQuery;
-		    }
+		for (i = 0; i < jpMoveObjConf.parentTypes.length; i++) {
+			if(i>0){
+				typeQuery += "+";
+			}
+		    typeQuery += jpMoveObjConf.parentField + "%3A" + jpMoveObjConf.parentTypes[i];
 		}
 		
 		if ($("#mom_radio_search_filter1").is(':checked')){
-			var url = searchConf.baseUrl + "servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID + typeQuery + "&sort="+searchConf.sort+"+asc&wt=json&indent=true";
+			var url = solrUrl + "?q=" + id + "&start=" + start +  "&rows=10&fq=parent%3A" + objID + typeQuery + "&sort="+jpMoveObjConf.sort+"+asc&wt=json&indent=true";
 		}
 		else{
-			var url = searchConf.baseUrl + "servlets/solr/select?q=" + id + "&start=" + start +  "&rows=10" + typeQuery + "&sort="+searchConf.sort+"+asc&wt=json&indent=true";
+			var url = solrUrl + "?q=" + id + "&start=" + start +  "&rows=10" + typeQuery + "&sort="+jpMoveObjConf.sort+"+asc&wt=json&indent=true";
 		}
 		
 		$.getJSON(url, function(search){
@@ -336,9 +332,9 @@ $(document).ready(function(){
 	}
 	function selectAll() {
 		if($("#mom_checkbox_childlist_all").is(":checked")){
-			$.getJSON(searchConf.baseUrl + "servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search){
+			$.getJSON(solrUrl + "?q=%2Bparent%3A" + objID + "&start=0&wt=json&sort="+jpMoveObjConf.sort+"%20asc&wt=json", function(search){
 				if(search.response.numFound > 0){
-					$.getJSON(searchConf.baseUrl + "servlets/solr/select?q=%2Bparent%3A" + objID + "&start=0&rows=" + search.response.numFound + "&wt=json&sort="+searchConf.sort+"%20asc&wt=json", function(search2){
+					$.getJSON(solrUrl + "?q=%2Bparent%3A" + objID + "&start=0&rows=" + search.response.numFound + "&wt=json&sort="+jpMoveObjConf.sort+"%20asc&wt=json", function(search2){
 						if(search2.response.numFound > 0){
 							var childs = search2.response.docs;
 							for (child in childs){
