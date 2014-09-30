@@ -117,7 +117,7 @@ public class MoveObjResource {
         }
         
         String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
-        String baseURL = MCRFrontendUtil.getBaseURL();
+        String baseURL = MCRServlet.getBaseURL();
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentField", parentField);
         confObj.add("parentTypes", parentTypeJson);
