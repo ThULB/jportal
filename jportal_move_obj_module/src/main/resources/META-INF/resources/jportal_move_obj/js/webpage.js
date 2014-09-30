@@ -138,7 +138,7 @@ $(document).ready(function(){
 	
 	function addSearchResult(result) {
 		var li = $("<li></li>");
-		li.append('<div class="mom_text" data-objId="' + result.id +  '"><input class="mom_checkbox_result" type="checkbox"/><p data-jp-mcrid="' + result.id + '" class="mom_resultlist_entry">' + result.maintitle + '</p></div>');
+		li.append('<div class="mom_text" data-objId="' + result.id +  '"><input class="mom_checkbox_result" type="checkbox"/><p data-jp-mcrid="' + result.id + '" class="mom_resultlist_entry">' + result[jpMoveObjConf.sort] + '</p></div>');
 		if (result.objectType != "jpjournal"){
 			li.find("p").append( " (" + result.journalTitle + ")");
 		}
