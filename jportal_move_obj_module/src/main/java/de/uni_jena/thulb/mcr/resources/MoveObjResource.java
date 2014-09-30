@@ -116,12 +116,15 @@ public class MoveObjResource {
             parentTypeJson.add(new JsonPrimitive(parentType));
         }
         
-        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
         String baseURL = MCRServlet.getBaseURL();
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentField", parentField);
         confObj.add("parentTypes", parentTypeJson);
-        confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
+        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
+        if(url != null && !url.equals("")) {
+            confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
+        }
+        
         confObj.addProperty("baseUrl", baseURL);
         String jsonConf = "var jpMoveObjConf = " + confObj.toString();
         return Response.ok(jsonConf).build();
