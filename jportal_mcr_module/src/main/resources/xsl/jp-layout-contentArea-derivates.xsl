@@ -172,7 +172,7 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}rsc/iview/client/{$derivID}{mcrxml:encodeURIPath($file)}">
+    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}{mcrxml:encodeURIPath($file)}">
       <div class="jp-layout-hidden-Button"></div>
       <img src="{$WebApplicationBaseURL}servlets/MCRThumbnailServlet/{$derivID}{mcrxml:encodeURIPath($file)}?centerThumb=no" />
     </a>
