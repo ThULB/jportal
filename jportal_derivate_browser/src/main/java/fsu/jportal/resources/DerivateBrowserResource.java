@@ -17,29 +17,25 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.jdom2.Document;
 import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.transformer.MCRContentTransformer;
-import org.mycore.common.content.transformer.MCRParameterizedTransformer;
-import org.mycore.common.xml.MCRLayoutService;
-import org.mycore.common.xsl.MCRParameterCollector;
-import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
+import org.mycore.frontend.fileupload.MCRUploadHandler;
+import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
+import org.mycore.urn.services.MCRURNAdder;
+import org.mycore.urn.services.MCRURNManager;
 //import org.mycore.urn.hibernate.MCRURN;
 //import org.mycore.urn.services.MCRURNManager;
 import org.xml.sax.SAXException;
@@ -47,10 +43,11 @@ import org.xml.sax.SAXException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 
 import fsu.jportal.backend.Derivate;
 import fsu.jportal.backend.DerivateTools;
-import fsu.jportal.backend.MetaDataTools;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
@@ -229,6 +226,53 @@ public class DerivateBrowserResource {
         return Response.ok(jsonObject.toString()).build();
     }
     
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("upload")
+    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("file") FormDataContentDisposition header, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path) throws Exception{
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        MCRUploadHandler handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
+        handler.startUpload(1);
+        session.commitTransaction();
+        handler.receiveFile(path + header.getFileName(), inputStream, 0, null);
+        session.beginTransaction();
+        handler.finishUpload();
+        handler.unregister();
+        
+//        DerivatePath fileLocation = new DerivatePath(filePath);
+//        
+//        MCRFilesystemNode file = fileLocation.toFileNode();
+//        try {
+//            saveFile(inputStream,path + "/" + header.getFileName());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return Response.status(Status.CONFLICT).build();
+//        }
+        return Response.ok().build();
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("addURN")
+    public Response addURN(String data) throws Exception{
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
+        JsonArray jsonArray = jsonObject.getAsJsonArray("files");
+        String deriID = jsonObject.get("deriID").getAsString();
+        MCRURNAdder urnAdder = new MCRURNAdder();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
+            String path = jsonO.get("path").getAsString();
+            if(urnAdder.addURNToSingleFile(deriID, path)){
+                jsonO.addProperty("URN", getURNforFile(deriID, path));
+            }
+            else{
+                jsonO.addProperty("URN", "");
+            }
+        }
+        return Response.ok(jsonObject.toString()).build();
+    }
+    
     private JsonArray getFolderChildren(MCRFilesystemNode[] childs){
         JsonArray jsonArray = new JsonArray();
         for (MCRFilesystemNode child : childs){
@@ -248,6 +292,16 @@ public class DerivateBrowserResource {
             }
         }
         return jsonArray;
+    }
+    
+    private String getURNforFile(String derivate, String path) {
+        String fileName = path;
+        String pathToFile = "/";
+        if (path.contains("/")) {
+            pathToFile = path.substring(0, path.lastIndexOf("/") + 1);
+            fileName = path.substring(path.lastIndexOf("/") + 1);
+        }
+        return MCRURNManager.getURNForFile(derivate, pathToFile, fileName);
     }
     
     

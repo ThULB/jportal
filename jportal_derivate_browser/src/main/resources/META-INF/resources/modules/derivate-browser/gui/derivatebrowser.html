@@ -22,6 +22,7 @@
 		<div id="file-view" class="well" ondragover="return false">
 <!-- 			<div id="drag-and-drop-info"><span id="hide-drag-drop-info" class="glyphicon glyphicon-remove"></span></div> -->
 			<div id="files">
+				<div id="upload-overlay" class="hidden"></div>
 				<div class="panel panel-default hidden" id="derivat-panel">
 					<div id="collapseOne" class="panel-collapse collapse in">
 						<div class="panel-body">
@@ -83,7 +84,28 @@
 					</div>
 				</div>
 				<div id="journal-info" class="hidden">
+					<button id="journal-info-button-edit"type="button" class="btn btn-primary">Edit</button>
+					<div id="journal-info-text"></div>
 				</div>
+			</div>
+		</div>
+		<div id="upload-status-bar" class="hidden">
+			<div id="upload-status-bar-header">
+				<span class="glyphicon glyphicon-cloud-upload"></span>
+				<div id="upload-status-bar-header-label">Upload...</div>
+				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
+			</div>
+			<div id="upload-status-bar-body">
+				<table>
+					<tbody id="upload-status-bar-table">
+<!-- 						<tr class="upload-entry"> -->
+<!-- 						<td><img class='upload-preview-image' src="//lh6.ggpht.com/t9kbY1GAjgY-4jyTgWDiZnSNgTiFbTKYZeraqc4epFGE11lO9z-R5acrnMvq_ocxdxwEnjm6la8Cvo59ii2NhZ3ER43kQLeTEULaiGST=s660"></img></td> -->
+<!-- 						<td class="upload-preview-name">Bild bla bla</td> -->
+<!-- 						<td class="upload-preview-size">1337 GB</td> -->
+<!-- 						<td class="upload-preview-status"><div class='statusbar-progress'><div class='statusbar-progress-status'></div></div></td> -->
+<!-- 						</tr> -->
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -164,7 +186,8 @@
 					{{urn}}
 				{{/urn}}
 				{{^urn}}
-					-
+					<div class="no-urn">-</div>
+					<span class="glyphicon glyphicon-tag btn-new-urn btn invisable"></span>
 				{{/urn}}
 			</td>
 		</tr>
@@ -186,7 +209,7 @@
 					{{urn}}
 				{{/urn}}
 				{{^urn}}
-					-
+					
 				{{/urn}}
 			</td>
 		</tr>
@@ -210,6 +233,15 @@
 				</ul>
 			{{/hasChildren}}
 		</li>
+	</script>
+	
+	<script id="upload-entry-template" type="text/mustache">
+		<tr class="upload-entry">
+			<td><img class='upload-preview-image'></img></td>
+			<td class="upload-preview-name" title="{{name}}">{{name}}</td>
+			<td class="upload-preview-size" title="{{size}}">{{size}}</td>
+			<td class="upload-preview-status"><div class='statusbar-progress'><div class='statusbar-progress-status'></div></div></td>
+		</tr>
 	</script>
 
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
