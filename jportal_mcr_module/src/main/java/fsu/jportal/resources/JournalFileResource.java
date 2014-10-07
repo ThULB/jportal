@@ -1,20 +1,31 @@
 package fsu.jportal.resources;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Content;
@@ -27,22 +38,26 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRPathContent;
+import org.mycore.common.content.util.MCRServletContentHelper;
 
-@Path("journalFile")
+@Path("journalFile/{id}")
 public class JournalFileResource {
     static Logger logger = Logger.getLogger(JournalFileResource.class);
 
-    @POST
-    @Path("{id}/{filename}")
-    @Consumes(MediaType.APPLICATION_XHTML_XML)
-    public Response postAddFile(@PathParam("id") String journalID, @PathParam("filename") String filename, String fileContent) throws JDOMException, IOException {
-        String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
-        File journalFileDir = new File(journalFileFolderPath + File.separator + journalID);
-        
-        if(!journalFileDir.exists()){
-            journalFileDir.mkdirs();
-        }
+    @PathParam("id")
+    String journalID;
+    @Context ServletContext context;
+    @Context HttpServletRequest request;
+    @Context HttpServletResponse response;
 
+    private String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
+
+    @POST
+    @Path("{filename}")
+    @Consumes(MediaType.APPLICATION_XHTML_XML)
+    public Response postAddFile(@PathParam("filename") String filename, String fileContent) throws JDOMException,
+            IOException {
         String rootName = "MyCoReWebPage";
         Element root = new Element(rootName);
         Element section = new Element("section");
@@ -53,12 +68,18 @@ public class JournalFileResource {
         Document document = new Document(root);
         DocType doctype = new DocType(rootName);
         document.setDocType(doctype);
-        
+
         addStringContent(section, fileContent);
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+        try {
+            java.nio.file.Path introXMl = getJournalFileFolderPath().resolve("intro.xml");
+            BufferedWriter introWriter = Files.newBufferedWriter(introXMl, StandardCharsets.UTF_8);
+            xmlOutputter.output(document, introWriter);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-        xmlOutputter.output(document, new FileOutputStream(journalFileFolderPath + File.separator + journalID + File.separator + "intro.xml"));
-        
         return Response.created(URI.create("../")).build();
     }
 
@@ -75,5 +96,50 @@ public class JournalFileResource {
             element.addContent(object);
         }
     }
+    
+    class FileStreamingOutput implements StreamingOutput{
+        private java.nio.file.Path path;
+        public FileStreamingOutput(java.nio.file.Path path) {
+            this.path = path;
+        }
+        
+        @Override
+        public void write(OutputStream os) throws IOException, WebApplicationException {
+            Files.copy(path, os);
+        }
+        
+    }
 
+    @GET
+    @Path("web/{path:.*}")
+    public Response getResources(@PathParam("path") String path) {
+        try {
+            java.nio.file.Path file = getJournalFileFolderPath().resolve("web").resolve(path);
+            MCRServletContentHelper.serveContent(new MCRPathContent(file), request, response, context);
+            return Response.ok().build();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return Response.status(Status.NOT_FOUND).build();
+    }
+
+    public java.nio.file.Path getJournalFileFolderPath() throws Exception {
+        java.nio.file.Path journalFileFolder = Paths.get(URI.create("file://" + journalFileFolderPath));
+        journalFileFolder = journalFileFolder.resolve(journalID);
+
+        if (!Files.exists(journalFileFolder)) {
+            try {
+                Files.createDirectory(journalFileFolder);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (!Files.isDirectory(journalFileFolder)) {
+            throw new Exception(journalFileFolder.toString() + " is not a Directory.");
+        }
+
+        return journalFileFolder;
+    }
 }
