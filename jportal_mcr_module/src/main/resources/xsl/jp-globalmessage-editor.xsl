@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan mcrxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="xalan mcrxml acl">
 
   <xsl:template match="globalmessage-editor">
     <div id="jp-layout-globalmessage-editor" class="jp-layout-globalmessage-editor">
       <h1>Globale Nachricht bearbeiten</h1>
       <xsl:choose>
-        <xsl:when test="mcrxml:isCurrentUserInRole('admin')">
+        <xsl:when test="acl:checkPermission('administrate-jportal')">
           <xsl:call-template name="jp.globalmessage.editor" />
         </xsl:when>
         <xsl:otherwise>
@@ -53,9 +53,9 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $('#submit').on('click', function () {
-          var visibility = $('#visibility').attr("value");
-          var head = $('#head').attr("value");
-          var message = $('#message').attr("value");
+          var visibility = $('#visibility').val();
+          var head = $('#head').val();
+          var message = $('#message').val();
           $.ajax({
             url: jp.baseURL + "rsc/globalMessage/save",
             type:"POST",

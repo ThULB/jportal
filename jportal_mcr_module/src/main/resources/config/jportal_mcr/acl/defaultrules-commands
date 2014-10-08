@@ -15,6 +15,7 @@ update permission writedb for id default_jparticle with rulefile xml/grant-edito
 update permission writedb for id default_person with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission writedb for id default_jpinst with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission writedb for id default_derivate with rulefile xml/grant-editorsgroup.xml described by editorsgroup
+update permission writedb for id default_class with rulefile xml/grant-journalgroup.xml described by journalgroup
 
 update permission deletedb for id default_jpjournal with rulefile xml/grant-admin.xml described by journalgroup
 update permission deletedb for id default_jpvolume with rulefile xml/grant-editorsgroup.xml described by editorsgroup
@@ -48,6 +49,7 @@ update permission create-derivate for id POOLPRIVILEGE with rulefile xml/grant-d
 update permission update-derivate for id POOLPRIVILEGE with rulefile xml/grant-editorsgroup.xml described by editorsgroup
 update permission delete-derivate for id POOLPRIVILEGE with rulefile xml/grant-derivategroup.xml described by derivategroup
 
+update permission administrate-jportal for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission create-class for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission administrate-user for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission create-user for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor

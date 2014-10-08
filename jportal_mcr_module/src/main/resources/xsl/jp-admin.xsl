@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="i18n mcrxml">
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="i18n mcrxml acl">
 
   <xsl:template match="jpadmin">
     <div class="jp-layout-admin">
       <h1>Administration</h1>
       <xsl:choose>
-        <xsl:when test="mcrxml:isCurrentUserInRole('admin')">
+        <xsl:when test="acl:checkPermission('administrate-jportal')">
           <xsl:call-template name="jp.admin.show" />
         </xsl:when>
         <xsl:otherwise>

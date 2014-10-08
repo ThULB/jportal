@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" exclude-result-prefixes="xalan mcrxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" exclude-result-prefixes="xalan mcrxml acl">
 
   <xsl:template match="/globalmessage">
   </xsl:template>
@@ -8,7 +8,7 @@
   <xsl:template match="/globalmessage[visibility != 'hidden']">
     <xsl:if test="(visibility = 'visible') or
                     (visibility = 'user' and not(mcrxml:isCurrentUserGuestUser())) or
-                    (visibility = 'admin' and mcrxml:isCurrentUserInRole('admin'))">
+                    (acl:checkPermission('administrate-jportal'))">
       <xsl:call-template name="jp.globalmessage.print" />
     </xsl:if>
   </xsl:template>
