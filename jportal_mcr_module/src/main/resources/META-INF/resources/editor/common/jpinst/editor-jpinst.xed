@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Institution anlegen">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+      <xed:source uri="mcrobject:{$id}" />
+      <xed:bind
+        xpath="/mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-jpinst.xsd'][@ID='jportal_jpinst_00000000'][@label='jportal_jpinst_00000000'][@version='2014.07-SNAPSHOT']">
+        <xed:bind xpath="structure"></xed:bind>
+        <xed:bind xpath="metadata">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h2 class="text-center">Institution anlegen</h2>
+            </div>
+            <div class="panel-body">
+              <xed:include uri="xslStyle:institution-person-editor-template:webapp:/editor/common/institution-person-editor.xed"
+                ref="creatInstitution" />
+
+              <div class="col-md-11 text-right">
+                <div class="col-md-11">
+                  <xed:include uri="xslStyle:institution-person-editor-template:webapp:/editor/common/institution-person-editor.xed"
+                    ref="buttons" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </xed:bind>
+      </xed:bind>
+    </xed:form>
+  </section>
+</MyCoReWebPage>

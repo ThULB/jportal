@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Person anlegen">
+    <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+      <xed:source uri="mcrobject:{$id}" />
+      <xed:bind
+        xpath="/mycoreobject[@xsi:noNamespaceSchemaLocation='datamodel-person.xsd'][@version='2014.07-SNAPSHOT']">
+        <xed:bind xpath="@ID" initially="jportal_person_00000000"/>   
+        <xed:bind xpath="@label" initially="jportal_person_00000000"/>  
+        <xed:bind xpath="structure"></xed:bind>
+        <xed:bind xpath="metadata">
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h2 class="text-center">Person anlegen</h2>
+            </div>
+            <div class="panel-body">
+              <xed:include uri="xslStyle:institution-person-editor-template:webapp:/editor/common/institution-person-editor.xed"
+                ref="creatPerson" />
+
+              <div class="col-md-11 text-right">
+                <div class="col-md-11">
+                  <xed:include uri="xslStyle:institution-person-editor-template:webapp:/editor/common/institution-person-editor.xed"
+                    ref="buttons" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </xed:bind>
+      </xed:bind>
+    </xed:form>
+  </section>
+</MyCoReWebPage>
