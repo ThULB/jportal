@@ -30,14 +30,29 @@
   <xsl:variable name="menuXML">
     <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
-      <link id="editorResource" href="{$WebApplicationBaseURL}rsc/editor" />
+      
+      <xsl:variable name="editObj">
+        <xsl:choose>
+          <xsl:when test="$currentType = 'jpinst' or $currentType = 'person'">
+            <url link="{$WebApplicationBaseURL}editor/common" label="{$currentType}/editor-{$currentType}.xed?id={$currentObjID}"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <url link="{$WebApplicationBaseURL}rsc/editor" label="update/{$currentObjID}"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      
+      <link id="newEditorResource" href="{$WebApplicationBaseURL}editor/common" />
+      
+      <link id="editorResource" href="{xalan:nodeset($editObj)/url/@link}" />
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
       <item class="jp-layout-menu-dropdown">
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}" />
+          <label name="Dokument bearbeiten" ref="editorResource" path="{xalan:nodeset($editObj)/url/@label}" />
+          <!-- <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}" /> -->
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
@@ -67,11 +82,13 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <label name="Neue Person" ref="editorResource" path="create/person" />
+          <label name="Neue Person" ref="newEditorResource" path="person/editor-person.xed" />
+          <!-- <label name="Neue Person" ref="editorResource" path="create/person" /> path="person/editor-person.xed"-->
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-          <label name="Neue Institution" ref="editorResource" path="create/jpinst" />
+        <label name="Neue Institution" ref="newEditorResource" path="jpinst/editor-jpinst.xed" />
+          <!-- <label name="Neue Institution" ref="editorResource" path="create/jpinst" />  -->
           <restriction name="createInst" value="true" />
         </item>
         <item>
