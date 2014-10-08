@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role name="supervisor">
+  <label xml:lang="en" text="supervisor" description="Supervisor, can create and edit everything." />
+</role>
