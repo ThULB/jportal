@@ -3,6 +3,9 @@
 	<import file="${basedir}/common-modules.xml" />
 	<import file="${basedir}/build.xml" />
 
+    <property name="module.directory" location="${ant.file}/.." />
+    <property file="${module.directory}/build.properties" />
+
 	<target name="config">
 		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="de.uni_jena.thulb.mcr.resources" />
 	</target>
