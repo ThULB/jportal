@@ -141,7 +141,7 @@
       <body>
         <div id="globalHeader">
           <div class="row">
-            <div class="col-md-6 pull-left">
+            <div class="col-md-5 pull-left">
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
                 <li class="jp-layout-mainHeader-SeperatorRight">
                   <a href="{$JP.Site.Parent.url}" target="_blank">
@@ -162,7 +162,7 @@
                 </xsl:if>
               </ul>
             </div>
-            <div class="col-md-6 pull-right">
+            <div class="col-md-7 pull-right">
               <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
               <xsl:call-template name="jp.navigation.top" />
             </div>
