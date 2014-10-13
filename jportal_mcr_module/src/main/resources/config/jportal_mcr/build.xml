@@ -24,8 +24,7 @@
 	</target>
 
 	<target name="config">
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.CLI.Classes.Internal" value="org.mycore.frontend.cli.MigratingCMDs,org.mycore.frontend.cli.MCRJPortalRedundancyCommands" />
-		<mcr:config action="addInclude" propertyfile="${build.config}/mycore.properties" key="MCR.Jersey.resource.packages" value="fsu.jportal.resources" />
+		
 
 		<!-- copy solr stuff -->
 		<echo>copy solr stuff</echo>
