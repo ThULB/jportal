@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:perInstituion="http://www.mycore.de/components/PersonenInstitution">
+  <!-- Ab hier Submit und Cancel Buttons! -->
+  <xed:template id="button_create">
+    <input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}" class="btn btn-primary" />
+  </xed:template>
+  <xed:template id="button_update">
+    <input type="submit" xed:target="servlet" xed:href="UpdateObjectServlet" value="{i18n:common.button.save}" class="btn btn-primary" />
+  </xed:template>
+  <xed:template id="button_debug">
+    <input type="submit" xed:target="debug" value="Debug" class="btn btn-primary" />
+  </xed:template>
+</xed:template>

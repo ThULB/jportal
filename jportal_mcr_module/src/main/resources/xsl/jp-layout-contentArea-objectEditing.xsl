@@ -34,7 +34,7 @@
       <xsl:variable name="editObj">
         <xsl:choose>
           <xsl:when test="$currentType = 'jpinst' or $currentType = 'person'">
-            <url link="{$WebApplicationBaseURL}editor/common" label="{$currentType}/editor-{$currentType}.xed?id={$currentObjID}"/>
+            <url link="{$WebApplicationBaseURL}editor" label="start.xed?id={$currentObjID}&amp;type={$currentType}&amp;action=update"/>
           </xsl:when>
           <xsl:otherwise>
             <url link="{$WebApplicationBaseURL}rsc/editor" label="update/{$currentObjID}"/>
@@ -82,12 +82,12 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <label name="Neue Person" ref="newEditorResource" path="person/editor-person.xed" />
+          <label name="Neue Person" ref="newEditorResource" path="person/editor-person.xed?action=create" />
           <!-- <label name="Neue Person" ref="editorResource" path="create/person" /> path="person/editor-person.xed"-->
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-        <label name="Neue Institution" ref="newEditorResource" path="jpinst/editor-jpinst.xed" />
+        <label name="Neue Institution" ref="newEditorResource" path="jpinst/editor-jpinst.xed?action=create" />
           <!-- <label name="Neue Institution" ref="editorResource" path="create/jpinst" />  -->
           <restriction name="createInst" value="true" />
         </item>
