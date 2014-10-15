@@ -1,108 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:perInstituion="http://www.mycore.de/components/PersonenInstitution">
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:jp="http://www.mycore.de/components/jp">
   <xed:template id="edit_person">
 
-    <perInstituion:section title="{i18n:editormask.person.Lheading}">
+    <jp:section title="{i18n:editormask.person.Lheading}">
 
       <xed:bind xpath="def.heading[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']/heading[@inherited='0']">
-        <perInstituion:template name="textInputSm" xpath="lastName" i18nH="editormask.person.Lheading" i18n="jp.editor.person.lastName"
+        <jp:template name="textInputSm" xpath="lastName" i18nH="editormask.person.Lheading" i18n="jp.editor.person.lastName"
           maxlength="128" required="true" />
-        <perInstituion:template name="textInputSm" xpath="firstName" i18n="jp.editor.person.firstName" maxlength="128" />
-        <perInstituion:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation" maxlength="128" />
-        <perInstituion:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
-        <perInstituion:template name="textInputSm" xpath="name" i18n="jp.editor.person.single" maxlength="128" />
+        <jp:template name="textInputSm" xpath="firstName" i18n="jp.editor.person.firstName" maxlength="128" />
+        <jp:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation" maxlength="128" />
+        <jp:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
+        <jp:template name="textInputSm" xpath="name" i18n="jp.editor.person.single" maxlength="128" />
       </xed:bind>
-    </perInstituion:section>
+    </jp:section>
 
-    <perInstituion:section title="{i18n:jp.editor.inst.alternativeName}">
+    <jp:section title="{i18n:jp.editor.inst.alternativeName}">
 
       <xed:bind xpath="def.alternative[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']">
         <xed:repeat xpath="alternative[@type='complete'][@inherited='0']">
-          <perInstituion:template name="textInputSm" xpath="lastName" i18nH="jp.editor.inst.alternativeName" i18n="jp.editor.person.lastName"
+          <jp:template name="textInputSm" xpath="lastName" i18nH="jp.editor.inst.alternativeName" i18n="jp.editor.person.lastName"
             maxlength="128"/>
-          <perInstituion:template name="textInputSm" xpath="firstName" i18n="jp.editor.person.firstName" maxlength="128" />
-          <perInstituion:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation"
+          <jp:template name="textInputSm" xpath="firstName" i18n="jp.editor.person.firstName" maxlength="128" />
+          <jp:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation"
             maxlength="128" buttons="true" />
-          <perInstituion:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
+          <jp:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
         </xed:repeat>
         <xed:repeat xpath="alternative[@type='single'][@inherited='0']">
-          <perInstituion:template name="textInputSm" xpath="name" i18n="jp.editor.person.single" maxlength="128"/>
-          <perInstituion:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation"
+          <jp:template name="textInputSm" xpath="name" i18n="jp.editor.person.single" maxlength="128"/>
+          <jp:template name="textInputSm" xpath="collocation" i18n="jp.editor.person.collocation"
             maxlength="128" buttons="true" />
-          <perInstituion:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
+          <jp:template name="textInputSm" xpath="nameAffix" i18n="jp.editor.person.nameAffix" maxlength="128" />
         </xed:repeat>
       </xed:bind>
-    </perInstituion:section>
+    </jp:section>
 
-    <perInstituion:section>
+    <jp:section>
 
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.peerage[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/peerage[@inherited='0'][@form='plain']" i18n="editormask.person.Lpeerage"
         maxlength="128" />
 
       <xed:bind
         xpath="def.gender[@class='MCRMetaClassification'][@heritable='true'][@notinherit='true']/gender[@inherited='0'][@classid='urmel_class_00000001']">
-        <perInstituion:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="true">
+        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender">
           <select class="form-control" id="type" tabindex="1" size="1">
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000001" />
           </select>
-        </perInstituion:template>
+        </jp:template>
       </xed:bind>
 
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
-        <perInstituion:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
-          add="true" classification="true">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
+          add="true">
           <select class="form-control" id="type" tabindex="1" size="1">
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000002" />
           </select>
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
           </xed:bind>
-        </perInstituion:template>
+        </jp:template>
       </xed:repeat>
 
       <xed:repeat xpath="def.role[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/role[@inherited='0'][@form='plain']">
-        <perInstituion:template name="textArea" xpath="." i18n="editormask.person.Lrole" buttons="true" />
+        <jp:template name="textArea" xpath="." i18n="editormask.person.Lrole" buttons="true" />
       </xed:repeat>
 
       <xed:repeat
         xpath="def.placeOfActivity[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfActivity[@inherited='0'][@form='plain']">
-        <perInstituion:template name="textInput" xpath="." i18n="editormask.person.LplaceOfActivity" maxlength="128"
+        <jp:template name="textInput" xpath="." i18n="editormask.person.LplaceOfActivity" maxlength="128"
           buttons="true" />
       </xed:repeat>
 
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.dateOfBirth[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfBirth[@inherited='0']" i18n="editormask.person.LdateOfBirth"
         maxlength="10" />
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.placeOfBirth[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfBirth[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfBirth" maxlength="128" />
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.dateOfDeath[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfDeath[@inherited='0']" i18n="editormask.person.LdateOfDeath"
         maxlength="10" />
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.placeOfDeath[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfDeath[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfDeath" maxlength="128" />
 
       <xed:bind
         xpath="def.note[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/note[@type='visible'][@inherited='0'][@form='plain']">
-        <perInstituion:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="true">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="true">
           <option i18n="jp.editor.person.visible" value="visible" />
           <option i18n="jp.editor.person.hidden" value="hidden" />
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
           </xed:bind>
-        </perInstituion:template>
+        </jp:template>
       </xed:bind>
 
       <xed:repeat xpath="def.link[@class='MCRMetaLink'][@heritable='true'][@notinherit='true']/link[@inherited='0'][@xlink:type='locator']">
-        <perInstituion:template name="textInput" xpath="@xlink:href" i18n="jp.editor.person.link" maxlength="128" buttons="true" />
+        <jp:template name="textInput" xpath="@xlink:href" i18n="jp.editor.person.link" maxlength="128" buttons="true" />
       </xed:repeat>
 
       <xed:repeat
         xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']">
-        <perInstituion:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
           add="true">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
@@ -111,9 +111,9 @@
           <xed:bind xpath=".">
             <input type="text" class="form-control" maxlength="128" tabindex="1" />
           </xed:bind>
-        </perInstituion:template>
+        </jp:template>
       </xed:repeat>
-      <perInstituion:template name="textInput"
+      <jp:template name="textInput"
         xpath="def.doubletOf[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/doubletOf[@inherited='0'][@form='plain']"
         i18n="editormask.labels.LdoubletOf" maxlength="128" />
 
@@ -122,7 +122,7 @@
           <xed:output i18n="jp.editor.required" />
         </label>
       </div>
-    </perInstituion:section>
+    </jp:section>
     
   </xed:template>
 </xed:template>

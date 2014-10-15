@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
-  xmlns:perInstitution="http://www.mycore.de/components/PersonenInstitution"  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder" >
+  xmlns:jp="http://www.mycore.de/components/jp"  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder" >
 
   <xsl:include href="copynodes.xsl" />
 
-  <xsl:template match="perInstitution:template[@name='title']">
+  <xsl:template match="jp:template[@name='title']">
     <div class="col-md-12 text-center">
       <xsl:if test="@left">
         <xsl:attribute name="class">col-md-12 text-left</xsl:attribute>
@@ -16,7 +16,7 @@
   </xsl:template>
 
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, select) and 3. buttons -->
-  <xsl:template match="perInstitution:template[contains('textInput|selectInput|textArea', @name)]">
+  <xsl:template match="jp:template[contains('textInput|selectInput|textArea', @name)]">
     <div class="col-md-12">
 
       <!-- 1. part: title class="form-group col-md-12" -->
@@ -128,7 +128,7 @@
   </xsl:template>
 
   <!-- to creat new person, needed 1 extra title in the first half -->
-  <xsl:template match="perInstitution:template[@name='textInputSm']">
+  <xsl:template match="jp:template[@name='textInputSm']">
     <!-- first title -->
     <div class="col-md-12">
       <div class="col-md-2 text-center">
@@ -155,7 +155,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="perInstitution:template" mode="title">
+  <xsl:template match="jp:template" mode="title">
     <xsl:choose>
       <xsl:when test="@required">
         <label>
@@ -170,7 +170,7 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="perInstitution:template" mode="input">
+  <xsl:template match="jp:template" mode="input">
     <input type="text" class="form-control" maxlength="{@maxlength}" tabindex="1">
       <xsl:if test="@placeholder">
         <xsl:attribute name="placeholder">
@@ -180,7 +180,7 @@
     </input>
   </xsl:template>
 
-  <xsl:template match="perInstitution:template" mode="buttons">
+  <xsl:template match="jp:template" mode="buttons">
     <xsl:if test="@buttons">
       <div class="col-md-2">
         <xed:controls>insert remove up down</xed:controls>
@@ -188,7 +188,7 @@
     </xsl:if>
   </xsl:template>
 
-  <xsl:template match="perInstitution:template" mode="required">
+  <xsl:template match="jp:template" mode="required">
     <xsl:if test="@required">
       <xed:validate display="here" required="true">
         <div class="alert alert-danger" role="alert">
