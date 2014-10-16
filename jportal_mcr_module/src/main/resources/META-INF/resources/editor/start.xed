@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-  <section xml:lang="de" title="Person anlegen">
+  <section xml:lang="de" title="Personen anlegen">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor">
       <xed:source uri="mcrobject:{$id}" />
       <xed:bind xpath="/mycoreobject[@version='2.0']">
         <xed:bind xpath="@xsi:noNamespaceSchemaLocation" initially="datamodel-{$type}.xsd" />
         <xed:bind xpath="@ID" initially="jportal_{$type}_00000000" />
         <xed:bind xpath="@label" initially="jportal_{$type}_00000000" />
-        <xed:bind xpath="structure"></xed:bind>
+        <xed:bind xpath="structure" >
+          <xed:if test="$parent">
+            <xed:bind xpath="parents[@class='MCRMetaLinkID']/parent[@inherited='0'][@xlink:type='locator']">
+              <xed:bind xpath="@xlink:href" initially="{$parent}"/>   
+            </xed:bind>
+          </xed:if>
+        </xed:bind>
         <xed:bind xpath="metadata">
 
           <div class="panel panel-default">
@@ -34,7 +40,6 @@
               </div>
             </div>
           </div>
-
         </xed:bind>
       </xed:bind>
     </xed:form>

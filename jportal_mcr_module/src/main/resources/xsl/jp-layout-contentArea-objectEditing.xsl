@@ -33,7 +33,7 @@
       
       <xsl:variable name="editObj">
         <xsl:choose>
-          <xsl:when test="$currentType = 'jpinst' or $currentType = 'person'">
+          <xsl:when test="$currentType = 'jpinst' or $currentType = 'person' or $currentType ='jpvolume' or $currentType='jparticle'">
             <url link="{$WebApplicationBaseURL}editor" label="start.xed?id={$currentObjID}&amp;type={$currentType}&amp;action=update"/>
           </xsl:when>
           <xsl:otherwise>
@@ -42,7 +42,7 @@
         </xsl:choose>
       </xsl:variable>
       
-      <link id="newEditorResource" href="{$WebApplicationBaseURL}editor/common" />
+      <link id="newEditorResource" href="{$WebApplicationBaseURL}editor" />
       
       <link id="editorResource" href="{xalan:nodeset($editObj)/url/@link}" />
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
@@ -82,12 +82,12 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <label name="Neue Person" ref="newEditorResource" path="person/editor-person.xed?action=create" />
+          <label name="Neue Person" ref="newEditorResource" path="start.xed?type=person&amp;action=create" />
           <!-- <label name="Neue Person" ref="editorResource" path="create/person" /> path="person/editor-person.xed"-->
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-        <label name="Neue Institution" ref="newEditorResource" path="jpinst/editor-jpinst.xed?action=create" />
+        <label name="Neue Institution" ref="newEditorResource" path="start.xed?type=jpinst&amp;action=create" />
           <!-- <label name="Neue Institution" ref="editorResource" path="create/jpinst" />  -->
           <restriction name="createInst" value="true" />
         </item>
@@ -97,16 +97,19 @@
           <restriction name="createInst" value="true" />
         </item>
         <item>
-          <label name="Neue Zeitschrift" ref="editorResource" path="create/jpjournal" />
+          <label name="Neue Zeitschrift" ref="newEditorResource" path="start.xed?type=jpjournal&amp;action=create" />
+          <!-- <label name="Neue Zeitschrift" ref="editorResource" path="create/jpjournal" /> -->
           <restriction name="createJournal" value="true" />
         </item>
         <item>
-          <label name="Neuer Band" ref="editorResource" path="{$currentObjID}/create/jpvolume" />
+          <label name="Neuer Band" ref="newEditorResource" path="start.xed?type=jpvolume&amp;action=create&amp;parent={$currentObjID}" />
+<!--           <label name="Neuer Band" ref="editorResource" path="{$currentObjID}/create/jpvolume" /> -->
           <restriction name="createVol" value="true" />
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
-          <label name="Neuer Artikel" ref="editorResource" path="{$currentObjID}/create/jparticle" />
+          <label name="Neuer Artikel" ref="newEditorResource" path="start.xed?type=jparticle&amp;action=create&amp;parent={$currentObjID}" />
+<!--           <label name="Neuer Artikel" ref="editorResource" path="{$currentObjID}/create/jparticle" /> -->
           <restriction name="createArt" value="true" />
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>

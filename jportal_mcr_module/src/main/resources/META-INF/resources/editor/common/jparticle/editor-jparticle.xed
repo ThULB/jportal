@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:jp="http://www.mycore.de/components/jp">
+  <xed:template id="edit_jparticle">
+    <jp:section title="{i18n:metaData.headlines.formaldiscr}">
+      <jp:template name="title" i18n="metaData.headlines.formaldiscr" />
+      
+      <jp:template name="textArea" xpath="maintitles[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/maintitle[@inherited='0'][@form='plain']"
+        i18n="editormask.labels.bibdescript" required="true" />
+        
+      <xed:repeat xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']">
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true" classification="jportal_class_00000006" add="true" > 
+          <xed:bind xpath=".">
+            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
+          </xed:bind>
+        </jp:template> 
+      </xed:repeat>
+      
+      <xed:repeat xpath="participants[@class='MCRMetaLinkID'][@heritable='false'][@notinherit='false']/participant[@inherited='0'][@xlink:type='locator']">
+         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true" classification="jportal_class_00000007" subselect="true" xpath2="@xlink:title" xpath3="@xlink:href"/> 
+      </xed:repeat>
+      
+      <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
+         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true" classification="jportal_class_00000008" add="true" addT="true"> 
+          <span><xed:output i18n="editormask.labels.date_howToUse" /></span>  
+          
+          <xed:bind xpath=".">
+            <input type="text" class="form-control" maxlength="10" tabindex="1" />
+          </xed:bind>
+         </jp:template>
+      </xed:repeat>
+        
+     <xed:repeat xpath="refs[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/ref[@inherited='0'][@form='plain']">
+        <jp:template name="textInput" xpath="." i18n="editormask.labels.pub_reference" maxlength="128" />
+     </xed:repeat>
+    
+     <xed:repeat xpath="identis[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/identi[@inherited='0'][@form='plain']">
+       <jp:template name="selectInput" xpath="@type" i18n="metaData.jpjournal.identi.issn" buttons="true" classification="jportal_class_00000010" add="true" >
+        <xed:bind xpath=".">
+          <input type="text" class="form-control" maxlength="64" tabindex="1" />
+        </xed:bind> 
+       </jp:template>
+     </xed:repeat>
+     
+     <jp:template name="textInput" xpath="sizes[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/size[@inherited='0'][@form='plain']" i18n="editormask.labels.size" maxlength="48" /> 
+    </jp:section>
+    
+    <jp:section title="{i18n:metaData.headlines.contantdiscr}">
+      <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
+  
+      <xed:repeat xpath="keywords[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/keyword[@inherited='0'][@form='plain']">
+        <jp:template name="textInput" xpath="." i18n="editormask.labels.keyword" maxlength="64" buttons="true" />
+      </xed:repeat>
+      
+      <xed:repeat xpath="abstracts[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/abstract[@inherited='0'][@form='plain']">
+        <jp:template name="textArea" xpath="." i18n="editormask.labels.abstract" buttons="true" />
+      </xed:repeat>
+      
+      
+      <xed:repeat xpath="notes[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/note[@inherited='0'][@form='plain']">
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.note" buttons="true" classification="jportal_class_00000060" add="true" > 
+          <xed:bind xpath=".">
+            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
+          </xed:bind>
+        </jp:template> 
+      </xed:repeat>
+    </jp:section>
+  </xed:template>
+</xed:template>

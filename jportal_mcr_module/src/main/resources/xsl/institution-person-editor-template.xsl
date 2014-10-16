@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
-  xmlns:jp="http://www.mycore.de/components/jp"  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder" >
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor" xmlns:jp="http://www.mycore.de/components/jp"  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="encoder" >
+
 
   <xsl:include href="copynodes.xsl" />
 
@@ -98,15 +98,12 @@
           <xed:output value="@xlink:title" />
           <label> (<xed:output value="@xlink:href" />)</label>
           
+          
           <!-- Hier 2 buttons um personen auszuwählen und institutionen -->
           <div class="form-group">
             <button type="submit" xed:target="subselect" xed:href="{concat('solr/subselect?',encoder:encode('XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=editor/common/jpjournal/editor-jpjournal.xed?'))}" class="btn btn-default" tabindex="1" ><xed:output i18n="jp.editor.person.select" /></button>
-            <button type="submit" xed:target="subselect" xed:href="{concat('solr/subselect?',encoder:encode('XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=editor/common/jpjournal/Feditor-jpjournal.xed?'))}" class="btn btn-default" tabindex="1" ><xed:output i18n="jp.editor.inst.select" /></button> 
-          </div>
-          <!-- ?XSL.subselect.type=person&XSL.subselect.session.SESSION=h7rkmczi9&XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&XSL.subselect.webpage.SESSION=editor%2Fcommon%2Fjpjournal%2Feditor-jpjournal.xed%3F -->
-          
-<!--           http://localhost:8291/servlets/solr/subselect?XSL.subselect.type=person&_xed_subselect_session=1-39 -->
-   
+            <button type="submit" xed:target="subselect" xed:href="{concat('solr/subselect?',encoder:encode('XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=editor/common/jpjournal/editor-jpjournal.xed?'))}" class="btn btn-default" tabindex="1" ><xed:output i18n="jp.editor.inst.select" /></button> 
+          </div>   
         </xsl:if>
         <xsl:if test="@add">
           <div class="form-group">

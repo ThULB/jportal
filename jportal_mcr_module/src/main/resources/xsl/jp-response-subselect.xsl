@@ -4,16 +4,24 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:decoder="java.net.URLDecoder"
   exclude-result-prefixes="xalan mcrxml solrxml i18n decoder">
 
+  <xsl:variable name="_xed_subselect_session">
+    <xsl:call-template name="UrlGetParam">
+      <xsl:with-param name="url" select="$RequestURL" />
+      <xsl:with-param name="par" select="'_xed_subselect_session'" />
+    </xsl:call-template>
+  </xsl:variable>
+
   <!-- subselect param -->
   <xsl:param name="subselect.type" select="''" />
-  <xsl:param name="subselect.session" />
+  <xsl:param name="subselect.session" /> 
   <xsl:param name="subselect.varpath" />
   <xsl:param name="subselect.webpage" />
 
   <xsl:variable name="subselectXML">
     <subselect>
       <param name="subselect.type" value="{$subselect.type}" />
-      <param name="subselect.session" value="{$subselect.session}" />
+      <param name="subselect.session" value="{$subselect.session}" />  
+      <param name="_xed_subselect_session" value="{$_xed_subselect_session}" />
       <param name="subselect.varpath" value="{$subselect.varpath}" />
       <param name="subselect.webpage" value="{$subselect.webpage}" />
     </subselect>
@@ -107,9 +115,17 @@
     </xsl:attribute>
   </xsl:template>
 
+<!--   <xsl:template mode="renderView" match="@value[contains(.,'{subselect.session}')]">  -->
+  <xsl:template mode="renderView" match="@value[contains(.,'{_xed_subselect_session}')]">
+    <xsl:attribute name="value">
+<!--       <xsl:value-of select="$subselect.session" />  -->
+        <xsl:value-of select="$_xed_subselect_session" />
+    </xsl:attribute>
+  </xsl:template>
+  
   <xsl:template mode="renderView" match="@value[contains(.,'{subselect.session}')]">
     <xsl:attribute name="value">
-      <xsl:value-of select="$subselect.session" />
+        <xsl:value-of select="$subselect.session" />
     </xsl:attribute>
   </xsl:template>
 
@@ -186,12 +202,37 @@
     <xsl:param name="data" />
     <xsl:variable name="url">
       <url>
-        <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>
-        <param name="_action" value="end.subselect" />
-        <xsl:copy-of select="$subselectParam/subselect/param" />
-        <param name="mode" value="prefix" />
-        <param name="_var_@xlink:href" value="{$data/str[@name='id']}" />
-        <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false"/>
+<!--          <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>   -->
+        <xsl:choose>
+          <xsl:when test="$subselect.session = ''">
+            <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base>
+            
+<!--             <param name="_action" value="end.subselect" /> -->
+            
+            <param name="_xed_submit_return" value=" " />
+            <param name="_xed_session" value="{$_xed_subselect_session}" />
+            
+            <xsl:copy-of select="$subselectParam/subselect/param" />
+<!--             <param name="mode" value="prefix" /> -->
+            <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
+            <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
+          </xsl:when>
+          <xsl:otherwise>
+            <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>
+            
+            <param name="_action" value="end.subselect" />
+            
+            <xsl:copy-of select="$subselectParam/subselect/param" />
+            <param name="mode" value="prefix" />
+            <param name="_var_@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
+            <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
+          </xsl:otherwise>
+        </xsl:choose>
+        
+<!--         <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base> -->
+        
+<!--         <param name="_action" value="end.subselect" /> -->
+
       </url>
     </xsl:variable>
 
@@ -235,7 +276,16 @@
           <xsl:value-of select="concat('/',$subselect.webpage)" />
         </xsl:when>
         <xsl:otherwise>
-         <xsl:value-of select="concat('/',$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
+        
+              <xsl:choose>
+                <xsl:when test="$subselect.session = ''">
+                  <xsl:value-of select="concat('/',$subselect.webpage,'_xed_subselect_session=', $_xed_subselect_session)" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat('/',$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
+                </xsl:otherwise>
+              </xsl:choose>
+              
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
