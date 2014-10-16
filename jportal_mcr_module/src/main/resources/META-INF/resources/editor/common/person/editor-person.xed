@@ -42,20 +42,20 @@
 
       <xed:bind
         xpath="def.gender[@class='MCRMetaClassification'][@heritable='true'][@notinherit='true']/gender[@inherited='0'][@classid='urmel_class_00000001']">
-        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender">
-          <select class="form-control" id="type" tabindex="1" size="1">
-            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000001" />
-          </select>
+        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001">
+<!--           <select class="form-control" id="type" tabindex="1" size="1"> -->
+<!--             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000001" /> -->
+<!--           </select> -->
         </jp:template>
       </xed:bind>
 
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
-          add="true">
-          <select class="form-control" id="type" tabindex="1" size="1">
-            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000002" />
-          </select>
+          add="true" classification="urmel_class_00000002">
+<!--           <select class="form-control" id="type" tabindex="1" size="1"> -->
+<!--             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:urmel_class_00000002" /> -->
+<!--           </select> -->
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
           </xed:bind>
@@ -87,7 +87,7 @@
 
       <xed:bind
         xpath="def.note[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/note[@type='visible'][@inherited='0'][@form='plain']">
-        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="true">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="true" option="true" >
           <option i18n="jp.editor.person.visible" value="visible" />
           <option i18n="jp.editor.person.hidden" value="hidden" />
           <xed:bind xpath=".">
@@ -103,7 +103,7 @@
       <xed:repeat
         xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
-          add="true">
+          add="true" option="true">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />

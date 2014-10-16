@@ -42,7 +42,7 @@
         xpath="phones[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/phone[@xml:lang='de'][@inherited='0'][@form='plain']"
         min="0">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LPhone" buttons="true"
-          maxlength="128" add="true">
+          maxlength="128" add="true" option="true">
           <option i18n="editormask.labels.SphoneTelefon" value="Telefon" />
           <option i18n="editormask.labels.SphoneFax" value="Fax" />
           <option i18n="editormask.labels.SphoneMobil" value="Mobil" />
@@ -66,9 +66,9 @@
         maxlength="128" />
     </jp:section>
 
-    <jp:section title="{i18n:metaData.headlines.jpinst.contact}">
+    <jp:section title="{i18n:metaData.headlines.misc}">
 
-      <jp:template name="title" i18n="metaData.headlines.jpinst.contact" />
+      <jp:template name="title" i18n="metaData.headlines.misc" />
 
       <jp:template name="textArea"
         xpath="notes[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/note[@inherited='0'][@form='plain']" i18n="editormask.labels.LNote" />
@@ -76,7 +76,7 @@
       <xed:repeat xpath="identifiers[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/identifier[@inherited='0'][@form='plain']"
         min="0">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
-          add="true">
+          add="true" option="true">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
@@ -88,7 +88,7 @@
 
       <xed:repeat xpath="logo[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/url[@inherited='0'][@form='plain']"
         min="0">
-        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LLogos" buttons="true" add="true">
+        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LLogos" buttons="true" add="true" option="true">
           <option i18n="jp.editor.inst.sLogo" value="logoPlain" />
           <option i18n="jp.editor.inst.logoWText" value="logoPlusText" />
           <xed:bind xpath=".">
