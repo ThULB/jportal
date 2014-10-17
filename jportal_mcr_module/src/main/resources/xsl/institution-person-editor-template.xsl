@@ -18,6 +18,7 @@
   </xsl:template>
 
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, select) and 3. buttons -->
+  <!-- Form: titel | input | buttons -->
   <xsl:template match="jp:template[contains('textInput|selectInput|textArea', @name)]">
     <div class="col-md-12">
 
@@ -65,6 +66,7 @@
   </xsl:template>
 
   <!-- to creat new person, needed 1 extra title in the first half -->
+  <!-- Form: titel1 | titel2 | input | buttons -->
   <xsl:template match="jp:template[@name='textInputSm']">
     <!-- first title -->
     <div class="col-md-12">
@@ -158,19 +160,12 @@
   </xsl:template>
 
   <xsl:template match="jp:template[@list]" mode="input_select">
-    <!-- load items -->
-    <list class="form-control" type="dropdown" id="typ">
-      <item value="">
-        <label>
-          <xed:output i18n="editor.common.select" />
-        </label>
-      </item>
+    <select class="form-control" id="type" tabindex="1" size="1">
+      <option value="">
+        <xed:output i18n="editor.common.select" />
+      </option>
       <xed:include uri="{@list}" />
-      <!-- need this for jportal_getALLClassIDs: (but somehow it works without it sometimes) -->
-      <xsl:if test="@cacheable">
-        <xsl:attribute name="style">cacheable="false"</xsl:attribute>
-      </xsl:if>
-    </list>
+    </select>
   </xsl:template>
 
   <xsl:template match="jp:template[@option]" mode="input_select">
@@ -201,12 +196,12 @@
     <!-- Hier 2 buttons um personen auszuwählen und institutionen -->
     <div class="form-group">
       <button type="submit" xed:target="subselect"
-        xed:href="{concat('solr/subselect?',encoder:encode('XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=editor/common/jpjournal/editor-jpjournal.xed?'))}"
+        xed:href="{concat('solr/subselect?XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @subselect)}"
         class="btn btn-default" tabindex="1">
         <xed:output i18n="jp.editor.person.select" />
       </button>
       <button type="submit" xed:target="subselect"
-        xed:href="{concat('solr/subselect?',encoder:encode('XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=editor/common/jpjournal/editor-jpjournal.xed?'))}"
+        xed:href="{concat('solr/subselect?XSL.subselect.type=jpinst&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @subselect)}"
         class="btn btn-default" tabindex="1">
         <xed:output i18n="jp.editor.inst.select" />
       </button>

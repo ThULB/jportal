@@ -16,7 +16,7 @@
       </xed:repeat>
       
       <xed:repeat xpath="participants[@class='MCRMetaLinkID'][@heritable='false'][@notinherit='false']/participant[@inherited='0'][@xlink:type='locator']">
-         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true" classification="jportal_class_00000007" subselect="true" xpath2="@xlink:title" xpath3="@xlink:href"/> 
+         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true" classification="jportal_class_00000007" subselect="editor%2Fstart.xed%3Ftype%3D{$type}%26action%3D{$action}" xpath2="@xlink:title" xpath3="@xlink:href"/> 
       </xed:repeat>
       
       <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
@@ -114,7 +114,7 @@
       <jp:template name="title" i18n="editormask.labels.Admin" />
       
       <jp:template name="title" i18n="editormask.labels.AdminGeneral" left="true" />
-      <jp:template name="selectInput" xpath="hidden_templates[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_template[@inherited='0'][@form='plain']" i18n="jp.editor.journal.template" list="templates:prop:templates.folder" required="true" />
+      <jp:template name="selectInput" xpath="hidden_templates[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_template[@inherited='0'][@form='plain']" i18n="jp.editor.journal.template" list="templatesOption:prop:templates.folder" required="true" />
        
       <jp:template name="textInput" xpath="hidden_genhiddenfields1[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_genhiddenfield1[@inherited='0'][@form='plain']" i18n="editormask.labels.genhiddenfield1" maxlength="32" />
       <jp:template name="textInput" xpath="hidden_genhiddenfields2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_genhiddenfield2[@inherited='0'][@form='plain']" i18n="editormask.labels.genhiddenfield2" maxlength="32" />
@@ -122,21 +122,21 @@
       <jp:template name="textInput" xpath="hidden_websitecontexts[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_websitecontext[@inherited='0'][@form='plain']" i18n="editormask.labels.websitecontext" maxlength="48" />
       
       <jp:template name="title" i18n="editormask.labels.AdminVolume" left="true" />
-      <jp:template name="selectInput" xpath="hidden_classiVol1[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol1[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol1/hidden_classiVol1" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classiVol2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol2[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol2/hidden_classiVol2" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classiVol3[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol3[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol3/hidden_classiVol3" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classiVol4[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol4[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol4/hidden_classiVol4" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classiVol5[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol5[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol5/hidden_classiVol5" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classiVol6[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol6[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol6/hidden_classiVol6" list="jportal_getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol1[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol1[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol1/hidden_classiVol1" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol2[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol2/hidden_classiVol2" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol3[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol3[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol3/hidden_classiVol3" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol4[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol4[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol4/hidden_classiVol4" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol5[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol5[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol5/hidden_classiVol5" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classiVol6[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classiVol6[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classiVol6/hidden_classiVol6" list="getALLClassIDs:" cacheable="false" />
  
       <jp:template name="title" i18n="editormask.labels.AdminArticle" left="true" />
-      <jp:template name="selectInput" xpath="hidden_pubTypesID[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_pubTypeID[@inherited='0'][@form='plain']" i18n="editormask.labels.pubTypeID" list="jportal_getALLClassIDs:" />
-      <jp:template name="selectInput" xpath="hidden_classispub[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub/hidden_classipub" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classispub2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub2[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub2/hidden_classipub2" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classispub3[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub3[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub3/hidden_classipub3" list="jportal_getALLClassIDs:" cacheable="false" />
-      <jp:template name="selectInput" xpath="hidden_classispub4[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub4[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub4/hidden_classipub4" list="jportal_getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_pubTypesID[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_pubTypeID[@inherited='0'][@form='plain']" i18n="editormask.labels.pubTypeID" list="getALLClassIDs:" />
+      <jp:template name="selectInput" xpath="hidden_classispub[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub/hidden_classipub" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classispub2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub2[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub2/hidden_classipub2" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classispub3[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub3[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub3/hidden_classipub3" list="getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_classispub4[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_classipub4[@inherited='0'][@form='plain']" i18n="editormask.labels.hidden_classispub4/hidden_classipub4" list="getALLClassIDs:" cacheable="false" />
 
-      <jp:template name="selectInput" xpath="hidden_rubricsID[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_rubricID[@inherited='0'][@form='plain']" i18n="editormask.labels.rubricID" list="jportal_getALLClassIDs:" cacheable="false" />
+      <jp:template name="selectInput" xpath="hidden_rubricsID[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_rubricID[@inherited='0'][@form='plain']" i18n="editormask.labels.rubricID" list="getALLClassIDs:" cacheable="false" />
     </jp:section>
     
   </xed:template>

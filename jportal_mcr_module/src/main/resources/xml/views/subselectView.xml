@@ -21,7 +21,7 @@
         </div>
         <input type="hidden" name="XSL.subselect.type" value="{subselect.type}" />
         <input type="hidden" name="XSL.subselect.session.SESSION" value="{subselect.session}" />  
-<!--         <input type="hidden" name="_xed_subselect_session" value="{_xed_subselect_session}" />  -->
+        <input type="hidden" name="_xed_subselect_session" value="{_xed_subselect_session}" /> 
         <input type="hidden" name="XSL.subselect.varpath.SESSION" value="{subselect.varpath}" />
         <input type="hidden" name="XSL.subselect.webpage.SESSION" value="{subselect.webpage}" />
       </form>

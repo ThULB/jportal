@@ -228,11 +228,6 @@
             <param name="_var_@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
           </xsl:otherwise>
         </xsl:choose>
-        
-<!--         <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base> -->
-        
-<!--         <param name="_action" value="end.subselect" /> -->
-
       </url>
     </xsl:variable>
 
@@ -276,10 +271,10 @@
           <xsl:value-of select="concat('/',$subselect.webpage)" />
         </xsl:when>
         <xsl:otherwise>
-        
+
               <xsl:choose>
                 <xsl:when test="$subselect.session = ''">
-                  <xsl:value-of select="concat('/',$subselect.webpage,'_xed_subselect_session=', $_xed_subselect_session)" />
+                  <xsl:value-of select="concat('/',$subselect.webpage,'&amp;_xed_subselect_session=', $_xed_subselect_session)" />
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="concat('/',$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
