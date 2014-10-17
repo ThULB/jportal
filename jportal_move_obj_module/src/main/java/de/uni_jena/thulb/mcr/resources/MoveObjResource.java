@@ -120,8 +120,8 @@ public class MoveObjResource {
         confObj.addProperty("sort", sort);
         confObj.addProperty("parentField", parentField);
         confObj.add("parentTypes", parentTypeJson);
-        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url");
-        if(url != null && !url.equals("")) {
+        String url = MCRConfiguration.instance().getString("MCR.Module.Move.Obj.Url", "");
+        if(!url.equals("")) {
             confObj.addProperty("url", uri.getBaseUriBuilder().replacePath(url).build().toString());
         }
         
