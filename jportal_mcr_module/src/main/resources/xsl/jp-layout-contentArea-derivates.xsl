@@ -54,7 +54,7 @@
     <xsl:param name="mode" select="'metadata'" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
-    <xsl:variable name="file" select="concat('/', substring-after(@xlink:href, '/'))" />
+    <xsl:variable name="file" select="substring-after(@xlink:href, '/')" />
     <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'update-jparticle')" />
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
@@ -172,9 +172,9 @@
   <xsl:template name="iview2Entry">
     <xsl:param name="derivID" />
     <xsl:param name="file" />
-    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}{mcrxml:encodeURIPath($file)}">
+    <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{mcrxml:encodeURIPath($file)}">
       <div class="jp-layout-hidden-Button"></div>
-      <img src="{$WebApplicationBaseURL}servlets/MCRThumbnailServlet/{$derivID}{mcrxml:encodeURIPath($file)}?centerThumb=no" />
+      <img src="{$WebApplicationBaseURL}servlets/MCRThumbnailServlet/{$derivID}/{mcrxml:encodeURIPath($file)}?centerThumb=no" />
     </a>
   </xsl:template>
 

@@ -95,7 +95,7 @@ public class MCRObjectTools {
     }
 
     @MCRCommand(help = "merge several derivates", syntax = "merge derivates {0}")
-    public static List<String> mergeDerivates(String derivateIDs) {
+    public static List<String> mergeDerivates(String derivateIDs) throws IOException {
         List<String> executeMoreCMDs = new ArrayList<String>();
         String[] derivateIdArray = derivateIDs.split(",");
 
@@ -116,7 +116,7 @@ public class MCRObjectTools {
     }
 
     @MCRCommand(help = "move file abs. path to abs. path", syntax = "move file {0} to {1}")
-    public static List<String> moveFile(String sourcePath, String destPath) {
+    public static List<String> moveFile(String sourcePath, String destPath) throws IOException {
         List<String> executeMoreCMDs = new ArrayList<String>();
         MCRFilesystemNode sourceNode = getFileSystemNode(sourcePath);
 
