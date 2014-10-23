@@ -5,6 +5,8 @@
 
 	<property name="module.directory" location="${ant.file}/.." />
 	<property file="${module.directory}/build.properties" />
+	<property file="${build}/build.properties" />
+
 	<property name="module.jar" location="${build.lib}/${module.jar.name}" />
 
 	<target name="create.default-rules" description="loads default acl rules for jportal application">
@@ -26,7 +28,7 @@
 	<target name="config">
 		
 
-		<!-- copy solr stuff -->
+		<!-- copy solr jportal -->
 		<echo>copy solr stuff</echo>
 	    <copy todir="${basedir}/config/solr-home">
 	      <fileset dir="${basedir}/config/solr-home.template">
@@ -38,6 +40,15 @@
 		<copy todir="${basedir}/config/solr-home">
 			<fileset dir="${module.directory}/solr" />
 		</copy>
+		<!-- copy solr classification -->
+<!--    <echo>copy solr classification schema: ${build.lib}/${mycore.jar}</echo>
+		<unjar dest="${basedir}/config/solr-home/conf" overwrite="true">
+			<fileset file="${mycore.jar}" />
+			<patternset>
+				<include name="components/solr/config/solr/conf/classificationSchema.xml" />
+			</patternset>
+			<regexpmapper from="^(components/solr/config/solr/conf/)(classificationSchema.xml)" to="\2" />
+		</unjar>-->
 	</target>
 
 	<!-- CREATE WEB APPLICATION -->
