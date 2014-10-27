@@ -10,10 +10,17 @@ def getDate() {
     return formattedDate
 }
 
-allprojects {
+subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'eclipse'
+
+    eclipse {
+        jdt {
+            sourceCompatibility = 1.7
+            targetCompatibility = 1.7
+        }
+    }
 
     group = "fsu.thulb"
     version = "2.0.18-SNAPSHOT"
@@ -23,71 +30,49 @@ allprojects {
         maven{ url "http://artifactory.mycore.de/mycore-releases" }
 
         maven{ url "http://artifactory.mycore.de/mycore-snapshots" }
-        
     }
-    
-    dependencies{
-        compile "org.mycore:mycore-base:$mcrVersion"
-        compile "org.mycore:mycore-solr:$mcrVersion"
-        compile "org.mycore:mycore-mets:$mcrVersion"
-        compile "org.mycore:mycore-iview2:$mcrVersion"
-        compile "org.mycore:mycore-user2:$mcrVersion"
-        compile "org.mycore:mycore-classeditor:$mcrVersion"
-        compile "org.mycore:mycore-mets:$mcrVersion"
-        compile "org.mycore:mycore-oai:$mcrVersion"
-//        compile "org.mycore:mycore-handle:$mcrVersion"
-        compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
-        compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
-        compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
-        compile 'javax.servlet:javax.servlet-api:3.1.0'
-        compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
-        compile 'org.apache.maven:maven-core:3.0.4'
-        testCompile group: 'junit', name: 'junit', version: '4.+'
-        testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
-    }
-}
 
-subprojects {
-    if(project.name.equals("jportal_webapp")){
-        apply plugin: 'war'
-
-        configurations { jetty }
-        
-        dependencies {
-            jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-//            runtime project(":jportal_webapp_wizard")
-//            runtime 'org.mycore.mir:mir-wizard:0.1-SNAPSHOT'
-            runtime "org.mycore:mycore-xeditor:$mcrVersion"
-            runtime 'org.hsqldb:hsqldb:2.3.1'
-            runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
-            runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
-            runtime 'com.mchange:c3p0:0.9.2.1'
-        }
-        
-        task runJetty(type: JavaExec) {
-            main = "org.eclipse.jetty.runner.Runner"
-            println(war.archivePath)
-            jvmArgs '-Xdebug'
-            jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
-            args '--config', 'jetty/jetty-config.xml'
-            args '--path', '/'
-            args war.archivePath
-            classpath configurations.jetty
-        }
-
-    }
-    
-    if(project.name.equals("jportal_webapp_wizard")){
-        jar {
-            manifest {
-                attributes("MCR-Application-Module": "$project.name")
-                attributes("MCR-Artifact-Id": "$project.name")
-                attributes("version": "$project.version")
-                attributes("timestamp": getDate())
-            }
-            
+    def noMCRDep = [
+        "jportal_jetty_tools"
+    ]
+    if (!(project.name in noMCRDep)) {
+        dependencies{
+            compile "org.mycore:mycore-base:$mcrVersion"
+            compile "org.mycore:mycore-solr:$mcrVersion"
+            compile "org.mycore:mycore-mets:$mcrVersion"
+            compile "org.mycore:mycore-iview2:$mcrVersion"
+            compile "org.mycore:mycore-user2:$mcrVersion"
+            compile "org.mycore:mycore-classeditor:$mcrVersion"
+            compile "org.mycore:mycore-mets:$mcrVersion"
+            compile "org.mycore:mycore-oai:$mcrVersion"
+            //        compile "org.mycore:mycore-handle:$mcrVersion"
+            compile 'org.mycore.legacy:mycore-legacy-search:1.0-SNAPSHOT'
+            compile 'org.mycore.sru:sru-adapter:0.0.1-SNAPSHOT'
+            compile 'org.mycore.mets:mets-model:0.5-SNAPSHOT'
+            compile 'javax.servlet:javax.servlet-api:3.1.0'
+            compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
+            compile 'org.apache.maven:maven-core:3.0.4'
+            testCompile group: 'junit', name: 'junit', version: '4.+'
+            testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
         }
     }
+
+    if(project.name.equals("jportal_jetty_tools")){
+        dependencies{
+//            compile "org.mycore:mycore-base:$mcrVersion"
+            compile 'org.hsqldb:hsqldb:2.3.2'
+            compile 'javax.servlet:javax.servlet-api:3.0.1'
+            compile 'log4j:log4j:1.2.17'
+        }
+    }
+
+    def noJPModuleDep = [
+        "jportal-commons",
+        "jportal_ext_web_lib",
+        "jportal_iview2_plugin",
+        "jportal_emb_hsql",
+        "jportal_jetty_tools"
+    ]
 
     if(project.name.equals("jportal_mcr_module")){
         dependencies{
@@ -105,24 +90,71 @@ subprojects {
             compile 'xmlunit:xmlunit:1.3'
             compile 'javax.xml.bind:jaxb-api:2.2.1'
             compile 'com.sun.xml.bind:jaxb-impl:2.2.1.1'
+        }
+    }else if(!(project.name in noJPModuleDep)){
+        dependencies{ compile project(':jportal_mcr_module') }
+    }
 
-            jar {
-                manifest {
-                    attributes("MCR-Application-Module": "$project.name")
-                    attributes("MCR-Artifact-Id": "$project.name")
-                    attributes("version": "$project.version")
-                    attributes("timestamp": getDate())
-                }
+    def mcrModule = [
+        "jportal_mcr_module"
+    ]
+
+    if(project.name in mcrModule){
+        println "MCRModule $project.name"
+        jar {
+            manifest {
+                attributes("MCR-Application-Module": "$project.name")
+                attributes("MCR-Artifact-Id": "$project.name")
+                attributes("version": "$project.version")
+                attributes("timestamp": getDate())
             }
         }
-    } else if(!project.name.equals("jportal-commons") && !project.name.equals("jportal_ext_web_lib") && !project.name.equals("jportal_iview2_plugin")){
-        dependencies{ compile project(':jportal_mcr_module') }
+    }
+
+    if(project.name.equals("jportal_webapp")){
+        apply plugin: 'war'
+
+
+        dependencies {
+            //            jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
+            //            jetty 'org.hsqldb:hsqldb:2.3.2'
+            //            runtime project(":jportal_webapp_wizard")
+            //            runtime 'org.mycore.mir:mir-wizard:0.1-SNAPSHOT'
+            runtime "org.mycore:mycore-xeditor:$mcrVersion"
+            //            runtime 'org.hsqldb:hsqldb:2.3.2'
+            runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
+            runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
+            runtime 'com.mchange:c3p0:0.9.2.1'
+        }
+
+        task runJetty(type: JavaExec) {
+            configurations {
+                jetty
+                solr
+            }
+
+            dependencies {
+                jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
+                jetty project(':jportal_jetty_tools')
+                solr "org.mycore.solr:solr:4.7.2@war"
+            }
+
+            def solrWarFilePath
+            configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
+
+            main = "org.eclipse.jetty.runner.Runner"
+            //    println(war.archivePath)
+            systemProperties.put("MCR.AppName","jportal")
+            jvmArgs '-Xdebug'
+            jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+            args '--config', 'jetty/jetty-config.xml'
+            args '--path', '/solr', solrWarFilePath
+            args '--path', '/jportal', war.archivePath
+            classpath configurations.jetty
+        }
     }
 }
 
-configurations.all {
-    resolutionStrategy.cacheDynamicVersionsFor 0, 'minutes'
-}
 
 
-dependencies { compile project(':jportal_mcr_module') }
+configurations.all { resolutionStrategy.cacheDynamicVersionsFor 0, 'minutes' }
