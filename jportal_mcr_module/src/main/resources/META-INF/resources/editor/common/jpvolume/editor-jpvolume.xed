@@ -10,7 +10,7 @@
 
       <xed:repeat xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true" classification="jportal_class_00000006"
-          add="true">
+          add="-10">
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
           </xed:bind>
@@ -25,8 +25,8 @@
 
       <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true" classification="jportal_class_00000009"
-          add="true" addT="true">
-          <span>
+          add="10" >
+          <span type="addT">
             <xed:output i18n="editormask.labels.date_howToUse" />
           </span>
           <xed:bind xpath=".">
@@ -37,7 +37,7 @@
 
       <xed:repeat xpath="traditions[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/tradition[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.tradition_label" buttons="true" classification="jportal_class_00000080"
-          add="true">
+          add="-10">
           <xed:bind xpath=".">
             <input type="text" class="form-control" maxlength="64" tabindex="1" />
           </xed:bind>
@@ -46,7 +46,7 @@
 
       <xed:repeat xpath="identis[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/identi[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.jpjournal.identi.issn" buttons="true" classification="jportal_class_00000010"
-          add="true">
+          add="-10">
           <xed:bind xpath=".">
             <input type="text" class="form-control" maxlength="64" tabindex="1" />
           </xed:bind>
@@ -56,7 +56,7 @@
       <xed:bind
         xpath="collationNotes[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/collationNote[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.collation_note" classification="jportal_class_00000082"
-          add="true">
+          add="-10">
           <xed:bind xpath=".">
             <input type="text" class="form-control" maxlength="64" tabindex="1" />
           </xed:bind>

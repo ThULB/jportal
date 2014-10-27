@@ -25,7 +25,7 @@
             </div>
             <div class="panel-body">
               <xed:include
-                uri="xslStyle:institution-person-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
+                uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
                 ref="edit_{$type}" />
 
               <div class="col-md-11 text-right">
@@ -34,7 +34,7 @@
                   <input type="button" value="{i18n:common.button.cancel}" class="btn btn-default" tabindex="999"
                     xed:target="cancel" />
                   <xed:include
-                    uri="xslStyle:institution-person-editor-template:webapp:/editor/common/editor-common.xed"
+                    uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed"
                     ref="button_{$action}" />
                 </div>
               </div>
