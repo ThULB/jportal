@@ -115,12 +115,7 @@ subprojects {
 
 
         dependencies {
-            //            jetty "org.eclipse.jetty:jetty-runner:$jettyVersion"
-            //            jetty 'org.hsqldb:hsqldb:2.3.2'
-            //            runtime project(":jportal_webapp_wizard")
-            //            runtime 'org.mycore.mir:mir-wizard:0.1-SNAPSHOT'
             runtime "org.mycore:mycore-xeditor:$mcrVersion"
-            //            runtime 'org.hsqldb:hsqldb:2.3.2'
             runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
             runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
             runtime 'com.mchange:c3p0:0.9.2.1'
@@ -142,7 +137,6 @@ subprojects {
             configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
 
             main = "org.eclipse.jetty.runner.Runner"
-            //    println(war.archivePath)
             systemProperties.put("MCR.AppName","jportal")
             jvmArgs '-Xdebug'
             jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
