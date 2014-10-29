@@ -14,6 +14,10 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.metadata.MCRBase;
+import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
+import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -66,19 +70,31 @@ public class JPortalCommands {
     public static void renameFileInIFS(String file, String name) throws Exception {
         DerivateTools.rename(file, name);
     }
-    
-    @MCRCommand(help = "Copy file in derivate: copy derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "copy {0} {1}")
-    public static void copy(String oldFile, String newFile) {
+
+    @MCRCommand(help = "Copy file in derivate: copy derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "copy file {0} {1}")
+    public static void copyFile(String oldFile, String newFile) {
         DerivateTools.cp(oldFile, newFile);
     }
-    
+
+    @MCRCommand(help = "Copy object", syntax = "copy object {0}")
+    public static void copyObject(String id) {
+        MCRObjectID mcrId = MCRObjectID.getInstance(id);
+        MCRBase object = MCRMetadataManager.retrieve(mcrId);
+        object.setId(MCRObjectID.getNextFreeId(mcrId.getBase()));
+        if (object instanceof MCRObject) {
+            MCRMetadataManager.create((MCRObject) object);
+        } else {
+            MCRMetadataManager.create((MCRDerivate) object);
+        }
+    }
+
     @MCRCommand(help = "Move file in derivate: move derivID_1:/path/to/source derivID_2:/path/to/target", syntax = "move {0} {1}")
     public static void move(String oldFile, String newFile) {
         DerivateTools.mv(oldFile, newFile);
     }
-    
+
     @MCRCommand(help = "Create directories in derivate: mkir derivID:/path/to/newDir", syntax = "mkdir {0}")
     public static void mkdir(String newDir) {
-        DerivateTools.mkdir(newDir);;
+        DerivateTools.mkdir(newDir);
     }
 }
