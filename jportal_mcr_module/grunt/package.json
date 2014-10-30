@@ -1,0 +1,18 @@
+{
+    "name": "iview-client-derivate-link-plugin",
+    "version": "0.0.1",
+    "description": "wtf index.js",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "grunt-cli": "~0.1.6",
+        "grunt": "~0.4.2",
+        "grunt-typescript": "^0.2.8",
+        "grunt-contrib-copy": "^0.5.0",
+        "grunt-contrib-uglify": "^0.4.0" 
+    },
+    "author": "Matthias Eichner - matthias.eichner@uni-jena.de",
+    "license": "GPLv3"
+}
