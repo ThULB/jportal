@@ -662,10 +662,6 @@ body {
 	padding-left: 5px;
 }
 
-.jp-layout-topline {
-	/*border-top: 1px solid;*/
-}
-
 #searchResults .jp-layout-list-nodecoration>.jp-layout-topline:first-child
 	{
 	border: medium none;
@@ -732,44 +728,6 @@ body {
 	margin-top: 0;
 }
 
-.jp-layout-facet-list {
-	float: left;
-	width: 266px;
-}
-.jp-layout-facet-list .group {
-	font-size: 1rem;
-}
-.jp-layout-facet-list .group table {
-	width: 100%;
-	border-spacing: 0px;
-}
-.jp-layout-facet-list .group table td {
-	padding: 0px;
-	vertical-align: top;
-}
-.jp-layout-facet-list .group table td.text {
-	text-align: left;
-}
-.jp-layout-facet-list .group table td.count {
-	text-align: right;
-}
-
-.jp-layout-facet-list .group .groupName {
-	font-weight: bold;
-	margin-bottom: 4px;
-	margin-top: 8px;
-}
-.jp-layout-facet-list .group a .icon {
-	font-family: FontAwesome;
-	width: 22px;
-	display: inline-block;
-}
-.jp-layout-facet-list .group a:hover .icon:before, .jp-layout-facet-list .group a .icon.selected:before {
-	content: "\f00c";
-}
-.jp-layout-facet-list .group a:hover .icon.selected:before {
-	content: "\f00d";
-}
 .jp-layout-content-LCol {
 	float: left;
 	padding-bottom: 20px;
@@ -952,12 +910,13 @@ body {
 }
 
 #searchBar {
-	background-color: #859198;
+/* 	#0682f7 frühere farbe 859198 */
+	background-color: #008BD0; 
 	padding: 5px 29px 5px;
 }
 
 #searchBar .input-group {
-	width: 555px;
+	width: 555px;  709
 }
 
 #searchBar .dropdown-menu .fa-fw {
@@ -969,6 +928,19 @@ body {
 }
 #searchBar button.dropdown-toggle .fa-fw {
 	margin-right: 2px;
+}
+
+#searchBar #inputField{
+	padding-right: 2.3em;
+}
+
+.glyphSearchBar{
+	position: absolute; 
+	right: 1.16em; 
+	padding: 0.87em 0.87em 0.79em; 
+	cursor: pointer;
+	top: 0;
+	z-index: 3;
 }
 
 #main {
@@ -1375,4 +1347,139 @@ p.jp-layout-metadata-list {
 
 textarea {
 	resize:none;
+}
+
+.dt-collapse{
+	width: 100%;
+	padding-left: 0.1em;
+	cursor: pointer;
+}
+
+.dt-collapse i, .dt-collapse span, .jp-layout-resultLCaption {
+	color: #008CC9;
+	font-size: 18px;
+}
+
+.dt-collapse .fa-sort-asc{
+	float: right;
+	padding-right: 0.7em;	
+	padding-top: 7px;
+}
+
+.dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
+	display: none;	
+}
+
+.dt-collapse.collapsed .fa-sort-desc{
+	display: inline-block;
+	float: right; 
+	padding-right: 0.7em;
+}
+
+.jp-layout-searchResult-style{
+	font-size: 1.4em; 
+	font-weight: bold;
+	border-top: 1px solid #A8A9AA;
+	border-bottom: 1px solid #A8A9AA;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+}
+
+.jp-list-goupr-special .list-group-item{
+	borde-color: #C6C7C8 !important;
+}
+
+.jp-list-group-special .list-group-item:first-child{
+	border-top: none;		
+	border-left: none;
+	border-right: none;
+	padding-left: 0.2em;
+	padding-right: 0.8em;
+}
+
+.jp-list-group-special .list-group-item:not(:first-child){
+	border-left: none;
+	border-right: none;
+	padding-left: 0.2em;
+	padding-right: 0.8em;
+}
+
+.jp-list-group-special .list-group-item:last-child{
+	border-bottom: none;
+}
+
+.jp-list-group-special a, .dt-collapse {
+	text-decoration: none !important;
+}
+
+.jp-layout-resultlistBorder > .metadata:not(:nth-child(3)){
+	border-top: 1px solid #C6C7C8;	
+	padding-top: 15px;
+}
+
+.jp-layout-resultlistBorder{
+	border-left: 1px solid #9C9E9F;
+	padding-left: 2em;
+	min-height: 30em;
+}
+
+.jp-layout-searchList{
+	padding-left: 0;
+}
+
+.jp-layout-resultlistBorder > .metadata, #resultList #sortSelect{
+	width: 100% !important;	
+}
+
+.jp-list-group-special > a.selected, .jp-list-group-special > a.list-group-item:hover{
+	background-color: #5EC5ED;
+	color: #fff;
+	margin-left: -0.5em !important;
+	margin-right: -0.5em !important;
+	padding-left: 0.6em !important;
+	padding-right: 1.4em !important;	
+}
+
+.jp-list-group-special a .icon.selected:before  {
+	content: "\f00d";
+	font-family: FontAwesome;
+	width: 22px;
+	display: inline-block;
+}
+
+#jp-layout-triangle:before {
+    /* Rahmen nur an einer Seite einblenden */
+    border-color:transparent transparent transparent #9C9E9F;
+    border-style:solid;
+    border-width:16px;
+
+    /* Pseudo-Element stylebar machen */
+    content:" ";
+    display:block;
+    height:0;
+    width:0;
+
+    /* Pseudo-Element positionieren */
+    left:-2.077em;
+    top:0.7em;
+    
+    position:absolute;
+}
+
+#jp-layout-triangle {
+    padding-left:60px;
+    position:relative;
+}
+
+#resultList #jp-layout-triangle:nth-child(2):before{
+	border-color:transparent transparent transparent #fff;
+	left:-2.2em;
+}
+
+.jp-layout-resultlistBorder .metadata div, #searchResults > #resultList{
+	padding: 0;
+}
+
+.jp-layout-searchBarAdvanced a{
+	color: #fff;
 }
