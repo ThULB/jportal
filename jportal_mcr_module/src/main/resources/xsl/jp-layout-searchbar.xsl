@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:decoder="xalan://java.net.URLDecoder"
-  exclude-result-prefixes="xalan decoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:decoder="xalan://java.net.URLDecoder" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan decoder i18n">
 
   <xsl:variable name="qry">
     <xsl:variable name="encodedQuery">
@@ -65,18 +65,51 @@
   <xsl:template name="jp.layout.searchbar.default">
     <script type="text/javascript">
       $(document).ready(function() {
-        updateSearchbar();
+      updateSearchbar();
       });
     </script>
     <div id="searchBar">
       <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="container-fluid">
         <div class="row">
           <div class="hidden">
-            <span id="globalSearchLabel">Suche im Gesamtbestand</span>
-            <span id="journalSearchLabel">Suche innerhalb der Zeitschrift</span>
+            <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
+            <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
           </div>
-          <div class="col-md-8 input-group">
+          <div class="col-md-3 text-center jp-layout-searchBarAdvanced">
+            <xsl:attribute name="style">padding-top: 0.5em</xsl:attribute> 
+            <xsl:choose>
+              <xsl:when test="$searchMode != 'advanced'">
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml')" />
+                      <xsl:if test="$journalID != ''">
+                        <xsl:value-of select="concat('?journalID=', $journalID)" />
+                      </xsl:if>
+                  </xsl:attribute>
+                  <xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <a>
+                  <xsl:attribute name="href">
+                <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml?')" />
+                <xsl:value-of select="concat('XSL.field1=', $field1, '&amp;XSL.value1=', $value1)" />
+                <xsl:value-of select="concat('&amp;XSL.field2=', $field2, '&amp;XSL.value2=', $value2)" />
+                <xsl:value-of select="concat('&amp;XSL.field3=', $field3, '&amp;XSL.value3=', $value3)" />
+                <xsl:if test="$journalID != ''">
+                  <xsl:value-of select="concat('&amp;journalID=', $journalID)" />
+                </xsl:if>
+              </xsl:attribute>
+                  <xsl:value-of select="i18n:translate('jp.metadata.search.advancedEdit')" />
+                </a>
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+
+          <div class="col-md-9"> <!-- input-group -->
             <xsl:if test="$journalID != ''">
+              <xsl:attribute name="class">col-md-9 input-group</xsl:attribute>
+              <xsl:attribute name="style">width: 709px</xsl:attribute>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                   <span class="caret"></span>
@@ -96,17 +129,24 @@
                 </ul>
               </span>
             </xsl:if>
-            <input class="form-control" id="inputField" name="qry" value="{$qry}" />
-            <xsl:if test="$sort != ''">
-              <input type="hidden" name="sort" value="{$sort}" />
-            </xsl:if>
-            <span class="input-group-btn">
-              <input id="submitButton" type="submit" class="btn btn-default" value="Suche" />
-            </span>
+            
+           <span class="glyphicon glyphicon-search glyphSearchBar" onclick="$('#searchForm').submit()" > 
+              <xsl:attribute name="title">
+                <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
+              </xsl:attribute>
+              <xsl:if test="$journalID != ''">
+                  <xsl:attribute name="style">right: 0</xsl:attribute>
+              </xsl:if>
+           </span>
+            
+           <input class="form-control" id="inputField" name="qry" value="{$qry}" />
+            
+           <xsl:if test="$sort != ''">
+             <input type="hidden" name="sort" value="{$sort}" />
+           </xsl:if>
           </div>
         </div>
       </form>
     </div>
   </xsl:template>
-
 </xsl:stylesheet>

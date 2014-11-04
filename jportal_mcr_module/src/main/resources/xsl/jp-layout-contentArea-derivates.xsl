@@ -39,7 +39,7 @@
 
     <xsl:if test="acl:checkPermission($journalID,'read-derivate') or derivAccess:checkPermission($journalID, $published)">
       <xsl:if test="count($nodes) &gt; 0">
-        <div class="jp-layout-derivateList">
+        <div class="jp-layout-derivateList pull-left">
           <xsl:apply-templates mode="derivateDisplay" select="$nodes">
             <xsl:with-param name="editable" select="$editable" />
             <xsl:with-param name="mode" select="$mode" />
