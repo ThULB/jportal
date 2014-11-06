@@ -80,29 +80,22 @@ public class InitHandler implements AutoExecutable{
         return session.createCriteria(clazz).setMaxResults(1).list().isEmpty();
     }
 
-    public void closeSession() {
+    private void closeSession() {
         transaction.commit();
         session.close();
     }
 
-    public void startSession() {
+    private void startSession() {
         session = MCRHIBConnection.instance().getSession();
         transaction = session.beginTransaction();
     }
 
     private void createClass() {
         info("creating default classifications ...");
-        URL classiPath = getClass().getResource("/classifications");
-        String[] splittedClassiPath = classiPath.toString().split("!");
-        String jarFile = splittedClassiPath[0];
-        String classiFolder = splittedClassiPath[1];
         
-        Map<String, String> env = new HashMap<>();
         try {
-            FileSystem zipFS = FileSystems.newFileSystem(URI.create(jarFile), env);
-            
             MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-            for (Path child : Files.newDirectoryStream(zipFS.getPath(classiFolder))) {
+            for (Path child : Files.newDirectoryStream(getJarPath("/classifications"))) {
                 InputStream classiXMLIS = Files.newInputStream(child);
                 
                 Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));
@@ -123,7 +116,18 @@ public class InitHandler implements AutoExecutable{
         }
     }
 
-    public void initSuperUser() {
+    private Path getJarPath(String path) throws IOException {
+        URL jarURL = getClass().getResource(path);
+        String[] splittedURL = jarURL.toString().split("!");
+        String jarFile = splittedURL[0];
+        String jarFolder = splittedURL[1];
+        Map<String, String> env = new HashMap<>();
+        FileSystem zipFS = FileSystems.newFileSystem(URI.create(jarFile), env);
+        
+        return zipFS.getPath(jarFolder);
+    }
+
+    private void initSuperUser() {
         info("superuser ...");
         String superuser = MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName", "administrator");
         if(!MCRUserManager.exists(superuser)){
@@ -136,7 +140,7 @@ public class InitHandler implements AutoExecutable{
         System.out.println("Init: " + msg);
     }
 
-    public void createDefaultRules() {
+    private void createDefaultRules() {
         info("creating default ACL rules ...");
         InputStream cmdFileIS = getClass().getResourceAsStream("/config/jportal_mcr/acl/defaultrules-commands");
         BufferedReader cmdFileReader = new BufferedReader(new InputStreamReader(cmdFileIS));
@@ -154,7 +158,7 @@ public class InitHandler implements AutoExecutable{
         }
     }
     
-    public void createRule(String cmdLine){
+    private void createRule(String cmdLine){
         try {
             Object[] params = parseParams(cmdLine);
             
@@ -173,7 +177,7 @@ public class InitHandler implements AutoExecutable{
         } 
     }
     
-    public Element getRuleXML(String source) {
+    private Element getRuleXML(String source) {
         Path path = Paths.get("/config/jportal_mcr/acl", source);
         String ruleXML = path.toString();
         InputStream resourceIS = getClass().getResourceAsStream(ruleXML);
@@ -188,7 +192,7 @@ public class InitHandler implements AutoExecutable{
         return null;
     }
 
-    public Object[] parseParams(String cmdLine) throws NoSuchMethodException, ParseException {
+    private Object[] parseParams(String cmdLine) throws NoSuchMethodException, ParseException {
         Method method = MCRAccessCommands.class.getMethod("permissionUpdateForID", String.class, String.class, String.class, String.class);
         String pattern = method.getAnnotation(MCRCommand.class).syntax();
         MessageFormat mf = new MessageFormat(pattern);
@@ -196,7 +200,7 @@ public class InitHandler implements AutoExecutable{
         return params;
     }
     
-    public void addRule(String id, String permission, Element rule, String description){
+    private void addRule(String id, String permission, Element rule, String description){
         MCRAccessInterface AI = MCRAccessManager.getAccessImpl();
         
         AI.addRule(id, permission, rule, description);
