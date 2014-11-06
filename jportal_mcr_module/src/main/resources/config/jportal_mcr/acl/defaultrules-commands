@@ -1,4 +1,13 @@
 update permission read for id default with rulefile xml/grant-all.xml described by always allowed
+update permission writedb for id default with rulefile xml/grant-admins.xml described by For administrators only
+update permission deletedb for id default with rulefile xml/grant-admins.xml described by For administrators only
+
+update permission read for id webpage:/authorization/new-user.xed?action=save with rulefile xml/grant-admins.xml described by For administrators only
+update permission read for id webpage:/authorization/roles-editor.xml with rulefile xml/grant-admins.xml described by For administrators only
+update permission read for id webpage:/content/main/admin.xml with rulefile xml/grant-admins.xml described by For administrators only
+update permission read for id webpage:/servlets/MCRSessionListingServlet with rulefile xml/grant-admins.xml described by For administrators only
+
+update permission read for id default with rulefile xml/grant-all.xml described by always allowed
 update permission writedb for id default with rulefile xml/grant-admin.xml described by For administrators only
 update permission deletedb for id default with rulefile xml/grant-admin.xml described by For administrators only
 

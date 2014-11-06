@@ -24,11 +24,14 @@ public class WebappConf {
     private File solrHomeDir;
 
     private String projectName;
+    
+    private Path confDirFromResource = Paths.get("/config/jportal_jetty_tools");
 
     private WebappConf() {
         projectName = System.getProperty("MCR.AppName", "jportal");
         initConfDir();
-        checkHibernateConf();
+        checkConf(Paths.get("mycore.properties"));
+        checkConf(Paths.get("hibernate/hibernate.cfg.xml"));
         startHsqlDB();
         checkSolrHome();
     }
@@ -57,23 +60,24 @@ public class WebappConf {
         info("Using SOLR home (" + solrHomeDir.getAbsolutePath() + ").");
     }
 
-    private void checkHibernateConf() {
-        File hibConFile = ConfigurationDir.getConfigFile("hibernate.cfg.xml");
+    private void checkConf(Path confFilePath) {
+        String fileName = confFilePath.getFileName().toString();
+        File hibConFile = ConfigurationDir.getConfigFile(fileName);
 
         if (!hibConFile.exists()) {
-            info("Creating hibernate config file ...");
+            info("Creating config file " + fileName);
             Path hibConfPath = Paths.get(hibConFile.getAbsolutePath());
-            InputStream hibConfIS = getClass().getResourceAsStream(
-                    "/config/jportal_jetty_tools/hibernate/hibernate.cfg.xml");
+            String confFile = confDirFromResource.resolve(confFilePath).toString();
+            InputStream hibConfIS = getClass().getResourceAsStream(confFile);
             try {
                 Files.copy(hibConfIS, hibConfPath);
-                info("Created hibernate config file ... (" + hibConFile.getAbsolutePath() + ").");
+                info("Created config file ... (" + hibConFile.getAbsolutePath() + ").");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
-        info("Using hibernate config file (" + hibConFile.getAbsolutePath() + ").");
+        info("Using config file (" + hibConFile.getAbsolutePath() + ").");
     }
 
     private void initConfDir() {
