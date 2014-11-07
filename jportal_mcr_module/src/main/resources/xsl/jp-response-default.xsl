@@ -18,7 +18,6 @@
         <h2 class="col-sm-6 jp-layout-resultListHeadLeft"> 
           <xsl:value-of select="i18n:translate('jp.metadata.search.result')" />
         </h2>
-        
         <div class="col-sm-6 jp-layout-resultListHeadRight">
           <xsl:if test="$journalID != ''">
             <a href="{$WebApplicationBaseURL}receive/{$journalID}">
@@ -31,7 +30,6 @@
             </a>
           </xsl:if>
         </div>
-        
       </div>
       <div id="resultList" class="col-sm-12 container-fluid">
         <xsl:apply-templates mode="resultList" select="." />
@@ -101,37 +99,19 @@
     </xsl:variable>
     <xsl:if test="$showFacet">
       <div id="navbar-collapse-searchResult" class="col-sm-3 jp-layout-searchList navbar-collapse collapse" role="navigation">
-        
-          <xsl:variable name="getFQ">
-            <xsl:call-template name="UrlGetParam">
-              <xsl:with-param name="url" select="$RequestURL" />
-              <xsl:with-param name="par" select="'fq'" />
-            </xsl:call-template>
-          </xsl:variable>
-        
-        <xsl:if test="$getFQ!=''">
-          <xsl:attribute name="class">col-sm-3 jp-layout-searchList navbar-collapse collapse in</xsl:attribute>
-        </xsl:if>
         <div class="jp-layout-searchResult-style form-group">
           <xsl:apply-templates mode="searchResultText" select="." />
         </div>
-
         <xsl:apply-templates mode="jp.response.navigation" select="." />
-
         <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" />
       </div>
     </xsl:if>
     <div class="col-sm-9 jp-layout-resultlistBorder">
-
       <div id="jp-layout-triangle"></div>
       <div id="jp-layout-triangle"></div>
-
       <xsl:apply-templates mode="searchResults" select="result/doc" />
-
       <xsl:apply-templates mode="jp.pagination" select="." />
     </div>
-    <!-- <div class="clear" /> -->
-
   </xsl:template>
 
   <xsl:variable name="searchResultsFields">
