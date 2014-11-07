@@ -1,10 +1,159 @@
 var DerivateBrowser = function(){
 	var i18nKeys =[];
+	var uploadList = {};
+	var currentDocID = "";
+	var currentDeriID = "";
+	var currentPath = "";
+	var currentUploadCheck = {};
+	
+	
 	var mode = "normal";
 	var dragcounter = 0;
+	var mouseDown = false;
+	//var mouseY = 0;
+	var dragElm = null;
+	var dragObj = null;
+	var uploade = 0;
 
 	return {
 		init: function() {
+			
+			$("body").on("click", "#btn-upload-cancel", function() {
+				$('#lightbox-upload-overwrite').modal('hide');
+				uploadList = {};
+			});
+			
+			$("body").on("click", "#btn-upload-skip", function() {
+				$('#lightbox-upload-overwrite').modal('hide');
+				currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
+				if ($(".btn-upload-all").data("check") == true){
+					console.log("bla");
+					currentUploadCheck.skipAll = true;
+				}
+				uploadFilesAndAsk();
+			});
+			
+			$("body").on("click", ".btn-upload-all", function() {
+				if($(this).data("check") == true){
+					$(this).removeData("check");
+					$(this).addClass("glyphicon-unchecked");
+					$(this).removeClass("glyphicon-check");
+				}
+				else{
+					$(this).data("check", true);
+					$(this).removeClass("glyphicon-unchecked");
+					$(this).addClass("glyphicon-check");
+				}
+			});
+						
+			$("body").on("click", "#btn-upload-overwrite", function() {
+				var upload = uploadList[currentUploadCheck.data.files[currentUploadCheck.currentPos].id];
+				upload.statusbar = $("#upload-status-bar-table").append(upload.getStatus());
+				showUploadBar();
+				$('#lightbox-upload-overwrite').modal('hide');
+				currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
+				if ($(".btn-upload-all").data("check") == true){
+					currentUploadCheck.overwriteAll = true;
+				}
+				uploadFile(upload);
+			});
+			
+			$('#lightbox-upload-overwrite').on('hidden.bs.modal', function (e) {
+				$(this).data("open", false);
+				if ($(this).data("openagain") != undefined){
+					$(this).removeData("openagain");
+					$('#lightbox-upload-overwrite').modal("show");
+				}			
+			});
+			
+			$('#lightbox-upload-overwrite').on('shown.bs.modal', function (e) {
+				$(this).data("open", true);		
+			});
+			
+//			$("body").on("click", "#upload-status-bar-remember-check", function() {
+//				if ($(this).data("checked") != true){
+//					$(this).data("checked", true);
+//					$(this).removeClass("glyphicon-unchecked");
+//					$(this).addClass("glyphicon-check");
+//				}
+//				else{
+//					$(this).removeData("checked");
+//					$(this).addClass("glyphicon-unchecked");
+//					$(this).removeClass("glyphicon-check");
+//					uploade = 0;
+//				}
+//			});
+			
+//			$("body").on("mouseenter", ".upload-preview-overlay-label", function() {
+//				$(this).addClass("hidden");
+//				$(this).siblings(".upload-preview-overlay-button").removeClass("hidden");
+//			});
+//			
+//			$("body").on("mouseleave", ".upload-preview-overlay-button", function() {
+//				$(this).addClass("hidden");
+//				$(this).siblings(".upload-preview-overlay-label").removeClass("hidden");
+//			});
+			
+//			$("body").on("click", ".upload-preview-overlay-overwrite", function() {
+//				if ($("#upload-status-bar-remember-check").data("checked") == true){
+//					uploade = 1;
+//				}
+//				$(this).closest(".upload-preview-overlay").siblings(".upload-preview-size").removeClass("hidden");
+//				$(this).closest(".upload-preview-overlay").siblings(".upload-preview-status").removeClass("hidden");
+//				$(this).closest(".upload-preview-overlay").addClass("hidden");
+//				uploadFile($(this).closest(".upload-entry"), true);
+//			});
+			
+//			$("body").on("click", ".upload-preview-overlay-discard", function() {
+//				if ($("#upload-status-bar-remember-check").data("checked") == true){
+//					uploade = 2;
+//				}
+//				$(this).closest(".upload-entry").remove();
+//			});
+			
+			$("body").on("mousedown", ".popover-file", function(event) {
+				mouseDown = true;
+				//mouseY = event.pageY;
+				dragElm = $(this).closest(".browser-table-entry");
+			});
+			
+		    $("body").on("mousemove", function(e) {
+		    	if (mouseDown){
+//		    		console.log(mouseY - e.pageY);
+		    		
+			        if ($(dragObj)){
+			        	$(dragObj).offset({
+			                top: e.pageY - ($(dragObj).height() / 2),
+			                left: e.pageX - ($(dragObj).width() / 2)
+			            });
+			        }
+			        if ((dragObj == null) /*&& (Math.abs(mouseY - e.pageY) > 20)*/){
+			        	var img = $('<img id="drag-img" src="/servlets/MCRFileNodeServlet/' + dragElm.data("deriID") + dragElm.data("path") + '">');
+						$("body").append(img);
+						dragObj = img;
+						window.getSelection().removeAllRanges();
+						$("body").attr('unselectable','on')
+					     .addClass("noSelect").bind('selectstart', function(){ return false; });
+			        }
+			        
+		    	}
+		    });
+		    
+			$("body").on("mouseup", function(e) {
+				mouseDown = false;
+				//mouseY = 0;
+				if (dragObj){
+					dragObj.remove();
+					dropObj = document.elementFromPoint(e.pageX, e.pageY);
+					if ($(dropObj).closest("#derivat-panel-startfile").length>0){
+						changeStartFile(dragElm);
+					}					
+					dragElm = null;
+					$("body").removeAttr('unselectable')
+				     .removeClass("noSelect").bind('selectstart', function(){ return true; });
+					dragObj = null;
+				}
+			});
 			
 			$("body").on("click", "span.btn-new-urn", function(event) {
 				var entry = $(this).parents(".browser-table-entry");
@@ -28,35 +177,75 @@ var DerivateBrowser = function(){
 				event.preventDefault();
 				event.stopPropagation();
 				var files = event.originalEvent.dataTransfer.files;
-				console.log(files);
+				var deriID;
+				if ($(".aktiv").hasClass("derivat-folder")){
+				   	deriID = $(".aktiv").data("deriID");
+				}
+				else{
+				  	deriID = $(".aktiv").data("id");
+				}
+				var path;
+			    if ($(".aktiv").data("path") == undefined){
+			    	path = "";
+			    }
+			    else{
+			    	path = $(".aktiv").data("path");
+			    }
+				var json = {
+						"deriID": deriID,
+						"path": path,
+						"files": [],
+					};
+//				console.log(json);
 				$.each(files, function(i, file) {
 					if (file.type != "" && file.type != "text/xml"){
-					    var data = new FormData();
-					    data.append("documentID", $(".aktiv").closest(".folder").data("id"));
-					    data.append("derivateID", $(".aktiv").data("deriID"));
-					    if ($(".aktiv").data("path") == undefined){
-					    	data.append("path", "");
-					    }
-					    else{
-					    	data.append("path", $(".aktiv").data("path") + "/");
-					    }
-					    data.append("derivateID", $(".aktiv").data("id"));
-					    data.append("file", file);
+						var upload = new Upload(currentDocID, currentDeriID, currentPath, file);
+						uploadList[upload.getID()] = upload;
+//					    var data = new FormData();
+//					    data.append("documentID", $(".aktiv").closest(".folder").data("id"));
+//					    data.append("derivateID", deriID);
+//					    data.append("path", path);
+////					    data.append("derivateID", $(".aktiv").data("id"));
+//					    data.append("file", file);
 					    //createStatusBar($("#upload-status-bar-table"), file);
-						uploadFile(data, createStatusBar($("#upload-status-bar-table"), file), file);
+						//uploadFile(data, createStatusBar($("#upload-status-bar-table"), file), file);
+//					    createStatusBar($("#upload-status-bar-table"), file, data, path, deriID);
+//					    var jsonO = {
+//								"file": file.name
+//						}
+//						json.files.push(jsonO);
 					}
 					else{
 						alert("invalid File Type")
 					}
 				});
+				existsCheck();
 				dragcounter = 0;
 				$("#upload-overlay").addClass("hidden");
-				$("#upload-status-bar").removeClass("hidden");
 			});
 			
 			$("body").on("click", ".btn-close-usb", function() {
-				$("#upload-status-bar").addClass("hidden");
-				$("#upload-status-bar-table").html("");
+				$("#upload-status-bar").animate({'height': '0px'}, 500, function() {
+					$("#upload-status-bar").addClass("hidden");
+					$("#upload-status-bar-table").html("");
+				});
+			});
+			
+			$("body").on("click", ".btn-mini-usb", function() {
+				if($(this).data("status") == "maxi"){
+					$(this).data("status", "mini");
+					$("#upload-status-bar").animate({'height': '32px'}, 500, function() {
+						$("#upload-status-bar-table").addClass("hidden");
+					});
+				}
+				else{
+					$(this).data("status", "maxi");
+					$("#upload-status-bar-table").removeClass("hidden");
+					$("#upload-status-bar").animate({'height': '300px'}, 500);
+				}
+
+//				$("#upload-status-bar").addClass("hidden");
+//				$("#upload-status-bar-table").html("");
 			});
 			
 			$("body").on("dragenter", "#files", function(event) {
@@ -94,11 +283,14 @@ var DerivateBrowser = function(){
 				$("#derivat-panel").addClass("hidden");
 				$("#browser-table-files").html("");
 				highlight($(this).parent());
-				jp.subselect.get($(this).parent().data("id"), addInfo);
+				jp.subselect.get($(this).parent().data("docID"), addInfo);
+				currentDocID = $(this).parent().data("docID");
+				currentDeriID = "";
+				currentPath = "";
 			});
 			
 			$("body").on("click", ".button-expand", function() {
-				getDerivateIDs($(this).siblings("ul.children"), $(this).closest(".folder").data("id"));
+				getDerivateIDs($(this).siblings("ul.children"), $(this).closest(".folder").data("docID"));
 				expandFolder($(this).closest(".folder"));
 			});
 			
@@ -113,14 +305,24 @@ var DerivateBrowser = function(){
 			
 			$("body").on("click", ".derivat > .folder-name, .derivat > span.icon", function() {
 				$("#journal-info").addClass("hidden");
+				$(".btn-delete-all").addClass("faded");
+				$(".btn-move-all").addClass("faded");
 				highlight($(this).parent());
-				getDerivate($(this).parent().data("id"), "");
+				getDerivate($(this).parent().data("deriID"), "");
+				currentDeriID = $(this).parent().data("deriID");
+				currentPath = "";
+				currentDocID = $(this).closest(".folder").data("docID");
 			});
 			
 			$("body").on("click", ".derivat-folder > .folder-name, .derivat-folder > span.icon", function() {
 				$("#journal-info").addClass("hidden");
+				$(".btn-delete-all").addClass("faded");
+				$(".btn-move-all").addClass("faded");
 				highlight($(this).parent());
 				getDerivate($(this).parent().data("deriID"), $(this).parent().data("path"));
+				currentDeriID = $(this).parent().data("deriID");
+				currentPath = $(this).parent().data("path");
+				currentDocID = $(this).closest(".folder").data("docID");
 			});
 			
 			$("body").on("click", ".derivate-browser-breadcrumb-entry", function() {
@@ -130,6 +332,7 @@ var DerivateBrowser = function(){
 					return $(this).data("id") == deriID + path;
 				}));
 				getDerivate(deriID, path);
+				currentPath = path;
 			});
 			
 			$("body").on("click", ".btn-folder", function() {
@@ -140,6 +343,8 @@ var DerivateBrowser = function(){
 				});
 				highlight(parentInTreeView);
 				getDerivate(deriID, path);
+				currentPath = path;
+				console.log(currentPath);
 			});
 			
 			$("body").on("click", ".btn-edit", function(){
@@ -190,12 +395,18 @@ var DerivateBrowser = function(){
 					$(this).removeClass("glyphicon-unchecked");
 					$(this).removeClass("invisable");
 					$(this).addClass("glyphicon-check");
+					$(".btn-delete-all").removeClass("faded");
+					$(".btn-move-all").removeClass("faded");
 				}
 				else{
 					$(parent).removeClass("checked");
 					$(parent).removeData("checked");
 					$(this).addClass("glyphicon-unchecked");
 					$(this).removeClass("glyphicon-check");
+					if ($(".browser-table-entry .glyphicon-check").length == 0){
+						$(".btn-delete-all").addClass("faded");
+						$(".btn-move-all").addClass("faded");
+					}
 				}
 
 			});
@@ -203,23 +414,29 @@ var DerivateBrowser = function(){
 			$("body").on("click", ".btn-check-all", function(){
 				if ($(this).data("checked") != true){
 					$(this).data("checked", true);
-					$(".browser-table-file:visible").each(function(i, node) {
+					$(".browser-table-entry:visible").each(function(i, node) {
 						$(node).addClass("checked");
 						$(node).data("checked", true);
 						$(node).find(".btn-check").removeClass("glyphicon-unchecked");
 						$(node).find(".btn-check").removeClass("invisable");
 						$(node).find(".btn-check").addClass("glyphicon-check");
 					});
+					$(".btn-delete-all").removeClass("faded");
+					$(".btn-move-all").removeClass("faded");
 				}
 				else{
 					$(this).removeData("checked");
-					$(".browser-table-file.checked").each(function(i, node) {
+					$(".browser-table-entry.checked").each(function(i, node) {
 						$(node).removeClass("checked");
 						$(node).removeData("checked");
 						$(node).find(".btn-check").addClass("glyphicon-unchecked");
 						$(node).find(".btn-check").addClass("invisable");
 						$(node).find(".btn-check").removeClass("glyphicon-check");
 					});
+					if ($(".browser-table-entry .glyphicon-check").length == 0){
+						$(".btn-delete-all").addClass("faded");
+						$(".btn-move-all").addClass("faded");
+					}
 				}
 			});
 			
@@ -303,57 +520,55 @@ var DerivateBrowser = function(){
 			});
 			
 			$("body").on("mouseenter", "#panel-img", function() {
-				$("#derivat-panel-startfile-btn-div").removeClass("hidden");
+				$("#derivat-panel-startfile-overlay-div").removeClass("hidden");
 			});
 			
-			$("body").on("mouseleave", "#derivat-panel-startfile-btn-div", function() {
-				if(mode != "startfile"){
-					$("#derivat-panel-startfile-btn-div").addClass("hidden");
-				}
+			$("body").on("mouseleave", "#derivat-panel-startfile-overlay-div", function() {
+				$("#derivat-panel-startfile-overlay-div").addClass("hidden");
 			});
 			
-			$("body").on("click", "#derivat-panel-startfile-btn-edit", function() {
-				if (mode == "normal"){
-					toggleStartMode();
-				}
-			});
+//			$("body").on("click", "#derivat-panel-startfile-btn-edit", function() {
+//				if (mode == "normal"){
+//					toggleStartMode();
+//				}
+//			});
 			
-			$("body").on("click", "#derivat-panel-startfile-btn-confirm", function() {
-				if (mode == "startfile"){
-					var newStartFile = $(".browser-table-entry").filter(function() {
-						return $(this).data("startfile") == true;
-					});
-					changeStartFile(newStartFile);
-				}
-			});
+//			$("body").on("click", "#derivat-panel-startfile-btn-confirm", function() {
+//				if (mode == "startfile"){
+//					var newStartFile = $(".browser-table-entry").filter(function() {
+//						return $(this).data("startfile") == true;
+//					});
+//					changeStartFile(newStartFile);
+//				}
+//			});
 			
-			$("body").on("click", "#derivat-panel-startfile-btn-cancel", function() {
-				if (mode == "startfile"){
-					var oldStartfile = $("#derivat-panel-startfile").data("startfile");
-					var oldEntry = $(".browser-table-file").filter(function() {
-						return $(this).data("path") == oldStartfile;
-					});
-					if (oldEntry.length != 0){
-						setStartFile(oldEntry);
-					}
-					else{
-						$("#panel-img").attr("src", $("#panel-img").data("oldSrc"));
-						$(".startfile").removeClass("startfile");
-						$(".browser-table-file").filter(function() {
-							return $(this).data("startfile") == true;
-						}).removeData("startfile");
-						$("#derivat-panel-startfile-label").html($("#derivat-panel-startfile").data("startfile"));
-					}
-					toggleStartMode();
-				}
-			});
+//			$("body").on("click", "#derivat-panel-startfile-btn-cancel", function() {
+//				if (mode == "startfile"){
+//					var oldStartfile = $("#derivat-panel-startfile").data("startfile");
+//					var oldEntry = $(".browser-table-file").filter(function() {
+//						return $(this).data("path") == oldStartfile;
+//					});
+//					if (oldEntry.length != 0){
+//						setStartFile(oldEntry);
+//					}
+//					else{
+//						$("#panel-img").attr("src", $("#panel-img").data("oldSrc"));
+//						$(".startfile").removeClass("startfile");
+//						$(".browser-table-file").filter(function() {
+//							return $(this).data("startfile") == true;
+//						}).removeData("startfile");
+//						$("#derivat-panel-startfile-label").html($("#derivat-panel-startfile").data("startfile"));
+//					}
+//					toggleStartMode();
+//				}
+//			});
 			
-			$("body").on("click", ".browser-table-file", function() {
-				if (mode == "startfile"){
-					setStartFile($(this));
-				}
-			});
-			
+//			$("body").on("click", ".browser-table-file", function() {
+//				if (mode == "startfile"){
+//					setStartFile($(this));
+//				}
+//			});
+//			
 			$("body").on("click", ".btn-move-all", function(){				
 				if($(".glyphicon-check").length > 0){
 					getTargetFolders($("#derivat-panel-name").html());
@@ -383,7 +598,10 @@ var DerivateBrowser = function(){
 							path = $("li.aktiv").data("id").substr($("li.aktiv").data("id").indexOf("/"));
 						}
 						if (file != moveTo && $(this).data("deriID") + ":" + path != moveTo){
-							json.files.push(file);
+							json2 ={
+								"file": file	
+							};
+							json.files.push(json2);
 						}
 					});
 				}
@@ -395,6 +613,7 @@ var DerivateBrowser = function(){
 	function getJournals(query, start) {
 		var url = "/servlets/solr/select?q=" + query + "&start=" + start +  "&rows=10&fq=objectType%3Ajpjournal&sort=maintitle+asc&wt=json&indent=true";
 		$.getJSON(url, function(search){
+			console.log(search.response);
 			if(search.response.numFound > 0){
 				var results = search.response.docs;
 				for (result in results){
@@ -421,19 +640,19 @@ var DerivateBrowser = function(){
 		});
 	};
 	
-	function getDerivateIDs(node, id) {
+	function getDerivateIDs(node, deriID) {
 		$.ajax({
-			url: "/rsc/derivatebrowser/deriid/" + id,
+			url: "/rsc/derivatebrowser/deriid/" + deriID,
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
 						for (id in data){
 							createDerivate(node, data[id]);
 						}
-						getChilds(node, id, 0);
+						getChilds(node, deriID, 0);
 					},
 			error: function(error) {
-						getChilds(node, id, 0);
+						getChilds(node, deriID, 0);
 					}
 		});
 	}
@@ -531,6 +750,9 @@ var DerivateBrowser = function(){
 				},
 				500: function(error) {
 					alert(error);
+				},
+				409: function(error) {
+					alert("Ordnername bereits vergeben.");
 				}
 			}
 		});
@@ -544,7 +766,8 @@ var DerivateBrowser = function(){
 			statusCode: {
 				200: function() {
 					$("#derivat-panel-startfile").data("startfile", $(entry).data("path"));
-					toggleStartMode();
+					setStartFile(entry);
+//					toggleStartMode();
 				},
 				500: function(error) {
 					var oldStartfile = $("#derivat-panel-startfile").data("startfile");
@@ -553,7 +776,7 @@ var DerivateBrowser = function(){
 					});
 					setStartFile(oldEntry);
 					$("#derivat-panel-startfile").data("startfile", $(oldEntry).data("path"));
-					toggleStartMode();
+//					toggleStartMode();
 				}
 			}
 		});
@@ -585,18 +808,27 @@ var DerivateBrowser = function(){
 			dataType: "json",
 			data: JSON.stringify(json),
 			statusCode: {
-				200: function() {
-					$.each(json.files, function(i, file) {
-						var deriID = file.substr(0, file.indexOf(":"));
-						var path = file.substr(file.indexOf(":")+1);
-						$(".browser-table-entry").filter(function() {
-							return ($(this).data("deriID") == deriID) && ($(this).data("path") == path);
-						}).remove();
-						$(".derivat-folder").filter(function() {
-							return ($(this).data("deriID") == deriID) && ($(this).data("path") == path);
-						}).remove();
+				200: function(data) {
+					var notMoved = false;
+					$.each(data.files, function(i, oneFile) {
+						if (oneFile.status == "1"){
+							var deriID = oneFile.file.substr(0, oneFile.file.indexOf(":"));
+							var path = oneFile.file.substr(oneFile.file.indexOf(":")+1);
+							$(".browser-table-entry").filter(function() {
+								return ($(this).data("deriID") == deriID) && ($(this).data("path") == path);
+							}).remove();
+							$(".derivat-folder").filter(function() {
+								return ($(this).data("deriID") == deriID) && ($(this).data("path") == path);
+							}).remove();
+						}
+						else{
+							notMoved = true;
+						}
 					});
-					$('#lightbox-multi-move').modal('hide')							
+					$('#lightbox-multi-move').modal('hide');
+					if (notMoved){
+						alert("Es wurden nicht alle Dateien verschoben.");
+					}
 				},
 				500: function(error) {
 					alert(error);
@@ -629,29 +861,39 @@ var DerivateBrowser = function(){
 		});
 	}
 	
-	function uploadFile(data, statusbar, file){
+	function uploadFile(upload){
 		$.ajax({
 			url: "/rsc/derivatebrowser/upload",
 			type: "POST",
 			processData: false, 
 			contentType: false,
-			data: data,
+			data: upload.getFormData(),
 			xhr: function() {
-				var xhr = new window.XMLHttpRequest();
-				xhr.upload.addEventListener("progress", function(evt) {
-					if (evt.lengthComputable){
-						var percentComplete = evt.loaded / evt.total;
-						console.log(percentComplete);
-						$(statusbar).find(".statusbar-progress-status").width(percentComplete + '%');
-			            $(statusbar).find(".statusbar-progress-status").html(percentComplete + '%');
-					}
-				}, false);
-				return xhr;
+						var xhr = new window.XMLHttpRequest();
+						xhr.upload.addEventListener("progress", function(evt) {
+							if (evt.lengthComputable){
+								var percentComplete = evt.loaded / evt.total;
+								$(upload.statusbar).find(".statusbar-progress-status").width(percentComplete + '%');
+								$(upload.statusbar).find(".statusbar-progress-status").html(percentComplete + '%');
+							}
+						}, false);
+						return xhr;
 			},
-			success: function(data) {
-						console.log("Complete");
-						$(statusbar).find(".upload-preview-status").html('Hochgeladen');
-						addFileToDerivateBrowser({"name": file.name, "size": file.size, "lastmodified": file.lastModifiedDate, "absPath": "/" + file.name, "deriID": $(".aktiv").data("id")});
+			success: function() {
+						$(upload.statusbar).find(".upload-preview-status").html('Hochgeladen');
+//						var currentDate = new Date();
+//						var path = "/";
+//						if ($(statusbar).data("filepath") != ""){
+//							path = $(statusbar).data("filepath") + "/";
+//						}
+						if (upload.exists){
+							$(".browser-table-file").filter(function() {								
+								return ($(this).data("deriID") == upload.deriID) && ($(this).data("path") == upload.getCompletePath());
+							}).remove();
+						}
+						addFileToDerivateBrowser(upload.getaddToBrowserJson());
+						uploadFilesAndAsk();
+//						$(statusbar).data("status", 1);
 					},
 			error: function(error) {
 						alert(error);
@@ -686,6 +928,31 @@ var DerivateBrowser = function(){
 			}
 		});
 	}
+	function doExistsCheck(json) {
+		$.ajax({
+			url: "/rsc/derivatebrowser/exists",
+			type: "POST",
+			contentType: 'application/json',
+			dataType: "json",
+			data: JSON.stringify(json),
+			statusCode: {
+				200: function(data) {
+					currentUploadCheck.data = data;
+					currentUploadCheck.currentPos = 0;
+					currentUploadCheck.overwriteAll = false;
+					currentUploadCheck.skipAll = false;
+					$(".btn-upload-all").removeData("check");
+					$(".btn-upload-all").addClass("glyphicon-unchecked");
+					$(".btn-upload-all").removeClass("glyphicon-check");
+					uploadFilesAndAsk();
+//					
+				},
+				500: function(error) {
+					alert(error);
+				}
+			}
+		});
+	}
 		
 	function createFolder(parent, data) {
 		var li = $("<li class='folder'><div class='folder-name'>" + data.maintitle + "</div></li>");
@@ -709,7 +976,7 @@ var DerivateBrowser = function(){
 		else{
 			$(li).prepend("<div class='no-button'>&nbsp;</div>");
 		}
-		$(li).data("id", data.id);
+		$(li).data("docID", data.id);
 		$(parent).append(li);
 	}
 	
@@ -718,13 +985,13 @@ var DerivateBrowser = function(){
 		$(li).prepend("<span class='glyphicon glyphicon-picture icon'></span>");
 		$(li).prepend("<div class='no-button'>&nbsp;</div>");
 		$(li).append("<ul class='children'></ul>");
-		$(li).data("id", data.id);
+		$(li).data("deriID", data.id);
 		$(parent).append(li);
 	}
 	
 	function showDerivatOrFolder(deriID, data){
 		var parentInTreeView = $(".derivat").filter(function() {
-			return $(this).data("id") == deriID;
+			return $(this).data("deriID") == deriID;
 		}).children(".children");
 		if (data.absPath != "/"){
 			parentInTreeView = $(parentInTreeView).find(".derivat-folder").filter(function() {
@@ -833,7 +1100,7 @@ var DerivateBrowser = function(){
 		$(".browser-table-file").filter(function() {
 			return $(this).data("startfile") == true;
 		}).removeData("startfile");
-		$(entry).data("startfile", true).addClass("startfile");
+		$(entry).data("startfile", true);
 		$("#panel-img").attr("src", "/servlets/MCRFileNodeServlet/" + $(entry).data("deriID") + $(entry).data("path"));
 		$("#derivat-panel-startfile-label").html($(entry).data("path"));
 	}
@@ -926,12 +1193,19 @@ var DerivateBrowser = function(){
 		}
 	}
 	
-	function createStatusBar(parent, file){
+	function createStatusBar(parent, file, data, path, deriID){
 		var template = $("#upload-entry-template").html();
 		var status = $(Mustache.render(template, {"name": file.name, "size": getReadableSize(file.size,0)}));
 		if (file.type.match(/image.*/)){
 			readImg(file, $(status).find("img.upload-preview-image"));
 		}
+		$(status).data("data", data);
+		$(status).data("filename", file.name);
+		$(status).data("status", 0);
+		$(status).data("filepath", path);
+		$(status).data("deriID", deriID);
+		$(status).data("size", getReadableSize(file.size,0));
+		$(status).data("lastMod", file.lastModifiedDate);
 		$(parent).append(status);
 		return status;
 	}
@@ -940,13 +1214,110 @@ var DerivateBrowser = function(){
 		var reader = new FileReader();
 		reader.onload =  function(e) {
 			display.attr("src", reader.result);
+			console.log("img gelesen");
 		}
 		reader.readAsDataURL(file);
+	}
+	
+//	function showOverwriteOverlay(entry, oriFile) {
+//		oriFile.deriID = entry.data("deriID");
+//		oriFile.path = entry.data("filepath");
+//		var uploadOverwriteTemplate = $("#upload-overwrite-template").html();
+//		var originalFileOutput = $(Mustache.render(uploadOverwriteTemplate, oriFile));
+//		//var newFileOutput = $(Mustache.render(fileEntryTemplate, file));
+//		$(originalFileOutput).find(".img-size").html(getReadableSize($(originalFileOutput).find(".img-size").html(),0));
+//		$("#lightbox-upload-overwrite-original-file").html(originalFileOutput);		
+//		var json = {
+//				size: entry.data("size"),
+//				lastmodified: entry.data("lastMod")
+//		};
+//		var newFileOutput = $(Mustache.render(uploadOverwriteTemplate, json));
+//		$(newFileOutput).find("img.overwrite-img").prop("src", $(entry).find("img.upload-preview-image").prop("src"));
+//		console.log($(entry).find("img.upload-preview-image").prop("src"));
+//		$("#lightbox-upload-overwrite-new-file").html(newFileOutput);
+//		$("#lightbox-upload-overwrite-label").html(oriFile.name + " ersätzen?")
+//		$('#lightbox-upload-overwrite').modal('show');
+//	}
+	function existsCheck() {
+		var json = {
+				"deriID": currentDeriID,
+				"path": currentPath,
+				"files": [],
+			};
+		$.each(uploadList, function(index, value) {
+			if (value instanceof Upload){
+				if (value.exists == undefined){
+					json.files.push(value.getCheckJson());
+				}
+			}
+		});
+		console.log(json);
+		doExistsCheck(json)
+	}
+	
+	function uploadFilesAndAsk() {		
+		var data = currentUploadCheck.data;
+		if(currentUploadCheck.currentPos < Object.keys(data.files).length){			
+			var file = data.files[currentUploadCheck.currentPos];
+			var upload = uploadList[file.id];
+			//TODO fix abfrage
+			if (file.exists == "1" && currentUploadCheck.skipAll){
+				currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
+				uploadFilesAndAsk();
+				return false;
+			}
+			if(file.exists == "1" && !currentUploadCheck.overwriteAll){
+				upload.exists = true;
+				upload.askOverwrite(file.existingFile, data.deriID, data.path);
+			}
+			if(file.exists == "1" && currentUploadCheck.overwriteAll){
+				upload.exists = true;
+			}
+			if (file.exists == "0"){
+				upload.exists = false;
+			}
+			if (file.exists == "0" || currentUploadCheck.overwriteAll){
+				upload.statusbar = $("#upload-status-bar-table").append(upload.getStatus());
+				showUploadBar();
+				uploadFile(upload);
+				currentUploadCheck.currentPos = currentUploadCheck.currentPos + 1;
+			}
+		}
+		else{
+			currentUploadCheck = {};
+		}
+		
+//		$.each(data.files, function(i, file) {
+//			if (currentUploadCheck.currentPos <= i){
+//				var upload = uploadList[file.id];;
+//				if (file.exists == "0"){
+//					console.log("test1");
+//					upload.exists = false;
+//					$("#upload-status-bar-table").append(upload.getStatus())
+////					uploadFile(upload);
+//				}
+//				if (file.exists == "1"){
+//					upload.askOverwrite(file.existingFile, data.deriID, data.path);
+//					console.log("test2");
+//					return false;
+//				}
+//			}
+//			currentUploadCheck.currentPos++;
+//		});
+//		console.log(currentUploadCheck.currentPos)
+	}
+	
+	function showUploadBar() {
+		$("#upload-status-bar-table").removeClass("hidden");
+		$("#upload-status-bar").removeClass("hidden");
+		$("#upload-status-bar").animate({'height': '300px'}, 500);
+		$(".btn-mini-usb").data("status", "maxi");
 	}
 }
 
 
 $(document).ready(function() {
+//	$(this).load("/rsc/derivatebrowser/gui/template/derivatebrowser-templates.html")
 	var DerivateBrowserInstance = new DerivateBrowser();
 	DerivateBrowserInstance.init();
 });

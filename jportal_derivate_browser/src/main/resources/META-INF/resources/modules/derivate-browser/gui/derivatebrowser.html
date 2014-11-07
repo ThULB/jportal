@@ -47,11 +47,12 @@
 								    <figcaption class="panel-img-cap">
 								    	<h5 id="derivat-panel-startfile-label"></h5>
 								    </figcaption>
-								    <div id="derivat-panel-startfile-btn-div" class="hidden">
-								    	<div id="derivat-panel-startfile-btn">
-										    <span id="derivat-panel-startfile-btn-edit" class="glyphicon glyphicon-edit btn startfile-btn"></span>
-										    <span id="derivat-panel-startfile-btn-confirm" class="glyphicon glyphicon-ok btn startfile-btn hidden"></span>
-										    <span id="derivat-panel-startfile-btn-cancel" class="glyphicon glyphicon-remove btn startfile-btn hidden"></span>
+								    <div id="derivat-panel-startfile-overlay-div" class="hidden">
+								    	<div id="derivat-panel-startfile-overlay-label">
+								    	Drag and Drop to change.
+<!-- 										    <span id="derivat-panel-startfile-btn-edit" class="glyphicon glyphicon-edit btn startfile-btn"></span> -->
+<!-- 										    <span id="derivat-panel-startfile-btn-confirm" class="glyphicon glyphicon-ok btn startfile-btn hidden"></span> -->
+<!-- 										    <span id="derivat-panel-startfile-btn-cancel" class="glyphicon glyphicon-remove btn startfile-btn hidden"></span> -->
 										</div>
 								    </div>
         						</figure>
@@ -77,10 +78,13 @@
 						</tbody>
 					</table>
 					<div id="bottom-btns">
-						<span class="glyphicon glyphicon-plus btn-add btn"></span>
+						<span class="glyphicon glyphicon-folder-close btn-add btn"></span>
+						<span class="glyphicon glyphicon-plus btn-add1 btn"></span>
+						<span class="glyphicon glyphicon-plus btn-add2 btn"></span>
+<!-- 						<span class="glyphicon glyphicon-plus btn-add3 btn"></span> -->
 						<span class='glyphicon glyphicon-unchecked btn-check-all btn'></span>
-						<span class='glyphicon glyphicon-trash btn-delete-all btn'></span>
-						<span class='glyphicon glyphicon-share-alt btn-move-all btn'></span>
+						<span class='glyphicon glyphicon-trash btn-delete-all btn faded'></span>
+						<span class='glyphicon glyphicon-share-alt btn-move-all btn faded'></span>
 					</div>
 				</div>
 				<div id="journal-info" class="hidden">
@@ -94,6 +98,7 @@
 				<span class="glyphicon glyphicon-cloud-upload"></span>
 				<div id="upload-status-bar-header-label">Upload...</div>
 				<span class="glyphicon glyphicon-remove btn-close-usb btn"></span>
+				<span class="glyphicon glyphicon-minus btn-mini-usb btn"></span>
 			</div>
 			<div id="upload-status-bar-body">
 				<table>
@@ -110,43 +115,16 @@
 		</div>
 	</div>
 	
-	<div class="modal fade" id="lightbox-multi-move" tabindex="-1" role="dialog" aria-labelledby="lightbox-multi-move-label" aria-hidden="true">
+	<div class="modal fade" id="lightbox-multi-move" tabindex="-1" role="dialog" aria-labelledby="lightbox-multi-move-label" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog">
 			<div class="modal-content">
 			 	<div class="modal-header">
 					<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">X</button>
 					<h4 id="lightbox-multi-move-label" class="modal-title">Zielort auswählen</h4>
-				</div>
-<!-- 				<div class="modal-body"> -->
-<!-- 					<div class="file-panel panel panel-primary"> -->
-<!-- 			        	<div class="panel-heading"> -->
-<!-- 			              <h3 class="panel-title"> -->
-<!-- 			                Ausgewählte Dateien -->
-<!-- 			              </h3> -->
-<!-- 			            </div> -->
-<!-- 			            <div class="panel-body"> -->
-<!-- 			            	<ul id="file-panel-childlist" class="panel-list"> -->
-<!-- 			            	</ul> -->
-<!-- 			            </div> -->
-<!-- 			        </div> -->
-<!-- 				</div> -->
-				
+				</div>				
 				<div class="modal-body">
-<!-- 					<div class="target-panel panel panel-primary"> -->
-<!-- 			        	<div class="panel-heading"> -->
-<!-- 			              <h3 class="panel-title"> -->
-<!-- 			                Zielort -->
-<!-- 			              </h3> -->
-<!-- 			            </div> -->
-<!-- 			            <div class="panel-body"> -->
-<!-- 				            <div class="panel-body"> -->
-				            	<ul id="target-panel-childlist" class="panel-list">
-				            	
-				            	</ul>
-<!-- 				            </div> -->
-<!-- 			            </div> -->
-<!-- 			        </div> -->
-<!-- 				</div>		-->
+					<ul id="target-panel-childlist" class="panel-list">
+				    </ul>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">cancel</button>
@@ -155,10 +133,44 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal fade" id="lightbox-upload-overwrite" tabindex="-1" role="dialog" aria-labelledby="lightbox-upload-overwrite-label" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			 	<div class="modal-header">
+					<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">X</button>
+					<h4 id="lightbox-upload-overwrite-label" class="modal-title">Aktion auswählen</h4>
+				</div>				
+				<div class="modal-body">
+					<div id="lightbox-upload-overwrite-text">Die Datei existiert bereits. Soll die Datei überschrieben werden?</div>
+					<div id="lightbox-upload-overwrite-original">
+						<div id="lightbox-upload-overwrite-original-label" class="overwrite-label">Original Datei</div>
+						<div id="lightbox-upload-overwrite-original-file" class="overwrite-content"></div>
+					</div>
+					<div id="lightbox-upload-overwrite-new">
+						<div id="lightbox-upload-overwrite-new-label" class="overwrite-label">Neue Datei</div>
+						<div id="lightbox-upload-overwrite-new-file" class="overwrite-content"></div>
+					</div>
+				</div>
+				<div class="modal-footer">
+						<div>
+							<span class="glyphicon glyphicon-unchecked btn-upload-all btn"></span>
+							<p id="btn-upload-all-label">Für alle folgenden übernehmen<p>
+						</div>
+						<div>
+							<button type="button" id="btn-upload-overwrite" class="btn btn-warning btn-upload">Überschreiben</button>
+							<button type="button" id="btn-upload-skip" class="btn btn-primary btn-upload" >Überspringen</button>
+							<button type="button" id="btn-upload-cancel" class="btn btn-default btn-upload">Upload abbrechen</button>
+						</div>
+<!-- 					<button type="button" class="btn btn-default lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">Überschreiben</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script id="popover-template" type="text/mustache">
 	<div>
-		<img class='popover-img' src='/servlets/MCRFileNodeServlet/{{deriID}}{{{absPath}}}'>
+		<img class='popover-img' src='/servlets/MCRFileNodeServlet/{{deriID}}{{absPath}}'>
 		<dl>
 			<dt>Size</dt>
 			<dd class="img-size">{{size}}</dd>
@@ -243,11 +255,33 @@
 			<td class="upload-preview-status"><div class='statusbar-progress'><div class='statusbar-progress-status'></div></div></td>
 		</tr>
 	</script>
+	
+	<script id="upload-overwrite-template" type="text/mustache">
+		<div>
+			<img class='overwrite-img' src='/servlets/MCRFileNodeServlet/{{deriID}}{{path}}/{{name}}'>
+			<dl>
+				<dt>Size</dt>
+				<dd class="img-size">{{size}}</dd>
+				<dt>last modified</dt>
+				<dd>{{lastmodified}}</dd>
+			</dl>
+		</div>
+	</script>
+	
+	
+<!-- 				<td class="upload-preview-overlay hidden" colspan="2"> -->
+<!-- 				<div class="upload-preview-overlay-label">Datei existiert bereits, bitte Aktion wählen</div> -->
+<!-- 				<div class="upload-preview-overlay-button hidden"> -->
+<!-- 					<button type="button" class="btn btn-primary upload-preview-overlay-overwrite btn-overlay">Überschreiben</button> -->
+<!-- 					<button type="button" class="btn btn-danger upload-preview-overlay-discard btn-overlay">Verwerfen</button> -->
+<!-- 				</div> -->
+<!-- 			</td> -->
 
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
  	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser.js"></script>
+ 	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-upload.js"></script>
  	<script type="text/javascript" src="/js/jp-subselect.js" ></script>
 </body>
 </html>
