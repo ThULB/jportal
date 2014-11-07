@@ -42,10 +42,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	color: #2A89C1;
 }
 
-body {
-	margin: 0 auto;
-	width: 1024px;
-}
 .hidden {
 	display: none;
 }
@@ -915,10 +911,6 @@ body {
 	padding: 5px 29px 5px;
 }
 
-#searchBar .input-group {
-	width: 555px;  709
-}
-
 #searchBar .dropdown-menu .fa-fw {
 	margin-left: -6px;
 	margin-right: 6px;
@@ -1313,29 +1305,17 @@ p.jp-layout-metadata-list {
 	padding-right: 13px !important; 
 }
 
-.jp-navigation-topHeader-UlRightWraper{
-	padding: 10px 6px; 
-	float:right; 
-	margin-bottom: 0;
+.jp-navigation-topHeader-UlRightWraper > .jp-layout-mainHeader-SeperatorRight > a{
+	font-weight: normal !important;
 }
 
-.jp-navigation-topHeader-LanguageMenu{
-	float: right; 
-	padding: 3px;
-}
-
-.jp-navigation-topHeader-DropdownMenu{
-	min-width: 50px; 
-	margin-left: -24px; 
-	margin-top: -2px;
+.jp-layout-mainHeader-SeperatorRight > a:hover{
+	color: #000;
+	text-decoration: none !important;
 }
 
 .jp-navigation-topHeader-ImgPush{
 	padding-right: 4px;
-}
-
-.jp-navigation-topHeader-Pad0{
-	padding: 0;
 }
 
 .jp-navigation-topHeader-DropdownBorder{
@@ -1417,16 +1397,6 @@ textarea {
 	padding-top: 15px;
 }
 
-.jp-layout-resultlistBorder{
-	border-left: 1px solid #9C9E9F;
-	padding-left: 2em;
-	min-height: 30em;
-}
-
-.jp-layout-searchList{
-	padding-left: 0;
-}
-
 .jp-layout-resultlistBorder > .metadata, #resultList #sortSelect{
 	width: 100% !important;	
 }
@@ -1447,39 +1417,178 @@ textarea {
 	display: inline-block;
 }
 
-#jp-layout-triangle:before {
-    /* Rahmen nur an einer Seite einblenden */
-    border-color:transparent transparent transparent #9C9E9F;
-    border-style:solid;
-    border-width:16px;
-
-    /* Pseudo-Element stylebar machen */
-    content:" ";
-    display:block;
-    height:0;
-    width:0;
-
-    /* Pseudo-Element positionieren */
-    left:-2.077em;
-    top:0.7em;
-    
-    position:absolute;
-}
-
-#jp-layout-triangle {
-    padding-left:60px;
-    position:relative;
-}
-
-#resultList #jp-layout-triangle:nth-child(2):before{
-	border-color:transparent transparent transparent #fff;
-	left:-2.2em;
-}
-
 .jp-layout-resultlistBorder .metadata div, #searchResults > #resultList{
 	padding: 0;
 }
 
 .jp-layout-searchBarAdvanced a{
 	color: #fff;
+}
+
+.jp-layout-mynavbarbutton .icon-bar{
+	background-color: #008BD0;
+}
+
+#resultList > .navbar-collapse{
+	max-height: 100%;
+}
+
+.jp-layout-mynavbarbutton{
+	margin: 1.3em 0 0 0;
+	border: 1px solid #008BD0
+}
+
+#globalHeader .jp-layout-mynavbarbutton{
+	margin: 2px;
+}
+
+/* Medium devices Desktops (≥992px) */
+@media (min-width: 992px) {  
+	.jp-layout-searchList{
+		padding-left: 0;
+	}
+		
+	#searchBar .input-group {
+		width: 555px; 
+	}
+	
+	.jp-layout-largeInput{
+		width: 709px;
+	}
+	
+	.jp-layout-resultListHeadLeft{
+		padding-left: 0
+	}
+}
+
+/* Extra small devices Phones (<768px) */
+@media (max-width: 767px) {	
+	.jp-layout-clickLabel{
+		word-wrap: break-word;
+	}
+	
+	.jp-layout-resultListHeadLeft{
+		margin-right: 2.5em; 
+		padding-left: 0
+	}
+	
+	.jp-layout-resultListHeadRight{
+		padding-left: 0
+	}
+	
+}
+
+@media (max-width: 991px) {  
+	.jp-layout-resultlistBorder{
+		padding: 0;
+	}	
+}
+
+@media (min-width: 1024px) {
+	body {
+		margin: 0 auto;
+		width: 1024px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 991px){ 
+	.jp-layout-searchList.navbar-collapse{
+		width: 25%;
+	}
+}
+
+/* Small devices Tablets (≥768px) */
+@media (min-width: 768px) {
+	
+	.jp-navigation-topHeader-DropdownBorder:hover, .jp-navigation-topHeader-DropdownBorder:focus, .jp-navigation-topHeader-DropdownBorder:active, .open .jp-navigation-topHeader-DropdownBorder.btn-default{
+		background-color: #fff !important;
+	}
+	
+	.jp-navigation-topHeader-DropdownMenu{
+		min-width: 55px; 
+		margin-top: 0.3em !important;
+		margin-right: -0.3em;
+	}
+	
+	.jp-navigation-topHeader-DropdownMenu > li > a{
+		padding-left: 0; 
+		padding-right: 0;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper{
+		padding: 10px; 
+		margin-bottom: 0;
+		float: right;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper > li > a{
+		padding: 0;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper > li:not(:last-child){
+		padding: 0 0.35em 0 0.65em;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper > li:last-child{
+		padding: 0;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper > li:last-child > a{
+		padding: 0 5px;
+	}
+	
+	.jp-navigation-topHeader-UlRightWraper > li > a:focus, .jp-navigation-topHeader-UlRightWraper > li > a:hover{
+		text-decoration: underline;
+		background-color: #fff;
+	}
+	
+	#jp-layout-triangle:before {
+	    /* Rahmen nur an einer Seite einblenden */
+	    border-color:transparent transparent transparent #9C9E9F;
+	    border-style:solid;
+	    border-width:16px;
+	
+	    /* Pseudo-Element stylebar machen */
+	    content:" ";
+	    display:block;
+	    height:0;
+	    width:0;
+	
+	    /* Pseudo-Element positionieren */
+	    left:-2.077em;
+	    top:0.7em;
+	    
+	    position:absolute;
+	}
+
+	#jp-layout-triangle {
+	    padding-left:60px;
+	    position:relative;
+	}
+
+	#resultList #jp-layout-triangle:nth-child(2):before{
+		border-color:transparent transparent transparent #fff;
+		left:-2.2em;
+	}
+	
+	.jp-layout-resultlistBorder{
+		border-left: 1px solid #9C9E9F;
+		padding-left: 2em;
+		min-height: 30em;
+	}
+	
+	.jp-layout-resultListHeadRight{
+		margin-bottom: 10px; 
+		margin-top: 20px; 
+		padding-right: 0;
+	}
+	
+	.jp-layout-resultListHeadRight > a{
+		float: right;
+	}
+	
+	.jp-navigation-topHeader-DropdownBorder.btn:active, .jp-navigation-topHeader-DropdownBorder.btn.active{
+		box-shadow: none;
+	}
+	
 }

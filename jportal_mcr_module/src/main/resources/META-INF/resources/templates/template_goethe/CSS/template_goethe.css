@@ -13,3 +13,10 @@
 	font-size: 1.1rem;
 	color: #444;
 }
+
+@media (max-width: 767px) {
+	#logo .logoTitle {
+    	font-size: 0.9rem;
+    	word-break: break-all;
+	}
+}

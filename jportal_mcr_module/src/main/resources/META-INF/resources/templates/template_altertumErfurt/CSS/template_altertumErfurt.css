@@ -1,5 +1,25 @@
 @CHARSET "US-ASCII";
 #logo .logoTitle {
-	padding-right: 200px;
+	padding-right: 290px;
 	font-size: 23pt;
+}
+
+@media (min-width: 843px) and (max-width: 959px){
+	#logo .logoTitle {
+		padding-right: 174px;
+	}
+}
+
+@media (min-width: 768px) and (max-width: 842px){
+	#logo .logoTitle {
+		padding-right: 100px;
+	}
+}
+
+@media (max-width: 767px) {
+	#logo .logoTitle {
+    	word-break: break-all; 
+    	font-size: 1.6em;
+    	padding-right: 0.5em; 
+	}
 }

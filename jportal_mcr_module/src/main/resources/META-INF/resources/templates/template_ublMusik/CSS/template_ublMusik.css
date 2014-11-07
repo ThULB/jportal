@@ -4,4 +4,12 @@
 	color: #062F51;
     padding-left: 140px;
     width: 620px;
+    font-size: 2em;
+}
+
+@media (max-width: 767px) {
+	#logo .logoTitle {
+    	font-size: 1.1em;
+    	word-break: break-all;
+	}
 }

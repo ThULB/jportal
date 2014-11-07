@@ -82,6 +82,7 @@
         <meta content="{$JP.Site.HTML.Head.Meta.Keywords.de}" lang="de" name="keywords" />
         <meta content="{$JP.Site.HTML.Head.Meta.Keywords.en}" lang="en" name="keywords" />
         <meta content="MyCoRe" lang="de" name="generator" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- add html stuff to head for MyCoReWebPage-->
         <xsl:copy-of select="/MyCoReWebPage/head/top/*" />
         <link href="{$WebApplicationBaseURL}bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
@@ -141,7 +142,14 @@
       <body>
         <div id="globalHeader">
           <div class="row">
-            <div class="col-md-5 pull-left">
+            <div class="col-md-6 navbar-header">
+              <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-globalHeader">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            
               <ul class="list-inline jp-layout-mainHeader-UlLeft">
                 <li class="jp-layout-mainHeader-SeperatorRight">
                   <a href="{$JP.Site.Parent.url}" target="_blank">
@@ -162,7 +170,7 @@
                 </xsl:if>
               </ul>
             </div>
-            <div class="col-md-7 pull-right">
+            <div id="navbar-collapse-globalHeader" class="col-md-6 collapse navbar-collapse navbar-right">
               <!-- <ul class="list-inline" style="padding: 10px"> </ul> -->
               <xsl:call-template name="jp.navigation.top" />
             </div>

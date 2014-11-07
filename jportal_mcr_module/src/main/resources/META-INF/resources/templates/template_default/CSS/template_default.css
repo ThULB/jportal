@@ -3,3 +3,14 @@
 	background: #a8bdcb;
 	width: 100%;
 }
+
+#logo .logoTitle{
+	font-size: 2em;
+}
+
+@media (max-width: 767px) {
+	#logo .logoTitle {
+    	word-break: break-all; 
+    	font-size: 1.3em; 
+	}
+}

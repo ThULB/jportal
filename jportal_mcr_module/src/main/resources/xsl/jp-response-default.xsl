@@ -8,12 +8,32 @@
 
   <xsl:template match="/response">
     <div id="searchResults">
-      <div id="resultListHeader" class="jp-layout-border-light">
-        <h2>
+      <div id="resultListHeader" class="row col-sm-12 jp-layout-border-light"> <!-- navbar-header -->
+        <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <h2 class="col-sm-6 jp-layout-resultListHeadLeft"> 
           <xsl:value-of select="i18n:translate('jp.metadata.search.result')" />
         </h2>
+        
+        <div class="col-sm-6 jp-layout-resultListHeadRight">
+          <xsl:if test="$journalID != ''">
+            <a href="{$WebApplicationBaseURL}receive/{$journalID}">
+              <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
+            </a>
+          </xsl:if>
+          <xsl:if test="$returnURL">
+            <a href="{$returnURL}">
+              <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
+            </a>
+          </xsl:if>
+        </div>
+        
       </div>
-      <div id="resultList" class="col-md-12">
+      <div id="resultList" class="col-sm-12 container-fluid">
         <xsl:apply-templates mode="resultList" select="." />
       </div>
     </div>
@@ -41,24 +61,33 @@
   </xsl:template>
 
   <xsl:template match="response" mode="jp.response.navigation">
-    <xsl:if test="$journalID != ''">
-      <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a>
-    </xsl:if>
-    <xsl:if test="$returnURL">
-      <a href="{$returnURL}">Zurück</a>
-    </xsl:if>
+<!--     <xsl:if test="$journalID != ''"> -->
+<!--       <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a> -->
+<!--     </xsl:if> -->
+<!--     <xsl:if test="$returnURL"> -->
+<!--       <a href="{$returnURL}">Zurück</a> -->
+<!--     </xsl:if> -->
     <xsl:apply-templates mode="jp.response.sort" select="." />
   </xsl:template>
 
   <xsl:template mode="resultList" match="response[result/@numFound = 0]">
     <p>
-      <xsl:value-of select="i18n:translate('jp.metadata.search.no_results')" /><br/>
+      <xsl:value-of select="i18n:translate('jp.metadata.search.no_results')" />
+      <br />
       <xsl:value-of select="i18n:translate('jp.metadata.search.sugestion')" />
       <ul>
-        <li><xsl:value-of select="i18n:translate('jp.metadata.search.sugestion1')" /></li>
-        <li><xsl:value-of select="i18n:translate('jp.metadata.search.sugestion2')" /></li>
-        <li><xsl:value-of select="i18n:translate('jp.metadata.search.sugestion3')" /></li>
-        <li><xsl:value-of select="i18n:translate('jp.metadata.search.sugestion4')" /></li>
+        <li>
+          <xsl:value-of select="i18n:translate('jp.metadata.search.sugestion1')" />
+        </li>
+        <li>
+          <xsl:value-of select="i18n:translate('jp.metadata.search.sugestion2')" />
+        </li>
+        <li>
+          <xsl:value-of select="i18n:translate('jp.metadata.search.sugestion3')" />
+        </li>
+        <li>
+          <xsl:value-of select="i18n:translate('jp.metadata.search.sugestion4')" />
+        </li>
       </ul>
     </p>
   </xsl:template>
@@ -71,7 +100,18 @@
       </xsl:if>
     </xsl:variable>
     <xsl:if test="$showFacet">
-      <div class="col-md-3 jp-layout-searchList">
+      <div id="navbar-collapse-searchResult" class="col-sm-3 jp-layout-searchList navbar-collapse collapse" role="navigation">
+        
+          <xsl:variable name="getFQ">
+            <xsl:call-template name="UrlGetParam">
+              <xsl:with-param name="url" select="$RequestURL" />
+              <xsl:with-param name="par" select="'fq'" />
+            </xsl:call-template>
+          </xsl:variable>
+        
+        <xsl:if test="$getFQ!=''">
+          <xsl:attribute name="class">col-sm-3 jp-layout-searchList navbar-collapse collapse in</xsl:attribute>
+        </xsl:if>
         <div class="jp-layout-searchResult-style form-group">
           <xsl:apply-templates mode="searchResultText" select="." />
         </div>
@@ -81,11 +121,11 @@
         <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" />
       </div>
     </xsl:if>
-    <div class="col-md-9 jp-layout-resultlistBorder">
-    
+    <div class="col-sm-9 jp-layout-resultlistBorder">
+
       <div id="jp-layout-triangle"></div>
       <div id="jp-layout-triangle"></div>
-      
+
       <xsl:apply-templates mode="searchResults" select="result/doc" />
 
       <xsl:apply-templates mode="jp.pagination" select="." />
@@ -96,62 +136,62 @@
 
   <xsl:variable name="searchResultsFields">
     <field name="objectType" />
-    <field name="published">  
-      <xsl:attribute name="label" >
+    <field name="published">
+      <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
       </xsl:attribute>
     </field>
-    <field name="published_from">  
-      <xsl:attribute name="label" >
+    <field name="published_from">
+      <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
       </xsl:attribute>
     </field>
-    <field name="date.published_from"> 
-      <xsl:attribute name="label" >
+    <field name="date.published_from">
+      <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
       </xsl:attribute>
     </field>
-    <field name="dateOfBirth" > 
+    <field name="dateOfBirth">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.person.dateOfBirth')" />
       </xsl:attribute>
     </field>
-    <field name="dateOfDeath" > 
+    <field name="dateOfDeath">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.person.dateOfDeath')" />
       </xsl:attribute>
     </field>
-    <field name="participant.author" > 
+    <field name="participant.author">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.author')" />
       </xsl:attribute>
     </field>
-    <field name="date.published" > 
+    <field name="date.published">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('metaData.jpjournal.date.published')" />
       </xsl:attribute>
     </field>
-    <field name="date.published_Original" > 
+    <field name="date.published_Original">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
       </xsl:attribute>
     </field>
-    <field name="date.published_Original_From" > 
+    <field name="date.published_Original_From">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
       </xsl:attribute>
     </field>
-    <field name="date.published_Original_Till" > 
+    <field name="date.published_Original_Till">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.coverage')" />
       </xsl:attribute>
     </field>
-    <field name="size" > 
+    <field name="size">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.size')" />
       </xsl:attribute>
     </field>
-    <field name="rubric" > 
+    <field name="rubric">
       <xsl:attribute name="label">
         <xsl:value-of select="i18n:translate('editormask.labels.rubric')" />
       </xsl:attribute>
@@ -322,15 +362,27 @@
   <xsl:template mode="jp.response.sort" match="response">
     <xsl:variable name="sort" select="lst[@name='responseHeader']/lst[@name='params']/str[@name='sort']/text()" />
     <xsl:variable name="sortOptionsXML">
-      <option value=""><xsl:value-of select="i18n:translate('jp.metadata.search.sort')" /></option>
-      <option value="score desc"><xsl:value-of select="i18n:translate('jp.metadata.search.score_desc')" /></option>
-      <option value="published_sort asc"><xsl:value-of select="i18n:translate('jp.metadata.search.published_sort_asc')" /></option>
-      <option value="published_sort desc"><xsl:value-of select="i18n:translate('jp.metadata.search.published_sort desc')" /></option>
-      <option value="alphabetic_sort asc"><xsl:value-of select="i18n:translate('jp.metadata.search.alphabetic_sort_asc')" /></option>
+      <option value="">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.sort')" />
+      </option>
+      <option value="score desc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.score_desc')" />
+      </option>
+      <option value="published_sort asc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort_asc')" />
+      </option>
+      <option value="published_sort desc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.published_sort desc')" />
+      </option>
+      <option value="alphabetic_sort asc">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.alphabetic_sort_asc')" />
+      </option>
     </xsl:variable>
     <xsl:variable name="sortOptions" select="xalan:nodeset($sortOptionsXML)" />
     <div class="form-group">
-      <span class="jp-layout-resultLCaption"><xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" /></span>
+      <span class="jp-layout-resultLCaption">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
+      </span>
     </div>
     <div class="form-group">
       <select id="sortSelect">
@@ -431,7 +483,7 @@
       <span class="text">
         <xsl:value-of select="$text" />
       </span>
-      <span class="pull-right"> 
+      <span class="pull-right">
         <xsl:value-of select="$count" />
       </span>
     </a>

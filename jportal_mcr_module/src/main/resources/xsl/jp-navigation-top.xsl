@@ -5,11 +5,11 @@
 
   <xsl:template name="jp.navigation.top">
     <xsl:variable name="isGuest" select="mcrxml:isCurrentUserGuestUser()" />
-    <div class="col-md-11 pull-left">
-      <ul class="list-inline jp-navigation-topHeader-UlRightWraper">
+      <ul class="list-inline jp-navigation-topHeader-UlRightWraper nav navbar-nav">
+       
         <xsl:if test="not($isGuest)">
           <li class="userName jp-layout-mainHeader-SeperatorRight">
-            <xsl:value-of select="layoutTools:getUserName()" />
+            <a> <xsl:value-of select="layoutTools:getUserName()" /></a>
           </li>
         </xsl:if>
         <li>
@@ -64,25 +64,22 @@
             </xsl:if>
           </a>
         </li>
-      </ul>
-    </div>
     <xsl:call-template name="jp.navigation.top.language" />
+    </ul>
   </xsl:template>
 
   <xsl:template name="jp.navigation.top.language">
-    <div class="col-md-1 pull-right jp-navigation-topHeader-Pad0">
-      <span id="languageMenu" class="dropdown-toggle jp-navigation-topHeader-LanguageMenu">
-
-        <button data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
+      <li id="languageMenu" class="dropdown-toggle"> 
+        <a data-toggle="dropdown" class="btn btn-default dropdown-toggle jp-navigation-topHeader-DropdownBorder" type="button">
           <img src="{$WebApplicationBaseURL}images/naviMenu/lang-{$CurrentLang}.png" alt="{$CurrentLang}" class="jp-navigation-topHeader-ImgPush" />
           <span class="caret"></span>
-        </button>
+        </a>
 
         <ul role="menu" class="dropdown-menu jp-navigation-topHeader-DropdownMenu">
           <xsl:for-each select="$languages/lang">
             <xsl:if test="$CurrentLang != text()">
               <li>
-                <a class="changeLang">
+                <a class="changeLang text-center">
                   <xsl:attribute name="href">
 	                  <xsl:variable name="newurl">
 	                    <xsl:call-template name="UrlSetParam">
@@ -101,9 +98,8 @@
             </xsl:if>
           </xsl:for-each>
         </ul>
-      </span>
-    </div>
-    <xsl:call-template name="jp.navigation.top.language.js" />
+        <xsl:call-template name="jp.navigation.top.language.js" />
+      </li>    
   </xsl:template>
 
   <xsl:template name="jp.navigation.top.language.js">
