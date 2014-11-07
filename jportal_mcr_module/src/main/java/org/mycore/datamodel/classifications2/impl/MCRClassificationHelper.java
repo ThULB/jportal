@@ -9,6 +9,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.MCRCategoryLink;
 
 public class MCRClassificationHelper {
     private static Logger LOGGER = Logger.getLogger(MCRClassificationHelper.class.getName());
