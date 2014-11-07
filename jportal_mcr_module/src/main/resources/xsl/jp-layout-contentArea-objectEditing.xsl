@@ -82,13 +82,13 @@
       </item>
       <item class="jp-layout-menu-dropdown">
         <item>
-          <!-- <label name="Neue Person" ref="newEditorResource" path="start.xed?type=person&amp;action=create" /> -->
-          <label name="Neue Person" ref="editorResource" path="create/person" />
+          <label name="Neue Person" ref="newEditorResource" path="start.xed?type=person&amp;action=create" />
+<!--           <label name="Neue Person" ref="editorResource" path="create/person" /> -->
           <restriction name="createPerson" value="true" />
         </item>
         <item>
-          <!-- <label name="Neue Institution" ref="newEditorResource" path="start.xed?type=jpinst&amp;action=create" /> -->
-          <label name="Neue Institution" ref="editorResource" path="create/jpinst" />
+          <label name="Neue Institution" ref="newEditorResource" path="start.xed?type=jpinst&amp;action=create" />
+<!--           <label name="Neue Institution" ref="editorResource" path="create/jpinst" /> -->
           <restriction name="createInst" value="true" />
         </item>
         <item>
