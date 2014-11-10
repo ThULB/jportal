@@ -18,6 +18,9 @@ subprojects {
             sourceCompatibility = 1.7
             targetCompatibility = 1.7
         }
+        classpath {
+            downloadSources=true
+        }
     }
 
     group = "fsu.thulb"
