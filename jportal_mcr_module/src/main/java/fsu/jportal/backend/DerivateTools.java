@@ -20,14 +20,14 @@ import fsu.jportal.util.DerivatePath;
 public class DerivateTools {
     static Logger LOGGER = Logger.getLogger(DerivateTools.class);
 
-    private static void cp(MCRFilesystemNode source, MCRDirectory targetDir, String newName, Map<MCRFilesystemNode, MCRFile> copyHistory) {
+    private static boolean cp(MCRFilesystemNode source, MCRDirectory targetDir, String newName, Map<MCRFilesystemNode, MCRFile> copyHistory) {
         if (newName == null) {
             newName = source.getName();
         }
 
         if (targetDir.hasChild(newName)) {
             LOGGER.info("cp: " + newName + " allready exists (not copied)");
-            return;
+            return false;
         }
 
         try {
@@ -43,13 +43,16 @@ public class DerivateTools {
                     cp(child, newDir, null, copyHistory);
                 }
             }
+            return true;
         } catch (MCRPersistenceException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        
+        return false;
     }
 
-    public static void cp(String sourcePath, String targetPath, boolean delAfterCopy) {
+    public static boolean cp(String sourcePath, String targetPath, boolean delAfterCopy) {
         if (sourcePath == null || targetPath == null) {
             LOGGER.info("Usage: copy {path_to_file} {new_path}");
         }
@@ -61,7 +64,7 @@ public class DerivateTools {
 
             if (sourceNode == null) {
                 LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
-                return;
+                return false;
             }
             
 
@@ -70,20 +73,19 @@ public class DerivateTools {
 
             if (targetDir == null) {
                 LOGGER.info("cp: target " + targetLocation.getAbsolutePath() + " does not exists (not copied)");
-                return;
+                return false;
             }
 
             String newFileName = targetDir.getName().equals(targetLocation.getFileName()) ? null : targetLocation
                     .getFileName();
 
             Map<MCRFilesystemNode, MCRFile> copyHistory = new HashMap<MCRFilesystemNode, MCRFile>();
-            cp(sourceNode, targetDir, newFileName, copyHistory);
-            
-            if(delAfterCopy){
+            if(cp(sourceNode, targetDir, newFileName, copyHistory) && delAfterCopy){
                 Derivate derivate = new Derivate(sourceNode.getOwnerID());
                 moveAttachedData(derivate, copyHistory);
                 sourceNode.delete();
             }
+            return true;
         } catch (MCRUsageException e) {
             e.printStackTrace();
         } catch (MCRPersistenceException e) {
@@ -91,6 +93,7 @@ public class DerivateTools {
             e.printStackTrace();
         }
 
+        return false;
     }
 
     private static void moveAttachedData(Derivate srcDerivate, Map<MCRFilesystemNode, MCRFile> copyHistory) {
@@ -151,29 +154,31 @@ public class DerivateTools {
         }
     }
 
-    public static void mv(String sourcePath, String targetPath) {
-        cp(sourcePath, targetPath, true);
+    public static boolean mv(String sourcePath, String targetPath) {
+        return cp(sourcePath, targetPath, true);
     }
 
     public static void cp(String sourcePath, String targetPath) {
         cp(sourcePath, targetPath, false);
     }
     
-    public static void mkdir(String path){
+    public static boolean mkdir(String path){
         DerivatePath dirPath = new DerivatePath(path);
         MCRFilesystemNode dirNode = dirPath.toFileNode();
         
         if(dirNode != null){
             LOGGER.info("mkdir: " + dirPath.getAbsolutePath() + " allready exists.");
-            return;
+            return false;
         }
         
         MCRFilesystemNode parentNode = dirPath.getParent().toFileNode();
         
         if(parentNode instanceof MCRDirectory){
             new MCRDirectory(dirPath.getFileName(), (MCRDirectory) parentNode);
+            return true;
         } else {
             LOGGER.info("mkdir: " + dirPath.getParentPath() + " does not exists or is not a directory.");
+            return false;
         }
     }
 }
