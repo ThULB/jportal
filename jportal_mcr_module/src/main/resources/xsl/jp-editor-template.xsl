@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:jp="http://www.mycore.de/components/jp" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="encoder">
+  exclude-result-prefixes="xed xlink jp i18n encoder">
 
   <xsl:include href="copynodes.xsl" />
-  
+
+  <xsl:template match="jp:section">
+    <div>
+      <xsl:apply-templates select="@*|node()"/>
+    </div>
+  </xsl:template>
+
   <xsl:template match="jp:template[@name='title']">
-    <div class="col-md-12 text-center">
+    <div class="row text-center">
       <xsl:if test="@left">
         <xsl:attribute name="class">col-md-12 text-left</xsl:attribute>
       </xsl:if>
@@ -19,11 +25,11 @@
   <!-- 1 line is split into 3 parts: 1. title, 2. input (input, textArea, select) and 3. buttons -->
   <!-- Form: titel | input | buttons -->
   <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea', @name)]">
-    <div class="col-md-12">
+    <div class="row">
       <xsl:if test="@small">
         <xsl:attribute name="class"></xsl:attribute>	
       </xsl:if>
-      
+
       <!-- 1. part: title class="form-group col-md-12" -->
       <div class="col-md-2 text-right">
         <xsl:if test="@small">
@@ -32,7 +38,7 @@
         </xsl:if>
         <xsl:apply-templates select="." mode="title" />
       </div>
-      
+
       <!-- 2. part: input class="form-group col-md-8" -->
       <div class="col-md-8"> 
         <xsl:if test="@small">
