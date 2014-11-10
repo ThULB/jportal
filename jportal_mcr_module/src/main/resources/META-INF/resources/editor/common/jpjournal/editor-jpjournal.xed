@@ -47,7 +47,7 @@
        </jp:template>
      </xed:repeat>
      
-    <jp:template name="selectInput" xpath="languages[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/language[@inherited='0'][@classid='jportal_class_00000004'][@form='plain']/@categid" i18n="metaData.jpjournal.language" classification="jportal_class_00000004" required="true" /> 
+    <jp:template name="selectInput" xpath="languages[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/language[@inherited='0'][@classid='jportal_class_00000004']/@categid" i18n="metaData.jpjournal.language" classification="jportal_class_00000004" required="true" /> 
     
     <jp:template name="textInput" xpath="rights[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/right[@inherited='0'][@form='plain']" i18n="editormask.labels.right" maxlength="48" />
     

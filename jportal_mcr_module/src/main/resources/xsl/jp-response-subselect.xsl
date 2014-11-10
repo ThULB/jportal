@@ -212,7 +212,7 @@
             <param name="_xed_submit_return" value=" " />
             <param name="_xed_session" value="{$_xed_subselect_session}" />
             
-            <xsl:copy-of select="$subselectParam/subselect/param" />
+            <!-- <xsl:copy-of select="$subselectParam/subselect/param" /> -->
 <!--             <param name="mode" value="prefix" /> -->
             <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
             <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
