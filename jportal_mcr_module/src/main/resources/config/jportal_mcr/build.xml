@@ -41,14 +41,14 @@
 			<fileset dir="${module.directory}/solr" />
 		</copy>
 		<!-- copy solr classification -->
-<!--    <echo>copy solr classification schema: ${build.lib}/${mycore.jar}</echo>
+	    <echo>copy solr classification schema: ${build.lib}/${mycore.jar}</echo>
 		<unjar dest="${basedir}/config/solr-home/conf" overwrite="true">
 			<fileset file="${mycore.jar}" />
 			<patternset>
 				<include name="components/solr/config/solr/conf/classificationSchema.xml" />
 			</patternset>
 			<regexpmapper from="^(components/solr/config/solr/conf/)(classificationSchema.xml)" to="\2" />
-		</unjar>-->
+		</unjar>
 	</target>
 
 	<!-- CREATE WEB APPLICATION -->

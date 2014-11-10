@@ -32,6 +32,6 @@
     <!-- http://<host>/<webapp-name-if-any>/docportal/admin/ -->
     <core name="jportal" instanceDir="." dataDir="./data/jportal" />
     <core name="jportal2" instanceDir="." dataDir="./data/jportal2" />
-<!--    <core name="classification" instanceDir="." dataDir="./data/classification" schema="classificationSchema.xml" /> -->
+    <core name="classification" instanceDir="." dataDir="./data/classification" schema="classificationSchema.xml" />
   </cores>
 </solr>
