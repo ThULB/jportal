@@ -11,27 +11,26 @@
 
     <!-- =================================================================== -->
     <xsl:template match="journalList[@mode='javascript']">
-        
-        <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
-          <div class="atoz">
-            <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
-            <ul id="tabNav" class="tab-nav" />
-            <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" onkeyup="jp.az.showSearchDIcon();"/>
-            <span id="glyphRemove" class="glyphicon glyphicon-remove" onclick="jp.az.deleteSearchInput();"></span>
-
-          </div>
-          <div id="resultList" class="tab-panel"></div>
+      <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
+        <div class="atoz">
+          <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
+          <ul id="tabNav" class="tab-nav" />
+          <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" />
+          <span id="atozFilterRemove" class="glyphicon glyphicon-remove"></span>
         </div>
-        <script src="{$WebApplicationBaseURL}js/jp-journalList.js"></script>
-        <script type="text/javascript">
-          $(document).ready(function() {
-            jp.az.load();
-          });
-        </script>
+        <div id="resultList" class="tab-panel"></div>
+      </div>
+      <script src="{$WebApplicationBaseURL}js/jp-journalList.js"></script>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          jp.az.load();
+        });
+      </script>
     </xsl:template>
 
     <!-- =================================================================== -->
     <xsl:template match="journalList[@url]" priority="2">
         <xsl:apply-templates select="document(@url)/journalList" />
     </xsl:template>
+
 </xsl:stylesheet>

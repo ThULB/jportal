@@ -80,7 +80,15 @@ jp.az = {
 
 	printFilter: function() {
 		var filter = $("#atozFilter");
-		filter.on("change", function() {
+		var filterRemove = $("#atozFilterRemove");
+		filter.on("keyup paste", function() {
+			jp.az.updateTabs(); 
+			jp.az.updateJournals();
+			jp.az.updateFilter();
+		});
+		filterRemove.on("click", function() {
+			$('#atozFilter').val('');
+			$(this).css("visibility", 'hidden');
 			jp.az.updateTabs(); 
 			jp.az.updateJournals();
 		});
@@ -174,18 +182,14 @@ jp.az = {
 	    	node.append(pusblisherStr + "</div>");
 		}
 	},
-	
-	showSearchDIcon: function(){
-	    if($('#atozFilter').val() == '') 
-	        $('#glyphRemove').css("visibility", 'hidden');
-	    else
-	        $('#glyphRemove').css("visibility", 'visible'); 
+
+	updateFilter: function(){
+	    if($('#atozFilter').val() == '') {
+	        $('#atozFilterRemove').css("visibility", 'hidden');
+	    } else {
+	    	$('#atozFilterRemove').css("visibility", 'visible');
+	    }
 	},
-		  
-	deleteSearchInput: function(){
-	  $('#atozFilter').val('');
-	  $('#glyphRemove').css("visibility", 'hidden');
-	}
 
 }
 
