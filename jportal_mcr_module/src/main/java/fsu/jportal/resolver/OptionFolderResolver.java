@@ -12,7 +12,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
 
-import fsu.jportal.nio.FileTools;
+import fsu.jportal.nio.JarResource;
 
 public class OptionFolderResolver implements URIResolver{
 
@@ -20,11 +20,13 @@ public class OptionFolderResolver implements URIResolver{
     public Source resolve(String href, String base) throws TransformerException {
         Element folderList = new Element("folderList");
         try {
-            for (Path child : FileTools.listFiles("/META-INF/resources/jp_templates")) {
+            JarResource jarResource = new JarResource("/META-INF/resources/jp_templates");
+            for (Path child : jarResource.listFiles()) {
                 String folderName = child.getFileName().toString();
                 folderList.addContent(createItemElement(folderName));
                 
             }
+            jarResource.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

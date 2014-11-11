@@ -38,7 +38,7 @@ import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
 
-import fsu.jportal.nio.FileTools;
+import fsu.jportal.nio.JarResource;
 
 public class InitHandler implements AutoExecutable{
 
@@ -90,8 +90,9 @@ public class InitHandler implements AutoExecutable{
         info("creating default classifications ...");
         
         try {
+            JarResource jarResource = new JarResource("/classifications");
             MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-            for (Path child : FileTools.listFiles("/classifications")) {
+            for (Path child : jarResource.listFiles()) {
                 InputStream classiXMLIS = Files.newInputStream(child);
                 
                 Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));

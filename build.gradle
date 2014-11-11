@@ -8,6 +8,8 @@ def getDate() {
     return formattedDate
 }
 
+//project.ext.needMCR = true
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
@@ -31,10 +33,8 @@ subprojects {
         maven{ url "http://artifactory.mycore.de/mycore-snapshots" }
     }
 
-    def noMCRDep = [
-        "jportal_jetty_tools"
-    ]
-    if (!(project.name in noMCRDep)) {
+
+    if (project.name != 'jportal_jetty_tools') {
         dependencies{
             compile "org.mycore:mycore-base:$mcrVersion"
             compile "org.mycore:mycore-solr:$mcrVersion"
@@ -52,15 +52,6 @@ subprojects {
             compile 'fsu.archiv.mycore.sru:sru-pica-import:0.0.1-SNAPSHOT'
             testCompile group: 'junit', name: 'junit', version: '4.+'
             testCompile group: 'org.mycore', name: 'mycore-base', version: mcrVersion, classifier: 'tests'
-        }
-    }
-
-    if(project.name.equals("jportal_jetty_tools")){
-        dependencies{
-            //            compile "org.mycore:mycore-base:$mcrVersion"
-            compile 'org.hsqldb:hsqldb:2.3.2'
-            compile 'javax.servlet:javax.servlet-api:3.0.1'
-            compile 'log4j:log4j:1.2.17'
         }
     }
 
@@ -142,22 +133,6 @@ project(':jportal_mcr_module'){
             workingDir gruntBuildDir
             commandLine "node_modules/grunt-cli/bin/grunt"
         }
-
-        println "Generate template name XML...."
-        def tree = fileTree(dir: 'src/main/resources/META-INF/resources/templates')
-        tree.include 'template_*'
-        def templateNameXMl = new File(project.buildDir,"templateName.xml");
-        templateNameXMl.withPrintWriter { writer ->
-            writer.println '<?xml version="1.0"?>'
-            writer.println '<folderList>'
-            tree.visit {file -> 
-            writer.println "<option value='$file.name'>"
-            writer.println "<label xml:lang='de'>$file.name<label>"
-            writer.println "</option>"
-            }
-            writer.println '</folderList>'
-        }
-        println "Successfully generate template name XML."
     }
 
     processResources {
@@ -207,6 +182,55 @@ project(':jportal_webapp'){
         from(configurations.applet){
             into 'applet'
             rename 'fileupload-applet(.*).jar', 'upload.jar'
+        }
+    }
+}
+
+project(':jportal_jetty_tools'){
+    //    project.ext.needMCR = false
+    configurations { 
+        solr
+         
+        }
+
+    dependencies{
+        //            compile "org.mycore:mycore-base:$mcrVersion"
+        compile 'org.hsqldb:hsqldb:2.3.2'
+        compile 'javax.servlet:javax.servlet-api:3.0.1'
+        compile 'log4j:log4j:1.2.17'
+        solr "org.mycore:mycore-solr:$mcrVersion@jar"
+    }
+
+    def solrBuildDir = "$project.buildDir/solr"
+    processResources.doFirst{
+        def solrJar
+        configurations.solr.each{ file ->
+            solrJar = file.absolutePath
+            println "Solr Jar $solrJar";
+        }
+        copy {
+            from zipTree(solrJar).files
+            include 'classificationSchema.xml'
+            into solrBuildDir
+            includeEmptyDirs = false
+        }
+        
+        copy {
+            from project(':jportal_mcr_module').fileTree("src/main/resources").files
+            include '**/solr.xml', '**/schema.xml', '**/solrconfig.xml', '**/stopwords.txt'
+            into solrBuildDir
+            includeEmptyDirs = false
+        }
+    }
+    processResources {
+        from("$solrBuildDir") {
+            include 'classificationSchema.xml', 'schema.xml', 'solrconfig.xml', 'stopwords.txt'
+            into 'config/jportal_jetty_tools/solr/solr-home/conf'
+        }
+        
+        from("$solrBuildDir") {
+            include 'solr.xml'
+            into 'config/jportal_jetty_tools/solr/solr-home'
         }
     }
 }
