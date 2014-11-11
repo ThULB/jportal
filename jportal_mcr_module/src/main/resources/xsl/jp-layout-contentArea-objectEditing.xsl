@@ -31,28 +31,15 @@
     <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
       
-      <xsl:variable name="editObj">
-        <xsl:choose>
-          <xsl:when test="$currentType = 'jpinst' or $currentType = 'person' or $currentType ='jpvolume' or $currentType='jparticle'">
-            <url link="{$WebApplicationBaseURL}editor" label="start.xed?id={$currentObjID}&amp;type={$currentType}&amp;action=update"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <url link="{$WebApplicationBaseURL}rsc/editor" label="update/{$currentObjID}"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      
       <link id="newEditorResource" href="{$WebApplicationBaseURL}editor" />
       
-      <link id="editorResource" href="{xalan:nodeset($editObj)/url/@link}" />
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
       <item class="jp-layout-menu-dropdown">
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
-          <label name="Dokument bearbeiten" ref="editorResource" path="{xalan:nodeset($editObj)/url/@label}" />
-          <!-- <label name="Dokument bearbeiten" ref="editorResource" path="update/{$currentObjID}" /> -->
+          <label name="Dokument bearbeiten" href="{$WebApplicationBaseURL}editor/start.xed?id={$currentObjID}&amp;type={$currentType}&amp;action=update" />
         </item>
         <item>
           <restriction name="hasChildren" value="true" />
