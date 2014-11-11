@@ -152,6 +152,7 @@ project(':jportal_webapp'){
 
     dependencies {
         runtime "org.mycore:mycore-xeditor:$mcrVersion"
+        runtime "org.mycore:mycore-webcli:$mcrVersion"
         runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
         runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
         runtime 'com.mchange:c3p0:0.9.2.1'

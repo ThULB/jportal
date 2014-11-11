@@ -22,7 +22,7 @@ public class OptionFolderResolver implements URIResolver{
         try {
             JarResource jarResource = new JarResource("/META-INF/resources/jp_templates");
             for (Path child : jarResource.listFiles()) {
-                String folderName = child.getFileName().toString();
+                String folderName = child.getFileName().getFileName().toString();
                 folderList.addContent(createItemElement(folderName));
                 
             }
