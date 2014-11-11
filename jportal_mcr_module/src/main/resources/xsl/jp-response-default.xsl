@@ -445,7 +445,7 @@
           <div class="collapse in list-group jp-list-group-special" id="{@name}">
             <xsl:apply-templates select="int" mode="facetField">
               <xsl:with-param name="facet" select="@name" />
-              <xsl:with-param name="isSelected" select="$location" />
+              <xsl:with-param name="isSelected" select="$isSelected" />
             </xsl:apply-templates>
           </div>
         </div>
@@ -453,7 +453,7 @@
       <xsl:when test="$isSelected = true()">
         <xsl:apply-templates select="int" mode="facetField">
             <xsl:with-param name="facet" select="@name" />
-            <xsl:with-param name="isSelected" select="$location" />
+            <xsl:with-param name="isSelected" select="$isSelected" />
          </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
