@@ -3,8 +3,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink">
 
   <xsl:template name="breadcrumb">
-    <div id="jp-breadcrumb-container">
-      <menu class="jp-layout-breadcrumb">
+    <div id="jp-breadcrumb-container" class="col-sm-12">
+      <ol class="col-sm-10 breadcrumb jp-layout-mcbreadcrumb"> <!-- jp-layout-breadcrumb -->
         <xsl:if test="contains(/mycoreobject/metadata/hidden_jpjournalsID/hidden_jpjournalID, 'jpjournal')">
           <xsl:variable name="hash">
             <xsl:variable name="char" select="substring(/mycoreobject/metadata/maintitles/maintitle[last()]/text(), 1, 1)" />
@@ -31,7 +31,7 @@
         </xsl:if>
         <xsl:variable name="parents" select="document(concat('parents:',/mycoreobject/@ID))/parents" />
         <xsl:apply-templates mode="jp.printListEntry" select="$parents/parent | metadata/maintitles/maintitle[@inherited='0'] | metadata/def.heading/heading" />
-      </menu>
+      </ol>
       <xsl:call-template name="jp-layout-breadcrumb-scroller" />
     </div>
   </xsl:template>
@@ -95,7 +95,7 @@
 
   <xsl:template name="jp-layout-breadcrumb-scroller">
     <xsl:variable name="objectScroll" select="document(concat('objectScroll:', /mycoreobject/@ID))/scroll" />
-    <menu class="jp-layout-scroller">
+    <ol class="col-sm-2 breadcrumb jp-layout-scroller hidden-xs">
       <xsl:if test="$objectScroll/previous/@id">
         <li>
           <a href="{$objectScroll/previous/@id}">
@@ -110,7 +110,7 @@
           </a>
         </li>
       </xsl:if>
-    </menu>
+    </ol>
   </xsl:template>
 
 </xsl:stylesheet>

@@ -41,7 +41,7 @@
     <xsl:variable name="contentRColHtml">
       <xsl:choose>
         <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
-          <div id="jp-content-RColumn" class="jp-layout-content-RCol">
+          <div id="jp-content-RColumn" class="col-sm-3 jp-layout-content-RCol">
             <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing' and li]" />
           </div>
           <class for="jp-content-LColumn">jp-layout-content-LCol-RCol</class>
@@ -62,7 +62,7 @@
       <xsl:with-param name="allowHTML" select="$objSetting/title/@allowHTML" />
     </xsl:apply-templates>
     <xsl:variable name="LColumnHTML">
-      <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
+      <div id="jp-content-LColumn" class="col-sm-9 jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
         <ul>
           <xsl:if test="structure/children">
             <xsl:call-template name="tableOfContent">
@@ -86,9 +86,9 @@
 
     <!-- metadata & derivate -->
     <xsl:if test="$showMetadataAndDerivate">
-      <div id="jp-content-Bottom">
+      <div id="jp-content-Bottom" class="col-sm-12">
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
-        <dl class="jp-layout-metadataList">
+        <dl class="col-sm-8 jp-layout-metadataList">
           <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
           <xsl:apply-templates mode="metadataDisplay"
             select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
@@ -107,7 +107,7 @@
         </dl>
         </xsl:if>
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
-          <div id="derivCol">
+          <div id="derivCol" class="col-sm-4">
             <xsl:call-template name="derivateDisplay">
               <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
               <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />

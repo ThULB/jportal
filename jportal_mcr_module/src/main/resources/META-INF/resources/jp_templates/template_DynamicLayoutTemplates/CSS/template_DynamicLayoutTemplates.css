@@ -16,10 +16,19 @@
     width: 450px; 
 }
 
-@media (max-width: 767px) {
+@media (min-width: 501px) and (max-width: 767px){
 	#logo #logoTitle {
     	word-break: break-all; 
-    	font-size: 0.8em !important; 
-    	width: 30%;
+		width: 55%;
+	}
+}
+
+@media (max-width: 500px) {
+	#logo #logoTitle {
+    	word-break: break-all; 
+		width: 99%;
+		padding-right: 10px;
+    	left: 10px;
+    	color: #FF9600;
 	}
 }

@@ -6,6 +6,7 @@
 	height: 90px;
 	font-size: 1.4rem;
 	color: #444;
+	word-break: break-all;
 }
 
 #logo .logoDate {
@@ -14,9 +15,11 @@
 	color: #444;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 500px) {
 	#logo .logoTitle {
-    	font-size: 0.9rem;
     	word-break: break-all;
+    	padding-left: 10px;
+    	padding-right: 10px;
+    	color: #C00000;
 	}
 }

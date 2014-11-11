@@ -172,6 +172,8 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 #jp-breadcrumb-container {
 	border-bottom: 1px solid;
 	font-size: 11px;
+	padding-right: 0;
+	padding-left: 0;
 }
 
 #jp-breadcrumb-container menu {
@@ -197,8 +199,12 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #jp-breadcrumb-container .jp-layout-scroller {
-	float: right;
+/* 	float: right; */
+	text-align: right;
 	clear: right;
+	background-color: #fff;
+	margin: 0;
+	padding-right: 0;
 }
 
 .jp-layout-searchBreadcrumb {
@@ -218,13 +224,19 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding-left: 0px;
 }
 
+@media (max-width: 435px){
+	.linked .jp-layout-searchBreadcrumb li:not(:first-child) {
+		display: block;
+		margin-left: 0.3em;
+	}
+}
+
 .jp-layout-horiz-menu,.topList {
 	list-style-type: none;
 	padding: 0;
 }
 
-.jp-layout-menu-dropdown:nth-last-child(4):hover>menu.jp-layout-submenu-dropdown
-	{
+.jp-layout-menu-dropdown:nth-last-child(4):hover>menu.jp-layout-submenu-dropdown {
 	right: 0;
 }
 
@@ -265,13 +277,25 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 .jp-layout-metadataList dt {
 	clear: left;
-	float: left;
+/* 	float: left; */
 	font-style: italic;
 	margin-bottom: 10px;
-	text-align: right;
-	width: 250px;
+/* 	text-align: right; */
+/* 	width: 250px; */
 }
 
+@media (min-width: 992px) {  
+	.jp-layout-metadataList dt {
+		float: left;
+		text-align: right;
+		width: 250px;
+	}
+	
+	.jp-layout-metadataList dd {
+		width: 350px;
+	}
+}
+	
 .jp-layout-metadataList dt:AFTER {
 	content: ": "
 }
@@ -280,7 +304,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	float: left;
 	margin-bottom: 10px;
 	margin-left: 10px;
-	width: 350px;
+	word-break: break-all;
 }
 .jp-layout-metadataList .address dt {
 	width: 90px;
@@ -301,6 +325,30 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 .jp-layout-metadataList .linked ul .jp-layout-searchBreadcrumb {
 	display: block;
+}
+
+.jp-layout-metadataList {
+	float: left;
+	list-style: none outside none;
+/* 	width: 630px; */
+	overflow: hidden;
+	padding: 0;
+}
+
+.jp-layout-metadataList li span {
+	float: left;
+	font-style: italic;
+	padding-right: 10px;
+	text-decoration: underline;
+}
+
+.jp-layout-metadataList li p {
+	padding-left: 20px;
+}
+
+p.jp-layout-metadata-list {
+	margin-top: 0px;
+	word-break: break-all; 
 }
 
 .jp-layout-derivates {
@@ -376,25 +424,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	margin: 0;
 	position: relative;
 	top: 8px;
-}
-
-.jp-layout-metadataList {
-	float: left;
-	list-style: none outside none;
-	width: 630px;
-	overflow: hidden;
-	padding: 0;
-}
-
-.jp-layout-metadataList li span {
-	float: left;
-	font-style: italic;
-	padding-right: 10px;
-	text-decoration: underline;
-}
-
-.jp-layout-metadataList li p {
-	padding-left: 20px;
 }
 
 .navi_history {
@@ -730,9 +759,22 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding-right: 29px;
 }
 
-.jp-layout-content-LCol-RCol {
-	border-right: 1px solid;
-	width: 716px;
+/* .jp-layout-content-LCol-RCol { */
+/* 	border-right: 1px solid; */
+/* 	width: 716px; */
+/* } */
+
+@media (min-width: 768px) {	
+	.jp-layout-content-LCol-RCol {
+		border-right: 1px solid;
+/* 		width: 716px; */
+	}
+}
+
+@media (max-width: 767px) {
+	#jp-content-LColumn.jp-layout-content-LCol.jp-layout-content-LCol-RCol, #jp-content-LColumn.jp-layout-content-LCol.jp-layout-content-LCol-noRCol{
+		padding: 0;
+	}
 }
 
 .jp-layout-content-LCol-noRCol {
@@ -758,12 +800,20 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 .jp-layout-content-RCol {
-	border-left: 1px solid;
-	float: right;
+/* 	border-left: 1px solid; */
+/* 	float: right; */ 
+	float: left;
 	margin-left: -1px;
 	padding: 0 0 20px 28px;
-	width: 251px;
+/* 	width: 251px; */
 }
+
+@media (min-width: 768px) {	
+	.jp-layout-content-RCol {
+		border-left: 1px solid;	
+	}
+}
+
 
 .jp-layout-object-editing {
 	border-bottom: medium none;
@@ -979,9 +1029,12 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding-right: 25px;
 }
 
-#artList li .metadata, #resultList .metadata {
-	float: left;
-	width: 82%;
+
+@media (min-width: 768px){
+	#artList li .metadata, #resultList .metadata {
+		float: left;
+/* 		width: 82%; */
+	}
 }
 
 #resultList .jp-layout-derivateList, #artList .jp-layout-derivateList {
@@ -1022,8 +1075,31 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 
 #derivCol {
 	margin-top: 12px;
-	overflow: hidden;
-	padding-left: 128px;
+/* 	overflow: hidden; */
+/* 	padding-left: 128px; */
+}
+
+@media (min-width: 992px){
+	#derivCol {
+		overflow: hidden;
+		padding-left: 128px;
+	}
+}
+
+@media (max-width: 991px){
+	#derivCol {
+		padding-left: 53px;
+	}
+	
+	#jp-tableOfContent > #artList{
+		padding: 0 !important;
+	}
+}
+
+@media (min-width: 715px) and (max-width: 991px){
+	#derivCol {
+		float: right;
+	}
 }
 
 #derivCol>h4 {
@@ -1086,11 +1162,24 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	margin-top: 20px;
 }
 
+#artList .col-md-2.jp-layout-derivateList.pull-left{
+	padding: 0 1em 0 0;
+}
+
+#artList .col-md-10.metadata.jp-layout-metadaInSearchResults {
+	marging-top: 0 !important;
+	padding-right: 0;
+}
+
+#artList > li > .col-md-2{
+	padding-left: 0;
+}
+
 .jp-layout-metadaInSearchResults {
 	list-style-type: none;
 	padding-left: 0px;
 	font-style: italic;
-	float: left;
+/* 	float: left; */
 }
 
 .jp-layout-admin ul {
@@ -1253,10 +1342,6 @@ ul.ckeditorButtons li:last-child {
 	height: 22px;
 }
 
-p.jp-layout-metadata-list {
-	margin-top: 0px;
-}
-
 /* bootstrap fontsize adjustment */
 #searchResults h2{
 	font-size: 20px;
@@ -1337,13 +1422,19 @@ textarea {
 
 .dt-collapse i, .dt-collapse span, .jp-layout-resultLCaption {
 	color: #008CC9;
-	font-size: 18px;
+	font-size: 17px;
 }
 
 .dt-collapse .fa-sort-asc{
 	float: right;
 	padding-right: 0.7em;	
 	padding-top: 7px;
+}
+
+@media (min-width: 768px) and (max-width: 792px){
+	.dt-collapse .fa-sort-asc, .dt-collapse .fa-sort-desc{
+		padding-right: 0;
+	}
 }
 
 .dt-collapse.collapsed .fa-sort-asc, .dt-collapse .fa-sort-desc{
@@ -1435,7 +1526,7 @@ textarea {
 
 .jp-layout-mynavbarbutton{
 	margin: 1.3em 0 0 0;
-	border: 1px solid #008BD0
+	border: 1px solid #008BD0;
 }
 
 #globalHeader .jp-layout-mynavbarbutton{
@@ -1448,34 +1539,71 @@ textarea {
 		padding-left: 0;
 	}
 		
-	#searchBar .input-group {
-		width: 555px; 
-	}
+/* 	#searchBar .input-group { */
+/* 		width: 555px;  */
+/* 	} */
 	
 	.jp-layout-largeInput{
 		width: 709px;
 	}
 	
-	.jp-layout-resultListHeadLeft{
-		padding-left: 0
-	}
+/* 	.jp-layout-resultListHeadLeft{ */
+/* 		padding-left: 0; */
+/* 	} */
 }
 
 /* Extra small devices Phones (<768px) */
 @media (max-width: 767px) {	
+	#resultListHeader > .jp-list-group-special.list-group.visible-xs{
+		margin-top: 10px;
+	}
+	
+	#resultListHeader > .jp-list-group-special.list-group.visible-xs > a{
+		width: 40%; 
+		display: inline; 
+		float: left; 
+		border-radius: 25px; 
+		text-align: center;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+/* 		padding-left: 10px !important; */
+		padding-right: 15px !important;
+	}
+	
+	.jp-layout-maintitle.jp-layout-border{
+		font-size: 1.1em;
+	}
+	
+	#searchBar{
+		padding-left: 10px; 
+		padding-right: 10px;
+	}
+	
+	#searchBar > #searchForm > .row > .col-md-9{
+		padding: 0;
+	}
+	
 	.jp-layout-clickLabel{
 		word-wrap: break-word;
 	}
 	
-	.jp-layout-resultListHeadLeft{
-		margin-right: 2.5em; 
-		padding-left: 0
+/* 	.jp-layout-resultListHeadLeft{ */
+/* 		margin-right: 2.5em;  */
+/* 		padding-left: 0; */
+/* 	} */
+	
+/* 	.jp-layout-resultListHeadRight{ */
+/* 		padding-left: 0; */
+/* 	} */
+	
+	#jp-content-Bottom {
+		padding-left: 0;
+		padding-right: 0;
 	}
 	
-	.jp-layout-resultListHeadRight{
-		padding-left: 0
+	#main{
+		padding: 1px 17px 49px;
 	}
-	
 }
 
 @media (max-width: 991px) {  
@@ -1574,21 +1702,30 @@ textarea {
 	.jp-layout-resultlistBorder{
 		border-left: 1px solid #9C9E9F;
 		padding-left: 2em;
-		min-height: 30em;
+		margin-left: -1px;
 	}
 	
-	.jp-layout-resultListHeadRight{
-		margin-bottom: 10px; 
-		margin-top: 20px; 
-		padding-right: 0;
-	}
+/* 	.jp-layout-resultListHeadRight{ */
+/* 		margin-bottom: 10px;  */
+/* 		margin-top: 20px;  */
+/* 		padding-right: 0; */
+/* 	} */
 	
-	.jp-layout-resultListHeadRight > a{
-		float: right;
-	}
+/* 	.jp-layout-resultListHeadRight > a{ */
+/* 		float: right; */
+/* 	} */
 	
 	.jp-navigation-topHeader-DropdownBorder.btn:active, .jp-navigation-topHeader-DropdownBorder.btn.active{
 		box-shadow: none;
 	}
 	
+	#resultList > .jp-layout-searchList{
+		border-right: 1px solid #9c9e9f;
+	}
+}
+
+.jp-layout-mcbreadcrumb{
+	margin: 0;
+	padding-left: 0;
+	background-color: #fff;
 }

@@ -132,7 +132,13 @@
         </xsl:variable>
         <xsl:variable name="doc" select="." />
         <li>
-          <ul class="metadata jp-layout-metadaInSearchResults">
+          <div class="col-md-2">
+            <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
+              <xsl:call-template name="derivatePreview">
+              <xsl:with-param name="mcrObj" select="$mcrObj" />
+            </xsl:call-template>
+          </div>
+          <ul class="col-md-10 metadata jp-layout-metadaInSearchResults">
             <li>
               <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
                 <xsl:value-of select="str[@name='maintitle']" />
@@ -150,10 +156,10 @@
               </xsl:if>
             </xsl:for-each>
           </ul>
-          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-          <xsl:call-template name="derivatePreview">
-            <xsl:with-param name="mcrObj" select="$mcrObj" />
-          </xsl:call-template>
+<!--           <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" /> -->
+<!--           <xsl:call-template name="derivatePreview"> -->
+<!--             <xsl:with-param name="mcrObj" select="$mcrObj" /> -->
+<!--           </xsl:call-template> -->
         </li>
       </xsl:when>
       <xsl:otherwise>
