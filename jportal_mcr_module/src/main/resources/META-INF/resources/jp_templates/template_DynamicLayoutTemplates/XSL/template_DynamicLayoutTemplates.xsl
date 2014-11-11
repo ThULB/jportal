@@ -54,7 +54,7 @@
           console.error("Unable to find template. Maybe there is no valid published or published_from metadata field set.");
           return;
         }
-        $('#logo').css('background-image', 'url(' + baseURL + 'templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
+        $('#logo').css('background-image', 'url(' + baseURL + 'jp_templates/template_DynamicLayoutTemplates/IMAGES/logo<xsl:value-of select="$century" />.png)');
         var maintitle = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
         $('#logo').prepend('<div id="logoDate"><xsl:value-of select="$pubYear" /></div>');
         $('#logoDate').after('<div id="logoTitle">' + truncate(maintitle, 96) + '</div>');

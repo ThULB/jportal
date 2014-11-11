@@ -52,8 +52,8 @@
     <xsl:call-template name="jp.getSearchMode" />
   </xsl:variable>
 
-  <xsl:variable name="templateResourcePath" select="concat('templates/', $template, '/')" />
-  <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'templates/', $template, '/')" />
+  <xsl:variable name="templateResourcePath" select="concat('jp_templates/', $template, '/')" />
+  <xsl:variable name="templateWebURL" select="concat($WebApplicationBaseURL, 'jp_templates/', $template, '/')" />
 
   <!-- TODO: remove this -->
   <xsl:variable name="wcms.useTargets" select="'no'" />
@@ -128,7 +128,7 @@
         <!-- add IE CSS to head -->
         <xsl:variable name="cssLinked">
           &lt;link href="
-          <xsl:value-of select="concat($WebApplicationBaseURL,'templates/',$template,'/CSS/',$template,'_IE.css')" />"
+          <xsl:value-of select="concat($WebApplicationBaseURL,'jp_templates/',$template,'/CSS/',$template,'_IE.css')" />"
           rel="stylesheet" type="text/css"/&gt;
         </xsl:variable>
         <xsl:comment>

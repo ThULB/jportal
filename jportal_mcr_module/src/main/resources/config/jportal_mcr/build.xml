@@ -59,9 +59,9 @@
 		<unjar dest="${build.webapps}" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="META-INF/resources/templates/**" />
+				<include name="META-INF/resources/jp_templates/**" />
 			</patternset>
-			<regexpmapper from="^(META-INF/resources/)(templates/.*)" to="\2" />
+			<regexpmapper from="^(META-INF/resources/)(jp_templates/.*)" to="\2" />
 		</unjar>
 		<!-- overwrite index.xml -->
 		<unjar dest="${build.webapps}" overwrite="true">

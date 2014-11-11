@@ -890,7 +890,7 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #logo {
-	background-image: url("../templates/template_master2/IMAGES/logo.png");
+	background-image: url("../jp_templates/template_master2/IMAGES/logo.png");
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;

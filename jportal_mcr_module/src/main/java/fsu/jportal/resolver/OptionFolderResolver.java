@@ -1,6 +1,7 @@
 package fsu.jportal.resolver;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -10,34 +11,25 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.common.config.MCRConfiguration;
+
+import fsu.jportal.nio.FileTools;
 
 public class OptionFolderResolver implements URIResolver{
 
-    private static final String PREFIX = "templatesOption:";
-    private static final String PROPPREFIX = "prop:";
-
     @Override
     public Source resolve(String href, String base) throws TransformerException {
-        href = getPath(href);
         Element folderList = new Element("folderList");
-        for (File file : new File(href).listFiles()) {
-            String folderName = file.getName();
-            folderList.addContent(createItemElement(folderName));
+        try {
+            for (Path child : FileTools.listFiles("/META-INF/resources/jp_templates")) {
+                String folderName = child.getFileName().toString();
+                folderList.addContent(createItemElement(folderName));
+                
+            }
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         return new JDOMSource(new Document(folderList));
-    }
-
-    private String getPath(String href) {
-        if(href.startsWith(PREFIX)){
-            href = href.replaceAll(PREFIX, "");
-        }
-        
-        if(href.startsWith(PROPPREFIX)){
-            String property = href.replaceAll(PROPPREFIX, "");
-            href = MCRConfiguration.instance().getString(property);
-        }
-        return href;
     }
 
     private Element createItemElement(String folderName) {
@@ -47,5 +39,4 @@ public class OptionFolderResolver implements URIResolver{
         item.addContent(label);
         return item;
     }
-
 }

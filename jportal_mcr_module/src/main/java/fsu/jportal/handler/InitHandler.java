@@ -5,18 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -43,6 +37,8 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.user2.MCRUserCommands;
 import org.mycore.user2.MCRUserManager;
 import org.xml.sax.SAXParseException;
+
+import fsu.jportal.nio.FileTools;
 
 public class InitHandler implements AutoExecutable{
 
@@ -95,7 +91,7 @@ public class InitHandler implements AutoExecutable{
         
         try {
             MCRCategoryDAO DAO = MCRCategoryDAOFactory.getInstance();
-            for (Path child : Files.newDirectoryStream(getJarPath("/classifications"))) {
+            for (Path child : FileTools.listFiles("/classifications")) {
                 InputStream classiXMLIS = Files.newInputStream(child);
                 
                 Document xml = MCRXMLParserFactory.getParser().parseXML(new MCRStreamContent(classiXMLIS));
@@ -115,18 +111,7 @@ public class InitHandler implements AutoExecutable{
             e.printStackTrace();
         }
     }
-
-    private Path getJarPath(String path) throws IOException {
-        URL jarURL = getClass().getResource(path);
-        String[] splittedURL = jarURL.toString().split("!");
-        String jarFile = splittedURL[0];
-        String jarFolder = splittedURL[1];
-        Map<String, String> env = new HashMap<>();
-        FileSystem zipFS = FileSystems.newFileSystem(URI.create(jarFile), env);
-        
-        return zipFS.getPath(jarFolder);
-    }
-
+    
     private void initSuperUser() {
         info("superuser ...");
         String superuser = MCRConfiguration.instance().getString("MCR.Users.Superuser.UserName", "administrator");

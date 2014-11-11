@@ -18,9 +18,7 @@ subprojects {
             sourceCompatibility = 1.7
             targetCompatibility = 1.7
         }
-        classpath {
-            downloadSources=true
-        }
+        classpath { downloadSources=true }
     }
 
     group = "fsu.thulb"
@@ -93,8 +91,6 @@ subprojects {
             }
         }
     }
-
-    
 }
 
 project(':jportal_mcr_module'){
@@ -146,10 +142,27 @@ project(':jportal_mcr_module'){
             workingDir gruntBuildDir
             commandLine "node_modules/grunt-cli/bin/grunt"
         }
+
+        println "Generate template name XML...."
+        def tree = fileTree(dir: 'src/main/resources/META-INF/resources/templates')
+        tree.include 'template_*'
+        def templateNameXMl = new File(project.buildDir,"templateName.xml");
+        templateNameXMl.withPrintWriter { writer ->
+            writer.println '<?xml version="1.0"?>'
+            writer.println '<folderList>'
+            tree.visit {file -> 
+            writer.println "<option value='$file.name'>"
+            writer.println "<label xml:lang='de'>$file.name<label>"
+            writer.println "</option>"
+            }
+            writer.println '</folderList>'
+        }
+        println "Successfully generate template name XML."
     }
 
     processResources {
         from("$gruntBuildDir/classes/META-INF") { into 'META-INF' }
+        from("$project.buildDir/templateName.xml") { into 'META-INF/resources/templates' }
     }
 }
 
