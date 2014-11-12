@@ -46,7 +46,8 @@ Setting properties in mycore.private.properties (in docportal)
   - MCR.basedir=<Path to docportal>
   - MCR.Modules.Application=common,maven
   - MCR.Components.Exclude=migration20-21,iview
-  - MCR.Module-solr.ServerURL=http\://localhost:8296/jportal
+  - MCR.Module-solr.ServerURL=http\://localhost:8296
+  - MCR.Module-solr.Core=jportal
 
   optional develop properties
   - MCR.LayoutService.LastModifiedCheckPeriod = 1000
