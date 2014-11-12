@@ -148,8 +148,8 @@ public class InitHandler implements AutoExecutable{
         try {
             Object[] params = parseParams(cmdLine);
             
-            String id = (String) params[0];
-            String permission = (String) params[1];
+            String permission = (String) params[0];
+            String id = (String) params[1];
             Element rule = getRuleXML((String) params[2]);
             String description = (String) params[3];
             
