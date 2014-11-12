@@ -17,6 +17,8 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 
+import fsu.jportal.xml.JPXMLFunctions;
+
 public class MCRJPortalURIGetJournalID implements URIResolver {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetJournalID.class);
@@ -64,7 +66,7 @@ public class MCRJPortalURIGetJournalID implements URIResolver {
         // It was used for another reason. Should be changed in the next version.
 //        String currentObjID = MCRLayoutUtilities.getLastValidPageID();
         
-        String currentObjID = MCRJPortalXMLFunctions.getLastValidPageID();
+        String currentObjID = JPXMLFunctions.getLastValidPageID();
         if(currentObjID.equals("") || currentObjID.contains("_jpinst_") || currentObjID.contains("_person_")) {
             return "";
         }

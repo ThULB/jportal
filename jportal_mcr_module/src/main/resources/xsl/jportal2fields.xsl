@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://org.mycore.common.xml.MCRJPortalXMLFunctions"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
   exclude-result-prefixes="jpxml">
 
   <xsl:include href="coreFunctions.xsl" />

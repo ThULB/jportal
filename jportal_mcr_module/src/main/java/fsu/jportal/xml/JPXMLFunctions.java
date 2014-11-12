@@ -1,4 +1,4 @@
-package org.mycore.common.xml;
+package fsu.jportal.xml;
 
 import java.io.File;
 import java.text.ParseException;
@@ -23,9 +23,9 @@ import org.mycore.user2.MCRUserManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class MCRJPortalXMLFunctions {
+public class JPXMLFunctions {
 
-    private static final Logger LOGGER = Logger.getLogger(MCRJPortalXMLFunctions.class);
+    private static final Logger LOGGER = Logger.getLogger(JPXMLFunctions.class);
 
     private static final ThreadLocal<DocumentBuilder> BUILDER_LOCAL = new ThreadLocal<DocumentBuilder>() {
         @Override
@@ -94,9 +94,7 @@ public class MCRJPortalXMLFunctions {
      * @return
      */
     public static boolean resourceExist(String webResource) {
-        String webDir = MCRConfiguration.instance().getString("MCR.webappsDir");
-        File f = new File(new File(webDir), webResource);
-        return f.exists();
+        return JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource) != null;
     }
 
     public String resolveText(String text, String varList) {
