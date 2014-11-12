@@ -51,7 +51,7 @@ public class MODSLogoResource {
                 if (retrievedElem instanceof MCRMetaLinkID) {
                     MCRMetaLinkID participant = (MCRMetaLinkID) retrievedElem;
                     String role = participant.getType();
-                    if (ParticipantRoleTypes.equals(role)) {
+                    if (role != null && ParticipantRoleTypes.equals(role)) {
                         String participantID = participant.getXLinkHref();
                         MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(participantID));
                         entities.add(createLogoEntity(role, participantMcrObj));
