@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-  <section xml:lang="de" title="Personen anlegen">
+  <section xml:lang="all">
     <xed:form xmlns:xed="http://www.mycore.de/xeditor">
       <xed:source uri="mcrobject:{$id}" />
       <xed:bind xpath="/mycoreobject[@version='2.0']">
@@ -16,10 +16,9 @@
           </xed:if>
         </xed:bind>
         <xed:bind xpath="metadata">
-
           <div class="panel panel-default">
             <div class="panel-heading">
-              <h2 class="text-center">
+              <h2 id="xeditor-title" class="text-center">
                 <xed:output i18n="jp.xeditor.{$type}.{$action}"/>
               </h2>
             </div>
@@ -27,7 +26,6 @@
               <xed:include
                 uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
                 ref="edit_{$type}" />
-
               <div class="col-md-11 text-right">
                 <div class="col-md-11">
                   <xed:cancel url="receive/{$id}" />
@@ -42,6 +40,11 @@
           </div>
         </xed:bind>
       </xed:bind>
+      <script type="text/javascript">
+        $(document).ready(function() {
+          document.title = $("#xeditor-title").text().trim() + " " + document.title;
+        });
+      </script>
     </xed:form>
   </section>
 </MyCoReWebPage>
