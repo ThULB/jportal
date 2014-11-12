@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="xalan layoutTools mcrxml xlink">
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan layoutTools mcrxml xlink">
 
   <xsl:variable name="tagsWithTemplateInfo" select="/mycoreobject|/MyCoReWebPage|/response" />
   <xsl:variable name="tagsWithSearchModeInfo" select="/response|/MyCoReWebPage" />
@@ -19,14 +18,15 @@
   </xsl:template>
 
   <xsl:template mode="nameOfTemplate" match="*">
-      <xsl:variable name="journalID">
-        <xsl:call-template name="jp.getJournalID" />
-      </xsl:variable>
-      <xsl:if test="$journalID != ''">
-        <!-- using URI resolver nameOfTemplate: is pretty ugly, should find a better solution -->
-        <!-- stream will not close while using URI resolver notnull:mcrobject: which leads to "Too many open files" exception -->
-        <xsl:value-of select="layoutTools:getNameOfTemplate($journalID)"/>
-      </xsl:if>
+    <xsl:variable name="journalID">
+      <xsl:call-template name="jp.getJournalID" />
+    </xsl:variable>
+    <xsl:if test="$journalID != ''">
+      <!-- using URI resolver nameOfTemplate: is pretty ugly, should find a better solution -->
+      <!-- stream will not close while using URI resolver notnull:mcrobject: which leads to "Too many open files" exception -->
+      <xsl:value-of select="layoutTools:getNameOfTemplate($journalID)" />
+    </xsl:if>
+
   </xsl:template>
 
   <!-- *************************************************** -->
@@ -71,7 +71,8 @@
   <xsl:template mode="searchMode" match="text()|@*" />
 
   <xsl:template mode="searchMode" match="response">
-    <xsl:value-of select="substring-before(mcrxml:regexp($RequestURL, concat($WebApplicationBaseURL, 'servlets/solr/') , ''), '?')" />
+    <xsl:value-of
+      select="substring-before(mcrxml:regexp($RequestURL, concat($WebApplicationBaseURL, 'servlets/solr/') , ''), '?')" />
   </xsl:template>
 
   <xsl:template mode="searchMode" match="MyCoReWebPage[section/jpadvancedsearch]">

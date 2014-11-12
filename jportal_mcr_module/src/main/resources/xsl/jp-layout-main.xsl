@@ -46,7 +46,17 @@
     <xsl:call-template name="jp.getJournalID" />
   </xsl:variable>
   <xsl:variable name="template">
-    <xsl:call-template name="jp.getNameOfTemplate" />
+    <xsl:variable name="tmp">
+      <xsl:call-template name="jp.getNameOfTemplate" />
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="$tmp = ''">
+        <xsl:value-of select="'template_master2'" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$tmp" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:variable>
   <xsl:variable name="searchMode">
     <xsl:call-template name="jp.getSearchMode" />
@@ -97,7 +107,7 @@
         <xsl:if test="starts-with($RequestURL, concat($WebApplicationBaseURL, 'content/below/index.xml'))">
           <link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow&amp;subset=latin-ext,cyrillic" rel="stylesheet" type="text/css" />
         </xsl:if>
-
+       
         <xsl:if test="$template != ''">
           <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'IMAGES/logo.png'))">
             <style type="text/css">
@@ -106,7 +116,7 @@
               }
             </style>
           </xsl:if>
-          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, '/CSS/', $template, '.css'))">
+          <xsl:if test="jpxml:resourceExist(concat($templateResourcePath, 'CSS/', $template, '.css'))">
             <link href="{$templateWebURL}CSS/{$template}.css" rel="stylesheet" type="text/css" />
           </xsl:if>
         </xsl:if>

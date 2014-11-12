@@ -1,6 +1,8 @@
 package fsu.jportal.xml;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -94,7 +96,15 @@ public class JPXMLFunctions {
      * @return
      */
     public static boolean resourceExist(String webResource) {
-        return JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource) != null;
+        InputStream resource = JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource);
+        boolean resourceExist = resource != null;
+        try {
+            resource.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return resourceExist;
     }
 
     public String resolveText(String text, String varList) {
