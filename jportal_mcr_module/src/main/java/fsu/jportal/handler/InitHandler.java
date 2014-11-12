@@ -99,6 +99,7 @@ public class InitHandler implements AutoExecutable{
                 MCRCategory category = MCRXMLTransformer.getCategory(xml);
                 DAO.addCategory(null, category);
             }
+            jarResource.close();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (MCRException e) {
