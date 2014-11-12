@@ -171,12 +171,16 @@
       <xed:output value="@xlink:href" />
     </xed:bind>
 
-    <xed:output value="@xlink:title" />
-    <label>
-      (
-      <xed:output value="@xlink:href" />
-      )
-    </label>
+    <xed:if test="@xlink:title != ''">
+      <xed:output value="@xlink:title" />
+    </xed:if>
+    <xed:if test="@xlink:href != ''">
+      <label>
+        (
+        <xed:output value="@xlink:href" />
+        )
+      </label>
+    </xed:if>
 
     <!-- Hier 2 buttons um personen auszuwählen und institutionen -->
     <div class="form-group">
