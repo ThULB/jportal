@@ -97,14 +97,18 @@ public class JPXMLFunctions {
      */
     public static boolean resourceExist(String webResource) {
         InputStream resource = JPXMLFunctions.class.getResourceAsStream("/META-INF/resources/" + webResource);
-        boolean resourceExist = resource != null;
-        try {
-            resource.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        
+        if(resource == null){
+            return false;
+        }else{
+            try {
+                resource.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return true;
         }
-        return resourceExist;
     }
 
     public String resolveText(String text, String varList) {
