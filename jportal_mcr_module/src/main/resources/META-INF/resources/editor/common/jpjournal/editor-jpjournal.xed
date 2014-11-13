@@ -15,11 +15,7 @@
         </jp:template> 
       </xed:repeat>
       
-      <xed:repeat xpath="participants[@class='MCRMetaLinkID'][@heritable='false'][@notinherit='false']/participant[@inherited='0'][@xlink:type='locator']">
-         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true" classification="jportal_class_00000007" >
-           <jp:template type="subselect" value="editor%2Fstart.xed%3Ftype%3D{$type}%26action%3D{$action}" xpath="@xlink:title" xpath2="@xlink:href" />
-         </jp:template> 
-      </xed:repeat>
+      <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="chooseParticipants" />
       
       <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
          <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true" classification="jportal_class_00000009" add="10" > 

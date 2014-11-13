@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:perInstituion="http://www.mycore.de/components/PersonenInstitution">
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:jp="http://www.mycore.de/components/jp"
+  xmlns:perInstituion="http://www.mycore.de/components/PersonenInstitution">
   <!-- Ab hier Submit und Cancel Buttons! -->
   <xed:template id="button_create">
-    <input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}" class="btn btn-primary" />
+    <input type="submit" xed:target="servlet" xed:href="CreateObjectServlet" value="{i18n:common.button.save}"
+      class="btn btn-primary" />
   </xed:template>
   <xed:template id="button_update">
-    <input type="submit" xed:target="servlet" xed:href="UpdateObjectServlet" value="{i18n:common.button.save}" class="btn btn-primary" />
+    <input type="submit" xed:target="servlet" xed:href="UpdateObjectServlet" value="{i18n:common.button.save}"
+      class="btn btn-primary" />
   </xed:template>
   <xed:template id="button_debug">
     <input type="submit" xed:target="debug" value="Debug" class="btn btn-primary" />
+  </xed:template>
+  <xed:template id="chooseParticipants">
+    <xed:repeat
+      xpath="participants[@class='MCRMetaLinkID'][@heritable='false'][@notinherit='false']/participant[@inherited='0'][@xlink:type='locator']">
+      <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.participants_label" buttons="true"
+        classification="jportal_class_00000007">
+        <jp:template type="subselect" value="editor%2Fstart.xed%3Ftype%3D{$type}%26action%3D{$action}%26id%3D{$id}"
+          xpath="@xlink:title" xpath2="@xlink:href" />
+      </jp:template>
+    </xed:repeat>
   </xed:template>
 </xed:template>
