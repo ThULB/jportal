@@ -1,20 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
   <xsl:param name="returnURL" />
-  
+
+  <!-- facets without selected -->
+  <xsl:variable name="filteredFacetsXML">
+    <xsl:variable name="numFound" select="/response/result/@numFound" />
+    <lst name="facet_fields">
+      <xsl:for-each select="/response/lst[@name='facet_counts']/lst[@name='facet_fields']/lst">
+        <xsl:variable name="facet" select="@name" />
+        <lst name="{@name}">
+          <xsl:for-each select="int">
+            <xsl:if test="not(jpxml:isFacetSelected($RequestURL, $facet, @name)) and $numFound != text()">
+              <int name="{@name}">
+                <xsl:value-of select="text()" />
+              </int>
+            </xsl:if>
+          </xsl:for-each>
+        </lst>
+      </xsl:for-each>
+    </lst>
+  </xsl:variable>
+  <xsl:variable name="filteredFacets" select="xalan:nodeset($filteredFacetsXML)" />
+
+  <!-- selected facets -->
+  <xsl:variable name="selectedFacetsXML">
+    <lst name="facet_fields">
+      <xsl:for-each select="/response/lst[@name='facet_counts']/lst['facet_fields']/lst">
+        <xsl:variable name="facet" select="@name" />
+        <lst name="{@name}">
+          <xsl:for-each select="int">
+            <xsl:if test="jpxml:isFacetSelected($RequestURL, $facet, @name)">
+              <int name="{@name}">
+                <xsl:value-of select="text()" />
+              </int>
+            </xsl:if>
+          </xsl:for-each>
+        </lst>
+      </xsl:for-each>
+    </lst>
+  </xsl:variable>
+  <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
+
   <xsl:template match="/response">
     <div id="searchResults">
-      <div id="resultListHeader" class="row col-sm-12">      
-        <div class="list-group jp-list-group-special visible-xs">
-          <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
-            <xsl:with-param name="isSelected" select="true()" />
-          </xsl:apply-templates>
+      <xsl:if test="$selectedFacets/lst/lst/int">
+        <div id="resultListHeader" class="row col-sm-12">
+          <div class="list-group jp-list-group-special visible-xs">
+            <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int" />
+          </div>
         </div>
-      </div>
+      </xsl:if>
       <div id="resultList" class="col-sm-12 container-fluid">
         <xsl:apply-templates mode="resultList" select="." />
       </div>
@@ -43,12 +81,12 @@
   </xsl:template>
 
   <xsl:template match="response" mode="jp.response.navigation">
-<!--     <xsl:if test="$journalID != ''"> -->
-<!--       <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a> -->
-<!--     </xsl:if> -->
-<!--     <xsl:if test="$returnURL"> -->
-<!--       <a href="{$returnURL}">Zurück</a> -->
-<!--     </xsl:if> -->
+    <!-- <xsl:if test="$journalID != ''"> -->
+    <!-- <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a> -->
+    <!-- </xsl:if> -->
+    <!-- <xsl:if test="$returnURL"> -->
+    <!-- <a href="{$returnURL}">Zurück</a> -->
+    <!-- </xsl:if> -->
     <xsl:apply-templates mode="jp.response.sort" select="." />
   </xsl:template>
 
@@ -82,33 +120,33 @@
       </xsl:if>
     </xsl:variable>
     <xsl:if test="$showFacet">
-    	<div class="col-sm-3 form-group">
-    		<!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse-->
-    		<div class="visible-xs">
-	    		<div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
-		        <xsl:apply-templates select="." mode="getFacetList">
-	        		<xsl:with-param name="colapsedId" select="1" />
-	        	</xsl:apply-templates>
-		      </div>
-	      </div>
-	      <div class="jp-layout-searchResult-style">
-	        <xsl:apply-templates mode="searchResultText" select="." />
-	        
-	        <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
-	         <span class="sr-only">Toggle navigation</span>
-	         <span class="icon-bar"></span>
-	         <span class="icon-bar"></span>
-	         <span class="icon-bar"></span>
-	       </button>
-	       
-		      <div id="jp-layout-triangle" class="visible-xs"></div>
-		      <div id="jp-layout-triangle" class="visible-xs"></div>
-	      </div>
-	      <div class="jp-layout-searchList hidden-xs">
-	        	<xsl:apply-templates select="." mode="getFacetList">
-	        		<xsl:with-param name="colapsedId" select="2" />
-	        	</xsl:apply-templates>
-	      </div>
+      <div class="col-sm-3 form-group">
+        <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
+        <div class="visible-xs">
+          <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
+            <xsl:apply-templates select="." mode="getFacetList">
+              <xsl:with-param name="colapsedId" select="1" />
+            </xsl:apply-templates>
+          </div>
+        </div>
+        <div class="jp-layout-searchResult-style">
+          <xsl:apply-templates mode="searchResultText" select="." />
+
+          <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+          <div id="jp-layout-triangle" class="visible-xs"></div>
+          <div id="jp-layout-triangle" class="visible-xs"></div>
+        </div>
+        <div class="jp-layout-searchList hidden-xs">
+          <xsl:apply-templates select="." mode="getFacetList">
+            <xsl:with-param name="colapsedId" select="2" />
+          </xsl:apply-templates>
+        </div>
       </div>
     </xsl:if>
     <div class="col-sm-9 jp-layout-resultlistBorder">
@@ -118,48 +156,46 @@
       <xsl:apply-templates mode="jp.pagination" select="." />
     </div>
   </xsl:template>
-  
+
   <xsl:template mode="getFacetList" match="response[result/@numFound &gt;= 1]">
-  	 <xsl:param name="colapsedId" />
-  	 <xsl:apply-templates mode="jp.response.navigation" select="." />
-		        
-     <div>
-       <h2 class="jp-layout-resultLCaption">
-         <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
-       </h2>
-       
-     <div class="form-group list-group jp-list-group-special hidden-xs">
-       <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
-         <xsl:with-param name="isSelected" select="true()" />
-         <xsl:with-param name="colapsedId" select="$colapsedId" />
-       </xsl:apply-templates>
-     </div>
-     
-       <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
-         <xsl:with-param name="isSelected" select="false()" />
-         <xsl:with-param name="colapsedId" select="$colapsedId" />
-       </xsl:apply-templates>
-     </div>
-     
-     <xsl:if test="$journalID != '' or $returnURL">
-       <div class="form-group">
-         <h2 class="jp-layout-resultLCaption">
-           Optionen
-         </h2>
-         <xsl:if test="$journalID != ''">
-           <a href="{$WebApplicationBaseURL}receive/{$journalID}">
-             <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
-           </a>
-         </xsl:if>
-         <xsl:if test="$returnURL">
-           <a href="{$returnURL}">
-             <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
-           </a>
-         </xsl:if>
-       </div>
-     </xsl:if>
+    <xsl:param name="colapsedId" />
+    <xsl:apply-templates mode="jp.response.navigation" select="." />
+
+    <div>
+      <h2 class="jp-layout-resultLCaption">
+        <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
+      </h2>
+
+      <div class="form-group list-group jp-list-group-special hidden-xs">
+        <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int">
+          <xsl:with-param name="colapsedId" select="$colapsedId" />
+        </xsl:apply-templates>
+      </div>
+
+      <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
+        <xsl:with-param name="colapsedId" select="$colapsedId" />
+      </xsl:apply-templates>
+    </div>
+
+    <xsl:if test="$journalID != '' or $returnURL">
+      <div class="form-group">
+        <h2 class="jp-layout-resultLCaption">
+          Optionen
+        </h2>
+        <xsl:if test="$journalID != ''">
+          <a href="{$WebApplicationBaseURL}receive/{$journalID}">
+            <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
+          </a>
+        </xsl:if>
+        <xsl:if test="$returnURL">
+          <a href="{$returnURL}">
+            <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
+          </a>
+        </xsl:if>
+      </div>
+    </xsl:if>
   </xsl:template>
-  
+
   <xsl:variable name="searchResultsFields">
     <field name="objectType" />
     <field name="published">
@@ -268,8 +304,8 @@
 
   <xsl:template mode="searchHitLabel" match="doc">
     <h3 class="jp-layout-clickLabel">
-      <!-- TODO: do not pass the hl parameter, instead we should pass a generated response id. with this id we could get the response from cache 
-        and use it in our metadata object -->
+      <!-- TODO: do not pass the hl parameter, instead we should pass a generated response id. with this id we could get the response from cache and use it in our 
+        metadata object -->
       <xsl:variable name="hl" select="../../lst[@name='responseHeader']/lst[@name='params']/str[@name='qry']" />
       <a>
         <xsl:attribute name="href">
@@ -432,109 +468,80 @@
   <!-- *************************************************** -->
   <!-- * FACET -->
   <!-- *************************************************** -->
-  <xsl:template mode="facetList" match="lst">
-  </xsl:template>
   <xsl:template mode="facetGroup" match="lst">
   </xsl:template>
-
-  <xsl:template mode="facetList" match="lst[@name='facet_fields']">
-    <xsl:param name="isSelected" />
-    <xsl:param name="colapsedId" />
-    <xsl:apply-templates mode="facetGroup" select="lst" >
-      <xsl:with-param name="isSelected" select="$isSelected" />
-      <xsl:with-param name="colapsedId" select="$colapsedId" />
-    </xsl:apply-templates>
+  <xsl:template mode="filteredFacetGroup" match="lst">
   </xsl:template>
 
   <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
-    <xsl:param name="isSelected" />
     <xsl:param name="colapsedId" />
-    <xsl:choose>
-      <xsl:when test="$isSelected = false()"> 
-        <div class="form-group">
-          <a class="dt-collapse" data-toggle="collapse">
-              <xsl:attribute name="data-target">
-                  <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />
-              </xsl:attribute>
-            <span>
-              <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
-            </span>
-            <i class="fa fa-sort-asc"></i>
-            <i class="fa fa-sort-desc"></i>
-          </a>
-          <div class="collapse in list-group jp-list-group-special" id="{@name}_{$colapsedId}">
-            <xsl:apply-templates select="int" mode="facetField">
-              <xsl:with-param name="facet" select="@name" />
-              <xsl:with-param name="isSelected" select="$isSelected" />
-            </xsl:apply-templates>
-          </div>
-        </div>
-      </xsl:when>
-      <xsl:when test="$isSelected = true()">
-        <xsl:apply-templates select="int" mode="facetField">
-            <xsl:with-param name="facet" select="@name" />
-            <xsl:with-param name="isSelected" select="$isSelected" />
-         </xsl:apply-templates>
-      </xsl:when>
-      <xsl:otherwise>
-      </xsl:otherwise>
-    </xsl:choose>
+    <div class="form-group">
+      <a class="dt-collapse" data-toggle="collapse">
+        <xsl:attribute name="data-target">
+              <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />
+          </xsl:attribute>
+        <span>
+          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
+        </span>
+        <i class="fa fa-sort-asc"></i>
+        <i class="fa fa-sort-desc"></i>
+      </a>
+      <div class="collapse in list-group jp-list-group-special" id="{@name}_{$colapsedId}">
+        <xsl:apply-templates select="int" mode="facetField" />
+      </div>
+    </div>
   </xsl:template>
 
   <xsl:template mode="facetField" match="int">
-    <xsl:param name="facet" />
-    <xsl:param name="isSelected" />
     <xsl:variable name="value" select="@name" />
     <xsl:variable name="count" select="text()" />
-
+    <xsl:variable name="facet" select="../@name" />
     <xsl:variable name="selected" select="jpxml:isFacetSelected($RequestURL, $facet, $value)" />
-    
-    <xsl:if test="$selected = $isSelected">
-      <xsl:variable name="href">
-        <xsl:choose>
-          <xsl:when test="$selected">
-            <xsl:value-of select="jpxml:removeFacet($RequestURL, $facet, $value)" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':', $value)" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-      <xsl:variable name="class">
+
+    <xsl:variable name="href">
+      <xsl:choose>
+        <xsl:when test="$selected">
+          <xsl:value-of select="jpxml:removeFacet($RequestURL, $facet, $value)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($RequestURL, '&amp;fq=', $facet, ':', $value)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="class">
+      <xsl:if test="$selected">
+        <xsl:value-of select="'selected'" />
+      </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="text">
+      <xsl:variable name="facetSettings" select="$settings/facet[@name=$facet]" />
+      <xsl:choose>
+        <xsl:when test="$facetSettings/@translate = 'true'">
+          <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))" />
+        </xsl:when>
+        <xsl:when test="$facetSettings/@mcrid = 'true'">
+          <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $value))/mycoreobject" />
+          <xsl:apply-templates mode="printTitle"
+            select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$value" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <a class="list-group-item {$class}" href="{$href}">
+      <i class="icon {$class}"></i>
+      <span class="text">
+        <xsl:value-of select="$text" />
+      </span>
+      <span class="pull-right">
         <xsl:if test="$selected">
-          <xsl:value-of select="'selected'" />
+          <xsl:attribute name="class">pull-right hidden-xs</xsl:attribute>
         </xsl:if>
-      </xsl:variable>
-      <xsl:variable name="text">
-        <xsl:variable name="facetSettings" select="$settings/facet[@name=$facet]" />
-        <xsl:choose>
-          <xsl:when test="$facetSettings/@translate = 'true'">
-            <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', $facet, '.', $value))" />
-          </xsl:when>
-          <xsl:when test="$facetSettings/@mcrid = 'true'">
-            <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $value))/mycoreobject" />
-            <xsl:apply-templates mode="printTitle"
-              select="$mcrObj/metadata/maintitles/maintitle[@inherited='0']|$mcrObj/metadata/def.heading/heading|$mcrObj/metadata/names[@class='MCRMetaInstitutionName']/name" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$value" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-  
-      <a class="list-group-item {$class}" href="{$href}">
-        <i class="icon {$class}"></i>
-        <span class="text">
-          <xsl:value-of select="$text" />
-        </span>
-        <span class="pull-right">
-        	<xsl:if test="$isSelected">
-          	<xsl:attribute name="class">pull-right hidden-xs</xsl:attribute>
-        	</xsl:if>
-          <xsl:value-of select="$count" />
-        </span>
-      </a>
-    </xsl:if>    
+        <xsl:value-of select="$count" />
+      </span>
+    </a>
   </xsl:template>
 
 </xsl:stylesheet>
