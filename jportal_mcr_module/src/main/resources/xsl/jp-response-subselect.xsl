@@ -265,19 +265,21 @@
 
   <xsl:template mode="renderView" match="@href[.='{subselect.cancel.link}']">
     <xsl:param name="data" />
+    <xsl:message>
+    </xsl:message>
     <xsl:attribute name="href">
       <xsl:choose>
         <xsl:when test="contains($subselect.webpage, 'XSL.editor.session.id')">
-          <xsl:value-of select="concat('/',$subselect.webpage)" />
+          <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage)" />
         </xsl:when>
         <xsl:otherwise>
 
               <xsl:choose>
                 <xsl:when test="$subselect.session = ''">
-                  <xsl:value-of select="concat('/',$subselect.webpage,'&amp;_xed_subselect_session=', $_xed_subselect_session)" />
+                  <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage,'&amp;_xed_subselect_session=', $_xed_subselect_session)" />
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="concat('/',$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
+                  <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
                 </xsl:otherwise>
               </xsl:choose>
               
