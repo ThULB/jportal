@@ -8,22 +8,12 @@
   
   <xsl:template match="/response">
     <div id="searchResults">
-      <div id="resultListHeader" class="row col-sm-12"> <!-- jp-layout-border-light navbar-header -->
-        <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        
-        <div class="form-group list-group jp-list-group-special visible-xs">
+      <div id="resultListHeader" class="row col-sm-12">      
+        <div class="list-group jp-list-group-special visible-xs">
           <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
             <xsl:with-param name="isSelected" select="true()" />
           </xsl:apply-templates>
         </div>
-<!--         <h2 class="col-sm-6 jp-layout-resultListHeadLeft">  -->
-<!--           <xsl:value-of select="i18n:translate('jp.metadata.search.result')" /> -->
-<!--         </h2> -->
       </div>
       <div id="resultList" class="col-sm-12 container-fluid">
         <xsl:apply-templates mode="resultList" select="." />
@@ -92,46 +82,33 @@
       </xsl:if>
     </xsl:variable>
     <xsl:if test="$showFacet">
-      <div id="navbar-collapse-searchResult" class="col-sm-3 jp-layout-searchList navbar-collapse collapse" role="navigation">
-        <div class="jp-layout-searchResult-style form-group">
-          <xsl:apply-templates mode="searchResultText" select="." />
-        </div>
-        
-        <xsl:apply-templates mode="jp.response.navigation" select="." />
-        
-        <div>
-          <h2 class="jp-layout-resultLCaption">
-            <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
-          </h2>
-          
-        <div class="form-group list-group jp-list-group-special hidden-xs">
-          <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
-            <xsl:with-param name="isSelected" select="true()" />
-          </xsl:apply-templates>
-        </div>
-        
-          <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
-            <xsl:with-param name="isSelected" select="false()" />
-          </xsl:apply-templates>
-        </div>
-        
-        <xsl:if test="$journalID != '' or $returnURL">
-          <div class="form-group">
-            <h2 class="jp-layout-resultLCaption">
-              Optionen
-            </h2>
-            <xsl:if test="$journalID != ''">
-              <a href="{$WebApplicationBaseURL}receive/{$journalID}">
-                <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
-              </a>
-            </xsl:if>
-            <xsl:if test="$returnURL">
-              <a href="{$returnURL}">
-                <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
-              </a>
-            </xsl:if>
-          </div>
-        </xsl:if>
+    	<div class="col-sm-3 form-group">
+    		<!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse-->
+    		<div class="visible-xs">
+	    		<div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
+		        <xsl:apply-templates select="." mode="getFacetList">
+	        		<xsl:with-param name="colapsedId" select="1" />
+	        	</xsl:apply-templates>
+		      </div>
+	      </div>
+	      <div class="jp-layout-searchResult-style">
+	        <xsl:apply-templates mode="searchResultText" select="." />
+	        
+	        <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
+	         <span class="sr-only">Toggle navigation</span>
+	         <span class="icon-bar"></span>
+	         <span class="icon-bar"></span>
+	         <span class="icon-bar"></span>
+	       </button>
+	       
+		      <div id="jp-layout-triangle" class="visible-xs"></div>
+		      <div id="jp-layout-triangle" class="visible-xs"></div>
+	      </div>
+	      <div class="jp-layout-searchList hidden-xs">
+	        	<xsl:apply-templates select="." mode="getFacetList">
+	        		<xsl:with-param name="colapsedId" select="2" />
+	        	</xsl:apply-templates>
+	      </div>
       </div>
     </xsl:if>
     <div class="col-sm-9 jp-layout-resultlistBorder">
@@ -141,7 +118,48 @@
       <xsl:apply-templates mode="jp.pagination" select="." />
     </div>
   </xsl:template>
-
+  
+  <xsl:template mode="getFacetList" match="response[result/@numFound &gt;= 1]">
+  	 <xsl:param name="colapsedId" />
+  	 <xsl:apply-templates mode="jp.response.navigation" select="." />
+		        
+     <div>
+       <h2 class="jp-layout-resultLCaption">
+         <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
+       </h2>
+       
+     <div class="form-group list-group jp-list-group-special hidden-xs">
+       <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
+         <xsl:with-param name="isSelected" select="true()" />
+         <xsl:with-param name="colapsedId" select="$colapsedId" />
+       </xsl:apply-templates>
+     </div>
+     
+       <xsl:apply-templates mode="facetList" select="lst[@name='facet_counts']/lst" >
+         <xsl:with-param name="isSelected" select="false()" />
+         <xsl:with-param name="colapsedId" select="$colapsedId" />
+       </xsl:apply-templates>
+     </div>
+     
+     <xsl:if test="$journalID != '' or $returnURL">
+       <div class="form-group">
+         <h2 class="jp-layout-resultLCaption">
+           Optionen
+         </h2>
+         <xsl:if test="$journalID != ''">
+           <a href="{$WebApplicationBaseURL}receive/{$journalID}">
+             <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
+           </a>
+         </xsl:if>
+         <xsl:if test="$returnURL">
+           <a href="{$returnURL}">
+             <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
+           </a>
+         </xsl:if>
+       </div>
+     </xsl:if>
+  </xsl:template>
+  
   <xsl:variable name="searchResultsFields">
     <field name="objectType" />
     <field name="published">
@@ -421,20 +439,22 @@
 
   <xsl:template mode="facetList" match="lst[@name='facet_fields']">
     <xsl:param name="isSelected" />
+    <xsl:param name="colapsedId" />
     <xsl:apply-templates mode="facetGroup" select="lst" >
       <xsl:with-param name="isSelected" select="$isSelected" />
+      <xsl:with-param name="colapsedId" select="$colapsedId" />
     </xsl:apply-templates>
   </xsl:template>
 
   <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
     <xsl:param name="isSelected" />
-    
+    <xsl:param name="colapsedId" />
     <xsl:choose>
       <xsl:when test="$isSelected = false()"> 
         <div class="form-group">
           <a class="dt-collapse" data-toggle="collapse">
               <xsl:attribute name="data-target">
-                  <xsl:value-of select="concat('#', @name)" />
+                  <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />
               </xsl:attribute>
             <span>
               <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
@@ -442,7 +462,7 @@
             <i class="fa fa-sort-asc"></i>
             <i class="fa fa-sort-desc"></i>
           </a>
-          <div class="collapse in list-group jp-list-group-special" id="{@name}">
+          <div class="collapse in list-group jp-list-group-special" id="{@name}_{$colapsedId}">
             <xsl:apply-templates select="int" mode="facetField">
               <xsl:with-param name="facet" select="@name" />
               <xsl:with-param name="isSelected" select="$isSelected" />
@@ -508,6 +528,9 @@
           <xsl:value-of select="$text" />
         </span>
         <span class="pull-right">
+        	<xsl:if test="$isSelected">
+          	<xsl:attribute name="class">pull-right hidden-xs</xsl:attribute>
+        	</xsl:if>
           <xsl:value-of select="$count" />
         </span>
       </a>

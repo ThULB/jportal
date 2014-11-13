@@ -12,11 +12,12 @@
     <!-- =================================================================== -->
     <xsl:template match="journalList[@mode='javascript']">
       <div id="firstLetterTab" class="journalList" additionalQuery="{additionalQuery}">
-        <div class="atoz">
-          <span class="label"><xsl:value-of select="i18n:translate(listTitle/text())"/>:</span>
-          <ul id="tabNav" class="tab-nav" />
-          <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" />
-          <span id="atozFilterRemove" class="glyphicon glyphicon-remove"></span>
+        <div class="atoz col-md-12">
+          <ul id="tabNav" class="nav nav-tabs tab-nav col-md-9 col-md-offset-1" />
+          <div class="col-md-2 jp-layout-atozilter">
+	          <input id="atozFilter" class="form-control filter" type="text" placeholder="Filter" />
+	          <span id="atozFilterRemove" class="glyphicon glyphicon-remove"></span>
+	        </div>
         </div>
         <div id="resultList" class="tab-panel"></div>
       </div>
