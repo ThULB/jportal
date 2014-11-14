@@ -262,6 +262,12 @@
         <xsl:value-of select="$data/href" />
     </xsl:attribute>
   </xsl:template>
+  
+  <xsl:template mode="renderView" match="@action[.='{subselect.url}']">
+    <xsl:attribute name="action">
+        <xsl:value-of select="concat($WebApplicationBaseURL,'servlets/solr/subselect')" />
+    </xsl:attribute>
+  </xsl:template>
 
   <xsl:template mode="renderView" match="@href[.='{subselect.cancel.link}']">
     <xsl:param name="data" />

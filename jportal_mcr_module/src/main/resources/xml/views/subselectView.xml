@@ -2,7 +2,7 @@
 <view name="subselect">
   <component name="subelectFormInput">
     <div id="searchBar">
-      <form id="searchForm" action="/servlets/solr/subselect">
+      <form id="searchForm" action="{subselect.url}">
         <div class="row">
           <div class="col-lg-8">
             <div class="input-group">
