@@ -121,7 +121,7 @@
       </xsl:if>
     </xsl:variable>
     <xsl:if test="$showFacet">
-      <div class="col-sm-3 form-group">
+      <div class="col-sm-3">
         <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
         <div class="visible-xs">
           <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
@@ -163,17 +163,17 @@
     <xsl:apply-templates mode="jp.response.navigation" select="." />
 
     <xsl:if test="$selectedFacets/lst/lst/int or $filteredFacets/lst/lst/int">
-      <div>
+      <div class="jp-layout-search-sidebar-group">
         <h2 class="jp-layout-resultLCaption">
           <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
         </h2>
-  
-        <div class="form-group list-group jp-list-group-special hidden-xs">
+
+        <div class="list-group jp-list-group-special hidden-xs">
           <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int">
             <xsl:with-param name="colapsedId" select="$colapsedId" />
           </xsl:apply-templates>
         </div>
-  
+
         <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
           <xsl:with-param name="colapsedId" select="$colapsedId" />
         </xsl:apply-templates>
@@ -181,7 +181,7 @@
     </xsl:if>
 
     <xsl:if test="$journalID != '' or $returnURL">
-      <div class="form-group">
+      <div class="jp-layout-search-sidebar-group">
         <h2 class="jp-layout-resultLCaption">
           Optionen
         </h2>
@@ -268,7 +268,7 @@
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
 
-        <div class="metadata form-group">
+        <div class="metadata">
 
           <div class="col-md-2">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
@@ -441,7 +441,7 @@
       </option>
     </xsl:variable>
     <xsl:variable name="sortOptions" select="xalan:nodeset($sortOptionsXML)" />
-    <div class="form-group">
+    <div class="jp-layout-search-sidebar-group">
       <h2 class="jp-layout-resultLCaption">
         <xsl:value-of select="i18n:translate('jp.metadata.search.sort')" />
       </h2>
@@ -478,7 +478,7 @@
 
   <xsl:template mode="facetGroup" match="lst[count(*) &gt; 0]">
     <xsl:param name="colapsedId" />
-    <div class="form-group">
+    <div>
       <a class="dt-collapse" data-toggle="collapse">
         <xsl:attribute name="data-target">
               <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />

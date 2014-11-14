@@ -682,16 +682,6 @@ p.jp-layout-metadata-list {
 	padding-left: 5px;
 }
 
-#searchResults .jp-layout-list-nodecoration>.jp-layout-topline:first-child
-	{
-	border: medium none;
-	padding: 0;
-}
-
-#searchResults .jp-layout-list-nodecoration>.jp-layout-topline {
-	padding-top: 6px;
-}
-
 #objectPreviewContainer .objectPreview {
     background-color: #FAFAFA;
     box-shadow: 0 0 4px #999999;
@@ -725,10 +715,6 @@ p.jp-layout-metadata-list {
 	#resultList {
 		width: 900px;
 	}
-}
-
-#searchResults #resultList {
-	width: 100%;
 }
 
 #searchRightNavi {
@@ -1286,11 +1272,6 @@ ul.ckeditorButtons li:last-child {
 	height: 22px;
 }
 
-/* bootstrap fontsize adjustment */
-#searchResults h2{
-	font-size: 20px;
-}
-
 #resultList h3{
 	font-size: 16px;
 }
@@ -1358,15 +1339,30 @@ textarea {
 	resize:none;
 }
 
-.dt-collapse{
+.jp-layout-searchList h2 {
+	font-size: 1.4em;
+}
+
+.jp-layout-searchList .jp-layout-facet-group-head {
+	font-size: 1.2em;
+}
+
+.jp-layout-searchList .dt-collapse{
 	width: 100%;
 	padding-left: 0.1em;
 	cursor: pointer;
 }
 
+.jp-layout-search-sidebar-group {
+	border-top: 1px solid #A8A9AA;
+	margin-top: 10px;
+}
+.jp-layout-search-sidebar-group:first-child {
+	border-top: none;
+}
+
 .dt-collapse i, .dt-collapse span, .jp-layout-resultLCaption {
 	color: #008CC9;
-	font-size: 17px;
 }
 
 .dt-collapse .fa-sort-asc{
@@ -1453,7 +1449,7 @@ textarea {
 	display: inline-block;
 }
 
-.jp-layout-resultlistBorder .metadata div, #searchResults > #resultList, .jp-layout-searchList{
+.jp-layout-resultlistBorder .metadata div, .jp-layout-searchList {
 	padding: 0;
 }
 
@@ -1476,10 +1472,6 @@ textarea {
 
 /* Medium devices Desktops (≥992px) */
 @media (min-width: 992px) {
-	.jp-layout-largeInput{
-		width: 709px;
-	}
-	
 	#derivCol {
 		overflow: hidden;
 		padding-left: 128px;

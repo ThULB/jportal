@@ -106,9 +106,8 @@
             </xsl:choose>
           </div>
 
-          <div class="col-sm-9"> 
+          <div class="col-sm-9 input-group"> 
             <xsl:if test="$journalID != ''">
-              <xsl:attribute name="class">col-md-9 input-group jp-layout-largeInput</xsl:attribute>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                   <span class="caret"></span>

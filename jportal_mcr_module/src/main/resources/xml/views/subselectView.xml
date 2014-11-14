@@ -28,53 +28,51 @@
     </div>
   </component>
   <component name="resultList">
-    <div id="searchResults">
-      <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
-        <h2>{subselect.type.label}</h2>
-        <div>
-          <span>
-            <getData id="search.numFound" />
-            <getData id="subselect.type.label" />
-            gefunden.
-          </span>
-          <ul class="navigation">
-            <li>
-              <a href="{subselect.cancel.link}">Auswahl abbrechen</a>
-            </li>
-          </ul>
-        </div>
+    <div class="jp-layout-bottomline jp-layout-border-light" id="resultListHeader">
+      <h2>{subselect.type.label}</h2>
+      <div>
+        <span>
+          <getData id="search.numFound" />
+          <getData id="subselect.type.label" />
+          gefunden.
+        </span>
+        <ul class="navigation">
+          <li>
+            <a href="{subselect.cancel.link}">Auswahl abbrechen</a>
+          </li>
+        </ul>
       </div>
-      <div id="resultList">
-        <ul class="jp-layout-list-nodecoration">
-          <component id="resultListEntry">
-            <li class="resultListEntry jp-layout-topline jp-layout-border-light">
-              <h3 class="jp-layout-clickLabel">
-                <a href="/receive/{result.hit.id}" data-jp-mcrid="{result.hit.id}">
-                  <getData id="result.hit.heading" />
-                </a>
-              </h3>
-              <ul class="jp-layout-metadaInSearchResults">
-                <li>
-                  <getData id="result.hit.dateOfBirth" />
-                </li>
-                <li>
-                  <getData id="result.hit.dateOfDeath" />
-                </li>
-              </ul>
+    </div>
+    <div id="resultList">
+      <ul class="jp-layout-list-nodecoration">
+        <component id="resultListEntry">
+          <li class="resultListEntry jp-layout-topline jp-layout-border-light">
+            <h3 class="jp-layout-clickLabel">
+              <a href="/receive/{result.hit.id}" data-jp-mcrid="{result.hit.id}">
+                <getData id="result.hit.heading" />
+              </a>
+            </h3>
+            <ul class="jp-layout-metadaInSearchResults">
+              <li>
+                <getData id="result.hit.dateOfBirth" />
+              </li>
+              <li>
+                <getData id="result.hit.dateOfDeath" />
+              </li>
+            </ul>
+          </li>
+        </component>
+      </ul>
+      <div class="jp-layout-topline jp-layout-border-light" id="resultPaginator">
+        <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
+          <component id="resultPaginator">
+            <li class="{resultpage} jp-layout-selected-underline">
+              <a href="{link.to.resultpage}">
+                <getData id="resultpage.label" />
+              </a>
             </li>
           </component>
-        </ul>
-        <div class="jp-layout-topline jp-layout-border-light" id="resultPaginator">
-          <menu class="jp-layout-paginator jp-layout-horiz-menu jp-layout-inline">
-            <component id="resultPaginator">
-              <li class="{resultpage} jp-layout-selected-underline">
-                <a href="{link.to.resultpage}">
-                  <getData id="resultpage.label" />
-                </a>
-              </li>
-            </component>
-          </menu>
-        </div>
+        </menu>
       </div>
     </div>
   </component>
