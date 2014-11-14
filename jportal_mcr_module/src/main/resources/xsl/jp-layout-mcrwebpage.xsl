@@ -34,8 +34,8 @@
   </xsl:template>
 
   <xsl:template mode="jp.layout.printLatestArticles" match="doc">
-    <div class="col-md-4">
-      <div>
+    <div class="col-sm-4">
+      <div class="jp-layout-titlewrap">
         <a class="title" href="{$WebApplicationBaseURL}receive/{str[@name='id']}">
           <xsl:call-template name="shortenString">
             <xsl:with-param name="string" select="str[@name='maintitle']" />

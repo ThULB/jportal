@@ -75,7 +75,7 @@
             <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
             <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
           </div>
-          <div class="col-md-3 text-center jp-layout-searchBarAdvanced hidden-xs">
+          <div class="col-sm-3 text-center jp-layout-searchBarAdvanced hidden-xs">
             <xsl:attribute name="style">padding-top: 0.5em</xsl:attribute> 
             <xsl:choose>
               <xsl:when test="$searchMode != 'advanced'">
@@ -106,7 +106,7 @@
             </xsl:choose>
           </div>
 
-          <div class="col-md-9"> 
+          <div class="col-sm-9"> 
             <xsl:if test="$journalID != ''">
               <xsl:attribute name="class">col-md-9 input-group jp-layout-largeInput</xsl:attribute>
               <span class="input-group-btn">

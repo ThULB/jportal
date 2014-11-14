@@ -18,7 +18,7 @@
         </p>
       </div>
       <div class="jp-layout-index-list">
-        <ul>
+        <ul class="list-inline text-center">
           <li>
             <a href="{$WebApplicationBaseURL}content/main/journalList.xml#A" class="entry journal">
               <xsl:variable name="text" select="i18n:translate('jp.site.home.journal')" />

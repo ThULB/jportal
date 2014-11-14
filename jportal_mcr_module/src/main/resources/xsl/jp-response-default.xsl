@@ -54,6 +54,9 @@
         </div>
       </xsl:if>
       <div id="resultList" class="col-sm-12 container-fluid">
+      	<xsl:if test="not($selectedFacets/lst/lst/int)">
+      		<xsl:attribute name="style">padding-top: 10px</xsl:attribute>
+      	</xsl:if>
         <xsl:apply-templates mode="resultList" select="." />
       </div>
     </div>
@@ -150,8 +153,8 @@
       </div>
     </xsl:if>
     <div class="col-sm-9 jp-layout-resultlistBorder">
-      <div id="jp-layout-triangle"></div>
-      <div id="jp-layout-triangle"></div>
+      <div id="jp-layout-triangle" class="hidden-xs"></div>
+      <div id="jp-layout-triangle" class="hidden-xs"></div>
       <xsl:apply-templates mode="searchResults" select="result/doc" />
       <xsl:apply-templates mode="jp.pagination" select="." />
     </div>
