@@ -106,7 +106,7 @@
             </xsl:choose>
           </div>
 
-          <div class="col-sm-9 input-group"> 
+          <div class="col-sm-9 col-xs-12 input-group"> 
             <xsl:if test="$journalID != ''">
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
