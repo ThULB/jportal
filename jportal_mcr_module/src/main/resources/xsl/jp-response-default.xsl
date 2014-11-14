@@ -45,20 +45,18 @@
   <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
 
   <xsl:template match="/response">
-    <div id="searchResults">
-      <xsl:if test="$selectedFacets/lst/lst/int">
-        <div id="resultListHeader" class="row col-sm-12">
-          <div class="list-group jp-list-group-special visible-xs">
-            <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int" />
-          </div>
+    <xsl:if test="$selectedFacets/lst/lst/int">
+      <div id="resultListHeader" class="row">
+        <div class="list-group jp-list-group-special visible-xs">
+          <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int" />
         </div>
-      </xsl:if>
-      <div id="resultList" class="col-sm-12 container-fluid">
-      	<xsl:if test="not($selectedFacets/lst/lst/int)">
-      		<xsl:attribute name="style">padding-top: 10px</xsl:attribute>
-      	</xsl:if>
-        <xsl:apply-templates mode="resultList" select="." />
       </div>
+    </xsl:if>
+    <div id="resultList" class="row container-fluid">
+    	<xsl:if test="not($selectedFacets/lst/lst/int)">
+    		<xsl:attribute name="style">padding-top: 10px</xsl:attribute>
+    	</xsl:if>
+      <xsl:apply-templates mode="resultList" select="." />
     </div>
   </xsl:template>
 
@@ -164,21 +162,23 @@
     <xsl:param name="colapsedId" />
     <xsl:apply-templates mode="jp.response.navigation" select="." />
 
-    <div>
-      <h2 class="jp-layout-resultLCaption">
-        <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
-      </h2>
-
-      <div class="form-group list-group jp-list-group-special hidden-xs">
-        <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int">
+    <xsl:if test="$selectedFacets/lst/lst/int or $filteredFacets/lst/lst/int">
+      <div>
+        <h2 class="jp-layout-resultLCaption">
+          <xsl:value-of select="i18n:translate('jp.metadata.search.narrow')" />
+        </h2>
+  
+        <div class="form-group list-group jp-list-group-special hidden-xs">
+          <xsl:apply-templates mode="facetField" select="$selectedFacets/lst/lst/int">
+            <xsl:with-param name="colapsedId" select="$colapsedId" />
+          </xsl:apply-templates>
+        </div>
+  
+        <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
           <xsl:with-param name="colapsedId" select="$colapsedId" />
         </xsl:apply-templates>
       </div>
-
-      <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
-        <xsl:with-param name="colapsedId" select="$colapsedId" />
-      </xsl:apply-templates>
-    </div>
+    </xsl:if>
 
     <xsl:if test="$journalID != '' or $returnURL">
       <div class="form-group">
@@ -483,7 +483,7 @@
         <xsl:attribute name="data-target">
               <xsl:value-of select="concat('#', @name, '_', $colapsedId)" />
           </xsl:attribute>
-        <span>
+        <span class="jp-layout-facet-group-head">
           <xsl:value-of select="i18n:translate(concat('jp.metadata.facet.', @name))" />
         </span>
         <i class="fa fa-sort-asc"></i>
