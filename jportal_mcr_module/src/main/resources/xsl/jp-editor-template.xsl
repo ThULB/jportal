@@ -1,13 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:jp="http://www.mycore.de/components/jp" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:encoder="xalan://java.net.URLEncoder"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jp="http://www.mycore.de/components/jp" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xed xlink jp i18n encoder">
 
   <xsl:include href="copynodes.xsl" />
+  <xsl:param name="xedIncParam" select="''" />
+
+  <xsl:template match="jp:journalID">
+    <xsl:choose>
+      <xsl:when test="$xedIncParam != '{$parent}' and $xedIncParam != ''">
+        <xsl:value-of select="layoutTools:getJournalID($xedIncParam)" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="./*" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template match="xed:cancel[@name='cancelUrl']">
+    <xsl:copy>
+      <xsl:attribute name="url">
+      <xsl:choose>
+        <xsl:when test="$xedIncParam != '{$parent}' and $xedIncParam != ''">
+          <xsl:value-of select="concat(@url,$xedIncParam)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat(@url,@default)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
+    </xsl:copy>
+  </xsl:template>
 
   <xsl:template match="jp:section">
     <div>
-      <xsl:apply-templates select="@*|node()"/>
+      <xsl:apply-templates select="@*|node()" />
     </div>
   </xsl:template>
 
@@ -27,7 +55,7 @@
   <xsl:template match="jp:template[contains('textInput|textInputSm|selectInput|textArea', @name)]">
     <div class="row">
       <xsl:if test="@small">
-        <xsl:attribute name="class"></xsl:attribute>	
+        <xsl:attribute name="class"></xsl:attribute>
       </xsl:if>
 
       <!-- 1. part: title class="form-group col-md-12" -->
@@ -40,7 +68,7 @@
       </div>
 
       <!-- 2. part: input class="form-group col-md-8" -->
-      <div class="col-md-8"> 
+      <div class="col-md-8">
         <xsl:if test="@small">
           <xsl:attribute name="class">col-md-9</xsl:attribute>
           <xsl:attribute name="style">padding: 0px</xsl:attribute>
@@ -60,13 +88,13 @@
         </xed:bind>
         <!-- add text <span> -->
         <xsl:apply-templates select="span[@type='addT']" />
-        <xsl:apply-templates select="jp:template[@type='subselect']" mode="subselect"/>
+        <xsl:apply-templates select="jp:template[@type='subselect']" mode="subselect" />
 
         <xsl:if test="@add">
           <div class="form-group">
             <xsl:attribute name="style">
               <xsl:value-of select="concat('margin-top:',@add, 'px')" />
-            </xsl:attribute> 
+            </xsl:attribute>
             <xsl:apply-templates select="xed:bind" />
           </div>
         </xsl:if>
@@ -133,9 +161,19 @@
       <option value="">
         <xed:output i18n="editor.common.select" />
       </option>
+      <xsl:variable name="classID">
+        <xsl:choose>
+          <xsl:when test="@classification = '{xedIncParam}'">
+            <xsl:value-of select="$xedIncParam" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@classification" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <xed:include>
         <xsl:attribute name="uri">
-          <xsl:value-of select="concat('xslStyle:items2options:classification:editor:-1:children:', @classification)" />
+          <xsl:value-of select="concat('xslStyle:items2options:classification:editor:-1:children:', $classID)" />
         </xsl:attribute>
       </xed:include>
     </select>
@@ -163,7 +201,7 @@
     </select>
   </xsl:template>
 
-  <xsl:template match="jp:template[@type='subselect']" mode="subselect" >
+  <xsl:template match="jp:template[@type='subselect']" mode="subselect">
     <xed:bind xpath="{@xpath}">
       <xed:output value="@xlink:title" />
     </xed:bind>

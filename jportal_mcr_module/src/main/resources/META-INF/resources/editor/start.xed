@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
-<MyCoReWebPage>
+<MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor">
   <section xml:lang="all">
-    <xed:form xmlns:xed="http://www.mycore.de/xeditor">
+    <xed:form>
       <xed:source uri="mcrobject:{$id}" />
       <xed:bind xpath="/mycoreobject[@version='2.0']">
+        <span id="journalID" style="display:none">            
+          <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />
+        </span>
         <xed:bind xpath="@xsi:noNamespaceSchemaLocation" initially="datamodel-{$type}.xsd" />
         <xed:bind xpath="@ID" initially="jportal_{$type}_00000000" />
         <xed:bind xpath="@label" initially="jportal_{$type}_00000000" />
-        <xed:bind xpath="structure" >
+        <xed:bind xpath="structure">
           <xed:if test="$parent">
             <xed:bind xpath="parents[@class='MCRMetaLinkID']/parent[@inherited='0'][@xlink:type='locator']">
-              <xed:bind xpath="@xlink:href" initially="{$parent}"/>   
+              <xed:bind xpath="@xlink:href" initially="{$parent}" />
             </xed:bind>
           </xed:if>
         </xed:bind>
@@ -19,20 +22,17 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h2 id="xeditor-title" class="text-center">
-                <xed:output i18n="jp.xeditor.{$type}.{$action}"/>
+                <xed:output i18n="jp.xeditor.{$type}.{$action}" />
               </h2>
             </div>
             <div class="panel-body">
-              <xed:include
-                uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
+              <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
                 ref="edit_{$type}" />
               <div class="col-md-11 text-right">
                 <div class="col-md-11">
-                  <xed:cancel url="{$WebApplicationBaseURL}receive/{$id}" />
-                  <input type="submit" value="{i18n:common.button.cancel}" class="btn btn-default" tabindex="999"
-                    xed:target="cancel" />
-                  <xed:include
-                    uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed"
+                  <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed"
+                    ref="button_cancel" />
+                  <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed"
                     ref="button_{$action}" />
                 </div>
               </div>
@@ -42,7 +42,7 @@
       </xed:bind>
       <script type="text/javascript">
         $(document).ready(function() {
-          document.title = $("#xeditor-title").text().trim() + " " + document.title;
+        document.title = $("#xeditor-title").text().trim() + " " + document.title;
         });
       </script>
     </xed:form>

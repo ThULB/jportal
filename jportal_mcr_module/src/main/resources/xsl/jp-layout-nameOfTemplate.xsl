@@ -54,7 +54,11 @@
   </xsl:template>
 
   <xsl:template mode="journalID" match="MyCoReWebPage">
-    <xsl:value-of select="journalID" />
+        <xsl:apply-templates mode="journalID" select="journalID|section/form/span[@id='journalID']" />
+  </xsl:template>
+  
+  <xsl:template mode="journalID" match="journalID|span[@id='journalID']">
+    <xsl:value-of select="." />
   </xsl:template>
 
   <xsl:template mode="journalID" match="response">
