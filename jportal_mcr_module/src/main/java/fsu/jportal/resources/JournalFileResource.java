@@ -43,13 +43,19 @@ import org.mycore.common.content.util.MCRServletContentHelper;
 
 @Path("journalFile/{id}")
 public class JournalFileResource {
-    static Logger logger = Logger.getLogger(JournalFileResource.class);
+    static Logger LOGGER = Logger.getLogger(JournalFileResource.class);
 
     @PathParam("id")
     String journalID;
-    @Context ServletContext context;
-    @Context HttpServletRequest request;
-    @Context HttpServletResponse response;
+
+    @Context
+    ServletContext context;
+
+    @Context
+    HttpServletRequest request;
+
+    @Context
+    HttpServletResponse response;
 
     private String journalFileFolderPath = MCRConfiguration.instance().getString("JournalFileFolder");
 
@@ -57,7 +63,7 @@ public class JournalFileResource {
     @Path("{filename}")
     @Consumes(MediaType.APPLICATION_XHTML_XML)
     public Response postAddFile(@PathParam("filename") String filename, String fileContent) throws JDOMException,
-            IOException {
+        IOException {
         String rootName = "MyCoReWebPage";
         Element root = new Element(rootName);
         Element section = new Element("section");
@@ -76,7 +82,6 @@ public class JournalFileResource {
             BufferedWriter introWriter = Files.newBufferedWriter(introXMl, StandardCharsets.UTF_8);
             xmlOutputter.output(document, introWriter);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -96,18 +101,19 @@ public class JournalFileResource {
             element.addContent(object);
         }
     }
-    
-    class FileStreamingOutput implements StreamingOutput{
+
+    class FileStreamingOutput implements StreamingOutput {
         private java.nio.file.Path path;
+
         public FileStreamingOutput(java.nio.file.Path path) {
             this.path = path;
         }
-        
+
         @Override
         public void write(OutputStream os) throws IOException, WebApplicationException {
             Files.copy(path, os);
         }
-        
+
     }
 
     @GET
@@ -118,7 +124,6 @@ public class JournalFileResource {
             MCRServletContentHelper.serveContent(new MCRPathContent(file), request, response, context);
             return Response.ok().build();
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return Response.status(Status.NOT_FOUND).build();
@@ -130,9 +135,9 @@ public class JournalFileResource {
 
         if (!Files.exists(journalFileFolder)) {
             try {
-                Files.createDirectory(journalFileFolder);
+                Files.createDirectories(journalFileFolder);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error("Unable to create directory " + journalFileFolder.toAbsolutePath().toString(), e);
             }
         }
 
