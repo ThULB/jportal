@@ -65,6 +65,8 @@
   <i18n tag="link">metaData.person.link</i18n> 
   <i18n tag="doubletOf">editormask.labels.LdoubletOf</i18n>
   <i18n tag="fullname">metaData.jpinst.fullname</i18n>
+  <i18n tag="predece">editormask.labels.predecessor</i18n>
+  <i18n tag="successor">editormask.labels.successor</i18n>
 
   <newObj parent="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" label="Neuer Band">jpvolume</newObj>
   <newObj parent="datamodel-jpvolume.xsd" label="Neuer Artikel">jparticle</newObj>

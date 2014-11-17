@@ -294,6 +294,10 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	content: ": "
 }
 
+.jp-layout-metadataList dd > a:not(:last-child):after{
+	content: ", "
+}
+
 .jp-layout-metadataList dd {
 	float: left;
 	margin-bottom: 10px;
