@@ -16,11 +16,14 @@ public class JarResource{
     private Path path;
 
     public JarResource(String path) throws IOException {
-        init(path);
+        this(JarResource.class.getResource(path));
     }
     
-    public void init(String path) throws IOException {
-        URL jarURL = JarResource.class.getResource(path);
+    public JarResource(URL url) throws IOException {
+        init(url);
+    }
+
+    public void init(URL jarURL) throws IOException {
         String[] splittedURL = jarURL.toString().split("!");
         String jarFile = splittedURL[0];
         String jarFolder = splittedURL[1];
@@ -31,7 +34,15 @@ public class JarResource{
     }
     
     public DirectoryStream<Path> listFiles() throws IOException{
+        return listFiles(path);
+    }
+    
+    public DirectoryStream<Path> listFiles(Path path) throws IOException{
         return Files.newDirectoryStream(path);
+    }
+    
+    public Path getPath(){
+        return path;
     }
 
     public void close() throws IOException {

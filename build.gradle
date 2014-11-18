@@ -157,6 +157,7 @@ project(':jportal_webapp'){
         runtime "org.hibernate:hibernate-c3p0:$hibernateVersion"
         runtime "org.hibernate:hibernate-ehcache:$hibernateVersion"
         runtime 'com.mchange:c3p0:0.9.2.1'
+        runtime project(':jportal_laws')
         applet "org.mycore.fileupload:fileupload-applet:1.2-SNAPSHOT"
     }
 
