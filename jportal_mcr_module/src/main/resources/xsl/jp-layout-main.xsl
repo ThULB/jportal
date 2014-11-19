@@ -186,6 +186,7 @@
             </div>
           </div>
         </div>
+        <div class="jp-layout-line" />
 
         <xsl:apply-templates select="document('webapp:config/jp-globalmessage.xml')/globalmessage" />
         <div id="logo"></div>

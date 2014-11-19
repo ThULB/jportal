@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="encoder xalan jpxml">
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="encoder xalan jpxml i18n">
 
   <xsl:param name="field1" />
   <xsl:param name="field2" />
@@ -10,19 +10,19 @@
   <xsl:param name="value3" />
 
   <xsl:variable name="searchfields">
-    <entry label="alle Wörter" field="allMeta" />
-    <entry label="Titel" field="titles_de" />
-    <entry label="Person/Institution" field="names_de" />
-    <entry label="Jahr" field="dates" />
-    <entry label="Schlagwörter" field="keywords" />
-    <entry label="Rubrik" field="rubricText" />
-    <entry label="Volltext" field="content" />
+    <entry field="allMeta" />
+    <entry field="titles_de" />
+    <entry field="names_de" />
+    <entry field="dates" />
+    <entry field="keywords" />
+    <entry field="rubricText" />
+    <entry field="content" />
   </xsl:variable>
 
   <xsl:template match="jpadvancedsearch">
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-advancedsearch.js" />
     <div>
-      <h2>Erweiterte Suche</h2>
+      <h4 class="col-sm-offset-1 jp-layout-advancedSearchHead"><xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" /></h4>
       <form id="advancedSearchForm" action="{$WebApplicationBaseURL}servlets/solr/advanced" onsubmit="jp.advancedsearch.onsubmit()">
         <xsl:call-template name="jpadvancedsearch.printSearchRow">
           <xsl:with-param name="row" select="'1'" />
@@ -44,7 +44,13 @@
           <input type="hidden" name="fq" value="journalID:{$journalID}" />
         </xsl:if>
         <input type="hidden" name="q" value="" />
-        <input id="submitButton" type="submit" value="Suche" class="submit" />
+        <div class="col-sm-12">
+        	<input id="submitButton" type="submit" class="btn btn-primary pull-right">
+      			<xsl:attribute name="value">
+                <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
+            </xsl:attribute>
+      		</input>
+      	</div>
       </form>
     </div>
   </xsl:template>
@@ -53,24 +59,26 @@
     <xsl:param name="row" />
     <xsl:param name="field" />
     <xsl:param name="value" />
-    <div class="row">
-      <select name="XSL.field{$row}" class="field">
+    <div> 
+      <select name="XSL.field{$row}" class="field col-sm-3 col-sm-offset-1 col-xs-12">
         <xsl:for-each select="xalan:nodeset($searchfields)/entry">
           <xsl:choose>
             <xsl:when test="$field = @field">
               <option value="{@field}" selected="selected">
-                <xsl:value-of select="@label" />
+                <xsl:value-of select="i18n:translate(concat('jp.metadata.search.advanced.', @field))" />
               </option>
             </xsl:when>
             <xsl:otherwise>
               <option value="{@field}">
-                <xsl:value-of select="@label" />
+                <xsl:value-of select="i18n:translate(concat('jp.metadata.search.advanced.', @field))" />
               </option>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:for-each>
       </select>
-      <input id="inputField" name="XSL.value{$row}" value="{$value}" class="value"></input>
+      <div class="col-sm-8 form-group col-xs-12">
+      	<input id="inputField" name="XSL.value{$row}" value="{$value}" class="form-control jp-layout-advancedSearchInput"></input>
+      </div>
     </div>
   </xsl:template>
 

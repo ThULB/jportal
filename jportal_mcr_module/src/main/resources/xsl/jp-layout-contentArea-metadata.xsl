@@ -89,10 +89,10 @@
 
   <xsl:template name="metadataField">
     <xsl:param name="fields" />
-    <dt>
+    <dt class="col-sm-4">
       <xsl:apply-templates mode="metadataFieldLabel" select="$fields[1]" />
     </dt>
-    <dd>
+    <dd class="col-sm-8">
       <xsl:apply-templates mode="metadataFieldValue" select="$fields">
         <xsl:sort select="text()" />
         <xsl:sort select="@xlink:title" />
@@ -223,7 +223,7 @@
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink']">
     <a href="{@xlink:href}">
-      <xsl:value-of select="concat(@xlink:href, ' (', @xlink:title, ')')" />
+			<xsl:value-of select="@xlink:title" />
     </a>
   </xsl:template>
 

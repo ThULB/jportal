@@ -49,7 +49,7 @@
       <xsl:apply-templates mode="controllerHook" select="xalan:nodeset($controllerHook)/jpsearchBar" />
     </xsl:variable>
 
-    <xsl:if test="$showSearchBar = 'true'">
+<!--     <xsl:if test="$showSearchBar = 'true'"> -->
       <xsl:variable name="searchBar" select="xalan:nodeset($searchBarMode)" />
       <xsl:choose>
         <xsl:when test="$searchBar/div[@id='searchBar']">
@@ -59,7 +59,7 @@
           <xsl:call-template name="jp.layout.searchbar.default" />
         </xsl:otherwise>
       </xsl:choose>
-    </xsl:if>
+<!--     </xsl:if> -->
   </xsl:template>
 
   <xsl:template name="jp.layout.searchbar.default">
@@ -69,6 +69,7 @@
       });
     </script>
     <div id="searchBar">
+    	<xsl:if test="$showSearchBar = 'true'">
       <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="container-fluid">
         <div class="row">
           <div class="hidden">
@@ -132,9 +133,6 @@
               <xsl:attribute name="title">
                 <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
               </xsl:attribute>
-              <xsl:if test="$journalID != ''">
-                  <xsl:attribute name="style">right: 0</xsl:attribute>
-              </xsl:if>
            </span>
             
            <input class="form-control" id="inputField" name="qry" value="{$qry}" />
@@ -145,6 +143,7 @@
           </div>
         </div>
       </form>
+      </xsl:if>
     </div>
   </xsl:template>
 </xsl:stylesheet>

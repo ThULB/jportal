@@ -87,8 +87,19 @@
     <!-- metadata & derivate -->
     <xsl:if test="$showMetadataAndDerivate">
       <div id="jp-content-Bottom" class="col-sm-12">
+        <xsl:if test="structure/derobjects or metadata/derivateLinks">
+          <div id="derivCol" class="col-sm-4">
+            <xsl:call-template name="derivateDisplay">
+              <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
+              <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+            </xsl:call-template>
+          </div>
+        </xsl:if>
         <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
         <dl class="col-sm-8 jp-layout-metadataList">
+        	<xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
+        		<xsl:attribute name="class">col-sm-8 col-sm-offset-2 jp-layout-metadataList</xsl:attribute>
+        	</xsl:if>
           <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
           <xsl:apply-templates mode="metadataDisplay"
             select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
@@ -105,14 +116,6 @@
             </xsl:when>
           </xsl:choose>
         </dl>
-        </xsl:if>
-        <xsl:if test="structure/derobjects or metadata/derivateLinks">
-          <div id="derivCol" class="col-sm-4">
-            <xsl:call-template name="derivateDisplay">
-              <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
-              <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-            </xsl:call-template>
-          </div>
         </xsl:if>
       </div>
     </xsl:if>

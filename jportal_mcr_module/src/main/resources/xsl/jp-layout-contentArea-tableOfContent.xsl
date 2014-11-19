@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:mcr="http://www.mycore.org/" xmlns:solrxml="xalan://org.mycore.solr.common.xml.MCRSolrXMLFunctions" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xalan encoder mcr mcrxml solrxml">
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan encoder mcr mcrxml solrxml i18n">
 
   <xsl:param name="referer" />
   <xsl:param name="vol.start" />
@@ -56,7 +56,9 @@
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
-          <h3>Inhaltsverzeichnis</h3>
+          <h3><xsl:value-of select="i18n:translate('jp.metadata.directory')" /></h3>
+          <div id="jp-layout-triangle"></div>
+          <div id="jp-layout-triangle"></div>
           <ul>
             <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
           </ul>
@@ -156,10 +158,6 @@
               </xsl:if>
             </xsl:for-each>
           </ul>
-<!--           <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" /> -->
-<!--           <xsl:call-template name="derivatePreview"> -->
-<!--             <xsl:with-param name="mcrObj" select="$mcrObj" /> -->
-<!--           </xsl:call-template> -->
         </li>
       </xsl:when>
       <xsl:otherwise>

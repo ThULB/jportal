@@ -445,7 +445,7 @@
       <h2 class="jp-layout-resultLCaption">
         <xsl:value-of select="i18n:translate('jp.metadata.search.sort')" />
       </h2>
-      <select id="sortSelect">
+      <select class="sortSelect"> <!-- id="sortSelect" -->
         <xsl:apply-templates select="$sortOptions/option" mode="jp.response.sort.option">
           <xsl:with-param name="selected" select="$sort" />
         </xsl:apply-templates>

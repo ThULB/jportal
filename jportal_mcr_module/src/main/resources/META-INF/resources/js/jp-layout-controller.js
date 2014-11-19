@@ -213,7 +213,7 @@ $(document).ready(function() {
 
 // SORT
 $(document).ready(function() {
-	$("#sortSelect").on("change", function() {
+	$(".sortSelect").on("change", function() {
 		// get url
 		var url = window.location.href;
 		// change/add sort parameter
