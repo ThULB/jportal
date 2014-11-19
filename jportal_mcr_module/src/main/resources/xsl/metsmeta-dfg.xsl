@@ -115,14 +115,20 @@
     <!-- related item -> parent journal id -->
     <xsl:if test="./metadata/hidden_jpjournalsID/hidden_jpjournalID and not(contains(@ID,'_jpjournal_'))">
       <xsl:variable name="journalID" select="./metadata/hidden_jpjournalsID/hidden_jpjournalID/text()" />
+      <xsl:variable name="journal" select="document(concat('mcrobject:', $journalID))/mycoreobject" />
       <mods:relatedItem type="host">
         <xsl:attribute name="ID">
           <xsl:value-of select="$journalID" />
         </xsl:attribute>
         <mods:identifier type="uri"><xsl:value-of select="concat($WebApplicationBaseURL,'receive/',$journalID)" /></mods:identifier>
         <mods:titleInfo>
-          <mods:title><xsl:value-of select="document(concat('mcrobject:', $journalID))/mycoreobject/metadata/maintitles/maintitle" /></mods:title>
+          <mods:title><xsl:value-of select="$journal/metadata/maintitles/maintitle" /></mods:title>
         </mods:titleInfo>
+        <xsl:for-each select="document(concat('parents:',@ID))/parents/parent[contains(@xlink:href, '_jpvolume_')]">
+          <mods:part ID="{@xlink:href}" type="volume" order="{position()}">
+            <text><xsl:value-of select="@xlink:title" /></text>
+          </mods:part>
+        </xsl:for-each>
       </mods:relatedItem>
     </xsl:if>
 
