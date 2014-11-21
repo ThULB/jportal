@@ -64,18 +64,14 @@
     <xsl:value-of select="i18n:translate('jp.metadata.search.no_results')" />
   </xsl:template>
 
-  <xsl:template mode="searchResultText" match="response[result/@numFound = 1]">
-    <xsl:value-of select="i18n:translate('jp.metadata.search.object')" />
-  </xsl:template>
-
-  <xsl:template mode="searchResultText" match="response[result/@numFound &gt; 1]">
+  <xsl:template mode="searchResultText" match="response[result/@numFound &gt; 0]">
     <xsl:variable name="resultInfoXML">
       <xsl:call-template name="jp.pagination.getResultInfoXML">
         <xsl:with-param name="response" select="/response" />
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
-    <xsl:value-of select="concat($resultInfo/numFound, ' ', i18n:translate('jp.metadata.search.objects'))" />
+    <xsl:value-of select="concat($resultInfo/numFound, ' ', i18n:translate('jp.metadata.search.hits'))" />
     <xsl:if test="$resultInfo/page > 0">
       <xsl:value-of select="concat(' (', i18n:translate('jp.metadata.search.page'), ' ' , $resultInfo/page + 1, ')')" />
     </xsl:if>

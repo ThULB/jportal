@@ -728,12 +728,6 @@ p.jp-layout-metadata-list {
 	padding-bottom: 49px;
 }
 
-@media (min-width: 900px){
-	#resultList {
-		width: 900px;
-	}
-}
-
 #searchRightNavi {
 	border-left: 1px solid;
 	float: right;
@@ -1164,7 +1158,6 @@ p.jp-layout-metadata-list {
 .jp-layout-metadaInSearchResults {
 	list-style-type: none;
 	padding-left: 0px;
-	font-style: italic;
 }
 
 .jp-layout-admin ul {
