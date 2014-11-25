@@ -98,20 +98,7 @@
             </xsl:if>
           </xsl:for-each>
         </ul>
-        <xsl:call-template name="jp.navigation.top.language.js" />
       </li>    
-  </xsl:template>
-
-  <xsl:template name="jp.navigation.top.language.js">
-    <script type="text/javascript">
-      $(document).ready(function() {
-      var languageList = $('#languageList');
-      $('#languageSelect').click(function() {
-      $(this).toggleClass('clicked');
-      languageList.toggleClass('hidden');
-      });
-      });
-    </script>
   </xsl:template>
 
 </xsl:stylesheet>
