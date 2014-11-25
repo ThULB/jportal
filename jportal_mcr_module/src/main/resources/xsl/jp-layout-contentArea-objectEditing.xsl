@@ -63,7 +63,7 @@
           <label name="Partner auswählen" />
         </item>
         <item>
-          <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" />
+          <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
         </item>
       </item>

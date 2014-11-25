@@ -91,7 +91,7 @@
 
     <xsl:if test="$deleteDB or $showDerivate">
     <div class="jp-layout-derivateWrapper">
-      <div class="image">
+      <div class="jp-layout-derivate">
         <xsl:choose>
           <xsl:when test="$iviewFile != ''">
             <xsl:call-template name="iview2Entry">
@@ -106,7 +106,7 @@
           </xsl:otherwise>
         </xsl:choose>
       </div>
-      <xsl:if test="$mode = 'metadata'">
+      <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
         <xsl:call-template name="dfgViewerLink">
           <xsl:with-param name="derivID" select="$derivID" />
         </xsl:call-template>
@@ -174,7 +174,6 @@
     <xsl:param name="file" />
     <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivID}/{mcrxml:encodeURIPath($file)}" class="thumbnail" >
       <div class="jp-layout-hidden-Button"></div>
-<!--       <img src="{$WebApplicationBaseURL}servlets/MCRThumbnailServlet/{$derivID}/{mcrxml:encodeURIPath($file)}?centerThumb=no" /> -->
       <img src="{$WebApplicationBaseURL}servlets/MCRTileCombineServlet/MIN/{$derivID}/{mcrxml:encodeURIPath($file)}?centerThumb=no" />
     </a>
   </xsl:template>
@@ -194,13 +193,16 @@
       <div class="jp-layout-hidden-Button"></div>
       <xsl:choose>
         <xsl:when test="$fileType = 'PDF'">
-          <img src="{concat($WebApplicationBaseURL,'images/adobe-logo.svg')}" border="0" class="logo" />  
+          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$encodedMaindoc}" border="0" class="thumbnail" />  
         </xsl:when>
         <xsl:when test="$fileType = 'XML'">
-          <img src="{concat($WebApplicationBaseURL,'images/xml-logo.svg')}" border="0" class="logo" />  
+          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" border="0" class="logo" />  
+        </xsl:when>
+        <xsl:when test="$fileType = 'SVG'">
+          <img src="{$derivbase}{$encodedMaindoc}" border="0" class="thumbnail" />  
         </xsl:when>
         <xsl:otherwise>
-          <img src="{concat($WebApplicationBaseURL,'images/file-logo.svg')}" border="0" class="logo" />
+          <img src="{$WebApplicationBaseURL}images/file-logo.svg" border="0" class="logo" />
           <span style="display: inline-block; text-align: center; width: 100%;">
             <xsl:value-of select="$fileType" />
           </span>

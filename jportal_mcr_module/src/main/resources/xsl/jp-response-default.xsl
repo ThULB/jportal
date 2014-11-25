@@ -146,7 +146,7 @@
         </div>
       </div>
     </xsl:if>
-    <div class="col-sm-9 jp-layout-resultlistBorder">
+    <div class="col-sm-9 jp-layout-hits">
       <div id="jp-layout-triangle" class="hidden-xs"></div>
       <div id="jp-layout-triangle" class="hidden-xs"></div>
       <xsl:apply-templates mode="searchResults" select="result/doc" />
@@ -263,17 +263,14 @@
     <xsl:variable name="mcrId" select="str[@name='id']" />
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
-
-        <div class="metadata">
-
-          <div class="col-md-2">
+        <div class="row jp-layout-hit">
+          <div class="col-md-2 jp-layout-hit-image">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
             <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
-
-          <div class="col-md-10">
+          <div class="col-md-10 jp-layout-hit-metadata">
             <xsl:apply-templates mode="searchHitLabel" select="." />
             <ul class="jp-layout-metadaInSearchResults">
               <xsl:variable name="doc" select="." />
