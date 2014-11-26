@@ -80,12 +80,15 @@ public class DerivateTools {
                     .getFileName();
 
             Map<MCRFilesystemNode, MCRFile> copyHistory = new HashMap<MCRFilesystemNode, MCRFile>();
-            if(cp(sourceNode, targetDir, newFileName, copyHistory) && delAfterCopy){
-                Derivate derivate = new Derivate(sourceNode.getOwnerID());
-                moveAttachedData(derivate, copyHistory);
-                sourceNode.delete();
+            if(cp(sourceNode, targetDir, newFileName, copyHistory)){
+                if (delAfterCopy){
+                    Derivate derivate = new Derivate(sourceNode.getOwnerID());
+                    moveAttachedData(derivate, copyHistory);
+                    sourceNode.delete();
+                }
+                return true;
             }
-            return true;
+            return false;
         } catch (MCRUsageException e) {
             e.printStackTrace();
         } catch (MCRPersistenceException e) {

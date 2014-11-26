@@ -1,5 +1,6 @@
 package fsu.jportal.resources;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUsageException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -143,8 +145,18 @@ public class DerivateBrowserResource {
 
     @POST
     @Path("rename")
-    public Response rename(@QueryParam("file") String file, @QueryParam("name") String name) throws Exception {
-        DerivateTools.rename(file, name);
+    public Response rename(@QueryParam("file") String file, @QueryParam("name") String name, @QueryParam("mainFile") String start) {
+        try{
+            DerivateTools.rename(file, name);
+        }
+        catch (Exception e){
+            return Response.status(Status.CONFLICT).build();
+        }
+        if (Boolean.parseBoolean(start)){
+            String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
+            Derivate derivate = new Derivate(file.substring(0, file.lastIndexOf(":")));
+            derivate.setMaindoc(path.substring(path.lastIndexOf(":") + 1));
+        }
         return Response.ok().build();
     }
     
@@ -232,7 +244,6 @@ public class DerivateBrowserResource {
         else{
             jsonObject.addProperty("hasChildren", false);
         }
-               
         return Response.ok(jsonObject.toString()).build();
     }
     
@@ -316,7 +327,12 @@ public class DerivateBrowserResource {
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
         String deriID = jsonObject.get("deriID").getAsString();
+        Boolean all = jsonObject.get("completeDeri").getAsBoolean();
         MCRURNAdder urnAdder = new MCRURNAdder();
+        if (all) {
+            urnAdder.addURNToDerivates(deriID);
+            return Response.ok().build();
+        }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
             String path = jsonO.get("path").getAsString();

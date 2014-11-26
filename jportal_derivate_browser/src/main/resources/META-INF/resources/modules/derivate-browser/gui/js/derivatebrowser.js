@@ -911,16 +911,23 @@ var DerivateBrowser = function(){
 			data: JSON.stringify(json),
 			statusCode: {
 				200: function(data) {
-					console.log(data);
-					var dID = data.deriID;
-					$.each(data.files, function(i, file) {
-						console.log(file);
-						if (file.URN != ""){
-							$(".browser-table-file").filter(function() {
-								return ($(this).data("deriID") == dID) && ($(this).data("path") == file.path);
-							}).find("td.browser-table-file-urn").html(file.URN);
-						}
-					});					
+					if (json.completeDeri){
+						getDerivate(currentDeriID, currentPath);
+					}
+					else{
+						var dID = data.deriID;
+						$.each(data.files, function(i, file) {
+							console.log(file);
+							if (file.URN != ""){
+								$(".browser-table-file").filter(function() {
+									return ($(this).data("deriID") == dID) && ($(this).data("path") == file.path);
+								}).find("td.browser-table-file-urn").html(file.URN);
+							}
+							else{
+								alert("URN konnte nicht gesetzt werden.")
+							}
+						});	
+					}
 				},
 				500: function(error) {
 					alert(error);

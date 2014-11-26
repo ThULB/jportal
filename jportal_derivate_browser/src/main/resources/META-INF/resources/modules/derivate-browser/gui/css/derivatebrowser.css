@@ -280,6 +280,16 @@ span.btn{
 	display: inline-block;
 }
 
+.panel-body{
+	position: relative;
+}
+
+#btn-urnAll{
+	position: absolute;
+	left: 15px;
+	bottom: 0px;
+}
+
 #derivat-panel-startfile{
 	display: inline-block;
 	float: right;

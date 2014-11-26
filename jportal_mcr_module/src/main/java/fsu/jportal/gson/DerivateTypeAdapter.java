@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 
 import org.mycore.common.MCRJSONTypeAdapter;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.urn.services.MCRURNManager;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -32,7 +33,13 @@ public class DerivateTypeAdapter extends MCRJSONTypeAdapter<FileNodeWraper> {
 
             childrenJSON.add(childNodeJSON);
         }
-
+        MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID());
+        if(MCRURNManager.hasURNAssigned(deriv.getNode().getOwnerID())){
+            nodeJSON.addProperty("hasURN", true);
+        }
+        else{
+            nodeJSON.addProperty("hasURN", false);
+        }
         nodeJSON.add("children", childrenJSON);
 
         return nodeJSON;
