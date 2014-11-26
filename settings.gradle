@@ -14,3 +14,5 @@ subDirs.each { File dir ->
     println "Including $dir.name"
     include dir.name
 }
+
+include 'java_agent'

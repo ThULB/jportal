@@ -167,7 +167,7 @@ project(':jportal_webapp'){
             jetty project(':jportal_jetty_tools')
             solr "org.mycore.solr:solr:4.7.2@war"
         }
-
+        
         def solrWarFilePath
         configurations.solr.each { File file -> solrWarFilePath = file.absolutePath }
 
@@ -175,6 +175,7 @@ project(':jportal_webapp'){
         systemProperties.put("MCR.AppName","jportal")
         jvmArgs '-Xdebug'
         jvmArgs '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8295'
+        jvmArgs "-javaagent:" + project(':java_agent').tasks.getByPath(':java_agent:jar').archivePath
         args '--config', 'jetty/jetty-config.xml'
         args '--path', '/solr', solrWarFilePath
         args '--path', '/jportal', war.archivePath
