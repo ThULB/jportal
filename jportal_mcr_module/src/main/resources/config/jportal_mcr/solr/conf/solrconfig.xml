@@ -1826,7 +1826,7 @@
     <lst name="defaults">
       <str name="echoParams">explicit</str>
       <str name="qf">heading^10 dates^10 alternatives^5 heading_de^5 alternatives_de^3 allMeta^1</str>
-      <int name="rows">10</int>
+      <int name="rows">6</int>
       <str name="qry">*:*</str>
       <str name="XSL.subselect.type">person</str>
       <str name="sort">created desc</str>

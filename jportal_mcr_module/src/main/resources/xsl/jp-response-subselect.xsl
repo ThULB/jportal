@@ -152,7 +152,7 @@
   <xsl:template mode="renderView" match="component[@id='resultListEntry']">
     <xsl:param name="data" />
     <xsl:apply-templates mode="listEntryView" select="$data/result/doc">
-      <xsl:with-param name="view" select="li[contains(@class,'resultListEntry')]" />
+      <xsl:with-param name="view" select="a[contains(@class,'list-group-item')]" />
     </xsl:apply-templates>
   </xsl:template>
 
@@ -198,30 +198,21 @@
     </xsl:attribute>
   </xsl:template>
 
-  <xsl:template mode="renderView" match="@href[contains(.,'{result.hit.id}')]">
+  <xsl:template mode="renderView" match="@data-submit-url[contains(.,'{result.hit.id}')]">
     <xsl:param name="data" />
     <xsl:variable name="url">
       <url>
-<!--          <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>   -->
         <xsl:choose>
           <xsl:when test="$subselect.session = ''">
             <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base>
-            
-<!--             <param name="_action" value="end.subselect" /> -->
-            
             <param name="_xed_submit_return" value=" " />
             <param name="_xed_session" value="{$_xed_subselect_session}" />
-            
-            <!-- <xsl:copy-of select="$subselectParam/subselect/param" /> -->
-<!--             <param name="mode" value="prefix" /> -->
             <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
             <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
           </xsl:when>
           <xsl:otherwise>
             <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XMLEditor')" /></base>
-            
             <param name="_action" value="end.subselect" />
-            
             <xsl:copy-of select="$subselectParam/subselect/param" />
             <param name="mode" value="prefix" />
             <param name="_var_@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
@@ -231,7 +222,7 @@
       </url>
     </xsl:variable>
 
-    <xsl:attribute name="href">
+    <xsl:attribute name="data-submit-url">
       <xsl:apply-templates mode="createURL" select="xalan:nodeset($url)/url" />
     </xsl:attribute>
   </xsl:template>

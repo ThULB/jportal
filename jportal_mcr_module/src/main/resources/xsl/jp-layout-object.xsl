@@ -16,11 +16,10 @@
   <xsl:include href="coreFunctions.xsl" />
 
   <xsl:template match="/mycoreobject">
-    <div class="jp-metadata" data-jp-id="{@ID}">
+    <div class="jp-metadata clearfix" data-jp-id="{@ID}">
       <xsl:variable name="ignore" select="'logo'" />
       <xsl:apply-templates mode="metadataDisplay"
         select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
-      <div class="jp-layout-clear" />
     </div>
   </xsl:template>
 

@@ -4,24 +4,26 @@ jp.subselect = {
 
 	cache: [],
 
-	init: function(/*String*/ hoverSelector, /*String*/ previewSelector) {
-		var div = $(previewSelector);
-		$(hoverSelector).hover(function() {
-			var mcrid = $(this).attr("data-jp-mcrid");
-			var pos = $(this).position();
-			div.css("top", pos.top + 30);
-			div.css("left", pos.left - 8);
-			jp.subselect.get(mcrid, function(html) {
-				div.html(html);
+	select: function(i) {
+		$(".list-group-item").removeClass("active");
+		var popoverContainer = $(".jp-popover-container");
+		if(popoverContainer.hasClass("hidden")) {
+			popoverContainer.fadeIn({
+				duration: 400,
+				start: function() {
+					popoverContainer.removeClass("hidden");
+				}
 			});
-			div.removeClass("hidden");
-			div.stop().animate({opacity: 1}, 500);
-		},
-		function () {
-			div.stop().animate({opacity: 0}, 500, function() {
-				div.css("opacity", "0");
-				div.addClass("hidden");
-			});
+		}
+		var item = $(i);
+		item.addClass('active');
+		var metadataContainer = $("#metadata-content");	
+		var mcrid = item.attr("data-jp-mcrid");
+		var url = item.attr("data-submit-url");
+		jp.subselect.get(mcrid, function(html) {
+			metadataContainer.html(html);
+			$("#selectButton").removeAttr("disabled");
+			$("#selectButton").attr("href", url);
 		});
 	},
 

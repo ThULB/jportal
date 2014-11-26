@@ -26,6 +26,18 @@
 	position: relative;
 }
 
+.jp-popover-container .popover {
+	display: block;
+	width: 100%;
+	max-width: none;
+	position: relative;
+	box-shadow: none;
+}
+.jp-popover-container .popover .popover-content {
+	height: 494px;
+	overflow-x: hidden;
+}
+
 /*******************************************************
 *
 ********************************************************/
@@ -366,6 +378,13 @@ p.jp-layout-metadata-list {
 	font-weight: bold;
 }
 
+.jp-layout-clickLabel .popover {
+	max-width: 700px;
+}
+.jp-layout-clickLabel .popover .popover-content {
+	font-size: 0.8rem;
+}
+
 #resultListHeader {
 		margin-bottom: 10px;
 }
@@ -398,10 +417,6 @@ p.jp-layout-metadata-list {
 }
 .jp-metadata dt:AFTER {
 	content: ": "
-}
-
-#resultList {
-	padding-bottom: 49px;
 }
 
 .jp-layout-content-LCol {
@@ -579,6 +594,10 @@ p.jp-layout-metadata-list {
 
 #main a:hover {
 	text-decoration: underline;
+}
+
+#main .list-group a:hover {
+	text-decoration: none;
 }
 
 @media(max-width: 767px){
