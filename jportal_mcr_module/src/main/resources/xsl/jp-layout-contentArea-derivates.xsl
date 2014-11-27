@@ -59,12 +59,10 @@
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
-        <div class="image">
-          <xsl:call-template name="iview2Entry">
-            <xsl:with-param name="derivID" select="$derivID" />
-            <xsl:with-param name="file" select="$file" />
-          </xsl:call-template>
-        </div>
+        <xsl:call-template name="iview2Entry">
+          <xsl:with-param name="derivID" select="$derivID" />
+          <xsl:with-param name="file" select="$file" />
+        </xsl:call-template>
         <xsl:if test="$mode = 'metadata'">
           <xsl:call-template name="dfgViewerLink">
             <xsl:with-param name="derivID" select="$derivID" />
@@ -143,6 +141,9 @@
               <a href='javascript:;' onclick="showDeleteDerivateDialog('{@xlink:href}');">Derivat löschen</a>
             </li>
           </xsl:if>
+          <li>
+            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{@xlink:role}');">Derivate Kontext</a>
+          </li>
         </ul>
       </xsl:if>
     </div>

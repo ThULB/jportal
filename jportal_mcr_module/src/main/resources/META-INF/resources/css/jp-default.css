@@ -22,8 +22,9 @@
 	border-color: #DDD;
 }
 
-.image .thumbnail {
+.thumbnail {
 	position: relative;
+	cursor: pointer;
 }
 
 .jp-popover-container .popover {
@@ -706,15 +707,7 @@ p.jp-layout-metadata-list {
 	padding: 0px;
 }
 
-.jp-layout-derivateList .jp-layout-derivateWrapper .image {
-	position: relative;
-}
-
-.jp-layout-derivateList .jp-layout-derivateWrapper .image:hover {
-	cursor: pointer;
-}
-
-#resultList .jp-layout-derivateList .jp-layout-derivateWrapper img, #artList .jp-layout-derivateList .jp-layout-derivateWrapper img, #resultList .jp-layout-derivateList .jp-layout-derivateWrapper .image, #artList .jp-layout-derivateList .jp-layout-derivateWrapper .image {
+#resultList .jp-layout-derivateList .jp-layout-derivateWrapper img, #artList .jp-layout-derivateList .jp-layout-derivateWrapper img {
 	width: 80px;
 }
 
@@ -1377,20 +1370,9 @@ textarea {
 .jp-layout-line {
 	height: 0.5em; 
 	background-color: #859198;
-}	
+}
 
-.metadata .jp-layout-derivateList > .jp-layout-derivateWrapper, .metadata .jp-layout-derivateList > .jp-layout-derivateWrapper > .image, .metadata .jp-layout-derivateList > .jp-layout-derivateWrapper > .image > a{
+.metadata .jp-layout-derivateList > .jp-layout-derivateWrapper {
 	width: 100%;
 }
 
-.image, .metadata .jp-layout-derivateList > .jp-layout-derivateWrapper > .image > a {
-	display: table;
-	line-height: 100px;
-	text-align: center;
-}
-
-.image, .metadata .jp-layout-derivateList > .jp-layout-derivateWrapper > .image > a > img {
-	display: table-cell;
-	max-height: 100px;
-	max-width: 80px;
-}
