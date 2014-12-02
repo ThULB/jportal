@@ -81,11 +81,12 @@
   <xsl:template mode="derivateDisplay" match="derobject">
     <xsl:param name="editable" select="'true'" />
     <xsl:param name="mode" select="'metadata'" />
+
+    <xsl:variable name="derivate" select="document(concat('mcrobject:', @xlink:href))/mycorederivate" />
     <xsl:variable name="iviewFile" select="iview2:getSupportedMainFile(@xlink:href)" />
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
-    <xsl:variable name="derivID" select="@xlink:href" />
     <xsl:variable name="deleteDB" select="acl:checkPermission(@xlink:href, 'deletedb')" />
-    <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay($derivID) = 'true'" />
+    <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay(@xlink:href) = 'true'" />
 
     <xsl:if test="$deleteDB or $showDerivate">
     <div class="jp-layout-derivateWrapper">
@@ -99,14 +100,14 @@
           </xsl:when>
           <xsl:otherwise>
             <xsl:call-template name="derivEntry">
-              <xsl:with-param name="derivID" select="@xlink:href" />
+              <xsl:with-param name="derivate" select="$derivate" />
             </xsl:call-template>
           </xsl:otherwise>
         </xsl:choose>
       </div>
       <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
         <xsl:call-template name="dfgViewerLink">
-          <xsl:with-param name="derivID" select="$derivID" />
+          <xsl:with-param name="derivID" select="@xlink:href" />
         </xsl:call-template>
       </xsl:if>
       <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
@@ -142,7 +143,7 @@
             </li>
           </xsl:if>
           <li>
-            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{@xlink:role}');">Derivate Kontext</a>
+            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivate Kontext</a>
           </li>
         </ul>
       </xsl:if>
@@ -180,8 +181,8 @@
   </xsl:template>
 
   <xsl:template name="derivEntry">
-    <xsl:param name="derivID" />
-    <xsl:variable name="derivate" select="document(concat('mcrobject:', $derivID))/mycorederivate" />
+    <xsl:param name="derivate" />
+    <xsl:variable name="derivID" select="$derivate/@ID" />
     <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
     <xsl:variable name="encodedMaindoc" select="mcrservlet:encodeURL($maindoc)" />
     <xsl:variable name="derivbase" select="concat($WebApplicationBaseURL,'servlets/MCRFileNodeServlet/',$derivID,'/')" />

@@ -2,8 +2,6 @@ package fsu.jportal.resources;
 
 import static org.mycore.access.MCRAccessManager.PERMISSION_WRITE;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -22,9 +20,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
-import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.classeditor.json.MCRJSONCategory;
 
@@ -62,8 +58,7 @@ public class DerivateContextResource {
     }
 
     /**
-     * Updates the context uri of the given derivate. This changes the xlink:role attribute of the
-     * corresponding mycore object.
+     * Updates the context uri of the given derivate. This changes the xlink:role attribute of the linkmeta element.
      * 
      * @param derivateId derivate to update
      * @param contextURI the new context uri.
@@ -78,21 +73,13 @@ public class DerivateContextResource {
             throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
                 .entity("Missing 'context' parameter.").build());
         }
-        MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derivateId));
-        String objectId = mcrDerivate.getDerivate().getMetaLink().getXLinkHref();
-        MCRObjectID mcrObjectId = MCRObjectID.getInstance(objectId);
-        if (!MCRAccessManager.checkPermission(mcrObjectId, PERMISSION_WRITE)) {
+        MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
+        if (!MCRAccessManager.checkPermission(mcrDerivateId, PERMISSION_WRITE)) {
             throw new WebApplicationException(Response.status(Status.UNAUTHORIZED).build());
         }
-        MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(mcrObjectId);
-        List<MCRMetaLinkID> derivateLinks = mcrObject.getStructure().getDerivates();
-        for (MCRMetaLinkID derivateLink : derivateLinks) {
-            if (derivateLink.getXLinkHref().equals(derivateId)) {
-                derivateLink.setRole(contextURI);
-                MCRMetadataManager.update(mcrObject);
-                return;
-            }
-        }
+        MCRDerivate mcrDerivate = MCRMetadataManager.retrieveMCRDerivate(mcrDerivateId);
+        mcrDerivate.getDerivate().getMetaLink().setXLinkRole(contextURI);
+        MCRMetadataManager.update(mcrDerivate);
     }
 
 }
