@@ -105,7 +105,7 @@
     <td class="content">
       <xsl:choose>
         <xsl:when test="$image">
-          <a href="javascript:void(0)" data-jp-laws-derivateId="{$derivateId}" data-jp-laws-image="{$image}">
+          <a href="{$WebApplicationBaseURL}rsc/iview/client/{$derivateId}{$image}">
             <xsl:value-of select="inhalt" />
           </a>
         </xsl:when>
