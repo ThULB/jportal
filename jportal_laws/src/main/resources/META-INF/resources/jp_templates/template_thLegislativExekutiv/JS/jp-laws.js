@@ -1,11 +1,3 @@
-function linkLawsToIview() {
-	$('.content a').click(function() {
-		showIview({
-			ID : $(this).attr("data-jp-laws-derivateId"),
-			file : "/" + $(this).attr("data-jp-laws-image")
-		});
-	});
-}
 
 function buildQuery() {
 	var searchTerm = $("#searchTerm").val();

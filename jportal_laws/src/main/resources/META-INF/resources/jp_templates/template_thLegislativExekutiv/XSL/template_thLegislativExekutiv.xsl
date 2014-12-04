@@ -45,7 +45,6 @@
         var name = '<xsl:value-of select="escapeUtils:escapeJavaScript(layoutTools:getMaintitle($journalID))" />';
         setMaintitle(truncate(name, 114));
         setSearchLink('<xsl:value-of select="$WebApplicationBaseURL" />');
-        linkLawsToIview();
         highlightLawsText('<xsl:value-of select="$hl" />');
       });
     </script>
