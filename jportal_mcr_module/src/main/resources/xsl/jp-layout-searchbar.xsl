@@ -76,58 +76,59 @@
             <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
             <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
           </div>
-          <div class="col-sm-3 text-center jp-layout-searchBarAdvanced hidden-xs">
-            <xsl:attribute name="style">padding-top: 0.5em</xsl:attribute> 
-            <xsl:choose>
-              <xsl:when test="$searchMode != 'advanced'">
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml')" />
-                      <xsl:if test="$journalID != ''">
-                        <xsl:value-of select="concat('?journalID=', $journalID)" />
-                      </xsl:if>
-                  </xsl:attribute>
-                  <xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" />
-                </a>
-              </xsl:when>
-              <xsl:otherwise>
-                <a>
-                  <xsl:attribute name="href">
-                <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml?')" />
-                <xsl:value-of select="concat('XSL.field1=', $field1, '&amp;XSL.value1=', $value1)" />
-                <xsl:value-of select="concat('&amp;XSL.field2=', $field2, '&amp;XSL.value2=', $value2)" />
-                <xsl:value-of select="concat('&amp;XSL.field3=', $field3, '&amp;XSL.value3=', $value3)" />
-                <xsl:if test="$journalID != ''">
-                  <xsl:value-of select="concat('&amp;journalID=', $journalID)" />
-                </xsl:if>
-              </xsl:attribute>
-                  <xsl:value-of select="i18n:translate('jp.metadata.search.advancedEdit')" />
-                </a>
-              </xsl:otherwise>
-            </xsl:choose>
-          </div>
-
-          <div class="col-sm-9 col-xs-12 input-group"> 
-            <xsl:if test="$journalID != ''">
+          <div class="col-sm-9 col-sm-offset-3 col-xs-12 input-group"> 
+          
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                   <span class="caret"></span>
                   <span class="sr-only">Toggle Search</span>
                 </button>
                 <ul class="dropdown-menu" role="menu" id="searchDropDownMenu">
+	                <xsl:if test="$journalID != ''">
+	                  <li>
+	                    <a href="javascript:void(0)" id="globalSearchOption">
+	                      <i class="fa fa-fw fa-globe" />
+	                    </a>
+	                  </li>
+	                  <li>
+	                    <a href="javascript:void(0)" id="journalSearchOption">
+	                      <i class="fa fa-fw fa-book" />
+	                    </a>
+	                  </li>
+	                </xsl:if>
                   <li>
-                    <a href="javascript:void(0)" id="globalSearchOption">
-                      <i class="fa fa-fw fa-globe" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:void(0)" id="journalSearchOption">
-                      <i class="fa fa-fw fa-book" />
-                    </a>
+		                <xsl:choose>
+				              <xsl:when test="$searchMode != 'advanced'">
+				                <a>
+				                  <xsl:attribute name="href">
+				                    <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml')" />
+				                      <xsl:if test="$journalID != ''">
+				                        <xsl:value-of select="concat('?journalID=', $journalID)" />
+				                      </xsl:if>
+				                  </xsl:attribute>
+				                  <i class="fa fa-fw fa-search-plus" />
+				                  <xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" />
+				                </a>
+				              </xsl:when>
+				              <xsl:otherwise>
+				                <a>
+				                  <xsl:attribute name="href">
+						                <xsl:value-of select="concat($WebApplicationBaseURL, 'jp-advancedsearch.xml?')" />
+						                <xsl:value-of select="concat('XSL.field1=', $field1, '&amp;XSL.value1=', $value1)" />
+						                <xsl:value-of select="concat('&amp;XSL.field2=', $field2, '&amp;XSL.value2=', $value2)" />
+						                <xsl:value-of select="concat('&amp;XSL.field3=', $field3, '&amp;XSL.value3=', $value3)" />
+						                <xsl:if test="$journalID != ''">
+						                  <xsl:value-of select="concat('&amp;journalID=', $journalID)" />
+						                </xsl:if>
+						              </xsl:attribute>
+						              <i class="fa fa-fw fa-search-plus" />
+				                  <xsl:value-of select="i18n:translate('jp.metadata.search.advancedEdit')" />
+				                </a>
+				              </xsl:otherwise>
+				            </xsl:choose>
                   </li>
                 </ul>
               </span>
-            </xsl:if>
             
            <span class="glyphicon glyphicon-search glyphSearchBar" onclick="$('#searchForm').submit()" > 
               <xsl:attribute name="title">

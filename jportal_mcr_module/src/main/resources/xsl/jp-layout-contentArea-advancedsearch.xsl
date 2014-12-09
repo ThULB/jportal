@@ -22,8 +22,27 @@
   <xsl:template match="jpadvancedsearch">
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-advancedsearch.js" />
     <div>
-      <h4 class="col-sm-offset-1 jp-layout-advancedSearchHead"><xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" /></h4>
       <form id="advancedSearchForm" action="{$WebApplicationBaseURL}servlets/solr/advanced" onsubmit="jp.advancedsearch.onsubmit()">
+      	<h4 class="col-sm-offset-1 jp-layout-advancedSearchHead">
+      		<xsl:value-of select="i18n:translate('jp.metadata.search.advanced')" />
+      	</h4>
+      	<xsl:if test="$journalID != ''">
+      	<div>
+      		<span class="col-sm-3 col-sm-offset-1 col-xs-12 jp-layout-advancedSearchLabel">
+						<xsl:value-of select="i18n:translate('jp.metadata.search.searchArea')" />
+					</span>
+	      	<div class="col-sm-8 form-group col-xs-12 jp-layout-advancedSearchRadioGr">
+		      	<label class="radio-inline col-sm-6">
+		          <input type="radio" name="radioGroup" id="globalSearchOption" value="globalSearchOption" onchange="jp.advancedsearch.changeSearchRadius()" />
+		          <xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" />
+		        </label>
+		        <label class="radio-inline col-sm-6">
+		          <input type="radio" name="radioGroup" checked="" id="journalSearchOption" value="journalSearchOption" onchange="jp.advancedsearch.changeSearchRadius()" />
+		          <xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" />
+		        </label>
+	        </div>
+	      </div>
+        </xsl:if>
         <xsl:call-template name="jpadvancedsearch.printSearchRow">
           <xsl:with-param name="row" select="'1'" />
           <xsl:with-param name="field" select="$field1" />
@@ -40,8 +59,8 @@
           <xsl:with-param name="value" select="$value3" />
         </xsl:call-template>
         <xsl:if test="$journalID != ''">
-          <input type="hidden" name="journalID" value="{$journalID}" />
-          <input type="hidden" name="fq" value="journalID:{$journalID}" />
+          <input type="hidden" name="journalID" value="{$journalID}"  />
+          <input type="hidden" name="fq" value="journalID:{$journalID}"/>           
         </xsl:if>
         <input type="hidden" name="q" value="" />
         <div class="col-sm-12">

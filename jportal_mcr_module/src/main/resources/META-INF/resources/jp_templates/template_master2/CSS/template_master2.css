@@ -1,4 +1,9 @@
 @CHARSET "UTF-8";
-#searchBar, .jp-layout-line {
+#searchBar, #logo {
 	background-color: #008BD0; 
+}
+
+#logo {
+	height: 121px;	
+	background-position: bottom; 
 }

@@ -24,6 +24,16 @@ jp.advancedsearch = {
                 : contentQuery + " AND " + solrQuery;
         $("input[name='q']").val(solrQuery);
 		return true;
+	},
+
+	changeSearchRadius: function() {
+		if($("input:checked").val() == 'globalSearchOption'){
+			$("input[name='fq']").remove();
+		}
+		
+		if($("input:checked").val() == 'journalSearchOption'){
+			$("input[name='journalID']").after(' <input type="hidden" name="fq" value="journalID:' + $("input[name='journalID']").val() + '"/> ')
+		}
 	}
 
 };

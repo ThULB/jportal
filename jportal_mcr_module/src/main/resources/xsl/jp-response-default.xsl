@@ -4,7 +4,7 @@
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xalan mcrxml jpxml solrxml i18n">
 
   <xsl:param name="returnURL" />
-
+    
   <!-- facets without selected -->
   <xsl:variable name="filteredFacetsXML">
     <xsl:variable name="numFound" select="/response/result/@numFound" />
@@ -45,6 +45,10 @@
   <xsl:variable name="selectedFacets" select="xalan:nodeset($selectedFacetsXML)" />
 
   <xsl:template match="/response">
+  	<xsl:call-template name="searchBreadcrumb" >
+  		<xsl:with-param name="objID" select="$journalID" />
+  		<xsl:with-param name="currentPageName" select="'jp.metadata.search.search'" />
+  	</xsl:call-template>
     <xsl:if test="$selectedFacets/lst/lst/int">
       <div id="resultListHeader" class="row">
         <div class="list-group jp-list-group-special visible-xs">
@@ -53,9 +57,6 @@
       </div>
     </xsl:if>
     <div id="resultList" class="row container-fluid">
-    	<xsl:if test="not($selectedFacets/lst/lst/int)">
-    		<xsl:attribute name="style">padding-top: 10px</xsl:attribute>
-    	</xsl:if>
       <xsl:apply-templates mode="resultList" select="." />
     </div>
   </xsl:template>
@@ -78,12 +79,6 @@
   </xsl:template>
 
   <xsl:template match="response" mode="jp.response.navigation">
-    <!-- <xsl:if test="$journalID != ''"> -->
-    <!-- <a href="{$WebApplicationBaseURL}receive/{$journalID}">Zurück zur Zeitschrift</a> -->
-    <!-- </xsl:if> -->
-    <!-- <xsl:if test="$returnURL"> -->
-    <!-- <a href="{$returnURL}">Zurück</a> -->
-    <!-- </xsl:if> -->
     <xsl:apply-templates mode="jp.response.sort" select="." />
   </xsl:template>
 
@@ -173,24 +168,6 @@
         <xsl:apply-templates mode="facetGroup" select="$filteredFacets/lst[@name='facet_fields']/lst">
           <xsl:with-param name="colapsedId" select="$colapsedId" />
         </xsl:apply-templates>
-      </div>
-    </xsl:if>
-
-    <xsl:if test="$journalID != '' or $returnURL">
-      <div class="jp-layout-search-sidebar-group">
-        <h2 class="jp-layout-resultLCaption">
-          Optionen
-        </h2>
-        <xsl:if test="$journalID != ''">
-          <a href="{$WebApplicationBaseURL}receive/{$journalID}">
-            <xsl:value-of select="i18n:translate('jp.metadata.search.back_journal')" />
-          </a>
-        </xsl:if>
-        <xsl:if test="$returnURL">
-          <a href="{$returnURL}">
-            <xsl:value-of select="i18n:translate('jp.metadata.search.back')" />
-          </a>
-        </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>
