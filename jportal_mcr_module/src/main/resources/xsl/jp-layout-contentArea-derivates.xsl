@@ -191,20 +191,20 @@
         <xsl:with-param name="string" select="mcrxml:regexp($maindoc, '.*\.', '')" />
       </xsl:call-template>
     </xsl:variable>
-    <a href="{$derivbase}{$encodedMaindoc}">
+    <a href="{$derivbase}{$encodedMaindoc}" class="thumbnail">
       <div class="jp-layout-hidden-Button"></div>
       <xsl:choose>
         <xsl:when test="$fileType = 'PDF'">
-          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" border="0" class="thumbnail" />  
+          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" border="0" />  
         </xsl:when>
         <xsl:when test="$fileType = 'XML'">
-          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" border="0" class="logo" />  
+          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" border="0" />  
         </xsl:when>
         <xsl:when test="$fileType = 'SVG'">
-          <img src="{$derivbase}{$encodedMaindoc}" border="0" class="thumbnail" />  
+          <img src="{$derivbase}{$encodedMaindoc}" border="0" />  
         </xsl:when>
         <xsl:otherwise>
-          <img src="{$WebApplicationBaseURL}images/file-logo.svg" border="0" class="logo" />
+          <img src="{$WebApplicationBaseURL}images/file-logo.svg" border="0" />
           <span style="display: inline-block; text-align: center; width: 100%;">
             <xsl:value-of select="$fileType" />
           </span>
