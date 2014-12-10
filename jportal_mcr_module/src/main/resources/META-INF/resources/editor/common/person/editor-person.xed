@@ -67,7 +67,7 @@
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
-          add="-10" classification="urmel_class_00000002">
+          add="-10" classification="urmel_class_00000002" required="extra">
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
           </xed:bind>
