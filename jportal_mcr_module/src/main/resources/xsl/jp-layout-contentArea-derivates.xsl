@@ -113,7 +113,7 @@
       <xsl:if test="$mode = 'metadata' and $editable = 'true' and not(mcrxml:isCurrentUserGuestUser())">
         <ul class="edit">
           <li>
-            <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}">Details</a>
+            <a href="{$WebApplicationBaseURL}servlets/MCRFileNodeServlet/{@xlink:href}/">Details</a>
           </li>
           <li>
             <a
