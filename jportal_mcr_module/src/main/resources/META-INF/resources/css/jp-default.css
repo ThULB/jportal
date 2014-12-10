@@ -354,15 +354,15 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent {
 	clear: both;
-	overflow: hidden;
+/* 	overflow: hidden; */
 }
 
-.jp-layout-tableOfContent h3 {
-	margin-top: 0;
-	margin-bottom: 15px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #888A8B;
-}
+/* .jp-layout-tableOfContent h3 { */
+/* 	margin-top: 0; */
+/* 	margin-bottom: 15px; */
+/* 	padding-bottom: 10px; */
+/* 	border-bottom: 1px solid #888A8B; */
+/* } */
 
 #resultList .jp-layout-hidden-Button, #artList .jp-layout-hidden-Button {
 	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
@@ -446,7 +446,7 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-content-LCol {
-	float: left;
+/* 	float: left; */
 	padding-bottom: 20px;
 	padding-right: 29px;
 }
@@ -468,7 +468,7 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-content-LCol>ul>li {
-	border-top: 1px solid;
+/* 	border-top: 1px solid; */
 /* 	margin-top: 20px; */
 	padding-top: 20px;
 }
@@ -534,7 +534,7 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent > ul li{
 	margin-bottom: 2px;
-	list-style-type: initial;
+/* 	list-style-type: initial; */
 }
 
 .resultPaginator {
@@ -570,7 +570,9 @@ p.jp-layout-metadata-list {
 	background-position: left top;
 	background-repeat: no-repeat;
 	clear: both;
-	height: 115px;
+	height: 121px;	
+	background-color: #859198;
+	background-position: bottom; 
 }
 
 #logo .logoTitle {
@@ -670,7 +672,7 @@ p.jp-layout-metadata-list {
 	float: right;
 }
 
-#jp-content-Bottom > #derivCol > .jp-layout-derivateList, #jp-content-Bottom > #derivCol > .jp-layout-derivateList .jp-layout-derivateWrapper {
+#jp-content-Bottom > #derivCol > .jp-layout-derivateList, #artList .jp-layout-derivateList, #jp-content-Bottom > #derivCol > .jp-layout-derivateList .jp-layout-derivateWrapper {
 	width: 100%; 
 }
 
@@ -713,7 +715,7 @@ p.jp-layout-metadata-list {
 }
 
 #artList>li {
-	border-top: 1px solid;
+/* 	border-top: 1px solid; */
 	margin-top: 20px;
 	padding-top: 20px;
 	overflow: hidden;
@@ -783,6 +785,10 @@ p.jp-layout-metadata-list {
 
 #artList > li > .col-md-2{
 	padding-left: 0;
+}
+
+#jp-tableOfContent > #artList{
+	padding: 0;
 }
 
 .jp-layout-metadaInSearchResults {
@@ -1271,10 +1277,6 @@ textarea {
 }
 
 @media (max-width: 991px) {  
-	#jp-tableOfContent > #artList{
-		padding: 0 !important;
-	}
-
 	.jp-layout-hits > .metadata > div.col-md-10{
 		margin-left: 7.5em;
 	}
@@ -1392,9 +1394,9 @@ textarea {
 
 
 .jp-layout-tableOfContent #jp-layout-triangle:before {
-  border-color: #888a8b transparent transparent transparent ;
+  border-color: #dbdbdb transparent transparent transparent ;
   left: 1.3em;
-  top: -1.2em;
+  top: -1.55em;  /* -1.2em */
   border-width: 13px;
 }
 
@@ -1403,9 +1405,9 @@ textarea {
   position: relative;
 }
 
-.jp-layout-tableOfContent #jp-layout-triangle:nth-child(3):before{
+.jp-layout-tableOfContent #jp-layout-triangle:nth-child(2):before{
 	border-color: #fff transparent transparent transparent !important;
-	top: -1.3em;
+	top: -1.8em;
 	z-index: 1;
 }
 
