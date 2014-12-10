@@ -143,7 +143,7 @@
             </li>
           </xsl:if>
           <li>
-            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivate Kontext</a>
+            <a href="javascript:;" onclick="selectDerivateContext(this, '{@xlink:href}', '{$derivate/derivate/linkmetas/linkmeta/@xlink:role}');">Derivat Kontext</a>
           </li>
         </ul>
       </xsl:if>
@@ -195,7 +195,7 @@
       <div class="jp-layout-hidden-Button"></div>
       <xsl:choose>
         <xsl:when test="$fileType = 'PDF'">
-          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$encodedMaindoc}" border="0" class="thumbnail" />  
+          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" border="0" class="thumbnail" />  
         </xsl:when>
         <xsl:when test="$fileType = 'XML'">
           <img src="{$WebApplicationBaseURL}images/xml-logo.svg" border="0" class="logo" />  

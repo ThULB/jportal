@@ -79,7 +79,7 @@
       </analyzer>
     </fieldType>
 
-    <fieldType name="text" class="solr.TextField" positionIncrementGap="100" stored="false">
+    <fieldType name="text" class="solr.TextField" positionIncrementGap="100">
       <analyzer type="index">
         <tokenizer class="solr.ICUTokenizerFactory" />
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
@@ -170,7 +170,7 @@
     <field name="doubletOf" type="string" />
 
     <!-- classification and category -->
-    <field name="classification" type="string" multiValued="true"/>
+    <field name="classification" type="string" multiValued="true" />
     <field name="category" type="string" multiValued="true" />
 
     <!-- identifier (gnd, pnd, etc.) -->
