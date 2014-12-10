@@ -59,7 +59,7 @@
           <xsl:with-param name="value" select="$value3" />
         </xsl:call-template>
         <xsl:if test="$journalID != ''">
-          <input type="hidden" name="journalID" value="{$journalID}"  />
+          <input id="hiddenJournalId" type="hidden" name="journalID" value="{$journalID}"  />
           <input type="hidden" name="fq" value="journalID:{$journalID}"/>           
         </xsl:if>
         <input type="hidden" name="q" value="" />

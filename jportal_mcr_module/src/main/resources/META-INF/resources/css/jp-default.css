@@ -199,7 +199,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 }
 
 #jp-breadcrumb-container {
-/* 	border-bottom: 1px solid; */
 	font-size: 11px;
 	padding-right: 0;
 	padding-left: 0;
@@ -230,30 +229,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding-left: 0px;
 }
 
-/* .jp-layout-searchBreadcrumb { */
-/* 	display: inline; */
-/* 	margin: 0; */
-/* 	padding-left: 0; */
-/* } */
-
-/* .jp-layout-searchBreadcrumb li { */
-/* 	border-left: 1px solid; */
-/* 	display: inline-block; */
-/* 	padding: 0 5px; */
-/* } */
-
-/* .jp-layout-searchBreadcrumb li:first-child { */
-/* 	border: medium none; */
-/* 	padding-left: 0px; */
-/* } */
-
-/* @media (max-width: 435px){ */
-/* 	.linked .jp-layout-searchBreadcrumb li:not(:first-child) { */
-/* 		display: block; */
-/* 		margin-left: 0.3em; */
-/* 	} */
-/* } */
-
 .jp-layout-menu-dropdown:nth-last-child(4):hover>menu.jp-layout-submenu-dropdown {
 	right: 0;
 }
@@ -276,19 +251,14 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	clear: both;
 	font-size: 13pt;
 	padding: 15px 0;
-	border-bottom: 3px solid #C6C7C8; /*#C6C7C8*/
+	border-bottom: 1px solid #C6C7C8;
 	font-weight: bold;
 }
 
 .jp-layout-metadataList dt {
 	clear: left;
-/* 	font-style: italic; */
 	margin-bottom: 10px;
 }
-	
-/* .jp-layout-metadataList dt:AFTER { */
-/* 	content: ": "; */
-/* } */
 
 .jp-layout-metadataList dd > a:not(:last-child):after{
 	content: ", ";
@@ -321,10 +291,6 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	font-weight: bold;
 }
 
-/* .jp-layout-metadataList .linked ul .jp-layout-searchBreadcrumb { */
-/* 	display: block; */
-/* } */
-
 .jp-layout-metadataList {
 	float: left;
 	list-style: none outside none;
@@ -354,15 +320,7 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent {
 	clear: both;
-/* 	overflow: hidden; */
 }
-
-/* .jp-layout-tableOfContent h3 { */
-/* 	margin-top: 0; */
-/* 	margin-bottom: 15px; */
-/* 	padding-bottom: 10px; */
-/* 	border-bottom: 1px solid #888A8B; */
-/* } */
 
 #resultList .jp-layout-hidden-Button, #artList .jp-layout-hidden-Button {
 	background: url("../images/enlargeButton_small.png") no-repeat scroll 0 0
@@ -416,8 +374,6 @@ p.jp-layout-metadata-list {
 }
 
 #resultPaginator {
-/* 	margin-top: 25px; */
-/* 	padding-top: 20px; */
 	clear: both;
 	text-align: center;
 }
@@ -446,7 +402,6 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-content-LCol {
-/* 	float: left; */
 	padding-bottom: 20px;
 	padding-right: 29px;
 }
@@ -468,8 +423,6 @@ p.jp-layout-metadata-list {
 }
 
 .jp-layout-content-LCol>ul>li {
-/* 	border-top: 1px solid; */
-/* 	margin-top: 20px; */
 	padding-top: 20px;
 }
 
@@ -534,7 +487,6 @@ p.jp-layout-metadata-list {
 
 .jp-layout-tableOfContent > ul li{
 	margin-bottom: 2px;
-/* 	list-style-type: initial; */
 }
 
 .resultPaginator {
@@ -672,7 +624,7 @@ p.jp-layout-metadata-list {
 	float: right;
 }
 
-#jp-content-Bottom > #derivCol > .jp-layout-derivateList, #artList .jp-layout-derivateList, #jp-content-Bottom > #derivCol > .jp-layout-derivateList .jp-layout-derivateWrapper {
+#jp-content-Bottom > #derivCol > .jp-layout-derivateList, #jp-content-Bottom > #derivCol > .jp-layout-derivateList .jp-layout-derivateWrapper {
 	width: 100%; 
 }
 
@@ -715,14 +667,13 @@ p.jp-layout-metadata-list {
 }
 
 #artList>li {
-/* 	border-top: 1px solid; */
 	margin-top: 20px;
 	padding-top: 20px;
 	overflow: hidden;
 }
 
 #jp-content-Bottom {
-	border-top: 3px solid;
+	border-top: 1px solid;
 	clear: both;
 	overflow: hidden;
 	padding: 20px 0 0 0;
@@ -778,12 +729,16 @@ p.jp-layout-metadata-list {
 	padding: 0 1em 0 0;
 }
 
-#artList .col-md-10.metadata.jp-layout-metadaInSearchResults {
+#artList .metadata.jp-layout-metadaInSearchResults {
 	marging-top: 0 !important;
 	padding-right: 0;
 }
 
-#artList > li > .col-md-2{
+#artList .jp-layout-derivateWrapper > .jp-layout-derivate {
+	padding-right: 1em;
+}
+
+#artList > li > div{
 	padding-left: 0;
 }
 
@@ -1233,7 +1188,6 @@ textarea {
 	.jp-layout-searchList{
 		max-height: 100%;
 		border-bottom: 1px solid #A8A9AA;
-/* 		overflow: visible !important; */
 	}
 
 	.dt-collapse .fa-sort-asc{
@@ -1396,7 +1350,7 @@ textarea {
 .jp-layout-tableOfContent #jp-layout-triangle:before {
   border-color: #dbdbdb transparent transparent transparent ;
   left: 1.3em;
-  top: -1.55em;  /* -1.2em */
+  top: -1.55em; 
   border-width: 13px;
 }
 
@@ -1407,7 +1361,7 @@ textarea {
 
 .jp-layout-tableOfContent #jp-layout-triangle:nth-child(2):before{
 	border-color: #fff transparent transparent transparent !important;
-	top: -1.8em;
+	top: -1.65em;
 	z-index: 1;
 }
 

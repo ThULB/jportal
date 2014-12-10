@@ -98,7 +98,6 @@
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
       <li>
         <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
-<!--           <h3>Artikel</h3> -->
           <ul id="artList">
             <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
           </ul>
@@ -134,13 +133,13 @@
         </xsl:variable>
         <xsl:variable name="doc" select="." />
         <li>
-          <div class="col-md-2 col-xs-5 col-sm-3">
+          <div> 
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
               <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
-          <ul class="col-md-10 col-xs-7 col-sm-8 metadata jp-layout-metadaInSearchResults">
+          <ul class="metadata jp-layout-metadaInSearchResults">
             <li>
               <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
                 <xsl:value-of select="str[@name='maintitle']" />

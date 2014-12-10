@@ -29,10 +29,12 @@ jp.advancedsearch = {
 	changeSearchRadius: function() {
 		if($("input:checked").val() == 'globalSearchOption'){
 			$("input[name='fq']").remove();
+			$("#hiddenJournalId").removeAttr("name");
 		}
 		
 		if($("input:checked").val() == 'journalSearchOption'){
-			$("input[name='journalID']").after(' <input type="hidden" name="fq" value="journalID:' + $("input[name='journalID']").val() + '"/> ')
+			$("#hiddenJournalId").after(' <input type="hidden" name="fq" value="journalID:' + $("input[name='journalID']").val() + '"/> ')
+			$("#hiddenJournalId").attr("name", "journalID");
 		}
 	}
 
