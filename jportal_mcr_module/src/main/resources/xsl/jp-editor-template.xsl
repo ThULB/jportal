@@ -105,6 +105,7 @@
 				</xsl:if>
 			</div>
 			<!-- 3.part: buttons -->
+			<xsl:apply-templates select="." mode="buttons" />
 		</div>
 	</xsl:template>
 
@@ -160,6 +161,15 @@
 			</div>
 		</xed:validate>
 	</xsl:template>
+	
+<!-- 	<xsl:template match="jp:template[@validate='subselect']" mode="required"> -->
+<!-- 			<xed:validate display="here" -->
+<!-- 			test="((string-length(.) = 0) and (string-length(../@xlink:title) = 0) and (string-length(@xlink:href) = 0) or ((string-length(.) > 0) and ((string-length(../@xlink:title) > 0) or (string-length(../@xlink:href) > 0))">  -->
+<!-- 			<div class="alert alert-danger" role="alert"> -->
+<!-- 				<xed:output i18n="jp.editor.select_help" /> -->
+<!-- 			</div> -->
+<!-- 		</xed:validate> -->
+<!-- 	</xsl:template> -->
 
 	<xsl:template match="jp:template[@validate='date']" mode="required">
 		<xed:validate display="here" type="datetime"
@@ -244,7 +254,7 @@
 				<xed:output value="@xlink:href" />
 				)
 			</label>
-		</xed:if>
+		</xed:if>	
 
 		<!-- Hier 2 buttons um personen auszuwählen und institutionen -->
 		<div class="form-group">
