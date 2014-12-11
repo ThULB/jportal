@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
+  exclude-result-prefixes="xlink mcrservlet">
 
   <xsl:param name="JP.Site.Footer.Logo.url" />
   <xsl:param name="JP.Site.Footer.Logo.default" />
@@ -53,16 +54,22 @@
 
   <xsl:template match="participant" mode="footer">
     <xsl:variable name="participant" select="document(concat('mcrobject:', @xlink:href))/mycoreobject" />
-    <xsl:if test="$participant/metadata/logo/url[@type='logoPlain']">
+    <xsl:variable name="derivateID" select="$participant/structure/derobjects/derobject/@xlink:href" />
+    <xsl:variable name="role" select="$participant/structure/derobjects/derobject/@xlink:role" />
+
+    <xsl:if test="$role = 'http://mycore.de/urmel/derivate/context/partner'">
+      <xsl:variable name="derivate" select="document(concat('mcrobject:', $derivateID))/mycorederivate" />
+      <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
+      <xsl:variable name="src" select="concat($WebApplicationBaseURL, 'servlets/MCRFileNodeServlet/', $derivateID, '/', mcrservlet:encodeURL($maindoc))" />
       <li>
         <xsl:choose>
           <xsl:when test="$participant/metadata/urls/url">
             <a href="{$participant/metadata/urls/url/@xlink:href}">
-              <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />
+              <img src="{$src}" alt="{@xlink:title}" class="logo" />
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <img src="{$participant/metadata/logo/url[@type='logoPlain']}" alt="{@xlink:title}" class="logo" />          
+            <img src="{$src}" alt="{@xlink:title}" class="logo" />
           </xsl:otherwise>
         </xsl:choose>
       </li>
