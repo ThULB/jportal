@@ -43,14 +43,14 @@
   <xed:template id="maintitle">
     <jp:template name="textArea"
       xpath="maintitles[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/maintitle[@inherited='0'][@form='plain']"
-      i18n="editormask.labels.bibdescript" required="true" />
+      i18n="editormask.labels.bibdescript" validate="required" />
   </xed:template>
 
   <xed:template id="subtitles">
     <xed:repeat
       xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true"
-        classification="jportal_class_00000006" add="-10">
+        classification="jportal_class_00000006" add="-10" validate="interdependent">
         <xed:bind xpath=".">
           <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
         </xed:bind>
@@ -61,10 +61,10 @@
   <xed:template id="dates">
     <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true"
-        classification="{xedIncParam}" add="10">
-        <span type="addT">
-          <xed:output i18n="editormask.labels.date_howToUse" />
-        </span>
+        classification="{xedIncParam}" add="10" validate="interdependent">
+<!--         <span type="addT"> -->
+<!--           <xed:output i18n="editormask.labels.date_howToUse" /> -->
+<!--         </span> -->
         <xed:bind xpath=".">
           <input type="text" class="form-control" maxlength="10" tabindex="1" />
         </xed:bind>

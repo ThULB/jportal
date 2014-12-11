@@ -110,7 +110,7 @@
 
 	<xsl:template match="jp:template" mode="title">
 		<xsl:choose>
-			<xsl:when test="@required">
+			<xsl:when test="@validate = 'required'">
 				<label>
 					<xed:output i18n="{@i18n}" />
 				</label>
@@ -142,40 +142,32 @@
 		</xsl:if>
 	</xsl:template>
 
-	<xsl:template match="jp:template" mode="required">
-		<xsl:if test="@required = 'true'">
-			<xed:validate display="here" required="true">
-				<div class="alert alert-danger" role="alert">
-					<xed:output i18n="jp.editor.requiredInput" />
-				</div>
-			</xed:validate>
-		</xsl:if>
+	<xsl:template match="jp:template[@validate='required']" mode="required">
+		<xed:validate display="here" required="true">
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="jp.editor.requiredInput" />
+			</div>
+		</xed:validate>
+	</xsl:template>
 
+	<xsl:template match="jp:template[@validate='interdependent']" mode="required">
+		<!--solange true rauskommt, ist es (has-success) und wenn false rauskommt, 
+			dann gibts fehler (has-error) -->
+		<xed:validate display="here"
+			test="((string-length(.) = 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) > 0))"> 
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="jp.editor.select_help" />
+			</div>
+		</xed:validate>
+	</xsl:template>
 
-
-	<!-- only by creat person / contact -->
-		<xsl:if test="@required = 'extra'">
-			<span>
-				<xed:output value="../text()"></xed:output>
-			</span>
-			<span>
-				<xed:output value="../@type"></xed:output>
-			</span>
-<!-- 			<xed:if test="(string-length(.) = 0) and (string-length(./..) > 0)"> -->
-				<!-- <xed:if test="(string-length(.) = 0)"> -->
-				<!-- <xed:if test="(string-length(./..) > 0)"> -->
-				<xed:validate display="here" test="(string-length(../@type) = 0) and (string-length(../text()) &gt; 0)">
-					<div class="alert alert-danger" role="alert">
-						<xed:output i18n="jp.editor.requiredInput" />
-					</div>
-				</xed:validate>
-<!-- 			</xed:if> -->
-			<!-- </xed:if> -->
-			<!-- </xed:if> -->
-			<!-- </xed:if> -->
-		</xsl:if>
-
-
+	<xsl:template match="jp:template[@validate='date']" mode="required">
+		<xed:validate display="here" type="datetime"
+			format="dd.MM.yyyy;MM.dd.yyyy;yyyy.MM.dd;yyyy;yyyy-MM;yyyy-MM-dd;dd-MM-yyyy;MM-dd-yyyy">
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="editormask.labels.date_howToUse" />
+			</div>
+		</xed:validate>
 	</xsl:template>
 
 	<xsl:template match="jp:template[@name='textArea']" mode="input">
@@ -191,7 +183,7 @@
 	<xsl:template match="jp:template[@classification]" mode="input_select">
 		<!-- load classification -->
 		<select class="form-control" id="type" tabindex="1" size="1">
-			<option value="">
+			<option value="" selected="">
 				<xed:output i18n="editor.common.select" />
 			</option>
 			<xsl:variable name="classID">
@@ -215,7 +207,7 @@
 
 	<xsl:template match="jp:template[@list]" mode="input_select">
 		<select class="form-control" id="type" tabindex="1" size="1">
-			<option value="">
+			<option value="" selected="">
 				<xed:output i18n="editor.common.select" />
 			</option>
 			<xed:include uri="{@list}" />
@@ -224,7 +216,7 @@
 
 	<xsl:template match="jp:template[@option]" mode="input_select">
 		<select class="form-control" id="type" tabindex="1" size="1">
-			<option value="">
+			<option value="" selected="">
 				<xed:output i18n="editor.common.select" />
 			</option>
 			<xsl:for-each select="option">

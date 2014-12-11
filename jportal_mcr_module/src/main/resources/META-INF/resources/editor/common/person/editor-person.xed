@@ -6,7 +6,7 @@
 
       <xed:bind xpath="def.heading[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']/heading[@inherited='0']">
         <jp:template name="textInputSm" xpath="lastName" i18n="editormask.person.Lheading" >
-          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" required="true" small="true" />
+          <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" validate="required" small="true" />
         </jp:template>
         <jp:template name="textInputSm" xpath="firstName" >
           <jp:template name="textInput" xpath="." i18n="jp.editor.person.firstName" maxlength="128" small="true" />
@@ -62,12 +62,12 @@
 
       <xed:bind
         xpath="def.gender[@class='MCRMetaClassification'][@heritable='true'][@notinherit='true']/gender[@inherited='0'][@classid='urmel_class_00000001']">
-        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001" required="true" />
+        <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001" validate="required" />
       </xed:bind>
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
-          add="-10" classification="urmel_class_00000002" required="extra">
+          add="-10" classification="urmel_class_00000002" validate="interdependent">
           <xed:bind xpath=".">
             <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
           </xed:bind>
@@ -86,24 +86,24 @@
 
       <jp:template name="textInput"
         xpath="def.dateOfBirth[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfBirth[@inherited='0']" i18n="editormask.person.LdateOfBirth"
-        maxlength="10" />
+        maxlength="10" validate="date" />
       <jp:template name="textInput"
         xpath="def.placeOfBirth[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfBirth[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfBirth" maxlength="128" />
       <jp:template name="textInput"
         xpath="def.dateOfDeath[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfDeath[@inherited='0']" i18n="editormask.person.LdateOfDeath"
-        maxlength="10" />
+        maxlength="10" validate="date" />
       <jp:template name="textInput"
         xpath="def.placeOfDeath[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfDeath[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfDeath" maxlength="128" />
 
       <xed:bind
-        xpath="def.note[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/note[@type='visible'][@inherited='0'][@form='plain']">
-        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="-10" option="true" >
+        xpath="def.note[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/note[@inherited='0'][@form='plain']">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="-10" option="true" validate="interdependent">
           <option i18n="jp.editor.person.visible" value="visible" />
           <option i18n="jp.editor.person.hidden" value="hidden" />
           <xed:bind xpath=".">
-            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" style="marging-top: 5px" />
+            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
           </xed:bind>
         </jp:template>
       </xed:bind>
@@ -115,7 +115,7 @@
       <xed:repeat
         xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
-          add="-10" option="true">
+          add="-10" option="true" validate="interdependent">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
