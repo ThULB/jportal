@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration type="person">
-    <structure />
+    <structure>
+        <!-- Derivate Objects -->
+        <element name="derobjects" minOccurs='0' maxOccurs='1'>
+            <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+    </structure>
     <metadata>
         <!-- 01 - Ansetzungsform: Name -->
         <element name="def.heading" minOccurs='1' maxOccurs='1'>

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <configuration type="jpinst">
-    <structure />
+    <structure>
+        <!-- Derivate Objects -->
+        <element name="derobjects" minOccurs='0' maxOccurs='1'>
+            <mcrmetalinkid name="derobject" class="MCRMetaLinkID" minOccurs='0' maxOccurs='unbounded' />
+        </element>
+    </structure>
     <metadata>
         <!-- 01 - Institution Name -->
         <element name="names" minOccurs='1' maxOccurs='1'>
