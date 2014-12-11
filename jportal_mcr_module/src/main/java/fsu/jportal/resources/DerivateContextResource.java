@@ -59,6 +59,7 @@ public class DerivateContextResource {
 
     /**
      * Updates the context uri of the given derivate. This changes the xlink:role attribute of the linkmeta element.
+     * If the contextURI parameter is empty or not set the context is removed.
      * 
      * @param derivateId derivate to update
      * @param contextURI the new context uri.
@@ -69,9 +70,8 @@ public class DerivateContextResource {
     @Path("update/{derivateId}")
     public void update(@PathParam("derivateId") String derivateId, @QueryParam("context") String contextURI)
         throws Exception {
-        if (contextURI == null) {
-            throw new WebApplicationException(Response.status(Status.BAD_REQUEST)
-                .entity("Missing 'context' parameter.").build());
+        if (contextURI == null || contextURI.equals("")) {
+            contextURI = null;
         }
         MCRObjectID mcrDerivateId = MCRObjectID.getInstance(derivateId);
         if (!MCRAccessManager.checkPermission(mcrDerivateId, PERMISSION_WRITE)) {

@@ -112,7 +112,7 @@ function selectDerivateContext(/*dom*/ e, /*String*/ id, /*String*/ roleURI) {
 		type : 'GET',
 		url : jp.baseURL + 'rsc/derivate/context/list'
 	}).done(function(json) {
-		var selectBox = "<select id='derivateContextSelector' data-derivate-id='" + id + "'><option>Kein Kontext</option>";
+		var selectBox = "<select id='derivateContextSelector' data-derivate-id='" + id + "'><option value=''>Kein Kontext</option>";
 		var children = json.children;
 		for(var i = 0; i < children.length; i++) {
 			selectBox += "<option value='" + children[i].uri + "'";
