@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrservlet="xalan://org.mycore.frontend.servlets.MCRServlet"
-  exclude-result-prefixes="xlink mcrservlet">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  exclude-result-prefixes="xlink mcrxml">
 
   <xsl:param name="JP.Site.Footer.Logo.url" />
   <xsl:param name="JP.Site.Footer.Logo.default" />
@@ -59,8 +59,8 @@
 
     <xsl:if test="$role = 'http://mycore.de/urmel/derivate/context/partner'">
       <xsl:variable name="derivate" select="document(concat('mcrobject:', $derivateID))/mycorederivate" />
-      <xsl:variable name="maindoc" select="$derivate/derivate/internals/internal/@maindoc" />
-      <xsl:variable name="src" select="concat($WebApplicationBaseURL, 'servlets/MCRFileNodeServlet/', $derivateID, '/', mcrservlet:encodeURL($maindoc))" />
+      <xsl:variable name="file" select="$derivate/derivate/internals/internal/@maindoc" />
+      <xsl:variable name="src" select="concat($WebApplicationBaseURL, 'servlets/MCRFileNodeServlet/', $derivateID, '/', mcrxml:encodeURIPath($file))" />
       <li>
         <xsl:choose>
           <xsl:when test="$participant/metadata/urls/url">
