@@ -77,7 +77,7 @@ public class JPortalCommands {
     }
 
     @MCRCommand(help = "Copy object", syntax = "copy object {0}")
-    public static void copyObject(String id) {
+    public static void copyObject(String id) throws Exception {
         MCRObjectID mcrId = MCRObjectID.getInstance(id);
         MCRBase object = MCRMetadataManager.retrieve(mcrId);
         object.setId(MCRObjectID.getNextFreeId(mcrId.getBase()));
