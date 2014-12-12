@@ -253,6 +253,23 @@ html .jp-layout-metadataList a, html p a, html .jp-layout-inList a, html .jp-lay
 	padding: 15px 0;
 	border-bottom: 1px solid #C6C7C8;
 	font-weight: bold;
+	margin-bottom: 22px;
+}
+
+.jp-layout-object-editing-container {
+	line-height: 31px;
+}
+
+.jp-layout-object-editing-container > .btn {
+	font-size: 16px;
+}
+
+.jp-layout-object-editing-menu a:hover {
+	text-decoration: none;
+}
+
+.jp-layout-object-editing-menu .divider:first-child {
+    display: none;
 }
 
 .jp-layout-metadataList dt {
@@ -673,7 +690,6 @@ p.jp-layout-metadata-list {
 }
 
 #jp-content-Bottom {
-	border-top: 1px solid;
 	clear: both;
 	overflow: hidden;
 	padding: 20px 0 0 0;
@@ -1137,7 +1153,7 @@ textarea {
 	}
 }
 
-#jp-layout-triangle:before {
+.jp-layout-triangle:before {
 			/* Rahmen nur an einer Seite einblenden */
 /* 			border-color: #A8A9AA transparent transparent transparent ; */
 			border-style: solid;
@@ -1164,13 +1180,13 @@ textarea {
 		margin-top: 10px;
 	}
 	
-	#jp-layout-triangle:before {
+	.jp-layout-triangle:before {
 	  border-color: #A8A9AA transparent transparent transparent ;
 	  left: 1em;
 	  top: 0.5em;
 	}
 
-	#jp-layout-triangle {
+	.jp-layout-triangle {
 	  padding-left: 60px;
 	  position: relative;
 	}
@@ -1296,18 +1312,18 @@ textarea {
 		background-color: #fff;
 	}
 	
-	#jp-layout-triangle:before {
+	.jp-layout-triangle:before {
 	    border-color:transparent transparent transparent #9C9E9F;
 	    left:-3.077em;
 	    top:0.7em;
 	}
 
-	#jp-layout-triangle {
+	.jp-layout-triangle {
 	    padding-left:60px;
 	    position:relative;
 	}
 
-	#resultList #jp-layout-triangle:nth-child(2):before{
+	#resultList .jp-layout-triangle:nth-child(2):before{
 		border-color:transparent transparent transparent #fff;
 		left:-3.2em;
 	}
@@ -1347,21 +1363,21 @@ textarea {
 }
 
 
-.jp-layout-tableOfContent #jp-layout-triangle:before {
+.jp-layout-maintitle .jp-layout-triangle:before {
   border-color: #dbdbdb transparent transparent transparent ;
   left: 1.3em;
-  top: -1.55em; 
+  top: 0.85em; 
   border-width: 13px;
 }
 
-.jp-layout-tableOfContent #jp-layout-triangle {
+.jp-layout-maintitle .jp-layout-triangle {
   padding-left: 60px;
   position: relative;
 }
 
-.jp-layout-tableOfContent #jp-layout-triangle:nth-child(2):before{
+.jp-layout-maintitle .jp-layout-triangle:nth-child(2):before{
 	border-color: #fff transparent transparent transparent !important;
-	top: -1.65em;
+	top: 0.75em;
 	z-index: 1;
 }
 

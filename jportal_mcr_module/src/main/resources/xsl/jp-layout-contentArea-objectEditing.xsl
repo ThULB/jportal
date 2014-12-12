@@ -30,11 +30,11 @@
   <xsl:variable name="menuXML">
     <menu id="jp-main-menu" journalid="{$currentObjID}">
       <link id="editorServlet" href="{$ServletsBaseURL}MCRStartEditorServlet{$HttpSession}" />
-      
+
       <link id="newEditorResource" href="{$WebApplicationBaseURL}editor" />
-      
+
       <link id="moveObjResource" href="{$WebApplicationBaseURL}rsc/moveObj" />
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <!-- <label name="Bearbeiten" /> -->
         <restriction name="updatePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
@@ -46,28 +46,28 @@
           <restriction name="createJournal" value="true" />
           <label name="Kinder verschieben" ref="moveObjResource" path="start?objId={$currentObjID}" />
         </item>
-        <item id="ckeditorButton" class="objectEditingButton">
+        <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Beschreibung bearbeiten" />
+          <label name="Beschreibung bearbeiten" id="ckeditorButton" />
         </item>
-        <item id="diagButton" class="objectEditingButton">
+        <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Rubrik bearbeiten" />
+          <label name="Rubrik bearbeiten" id="diagButton" />
         </item>
-        <item id="imprintButton" class="objectEditingButton jp-infoFiles-button" type="imprint" journalid="{$currentObjID}" containerid="jp-content-LColumn">
+        <item class="jp-infoFiles-button" type="imprint" journalid="{$currentObjID}" containerid="main">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Impressum auswählen" />
+          <label name="Impressum auswählen" id="imprintButton" />
         </item>
-        <item id="partnerButton" class="objectEditingButton jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="jp-content-LColumn">
+        <item class="jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="main">
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Partner auswählen" />
+          <label name="Partner auswählen" id="partnerButton" />
         </item>
         <item>
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->
           <label name="Datei hochladen" href="{$WebApplicationBaseURL}servlets/derivate/create?id={$currentObjID}" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <item>
           <label name="Neue Person" ref="newEditorResource" path="start.xed?type=person&amp;action=create" />
           <restriction name="createPerson" value="true" />
@@ -91,19 +91,19 @@
           <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd" />
         </item>
         <item>
-         <label name="Neuer Artikel" ref="newEditorResource" path="start.xed?type=jparticle&amp;action=create&amp;parent={$currentObjID}" />
+          <label name="Neuer Artikel" ref="newEditorResource" path="start.xed?type=jparticle&amp;action=create&amp;parent={$currentObjID}" />
           <restriction name="createArt" value="true" />
           <restriction name="dataModel" value="datamodel-jpvolume.xsd" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <restriction name="updatePerm" value="true" />
         <restriction name="createJournal" value="true" />
         <item>
           <label name="Dublettenfinder" href="{$WebApplicationBaseURL}rsc/doublets" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <restriction name="updatePerm" value="true" />
         <restriction name="linkImgAllowed" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
@@ -111,14 +111,14 @@
           <label name="Bild verlinken" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <restriction name="deletePerm" value="true" />
         <restriction name="dataModel" contains="datamodel-" />
-        <item class="objectEditingButton" id="deleteDocButton">
-          <label name="Dokument löschen" />
+        <item>
+          <label name="Dokument löschen" id="deleteDocButton" />
         </item>
       </item>
-      <item class="jp-layout-menu-dropdown">
+      <item type="menu">
         <restriction name="isGuest" value="false" />
         <restriction name="dataModel" contains="datamodel-" />
         <item>
@@ -161,7 +161,7 @@
     <script type="text/javascript">
       $(document).ready(function() {
         $("#ckeditorButton").click(function() {
-          introEditor('<xsl:value-of select="$currentObjID" />');
+         introEditor('<xsl:value-of select="$currentObjID" />');
         });
       });
     </script>
@@ -169,64 +169,53 @@
 
   <xsl:template name="initImprint">
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-imprint.js" />
-    <script type="text/javascript">
-      $(document).ready(function() {
-      <!-- initFS({ baseURL: '<xsl:value-of select="$WebApplicationBaseURL" />', type: 'imprint', journalID: '<xsl:value-of select="$currentObjID"/>', container: 
-        '#jp-content-LColumn', button: '#imprintButton' }); -->
-      });
-    </script>
   </xsl:template>
 
-  <xsl:template name="objectEditing">
-    <xsl:param name="id" />
-    <xsl:param name="dataModel" />
+  <xsl:template name="jp.object.editing.items">
+    <xsl:apply-templates mode="menuItem" select="$menu/item" />
+    <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
+      <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
+      <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
+      <xsl:call-template name="classificationEditorDiag" />
+      <xsl:call-template name="introEditorDiag" />
+      <xsl:call-template name="initImprint" />
+    </xsl:if>
+  </xsl:template>
 
-    <menu id="jp-object-editing" class="jp-layout-object-editing">
-      <xsl:apply-templates mode="menuItem" select="$menu/item" />
-      <xsl:if test="/mycoreobject[contains(@ID,'_jpjournal_')]">
-        <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.0.1/ckeditor.js" />
-        <script type="text/javascript" src="{$WebApplicationBaseURL}ckeditor/adapters/jquery.js" />
-        <xsl:call-template name="classificationEditorDiag" />
-        <xsl:call-template name="introEditorDiag" />
-        <xsl:call-template name="initImprint" />
-      </xsl:if>
-    </menu>
-
-    <delete>
-      <xsl:if test="$deletePerm='true' and /mycoreobject">
-        <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-delete-dialog.js" />
-        <xsl:variable name="title">
-          <xsl:apply-templates select="." mode="jp.metadata.title" />
-        </xsl:variable>
-        <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true" data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
-          data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}" data-title="{$title}" data-backdrop="static">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title" id="delete-dialog-title"></h4>
-              </div>
-              <div class="modal-body" id="delete-dialog-body">
-                <div class="row">
-                  <div class="col-md-2 text-center" id="delete-dialog-image">
-                  </div>
-                  <div class="col-md-10" id="delete-dialog-info">
-                  </div>
+  <xsl:template name="jp.object.editing.delete.dialog">
+    <xsl:if test="$deletePerm='true' and /mycoreobject">
+      <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-delete-dialog.js" />
+      <xsl:variable name="title">
+        <xsl:apply-templates select="." mode="jp.metadata.title" />
+      </xsl:variable>
+      <div class="modal fade" id="delete-dialog" tabindex="-1" role="dialog" aria-hidden="true" data-id="{/mycoreobject/@ID}" data-deletable="{not(/mycoreobject/structure/derobjects)}"
+        data-referer="{$Referer}" data-parent="{/mycoreobject/structure/parents/parent/@xlink:href}" data-title="{$title}" data-backdrop="static">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="delete-dialog-title"></h4>
+            </div>
+            <div class="modal-body" id="delete-dialog-body">
+              <div class="row">
+                <div class="col-md-2 text-center" id="delete-dialog-image">
+                </div>
+                <div class="col-md-10" id="delete-dialog-info">
                 </div>
               </div>
-              <div class="modal-footer" id="delete-dialog-footer">
-                <button type="button" class="btn btn-default" id="delete-dialog-close" data-dismiss="modal">Ok</button>
-                <button type="button" class="btn btn-primary hidden" id="delete-dialog-submit">Löschen</button>
-              </div>
+            </div>
+            <div class="modal-footer" id="delete-dialog-footer">
+              <button type="button" class="btn btn-default" id="delete-dialog-close" data-dismiss="modal">Ok</button>
+              <button type="button" class="btn btn-primary hidden" id="delete-dialog-submit">Löschen</button>
             </div>
           </div>
         </div>
-      </xsl:if>
-    </delete>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <!-- MENU ##################################################################### -->
   <xsl:template mode="menuItem" match="item">
-    <xsl:call-template name="createMenuItem" />
+    <xsl:apply-templates select="." mode="createMenuItem" />
   </xsl:template>
 
   <xsl:template mode="menuItem" match="item[restriction]">
@@ -234,7 +223,7 @@
       <xsl:apply-templates select="restriction" mode="menuItem" />
     </xsl:variable>
     <xsl:if test="not(contains($access, 'false'))">
-      <xsl:call-template name="createMenuItem" />
+      <xsl:apply-templates select="." mode="createMenuItem" />
     </xsl:if>
   </xsl:template>
 
@@ -250,12 +239,17 @@
     <xsl:value-of select="$permission != '' and contains($permission, @value)" />
   </xsl:template>
 
-  <xsl:template name="createMenuItem">
+  <xsl:template match="item" mode="createMenuItem">
     <li>
       <xsl:apply-templates mode="copyAttr" select="@*" />
       <xsl:apply-templates mode="menuLabel" select="label" />
       <xsl:apply-templates mode="subMenu" select="." />
     </li>
+  </xsl:template>
+
+  <xsl:template match="item[@type='menu']" mode="createMenuItem">
+    <li class="divider"></li>
+    <xsl:apply-templates mode="subMenu" select="." />
   </xsl:template>
 
   <xsl:template mode="copyAttr" match="@*">
@@ -266,13 +260,19 @@
   </xsl:template>
 
   <xsl:template mode="subMenu" match="item[item]">
-    <menu class="jp-layout-submenu-dropdown">
-      <xsl:apply-templates mode="menuItem" select="item" />
-    </menu>
+    <xsl:apply-templates mode="menuItem" select="item" />
   </xsl:template>
 
   <xsl:template mode="menuLabel" match="label">
-    <xsl:value-of select="@name" />
+    <a>
+      <xsl:copy-of select="@*" />
+      <xsl:if test="not(@href)">
+        <xsl:attribute name="href">
+          <xsl:value-of select="'javascript:void(0)'" />
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="@name" />
+    </a>
   </xsl:template>
 
   <xsl:template mode="menuLabel" match="label[@href]">

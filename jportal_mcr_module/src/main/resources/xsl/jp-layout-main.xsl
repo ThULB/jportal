@@ -10,7 +10,6 @@
   <xsl:include href="jp-layout-contentArea.xsl" />
   <xsl:include href="jp-layout-contentArea-objectEditing.xsl" />
   <xsl:include href="jp-layout-contentArea-advancedsearch.xsl" />
-  <xsl:include href="jp-layout-mcrwebpage.xsl" />
   <xsl:include href="jp-layout-footer.xsl" />
 
   <xsl:include href="jp-navigation-top.xsl" />
@@ -68,19 +67,17 @@
   <!-- TODO: remove this -->
   <xsl:variable name="wcms.useTargets" select="'no'" />
 
+  <xsl:variable name="objectEditingHTML">
+    <editing>
+      <xsl:call-template name="jp.object.editing.items" />
+    </editing>
+  </xsl:variable>
+  <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
+
   <xsl:template name="renderLayout">
     <xsl:if test="/mycoreobject/@ID">
       <xsl:variable name="setObjIDInSession" select="jpxml:setLastValidPageID(/mycoreobject/@ID)" />
     </xsl:if>
-    <xsl:variable name="objectEditingHTML">
-      <editing>
-        <xsl:call-template name="objectEditing">
-          <xsl:with-param name="id" select="/mycoreobject/@ID" />
-          <xsl:with-param name="dataModel" select="/mycoreobject/@xsi:noNamespaceSchemaLocation" />
-        </xsl:call-template>
-      </editing>
-    </xsl:variable>
-    <xsl:variable name="objectEditing" select="xalan:nodeset($objectEditingHTML)/editing" />
 
     <html>
       <head>
@@ -194,33 +191,7 @@
         <xsl:call-template name="jp.layout.searchbar" />
 
         <div id="main">
-          <xsl:choose>
-            <xsl:when test="/MyCoReWebPage[//mycoreobject]">
-              <xsl:variable name="contentRColHtml">
-                <xsl:choose>
-                  <xsl:when test="$objectEditing/menu[@id='jp-object-editing']//li/a">
-                    <div id="jp-content-RColumn" class="jp-layout-content-RCol">
-                      <xsl:copy-of select="$objectEditing/menu[@id='jp-object-editing' and li]" />
-                    </div>
-                    <class for="jp-content-LColumn">jp-layout-content-LCol-RCol</class>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <class for="jp-content-LColumn">jp-layout-content-LCol-noRCol</class>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </xsl:variable>
-              <xsl:variable name="contentRCol" select="xalan:nodeset($contentRColHtml)" />
-              <div id="jp-content-LColumn" class="jp-layout-content-LCol {$contentRCol/class[@for='jp-content-LColumn']}">
-                <xsl:apply-templates />
-              </div>
-              <!-- Edit -->
-              <xsl:copy-of select="$contentRCol/div[@id='jp-content-RColumn']"></xsl:copy-of>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:apply-templates />
-            </xsl:otherwise>
-          </xsl:choose>
-
+          <xsl:apply-templates />
           <!-- call dynamic template_*.xsl -->
           <xsl:if test="$template != ''">
             <xsl:variable name="templateXML">
@@ -235,8 +206,9 @@
         </div>
         <!-- footer -->
         <xsl:call-template name="jp.layout.footer" />
+
         <!-- delete -->
-        <xsl:copy-of select="$objectEditing/delete/*" />
+        <xsl:call-template name="jp.object.editing.delete.dialog" />
         <div id="viewerContainerWrapper" />
         <!-- add html stuff to end of body for MyCoReWebPage -->
         <xsl:copy-of select="/MyCoReWebPage/body/*" />

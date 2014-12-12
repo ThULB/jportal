@@ -131,8 +131,8 @@
             <span class="icon-bar"></span>
           </button>
 
-          <div id="jp-layout-triangle" class="visible-xs"></div>
-          <div id="jp-layout-triangle" class="visible-xs"></div>
+          <div class="jp-layout-triangle visible-xs"></div>
+          <div class="jp-layout-triangle visible-xs"></div>
         </div>
         <div class="jp-layout-searchList hidden-xs">
           <xsl:apply-templates select="." mode="getFacetList">
@@ -142,8 +142,8 @@
       </div>
     </xsl:if>
     <div class="col-sm-9 jp-layout-hits">
-      <div id="jp-layout-triangle" class="hidden-xs"></div>
-      <div id="jp-layout-triangle" class="hidden-xs"></div>
+      <div class="jp-layout-triangle hidden-xs"></div>
+      <div class="jp-layout-triangle hidden-xs"></div>
       <xsl:apply-templates mode="searchResults" select="result/doc" />
       <xsl:apply-templates mode="jp.pagination" select="." />
     </div>

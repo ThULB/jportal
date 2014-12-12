@@ -51,22 +51,16 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="volumes"
-      select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
+    <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
-      <li>
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
-<!--           <h3><xsl:value-of select="i18n:translate('jp.metadata.directory')" /></h3> -->
-          <div id="jp-layout-triangle"></div>
-          <div id="jp-layout-triangle"></div>
-          <ul>
-            <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
-          </ul>
-          <xsl:apply-templates mode="jp.pagination" select="$volumes/response">
-            <xsl:with-param name="startParam" select="'XSL.vol.start'" />
-          </xsl:apply-templates>
-        </div>
-      </li>
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
+        <ul>
+          <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
+        </ul>
+        <xsl:apply-templates mode="jp.pagination" select="$volumes/response">
+          <xsl:with-param name="startParam" select="'XSL.vol.start'" />
+        </xsl:apply-templates>
+      </div>
     </xsl:if>
   </xsl:template>
 
@@ -93,19 +87,16 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="articles"
-      select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
+    <xsl:variable name="articles" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
-      <li>
-        <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
-          <ul id="artList">
-            <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
-          </ul>
-          <xsl:apply-templates mode="jp.pagination" select="$articles/response">
-            <xsl:with-param name="startParam" select="'XSL.art.start'" />
-          </xsl:apply-templates>
-        </div>
-      </li>
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
+        <ul id="artList">
+          <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
+        </ul>
+        <xsl:apply-templates mode="jp.pagination" select="$articles/response">
+          <xsl:with-param name="startParam" select="'XSL.art.start'" />
+        </xsl:apply-templates>
+      </div>
     </xsl:if>
   </xsl:template>
 
@@ -133,9 +124,9 @@
         </xsl:variable>
         <xsl:variable name="doc" select="." />
         <li>
-          <div> 
+          <div>
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
-              <xsl:call-template name="derivatePreview">
+            <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
