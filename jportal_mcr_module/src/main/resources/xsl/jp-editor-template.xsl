@@ -57,6 +57,13 @@
 	<!-- Form: titel | input | buttons -->
 	<xsl:template
 		match="jp:template[contains('textInput|textInputSm|selectInput|textArea', @name)]">
+	
+		        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker6').datetimepicker();
+            });
+        </script>
+		
 		<div class="row">
 			<xsl:if test="@small">
 				<xsl:attribute name="class"></xsl:attribute>
@@ -153,7 +160,7 @@
 
 	<xsl:template match="jp:template[@validate='interdependent']" mode="required">
 		<!--solange true rauskommt, ist es (has-success) und wenn false rauskommt, 
-			dann gibts fehler (has-error) -->
+			dann gibts fehler (has-error) und das div wird benutzt-->
 		<xed:validate display="here"
 			test="((string-length(.) = 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) > 0))"> 
 			<div class="alert alert-danger" role="alert">
@@ -162,17 +169,17 @@
 		</xed:validate>
 	</xsl:template>
 	
-<!-- 	<xsl:template match="jp:template[@validate='subselect']" mode="required"> -->
-<!-- 			<xed:validate display="here" -->
-<!-- 			test="((string-length(.) = 0) and (string-length(../@xlink:title) = 0) and (string-length(@xlink:href) = 0) or ((string-length(.) > 0) and ((string-length(../@xlink:title) > 0) or (string-length(../@xlink:href) > 0))">  -->
-<!-- 			<div class="alert alert-danger" role="alert"> -->
-<!-- 				<xed:output i18n="jp.editor.select_help" /> -->
-<!-- 			</div> -->
-<!-- 		</xed:validate> -->
-<!-- 	</xsl:template> -->
+	<xsl:template match="jp:template[@validate='subselect']" mode="required">
+			<xed:validate display="here"
+			test="((string-length(.) = 0) and (string-length(../@xlink:href) = 0)) or ((string-length(.) > 0) and (string-length(../@xlink:href) > 0))"> 
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="jp.editor.select_help" />
+			</div>
+		</xed:validate>
+	</xsl:template>
 
 	<xsl:template match="jp:template[@validate='date']" mode="required">
-		<xed:validate display="here" type="datetime"
+			<xed:validate display="here" type="datetime"
 			format="dd.MM.yyyy;MM.dd.yyyy;yyyy.MM.dd;yyyy;yyyy-MM;yyyy-MM-dd;dd-MM-yyyy;MM-dd-yyyy">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="editormask.labels.date_howToUse" />

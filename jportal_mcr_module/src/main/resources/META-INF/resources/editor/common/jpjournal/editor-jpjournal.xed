@@ -26,7 +26,7 @@
        </jp:template>
      </xed:repeat>
      
-    <jp:template name="selectInput" xpath="languages[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/language[@inherited='0'][@classid='jportal_class_00000004']/@categid" i18n="metaData.jpjournal.language" classification="jportal_class_00000004" required="true" /> 
+    <jp:template name="selectInput" xpath="languages[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/language[@inherited='0'][@classid='jportal_class_00000004']/@categid" i18n="metaData.jpjournal.language" classification="jportal_class_00000004" validate="required" /> 
     
     <jp:template name="textInput" xpath="rights[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/right[@inherited='0'][@form='plain']" i18n="editormask.labels.right" maxlength="48" />
     
@@ -101,7 +101,7 @@
       <jp:template name="title" i18n="editormask.labels.Admin" />
       
       <jp:template name="title" i18n="editormask.labels.AdminGeneral" left="true" />
-      <jp:template name="selectInput" xpath="hidden_templates[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_template[@inherited='0'][@form='plain']" i18n="jp.editor.journal.template" list="templatesOption:prop:templates.folder" required="true" />    
+      <jp:template name="selectInput" xpath="hidden_templates[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_template[@inherited='0'][@form='plain']" i18n="jp.editor.journal.template" list="templatesOption:prop:templates.folder" validate="required" />    
        
       <jp:template name="textInput" xpath="hidden_genhiddenfields1[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_genhiddenfield1[@inherited='0'][@form='plain']" i18n="editormask.labels.genhiddenfield1" maxlength="32" />
       <jp:template name="textInput" xpath="hidden_genhiddenfields2[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/hidden_genhiddenfield2[@inherited='0'][@form='plain']" i18n="editormask.labels.genhiddenfield2" maxlength="32" />

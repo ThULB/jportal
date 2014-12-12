@@ -27,7 +27,7 @@
 
       <xed:bind xpath="def.alternative[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']">
         <xed:repeat xpath="alternative[@type='complete'][@inherited='0']">
-          <jp:template name="textInputSm" xpath="lastName" i18n="jp.editor.inst.alternativeName" >
+        	<jp:template name="textInputSm" xpath="lastName" i18n="jp.editor.inst.alternativeName" >
             <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" small="true" />
           </jp:template>
           <jp:template name="textInputSm" xpath="firstName" >
@@ -39,6 +39,7 @@
           <jp:template name="textInputSm" xpath="nameAffix" >
             <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
           </jp:template>
+          <xed:cleanup-rule xpath="//alternative[@type='complete']" relevant-if="(string-length(lastName/text()) > 0) or (string-length(firstName/text()) > 0) or (string-length(collocation/text()) > 0) or (string-length(nameAffix/text()) > 0)" />
         </xed:repeat>
         <xed:repeat xpath="alternative[@type='single'][@inherited='0']">
           <jp:template name="textInputSm" xpath="name" >
@@ -50,6 +51,7 @@
           <jp:template name="textInputSm" xpath="nameAffix" >
             <jp:template name="textInput" xpath="." i18n="jp.editor.person.nameAffix" maxlength="128" small="true" />
           </jp:template>
+          <xed:cleanup-rule xpath="//alternative[@type='single']" relevant-if="(string-length(name/text()) > 0) or  (string-length(collocation/text()) > 0) or (string-length(nameAffix/text()) > 0)" />
         </xed:repeat>
       </xed:bind>
     </jp:section>
