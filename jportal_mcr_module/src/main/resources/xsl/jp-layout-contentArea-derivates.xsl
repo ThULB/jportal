@@ -59,21 +59,23 @@
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">
-        <xsl:call-template name="iview2Entry">
-          <xsl:with-param name="derivID" select="$derivID" />
-          <xsl:with-param name="file" select="$file" />
-        </xsl:call-template>
-        <xsl:if test="$mode = 'metadata'">
-          <xsl:call-template name="dfgViewerLink">
+        <div class="jp-layout-derivate">
+          <xsl:call-template name="iview2Entry">
             <xsl:with-param name="derivID" select="$derivID" />
             <xsl:with-param name="file" select="$file" />
           </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
-          <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
-            <xsl:value-of select="'Verlinkung löschen'" />
-          </div>
-        </xsl:if>
+          <xsl:if test="$mode = 'metadata'">
+            <xsl:call-template name="dfgViewerLink">
+              <xsl:with-param name="derivID" select="$derivID" />
+              <xsl:with-param name="file" select="$file" />
+            </xsl:call-template>
+          </xsl:if>
+          <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
+            <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
+              <xsl:value-of select="'Verlinkung löschen'" />
+            </div>
+          </xsl:if>
+        </div>
       </div>
     </xsl:if>
   </xsl:template>
