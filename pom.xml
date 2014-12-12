@@ -218,6 +218,12 @@
       </dependency>
       <dependency>
         <groupId>org.mycore</groupId>
+        <artifactId>mycore-ifs</artifactId>
+        <version>${mcr.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore</groupId>
         <artifactId>mycore-meta</artifactId>
         <version>${mcr.version}</version>
         <type>pom</type>
