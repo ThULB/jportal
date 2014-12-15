@@ -5,7 +5,7 @@ function loadKeywords() {
 	}).click(function() {
 		toggleKeyword($(this));
 	});
-	mainDiv.appendTo($("#jp-content-LColumn > ul"));
+	mainDiv.appendTo($("#main"));
 }
 
 function toggleKeyword(element) {
