@@ -70,7 +70,7 @@
     </script>
     <div id="searchBar">
       <xsl:if test="$showSearchBar = 'true'">
-        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="container-fluid">
+        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="row">
             <xsl:variable name="mobileCol">
               <xsl:choose>

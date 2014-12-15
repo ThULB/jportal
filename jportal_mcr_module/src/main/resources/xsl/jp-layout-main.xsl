@@ -2,7 +2,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
   xmlns:mcr="http://www.mycore.org/" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:layoutUtils="xalan://org.mycore.frontend.MCRLayoutUtilities" xmlns:websiteWriteProtection="xalan://org.mycore.frontend.MCRWebsiteWriteProtection"
-  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xsi mcr acl xalan layoutUtils websiteWriteProtection jpxml">
+  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions" exclude-result-prefixes="xsi mcr mcrxml acl xalan layoutUtils websiteWriteProtection jpxml">
 
   <xsl:include href="jp-layout-tools.xsl" />
   <xsl:include href="jp-layout-functions.xsl" />
@@ -126,6 +127,9 @@
         <script type="text/javascript" src="{$MCR.Layout.JS.JQueryURI}" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}js/jp-layout-controller.js" />
         <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap/js/bootstrap.js" />
+        <xsl:if test="not(mcrxml:isCurrentUserGuestUser())">
+          <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-dialog/bootstrap-dialog.min.js" />
+        </xsl:if>
 
         <!-- Piwik -->
         <xsl:call-template name="jp.piwik" />

@@ -1,108 +1,117 @@
 // CKEDITOR
 function introEditor(journalID) {
 	var createdElem = null;
-
 	var ckEditorMainButtonCtr = function(tmpElem) {
-		return function() {
-			$('#ckeditorButton').hide();
-			var introFrame = $('#intro');
-			introFrame
-					.ckeditor({
-						resize_enabled : false,
-						entities : false,
-						enterMode : CKEDITOR.ENTER_BR,
-						entities_processNumerical : 'force',
-						tabSpaces : 4,
-						fillEmptyBlocks : false,
-						height : '500px',
-						toolbar : [ [ 'Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
-								'Source' ] ]
-					});
-
-			function cancelNoSave() {
-				introFrame.ckeditorGet().destroy(true);
-				tmpElem.remove();
-				$('#ckeditorButton').show();
-			}
-
-			function saveContent() {
-				var editor = introFrame.ckeditorGet();
-				var editorData = editor.getData();
-				$.ajax({
-					url : jp.baseURL + 'rsc/journalFile/' + journalID + '/intro.xml',
-					type : 'POST',
-					data : editorData,
-					contentType : 'application/xhtml+xml'
+		$('#ckeditorButton').hide();
+		var introFrame = $('#intro');
+		introFrame
+				.ckeditor({
+					resize_enabled : false,
+					entities : false,
+					enterMode : CKEDITOR.ENTER_BR,
+					entities_processNumerical : 'force',
+					tabSpaces : 4,
+					fillEmptyBlocks : false,
+					height : '500px',
+					toolbar : [ [ 'Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink',
+							'Source' ] ]
 				});
-				editor.destroy();
-				$('#ckeditorButton').show();
+		var ckeditorButtons = $("<ul id='ckeditorButtons' class='ckeditorButtons'></ul>");
+		var ckeditorCancelButton = $("<button id='ckeditorCancelButton'>Abbrechen</button>");
+		var ckeditorSaveButton = $("<button id='ckeditorSaveButton'>Speichern</button>");
+		$("<li />").appendTo(ckeditorButtons).append(ckeditorCancelButton);
+		$("<li />").appendTo(ckeditorButtons).append(ckeditorSaveButton);
+		tmpElem.append(ckeditorButtons);
+
+		function cancelNoSave() {
+			introFrame.ckeditorGet().destroy(true);
+			tmpElem.remove();
+			$('#ckeditorButton').show();
+		}
+
+		function saveContent() {
+			var editor = introFrame.ckeditorGet();
+			var editorData = editor.getData();
+			$.ajax({
+				url : jp.baseURL + 'rsc/journalFile/' + journalID + '/intro.xml',
+				type : 'POST',
+				data : editorData,
+				contentType : 'application/xhtml+xml'
+			});
+			editor.destroy();
+			$('#ckeditorButton').show();
+		}
+
+		ckeditorSaveButton.click(function() {
+			saveContent();
+			ckeditorButtons.remove();
+		});
+
+		ckeditorCancelButton.click(function() {
+			ckeditorButtons.remove();
+			if (introFrame.ckeditorGet().checkDirty()) {
+				new BootstrapDialog({
+					title: 'Änderungen speichern',
+					message: 'Es wurden Änderungen vorgenommen! Wollen Sie diese Änderungen Speichern?',
+					buttons: [{
+						label: 'Nein',
+						action: function(dialog) {
+							cancelNoSave();
+							dialog.close();
+						}
+					}, {
+						label: 'Ja',
+						cssClass: 'btn-primary',
+						action: function(dialog) {
+							saveContent();
+							dialog.close();
+						}
+					}]
+				}).open();
+			} else {
+				cancelNoSave();
 			}
-
-			$('#ckeditorSaveButton').click(function() {
-				saveContent();
-				$('#ckeditorButtons').remove();
-			})
-
-			$('#ckeditorCancelButton').click(function() {
-				var cancelMsgButtonCtr = function() {
-					$('#ckEditorCancelNoSave').click(function() {
-						$('#ckEditorCancelMsgContainer').parent().remove();
-						cancelNoSave();
-					});
-
-					$('#ckEditorCancelSave').click(function() {
-						saveContent();
-						$('#ckEditorCancelMsgContainer').parent().remove();
-					});
-				}
-
-				$('#ckeditorButtons').remove();
-				if (introFrame.ckeditorGet().checkDirty()) {
-					$('<div/>').load(jp.baseURL + 'ckeditor/GUI.html #ckEditorCancelMsgContainer', cancelMsgButtonCtr).appendTo('#main');
-				} else {
-					cancelNoSave();
-				}
-
-			})
-		}
+		});
 	}
-
-	if ($('#intro').length) {
-		var tmpElem = $('<div id="#ckEditorTmp"/>')
-		tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #ckeditorButtons', ckEditorMainButtonCtr(tmpElem)).insertAfter('#intro');
-	} else {
-		var Lcolum = $('#jp-content-LColumn>ul');
-		if (Lcolum.length == 0) {
-			var tmpElem = $('<div id="#ckEditorTmp"/>')
-			tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #jp-content-LColumn', ckEditorMainButtonCtr(tmpElem)).insertAfter('#jp-maintitle');
-		} else {
-			var tmpElem = $('<li id="#ckEditorTmp"/>')
-			tmpElem.load(jp.baseURL + 'ckeditor/GUI.html #jp-content-LColumn-List .ckGUI', ckEditorMainButtonCtr(tmpElem)).appendTo(Lcolum);
-		}
-	}
+	var tmpElem = $('<div id="#ckEditorTmp"/>');
+	ckEditorMainButtonCtr(tmpElem);
+	tmpElem.insertAfter('#intro');
 }
 
 // DERIVATE DELETE DIALOG
-function showDeleteDerivateDialog(/* String */id) {
-	if (!confirm('Das Derivat wirklich löschen?')) {
-		return;
-	}
-	jQuery.ajax({
-		type : 'DELETE',
-		url : jp.baseURL + 'rsc/object/' + id
-	}).done(function(msg) {
-		location.reload(true);
-	}).fail(function(error) {
-		if (error.status == 400) {
-			alert('Bad request: ' + error.responseText);
-		} else if (error.status == 401) {
-			alert('Unauthorized: You have no permission to delete this object!');
-		} else if (error.status == 403) {
-			alert('Forbidden: ' + error.responseText);
-		} else if (error.status == 404) {
-			alert('Unknown MyCoRe object id ' + id);
-		}
-	});
+function showDeleteDerivateDialog(/*String*/ id) {
+	 new BootstrapDialog({
+		title: 'Derivat löschen',
+		message: 'Wollen Sie das Derivat endgültig löschen?',
+		buttons: [{
+			label: 'Nein',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			label: 'Ja',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				jQuery.ajax({
+					type : 'DELETE',
+					url : jp.baseURL + 'rsc/object/' + id
+				}).done(function(msg) {
+					location.reload(true);
+				}).fail(function(error) {
+					if (error.status == 400) {
+						alert('Bad request: ' + error.responseText);
+					} else if (error.status == 401) {
+						alert('Unauthorized: You have no permission to delete this object!');
+					} else if (error.status == 403) {
+						alert('Forbidden: ' + error.responseText);
+					} else if (error.status == 404) {
+						alert('Unknown MyCoRe object id ' + id);
+					}
+				});
+				dialog.close();
+			}
+		}]
+	}).open();
 }
 
 // DERIVATE CONTEXT
