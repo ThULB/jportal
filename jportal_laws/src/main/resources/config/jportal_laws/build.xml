@@ -23,7 +23,7 @@
 		<unjar dest="${build.webapps}/WEB-INF/classes/xsl" overwrite="true">
 			<fileset file="${module.jar}" />
 			<patternset>
-				<include name="META-INF/resources/templates/*/XSL/*.xsl" />
+				<include name="META-INF/resources/jp_templates/*/XSL/*.xsl" />
 			</patternset>
 			<mapper type="flatten" />
 		</unjar>

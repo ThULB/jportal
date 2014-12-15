@@ -5,7 +5,7 @@
 
   <xsl:template match="jp-laws-search">
     <xsl:call-template name="jp.laws.search.js" />
-    <link href="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/CSS/template_thLegislativExekutiv.css" rel="stylesheet" type="text/css" />
+    <link href="{$WebApplicationBaseURL}jp_templates/template_thLegislativExekutiv/CSS/template_thLegislativExekutiv.css" rel="stylesheet" type="text/css" />
     <p>
       <xsl:value-of select="i18n:translate('jp.laws.search.intro')" />
     </p>
@@ -49,7 +49,7 @@
   </xsl:template>
 
   <xsl:template name="jp.laws.search.js">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/JS/jp-laws.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}jp_templates/template_thLegislativExekutiv/JS/jp-laws.js" />
     <script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');

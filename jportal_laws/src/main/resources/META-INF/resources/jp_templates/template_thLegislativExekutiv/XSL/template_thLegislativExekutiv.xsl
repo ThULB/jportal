@@ -37,8 +37,8 @@
 
   <!-- ================================================================================= -->
   <xsl:template name="jp.laws.js">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/JS/jp-laws.js" />
-    <script type="text/javascript" src="{$WebApplicationBaseURL}templates/template_thLegislativExekutiv/JS/jquery.highlight.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}jp_templates/template_thLegislativExekutiv/JS/jp-laws.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}jp_templates/template_thLegislativExekutiv/JS/jquery.highlight.js" />
     <script type="text/javascript">
       $(document).ready(function() {
         setLogo('<xsl:value-of select="$WebApplicationBaseURL" />');

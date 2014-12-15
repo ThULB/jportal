@@ -105,7 +105,7 @@
     <td class="content">
       <xsl:choose>
         <xsl:when test="$image">
-          <a href="{$WebApplicationBaseURL}rsc/iview/client/{$derivateId}{$image}">
+          <a href="{$WebApplicationBaseURL}rsc/viewer/{$derivateId}/{$image}">
             <xsl:value-of select="inhalt" />
           </a>
         </xsl:when>
