@@ -59,7 +59,7 @@
 
     <!-- metadata & derivate -->
     <xsl:if test="$showMetadataAndDerivate">
-      <div id="jp-content-Bottom" class="col-sm-12">
+      <div id="jp-content-Bottom">
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
           <div id="derivCol" class="col-sm-4">
             <xsl:call-template name="derivateDisplay">

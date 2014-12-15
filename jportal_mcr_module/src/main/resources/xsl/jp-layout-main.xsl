@@ -136,17 +136,6 @@
 
         <xsl:variable name="type" select="substring-before(substring-after(/mycoreobject/@ID,'_'),'_')" />
 
-        <!-- add IE CSS to head -->
-        <xsl:variable name="cssLinked">
-          &lt;link href="
-          <xsl:value-of select="concat($WebApplicationBaseURL,'jp_templates/',$template,'/CSS/',$template,'_IE.css')" />"
-          rel="stylesheet" type="text/css"/&gt;
-        </xsl:variable>
-        <xsl:comment>
-          <xsl:value-of select="'[if lte IE 8]&gt;'" />
-          <xsl:value-of select="$cssLinked" />
-          <xsl:value-of select="'&lt;![endif]'" />
-        </xsl:comment>
         <!-- add html stuff to head for MyCoReWebPage -->
         <xsl:copy-of select="/MyCoReWebPage/head/bottom/*" />
       </head>
