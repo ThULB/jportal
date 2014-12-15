@@ -233,6 +233,12 @@
     <xsl:apply-templates select="$data" mode="jp.pagination" />
   </xsl:template>
 
+  <xsl:template mode="renderView" match="@src[contains(., '{WebApplicationBaseURL}')]">
+    <xsl:attribute name="src">
+      <xsl:value-of select="concat($WebApplicationBaseURL, substring-after(.,'{WebApplicationBaseURL}'))" />
+    </xsl:attribute>
+  </xsl:template>
+
   <xsl:template mode="renderView" match="@class[contains(.,'{resultpage}')]">
     <xsl:param name="data" />
     <xsl:if test="$data/selected">

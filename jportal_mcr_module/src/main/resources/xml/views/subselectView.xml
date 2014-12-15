@@ -79,6 +79,6 @@
       <a href="#" class="btn btn-primary" disabled="disabled" id="selectButton">Übernehmen</a>
       <a href="{subselect.cancel.link}" class="btn btn-danger">Auswahl abbrechen</a>
     </div>
-    <script type="text/javascript" src="/js/jp-subselect.js" />
+    <script type="text/javascript" src="{WebApplicationBaseURL}js/jp-subselect.js" />
   </component>
 </view>
