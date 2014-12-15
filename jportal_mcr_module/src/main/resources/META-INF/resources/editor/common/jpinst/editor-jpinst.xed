@@ -42,23 +42,22 @@
         xpath="phones[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/phone[@xml:lang='de'][@inherited='0'][@form='plain']"
         min="0">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LPhone" buttons="true"
-          maxlength="128" add="-10" option="true" validate="interdependent">
+          maxlength="128"  option="true" validate="interdependentSelect">
           <option i18n="editormask.labels.SphoneTelefon" value="Telefon" />
           <option i18n="editormask.labels.SphoneFax" value="Fax" />
           <option i18n="editormask.labels.SphoneMobil" value="Mobil" />
-          <xed:bind xpath=".">
-            <input type="text" class="form-control" maxlength="128" tabindex="1" />
-          </xed:bind>
         </jp:template>
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
 
       <xed:bind xpath="urls[@class='MCRMetaLink'][@heritable='true'][@notinherit='false']/url[@inherited='0'][@xlink:type='locator']">
         <jp:template name="textInput" xpath="@xlink:title" i18n="editormask.labels.LURL" maxlength="128"
-          add="-10" placeholder="editormask.labels.AURLTitle">
-          <xed:bind xpath="@xlink:href">
-            <input type="text" class="form-control" maxlength="128" tabindex="1" placeholder="{i18n:editormask.labels.AURLReference}" />
-          </xed:bind>
-        </jp:template>
+           placeholder="editormask.labels.AURLTitle" />
+<!--           <xed:bind xpath="@xlink:href"> -->
+<!--             <input type="text" class="form-control" maxlength="128" tabindex="1" placeholder="{i18n:editormask.labels.AURLReference}" /> -->
+<!--           </xed:bind> -->
+<!--         </jp:template> -->
+        <jp:template name="textInput" xpath="@xlink:title" placeholder="i18n:editormask.labels.AURLReference" maxlength="128" />
       </xed:bind>
 
       <jp:template name="textInput"
@@ -76,25 +75,12 @@
       <xed:repeat xpath="identifiers[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/identifier[@inherited='0'][@form='plain']"
         min="0">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
-          add="-10" option="true" validate="interdependent">
+           option="true" validate="interdependentSelect">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
-          <xed:bind xpath=".">
-            <input type="text" class="form-control" maxlength="128" tabindex="1" />
-          </xed:bind>
         </jp:template>
-      </xed:repeat>
-
-      <xed:repeat xpath="logo[@class='MCRMetaLangText'][@heritable='true'][@notinherit='false']/url[@inherited='0'][@form='plain']"
-        min="0">
-        <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.LLogos" buttons="true" add="-10" option="true" validate="interdependent">
-          <option i18n="jp.editor.inst.sLogo" value="logoPlain" />
-          <option i18n="jp.editor.inst.logoWText" value="logoPlusText" />
-          <xed:bind xpath=".">
-            <input type="text" class="form-control" maxlength="128" tabindex="1" />
-          </xed:bind>
-        </jp:template>
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
 
       <jp:template name="textInput"

@@ -1167,7 +1167,7 @@ textarea {
 	  position: relative;
 	}
 	
-	.jp-layout-searchResult-style #jp-layout-triangle:nth-child(2):before{
+	.jp-layout-searchResult-style .jp-layout-triangle:nth-child(2):before{
 		border-color: #fff transparent transparent transparent;
 		top: 0.45em;
 		z-index: 1;
@@ -1331,7 +1331,6 @@ textarea {
 	background-color: #fff;
 }
 
-
 .jp-layout-maintitle .jp-layout-triangle:before {
   border-color: #dbdbdb transparent transparent transparent ;
   left: 1.3em;
@@ -1354,3 +1353,6 @@ textarea {
 	width: 100%;
 }
 
+.jp-layout-white{
+	background-color: white;
+}

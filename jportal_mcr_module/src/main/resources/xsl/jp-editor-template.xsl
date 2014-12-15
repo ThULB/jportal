@@ -2,10 +2,10 @@
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xed="http://www.mycore.de/xeditor"
 	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:jp="http://www.mycore.de/components/jp"
-	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+	xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:jpxml="xalan://fsu.jportal.xml.JPXMLFunctions"
 	xmlns:layoutTools="xalan://fsu.jportal.xsl.LayoutTools" xmlns:encoder="xalan://java.net.URLEncoder"
-	exclude-result-prefixes="xed xlink jp i18n encoder">
-
+	exclude-result-prefixes="xed xlink jp i18n encoder jpxml">
+	
 	<xsl:include href="copynodes.xsl" />
 	<xsl:param name="xedIncParam" select="''" />
 
@@ -57,13 +57,6 @@
 	<!-- Form: titel | input | buttons -->
 	<xsl:template
 		match="jp:template[contains('textInput|textInputSm|selectInput|textArea', @name)]">
-	
-		        <script type="text/javascript">
-            $(function () {
-                $('#datetimepicker6').datetimepicker();
-            });
-        </script>
-		
 		<div class="row">
 			<xsl:if test="@small">
 				<xsl:attribute name="class"></xsl:attribute>
@@ -89,8 +82,11 @@
 					<xsl:if test="@name!='textInputSm'">
 						<div>
 							<xsl:attribute name="class">form-group {$xed-validation-marker}</xsl:attribute>
-							<xsl:if test="@add='10'">
-								<xsl:attribute name="style">margin-bottom: 0px</xsl:attribute>
+							<xsl:if test="@classDatePick">
+								<xsl:attribute name="class">form-group input-group {$xed-validation-marker} <xsl:value-of select="@classDatePick" /></xsl:attribute>
+							</xsl:if>
+							<xsl:if test="@validate='interdependentSelect'">
+								<xsl:attribute name="style">margin-bottom: 5px</xsl:attribute>
 							</xsl:if>
 							<xsl:apply-templates select="." mode="input" />
 							<xsl:apply-templates select="." mode="required" />
@@ -101,15 +97,6 @@
 				<xsl:apply-templates select="span[@type='addT']" />
 				<xsl:apply-templates select="jp:template[@type='subselect']"
 					mode="subselect" />
-
-				<xsl:if test="@add">
-					<div class="form-group">
-						<xsl:attribute name="style">
-              <xsl:value-of select="concat('margin-top:',@add, 'px')" />
-            </xsl:attribute>
-						<xsl:apply-templates select="xed:bind" />
-					</div>
-				</xsl:if>
 			</div>
 			<!-- 3.part: buttons -->
 			<xsl:apply-templates select="." mode="buttons" />
@@ -139,6 +126,10 @@
           <xsl:value-of select="concat('{i18n:', @placeholder, '}')" />
         </xsl:attribute>
 			</xsl:if>
+			<xsl:if test="@classDatePick">
+				<xsl:attribute name="data-date-format">YYYY-MM-DD</xsl:attribute>
+        <span class="input-group-addon btn btn-default jp-layout-white"><span class="glyphicon glyphicon-calendar"></span></span>
+			</xsl:if>
 		</input>
 	</xsl:template>
 
@@ -158,13 +149,20 @@
 		</xed:validate>
 	</xsl:template>
 
-	<xsl:template match="jp:template[@validate='interdependent']" mode="required">
-		<!--solange true rauskommt, ist es (has-success) und wenn false rauskommt, 
-			dann gibts fehler (has-error) und das div wird benutzt-->
+	<xsl:template match="jp:template[@validate='interdependentSelect']" mode="required">
 		<xed:validate display="here"
-			test="((string-length(.) = 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) > 0))"> 
+			test="((string-length(.) = 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) = 0)) or ((string-length(.) > 0) and (string-length(..) > 0))"> 
 			<div class="alert alert-danger" role="alert">
-				<xed:output i18n="jp.editor.select_help" />
+				<xed:output i18n="jp.editor.requiredSelect" />
+			</div>
+		</xed:validate>
+	</xsl:template>
+	
+	<xsl:template match="jp:template[@validate='interdependentInput']" mode="required">
+		<xed:validate display="here"
+			test="((string-length({@selectXpath}) = 0) and (string-length(text()) = 0)) or ((string-length({@selectXpath}) = 0) and (string-length(text()) > 0)) or ((string-length({@selectXpath}) > 0) and (string-length(text()) > 0))"> 
+			<div class="alert alert-danger" role="alert">
+				<xed:output i18n="jp.editor.requiredInput" />
 			</div>
 		</xed:validate>
 	</xsl:template>
@@ -178,13 +176,13 @@
 		</xed:validate>
 	</xsl:template>
 
-	<xsl:template match="jp:template[@validate='date']" mode="required">
+	<xsl:template match="jp:template[@validate='date' or @classDatePick]" mode="required">
 			<xed:validate display="here" type="datetime"
 			format="dd.MM.yyyy;MM.dd.yyyy;yyyy.MM.dd;yyyy;yyyy-MM;yyyy-MM-dd;dd-MM-yyyy;MM-dd-yyyy">
 			<div class="alert alert-danger" role="alert">
 				<xed:output i18n="editormask.labels.date_howToUse" />
 			</div>
-		</xed:validate>
+		</xed:validate>		
 	</xsl:template>
 
 	<xsl:template match="jp:template[@name='textArea']" mode="input">
@@ -263,7 +261,7 @@
 			</label>
 		</xed:if>	
 
-		<!-- Hier 2 buttons um personen auszuwählen und institutionen -->
+		<!-- 2 buttons for selection of person or institution _ subselect -->
 		<div class="form-group">
 			<button type="submit" xed:target="subselect"
 				xed:href="{concat('solr/subselect?XSL.subselect.type=person&amp;XSL.subselect.varpath.SESSION=/mycoreobject/metadata/participants/participant&amp;XSL.subselect.webpage.SESSION=', @value)}"

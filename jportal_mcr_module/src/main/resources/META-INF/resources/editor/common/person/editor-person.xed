@@ -69,11 +69,8 @@
 
       <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
-          add="-10" classification="urmel_class_00000002" validate="interdependent">
-          <xed:bind xpath=".">
-            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
-          </xed:bind>
-        </jp:template>
+           classification="urmel_class_00000002" validate="interdependentSelect" />
+        <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
 
       <xed:repeat xpath="def.role[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/role[@inherited='0'][@form='plain']">
@@ -88,26 +85,24 @@
 
       <jp:template name="textInput"
         xpath="def.dateOfBirth[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfBirth[@inherited='0']" i18n="editormask.person.LdateOfBirth"
-        maxlength="10" validate="date" />
+        maxlength="10" validate="date" classDatePick="datetimepicker6"/>
       <jp:template name="textInput"
         xpath="def.placeOfBirth[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfBirth[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfBirth" maxlength="128" />
       <jp:template name="textInput"
         xpath="def.dateOfDeath[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='true']/dateOfDeath[@inherited='0']" i18n="editormask.person.LdateOfDeath"
-        maxlength="10" validate="date" />
+        maxlength="10" validate="date" classDatePick="datetimepicker6"/>
       <jp:template name="textInput"
         xpath="def.placeOfDeath[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfDeath[@inherited='0'][@form='plain']"
         i18n="editormask.person.LplaceOfDeath" maxlength="128" />
 
       <xed:bind
         xpath="def.note[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/note[@inherited='0'][@form='plain']">
-        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" add="-10" option="true" validate="interdependent">
+        <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact"  option="true" validate="interdependentSelect">
           <option i18n="jp.editor.person.visible" value="visible" />
           <option i18n="jp.editor.person.hidden" value="hidden" />
-          <xed:bind xpath=".">
-            <textarea class="form-control" wrap="" rows="3" cols="48" tabindex="1" />
-          </xed:bind>
         </jp:template>
+        <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:bind>
 
       <xed:repeat xpath="def.link[@class='MCRMetaLink'][@heritable='true'][@notinherit='true']/link[@inherited='0'][@xlink:type='locator']">
@@ -117,15 +112,12 @@
       <xed:repeat
         xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
-          add="-10" option="true" validate="interdependent">
+           option="true" validate="interdependentSelect">
           <option i18n="metaData.person.gnd" value="gnd" />
           <option i18n="metaData.person.pnd" value="pnd" />
           <option i18n="metaData.person.ppn" value="ppn" />
-
-          <xed:bind xpath=".">
-            <input type="text" class="form-control" maxlength="128" tabindex="1" />
-          </xed:bind>
         </jp:template>
+        <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" />
       </xed:repeat>
       <jp:template name="textInput"
         xpath="def.doubletOf[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/doubletOf[@inherited='0'][@form='plain']"

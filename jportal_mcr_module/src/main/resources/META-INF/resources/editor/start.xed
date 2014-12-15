@@ -3,8 +3,22 @@
 <MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor">
   <section xml:lang="all">
     <xed:form>
+    	<xed:if test="$type != 'jpinst'">
+	    	<link href="{$WebApplicationBaseURL}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
+				<script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js"></script> 
+				<script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+				<script type="text/javascript">
+          $(function () {
+              $('.datetimepicker6').datetimepicker({
+              language: $('#hiddenLanguage').text(),
+              pickTime: false
+              });
+          });
+      	</script>
+        <span id="hiddenLanguage" style="display:none"><xed:output value="$CurrentLang" /></span>
+    	</xed:if>
       <xed:source uri="mcrobject:{$id}" />
-      <xed:bind xpath="/mycoreobject[@version='2.0']">
+      <xed:bind xpath="/mycoreobject[@version='2.0']"> 
         <span id="journalID" style="display:none">            
           <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />
         </span>

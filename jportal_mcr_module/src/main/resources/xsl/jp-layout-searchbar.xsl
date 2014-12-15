@@ -84,6 +84,10 @@
             </xsl:variable>
             <div class="col-sm-8 {$mobileCol}">
               <div class="input-group">
+		            <div class="hidden">
+			            <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
+			            <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
+			          </div>
                 <span class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                     <span class="caret"></span>
