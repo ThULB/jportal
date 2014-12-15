@@ -24,7 +24,7 @@ public class XSLTemplateInclude implements MCRXslIncludeHrefs {
     @Override
     public List<String> getHrefs() {
         ServletContext servletContext = MCRURIResolver.getServletContext();
-        String templatesPath = "/templates/";
+        String templatesPath = "/jp_templates/";
         Set<String> resourcePaths = servletContext.getResourcePaths(templatesPath);
         List<String> hrefList = new ArrayList<String>();
         for (String string : resourcePaths) {
