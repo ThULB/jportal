@@ -197,19 +197,16 @@
       <div class="jp-layout-hidden-Button"></div>
       <xsl:choose>
         <xsl:when test="$fileType = 'PDF'">
-          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" border="0" />  
+          <img src="{$WebApplicationBaseURL}img/pdfthumb/{$derivID}/{$encodedMaindoc}" />  
         </xsl:when>
         <xsl:when test="$fileType = 'XML'">
-          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" border="0" />  
+          <img src="{$WebApplicationBaseURL}images/xml-logo.svg" />  
         </xsl:when>
         <xsl:when test="$fileType = 'SVG'">
-          <img src="{$derivbase}{$encodedMaindoc}" border="0" />  
+          <img src="{$derivbase}{$encodedMaindoc}" />  
         </xsl:when>
         <xsl:otherwise>
-          <img src="{$WebApplicationBaseURL}images/file-logo.svg" border="0" />
-          <span style="display: inline-block; text-align: center; width: 100%;">
-            <xsl:value-of select="$fileType" />
-          </span>
+          <img src="{$WebApplicationBaseURL}images/file-logo.svg" />
         </xsl:otherwise>
       </xsl:choose>
     </a>

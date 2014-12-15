@@ -639,6 +639,7 @@ p.jp-layout-metadata-list {
 	max-height: 370px;
 	max-width: 300px;
 }
+
 @media(max-width: 767px){
 	#jp-content-Bottom > #derivCol > .jp-layout-derivateList .jp-layout-derivateWrapper a.thumbnail > img {
 		max-height: 270px;

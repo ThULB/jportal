@@ -105,42 +105,34 @@
   </xsl:template>
 
   <xsl:template mode="resultList" match="response[result/@numFound &gt;= 1]">
-    <xsl:variable name="showFacet" select="lst[@name='facet_counts']" />
-    <xsl:variable name="resultListClass">
-      <xsl:if test="$showFacet">
-        <xsl:value-of select="'facet'" />
-      </xsl:if>
-    </xsl:variable>
-    <xsl:if test="$showFacet">
-      <div class="col-sm-3">
-        <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
-        <div class="visible-xs">
-          <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
-            <xsl:apply-templates select="." mode="getFacetList">
-              <xsl:with-param name="colapsedId" select="1" />
-            </xsl:apply-templates>
-          </div>
-        </div>
-        <div class="jp-layout-searchResult-style">
-          <xsl:apply-templates mode="searchResultText" select="." />
-
-          <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-
-          <div class="jp-layout-triangle visible-xs"></div>
-          <div class="jp-layout-triangle visible-xs"></div>
-        </div>
-        <div class="jp-layout-searchList hidden-xs">
+    <div class="col-sm-3">
+      <!-- bootstrap visible-xs and navbar-collapse have problems to be in the same class, so wrap visible around navbar-collapse -->
+      <div class="visible-xs">
+        <div id="navbar-collapse-searchResult" class="jp-layout-searchList navbar-collapse collapse" role="navigation">
           <xsl:apply-templates select="." mode="getFacetList">
-            <xsl:with-param name="colapsedId" select="2" />
+            <xsl:with-param name="colapsedId" select="1" />
           </xsl:apply-templates>
         </div>
       </div>
-    </xsl:if>
+      <div class="jp-layout-searchResult-style">
+        <xsl:apply-templates mode="searchResultText" select="." />
+
+        <button type="button" class="navbar-toggle collapsed jp-layout-mynavbarbutton" data-toggle="collapse" data-target="#navbar-collapse-searchResult">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <div class="jp-layout-triangle visible-xs"></div>
+        <div class="jp-layout-triangle visible-xs"></div>
+      </div>
+      <div class="jp-layout-searchList hidden-xs">
+        <xsl:apply-templates select="." mode="getFacetList">
+          <xsl:with-param name="colapsedId" select="2" />
+        </xsl:apply-templates>
+      </div>
+    </div>
     <div class="col-sm-9 jp-layout-hits">
       <div class="jp-layout-triangle hidden-xs"></div>
       <div class="jp-layout-triangle hidden-xs"></div>
