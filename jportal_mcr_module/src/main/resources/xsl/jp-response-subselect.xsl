@@ -205,7 +205,7 @@
         <xsl:choose>
           <xsl:when test="$subselect.session = ''">
             <base><xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor')" /></base>
-            <param name="_xed_submit_return" value=" " />
+            <param name="_xed_submit_return" value="submit" />
             <param name="_xed_session" value="{$_xed_subselect_session}" />
             <param name="@xlink:href" value="{$data/str[@name='id']}" /> <!-- _var_@xlink:href -->
             <param name="@xlink:title" value="{$data/str[@name='heading']}" encode="false"/> <!-- _var_@xlink:title -->
@@ -268,26 +268,8 @@
 
   <xsl:template mode="renderView" match="@href[.='{subselect.cancel.link}']">
     <xsl:param name="data" />
-    <xsl:message>
-    </xsl:message>
     <xsl:attribute name="href">
-      <xsl:choose>
-        <xsl:when test="contains($subselect.webpage, 'XSL.editor.session.id')">
-          <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage)" />
-        </xsl:when>
-        <xsl:otherwise>
-
-              <xsl:choose>
-                <xsl:when test="$subselect.session = ''">
-                  <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage,'&amp;_xed_subselect_session=', $_xed_subselect_session)" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="concat($WebApplicationBaseURL,$subselect.webpage,'XSL.editor.session.id=',$subselect.session)" />
-                </xsl:otherwise>
-              </xsl:choose>
-              
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'servlets/XEditor?_xed_submit_return=cancel&amp;_xed_session=', $_xed_subselect_session)" />
     </xsl:attribute>
   </xsl:template>
 
