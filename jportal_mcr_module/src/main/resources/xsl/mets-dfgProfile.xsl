@@ -15,7 +15,6 @@
   <xsl:param name="JP.Site.Owner.label" />
   <xsl:param name="JP.Site.Owner.url" />
   <xsl:param name="JP.Site.Owner.logo" />
-  <xsl:param name="JP.Site.Owner.fullLogo" />
 
   <xsl:variable name="ACTUAL.OPAC.CATALOG">
     <xsl:choose>
@@ -48,7 +47,6 @@
     <urmel:entity type="{$type}" xlink:type="extended" xlink:title="{$JP.Site.Owner.label}">
       <urmel:site xlink:type="locator" xlink:href="{$JP.Site.Owner.url}" />
       <urmel:logo xlink:type="resource" xlink:href="{$JP.Site.Owner.logo}" />
-      <urmel:full-logo xlink:type="resource" xlink:href="{$JP.Site.Owner.fullLogo}" />
     </urmel:entity>
   </xsl:template>
 

@@ -23,17 +23,13 @@ public class MODSLogoEntityXMLMapper {
         Document modsLogoEntities = new Document();
         Element entitiesTag = createUrmelTag("entities");
         entitiesTag.addNamespaceDeclaration(MCRConstants.XLINK_NAMESPACE);
-
         for (MODSLogoEntity entity : entities) {
             Element entityTag = createEntityTag(entity);
             if (entity.getSiteURL() != null) {
                 entityTag.addContent(createSiteTag(entity.getSiteURL()));
             }
-            if (entity.getLogoPlainURL() != null) {
-                entityTag.addContent(createLogoTag("logo", entity.getLogoPlainURL()));
-            }
-            if (entity.getLogoPlusTextURL() != null) {
-                entityTag.addContent(createLogoTag("full-logo", entity.getLogoPlusTextURL()));
+            if (entity.getLogo() != null) {
+                entityTag.addContent(createLogoTag("logo", entity.getLogo()));
             }
             entitiesTag.addContent(entityTag);
         }

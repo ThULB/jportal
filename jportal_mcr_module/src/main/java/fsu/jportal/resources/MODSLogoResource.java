@@ -16,15 +16,16 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaInstitutionName;
 import org.mycore.datamodel.metadata.MCRMetaInterface;
-import org.mycore.datamodel.metadata.MCRMetaLangText;
 import org.mycore.datamodel.metadata.MCRMetaLink;
 import org.mycore.datamodel.metadata.MCRMetaLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.frontend.servlets.MCRServlet;
 
 import fsu.jportal.constants.ParticipantRoleTypes;
 import fsu.jportal.mods.MODSLogoEntity;
@@ -33,6 +34,7 @@ import fsu.jportal.xml.mapper.MODSLogoEntityXMLMapper;
 @Path("modslogos")
 public class MODSLogoResource {
     static Logger LOGGER = Logger.getLogger(MODSLogoResource.class);
+
     @GET
     @Path("{hiddenJournalId}")
     @Produces(MediaType.APPLICATION_XML)
@@ -46,14 +48,15 @@ public class MODSLogoResource {
         List<MODSLogoEntity> entities = new ArrayList<MODSLogoEntity>();
         MCRObject mcrObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(journalID));
         MCRMetaElement participants = mcrObject.getMetadata().getMetadataElement("participants");
-        if(participants != null) {
+        if (participants != null) {
             for (MCRMetaInterface retrievedElem : participants) {
                 if (retrievedElem instanceof MCRMetaLinkID) {
                     MCRMetaLinkID participant = (MCRMetaLinkID) retrievedElem;
                     String role = participant.getType();
                     if (role != null && ParticipantRoleTypes.equals(role)) {
                         String participantID = participant.getXLinkHref();
-                        MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(participantID));
+                        MCRObject participantMcrObj = MCRMetadataManager.retrieveMCRObject(MCRObjectID
+                            .getInstance(participantID));
                         entities.add(createLogoEntity(role, participantMcrObj));
                     }
                 }
@@ -79,21 +82,23 @@ public class MODSLogoResource {
     }
 
     protected static void getLogoURL(MCRObject participantMcrObj, MODSLogoEntity modsLogoEntity) {
-        MCRMetaElement logo = participantMcrObj.getMetadata().getMetadataElement("logo");
-        if(logo == null) {
+        List<MCRMetaLinkID> derivates = participantMcrObj.getStructure().getDerivates();
+        if (derivates == null || derivates.isEmpty()) {
             return;
         }
-        for (MCRMetaInterface logoElem : logo) {
-            if(logoElem instanceof MCRMetaLangText){
-                MCRMetaLangText url = (MCRMetaLangText) logoElem;
-                modsLogoEntity.setLogoUrl(url.getType(), url.getText());
-            }
-        }
+        // we assume that there is only one derivate
+        MCRObjectID derivateId = derivates.get(0).getXLinkHrefID();
+        MCRDerivate derivate = MCRMetadataManager.retrieveMCRDerivate(derivateId);
+        String mainDoc = derivate.getDerivate().getInternals().getMainDoc();
+        // TODO: we should check if its an image (iview api?)
+        StringBuilder url = new StringBuilder(MCRServlet.getServletBaseURL()).append("MCRFileNodeServlet/")
+            .append(derivateId.toString()).append("/").append(mainDoc);
+        modsLogoEntity.setLogo(url.toString());
     }
 
     protected static String getFullname(MCRObject participantMcrObj) {
         MCRMetaElement names = participantMcrObj.getMetadata().getMetadataElement("names");
-        if(names != null) {
+        if (names != null) {
             for (MCRMetaInterface nameElem : names) {
                 if (nameElem instanceof MCRMetaInstitutionName) {
                     MCRMetaInstitutionName name = (MCRMetaInstitutionName) nameElem;
@@ -106,7 +111,7 @@ public class MODSLogoResource {
 
     protected static String getSite(MCRObject participantMcrObj) {
         MCRMetaElement urls = participantMcrObj.getMetadata().getMetadataElement("urls");
-        if(urls != null) {
+        if (urls != null) {
             for (MCRMetaInterface url : urls) {
                 if (url instanceof MCRMetaLink) {
                     return ((MCRMetaLink) url).getXLinkHref();
