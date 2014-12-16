@@ -221,9 +221,15 @@
     </xsl:call-template>
   </xsl:template>
 
+  <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink' and @xlink:title]">
+    <a href="{@xlink:href}">
+      <xsl:value-of select="@xlink:title" />
+    </a>
+  </xsl:template>
+
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaLink']">
     <a href="{@xlink:href}">
-			<xsl:value-of select="@xlink:title" />
+      <xsl:value-of select="@xlink:href" />
     </a>
   </xsl:template>
 
