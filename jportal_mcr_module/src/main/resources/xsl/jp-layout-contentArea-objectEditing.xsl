@@ -10,11 +10,11 @@
 
   <xsl:variable name="menuVarXML">
     <var name="dataModel" value="{/mycoreobject/@xsi:noNamespaceSchemaLocation}" />
-    <var name="createJournal" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpjournal')}" />
-    <var name="createPerson" value="{acl:checkPermission('POOLPRIVILEGE', 'create-person')}" />
-    <var name="createInst" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')}" />
-    <var name="createVol" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jpvolume')}" />
-    <var name="createArt" value="{acl:checkPermission('POOLPRIVILEGE', 'create-jparticle')}" />
+    <var name="createJournal" value="{acl:checkPermission('default', 'create-jpjournal')}" />
+    <var name="createPerson" value="{acl:checkPermission('default', 'create-person')}" />
+    <var name="createInst" value="{acl:checkPermission('default', 'create-jpinst')}" />
+    <var name="createVol" value="{acl:checkPermission('default', 'create-jpvolume')}" />
+    <var name="createArt" value="{acl:checkPermission('default', 'create-jparticle')}" />
     <var name="deleteDeriv" value="{acl:checkPermission('default_derivate', 'deletedb')}" />
     <var name="currentType" value="{$currentType}" />
     <var name="currentObjID" value="{$currentObjID}" />

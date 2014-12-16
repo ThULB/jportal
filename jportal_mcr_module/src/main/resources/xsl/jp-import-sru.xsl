@@ -15,7 +15,7 @@
 
   <xsl:template match="jp-import-sru">
     <xsl:choose>
-      <xsl:when test="acl:checkPermission('POOLPRIVILEGE', 'create-person') and acl:checkPermission('POOLPRIVILEGE', 'create-jpinst')">
+      <xsl:when test="acl:checkPermission('default', 'create-person') and acl:checkPermission('default', 'create-jpinst')">
         <xsl:call-template name="jp.import.sru.search" />
       </xsl:when>
       <xsl:otherwise>

@@ -55,7 +55,7 @@
     <xsl:variable name="objID" select="/mycoreobject/@ID" />
     <xsl:variable name="derivID" select="substring-before(@xlink:href, '/')" />
     <xsl:variable name="file" select="substring-after(@xlink:href, '/')" />
-    <xsl:variable name="deleteLink" select="acl:checkPermission($derivID, 'update-jparticle')" />
+    <xsl:variable name="deleteLink" select="acl:checkPermission('default', 'update-jparticle')" />
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
       <div class="jp-layout-derivateWrapper">

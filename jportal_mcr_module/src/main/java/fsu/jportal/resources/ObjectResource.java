@@ -83,7 +83,7 @@ public class ObjectResource {
             return Response.status(Status.BAD_REQUEST).entity("invalid xml data").build();
         }
         String objectType = obj.getId().getTypeId();
-        MCRJerseyUtil.checkPermission("POOLPRIVILEGE", "create-" + objectType);
+        MCRJerseyUtil.checkPermission("default", "create-" + objectType);
         obj.setId(MCRObjectID.getNextFreeIdByType(objectType));
         MCRMetadataManager.create(obj);
         return Response.ok(obj.getId().toString()).build();
