@@ -18,6 +18,8 @@ public class MCRJPortalURIGetJournalID {
 
     private static final Logger LOGGER = Logger.getLogger(MCRJPortalURIGetJournalID.class);
 
+    private static String URI = "getJournalID";
+
     static javax.xml.transform.TransformerFactory factory = javax.xml.transform.TransformerFactory.newInstance();
 
     /**
