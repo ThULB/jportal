@@ -1,4 +1,4 @@
-package fsu.jportal.resolver;
+package fsu.jportal.resolver.xeditor;
 
 import java.util.Iterator;
 import java.util.List;

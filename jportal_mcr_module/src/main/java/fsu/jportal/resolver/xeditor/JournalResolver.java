@@ -1,4 +1,4 @@
-package fsu.jportal.resolver;
+package fsu.jportal.resolver.xeditor;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -26,12 +26,17 @@ public class JournalResolver implements URIResolver {
         String objectId = uriParts.length >= 2 && !uriParts[1].equals("") ? uriParts[1] : null;
         String parentId = uriParts.length >= 3 && !uriParts[2].equals("") ? uriParts[2] : null;
         if (objectId == null && parentId == null) {
-            throw new TransformerException("Cannot get journal id without any reference: " + href);
+            throw new IllegalArgumentException("Cannot get journal id without any reference: " + href);
         }
         MCRObject refObject = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objectId != null ? objectId
             : parentId));
         MCRObject journal = MCRObjectUtils.getRoot(refObject);
+        if (journal == null) {
+            if (!refObject.getId().getTypeId().equals("jpjournal")) {
+                throw new IllegalArgumentException("Cannot receive journal id when root is null: " + href);
+            }
+            journal = refObject;
+        }
         return new JDOMSource(journal.createXML());
     }
-
 }

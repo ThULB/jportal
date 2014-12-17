@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:jp="http://www.mycore.de/components/jp">
   <xed:template id="edit_jparticle">
-    <xed:load-resource name="journal" uri="journal:{$id}:{$parent}" />
+    <xed:load-resource name="journal" uri="xJournal:{$id}:{$parent}" />
     <jp:section title="{i18n:metaData.headlines.formaldiscr}">
 
       <jp:template name="title" i18n="metaData.headlines.formaldiscr" />
