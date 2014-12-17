@@ -210,7 +210,7 @@ public class MCRXSLTransformerVisitor extends ClassVisitor{
             mv.visitLocalVariable("source", "Ljavax/xml/transform/sax/SAXSource;", null, l12, l11, 5);
             mv.visitMaxs(5, 6);
             mv.visitEnd();
-            return null;
+            return null;//Do not visit the existing method. We override the existing method
         }
         return mv;
     }
