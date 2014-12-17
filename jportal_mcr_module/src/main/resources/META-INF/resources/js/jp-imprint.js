@@ -39,7 +39,7 @@ var InfoEditorCtr = function(buttonTag){
 	var containerID = buttonTag.attr('containerid');
 	var backend = new FSConnector(type);
 	var imprintID = backend.get(journalID);
-	var selectBox = new Select();
+// var selectBox = new Select();
 	var editBox = new EditBox();
 	var editor = new Editor(type, controller);
 	var button = $('<div>' + buttonLabel +'</div>');
@@ -52,12 +52,12 @@ var InfoEditorCtr = function(buttonTag){
 	}
 	
 	controller.has = function(id){
-		return id == imprintID && selectBox.has(id);
+		return id == imprintID && editor.selectBox.has(id);
 	}
 	
 	controller.save = function(id, data){
 		backend.save(id, data, function() {
-			selectBox.addOption(id, id, true);
+			editor.selectBox.addOption(id, id, true);
 			editor.close();
 		}, function(err) {
 			alert('Es ist ein Fehler beim speichern aufgetreten.');
@@ -86,30 +86,35 @@ var InfoEditorCtr = function(buttonTag){
 	}
 	
 	button.on('click', function(){
-		trigger('deactivateButton');
-		buttonTag.addClass('active');
-		selectBox.empty();
-		backend.list(function(idList){
-			idList.sort();
-	    	if(idList.length != 0) {
-	    		editBox.toggleDel();
-	    		selectBox.addOption(null, "bitte wählen... / neuer Eintrag", imprintID == null);
-				for(var i = 0; i < idList.length; i++) {
-					selectBox.addOption(idList[i], idList[i], imprintID == idList[i]);
-				}
-			} else {
-				selectBox.addOption(null, "Keine Eintrag", true);
-			}
-	    	
-	    	editBox.addSelectBox(selectBox);
+		
+		if(imprintID != null && imprintID != '') {
+			backend.retrieve(imprintID, function(xml) {
+				editor.setContent(xml);
+				editor.setID(imprintID);
+			}, function(err) {
+				console.log("Error");
+				console.log(err);
+				alert("Error while loading. Please inform the administrator.");
+			});
+		} 
+		
+		editor.start("#" + containerID);
+		
+		
+// trigger('deactivateButton');
+// buttonTag.addClass('active');
+			backend.list(function(idList){
+				editor.setIdList(idList, imprintID)
+			})
+	})
+			    	
+// editBox.addSelectBox(selectBox);
 
-	    	button.detach();
-	    	buttonTag.html(editBox);
-	    })
-	});
+//	    	button.detach();
+//	    	buttonTag.html(editBox);
 	
 	editBox.editButton.on('click', function(){
-		var imprintID = selectBox.getValue();
+		var imprintID = editor.selectBox.getValue();
 		
 		if(imprintID != null && imprintID != '') {
 			backend.retrieve(imprintID, function(xml) {
@@ -125,13 +130,11 @@ var InfoEditorCtr = function(buttonTag){
 		editor.start("#" + containerID);
 	});
 	
-	selectBox.on('change', function(){
-		var newID = selectBox.getValue();
-		
+	controller.selectBoxChanged = function(newID){
 		if(newID != null && newID != ""){
 			backend.set(journalID, newID);
 		}
-	})
+	}
 	
 	editBox.removeButton.on('click', function() {
 		if(imprintID == null || !confirm("Eintrag wirklich löschen?")) {
@@ -139,7 +142,7 @@ var InfoEditorCtr = function(buttonTag){
 		}
 		backend.remove(imprintID, function() {
 			editor.close();
-			selectBox.delOption(imprintID);
+			editor.selectBox.delOption(imprintID);
 		});
 	});
 	
@@ -172,7 +175,7 @@ var Editor = function(type, ctr){
 				return false;
 			}
 			
-			if(ctr.has(newID)) {
+			if(selectBox.has(newID)) {
 				var confirmUpdate = confirm("Es existiert bereits ein Eintrag mit dem Namen '" + newID + "'. Wollen Sie den Eintrag überschreiben?");
 				
 				if(!confirmUpdate){
@@ -241,12 +244,43 @@ var Editor = function(type, ctr){
 	    editorFrame.checkAllreadyExist = function(){
 	    	return false;
 	    }
+	    
+	    var selectBox = new Select(editorFrame.find("#imprintSelBox"));
+	    selectBox.on('change', function(){
+			var newID = selectBox.getValue();
+			
+			controller.selectBoxChanged(newID);
+		})
+		
+	    editorFrame.setIdList = function(idList, imprintID){
+	    	idList.sort();
+	    	if(idList.length != 0) {
+	    		for(var i = 0; i < idList.length; i++) {
+	    			selectBox.addOption(idList[i], idList[i], imprintID == idList[i]);
+	    		}
+	    	} else {
+	    		selectBox.addOption(null, "Keine Eintrag", true);
+	    	}
+	    }
+	    
+		editorFrame.getSelBoxVal = function(){
+	    	return selectBox.getValue();
+	    }
+	    
+	    editorFrame.selectBoxempty = function(){
+	    	selectBox.empty();
+	    }
+	    
+	    editorFrame.addSelOption = function(/* String */ value, /* String */ label, /* boolean */ selected){
+	    	selectBox.addOption(value, label, selected);
+	    }
+		
 	});
 	
 	
 	
-	var editorOverlay = $("<div id='overlay' class='well'/>")//.appendTo(editorFrame);
-	var editorCenter = $("<div/>")//.appendTo(editorFrame);
+	var editorOverlay = $("<div id='overlay' class='well'/>")// .appendTo(editorFrame);
+	var editorCenter = $("<div/>")// .appendTo(editorFrame);
 	var editorNode = $("<div/>").appendTo(editorCenter);
 	editorNode.append($("<h3>" + title[type] + " bearbeiten</h3>"));
 	var idInput = $("<input type='text' site='40' />");
@@ -260,9 +294,9 @@ var Editor = function(type, ctr){
     
     
     
-//    editorFrame.cancelButton = cancelButton;
-//    editorFrame.saveButton = saveButton;
-//    editorFrame.idInput = idInput;
+// editorFrame.cancelButton = cancelButton;
+// editorFrame.saveButton = saveButton;
+// editorFrame.idInput = idInput;
     
     return editorFrame;
 }
@@ -290,8 +324,7 @@ var EditBox = function(){
 	return domNode;
 }
 
-var Select = function(){
-	var select = $("<select />");
+var Select = function(select){
 	
 	select.addOption = function(/* String */ value, /* String */ label, /* boolean */ selected){
 		var newOption = $("<option" + (selected ? " selected='selected'" : "") + "/>");
@@ -300,7 +333,7 @@ var Select = function(){
 		select.append(newOption);
 	}
 	
-	select.delOption = function(/*string*/ imprintID){
+	select.delOption = function(/* string */ imprintID){
 		select.find("option[value='" + imprintID + "']").remove();
 	}
 	
@@ -312,11 +345,11 @@ var Select = function(){
 	return select;
 }
 
-var FSConnector = function(/*string*/ type){
+var FSConnector = function(/* string */ type){
 	var baseURL = jp.baseURL + "rsc/fs/" + type;
 
 	return {
-		get: function(/*string*/ objectID) {
+		get: function(/* string */ objectID) {
 			var notFound = false;
 			var importID = $.ajax({
 				url: baseURL + "/get/" + objectID,
@@ -335,7 +368,7 @@ var FSConnector = function(/*string*/ type){
 			return notFound ? null : importID;
 		},
 
-		set: function(/*string*/ objectID, /*string*/ imprintID, /*function*/ onSuccess) {
+		set: function(/* string */ objectID, /* string */ imprintID, /* function */ onSuccess) {
 			$.ajax({
 				type: "POST",
 				url: baseURL + "/set?objID=" + objectID,
@@ -348,14 +381,14 @@ var FSConnector = function(/*string*/ type){
 			}).done(onSuccess);
 		},
 
-		retrieve: function(/*string*/ imprintID, /*function*/ onSuccess, /*function*/ onError) {
+		retrieve: function(/* string */ imprintID, /* function */ onSuccess, /* function */ onError) {
 			$.ajax({
 				url: baseURL + "/retrieve/" + imprintID,
 				dataType: "text"
 			}).done(onSuccess).error(onError);
 		},
 
-		list: function(/*function*/ onSuccess, /*function*/ onError) {
+		list: function(/* function */ onSuccess, /* function */ onError) {
 			$.ajax({
 				url: baseURL + "/list",
 				dataType: "json",
@@ -363,7 +396,7 @@ var FSConnector = function(/*string*/ type){
 			}).done(onSuccess).error(onError);
 		},
 		
-		remove: function(/*string*/ imprintID, /*function*/ onSuccess) {
+		remove: function(/* string */ imprintID, /* function */ onSuccess) {
 			$.ajax({
 				type: "DELETE",
 				url: baseURL + "/delete/" + imprintID
@@ -373,7 +406,7 @@ var FSConnector = function(/*string*/ type){
 			});
 		},
 
-		save: function(/*string*/ imprintID, /*string*/ data, /*function*/ onSuccess, /*function*/ onError) {
+		save: function(/* string */ imprintID, /* string */ data, /* function */ onSuccess, /* function */ onError) {
 			$.ajax({
 				type: "POST",
 				url: baseURL + "/save",
