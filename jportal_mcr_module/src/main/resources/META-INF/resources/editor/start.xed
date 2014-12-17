@@ -11,14 +11,15 @@
           $(function () {
               $('.datetimepicker6').datetimepicker({
               language: $('#hiddenLanguage').text(),
-              pickTime: false
+              pickTime: false,
+              minDate:`0-0-0001`
               });
           });
       	</script>
         <span id="hiddenLanguage" style="display:none"><xed:output value="$CurrentLang" /></span>
     	</xed:if>
       <xed:source uri="mcrobject:{$id}" />
-      <xed:bind xpath="/mycoreobject[@version='2.0']"> 
+      <xed:bind xpath="/mycoreobject[@version='2.0']">
         <span id="journalID" style="display:none">            
           <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />
         </span>

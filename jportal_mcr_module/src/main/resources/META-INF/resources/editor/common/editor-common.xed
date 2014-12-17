@@ -48,7 +48,7 @@
 
   <xed:template id="subtitles">
     <xed:repeat
-      xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']">
+      xpath="subtitles[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/subtitle[@inherited='0'][@form='plain']" min="0" max="20">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.subtitle" buttons="true"
         classification="jportal_class_00000006"  validate="interdependentSelect" />
       <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
@@ -56,10 +56,10 @@
   </xed:template>
 
   <xed:template id="dates">
-    <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']">
+    <xed:repeat xpath="dates[@class='MCRMetaISO8601Date'][@heritable='true'][@notinherit='false']/date[@inherited='0']" min="0" max="2">
       <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.date_label" buttons="true"
         classification="{xedIncParam}"  validate="interdependentSelect" />
-      <jp:template name="textInput" xpath="." selectXpath="@type" validate="interdependentInput" maxlength="128" classDatePick="datetimepicker6"/>
+      <jp:template name="textInput" xpath="." selectXpath="@type" validate="date" maxlength="128" classDatePick="datetimepicker6"/>
     </xed:repeat>
   </xed:template>
 </xed:template>

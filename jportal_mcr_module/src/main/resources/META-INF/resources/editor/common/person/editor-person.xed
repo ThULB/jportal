@@ -26,7 +26,7 @@
     <jp:section title="{i18n:jp.editor.inst.alternativeName}">
 
       <xed:bind xpath="def.alternative[@class='MCRMetaXML'][@heritable='true'][@notinherit='true']">
-        <xed:repeat xpath="alternative[@type='complete'][@inherited='0']">
+        <xed:repeat xpath="alternative[@type='complete'][@inherited='0']" min="0" max="1024">
         	<jp:template name="textInputSm" xpath="lastName" i18n="jp.editor.inst.alternativeName" >
             <jp:template name="textInput" xpath="." i18n="jp.editor.person.lastName" maxlength="128" small="true" />
           </jp:template>
@@ -41,7 +41,7 @@
           </jp:template>
           <xed:cleanup-rule xpath="//alternative[@type='complete']" relevant-if="(string-length(lastName/text()) > 0) or (string-length(firstName/text()) > 0) or (string-length(collocation/text()) > 0) or (string-length(nameAffix/text()) > 0)" />
         </xed:repeat>
-        <xed:repeat xpath="alternative[@type='single'][@inherited='0']">
+        <xed:repeat xpath="alternative[@type='single'][@inherited='0']" min="0" max="1024">
           <jp:template name="textInputSm" xpath="name" >
             <jp:template name="textInput" xpath="." i18n="jp.editor.person.single" maxlength="128" small="true" />
           </jp:template>
@@ -67,18 +67,18 @@
         <jp:template name="selectInput" xpath="@categid" i18n="editormask.person.Lgender" classification="urmel_class_00000001" validate="required" />
       </xed:bind>
 
-      <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']">
+      <xed:repeat xpath="def.contact[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/contact[@inherited='0'][@form='plain']" min="0" max="9">
         <jp:template name="selectInput" xpath="@type" i18n="metaData.headlines.jpinst.contact" buttons="true"
            classification="urmel_class_00000002" validate="interdependentSelect" />
         <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:repeat>
 
-      <xed:repeat xpath="def.role[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/role[@inherited='0'][@form='plain']">
+      <xed:repeat xpath="def.role[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/role[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="textArea" xpath="." i18n="editormask.person.Lrole" buttons="true" />
       </xed:repeat>
 
       <xed:repeat
-        xpath="def.placeOfActivity[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfActivity[@inherited='0'][@form='plain']">
+        xpath="def.placeOfActivity[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/placeOfActivity[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="textInput" xpath="." i18n="editormask.person.LplaceOfActivity" maxlength="128"
           buttons="true" />
       </xed:repeat>
@@ -105,12 +105,12 @@
         <jp:template name="textArea" xpath="." selectXpath="@type" validate="interdependentInput" />
       </xed:bind>
 
-      <xed:repeat xpath="def.link[@class='MCRMetaLink'][@heritable='true'][@notinherit='true']/link[@inherited='0'][@xlink:type='locator']">
+      <xed:repeat xpath="def.link[@class='MCRMetaLink'][@heritable='true'][@notinherit='true']/link[@inherited='0'][@xlink:type='locator']" min="0" max="10">
         <jp:template name="textInput" xpath="@xlink:href" i18n="jp.editor.person.link" maxlength="128" buttons="true" />
       </xed:repeat>
 
       <xed:repeat
-        xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']">
+        xpath="def.identifier[@class='MCRMetaLangText'][@heritable='true'][@notinherit='true']/identifier[@inherited='0'][@form='plain']" min="0" max="10">
         <jp:template name="selectInput" xpath="@type" i18n="editormask.labels.Lidentifier" buttons="true"
            option="true" validate="interdependentSelect">
           <option i18n="metaData.person.gnd" value="gnd" />

@@ -37,7 +37,7 @@ public class MCRJPortalURIGetClass implements URIResolver {
      * alias. The alias is resolved by getting classification ID as value from
      * MCRSession for key=alias
      * 
-     * Syntax: <code>jportal_getClass:XPathWhereToFindInJournalXML
+     * Syntax: <code>jportal_getClass:XPathWhereToFindInJournalXML:journalID
      * 
      * @param uri
      *            URI in the syntax above
@@ -55,12 +55,16 @@ public class MCRJPortalURIGetClass implements URIResolver {
         // get class id
         String journalID = MCRJPortalURIGetJournalID.getID();
         String[] params = uri.split(":");
+
+        
         String classID = MCRJPortalURIGetClassID.getClassID(journalID, params[1]);
 
         // get class as xml
         if (classID == null)
             throw new MCRException("Could not resolve given alias " + uri + " into MCRClassificationID");
-        String classiURI = "classification:editor:-1:children:" + classID;
+//        	String classiURI = "classification:editor:-1:children:" + classID;
+        	String classiURI = "xslStyle:items2options:classification:editor:-1:children:" + classID;
+        
         Element returnXML;
         // not cached
         if (MCRConfiguration.instance().getSystemLastModified() > CACHE_INIT_TIME) {

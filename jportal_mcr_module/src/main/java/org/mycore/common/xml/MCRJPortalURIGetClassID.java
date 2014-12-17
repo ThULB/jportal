@@ -58,8 +58,15 @@ public class MCRJPortalURIGetClassID implements URIResolver {
         if (returnIncludeTag(uri)) {
             String uriVal = INCLUDE_TAG_RETURN_VALUE + classID;
             returnXML.addContent(new Element("include").setAttribute("cacheable", "false").setAttribute("uri", uriVal));
-        } else
-            returnXML.addContent(new Element("hidden").setAttribute("var", params[2]).setAttribute("default", classID));
+        } else {
+        	if(params[2].equals("useXeditor")){
+        		returnXML.addContent(new Element("input").setAttribute("type", "hidden").setAttribute("value", classID));
+        	} else {
+        		returnXML.addContent(new Element("hidden").setAttribute("var", params[2]).setAttribute("default", classID));
+        	}
+        }
+//            returnXML.addContent(new Element("hidden").setAttribute("var", params[2]).setAttribute("default", classID));
+        		
 
         return returnXML;
     }
