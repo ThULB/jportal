@@ -1,6 +1,7 @@
 package fsu.jportal.mets;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -8,6 +9,7 @@ import org.jdom2.JDOMException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.model.Mets;
 import org.mycore.mets.model.files.File;
 import org.mycore.mets.model.files.FileGrp;
@@ -37,7 +39,7 @@ public class MetsTools {
             this.metsFile = (MCRFile)metsFile;
         }
 
-        public void updateFileEntry(MCRFilesystemNode sourceNode, MCRFile target) {
+        public void updateFileEntry(MCRPath sourceNode, MCRPath target) {
             try {
                 File sourceFileMetsEntry = getMetsEntry(sourceNode);
                 PhysicalSubDiv sourceSubDiv = getPhysicalSubDiv(sourceFileMetsEntry);
@@ -59,8 +61,8 @@ public class MetsTools {
             }
         }
 
-        public File getMetsEntry(MCRFilesystemNode fileNode) throws Exception, IOException, JDOMException {
-            String sourcePath = fileNode.getAbsolutePath();
+        public File getMetsEntry(MCRPath fileNode) throws Exception, IOException, JDOMException {
+            String sourcePath = fileNode.toAbsolutePath().toString();
             if(!sourcePath.equals("/")) {
                 sourcePath = sourcePath.substring(1);
             }
@@ -88,12 +90,12 @@ public class MetsTools {
         }
     }
 
-    public static void updateFileEntry(MCRFilesystemNode sourceNode, MCRFile target) {
-        if(sourceNode == null || target == null){
+    public static void updateFileEntry(MCRPath sourceNode, MCRPath target) {
+        if(Files.exists(sourceNode) || Files.exists(target)){
             return;
         }
         
-        String derivateID = sourceNode.getOwnerID();
+        String derivateID = sourceNode.getOwner();
         try {
             MetsContainer metsContainer = new MetsContainer(derivateID);
             metsContainer.updateFileEntry(sourceNode, target);

@@ -218,7 +218,12 @@
 					<span class="glyphicon glyphicon-trash btn-delete btn invisable"></span>
 				</div>
 			</td>
-			<td class="browser-table-file-name">{{name}}</td>
+			{{#temp}}
+				<td class="browser-table-file-name"><input id="temp-folder-{{temp}}" class="input-new" type="text" value=""></td>
+			{{/temp}}
+			{{^temp}}
+				<td class="browser-table-file-name">{{name}}</td>
+			{{/temp}}
 			<td class="browser-table-file-urn">
 				{{#urn}}
 					{{urn}}
@@ -271,20 +276,15 @@
 		</div>
 	</script>
 	
-	
-<!-- 				<td class="upload-preview-overlay hidden" colspan="2"> -->
-<!-- 				<div class="upload-preview-overlay-label">Datei existiert bereits, bitte Aktion wählen</div> -->
-<!-- 				<div class="upload-preview-overlay-button hidden"> -->
-<!-- 					<button type="button" class="btn btn-primary upload-preview-overlay-overwrite btn-overlay">Überschreiben</button> -->
-<!-- 					<button type="button" class="btn btn-danger upload-preview-overlay-discard btn-overlay">Verwerfen</button> -->
-<!-- 				</div> -->
-<!-- 			</td> -->
-
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+ 	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
  	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser.js"></script>
  	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-upload.js"></script>
+ 	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-treeEntry.js"></script>
+	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-navigation.js"></script>
+	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-fileView.js"></script>
  	<script type="text/javascript" src="/js/jp-subselect.js" ></script>
 </body>
 </html>

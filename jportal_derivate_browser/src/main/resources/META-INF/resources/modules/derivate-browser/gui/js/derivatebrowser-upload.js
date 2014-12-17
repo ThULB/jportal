@@ -1,5 +1,4 @@
 function Upload(docID, deriID, path, file) {
-	console.log(file);
 	this.docID = docID;
 	this.deriID = deriID;
 	this.path = path;
@@ -19,14 +18,6 @@ Upload.prototype.getStatus = function() {
 	if (this.file.type.match(/image.*/)){
 		readImg(this.file, $(status).find("img.upload-preview-image"));
 	}
-//	$(status).data("data", data);
-//	$(status).data("filename", file.name);
-//	$(status).data("status", 0);
-//	$(status).data("filepath", path);
-//	$(status).data("deriID", deriID);
-//	$(status).data("size", getReadableSize(file.size,0));
-//	$(status).data("lastMod", file.lastModifiedDate);
-//	$(parent).append(status);
 	return status;
 }
 
@@ -36,6 +27,7 @@ Upload.prototype.getFormData = function() {
     data.append("documentID", this.docID);
     data.append("derivateID", this.deriID);
     data.append("path", this.path);
+    data.append("size", this.rawSize);
     data.append("file", this.file);
 	data.append("overwrite", this.exists);
     return data;
@@ -55,7 +47,8 @@ Upload.prototype.getCompletePath = function() {
 Upload.prototype.getCheckJson = function() {
 	var json ={
 			file: this.name,
-			id: this.getID()
+			id: this.getID(),
+			fileType: this.file.type
 	}
 	return json;
 }

@@ -1,11 +1,11 @@
 package fsu.jportal.resources;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletContext;
@@ -26,21 +26,20 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jdom2.JDOMException;
-import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRJSONManager;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRUsageException;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.frontend.fileupload.MCRUploadHandler;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
-//import org.mycore.urn.hibernate.MCRURN;
-//import org.mycore.urn.services.MCRURNManager;
+
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
@@ -54,11 +53,16 @@ import fsu.jportal.backend.DerivateTools;
 import fsu.jportal.gson.DerivateTypeAdapter;
 import fsu.jportal.gson.FileNodeWraper;
 import fsu.jportal.gson.MCRFilesystemNodeTypeAdapter;
-import fsu.jportal.util.DerivatePath;
 
 @Path("derivatebrowser")
 public class DerivateBrowserResource {
     private MCRJSONManager gsonManager;
+    
+    private static final String dateFormat = "dd.MM.yyyy HH:mm:ss";
+
+    private static final DateFormat dateFormatter = new SimpleDateFormat(dateFormat);
+    
+    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
     
     @Context
     HttpServletRequest request;
@@ -82,20 +86,25 @@ public class DerivateBrowserResource {
         Derivate derivate = new Derivate(derivID);
 
         MCRFilesystemNode node;
+        MCRPath mcrPath = MCRPath.getPath(derivID, path);
         if (path != null && !"".equals(path.trim())) {
             node = derivate.getChildByPath(path);
         } else {
             node = derivate.getRootDir();
         }
-
-        if (node == null) {
+       
+        if (!Files.exists(mcrPath)) {
             return Response.status(Status.NOT_FOUND).build();
         }
-
         String maindoc = derivate.getMaindoc();
         FileNodeWraper wrapper = new FileNodeWraper(node, maindoc);
-        String json = gsonManager.createGson().toJson(wrapper);
-        return Response.ok(json).build();
+        JsonObject json = gsonManager.createGson().toJsonTree(wrapper).getAsJsonObject();
+        if (path != null && !"".equals(path.trim())) {
+            json.addProperty("parentName", derivate.getRootDir().getName());
+            json.addProperty("parentSize", derivate.getRootDir().getSize());
+            json.addProperty("parentLastMod", dateFormatter.format(derivate.getRootDir().getLastModified().getTime()));
+        }
+        return Response.ok(json.toString()).build();
     }
     
      @GET
@@ -110,7 +119,8 @@ public class DerivateBrowserResource {
     @Path("{derivID}{path:(/.*)*}")
     //    @MCRRestrictedAccess(ResourceAccess.class)
     public Response deleteFile(@PathParam("derivID") String derivID, @PathParam("path") String path) {
-        int status =  doDelete(derivID, path);
+        int status;
+        status = DerivateTools.delete(MCRPath.getPath(derivID, path));
         if (status == 1) return Response.ok().build();
         if (status == 2) return Response.status(Status.NOT_FOUND).build();
         return Response.serverError().build();
@@ -127,7 +137,8 @@ public class DerivateBrowserResource {
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonO = jsonArray.get(i).getAsJsonObject();
-            int status = doDelete( jsonO.get("deriID").getAsString(),  jsonO.get("path").getAsString());
+            int status;
+            status = DerivateTools.delete(MCRPath.getPath(jsonO.get("deriID").getAsString(),  jsonO.get("path").getAsString()));
             jsonO.addProperty("status", status);
         }
         return Response.ok(jsonObject.toString()).build();
@@ -142,7 +153,6 @@ public class DerivateBrowserResource {
         return Response.ok().build();
     }
 
-
     @POST
     @Path("rename")
     public Response rename(@QueryParam("file") String file, @QueryParam("name") String name, @QueryParam("mainFile") String start) {
@@ -150,6 +160,7 @@ public class DerivateBrowserResource {
             DerivateTools.rename(file, name);
         }
         catch (Exception e){
+            e.printStackTrace();
             return Response.status(Status.CONFLICT).build();
         }
         if (Boolean.parseBoolean(start)){
@@ -190,11 +201,6 @@ public class DerivateBrowserResource {
         derivate.setMaindoc(path);
 
         return Response.ok().build();
-
-        //        } else {
-        //            response.sendError(HttpServletResponse.SC_FORBIDDEN,
-        //                MessageFormat.format("User has not the \"" + PERMISSION_WRITE + "\" permission on object {0}.", derivID));
-        //        }
     }
     
 //    @GET
@@ -258,6 +264,7 @@ public class DerivateBrowserResource {
         String path = jsonObject.get("path").getAsString();
         Derivate derivate = new Derivate(deriID);
         MCRDirectory node;
+        List<String> fileTyps = CONFIG.getStrings("MCR.Derivate.Upload.SupportedFileTypes");
 //        MCRFilesystemNode node;
         if (path != null && !"".equals(path.trim())) {
             node = (MCRDirectory) derivate.getChildByPath(path);
@@ -266,19 +273,25 @@ public class DerivateBrowserResource {
         }
         for (int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonFile = jsonArray.get(i).getAsJsonObject();
-            if (node.hasChild(jsonFile.get("file").getAsString())){
-                MCRFilesystemNode child = node.getChild(jsonFile.get("file").getAsString());
-                JsonObject childJson = new JsonObject();
-                childJson.addProperty("name", child.getName());
-                childJson.addProperty("size", child.getSize());
-                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-                childJson.addProperty("lastmodified", sdf.format(child.getLastModified().getTime()));
-                jsonFile.addProperty("exists", "1");
-                jsonFile.add("existingFile", childJson);
+            if (fileTyps.contains(jsonFile.get("fileType").getAsString())){
+                if (node.hasChild(jsonFile.get("file").getAsString())){
+                    MCRFilesystemNode child = node.getChild(jsonFile.get("file").getAsString());
+                    JsonObject childJson = new JsonObject();
+                    childJson.addProperty("name", child.getName());
+                    childJson.addProperty("size", child.getSize());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+                    childJson.addProperty("lastmodified", sdf.format(child.getLastModified().getTime()));
+                    jsonFile.addProperty("exists", "1");
+                    jsonFile.add("existingFile", childJson);
+                }
+                else{
+                    jsonFile.addProperty("exists", "0");
+                }
             }
             else{
-                jsonFile.addProperty("exists", "0");
+                jsonFile.addProperty("exists", "2");
             }
+
         }
         return Response.ok(jsonObject.toString()).build();
     }
@@ -286,36 +299,25 @@ public class DerivateBrowserResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("upload")
-    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("file") FormDataContentDisposition header, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite) throws Exception{
-//        if (Boolean.parseBoolean(overwrite)){
+    public Response getUpload(@FormDataParam("file") InputStream inputStream, @FormDataParam("file") FormDataContentDisposition header, @FormDataParam("size") long filesize, @FormDataParam("documentID") String documentID, @FormDataParam("derivateID") String derivateID, @FormDataParam("path") String path, @FormDataParam("overwrite") boolean overwrite){
         if (overwrite){
-            if (doDelete(derivateID, path + "/" + header.getFileName()) != 1){
+            if (DerivateTools.delete(MCRPath.getPath(derivateID, path + "/" + header.getFileName())) != 1){
                 return Response.serverError().build();
             }
         }
-//        Derivate derivate = new Derivate(derivateID + path);
-//        MCRDirectory node = derivate.getRootDir();
-//        if(node.hasChild(header.getFileName())){
-//            return Response.status(Status.CONFLICT).build();
-//        }
         MCRSession session = MCRSessionMgr.getCurrentSession();
         MCRUploadHandler handler = new MCRUploadHandlerIFS(documentID, derivateID, null);
-        handler.startUpload(1);
-        session.commitTransaction();
-        handler.receiveFile(path + "/" + header.getFileName(), inputStream, 0, null);
-        session.beginTransaction();
-        handler.finishUpload();
-        handler.unregister();
-        
-//        DerivatePath fileLocation = new DerivatePath(filePath);
-//        
-//        MCRFilesystemNode file = fileLocation.toFileNode();
-//        try {
-//            saveFile(inputStream,path + "/" + header.getFileName());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return Response.status(Status.CONFLICT).build();
-//        }
+        try {
+            handler.startUpload(1);
+            session.commitTransaction();
+            handler.receiveFile(path + "/" + header.getFileName(), inputStream, filesize, null);
+            session.beginTransaction();
+            handler.finishUpload();
+            handler.unregister();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
         return Response.ok().build();
     }
     
@@ -375,32 +377,5 @@ public class DerivateBrowserResource {
             fileName = path.substring(path.lastIndexOf("/") + 1);
         }
         return MCRURNManager.getURNForFile(derivate, pathToFile, fileName);
-    }
-    
-    
-    private int doDelete(String derivID, String path){
-        if (MCRAccessManager.checkPermission(derivID, "delete")) {
-
-        }
-        MCRFilesystemNode rootNode = MCRFilesystemNode.getRootNode(derivID);
-        if (rootNode == null) {
-            return 2; //NOT_FOUND
-        }
-
-        if (rootNode instanceof MCRDirectory && path != null && !"".equals(path.trim())) {
-            MCRFilesystemNode node = ((MCRDirectory) rootNode).getChildByPath(path);
-            if (node == null) {
-                return 2; //NOT_FOUND
-            }
-
-            node.delete();
-            return 1; //OK
-        }
-        //        } else {
-        //            response.sendError(HttpServletResponse.SC_FORBIDDEN,
-        //                MessageFormat.format("User has not the \"" + PERMISSION_DELETE + "\" permission on object {0}.", derivateId));
-        //        }
-
-        return 0; //SERVER_ERROR
     }
 }

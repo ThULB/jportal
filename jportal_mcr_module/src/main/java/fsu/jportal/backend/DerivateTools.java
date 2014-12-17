@@ -2,6 +2,16 @@ package fsu.jportal.backend;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.CopyOption;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +21,7 @@ import org.mycore.common.MCRUsageException;
 import org.mycore.datamodel.ifs.MCRDirectory;
 import org.mycore.datamodel.ifs.MCRFile;
 import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.urn.hibernate.MCRURN;
 
 import fsu.jportal.mets.MetsTools;
@@ -20,28 +31,60 @@ import fsu.jportal.util.DerivatePath;
 public class DerivateTools {
     static Logger LOGGER = Logger.getLogger(DerivateTools.class);
 
-    private static boolean cp(MCRFilesystemNode source, MCRDirectory targetDir, String newName, Map<MCRFilesystemNode, MCRFile> copyHistory) {
+    private static boolean cp(final MCRPath source, MCRPath targetDir, String newName, final Map<MCRPath, MCRPath> copyHistory) {
         if (newName == null) {
-            newName = source.getName();
+            newName = source.getFileName().toString();
+        }
+        
+        if (!Files.isDirectory(targetDir)){
+            LOGGER.info("cp: " + targetDir + " is not a directory.");
+            return false;
         }
 
-        if (targetDir.hasChild(newName)) {
+        
+        if (Files.exists(targetDir.resolve(newName))) {
             LOGGER.info("cp: " + newName + " allready exists (not copied)");
             return false;
         }
 
         try {
-            if (source instanceof MCRFile) {
-                MCRFile newFile = new MCRFile(newName, targetDir);
-                newFile.setContentFrom(((MCRFile) source).getContentAsInputStream());
-                copyHistory.put(source, newFile);
+            if (Files.isRegularFile(source)) {
+//                MCRFile newFile = new MCRFile(newName, targetDir);
+                Path path = targetDir.resolve(newName);
+//                Path path = Files.createTempFile(targetDir, "", newName);
+//                Path path = targetDir.resolve(newName);
+                Path newPath = Files.copy(source, path, StandardCopyOption.COPY_ATTRIBUTES);
+//                newFile.setContentFrom(((MCRFile) source).getContentAsInputStream());
+                copyHistory.put(source, MCRPath.toMCRPath(newPath));
             } else {
-                MCRDirectory newDir = new MCRDirectory(newName, targetDir);
-
-                MCRFilesystemNode[] children = ((MCRDirectory) source).getChildren();
-                for (MCRFilesystemNode child : children) {
-                    cp(child, newDir, null, copyHistory);
-                }
+//                MCRDirectory newDir = new MCRDirectory(newName, targetDir);
+                final Path mcrPath = Files.createDirectory(targetDir.resolve(newName));
+                Files.walkFileTree(source, new SimpleFileVisitor<Path>(){
+                    @Override
+                    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                        Path tempPath = mcrPath.resolve(source.relativize(dir));
+                        try {
+                            Files.copy(dir, tempPath);
+                        } catch (FileAlreadyExistsException e) {
+                            if (!Files.isDirectory(tempPath)){
+                                throw e;
+                            }
+                        }
+                        copyHistory.put(MCRPath.toMCRPath(dir), MCRPath.toMCRPath(tempPath));
+                        return super.preVisitDirectory(dir, attrs);
+                    }
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        Path tempPath = mcrPath.resolve(source.relativize(file));
+                        Files.copy(file, tempPath, StandardCopyOption.COPY_ATTRIBUTES);
+                        copyHistory.put(MCRPath.toMCRPath(file), MCRPath.toMCRPath(tempPath));
+                        return super.visitFile(file, attrs);
+                    }                    
+                });
+//                MCRFilesystemNode[] children = ((MCRDirectory) source).getChildren();
+//                for (MCRFilesystemNode child : children) {
+//                    cp(child, newDir, null, copyHistory);
+//                }
             }
             return true;
         } catch (MCRPersistenceException | IOException e) {
@@ -57,34 +100,41 @@ public class DerivateTools {
             LOGGER.info("Usage: copy {path_to_file} {new_path}");
         }
 
-        DerivatePath sourceLocation = new DerivatePath(sourcePath.trim());
+//        DerivatePath sourceLocation = new DerivatePath(sourcePath.trim());
 
         try {
-            MCRFilesystemNode sourceNode = sourceLocation.toFileNode();
-
-            if (sourceNode == null) {
+            String[] sourcePathArray = sourcePath.split(":");
+            MCRPath sourceNode = MCRPath.getPath(sourcePathArray[0], sourcePathArray[1]);
+            
+            if (!Files.exists(sourceNode)) {
                 LOGGER.info("cp: source " + sourcePath + " does not exists (not copied)");
                 return false;
             }
             
 
-            DerivatePath targetLocation = new DerivatePath(targetPath.trim());
-            MCRDirectory targetDir = getTargetDir(targetLocation);
+//            DerivatePath targetLocation = new DerivatePath(targetPath.trim());
+//            MCRDirectory targetDir = getTargetDir(targetLocation);
+            String[] targetPathArray = targetPath.split(":");
+            MCRPath targetNode = MCRPath.getPath(targetPathArray[0], targetPathArray[1]);
 
-            if (targetDir == null) {
-                LOGGER.info("cp: target " + targetLocation.getAbsolutePath() + " does not exists (not copied)");
+            if (!Files.exists(targetNode)) {
+                LOGGER.info("cp: target " + targetPath + " does not exists (not copied)");
                 return false;
             }
+            String newFileName = null;
+            if (!Files.isDirectory(targetNode)){
+                newFileName = targetNode.getFileName().toString();
+            }                    
+//            String newFileName = targetDir.getName().equals(targetLocation.getFileName()) ? null : targetLocation
+//                    .getFileName();
 
-            String newFileName = targetDir.getName().equals(targetLocation.getFileName()) ? null : targetLocation
-                    .getFileName();
-
-            Map<MCRFilesystemNode, MCRFile> copyHistory = new HashMap<MCRFilesystemNode, MCRFile>();
-            if(cp(sourceNode, targetDir, newFileName, copyHistory)){
+            Map<MCRPath, MCRPath> copyHistory = new HashMap<MCRPath, MCRPath>();
+            if(cp(sourceNode, targetNode, newFileName, copyHistory)){
                 if (delAfterCopy){
-                    Derivate derivate = new Derivate(sourceNode.getOwnerID());
+                    Derivate derivate = new Derivate(sourceNode.getOwner());
                     moveAttachedData(derivate, copyHistory);
-                    sourceNode.delete();
+//                    sourceNode.delete();
+                    delete(sourceNode);
                 }
                 return true;
             }
@@ -99,14 +149,14 @@ public class DerivateTools {
         return false;
     }
 
-    private static void moveAttachedData(Derivate srcDerivate, Map<MCRFilesystemNode, MCRFile> copyHistory) {
+    private static void moveAttachedData(Derivate srcDerivate, Map<MCRPath, MCRPath> copyHistory) {
         String maindoc = srcDerivate.getMaindoc();
-        for (MCRFilesystemNode sourceNode : copyHistory.keySet()) {
-            MCRFile target = copyHistory.get(sourceNode);
+        for (MCRPath sourceNode : copyHistory.keySet()) {
+            MCRPath target = copyHistory.get(sourceNode);
             
             String sourcePath = getPathNoLeadingRoot(sourceNode);
             if(sourcePath.equals(maindoc)){
-                Derivate targetDerivate = new Derivate(target.getOwnerID());
+                Derivate targetDerivate = new Derivate(target.getOwner());
                 targetDerivate.setMaindoc(getPathNoLeadingRoot(target));
             }
             
@@ -115,8 +165,8 @@ public class DerivateTools {
         }
     }
 
-    public static String getPathNoLeadingRoot(MCRFilesystemNode node) {
-        String nodePath = node.getAbsolutePath();
+    public static String getPathNoLeadingRoot(MCRPath node) {
+       String nodePath = node.getOwnerRelativePath();
         if(!node.equals("/")){
             nodePath = nodePath.substring(1);
         }
@@ -141,19 +191,69 @@ public class DerivateTools {
         return null;
     }
 
-    public static void rename(String filePath, String newName) throws FileNotFoundException {
-        DerivatePath fileLocation = new DerivatePath(filePath);
+    public static void rename(String filePath, String newName) throws IOException {
+//        DerivatePath fileLocation = new DerivatePath(filePath);
         
-        MCRFilesystemNode file = fileLocation.toFileNode();
-        if (file == null) {
+//        MCRFilesystemNode file = fileLocation.toFileNode();
+        String[] pathArray = filePath.split(":");
+        final Path source = MCRPath.getPath(pathArray[0], pathArray[1]);
+        final Path target = source.resolveSibling(newName);
+        if (!Files.exists(source)) {
             throw new FileNotFoundException(filePath);
         }
         
-        MCRURN urn = URNTools.getURNForFile(file);
-        file.setName(newName);
         
+        
+        if (!Files.isDirectory(source)){
+            MCRURN urn = URNTools.getURNForFile(MCRPath.toMCRPath(source));
+            Files.move(source, target);
+            if(urn != null){
+                URNTools.updateURNFileName(urn, null, newName);
+            }
+        }
+        else{
+            final Path mcrPath = Files.createDirectories(target);
+            Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
+
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    Path tempPath = mcrPath.resolve(source.relativize(dir));
+                    try{
+                        Files.copy(dir, tempPath);
+                    } catch (FileAlreadyExistsException e) {
+                        if (!Files.isDirectory(tempPath)){
+                            throw e;
+                        }
+                    }
+                    return super.preVisitDirectory(dir, attrs);
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    Path tempPath = mcrPath.resolve(source.relativize(file));
+                    mvSingleFile(file, tempPath);
+                    return super.visitFile(file, attrs);
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return super.postVisitDirectory(dir, exc);
+                }
+                
+            });
+        }
+    }
+    
+    private static void mvSingleFile(Path src, Path tgt) throws IOException{
+        MCRURN urn = URNTools.getURNForFile(MCRPath.toMCRPath(src));
+        Files.move(src, tgt);
         if(urn != null){
-            URNTools.updateURNFileName(urn, null, newName);
+            String path = MCRPath.toMCRPath(tgt).getParent().getOwnerRelativePath();
+            if(!path.endsWith("/")){
+                path += "/";
+            }
+            URNTools.updateURNFileName(urn, path , tgt.getFileName().toString());
         }
     }
 
@@ -166,22 +266,68 @@ public class DerivateTools {
     }
     
     public static boolean mkdir(String path){
-        DerivatePath dirPath = new DerivatePath(path);
-        MCRFilesystemNode dirNode = dirPath.toFileNode();
+//        DerivatePath dirPath = new DerivatePath(path);
+//        MCRFilesystemNode dirNode = dirPath.toFileNode();
+        String[] pathArray = path.split(":");
+        MCRPath mcrPath = MCRPath.getPath(pathArray[0], pathArray[1]);
         
-        if(dirNode != null){
-            LOGGER.info("mkdir: " + dirPath.getAbsolutePath() + " allready exists.");
+        if(Files.exists(mcrPath)){
+            LOGGER.info("mkdir: " + mcrPath.getFileName().toString() + " allready exists.");
             return false;
         }
         
-        MCRFilesystemNode parentNode = dirPath.getParent().toFileNode();
+        MCRPath parentPath = mcrPath.getParent();
+//        MCRFilesystemNode parentNode = dirPath.getParent().toFileNode();
         
-        if(parentNode instanceof MCRDirectory){
-            new MCRDirectory(dirPath.getFileName(), (MCRDirectory) parentNode);
+        if(Files.isDirectory(parentPath)){
+            try {
+                Files.createDirectory(mcrPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+//            new MCRDirectory(dirPath.getFileName(), (MCRDirectory) parentNode);
             return true;
         } else {
-            LOGGER.info("mkdir: " + dirPath.getParentPath() + " does not exists or is not a directory.");
+            LOGGER.info("mkdir: " + parentPath.getFileName().toString() + " does not exists or is not a directory.");
             return false;
         }
+    }
+    
+    public static int delete(MCRPath mcrPath){
+        if (!Files.exists(mcrPath)) {
+            return 2; //NOT_FOUND
+        }
+        
+        if (!Files.isDirectory(mcrPath)) {
+            try {
+                Files.delete(mcrPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return 0;
+            }
+            return 1; //OK
+        }
+        try {
+            Files.walkFileTree(mcrPath, new SimpleFileVisitor<java.nio.file.Path>(){
+
+                @Override
+                public FileVisitResult visitFile(java.nio.file.Path file, BasicFileAttributes attrs) throws IOException {
+                    Files.delete(file);
+                    return super.visitFile(file, attrs);
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(java.nio.file.Path dir, IOException exc) throws IOException {
+                    Files.delete(dir);
+                    return super.postVisitDirectory(dir, exc);
+                }
+                
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 1; //OK
     }
 }
