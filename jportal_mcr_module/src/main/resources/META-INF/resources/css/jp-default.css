@@ -1335,7 +1335,7 @@ textarea {
 .jp-layout-maintitle .jp-layout-triangle:before {
   border-color: #dbdbdb transparent transparent transparent ;
   left: 1.3em;
-  top: 0.85em; 
+  top: 0.85em;
   border-width: 13px;
 }
 
@@ -1348,6 +1348,15 @@ textarea {
 	border-color: #fff transparent transparent transparent !important;
 	top: 0.75em;
 	z-index: 1;
+}
+
+@media (max-width: 768px) {
+	.jp-layout-maintitle .jp-layout-triangle:before {
+		top: 1.1em;
+	}
+	.jp-layout-maintitle .jp-layout-triangle:nth-child(2):before{
+		top: 1em;
+	}
 }
 
 .metadata .jp-layout-derivateList > .jp-layout-derivateWrapper {

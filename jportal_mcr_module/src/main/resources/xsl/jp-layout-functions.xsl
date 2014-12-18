@@ -171,7 +171,7 @@
     </xsl:variable>
     <xsl:variable name="resultInfo" select="xalan:nodeset($resultInfoXML)" />
 
-    <xsl:if test="$resultInfo/pages &gt; 1">
+    <xsl:if test="$resultInfo/pages &gt; 1 or ($resultInfo/numFound &lt; 10 and $resultInfo/start != 0)">
       <xsl:variable name="start" select="$resultInfo/start" />
       <xsl:variable name="rows" select="$resultInfo/rows" />
 
