@@ -33,44 +33,55 @@
 
     <jp:section title="{i18n:metaData.headlines.contantdiscr}">
       <jp:template name="title" i18n="metaData.headlines.contantdiscr" />
-        <xed:if test="$journal/metadata/hidden_classiVol1/hidden_classiVol1">
-          <xed:repeat xpath="volContentClassis1[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi1[@inherited='0']" min="0" max="30">
-            <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1" buttons="true" loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1"/>
-  	        <xed:bind xpath="@classid">
-              <xed:include cacheable="false" uri="xClassificationID:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1" />
-  	        </xed:bind>
-  	      </xed:repeat>
-        </xed:if>
-	    <xed:repeat xpath="volContentClassis2[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi2[@inherited='0']" min="0" max="30">
-	      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol2/hidden_classiVol2" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2"/>
-	    	<xed:bind xpath="@classid">
-	    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol2/hidden_classiVol2:useXeditor" />
-	    	</xed:bind>
-	    </xed:repeat>
-	    <xed:repeat xpath="volContentClassis3[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi3[@inherited='0']" min="0" max="30">
-	      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol3/hidden_classiVol3" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3"/>
-	    	<xed:bind xpath="@classid">
-	    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol3/hidden_classiVol3:useXeditor" />
-	    	</xed:bind>
-	    </xed:repeat>
-	    <xed:repeat xpath="volContentClassis4[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi4[@inherited='0']" min="0" max="30">
-	      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol4/hidden_classiVol4" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4"/>
-	    	<xed:bind xpath="@classid">
-	    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol4/hidden_classiVol4:useXeditor" />
-	    	</xed:bind>
-	    </xed:repeat>
-	    <xed:repeat xpath="volContentClassis5[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi5[@inherited='0']" min="0" max="30">
-	      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol5/hidden_classiVol5" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5"/>
-	    	<xed:bind xpath="@classid">
-	    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol5/hidden_classiVol5:useXeditor" />
-	    	</xed:bind>
-	    </xed:repeat>
-	    <xed:repeat xpath="volContentClassis6[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi6[@inherited='0']" min="0" max="30">
-	      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol6/hidden_classiVol6" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6"/>
-	    	<xed:bind xpath="@classid">
-	    		<xed:include cacheable="true" uri="jportal_getClassID:hidden_classiVol6/hidden_classiVol6:useXeditor" />
-	    	</xed:bind>
-	    </xed:repeat>
+
+      <xed:if test="$journal/metadata/hidden_classiVol1/hidden_classiVol1">
+        <xed:repeat xpath="volContentClassis1[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi1[@inherited='0']" min="0" max="30">
+          <jp:template name="selectInput" xpath="@categid" list="xClassification:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1" buttons="true" loadLabel="xClassificationLabel:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1"/>
+ 	        <xed:bind xpath="@classid">
+            <xed:include cacheable="false" uri="xClassificationID:{$journal/@ID}:hidden_classiVol1/hidden_classiVol1" />
+ 	        </xed:bind>
+ 	      </xed:repeat>
+      </xed:if>
+      <xed:if test="$journal/metadata/hidden_classiVol2/hidden_classiVol2">
+		    <xed:repeat xpath="volContentClassis2[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi2[@inherited='0']" min="0" max="30">
+		      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol2/hidden_classiVol2" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol2/hidden_classiVol2"/>
+		    	<xed:bind xpath="@classid">
+		    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol2/hidden_classiVol2:useXeditor" />
+		    	</xed:bind>
+		    </xed:repeat>
+		  </xed:if>
+		  <xed:if test="$journal/metadata/hidden_classiVol3/hidden_classiVol3">
+		    <xed:repeat xpath="volContentClassis3[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi3[@inherited='0']" min="0" max="30">
+		      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol3/hidden_classiVol3" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol3/hidden_classiVol3"/>
+		    	<xed:bind xpath="@classid">
+		    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol3/hidden_classiVol3:useXeditor" />
+		    	</xed:bind>
+		    </xed:repeat>
+		  </xed:if>
+		  <xed:if test="$journal/metadata/hidden_classiVol4/hidden_classiVol4">
+		    <xed:repeat xpath="volContentClassis4[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi4[@inherited='0']" min="0" max="30">
+		      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol4/hidden_classiVol4" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol4/hidden_classiVol4"/>
+		    	<xed:bind xpath="@classid">
+		    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol4/hidden_classiVol4:useXeditor" />
+		    	</xed:bind>
+		    </xed:repeat>
+		  </xed:if>
+		  <xed:if test="$journal/metadata/hidden_classiVol5/hidden_classiVol5">
+		    <xed:repeat xpath="volContentClassis5[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi5[@inherited='0']" min="0" max="30">
+		      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol5/hidden_classiVol5" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol5/hidden_classiVol5"/>
+		    	<xed:bind xpath="@classid">
+		    		<xed:include cacheable="false" uri="jportal_getClassID:hidden_classiVol5/hidden_classiVol5:useXeditor" />
+		    	</xed:bind>
+		    </xed:repeat>
+		  </xed:if>
+		  <xed:if test="$journal/metadata/hidden_classiVol6/hidden_classiVol6">
+		    <xed:repeat xpath="volContentClassis6[@class='MCRMetaClassification'][@heritable='false'][@notinherit='false']/volContentClassi6[@inherited='0']" min="0" max="30">
+		      <jp:template name="selectInput" xpath="@categid" list="jportal_getClass:hidden_classiVol6/hidden_classiVol6" buttons="true" loadLabel="jportal_getClassLabel:getFromJournal:hidden_classiVol6/hidden_classiVol6"/>
+		    	<xed:bind xpath="@classid">
+		    		<xed:include cacheable="true" uri="jportal_getClassID:hidden_classiVol6/hidden_classiVol6:useXeditor" />
+		    	</xed:bind>
+		    </xed:repeat>
+		  </xed:if>
 
       <xed:repeat xpath="abstracts[@class='MCRMetaLangText'][@heritable='false'][@notinherit='false']/abstract[@inherited='0'][@form='plain']" min="0" max="3">
         <jp:template name="textArea" xpath="." i18n="editormask.labels.abstract" buttons="true" />

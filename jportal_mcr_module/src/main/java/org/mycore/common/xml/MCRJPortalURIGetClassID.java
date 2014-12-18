@@ -37,6 +37,11 @@ public class MCRJPortalURIGetClassID implements URIResolver {
      *       <hidden var="XPath2BeFilled" default="classID" />
      *  </dummyRoot>
      *
+     * if $XpathToBeFilled = "useXeditor"
+     * <dummyRoot>
+     *			 <input type="hidden" value="classID" />
+     * <dummyRoot>
+     *
      */
     public Element resolveElement(String uri) {
         LOGGER.debug("start resolving " + uri);
@@ -51,7 +56,7 @@ public class MCRJPortalURIGetClassID implements URIResolver {
         String[] params = uri.split(":");
         String classID = getClassID(journalID, params[1]);
         if (classID == null)
-            throw new MCRException("Could not resolve given alias " + uri + " into MCRClassificationID");
+        		throw new MCRException("Could not resolve given alias " + uri + " into MCRClassificationID");
 
         // answer xml
         Element returnXML = new Element("dummyRoot");

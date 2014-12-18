@@ -61,8 +61,10 @@ public class MCRJPortalURIGetClass implements URIResolver {
 
         // get class as xml
         if (classID == null)
-            throw new MCRException("Could not resolve given alias " + uri + " into MCRClassificationID");
-//        	String classiURI = "classification:editor:-1:children:" + classID;
+        		throw new MCRException("Could not resolve given alias " + uri + " into MCRClassificationID");
+        //classification:editor:-1:children: -> we get <items>
+        //  String classiURI = "classification:editor:-1:children:" + classID;
+        //xslStyle:items2options:classification:editor:-1:children: we get <option>
         	String classiURI = "xslStyle:items2options:classification:editor:-1:children:" + classID;
         
         Element returnXML;
