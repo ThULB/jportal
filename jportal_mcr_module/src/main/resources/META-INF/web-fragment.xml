@@ -7,10 +7,6 @@
 
   <name>jportal_mcr_module</name>
 
-  <session-config>
-    <session-timeout>60</session-timeout>
-  </session-config>
-
   <!-- **************************************************************** -->
   <!-- JPortal Servlet Mapping -->
   <!-- **************************************************************** -->
