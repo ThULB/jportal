@@ -3,14 +3,18 @@
  */
 package fsu.jportal.laws.frontend.mets;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import javax.activation.MimetypesFileTypeMap;
 
-import org.mycore.common.config.MCRConfiguration;
-import org.mycore.datamodel.ifs.MCRDirectory;
-import org.mycore.datamodel.ifs.MCRFilesystemNode;
+import org.mycore.datamodel.niofs.MCRPath;
 import org.mycore.mets.misc.LogicalIdProvider;
 import org.mycore.mets.model.MCRMETSGenerator;
 import org.mycore.mets.model.Mets;
@@ -34,47 +38,58 @@ import org.mycore.mets.tools.MCRMetsSave;
 
 /**
  * @author shermann
+ * @author tchef
  */
 public class LawCollectionMETSGenerator extends MCRMETSGenerator {
-    
+
     @Override
-    public Mets getMETS(MCRDirectory dir, Set<MCRFilesystemNode> ignoreNodes) {
-        MCRFilesystemNode[] nodes = dir.getChildren(MCRDirectory.SORT_BY_NAME_IGNORECASE);
+    public Mets getMETS(MCRPath dir, Set<MCRPath> ignoreNodes) throws IOException {
+        final String metsFile = MCRMetsSave.getMetsFileName();
+        SortedSet<Path> files = new TreeSet<>();
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+            for (Path curPath : stream) {
+                if (!curPath.getFileName().toString().equals(metsFile)) {
+                    files.add(curPath);
+                }
+            }
+        }
 
         // init the mets document
-        Mets mets = initMets(dir.getOwnerID(), nodes[0].getName());
-        PhysicalStructMap physicalStructMap = (PhysicalStructMap)mets.getStructMap(PhysicalStructMap.TYPE);
-        LogicalStructMap logicalStructMap = (LogicalStructMap)mets.getStructMap(LogicalStructMap.TYPE);
+        Mets mets = initMets(dir.getOwner(), files.first().getFileName().toString());
+        PhysicalStructMap physicalStructMap = (PhysicalStructMap) mets.getStructMap(PhysicalStructMap.TYPE);
+        LogicalStructMap logicalStructMap = (LogicalStructMap) mets.getStructMap(LogicalStructMap.TYPE);
 
         LogicalIdProvider idProvider = new LogicalIdProvider("log_", 6);
         LogicalSubDiv logDiv = null;
         int logicalOrder = 0;
-        String metsFile = MCRMetsSave.getMetsFileName();
+
+        Path[] nodes = files.toArray(new Path[files.size()]);
 
         for (int i = 0; i < nodes.length; i++) {
-            MCRFilesystemNode node = nodes[i];
-            String filename = node.getName();
+            Path node = nodes[i];
+            String filename = node.getFileName().toString();
             if (filename.equals(metsFile)) {
                 continue;
             }
             // add the file to the filesection and filegrp
             File file = addFileToFileSection(filename, mets);
             // add file to the physical struct map
-            PhysicalSubDiv physIdv = addFileToPhysicalStructMap(physicalStructMap, file, i+1);
+            PhysicalSubDiv physIdv = addFileToPhysicalStructMap(physicalStructMap, file, i + 1);
             // now the tricky part, add file to logical struct map
             String[] filenameParts = filename.split("_");
 
             if (logDiv == null) {
-                logDiv = new LogicalSubDiv(idProvider.getNextId(), DFGTypeProvider.getDFGType(filenameParts[3]), LabelProvider.getLabel(filenameParts[3]), ++logicalOrder);
+                logDiv = new LogicalSubDiv(idProvider.getNextId(), DFGTypeProvider.getDFGType(filenameParts[3]),
+                    LabelProvider.getLabel(filenameParts[3]), ++logicalOrder);
                 logicalStructMap.getDivContainer().add(logDiv);
             }
             // add file to smlink
             mets.getStructLink().addSmLink(new SmLink(logDiv.getId(), physIdv.getId()));
 
             // is there a file after the current?
-            if (i < nodes.length - 1 && !nodes[i + 1].getName().equals(metsFile)) {
+            if (i < nodes.length - 1) {
                 // set log div to null if condition applies
-                if (!(nodes[i + 1].getName().split("_")[3].equals(filenameParts[3]))) {
+                if (!(nodes[i + 1].getFileName().toString().split("_")[3].equals(filenameParts[3]))) {
                     logDiv = null;
                 }
             }
@@ -94,7 +109,8 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
      * @return the {@link PhysicalSubDiv} created
      */
     private PhysicalSubDiv addFileToPhysicalStructMap(PhysicalStructMap physicalStructMap, File file, int order) {
-        PhysicalSubDiv div = new PhysicalSubDiv(PhysicalSubDiv.ID_PREFIX + file.getId(), PhysicalSubDiv.TYPE_PAGE, order);
+        PhysicalSubDiv div = new PhysicalSubDiv(PhysicalSubDiv.ID_PREFIX + file.getId(), PhysicalSubDiv.TYPE_PAGE,
+            order);
         div.add(new Fptr(file.getId()));
         physicalStructMap.getDivContainer().add(div);
         return div;
@@ -113,7 +129,7 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
         // create file ref
         UUID uuid = UUID.randomUUID();
         File file = new File(FileGrp.USE_MASTER + uuid, new MimetypesFileTypeMap().getContentType(filename));
-        
+
         FLocat fLoc = new FLocat(LOCTYPE.URL, filename);
         file.setFLocat(fLoc);
         // add file to group
@@ -155,7 +171,8 @@ public class LawCollectionMETSGenerator extends MCRMETSGenerator {
         String authority = LabelProvider.getLabel(fNameParts[1]);
         String year = fNameParts[2];
         String label = authority + " - " + year;
-        LogicalDiv logDivContainer = new LogicalDiv("log_" + derivateId, "monograph", label, 1, amdSec.getId(), dmdSec.getId());
+        LogicalDiv logDivContainer = new LogicalDiv("log_" + derivateId, "monograph", label, 1, amdSec.getId(),
+            dmdSec.getId());
         logDivContainer.setOrder(1);
         logicalStructMp.setDivContainer(logDivContainer);
 
