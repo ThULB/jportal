@@ -714,10 +714,6 @@ p.jp-layout-metadata-list {
 	content: "; ";
 }
 
-.jp-layout-derivateList ~ .jp-layout-metadaInSearchResults {
-	margin-top: 20px;
-}
-
 #artList .col-md-2.jp-layout-derivateList.pull-left{
 	padding: 0 1em 0 0;
 }
@@ -1318,10 +1314,6 @@ textarea {
 	#resultList > .col-sm-3{
 		border-right: 1px solid #9c9e9f;
 		padding-left: 0;
-	}
-	
-	#artList li .metadata, #resultList .metadata {
-		float: left;
 	}
 
 }
