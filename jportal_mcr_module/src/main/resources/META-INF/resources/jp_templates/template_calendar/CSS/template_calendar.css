@@ -15,8 +15,10 @@
 .keywords > ul {
     padding-left: 0px !important;
 }
+
 .keywords ul {
     padding-left: 20px;
+    list-style-type: none;
 }
 .keywords .placeholder {
 	background-position: left;
