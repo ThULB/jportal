@@ -60,5 +60,5 @@ update permission delete-derivate for id default with rulefile xml/grant-derivat
 
 update permission administrate-jportal for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission create-class for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
-update permission administrate-user for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
+update permission administrate-users for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor
 update permission create-user for id POOLPRIVILEGE with rulefile xml/grant-supervisor.xml described by supervisor

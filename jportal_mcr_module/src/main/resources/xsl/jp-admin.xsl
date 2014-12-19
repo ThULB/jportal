@@ -18,17 +18,22 @@
   </xsl:template>
 
   <xsl:template name="jp.admin.show">
+    <xsl:variable name="isAdmin" select="mcrxml:isCurrentUserInRole('admin')" />
     <h2>Editoren</h2>
     <ul>
-      <li>
-        <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
-      </li>
+      <xsl:if test="$isAdmin">
+        <li>
+          <a href="{$WebApplicationBaseURL}rsc/ACLE/start">ACL-Editor</a>
+        </li>
+      </xsl:if>
       <li>
         <a href="{$WebApplicationBaseURL}jp-classeditor.xml">Klassifikations Editor</a>
       </li>
     </ul>
-    <h2>WebCLI</h2>
-    <input type="button" value="Start" onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+    <xsl:if test="$isAdmin">
+      <h2>WebCLI</h2>
+      <input type="button" value="Start" onclick="window.open(jp.baseURL + 'modules/webcli/start.xml','','width=900,height=900,resizable,locationbar=false,menubar=false,personalbar=false,toolbar=false');"/>
+    </xsl:if>
     <h2>Benutzer</h2>
     <ul>
       <li>
@@ -41,17 +46,19 @@
         <a href="{$WebApplicationBaseURL}authorization/roles-editor.xml">Gruppen verwalten</a>
       </li>
     </ul>
-    <h2>Sitzungen</h2>
-    <ul>
-      <li>
-        <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
-      </li>
-    </ul>
-    <h2>Einstellungen</h2>
-    <ul>
-      <li>
-        <a href="{$WebApplicationBaseURL}jp-globalmessage-editor.xml">Globale Nachricht Bearbeiten</a>
-      </li>
-    </ul>
+    <xsl:if test="$isAdmin">
+      <h2>Sitzungen</h2>
+      <ul>
+        <li>
+          <a href="{$WebApplicationBaseURL}servlets/MCRSessionListingServlet">Aktive Sitzungen</a>
+        </li>
+      </ul>
+      <h2>Einstellungen</h2>
+      <ul>
+        <li>
+          <a href="{$WebApplicationBaseURL}jp-globalmessage-editor.xml">Globale Nachricht Bearbeiten</a>
+        </li>
+      </ul>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
