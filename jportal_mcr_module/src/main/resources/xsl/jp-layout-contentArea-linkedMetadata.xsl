@@ -16,10 +16,10 @@
   </xsl:template>
 
   <xsl:template mode="linkedObjects.result" match="/response[result/@numFound &gt; 0]">
-    <dt>
+    <dt class="col-sm-4">
       <xsl:apply-templates mode="linkedObjects.result.label" select="lst[@name = 'responseHeader']/lst[@name = 'params']" />
     </dt>
-    <dd class="linked">
+    <dd class="col-sm-8 linked">
       <ul>
         <xsl:apply-templates mode="linkedObjects.result.list" select="result/doc" />
         <xsl:apply-templates mode="linkedObjects.result.more" select="." />
@@ -38,15 +38,19 @@
   <xsl:template mode="linkedObjects.result.list" match="doc">
     <xsl:variable name="objID" select="str[@name='id']" />
     <li>
-      <a href="{$WebApplicationBaseURL}receive/{$objID}" class="jp-layout-clickLabel">
-        <xsl:call-template name="shortenString">
-          <xsl:with-param name="string" select="str[@name='maintitle']" />
-          <xsl:with-param name="length" select="50" />
-        </xsl:call-template>
-      </a>
-      <xsl:call-template name="resultListBreadcrumb">
-        <xsl:with-param name="objID" select="$objID" />
-      </xsl:call-template>
+      <ol class="jp-layout-hit-breadcrumb breadcrumb">
+        <li>
+          <b>
+            <a href="{$WebApplicationBaseURL}receive/{$objID}">
+              <xsl:call-template name="shortenString">
+                <xsl:with-param name="string" select="str[@name='maintitle']" />
+                <xsl:with-param name="length" select="50" />
+              </xsl:call-template>
+            </a>
+          </b>
+        </li>
+        <xsl:apply-templates mode="jp.printListEntry" select="document(concat('parents:',$objID))/parents/parent" />
+      </ol>
     </li>
   </xsl:template>
 
