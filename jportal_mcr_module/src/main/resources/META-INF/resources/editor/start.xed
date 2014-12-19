@@ -3,63 +3,70 @@
 <MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor">
   <section xml:lang="all">
     <xed:form>
-    	<xed:if test="$type != 'jpinst'">
-	    	<link href="{$WebApplicationBaseURL}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
-				<script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js"></script> 
-				<script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
-				<script type="text/javascript">
-          $(function () {
-              $('.datetimepicker6').datetimepicker({
-              language: $('#hiddenLanguage').text(),
-              pickTime: false,
-              minDate:`0-0-0001`
+      <xed:load-resource name="acl" uri="acl:object:{$action}-{$type}" />
+      <xed:choose>
+        <xed:when test="$acl/@permission = 'true'">
+          <xed:if test="$type != 'jpinst'">
+            <link href="{$WebApplicationBaseURL}bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen" type="text/css" />
+            <script type="text/javascript" src="{$WebApplicationBaseURL}moment/min/moment-with-locales.js"></script>
+            <script type="text/javascript" src="{$WebApplicationBaseURL}bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+            <script type="text/javascript">
+              $(function () {
+                $('.datetimepicker6').datetimepicker({
+                  language: $('#hiddenLanguage').text(),
+                  pickTime: false,
+                  minDate:`0-0-0001`
+                });
               });
-          });
-      	</script>
-        <span id="hiddenLanguage" style="display:none"><xed:output value="$CurrentLang" /></span>
-    	</xed:if>
-      <xed:source uri="mcrobject:{$id}" />
-      <xed:bind xpath="/mycoreobject[@version='2.0']">
-        <span id="journalID" style="display:none">            
-          <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />
-        </span>
-        <xed:bind xpath="@xsi:noNamespaceSchemaLocation" initially="datamodel-{$type}.xsd" />
-        <xed:bind xpath="@ID" initially="jportal_{$type}_00000000" />
-        <xed:bind xpath="@label" initially="jportal_{$type}_00000000" />
-        <xed:bind xpath="structure">
-          <xed:if test="$parent">
-            <xed:bind xpath="parents[@class='MCRMetaLinkID']/parent[@inherited='0'][@xlink:type='locator']">
-              <xed:bind xpath="@xlink:href" initially="{$parent}" />
-            </xed:bind>
+            </script>
+            <span id="hiddenLanguage" style="display:none">
+              <xed:output value="$CurrentLang" />
+            </span>
           </xed:if>
-        </xed:bind>
-        <xed:bind xpath="metadata">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h2 id="xeditor-title" class="text-center">
-                <xed:output i18n="jp.xeditor.{$type}.{$action}" />
-              </h2>
-            </div>
-            <div class="panel-body">
-              <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed"
-                ref="edit_{$type}" />
-              <div class="col-md-11 text-right">
-                <div class="col-md-11">
-                  <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed"
-                    ref="button_cancel" />
-                  <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed"
-                    ref="button_{$action}" />
+          <xed:source uri="mcrobject:{$id}" />
+          <xed:bind xpath="/mycoreobject[@version='2.0']">
+            <span id="journalID" style="display:none">
+              <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="journalID" />
+            </span>
+            <xed:bind xpath="@xsi:noNamespaceSchemaLocation" initially="datamodel-{$type}.xsd" />
+            <xed:bind xpath="@ID" initially="jportal_{$type}_00000000" />
+            <xed:bind xpath="@label" initially="jportal_{$type}_00000000" />
+            <xed:bind xpath="structure">
+              <xed:if test="$parent">
+                <xed:bind xpath="parents[@class='MCRMetaLinkID']/parent[@inherited='0'][@xlink:type='locator']">
+                  <xed:bind xpath="@xlink:href" initially="{$parent}" />
+                </xed:bind>
+              </xed:if>
+            </xed:bind>
+            <xed:bind xpath="metadata">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 id="xeditor-title" class="text-center">
+                    <xed:output i18n="jp.xeditor.{$type}.{$action}" />
+                  </h2>
+                </div>
+                <div class="panel-body">
+                  <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/{$type}/editor-{$type}.xed" ref="edit_{$type}" />
+                  <div class="col-md-11 text-right">
+                    <div class="col-md-11">
+                      <xed:include uri="xslStyle:jp-editor-template?xedIncParam={$parent}:webapp:/editor/common/editor-common.xed" ref="button_cancel" />
+                      <xed:include uri="xslStyle:jp-editor-template:webapp:/editor/common/editor-common.xed" ref="button_{$action}" />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </xed:bind>
-      </xed:bind>
-      <script type="text/javascript">
-        $(document).ready(function() {
-        document.title = $("#xeditor-title").text().trim() + " " + document.title;
-        });
-      </script>
+            </xed:bind>
+          </xed:bind>
+          <script type="text/javascript">
+            $(document).ready(function() {
+              document.title = $("#xeditor-title").text().trim() + " " + document.title;
+            });
+          </script>
+        </xed:when>
+        <xed:otherwise>
+          <div class="alert alert-danger">Permission denied</div>
+        </xed:otherwise>
+      </xed:choose>
     </xed:form>
   </section>
 </MyCoReWebPage>

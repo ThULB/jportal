@@ -7,7 +7,6 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRException;
-import org.mycore.common.xml.MCRJPortalURIGetClassID;
 
 public class ClassificationIdResolver implements URIResolver {
 
@@ -19,7 +18,7 @@ public class ClassificationIdResolver implements URIResolver {
         }
         String journalID = uriParts[1];
         String xpath = uriParts[2];
-        String classID = MCRJPortalURIGetClassID.getClassID(journalID, xpath);
+        String classID = ClassificationResolver.getClassificationID(journalID, xpath);
         if (classID == null) {
             throw new MCRException("Couldn't find classification id '" + xpath + "' in journal " + journalID);
         }

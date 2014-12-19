@@ -7,7 +7,6 @@ import javax.xml.transform.URIResolver;
 import org.apache.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
-import org.mycore.common.xml.MCRJPortalURIGetClassID;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -24,7 +23,7 @@ public class ClassificationLabelResolver implements URIResolver {
         }
         String journalID = uriParts[1];
         String xpath = uriParts[2];
-        String classID = MCRJPortalURIGetClassID.getClassID(journalID, xpath);
+        String classID = ClassificationResolver.getClassificationID(journalID, xpath);
         String label = getClassLabel(classID);
         return new JDOMSource(new Element("dummyRoot").addContent(new Element("label").setText(label)));
     }
