@@ -109,7 +109,7 @@ $(document).ready(function(){
 	});
 	
 	$("body").on("click", "#mom_button_move_cancel", function() {
-		window.location.replace(jpMoveObjConf.baseUrl + "/receive/" +  objID);
+		window.location.replace(jpMoveObjConf.baseUrl + "receive/" +  objID);
 	});
 		
 	function moveTo(json, newparentID) {
@@ -124,7 +124,7 @@ $(document).ready(function(){
 					$("#mom_move_popup").removeClass("hidden");
 					$("#mom_move_popup").css("left", ($("#mom_middle").outerWidth() / 2) - ($("#mom_move_popup").outerWidth() / 2));
 					$("#mom_move_popup").css("top", ($("#mom_move_popup_arrow").outerHeight() + $("#mom_move_popup").outerHeight()) * -1);
-					setTimeout(function(){window.location.replace(jpMoveObjConf.baseUrl + "/receive/" +  newparentID);},5000);
+					setTimeout(function(){window.location.replace(jpMoveObjConf.baseUrl + "receive/" +  newparentID);},5000);
 				},
 				500: function(error) {
 					$("#mom_button_move").removeClass("disabled");
