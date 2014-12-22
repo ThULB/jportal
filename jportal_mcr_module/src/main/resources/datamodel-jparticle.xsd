@@ -163,7 +163,7 @@
       <xsd:element name="dates" minOccurs="0" maxOccurs="1">
         <xsd:complexType>
           <xsd:sequence>
-            <xsd:element name="date" minOccurs="1" maxOccurs="2">
+            <xsd:element name="date" minOccurs="0" maxOccurs="unbounded">
               <xsd:complexType>
                 <xsd:simpleContent>
                   <xsd:extension base="xsd:string">
