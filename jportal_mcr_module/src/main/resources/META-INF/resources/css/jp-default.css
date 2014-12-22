@@ -721,6 +721,7 @@ p.jp-layout-metadata-list {
 #artList .metadata.jp-layout-metadaInSearchResults {
 	marging-top: 0 !important;
 	padding-right: 0;
+	max-width: 860px;
 }
 
 #artList .jp-layout-derivateWrapper > .jp-layout-derivate {
