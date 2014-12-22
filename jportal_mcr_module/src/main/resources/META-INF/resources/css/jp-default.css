@@ -532,17 +532,17 @@ p.jp-layout-metadata-list {
 	margin-right: 2px;
 }
 
-#searchBar #inputField{
-	padding-right: 2.3em;
+#searchBar .input-group-addon {
+	background-color: #fff;
+}
+
+#searchBar #inputField {
+	border-right: none;
+	box-shadow: none;
 }
 
 .glyphSearchBar{
-	position: absolute; 
-	right: 0; 
-	padding: 0.87em 0.87em 0.79em; 
 	cursor: pointer;
-	top: 0;
-	z-index: 3;
 }
 
 #main {

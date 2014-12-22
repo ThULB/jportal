@@ -84,11 +84,8 @@
             </xsl:variable>
             <div class="col-sm-8 {$mobileCol}">
               <div class="input-group">
-		            <div class="hidden">
-			            <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
-			            <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
-			          </div>
-                <span class="input-group-btn">
+		            
+                <div class="input-group-btn">
                   <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" id="searchDropDownButton">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Search</span>
@@ -138,20 +135,26 @@
                       </xsl:choose>
                     </li>
                   </ul>
-                </span>
-  
-                <span class="glyphicon glyphicon-search glyphSearchBar" onclick="$('#searchForm').submit()">
-                  <xsl:attribute name="title">
+                </div><!-- end input-group-btn -->
+                <input class="form-control" type="text" id="inputField" name="qry" value="{$qry}" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-search glyphSearchBar"
+                      onclick="$('#searchForm').submit()">
+                      <xsl:attribute name="title">
                   <xsl:value-of select="i18n:translate('jp.metadata.search.search')" />
                 </xsl:attribute>
-                </span>
+                    </span>
+                  </span>
   
-                <input class="form-control" id="inputField" name="qry" value="{$qry}" />
+              </div><!-- input-group-btn  -->
+                <div class="hidden">
+                  <span id="globalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.entire_inventory')" /></span> 
+                  <span id="journalSearchLabel"><xsl:value-of select="i18n:translate('jp.metadata.search.within_journal')" /></span> 
+                </div>
   
                 <xsl:if test="$sort != ''">
                   <input type="hidden" name="sort" value="{$sort}" />
                 </xsl:if>
-              </div>
             </div>
             <!-- edit object -->
             <xsl:if test="$objectEditing//li/a">
