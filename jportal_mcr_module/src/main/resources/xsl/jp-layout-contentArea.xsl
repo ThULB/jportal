@@ -45,54 +45,57 @@
       <div class="jp-layout-triangle"></div>
     </div>
 
-    <!-- children -->
-    <xsl:if test="structure/children">
-      <xsl:call-template name="tableOfContent">
-        <xsl:with-param name="id" select="./@ID" />
-      </xsl:call-template>
-    </xsl:if>
-
-    <!-- journal text -->
-    <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
-      <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
-    </xsl:if>
-
-    <!-- metadata & derivate -->
-    <xsl:if test="$showMetadataAndDerivate">
-      <div class="jp-content-metadata row">
-        <xsl:if test="structure/derobjects or metadata/derivateLinks">
-          <div class="col-sm-4">
-            <xsl:call-template name="derivateDisplay">
-              <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
-              <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
-            </xsl:call-template>
+    <div class="jp-content container-fluid">
+      <!-- children -->
+      <xsl:if test="structure/children">
+        <xsl:call-template name="tableOfContent">
+          <xsl:with-param name="id" select="./@ID" />
+        </xsl:call-template>
+      </xsl:if>
+  
+      <!-- journal text -->
+      <xsl:if test="@xsi:noNamespaceSchemaLocation='datamodel-jpjournal.xsd'">
+        <xsl:apply-templates mode="renderIntroTxt" select="document(concat('notnull:journalFile:',@ID,'/intro.xml'))/MyCoReWebPage/section[@xml:lang='de']" />
+      </xsl:if>
+  
+      <!-- metadata & derivate -->
+      <xsl:if test="$showMetadataAndDerivate">
+        <div class="jp-content-block row">
+          <div class="row">
+            <xsl:if test="structure/derobjects or metadata/derivateLinks">
+              <div class="col-sm-4 jp-content-thumbnail">
+                <xsl:call-template name="derivateDisplay">
+                  <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
+                  <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
+                </xsl:call-template>
+              </div>
+            </xsl:if>
+            <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
+              <dl class="col-sm-8 jp-content-metadata">
+                <xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
+                  <xsl:attribute name="class">col-sm-8 col-sm-offset-2 jp-layout-metadataList</xsl:attribute>
+                </xsl:if>
+                <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
+                <xsl:apply-templates mode="metadataDisplay"
+                  select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
+                <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
+                  <xsl:apply-templates mode="linkedArticles" select="." />
+                  <xsl:apply-templates mode="linkedCalendar" select="." />
+                </xsl:if>
+                <xsl:choose>
+                  <xsl:when test="metadata/derivateLinks/derivateLink">
+                    <xsl:apply-templates mode="metadataURN" select="metadata/derivateLinks/derivateLink" />
+                  </xsl:when>
+                  <xsl:when test="structure/derobjects/derobject">
+                    <xsl:apply-templates mode="metadataURN" select="structure/derobjects/derobject" />
+                  </xsl:when>
+                </xsl:choose>
+              </dl>
+            </xsl:if>
           </div>
-        </xsl:if>
-        <xsl:if test="metadata/child::node()[not(contains(name(), 'hidden_')) and */@inherited='0']">
-          <dl class="col-sm-8 jp-layout-metadataList">
-            <xsl:if test="not(structure/derobjects or metadata/derivateLinks)">
-              <xsl:attribute name="class">col-sm-8 col-sm-offset-2 jp-layout-metadataList</xsl:attribute>
-            </xsl:if>
-            <xsl:variable name="ignore" select="'maintitles def.heading names logo'" />
-            <xsl:apply-templates mode="metadataDisplay"
-              select="metadata/child::node()[not(contains(name(), 'hidden_')) and not(contains($ignore, name())) and */@inherited='0']" />
-            <xsl:if test="contains(@ID, '_person_') or contains(@ID, '_jpinst_')">
-              <xsl:apply-templates mode="linkedArticles" select="." />
-              <xsl:apply-templates mode="linkedCalendar" select="." />
-            </xsl:if>
-            <xsl:choose>
-              <xsl:when test="metadata/derivateLinks/derivateLink">
-                <xsl:apply-templates mode="metadataURN" select="metadata/derivateLinks/derivateLink" />
-              </xsl:when>
-              <xsl:when test="structure/derobjects/derobject">
-                <xsl:apply-templates mode="metadataURN" select="structure/derobjects/derobject" />
-              </xsl:when>
-            </xsl:choose>
-          </dl>
-        </xsl:if>
-      </div>
-    </xsl:if>
-
+        </div>
+      </xsl:if>
+    </div>
   </xsl:template>
 
   <xsl:template match="/" mode="template">
@@ -103,7 +106,7 @@
   </xsl:template>
 
   <xsl:template mode="renderIntroTxt" match="section[@xml:lang='de']">
-    <div id="intro" class="jp-layout-intro">
+    <div id="intro" class="jp-layout-intro jp-content-block row">
       <xsl:copy-of select="@*|node()" />
     </div>
   </xsl:template>

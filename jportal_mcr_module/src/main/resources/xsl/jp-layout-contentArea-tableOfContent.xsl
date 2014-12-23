@@ -53,7 +53,7 @@
 
     <xsl:variable name="volumes" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$volumes/response/result/@numFound &gt; 0">
-      <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent jp-content-block row">
         <ul>
           <xsl:apply-templates mode="jp.printListEntryContent" select="$volumes/response/result/doc" />
         </ul>
@@ -89,7 +89,7 @@
 
     <xsl:variable name="articles" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
-      <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist">
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist jp-content-block row">
         <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
         <xsl:apply-templates mode="jp.pagination" select="$articles/response">
           <xsl:with-param name="startParam" select="'XSL.art.start'" />

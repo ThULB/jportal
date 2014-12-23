@@ -604,11 +604,10 @@ p.jp-layout-metadata-list {
 	width: auto;
 }
 
-.jp-content-metadata {
-	clear: both;
-	overflow: hidden;
-	padding: 20px 0 0 0;
-	margin-top: -3px;
+#main .jp-content-block:not(:first-child) {
+	border-top: 1px solid #dbdbdb;
+	padding-top: 15px;
+	margin-top: 15px;
 }
 
 .jp-layout-derivateList .jp-layout-derivate .edit {
@@ -621,12 +620,20 @@ p.jp-layout-metadata-list {
 	width: 80px;
 }
 
-.jp-content-metadata .jp-layout-derivate a.thumbnail > img {
+.jp-content-metadata {
+	
+}
+
+.jp-content-thumbnail {
+	
+}
+
+.jp-content-thumbnail .jp-layout-derivate a.thumbnail > img {
 	max-height: 370px;
 }
 
 @media(max-width: 767px) {
-	.jp-content-metadata .jp-layout-derivate a.thumbnail > img {
+	.jp-content-thumbnail .jp-layout-derivate a.thumbnail > img {
 		max-height: 270px;
 	}
 }
@@ -639,10 +646,6 @@ p.jp-layout-metadata-list {
 
 .jp-layout-derivateList .jp-layout-derivate img.logo {
 	width: 100px;
-}
-
-#jp-breadcrumb-container+.jp-content-metadata {
-	border-top: medium none;
 }
 
 .jp-layout-label + .jp-layout-inList:BEFORE {
@@ -711,7 +714,7 @@ ul.ckeditorButtons li:last-child {
 	margin-right: 0;
 }
 
-.jp-layout-maintitle, #resultList, #jp-breadcrumb-container, .jp-layout-object-editing > li, .jp-content-metadata {
+.jp-layout-maintitle, #resultList, #jp-breadcrumb-container, .jp-layout-object-editing > li {
 	border-color: #DBDBDB !important;	
 }
 
