@@ -78,12 +78,12 @@ public class ObjectResource {
         try {
             Document doc = builder.build(new StringReader(xml));
             obj = new MCRObject(doc);
-        } catch(Exception exc) {
+        } catch (Exception exc) {
             LOGGER.error("unable to build xml or mcr object: " + xml);
             return Response.status(Status.BAD_REQUEST).entity("invalid xml data").build();
         }
         String objectType = obj.getId().getTypeId();
-        MCRJerseyUtil.checkPermission("default", "create-" + objectType);
+        MCRJerseyUtil.checkPermission("create-" + objectType);
         obj.setId(MCRObjectID.getNextFreeIdByType(objectType));
         MCRMetadataManager.create(obj);
         return Response.ok(obj.getId().toString()).build();

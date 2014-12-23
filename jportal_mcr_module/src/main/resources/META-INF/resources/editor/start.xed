@@ -3,7 +3,7 @@
 <MyCoReWebPage xmlns:xed="http://www.mycore.de/xeditor">
   <section xml:lang="all">
     <xed:form>
-      <xed:load-resource name="acl" uri="acl:object:{$action}-{$type}" />
+      <xed:load-resource name="acl" uri="acl:{$id}:{$action}-{$type}" />
       <xed:choose>
         <xed:when test="$acl/@permission = 'true'">
           <xed:if test="$type != 'jpinst'">

@@ -29,7 +29,8 @@ public class ACLResolver implements URIResolver {
         }
         String id = uriParts[1];
         String permission = uriParts[2];
-        boolean hasPermission = MCRAccessManager.checkPermission(id, permission);
+        boolean hasPermission = !"".equals(id) ? MCRAccessManager.checkPermission(id, permission) : MCRAccessManager
+            .checkPermission(permission);
         return new JDOMSource(new Element("access").setAttribute("permission", String.valueOf(hasPermission)));
     }
 
