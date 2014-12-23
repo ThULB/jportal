@@ -233,13 +233,13 @@
     <xsl:choose>
       <xsl:when test="mcrxml:exists($mcrId)">
         <div class="row jp-layout-hit">
-          <div class="col-sm-2 col-xs-3 jp-layout-hit-image">
+          <div class="jp-layout-hit-image">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
             <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
-          <div class="col-sm-10 col-xs-9 jp-layout-hit-metadata">
+          <div class="jp-layout-hit-metadata">
             <xsl:apply-templates mode="searchHitLabel" select="." />
             <ul class="jp-layout-metadaInSearchResults">
               <xsl:variable name="doc" select="." />

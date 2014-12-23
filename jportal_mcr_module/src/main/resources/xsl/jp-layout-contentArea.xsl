@@ -59,9 +59,9 @@
 
     <!-- metadata & derivate -->
     <xsl:if test="$showMetadataAndDerivate">
-      <div id="jp-content-Bottom">
+      <div class="jp-content-metadata row">
         <xsl:if test="structure/derobjects or metadata/derivateLinks">
-          <div id="derivCol" class="col-sm-4">
+          <div class="col-sm-4">
             <xsl:call-template name="derivateDisplay">
               <xsl:with-param name="nodes" select="structure/derobjects|metadata/derivateLinks" />
               <xsl:with-param name="journalID" select="metadata/hidden_jpjournalsID/hidden_jpjournalID" />
