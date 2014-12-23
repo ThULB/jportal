@@ -54,13 +54,13 @@
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
           <label name="Rubrik bearbeiten" id="diagButton" />
         </item>
-        <item class="jp-infoFiles-button" type="imprint" journalid="{$currentObjID}" containerid="main">
+        <item>
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Impressum auswählen" id="imprintButton" />
+          <label name="Impressum auswählen" id="imprintButton" class="jp-infoFiles-button" type="imprint" journalid="{$currentObjID}" containerid="main"/>
         </item>
-        <item class="jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="main">
+        <item >
           <restriction name="dataModel" value="datamodel-jpjournal.xsd" />
-          <label name="Partner auswählen" id="partnerButton" />
+          <label name="Partner auswählen" id="partnerButton" class="jp-infoFiles-button" type="partner" journalid="{$currentObjID}" containerid="main"/>
         </item>
         <item>
           <!-- <restriction name="dataModel" value="datamodel-jpjournal.xsd datamodel-jpvolume.xsd datamodel-jparticle.xsd" /> -->

@@ -5,39 +5,66 @@
 <title>Imprint GUI</title>
 </head>
 <body style="background-color: white">
-	<div id="imprintEditorGUI">
-		<div class="modal fade in" style="display: block;">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h4 id="imprintTitle" class="modal-title">Impressum
-							bearbeiten</h4>
-					</div>
-					<div class="modal-body">
-						<div class="editBox">
-							<select id="imprintSelBox">
-								<option selected="selected" value="">bitte wählen... / neuer Eintrag</option>
-							</select> 
-							<i class="editButton fa fa-edit pointer"/> 
-							<i class="removeButton fa fa-trash-o pointer"/>
+	<div id="GUI">
+		<div id="imprintGUIMain">
+			<div class="modal fade in" style="display: block;">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 id="imprintTitle" class="modal-title">Impressum
+								bearbeiten</h4>
 						</div>
-						<div class="form-group">
-							<label for="inputName" class="control-label">Name</label> <input
-								type="text" class="form-control" id="inputName"
-								placeholder="Name">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-md-4 editBox">
+									<div id="imprintSelBox" class="list-group"
+										style="height: 571px; width: 280px; overflow: auto" />
+									<div class="btn-group" role="group" aria-label="Edit Buttons">
+										<button id="addImprintButton" type="button"
+											class="btn btn-default">
+											<i class="fa fa-plus"></i>
+										</button>
+									</div>
+								</div>
+								<div class="col-md-8">
+
+									<div class='ckeditor' id="ckEditorContainer"></div>
+								</div>
+							</div>
 						</div>
-						<div class='ckeditor' id="ckEditorContainer"></div>
-					</div>
-					<div class="modal-footer">
-						<button id="imprintCancelButton" class="btn btn-default"
-							type="button">Abbrechen</button>
-						<button id="imprintSaveButton" class="btn btn-primary"
-							type="button">Speichern</button>
+						<div class="modal-footer">
+							<button id="imprintCancelButton" class="btn btn-default"
+								type="button">Abbrechen</button>
+							<button id="imprintSaveButton" class="btn btn-primary"
+								type="button">Speichern</button>
+						</div>
 					</div>
 				</div>
 			</div>
+			<div class="modal-backdrop fade in"></div>
 		</div>
-		<div class="modal-backdrop fade in"></div>
+
+
+		<div id="warnEmptyName" aria-hidden="false"
+			aria-labelledby="mySmallModalLabel" role="dialog"
+			class="modal fade in" style="display: block; padding-right: 15px;">
+			<div class="modal-dialog modal-sm">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 id="mySmallModalLabel" class="modal-title">
+							<i class="fa fa-exclamation-triangle"></i> Kein Titel
+						</h2>
+					</div>
+					<div class="modal-body">...</div>
+					<div class="modal-footer">
+						<button id="warnEmptyNameOKButton" class="btn btn-primary"
+							type="button">OK</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
 	</div>
 </body>
 </html>

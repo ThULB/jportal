@@ -5,47 +5,238 @@ $(document).ready(function(){
 	
 	var masterCtr = new MasterController();
 	
+//	infoFilesButtons.each(function(){
+//		var ctr = new InfoEditorCtr($(this));
+//		masterCtr.add(ctr);
+//	})
+	
 	infoFilesButtons.each(function(){
-		var ctr = new InfoEditorCtr($(this));
-		masterCtr.add(ctr);
+		initStartEditorButton($(this));
 	})
+	
+	function Controller(){
+		
+	}
+	
+	function initStartEditorButton(button){
+		var buttonLabel = button.html();
+		var type = button.attr('type');
+		var journalID = button.attr('journalid');
+		var containerID = button.attr('containerid');
+		
+		button.on('click', function(){
+			initGUI($('#' + containerID), type, journalID);
+		})
+	}
+	
+	function initGUI(GUIcontainer, type, journalID){
+		$("<div/>").load(jp.baseURL + "html/jp-imprint.html #GUI", function(){
+			var imprintGUI = $(this);
+			var mainGUI = imprintGUI.find("#imprintGUIMain");
+			
+			var addButton = imprintGUI.find("#addImprintButton");
+			var warmEmptyName = imprintGUI.find("#warnEmptyName");
+			var selectBox = mainGUI.find("#imprintSelBox");
+			var ckEditor = mainGUI.find("#ckEditorContainer");
+			
+			GUIcontainer.append(mainGUI);
+			
+			var masterCtr = new MasterController(journalID, type);
+			initCKEditorCtr(ckEditor, masterCtr);
+			initSelectBoxCtr(selectBox, masterCtr);
+			initAddButtonCtr(addButton, masterCtr);
+			initWarnEmptyNameCtr(warmEmptyName, mainGUI, masterCtr);
+		})
+	}
+	
+	function initWarnEmptyNameCtr(popup, container, masterCtr){
+		var okButton = popup.find('#warnEmptyNameOKButton');
+		
+		okButton.on('click', function(){
+			popup.detach();
+		})
+		
+		this.popupWarnEmptyName = function(callback){
+			okButton.on('click', function(){
+				callback();
+			})
+			container.append(popup);
+		}
+		masterCtr.add(this);
+	}
+	
+	function initAddButtonCtr(button, masterCtr){
+		button.on("click", function(){
+			console.log("click Add");
+			masterCtr.trigger("newItem");
+		})
+		
+		$(document).keypress(function(e){
+			// ctrl + '+'
+			if(e.ctrlKey && e.which == 43){
+				button.click();
+			}
+		})
+	}
+	
+	function initCKEditorCtr(container, masterCtr){
+		container.ckeditor({
+    		resize_enabled : false,
+    		entities: false,
+    		enterMode: CKEDITOR.ENTER_BR,
+    		entities_processNumerical: 'force',
+    		tabSpaces: 4,
+    		fillEmptyBlocks: false,
+    		height : '500px',
+    		toolbar : [ [ 'Undo', 'Undo', 'Redo', '-', 'Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-',
+    		             'Link', 'Unlink', 'Source', 'Save' ] ]
+    	});
+    	$("body").css("overflow","hidden");
+    	
+    	container.loadContent = function(imprintID){
+    		if(imprintID != null && imprintID != '') {
+    			masterCtr.getBackend().retrieve(imprintID, function(xml) {
+    				container.ckeditorGet().setData(xml);
+    			}, function(err) {
+    				console.log("Error");
+    				console.log(err);
+    				alert("Error while loading. Please inform the administrator.");
+    			});
+    		} 
+    	}
+    	
+    	container.newItem = function(){
+    		container.ckeditorGet().setData('')
+    	}
+    	
+    	masterCtr.add(container);
+	}
+	
+	function initSelectBoxCtr(select, masterCtr){
+		var activeItem = select.find('.active');
+		
+		masterCtr.getImprintID(function(imprintID){
+			masterCtr.getBackend().list(function(idList){
+				idList.sort();
+				if(idList.length != 0) {
+					for(var i = 0; i < idList.length; i++) {
+						select.addOption(idList[i], idList[i], imprintID == idList[i]);
+					}
+				} else {
+					select.addOption(null, "Keine Eintrag", true);
+				}
+				
+				masterCtr.add(select);
+			})
+		})
+		
+		select.newItem = function(){
+			var newItem = $("<a href='#' class='list-group-item'/>");
+			var input = $('<input class="form-control input-sm" type="text">').appendTo(newItem);
+			var oldActiveItem = activeItem;
+			
+			select.setActive(newItem);
+			select.append(newItem);
+			input.focus();
+			
+			$(document).keypress(function(e){
+				if(e.keyCode == 13){
+					var inputVal = input.val();
+					if(inputVal == null || inputVal == ''){
+						console.log('Empty Name');
+						newItem.addClass('has-error');
+						input.addClass('alert-danger');
+						input.blur();
+						masterCtr.trigger("popupWarnEmptyName", function(){
+							newItem.removeClass('has-error');
+							input.removeClass('alert-danger');
+							input.focus();
+						});
+					}
+				}else if(e.keyCode == 27){
+					newItem.remove();
+					select.setActive(oldActiveItem);
+				}
+			})
+		}
+		
+		select.addOption = function(/* String */ value, /* String */ label, /* boolean */ selected){
+			var newOption = $("<a href='#' class='list-group-item'/>");
+			
+			newOption.text(label);
+			newOption.data("value", value);
+			select.append(newOption);
+			
+			if(selected){
+				select.setActive(newOption);
+			}
+		}
+		
+		select.setActive = function(item){
+			activeItem.removeClass('active');
+			item.addClass('active');
+			activeItem = item;
+			masterCtr.trigger("loadContent", item.data("value"));
+		}
+		
+		select.delOption = function(/* string */ imprintID){
+			select.find("option[value='" + imprintID + "']").remove();
+		}
+		
+		select.getValue = function(){
+			var val = select.find(":selected").val();
+			return val != null ? val : null;
+		}
+		
+		select.delegate("a.list-group-item", "click", function(){
+			var clickedItem = $(this);
+			select.setActive(clickedItem);
+			masterCtr.trigger("setContent", clickedItem.data("value"));
+		})
+		
+		return select;
+	}
 });
 
-var MasterController = function(){
+var MasterController = function(journalID, type){
 	var controllers = [];
+	var backend = new FSConnector(type);
 
-	this.trigger = function(event){
+	this.trigger = function(event, dataOrFunction){
 		for (var i = 0; i < controllers.length; i++){
 			if(controllers[i][event]){
-				controllers[i][event]();
+				controllers[i][event](dataOrFunction);
 			}
 		}
 	}
 	 
 	this.add = function(ctr){
-		ctr.setMasterCtr(this);
 		controllers.push(ctr);
 	} 
+	
+	this.getBackend = function(){
+		return backend;
+	}
+	
+	this.getImprintID = function(callBack){
+		backend.get(journalID, callBack);
+	}
 	 
 	return this;
 }
 
-var InfoEditorCtr = function(buttonTag){
+var InfoEditorCtr = function(button){
 	var controller = this;
 	var masterCtr = null;
-	var buttonLabel = buttonTag.html();
-	var type = buttonTag.attr('type');
-	var journalID = buttonTag.attr('journalid');
-	var containerID = buttonTag.attr('containerid');
+	var buttonLabel = button.html();
+	var type = button.attr('type');
+	var journalID = button.attr('journalid');
+	var containerID = button.attr('containerid');
 	var backend = new FSConnector(type);
 	var imprintID = backend.get(journalID);
-// var selectBox = new Select();
 	var editBox = new EditBox();
 	var editor = new Editor(type, controller);
-	var button = $('<div>' + buttonLabel +'</div>');
 	var imprintContainer = $("<div class='imprintContainer' />").load(jp.baseURL + "html/jp-imprint.html #imprintEditorGUI");
-	
-	buttonTag.html(button);
 	
 	controller.setMasterCtr = function(ctr){
 		masterCtr = ctr;
@@ -66,16 +257,15 @@ var InfoEditorCtr = function(buttonTag){
 	}
 	
 	controller.deactivateButton = function(){
-		if(buttonTag.hasClass('active')){
+		if(button.hasClass('active')){
 			if(editor.hasChanged() && confirm('Änderung speichern?')){
 				editor.saveButton.trigger('click');
 			}else{
 				editor.close();
 			}
 			
-			buttonTag.removeClass('active');
+			button.removeClass('active');
 			editBox.detach();
-			buttonTag.html(button);
 		}
 	}
 	
@@ -101,18 +291,11 @@ var InfoEditorCtr = function(buttonTag){
 		editor.start("#" + containerID);
 		
 		
-// trigger('deactivateButton');
-// buttonTag.addClass('active');
 			backend.list(function(idList){
 				editor.setIdList(idList, imprintID)
 			})
 	})
 			    	
-// editBox.addSelectBox(selectBox);
-
-//	    	button.detach();
-//	    	buttonTag.html(editBox);
-	
 	editBox.editButton.on('click', function(){
 		var imprintID = editor.selectBox.getValue();
 		
@@ -161,6 +344,8 @@ var Editor = function(type, ctr){
 		var saveButton = editorFrame.find("#imprintSaveButton");
 		var idInput = editorFrame.find("#inputName");
 		var ckEditor = editorFrame.find("#ckEditorContainer");
+		var newImprintButton = editorFrame.find("#newImprintButton");
+		var newImprintInput = editorFrame.find("#newImprintInput");
 		
 		cancelButton.on('click', function(){
 			editorFrame.close();
@@ -263,6 +448,12 @@ var Editor = function(type, ctr){
 	    	}
 	    }
 	    
+	    newImprintButton.on('click', function(){
+	    	console.log('new Imprint');
+	    	var newName = newImprintInput.val();
+	    	selectBox.addOption(newName, newName, true);
+	    })
+	    
 		editorFrame.getSelBoxVal = function(){
 	    	return selectBox.getValue();
 	    }
@@ -290,14 +481,6 @@ var Editor = function(type, ctr){
     var cancelLi = $("<li />").appendTo(buttonUl);
     var saveLi = $("<li />").appendTo(buttonUl);
     
-    
-    
-    
-    
-// editorFrame.cancelButton = cancelButton;
-// editorFrame.saveButton = saveButton;
-// editorFrame.idInput = idInput;
-    
     return editorFrame;
 }
 
@@ -324,11 +507,35 @@ var EditBox = function(){
 	return domNode;
 }
 
-var Select = function(select){
+var SelectCtr = function(select, masterCtr){
+	var activeElem = select.find('.active');
+	
+	masterCtr.getImprintID(function(imprintID){
+		masterCtr.getBackend().list(function(idList){
+			idList.sort();
+			if(idList.length != 0) {
+				for(var i = 0; i < idList.length; i++) {
+					select.addOption(idList[i], idList[i], imprintID == idList[i]);
+				}
+			} else {
+				select.addOption(null, "Keine Eintrag", true);
+			}
+			
+			masterCtr.add(select);
+		})
+	})
 	
 	select.addOption = function(/* String */ value, /* String */ label, /* boolean */ selected){
-		var newOption = $("<option" + (selected ? " selected='selected'" : "") + "/>");
-		newOption.val(value);
+//		var newOption = $("<option" + (selected ? " selected='selected'" : "") + "/>");
+		var newOption = $("<a href='#' class='list-group-item'/>");
+//		newOption.val(value);
+		
+		if(selected){
+			activeElem.removeClass('active');
+			newOption.addClass('active');
+			activeElem = newOption;
+		}
+		
 		newOption.text(label);
 		select.append(newOption);
 	}
@@ -349,12 +556,11 @@ var FSConnector = function(/* string */ type){
 	var baseURL = jp.baseURL + "rsc/fs/" + type;
 
 	return {
-		get: function(/* string */ objectID) {
+		get: function(/* string */ objectID, /* function */ onSuccess, /* function */ onError) {
 			var notFound = false;
-			var importID = $.ajax({
+			$.ajax({
 				url: baseURL + "/get/" + objectID,
-				dataType: "json",
-				async: false,
+				dataType: "text",
 				contentType: 'text/plain; charset=UTF-8',
 				error: function(err) {
 					if(err.status == 404) {
@@ -364,8 +570,7 @@ var FSConnector = function(/* string */ type){
 						console.log(err);
 					}
 				}
-			}).responseText;
-			return notFound ? null : importID;
+			}).done(onSuccess).error(onError);
 		},
 
 		set: function(/* string */ objectID, /* string */ imprintID, /* function */ onSuccess) {
