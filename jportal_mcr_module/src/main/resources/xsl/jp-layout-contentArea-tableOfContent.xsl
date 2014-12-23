@@ -89,7 +89,7 @@
 
     <xsl:variable name="articles" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
-      <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-layout-hits">
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-objectlist">
         <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
         <xsl:apply-templates mode="jp.pagination" select="$articles/response">
           <xsl:with-param name="startParam" select="'XSL.art.start'" />
@@ -121,14 +121,14 @@
           <field name="rubric" label="Rubrik" />
         </xsl:variable>
         <xsl:variable name="doc" select="." />
-        <div class="row jp-layout-hit">
-          <div class="jp-layout-hit-image">
+        <div class="row jp-objectlist-object">
+          <div class="jp-objectlist-thumbnail">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
             <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
-          <div class="jp-layout-hit-metadata">
+          <div class="jp-objectlist-metadata">
             <h3 class="jp-layout-clickLabel">
               <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
                 <xsl:value-of select="str[@name='maintitle']" />
