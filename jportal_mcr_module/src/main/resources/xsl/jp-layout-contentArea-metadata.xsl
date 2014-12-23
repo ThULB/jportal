@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:urn="xalan://org.mycore.urn.services.MCRURNManager" exclude-result-prefixes="i18n xsi xlink mcrxml">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:urn="xalan://org.mycore.urn.services.MCRURNManager" exclude-result-prefixes="i18n xsi xlink mcrxml">
 
   <xsl:key name="subtitles" match="subtitle[@inherited='0']" use="@type" />
   <xsl:key name="identis" match="identi[@inherited='0']" use="@type" />
@@ -24,48 +24,49 @@
 
   <xsl:template mode="metadataDisplay" match="metadata/*">
   </xsl:template>
-  
+
   <xsl:template mode="metadataURN" match="derivateLink">
-    <xsl:variable name="derivID" select="substring-before(@xlink:href,'/')"/>
-    <xsl:variable name="filePath" select="concat('/',substring-after(@xlink:href,'/'))"/>
-    <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)"/>
-    <xsl:if test="$urn != ''">
-    <dt>
-      URN
-    </dt>
-    <dd>
-      <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
-        <xsl:value-of select="$urn"/>
-      </a>
-    </dd>
-    </xsl:if>
+    <xsl:variable name="derivID" select="substring-before(@xlink:href,'/')" />
+    <xsl:variable name="filePath" select="concat('/',substring-after(@xlink:href,'/'))" />
+    <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
+    <xsl:call-template name="metadataDisplayURNItem">
+      <xsl:with-param name="urn" select="urn" />
+    </xsl:call-template>
   </xsl:template>
-  
+
   <xsl:template mode="metadataURN" match="derobject">
-    <xsl:variable name="derivID" select="@xlink:href"/>
-    <xsl:variable name="_filePath" select="document(concat('notnull:mcrobject:',$derivID))/mycorederivate/derivate/internals/internal/@maindoc"/>
+    <xsl:variable name="derivID" select="@xlink:href" />
+    <xsl:variable name="_filePath"
+      select="document(concat('notnull:mcrobject:',$derivID))/mycorederivate/derivate/internals/internal/@maindoc" />
     <xsl:variable name="filePath">
       <xsl:choose>
         <xsl:when test="starts-with($_filePath,'/')">
-          <xsl:value-of select="$_filePath"/>
+          <xsl:value-of select="$_filePath" />
         </xsl:when>
         <xsl:otherwise>
-          <xsl:value-of select="concat('/',$_filePath)"/>
+          <xsl:value-of select="concat('/',$_filePath)" />
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
     <xsl:if test="$filePath != ''">
       <xsl:variable name="urn" select="urn:getURNForFile($derivID,$filePath)" />
-      <xsl:if test="$urn != ''">
-        <dt>
-          URN
-        </dt>
-        <dd>
-          <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
-            <xsl:value-of select="$urn" />
-          </a>
-        </dd>
-      </xsl:if>
+      <xsl:call-template name="metadataDisplayURNItem">
+        <xsl:with-param name="urn" select="urn" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="metadataDisplayURNItem">
+    <xsl:param name="urn" />
+    <xsl:if test="$urn != ''">
+      <dt class="col-sm-4">
+        URN
+      </dt>
+      <dd class="col-sm-8">
+        <a href="{concat('http://nbn-resolving.de/urn/resolver.pl?urn=', $urn)}">
+          <xsl:value-of select="$urn" />
+        </a>
+      </dd>
     </xsl:if>
   </xsl:template>
 
@@ -193,7 +194,7 @@
   </xsl:template>
 
   <xsl:template mode="metadataFieldValue" match="*[../@class='MCRMetaISO8601Date']">
-     <xsl:variable name="format">
+    <xsl:variable name="format">
       <xsl:choose>
         <xsl:when test="string-length(normalize-space(.)) = 4">
           <xsl:value-of select="i18n:translate('metaData.dateYear')" />
