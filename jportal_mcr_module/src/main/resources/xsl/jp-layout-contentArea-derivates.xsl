@@ -58,24 +58,22 @@
     <xsl:variable name="deleteLink" select="acl:checkPermission('default', 'update-jparticle')" />
 
     <xsl:if test="$deleteLink or layoutTools:getDerivateDisplay($derivID) = 'true'">
-      <div class="jp-layout-derivateWrapper">
-        <div class="jp-layout-derivate">
-          <xsl:call-template name="iview2Entry">
+      <div class="jp-layout-derivate">
+        <xsl:call-template name="iview2Entry">
+          <xsl:with-param name="derivID" select="$derivID" />
+          <xsl:with-param name="file" select="$file" />
+        </xsl:call-template>
+        <xsl:if test="$mode = 'metadata'">
+          <xsl:call-template name="dfgViewerLink">
             <xsl:with-param name="derivID" select="$derivID" />
             <xsl:with-param name="file" select="$file" />
           </xsl:call-template>
-          <xsl:if test="$mode = 'metadata'">
-            <xsl:call-template name="dfgViewerLink">
-              <xsl:with-param name="derivID" select="$derivID" />
-              <xsl:with-param name="file" select="$file" />
-            </xsl:call-template>
-          </xsl:if>
-          <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
-            <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
-              <xsl:value-of select="'Verlinkung löschen'" />
-            </div>
-          </xsl:if>
-        </div>
+        </xsl:if>
+        <xsl:if test="$mode = 'metadata' and $editable = 'true' and $deleteLink">
+          <div class="objectEditingButton unlinkImage" data-object="{$objID}" data-image="{@xlink:href}">
+            <xsl:value-of select="'Verlinkung löschen'" />
+          </div>
+        </xsl:if>
       </div>
     </xsl:if>
   </xsl:template>
@@ -91,22 +89,20 @@
     <xsl:variable name="showDerivate" select="layoutTools:getDerivateDisplay(@xlink:href) = 'true'" />
 
     <xsl:if test="$deleteDB or $showDerivate">
-    <div class="jp-layout-derivateWrapper">
-      <div class="jp-layout-derivate">
-        <xsl:choose>
-          <xsl:when test="$iviewFile != ''">
-            <xsl:call-template name="iview2Entry">
-              <xsl:with-param name="derivID" select="@xlink:href" />
-              <xsl:with-param name="file" select="$iviewFile" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="derivEntry">
-              <xsl:with-param name="derivate" select="$derivate" />
-            </xsl:call-template>
-          </xsl:otherwise>
-        </xsl:choose>
-      </div>
+    <div class="jp-layout-derivate">
+      <xsl:choose>
+        <xsl:when test="$iviewFile != ''">
+          <xsl:call-template name="iview2Entry">
+            <xsl:with-param name="derivID" select="@xlink:href" />
+            <xsl:with-param name="file" select="$iviewFile" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="derivEntry">
+            <xsl:with-param name="derivate" select="$derivate" />
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:if test="$mode = 'metadata' and $iviewFile != ''">
         <xsl:call-template name="dfgViewerLink">
           <xsl:with-param name="derivID" select="@xlink:href" />

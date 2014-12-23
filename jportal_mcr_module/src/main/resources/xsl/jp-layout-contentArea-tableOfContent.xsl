@@ -89,10 +89,8 @@
 
     <xsl:variable name="articles" select="document(concat('solr:q=', $q, '&amp;sort=', $sort, '&amp;rows=', $rows,'&amp;start=', $start))" />
     <xsl:if test="$articles/response/result/@numFound &gt; 0">
-      <div id="jp-tableOfContent" class="jp-layout-tableOfContent">
-        <ul id="artList">
-          <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
-        </ul>
+      <div id="jp-tableOfContent" class="jp-layout-tableOfContent container-fluid jp-layout-hits">
+        <xsl:apply-templates mode="artList" select="$articles/response/result/doc" />
         <xsl:apply-templates mode="jp.pagination" select="$articles/response">
           <xsl:with-param name="startParam" select="'XSL.art.start'" />
         </xsl:apply-templates>
@@ -123,32 +121,34 @@
           <field name="rubric" label="Rubrik" />
         </xsl:variable>
         <xsl:variable name="doc" select="." />
-        <li>
-          <div>
+        <div class="row jp-layout-hit">
+          <div class="jp-layout-hit-image">
             <xsl:variable name="mcrObj" select="document(concat('mcrobject:', $mcrId))/mycoreobject" />
             <xsl:call-template name="derivatePreview">
               <xsl:with-param name="mcrObj" select="$mcrObj" />
             </xsl:call-template>
           </div>
-          <ul class="metadata jp-layout-metadaInSearchResults">
-            <li>
+          <div class="jp-layout-hit-metadata">
+            <h3 class="jp-layout-clickLabel">
               <a href="{$WebApplicationBaseURL}receive/{$mcrId}" class="title">
                 <xsl:value-of select="str[@name='maintitle']" />
               </a>
-            </li>
-            <xsl:for-each select="xalan:nodeset($fields)/field">
-              <xsl:variable name="fieldName" select="@name" />
-              <xsl:if test="$doc/*[@name = $fieldName]">
-                <li>
-                  <span class="jp-layout-label">
-                    <xsl:value-of select="@label" />
-                  </span>
-                  <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
-                </li>
-              </xsl:if>
-            </xsl:for-each>
-          </ul>
-        </li>
+            </h3>
+            <ul class="jp-layout-metadaInSearchResults">
+              <xsl:for-each select="xalan:nodeset($fields)/field">
+                <xsl:variable name="fieldName" select="@name" />
+                <xsl:if test="$doc/*[@name = $fieldName]">
+                  <li>
+                    <span class="jp-layout-label">
+                      <xsl:value-of select="@label" />
+                    </span>
+                    <xsl:apply-templates mode="artEntryFields" select="$doc/*[@name = $fieldName]" />
+                  </li>
+                </xsl:if>
+              </xsl:for-each>
+            </ul>
+          </div>
+        </div>
       </xsl:when>
       <xsl:otherwise>
         <!-- object doesn't exist in mycore -> delete it in solr -->

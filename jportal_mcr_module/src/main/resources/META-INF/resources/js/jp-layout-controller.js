@@ -247,7 +247,7 @@ function updateSearchbar() {
 
 // IVIEW 2
 $(document).ready(function() {
-	$('div.jp-layout-derivateWrapper .thumbnail').on({
+	$('div.jp-layout-derivate .thumbnail').on({
 		mouseenter: function() {
 			jQuery(this).find('div.jp-layout-hidden-Button').show();
 		},
