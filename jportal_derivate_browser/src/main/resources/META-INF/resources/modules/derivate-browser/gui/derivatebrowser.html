@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<link href="/rsc/derivatebrowser/gui/css/derivatebrowser.css" rel="stylesheet" type="text/css">
-<title>MyCore File Browser</title>
+<title>Jportal Derivate Browser</title>
 </head>
 <body>
 	<div id="filebrowser">
-		<div id="folder-list-div" class="well">
-		   	<div id="folder-list-search" class="input-group input-group-sm">
-              <input id="folder-list-search-input" class="form-control" type="text" placeholder="Suchen..." />
+		<div id="folder-list-div">
+		   	<div id="folder-list-search" class="input-group">
+              <input id="folder-list-search-input" class="form-control" type="text" placeholder="" />
               <span class="input-group-btn">
                 <button id="folder-list-search-button" class="btn btn-default" type="button">
                   <i class="glyphicon glyphicon-search"></i>
@@ -19,79 +19,80 @@
             </div>
 			<ul id="folder-list-ul"></ul>
 		</div>
-		<div id="file-view" class="well" ondragover="return false">
+		<div id="file-view" ondragover="return false">
+			<div id="alert-area" class="alert alert-danger">...</div>
 <!-- 			<div id="drag-and-drop-info"><span id="hide-drag-drop-info" class="glyphicon glyphicon-remove"></span></div> -->
 			<div id="files">
 				<div id="upload-overlay" class="hidden"></div>
-				<div class="panel panel-default hidden" id="derivat-panel">
-					<div id="collapseOne" class="panel-collapse collapse in">
-						<div class="panel-body">
-							<dl>
-								<dt>Name:</dt>
-								<dd id="derivat-panel-name"></dd>
-								<dt>Size:</dt>
-								<dd id="derivat-panel-size"></dd>
-								<dt>last modified:</dt>
-								<dd id="derivat-panel-last"></dd>
-<!-- 								<dt>Startdatei:</dt> -->
-<!-- 								<dd id="derivat-panel-startfile"> -->
-<!-- 									<div id="derivat-panel-startfile-label"></div> -->
-<!-- 									<span id="derivat-panel-startfile-btn" class="glyphicon glyphicon-edit btn"></span> -->
-<!-- 								</dd> -->
-							</dl>
-							<div id="derivat-panel-startfile">
-								<label>Startdatei</label>
-								<figure>
-									<img id='panel-img' src=''>
-								    <figcaption class="panel-img-cap">
-								    	<h5 id="derivat-panel-startfile-label"></h5>
-								    </figcaption>
-								    <div id="derivat-panel-startfile-overlay-div" class="hidden">
-								    	<div id="derivat-panel-startfile-overlay-label">
-								    	Drag and Drop to change.
-<!-- 										    <span id="derivat-panel-startfile-btn-edit" class="glyphicon glyphicon-edit btn startfile-btn"></span> -->
-<!-- 										    <span id="derivat-panel-startfile-btn-confirm" class="glyphicon glyphicon-ok btn startfile-btn hidden"></span> -->
-<!-- 										    <span id="derivat-panel-startfile-btn-cancel" class="glyphicon glyphicon-remove btn startfile-btn hidden"></span> -->
-										</div>
-								    </div>
-        						</figure>
-<!-- 								<span id="derivat-panel-startfile-btn" class="glyphicon glyphicon-edit btn"></span> -->
-							</div>
-							<button id="btn-urnAll" type="button" class="btn btn-default">
- 									<span class="glyphicon glyphicon glyphicon-tags"></span>
- 									&nbsp;URN für Derivat vergeben
-							</button>
-						</div>
-					</div>
-					<div id="collapse-btn-div"><span id="collapse-btn" class="glyphicon glyphicon-chevron-up btn" data-toggle="collapse" data-target="#collapseOne"> </span></div>
-				</div>
 				<div id="derivate-browser" class="hidden">
-					<ol  id="derivate-browser-breadcrumb" class="breadcrumb">
-					</ol>
-					<table id="browser-table" class="table table-hover table-condensed" cellspacing="0">
-						<thead>
-							<tr id="browser-table-head">
-								<th></th>
-								<th></th>
-								<th>Filename</th>
-								<th>URN</th>
-							</tr>
-						</thead>
-						<tbody id="browser-table-files">	
-						</tbody>
-					</table>
-					<div id="bottom-btns">
-						<span class="glyphicon glyphicon-folder-close btn-add btn"></span>
-						<span class="glyphicon glyphicon-plus btn-add1 btn"></span>
-						<span class="glyphicon glyphicon-plus btn-add2 btn"></span>
-<!-- 						<span class="glyphicon glyphicon-plus btn-add3 btn"></span> -->
-						<span class='glyphicon glyphicon-unchecked btn-check-all btn'></span>
-						<span class='glyphicon glyphicon-trash btn-delete-all btn faded'></span>
-						<span class='glyphicon glyphicon-share-alt btn-move-all btn faded'></span>
+					<div id="derivate-browser-header">
+						<div class="panel panel-default hidden" id="derivat-panel">
+							<div id="collapseOne" class="panel-collapse collapse in">
+								<div class="panel-body">
+									<dl>
+										<dt><text class="i18n" i18n="db.label.fileName" i18n-def="Dateiname"></text>:</dt>
+										<dd id="derivat-panel-name"></dd>
+										<dt><text class="i18n" i18n="db.label.fileSize" i18n-def="Größe"></text>:</dt>
+										<dd id="derivat-panel-size"></dd>
+										<dt><text class="i18n" i18n="db.label.fileLastMod" i18n-def="zuletzt geändert"></text>:</dt>
+										<dd id="derivat-panel-last"></dd>
+									</dl>
+									<div id="derivat-panel-startfile">
+										<label><text class="i18n" i18n="db.label.startFile" i18n-def="Startdatei"></text></label>
+										<figure>
+											<img id='panel-img' src=''>
+										    <div id="derivat-panel-startfile-overlay-div" class="hidden">
+										    	<div id="derivat-panel-startfile-overlay-label">
+										    		<text class="i18n" i18n="db.label.dragAndDrop" i18n-def="Drag and Drop zum ändern"></text>
+												</div>
+										    </div>
+											<figcaption class="panel-img-cap">
+												<h5 id="derivat-panel-startfile-label"></h5>
+											</figcaption>
+		        						</figure>
+									</div>
+									<button id="btn-urnAll" type="button" class="btn btn-default">
+		 									<span class="glyphicon glyphicon glyphicon-tags"></span>
+		 									<text class="i18n" i18n="db.label.assignUrn" i18n-def=" URN für Derivat vergeben"></text>
+									</button>
+								</div>
+							</div>
+							<div id="collapse-btn-div"><span id="collapse-btn" class="glyphicon glyphicon-chevron-up btn" data-toggle="collapse" data-target="#collapseOne"> </span></div>
+						</div>
+						<ol  id="derivate-browser-breadcrumb" class="breadcrumb">
+						</ol>
+						<table id="browser-table-head" class="table table-hover table-condensed" cellspacing="0">
+							<thead>
+								<tr id="browser-table-head-tr">
+									<th></th>
+									<th></th>
+									<th><text class="i18n" i18n="db.label.fileName" i18n-def="Dateiname"></text></th>
+									<th><text class="i18n" i18n="db.label.fileUrn" i18n-def="URN"></text></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+					<div id="browser-table-wrapper">
+						<table id="browser-table" class="table table-hover table-condensed" cellspacing="0">
+							<tbody id="browser-table-files">	
+							</tbody>
+						</table>
+					</div>
+					<div id="derivate-browser-footer">
+						<div id="bottom-btns">
+							<div class="btn-add btn">
+								<span class="glyphicon glyphicon-folder-close btn-add btn"></span>
+								<span class="glyphicon glyphicon-plus btn-add1 btn"></span>
+								<span class="glyphicon glyphicon-plus btn-add2 btn"></span>
+							</div>
+								<span class='glyphicon glyphicon-unchecked btn-check-all btn'></span>
+								<span class='glyphicon glyphicon-trash btn-delete-all btn faded'></span>
+								<span class='glyphicon glyphicon-share-alt btn-move-all btn faded'></span>
+						</div>
 					</div>
 				</div>
 				<div id="journal-info" class="hidden">
-					<button id="journal-info-button-edit"type="button" class="btn btn-primary">Edit</button>
+					<button id="journal-info-button-edit" type="button" class="btn btn-primary">Edit</button>
 					<div id="journal-info-text"></div>
 				</div>
 			</div>
@@ -106,12 +107,6 @@
 			<div id="upload-status-bar-body">
 				<table>
 					<tbody id="upload-status-bar-table">
-<!-- 						<tr class="upload-entry"> -->
-<!-- 						<td><img class='upload-preview-image' src="//lh6.ggpht.com/t9kbY1GAjgY-4jyTgWDiZnSNgTiFbTKYZeraqc4epFGE11lO9z-R5acrnMvq_ocxdxwEnjm6la8Cvo59ii2NhZ3ER43kQLeTEULaiGST=s660"></img></td> -->
-<!-- 						<td class="upload-preview-name">Bild bla bla</td> -->
-<!-- 						<td class="upload-preview-size">1337 GB</td> -->
-<!-- 						<td class="upload-preview-status"><div class='statusbar-progress'><div class='statusbar-progress-status'></div></div></td> -->
-<!-- 						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -122,16 +117,44 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 			 	<div class="modal-header">
-					<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">X</button>
-					<h4 id="lightbox-multi-move-label" class="modal-title">Zielort auswählen</h4>
+			 		<div class="btn-round">
+						<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">x</button>
+			 		</div>
+					<h4 id="lightbox-multi-move-label" class="modal-title"><text class="i18n" i18n="db.label.target" i18n-def="Zielort auswählen"></text></h4>
 				</div>				
 				<div class="modal-body">
 					<ul id="target-panel-childlist" class="panel-list">
 				    </ul>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">cancel</button>
-					<button type="button" id="lightbox-multi-move-confirm" class="btn btn-primary" >confrim</button>
+					<button type="button" class="btn btn-default lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></button>
+					<button type="button" id="lightbox-multi-move-confirm" class="btn btn-primary" ><text class="i18n" i18n="db.label.confirm" i18n-def="Bestätigen"></text></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="lightbox-alert-delete" tabindex="-1" role="dialog" aria-labelledby="lightbox-alert-delete-label" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			 	<div class="modal-header">
+			 		<div class="btn-round">
+						<button type="button" class="close lightbox-alert-delete-cancel" data-dismiss="modal" aria-hidden="true">x</button>
+			 		</div>
+					<h4 id="lightbox-alert-delete-label" class="modal-title"><text class="i18n" i18n="db.alert.delete.title" i18n-def="Dateien löschen?"></text></h4>
+				</div>				
+				<div class="modal-body">
+					<div id="lightbox-alert-main" class="dl-horizontal">
+						<div class="alert alert-warning lightbox-warning">
+	 						<h4><label><text class="i18n" i18n="db.alert.delete.warning" i18n-def="Achtung!"></text></label></h4>
+	  						<label><text class="i18n" i18n="db.alert.delete.confirm" i18n-def="Wollen Sie wirklich die folgenden Dateien löschen?"></text></label>
+	  						<div id="lightbox-alert-delete-list"></div>
+	  					</div>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default lightbox-alert-delete-cancel" data-dismiss="modal" aria-hidden="true"><text class="i18n" i18n="db.label.cancel" i18n-def="Abbrechen"></button>
+					<button type="button" id="lightbox-alert-delete-confirm" class="btn btn-danger" ><text class="i18n" i18n="db.alert.delete.label" i18n-def="Löschen"></text></button>
 				</div>
 			</div>
 		</div>
@@ -141,31 +164,32 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 			 	<div class="modal-header">
-					<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">X</button>
-					<h4 id="lightbox-upload-overwrite-label" class="modal-title">Aktion auswählen</h4>
+			 		<div class="btn-round">
+						<button type="button" class="close lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">x</button>
+					</div>
+					<h4 id="lightbox-upload-overwrite-label" class="modal-title"><text id="lightbox-upload-overwrite-filename"></text><text class="i18n" i18n="db.label.overwrite.title" i18n-def=" ersätzen?"></text></h4>
 				</div>				
 				<div class="modal-body">
-					<div id="lightbox-upload-overwrite-text">Die Datei existiert bereits. Soll die Datei überschrieben werden?</div>
+					<div id="lightbox-upload-overwrite-text"><text class="i18n" i18n="db.label.overwrite" i18n-def="Die Datei existiert bereits. Soll die Datei überschrieben werden?"></text></div>
 					<div id="lightbox-upload-overwrite-original">
-						<div id="lightbox-upload-overwrite-original-label" class="overwrite-label">Original Datei</div>
+						<div id="lightbox-upload-overwrite-original-label" class="overwrite-label"><text class="i18n" i18n="db.label.overwrite.original" i18n-def="Original Datei"></text></div>
 						<div id="lightbox-upload-overwrite-original-file" class="overwrite-content"></div>
 					</div>
 					<div id="lightbox-upload-overwrite-new">
-						<div id="lightbox-upload-overwrite-new-label" class="overwrite-label">Neue Datei</div>
+						<div id="lightbox-upload-overwrite-new-label" class="overwrite-label"><text class="i18n" i18n="db.label.overwrite.new" i18n-def="Neue Datei"></text></div>
 						<div id="lightbox-upload-overwrite-new-file" class="overwrite-content"></div>
 					</div>
 				</div>
 				<div class="modal-footer">
-						<div>
+						<div id="lightbox-upload-overwrite-save">
 							<span class="glyphicon glyphicon-unchecked btn-upload-all btn"></span>
-							<p id="btn-upload-all-label">Für alle folgenden übernehmen<p>
+							<p id="btn-upload-all-label"><text class="i18n" i18n="db.label.overwrite.save" i18n-def="Für alle folgenden übernehmen"></text><p>
 						</div>
-						<div>
-							<button type="button" id="btn-upload-overwrite" class="btn btn-warning btn-upload">Überschreiben</button>
-							<button type="button" id="btn-upload-skip" class="btn btn-primary btn-upload" >Überspringen</button>
-							<button type="button" id="btn-upload-cancel" class="btn btn-default btn-upload">Upload abbrechen</button>
+						<div id="lightbox-upload-overwrite-buttons" >
+							<button type="button" id="btn-upload-overwrite" class="btn btn-warning btn-upload"><text class="i18n" i18n="db.label.overwrite.confirm" i18n-def="Überschreiben"></button>
+							<button type="button" id="btn-upload-skip" class="btn btn-primary btn-upload"><text class="i18n" i18n="db.label.overwrite.skip" i18n-def="Überspringen"></button>
+							<button type="button" id="btn-upload-cancel" class="btn btn-default btn-upload"><text class="i18n" i18n="db.label.overwrite.cancel" i18n-def="Upload abbrechen"></button>
 						</div>
-<!-- 					<button type="button" class="btn btn-default lightbox-multi-move-cancel" data-dismiss="modal" aria-hidden="true">Überschreiben</button> -->
 				</div>
 			</div>
 		</div>
@@ -280,11 +304,11 @@
  	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.address/1.6/jquery.address.min.js"></script>
  	<script src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.js"></script>
  	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
- 	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser.js"></script>
- 	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-upload.js"></script>
- 	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-treeEntry.js"></script>
-	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-navigation.js"></script>
-	<script src="/rsc/derivatebrowser/gui/js/derivatebrowser-fileView.js"></script>
+ 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser.js"></script>
+ 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-upload.js"></script>
+ 	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-treeEntry.js"></script>
+	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-navigation.js"></script>
+	<script type="text/javascript" src="/rsc/derivatebrowser/gui/js/derivatebrowser-fileView.js"></script>
  	<script type="text/javascript" src="/js/jp-subselect.js" ></script>
 </body>
 </html>

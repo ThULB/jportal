@@ -2,6 +2,7 @@ package fsu.jportal.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRJSONManager;
+import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.config.MCRConfiguration;
@@ -35,11 +37,12 @@ import org.mycore.datamodel.ifs.MCRFilesystemNode;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.frontend.cli.MCRDerivateCommands;
+import org.mycore.frontend.cli.MCRObjectCommands;
 import org.mycore.frontend.fileupload.MCRUploadHandler;
 import org.mycore.frontend.fileupload.MCRUploadHandlerIFS;
 import org.mycore.urn.services.MCRURNAdder;
 import org.mycore.urn.services.MCRURNManager;
-
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
@@ -92,7 +95,7 @@ public class DerivateBrowserResource {
         } else {
             node = derivate.getRootDir();
         }
-       
+
         if (!Files.exists(mcrPath)) {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -115,16 +118,16 @@ public class DerivateBrowserResource {
          return Response.ok(mainGui).build();
      }
 
-    @DELETE
-    @Path("{derivID}{path:(/.*)*}")
-    //    @MCRRestrictedAccess(ResourceAccess.class)
-    public Response deleteFile(@PathParam("derivID") String derivID, @PathParam("path") String path) {
-        int status;
-        status = DerivateTools.delete(MCRPath.getPath(derivID, path));
-        if (status == 1) return Response.ok().build();
-        if (status == 2) return Response.status(Status.NOT_FOUND).build();
-        return Response.serverError().build();
-    }
+//    @DELETE
+//    @Path("{derivID}{path:(/.*)*}")
+//    //    @MCRRestrictedAccess(ResourceAccess.class)
+//    public Response deleteFile(@PathParam("derivID") String derivID, @PathParam("path") String path) {
+//        int status;
+//        status = DerivateTools.delete(MCRPath.getPath(derivID, path));
+//        if (status == 1) return Response.ok().build();
+//        if (status == 2) return Response.status(Status.NOT_FOUND).build();
+//        return Response.serverError().build();
+//    }
     
     @DELETE
     @Path("multiple")
@@ -159,9 +162,11 @@ public class DerivateBrowserResource {
         try{
             DerivateTools.rename(file, name);
         }
-        catch (Exception e){
-            e.printStackTrace();
+        catch (FileAlreadyExistsException e){
             return Response.status(Status.CONFLICT).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.serverError().build();
         }
         if (Boolean.parseBoolean(start)){
             String path = file.substring(0, file.lastIndexOf("/") + 1) + name;
@@ -173,8 +178,8 @@ public class DerivateBrowserResource {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("move")
-    public Response moveFiles(String data) throws Exception {
+    @Path("moveDeriFiles")
+    public Response moveDeriFiles(String data) throws Exception {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(data).getAsJsonObject();
         JsonArray jsonArray = jsonObject.getAsJsonArray("files");
@@ -346,6 +351,35 @@ public class DerivateBrowserResource {
             }
         }
         return Response.ok(jsonObject.toString()).build();
+    }
+    
+    @PUT
+    @Path("moveDocs")
+    public Response moveDocs(String data) {
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jsonArray = jsonParser.parse(data).getAsJsonArray();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+            String objID = jsonObject.get("objId").getAsString();
+            String newParentID = jsonObject.get("newParentId").getAsString();
+            if (!objID.equals(newParentID)) {
+                try {
+                    if (objID.contains("derivate")){
+                        MCRDerivateCommands.linkDerivateToObject(objID, newParentID);
+                    }
+                    else{
+                        MCRObjectCommands.replaceParent(objID, newParentID);                        
+                    }
+                } catch (MCRPersistenceException e) {
+                    return Response.status(Status.UNAUTHORIZED).build();
+                } catch (Exception e) { e.printStackTrace();
+                    e.printStackTrace();
+                    return Response.serverError().build();
+                }
+            }
+
+        }
+        return Response.ok().build();
     }
     
     private JsonArray getFolderChildren(MCRFilesystemNode[] childs){

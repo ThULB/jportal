@@ -77,7 +77,7 @@ Upload.prototype.askOverwrite = function(existingFile, deriID, path) {
 	var newFileOutput = $(Mustache.render(uploadOverwriteTemplate, this));
 	readImg(this.file, $(newFileOutput).find("img.overwrite-img"));
 	$("#lightbox-upload-overwrite-new-file").html(newFileOutput);
-	$("#lightbox-upload-overwrite-label").html(existingFile.name + " ersätzen?")
+	$("#lightbox-upload-overwrite-filename").html(existingFile.name);
 	showModalWhenReady();
 }
 

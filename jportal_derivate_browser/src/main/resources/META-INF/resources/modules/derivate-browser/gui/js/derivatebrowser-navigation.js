@@ -85,6 +85,14 @@ var derivateBrowserNavigation = (function () {
             case "jpjournal":
                 $(li).addClass("journal");
                 $(li).prepend("<span class='glyphicon glyphicon-book icon'></span>");
+                break;   
+            case "jpvolume":
+                $(li).addClass("volume");
+                $(li).prepend("<span class='glyphicon glyphicon-folder-close icon'></span>");
+                break;   
+            case "jparticle":
+                $(li).addClass("article");
+                $(li).prepend("<span class='glyphicon glyphicon-file icon'></span>");
                 break;
             default :
                 $(li).prepend("<span class='glyphicon glyphicon-file icon'></span>");
@@ -99,7 +107,9 @@ var derivateBrowserNavigation = (function () {
             $("#folder-list-ul").append(li);
         }
         else{
-            findDoc(doc.parentID).children("ul.children").append(li);
+        	var parent = findDoc(doc.parentID);
+        	checkForChildren(parent).append(li);
+        	checkForExpandButton(parent);
         }
         //get Childs
         if((doc.childCount > 0 || doc.deriCount > 0) && doc.type != "derivate"){
@@ -134,10 +144,7 @@ var derivateBrowserNavigation = (function () {
 	}
     
     function drawChildren(doc, parent){
-    	var ul = $(parent).children("ul");
-    	if (ul.length == 0){
-    		ul = $("<ul class='children'></ul>").appendTo(parent);
-    	}
+    	checkForChildren(parent);
         $.each(doc.deris, function(index, doc) {
             drawDoc(doc);
         });
@@ -158,10 +165,7 @@ var derivateBrowserNavigation = (function () {
     	});
 	}
     function drawDeriFolder(childName, childPath, deriID, parent) {
-    	var ul = $(parent).children("ul");
-    	if (ul.length == 0){
-    		ul = $("<ul class='children'></ul>").appendTo(parent);
-    	}
+    	var ul = checkForChildren(parent);
     	var li = findDoc(deriID, childPath);
     	if (li.length == 0){
     		li = $("<li class='derivat-folder'><div class='no-button'>&nbsp;</div><span class='glyphicon glyphicon-folder-close icon'></span><div class='folder-name'>" + childName + "</div></li>").appendTo(ul);
@@ -209,6 +213,35 @@ var derivateBrowserNavigation = (function () {
 			}
 		});		
 	}
+	
+	function addDocToParent(response) {
+		if (response.numFound > 0){
+           drawDoc(new TreeEntry(response.docs[0], ""));
+		}
+	}
+	
+	function checkForChildren(entry) {
+    	var ul = $(entry).children("ul");
+    	if (ul.length == 0){
+    		ul = $("<ul class='children'></ul>").appendTo(entry);
+    	}
+    	return ul;
+	}
+	
+	function checkForExpandButton(parent) {
+    	if (($(parent).children("ul").length != 0) && ($(parent).children("div.no-button").length != 0)){
+    		$(parent).children("div.no-button").remove();
+    		$(parent).prepend("<span class='glyphicon glyphicon-minus button button-contract'></span>");
+    	}
+    	if ($(parent).children("ul").children().length == 0){
+    		$(parent).children("ul").remove();
+    		if ($(parent).children("span.button").length != 0){
+    			$(parent).children("span.button").remove()
+    			$(parent).prepend("<div class='no-button'></div>");
+    		}
+    	}
+    	
+	}
 
     //ajax Methods
     function getDocPerID(docID, callback) {
@@ -224,7 +257,9 @@ var derivateBrowserNavigation = (function () {
 			type: "GET",
 			dataType: "json",
 			success: function(data) {
-						drawDeriFolders(deriID, data)
+						if (data.hasChildren != false){
+							drawDeriFolders(deriID, data);
+						}						
 						callback();
 					},
 			error: function(error) {
@@ -287,6 +322,7 @@ var derivateBrowserNavigation = (function () {
 		},
 		
 		expandDoc: function(docID){
+			findDoc(docID).find("ul.children").html("");
 			getDocPerID(docID, getDocChilds);
 		},
 		
@@ -300,7 +336,13 @@ var derivateBrowserNavigation = (function () {
 		},
 		
 		removeDoc: function(node) {
+			var parent = $(node).parent().closest(".folder");
 			node.remove();
+			checkForExpandButton(parent);
+		},
+		
+		addDoc: function(docID) {
+			getDocPerID(docID, addDocToParent);
 		}
     };
 })();
