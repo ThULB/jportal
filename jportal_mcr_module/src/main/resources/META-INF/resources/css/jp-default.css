@@ -1266,3 +1266,7 @@ textarea {
 .jp-layout-white{
 	background-color: white;
 }
+
+.jp-layout-colorBlue{
+	color: #008cc9; 
+}
