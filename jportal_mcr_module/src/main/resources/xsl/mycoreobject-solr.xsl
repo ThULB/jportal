@@ -27,13 +27,14 @@
 
   <!-- MCRObject MCRDerivate -->
   <xsl:template mode="base" match="mycoreobject|mycorederivate">
+    <xsl:variable name="objectType" select="substring-before(substring-after(@ID, '_'), '_')" />
     <field name="id"><xsl:value-of select="@ID" /></field>
-    <field name="objectType"><xsl:value-of select="substring-before(substring-after(@ID, '_'), '_')" /></field>
+    <field name="objectType"><xsl:value-of select="$objectType" /></field>
     <field name="objectProject"><xsl:value-of select="substring-before(@ID, '_')" /></field>
     <xsl:if test="name() = 'mycoreobject'">
       <field name="derivateCount"><xsl:value-of select="count(structure/derobjects/derobject)" /></field>
     </xsl:if>
-    <xsl:if test="name() = 'mycoreobject'">
+    <xsl:if test="name() = 'mycoreobject' and $objectType != 'person' and $objectType != 'jpinst'">
       <field name="childrenCount"><xsl:value-of select="count(structure/children/child)" /></field>
     </xsl:if>
     <xsl:if test="name() = 'mycorederivate'">
