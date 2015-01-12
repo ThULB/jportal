@@ -66,23 +66,31 @@
 	background-color: #eee;
 }
 
-.jp-laws-expertsearch {
-}
-
-.jp-laws-expertsearch table th {
-	padding-right: 20px;
-	text-align: left;
-}
-
-.jp-laws-expertsearch table tr {
-	padding-bottom: 8px;
-}
-
 .jp-laws-expertsearch .seperator {
 	padding-right: 3px;
 	padding-left: 3px;
 }
 
-.jp-laws-expertsearch .submit {
-	margin-top: 12px;
+@media (min-width: 768px) {
+	.jp-laws-expertsearchHeader {
+		padding: 1em 2.3em 0;
+	}
+}
+
+@media (max-width: 767px) {
+	.jp-laws-expertsearch > .form-group.col-sm-12 > label, .jp-laws-expertsearch > .form-group.col-sm-12 > div{
+		padding: 0;
+	}
+	
+	.jp-laws-expertsearchHeader {
+		padding-top: 1em;
+	}
+	
+	.jp-laws-expertsearch > .col-sm-12.row{
+		padding-right: 17px !important;
+	}
+}
+
+.jp-laws-expertsearchHeader > span {
+	height: unset;
 }
