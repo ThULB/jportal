@@ -829,14 +829,9 @@ ul.ckeditorButtons li:last-child {
 	background-color: white;
 	padding: 9px;
 }
-.message-wrapper .message {
-	border-radius: 6px;
-	padding: 0px 8px;
-	border: 1px solid #666666;
-	background-color: #FFC8C1;
-}
-.message-wrapper .message h1 {
-	font-size: 14px;
+
+.jp-layout-message {
+	margin-bottom: 0;
 }
 
 .form-login .control-label {

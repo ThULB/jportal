@@ -15,10 +15,10 @@
 
   <xsl:template name="jp.globalmessage.print">
     <div class="message-wrapper">
-      <div class="message">
-        <h1>
+      <div class="alert alert-danger jp-layout-message">
+        <strong>
           <xsl:value-of select="head" />
-        </h1>
+        </strong>
         <p>
           <xsl:value-of select="message" />
         </p>
